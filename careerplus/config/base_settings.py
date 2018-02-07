@@ -330,7 +330,7 @@ LOGGING = {
     },
     'formatters': {
         'verbose': {
-            'format': '%(processName)s %(name)-50s %(levelname)s %(asctime)s %(pathname)s %(lineno)s %(message)s'
+            'format': '%(processName)s %(name)s %(levelname)s %(asctime)s %(pathname)s %(lineno)s %(message)s'
         },
         'simple': {
             'format': '[%(asctime)s] %(levelname)s %(message)s',
@@ -410,7 +410,7 @@ LOGGING = {
          'level': 'DEBUG',
          'class': 'logging.handlers.SysLogHandler',
          'facility': 'local7',
-         'address': '/dev/log',
+         'address': SYSLOG_ADDRESS,
          'formatter': 'verbose'
        },
     },
@@ -473,9 +473,9 @@ LOGGING = {
 
 # LOGS_ROOT = os.path.join(BASE_DIR, "log")
 
-for d in ['debug', 'error', 'info', 'email', 'sms', 'payment', 'cron', 'cashback']:
-    if not os.path.exists(os.path.join(SYSLOG_ADDRESS, d)):
-        os.makedirs(os.path.join(SYSLOG_ADDRESS, d))
+# for d in ['debug', 'error', 'info', 'email', 'sms', 'payment', 'cron', 'cashback']:
+#     if not os.path.exists(os.path.join(SYSLOG_ADDRESS, d)):
+#         os.makedirs(os.path.join(SYSLOG_ADDRESS, d))
 
 # LOGGING = {
 #     'version': 1,

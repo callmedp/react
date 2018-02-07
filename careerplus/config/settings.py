@@ -289,6 +289,12 @@ COMPRESS_PRECOMPILERS = (
    ('text/scss', 'sass --scss {infile} {outfile}'),
 )
 
+######## STORAGE SETTINGS #############
+GS_BUCKET_NAME = 'learning-media-staging-189607'
+GCP_PRIVATE_MEDIA_BUCKET = 'learning--misc-staging-189607'
+GCP_STATIC_BUCKET = 'learning-static-staging-189607'
+GCP_INVOICE_BUCKET = 'learning-invoices-staging-189607'
+
 try:
     from .settings_local import *
 except:
