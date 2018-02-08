@@ -541,7 +541,7 @@ class WriterInvoiceMixin(object):
             total_item = orderitems.count()
             total = total_sum - total_combo_discount
             total_payable = total
-            if success_closure:
+            if total_item:
                 success_per = (success_closure / total_item) * 100
                 success_per = int(success_per)
 
