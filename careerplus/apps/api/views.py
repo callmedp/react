@@ -377,9 +377,19 @@ class ValidateCouponApiView(APIView):
         crm_order_amount = request.data.get('order_amount', 0)
         lead_source = request.data.get('lead_source', 0)
         product_ids = request.data.get('product_list', [])
-
+        lead_email = request.data.get('lead_email', '')
+        
         if coupon_code:
-            coupon = Coupon.objects.get(code=coupon_code)
+            try:
+                coupon = Coupon.objects.get(code=coupon_code)
+            except:
+                return Response(
+                    {
+                        "status": "FAIL",
+                        "msg": 'This code is not valid.'
+                    }, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
         # email = request.data.get('candidate_email', '')
