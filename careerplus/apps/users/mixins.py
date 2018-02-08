@@ -109,7 +109,7 @@ class WriterInvoiceMixin(object):
                 value_dict = linkedin_dict.get(exp_code, {})
                 starter_value = (LINKEDIN_STARTER_VALUE * value_dict.get(1)) / 100
                 linkedin_amount = starter_value
-                if value_dict and value_dict.get(user_type) != 1:
+                if value_dict and value_dict.get(user_type) and user_type != 1:
                     linkedin_amount = (starter_value * value_dict.get(user_type)) / 100
                     linkedin_amount = int(linkedin_amount)
                 if writing_ois.exists() and oi.pk not in self.combo_discount_object:
@@ -258,7 +258,7 @@ class WriterInvoiceMixin(object):
                         value_dict = writing_dict.get(exp_code, {})
                         starter_value = (WRITING_STARTER_VALUE * value_dict.get(1)) / 100
                         amount = starter_value
-                        if value_dict and value_dict.get(user_type) != 1:
+                        if value_dict and value_dict.get(user_type) and user_type != 1:
                             amount = (starter_value * value_dict.get(user_type)) / 100
                             amount = int(amount)
 
@@ -393,7 +393,7 @@ class WriterInvoiceMixin(object):
                             starter_value = (WRITING_STARTER_VALUE * value_dict.get(1)) / 100
 
                         amount = starter_value
-                        if value_dict and value_dict.get(user_type) != 1:
+                        if value_dict and value_dict.get(user_type) and user_type != 1:
                             amount = (starter_value * value_dict.get(user_type)) / 100
 
                         if product_pk in VISUAL_RESUME_PRODUCT_LIST:
@@ -483,7 +483,7 @@ class WriterInvoiceMixin(object):
                             starter_value = (WRITING_STARTER_VALUE * value_dict.get(1)) / 100
 
                         amount = starter_value
-                        if value_dict and value_dict.get(user_type) != 1:
+                        if value_dict and value_dict.get(user_type) and user_type != 1:
                             amount = (starter_value * value_dict.get(user_type)) / 100
 
                         if product_pk in VISUAL_RESUME_PRODUCT_LIST:
