@@ -65,7 +65,9 @@ class WriterInvoiceMixin(object):
                 if linkedin_ois.exists():
                     linkedin_obj = linkedin_ois[0]
                     writing_ois = linkedin_obj.order.orderitems.filter(
-                        product__type_flow__in=[1, 12, 13])
+                        assigned_to=assigned_to,
+                        product__type_flow__in=[1, 12, 13]).exclude(
+                        product__id__in=COVER_LETTER_PRODUCT_LIST)
                     if writing_ois.exists():
                         linkedin_obj = None
                     else:
@@ -81,7 +83,8 @@ class WriterInvoiceMixin(object):
                             assigned_to=assigned_to,
                             assigned_date__range=[start_date, end_date],
                             closed_on__month__lte=closed_on.month,
-                            closed_on__year__lte=closed_on.year)
+                            closed_on__year__lte=closed_on.year).exclude(
+                            product__id__in=COVER_LETTER_PRODUCT_LIST)
 
                         if writing_ois.exists():
                             linkedin_obj = None
@@ -102,7 +105,9 @@ class WriterInvoiceMixin(object):
                             self.combo_discount_object.add(linkedin_obj.pk)
             elif oi.product.type_flow == 8:
                 writing_ois = oi.order.orderitems.filter(
-                    product__type_flow__in=[1, 12, 13])
+                    assigned_to=assigned_to,
+                    product__type_flow__in=[1, 12, 13]).exclude(
+                    product__id__in=COVER_LETTER_PRODUCT_LIST)
                 exp_code = oi.product.get_exp()
                 if not exp_code:
                     exp_code = 'FR'
@@ -123,7 +128,8 @@ class WriterInvoiceMixin(object):
                         assigned_to=assigned_to,
                         assigned_date__range=[start_date, end_date],
                         closed_on__month__lte=invoice_date.month,
-                        closed_on__year__lte=invoice_date.year)
+                        closed_on__year__lte=invoice_date.year).exclude(
+                        product__id__in=COVER_LETTER_PRODUCT_LIST)
                     if writing_ois.exists() and oi.pk not in self.combo_discount_object:
                         combo_discount = (linkedin_amount * COMBO_DISCOUNT) / 100
                         self.combo_discount_object.add(oi.pk)
