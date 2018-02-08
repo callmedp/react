@@ -86,7 +86,13 @@ function submitMessage(oi_id, ){
 function saveWaitingForInput(oi_id, ){
     if (oi_id){
         $('#waiting-form' + oi_id).parsley().validate();
-        if ($('#waiting-form' + oi_id).parsley().isValid()){
+        var msg = $("#message-add-form"+oi_id+" textarea[name=message]").val();
+        $('#msgid').val(msg);
+        if (!msg)
+        {
+            alert("First submit message");
+        }
+        if (msg && $('#waiting-form' + oi_id).parsley().isValid()){
             var formData = $('#waiting-form' + oi_id).serialize();
             $.ajax({
                 url: '/ajax/orderitem/waiting-input-save/',
