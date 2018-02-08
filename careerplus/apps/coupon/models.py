@@ -140,6 +140,42 @@ class Coupon(AbstractAutoDate):
         else:
             return prefix + code
 
+    def is_valid_coupon(self, site=1, source=None, cart_obj=None):
+        # site=1 for learning
+        flag = False
+        if site == 2:
+            if self.coupon_scope == 2 and source:
+                source_list = self.source.split(',')
+                if source and str(source) in source_list:
+                    flag = True
+            elif self.coupon_scope == 0:
+                flag = True
+
+        elif site == 1:
+            if cart_obj and self.coupon_scope == 1:
+                product_list = list(cart_obj.lineitems.all().values_list('product', flat=True))
+                coupon_products = list(self.products.all().values_list('id', flat=True))
+                if set(product_list) & set(coupon_products):
+                    flag = True
+            elif self.coupon_scope == 0:
+                flag = True
+        else:
+            # site = 0
+            if self.coupon_scope == 2 and source:
+                source_list = self.source.split(',')
+                if source and str(source) in source_list:
+                    flag = True
+
+            elif cart_obj and self.coupon_scope == 1:
+                product_list = list(cart_obj.lineitems.all().values_list('product', flat=True))
+                coupon_products = list(self.products.all().values_list('id', flat=True))
+                if set(product_list) & set(coupon_products):
+                    flag = True
+            elif self.coupon_scope == 0:
+                flag = True
+
+        return flag
+
 
 class Campaign(AbstractAutoDate):
     name = models.CharField(_("Name"), max_length=255, unique=True)
