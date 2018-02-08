@@ -1,15 +1,15 @@
-{% load humanize search_tags compress %}
 {% load static compress %}
 <!doctype html>
 <html amp lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{% if meta.title %}{{ meta.title }}{% endif %}</title>
+    <title>{{page_obj.get_title}}</title>
     <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
     <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
     {% include 'meta/meta.html' %}
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+    <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
 
     <script async src="https://cdn.ampproject.org/v0.js"></script>
@@ -20,7 +20,7 @@
 
     <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
 
-<style amp-custom>
+    <style amp-custom>
 
   *, *:before, *:after {
     box-sizing: border-box;
@@ -160,10 +160,23 @@ figure {
     padding-bottom: 0!important;
 }
 
-
 .fs-10 {
     font-size: 10px;
     line-height: 1;
+}
+
+.fs-15 {
+    font-size: 15px!important;
+    line-height: 1.2;
+}
+
+.fs-16 {
+    font-size: 16px!important;
+    line-height: 1.5;
+}
+
+.mt-15 {
+    margin-top: 15px;
 }
 
 .btn, .btn-sm {
@@ -233,6 +246,16 @@ hr {
 .main-menu {
     position: relative;
     z-index: 1;
+}
+
+.table {
+    display: table;
+    width: 100%;
+}
+
+.table-cell {
+    display: table-cell;
+    vertical-align: middle;
 }
 
 [class^="icon-"] {
@@ -563,16 +586,16 @@ amp-accordion>section {
 
 .i-amphtml-accordion-content {
   padding: 0 15px 15px;
-  background-color: #f6f7f9;
+  background-color: #fff;
 }
 
 .i-amphtml-accordion-header {
     cursor: pointer;
-    background-color: #f6f7f9;
+    background-color: #fff;
     padding-right: 20px;
     border: 0 none;
     padding: 10px 15px;
-    font-size: 1.125rem;
+    font-size: 0.875rem;
     color: #333;
     font-weight: 700;
     position: relative;
@@ -1027,9 +1050,6 @@ h3 {
     font-weight: 600;
 }
 
-.mt-10 {
-    margin-top: 10px!important;
-}
 
 amp-sidebar {
   background-color: #fff;
@@ -1267,8 +1287,82 @@ nav {
     height: 100%;
 }
 
+/* CMS page CSS starts here */
+
+.user {
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    display: block;
+    height: 50px;
+    width: 50px;
+}
+
+.download-wrap {
+    background-color: #fcfcfc;
+    height: 140px;
+}
+
+.download-wrap .download-pdf {
+    background-color: #000;
+    position: relative;
+}
+
+.download-wrap .download-pdf .wrap {
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    z-index: 9;
+}
+
+.download-wrap .download-pdf .wrap .table {
+    height: 100%;
+}
+
+.download-wrap .download-pdf .table-cell {
+    width: 1000px;
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+}
 
 
+.download-wrap .download-pdf img {
+    width: 100%;
+    display: block;
+    opacity: .4;
+}
+
+.download-wrap .download-pdf .table-cell span {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    display: inline-block;
+    height: 45px;
+    width: 45px;
+    background-color: #2f5ea6;
+    position: relative;
+    z-index: 1;
+}
+
+.download-wrap .download-pdf .table-cell span .icon-download {
+    background-position: -247px 0;
+    background-image: url({% static 'shinelearn/images/mobile/common/sprites.svg'%});
+    width: 22px;
+    height: 22px;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -11px 0 0 -11px;
+}
+
+.bullet li {
+    list-style-type: circle;
+    list-style-position: inside;
+    padding-bottom: 10px;
+}
 
 </style>
     <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
@@ -1276,197 +1370,57 @@ nav {
   </head>
   <body>
 
-    <!-- /. header --> 
-    <header class="he-auto">
-        <amp-img 
-          src="{% static 'shinelearn/images/mobile/shop/header-img-3.png' %}" 
-          alt="Welcome" 
-          height="146" 
-          width="360">
-        </amp-img>
-        <!-- header main-menu Icon Starts here -->
-        <div class="main-menu">
-            <div class="pull-left">
-                <a on="tap:sidebar-left.toggle" tabindex="0" class="icon-bar pull-left" role="button"></a>
-            </div>
 
-            <div class="pull-right"> 
-               <a class="icon-cart" href="{% url "cart:cart-product-list" %}">cart <span id="cart-counter-id">{{cart_count}}</span></a>
-            </div><!-- / Right side Icon ends here -->
-        </div><!-- header menu Icon ends here -->
-        <div class="clearfix"></div>
-        <h1 class="heading-back pb-0">{{prd_H1}}</h1>
-        {% include "shop/partials/packagediv.html" %}
-    </header><!-- /. header -->
 
-    <div class="body-wrapper">
-        <section class="content-box">
-            <div class="rating-wrap">
-                {% if prd_num_rating %}
-                <div class="rating">
-                  <sup class="fill-star sprite"></sup>
-                  {{prd_rating}}/5
-                </div><!-- end of star rating -->
-                {% endif %}
-                <ul class="inline-block fs-12 jobs-icon-wrap">
-                    <li>
-                        <figure class="icon-comments"></figure>
-                        {% if prd_num_rating %}
-                        <a href="javascript:void(0);">{{prd_num_rating}}</a>
+    <header class="w100fl he-auto">
+    <amp-img 
+        src="{% static 'shinelearn/images/mobile/common/header-back-img.png' %}"
+        alt="Resume Writing"
+        width="360"
+        height="90">
+    </amp-img>
+    <!-- header menu Icon Starts here -->
+    <div class="main-menu w100fl">
+        <div class="pull-left">
+            <a on="tap:sidebar-left.toggle" tabindex="0" class="icon-bar pull-left" role="button"></a>
+        </div>
+        
+        <div class="pull-right">
+            <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
+            <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+        </div>
+
+        <!-- / Right side Icon ends here -->
+    </div><!-- header menu Icon ends here -->
+    <h1 class="heading-back w100fl pb-0">{{page_obj.get_display_name}}</h1>
+</header>
+
+    <div class="body-wrapper ">
+        <section class="content-box pt-0">
+            {{ left_widgets|safe|default:'' }}
+            {% if page_obj.allow_comment %}
+                <div class="comment-wrap mt-20">
+                    <input type='hidden' id='page_slug' value='{{page_obj.slug}}'/>
+                    <input type='hidden' id='page_pk' value='{{page_obj.pk}}'/>
+                    <form role="form" id="cms_comment_form">
+                        {% csrf_token %}
+                        <textarea placeholder="Write comments" class="form-control" id="id_message" name="message"></textarea>
+                        <span class="error position-error"></span><br/>
+                        {% if request.session.candidate_id %}
+                            <input type='submit' class="submit-button btn btn-lg btn-blue btn-round mt-10" id="comment_submit" value="Submit">
                         {% else %}
-                        <span class="fs-11">Be the first to review</span>
+                            <input type='button' class="submit-button js_redirect btn btn-lg btn-blue btn-round mt-10" value="Submit">
                         {% endif %}
-                    </li>
-                    {% if prd_num_jobs %}
-                        <li>
-                            <figure class="icon-bag"></figure>
-                            <strong>{{prd_num_jobs}} Jobs</strong>
-                        </li>
-                    {% endif %}
-                    <li>
-                        <figure class="icon-jobs"></figure>
-                        <strong>
-                            {{prd_num_bought}}
-                        </strong> bought
-                    </li>
-                    {% if prd_cert %}
-                        <li>
-                            <figure class="icon-certificate"></figure>
-                        </li>
-                    {% endif  %}
-                </ul>
-            </div><!-- end of icons wrapper -->
-        
-        <hr class="row">
-        <article class="mt-20">
-        {% if prd_about %}
-            <h2>Overview</h2>
-            <style>
-                .morecontent span {
-                      display: none;
-                  }
-                  .morelink {
-                      display: block;
-                  }
-            </style>
-            <p class="more">
-                {{prd_about|safe}}
-            </p>
-            <!--<p><a href="#">know more</a></p>-->
-        {% endif %}
-        
-            {% include "shop/partials/prd_cart.html" %}
-            {% include "shop/partials/product_child.html" %}
-            {% include "shop/partials/frequentlybought.html" %}
-            
-            <!-- Select products container Satrts here  -->
-            {% include "shop/partials/product_variations.html" %}
+                    </form>
+                    <ul class="mt-20" id="page_comment">
+                        {{ comment_listing|safe|default:'' }}
+                    </ul>
+                </div><!-- end of Comment wrap here -->
 
-            <!-- Select products container ends here -->
-            <div class="container mb-30">
-              <!-- AMP Accordion begin -->
-              <amp-accordion class="row">
-                {% if prd_desc %}
-                <section expanded>
-                  <div class="acc_head">About Product</div>
-                  {{prd_desc|safe}}
-                </section><!--./ section -->
-                {% endif %}
-
-                {% if prd_uget %}
-                <section>
-                  <div class="acc_head">What’ll you get
-                    <div class="acc_icon_expand sprite"></div>
-                  </div>
-                  {{prd_uget|safe}}
-                </section><!--./ section -->
-                {% endif %}
-                
-                <section>
-                  {% include "mobile/shop/partials/delivery_flow.html" %}
-                </section><!--./ section -->
-
-                <section>
-                  {% include "mobile/shop/partials/program_structure.html" %}
-                </section><!--./ section -->
-              </amp-accordion><!-- /. AMP Accordion begin -->
-
-              <!-- Accordion FAQ’s Starts here  -->
-              <amp-accordion class="row">
-                <section>
-                {% include "shop/partials/faq.html" %}
-                </section><!--./ section -->
-              </amp-accordion><!-- /. AMP Accordion FAQ’s Ends here -->
-            </div><!-- end of container -->
-
-            <div class="container">
-              <h2>Reviews</h2>
-
-              <div class="box row">
-                <amp-carousel class="carousel1"
-                layout="responsive"
-                height="175"
-                width="500"
-                type="slides">
-                
-                <div class="slide">
-                  <amp-rating class="rating inline-block">
-                    <sup class="fill-star"></sup>
-                    <sup class="fill-star"></sup>
-                    <sup class="fill-star"></sup>
-                    <sup class="unfill-star"></sup>
-                    <sup class="unfill-star"></sup>
-                  </amp-rating>
-
-                  <amp-fit-text layout="responsive"
-                    width="500"
-                    height="150"> 
-                    Mix is a tech writer based in Amsterdam that loves cinema and probably hates the movies that you like. Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.
-                  </amp-fit-text>
-                </div>
-
-                <div class="slide">
-                  <amp-rating class="rating inline-block">
-                    <sup class="fill-star"></sup>
-                    <sup class="fill-star"></sup>
-                    <sup class="fill-star"></sup>
-                    <sup class="fill-star"></sup>
-                    <sup class="unfill-star"></sup>
-                  </amp-rating>
-
-                  <amp-fit-text layout="responsive"
-                    width="500"
-                    height="150"> 
-                    Mix is a tech writer based in Amsterdam that loves cinema and probably hates the movies that you like. Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.
-                  </amp-fit-text>
-                </div>
-
-                <div class="slide">
-                  <amp-rating class="rating inline-block">
-                    <sup class="fill-star"></sup>
-                    <sup class="fill-star"></sup>
-                    <sup class="unfill-star"></sup>
-                    <sup class="unfill-star"></sup>
-                    <sup class="unfill-star"></sup>
-                  </amp-rating>
-
-                  <amp-fit-text layout="responsive"
-                    width="500"
-                    height="150"> 
-                    Mix is a tech writer based in Amsterdam that loves cinema and probably hates the movies that you like. Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.
-                  </amp-fit-text>
-                </div>              
-              </amp-carousel>
-              </div>
-            </div>
-
-
-                {% include "shop/partials/reviews.html" %}
-            </article>
+            {% endif %}
+            {{ right_widgets|safe|default:'' }}
         </section><!-- end of section here -->
-    </div><!-- body wrapper ends here -->
-
-    {% include "shop/partials/call_us.html" %}
+    </div>
 
     {% include 'basic/footer.html' %}
 
@@ -1531,145 +1485,3 @@ nav {
 
 
 
-    <amp-sidebar id="sidebar-right" layout="nodisplay" side="right">
-    {% if prd_service == 'course' and pop %}
-        <div class="sidebar" id="sidebar-secondary">
-            <div class="right-navbar pt-0">
-                <h2 class="mb-0">Other providers</h2>
-                <ul class="underline">
-                {% for provider in pop_list|slice:"0:4" %}
-                    <li>
-                        <a href="{{provider.url}}" for="test1">
-                            <span>
-                                <img src="{{provider.vendor.image.url}}" style="z-index: 10;">
-                                {{provider.vendor}}
-                            </span>
-                        </a>
-                    </li>
-                {% endfor %}
-                </ul>
-            </div>
-        </div>
-    {% elif product.pk == 1941 %}
-        <!-- Other packages start here -->
-    <div class="sidebar" id="sidebar-secondary">
-      <div class="right-navbar packages pt-0">
-        <h2 class="mb-0">Other packages</h2>
-        <ul class="underline">
-            <li>
-                <a href="/services/profile-update/featured-profile-10/pd-1939" class="blue-link pb-0">
-                    <strong>
-                        90 days
-                    </strong>
-                </a>
-            </li>
-            <li>
-                <a href="/services/profile-update/featured-profile-8/pd-1942" class="blue-link pb-0">
-                    <strong>
-                        180 days
-                    </strong>
-                </a>
-            </li>
-        </ul>
-      </div>
-    </div><!-- Other packages ends here -->
-    {% elif product.pk == 1939 %}
-        <!-- Other packages start here -->
-    <div class="sidebar" id="sidebar-secondary">
-      <div class="right-navbar packages pt-0">
-        <h2 class="mb-0">Other packages</h2>
-        <ul class="underline">
-            <li>
-                <a href="/services/profile-update/featured-profile-9/pd-1941" class="blue-link pb-0">
-                    <strong>
-                        30 days
-                    </strong>
-                </a>
-            </li>
-            <li>
-                <a href="/services/profile-update/featured-profile-8/pd-1942" class="blue-link pb-0">
-                    <strong>
-                        180 days
-                    </strong>
-                </a>
-            </li>
-        </ul>
-      </div>
-    </div><!-- Other packages ends here -->
-    {% elif product.pk == 1942 %}
-        <!-- Other packages start here -->
-    <div class="sidebar" id="sidebar-secondary">
-      <div class="right-navbar packages pt-0">
-        <h2 class="mb-0">Other packages</h2>
-        <ul class="underline">
-            <li>
-                <a href="/services/profile-update/featured-profile-9/pd-1941" class="blue-link pb-0">
-                    <strong>
-                        30 days
-                    </strong>
-                </a>
-            </li>
-            <li>
-                <a href="/services/profile-update/featured-profile-10/pd-1939" class="blue-link pb-0">
-                    <strong>
-                        90 days
-                    </strong>
-                </a>
-            </li>
-        </ul>
-      </div>
-    </div><!-- Other packages ends here -->
-    
-    {% else %}
-    <!-- Other packages start here -->
-    <div class="sidebar" id="sidebar-secondary">
-      <div class="right-navbar packages pt-0">
-        <h2 class="mb-0">Other packages</h2>
-        <ul class="underline">
-        {% for package in pop_list|slice:"0:4"  %}
-            <li>
-                <a href="{{package.url}}" class="blue-link pb-0">
-                {% if package.experience %} 
-                    <strong>
-                        {{package.experience|get_choice_display:"EXP_DICT"}}
-                    </strong>
-                {% endif %}
-                </a>
-            </li>
-        {% endfor %}
-        </ul>
-      </div>
-    </div><!-- Other packages ends here -->
-    {% endif %}
-
-    {% if prd_service == 'resume' and var_list %}
-        <!-- Select countries (optional) start here -->
-        <div class="sidebar" id="sidebar-countries">
-            <div class="right-navbar packages pt-0">
-                <ul class="underline">
-                {% for country in var_list %}
-                    <li id="element_checked">
-                        <input {% if country.id in selected_products %}checked{% endif %}
-                        value='{{country.id}}' name="required_option" type="checkbox"data-id="{{country.id}}" data-price="{{country.inr_price}}" actual-price="{% if country.fake_inr_price %} {{country.fake_inr_price}}{% else %}{{country.inr_price}}{% endif %}" id="{{country.label}} ">
-                        <label for="{{country.label}} ">
-                            <p class="pb-0" id="text_val">{{country.label}}</p>
-                        </label>
-                    </li>
-                {% endfor %}
-                </ul>
-                <div class="bottom-btn">
-                    <a href="#" class="btn-slg btn-blue btn-round w100fl text-center" 
-                    id="done_click">
-                        DONE
-                    </a>
-                </div>
-            </div>
-        </div><!-- Select countries (optional) ends here -->
-    {% endif %}
-    </amp-sidebar>
-
-
-
-
-  </body>
-</html>

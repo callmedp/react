@@ -13,7 +13,18 @@
                         </div>
                     </div>
                 </div>
+
+                {% if4 not amp %}
+                <amp-img
+                    src="{{image.url}}"
+                    alt="{{image_alt}}"
+                    width="315"
+                    height="90">
+                </amp-img>
+
+                {% else %}
                 <img src="{{image.url}}" alt="{{image_alt}}">
+                {% endif %}
             </a>
             {% endif %}
         </div><!-- end of download pdf -->
