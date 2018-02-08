@@ -24,7 +24,7 @@ writer.writerow(['Order Id','Customer Email','Vendor','Created Date','Payment Da
 for oi in OrderItem.objects.filter(order__payment_date__gte=timezone.datetime(2018,1,1),
 order__payment_date__lte=datetime.datetime(2018,1,31),order__status__in=[1,2,3,4]).filter(filter_processes):
 
-    a = reduce(lambda x,y: x + y,[x.selling_price for x in oi.order.orderitems.filter(filter_processes)])
+    a = reduce(lambda x,y: x + y,[x.selling_price+x.oi.delivery_price_incl_tax for x in oi.order.orderitems.filter(filter_processes)])
     b = oi.order.total_incl_tax
     c = re.sub("'","\"",oi.order.sales_user_info)
     if c:

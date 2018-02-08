@@ -311,7 +311,7 @@ RESUME_WRITING_INDIA = [2]
 #   SYSLOG_ADDRESS = "/var/run/syslog"
 #
 
-SYSLOG_ADDRESS = '/dev/log'
+SYSLOG_ADDRESS = '/run/uwsgi/app.sock'
 # Following is to make sure logging works with mac machines 2
 if sys.platform == "darwin":
     SYSLOG_ADDRESS = "/var/run/syslog"
@@ -330,7 +330,7 @@ LOGGING = {
     },
     'formatters': {
         'verbose': {
-            'format': '%(processName)s %(name)s %(levelname)s %(asctime)s %(pathname)s %(lineno)s %(message)s'
+            'format': 'Shinelearning %(name)s %(levelname)s %(asctime)s %(pathname)s %(lineno)s %(message)s'
         },
         'simple': {
             'format': '[%(asctime)s] %(levelname)s %(message)s',
@@ -409,7 +409,7 @@ LOGGING = {
         'syslog': {
          'level': 'DEBUG',
          'class': 'logging.handlers.SysLogHandler',
-         'facility': 'local7',
+         'facility': 'local5',
          'address': SYSLOG_ADDRESS,
          'formatter': 'verbose'
        },
