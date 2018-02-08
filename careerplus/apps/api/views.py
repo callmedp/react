@@ -23,6 +23,7 @@ from .serializers import OrderListHistorySerializer
 from payment.tasks import add_reward_point_in_wallet
 from order.functions import update_initiat_orderitem_sataus
 from geolocation.models import Country
+from coupon.models import Coupon
 from order.tasks import (
     pending_item_email,
     process_mailer,
@@ -364,3 +365,36 @@ class OrderHistoryAPIView(ListAPIView):
                 email=email,
                 status__in=[1, 2, 3]).distinct()
             return queryset_list
+
+
+class ValidateCouponApiView(APIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def post(self, request, format=None):
+
+        coupon_code = request.data.get('coupon_code', '')
+        crm_order_amount = request.data.get('order_amount', 0)
+        lead_source = request.data.get('lead_source', 0)
+        product_ids = request.data.get('product_list', [])
+
+        if coupon_code:
+            coupon = Coupon.objects.get(code=coupon_code)
+
+
+        # email = request.data.get('candidate_email', '')
+        # c_id = request.data.get('candidate_id', '')
+        # name = ''
+        
+
+        #         return Response(
+        #             {"status": "SUCCESS", "ltv_price": str(ltv), "name": name},
+        #             status=status.HTTP_200_OK)
+        #     else:
+        #         return Response(
+        #             {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
+        #             status=status.HTTP_400_BAD_REQUEST)    
+        # else:
+        #     return Response(
+        #         {"status": "FAIL", "msg": "Bad Parameters Provided"},
+        #         status=status.HTTP_400_BAD_REQUEST)
