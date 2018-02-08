@@ -91,10 +91,10 @@ class WriterInvoiceMixin(object):
                             exp_code = linkedin_obj.product.get_exp()
                             if not exp_code:
                                 exp_code = 'FR'
-                            starter_value = LINKEDIN_STARTER_VALUE
-                            linkedin_amount = starter_value
                             value_dict = linkedin_dict.get(exp_code, {})
-                            if value_dict and value_dict.get(user_type):
+                            starter_value = (LINKEDIN_STARTER_VALUE * value_dict.get(1)) / 100
+                            linkedin_amount = starter_value
+                            if value_dict and value_dict.get(user_type) != 1:
                                 linkedin_amount = (starter_value * value_dict.get(user_type)) / 100
                                 linkedin_amount = int(linkedin_amount)
 
@@ -106,10 +106,10 @@ class WriterInvoiceMixin(object):
                 exp_code = oi.product.get_exp()
                 if not exp_code:
                     exp_code = 'FR'
-                starter_value = LINKEDIN_STARTER_VALUE
-                linkedin_amount = starter_value
                 value_dict = linkedin_dict.get(exp_code, {})
-                if value_dict and value_dict.get(user_type):
+                starter_value = (LINKEDIN_STARTER_VALUE * value_dict.get(1)) / 100
+                linkedin_amount = starter_value
+                if value_dict and value_dict.get(user_type) != 1:
                     linkedin_amount = (starter_value * value_dict.get(user_type)) / 100
                     linkedin_amount = int(linkedin_amount)
                 if writing_ois.exists() and oi.pk not in self.combo_discount_object:
@@ -255,10 +255,10 @@ class WriterInvoiceMixin(object):
                         exp_code = p_oi.product.get_exp()
                         if not exp_code:
                             exp_code = 'FR'
-                        starter_value = WRITING_STARTER_VALUE
-                        amount = starter_value
                         value_dict = writing_dict.get(exp_code, {})
-                        if value_dict and value_dict.get(user_type):
+                        starter_value = (WRITING_STARTER_VALUE * value_dict.get(1)) / 100
+                        amount = starter_value
+                        if value_dict and value_dict.get(user_type) != 1:
                             amount = (starter_value * value_dict.get(user_type)) / 100
                             amount = int(amount)
 
@@ -386,14 +386,14 @@ class WriterInvoiceMixin(object):
                         if not exp_code:
                             exp_code = 'FR'
                         if oi.product.type_flow == 8:
-                            starter_value = LINKEDIN_STARTER_VALUE
                             value_dict = linkedin_dict.get(exp_code, {})
+                            starter_value = (LINKEDIN_STARTER_VALUE * value_dict.get(1)) / 100
                         else:
-                            starter_value = WRITING_STARTER_VALUE
                             value_dict = writing_dict.get(exp_code, {})
+                            starter_value = (WRITING_STARTER_VALUE * value_dict.get(1)) / 100
 
                         amount = starter_value
-                        if value_dict and value_dict.get(user_type):
+                        if value_dict and value_dict.get(user_type) != 1:
                             amount = (starter_value * value_dict.get(user_type)) / 100
 
                         if product_pk in VISUAL_RESUME_PRODUCT_LIST:
@@ -476,14 +476,14 @@ class WriterInvoiceMixin(object):
                         if not exp_code:
                             exp_code = 'FR'
                         if oi.product.type_flow == 8:
-                            starter_value = LINKEDIN_STARTER_VALUE
                             value_dict = linkedin_dict.get(exp_code, {})
+                            starter_value = (LINKEDIN_STARTER_VALUE * value_dict.get(1)) / 100
                         else:
-                            starter_value = WRITING_STARTER_VALUE
                             value_dict = writing_dict.get(exp_code, {})
+                            starter_value = (WRITING_STARTER_VALUE * value_dict.get(1)) / 100
 
                         amount = starter_value
-                        if value_dict and value_dict.get(user_type):
+                        if value_dict and value_dict.get(user_type) != 1:
                             amount = (starter_value * value_dict.get(user_type)) / 100
 
                         if product_pk in VISUAL_RESUME_PRODUCT_LIST:
