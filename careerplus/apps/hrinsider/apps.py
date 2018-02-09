@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class TalenteconomyConfig(AppConfig):
-    name = 'talenteconomy'
+class HRInsiderConfig(AppConfig):
+    name = 'hrinsider'
