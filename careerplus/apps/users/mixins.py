@@ -642,7 +642,7 @@ class WriterInvoiceMixin(object):
                 for chunk in pdf_file.chunks():
                     dest.write(chunk)
                 dest.close()
-                user.userprofile.user_invoice = full_path + file_name
+                user.userprofile.user_invoice = settings.INVOICE_DIR + full_path + file_name
                 user.userprofile.invoice_date = invoice_date
                 user.userprofile.save()
                 user.save()
