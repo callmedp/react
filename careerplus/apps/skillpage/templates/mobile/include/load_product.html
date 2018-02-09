@@ -4,7 +4,16 @@
         <div class="media">
             <div class="media-left">
                 <a href="javascript:void(0);" class="sigma-pro">
+                    {% if not amp %}
+                    <amp-img
+                        src="{{ product.pImg}}"
+                        width="50"
+                        height="50">
+                    </amp-img>
+
+                    {% else %}
                     <img src="{{ product.pImg}}">
+                    {% endif %}
                 </a>
             </div>
             <div class="media-body">
