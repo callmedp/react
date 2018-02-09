@@ -90,7 +90,7 @@ function saveWaitingForInput(oi_id, ){
         $('#msgid').val(msg);
         if (!msg)
         {
-            alert("First submit message");
+            alert("Give message int box click to save");
         }
         if (msg && $('#waiting-form' + oi_id).parsley().isValid()){
             var formData = $('#waiting-form' + oi_id).serialize();
