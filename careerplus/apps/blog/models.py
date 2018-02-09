@@ -22,6 +22,7 @@ SITE_TYPE = (
         (1, 'ShineLearning'),
         (2, 'TalentEconomy'),
         # (3, 'Both')
+        (3, 'HR-Insider'),
     )
 
 class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
