@@ -367,7 +367,7 @@ $(document).ready(function(){
                     required: true,
                 },
                 review: {
-                    maxlength: 100,
+                    maxlength: 1500,
                 },
             },
             messages: {
@@ -375,7 +375,7 @@ $(document).ready(function(){
                     required: "rating is required."
                 },
                 review: {
-                    maxlength: "length should be less than 100 characters.",
+                    maxlength: "length should not be greater than 1500 characters.",
                 },
             },
             errorPlacement: function(error, element){
