@@ -140,13 +140,17 @@ class Coupon(AbstractAutoDate):
         else:
             return prefix + code
 
-    def is_valid_coupon(self, site=1, source=None, cart_obj=None):
+    def is_valid_coupon(self, site=1, source=None, cart_obj=None, product_list=[]):
         # site=1 for learning
         flag = False
         if site == 2:
             if self.coupon_scope == 2 and source:
                 source_list = self.source.split(',')
                 if source and str(source) in source_list:
+                    flag = True
+            elif self.coupon_scope == 1 and product_list:
+                coupon_products = list(self.products.all().values_list('id', flat=True))
+                if set(coupon_products) & set(product_list):
                     flag = True
             elif self.coupon_scope == 0:
                 flag = True

@@ -10,4 +10,7 @@ urlpatterns = [
         views.EmailLTValueApiView.as_view(), name='api-ltvalue'),
     url(r'^v1/history/$',
         views.OrderHistoryAPIView.as_view(), name='historylist'),
+
+    url(r'^v1/coupon-validate/$',
+        views.ValidateCouponApiView.as_view(), name='coupon-validate'),
 ]
