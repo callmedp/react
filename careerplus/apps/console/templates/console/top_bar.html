@@ -1,3 +1,4 @@
+{% load console_tags %}  
   <!-- top navigation -->
 <div class="top_nav">
   <div class="nav_menu">
@@ -47,6 +48,31 @@
             </li>
           </ul>
         </li>
+
+        {% if request.user|has_group:WRITING_GROUP_LIST %}
+        <li class="">
+          <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <strong><small>Writer Invoice</small></strong>
+            <span class=" fa fa-angle-down"></span>
+          </a>
+          <ul class="dropdown-menu dropdown-usermenu pull-right">
+            
+              {% if not writer_invoice or not IS_LIVE %}
+              <li><a href="{% url "users:generate-writer-invoice"%}">
+                Generate Invoice
+              </a></li>
+              {% endif %}
+              {% if writer_invoice %}
+              <li>
+                <a href="{% url "users:download-writer-invoice" %}">
+                  Download Invoice
+                </a>
+              </li>
+              {% endif %}
+          </ul>
+        </li>
+        {% endif %}
+
       </ul>
     </nav>
   </div>

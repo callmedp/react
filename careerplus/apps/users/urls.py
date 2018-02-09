@@ -1,11 +1,9 @@
 from django.conf.urls import url
 from users.views import (
-	DownloadBoosterResume, 
-	ForgotPasswordResetView,
-	ForgotHtmlView,
-	ForgotPasswordEmailView,
-    SocialLoginView,
-    LinkedinLoginView,)
+    DownloadBoosterResume, ForgotPasswordResetView,
+    ForgotHtmlView, ForgotPasswordEmailView,
+    SocialLoginView, LinkedinLoginView,
+    GenerateWriterInvoiceView, DownloadWriterInvoiceView)
 
 
 urlpatterns = [
@@ -21,4 +19,13 @@ urlpatterns = [
         SocialLoginView.as_view(), name='social-login'),
     url(r'^linkedin/code/$',
         LinkedinLoginView.as_view(), name='linkedin-code'),
+
+    url(r'^generate-writer-invoice/$',
+        GenerateWriterInvoiceView.as_view(),
+        name='generate-writer-invoice'),
+
+    url(r'^download-writer-invoice/$',
+        DownloadWriterInvoiceView.as_view(),
+        name='download-writer-invoice'),
+
 ]
