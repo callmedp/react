@@ -106,6 +106,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
                     for obj in orderitem_objs:
                         email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                         obj.assigned_to = writer
+                        obj.assigned_date = timezone.now()
                         obj.assigned_by = request.user
                         obj.save()
 
@@ -1071,7 +1072,8 @@ class InterNationalAssignmentOrderItemView(View):
             try:
                 User = get_user_model()
                 writer = User.objects.get(pk=user_pk)
-                orderitem_objs = OrderItem.objects.filter(id__in=selected_id)
+                orderitem_objs = OrderItem.objects.filter(
+                    id__in=selected_id)
                 ActionUserMixin().assign_orderitem(
                     orderitem_list=orderitem_objs,
                     assigned_to=writer,

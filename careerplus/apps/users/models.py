@@ -4,6 +4,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin, BaseUserManager)
 from django.utils import timezone
+from django.db.models.signals import post_save
+
+from .choices import WRITER_TYPE
+from .functions import get_upload_path_user_invoice
 
 
 class UserManager(BaseUserManager):
@@ -71,7 +75,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         if self.name:
-            return self.name + '  (' + str(self.email) +')'
+            return self.name + '  (' + str(self.email) + ')'
         return "%s" % str(self.email)
 
     def get_short_name(self):
@@ -86,13 +90,85 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         return self.name
 
-
     def get_vendor(self):
         vendor_list = self.vendor_set.all()
         if vendor_list:
             return vendor_list[0]
         return None
-        
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    pan_no = models.CharField(
+        max_length=100, null=True, blank=True)
+    gstin = models.CharField(
+        max_length=255, null=True, blank=True)
+    address = models.TextField(null=True, blank=True)
+    writer_type = models.PositiveIntegerField(
+        choices=WRITER_TYPE,
+        default=0)
+    po_number = models.CharField(
+        max_length=255, unique=True,
+        null=True, blank=True)
+    valid_from = models.DateField(null=True, blank=True)
+    valid_to = models.DateField(null=True, blank=True)
+    user_invoice = models.FileField(
+        upload_to=get_upload_path_user_invoice,
+        max_length=255,
+        blank=True, null=True)
+    invoice_date = models.DateField(null=True, blank=True)
+
+    last_writer_type = models.PositiveIntegerField(
+        choices=WRITER_TYPE,
+        default=1)
+
+    wt_changed_date = models.DateField(
+        "Writer Type Update Date",
+        blank=True, null=True)
+
+    def __str__(self):
+        if self.user.name:
+            return self.user.name + ' (' + str(self.user.email) +')'
+        return "%s" % str(self.user.email)
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfile, self).__init__(*args, **kwargs)
+        self.initial_writer_type = self.writer_type
+        self.initial_wt_changed_date = self.wt_changed_date
+
+    def clean(self, *args, **kwargs):
+        super(UserProfile, self).clean(*args, **kwargs)
+        today_date = timezone.now().date()
+        if self.initial_writer_type != self.writer_type:
+            if not self.initial_wt_changed_date:
+                self.wt_changed_date = today_date
+                if self.initial_writer_type != 0:
+                    self.last_writer_type = self.initial_writer_type
+                elif self.writer_type != 0:
+                    self.last_writer_type = self.writer_type
+
+            elif self.initial_wt_changed_date.month == today_date.month and self.initial_wt_changed_date.year == today_date.year:
+                self.wt_changed_date = today_date
+
+            else:
+                if self.initial_writer_type != 0:
+                    self.last_writer_type = self.initial_writer_type
+                else:
+                    self.last_writer_type = self.writer_type
+                self.wt_changed_date = today_date
+
+
+def create_user_profile(sender, instance, created, **kwargs):
+    # when user is created
+    # if created:
+    # this code run on every save of user object
+    try:
+        UserProfile.objects.get_or_create(user=instance)
+    except:
+        pass
+post_save.connect(create_user_profile, sender=User)
+
+
 # class UserEmail(models.Model):
 #     """
 #     This is to record of all emails sent to a user.

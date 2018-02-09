@@ -19,6 +19,7 @@ else:
 
 # Database
 DATABASES = {
+
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'careerplus1',
@@ -27,6 +28,16 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
+
+    # learing2 db
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'careerplus',
+    #     'USER': 'root',
+    #     'PASSWORD': 'root',
+    #     'HOST': '172.22.65.33',
+    #     'PORT': '3306',
+    # },
 
     'oldDB': {
         'ENGINE': 'django.db.backends.mysql',
@@ -232,7 +243,7 @@ CP_VENDOR_ID = '12345'
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
-        'URL': 'http://172.22.65.33:8983/solr/prdt',
+        'URL': 'http://172.22.65.33:8983/solr/prdt',  # prdt(staging learning1) # live_prod(staging learing2)
         'INCLUDE_SPELLING': False,
     },
 }
@@ -282,6 +293,11 @@ GOOGLE_RECAPTCHA_SECRET = '6Lfa5zYUAAAAAAke3_HJ7XgC3Voxbdn1bscy878R'
 COMPRESS_PRECOMPILERS = (
    ('text/scss', 'sass --scss {infile} {outfile}'),
 )
+
+# Addon List For writer Invoice
+VISUAL_RESUME_PRODUCT_LIST = [305, 306, 307, 308, 309]
+COVER_LETTER_PRODUCT_LIST = [83, ]
+SECOND_REGULAR_RESUME_PRODUCT_LIST = [126, 127, 128, 129, 130]
 
 try:
     from .settings_local import *
