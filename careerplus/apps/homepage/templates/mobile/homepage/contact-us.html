@@ -1,12 +1,13 @@
 {% extends "mobile/basic/base.html" %}
+{% load static compress %}
 {% load static thumbnail compress %}
 {% block title %}Contact us | Shine learning{% endblock %}
 
 {% block css_section %}
     {{ block.super }}
-    <link href="{% static 'shinelearn/css/mobile/common/checkbox.css' %}" rel="stylesheet" >
-    <link href="{% static 'shinelearn/css/mobile/homepage/contact.css' %}" rel="stylesheet" >
-            
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/homepage/contact.scss' %}" rel="stylesheet" >
+    {% endcompress %}
 {% endblock css_section %}
 
 {% block header %}
@@ -31,28 +32,7 @@
             <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
         </div><!-- / Right side Icon ends here -->
     </div><!-- header menu Icon ends here -->
-
-    
-    
-    
     <h1 class="heading-back w100fl pb-0">Contact Us</h1>
-    
-
-
-    <!-- Skill Tagging starts here -->
-    
-    
-    <!-- Skill Tagging ends here -->
-
-    <!-- Course detail header starts here -->
-    
-    
-    <!-- Course detail header Ends here -->
-
-    <!-- Search listing tagging starts here -->
-    
-
-    
     <!-- Search listing tagging ends here -->
 </header><!-- header ends here -->
 
@@ -82,7 +62,7 @@
     <div class="care-left"><img src="{% static 'shinelearn/images/mobile/homepage/contact-phone.png' %}"></div>
     <div class="care-rgt">
     <h2>Customer Care</h2>
-      Phone - 01206158822
+      Phone - 08061843697
       <br>
       Email - <a href="mailto:resume@shine.com">resume@shine.com</a><br>
       Timings - 09:00 AM to 7:00 PM</div>

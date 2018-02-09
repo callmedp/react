@@ -1,21 +1,17 @@
 <section class="home-search-box {% if not request.session.candidate_id %}search-mg{% endif %}">
     <ul class="nav search-tabs" role="tablist">
         {% comment %}
-        
         <li role="presentation" class="active">
             <a href="#home-search" aria-controls="home-search" role="tab" data-toggle="tab">Search</a>
         </li>
-            
         <li role="presentation">
             <a href="#home-advanced-search" aria-controls="home-advanced-search" role="tab" data-toggle="tab">Advanced search</a>
         </li>
         {% endcomment %}
-        
     </ul>
-
-
-        <div class="tab-content form-inline">
-            <div role="tabpanel" class="tab-pane home-search active" id="home-search">
+    <div class="tab-content form-inline">
+        <div role="tabpanel" class="tab-pane home-search active" id="home-search">
+            <form class="cls_search" method='get' action='/search/results/'>
                 <div class="form-group">
                     <input class="inputTags-list key_press_js_search"
                            data-rulesid="01"
@@ -25,14 +21,13 @@
                            name="q"
                            placeholder="Search for courses, services etc.."
                            type="text"
-                           required="">
+                           required=""/>
                     <span class="error-txt"></span>
                 </div>
-
-                <button type="submit" onclick="redirectToSearch()" class="find-jobs-btn btn"></button>
-            </div>
-            {% comment %}
-                
+                <button type="submit" class="find-jobs-btn btn"></button>
+            </form>    
+        </div>
+        {% comment %}
             <div role="tabpanel" class="tab-pane home-advanced-search" id="home-advanced-search">
                 <form id="advance-search-form" class="form-inline js_advance_search_form" method="post" action="{% url 'search:recommend' %}">
                     {% csrf_token %}
@@ -48,8 +43,6 @@
                 <button type="submit" id="advance-search-button" class="find-jobs-btn btn js_advance_search"></button>
                 </form>
             </div>
-            {% endcomment %}
-            
-        </div>
-
+        {% endcomment %}
+    </div>
 </section>

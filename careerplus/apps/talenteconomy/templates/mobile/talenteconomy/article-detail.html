@@ -1,5 +1,5 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
+{% load static compress %}
 {% load thumbnail compress %}
 
 {% block django_meta %}
@@ -25,8 +25,9 @@
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
-    <link href="{% static "shinelearn/css/mobile/common/slick.css" %}" rel="stylesheet">
-    <link href="{% static "shinelearn/css/mobile/blog/blog.css" %}" rel="stylesheet">{% endcompress %}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/blog/blog.scss' %}" rel="stylesheet">
+    {% endcompress %}
 {% endblock css_section %}
 
 {% block header %}
@@ -105,9 +106,9 @@
     <div class="share-wrap">
         <ul id="share-icon">
             <!-- <li class="wp-bg"><a href="#"><span class="icon-wp"></span></a></li> -->
-            <li class="gp-bg"><a href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}"><span class="icon-gp"></span></a></li>
-            <li class="tw-bg"><a href="https://twitter.com/home?status={{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}"><span class="icon-tw"></span></a></li>
-            <li class="fb-bg"><a href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}"><span class="icon-fb"></span></a></li>
+            <li class="gp-bg"><a href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}" target="_blank">><span class="icon-gp"></span></a></li>
+            <li class="tw-bg"><a href="https://www.twitter.com/share?url=https://{{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}" target="_blank">><span class="icon-tw"></span></a></li>
+            <li class="fb-bg"><a href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}" target="_blank">><span class="icon-fb"></span></a></li>
             <li class="share-bg"><a href="#">{{main_article.no_shares}}<br>{% if main_article.no_shares > 1 %} Shares {% else %}Share{% endif %}</a></li>
         </ul>
         <a href="JavaScript:Void(0);" id="share-btn" class="blue-circle-60"><span class="icon-share"></span></a>

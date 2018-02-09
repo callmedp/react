@@ -48,7 +48,8 @@ class ActionUserMixin(object):
             )
 
     def assign_orderitem(self, orderitem_list=[], assigned_to=None, user=None, data={}):
-        orderitem_objs = OrderItem.objects.filter(id__in=orderitem_list).select_related('order')
+        orderitem_objs = OrderItem.objects.filter(
+            id__in=orderitem_list).select_related('order')
         for obj in orderitem_objs:
             if not obj.assigned_to:
                 obj.assigned_to = assigned_to
@@ -72,7 +73,7 @@ class ActionUserMixin(object):
                     "writer_email": assigned_to.email,
                     "subject": "Your service has been initiated",
                     "type_flow": obj.product.type_flow,
-                    'delivery_service': obj.delivery_service,
+                    'delivery_service': True if obj.delivery_service else False,
                     'delivery_service_slug': obj.delivery_service.slug if obj.delivery_service else '',
                     'delivery_service_name': obj.delivery_service.name if obj.delivery_service else '',
                 })
@@ -90,26 +91,27 @@ class ActionUserMixin(object):
                 variations = []
                 combos = []
 
-                if not obj.parent and obj.product.type_flow in [1, 12, 13]:
+                if not obj.parent and obj.product.type_flow in [1, 12, 13, 4]:
                     addons = obj.order.orderitems.filter(
                         parent=obj,
-                        product__type_flow__in=[1, 12, 13], is_addon=True)
+                        product__type_flow__in=[1, 12, 13, 4], is_addon=True)
                     variations = obj.order.orderitems.filter(
                         parent=obj.parent, is_variation=True)
 
-                elif obj.is_addon and obj.parent.product.type_flow in [1, 12, 13]:
+                elif obj.is_addon and obj.parent.product.type_flow in [1, 12, 13, 4]:
                     addons = obj.order.orderitems.filter(
                         parent=obj.parent,
-                        product__type_flow__in=[1, 12, 13], is_addon=True)
+                        product__type_flow__in=[1, 12, 13, 4], is_addon=True)
                     if not obj.parent.no_process:
-                        addons = addons | obj.order.orderitems.filter(pk=obj.parent.pk)
+                        addons = addons | obj.order.orderitems.filter(
+                            pk=obj.parent.pk)
 
                     variations = obj.order.orderitems.filter(
                         parent=obj.parent, is_variation=True)
 
                     combos = obj.order.orderitems.filter(
                         parent=obj.parent,
-                        product__type_flow__in=[1, 12, 13],
+                        product__type_flow__in=[1, 12, 13, 4],
                         is_combo=True)
 
                 elif obj.is_variation:
@@ -117,13 +119,13 @@ class ActionUserMixin(object):
                         parent=obj.parent, is_variation=True)
                     addons = obj.order.orderitems.filter(
                         parent=obj.parent,
-                        product__type_flow__in=[1, 12, 13],
+                        product__type_flow__in=[1, 12, 13, 4],
                         is_addon=True)
 
-                elif obj.is_combo and obj.product.type_flow in [1, 12, 13]:
+                elif obj.is_combo and obj.product.type_flow in [1, 12, 13, 4]:
                     addons = obj.order.orderitems.filter(
                         parent=obj.parent,
-                        product__type_flow__in=[1, 12, 13],
+                        product__type_flow__in=[1, 12, 13, 4],
                         is_addon=True)
 
                 for oi in addons:
@@ -149,17 +151,22 @@ class ActionUserMixin(object):
                             "writer_email": assigned_to.email,
                             "subject": "Your service has been initiated",
                             "type_flow": oi.product.type_flow,
-                            'delivery_service': oi.delivery_service,
+                            'delivery_service': True if oi.delivery_service else False,
                             'delivery_service_slug': oi.delivery_service.slug if oi.delivery_service else '',
                             'delivery_service_name': oi.delivery_service.name if oi.delivery_service else '',
                         })
-                        self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_data)
+                        self.product_flow_wise_mail(
+                            orderitem_obj=oi, to_emails=to_emails,
+                            mail_type=mail_type,
+                            data=email_data)
                         if oi.delivery_service:
                             if oi.delivery_service.slug == 'super-express':
                                 try:
-                                    SendSMS().send(sms_type=mail_type, data=email_data)
+                                    SendSMS().send(
+                                        sms_type=mail_type, data=email_data)
                                 except Exception as e:
-                                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                                    logging.getLogger('sms_log').error(
+                                        "%s - %s" % (str(mail_type), str(e)))
 
                         # sms to writer in case of express and super express delivery
 
@@ -186,17 +193,22 @@ class ActionUserMixin(object):
                             "writer_email": assigned_to.email,
                             "subject": "Your service has been initiated",
                             "type_flow": oi.product.type_flow,
-                            'delivery_service': oi.delivery_service,
+                            'delivery_service': True if oi.delivery_service else False,
                             'delivery_service_slug': oi.delivery_service.slug if oi.delivery_service else '',
                             'delivery_service_name': oi.delivery_service.name if oi.delivery_service else '',
                         })
-                        self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_data)
+                        self.product_flow_wise_mail(
+                            orderitem_obj=oi, to_emails=to_emails,
+                            mail_type=mail_type,
+                            data=email_data)
                         if oi.delivery_service:
                             if oi.delivery_service.slug == 'super-express':
                                 try:
-                                    SendSMS().send(sms_type=mail_type, data=email_data)
+                                    SendSMS().send(
+                                        sms_type=mail_type, data=email_data)
                                 except Exception as e:
-                                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                                    logging.getLogger('sms_log').error(
+                                        "%s - %s" % (str(mail_type), str(e)))
 
                         # sms to writer in case of express and super express delivery
 
@@ -223,11 +235,14 @@ class ActionUserMixin(object):
                             "writer_email": assigned_to.email,
                             "subject": "Your service has been initiated",
                             "type_flow": oi.product.type_flow,
-                            'delivery_service': oi.delivery_service,
+                            'delivery_service': True if oi.delivery_service else False,
                             'delivery_service_slug': oi.delivery_service.slug if oi.delivery_service else '',
                             'delivery_service_name': oi.delivery_service.name if oi.delivery_service else '',
                         })
-                        self.product_flow_wise_mail(orderitem_obj=oi, to_emails=to_emails, mail_type=mail_type, data=email_data)
+                        self.product_flow_wise_mail(
+                            orderitem_obj=oi, to_emails=to_emails,
+                            mail_type=mail_type,
+                            data=email_data)
                         if obj.delivery_service and obj.delivery_service.slug == 'super-express':
                             try:
                                 SendSMS().send(
@@ -415,24 +430,32 @@ class ActionUserMixin(object):
         return message_dict
 
     def product_flow_wise_mail(self, orderitem_obj=None, to_emails=[], mail_type=None, data={}):
-        email_sets = list(orderitem_obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
-        if orderitem_obj.product.type_flow == 1 and 28 not in email_sets:             
-            send_email_task.delay(to_emails, mail_type, data, status=28, oi=orderitem_obj.pk)
+        email_sets = list(
+            orderitem_obj.emailorderitemoperation_set.all().values_list(
+                'email_oi_status', flat=True).distinct())
+        if orderitem_obj.product.type_flow == 1 and 28 not in email_sets:
+            send_email_task.delay(
+                to_emails, mail_type, data, status=28, oi=orderitem_obj.pk)
 
-        elif orderitem_obj.product.type_flow == 12 and 141 not in email_sets:             
-            send_email_task.delay(to_emails, mail_type, data, status=141, oi=orderitem_obj.pk)
+        elif orderitem_obj.product.type_flow == 12 and 146 not in email_sets:
+            send_email_task.delay(
+                to_emails, mail_type, data, status=146, oi=orderitem_obj.pk)
 
-        elif orderitem_obj.product.type_flow == 13 and 151 not in email_sets:             
-            send_email_task.delay(to_emails, mail_type, data, status=151, oi=orderitem_obj.pk)
+        elif orderitem_obj.product.type_flow == 13 and 156 not in email_sets:
+            send_email_task.delay(
+                to_emails, mail_type, data, status=156, oi=orderitem_obj.pk)
 
-        elif orderitem_obj.product.type_flow == 8 and 101 not in email_sets:             
-            send_email_task.delay(to_emails, mail_type, data, status=108, oi=orderitem_obj.pk)
+        elif orderitem_obj.product.type_flow == 8 and 101 not in email_sets:
+            send_email_task.delay(
+                to_emails, mail_type, data, status=101, oi=orderitem_obj.pk)
 
-        elif orderitem_obj.product.type_flow == 3 and 41 not in email_sets:             
-            send_email_task.delay(to_emails, mail_type, data, status=41, oi=orderitem_obj.pk)
+        elif orderitem_obj.product.type_flow == 3 and 42 not in email_sets:
+            send_email_task.delay(
+                to_emails, mail_type, data, status=42, oi=orderitem_obj.pk)
 
-        elif orderitem_obj.product.type_flow == 4 and 61 not in email_sets:             
-            send_email_task.delay(to_emails, mail_type, data, status=61, oi=orderitem_obj.pk)
+        elif orderitem_obj.product.type_flow == 4 and 63 not in email_sets:
+            send_email_task.delay(
+                to_emails, mail_type, data, status=63, oi=orderitem_obj.pk)
         else:
             pass
 

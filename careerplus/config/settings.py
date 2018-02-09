@@ -27,6 +27,7 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
+
     'oldDB': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'shinecp',
@@ -211,6 +212,11 @@ SCOPE = 'r_emailaddress r_basicprofile'
 TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
 OAUTH_URL = "https://www.linkedin.com/oauth/v2/authorization?"
 
+# Cart Drop Out Set Time For Task
+CART_DROP_OUT_EMAIL = 1 * 60
+CART_DROP_OUT_LEAD = 3 * 60
+SHIPPING_DROP_OUT_LEAD = 10 * 60
+PAYMENT_DROP_LEAD = 5 * 60
 
 
 CELERY_IMPORTS = (
@@ -273,6 +279,9 @@ GOOGLE_RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify"
 GOOGLE_RECAPTCHA_KEY = '6Lfa5zYUAAAAAFFe_gV2u2h3XovQzmQCUzRm4MYY'
 GOOGLE_RECAPTCHA_SECRET = '6Lfa5zYUAAAAAAke3_HJ7XgC3Voxbdn1bscy878R'
 
+COMPRESS_PRECOMPILERS = (
+   ('text/scss', 'sass --scss {infile} {outfile}'),
+)
 
 try:
     from .settings_local import *

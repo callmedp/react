@@ -52,6 +52,7 @@ def booster():
             last_oi_status = oi.oi_status
             oi.oi_status = 4
             oi.last_oi_status = 6
+            oi.closed_on = timezone.now()
             oi.save()
             oi.orderitemoperation_set.create(
                 oi_status=62,
@@ -95,7 +96,7 @@ def booster():
             "username": oi.order.first_name,
         })
 
-        if oi.oi_draft:
+        if oi.oi_draft or oi.oi_resume:
             resumevar = "%s://%s/user/resume/download/?token=%s" % (
                 settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
             resumevar = textwrap.fill(resumevar, width=80)
@@ -122,6 +123,7 @@ def booster():
                 last_oi_status = oi.oi_status
                 oi.oi_status = 4
                 oi.last_oi_status = 6
+                oi.closed_on = timezone.now()
                 oi.save()
                 oi.orderitemoperation_set.create(
                     oi_status=62,

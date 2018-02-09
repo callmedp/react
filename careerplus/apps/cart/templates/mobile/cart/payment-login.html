@@ -1,5 +1,5 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
+{% load static compress %}
 {% load thumbnail %}
 {% load static compress %}
 
@@ -13,15 +13,9 @@
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
-        <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
-        <link href="{% static "shinelearn/css/mobile/payment/payment.css" %}" rel="stylesheet">
-        <link href="{% static "shinelearn/css/mobile/users/login.css" %}" rel="stylesheet">
-        <style type="text/css">
-            .error{
-                color:red;
-                font-size: 11px;
-            }
-        </style>
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/payment/payment.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/users/login.scss' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 

@@ -1,5 +1,5 @@
 {% extends "mobile/basic/base.html" %}
-{% load static %}
+{% load static compress %}
 {% load thumbnail %}
 {% load static compress %}
 
@@ -13,38 +13,10 @@
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
-        <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
-        <link href="{% static "shinelearn/css/mobile/payment/payment.css" %}" rel="stylesheet">
-        <link href="{% static "shinelearn/css/mobile/users/login.css" %}" rel="stylesheet">
-    {% endcompress %}
-    {% compress css inline %}
-        <style type="text/css">
-            .error{
-                color:red;
-            }
-            .autocomplete-suggestions {
-                border: 2px solid #e4e4e4;
-                background: #F4F4F4;
-                cursor: default;
-                overflow: auto;
-            }
-            .autocomplete-suggestion {
-                padding: 2px 5px;
-                font-size: 1.2em;
-                white-space: nowrap;
-                overflow: hidden
-            }
-            .autocomplete-selected {
-                background: #f0f0f0
-            }
-            .autocomplete-suggestions strong {
-                font-weight: normal;
-                color: #3399ff;
-                font-weight: bolder
-            }
-        </style>
-    {% endcompress %}
-    
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/payment/payment.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/users/login.scss' %}" rel="stylesheet">
+    {% endcompress %} 
 {% endblock css_section %}
 
 {% block header %}

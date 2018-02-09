@@ -16,7 +16,7 @@ def close_order():
     closed_order = 0
 
     for od in paid_orders:
-        open_ois = od.orderitems.filter(no_process=False).exclude(oi_status=4)
+        open_ois = od.orderitems.filter(no_process=False).exclude(oi_status__in=[4, 163])
         if not open_ois.exists():
             od.status = 3
             od.closed_on = timezone.now()

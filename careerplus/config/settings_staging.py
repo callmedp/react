@@ -40,6 +40,11 @@ COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 IS_LIVE = False
 
+CART_DROP_OUT_EMAIL = 1 * 60
+CART_DROP_OUT_LEAD = 3 * 60
+SHIPPING_DROP_OUT_LEAD = 10 * 60
+PAYMENT_DROP_LEAD = 5 * 60
+
 try:
     from .settings_local import *
 except:

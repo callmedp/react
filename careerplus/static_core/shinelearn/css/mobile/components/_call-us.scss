@@ -1,0 +1,58 @@
+.call-us {
+
+  .ui-grid-a {
+    width: 100%;
+    margin: 0;
+  }
+
+  .ui-block-a {
+    background-color: #3f8bff;
+    font-size: 1em;
+
+    span {
+      @include icon-inblock (16px, 12px, -47px -216px);
+      margin-right: 5px;
+      position: relative;
+      top: 1px;
+    }
+  }
+
+  .ui-block-b {
+    background-color: #5b9cff;
+
+    span {
+      @include icon-inblock (16px, 16px, 0 -215px);
+      margin-right: 5px;
+      position: relative;
+      top: 3px;
+    }
+  }
+
+  .ui-block-c {
+    background-color: #3f8bff;
+
+    span {
+      @include icon-inblock (20px, 15px, -22px -216px);
+      margin-right: 5px;
+      position: relative;
+      top: 3px;
+    }
+  }
+
+  .ui-block-a, .ui-block-b, .ui-block-c {
+    padding: 15px 10px;
+    color: $txt-white;
+    height: 50px;
+    float: left;
+
+    a {
+      color: $txt-white;
+    }
+  }
+}
+
+.block-3 {
+    .ui-block-a, .ui-block-b, .ui-block-c {
+      width: 33.33%
+    }
+}

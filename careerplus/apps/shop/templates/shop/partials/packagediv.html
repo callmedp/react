@@ -121,18 +121,19 @@
   
   
 {% else %}
-    
-  <div class="main-package">
-    <div class="main-package-content">
-      <span>Experience</span>
-      {% if prd_exp %}
-        <strong>{{prd_exp|get_choice_display:"EXP_DICT"}}</strong>
-      {% endif %}
-      <p>Starting at <small>Rs. {{start_price|floatformat}}/-</small></p>
-    </div>
+    {% if prd_exp %}
+      <div class="main-package">
+        <div class="main-package-content">
+          <span>Experience</span>
+          
+            <strong>{{prd_exp|get_choice_display:"EXP_DICT"}}</strong>
+          
+          <p>Starting at <small>Rs. {{start_price|floatformat}}/-</small></p>
+        </div>
 
-    <div class="main-package-arrow"></div>
-  </div>
+        <div class="main-package-arrow"></div>
+      </div>
+    {% endif %}
   <!-- main package start end-->
   {% if pop %}
 

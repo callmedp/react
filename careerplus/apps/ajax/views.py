@@ -1,9 +1,12 @@
 import json
 import logging
 import datetime
+from django.db.models import Sum
 
+from decimal import Decimal
 from django.views.generic import View, TemplateView
 from django.http import HttpResponse, HttpResponseForbidden
+from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.conf import settings
@@ -15,7 +18,7 @@ from blog.models import Blog, Comment
 from geolocation.models import Country
 from review.models import Review
 from users.mixins import RegistrationLoginApi
-from order.models import Order, OrderItem
+from order.models import Order, OrderItem, RefundRequest
 from console.order_form import FileUploadForm, VendorFileUploadForm
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
@@ -159,10 +162,14 @@ class AjaxReviewLoadMoreView(TemplateView):
         slug = self.request.GET.get('slug', '')
         page = int(self.request.GET.get('page', 1))
         try:
-            prod_id_list = SQS().filter(pCtg=slug).only('id').values_list('id', flat=True)
-            # page_obj = Category.objects.get(slug=slug, active=True)
-            # prod_id_list = page_obj.product_set.values_list('id', flat=True)
-            prod_reviews = Review.objects.filter(id__in=prod_id_list)
+            prod_id_list = SQS().filter(
+                pCtg=slug).only('id').values_list('id', flat=True)
+            product_obj = ContentType.objects.get(
+                app_label='shop', model='product')
+            prod_reviews = Review.objects.filter(
+                object_id__in=prod_id_list,
+                content_type=product_obj,
+                status=1)
             paginator = Paginator(prod_reviews, 4)
             try:
                 page_reviews = paginator.page(page)
@@ -341,8 +348,8 @@ class ApproveByAdminDraft(View):
                             "username": obj.order.first_name,
                             'draft_added': obj.draft_added_on,
                             'mobile': obj.order.mobile,
-                            'upload_url': "%s/autologin/%s/?next=/dashboard" % (
-                                settings.SITE_DOMAIN, token.decode()),
+                            'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
                         })
                         send_email_task.delay(
                             to_emails, mail_type, email_dict, status=9,
@@ -605,32 +612,34 @@ class MarkedPaidOrderView(View):
             order_pk = request.POST.get('order_pk', None)
             try:
                 obj = Order.objects.get(pk=order_pk)
-                data['status'] = 1
-                payment_date = timezone.now()
-                obj.status = 1
-                obj.paid_by = request.user
-                obj.payment_date = payment_date
-                obj.save()
+                if obj.status != 1:
+                    data['status'] = 1
+                    payment_date = timezone.now()
+                    obj.status = 1
+                    obj.paid_by = request.user
+                    obj.payment_date = payment_date
+                    obj.save()
 
-                txn_objs = obj.ordertxns.filter(status=0)
-                for txn_obj in txn_objs:
-                    txn_obj.status = 1
-                    txn_obj.payment_date = payment_date
-                    txn_obj.save()
+                    txn_objs = obj.ordertxns.filter(status=0)
+                    for txn_obj in txn_objs:
+                        txn_obj.status = 1
+                        txn_obj.payment_date = payment_date
+                        txn_obj.save()
 
-                data['display_message'] = "order %s marked paid successfully" % (str(order_pk))
-                # add reward_point in wallet
-                add_reward_point_in_wallet.delay(order_pk=obj.pk)
-                # OrderMixin().addRewardPointInWallet(order=obj)
+                    data['display_message'] = "order %s marked paid successfully" % (str(order_pk))
+                    # add reward_point in wallet
+                    add_reward_point_in_wallet.delay(order_pk=obj.pk)
+                    # OrderMixin().addRewardPointInWallet(order=obj)
 
-                # pending item email send
-                pending_item_email.apply_async((obj.pk,), countdown=900)
+                    # pending item email send
+                    pending_item_email.apply_async((obj.pk,), countdown=900)
 
-                # send email through process mailers
-                process_mailer.apply_async((obj.pk,), countdown=900)
+                    # send email through process mailers
+                    process_mailer.apply_async((obj.pk,), countdown=900)
+                    # process_mailer(obj.pk)
 
-                # roundone order
-                roundone_product(order=obj)
+                    # roundone order
+                    roundone_product(order=obj)
 
             except Exception as e:
                 data['display_message'] = '%s order id - %s' % (str(e), str(order_pk))
@@ -640,3 +649,43 @@ class MarkedPaidOrderView(View):
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         return HttpResponseForbidden()
+
+
+class GetLTVAjaxView(View):
+    
+    def post(self, request, *args, **kwargs):
+        data = {"status": 0}
+        return_list = []
+            
+        if request.is_ajax() and request.user.is_authenticated():
+            o_list = request.POST.getlist('order_list[]')
+            data = {"status": 1}
+            results = {order:"0" for order in o_list }
+            order_list = Order.objects.filter(pk__in=o_list)
+            order_dict = {str(order.pk): order.candidate_id for order in order_list}
+            candidate_list = order_list.values_list('candidate_id', flat=True).distinct()
+            candidate_dict = {}
+            for candidate in candidate_list:
+                ltv = Decimal(0)
+                ltv_pks = Order.objects.filter(
+                    candidate_id=candidate,
+                    status__in=[1,2,3]).values_list('pk', flat=True)
+                if ltv_pks:
+                    ltv_order_sum = Order.objects.filter(
+                        pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
+                    ltv = ltv_order_sum.get('ltv_price') if ltv_order_sum.get('ltv_price') else Decimal(0)
+                    rf_ois = OrderItem.objects.filter(
+                        order__in=ltv_pks,
+                        oi_status=163).values_list('order', flat=True)
+                    rf_sum = RefundRequest.objects.filter(
+                        order__in=rf_ois).aggregate(rf_price=Sum('refund_amount'))
+                    if rf_sum.get('rf_price'):
+                        ltv = ltv - rf_sum.get('rf_price')
+
+                candidate_dict[candidate] = str(ltv)
+            for k,v  in results.items():
+                if order_dict.get(k):
+                    results[k] = candidate_dict.get(order_dict.get(k), "0")         
+            for order in o_list:
+                data.update({order:results.get(order,"0")})
+        return HttpResponse(json.dumps(data), content_type="application/json")

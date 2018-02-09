@@ -117,7 +117,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pPfgbb = indexes.FloatField(model_attr='fake_gbp_price', indexed=False)
 
     pAbx = indexes.CharField(model_attr='about', default='', indexed=False) 
-    pARx = indexes.FloatField(model_attr='avg_rating', indexed=False)
+    pARx = indexes.FloatField(model_attr='avg_rating', indexed=True)
     pFAQs = indexes.CharField(indexed=False)
     pPChs = indexes.CharField(indexed=False)
     pCmbs = indexes.CharField(indexed=False)

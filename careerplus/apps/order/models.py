@@ -259,6 +259,7 @@ class OrderItem(AbstractAutoDate):
     approved_on = models.DateTimeField(null=True, blank=True)  # draft approved on
     expiry_date = models.DateTimeField(null=True, blank=True)
     user_feedback = models.BooleanField(default=False)
+    buy_count_updated = models.BooleanField(default=False)
 
     class Meta:
         app_label = 'order'
@@ -288,6 +289,8 @@ class OrderItem(AbstractAutoDate):
             ("can_show_linkedin_approval_queue", "Can View Linkedin Approval Queue"),
             ("can_show_linkedin_inbox_queue", "Can View Linkedin Inbox Queue"),
             ("can_show_linkedin_writer_draft", "Can View Linkedin Writer Draft"),
+            ("can_show_linkedin_counselling_form", "Can View Linkedin Counselling Form"),
+            ("can_view_counselling_form_in_approval_queue", "Can View Counselling Form In Approval Queue"),
 
             # Approval Queue
             ("can_show_approval_queue", "Can View Approval Queue"),

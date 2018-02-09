@@ -16,17 +16,21 @@
     {{block.super}}
     {% if request.session.candidate_id %}
     {% compress css %}
-    <link type="text/css" href="{% static 'shinelearn/css/homepage/home1.css' %}" rel="stylesheet">
+    <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/homepage/home1.scss' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
     {% endcompress %}
     {% else %}
     {% compress css %}
-    <link type="text/css" href="{% static 'shinelearn/css/homepage/home.css' %}" rel="stylesheet">
-    {% endcompress %}
-    {% endif %}
-    {% compress css %}
-    <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
+    <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/homepage/home.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
     {% endcompress %}
+    {% endif %}
+    
+    <style type="text/css">
+        .searchNavBar{
+            display: none;
+        }
+    </style>
 {% endblock css_section %}
 
 {% block main_container %}
@@ -315,7 +319,6 @@
 {% block js_section %}
     {{block.super}}
     {% compress js %}
-    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
     <script src="{% static 'shinelearn/js/homepage/index.js' %}"></script>
     {% endcompress %}
@@ -324,10 +327,8 @@
             skillsSet = {{ skills_set|safe }},
             prefetchedFuncArea = '{{ recmnd_func_area }}',
             prefetchedSkills = '{{ recmnd_skills }}';
-        $('#id_q').typeahead({
-            local: {{ search_context|safe }}
-        });
     </script>
+    
     {% compress js inline %}
     <script>
         $('#myCarousel1').carousel({

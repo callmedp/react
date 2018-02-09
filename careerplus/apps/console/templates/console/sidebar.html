@@ -18,6 +18,28 @@
       </li>
       </ul>
     {% endif %}
+    {% if request.user|has_group:USER_QUERY_GROUP_LIST %} 
+      <h3>User Query</h3>
+        
+      <ul class="nav side-menu">
+        <li><a><i class="fa fa-list-alt"></i> User Query <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              {% if request.user|has_group:CMS_GROUP_LIST %}
+                  <li><a href="{% url 'console:userquery:cms-query' %}">Cms Leads</a></li>
+              {% endif %}
+              {% if request.user|has_group:SKILL_GROUP_LIST %}
+                  <li><a href="{% url 'console:userquery:skill-query' %}">Skill Leads</a></li>
+              {% endif %}
+              {% if request.user|has_group:COURSE_GROUP_LIST %}
+                  <li><a href="{% url 'console:userquery:course-query' %}">Course Leads</a></li>
+              {% endif %}
+              {% if request.user|has_group:SERVICE_GROUP_LIST %}
+                  <li><a href="{% url 'console:userquery:service-query' %}">Service Leads</a></li>
+              {% endif %}
+            </ul>
+        </li>
+      </ul>
+    {% endif %}
     
     {% if request.user|has_group:PRODUCT_GROUP_LIST %}
         <h3>Live Catalog</h3>
@@ -119,6 +141,18 @@
           {% endif %}
         </ul>
     {% endif %}
+
+    {% if perms.review.can_change_review_queue %}
+        <h3>REVIEW MODERATIONS</h3>
+   
+        <ul class="nav side-menu"> 
+          <li><a><i class="fa fa-edit"></i> Review Moderations <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url 'console:review-to-moderate' %}">Review</a></li>
+            </ul>
+          </li>
+        </ul>
+    {% endif %}
       <h3>Orders</h3>
       
       <ul class="nav side-menu">
@@ -158,7 +192,7 @@
                 </li>
             </ul>
         {% endif %}
-
+      {% if request.user|has_group:WRITING_GROUP_LIST %}
       <li>
       <a>
         <i class="fa fa-edit"></i>Linkedin Queue<span class="fa fa-chevron-down"></span>
@@ -190,6 +224,7 @@
         {% endif %}
       </ul>
       </li>
+      {% endif %}
       <li><a><i class="fa fa-list-alt"></i> Queue <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
 
@@ -270,6 +305,7 @@
             
         </ul>
       </li>
+
     
   </div>
 

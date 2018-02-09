@@ -2,23 +2,24 @@ import logging
 import datetime
 from decimal import Decimal
 
+from django.db.models import Sum
 from django.utils import timezone
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser, )
+from rest_framework.generics import ListAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 
 from users.tasks import user_register
-from order.models import Order
+from order.models import Order, OrderItem, RefundRequest
 from shop.views import ProductInformationMixin
 from shop.models import Product
 from coupon.models import Coupon
 from core.api_mixin import ShineCandidateDetail
-# from order.mixins import OrderMixin
+from .serializers import OrderListHistorySerializer
 from payment.tasks import add_reward_point_in_wallet
 from order.functions import update_initiat_orderitem_sataus
 from geolocation.models import Country
@@ -153,13 +154,15 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                         variations = data.get('variations', [])
                         combos = data.get('combos', [])
                         product = Product.objects.get(id=parent_id)
+
                         p_oi = order.orderitems.create(
                             product=product,
                             title=product.get_name,
                             partner=product.vendor
                         )
                         p_oi.upc = str(order.pk) + "_" + str(p_oi.pk)
-
+                        if product.type_flow == 8:
+                            p_oi.oi_status = 2
                         if product.type_product == 3:
                             p_oi.is_combo = True
                             p_oi.no_process = True
@@ -172,6 +175,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                     parent=p_oi,
                                     is_combo=True
                                 )
+                                if prd.type_flow == 8:  # Linkedin Orders Resume required status
+                                    oi.oi_status = 2
                                 oi.upc = str(order.pk) + "_" + str(oi.pk)
                                 oi.save()
 
@@ -199,6 +204,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                 parent=p_oi,
                                 is_variation=True,
                             )
+                            if prd.type_flow == 8:  # Linkedin Orders Resume required status
+                                oi.oi_status = 2
                             oi.upc = str(order.pk) + "_" + str(oi.pk)
                             cost_price = var.get('price')
                             oi.cost_price = cost_price
@@ -220,6 +227,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                 parent=p_oi,
                                 is_addon=True,
                             )
+                            if prd.type_flow == 8:  # Linkedin Orders Resume required status
+                                oi.oi_status = 2
                             oi.upc = str(order.pk) + "_" + str(oi.pk)
                             cost_price = addon.get('price')
                             oi.cost_price = cost_price
@@ -281,3 +290,77 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
             return Response(
                 {"status": 0, "msg": "there is no items in order"},
                 status=status.HTTP_400_BAD_REQUEST)
+
+
+class EmailLTValueApiView(APIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def post(self, request, format=None):
+        email = request.data.get('candidate_email', '')
+        c_id = request.data.get('candidate_id', '')
+        name = ''
+        candidate_id = None
+        if email or c_id:
+            ltv = Decimal(0)
+            if not c_id:
+                email = email.lower().strip()
+                candidate_response = ShineCandidateDetail().get_candidate_detail(email=email)
+                if candidate_response:
+                    personal_detail = candidate_response.get('personal_detail')[0] if candidate_response.get('personal_detail') else None
+                    if personal_detail:
+                        candidate_id = personal_detail.get('id')
+                        name = personal_detail.get('first_name', '') + ' ' + personal_detail.get('last_name', '')  
+            else:
+                candidate_id = c_id
+            if candidate_id:
+                ltv_pks = Order.objects.filter(
+                    candidate_id=candidate_id,
+                    status__in=[1,2,3]).values_list('pk', flat=True)
+                if ltv_pks:
+                    ltv_order_sum = Order.objects.filter(
+                        pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
+                    ltv = ltv_order_sum.get('ltv_price') if ltv_order_sum.get('ltv_price') else Decimal(0)
+                    rf_ois = OrderItem.objects.filter(
+                        order__in=ltv_pks,
+                        oi_status=163).values_list('order', flat=True)
+                    rf_sum = RefundRequest.objects.filter(
+                        order__in=rf_ois).aggregate(rf_price=Sum('refund_amount'))
+                    if rf_sum.get('rf_price'):
+                        ltv = ltv - rf_sum.get('rf_price')
+
+                return Response(
+                    {"status": "SUCCESS", "ltv_price": str(ltv), "name": name},
+                    status=status.HTTP_200_OK)
+            else:
+                return Response(
+                    {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
+                    status=status.HTTP_400_BAD_REQUEST)    
+        else:
+            return Response(
+                {"status": "FAIL", "msg": "Bad Parameters Provided"},
+                status=status.HTTP_400_BAD_REQUEST)
+
+
+class OrderHistoryAPIView(ListAPIView):
+    serializer_class = OrderListHistorySerializer
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    # permission_classes = []
+
+    def get_queryset(self, *args, **kwargs):
+        email = self.request.GET.get("email", None)
+        candidate_id = self.request.GET.get("candidate_id", None)
+        queryset_list = Order.objects.all()
+        if not email and not candidate_id:
+            return queryset_list.none()
+        elif candidate_id:
+            queryset_list = queryset_list.filter(
+                candidate_id=candidate_id,
+                status__in=[1, 2, 3]).distinct()
+            return queryset_list
+        elif email:
+            queryset_list = queryset_list.filter(
+                email=email,
+                status__in=[1, 2, 3]).distinct()
+            return queryset_list

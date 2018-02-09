@@ -1,5 +1,6 @@
 {% extends "mobile/basic/base.html" %}
 {% load static compress search_tags %}
+{% load static compress %}
 {% load thumbnail %}
 
 
@@ -12,20 +13,8 @@
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
-        <link href="{% static "shinelearn/css/mobile/common/checkbox.css" %}" rel="stylesheet">
-        <link href="{% static "shinelearn/css/mobile/payment/payment.css" %}" rel="stylesheet">
-    {% endcompress %}
-    {% compress css inline %}
-        <style type="text/css">
-            .hidden-div {
-              display: none;
-              margin-top: 10px;
-            }
-            .error-txt{
-                color:red;
-                font-size: 12px;
-            }
-        </style>
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/payment/payment.scss' %}" rel="stylesheet">
     {% endcompress %}
     
 {% endblock css_section %}
@@ -48,7 +37,6 @@
             <li  id="payment" class="bg-none"><a role="button">Payment</a></li>
         </ul>
     </header><!-- header ends here -->
-
 {% endblock header %}
 
 {% block container %}

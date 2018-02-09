@@ -73,7 +73,7 @@ class TrackingMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
-        dict_data = {}        
+        dict_data = {}
         full_url = request.build_absolute_uri()
         decode_url = urllib.parse.unquote(full_url)
         query = urllib.parse.urlsplit(decode_url).query
@@ -200,7 +200,8 @@ class LearningShineMiddleware(object):
                     })
                     campaign_slug = utm_dict.get('utm_campaign')
                     try:
-                        url = utm_dict.get('ref_url').split('/')
+                        # url = utm_dict.get('ref_url').split('/')
+                        url = request.path.split('/')
                         last_ele = url[-1]
                         product_id = re.findall('\d+', last_ele)[0]
                         product = url[-2]
@@ -209,18 +210,11 @@ class LearningShineMiddleware(object):
                         product_id = 0
                         product = ''
 
-                    try:
-                        timestamp_obj = datetime.strptime(
-                            timestamp, "%Y-%m-%d %H:%M:%S")
-                        timestamp_obj = timezone.make_aware(
-                            timestamp_obj, timezone.get_current_timezone())
-                    except:
-                        timestamp_obj = timezone.now()
                     add_server_lead_task.delay({
                         'email': email,
                         'mobile': mobile,
                         'timestamp': timestamp,
-                        'url': url,
+                        'url': request.path,
                         'product_id': product_id,
                         'product': product,
                         'utm_parameter': utm_parameter,

@@ -13,7 +13,8 @@ from django.http import (
 )
 from django.core.urlresolvers import reverse
 from datetime import datetime
-
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import permission_required
 from shine.core import ShineCandidateDetail
 from linkedin.autologin import AutoLogin
 from .utills import ques_dict
@@ -49,6 +50,7 @@ class AutoLoginView(View):
         return HttpResponseRedirect('/login/')
 
 
+@method_decorator(permission_required('order.can_show_linkedin_counselling_form', login_url='/console/login/'), name='dispatch')
 class CounsellingSubmit(TemplateView):
     template_name = "linkedin/counselling_form.html"
 
@@ -118,7 +120,7 @@ class CounsellingSubmit(TemplateView):
                     orderitem.oi_status = 42
                     orderitem.save()
                     orderitem.orderitemoperation_set.create(
-                        oi_status=orderitem.oi_status,
+                        oi_status=42,
                         last_oi_status=last_oi_status,
                         assigned_to=orderitem.assigned_to)
                 return HttpResponseRedirect(reverse('console:linkedin-inbox'))
@@ -194,12 +196,13 @@ class CounsellingForm(TemplateView):
                     orderitem.oi_status = 42
                     orderitem.save()
                     orderitem.orderitemoperation_set.create(
-                        oi_status=orderitem.oi_status,
+                        oi_status=42,
                         last_oi_status=last_oi_status,
                         assigned_to=orderitem.assigned_to)
                 return HttpResponseRedirect(reverse('dashboard:dashboard'))
 
 
+@method_decorator(permission_required('order.can_show_linkedin_writer_draft', login_url='/console/login/'), name='dispatch')
 class LinkedinDraftView(TemplateView):
     template_name = "linkedin/linkedin_draft.html"
 
@@ -258,6 +261,7 @@ class LinkedinDraftView(TemplateView):
         return context
 
 
+@method_decorator(permission_required('order.can_show_linkedin_writer_draft', login_url='/console/login/'), name='dispatch')
 class ConsoleLinkedinDraftView(TemplateView):
     template_name = "linkedin/console_linkedin_draft.html"
 
@@ -389,61 +393,65 @@ class DraftDownloadView(View):
     def get(self, request, *args, **kwargs):
         orderitem_id = kwargs.get('order_item', '')
         op_id = kwargs.get('op_id', '')
-
         try:
             order_item = OrderItem.objects.get(pk=orderitem_id)
             oio = order_item.orderitemoperation_set.get(pk=op_id)
-            try:
-                draft = ''
-                if oio:
-                    flag2 = False
-                    draft = oio.linkedin
-                    name = draft.candidate_name
-                    skill_list = draft.key_skills
-                    organization_list = draft.from_organization.filter(org_current=False).order_by('-work_to')
-                    education_list = draft.from_education.filter(edu_current=False).order_by('-study_to')
-                    current_org = draft.from_organization.filter(org_current=True)
-                    current_edu = draft.from_education.filter(edu_current=True)
-                    if current_edu:
-                        current_edu = current_edu[0]
-                    if current_org:
-                        current_org = current_org[0]
-                    if draft.profile_photo:
-                        flag2 = True
-                    if draft.public_url:
-                        flag2 = True
-                    if draft.recommendation:
-                        flag2 = True
-                    if draft.follow_company:
-                        flag2 = True
-                    if draft.join_group:
-                        flag2 = True
+            ord_candidate = order_item.order.candidate_id
+            req_candidate = request.session.get('candidate_id')
+            if ord_candidate and (ord_candidate == req_candidate):
+                try:
+                    draft = ''
+                    if oio:
+                        flag2 = False
+                        draft = oio.linkedin
+                        name = draft.candidate_name
+                        skill_list = draft.key_skills
+                        organization_list = draft.from_organization.filter(org_current=False).order_by('-work_to')
+                        education_list = draft.from_education.filter(edu_current=False).order_by('-study_to')
+                        current_org = draft.from_organization.filter(org_current=True)
+                        current_edu = draft.from_education.filter(edu_current=True)
+                        if current_edu:
+                            current_edu = current_edu[0]
+                        if current_org:
+                            current_org = current_org[0]
+                        if draft.profile_photo:
+                            flag2 = True
+                        if draft.public_url:
+                            flag2 = True
+                        if draft.recommendation:
+                            flag2 = True
+                        if draft.follow_company:
+                            flag2 = True
+                        if draft.join_group:
+                            flag2 = True
 
-                    context_dict = {
-                        'pagesize': 'A4',
-                        'orderitem': order_item,
-                        'draft': draft,
-                        'name': name,
-                        'skill_list': skill_list.split(','),
-                        'organization_list': organization_list,
-                        'education_list': education_list,
-                        'flag2': flag2,
-                        'current_edu': current_edu,
-                        'current_org': current_org,
-                    }
-                    template = get_template('linkedin/linkedin-resume-pdf.html')
-                    context = Context(context_dict)
-                    html = template.render(context)
-                    pdf_file = HTML(string=html).write_pdf()
-                    http_response = HttpResponse(pdf_file, content_type='application/pdf')
-                    http_response['Content-Disposition'] = 'filename="report.pdf"'
-                    return http_response
-                else:
-                    return HttpResponseForbidden()
-            except:
-                return HttpResponseForbidden()
+                        context_dict = {
+                            'pagesize': 'A4',
+                            'orderitem': order_item,
+                            'draft': draft,
+                            'name': name,
+                            'skill_list': skill_list.split(','),
+                            'organization_list': organization_list,
+                            'education_list': education_list,
+                            'flag2': flag2,
+                            'current_edu': current_edu,
+                            'current_org': current_org,
+                        }
+                        template = get_template('linkedin/linkedin-resume-pdf.html')
+                        context = Context(context_dict)
+                        html = template.render(context)
+                        pdf_file = HTML(string=html).write_pdf()
+                        http_response = HttpResponse(pdf_file, content_type='application/pdf')
+                        http_response['Content-Disposition'] = 'filename="linkedin-draft.pdf"'
+                        return http_response
+                    else:
+                        return HttpResponseRedirect('/')
+                except:
+                    return HttpResponseRedirect('/')
+            else:
+                return HttpResponseRedirect('/login/')
         except:
-            return HttpResponseForbidden()
+            return HttpResponseRedirect('/')
 
 
 class DashboardDraftDownloadView(View):
@@ -452,54 +460,59 @@ class DashboardDraftDownloadView(View):
         orderitem_id = kwargs.get('order_item', '')
         try:
             order_item = OrderItem.objects.get(pk=orderitem_id)
-            try:
-                draft = ''
-                if order_item:
-                    flag2 = False
-                    draft = order_item.oio_linkedin
-                    name = draft.candidate_name
-                    skill_list = draft.key_skills
-                    organization_list = draft.from_organization.filter(org_current=False).order_by('-work_to')
-                    education_list = draft.from_education.filter(edu_current=False).order_by('-study_to')
-                    current_org = draft.from_organization.filter(org_current=True)
-                    current_edu = draft.from_education.filter(edu_current=True)
-                    if current_edu:
-                        current_edu = current_edu[0]
-                    if current_org:
-                        current_org = current_org[0]
-                    if draft.profile_photo:
-                        flag2 = True
-                    if draft.public_url:
-                        flag2 = True
-                    if draft.recommendation:
-                        flag2 - True
-                    if draft.follow_company:
-                        flag2 = True
-                    if draft.join_group:
-                        flag2 = True
+            ord_candidate = order_item.order.candidate_id
+            req_candidate = request.session.get('candidate_id')
+            if ord_candidate and (ord_candidate == req_candidate):
+                try:
+                    draft = ''
+                    if order_item:
+                        flag2 = False
+                        draft = order_item.oio_linkedin
+                        name = draft.candidate_name
+                        skill_list = draft.key_skills
+                        organization_list = draft.from_organization.filter(org_current=False).order_by('-work_to')
+                        education_list = draft.from_education.filter(edu_current=False).order_by('-study_to')
+                        current_org = draft.from_organization.filter(org_current=True)
+                        current_edu = draft.from_education.filter(edu_current=True)
+                        if current_edu:
+                            current_edu = current_edu[0]
+                        if current_org:
+                            current_org = current_org[0]
+                        if draft.profile_photo:
+                            flag2 = True
+                        if draft.public_url:
+                            flag2 = True
+                        if draft.recommendation:
+                            flag2 - True
+                        if draft.follow_company:
+                            flag2 = True
+                        if draft.join_group:
+                            flag2 = True
 
-                    context_dict = {
-                        'pagesize': 'A4',
-                        'orderitem': order_item,
-                        'draft': draft,
-                        'name': name,
-                        'skill_list': skill_list.split(','),
-                        'organization_list': organization_list,
-                        'education_list': education_list,
-                        'flag2': flag2,
-                        'current_edu': current_edu,
-                        'current_org': current_org,
-                    }
-                    template = get_template('linkedin/linkedin-resume-pdf.html')
-                    context = Context(context_dict)
-                    html = template.render(context)
-                    pdf_file = HTML(string=html).write_pdf()
-                    http_response = HttpResponse(pdf_file, content_type='application/pdf')
-                    http_response['Content-Disposition'] = 'filename="report.pdf"'
-                    return http_response
-                else:
-                    return HttpResponseForbidden()
-            except:
-                return HttpResponseForbidden()
+                        context_dict = {
+                            'pagesize': 'A4',
+                            'orderitem': order_item,
+                            'draft': draft,
+                            'name': name,
+                            'skill_list': skill_list.split(','),
+                            'organization_list': organization_list,
+                            'education_list': education_list,
+                            'flag2': flag2,
+                            'current_edu': current_edu,
+                            'current_org': current_org,
+                        }
+                        template = get_template('linkedin/linkedin-resume-pdf.html')
+                        context = Context(context_dict)
+                        html = template.render(context)
+                        pdf_file = HTML(string=html).write_pdf()
+                        http_response = HttpResponse(pdf_file, content_type='application/pdf')
+                        http_response['Content-Disposition'] = 'filename="linkedin-draft.pdf"'
+                        return http_response
+                    else:
+                        return HttpResponseRedirect('/')
+                except:
+                    return HttpResponseRedirect('/')
+            else:
+                return HttpResponseRedirect('/login/')
         except:
-            return HttpResponseForbidden()
+            return HttpResponseRedirect('/')

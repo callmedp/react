@@ -217,9 +217,9 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAdminUser'
+        'rest_framework.permissions.IsAuthenticated'
     ],
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 100,
 }
 
 OAUTH2_PROVIDER = {
@@ -514,3 +514,14 @@ DEPARTMENT_HEAD_GROUP_LIST = ['DEPARTMENT_HEAD']
 FINANCE_GROUP_LIST = ['FINANCE']
 BUSINESS_APPROVAL_LIMIT = 25000  # refund
 REFUND_GROUP_LIST = OPS_GROUP_LIST + OPS_HEAD_GROUP_LIST + BUSINESS_HEAD_GROUP_LIST + DEPARTMENT_HEAD_GROUP_LIST + FINANCE_GROUP_LIST
+
+# User Query Group
+CMS_GROUP_LIST = ['CMS_USER']
+SKILL_GROUP_LIST = ['SKILL_USER']
+COURSE_GROUP_LIST = ['COURSE_USER']
+SERVICE_GROUP_LIST = ['SERVICE_USER']
+USER_QUERY_GROUP_LIST = CMS_GROUP_LIST + SKILL_GROUP_LIST + COURSE_GROUP_LIST + SERVICE_GROUP_LIST
+
+
+# Course catalogoue cache time
+COURSE_CATALOGUE_CASH_TIME = 24 * 60 * 60  # in seconds

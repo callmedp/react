@@ -24,8 +24,9 @@
     {% block css_section %}
         <!-- Bootstrap -->
         {% compress css %}
-        <link type="text/css" href="{% static 'shinelearn/css/common/bootstrap.css' %}" rel="stylesheet">
-        <link type="text/css" href="{% static 'shinelearn/css/common/header-footer.css' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
         {% endcompress %}
          <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -41,7 +42,11 @@
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', 'UA-3537905-41');
+          {% if request.GET.itm_source or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
+              gtag('config', 'UA-3537905-41' ,{'dimension1': '{{request.GET.itm_source}}','dimension2' : '{{request.GET.itm_medium}}','dimension3':  '{{request.GET.itm_campaign}}','dimension4':'{{request.GET.itm_content}}' });
+          {% else%}
+              gtag('config', 'UA-3537905-41');
+          {%endif%}
           gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
         </script>
     {% endblock GA %}
@@ -59,6 +64,15 @@
         });
         </script>
     {% endblock banner_ads %}
+    {% block marketing_pixel %}
+        <!-- Google Tag Manager -->
+        <!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':-->
+        <!--new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],-->
+        <!--j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=-->
+        <!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);-->
+        <!--})(window,document,'script','dataLayer','GTM-M323HB');</script>-->
+        <!-- End Google Tag Manager -->
+    {% endblock marketing_pixel %}
    {{ JS_SETTINGS|safe }}
    </head>
    
@@ -101,6 +115,7 @@
     <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
     <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
     <script src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
     {% endcompress %}
@@ -112,14 +127,12 @@
             $('.dropdown-toggle', this).trigger('click');
           });
     </script>
-    {% if request.GET.itm_campaign or request.GET.itm_campaign or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
-       <script type="text/javascript"> MyGA.SendEvent('itm','Popular Course','{{request.GET.itm_content}}','click');</script>
-    {%endif%}
+
 {% endblock js_section %}
 
 {% block johukum %}
     <script type='text/javascript' id='spd-busns-spt' async=''
-        src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'  
+        src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
         data-client='324ed0abb0694b0c66a6daecb178352d'>
     </script>
 {% endblock johukum %}

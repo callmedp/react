@@ -1,3 +1,5 @@
+{% load static %}
+
 <!--hidden form -->
 <div style="display: none">
     <form role="form" method="POST" id="cartForm" > {% csrf_token %}
@@ -13,7 +15,7 @@
   <div class="box-panel enrol-cart">
      <strong id="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
      {{var_list.0.inr_price|floatformat}}{% else %}
-     {{sqs.pPinb|floatformat}} {% endif %}/- <small>(+taxes)</small></strong>
+     {{sqs.pPinb|floatformat}}{% endif %}/- <small>(+taxes)</small></strong>
 
     
     {% if selected_var or sqs.pPfinb %}
@@ -23,9 +25,9 @@
 
         <small id="id_percentage-off" percentage-off="{% if selected_var.fake_inr_price %}{{get_fakeprice.1|floatformat}}{% else %}{{get_fakeprice.1|floatformat}}{% endif %}">
             {% if selected_var.fake_inr_price > var_list.0.inr_price %}
-                {{get_fakeprice.1}}% off
+              {{get_fakeprice.1}}% off
             {% elif sqs.pPfinb > sqs.pPinb %}
-                {{get_fakeprice.1|floatformat}}% off
+              {{get_fakeprice.1|floatformat}}% off
             {% endif %}
         </small>
     {% endif %}
@@ -50,7 +52,20 @@
     
   <a href="#" class="take-test mt-40"><figure class="test-icon"></figure> Take free Assessment test</a>
   {% endcomment %}
-     
+  {% comment %}
+  <!-- check free sample start -->
+    <div class="free-sample">
+      <span class="sample-pic"></span>
+      <strong>Check free samples</strong>
+      <ul>
+        <li><a href="#">Resume Format</a></li>
+        <li><a href="#">Cover Letter Format</a></li>
+        <li><a href="#">Resignation Letter Format</a></li>
+        <li><a href="#">Resume Format for Freshers</a></li>
+        <li><a href="#">Resume Format for Experienced Professionals</a></li>
+      </ul>
+    </div>
+  {% endcomment %}
   </div>
 <!-- right fixed content end -->
 

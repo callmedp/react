@@ -21,8 +21,9 @@
     {% block css_section %}
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
         {% compress css %}
-        <link type="text/css" href="{% static 'shinelearn/css/common/bootstrap.css' %}" rel="stylesheet">
-        <link type="text/css" href="{% static 'shinelearn/css/common/header-footer.css' %}" rel="stylesheet">
+        <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
+        <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
         {% endcompress %}
     {% endblock css_section %}
 
@@ -33,7 +34,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
         {% block GA %}
-            <!-- Global site tag (gtag.js) - Google Analytics -->
+             <!--Global site tag (gtag.js) - Google Analytics-->
             <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script>
             <script>
               window.dataLayer = window.dataLayer || [];
@@ -44,7 +45,7 @@
               {% else%}
                 gtag('config', 'UA-3537905-41');
               {%endif%}
-              
+
               gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
             </script>
         {% endblock GA %}
@@ -64,6 +65,15 @@
         </script>
     {% endblock banner_ads %}
    {{ JS_SETTINGS|safe }}
+        {% block marketing_pixel %}
+            <!--&lt;!&ndash; Google Tag Manager &ndash;&gt;  Commented out till https issue resolved.-->
+            <!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':-->
+            <!--new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],-->
+            <!--j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=-->
+            <!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);-->
+            <!--})(window,document,'script','dataLayer','GTM-M323HB');</script>-->
+            <!-- End Google Tag Manager -->
+        {% endblock marketing_pixel %}
 
    </head>
   
@@ -125,6 +135,7 @@
     <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
     <script src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
     {% endcompress %}
@@ -135,9 +146,7 @@
         $('.dropdown').hover(function(){
             $('.dropdown-toggle', this).trigger('click');
           });
-        {% if request.GET.itm_source or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
-          MyGA.SendEvent('itm','Popular Course','{{request.GET.itm_content}}','click');
-        {%endif%}
+        
       
     </script>
 

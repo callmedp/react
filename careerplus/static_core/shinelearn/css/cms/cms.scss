@@ -1,0 +1,288 @@
+@import "../path";
+@import "../common/bootstrap/variables";
+@import "../common/bootstrap/mixins";
+
+.download-pdf {
+	clear: both;
+	position: relative;
+	display: block;
+
+	a {
+		color: $white-color;
+		font-size: $font-size+9;
+		font-weight: $font-weight+300;
+	}
+
+	.download-box {
+		display: block;
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		margin: auto;
+		width: 185px;
+		height: 70px;
+
+		figure {
+			margin: 0 auto;
+			display: block;
+		}
+	}
+}
+
+.download-resume {
+	color: $primary-color;
+	padding: 25px;
+
+	h2 {
+		font-size: $font-size+8;
+		color: $primary-color;
+		margin: 0 0 10px 0;
+	}
+
+	h3, strong {
+		font-size: $font-size+4;
+		background-color: #e5e5e5;
+		border-radius: 5px;
+		padding: 5px 10px;
+		display: inline-block;
+		font-weight: 400;
+	}
+
+	ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0 0 0 20px;
+
+		li {
+			display: $db;
+			font-size: $font-size+3;
+			margin: 5px 0 10px 0;
+			position: relative;
+
+			&:before {
+				content: '';
+				background: $sprite -582px -50px;
+				display: inline-block;
+				position: absolute;
+				left: -20px;
+				top: 7px;
+				width: 8px;
+				height: 9px;
+			}
+
+			a {
+				color: $anchor-color;
+
+				&:hover {
+					color: $blue-color;
+				}
+			}
+		}
+	}
+}
+
+.formatting {
+	color: $primary-color;
+	padding: 25px;
+
+	h2 {
+		font-size: $font-size+5;
+		color: $primary-color;
+		margin: 30px 0 15px 0;
+		font-weight: $font-weight+300;
+	}
+
+	h3 {
+	  font-size: 15px;
+	  color: #333;
+	  margin: 30px 0 15px 0;
+	  font-weight: 600;
+	}
+
+	ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0 0 0 20px;
+
+		li {
+			display: $db;
+			font-size: $font-size+3;
+			margin: 5px 0 10px 0;
+			position: relative;
+
+			&:before {
+				content: '';
+				background: $sprite -582px -50px;
+				display: inline-block;
+				position: absolute;
+				left: -20px;
+				top: 7px;
+				width: 8px;
+				height: 9px;
+			}
+
+			a {
+				color: $anchor-color;
+
+				&:hover {
+					color: $blue-color;
+				}
+			}
+		}
+	}
+
+	article {
+		font-size: $font-size+5;
+	}
+}
+
+.writer-comments {
+	padding: 25px;
+
+	h2 {
+		font-size: $font-size+8;
+		color: $primary-color;
+		margin: 0 0 10px 0;
+	}
+
+	article {
+		border-top: 1px solid #f1f1f1;
+		border-bottom: 1px solid #f1f1f1;
+		display: $db;
+		font-size: $font-size+4;
+		font-weight: $font-weight;
+		padding: 15px 0;
+
+		strong {
+			font-weight: $font-weight+100;
+			display: $db;
+			margin: 20px 0 3px 0;
+
+			&:first-child {
+				margin-top: 0;
+			}
+		}
+	}
+
+	.media-body {
+		font-size: $font-size+5;
+		font-weight: $font-weight;
+
+		strong {
+			font-size: $font-size+11;
+			font-weight: $font-weight+100;
+			display: $db;
+			margin: 0;
+		}
+	}
+
+	.media-left {
+		img {
+			width: 72px;
+			height: 72px;
+		}
+	}
+
+	.sample-resume {
+		font-size: $font-size+5;
+		font-weight: $font-weight+300;
+		text-align: center;
+		display: table;
+		margin: 15px auto 0 auto;
+
+		span {
+			margin-left: 5px;
+		}
+	}
+}
+
+.comments-box {
+	font-size: $font-size+4;
+	color: $secondary-color;
+
+	.media-body {
+		overflow: visible;
+	}
+
+	.form-group {
+		position: relative;
+
+		&:before {
+			content: '';
+			position: absolute;
+			left: -12px;
+			top: 0;
+			width: 13px;
+			height: 21px;
+			background: $sprite -596px -72px;
+			display: inline-block; 
+		}
+
+		textarea {
+			box-shadow: none;
+		}
+	}
+
+	.form-control {
+		border: 1px solid #e5e5e5;
+		border-radius: 0;
+	}
+
+	.submit-button {
+		display: inline-table;
+		float: right;
+		width: auto;
+		padding: 7px 15px;
+		border-radius: 2px;
+	}
+
+	.time {
+		display: $db;
+		color: $grey-color;
+		font-size: $font-size+1;
+		margin-top: 5px;
+	}
+}
+
+
+.comments-links {
+	padding: 10px;
+	display: block;
+	color: $primary-color;
+	background-color: #f1f1f1;
+	text-align: center;
+	font-size: $font-size+4;
+	font-weight: $font-weight+300;
+
+	&:hover {
+		color: $primary-color;
+	}
+
+	&:focus {
+		color: $primary-color;
+		overflow: hidden;
+	}
+}
+
+
+.related {
+	padding: 20px;
+
+	.media {
+		margin-top: 20px;
+
+		.media-body {
+			font-size: $font-size+4;
+			color: $secondary-color;
+			line-height: 20px;
+			text-decoration: none;
+			font-weight: $font-weight+300;
+		}
+	}	
+}
+
+.practice-test {
+	padding: 20px;
+}

@@ -1,0 +1,97 @@
+{% extends "console/base_console.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+  <title>Admin Counselling Form</title>
+{% endblock title %}
+{% block css_block %}
+  {{ block.super }}
+  <!-- Switchery -->
+  <link href="{% static "packages/switchery/dist/switchery.min.css"  %}"
+  rel="stylesheet" type="text/css">            
+{% endblock css_block %}
+
+{% block pagecontent %}
+        <!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>&nbsp;</h3> 
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>List Counselling Form</h2>
+
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <ol>
+                <li>
+                  <p class="question">{{quiz_resp.question1}}</p>                        
+                  <textarea rows="5" cols="50" class="js-answer" style="margin: 0px; width: 447px; height: 110px;"
+                  name="q1" required="">{{quiz_resp.anser1}}</textarea>        
+                </li>
+                <li>
+                  <p class="question">{{quiz_resp.question2}}</p>                        
+                  <textarea class="js-answer " rows="5" cols="50" style="margin: 0px; width:447px; height:110px;"
+                  name="q2" required="">{{quiz_resp.anser2}}</textarea>         
+                </li>
+                <li>
+                  <p class="question">{{quiz_resp.question3}}</p>                        
+                  <textarea  class="js-answer" rows="5" cols="50" style="margin: 0px; width:447px; height:110px;"
+                  name="q3" required="">{{quiz_resp.anser3}}</textarea>         
+                </li>
+                <li>
+                  <p class="question1">{{quiz_resp.question4}}</p>                        
+                  <textarea  class="js-answer" rows="5" cols="50" style="margin: 0px; width:447px; height:110px;"
+                  name="q4" required="">{{quiz_resp.anser4}}</textarea>         
+                </li>
+                <li>
+                  <p class="question">{{quiz_resp.question5}}</p>                        
+                  <textarea class="js-answer" rows="5" cols="50" style="margin: 0px; width:447px; height:110px;"
+                  name="q5" required="">{{quiz_resp.anser5}}</textarea>         
+                </li>
+            </ol>
+            <div class="ln_solid"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- /page content -->
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" 
+    src="{% static "packages/parsleyjs/parsley.min.js" %}">
+  </script>
+  <!-- jQuery Tags Input -->
+  <script type="text/javascript" 
+    src="{% static "packages/jquery.tagsinput/src/jquery.tagsinput.js" %}">
+  </script>  
+  <!-- Switchery -->
+  <script type="text/javascript" 
+    src="{% static "packages/switchery/dist/switchery.min.js" %}">
+  </script>
+  <script type="text/javascript" 
+    src="{% static 'console/js/ckeditor/ckeditor/ckeditor.js' %}">
+  </script>
+{% endblock js_block %}

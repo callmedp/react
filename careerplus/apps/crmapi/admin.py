@@ -46,11 +46,13 @@ lead_creted_on_crm.short_description = 'create lead on crm'
 class UserQuriesAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'name', 'phn_number', 'email', 'message',
-        'product', 'lead_created',
+        'product', 'lead_created', 'inactive',
         'lead_source', 'source'
     )
     ordering = ['-created']
     actions = [lead_creted_on_crm]
+    list_filter = ('lead_source', 'medium')
+    search_fields = ('id', 'phn_number', 'email')
     list_per_page = 20
 
 
