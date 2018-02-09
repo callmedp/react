@@ -108,7 +108,8 @@ class UserProfile(models.Model):
         choices=WRITER_TYPE,
         default=0)
     po_number = models.CharField(
-        max_length=255, null=True, blank=True)
+        max_length=255, unique=True,
+        null=True, blank=True)
     valid_from = models.DateField(null=True, blank=True)
     valid_to = models.DateField(null=True, blank=True)
     user_invoice = models.FileField(
@@ -117,16 +118,50 @@ class UserProfile(models.Model):
         blank=True, null=True)
     invoice_date = models.DateField(null=True, blank=True)
 
+    last_writer_type = models.PositiveIntegerField(
+        choices=WRITER_TYPE,
+        default=1)
+
+    wt_changed_date = models.DateField(
+        "Writer Type Update Date",
+        blank=True, null=True)
+
     def __str__(self):
         if self.user.name:
             return self.user.name + ' (' + str(self.user.email) +')'
         return "%s" % str(self.user.email)
 
+    def __init__(self, *args, **kwargs):
+        super(UserProfile, self).__init__(*args, **kwargs)
+        self.initial_writer_type = self.writer_type
+        self.initial_wt_changed_date = self.wt_changed_date
+
+    def clean(self, *args, **kwargs):
+        super(UserProfile, self).clean(*args, **kwargs)
+        today_date = timezone.now().date()
+        if self.initial_writer_type != self.writer_type:
+            if not self.initial_wt_changed_date:
+                self.wt_changed_date = today_date
+                if self.initial_writer_type != 0:
+                    self.last_writer_type = self.initial_writer_type
+                elif self.writer_type != 0:
+                    self.last_writer_type = self.writer_type
+
+            elif self.initial_wt_changed_date.month == today_date.month and self.initial_wt_changed_date.year == today_date.year:
+                self.wt_changed_date = today_date
+
+            else:
+                if self.initial_writer_type != 0:
+                    self.last_writer_type = self.initial_writer_type
+                else:
+                    self.last_writer_type = self.writer_type
+                self.wt_changed_date = today_date
+
 
 def create_user_profile(sender, instance, created, **kwargs):
     # when user is created
     # if created:
-    # this code run on every save of user object 
+    # this code run on every save of user object
     try:
         UserProfile.objects.get_or_create(user=instance)
     except:

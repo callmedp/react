@@ -60,6 +60,7 @@ class UserChangeForm(UserChangeForm):
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     fk_name = 'user'
+    readonly_fields = ('last_writer_type', 'wt_changed_date')
 
 
 class UserAdmin(BaseUserAdmin):

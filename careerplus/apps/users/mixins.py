@@ -188,7 +188,7 @@ class WriterInvoiceMixin(object):
             valid_from = user.userprofile.valid_from
             valid_to = user.userprofile.valid_to
             if valid_from and valid_to and valid_from < valid_to \
-                and invoice_date and invoice_date < valid_to:
+                and invoice_date and invoice_date >= valid_from and invoice_date <= valid_to:
                 pass
             elif not error:
                 error = 'Update writer Po Number validity'
@@ -220,11 +220,21 @@ class WriterInvoiceMixin(object):
             super_express_slug_list = settings.SUPER_EXPRESS_DELIVERY_SLUG
             delivery_slug_list = express_slug_list + super_express_slug_list
 
-            last_invoice_date = invoice_date.replace(day=1)
-            last_invoice_date = last_invoice_date - datetime.timedelta(days=1)
             added_base_object = []  # for country specific resume
             added_delivery_object = []  # for delivery price only for parent item 
-            user_type = user.userprofile.writer_type if user.userprofile else 0
+
+            user_type = 1
+            if user.userprofile.wt_changed_date:
+                changed_date = user.userprofile.wt_changed_date
+                changed_date = changed_date.replace(day=1)
+                changed_date = changed_date + datetime.timedelta(days=31)
+                changed_date = changed_date.replace(day=1)
+                if invoice_date >= changed_date:
+                    user_type = user.userprofile.writer_type
+                else:
+                    user_type = user.userprofile.last_writer_type
+            else:
+                user_type = user.userprofile.writer_type if user.userprofile else 0
 
             total_combo_discount = 0
             total_sum = 0
