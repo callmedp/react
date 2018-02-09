@@ -1,9 +1,50 @@
 {% load static thumbnail %}
+
+{% if not amp %}
+<div class="related-article row mb-30 mt-30">
+    <h2 class="mb-10">{{heading}}</h2>
+    <amp-carousel 
+        class="carousel1"
+        layout="responsive"
+        height="175"
+        width="500"
+        type="slides">
+
+        {% for art in related_arts %}
+            <div class="slide">
+                <div class="media">
+                    <a href="{% url 'blog:articles-deatil' art.slug art.pk %}">
+                        {% if art.image %}
+                        <figure class="media-left">
+                            {% thumbnail art.image "98x64" crop="center" as im %}
+                                <amp-img 
+                                    class="media-object w-auto" 
+                                    src="{{ im.url }}" width="{{ im.width }}" 
+                                    height="{{ im.height }}" 
+                                    alt="{{art.image_alt}}">
+                                </amp-img>
+                            {% endthumbnail %}
+                        </figure>
+                        {% endif %}
+                        <div class="media-body rel">
+                            <amp-fit-text class="bold" 
+                                layout="responsive"
+                                width="500"
+                                height="150"> 
+                                {{art.display_name}}
+                            </amp-fit-text>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </amp-carousel>
+</div>
+{% else %}
 <!-- Related articles Starts here -->
 {% if related_arts %}
 <div class="related-article row mb-30 mt-30">
     <h2 class="mb-10">{{heading}}</h2>
-
     <ul class="home-slider">
         {% for art in related_arts %}
         <li>
@@ -25,4 +66,5 @@
         {% endfor %}
     </ul>
 </div><!-- Related articles Ends here -->
+{% endif %}
 {% endif %}

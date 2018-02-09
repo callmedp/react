@@ -3,7 +3,19 @@
 <div class="container">
     <div class="box row">
         <h2>{{heading}}</h2>
-        <p><img src="{{image.url}}" class="img-reponsive"></p>
+        <p>
+        	{% if not amp %}
+        	<amp-img 
+        		src="{{image.url}}" 
+        		class="img-responsive"
+        		width="345"
+        		height="188"
+        		layout="responsive">
+        	</amp-img>
+        	{% else %}
+        	<img src="{{'image.url'}}" class="img-responsive">
+        	{% endif %}
+        </p>
         <p class="text-center fs-16 bold mt-15"><a  href="{{redirect_url}}">Take practice test</a></p>
     </div>
 </div><!-- box ends here -->
