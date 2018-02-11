@@ -96,7 +96,12 @@ CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=i
 ###### CACHE SETTINGS #################
 SITEMAP_CACHING_TIME = 86400
 
-
+###### LOGGING SETTINGS #############
+SYSLOG_ADDRESS = '/dev/log'
+# Following is to make sure logging works with mac machines 2
+if sys.platform == "darwin":
+    SYSLOG_ADDRESS = "/var/run/syslog"
+LOGGING['handlers']['syslog']['address'] = SYSLOG_ADDRESS
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True

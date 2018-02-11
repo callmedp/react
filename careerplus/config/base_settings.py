@@ -305,17 +305,6 @@ URL_SHORTENER_ACCESS_KEY='AIzaSyBtmK_SIBfhb_hXkgLlfk7IwVlnKZxTb2I'
 RESUME_WRITING_INDIA = [2]
 
 ######## LOGGING CONFIG ############################
-# SYSLOG_ADDRESS = "/dev/log"
-# # Following is to make sure logging works with mac machines 2
-# if sys.platform == "darwin":
-#   SYSLOG_ADDRESS = "/var/run/syslog"
-#
-
-SYSLOG_ADDRESS = '/run/uwsgi/app.sock'
-# Following is to make sure logging works with mac machines 2
-if sys.platform == "darwin":
-    SYSLOG_ADDRESS = "/var/run/syslog"
-
 
 LOGGING = {
     'version': 1,
@@ -347,70 +336,13 @@ LOGGING = {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.handlers.SysLogHandler',
-            'facility': 'local7',
+            'facility': 'local5',
             'formatter': 'simple'
         },
-        # 'debug_handler': {
-        #     'level': 'DEBUG',
-        #     'class': 'logging.handlers.SysLogHandler',
-        #     'facility': 'local7',
-        #     'formatter': 'verbose',
-        #     'address': os.path.join(SYSLOG_ADDRESS, 'debug', 'debug.log')
-        # },
-        # 'info_handler': {
-        #     'level': 'INFO',
-        #     'class': 'logging.handlers.SysLogHandler',
-        #     'facility': 'local7',
-        #     'formatter': 'verbose',
-        #     'address': os.path.join(SYSLOG_ADDRESS, 'info', 'info.log')
-        # },
-        # 'error_handler': {
-        #     'level': 'ERROR',
-        #     'class': 'logging.handlers.SysLogHandler',
-        #     'facility': 'local7',
-        #     'formatter': 'verbose',
-        #     'address': os.path.join(SYSLOG_ADDRESS, 'error', 'error.log')
-        # },
-        # 'email_handler': {
-        #     'level': 'INFO',
-        #     'class': 'logging.handlers.SysLogHandler',
-        #     'facility': 'local7',
-        #     'formatter': 'verbose',
-        #     'address': os.path.join(SYSLOG_ADDRESS, 'email', 'email.log')
-        # },
-        # 'sms_handler': {
-        #     'level': 'INFO',
-        #     'class': 'logging.handlers.SysLogHandler',
-        #     'facility': 'local7',
-        #     'formatter': 'verbose',
-        #     'address': os.path.join(SYSLOG_ADDRESS, 'sms', 'sms.log')
-        # },
-        # 'payment_handler': {
-        #     'level': 'ERROR',
-        #     'class': 'logging.handlers.SysLogHandler',
-        #     'facility': 'local7',
-        #     'formatter': 'verbose',
-        #     'address': os.path.join(SYSLOG_ADDRESS, 'payment', 'error.log')
-        # },
-        # 'cron_handler': {
-        #     'level': 'ERROR',
-        #     'class': 'logging.handlers.SysLogHandler',
-        #     'facility': 'local7',
-        #     'formatter': 'verbose',
-        #     'address': os.path.join(SYSLOG_ADDRESS, 'error', 'cron.log')
-        # },
-        # 'cashback_handler': {
-        #     'level': 'ERROR',
-        #     'class': 'logging.handlers.SysLogHandler',
-        #     'facility': 'local7',
-        #     'formatter': 'verbose',
-        #     'address': os.path.join(SYSLOG_ADDRESS, 'error', 'cashback.log')
-        # },
         'syslog': {
          'level': 'DEBUG',
          'class': 'logging.handlers.SysLogHandler',
          'facility': 'local5',
-         'address': SYSLOG_ADDRESS,
          'formatter': 'verbose'
        },
     },
@@ -468,7 +400,6 @@ LOGGING = {
         },
     },
 }
-
 
 
 # LOGS_ROOT = os.path.join(BASE_DIR, "log")

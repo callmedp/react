@@ -123,16 +123,23 @@ CACHES = {
     },
 }
 
+###### LOGGING SETTINGS #############
+SYSLOG_ADDRESS = '/run/uwsgi/careerplus.sock'
+
+LOGGING['handlers']['syslog']['address'] = SYSLOG_ADDRESS
+
+
 ADMINS = [
     '123snig@gmail.com',
     'snig_b@yahoo.com'
     'snigdha.batra@hindustantimes.com'
 ]
 
+####### PRODUCT ID SETTINGS ##############
 ROUNDONE_PRODUCT_ID = 2129
 
 
-#### LEAD CRONS
+#### CRM SETTINGS CRONS #################
 SHINECPCRM_DICT = {
     'base_url': 'http://shinecpcrm.shine.com',
     'token': '73f53cf358b94156feb49d034081ed507334e02a',
@@ -143,7 +150,7 @@ SHINECPCRM_DICT = {
     'ad_server_url': '/api/mobile-version-leads/'
 }
 
-### LINKEDIN SETTINGS
+### LINKEDIN SETTINGS ###########
 REDIRECT_URI = '{}/linkedin/login'.format(MAIN_DOMAIN_PREFIX)
 
 # Booster Recruiters

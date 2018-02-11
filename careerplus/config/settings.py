@@ -289,6 +289,14 @@ COMPRESS_PRECOMPILERS = (
    ('text/scss', 'sass --scss {infile} {outfile}'),
 )
 
+######## LOGGING SETTINGS ##########
+SYSLOG_ADDRESS = '/dev/log'
+# Following is to make sure logging works with mac machines 2
+if sys.platform == "darwin":
+    SYSLOG_ADDRESS = "/var/run/syslog"
+LOGGING['handlers']['syslog']['address'] = SYSLOG_ADDRESS
+
+
 ######## STORAGE SETTINGS #############
 GS_BUCKET_NAME = 'learning-media-staging-189607'
 GCP_PRIVATE_MEDIA_BUCKET = 'learning--misc-staging-189607'
