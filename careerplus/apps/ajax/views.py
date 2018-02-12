@@ -636,6 +636,7 @@ class MarkedPaidOrderView(View):
 
                     # send email through process mailers
                     process_mailer.apply_async((obj.pk,), countdown=900)
+                    # process_mailer(obj.pk)
 
                     # roundone order
                     roundone_product(order=obj)

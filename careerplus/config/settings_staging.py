@@ -108,7 +108,6 @@ CSRF_COOKIE_SECURE = True
 DEBUG = True
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
-IS_LIVE = False
 
 CART_DROP_OUT_EMAIL = 1 * 60
 CART_DROP_OUT_LEAD = 3 * 60
@@ -125,7 +124,6 @@ ROUNDONE_PRODUCT_ID = 2129
 
 ### LINKEDIN SETTINGS
 REDIRECT_URI = '{}/linkedin/login'.format(MAIN_DOMAIN_PREFIX)
-
 
 ###### STORAGE SETTINGS #############
 DEFAULT_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPMediaStorage'
@@ -144,3 +142,9 @@ GCP_INVOICE_BUCKET = 'learning-invoices-staging-189607'
 # GS_AUTO_CREATE_BUCKET = True
 STATIC_URL = 'https://{}.storage.googleapis.com/'.format(GCP_STATIC_BUCKET)
 MEDIA_URL = 'https://{}.storage.googleapis.com/'.format(GS_BUCKET_NAME)
+
+# Addon List For writer Invoice
+VISUAL_RESUME_PRODUCT_LIST = [305, 306, 307, 308, 309]
+COVER_LETTER_PRODUCT_LIST = [83, ]
+SECOND_REGULAR_RESUME_PRODUCT_LIST = [126, 127, 128, 129, 130]
+

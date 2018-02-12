@@ -13,6 +13,7 @@ SITEMAP_CACHING_TIME = 1
 
 #### Database SETTINGS ##############
 DATABASES = {
+
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'careerplus1',
@@ -21,6 +22,16 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
+
+    # learing2 db
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'careerplus',
+    #     'USER': 'root',
+    #     'PASSWORD': 'root',
+    #     'HOST': '172.22.65.33',
+    #     'PORT': '3306',
+    # },
 
     'oldDB': {
         'ENGINE': 'django.db.backends.mysql',
@@ -238,7 +249,7 @@ CP_VENDOR_ID = '12345'
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
-        'URL': 'http://172.22.65.33:8983/solr/prdt',
+        'URL': 'http://172.22.65.33:8983/solr/prdt',  # prdt(staging learning1) # live_prod(staging learing2)
         'INCLUDE_SPELLING': False,
     },
 }
@@ -302,6 +313,12 @@ GS_BUCKET_NAME = 'learning-media-staging-189607'
 GCP_PRIVATE_MEDIA_BUCKET = 'learning--misc-staging-189607'
 GCP_STATIC_BUCKET = 'learning-static-staging-189607'
 GCP_INVOICE_BUCKET = 'learning-invoices-staging-189607'
+
+# Addon List For writer Invoice
+VISUAL_RESUME_PRODUCT_LIST = [305, 306, 307, 308, 309]
+COVER_LETTER_PRODUCT_LIST = [83, ]
+SECOND_REGULAR_RESUME_PRODUCT_LIST = [126, 127, 128, 129, 130]
+
 
 try:
     from .settings_local import *

@@ -22,7 +22,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.files.base import ContentFile
 
 # from console.decorators import Decorate, stop_browser_cache
-from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCPInvoiceStorage
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage
 from order.models import Order, OrderItem
 from review.models import Review
 from emailers.email import SendMail
@@ -680,10 +680,10 @@ class DashboardNotificationBoxView(TemplateView):
 
 class DownloadQuestionnaireView(View):
     def get(self, request, *args, **kwargs):
-        file_path = settings.MEDIA_ROOT + '/attachment/' + 'Resume Questionnaire.docx'
+        file_path = 'attachment/' + 'Resume Questionnaire.docx'
         path = file_path
         try:
-            fsock = FileWrapper(open(path, 'rb'))
+            fsock = GCPMediaStorage().open(path)
         except IOError:
             raise Exception("Resume not found.")
 

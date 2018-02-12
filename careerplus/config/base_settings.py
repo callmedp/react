@@ -586,7 +586,12 @@ CLICK_TRACKING = 'https://www3.shine.com/click-tracking/'
 COURSE_SLUG = ['course', ]
 WRITING_SLUG = ['writing', 'resume']
 SERVICE_SLUG = ['service', ]
-DELIVERY_SLUG = ['normal', 'express', 'super-express']
+# delivery slug
+NORMAL_DELIVERY_SLUG = ['normal', ]
+EXPRESS_DELIVERY_SLUG = ['express', ]
+SUPER_EXPRESS_DELIVERY_SLUG = ['super-express', ]
+DELIVERY_SLUG = NORMAL_DELIVERY_SLUG + EXPRESS_DELIVERY_SLUG + SUPER_EXPRESS_DELIVERY_SLUG
+
 CHARS_TO_REMOVE = ['/', "'", "(", ")", "!", "~", "`", "@", "#", "$", "%", "&" ]
 ############################################
 

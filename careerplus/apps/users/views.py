@@ -11,11 +11,13 @@ from django.contrib import messages
 from django.views.generic import FormView, TemplateView, View
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.utils import timezone
 
 from shine.core import ShineCandidateDetail
 from core.mixins import TokenExpiry, TokenGeneration
-from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCPInvoiceStorage
 from order.models import OrderItem
+from users.mixins import WriterInvoiceMixin
 
 from emailers.tasks import send_email_task
 
@@ -234,7 +236,7 @@ class DownloadBoosterResume(View):
                 request, messages.ERROR,
                 "Sorry, the document is currently unavailable.")
             logging.getLogger(
-                        'error_log').error("candidate booster resume not found")
+                'error_log').error("candidate booster resume not found")
             response = HttpResponseRedirect(
                 request.META.get('HTTP_REFERER', '/'))
             return response
@@ -429,3 +431,49 @@ def server_error(request):
     response = render(request, 'error_pages/500.html', {})
     response.status_code = 500
     return response
+
+
+class GenerateWriterInvoiceView(View):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            user = request.user
+            if user.is_authenticated():
+                data = WriterInvoiceMixin().save_writer_invoice_pdf(
+                    user=user)
+                if data.get('error'):
+                    messages.add_message(
+                        request, messages.ERROR,
+                        data.get('error'))
+                else:
+                    messages.add_message(
+                        request, messages.SUCCESS,
+                        'Your invoice has generated, please download.')
+        except Exception as e:
+            logging.getLogger(
+                'error_log').error(
+                'writer invoice generation error - ' + str(e))
+        return HttpResponseRedirect(reverse('console:dashboard'))
+
+
+class DownloadWriterInvoiceView(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            user = request.user
+            invoice = None
+            if user.is_authenticated() and user.userprofile and user.userprofile.user_invoice:
+                invoice = user.userprofile.user_invoice
+            if invoice:
+                file_path = settings.INVOICE_DIR + invoice.name
+                fsock = GCPInvoiceStorage().open(file_path)
+                filename = invoice.name.split('/')[-1]
+                response = HttpResponse(
+                    fsock,
+                    content_type=mimetypes.guess_type(filename)[0])
+                response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
+                return response
+        except Exception as e:
+            logging.getLogger(
+                'error_log').error(
+                'writer invoice download error - ' + str(e))
+        return HttpResponseRedirect(reverse('console:dashboard'))

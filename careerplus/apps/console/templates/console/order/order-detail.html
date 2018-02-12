@@ -192,6 +192,9 @@
                             {% endif %}
                             {% if obj.partner %}
                               <strong>Partner:</strong> {{obj.partner}}
+                            {% endif %}<br/><br/>
+                            {% if obj.delivery_service %}
+                              <strong>Delivery Type:</strong> {{obj.delivery_service.name}}
                             {% endif %}
 
                           </td>
