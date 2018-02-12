@@ -349,6 +349,8 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     def get_absolute_url(self):
         if self.visibility == 2:
             return reverse('talent:te-articles-detail', kwargs={'cat_slug': self.p_cat.slug, 'slug': self.slug})
+        if self.visibility == 3:
+            return reverse('hrinsider:hr-articles-detail', kwargs={ 'cat_slug': self.p_cat.slug ,'slug': self.slug})          
         else:
             return reverse('blog:articles-deatil', kwargs={'slug': self.slug, 'pk': self.pk})
 

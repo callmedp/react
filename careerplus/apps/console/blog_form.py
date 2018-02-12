@@ -73,7 +73,7 @@ class ArticleAddForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(ArticleAddForm, self).__init__(*args, **kwargs)
-        visibility = [3]
+        visibility = []
         site_type = []
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(1)
@@ -81,6 +81,9 @@ class ArticleAddForm(forms.ModelForm):
         if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(2)
             site_type.append((2,"TalentEconomy"))
+        if has_group(user=self.request.user, grp_list=[settings.HR_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(3)
+            site_type.append((3,"HR blogger"))
         self.fields['p_cat'].queryset = Category.objects.filter(
             is_active=True,
             visibility__in=visibility)
@@ -194,7 +197,7 @@ class ArticleChangeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(ArticleChangeForm, self).__init__(*args, **kwargs)
-        visibility = [3]
+        visibility = []
         site_type = []
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(1)
@@ -202,6 +205,9 @@ class ArticleChangeForm(forms.ModelForm):
         if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(2)
             site_type.append((2,"TalentEconomy"))
+        if has_group(user=self.request.user, grp_list=[settings.HR_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(3)
+            site_type.append((3,"HR blogger"))
         self.fields['p_cat'].queryset = Category.objects.filter(
             is_active=True,
             visibility__in=visibility)
@@ -518,6 +524,9 @@ class ArticleFilterForm(forms.ModelForm):
         if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(2)
             site_type.append((2,"TalentEconomy"))
+        if has_group(user=self.request.user, grp_list=[settings.HR_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(3)
+            site_type.append((3,"HR blogger"))
         NEWSTATUS = ((-1, 'Select Status'),) + STATUS
 
         self.fields['author'] = forms.ModelChoiceField(label=("Writer:"),
@@ -637,7 +646,7 @@ class AuthorAddForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(AuthorAddForm, self).__init__(*args, **kwargs)
-        visibility = [3]
+        visibility = []
         site_type = []
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(1)
@@ -645,6 +654,9 @@ class AuthorAddForm(forms.ModelForm):
         if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(2)
             site_type.append((2,"TalentEconomy"))
+        if has_group(user=self.request.user, grp_list=[settings.HR_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(3)
+            site_type.append((3,"HR blogger"))
         self.fields['visibility'].choices = site_type
         
 
@@ -721,7 +733,7 @@ class AuthorChangeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(AuthorChangeForm, self).__init__(*args, **kwargs)
-        visibility = [3]
+        visibility = []
         site_type = []
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(1)
@@ -729,6 +741,9 @@ class AuthorChangeForm(forms.ModelForm):
         if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(2)
             site_type.append((2,"TalentEconomy"))
+        if has_group(user=self.request.user, grp_list=[settings.HR_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(3)
+            site_type.append((3,"HR blogger"))
         self.fields['visibility'].choices = site_type
         
         self.fields['slug'].widget.attrs['readonly'] = True
