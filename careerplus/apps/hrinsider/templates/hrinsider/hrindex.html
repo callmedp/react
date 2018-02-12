@@ -22,82 +22,29 @@
 
     {% block container %}
     <!-- header carousel -->
+    {% if top_article_list %}
+    {{top_article_list}}
       <header class="header-carousel-box">
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
           <div class="carousel-inner header-carousel">
-
-            <div class="carousel-item active">
+            {% for articlelist in top_article_list %}
+            <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
               <div class="row">
                 <!-- big image -->
-                <a href="#" class="col-sm-8 home-slide pr-0">
-                  <figure class="slide1">
-                    <img src="https://origin-static3.shine.com/images/blog/Ruchi-Bhatia.jpg" alt="HR Trends In 2018">
-                    <figcaption>   
-                      <span class="caption">Interview Preparation</span>                 
-                      <strong>4 Jumps To Managerial Jobs With Lean Six Sigma, But There’s A Catch!</strong>
-                    </figcaption>
-                  </figure>                  
-                </a>
+                <div class="col-sm-8 home-slide pr-0">
+                    {% include './include/banner.tmpl.html' with articlelist=topArtList.0 bigtmpl=True %}
+                </div><!-- /. col 8 -->
+
                 <!-- small image -->
                 <div class="col-sm-4 home-slide">
-                  <figure class="slide2">
-                    <img src="https://origin-static3.shine.com/images/blog/7_1.jpg" alt="How To Reach A Large Number Of Customers Through Viral Marketing?">
-                    <figcaption>   
-                      <span class="caption">Interview Preparation</span>                 
-                      <strong>4 Jumps To Managerial Jobs With Lean Six Sigma, But There’s A Catch!</strong>
-                    </figcaption>
-                  </figure>
-                  <figure class="slide2">
-                    <img src="https://origin-static3.shine.com/images/blog/Arun-Prabhudesai.jpg" alt="How SEO Has Become The Crux Of Digital Marketing">
-                    <figcaption>   
-                      <span class="caption">Interview Preparation</span>                 
-                      <strong>4 Jumps To Managerial Jobs With Lean Six Sigma, But There’s A Catch!</strong>
-                    </figcaption>
-                  </figure>               
-                </div>
-              </div>
+                    {% include './include/banner.tmpl.html' with articlelist=topArtList.0 %}
+                  <!-- small image -->
+                  
+                    {% include './include/banner.tmpl.html' with articlelist=topArtList.0 %}             
+                </div><!-- /. col 4 -->
+              </div><!-- ./ row -->
             </div><!-- carousal item ends here -->
-
-            <div class="carousel-item">
-              <div class="row">
-                <div href="#" class="col-sm-12 conclave-slide">
-                  <a href="#">
-                    <figure>
-                      <img src="{% static 'shinelearn/images/hr-insider/header-image1.jpg' %}" alt="HR Insider">
-                      <span class="overlay"></span>
-                      <figcaption class="conclave-slide-content">
-                        <div class="col-sm-2 float-right">
-                          <img class="conclave-img" src="{% static 'shinelearn/images/hr-insider/shine-conclave.png' %}" width="136" height="106" alt="Shine Conclave">
-                        </div>
-                        <div class="col-sm-8">
-                          <span class="caption">Upcoming Conclave</span>
-                          <strong>
-                            HR Analytics: Unlocking the power of data 
-                          </strong>
-                          <div class="row">
-                            <span class="col-sm-4 sub-text">
-                              <i class="icon-conclave1"></i>
-                              <p>(Auditorium) Park Street
-                                <b>St. Xaviers College</b>
-                              </p>
-                            </span>
-                            <span class="col-sm-4 sub-text">
-                              <i class="icon-conclave2"></i>
-                              9th & 10th September
-                            </span>
-                            <span class="col-sm-4 sub-text">
-                              <i class="icon-conclave3"></i>
-                              10am to 5pm
-                            </span>
-                          </div>
-                        </div>
-                      </figcaption>
-                    </figure>
-                  </a>                  
-                </div>
-              </div>
-            </div><!-- carousal item ends here -->
-
+            {% endfor %}
           </div>
           <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -109,230 +56,57 @@
           </a>
         </div>
       </header><!-- /. header carousel -->
+    {% endif %}
 
 
       <!-- Recenty added -->
+      {% if  article_list %}
       <section class="listing-box">
         <h1 class="primary-heading">Recenty added</h1>
         <div class="row">
-          {% for i in "x"|ljust:"6" %}
+          
+          {% for articleItem in article_list %}
           <!-- listing box -->
           <div class="col-md-4 listing">
             <div class="box-panel">
-              <a href="#">
+              
+              <a href="{% url 'hrinsider:hr-articles-detail' articleItem.p_cat.slug articleItem.slug %}" title="{{artList.heading}}">
                 <figure>
                   <i>
-                    <img src="https://origin-static3.shine.com/images/blog/Augmented-Reality--How-the-HR-Industry-Benefits.jpg" alt="Augmented Reality - How the HR Industry Benefits">
+                    <img src="{{articleItem.name.url}}" alt="{{article.name_alt}}">
                   </i>
-                  <figcaption>Interview Preparation</figcaption>
+                  <figcaption>{{articleItem.p_cat.name}}</figcaption>
                   <div class="view-forward">
-                    <i class="icon-forward"></i> 43
-                    <i class="icon-view ml-20"></i> 21
+                    <i class="icon-forward"></i> {{articleItem.no_shares}}
+                    <i class="icon-view ml-20"></i> {{articleItem.no_views}}
                   </div>
                 </figure>
-                <h3 class="sub-heading">4 Jumps To Managerial Jobs With Lean Six Sigma, But There’s A Catch!</h3>
-                <article>Yes, in a recent study, employers have started to 'evaluate' candidates based on their social media profiles...</article>
+                <h3 class="sub-heading">{{articleItem.heading}}</h3>
+                <article>{{artList.summary|striptags|safe}}</article>
               </a>
+              
               <a class="author" href="#">
+                {% if articleItem.author.image %}
                 <i>
-                  <img src="https://origin-static3.shine.com/images/blog/author/Aman.jpg" alt="Aman Khare">
+                  <img src="{{articleItem.author.image.url}}" alt="{{articleItem.author.name}}">
                 </i>
-                <strong>Ajay Misra</strong>
+                {% endif %}
+                <strong>{{articleItem.author.name}}</strong>
               </a>
             </div>          
           </div><!-- /. listing box -->
           {% endfor %}
         </div>
       </section><!-- /. Recenty added -->
+      {% endif %}
 
       <!-- Contributors and Speakers -->
-      <section class="author-carousel-box mt-30">
-        <h2 class="secondary-heading">Contributors and Speakers</h2>
-        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-          <div class="carousel-inner">
+    <!--   {% if authors %}
+         
+      {% endif %} -->
 
-            <div class="carousel-item  active">
-              <div class="row">
-                <div class="col-sm-2 author-carousel">
-                  <a href="#" class="box-panel">
-                    <figure>
-                      <i>
-                        <img src="https://origin-static3.shine.com/images/blog/author/Neha_Kaul.jpg">
-                      </i>
-                      <figcaption>
-                        <strong class="author-info author-info-primary">Neha Kaul</strong>
-                        <strong class="author-info author-info-secondary">5 articles</strong>
-                      </figcaption>
-                    </figure>
-                  </a>
-                </div>
-                <div class="col-sm-2 author-carousel">
-                  <a href="#" class="box-panel">
-                    <figure>
-                      <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Neeraj-Author.jpg" alt="Neeraj Singh">
-                      </i>
-                      <figcaption>
-                        <strong class="author-info author-info-primary">Neeraj</strong>
-                        <strong class="author-info author-info-secondary">5 articles</strong>
-                      </figcaption>
-                    </figure>
-                  </a>
-                </div>
-                <div class="col-sm-2 author-carousel">
-                  <a href="#" class="box-panel">
-                    <figure>
-                      <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/naman_agrawal.jpg" alt="Naman Agrawal">
-                      </i>
-                      <figcaption>
-                        <strong class="author-info author-info-primary">Naman Agrawal</strong>
-                        <strong class="author-info author-info-secondary">5 articles</strong>
-                      </figcaption>
-                    </figure>
-                  </a>
-                </div>
-                <div class="col-sm-2 author-carousel">
-                  <a href="#" class="box-panel">
-                    <figure>
-                      <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Aman.jpg" alt="Aman Khare - AmanGoinPlaces">
-                      </i>
-                      <figcaption>
-                        <strong class="author-info author-info-primary">Aman Khare</strong>
-                        <strong class="author-info author-info-secondary">5 articles</strong>
-                      </figcaption>
-                    </figure>
-                  </a>
-                </div>
-                <div class="col-sm-2 author-carousel">
-                  <a href="#" class="box-panel">
-                    <figure>
-                      <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Honey-Singh.jpg" alt="Honey Singh">
-                      </i>
-                      <figcaption>
-                        <strong class="author-info author-info-primary">Honey Singh</strong>
-                        <strong class="author-info author-info-secondary">5 articles</strong>
-                      </figcaption>
-                    </figure>
-                  </a>
-                </div>
-                <div class="col-sm-2 author-carousel">
-                  <a href="#" class="box-panel">
-                    <figure>
-                      <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/guarav.jpg" alt="Gaurav Jain">
-                      </i>
-                      <figcaption>
-                        <strong class="author-info author-info-primary">Gaurav Jain</strong>
-                        <strong class="author-info author-info-secondary">5 articles</strong>
-                      </figcaption>
-                    </figure>
-                  </a>
-                </div>
-              </div>
-            </div>
+      {% include './include/author.tmpl.html' with authors=authors %}
 
-            <div class="carousel-item">
-              <div class="row">
-                <div class="col-sm-2 author-carousel">
-                  <a href="#" class="box-panel">
-                    <figure>
-                      <i>
-                        <img src="https://origin-static3.shine.com/images/blog/author/Neha_Kaul.jpg">
-                      </i>
-                      <figcaption>
-                        <strong class="author-info author-info-primary">Neha Kaul</strong>
-                        <strong class="author-info author-info-secondary">5 articles</strong>
-                      </figcaption>
-                    </figure>
-                  </a>
-                </div>
-                <div class="col-sm-2 author-carousel">
-                  <a href="#" class="box-panel">
-                    <figure>
-                      <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Neeraj-Author.jpg" alt="Neeraj Singh">
-                      </i>
-                      <figcaption>
-                        <strong class="author-info author-info-primary">Neeraj</strong>
-                        <strong class="author-info author-info-secondary">5 articles</strong>
-                      </figcaption>
-                    </figure>
-                  </a>
-                </div>
-                <div class="col-sm-2 author-carousel">
-                  <a href="#" class="box-panel">
-                    <figure>
-                      <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/naman_agrawal.jpg" alt="Naman Agrawal">
-                      </i>
-                      <figcaption>
-                        <strong class="author-info author-info-primary">Naman Agrawal</strong>
-                        <strong class="author-info author-info-secondary">5 articles</strong>
-                      </figcaption>
-                    </figure>
-                  </a>
-                </div>
-                <div class="col-sm-2 author-carousel">
-                  <a href="#" class="box-panel">
-                    <figure>
-                      <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Aman.jpg" alt="Aman Khare - AmanGoinPlaces">
-                      </i>
-                      <figcaption>
-                        <strong class="author-info author-info-primary">Aman Khare</strong>
-                        <strong class="author-info author-info-secondary">5 articles</strong>
-                      </figcaption>
-                    </figure>
-                  </a>
-                </div>
-                <div class="col-sm-2 author-carousel">
-                  <a href="#" class="box-panel">
-                    <figure>
-                      <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Honey-Singh.jpg" alt="Honey Singh">
-                      </i>
-                      <figcaption>
-                        <strong class="author-info author-info-primary">Honey Singh</strong>
-                        <strong class="author-info author-info-secondary">5 articles</strong>
-                      </figcaption>
-                    </figure>
-                  </a>
-                </div>
-                <div class="col-sm-2 author-carousel">
-                  <a href="#" class="box-panel">
-                    <figure>
-                      <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/guarav.jpg" alt="Gaurav Jain">
-                      </i>
-                      <figcaption>
-                        <strong class="author-info author-info-primary">Gaurav Jain</strong>
-                        <strong class="author-info author-info-secondary">5 articles</strong>
-                      </figcaption>
-                    </figure>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-          </div>
-          <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-          </a>
-        </div>
-      </section><!-- /. Contributors and Speakers -->
-
-
-      {% block footer %}
-        {% include 'include/footer.html'%}
-      {% endblock footer %}
     {% endblock container %}
 
     

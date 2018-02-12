@@ -241,7 +241,7 @@ nav {
 }
 
 .icon-forward {
-	@include icon-inblock (21px, 18px, -148px -60px);
+	@include icon-inblock (21px, 18px, -85px -21px);
 	background-image: url($image-path);
 	vertical-align: middle;
 }
@@ -382,61 +382,77 @@ nav {
 }
 
 .home-slide {
-	figure {
-		position: relative;
-		overflow: hidden;		
-
-		&.slide1 {
-			height: 325px;
-
-			figcaption {
-				@extend %gradient-black;
-				position: absolute;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				opacity: 0.7;
-				z-index: 9;
-				padding: 20px 30px;
-				height: 130px;
-
-				strong {
-					font-size: $font-size+13;
-					color: $white;
-					display: block;
-					line-height: 27px;
-				}				
-			}
+	.slide1 {
+		a {
+			display: block;
 		}
 
-		&.slide2 {
-			height: 152px;
-			margin-top: 15px;
+		figure {
+			height: 325px;
+			position: relative;
+			overflow: hidden;
+		}
+
+			
+
+		figcaption {
+			@extend %gradient-black;
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			opacity: 0.7;
+			z-index: 9;
+			padding: 20px 30px;
+			height: 130px;
+
+			strong {
+				font-size: $font-size+13;
+				color: $white;
+				display: block;
+				line-height: 27px;
+			}				
+		}
+	}
+
+	.slide2 {
+		margin-top: 15px;
+		position: relative;
 
 			&:first-child {
 				margin-top: 0;
 			}
 
-			figcaption {
-				@extend %gradient-black;
-				position: absolute;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				opacity: 0.7;
-				z-index: 9;
-				padding: 10px;
-				height: 90px;
-
-				strong {
-					font-size: $font-size+6;
-					color: $white;
-					display: block;
-					line-height: 20px;
-					font-weight: $font-weight+100;
-				}				
+			a {
+				display: block;
 			}
+
+			figure {
+				height: 152px;
+				position: relative;
+				overflow: hidden;
+			}
+
+		figcaption {
+			@extend %gradient-black;
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			opacity: 0.7;
+			z-index: 9;
+			padding: 10px;
+			height: 90px;
+
+			strong {
+				font-size: $font-size+6;
+				color: $white;
+				display: block;
+				line-height: 20px;
+				font-weight: $font-weight+100;
+			}				
 		}
+	}
 
 		.caption {
 			@include border-radius (10px);
@@ -450,7 +466,6 @@ nav {
 			color: $white;
 			margin-bottom: 10px;
 		}			
-	}
 
 }
 

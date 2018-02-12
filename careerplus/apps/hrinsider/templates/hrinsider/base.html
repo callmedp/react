@@ -42,10 +42,10 @@
 
   	{% block navigation %}
   		<!-- navigation bar -->
-  		{% include 'include/navigation.html' %}
+  		{% include './include/navigation.html' %}
   	{% endblock navigation %}
 
-    {% include 'include/hr-tabs.html' %}
+    {% include './include/hr-tabs.html' %}
 
     <!-- main section start -->
     {% block container %}
@@ -54,8 +54,9 @@
 
    </div><!-- /. main body container -->
 
-
-
+     {% block footer %}
+    {% include './include/footer.html'%}
+    {% endblock footer %}
 
 	<!-- Google font API starts here -->
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
@@ -64,7 +65,7 @@
 	{% block js_section %}
 	    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
 	    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	    {% compress js %}
 	    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
