@@ -464,7 +464,7 @@ class DownloadWriterInvoiceView(View):
             if user.is_authenticated() and user.userprofile and user.userprofile.user_invoice:
                 invoice = user.userprofile.user_invoice
             if invoice:
-                file_path = settings.INVOICE_DIR + invoice.name
+                file_path = invoice.name
                 fsock = GCPInvoiceStorage().open(file_path)
                 filename = invoice.name.split('/')[-1]
                 response = HttpResponse(
