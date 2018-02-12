@@ -1,0 +1,1163 @@
+@import "bootstrap/functions";
+@import "bootstrap/mixins";
+@import "bootstrap/variables";
+
+
+
+/*----Detail page css---*/
+
+.detail-box-content {
+    @extend %gutter-space;
+}
+
+.author-view-box {
+    display: block;
+    margin-top: 20px;
+
+    .author-date {
+        display: inline-block;
+        color: $grey-color;
+        font-size: $font-size+3;
+
+        figure {
+            display: inline-block;
+            i {
+                img {
+                    width: 20px;
+                    height: 20px;
+                    @include border-radius (100%) margin-right: 5px;
+                }
+            }
+        }
+
+        strong {
+            display: inline;
+            font-weight: $font-weight+200;
+            color: $secondary-color;
+
+            &:after {
+                content: '/';
+                margin: 0 10px;
+                font-weight: $font-weight+100;
+            }
+
+            a {
+                color: $secondary-color;
+            }
+        }
+    }
+
+    .comment-view {
+        display: inline-block;
+        color: $grey-color;
+
+        figure {
+            display: inline-block;
+            margin-left: 10px;
+
+            figcaption {
+                display: inline-block;
+                color: $grey-color;
+            }
+        }
+    }
+}
+
+.social-login {
+    text-align: left;
+    display: block;
+    margin: 20px 0 25px 0;
+    padding-top: 25px;
+    border-top: 1px solid $border-color;
+
+    a {
+        display: inline-block;
+        margin-right: 10px;
+    }
+}
+
+.article-detail-content {
+
+    p {
+        margin-bottom: 30px;
+        display: block;
+        font-size: $font-size+4;
+        color: $primary-color;
+
+        h4,
+        strong,
+        b {
+            font-weight: $font-weight+200;
+        }
+
+        u,
+        em,
+        i {
+            font-weight: $font-weight+100;
+        }
+    }
+
+    .list-mid-head {
+        display: block;
+        font-size: $font-size+6;
+        font-weight: $font-weight+200;
+    }
+
+    ol,
+    ul {
+        margin: -10px 0 30px 0;
+        padding: 0 0 0 20px;
+
+        li {
+            font-size: $font-size+6;
+            margin-bottom: 10px;
+
+            ul {
+                list-style-type: disc;
+                margin: 0;
+                padding-left: 10px;
+
+                li {
+                    font-size: $font-size+4;
+                    margin: 5px 0;
+                }
+            }
+        }
+    }
+
+    figure {
+        margin-bottom: 30px;
+        max-height: 448px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+        }
+
+        iframe {
+            max-width: 800px;
+            max-height: 607px;
+        }
+    }
+
+    .article-content {
+        h4 {
+            display: inline-block;
+            font-size: $font-size+6;
+            font-weight: $font-weight+200;
+            margin: 0 3px 0 0;
+        }
+
+        img {
+            margin: 5px;
+        }
+    }
+
+    blockquote {
+        background: #ecf6f5;
+        border-left: 5px solid #2fc2e3;
+        padding: 20px;
+        margin-bottom: 30px;
+        display: block;
+        font-size: $font-size+6;
+        color: $primary-color;
+    }
+
+    .article-mid-pic {
+        float: right;
+
+        img {
+            max-width: 100%;
+            width: auto;
+            margin-left: 10px;
+            width: 266px;
+        }
+    }
+}
+
+.tagged-in {
+    font-size: $font-size+4;
+    color: $primary-color;
+    display: block;
+
+    strong {
+        font-weight: $font-weight+100;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    span {
+        display: inline-block;
+        padding: 5px 10px;
+        font-size: $font-size+2;
+        background-color: #ebebeb;
+        color: $grey-color;
+        text-transform: uppercase;
+        border-radius: 2px;
+        margin-right: 10px;
+
+        a {
+            color: $grey-color;
+        }
+    }
+}
+
+.comments-box {
+    font-size: $font-size+4;
+    color: $secondary-color;
+
+    .comments-box-heading {
+        border-bottom: 2px solid #eaf8ff;
+        margin: 15px 0 0 0;
+        padding-bottom: 10px;
+        position: relative;
+        display: block;
+        text-transform: uppercase;
+        font-weight: $font-weight+200;
+
+        strong {
+            font-size: $font-size+4;
+            color: $primary-color;
+            font-weight: $font-weight+200;
+        }
+
+        a {
+            float: right;
+
+            &:before {
+                content: '';
+                display: inline-block;
+                width: 19px;
+                height: 18px;
+                background: $sprite -420px -49px;
+                margin-right: 10px;
+                vertical-align: sub;
+            }
+        }
+    }
+
+    .media {
+        border-bottom: 1px solid $border-color;
+        margin-top: 15px;
+        padding-top: 15px;
+        padding-bottom: 20px;
+    }
+
+    .media-left {
+        figure {
+            width: 60px;
+            height: 60px;
+            margin: 5px 15px 0 0;
+
+            img {
+                width: 60px;
+                height: 60px;
+                border-radius: 100%;
+            }
+        }
+    }
+
+    .media-body {
+        overflow: visible;
+
+        a {
+            font-weight: $font-weight+100;
+            text-transform: uppercase;
+            font-size: $font-size+1;
+        }
+    }
+
+    .time {
+        display: inline-block;
+        color: $grey-color;
+        font-size: $font-size+1;
+        margin-top: 5px;
+    }
+
+    .author-name {
+        font-size: $font-size+4;
+        font-weight: $font-weight+200;
+        display: inline-block;
+        color: $primary-color;
+
+        &:after {
+            content: '/';
+            padding: 0 10px;
+            font-weight: $font-weight+100;
+            font-size: $font-size+1;
+            color: $grey-color;
+        }
+    }
+
+    p {
+        font-size: $font-size+2;
+        font-weight: $font-weight+100;
+        padding: 5px 0;
+        margin-bottom: 0;
+        color: $secondary-color;
+    }
+
+    .leave-comment {
+        background: #f6f6f6;
+        overflow: hidden;
+        padding: 20px;
+
+        strong {
+            font-size: $font-size+4;
+            color: $secondary-color;
+            font-weight: $font-weight+200;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: block;
+        }
+    }
+
+    .form-group {
+        position: relative;
+        font-size: $font-size+3;
+
+        textarea {
+            box-shadow: none;
+        }
+
+        input {
+            width: 100%;
+            box-shadow: none;
+        }
+    }
+
+    .form-control {
+        border: 1px solid #e5e5e5;
+        border-radius: 0;
+    }
+
+    .submit-button {
+        display: inline-table;
+        float: right;
+        width: auto;
+        padding: 7px 15px;
+        border-radius: 2px;
+        margin-top: 20px;
+        background: $link-color;
+        border: none;
+        color: $white;
+        cursor: pointer;
+    }
+
+    .comments-links {
+        padding: 15px;
+        display: block;
+        color: $primary-color;
+        background-color: #f1f1f1;
+        text-align: center;
+        font-size: $font-size+4;
+        font-weight: $font-weight+200;
+        text-transform: uppercase;
+        margin-top: 30px;
+    }
+}
+
+.you-may-like {
+    @extend %box-shadow;
+    padding: 20px 20px 10px 20px;
+
+    h2 {
+        font-weight: $font-weight+200;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            display: block;
+            border-top: 1px solid $border-color;
+            padding-top: 18px;
+            margin-bottom: 11px;
+
+            &:first-child {
+                border-top: none;
+                padding-top: 10px;
+            }
+
+            figure {
+                display: table;
+                i {
+                    width: 112px;
+                    height: 85px;
+                    overflow: hidden;
+                    display: table-cell;
+                    padding-right: 10px;
+
+                    img {
+                        width: 112px;
+                        height: auto;
+                    }
+                }
+
+                figcaption {
+                    font-size: $font-size;
+                    color: $grey-color;
+                    display: table-cell;
+                    vertical-align: top;
+                    text-transform: uppercase;
+                    padding-top: 5px;
+
+                    h3 {
+                        font-size: $font-size+3;
+                        font-weight: $font-weight+200;
+                        display: block;
+                        text-transform: none;
+                        color: $primary-color;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.conclave-box,
+.conclave-content-box {
+	@extend %gutter-space;
+}
+
+.conclave_head {
+
+    @extend %gradient;
+    @extend %gutter-space;
+    padding-top: 20px;
+    color: $white-color;
+
+
+    h1 {
+
+        font-size: 40px;
+        font-weight: $font-weight+200;
+        padding-top: 10px;
+    }
+
+    .event_speakers {
+        font-size: $font-size + 3;
+
+
+        &:before {
+
+            width: 29px;
+            height: 40px;
+            background-image: url($image-path);
+            background-position: -3px -89px;
+            content: '';
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        &:after {
+            border-bottom: solid 1px $white-color;
+            content: '';
+            vertical-align: middle;
+            opacity: .2;
+            width: 86%;
+            float: right;
+            margin: 20px 12px 0 5px;
+        }
+    }
+
+    .speakers {
+        margin: 5px 0 45px;
+
+        strong {
+            font-size: $font-size +7;
+            font-weight: $font-weight + 100;
+        }
+        em {
+            display: block;
+            font-style: normal;
+             color: $lightgrey;
+            line-height: 12px;
+        }
+
+        img {
+            display: block;
+            border-radius: 50px;
+            border: solid 1px $blue-color;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+        }
+    }
+}
+
+
+
+.responsive-video {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 60px;
+    overflow: hidden;
+}
+
+
+.responsive-video iframe,
+.responsive-video object,
+.responsive-video embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+.conclave-box-content {
+	@extend %gutter-space;
+    margin-top: 35px;
+}
+.conclave-content {
+    h2 {
+    	margin-bottom: 0;
+        sup {
+        	font-size: $font-size+4;
+        }
+    }
+
+    .sub-heading {
+    	color: $link-color;
+    }
+
+    h3 {
+        font-size: $font-size + 4;
+        color: $anchor-color;
+    }
+
+    p {
+        font-size: $font-size + 4;
+        padding: 15px 0 0 0;
+        margin: 0;
+    }
+
+    ul {
+    	list-style-type: none;
+    	margin: 10px 0 0 5px;
+    	padding: 0;
+
+    	li {
+    		font-size: $font-size+4;
+    		clear: both;
+
+    		&:before {
+    			content: '-';
+    			margin-right: 5px;
+    		}
+    	}
+    }
+
+    .noborder {
+        border-top: none;
+    }    
+}
+
+.schedule {
+	ul {
+		list-style-type: none;
+		margin: 40px 0 0 5px;
+		padding: 0 0 0 30px;
+		font-size: $font-size+2;
+		color: $grey-color;
+		font-weight: $font-weight+100;
+		border-left: 3px solid $yellow-color;
+
+		li {
+			display: block;
+			margin-bottom: 20px;
+			position: relative;
+
+			&:before {
+				content: '';
+				border: 3px solid $yellow-color;
+				width: 15px;
+				height: 15px;
+				position: absolute;
+				left: -39px;
+				top: 0;
+				border-radius: 100%;
+				background: $white-color;
+			}
+
+			small {
+				display: block;
+				font-size: $font-size+2;
+				line-height: 15px;
+			}
+
+			strong {
+				display: block;
+				font-size: $font-size+5;
+				color: $primary-color;
+			}
+		}
+	}
+}
+
+
+.pastconclave {
+
+    ul {
+        background: $grey-bg;
+        list-style: none;
+        margin:0;
+        padding:0; 
+        border-top: solid 1px $border-color; 
+
+        li {
+
+            padding: 15px 10px 15px 15px;
+            border-bottom: solid 1px $border-color;
+
+            figure {
+                display: table;
+
+                iframe {
+                	width: 100%;
+                	height: 100%;
+                }
+
+                figcaption {
+
+                    display: table-cell;
+                    vertical-align: middle;
+                    color: $grey-color;
+                    font-size: $font-size + 3;
+                    padding-left: 10px;
+
+                    h3 {
+                        color: $secondary-color;
+                        font-size: $font-size + 5;
+                        font-weight: $font-weight + 2;
+                    }
+
+                    em {
+                    	font-style: normal;
+
+                    	&:before {
+                    		width:16px;
+            				height: 18px;
+            				background-image: url($image-path);
+            				background-position: -258px -100px;
+           					content: '';
+            				display: inline-block;
+            				vertical-align: middle;
+
+
+                    	}
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+.viewall {
+	text-align: right;
+	display: block;
+	color: $anchor-color;
+	margin:10px 0 35px; 
+
+	&:before  {
+		width:13px;
+        height: 11px;
+        background-image: url($image-path);
+        background-position: -280px -103px;
+        content: '';
+        display: inline-block;
+        vertical-align: middle;
+	}
+}
+
+
+.staytuned {
+	background: $grey-bg;
+	padding:15px 20px 20px;
+	color: $grey-color;
+	font-size: $font-size + 3;
+
+
+	strong {
+		color: $primary-color;
+		font-size: $font-size + 15;
+		display: block;
+		padding-bottom:10px; 
+	} 
+
+	form {
+		margin-top:10px;
+
+		input[type='text']{
+			color: $grey-color;
+			border: solid 1px $border-color;
+			background: $white-color;
+			padding:10px; 
+			width: 90%;
+			@include border-radius (2px);
+		}
+
+		.subscribe {
+			border:solid 1px $anchor-color;
+			color: $anchor-color;
+			border-radius: 28px;
+			padding:3px 15px;
+			display: block; 
+			background: $grey-bg;
+			font-size: $font-size + 2;
+			margin-top:15px; 
+		}
+	} 
+}
+
+
+.conclave-box-btm {
+	background: #f9f9f9;
+	@extend %gutter-space-mg;
+	padding-bottom: 20px;
+
+	figcaption {
+		display: block;
+		font-size: $font-size+9;
+		color: $primary-color;
+		font-weight: $font-weight+400;
+		margin: 5px 0 0 0;
+
+		em {
+			font-size: $font-size+1;
+			color: $grey-color;
+			display: block;
+			font-style: normal;
+			font-weight: $font-weight+200;
+		}
+
+		a {
+			color: $link-color;
+			font-size: $font-size+1;
+			display: block;
+		}
+	}
+
+	.calender-box {
+		position: relative;
+		border-top: 3px solid $yellow-color;
+		text-align: center;
+		margin-right: 10px;
+		margin-top: -3px;
+
+		.calender-icon-box {
+			height: 70px;
+			width: 70px;
+			border-radius: 100%;
+			border: 3px solid $yellow-color;
+			display: block;
+			background: $white-color;
+			margin: -40px auto 0 auto;
+			text-align: center;
+
+			.icon-conclave1 {
+				margin: 15px 0 0 0;
+			}
+		}				
+	}
+
+	.time-box {
+		position: relative;
+		border-top: 3px solid $pink-color;
+		text-align: center;
+		margin-right: 10px;
+		margin-top: -3px;
+
+		.time-icon-box {
+			height: 70px;
+			width: 70px;
+			border-radius: 100%;
+			border: 3px solid $pink-color;
+			display: block;
+			background: $white-color;
+			margin: -40px auto 0 auto;
+			text-align: center;
+
+			.icon-conclave2 {
+				margin: 15px 0 0 0;
+			}
+		}
+	}
+
+	.venue-box {
+		position: relative;
+		border-top: 3px solid $green-color;
+		text-align: center;
+		margin-top: -3px;
+
+		.venue-icon-box {
+			height: 70px;
+			width: 70px;
+			border-radius: 100%;
+			border: 3px solid $green-color;
+			display: block;
+			background: $white-color;
+			margin: -40px auto 0 auto;
+			text-align: center;
+
+			.icon-conclave3 {
+				margin: 15px 0 0 0;
+			}
+		}
+	}
+}
+
+.widget {
+	border: 1px solid $border-color;
+	display: block;
+	padding: 15px;
+	margin-bottom: 20px;
+
+	iframe {
+		max-width: 360px;
+		max-height: 300px;
+	}
+}
+
+.sponsorship {
+	display: block;
+
+	img {
+		position: relative;
+		width: 100%;
+	}
+
+	.banner-txt {
+		position: absolute;
+		left: 15px;
+		right: 15px;
+		top: 0;
+		bottom: 0;
+		background: rgba(93, 0, 172, 0.8);
+		padding: 40px 30px 30px 30px;
+		color: $white-color;
+
+		strong {
+			color: $white-color;
+		}
+
+		h3 {
+			font-size: $font-size+4;
+			font-weight: $font-weight+100;
+			margin: 20px 0;
+			line-height: 20px;
+		}
+
+		.enquire {
+			font-size: $font-size+5;
+			font-weight: $font-weight+100;
+			padding: 5px 20px;
+			border: 2px solid $white-color;
+			@include border-radius (20px);
+			text-transform: uppercase;
+			color: $white-color;
+			display: inline-block;
+		}
+	}
+}
+
+.association {
+	display: block;
+	background: #7079bd;
+
+	.banner-txt {
+		padding: 30px;
+		color: $white-color;
+
+		strong {
+			color: $white-color;
+		}
+
+		h3 {
+			font-size: $font-size+4;
+			font-weight: $font-weight+100;
+			margin: 20px 0;
+			line-height: 20px;
+			color: $white-color;
+		}
+
+		.enquire {
+			font-size: $font-size+3;
+			font-weight: $font-weight+100;
+			padding: 5px 20px;
+			@include border-radius (20px);
+			text-transform: uppercase;
+			color: $white-color;
+			display: inline-block;
+			background: $link-color;
+			display: inline-block;
+			margin-right: 10px;
+		}
+	}
+}
+
+.association1 {
+
+	.banner-txt {
+		padding: 20px;
+
+		h3 {
+			margin: 10px 0 20px 0;
+		}
+	}
+}
+
+.jobfair-header {
+	@extend %gutter-space;
+	height: 260px;
+	overflow: hidden;
+	position: relative;
+
+	figure {
+		img {
+			width: 100%;
+			height: 100%;
+			margin-top: -20%;
+		}
+
+		.overlay {
+			opacity: 0.9;
+		}
+
+		.conclave-slide-content {
+			h1 {
+				font-size: $font-size+25;
+				color: $white;
+				display: block;
+				margin-bottom: 15px;
+				font-weight: $font-weight+200;
+			}
+
+			img {
+				margin: -30px 0 0 -30px;
+			}
+
+			p {
+				font-size: $font-size+7 !important;
+				line-height: 18px;
+
+				b {
+					font-size: $font-size+3 !important;
+					font-weight: $font-weight+100 !important;
+				}
+			}
+
+			article {
+				font-size: $font-size+4;
+				color: $white;
+				line-height: 17px;
+				font-weight: $font-weight+100;
+			}
+		}
+	}
+}
+
+.jobfair-content {
+
+	.features {
+		border: 1px solid $border-color;
+		padding: 25px;
+	}
+
+    h2 {
+    	color: $link-color;
+    	font-size: $font-size+9;
+    	font-weight: $font-weight+200;
+    }
+
+    h3 {
+        font-size: $font-size + 4;
+        color: $anchor-color;
+
+    }
+
+    p {
+        font-size: $font-size + 4;
+        padding: 0 0 15px 0;
+        margin: 0;
+    }
+
+    ul {
+    	list-style-type: none;
+    	margin: 10px 0 0 0;
+    	padding: 0;
+
+    	li {
+    		font-size: $font-size+4;
+    		display: block;
+    		line-height: 20px;
+    		margin: 15px 0;
+
+    		i {
+    			width: 20px;
+    			height: 20px;
+    			background: $link-color;
+    			@include border-radius (100%);
+    			display: inline-block;
+    			color: $white-color;
+    			text-align: center;
+    			font-style: normal;
+    			font-size: $font-size+3;
+    			font-weight: $font-weight+200;
+    			clear: both;
+    			margin-right: 7px;
+    		}
+    	}
+    }   
+}
+
+.jobfair-partner {
+
+	h2 {
+		font-size: $font-size+9;
+		font-weight: $font-weight+200;
+		margin: 0 auto;
+		color: $link-color;
+		text-transform: uppercase;
+		margin-bottom: 10px;
+	}
+
+	.bdr {
+		border:1px solid $border-color;
+		margin-bottom: 40px;
+
+		img {
+			margin: 17px 4%;
+		}
+
+		article {
+			font-size: $font-size+2;
+			color: $secondary-color;
+			line-height: 17px;
+			margin-bottom: 15px;
+		}
+	} 	
+}
+
+
+.modal-custom {
+
+	.modal-dialog {
+		max-width: 380px;
+	}
+
+	.modal-content {
+		border-radius: 0;
+
+		.modal-header {
+			border-bottom: transparent;
+			padding-left: 35px;
+			padding-right: 35px;
+
+			p {
+				font-size: $font-size+3;
+				color: $secondary-color;
+				display: block;
+				font-weight: $font-weight+100;
+				margin: -5px 0 0 0;
+			}
+
+			.close {
+				background: #d9d9d9;
+				padding: 0 5px;
+				font-weight: $font-weight+200;
+				font-size: $font-size+11;
+				margin-right: -35px;
+			}
+		}
+
+		.modal-body {
+			background: #f9f9f9;
+			padding-left: 35px;
+			padding-right: 35px;
+
+			.form-group {
+				input {
+					border: 1px solid $border-color;
+					@include border-radius (3px);
+					font-size: $font-size+4;
+					font-weight: $font-weight;
+					color: $grey-color;
+
+					&.error {
+						border: 1px solid $red-color;
+					}
+				}				
+			}
+
+			.btn {
+				background: $link-color;
+				@include border-radius (20px);
+				padding: 5px 25px;
+				font-size: $font-size+4;
+				font-weight: $font-weight+200;
+				text-transform: uppercase;
+			}
+
+			.form-check-label {
+				font-size: $font-size+4;
+				color: $grey-color;
+				font-weight: $font-weight;
+			}
+
+			.country-code {
+				display: table;
+
+				.custom-select {
+					width: 51px;
+					display: table-cell;
+					height: 40px;
+					position: relative;
+					padding: 0;
+
+					select {
+						-webkit-appearance: none;
+						-moz-appearance: none;
+					    text-indent: 0;
+					    text-overflow: '';
+						border-radius: 3px;
+						width: 44px;
+						height: 37px;
+						padding: 0;
+						border: transparent;
+						margin: 1px 0 0 5px;
+						font-size: $font-size+4;
+						font-weight: $font-weight+100;
+						color: $secondary-color;						
+
+						&::-ms-expand {
+							display: none;
+						}
+
+						option {
+							min-width: 100px;
+						}
+					}
+				}
+
+				input {
+					width: 250px;
+					display: table-cell;
+					margin-left: 7px;
+					height: 40px;
+				}
+			}
+
+			.lookingfor {
+				font-size: $font-size+4;
+				font-weight: $font-weight+200;
+				color: $secondary-color;
+				display: block;
+				margin-bottom: 0;
+			}
+		}
+	}	
+}

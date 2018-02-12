@@ -1,0 +1,82 @@
+{% load static compress %}
+{% spaceless %}
+<!doctype html>
+<html lang="en" itemscope itemtype="http://www.schema.org/WebPage">
+{% block head %}
+  <head>
+
+  	{% block meta_html %}
+  	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/media/static/shinelearn/images/fav_icon.png">
+    {% endblock meta_html %}
+
+    {% block django_meta %}
+    {% endblock django_meta %}
+
+    {% block canonical_url %}
+      <!-- <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}"> -->
+    {% endblock canonical_url %}
+
+    <title>{% block title %}Shine Learning{%endblock title%}</title>
+
+    {% block css_section %}
+        <!-- Bootstrap -->
+        {% compress css %}
+        <link type="text/scss" href="{% static 'shinelearn/css/hr-insider/bootstrap/bootstrap.scss' %}" rel="stylesheet">
+        {% endcompress %}
+         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    {% endblock css_section %}
+  </head>
+  {% endblock head %} 
+  <body>
+    <!-- main body container -->
+    <div class="container-fluid nopad-lr">
+
+  	{% block navigation %}
+  		<!-- navigation bar -->
+  		{% include 'include/navigation.html' %}
+  	{% endblock navigation %}
+
+    {% include 'include/hr-tabs.html' %}
+
+    <!-- main section start -->
+    {% block container %}
+
+    {% endblock container %}
+
+   </div><!-- /. main body container -->
+
+
+
+
+	<!-- Google font API starts here -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+	<!-- Google font API Ends here -->
+	<!-- JavaScript starts here -->
+	{% block js_section %}
+	    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	    {% compress js %}
+	    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
+	    <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+	    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+	    <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
+	    <script src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
+	    {% endcompress %}
+	{% endblock js_section %}
+	<!-- JavaScript starts here -->
+
+</body>
+</html>
+{% endspaceless %}
+
