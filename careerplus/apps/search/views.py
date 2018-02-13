@@ -73,7 +73,7 @@ class SearchBaseView(TemplateView):
 
     def get_template_names(self):
         if self.request.amp:
-            pass
+             return ["search/search-amp.html"]
         return ["search/search.html"]
 
     def get_search_params(self):
@@ -270,7 +270,8 @@ class SearchBaseView(TemplateView):
                 'has_next': page.has_next()
             }), content_type='application/json')
         else:
-            return render(self.request, self.template_name, context)
+            return render(self.request, self.get_template_names(), context)
+
 
     def set_form_attributes_in_context(self,context):
         """
