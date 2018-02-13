@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
 from order.models import OrderItem
-
+from shop.models import Product
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -11,19 +11,13 @@ class Command(BaseCommand):
 def update_product_buy_count():
     """ updating product buy count """
 
-    orderitems = OrderItem.objects.filter(
-        order__status__in=[1, 3],
-        buy_count_updated=False).exclude(
-        product=None)
-
     updated = 0
-    for oi in orderitems:
-        if oi.product:
-            pd = oi.product
-            pd.buy_count += 1
-            pd.save()
-            oi.buy_count_updated = True
-            oi.save()
+    products = Product.objects.all()
+    for product in products:
+        count = OrderItem.objects.filter(product_id=product.id, order__status__in=[1, 2, 3]).count()
+        if product.buy_count != count:
+            product.buy_count = count
+            product.save()
             updated += 1
 
-    print(updated, 'product buy count updated out of', orderitems.count())
+    print(updated, 'product buy count updated out of', products.count())

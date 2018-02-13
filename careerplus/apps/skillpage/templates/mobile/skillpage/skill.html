@@ -2,8 +2,10 @@
 {% load static compress %}
 {% block django_meta %}
     {% include 'meta/meta.html' %}
+
 {%  endblock django_meta %}
 {% block canonical_url %}
+  <link rel="amphtml" href="https://{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}?type=amp">
   <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
 {% endblock canonical_url %}
 
@@ -111,11 +113,14 @@
                                   <span class="icon-file mt-10"></span>
                                 </div>
                                 <div class="media-body">
-                                  <span class="fs-22 blue-link">
-                                  {{api_data.job_count}}</span>
-                                  <p class="pb-0 c6">
-                                    jobs in the market demanding this skill
-                                  </p>
+                                    <span class="fs-22 blue-link">
+                                        <a href="https://www.shine.com/job-search/{{category_obj.name|slugify}}/">
+                                            {{api_data.job_count}}
+                                        </a>    
+                                    </span>
+                                     <p class="pb-0 c6">
+                                        jobs in the market demanding this skill
+                                    </p>
                                 </div>
                             </div><!-- end of media -->
                             {% comment %}
@@ -136,15 +141,15 @@
                         <p>Jobs require this skill in different functional area</p>
                         <ul class="links mb-10">
                             <li>
-                                <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{api_data.jFArea.0.0}}">{{api_data.jFArea.0.2}} ({{api_data.jFArea.0.1}})
+                                <a href="https://www.shine.com/job-search/quotes-{{slug|slugify}}-quotes-jobs?farea={{api_data.jFArea.0.0}}">{{api_data.jFArea.0.2}} ({{api_data.jFArea.0.1}})
                                 </a>
                             </li>
                             <li>
-                                <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{api_data.jFArea.1.0}}">{{api_data.jFArea.1.2}} ({{api_data.jFArea.1.1}})
+                                <a href="https://www.shine.com/job-search/quotes-{{slug|slugify}}-quotes-jobs?farea={{api_data.jFArea.1.0}}">{{api_data.jFArea.1.2}} ({{api_data.jFArea.1.1}})
                                 </a>
                             </li>
                             <li>
-                                <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{api_data.jFArea.2.0}}">{{api_data.jFArea.2.2}} ({{api_data.jFArea.2.1}})
+                                <a href="https://www.shine.com/job-search/quotes-{{slug|slugify}}-quotes-jobs?farea={{api_data.jFArea.2.0}}">{{api_data.jFArea.2.2}} ({{api_data.jFArea.2.1}})
                                 </a>
                             </li>
                         </ul>

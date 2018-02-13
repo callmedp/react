@@ -45,7 +45,7 @@ class SkillPageView(DetailView, SkillPageMixin):
 
     def get_template_names(self):
         if self.request.amp:
-            pass
+            return ["skillpage/skill-amp.html"]
         return ["skillpage/skill.html"]
         
     def redirect_if_necessary(self, current_path, skill):

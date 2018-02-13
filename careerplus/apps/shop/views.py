@@ -327,7 +327,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
     def get_template_names(self):
         if self.request.amp:
-            pass
+            return ['shop/detail-amp.html']
         return ['shop/detail1.html']
 
     def get_context_data(self, **kwargs):
