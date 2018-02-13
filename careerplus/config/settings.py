@@ -232,7 +232,7 @@ CP_VENDOR_ID = '12345'
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
-        'URL': 'http://172.22.65.33:8983/solr/live_prod',
+        'URL': 'http://172.22.65.33:8983/solr/prdt',
         'INCLUDE_SPELLING': False,
     },
 }

@@ -13,4 +13,6 @@ urlpatterns = [
 
     url(r'^v1/coupon-validate/$',
         views.ValidateCouponApiView.as_view(), name='coupon-validate'),
+    url(r'^v1/remove-coupon/$',
+        views.RemoveCouponApiView.as_view(), name='remove-coupon'),
 ]

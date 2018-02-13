@@ -198,7 +198,7 @@ class CouponRemoveView(APIView, CartMixin):
                 return Response(
                     {'success': True,'msg': 'Successfully Removed'
                     }, status=200, content_type='application/json')
-               
+   
         except:
             return Response(
             {'success': 0,

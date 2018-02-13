@@ -197,7 +197,10 @@ class Campaign(AbstractAutoDate):
 class CouponUser(AbstractAutoDate):
     coupon = models.ForeignKey(Coupon, related_name='users')
     user = models.CharField(
-        _("User Email"), max_length=255, blank=True, null=True)
+        _("User Email"),
+        max_length=255, blank=True,
+        null=True)
+
     redeemed_at = models.DateTimeField(_("Redeemed at"), blank=True, null=True)
 
     def __str__(self):
