@@ -21,7 +21,7 @@
                             <div class="ui-block-a">
                                 <input type="radio" {% if forloop.first or vars.id in selected_products %}checked{% endif %} name="radio" 
                                 data-price="{{vars.inr_price}}" data-id="{{vars.id}}" 
-                                actual-price="{% if vars.fake_inr_price %} {{vars.fake_inr_price}}{% else %}{{vars.inr_price}}{% endif %}" id="pro{{vars.id}}">
+                                data-actual-price="{% if vars.fake_inr_price %} {{vars.fake_inr_price}}{% else %}{{vars.inr_price}}{% endif %}" id="pro{{vars.id}}">
                                 <label for="pro{{vars.id}}">
                                     <table class="table fs-10">
                                         <tr>

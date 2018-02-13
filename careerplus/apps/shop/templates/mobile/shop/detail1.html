@@ -21,6 +21,7 @@
 {% endblock title %}
 {% block canonical_url %}
   <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}?type=amp">
 {% endblock canonical_url %}
 
         {% block django_meta %}
@@ -311,5 +312,16 @@
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/shop/detail.js' %}"></script>
     {% endcompress %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+           if(commonJs.getParameterByName('type') == 'autoEnrol'){
+               $('#enrol-now-button').trigger('click'); 
+            }
+            if(commonJs.getParameterByName('type') == 'autoCart'){
+               $('#add-to-cart').trigger('click');
+            } 
+        })
+        
+    </script>
 {% endblock js_section %}
 
