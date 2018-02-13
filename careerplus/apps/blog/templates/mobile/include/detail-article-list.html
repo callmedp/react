@@ -39,7 +39,12 @@
 
         {% if article.allow_comment %}
             <div class="w100 text-center">
-                <a class="btn-slg btn-grey block" role="button" onclick="openCommentBox('{{article.id}}')" id="total_comment{{article.id}}"><span class="icon-chat"></span>{{article.comment_moderated}} comments</a>
+                <a class="btn-slg btn-grey block" role="button" {% if not amp %}href="openCommentBox('{{article.id}}')" {% else %}onclick="openCommentBox('{{article.id}}')"{% endif %} id="total_comment{{article.id}}"><span class="icon-chat"></span>
+                  {% if not amp %}
+                  {% else %}
+                    {{article.comment_moderated}} comments
+                  {% endif %}
+                </a>
             </div><!-- end of comments button -->
 
             <div class="comment-wrap mt-20" id="comment-box{{article.id}}" >
