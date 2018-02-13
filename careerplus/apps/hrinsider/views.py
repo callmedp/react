@@ -34,7 +34,11 @@ class HRLandingView(TemplateView, BlogMixin):
         context = super(self.__class__, self).get_context_data(**kwargs)
         categories = Category.objects.filter(is_active=True, visibility=3).order_by('-name')
 
-        article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author').order_by('-publish_date')[:10]
+        if kwargs.get('list'):
+        	article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author').order_by('-no_views')
+        	context.update({'list':True})
+        else:
+        	article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author').order_by('-publish_date')[:10]
         top_article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author')[:9]
 
         authors = Author.objects.filter(visibility=3,blog__visibility=3,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
@@ -51,6 +55,13 @@ class HRLandingView(TemplateView, BlogMixin):
         context.update(self.get_breadcrumb_data())
         context.update(self.get_meta_details())
         return context
+
+    def get_template_names(self):
+    	if self.kwargs.get('list'):
+    		temp = "hrinsider/hr_listing.html"
+    	else:
+    		temp = self.template_name
+    	return temp
 
     def get_breadcrumb_data(self):
         breadcrumbs = []

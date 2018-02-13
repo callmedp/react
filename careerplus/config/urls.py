@@ -122,7 +122,7 @@ urlpatterns += [
     url(r'^cms/', include('cms.urls', namespace='cms')),
     url(r'^article/', include('blog.urls', namespace='blog')),
     url(r'^talenteconomy/', include('talenteconomy.urls', namespace='talent')),
-    url(r'^hrinsider/', include('hrinsider.urls', namespace='hrinsider')),
+    url(r'^hr-insider/', include('hrinsider.urls', namespace='hrinsider')),
     
     url(r'^cart/', include('cart.urls', namespace='cart')),
     url(r'^order/', include('order.urls', namespace='order')),

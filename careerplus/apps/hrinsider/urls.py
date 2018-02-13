@@ -5,6 +5,7 @@ from .views import HRLandingView, HRBlogDetailView
 
 urlpatterns = [
      url(r'^$', HRLandingView.as_view(), name='hr-landing'),
+     url(r'^list/$', HRLandingView.as_view(),{'list':True}, name='hr-listing'),
      url(r'^(?P<cat_slug>[-\w]+)/(?P<slug>[-\w]+)/$', 
      	HRBlogDetailView.as_view(), name='hr-articles-detail'),
 
