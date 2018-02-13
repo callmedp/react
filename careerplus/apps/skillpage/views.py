@@ -25,7 +25,7 @@ from .mixins import SkillPageMixin
 
 class SkillPageView(DetailView, SkillPageMixin):
     model = Category
-    template_name = "skillpage/skill.html"
+    # template_name = "skillpage/skill.html"
     page = 1
 
     def get_object(self, queryset=None):
@@ -42,6 +42,11 @@ class SkillPageView(DetailView, SkillPageMixin):
             return queryset[0]
         else:
             raise Http404
+
+    def get_template_names(self):
+        if self.request.amp:
+            pass
+        return ["skillpage/skill.html"]
         
     def redirect_if_necessary(self, current_path, skill):
         expected_path = skill.get_absolute_url()
