@@ -46,6 +46,11 @@ class CMSPageView(DetailView, LoadMoreMixin):
             raise Http404
         return obj
 
+    def get_template_names(self):
+        if self.request.amp:
+            return ["cms/cms_page.html"]
+        return ["cms/cms_page.html"]
+
     def redirect_if_necessary(self, current_path, article):
         expected_path = article.get_absolute_url()
         if expected_path != urlquote(current_path):
