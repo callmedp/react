@@ -1,5 +1,80 @@
 from .settings import *
 
+DEBUG = True
+IS_LIVE = False
+
+ALLOWED_HOSTS = ['*']
+
+######## DATABASE SETTINGS ###########
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'careerplus1',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '',
+        'PORT': '',
+    },
+    'master': {
+        'NAME': 'careerplus1',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '',
+        'PORT': '',
+    },
+    'slave': {
+        'NAME': 'careerplus1',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '',
+        'PORT': '',
+    },
+    'oldDB': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'shinecp',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '',
+        'PORT': '',
+    },
+}
+
+
+####### APPS SETTIMGS #################
+DJANGO_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sites',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'collectfaster',       # Needed here before staticfiles
+    'django.contrib.staticfiles',
+    'django.contrib.humanize',
+]
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+if DEBUG:
+    DEV_APPS = [
+        'debug_toolbar'
+    ]
+    INSTALLED_APPS += DEV_APPS
+
+######### MIDDLEWARE SETTINGS ######
+if DEBUG:
+    DEV_MIDDLEWARE = [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ]
+    MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
+
+
+########## WSGI SETTINGS #################
+WSGI_APPLICATION = 'careerplus.config.wsgi.application'
+
+INVOICE_DIR = 'invoice/'   # Cloud path
+RESUME_DIR = 'resume/'  # Cloud path
+
 
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning1.shine.com'
@@ -38,7 +113,6 @@ CSRF_COOKIE_SECURE = True
 DEBUG = True
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
-IS_LIVE = False
 
 CART_DROP_OUT_EMAIL = 1 * 60
 CART_DROP_OUT_LEAD = 3 * 60

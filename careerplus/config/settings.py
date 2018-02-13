@@ -27,7 +27,22 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
-
+    'master': {
+        'NAME': 'careerplus1',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '',
+        'PORT': '',
+    },
+    'slave': {
+        'NAME': 'careerplus1',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '',
+        'PORT': '',
+    },
     'oldDB': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'shinecp',

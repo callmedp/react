@@ -66,7 +66,23 @@ DATABASES = {
         'PASSWORD': 'permitted@321',
         'HOST': '172.22.65.153',
         'PORT': '3306',
-    }
+    },
+    'master': {
+        'NAME': 'careerplus',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'carrerplus',
+        'PASSWORD': 'permitted@321',
+        'HOST': '172.22.65.153',
+        'PORT': '3306',
+    },
+    'slave': {
+        'NAME': 'careerplus',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'carrerplus',
+        'PASSWORD': 'permitted@321',
+        'HOST': '172.22.65.154',
+        'PORT': '3306',
+    },
 }
 
 CACHES = {
