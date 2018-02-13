@@ -140,7 +140,7 @@ class BlogDetailView(DetailView, BlogMixin):
 
     def get_template_names(self):
         if self.request.amp:
-            return ["blog/article-detail.html"]
+            return ["blog/article-detail-amp.html"]
         return ["blog/article-detail.html"]
 
     def redirect_if_necessary(self, current_path, article):

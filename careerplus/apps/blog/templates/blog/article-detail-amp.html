@@ -1,0 +1,402 @@
+{% load humanize search_tags compress %}
+{% load static compress %}
+<!doctype html>
+<html amp lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{object.display_name}} Career Articles | Shinelearning</title>
+    <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    {% include 'meta/meta.html' %}
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
+
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
+    <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
+    <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+    <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+
+    <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
+
+<style amp-custom>
+
+ *, *:before, *:after {
+    box-sizing: border-box;
+  }
+
+  html {
+  height: 100%; 
+}
+
+body {
+  color: #333;
+  display: block;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  margin: 0;
+  padding: 0;
+  height: 100%; }
+
+figure {
+  margin: 0; }
+
+p {
+  padding-bottom: 10px;
+  line-height: 1.5em; }
+
+/*img {
+  @include box(100%, auto, block);
+}*/
+a {
+  color: #2f5ea6;
+  text-decoration: none; }
+
+li {
+  list-style: none; }
+
+ul, ol {
+  list-style: none; }
+
+h1 {
+  color: #fff;
+  font-size: 2em;
+  font-weight: 400; }
+
+h3 {
+  font-size: 115%;
+  font-weight: 600; }
+
+h4, h5 {
+  color: #fff;
+  font-weight: 400;
+  margin-top: 20px; }
+
+h5 {
+  font-size: .875em; }
+
+hr {
+  border: 0 none;
+  border-top: 1px solid #ddd;
+  margin: 10px 0 15px; 
+}
+
+
+em,h1,h2,h3,h4,h5,h6,i,li,p,table,td,th,tr,ul{
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-weight:400;
+    text-shadow:none;
+    text-decoration:none
+}
+
+figure {
+    margin: 0;
+}
+  ul{
+      list-style:none
+  }
+  a{
+      color:#2f5ea6;
+      text-decoration:none
+  }
+
+  .pull-right {
+      float: right;
+  }
+
+  ..pull-left {
+      float: left;
+  }
+  .text-right{
+      text-align:right
+  }
+  .text-center{
+      text-align:center
+  }
+
+  .he-auto {
+    height: auto;
+  }
+  .w100fl {
+      width: 100%;
+  }
+
+  .pull-left, .w100fl {
+      float: left;
+  }
+
+  .clearfix {
+    clear: both;
+  }
+
+  .input-group .form-control, 
+  .input-group-addon, 
+  .input-group-btn, 
+  .detail-wrap .provided-by, 
+  .detail-wrap .select-provider {
+    display: table-cell;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+
+.c6 {
+    color: #666;
+}
+
+.row {
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.pb-0 {
+    padding-bottom: 0;
+}
+
+
+.fs-10 {
+    font-size: 10px;
+    line-height: 1;
+}
+
+.btn, .btn-sm {
+    background-color: transparent;
+    background-image: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1em;
+    font-weight: normal;
+    line-height: 1.6;
+    margin-bottom: 0;
+    padding: 10px 12px;
+    text-align: center;
+    touch-action: manipulation;
+    user-select: none;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.btn-yellow {
+    background-color: #ffcf26;
+    color: #333;
+}
+
+.btn-outline {
+    border: 1px solid #2f5ea6;
+    color: #2f5ea6;
+}
+
+.fs-11 {
+    font-size: 11px;
+    line-height: 1.2;
+}
+
+.main-heading, h2, h2 {
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 25px;
+    margin-bottom: 10px;
+}
+
+hr {
+    border: 0 none;
+    border-top: 1px solid #ddd;
+    margin: 10px 0 15px;
+}
+
+  header {
+      height: 50px;
+      width: 100%;
+      position: relative;
+      z-index: 9;
+      background-color: #2f5ea6;
+      padding: 15px;
+  }
+
+[class^="icon-"] {
+    background-image: url({% static 'shinelearn/images/mobile/common/sprites.svg'%}); 
+    text-indent: 200%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.icon-back {
+    background-position: -196px -1px;
+    width: 17px;
+    height: 19px;
+    display: inline-block;
+}
+.icon-search {    background-position: 0 -22px;
+    width: 21px;
+    height: 21px;
+    display: block;
+    float: left;
+}
+.icon-cart{background-position: -2px -44px;
+width:20px;
+height: 22px;
+display: block;
+margin-left: 10px;
+float: left;}
+
+
+.pull-right {float: right;}
+
+h1 {font-size: 18px;
+color: #fff;
+font-weight: 500;
+margin: 13px 0 0;
+line-height: 20px;}
+.border-bottom { border-bottom: 
+1px solid #f2f2f2;}
+
+
+.content-box {
+    padding: 15px;
+}
+
+
+.view-forward {
+    color: #999;
+    display: inline-block;
+    margin-top: 3px;font-size: 13px;
+line-height: 1.5 ;
+padding-bottom: 10px; 
+}
+
+.editor {
+    position: relative;
+    line-height: 18px;font-size: 13px ;
+line-height: 1.5;
+}
+.icon-chat-sm {
+    background-position: 0 -92px;
+    width: 12px;
+    height: 10px;
+    display: inline-block;
+    vertical-align: middle; margin:0; 
+}
+.icon-view {
+    background-position:-14px -79px;
+    width: 15px;
+    height: 9px;
+    display: inline-block;
+    color: #fff;
+    font-size: 72%; margin:0;
+}
+
+article {
+    line-height: 1.5;
+    font-size: 14px;
+    color: #333;
+    margin-top: 10px;
+}
+
+
+article p {padding-bottom: 10px;
+line-height: 1.5em;}
+
+article p strong { font-weight: 600; }
+article ol, article ul {
+    padding-left: 25px;
+    padding-bottom: 15px;
+}
+article ol li, article ul li {
+    padding-bottom: 10px;
+    list-style-type: decimal;
+}
+
+.tagging { margin:30px 0;  }
+.tagging p {
+    padding-bottom: 10px;
+    line-height: 1.5em;
+}
+.tagging a {
+    border-radius: 3px;
+    display: inline-block;
+    padding: 2px 5px;
+    margin: 0 2px;
+    text-transform: uppercase;
+    font-size: 11px;
+    color: #999;
+    background-color: #ebebeb;
+    cursor: pointer;
+}
+
+.mt-5 {
+    margin-top: 5px;
+}
+
+.fl100 {
+    float: left;
+    width: 100%;
+}
+
+.ml-10 {
+    margin-left: 10px;
+}
+pre{
+    margin: 10px 0 0 0;
+    float: left;
+    overflow-x: hidden;
+    padding: 0;
+    white-space: pre-wrap;
+    line-height: 23px;
+    width: 98%;
+    margin: 10px 0px 0 0;
+    color : #333;
+}
+
+</style>
+
+<style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+
+</head>
+<body>
+
+    <!-- header menu Icon Starts here -->
+    <header class="w100fl he-auto">        
+        <!-- header menu Icon Starts here -->
+        <div class="main-menu w100fl">
+            <div class="pull-left">
+                
+                <a class="pull-left" id="sidebar-main-trigger" role="button"></a> 
+
+                <a class="icon-back pull-left" role="button" href="/article/"></a> 
+            </div><!-- / Left side Icon ends here -->
+
+<!-- / Right side Icon ends here -->
+        </div><!-- header menu Icon ends here -->
+
+        
+        
+        
+        <h1 class="heading-back w100fl pb-0">{{main_article.display_name}}</h1>
+    </header><!-- header ends here -->
+    <div class="clearfix"></div>
+
+<div class="body-wrapper">
+    <section class="content-box">
+        <div id="related-container">
+          {% if main_article %}
+            <div class="clearfix border-bottom pb-10 mb-10 fs-13 fl100">
+                <span class="editor pull-left mt-5">{{main_article.created_by.name|truncatechars:"15"}}, {{main_article.publish_date.date}}</span>
+                <span class="view-forward pull-right">
+                  <figure class="icon-chat-sm"></figure> <a role="button"> {{main_article.comment_moderated}} Comments</a> 
+                  <figure class="icon-view icon-grey-view ml-10"></figure> {{main_article.no_views}}
+                </span>
+            </div>
+          {% endif %}
+          <pre>{{main_article.content|striptags|safe}}</pre>
+        </div>
+        <div id="id_ajax_article"></div>
+    </section>
+</div>
+
