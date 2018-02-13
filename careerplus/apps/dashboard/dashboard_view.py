@@ -738,7 +738,7 @@ class DashboardInvoiceDownload(View):
                 else:
                     order, invoice = InvoiceGenerate().save_order_invoice_pdf(order=order)
                 if invoice:
-                    file_path = settings.INVOICE_DIR + invoice.name
+                    file_path = invoice.name
                     fsock = GCPInvoiceStorage().open(file_path)
                     filename = invoice.name.split('/')[-1]
                     response = HttpResponse(fsock, content_type=mimetypes.guess_type(filename)[0])

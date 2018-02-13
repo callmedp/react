@@ -633,8 +633,6 @@ class WriterInvoiceMixin(object):
                     year=invoice_date.year)
                 file_name = 'invoice-' + str(user.name) + '-'\
                     + timezone.now().strftime('%d%m%Y') + '.pdf'
-                if not os.path.exists(settings.INVOICE_DIR + full_path):
-                    os.makedirs(settings.INVOICE_DIR + full_path)
                 pdf_file = SimpleUploadedFile(
                     file_name, pdf_file,
                     content_type='application/pdf')
