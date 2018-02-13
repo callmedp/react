@@ -21,42 +21,24 @@
     {% endblock css_section %}
 
     {% block container %}
-    <!-- header carousel -->
-    {% if top_article_list %}
-      <header class="header-carousel-box">
-        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-          <div class="carousel-inner header-carousel">
-            {% for articlelist in top_article_list %}
-            <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
-              <div class="row">
-                <!-- big image -->
-                <div class="col-sm-8 home-slide pr-0">
-                    {% include './include/banner.tmpl.html' with articlelist=topArtList.0 bigtmpl=True %}
-                </div><!-- /. col 8 -->
 
-                <!-- small image -->
-                <div class="col-sm-4 home-slide">
-                    {% include './include/banner.tmpl.html' with articlelist=topArtList.0 %}
-                  <!-- small image -->
-                  
-                    {% include './include/banner.tmpl.html' with articlelist=topArtList.0 %}             
-                </div><!-- /. col 4 -->
-              </div><!-- ./ row -->
-            </div><!-- carousal item ends here -->
-            {% endfor %}
-          </div>
-          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-          </a>
-        </div>
-      </header><!-- /. header carousel -->
-    {% endif %}
+    {% block breadcrumbs %}
+    <section class="breadcrumb-box">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb {% if white %} white {% endif %}" itemscope itemtype="http://schema.org/BreadcrumbList">
+           {% for breadcrumb in breadcrumbs %}
+            {% if breadcrumb.url %}
+              <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="{{breadcrumb.url}}" ><span itemprop="name">{{breadcrumb.name}}</span></a></li>
 
+            {% else %}
+              <li class="breadcrumb-item active">{{breadcrumb.name}}</li>
+            {% endif %}
+            
+          {% endfor %}
+        </ol>
+      </nav>
+    </section>
+    {% endblock breadcrumbs %}
 
       <!-- Recenty added -->
       {% if  article_list %}
