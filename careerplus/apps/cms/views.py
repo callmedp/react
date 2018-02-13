@@ -25,7 +25,7 @@ from .mixins import LoadMoreMixin
 
 class CMSPageView(DetailView, LoadMoreMixin):
     model = Page
-    template_name = "cms/cms_page.html"
+    #template_name = "cms/cms_page.html"
     page_obj = None
     page = 1
 
@@ -48,7 +48,7 @@ class CMSPageView(DetailView, LoadMoreMixin):
 
     def get_template_names(self):
         if self.request.amp:
-            return ["cms/cms_page.html"]
+            return ["cms/cms_page-amp.html"]
         return ["cms/cms_page.html"]
 
     def redirect_if_necessary(self, current_path, article):
@@ -108,6 +108,13 @@ class CMSPageView(DetailView, LoadMoreMixin):
         page_obj = self.get_object()
         left_widgets = page_obj.pagewidget_set.filter(section='left', widget__is_active=True).select_related('widget')
         right_widgets = page_obj.pagewidget_set.filter(section='right', widget__is_active=True).select_related('widget')
+
+        if self.request.amp:
+            context['amp'] = True
+            left_widgets = left_widgets.filter(widget__widget_type__in=[1,8])
+            right_widgets = right_widgets.filter(widget__widget_type__in=[1,8])
+
+           
         context['left_widgets'] = ''
         context['right_widgets'] = ''
         context['page_obj'] = page_obj
@@ -129,6 +136,7 @@ class CMSPageView(DetailView, LoadMoreMixin):
         for left in left_widgets:
             if self.request.flavour == 'mobile' and left.widget.widget_type in [6, 7]:
                 continue
+
             widget_context = {}
             widget_context.update({
                 'page_obj': page_obj,
