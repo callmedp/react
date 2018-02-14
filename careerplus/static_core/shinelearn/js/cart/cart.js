@@ -100,7 +100,15 @@ function updateCheckedPrice(this_obj){
     var fbt_price, sum_price, actual_price, actual_total;
     try{
         fbt_price =  parseFloat($(this_obj).attr('data-price'));
-        actual_price = parseFloat($(this_obj).attr('actual-price'));
+
+        //actual_price = parseFloat($(this_obj).attr('actual-price'));
+        
+        if(typeof $(this).attr('actual-price') != "undefined"){
+            actual_price =  parseFloat($(this).attr('actual-price'));
+        } else{
+            actual_price =  parseFloat($(this).data('actual-price'));
+        }
+
         try{
             sum_price = parseFloat($('#total-price').attr('sum-price'));
             actual_total = parseFloat($('#id-total-actual-price').attr('total-actual-price'));
@@ -147,7 +155,12 @@ function updateUnCheckedPrice(this_obj){
     var fbt_price, sum_price, actual_price, actual_total;
     try{
         fbt_price =  parseFloat($(this_obj).attr('data-price'));
-        actual_price = parseFloat($(this_obj).attr('actual-price'));
+        //actual_price = parseFloat($(this_obj).attr('actual-price'));
+        if(typeof $(this).attr('actual-price') != "undefined"){
+            actual_price =  parseFloat($(this).attr('actual-price'));
+        } else{
+            actual_price =  parseFloat($(this).data('actual-price'));
+        }
         try{
             sum_price = parseFloat($('#total-price').attr('sum-price'));
             actual_total = parseFloat($('#id-total-actual-price').attr('total-actual-price'));
@@ -261,7 +274,7 @@ $(document).ready(function() {
             var var_price, actual_price;
             try{
                 var_price =  parseFloat($(this).attr('data-price'));
-                if(typeof $(this).attr('actual-price') == "undefined"){
+                if(typeof $(this).attr('actual-price') != "undefined"){
                     actual_price =  parseFloat($(this).attr('actual-price'));
                 } else{
                     actual_price =  parseFloat($(this).data('actual-price'));

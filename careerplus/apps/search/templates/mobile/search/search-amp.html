@@ -42,16 +42,7 @@
 
     <header class="w100fl">
         <!-- header menu Icon Starts here -->
-        <div class="main-menu w100fl">
-            <div class="pull-left">
-                <a class="icon-back pull-left" href="/"></a>
-            </div><!-- / Left side Icon ends here -->
-
-            <div class="pull-right">
-                <a class="icon-search pull-left" href="/">search</a>
-                
-            </div><!-- / Right side Icon ends here -->
-        </div><!-- header menu Icon ends here -->
+        {% include 'basic/amp-menu.html'%}
     </header><!-- header ends here -->
 
 
@@ -129,8 +120,9 @@
             <span id="loading"></span>
         </div><!-- end of content box -->
     </div>
-{% include "mobile/shop/partials/call_us.html" %}
-{% include 'basic/footer.html' %}
+    {% include "mobile/shop/partials/call_us.html" %}
+    {% include 'basic/footer.html' %}
+    {% include 'basic/navigation-amp.html' %}
   </body>
 
 
