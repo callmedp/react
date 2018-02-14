@@ -53,7 +53,7 @@ class CouponRedeemView(APIView, CartMixin):
                 {'success': 0,
                  'error': 'Points already applied!.'
                  }, status=400, content_type='application/json')
-        
+
         user_email = cart_obj.email
         old_coupon = cart_obj.coupon
 
