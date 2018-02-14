@@ -95,7 +95,7 @@ class WriterInvoiceMixin(object):
                             if not exp_code:
                                 exp_code = 'FR'
                             value_dict = linkedin_dict.get(exp_code, {})
-                            starter_value = (LINKEDIN_STARTER_VALUE * value_dict.get(1)) / 100
+                            starter_value = LINKEDIN_STARTER_VALUE
                             linkedin_amount = starter_value
                             if value_dict and value_dict.get(user_type) != 1:
                                 linkedin_amount = (starter_value * value_dict.get(user_type)) / 100
