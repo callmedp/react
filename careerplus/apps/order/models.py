@@ -249,6 +249,9 @@ class OrderItem(AbstractAutoDate):
         related_name='oi_assigned',
         null=True, blank=True)
 
+    assigned_date = models.DateTimeField(
+        null=True, blank=True)
+
     assigned_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
         related_name='oi_assigned_by',
@@ -358,7 +361,7 @@ class OrderItem(AbstractAutoDate):
         )
 
     def __str__(self):
-        return '#'+str(self.pk)
+        return "#{}".format(self.pk)
 
     @property
     def get_oi_status(self):
@@ -443,7 +446,7 @@ class OrderItemOperation(AbstractAutoDate):
         ordering = ['created']
 
     def __str__(self):
-        return '#'+str(self.pk)
+        return "#{}".format(self.pk)
 
     @property
     def get_oi_status(self):
@@ -459,7 +462,6 @@ class OrderItemOperation(AbstractAutoDate):
 class Message(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem, null=True)
     oio = models.ForeignKey(OrderItemOperation, null=True)
-    
     added_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
         related_name='message_added_by',
@@ -475,7 +477,7 @@ class Message(AbstractAutoDate):
         ordering = ['created']
 
     def __str__(self):
-        return '#'+str(self.pk)
+        return "#{}".format(self.pk)
 
 
 class InternationalProfileCredential(AbstractAutoDate):

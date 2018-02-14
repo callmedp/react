@@ -126,6 +126,11 @@ SHINECPCRM_DICT = {
 ### LINKEDIN SETTINGS
 REDIRECT_URI = '{}/linkedin/login'.format(MAIN_DOMAIN_PREFIX)
 
+# Addon List For writer Invoice
+VISUAL_RESUME_PRODUCT_LIST = []
+COVER_LETTER_PRODUCT_LIST = []
+SECOND_REGULAR_RESUME_PRODUCT_LIST = []
+
 # Booster Recruiters
 BOOSTER_RECRUITERS = [
 'voyaze@gmail.com',

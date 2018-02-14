@@ -268,7 +268,7 @@ class InvoiceGenerate(object):
                 for chunk in pdf_file.chunks():
                     dest.write(chunk)
                 dest.close()
-                order.invoice = full_path + file_name
+                order.invoice = settings.INVOICE_DIR + full_path + file_name
                 order.save()
                 return order, order.invoice
         except Exception as e:
