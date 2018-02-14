@@ -97,7 +97,7 @@ class WriterInvoiceMixin(object):
                             value_dict = linkedin_dict.get(exp_code, {})
                             starter_value = LINKEDIN_STARTER_VALUE
                             linkedin_amount = starter_value
-                            if value_dict and value_dict.get(user_type) != 1:
+                            if value_dict and value_dict.get(user_type):
                                 linkedin_amount = (starter_value * value_dict.get(user_type)) / 100
                                 linkedin_amount = int(linkedin_amount)
 
@@ -112,9 +112,9 @@ class WriterInvoiceMixin(object):
                 if not exp_code:
                     exp_code = 'FR'
                 value_dict = linkedin_dict.get(exp_code, {})
-                starter_value = (LINKEDIN_STARTER_VALUE * value_dict.get(1)) / 100
+                starter_value = LINKEDIN_STARTER_VALUE
                 linkedin_amount = starter_value
-                if value_dict and value_dict.get(user_type) and user_type != 1:
+                if value_dict and value_dict.get(user_type):
                     linkedin_amount = (starter_value * value_dict.get(user_type)) / 100
                     linkedin_amount = int(linkedin_amount)
                 if writing_ois.exists() and oi.pk not in self.combo_discount_object:
@@ -234,7 +234,7 @@ class WriterInvoiceMixin(object):
                 else:
                     user_type = user.userprofile.last_writer_type
             else:
-                user_type = user.userprofile.writer_type if user.userprofile else 0
+                user_type = user.userprofile.writer_type if user.userprofile else 1
 
             total_combo_discount = 0
             total_sum = 0
@@ -272,9 +272,9 @@ class WriterInvoiceMixin(object):
                         if not exp_code:
                             exp_code = 'FR'
                         value_dict = writing_dict.get(exp_code, {})
-                        starter_value = (WRITING_STARTER_VALUE * value_dict.get(1)) / 100
+                        starter_value = WRITING_STARTER_VALUE
                         amount = starter_value
-                        if value_dict and value_dict.get(user_type) and user_type != 1:
+                        if value_dict and value_dict.get(user_type):
                             amount = (starter_value * value_dict.get(user_type)) / 100
                             amount = int(amount)
 
@@ -403,13 +403,13 @@ class WriterInvoiceMixin(object):
                             exp_code = 'FR'
                         if oi.product.type_flow == 8:
                             value_dict = linkedin_dict.get(exp_code, {})
-                            starter_value = (LINKEDIN_STARTER_VALUE * value_dict.get(1)) / 100
+                            starter_value = LINKEDIN_STARTER_VALUE
                         else:
                             value_dict = writing_dict.get(exp_code, {})
-                            starter_value = (WRITING_STARTER_VALUE * value_dict.get(1)) / 100
+                            starter_value = WRITING_STARTER_VALUE
 
                         amount = starter_value
-                        if value_dict and value_dict.get(user_type) and user_type != 1:
+                        if value_dict and value_dict.get(user_type):
                             amount = (starter_value * value_dict.get(user_type)) / 100
 
                         if product_pk in VISUAL_RESUME_PRODUCT_LIST:
@@ -493,13 +493,13 @@ class WriterInvoiceMixin(object):
                             exp_code = 'FR'
                         if oi.product.type_flow == 8:
                             value_dict = linkedin_dict.get(exp_code, {})
-                            starter_value = (LINKEDIN_STARTER_VALUE * value_dict.get(1)) / 100
+                            starter_value = LINKEDIN_STARTER_VALUE
                         else:
                             value_dict = writing_dict.get(exp_code, {})
-                            starter_value = (WRITING_STARTER_VALUE * value_dict.get(1)) / 100
+                            starter_value = WRITING_STARTER_VALUE
 
                         amount = starter_value
-                        if value_dict and value_dict.get(user_type) and user_type != 1:
+                        if value_dict and value_dict.get(user_type):
                             amount = (starter_value * value_dict.get(user_type)) / 100
 
                         if product_pk in VISUAL_RESUME_PRODUCT_LIST:
@@ -627,22 +627,22 @@ class WriterInvoiceMixin(object):
                 pdf_file = InvoiceGenerate().generate_pdf(
                     context_dict=data,
                     template_src='invoice/writer_invoice.html')
-                full_path = "user/{user_pk}/{month}_{year}/".format(
+                path = "invoice/user/{user_pk}/{month}_{year}/".format(
                     user_pk=user.pk, month=invoice_date.month,
                     year=invoice_date.year)
+                full_path = os.path.join(settings.MEDIA_ROOT, path)
                 file_name = 'invoice-' + str(user.name) + '-'\
                     + timezone.now().strftime('%d%m%Y') + '.pdf'
-                if not os.path.exists(settings.INVOICE_DIR + full_path):
-                    os.makedirs(settings.INVOICE_DIR + full_path)
-                dest = open(
-                    settings.INVOICE_DIR + full_path + file_name, 'wb')
+                if not os.path.exists(full_path):
+                    os.makedirs(full_path)
+                dest = open(full_path + file_name, 'wb')
                 pdf_file = SimpleUploadedFile(
                     file_name, pdf_file,
                     content_type='application/pdf')
                 for chunk in pdf_file.chunks():
                     dest.write(chunk)
                 dest.close()
-                user.userprofile.user_invoice = settings.INVOICE_DIR + full_path + file_name
+                user.userprofile.user_invoice = path + file_name
                 user.userprofile.invoice_date = invoice_date
                 user.userprofile.save()
                 user.save()
