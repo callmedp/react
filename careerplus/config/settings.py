@@ -53,6 +53,8 @@ DATABASES = {
     },
 }
 
+DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
+
 # Apps specific for this project go here.
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 

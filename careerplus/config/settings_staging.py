@@ -40,6 +40,7 @@ DATABASES = {
         'PORT': '',
     },
 }
+DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
 
 
 ####### APPS SETTIMGS #################

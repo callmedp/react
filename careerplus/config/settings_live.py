@@ -58,6 +58,7 @@ CCAVENUE_MOBILE_WORKING_KEY = 'A5BD19BE780D68E36598D8FB051CF66C'
 
 CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
 
+####### Database settings #####################
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -84,6 +85,9 @@ DATABASES = {
         'PORT': '3306',
     },
 }
+DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
+
+###### CACHE settings ###############
 
 CACHES = {
     'default': {
