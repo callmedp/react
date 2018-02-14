@@ -25,7 +25,8 @@
                 img {
                     width: 20px;
                     height: 20px;
-                    @include border-radius (100%) margin-right: 5px;
+                    @include border-radius (100%);
+                    margin-right: 5px;
                 }
             }
         }
@@ -79,7 +80,7 @@
 .article-detail-content {
 
     p {
-        margin-bottom: 30px;
+        margin-bottom: 20px;
         display: block;
         font-size: $font-size+4;
         color: $primary-color;
@@ -195,6 +196,7 @@
         text-transform: uppercase;
         border-radius: 2px;
         margin-right: 10px;
+        margin-bottom: 10px;
 
         a {
             color: $grey-color;

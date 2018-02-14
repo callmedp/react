@@ -1,0 +1,112 @@
+{% extends "hrinsider/base.html" %}
+{% load static humanize thumbnail compress %}
+    {% block django_meta %}
+        {% include 'meta/meta.html' %}
+    {%  endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ object.get_absolute_url }}">
+    {% endblock canonical_url %}
+
+    {% block title %}
+       {{object.display_name}} Career Articles | Shinelearning
+    {% endblock title %}
+    
+    {% block css_section %}
+        {{block.super}}
+        {% compress css %}
+        <link type="text/scss" href="{% static 'shinelearn/css/hr-insider/header-footer.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/hr-insider/hr-conclave.scss' %}" rel="stylesheet">
+        {% endcompress %}
+
+    {% endblock css_section %}
+
+    {% block container %}
+
+    {% block breadcrumbs %}
+    <section class="breadcrumb-box">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb {% if white %} white {% endif %}" itemscope itemtype="http://schema.org/BreadcrumbList">
+           {% for breadcrumb in breadcrumbs %}
+            {% if breadcrumb.url %}
+              <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="{{breadcrumb.url}}" ><span itemprop="name">{{breadcrumb.name}}</span></a></li>
+
+            {% else %}
+              <li class="breadcrumb-item active">{{breadcrumb.name}}</li>
+            {% endif %}
+            
+          {% endfor %}
+        </ol>
+      </nav>
+    </section>
+    {% endblock breadcrumbs %}
+
+    <!-- /. breadcrumb -->
+
+<section class="detail-box-content">
+  <div class="row">
+    <!-- left content start -->
+    <div class="col-sm-8">
+      {% include './include/article-detail.tmpl.html'%}
+    </div><!-- /. col-sm-8 -->
+
+    <!-- right content start -->
+    <div class="col-sm-4">
+      <div class="box-panel you-may-like">
+        <h2 class="primary-heading">You may also like</h2>
+        <ul>
+          <li>
+            <a href="#">
+              <figure>
+                <i><img class="img-fluid" src="https://origin-static3.shine.com/images/blog/How-GST-Could-Affect-Different-Sectors-in-2018.jpg" alt="How GST Could Affect Different Sectors In 2018"></i>
+                <figcaption>
+                  Interview Preparation
+                  <h3>4 Jumps To Managerial Jobs With Lean Six Sigma, But There’s A Catch!</h3>
+                </figcaption>
+              </figure>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure>
+                <i><img class="img-fluid" src="https://origin-static3.shine.com/images/blog/Augmented-Reality--How-the-HR-Industry-Benefits.jpg" alt="Augmented Reality - How the HR Industry Benefits"></i>
+                <figcaption>
+                  Resume
+                  <h3>Social Media Profiles May Just Get You A Job, Or Maybe Barred From One!</h3>
+                </figcaption>
+              </figure>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure>
+                <i><img class="img-fluid" src="https://origin-static3.shine.com/images/blog/An-Introduction-to-Blockchain---A-technology-powered-by-Big-Data.jpg" alt="An Introduction To Blockchain - A Technology Powered By Big Data"></i>
+                <figcaption>
+                  Salary and Appraisal
+                  <h3>Work life balance - Tightrope walking - Is it possible?</h3>
+                </figcaption>
+              </figure>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <figure>
+                <i><img class="img-fluid" src="https://origin-static3.shine.com/images/blog/How-GST-Could-Affect-Different-Sectors-in-2018.jpg" alt="How GST Could Affect Different Sectors In 2018"></i>
+                <figcaption>
+                  Interview Preparation
+                  <h3>4 Jumps To Managerial Jobs With Lean Six Sigma, But There’s A Catch!</h3>
+                </figcaption>
+              </figure>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div><!-- /. col-sm-4 -->
+  </div><!-- /. row -->
+</section>
+
+
+
+    {% endblock container %}
+
+    
