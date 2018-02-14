@@ -93,7 +93,8 @@ CACHES = {
     'default': {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": [
-            "redis://172.22.65.131:6379/1",
+            "redis://redis-01/6",
+            "redis://redis-02/6",
             ],
         "TIMEOUT": 86400,
         "OPTIONS": {
@@ -104,8 +105,8 @@ CACHES = {
     'session': {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": [
-            "redis://172.22.65.131:6379/2",
-            "redis://172.22.65.141:6379/2",
+            "redis://redis-01/5",
+            "redis://redis-02/5",
             ],
         "TIMEOUT": 86400,
         "OPTIONS": {
@@ -115,9 +116,12 @@ CACHES = {
     },
     'search_lookup': {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://172.22.65.131:6379/3",
+        "LOCATION": [
+            "redis://redis-01/6",
+            "redis://redis-02/6"
+            ],
         "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "CLIENT_CLASS": "django_redis.client.ShardClient",
             'CONNECTION_POOL_KWARGS': {'max_connections': 50},
         }
     },
@@ -876,18 +880,21 @@ ROUNDONE_API_DICT = {
 }
 
 ###### STORAGE SETTINGS #############
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.join(PROJECT_DIR, 'careerplus/config', 'code-learning-gcp-key.json')
+
 DEFAULT_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPMediaStorage'
-GS_BUCKET_NAME = 'learning-media-189607'
+GS_BUCKET_NAME = 'learning-media'
 
 PRIVATE_MEDIA_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPPrivateMediaStorage'
-GCP_PRIVATE_MEDIA_BUCKET = 'learning--misc-189607'
+GCP_PRIVATE_MEDIA_BUCKET = 'learning-misc'
 
 COMPRESS_STORAGE = STATICFILES_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPStaticStorage'
-GS_PROJECT_ID = 'shine-staging-189607'
-GCP_STATIC_BUCKET = 'learning-static-189607'
+COMPRESS_OFFLINE_MANIFEST = 'manifest_123.json'
+GS_PROJECT_ID = 'shinesumoplus'
+GCP_STATIC_BUCKET = 'learning-static'
 
 INVOICE_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPInvoiceStorage'
-GCP_INVOICE_BUCKET = 'learning-invoices-189607'
+GCP_INVOICE_BUCKET = 'learning-invoices'
 
 # GS_AUTO_CREATE_BUCKET = True
 STATIC_URL = 'https://{}.storage.googleapis.com/'.format(GCP_STATIC_BUCKET)
