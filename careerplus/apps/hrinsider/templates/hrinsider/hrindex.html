@@ -26,23 +26,30 @@
       <header class="header-carousel-box">
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
           <div class="carousel-inner header-carousel">
-            {% for articlelist in top_article_list %}
+            {% for topArtList in top_article_list %}
+            {% if topArtList %}
             <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
               <div class="row">
                 <!-- big image -->
                 <div class="col-sm-8 home-slide pr-0">
+                  {% if topArtList.0 %}
                     {% include './include/banner.tmpl.html' with articlelist=topArtList.0 bigtmpl=True %}
+                  {% endif %}
                 </div><!-- /. col 8 -->
 
                 <!-- small image -->
                 <div class="col-sm-4 home-slide">
-                    {% include './include/banner.tmpl.html' with articlelist=topArtList.0 %}
+                  {% if topArtList.1 %}
+                    {% include './include/banner.tmpl.html' with articlelist=topArtList.1 %}
+                  {% endif %}
                   <!-- small image -->
-                  
-                    {% include './include/banner.tmpl.html' with articlelist=topArtList.0 %}             
+                  {% if topArtList.2 %}
+                    {% include './include/banner.tmpl.html' with articlelist=topArtList.2 %}  
+                  {% endif %}           
                 </div><!-- /. col 4 -->
               </div><!-- ./ row -->
             </div><!-- carousal item ends here -->
+            {% endif %}
             {% endfor %}
           </div>
           <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
