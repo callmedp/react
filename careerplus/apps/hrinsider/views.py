@@ -131,22 +131,22 @@ class HRBlogDetailView(DetailView, BlogMixin):
 
         main_obj = Blog.objects.filter(slug=blog.slug, status=1, visibility=3).prefetch_related('tags')
 
-        context.update({
-            "main_article": main_obj[0],
-        })
-
         article_list = Blog.objects.filter(p_cat=p_cat, status=1, visibility=3).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1, visibility=3).order_by('-publish_date')
         article_list = article_list.exclude(slug=blog.slug)
         article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
+
+        context.update({
+            "main_article": main_obj[0],
+            "article_list": article_list,
+        })
 
         context.update(self.get_meta_details())
         return context
 
     def get_breadcrumb_data(self):
         breadcrumbs = []
-        breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy"})
-        breadcrumbs.append({"url": reverse('talent:te-articles-by-category', kwargs={'slug': self.object.p_cat.slug}), "name": self.object.p_cat.name})
+        breadcrumbs.append({"url": reverse('hrinsider:hr-landing') , "name": "HR Insider"})
+        breadcrumbs.append({"url": reverse('hrinsider:hr-listing') , "name": "All Articles"})
         breadcrumbs.append({"url": None, "name": self.object.display_name})
         data = {"breadcrumbs": breadcrumbs}
         return data

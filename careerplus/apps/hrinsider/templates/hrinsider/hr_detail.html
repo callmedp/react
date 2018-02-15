@@ -55,6 +55,7 @@
       <div class="box-panel you-may-like">
         <h2 class="primary-heading">You may also like</h2>
         <ul>
+          {% for article in article_list %}
           <li>
             <a href="#">
               <figure>
@@ -66,39 +67,7 @@
               </figure>
             </a>
           </li>
-          <li>
-            <a href="#">
-              <figure>
-                <i><img class="img-fluid" src="https://origin-static3.shine.com/images/blog/Augmented-Reality--How-the-HR-Industry-Benefits.jpg" alt="Augmented Reality - How the HR Industry Benefits"></i>
-                <figcaption>
-                  Resume
-                  <h3>Social Media Profiles May Just Get You A Job, Or Maybe Barred From One!</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <figure>
-                <i><img class="img-fluid" src="https://origin-static3.shine.com/images/blog/An-Introduction-to-Blockchain---A-technology-powered-by-Big-Data.jpg" alt="An Introduction To Blockchain - A Technology Powered By Big Data"></i>
-                <figcaption>
-                  Salary and Appraisal
-                  <h3>Work life balance - Tightrope walking - Is it possible?</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <figure>
-                <i><img class="img-fluid" src="https://origin-static3.shine.com/images/blog/How-GST-Could-Affect-Different-Sectors-in-2018.jpg" alt="How GST Could Affect Different Sectors In 2018"></i>
-                <figcaption>
-                  Interview Preparation
-                  <h3>4 Jumps To Managerial Jobs With Lean Six Sigma, But There’s A Catch!</h3>
-                </figcaption>
-              </figure>
-            </a>
-          </li>
+          {% endfor %}
         </ul>
       </div>
     </div><!-- /. col-sm-4 -->
