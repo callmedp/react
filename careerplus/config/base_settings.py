@@ -195,6 +195,10 @@ COMPRESS_CSS_FILTERS = (
     'compressor.filters.cssmin.CSSMinFilter'
 )
 
+COMPRESS_PRECOMPILERS = (
+   ('text/scss', 'sass --scss {infile} {outfile}'),
+)
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -253,6 +257,9 @@ BROKER_URL = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_IMPORTS = (
+    'emailers.tasks',
+)
 
 # try:
 #     REDIS_CON = redis.StrictRedis(host='localhost', port=6379, db=0)
@@ -278,6 +285,15 @@ MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN) #'http://learn
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
 SITE_ID = 1
 CART_MAX_LIMIT = 5
+META_SITE_TYPE = 'Website'
+META_SITE_NAME = 'ShineLearning'
+META_USE_SITES = True
+META_DEFAULT_KEYWORDS = ['E-Learning', 'Skills', 'Resume', 'India']
+META_USE_OG_PROPERTIES = True
+META_USE_TWITTER_PROPERTIES = False
+META_USE_GOOGLEPLUS_PROPERTIES = True
+META_FB_TYPE = 'Website'
+META_GPLUS_TYPE = 'Website'
 
 ############ SOLR SETTINGS #######################
 HAYSTACK_ITERATOR_LOAD_PER_QUERY = 100
@@ -634,6 +650,16 @@ USER_QUERY_GROUP_LIST = CMS_GROUP_LIST + SKILL_GROUP_LIST + COURSE_GROUP_LIST + 
 
 # Course catalogoue cache time
 COURSE_CATALOGUE_CASH_TIME = 24 * 60 * 60  # in seconds
+
+####### EMAIL SETTINGS #########
+ROUNDONE_DEFAULT_CP_EMAIL = "learning@shine.com"
+CONSULTANTS_EMAIL = 'Shine.com <learning@shine.com>'
+REPLY_TO = 'resume@shine.com'
+
+##### CCAVENUE SETTINGS ############
+CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
+SESSION_CACHE_ALIAS = 'session'
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = PROJECT_DIR + '/careerplus/config/code-learning-key.json'

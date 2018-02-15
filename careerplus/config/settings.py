@@ -84,14 +84,6 @@ MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
 
 META_SITE_PROTOCOL = SITE_DOMAIN
 META_SITE_DOMAIN = SITE_PROTOCOL
-META_SITE_TYPE = 'Website'
-META_SITE_NAME = 'ShineLearning'
-META_USE_SITES = True
-META_DEFAULT_KEYWORDS = ['E-Learning', 'Skills', 'Resume', 'India']
-META_USE_OG_PROPERTIES = True
-META_USE_TWITTER_PROPERTIES = False
-META_USE_GOOGLEPLUS_PROPERTIES = True
-META_FB_TYPE = 'Website'
 # META_FB_APPID = '1482454715170390'
 META_FB_PROFILE_ID = '282244838633660'
 # META_FB_PUBLISHER = 'https://facebook.com/foo.blag'
@@ -99,35 +91,21 @@ META_FB_PROFILE_ID = '282244838633660'
 # META_TWITTER_TYPE = 'summary_large_image'
 # META_TWITTER_SITE = '@FooBlag'
 # META_TWITTER_AUTHOR = '@FooBlag'
-META_GPLUS_TYPE = 'Website'
 # META_GPLUS_AUTHOR = '+FooBar'
 
-ROUNDONE_DEFAULT_CP_EMAIL = "learning@shine.com"
 
-if DEBUG or not IS_LIVE:
-    ROUNDONE_API_BASEURL = "http://api.roundone.asia"
-    ROUNDONE_API_BASEURL_ORDER = "http://testing.roundone.asia"
-    ROUNDONE_ORDER_SECRET_KEY = 'xHVEbrvpiH8BMol5rZt7YuDO'
-    ROUNDONE_JOBDETAIL_SECRET_KEY = 'cQMYGVYxrMqHGPSAZeRDm4G'
-    ROUNDONE_CP_CLIENT_ID = 'lnVPB3Oe9YPA3g)!F9zrFbg'
-    ROUNDONE_CP_CLIENT_SECRET = 'c&OMxZ^0T*6qvyi0e3lU9OjWc!(%Wp+'
-    ROUNDONE_ENCODING_KEY = 'roundonetestkey'
-    ROUNDONE_ENCODING_SALT = 'roundonetestsalt'
-    ROUNDONE_DEFAULT_PASSWORD = 'cp@roundone'
-    ROUNDONE_API_TIMEOUT = 5
-    SHINE_API_TIMEOUT = 5
-else:
-    ROUNDONE_API_BASEURL = "http://api.roundone.in"  # This is the live api
-    ROUNDONE_API_BASEURL_ORDER = "http://www.roundone.in"
-    ROUNDONE_ORDER_SECRET_KEY = 'xHVEbrvpiH8BMol5rZt7YuDO'
-    ROUNDONE_JOBDETAIL_SECRET_KEY = 'cQMYGVYxrMqHGPSAZeRDm4G'
-    ROUNDONE_CP_CLIENT_ID = 'lnVPB3Oe9YPA3g)!F9zrFbg'
-    ROUNDONE_CP_CLIENT_SECRET = 'c&OMxZ^0T*6qvyi0e3lU9OjWc!(%Wp+'
-    ROUNDONE_ENCODING_KEY = '#r0und0n3k3y'
-    ROUNDONE_ENCODING_SALT = '#r0und0n354l7'
-    ROUNDONE_DEFAULT_PASSWORD = 'cp@roundone'
-    ROUNDONE_API_TIMEOUT = 60
-    SHINE_API_TIMEOUT = 60
+####### ROUNDONE SETTINGS ##########
+ROUNDONE_API_BASEURL = "http://api.roundone.asia"
+ROUNDONE_API_BASEURL_ORDER = "http://testing.roundone.asia"
+ROUNDONE_ORDER_SECRET_KEY = 'xHVEbrvpiH8BMol5rZt7YuDO'
+ROUNDONE_JOBDETAIL_SECRET_KEY = 'cQMYGVYxrMqHGPSAZeRDm4G'
+ROUNDONE_CP_CLIENT_ID = 'lnVPB3Oe9YPA3g)!F9zrFbg'
+ROUNDONE_CP_CLIENT_SECRET = 'c&OMxZ^0T*6qvyi0e3lU9OjWc!(%Wp+'
+ROUNDONE_ENCODING_KEY = 'roundonetestkey'
+ROUNDONE_ENCODING_SALT = 'roundonetestsalt'
+ROUNDONE_DEFAULT_PASSWORD = 'cp@roundone'
+ROUNDONE_API_TIMEOUT = 5
+
 
 ROUNDONE_API_DICT = {
     'amount': 1999,
@@ -163,8 +141,6 @@ ROUNDONE_PRODUCT_ID = 2129
 ####### CCAVENUE SETTINGS ###########################
 CCAVENUE_ACCESS_CODE = 'AVEX73EI34CC49XECC'
 CCAVENUE_WORKING_KEY = 'DE002F3C615C11E7FB7D333050103230'
-CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
-
 
 # Shine settings
 
@@ -174,18 +150,12 @@ CLIENT_ACCESS_KEY = "ZiHCJeTKh4EppsrOEHXIQPd2OKvV4JWrlKql0Y1JONE"
 CLIENT_ACCESS_SECRET = "QdEhIXFmhlHQdveZB1h9u9xxnfvFleET6bNUPlKYwU4"
 SHINE_API_USER = 'scpapiuser@gmail.com'
 SHINE_API_USER_PWD = 'tarun@123'
+SHINE_API_TIMEOUT = 5
 
-
-# Use for CRM Lead
-CRM_LEAD_URL = 'http://172.22.65.32:8003'
-CRM_LEAD_TOKEN = '73f53cf358b94156feb49d034081ed507334e02a'
-
-# CRM_LEAD_URL = 'http://127.0.0.1:8000'
-# CRM_LEAD_TOKEN = '57da37ac3fb12133266927b629168292c368bd33'
-
+########## CRM SETTINGS #############
 SHINECPCRM_DICT = {
-    'base_url': CRM_LEAD_URL,
-    'token': CRM_LEAD_TOKEN,
+    'base_url': 'http://172.22.65.32:8003',
+    'token': '73f53cf358b94156feb49d034081ed507334e02a',
     'create_lead_url': '/api/v1/create-lead/',
     'update_products_url': '/product/update_sale_product/',
     'update_cartleads_url': '/api/update-cartleads/',
@@ -193,19 +163,11 @@ SHINECPCRM_DICT = {
     'timeout': 30,
 }
 
-# SHINE_SITE = 'https://www.shine.com'
-# SHINE_API_URL = 'https://mapi.shine.com/api/v2'
-# CLIENT_ACCESS_KEY = 'ZiHCJeTKh4EppsrOEHXIQPd2OKvV4JWrlKql0Y1JONE'
-# CLIENT_ACCESS_SECRET = 'QdEhIXFmhlHQdveZB1h9u9xxnfvFleET6bNUPlKYwU4'
-# SHINE_API_USER = 'scpapiuser@gmail.com'
-# SHINE_API_USER_PWD = 'tarun@123'
 
 # Email settings
 
 # VARIABLE FOR SENDING RESUME SERVICES MAILS
 CANDIDATES_EMAIL = 'Shine.com <candidates@shine.com>'
-CONSULTANTS_EMAIL = 'Shine.com <learning@shine.com>'
-REPLY_TO = 'resume@shine.com'
 
 EMAIL_HOST = '172.22.65.188'
 EMAIL_PORT = 25
@@ -216,11 +178,7 @@ SERVER_EMAIL = 'recruiter@shine.com'
 DEFAULT_FROM_EMAIL = CONSULTANTS_EMAIL
 EMAIL_SERVER = 'http://localhost:8000'
 
-# encode decode settings
-EMAIL_SMS_TOKEN_EXPIRY = 7
-ENCODE_SALT = 'xfxa'
-
-# Linkedin Cridential
+# Linkedin Credentials
 CLIENT_ID = "815g8q57sg0q6q"
 CLIENT_SECRET = "NljH5Pdr6e80MTuR"
 REDIRECT_URI = '{}/linkedin/login'.format(MAIN_DOMAIN_PREFIX)
@@ -234,11 +192,6 @@ CART_DROP_OUT_EMAIL = 1 * 60
 CART_DROP_OUT_LEAD = 3 * 60
 SHIPPING_DROP_OUT_LEAD = 10 * 60
 PAYMENT_DROP_LEAD = 5 * 60
-
-
-CELERY_IMPORTS = (
-    'emailers.tasks',
-)
 
 # Booster Recruiters
 BOOSTER_RECRUITERS = ['amar.kumar@hindustantimes.com']
@@ -289,16 +242,6 @@ CACHES = {
     },
 }
 
-SESSION_CACHE_ALIAS = 'session'
-SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-
-GOOGLE_RECAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify"
-GOOGLE_RECAPTCHA_KEY = '6Lfa5zYUAAAAAFFe_gV2u2h3XovQzmQCUzRm4MYY'
-GOOGLE_RECAPTCHA_SECRET = '6Lfa5zYUAAAAAAke3_HJ7XgC3Voxbdn1bscy878R'
-
-COMPRESS_PRECOMPILERS = (
-   ('text/scss', 'sass --scss {infile} {outfile}'),
-)
 
 ######## LOGGING SETTINGS ##########
 SYSLOG_ADDRESS = '/dev/log'
