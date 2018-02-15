@@ -22,17 +22,22 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
-
-    # learing2 db
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'careerplus',
-    #     'USER': 'root',
-    #     'PASSWORD': 'root',
-    #     'HOST': '172.22.65.33',
-    #     'PORT': '3306',
-    # },
-
+    'master': {
+        'NAME': 'careerplus1',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '',
+        'PORT': '',
+    },
+    'slave': {
+        'NAME': 'careerplus1',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '',
+        'PORT': '',
+    },
     'oldDB': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'shinecp',
@@ -42,6 +47,8 @@ DATABASES = {
         'PORT': '',
     },
 }
+
+DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
 
 ######### Apps specific for this project go here. ###########
 DJANGO_APPS = [
@@ -55,6 +62,7 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 ]
+
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 DEV_APPS = [

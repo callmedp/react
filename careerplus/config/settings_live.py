@@ -79,6 +79,7 @@ CCAVENUE_MOBILE_WORKING_KEY = 'A5BD19BE780D68E36598D8FB051CF66C'
 CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
 
 ########## DATABASE SETTINGS #################
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -87,8 +88,27 @@ DATABASES = {
         'PASSWORD': 'jWP4gEq2eV',
         'HOST': 'lmysql-01',
         'PORT': '3306',
-    }
+    },
+    'master': {
+        'NAME': 'careerplus',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'careerplus',
+        'PASSWORD': 'jWP4gEq2eV',
+        'HOST': '172.22.65.153',
+        'PORT': '3306',
+    },
+    'slave': {
+        'NAME': 'careerplus',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'careerplus',
+        'PASSWORD': 'jWP4gEq2eV',
+        'HOST': 'lmysql-02',
+        'PORT': '3306',
+    },
 }
+DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
+
+###### CACHE settings ###############
 
 ##### Cache Setting #####################
 SITEMAP_CACHING_TIME = 86400
