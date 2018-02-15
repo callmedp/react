@@ -79,7 +79,7 @@
               <a href="{% url 'hrinsider:hr-articles-detail' articleItem.p_cat.slug articleItem.slug %}" title="{{artList.heading}}">
                 <figure>
                   <i>
-                    <img src="{{articleItem.name.url}}" alt="{{article.name_alt}}">
+                    <img src="{{articleItem.image.url}}" alt="{{article.name_alt}}">
                   </i>
                   <figcaption>{{articleItem.p_cat.name}}</figcaption>
                   <div class="view-forward">
@@ -88,7 +88,7 @@
                   </div>
                 </figure>
                 <h3 class="sub-heading">{{articleItem.heading}}</h3>
-                <article>{{artList.summary|striptags|safe}}</article>
+                <article>{{articleItem.summary|striptags|safe}}</article>
               </a>
               
               <a class="author" href="#">

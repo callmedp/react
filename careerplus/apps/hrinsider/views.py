@@ -42,7 +42,7 @@ class HRLandingView(TemplateView, BlogMixin):
         top_article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author')[:9]
 
         authors = Author.objects.filter(visibility=3,blog__visibility=3,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
-        author_list = zip_longest(*[iter(authors)]*5, fillvalue=None)
+        author_list = zip_longest(*[iter(authors)]*6, fillvalue=None)
         
         context.update({
         'top_article_list':[top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
@@ -80,7 +80,7 @@ class HRLandingView(TemplateView, BlogMixin):
 
 
 class HRBlogDetailView(DetailView, BlogMixin):
-    template_name = "talenteconomy/article-detail.html"
+    template_name = "hrinsider/hr_detail.html"
     model = Blog
 
     def __init__(self):
