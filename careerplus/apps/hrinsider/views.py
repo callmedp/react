@@ -65,8 +65,8 @@ class HRLandingView(TemplateView, BlogMixin):
 
     def get_breadcrumb_data(self):
         breadcrumbs = []
-        breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": None, "name": "HR Insider"})
+        breadcrumbs.append({"url": reverse('hrinsider:hr-landing') , "name": "HR Insider"})
+        breadcrumbs.append({"url": None , "name": "All Articles"})
         data = {"breadcrumbs": breadcrumbs}
         return data
 
