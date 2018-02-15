@@ -300,6 +300,7 @@ nav {
 	@include icon-inblock (18px, 10px, -349px -70px);
 	background-image: url($image-path);
 	vertical-align: middle;
+	margin-right: 5px;
 }
 
 .icon-forward-detail {
@@ -393,15 +394,12 @@ nav {
 			overflow: hidden;
 		}
 
-			
-
 		figcaption {
 			@extend %gradient-black;
 			position: absolute;
 			left: 0;
 			right: 0;
 			bottom: 0;
-			opacity: 0.7;
 			z-index: 9;
 			padding: 20px 30px;
 			height: 130px;
@@ -439,7 +437,6 @@ nav {
 			left: 0;
 			right: 0;
 			bottom: 0;
-			opacity: 0.7;
 			z-index: 9;
 			padding: 10px;
 			height: 90px;
@@ -625,6 +622,7 @@ nav {
 	h3 {
 		margin: 15px 10px;
 		text-align: center;
+		height: 40px;
 	}
 
 	article {

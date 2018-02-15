@@ -54,7 +54,7 @@
               <a href="{% url 'hrinsider:hr-articles-detail' articleItem.p_cat.slug articleItem.slug %}" title="{{artList.heading}}">
                 <figure>
                   <i>
-                    <img src="{{articleItem.name.url}}" alt="{{article.name_alt}}">
+                    <img src="{{articleItem.image.url}}" alt="{{article.image_alt}}">
                   </i>
                   <figcaption>{{articleItem.p_cat.name}}</figcaption>
                   <div class="view-forward">
@@ -62,14 +62,14 @@
                     <i class="icon-view ml-20"></i> {{articleItem.no_views}}
                   </div>
                 </figure>
-                <h3 class="sub-heading">{{articleItem.heading}}</h3>
-                <article>{{artList.summary|striptags|safe}}</article>
+                <h3 class="sub-heading">{{articleItem.heading|truncatechars:60}}</h3>
+                <article>{{articleItem.summary|striptags|safe|truncatechars:100}}</article>
               </a>
               
               <a class="author" href="#">
                 {% if articleItem.author.image %}
                 <i>
-                  <img src="{{articleItem.author.image.url}}" alt="{{articleItem.author.name}}">
+                  <img src="{{articleItem.author.image.url}}" alt="{{articleItem.author.image_alt}}">
                 </i>
                 {% endif %}
                 <strong>{{articleItem.author.name}}</strong>

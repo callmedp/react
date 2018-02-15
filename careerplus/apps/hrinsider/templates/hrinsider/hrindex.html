@@ -87,8 +87,8 @@
                     <i class="icon-view ml-20"></i> {{articleItem.no_views}}
                   </div>
                 </figure>
-                <h3 class="sub-heading">{{articleItem.heading}}</h3>
-                <article>{{articleItem.summary|striptags|safe}}</article>
+                <h3 class="sub-heading">{{articleItem.heading|truncatechars:60}}</h3>
+                <article>{{articleItem.summary|striptags|safe|truncatechars:100}}</article>
               </a>
               
               <a class="author" href="#">

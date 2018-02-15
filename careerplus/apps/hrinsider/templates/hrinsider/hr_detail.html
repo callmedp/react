@@ -51,18 +51,19 @@
     </div><!-- /. col-sm-8 -->
 
     <!-- right content start -->
+    {% if article_list %}
     <div class="col-sm-4">
       <div class="box-panel you-may-like">
         <h2 class="primary-heading">You may also like</h2>
         <ul>
-          {% for article in article_list %}
+          {% for articleItem in article_list %}
           <li>
-            <a href="#">
+            <a href="{% url 'hrinsider:hr-articles-detail' articleItem.p_cat.slug articleItem.slug %}" title="{{artList.heading}}">
               <figure>
-                <i><img class="img-fluid" src="https://origin-static3.shine.com/images/blog/How-GST-Could-Affect-Different-Sectors-in-2018.jpg" alt="How GST Could Affect Different Sectors In 2018"></i>
+                <i><img class="img-fluid" src="{{articleItem.image.url}}" alt="{{articleItem.image_alt}}"></i>
                 <figcaption>
-                  Interview Preparation
-                  <h3>4 Jumps To Managerial Jobs With Lean Six Sigma, But There’s A Catch!</h3>
+                  {{articleItem.p_cat.name}}
+                  <h3>{{articleItem.heading}}</h3>
                 </figcaption>
               </figure>
             </a>
@@ -71,6 +72,7 @@
         </ul>
       </div>
     </div><!-- /. col-sm-4 -->
+    {% endif %}
   </div><!-- /. row -->
 </section>
 {% endblock container %}
