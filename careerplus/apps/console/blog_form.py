@@ -406,7 +406,7 @@ class CategoryChangeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(CategoryChangeForm, self).__init__(*args, **kwargs)
-        visibility = [3]
+        visibility = []
         site_type = []
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(1)
@@ -414,6 +414,9 @@ class CategoryChangeForm(forms.ModelForm):
         if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(2)
             site_type.append((2,"TalentEconomy"))
+        if has_group(user=self.request.user, grp_list=[settings.HR_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(3)
+            site_type.append((3,"HR blogger"))       
         self.fields['visibility'].choices = site_type
         
         self.fields['slug'].required = False
@@ -476,7 +479,7 @@ class CategoryAddForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(CategoryAddForm, self).__init__(*args, **kwargs)
-        visibility = [3]
+        visibility = []
         site_type = []
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(1)
@@ -484,6 +487,9 @@ class CategoryAddForm(forms.ModelForm):
         if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(2)
             site_type.append((2,"TalentEconomy"))
+        if has_group(user=self.request.user, grp_list=[settings.HR_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(3)
+            site_type.append((3,"HR blogger"))
         self.fields['visibility'].choices = site_type
         
         self.fields['name'].required = True
