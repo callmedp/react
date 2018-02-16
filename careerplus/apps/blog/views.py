@@ -218,7 +218,8 @@ class BlogDetailView(DetailView, BlogMixin):
 
         context.update({
             "loginform": ModalLoginApiForm(),
-            "registerform": ModalRegistrationApiForm()
+            "registerform": ModalRegistrationApiForm(),
+            "amp": self.request.amp
         })
 
         return context

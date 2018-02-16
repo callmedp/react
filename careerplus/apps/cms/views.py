@@ -110,7 +110,7 @@ class CMSPageView(DetailView, LoadMoreMixin):
         right_widgets = page_obj.pagewidget_set.filter(section='right', widget__is_active=True).select_related('widget')
 
         if self.request.amp:
-            context['amp'] = True
+            context['amp'] = self.request.amp
             left_widgets = left_widgets.filter(widget__widget_type__in=[1, 8, 5, 2])
             right_widgets = right_widgets.filter(widget__widget_type__in=[1, 8, 5, 2])
 

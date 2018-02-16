@@ -400,6 +400,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx['meta'] = self.product_obj.as_meta(self.request)
         ctx['meta']._url = ctx.get('canonical_url', '')
         ctx['show_chat'] = True
+        ctx['amp'] = self.request.amp
         return ctx
 
     def redirect_if_necessary(self, current_path, product):
