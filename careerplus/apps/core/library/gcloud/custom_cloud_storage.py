@@ -6,13 +6,25 @@ import logging
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.deconstruct import deconstructible
 from django.conf import settings
+from storages.utils import safe_join
 
 
-class GCPStaticStorage(GoogleCloudStorage):
+class GoogleCloudStorageMixin(GoogleCloudStorage):
+    """
+    GCP storage mixin to add location prefix for each file.
+    """
+
+    def _normalize_name(self, name):
+        name = super(GoogleCloudStorageMixin, self)._normalize_name(name)
+        return safe_join(self.location, name)
+
+
+class GCPStaticStorage(GoogleCloudStorageMixin):
     """
     GCP storage backend that saves the files locally, too.
     """
     bucket_name = settings.GCP_STATIC_BUCKET
+    location = '/l/s/'
 
     def __init__(self, **settings):
         super(GCPStaticStorage, self).__init__(**settings)
@@ -29,11 +41,12 @@ class GCPStaticStorage(GoogleCloudStorage):
 
 
 @deconstructible
-class GCPMediaStorage(GoogleCloudStorage):
+class GCPMediaStorage(GoogleCloudStorageMixin):
     """
     GCP storage backend for public media
     """
     bucket_name = settings.GS_BUCKET_NAME
+    location = '/l/m/'
 
     def url(self, name):
         return settings.MEDIA_URL + name
