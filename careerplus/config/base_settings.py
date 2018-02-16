@@ -335,7 +335,7 @@ LOGGING = {
     },
     'formatters': {
         'verbose': {
-            'format': 'Shinelearning %(name)s %(levelname)s %(asctime)s %(pathname)s %(lineno)s %(message)s'
+            'format': 'shinelearning_%(name)s: %(levelname)s %(asctime)s %(pathname)s %(lineno)s %(message)s'
         },
         'simple': {
             'format': '[%(asctime)s] %(levelname)s %(message)s',
