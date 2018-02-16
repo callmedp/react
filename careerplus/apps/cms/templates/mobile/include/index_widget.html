@@ -1,29 +1,46 @@
 {% load static look_up_tags %}
 
-<div class="box row">
-    <p class="fs-16">{{indexer_heading}}</p>
-
-    <!-- Accordion Index widget’s Starts here  -->
-    <div class="smk_accordion">
-        <div class="accordion_example1 faq-wrap row mt-20 ">
-
-          {% for key, value in column_data.items %}
-              <!-- Section 1 -->
-              <div class="accordion_in {% if forloop.first %}acc_active{% endif %}">
-                <div class="acc_head">{{ column_headings|get_value:key }}</div>
-                <div class="acc_content">
-                  <ul class="bullet">
-                    {% for k, v in value.items %}
-                        <li><a href="{{v}}">{{k}}</a></li>
-                    {% endfor %}
-                  </ul>
-                </div>
-              </div>
-          {% endfor %}
-
-          
+<div class="box row pb-0">
+    <p class="fs-16 pb-0">{{indexer_heading}}</p>
+    <!-- AMP Accordion begin -->
+    
+    {% if request.amp %}
+        <amp-accordion class="row mt-15">
+            {% for key, value in column_data.items %}
+              <section {% if forloop.first %}expanded{% endif %}>
+                <h4 class="acc_head">{{ column_headings|get_value:key }}</h4>
+                <ul class="bullet">
+                  {% for k, v in value.items %}
+                      <li><a href="{{v}}">{{k}}</a></li>
+                  {% endfor %}
+                </ul>
+              </section><!--./ section -->
+            {% endfor %}
+        </amp-accordion>
+    {% else %}
+        <!-- /. AMP Accordion begin -->
+        <!-- Accordion Index widget’s Starts here  -->
+        <div class="smk_accordion">
+            <div class="accordion_example1 faq-wrap row mt-20 ">
+              {% for key, value in column_data.items %}
+                  <!-- Section 1 -->
+                  <div class="accordion_in {% if forloop.first %}acc_active{% endif %}">
+                    <div class="acc_head">{{ column_headings|get_value:key }}</div>
+                    <div class="acc_content">
+                      <ul class="bullet">
+                        {% for k, v in value.items %}
+                            <li><a href="{{v}}">{{k}}</a></li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+              {% endfor %}
+            </div>
         </div>
-    </div>
+    {% endif %}
     <!-- Accordion Index widget Ends here  -->
+
+
+    
 </div><!-- box ends here -->
 

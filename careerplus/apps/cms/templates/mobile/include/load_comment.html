@@ -4,7 +4,18 @@
 {% static 'shinelearn/images/mobile/common/default-user.jpg' as default_user_pic %}
 {% for comment in comments %}
     <li>
-        <sup><img src="{{ default_user_pic }}"></sup>
+        <sup>
+            {% if amp %}
+            <amp-img
+                src="{{ default_user_pic }}"
+                width="40"
+                height="40"
+                alt="user">
+            </amp-img>
+            {% else %}
+            <img src="{{ default_user_pic }}">
+            {% endif %}
+        </sup>
         <p class="pb-0">{{comment.message}}</p>
         <span class="editor fs-12 c9">{% if comment.name %}{{ comment.name|title }}, {% endif %}{% get_humanize_date comment.created_on %}</span>
     </li>

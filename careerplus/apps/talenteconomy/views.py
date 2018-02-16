@@ -227,6 +227,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
         context.update({
             "detail_article": detail_article,
             "main_article": main_obj[0],
+            "amp": self.request.amp
         })
 
 

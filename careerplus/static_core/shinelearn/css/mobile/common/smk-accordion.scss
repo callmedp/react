@@ -4,7 +4,7 @@
 
 .smk_accordion {
 	position: relative;
-	border-bottom:1px solid #e0e0e0;
+	// border-bottom:1px solid #e0e0e0;
 
     .accordion_in {
         border-top: 1px solid #e0e0e0;
@@ -20,6 +20,8 @@
             font-weight: bold;
             padding: 12px 30px 12px 15px;
             position: relative;
+            color: $txt-grey-333;
+            margin-top: 0;
 
             h2 {
                 color: #444;
@@ -28,7 +30,7 @@
             }
 
             .acc_icon_expand {
-                @include icon-block (13px, 7px, -38px -201px);
+                @include icon-block (13px, 7px, -38px -202px);
                 margin-top: -4px;
                 position: absolute;
                 right: 10px;

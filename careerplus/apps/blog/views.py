@@ -138,6 +138,11 @@ class BlogDetailView(DetailView, BlogMixin):
             raise Http404
         return obj
 
+    def get_template_names(self):
+        if self.request.amp:
+            return ["blog/article-detail-amp.html"]
+        return ["blog/article-detail.html"]
+
     def redirect_if_necessary(self, current_path, article):
         expected_path = article.get_absolute_url()
         if expected_path != urlquote(current_path):
@@ -213,7 +218,8 @@ class BlogDetailView(DetailView, BlogMixin):
 
         context.update({
             "loginform": ModalLoginApiForm(),
-            "registerform": ModalRegistrationApiForm()
+            "registerform": ModalRegistrationApiForm(),
+            "amp": self.request.amp
         })
 
         return context

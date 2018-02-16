@@ -14,7 +14,20 @@
     </span>
 </div>
 
-<p class="mt-15"><img src="{{main_article.image.url}}" class="img-responsive" itemprop="image"></p>
+<p class="mt-15">
+    {% if amp %}
+    <amp-img 
+        src="{{main_article.image.url}}"
+        itemprop="image"
+        width="300"
+        height="150"
+        layout="responsive">
+    </amp-img>
+    {% else %}
+    
+    <img src="{{main_article.image.url}}" class="img-responsive" itemprop="image">
+    {% endif %}
+</p>
 <article class="" itemprop="articleBody">
 {{main_article.content|safe}}
 <meta itemprop="headline" content="{{main_article.heading}}">
@@ -27,8 +40,12 @@
     </div>
     <meta itemprop="name" content="Shine">
   </div>
-<hr>
 
+
+{% if amp %}
+
+{% else %}
+<hr>
 {% with main_article.tags.all as tags %}
 {% if tags %}
 <div class="tagging mt-30 mb-30">
@@ -39,16 +56,22 @@
 </div>
 {% endif %}
 {% endwith %}
+
+{% endif%}
 </article>
+
+{% if amp %}
+
+{% else %}
 
 {% if main_article.allow_comment %}
 <p class="take-me pb-0 mt-10" onclick="openCommentBox('{{main_article.id}}', 2)" id="total_comment{{main_article.id}}">
     <span class="line"><sup></sup></span>
     <span class="icon-chat"></span>{% if main_article.comment_moderated > 0 %}{{main_article.comment_moderated}} comments{% else %}Tap to Comment {% endif %}
 </p>
-<div id="comment-box{{main_article.id}}" >
-            
-</div>
+<div id="comment-box{{main_article.id}}" ></div>
+{% endif %}
+
 {% endif %}
 
 <!-- end of article -->

@@ -25,7 +25,7 @@ from .mixins import SkillPageMixin
 
 class SkillPageView(DetailView, SkillPageMixin):
     model = Category
-    template_name = "skillpage/skill.html"
+    # template_name = "skillpage/skill.html"
     page = 1
 
     def get_object(self, queryset=None):
@@ -42,6 +42,11 @@ class SkillPageView(DetailView, SkillPageMixin):
             return queryset[0]
         else:
             raise Http404
+
+    def get_template_names(self):
+        if self.request.amp:
+            return ["skillpage/skill-amp.html"]
+        return ["skillpage/skill.html"]
         
     def redirect_if_necessary(self, current_path, skill):
         expected_path = skill.get_absolute_url()
@@ -137,7 +142,6 @@ class SkillPageView(DetailView, SkillPageMixin):
         context['meta'] = self.object.as_meta(self.request)
         context['canonical_url'] = self.object.get_canonical_url()
         context['meta']._url = context.get('canonical_url', '')
-        
         meta_dict = context['meta'].__dict__
         meta_dict['description'] = meta_desc
         meta_dict['og_description'] = meta_desc
@@ -156,6 +160,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             'country_choices': country_choices,
             'initial_country': initial_country,
             'show_chat': True,
+            'amp': self.request.amp
         })
         context.update(self.get_breadcrumb_data())
         return context

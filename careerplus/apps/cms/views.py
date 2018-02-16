@@ -25,7 +25,7 @@ from .mixins import LoadMoreMixin
 
 class CMSPageView(DetailView, LoadMoreMixin):
     model = Page
-    template_name = "cms/cms_page.html"
+    #template_name = "cms/cms_page.html"
     page_obj = None
     page = 1
 
@@ -45,6 +45,11 @@ class CMSPageView(DetailView, LoadMoreMixin):
         except:
             raise Http404
         return obj
+
+    def get_template_names(self):
+        if self.request.amp:
+            return ["cms/cms_page-amp.html"]
+        return ["cms/cms_page.html"]
 
     def redirect_if_necessary(self, current_path, article):
         expected_path = article.get_absolute_url()
@@ -103,6 +108,13 @@ class CMSPageView(DetailView, LoadMoreMixin):
         page_obj = self.get_object()
         left_widgets = page_obj.pagewidget_set.filter(section='left', widget__is_active=True).select_related('widget')
         right_widgets = page_obj.pagewidget_set.filter(section='right', widget__is_active=True).select_related('widget')
+
+        if self.request.amp:
+            context['amp'] = self.request.amp
+            left_widgets = left_widgets.filter(widget__widget_type__in=[1, 8, 5, 2])
+            right_widgets = right_widgets.filter(widget__widget_type__in=[1, 8, 5, 2])
+
+           
         context['left_widgets'] = ''
         context['right_widgets'] = ''
         context['page_obj'] = page_obj
@@ -124,6 +136,7 @@ class CMSPageView(DetailView, LoadMoreMixin):
         for left in left_widgets:
             if self.request.flavour == 'mobile' and left.widget.widget_type in [6, 7]:
                 continue
+
             widget_context = {}
             widget_context.update({
                 'page_obj': page_obj,
@@ -133,6 +146,11 @@ class CMSPageView(DetailView, LoadMoreMixin):
                 'country_choices': country_choices,
                 'initial_country': initial_country,
             })
+
+            if self.request.amp:
+                widget_context['amp'] = True
+
+
             widget_context.update(left.widget.get_widget_data())
             context['left_widgets'] += render_to_string('include/' + left.widget.get_template(), widget_context, request=self.request)
 
@@ -149,6 +167,11 @@ class CMSPageView(DetailView, LoadMoreMixin):
                 'initial_country': initial_country,
                 'request': self.request,
             })
+
+            if self.request.amp:
+                widget_context['amp'] = True
+
+
             widget_context.update(right.widget.get_widget_data())
             context['right_widgets'] += render_to_string('include/' + right.widget.get_template(), widget_context)
 
