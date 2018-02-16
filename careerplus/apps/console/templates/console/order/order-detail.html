@@ -211,6 +211,9 @@
                                       {% if op.oi_resume %}
                                               <strong>Candidate Resume:</strong></br>
                                               <a href="{% url 'console:queue-resume-download' %}?path={{op.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
+                                      {% elif op.oi_status == 4 and op.oi_draft %}
+                                              <strong>Draft After Close OrderItem:</strong></br>
+                                              <a href="{% url 'console:queue-resume-download' %}?path={{op.oi_draft.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
                                       {% elif op.oi_draft %}
                                               <strong>Draft Level {% if op.draft_counter < max_limit_draft %} {{op.draft_counter}} {% else %}Final{% endif %}:</strong></br>
                                               <a href="{% url 'console:queue-resume-download' %}?path={{op.oi_draft.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
@@ -222,6 +225,40 @@
                                       {% endif %}
                                       </td>
                                     </tr>
+                                    {% if op.oi_status == 4 and obj.oi_draft %}
+                                    <tr>
+                                      <td colspan="4">
+                                        <form autocomplete="off" role="form" method="post"  data-parsley-validate enctype="multipart/form-data" 
+                                        id="draft-upload-form{{obj.pk}}">{% csrf_token %}
+                                        {{draft_form.file}}
+                                        <div style="display:none">
+                                            <input type="hidden" name="oi_pk" value="{{obj.pk}}">
+                                            <input type="hidden" id="flow-id{{obj.pk}}" name="flow" value="detailpage"/>
+                                        </div>
+                                        <button type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button>
+                                        </form>
+                                        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="draftmodal{{obj.pk}}">
+                                          <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+
+                                              <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                                </button>
+                                                <h4 class="modal-title" id="myModalLabel">Draft Upload</h4>
+                                              </div>
+                                              <div class="modal-body" id="myModalbody{{obj.pk}}">
+                                                Are You Sure???
+                                              </div>
+                                              <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                <button type="button" id="uploadDraftAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="detailPageUploadDraft('{{obj.pk}}',)">Yes</button>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                    {% endif %}
                                   {% endfor %}
                               </table>
                           </td>

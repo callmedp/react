@@ -421,6 +421,31 @@ class UploadDraftView(View):
         return HttpResponseForbidden()
 
 
+class DetailPageUploadDraftView(View):
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax() and request.user.is_authenticated():
+            data = {'display_message': "", }
+            form = FileUploadForm(request.POST, request.FILES)
+            if form.is_valid():
+                try:
+                    oi_pk = request.POST.get('oi_pk', None)
+                    obj = OrderItem.objects.get(pk=oi_pk)
+                    mixin_data = {
+                        "oi_draft": request.FILES.get('file', ''), }
+                    if obj.oi_status == 4:
+                        data = ActionUserMixin().detail_page_upload_draft_orderitem(
+                            oi=obj, data=mixin_data, user=request.user)
+                except Exception as e:
+                    data['display_message'] = str(e)
+            else:
+                error_message = form.errors.get('file')
+                if error_message:
+                    data['display_message'] = error_message
+            return HttpResponse(
+                json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()
+
+
 class SaveWaitingInput(View):
     def post(self, request, *args, **kwargs):
         if request.is_ajax() and request.user.is_authenticated():
