@@ -911,7 +911,7 @@ PRIVATE_MEDIA_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPPrivat
 GCP_PRIVATE_MEDIA_BUCKET = 'learning-misc'
 
 COMPRESS_STORAGE = STATICFILES_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPStaticStorage'
-COMPRESS_OFFLINE_MANIFEST = 'manifest_123.json'
+COMPRESS_OFFLINE_MANIFEST = 'manifest_123Z.json'
 GS_PROJECT_ID = 'shinesumoplus'
 GCP_STATIC_BUCKET = 'learning-static'
 
