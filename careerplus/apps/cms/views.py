@@ -111,8 +111,8 @@ class CMSPageView(DetailView, LoadMoreMixin):
 
         if self.request.amp:
             context['amp'] = True
-            left_widgets = left_widgets.filter(widget__widget_type__in=[1,8])
-            right_widgets = right_widgets.filter(widget__widget_type__in=[1,8])
+            left_widgets = left_widgets.filter(widget__widget_type__in=[1, 8, 5, 2])
+            right_widgets = right_widgets.filter(widget__widget_type__in=[1, 8, 5, 2])
 
            
         context['left_widgets'] = ''
@@ -146,6 +146,11 @@ class CMSPageView(DetailView, LoadMoreMixin):
                 'country_choices': country_choices,
                 'initial_country': initial_country,
             })
+
+            if self.request.amp:
+                widget_context['amp'] = True
+
+
             widget_context.update(left.widget.get_widget_data())
             context['left_widgets'] += render_to_string('include/' + left.widget.get_template(), widget_context, request=self.request)
 
@@ -162,6 +167,11 @@ class CMSPageView(DetailView, LoadMoreMixin):
                 'initial_country': initial_country,
                 'request': self.request,
             })
+
+            if self.request.amp:
+                widget_context['amp'] = True
+
+
             widget_context.update(right.widget.get_widget_data())
             context['right_widgets'] += render_to_string('include/' + right.widget.get_template(), widget_context)
 
