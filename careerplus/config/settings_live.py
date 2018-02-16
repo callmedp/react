@@ -919,8 +919,8 @@ INVOICE_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPInvoiceStora
 GCP_INVOICE_BUCKET = 'learning-invoices'
 
 # GS_AUTO_CREATE_BUCKET = True
-STATIC_URL = 'https://{}.storage.googleapis.com/l/s/'.format(GCP_STATIC_BUCKET)
-MEDIA_URL = 'https://{}.storage.googleapis.com/l/m/'.format(GS_BUCKET_NAME)
+STATIC_URL = 'https://gcp-static.shine.com/l/s/'
+MEDIA_URL = 'https://gcp-static.shine.com/l/m/'
 
 
 ##### EMAIL SETTINGS #######
