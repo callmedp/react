@@ -2,7 +2,11 @@
 <div class="container">
     <div class="box row">
     	<article>
-			<pre>{{description|striptags|safe}}</pre>
+			{% if amp %}
+				<pre>{{description|striptags|safe}}</pre>
+			{% else %}
+				{{description|safe}}
+			{% endif %}
     	</article>
     </div>
 </div><!-- box ends here -->

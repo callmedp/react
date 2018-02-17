@@ -1,3 +1,7 @@
 <div class="col-sm-12 box-panel formatting mb-40">
-   <pre>{{description|striptags|safe}}</pre>
+   {% if amp %}
+    <pre>{{ description|striptags|safe }}</pre>
+    {% else %}
+    {{ description|safe }}
+    {% endif %}
 </div>
