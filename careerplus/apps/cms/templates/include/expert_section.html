@@ -13,7 +13,7 @@
     </div>
   </div>          
   <article class="mt-20">
-    <pre>{{ description|striptags|safe }}</pre>
+    {{ description|safe }}
   </article>
   {% if download_doc %}
     <a class="sample-resume" href="#">Click here to Download Sample Resume <span class="sample-download-icon"></span></a>
