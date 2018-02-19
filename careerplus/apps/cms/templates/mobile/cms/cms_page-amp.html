@@ -9,7 +9,7 @@
     {% include 'meta/meta.html' %}
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
-
+    <meta name="amp-google-client-id-api" content="googleanalytics">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
 
     <script async src="https://cdn.ampproject.org/v0.js"></script>
@@ -30,6 +30,36 @@
 
   </head>
   <body>
+    <amp-analytics type="googleanalytics">
+        <script type="application/json">
+        {
+            "vars": {
+                "account": "UA-3537905-41"
+            },
+            "triggers": {
+                "trackPageview": {
+                    "on": "visible",
+                    "request": "pageview"
+                }
+            }
+        }
+        </script>
+    </amp-analytics>
+    <amp-analytics type="googleanalytics">
+        <script type="application/json">
+        {
+            "vars": {
+                "account": "UA-3537905-1"
+            },
+            "triggers": {
+                "trackPageview": {
+                    "on": "visible",
+                    "request": "pageview"
+                }
+            }
+        }
+        </script>
+    </amp-analytics>   
     <header class="w100fl he-auto">
     <!-- header menu Icon Starts here -->
     {% include 'basic/amp-menu.html'%}
