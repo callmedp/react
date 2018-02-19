@@ -21,6 +21,7 @@
 {% endblock title %}
 {% block canonical_url %}
   <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}?type=amp">
 {% endblock canonical_url %}
 
         {% block django_meta %}
@@ -107,11 +108,11 @@
             <!--<p><a href="#">know more</a></p>-->
         {% endif %}
         
-            {% include "shop/partials/prd_cart.html" %}
-            {% include "shop/partials/product_child.html" %}
-            {% include "shop/partials/frequentlybought.html" %}
+            {% include "mobile/shop/partials/prd_cart.html" %}
+            {% include "mobile/shop/partials/product_child.html" %}
+            {% include "mobile/shop/partials/frequentlybought.html" %}
             <!-- Select products container Satrts here  -->
-            {% include "shop/partials/product_variations.html" %}
+            {% include "mobile/shop/partials/product_variations.html" %}
 
             <!-- Select products container ends here -->
             <div class="container mb-30">
@@ -137,19 +138,28 @@
                         </div><!-- What’ll you get edns here  -->
                     {% endif %}
                         <!-- Delivery flow starts here  -->
-                        {% include "shop/partials/delivery_flow.html" %}
+                        <div class="accordion_in">
+                        {% include "mobile/shop/partials/delivery_flow.html" %}
+                        </div>
                         <!-- Delivery flow ends here  -->
                         <!-- Program Structure starts here  -->
-                        {% include "shop/partials/program_structure.html" %}
+                        <div class="accordion_in">
+                        {% include "mobile/shop/partials/program_structure.html" %}
+                        </div>
                         <!-- Program Structure ends here  -->
                     </div>
                     <!-- Accordion end -->
                     <!-- Accordion FAQ’s Starts here  -->
-                    {% include "shop/partials/faq.html" %}
+                    <div class="accordion_example1 faq-wrap row mt-40">
+                        <h2>FAQ’s</h2>
+                        <div class="accordion_in">
+                            {% include "mobile/shop/partials/faq.html" %}
+                        </div>
+                    </div>
                     <!-- Accordion FAQ’s Ends here  -->
                 </div><!-- end of container -->
                 <!-- Revew Slide widget -->
-                {% include "shop/partials/reviews.html" %}
+                {% include "mobile/shop/partials/reviews.html" %}
             </article>
         </section><!-- end of section here -->
     </div><!-- body wrapper ends here -->
@@ -302,5 +312,16 @@
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/shop/detail.js' %}"></script>
     {% endcompress %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+           if(commonJs.getParameterByName('type') == 'autoEnrol'){
+               $('#enrol-now-button').trigger('click'); 
+            }
+            if(commonJs.getParameterByName('type') == 'autoCart'){
+               $('#add-to-cart').trigger('click');
+            } 
+        })
+        
+    </script>
 {% endblock js_section %}
 

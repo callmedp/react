@@ -179,6 +179,11 @@ class TEBlogDetailView(DetailView, BlogMixin):
             raise Http404
         return obj
 
+    def get_template_names(self):
+        if self.request.amp:
+            return ["talenteconomy/article-detail-amp.html"]
+        return ["talenteconomy/article-detail.html"]    
+
 #    def redirect_if_necessary(self, current_path, article):
 #        expected_path = article.get_absolute_url()
 #        if expected_path != urlquote(current_path):
@@ -227,6 +232,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
         context.update({
             "detail_article": detail_article,
             "main_article": main_obj[0],
+            "amp": self.request.amp
         })
 
 

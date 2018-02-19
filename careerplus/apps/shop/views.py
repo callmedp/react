@@ -326,6 +326,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         super(ProductDetailView, self).__init__(*args, **kwargs)
 
     def get_template_names(self):
+        if self.request.amp:
+            return ['shop/detail-amp.html']
         return ['shop/detail1.html']
 
     def get_context_data(self, **kwargs):
@@ -398,6 +400,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx['meta'] = self.product_obj.as_meta(self.request)
         ctx['meta']._url = ctx.get('canonical_url', '')
         ctx['show_chat'] = True
+        ctx['amp'] = self.request.amp
         return ctx
 
     def redirect_if_necessary(self, current_path, product):
