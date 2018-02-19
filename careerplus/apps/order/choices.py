@@ -83,6 +83,9 @@ OI_OPS_STATUS = (
     (161, 'Refund initiated'),
     (162, 'Refund under progress'),
     (163, 'Refunded'),
+
+    # extra operation 181 - 190
+    (181, "Waiting for input")
 )
 
 OI_USER_STATUS = (

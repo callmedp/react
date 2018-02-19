@@ -20,11 +20,12 @@ writer=csv.writer(csvfile, delimiter=';')
 writer.writerow(['Order Id','Customer Email','Vendor','Created Date','Payment Date','Sales Agent','Sales Team Lead',
 'Sales Branch Head','Transactions','Order Item ID','Product Category','Product Name','Status',
 'Order Price before Coupons incl Tax','Amount Payable','Discount Percent','Item Selling Price',
-'Item Effective Price','Transaction Amounts','Coupon Codes','Payment Modes','Coupon Values'])
+'Product Site Price', 'Item Effective Price', 'Transaction Amounts',
+'Coupon Codes','Payment Modes','Coupon Values'])
 for oi in OrderItem.objects.filter(order__payment_date__gte=timezone.datetime(2018,1,1),
 order__payment_date__lte=datetime.datetime(2018,1,31),order__status__in=[1,2,3,4]).filter(filter_processes):
 
-    a = reduce(lambda x,y: x + y,[x.selling_price for x in oi.order.orderitems.filter(filter_processes)])
+    a = reduce(lambda x,y: x + y,[x.selling_price+x.delivery_price_incl_tax for x in oi.order.orderitems.filter(filter_processes)])
     b = oi.order.total_incl_tax
     c = re.sub("'","\"",oi.order.sales_user_info)
     if c:
@@ -48,6 +49,7 @@ order__payment_date__lte=datetime.datetime(2018,1,31),order__status__in=[1,2,3,4
     b,
     d,
     oi.selling_price,
+    oi.cost_price,
     (100-d)*oi.selling_price/100,
     ', '.join([str(tx.txn_amount) for tx in oi.order.get_txns()]),
     ', '.join([str(o.coupon_code) for o in oi.order.couponorder_set.all()]),
