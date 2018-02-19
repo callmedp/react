@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
     {% include 'meta/meta.html' %}
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="amp-google-client-id-api" content="googleanalytics">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
 
     <script async src="https://cdn.ampproject.org/v0.js"></script>
@@ -31,7 +32,36 @@
 
   </head>
   <body>
-
+    <amp-analytics type="googleanalytics">
+        <script type="application/json">
+        {
+            "vars": {
+                "account": "UA-3537905-41"
+            },
+            "triggers": {
+                "trackPageview": {
+                    "on": "visible",
+                    "request": "pageview"
+                }
+            }
+        }
+        </script>
+    </amp-analytics>
+    <amp-analytics type="googleanalytics">
+        <script type="application/json">
+        {
+            "vars": {
+                "account": "UA-3537905-1"
+            },
+            "triggers": {
+                "trackPageview": {
+                    "on": "visible",
+                    "request": "pageview"
+                }
+            }
+        }
+        </script>
+    </amp-analytics>   
     <!-- /. header --> 
     <header class="he-auto">
         <!-- header main-menu Icon Starts here -->
@@ -134,44 +164,41 @@
 
             <!-- Select products container ends here -->
             <div class="container mb-30">
-              <amp-accordion class="row">
-              {% if prd_desc %}
-                <section expanded>
-                  <h4 class="acc_head">About Product</h4>
-                  <div class="acc_content"><pre><p>{{prd_desc|striptags|safe}}</p></pre></div>
-                </section>
-                {% endif %}
-
-                {% if prd_uget %}
-                <section>
-                  <h4 class="acc_head">What’ll you get</h4>
-                  <div class="acc_content"><pre><p>{{prd_uget|striptags|safe}}</p></pre></div>
-                </section>
-                {% endif %}
-
-                <section>
-                  {% include "mobile/shop/partials/delivery_flow.html" %}
-                </section>
-
-                {% if chapter and chapter_list %}
-                <section>
-                    <h4 class="acc_head">Program Structure</h4>
-                    <div class="acc_content">
-                    {% for chapter in chapter_list  %}
-                        <p>
-                          <strong>{{chapter.heading}}</strong><br>
-                          <pre>{{chapter.content|striptags|safe}}</pre>
-                        </p>
-                    {% endfor %}
-                    </div>
-                </section>
-                {% endif %}
-
-              </amp-accordion>
-
+                {% if prd_desc or prd_uget or chapter or sqs %}
+                    <amp-accordion class="row">
+                        {% if prd_desc %}
+                            <section expanded>
+                                <h4 class="acc_head">About Product</h4>
+                                <div class="acc_content"><pre><p>{{prd_desc|striptags|safe}}</p></pre></div>
+                            </section>
+                        {% endif %}
+                        {% if prd_uget %}
+                            <section>
+                                <h4 class="acc_head">What'll you get</h4>
+                                <div class="acc_content"><pre><p>{{prd_uget|striptags|safe}}</p></pre></div>
+                            </section>
+                        {% endif %}
+                        <section>
+                          {% include "mobile/shop/partials/delivery_flow.html" %}
+                        </section>
+                        {% if chapter and chapter_list %}
+                            <section>
+                                <h4 class="acc_head">Program Structure</h4>
+                                <div class="acc_content">
+                                {% for chapter in chapter_list  %}
+                                    <p>
+                                      <strong>{{chapter.heading}}</strong><br>
+                                      <pre>{{chapter.content|striptags|safe}}</pre>
+                                    </p>
+                                {% endfor %}
+                                </div>
+                            </section>
+                        {% endif %}
+                    </amp-accordion>
+                {%endif%}
               {% if faq %}
               <div class="mt-30">
-                <h2>FAQ’s</h2>
+                <h2>FAQ's</h2>
                 <amp-accordion class="row">
                       
                     {% for ques in faq_list %}
