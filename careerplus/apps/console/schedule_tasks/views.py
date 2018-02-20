@@ -7,13 +7,10 @@ from wsgiref.util import FileWrapper
 from django.views.generic import FormView, ListView, View
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.db.models import Q
 from django.urls import reverse
 from django.http import (
     HttpResponseRedirect, HttpResponseForbidden,
     HttpResponse)
-from django.contrib.auth.decorators import permission_required
-from django.utils.decorators import method_decorator
 from django.conf import settings
 
 from blog.mixins import PaginationMixin
@@ -168,12 +165,12 @@ class DownloadTaskView(View):
                     fsock = FileWrapper(open(path, 'rb'))
                 except IOError:
                     messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
-                    response = HttpResponseRedirect(reverse('task:list-task'))
+                    response = HttpResponseRedirect(reverse('console:tasks:tasklist'))
                     return response
                 response = HttpResponse(fsock, content_type=mimetypes.guess_type(path)[0])
                 response['Content-Disposition'] = 'attachment; filename="%s"' % (file_name)
                 return response
         except:
             messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
-            response = HttpResponseRedirect(reverse('task:list-task'))
+            response = HttpResponseRedirect(reverse('console:tasks:tasklist'))
             return response
