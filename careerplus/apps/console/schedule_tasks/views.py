@@ -90,7 +90,7 @@ class GenerateAutoLoginTask(FormView):
                 else:
                     exp_days = None
 
-                gen_auto_login_token_task(
+                gen_auto_login_token_task.delay(
                     task=Task.pk, user=request.user.pk,
                     next_url=next_url, exp_days=exp_days)
                 messages.add_message(
