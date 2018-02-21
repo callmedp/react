@@ -91,6 +91,7 @@
                         <form role="form" id="order-filter-form">{% csrf_token %}
                             <div class="form-group custom-select">
                                 <select class="form-control" name="last_month_from" id="lastmonth-id">
+                                  <option value="18">Last eighteen months</option>
                                   <option value="6">Last six months</option>
                                   <option value="3">Last three months</option>
                                 </select>
