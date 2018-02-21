@@ -979,6 +979,12 @@ class Product(AbstractProduct, ModelMeta):
                     self.image_alt = self.name
                 if not self.meta_desc:
                     self.meta_desc = self.get_meta_desc()
+            if self.type_product == 1:
+                variations = self.variation.all().exclude(
+                    vendor=self.vendor)
+                for var in variations:
+                    var.vendor = self.vendor
+                    var.save()
         super(Product, self).save(*args, **kwargs)
         if getattr(self, 'attr', None):
             self.attr.save()
