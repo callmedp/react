@@ -113,6 +113,8 @@
                                 Revised Document is ready
                             {% elif op.oi_status == 24 and op.draft_counter == max_draft_limit %}
                                 Final Document is ready
+                            {% elif op.oi_status == 181 %}
+                              Waiting For Input 
                             {% else %}
                                {{op.get_user_oi_status}}
                             {% endif %}
@@ -143,6 +145,8 @@
                                 Revised Document is ready
                             {% elif op.oi_status == 4 %}
                                 Document is finalized
+                            {% elif op.oi_status == 181 %}
+                                Waiting for input
                             {% else %}
                                {{op.get_user_oi_status}}
                             {% endif %}

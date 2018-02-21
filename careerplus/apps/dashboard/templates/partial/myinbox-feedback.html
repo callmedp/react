@@ -32,8 +32,10 @@
             <span>Click to rate on scale of 1-5</span></br>
             <span class="error" style="color:red" id="rating-error"></span>    
        </div> 
-      <textarea class="form-control" id="id_review" name="review" placeholder="Feedback" rows="4"></textarea>
-      <small>Max 100 characters</small><br/>
+      <textarea class="form-control" id="id_review" name="review" 
+      placeholder="Feedback" rows="4">
+      </textarea>
+      <small>Max 1500 characters</small><br/>
       <span class="error"></span></br>
       <input type="hidden" name="oi_pk" value="{{oi.pk}}" />
       <button role="button" class="blue-button pull-left" id="rating-submit">Submit</button>

@@ -106,6 +106,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
                     for obj in orderitem_objs:
                         email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                         obj.assigned_to = writer
+                        obj.assigned_date = timezone.now()
                         obj.assigned_by = request.user
                         obj.save()
 
@@ -378,26 +379,33 @@ class ChangeDraftView(DetailView):
                             request, messages.ERROR, 'Draft not saved ')
                         return render(request, self.template_name, context)
                 elif request.POST.get('save') == 'save':
-                    draft_obj = draft_form.save()
-                    for form in org_formset.forms:
-                        org_obj = form.save(commit=False)
-                        org_obj.draft = draft_obj
-                        org_obj.save()
+                    try:
+                        draft_obj = draft_form.save()
+                        for form in org_formset.forms:
+                            org_obj = form.save(commit=False)
+                            org_obj.draft = draft_obj
+                            org_obj.save()
 
-                    for form in org_formset.deleted_forms:
-                        form.instance.delete()
+                        for form in org_formset.deleted_forms:
+                            form.instance.delete()
 
-                    for form in edu_formset.forms:
-                        edu_obj = form.save(commit=False)
-                        edu_obj.draft = draft_obj
-                        edu_obj.save()
+                        for form in edu_formset.forms:
+                            edu_obj = form.save(commit=False)
+                            edu_obj.draft = draft_obj
+                            edu_obj.save()
 
-                    for form in edu_formset.deleted_forms:
-                        form.instance.delete()
-                    messages.success(self.request, "Draft Saved Successfully")
-                    return HttpResponseRedirect(
-                        reverse('console:linkedin-inbox'))
-
+                        for form in edu_formset.deleted_forms:
+                            form.instance.delete()
+                        messages.success(self.request, "Draft Saved Successfully")
+                        return HttpResponseRedirect(
+                            reverse('console:linkedin-inbox'))
+                    except Exception as e:
+                        context['form'] = draft_form
+                        context['org_formset'] = org_formset
+                        context['edu_formset'] = edu_formset
+                        logging.getLogger('error_log').error(str(e))
+                        messages.add_message(request, messages.ERROR, str(e))
+                        return render(request, self.template_name, context)
             else:
                 messages.error(
                     self.request, "Draft does not exist with this order", 'error')
@@ -1064,7 +1072,8 @@ class InterNationalAssignmentOrderItemView(View):
             try:
                 User = get_user_model()
                 writer = User.objects.get(pk=user_pk)
-                orderitem_objs = OrderItem.objects.filter(id__in=selected_id)
+                orderitem_objs = OrderItem.objects.filter(
+                    id__in=selected_id)
                 ActionUserMixin().assign_orderitem(
                     orderitem_list=orderitem_objs,
                     assigned_to=writer,

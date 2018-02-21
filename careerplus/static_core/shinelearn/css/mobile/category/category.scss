@@ -5,6 +5,18 @@
   position: relative;
   background-color: $bg-blue-254;
 
+  .breadcrumb {
+  	
+  	text-align: left;
+    margin-top: 0;
+    position: absolute;
+    top: 10px;
+
+    a {
+    	color: $txt-white;
+    }
+  }
+
   .content {
     position: absolute;
     width: 100%;

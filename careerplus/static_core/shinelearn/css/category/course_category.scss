@@ -11,6 +11,11 @@ body {
 	color: $white-bg; 
 	text-align: center; 
 	position: relative;
+	background: url(../../images/cp-header.jpg) no-repeat center top; 
+	background-size: cover;
+	overflow: hidden;
+	display: block;
+	padding-bottom: 15%;
 
 	.category-heading {
 		position: absolute; 
