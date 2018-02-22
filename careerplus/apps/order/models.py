@@ -83,6 +83,21 @@ class Order(AbstractAutoDate):
     country = models.ForeignKey(Country, null=True)
 
     # welcome call done or not
+    assigned_to = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        related_name='oi_assigned',
+        null=True, blank=True)
+    wc_cat = models.PositiveIntegerField(
+        _("Welcome Call Category"), default=0,
+        choices=WC_CATEGORY)
+    wc_sub_cat = models.PositiveIntegerField(
+        _("Welcome Call Sub-Category"), default=0,
+        choices=WC_SUB_CATEGORY)
+    wc_status = models.PositiveIntegerField(
+        _("Welcome Call Status"), default=0,
+        choices=WC_FLOW_STATUS)
+    wc_follow_up = models.DateTimeField(null=True, blank=True)
+
     welcome_call_done = models.BooleanField(default=False)
     midout_sent_on = models.DateTimeField(null=True, blank=True)
 
@@ -263,6 +278,18 @@ class OrderItem(AbstractAutoDate):
     expiry_date = models.DateTimeField(null=True, blank=True)
     user_feedback = models.BooleanField(default=False)
     buy_count_updated = models.BooleanField(default=False)
+
+    # welcome call flow
+    wc_cat = models.PositiveIntegerField(
+        _("Welcome Call Category"), default=0,
+        choices=WC_CATEGORY)
+    wc_sub_cat = models.PositiveIntegerField(
+        _("Welcome Call Sub-Category"), default=0,
+        choices=WC_SUB_CATEGORY)
+    wc_status = models.PositiveIntegerField(
+        _("Welcome Call Status"), default=0,
+        choices=WC_FLOW_STATUS)
+    wc_follow_up = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         app_label = 'order'
@@ -636,3 +663,24 @@ class RefundOperation(AbstractAutoDate):
     def get_last_status(self):
         statusD = dict(REFUND_OPS_STATUS)
         return statusD.get(self.last_status)
+
+
+class WelcomeCallOperation(AbstractAutoDate):
+    order = Order
+    message = models.TextField(blank=True)
+    wc_cat = models.PositiveIntegerField(
+        _("Welcome Call Category"), default=0,
+        choices=WC_CATEGORY)
+    wc_sub_cat = models.PositiveIntegerField(
+        _("Welcome Call Sub-Category"), default=0,
+        choices=WC_SUB_CATEGORY)
+    wc_status = models.PositiveIntegerField(
+        _("Welcome Call Status"), default=0,
+        choices=WC_FLOW_STATUS)
+    wc_follow_up = models.DateTimeField(null=True, blank=True)
+    assigned_to = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        related_name='wcall_assigned',
+        null=True, blank=True)
+    created_by = models.ForeignKey(
+        'order.Order', verbose_name=_("Order"))

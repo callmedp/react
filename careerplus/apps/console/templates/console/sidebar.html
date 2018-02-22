@@ -18,6 +18,23 @@
       </li>
       </ul>
     {% endif %}
+
+
+      <h3>Welcome Call</h3>
+        
+      <ul class="nav side-menu">
+        <li><a><i class="fa fa-list-alt"></i> Welcome call <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url "console:welcomecall:wecome-queue" %}">Welcome Queue</a></li>
+              <li><a href="">Wc Assigned</a></li>
+              <li><a href="">Wc Callback</a></li>
+              <li><a href="">Wc Service Issue</a></li>
+              <li><a href="">Wc Closed</a></li>
+              
+            </ul>
+        </li>
+      </ul>
+
     {% if request.user|has_group:USER_QUERY_GROUP_LIST %} 
       <h3>User Query</h3>
         

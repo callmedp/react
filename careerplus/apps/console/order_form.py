@@ -163,8 +163,15 @@ class OrderFilterForm(forms.Form):
                 'placeholder': "from date - to date",
                 "readonly": True, }))
 
+        # self.assigned = forms.ChoiceField(
+        # label=("Assigned"), choices=[],
+        # required=False,
+        # initial=-1,
+        # widget=forms.Select(
+        #     attrs={'class': 'form-control'}))
+
     class Meta:
-        fields = ['status', 'payment_date', 'created']
+        fields = ['status', 'payment_date', 'created', ]
 
 
 class OIFilterForm(forms.Form):
