@@ -329,8 +329,13 @@ class AuthorListingView(TemplateView):
         return {"meta": meta}
 
 class AuthorDetailView(DetailView):
-    template_name = "talenteconomy/author-detail.html"
+    # template_name = "talenteconomy/author-detail-amp.html"
     model = Author
+
+    def get_template_names(self):
+        if self.request.amp:
+            return ["talenteconomy/author-detail-amp.html"]
+        return ["talenteconomy/author-detail.html"]
 
     def get(self, request, *args, **kwargs):
         context = super(self.__class__, self).get(request, args, **kwargs)
@@ -375,6 +380,7 @@ class AuthorDetailView(DetailView):
             'authors_list': list(author_list),
             "article_list":article_list,
             "popular_courses": popular_courses,
+            "amp": self.request.amp
         })
 
         context.update(self.get_meta_details())

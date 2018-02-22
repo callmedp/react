@@ -50,6 +50,7 @@
         </li>
 
         {% if request.user|has_group:WRITING_GROUP_LIST %}
+        {% comment %}
         <li class="">
           <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <strong><small>Writer Invoice</small></strong>
@@ -71,6 +72,7 @@
               {% endif %}
           </ul>
         </li>
+        {% endcomment %}
         {% endif %}
 
       </ul>
