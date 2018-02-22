@@ -30,7 +30,6 @@ class DashboardInfo(object):
         return True
 
     def get_inbox_list(self, candidate_id=None, request=None, last_month_from=18, select_type=0, page=1):
-        import ipdb; ipdb.set_trace()
         if candidate_id:
             days = last_month_from * 30
             last_payment_date = timezone.now() - datetime.timedelta(days=days)
