@@ -50,6 +50,7 @@ from .choices import (
     convert_gbp)
 from search.choices import EXP_DICT
 
+
 class ProductClass(AbstractAutoDate, AbstractSEO,):
     name = models.CharField(
         _('Name'), max_length=100,

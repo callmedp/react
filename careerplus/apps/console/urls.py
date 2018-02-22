@@ -12,6 +12,8 @@ urlpatterns = [
     url(r'^partner/', include('console.partner.urls', namespace='partner')),
     url(r'^operations/', include('console.operations.urls', namespace='operations')),
     url(r'^userquery/', include('console.userquery.urls', namespace='userquery')),
+    url(r'^tasks/',
+        include('console.schedule_tasks.urls', namespace='tasks')),
 ]
 
 
@@ -54,7 +56,7 @@ urlpatterns += [
     url(r'^screenproduct/action/(?P<action>[\w-]+)/$',
         vendor_view.ActionScreenProductView.as_view(),
         name='screenproduct-action'),
-    
+
     url(r'^screenfaq/list/$',
         vendor_view.ListScreenFaqView.as_view(),
         name='screenfaq-list'),

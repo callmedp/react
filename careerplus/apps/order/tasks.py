@@ -46,6 +46,7 @@ def pending_item_email(pk=None):
                 'product_name': oi.product.name,
                 'product_url': oi.product.get_url(),
                 'mobile': oi.order.mobile,
+                'parent_name': oi.parent.product.name if oi.parent else None
             })
             email_sets = list(oi.emailorderitemoperation_set.all().values_list(
                 'email_oi_status', flat=True).distinct())
@@ -287,6 +288,7 @@ def process_mailer(pk=None):
                     'email': oi.order.email,
                     'candidateid': oi.order.email,
                     'mobile': oi.order.mobile,
+                    'parent_name': oi.parent.product.name if oi.parent else None
                 })
                 if oi.product.type_flow in [1, 12, 13]:
                     data.update({

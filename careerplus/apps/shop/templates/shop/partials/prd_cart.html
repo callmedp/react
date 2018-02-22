@@ -11,7 +11,7 @@
 
 <div class="container pr">
   <!-- right fixed content start -->
-  <div id="price-box" class="col-sm-5 col-md-4  price-box">
+  <div id="price-box" class="col-sm-5 col-md-4 price-box">
   <div class="box-panel enrol-cart">
      <strong id="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
      {{var_list.0.inr_price|floatformat}}{% else %}
@@ -52,7 +52,7 @@
     
   <a href="#" class="take-test mt-40"><figure class="test-icon"></figure> Take free Assessment test</a>
   {% endcomment %}
-
+  {% comment %}
   <!-- check free sample start -->
     <div class="free-sample">
       <span class="sample-pic"></span>
@@ -68,7 +68,7 @@
         <li><a href="#">Resume Format for Experienced Professionals</a></li>-->
       </ul>
     </div>
-     
+  {% endcomment %}
   </div>
 <!-- right fixed content end -->
 

@@ -1,6 +1,12 @@
 <!-- box starts here -->
 <div class="container">
     <div class="box row">
-    {{description|safe}}
+    	<article>
+			{% if amp %}
+				<pre>{{description|striptags|safe}}</pre>
+			{% else %}
+				{{description|safe}}
+			{% endif %}
+    	</article>
     </div>
 </div><!-- box ends here -->
