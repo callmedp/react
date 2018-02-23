@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import datetime
+import calendar
 
 from django.contrib.gis.geoip import GeoIP
 from django.conf import settings
@@ -53,6 +54,9 @@ class WriterInvoiceMixin(object):
             if oi.product and oi.product.type_flow in [1, 12, 13]:
                 prev_month = invoice_date.replace(day=1)
                 prev_month = prev_month - datetime.timedelta(days=1)
+                _, last_day = calendar.monthrange(
+                    prev_month.year, prev_month.month)
+                prev_month = datetime.date(prev_month.year, prev_month.month, last_day)
 
                 linkedin_ois = OrderItem.objects.filter(
                     order__candidate_id=oi.order.candidate_id,
@@ -60,8 +64,7 @@ class WriterInvoiceMixin(object):
                     oi_status=4,
                     assigned_to=assigned_to,
                     assigned_date__range=[start_date, end_date],
-                    closed_on__month__lte=prev_month.month,
-                    closed_on__year__lte=prev_month.year).order_by('-id')
+                    closed_on__date__lte=prev_month).order_by('-id')
                 if linkedin_ois.exists():
                     linkedin_obj = linkedin_ois[0]
                     writing_ois = linkedin_obj.order.orderitems.filter(
@@ -76,14 +79,17 @@ class WriterInvoiceMixin(object):
                         start_date = assigned_date - datetime.timedelta(days=DISCOUNT_ALLOCATION_DAYS)
                         end_date = assigned_date + datetime.timedelta(days=DISCOUNT_ALLOCATION_DAYS)
                         closed_on = linkedin_obj.closed_on
+                        _, last_day = calendar.monthrange(
+                            closed_on.year, closed_on.month)
+                        closed_on_last = datetime.date(
+                            closed_on.year, closed_on.month, last_day)
                         writing_ois = OrderItem.objects.filter(
                             order__candidate_id=oi.order.candidate_id,
                             product__type_flow__in=[1, 12, 13],
                             oi_status=4,
                             assigned_to=assigned_to,
                             assigned_date__range=[start_date, end_date],
-                            closed_on__month__lte=closed_on.month,
-                            closed_on__year__lte=closed_on.year).exclude(
+                            closed_on__date__lte=closed_on_last).exclude(
                             product__id__in=COVER_LETTER_PRODUCT_LIST)
 
                         if writing_ois.exists():
@@ -121,14 +127,17 @@ class WriterInvoiceMixin(object):
                     combo_discount = (linkedin_amount * COMBO_DISCOUNT) / 100
                     self.combo_discount_object.add(oi.pk)
                 else:
+                    _, last_day = calendar.monthrange(
+                        invoice_date.year, invoice_date.month) 
+                    last_invoice_date = datetime.date(
+                        invoice_date.year, invoice_date.month, last_day)
                     writing_ois = OrderItem.objects.filter(
                         order__candidate_id=oi.order.candidate_id,
                         product__type_flow__in=[1, 12, 13],
                         oi_status=4,
                         assigned_to=assigned_to,
                         assigned_date__range=[start_date, end_date],
-                        closed_on__month__lte=invoice_date.month,
-                        closed_on__year__lte=invoice_date.year).exclude(
+                        closed_on__date__lte=last_invoice_date).exclude(
                         product__id__in=COVER_LETTER_PRODUCT_LIST)
                     if writing_ois.exists() and oi.pk not in self.combo_discount_object:
                         combo_discount = (linkedin_amount * COMBO_DISCOUNT) / 100
@@ -207,12 +216,19 @@ class WriterInvoiceMixin(object):
             error = msg
 
         if user and invoice_date and not error:
+            _, last_day = calendar.monthrange(
+                invoice_date.year, invoice_date.month)  #  _  return weekday of first day of the month
+            last_invoice_date = datetime.date(
+                invoice_date.year, invoice_date.month, last_day)
+            first_invoice_date = datetime.date(
+                invoice_date.year, invoice_date.month, 1)
+
             orderitems = OrderItem.objects.filter(
                 order__status__in=[1, 3],
                 product__type_flow__in=[1, 8, 12, 13],
                 oi_status=4, assigned_to=user,
-                closed_on__month=invoice_date.month,
-                closed_on__year=invoice_date.year, no_process=False).select_related('product').order_by('id')
+                closed_on__date__range=[first_invoice_date, last_invoice_date],
+                no_process=False).select_related('product').order_by('id')
 
             writing_dict = RESUME_WRITING_MATRIX_DICT
             linkedin_dict = LINKEDIN_WRITING_MATRIX_DICT
