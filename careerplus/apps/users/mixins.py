@@ -42,11 +42,23 @@ class WriterInvoiceMixin(object):
         if oi.assigned_to:
             assigned_to = oi.assigned_to
             assigned_date = oi.assigned_date
+            if not assigned_date:
+                ops = oi.orderitemoperation_set.filter(oi_status=1).order_by('id')
+                if ops.exists():
+                    assigned_date = ops[0].created
+                else:
+                    assigned_date = datetime.datetime.today()
         else:
             oi_assigned = oi.orderitem_set.all().exclude(
                 assigned_to=None)
             assigned_to = oi_assigned[0].assigned_to
             assigned_date = oi_assigned[0].assigned_date
+            if not assigned_date:
+                ops = oi_assigned[0].orderitemoperation_set.filter(oi_status=1).order_by('id')
+                if ops.exists():
+                    assigned_date = ops[0].created
+                else:
+                    assigned_date = datetime.datetime.today()
 
         start_date = assigned_date - datetime.timedelta(days=DISCOUNT_ALLOCATION_DAYS)
         end_date = assigned_date + datetime.timedelta(days=DISCOUNT_ALLOCATION_DAYS)
