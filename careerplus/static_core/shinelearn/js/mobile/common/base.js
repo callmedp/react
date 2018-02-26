@@ -105,6 +105,33 @@ $(document).ready(function() {
 		infinite: true
 	});
 
+	$(".article-slider").slick({
+		autoplay:false,
+		arrows: false,
+		dots: true
+	});
+
+	$(".contributors").slick({
+		autoplay:false,
+		autoplaySpeed:3000,
+		dots: false,
+		arrows: true,
+		variableWidth: true,
+		slidesToShow: 3,
+		slidesToScroll: 1,
+		infinite: true
+	});
+
+	$(".hr-speaker-slide").slick({
+		autoplay:true,
+		arrows: true,
+		dots: false,
+		// infinite: true,
+		variableWidth: true,
+  		slidesToShow: 3,
+  		slidesToScroll: 1
+	});
+
 });// Document ready function ends here
 
 function goBack() {
