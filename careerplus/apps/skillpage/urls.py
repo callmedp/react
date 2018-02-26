@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from .views import SkillPageView, SkillQueryLead
+from .views import SkillPageView
 from search.views import FuncAreaPageView
 
 # from .adminview import SkillAddFormView, SkillListView, SkillUpdateView
@@ -8,11 +8,9 @@ from search.views import FuncAreaPageView
 urlpatterns = [
     url(r'^(?P<fa_slug>[-\w]+)/(?P<pk>\d+)/$',
         FuncAreaPageView.as_view(), name='func_area_results'),
-    url(
-    	r'^(?P<fa_slug>[-\w]+)/(?P<skill_slug>[-\w]+)/(?P<pk>\d+)/$',
-    	SkillPageView.as_view(), name='skill-page-listing'),
-    url(r'^skill-query-lead/$',
-    	SkillQueryLead.as_view(), name='skill-query-lead'),
+    url(r'^(?P<fa_slug>[-\w]+)/(?P<skill_slug>[-\w]+)/(?P<pk>\d+)/$',
+        SkillPageView.as_view(), name='skill-page-listing'),
+
     ## NOT IN USE
     # url(r'^admin/skill-add/$', SkillAddFormView.as_view(),
     # 	name='skill-add'),

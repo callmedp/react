@@ -176,21 +176,3 @@ class SkillPageView(DetailView, SkillPageMixin):
         breadcrumbs.append({"url": '', "name": self.object.name})
         data = {"breadcrumbs": breadcrumbs}
         return data
-
-
-class SkillQueryLead(View, UploadInFile):
-    http_method_names = [u'post']
-
-    def post(self, request, *args, **kwargs):
-        data_dict = {}
-        name = request.POST.get('name', '')
-        mobile = request.POST.get('mobile_number', '')
-        message = request.POST.get('message_box', '')
-
-        data_dict = {
-            "name": name,
-            "mobile": mobile,
-            "message": message,
-        }
-        self.write_in_file(data_dict=data_dict)
-        return HttpResponse(status=200)
