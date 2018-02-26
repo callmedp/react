@@ -64,7 +64,7 @@ class WriterInvoiceMixin(object):
                     oi_status=4,
                     assigned_to=assigned_to,
                     assigned_date__range=[start_date, end_date],
-                    closed_on__date__lte=prev_month).order_by('-id')
+                    closed_on__lte=prev_month).order_by('-id')
                 if linkedin_ois.exists():
                     linkedin_obj = linkedin_ois[0]
                     writing_ois = linkedin_obj.order.orderitems.filter(
@@ -89,7 +89,7 @@ class WriterInvoiceMixin(object):
                             oi_status=4,
                             assigned_to=assigned_to,
                             assigned_date__range=[start_date, end_date],
-                            closed_on__date__lte=closed_on_last).exclude(
+                            closed_on__lte=closed_on_last).exclude(
                             product__id__in=COVER_LETTER_PRODUCT_LIST)
 
                         if writing_ois.exists():
@@ -137,7 +137,7 @@ class WriterInvoiceMixin(object):
                         oi_status=4,
                         assigned_to=assigned_to,
                         assigned_date__range=[start_date, end_date],
-                        closed_on__date__lte=last_invoice_date).exclude(
+                        closed_on__lte=last_invoice_date).exclude(
                         product__id__in=COVER_LETTER_PRODUCT_LIST)
                     if writing_ois.exists() and oi.pk not in self.combo_discount_object:
                         combo_discount = (linkedin_amount * COMBO_DISCOUNT) / 100
@@ -227,7 +227,7 @@ class WriterInvoiceMixin(object):
                 order__status__in=[1, 3],
                 product__type_flow__in=[1, 8, 12, 13],
                 oi_status=4, assigned_to=user,
-                closed_on__date__range=[first_invoice_date, last_invoice_date],
+                closed_on__range=[first_invoice_date, last_invoice_date],
                 no_process=False).select_related('product').order_by('id')
 
             writing_dict = RESUME_WRITING_MATRIX_DICT
