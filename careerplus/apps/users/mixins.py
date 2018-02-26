@@ -256,6 +256,8 @@ class WriterInvoiceMixin(object):
             total_sum = 0
             success_closure = 0
 
+            order_before = datetime.date(2017, 11, 3)
+
             for oi in orderitems:
                 oi_dict = {}
                 # sla incentive or penalty calculation
@@ -270,6 +272,19 @@ class WriterInvoiceMixin(object):
                     else:
                         if finish_days <= REGULAR_SLA:
                             success_closure += 1
+
+                if oi.order.payment_date.date() < order_before:
+                    oi_dict = {}
+                    oi_dict.update({
+                        "item_id": oi.pk,
+                        "product_name": oi.product.get_name,
+                        "closed_on": oi.closed_on.date(),
+                        "combo_discount": 0,
+                        "amount": 0,
+                        "item_type": "older",
+                    })
+                    item_list.append(oi_dict)
+                    continue
 
                 if oi.is_variation:
                     p_oi = oi.parent

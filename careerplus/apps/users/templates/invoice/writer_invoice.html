@@ -78,7 +78,7 @@
     {% for oi in item_list %}
     <tr>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{forloop.counter}}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.item_id}}</span></td>
+      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;">{% if oi.item_type == 'older' %}<span style="color:red; float:left;">* </span>{% endif %}<span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.item_id}}</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.product_name}}</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.closed_on|date:"d M Y"}}</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"> <span style="display: block; margin:0; padding:3px 0 3px 5px; ">-{% if oi.combo_discount %} {{oi.combo_discount}}{% endif %}</span></td>
