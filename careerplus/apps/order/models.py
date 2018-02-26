@@ -11,7 +11,8 @@ from linkedin.models import Draft
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, OI_LINKEDIN_FLOW_STATUS,\
     OI_USER_STATUS, OI_EMAIL_STATUS, REFUND_MODE, REFUND_OPS_STATUS,\
-    TYPE_REFUND, OI_SMS_STATUS
+    TYPE_REFUND, OI_SMS_STATUS, WC_CATEGORY, WC_SUB_CATEGORY,\
+    WC_FLOW_STATUS
 from .functions import get_upload_path_order_invoice
 
 
@@ -85,7 +86,7 @@ class Order(AbstractAutoDate):
     # welcome call done or not
     assigned_to = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
-        related_name='oi_assigned',
+        related_name='order_assigned',
         null=True, blank=True)
     wc_cat = models.PositiveIntegerField(
         _("Welcome Call Category"), default=0,
@@ -666,7 +667,7 @@ class RefundOperation(AbstractAutoDate):
 
 
 class WelcomeCallOperation(AbstractAutoDate):
-    order = Order
+    order = models.ForeignKey(Order)
     message = models.TextField(blank=True)
     wc_cat = models.PositiveIntegerField(
         _("Welcome Call Category"), default=0,
@@ -683,4 +684,8 @@ class WelcomeCallOperation(AbstractAutoDate):
         related_name='wcall_assigned',
         null=True, blank=True)
     created_by = models.ForeignKey(
-        'order.Order', verbose_name=_("Order"))
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        null=True,
+        related_name='wop_created_by',
+        verbose_name=_("Created By"))

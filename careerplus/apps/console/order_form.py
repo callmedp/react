@@ -141,6 +141,11 @@ class OrderFilterForm(forms.Form):
 
         NEWSTATUS = ((-1, 'All'),) + STATUS_CHOICES
 
+        writer_choice = [(-1, 'ALL'), (-2, "Assigned"), (-3, 'Not Assigned')]
+        writers = User.objects.filter(groups__name__in=settings.WELCOMECALL_GROUP_LIST)
+        writer_list = list(writers.all().values_list('pk', 'email'))
+        writer_choice += writer_list
+
         self.fields['status'] = forms.ChoiceField(
             label=("Status:"), choices=NEWSTATUS,
             initial=-1,
@@ -163,15 +168,14 @@ class OrderFilterForm(forms.Form):
                 'placeholder': "from date - to date",
                 "readonly": True, }))
 
-        # self.assigned = forms.ChoiceField(
-        # label=("Assigned"), choices=[],
-        # required=False,
-        # initial=-1,
-        # widget=forms.Select(
-        #     attrs={'class': 'form-control'}))
+        self.fields['assigned'] = forms.ChoiceField(
+            label=("Assigned"), choices=writer_choice,
+            initial=-1,
+            widget=forms.Select(
+                attrs={'class': 'form-control'}))
 
     class Meta:
-        fields = ['status', 'payment_date', 'created', ]
+        fields = ['status', 'payment_date', 'created', 'assigned']
 
 
 class OIFilterForm(forms.Form):

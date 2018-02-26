@@ -1,7 +1,8 @@
 $(function(){
 
 	$('#action_button_go').click(function(){
-		var action_type = $('#id_action').val();		
+		var action_type = $('#id_action').val();
+        console.log(action_type);
 		if (action_type == 0){
             $('#myModalbody').html('<div class="alert alert-danger">Please select any action first.</div>');
             $('#action_welcome').hide();

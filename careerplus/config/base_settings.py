@@ -532,6 +532,9 @@ USER_QUERY_GROUP_LIST = CMS_GROUP_LIST + SKILL_GROUP_LIST + COURSE_GROUP_LIST + 
 # Marketing User Auto login token Generation
 MARKETING_GROUP_LIST = ['MARKETING']
 
+# welcome call Group List
+WELCOMECALL_GROUP_LIST = ['WELCOME_CALL']
+
 
 # Course catalogoue cache time
 COURSE_CATALOGUE_CASH_TIME = 24 * 60 * 60  # in seconds

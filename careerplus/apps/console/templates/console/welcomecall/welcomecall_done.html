@@ -19,10 +19,10 @@
   <div class="">
     <div class="page-title">
       <div class="title_left">
-        <h3>Welcome Call</h3>
+        <h3>Welcome Call Done</h3>
       </div>
 
-      <form autocomplete="off" class="form-group" method="GET" action="{% url "console:welcomecall:queue" %}" id="filter-tables">
+      <form autocomplete="off" class="form-group" method="GET" action="{% url "console:welcomecall:done" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
@@ -70,7 +70,7 @@
                   <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
                 </div>
                 <div class="modal-body">
-                  <form autocomplete="off" class="form-group" method="GET" action="{% url "console:welcomecall:queue" %}" id="list-filter-form">
+                  <form autocomplete="off" class="form-group" method="GET" action="{% url "console:welcomecall:done" %}" id="list-filter-form">
                         <div class="form-group">
                             <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.payment_date.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -131,37 +131,7 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <div class="col-sm-4">
-            <div class="input-group">
-                {{action_form.action}}
-                <span class="input-group-btn">
-                  <button type="button" class="btn btn-primary" id="action_button_go">Assign To!</button>
-                </span>
-            </div>
-            </div>
-            <!--h2>Select Comment to Change</h2-->
-            <!-- large modal -->
-
-            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="actionModal">
-                <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                      </button>
-                      <h4 class="modal-title" id="myModalLabel">Action On Welcome Call</h4>
-                    </div>
-                    <div class="modal-body" id="myModalbody">
-                      Are You Sure???
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary" id="action_welcome">Yes</button>
-                    </div>
-
-                  </div>
-                </div>
-            </div>
+            
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
               </li>
@@ -192,7 +162,7 @@
                     <th class="column-title">LTV</th>
                     <th class="column-title">Added On</th>
                     <th class="bulk-actions" colspan="100%">
-                      <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
                     </th>
                   </tr>
                 </thead>

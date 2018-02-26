@@ -366,3 +366,55 @@ REFUND_OPS_STATUS = (
     (12, "Request Updated"),
     (13, "Cancel Request"),
 )
+
+WC_CATEGORY = (
+    # 21 - 40
+    (21, 'Process Order'),
+    (22, 'Service Issue'),
+    (23, 'Call Back')
+)
+
+WC_SUB_CATEGORY1 = (
+    # 41 - 60
+    (41, 'No Issue'),
+)
+
+WC_SUB_CATEGORY2 = (
+    # 61 - 80
+    (61, 'On Hold'),
+    (62, 'Process order'),
+    (63, 'Refund'),
+    (64, 'Replacement Order'),
+)
+
+WC_SUB_CATEGORY3 = (
+    # 81 - 100
+    (81, 'No answer'),
+    (82, 'Not reachable'),
+    (83, 'User is busy'),
+)
+
+WC_SUB_CATEGORY = WC_SUB_CATEGORY1 + WC_SUB_CATEGORY2 + WC_SUB_CATEGORY3
+
+WC_FLOW_STATUS = (
+    # 0-20
+    (0, 'Default'),
+    (1, 'Assigned'),
+    (2, 'Re Allocated'),
+
+    # 21 - 40
+
+    # 41 - 60
+    (21, 'No Issue'),
+
+    # 61 - 80
+    (61, 'On Hold'),
+    (62, 'Process order'),
+    (63, 'Refund'),
+    (64, 'Replacement Order'),
+
+    # 81 - 100
+    (81, 'No answer'),
+    (82, 'Not reachable'),
+    (83, 'User is busy'),
+)
