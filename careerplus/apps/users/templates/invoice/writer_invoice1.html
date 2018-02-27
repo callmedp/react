@@ -5,27 +5,32 @@
 <title>Invoice</title>
 </head>
 <body style="margin: 0px; padding: 0px;text-rendering: optimize-speed;font-family: Arial; background-color: #fff;">
-	<table width="600px" border="0" cellspacing="0" cellpadding="0" style="font-family: Arial; font-size: 12px; color: #333; margin: 0 auto; padding: 0;background-color: #fff;">
+	<table width="800px" border="0" cellspacing="0" cellpadding="0" style="font-family: Arial; font-size: 12px; color: #333; margin: 0; padding: 0;background-color: #fff; float:left;">
+  <tbody>
 	   <tr>
 	  	<td height="20"></td>
 	  </tr>
 	  	  <tr>
       <td>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="text-transform: uppercase; border: solid 1px #000; width: 100%;margin: 0 0 0 0; padding: 0 0 0 0;">
+  <tbody>
     <tr>
       <td width="33.3%" style="padding: 0 0 0 0;width: 33.33%;margin: 0 0 0 0;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; ">invoice number - {{invoice_no}}</span></td>
       <td width="33.3%" style="padding: 0 0 0 0;width: 33.33%;margin: 0 0 0 0;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; ">invoice date - {{invoice_date|date:"d M Y"}}</span></td>
       <td width="33.3%" style="padding: 0 0 0 0;width: 33.33%;margin: 0 0 0 0;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; ">purchase order number - {{writer_po_number}}</span></td>
     </tr>
+  </tbody>
 </table>
 	</td>
     </tr>
     <tr>
       <td>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="text-transform: uppercase;  width: 100%; margin: 0 0 0 0; padding: 0 0 0 0; border: solid 1px #000;">
+  <tbody>
     <tr>
       <td colspan="3" style="margin: 0 0 0 0; padding: 0 0 0 0;">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 0 0 0 0; padding: 0 0 40px 0; width: 100%;">
+  <tbody>
     <tr>
       <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; ">To,</span></td>
       <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; ">From:</span></td>
@@ -35,20 +40,23 @@
       <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:0 0 2px 5px; ">name of writer: {{writer_name}}</span></td>
     </tr>
 	   <tr>
-      <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="margin: 0 0 0 0; padding:0 0 2px 5px;">11th Floor, Sector 30, Gurgaon, Haryana-122001</span></td>
+      <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;">11th Floor, Sector 30, Gurgaon,<br/>Haryana-122001</td>
       <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:0 0 2px 5px; ">pan of writer: {{writer_pan}}</span></td>
     </tr>
 	   <tr>
-      <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="margin: 0 0 0 0; padding:0 0 2px 5px;">Pan: AABCH3165P</span></td>
+      <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;">Pan: AABCH3165P</td>
       <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:0 0 2px 5px; ">gstin of writer: {{writer_gstin}}</span></td>
     </tr>
 	   <tr>
-      <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="margin: 0 0 0 0; padding:0 0 2px 5px;">Gst No: 06AABCH3165P2ZA</span></td>
+      <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;">Gst No: 06AABCH3165P2ZA</td>
       <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:0 0 2px 5px; ">address of writer: {{writer_address}}</span></td>
     </tr>
+  </tbody>
 </table>
+
 		</td>
       </tr>
+  </tbody>
 </table>
 	</td>
     </tr>
@@ -58,6 +66,7 @@
 	  <tr>
       <td>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border: solid 1px #000; width: 100%;margin: 0; padding: 0;">
+  <tbody>
     <tr>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">S.No</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Order Item Id</span></td>
@@ -114,7 +123,10 @@
       <td colspan="4" style="padding:0;border-right: solid 1px #000; margin:0; text-align: center;"><strong><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Total Payable</span></strong></td>
       <td colspan="2" style="padding:0; text-align: center;margin: 0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{total_payable}}</span></td>
     </tr>
+  </tbody>
 </table>
+
+	
 	</td>
     </tr>
 	  <tr>
@@ -123,17 +135,20 @@
 	  <tr>
       <td>
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="text-transform: uppercase; border: solid 1px #000;width: 100%;margin: 0; padding: 0;">
+  <tbody>
     <tr>
       <td width="33.3%" style="padding: 0;border-right: solid 1px #000;width: 33.3%;margin: 0;"><span style="display: block; margin:0; padding:5px 0 5px 5px; ">Place</span></td>
       <td width="33.3%" style="padding: 0;border-right: solid 1px #000;width: 33.3%;margin: 0;"><span style="display: block; margin:0; padding:5px 0 5px 5px; ">Date</span></td>
       <td width="33.3%" style="padding: 0; width: 33.3%;margin: 0;"><span style="display: block; margin:0; padding:5px 0 5px 5px; ">Sign</span></td>
     </tr>
+  </tbody>
 </table>
 	</td>
     </tr>
 	  <tr>
 	  	<td height="20"></td>
 	  </tr>
+  </tbody>
 </table>
 </body>
 </html>
