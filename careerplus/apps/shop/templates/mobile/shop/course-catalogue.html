@@ -5,10 +5,20 @@
 
 {% block django_meta %}
         {% include 'meta/meta.html' %}
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:domain" content="{{ SITE_DOMAIN }}">
+        <meta name="twitter:site" content="@shinelearning">
+        <meta name="twitter:title" content="{{meta_title}}">
+        <meta name="twitter:url" content="{{meta_url}}">
+        <meta name="twitter:description" content="{{meta_desc}}" />
 {%  endblock django_meta %}
+
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
+    {% endblock canonical_url %}
     
     {% block title %}
-       Courses listing
+       Online Courses and Certifications : Free Online Education
     {% endblock title %}
 
 {% block css_section %}
@@ -29,6 +39,10 @@
   <!-- Category banner Starts here -->
   <div class="course-banner">
       <div class="content text-center">
+        <ul class="breadcrumb">
+          <li><a href="/">Home</a></li>
+          <li class="active">Course Catalogue</li>
+        </ul>
         <h1 class="head">India's largest e-learning platform</h1>
         <p class="sub-haed">Join the club of 4mn learners with our partners <br />like Skillsoft, ACCA etc</p>
         <!-- <p class="callToAction"><a href="#">Why you should you buy?</a></p> -->
@@ -61,11 +75,11 @@
             <ul>
               {% with skill_list=fa.pk|get_value:course_dict %}
               {% for skill in  skill_list %}
-                <li><a href="{{skill.url}}" role="tab">{{skill.name}}</a></li>
+                <li><a title="{{skill.name}}" href="{{skill.url}}" role="tab">{{skill.name}}</a></li>
               {% endfor %}
               {% endwith %}
             </ul>
-            <p class="text-right pb-0"><a href="{{fa.url}}">View all courses</a></p>
+            <p class="text-right pb-0"><a title="View all {{fa.name}} courses" href="{{fa.url}}">View all courses</a></p>
           </div><!-- / acc_content -->
         </div><!-- / Accordin -1 -->
         {% endfor %}
@@ -88,10 +102,10 @@
           <li>
             <a class="box-shadow">
                 <span class="img-box">
-                  <img src="{{vendor.image}}" alt="" class="img-responsive">
+                  <img src="{{vendor.image}}" alt="{{vendor.name}}.png" class="img-responsive">
                 </span>
                 <p class="pb-0 row">
-                  <span class="cc_heading">{{vendor.name}}</span>
+                  <span class="cc_heading"><h3>{{vendor.name}}</h3></span>
                 </p>
             </a>
           </li>

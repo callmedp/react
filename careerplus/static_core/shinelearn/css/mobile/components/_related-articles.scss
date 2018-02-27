@@ -23,6 +23,8 @@
 
     p {
       line-height: 1.2em;
+      font-size: 14px;
+      font-weight: 600;
     }
   }
 }
@@ -30,5 +32,6 @@
 .related-article {
   .slick-initialized .slick-slide {
     width: 345px;
+    padding-right: 15px;
   }
 }

@@ -40,7 +40,7 @@ class Review(AbstractAutoDate):
         verbose_name=_("User ID"),)
 
     content = RichTextField(
-        max_length=1024,
+        max_length=1500,
         verbose_name=_('Content'),
         blank=True,
     )
@@ -65,6 +65,10 @@ class Review(AbstractAutoDate):
 
     class Meta:
         ordering = ['-created']
+        permissions = (
+            #  review queue permission
+            ("can_change_review_queue", "Can Change Review Queue"),
+        )
 
     def __str__(self):
         return '{0} - {1}'.format(self.reviewed_item, self.get_user())

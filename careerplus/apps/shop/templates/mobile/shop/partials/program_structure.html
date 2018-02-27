@@ -1,13 +1,11 @@
 {% if chapter  and chapter_list %}
-	<div class="accordion_in">
-	    <div class="acc_head">Program Structure</div>
-	    <div class="acc_content">
-	    {% for chapter in chapter_list  %}
-	        <p>
-	        	<strong>{{chapter.heading}}</strong><br>
-	        	{{chapter.content|safe}}
-	        </p>
-	    {% endfor %}
-	    </div>
+	<div class="acc_head">Program Structure</div>
+	<div class="acc_content">
+	{% for chapter in chapter_list  %}
+	    <p>
+	    	<strong>{{chapter.heading}}</strong><br>
+	    	{{chapter.content|safe}}
+	    </p>
+	{% endfor %}
 	</div>
 {% endif %}

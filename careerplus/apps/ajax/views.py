@@ -426,6 +426,7 @@ class SaveWaitingInput(View):
         if request.is_ajax() and request.user.is_authenticated():
             data = {"message": "Waiting input Not Updated"}
             oi_pk = request.POST.get('oi_pk', None)
+            msg = request.POST.get('inputmsg', None)
             waiting_input = request.POST.get('waiting_input', None)
             try:
                 obj = OrderItem.objects.get(pk=oi_pk)
@@ -434,6 +435,22 @@ class SaveWaitingInput(View):
                 else:
                     obj.waiting_for_input = False
                 obj.save()
+                obj.message_set.create(
+                    message=msg,
+                    added_by=request.user
+                )
+                if obj.waiting_for_input:
+                    obj.orderitemoperation_set.create(
+                        oi_status=181,
+                        last_oi_status=obj.oi_status,
+                        added_by=request.user
+                    )
+                elif not obj.waiting_for_input:
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=181,
+                        added_by=request.user
+                    )
                 data['message'] = 'Waiting Input Updated Successfully.'
             except Exception as e:
                 data['message'] = str(e)
@@ -636,6 +653,7 @@ class MarkedPaidOrderView(View):
 
                     # send email through process mailers
                     process_mailer.apply_async((obj.pk,), countdown=900)
+                    # process_mailer(obj.pk)
 
                     # roundone order
                     roundone_product(order=obj)

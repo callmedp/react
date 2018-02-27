@@ -34,8 +34,9 @@ RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 error_log = logging.getLogger('error_log')
 redis_conn = get_redis_connection("search_lookup")
 
+
 class SearchBaseView(TemplateView):
-    template_name = 'search/search.html'
+    # template_name = 'search/search.html'
     ajax_template_name = 'search/ajax/search_listing.html'
     allow_empty_query = False
     extra_context = {}
@@ -69,6 +70,11 @@ class SearchBaseView(TemplateView):
             raise ImproperlyConfigured("'%s' must define params_class" % self.__class__.__name__)
 
         return self.params_class
+
+    def get_template_names(self):
+        if self.request.amp:
+             return ["search/search-amp.html"]
+        return ["search/search.html"]
 
     def get_search_params(self):
         self.params_class_obj = self.params_class()
@@ -264,7 +270,8 @@ class SearchBaseView(TemplateView):
                 'has_next': page.has_next()
             }), content_type='application/json')
         else:
-            return render(self.request, self.template_name, context)
+            return render(self.request, self.get_template_names(), context)
+
 
     def set_form_attributes_in_context(self,context):
         """

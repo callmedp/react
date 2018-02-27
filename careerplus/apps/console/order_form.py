@@ -375,6 +375,14 @@ class ReviewFilterForm(forms.Form):
             'class': 'form-control col-md-7 col-xs-12',
             'required': True}))
 
+    created = forms.CharField(
+        label=("Added On:"), required=False,
+        initial='',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control date-range-picker',
+            'placeholder': "from date - to date",
+            "readonly": True, }))
+
 
 class ReviewUpdateForm(forms.ModelForm):
 
@@ -388,9 +396,19 @@ class ReviewUpdateForm(forms.ModelForm):
             'class': 'form-control col-md-7 col-xs-12',
             'required': True}))
 
+    reviewed_item = forms.CharField(
+        label=("Product Name*:"), max_length=200,
+        required=True, widget=forms.TextInput(
+            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    created = forms.CharField(
+        label=("Created Date:"), required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-7 col-xs-12'}))
+
     class Meta:
         model = Review
-        fields = ['content_type', 'user_email', 'content', 'average_rating', 'status']
+        exclude = ['extra_content_type', 'extra_object_id', 'extra_item', 'object_id', 'user_name', 'user_id']
 
     def __init__(self, *args, **kwargs):
         super(ReviewUpdateForm, self).__init__(*args, **kwargs)
@@ -398,5 +416,8 @@ class ReviewUpdateForm(forms.ModelForm):
         obj = kwargs.get('instance')
         self.initial['content'] = strip_tags(obj.content)
         self.fields['content_type'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
+        self.initial['reviewed_item'] = '{}'.format(obj.reviewed_item)
+        self.fields['reviewed_item'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
         self.fields['user_email'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
+        self.initial['created'] = obj.created.strftime("%b. %e, %Y %H:%I %P")
         self.fields['average_rating'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'

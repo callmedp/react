@@ -62,7 +62,9 @@
       	<table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
           <tbody>
           <tr>
-            <td style="font-size:14px; color:#333; padding-bottom:10px;"><span>For  <a href="#" style="text-decoration: none; color: #2196f3">{{product_name}}</a></span>
+            <td style="font-size:14px; color:#333; padding-bottom:10px;">
+            <span>For  <a href="{{product_url}}" style="text-decoration: none; color: #2196f3">
+            {% if parent_name %} {{parent_name}} ({{product_name}}) {% else %} {{product_name}} {% endif %}</a></span>
             <p align="center" style="margin: 0px;padding:7px 0;border-bottom: solid 2px #dadada;"></p>
             </td>
           </tr>
@@ -88,8 +90,9 @@
         <table width="100%" border="0" cellspacing="0" cellpadding="0" style="padding:15px 10px; background-color: #fff;">
           <tbody>
             <tr>
-              <td style="font-size:14px; color:#333; padding-bottom:10px;"><span>For  <a href="{{product_url}}" style="text-decoration: none; color: #2196f3">
-              {{product_name}}</a></span>
+              <td style="font-size:14px; color:#333; padding-bottom:10px;"><span>
+              For  <a href="{{product_url}}" style="text-decoration: none; color: #2196f3">
+              {% if parent_name %} {{parent_name}} {% endif %} ({{product_name}})</a></span>
               <p align="center" style="margin: 0px;padding:7px 0;border-bottom: solid 2px #dadada;"></p>
               </td>
             </tr>
