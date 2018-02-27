@@ -646,9 +646,9 @@ class WriterInvoiceMixin(object):
         return data
 
     def save_writer_invoice_pdf(self, user=None, invoice_date=None):
-        error = ""
-        data = {"error": error}
-        try:
+            error = ""
+            data = {"error": error}
+        #try:
             if not user:
                 try:
                     user = self.request.user
@@ -693,12 +693,12 @@ class WriterInvoiceMixin(object):
             elif not error and not item_list:
                 error = 'No invoice for last month(no item is closed)'
 
-        except Exception as e:
-            error = 'something went wrong, try again later.'
-            logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
-        if error:
-            data.update({"error": error, })
-        return data
+        # except Exception as e:
+        #     error = 'something went wrong, try again later.'
+        #     logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+            if error:
+                data.update({"error": error, })
+            return data
 
 
 class RegistrationLoginApi(object):
