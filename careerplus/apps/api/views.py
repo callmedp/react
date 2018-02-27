@@ -178,6 +178,11 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                 if prd.type_flow == 8:  # Linkedin Orders Resume required status
                                     oi.oi_status = 2
                                 oi.upc = str(order.pk) + "_" + str(oi.pk)
+                                cost_price = oi.product.get_price()
+                                oi.cost_price = cost_price
+                                oi.selling_price = 0
+                                oi.tax_amount = 0
+                                oi.discount_amount = 0
                                 oi.save()
 
                         elif variations:
@@ -194,6 +199,12 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                         p_oi.tax_amount = tax_amount
                         p_oi.discount_amount = discount
                         p_oi.save()
+
+                        if variations and p_oi.product.product_class.slug == 'course':
+                            p_oi.selling_price = 0
+                            p_oi.tax_amount = 0
+                            p_oi.discount_amount = 0
+                            p_oi.save()
 
                         for var in variations:
                             prd = Product.objects.get(id=var.get('id'))
