@@ -8,53 +8,11 @@ import json
 import re
 from django.core.management.base import BaseCommand
 
-csvfile = open('/tmp/report_10.csv','w')
-filter_processes = Q(no_process=False)|Q(Q(is_combo=True)|~Q(product__product_class__slug__in=settings.COURSE_SLUG)&Q(no_process=True))
-writer=csv.writer(csvfile, delimiter=';')
-writer.writerow(['Order Id','Customer Email','Vendor','Created Date','Payment Date','Sales Agent','Sales Team Lead',
-'Sales Branch Head','Transactions','Order Item ID','Product Category','Product Name','Status',
-'Order Price before Coupons incl Tax','Amount Payable','Discount Percent','Item Selling Price',
-'Product Site Price', 'Item Effective Price', 'Transaction Amounts',
-'Coupon Codes','Payment Modes','Coupon Values'])
-for oi in OrderItem.objects.filter(order__payment_date__gte=timezone.datetime(2018,1,1),
-order__payment_date__lte=datetime.datetime(2018,1,31),order__status__in=[1,2,3,4]).filter(filter_processes):
 
-    a = reduce(lambda x,y: x + y,[x.selling_price+x.delivery_price_incl_tax for x in oi.order.orderitems.filter(filter_processes)])
-    b = oi.order.total_incl_tax
-    c = re.sub("'","\"",oi.order.sales_user_info)
-    if c:
-        c = json.loads(c)
-    d = round((a - b)*100/a, 2) if a else 0
-    e = [
-    oi.order.id,
-    oi.order.email,
-    oi.partner.name if oi.partner else '',
-    oi.order.created,
-    oi.order.payment_date,
-    oi.order.crm_sales_id,
-    c['team_lead'] if c else '',
-    c['branch_head'] if c else '',
-    ', '.join([tx.txn for tx in oi.order.get_txns()]),
-    oi.id,
-    oi.product.get_type_flow_display(),
-    oi.product.name,
-    oi.order.get_status_display(),
-    a,
-    b,
-    d,
-    oi.selling_price,
-    oi.cost_price,
-    (100-d)*oi.selling_price/100,
-    ', '.join([str(tx.txn_amount) for tx in oi.order.get_txns()]),
-    ', '.join([str(o.coupon_code) for o in oi.order.couponorder_set.all()]),
-    ', '.join([tx.get_payment_mode_display() for tx in oi.order.get_txns()]),
-    ', '.join([str(o.value) for o in oi.order.couponorder_set.all()])
-    ]
-    writer.writerow(e)
-
-def get_selling_price(order_item):
+def get_selling_price(oi):
     if oi.is_combo and not oi.no_process:
-        return oi.cost_price*oi.parent.selling_price/oi.parent.cost_price
+        return oi.cost_price*oi.parent.selling_price/(
+            sum(oi.parent.orderitem_set.filter(no_process=False, is_combo=True).values_list('cost_price')))
     else:
         return oi.selling_price
 
@@ -66,15 +24,15 @@ class Command(BaseCommand):
         parser.add_argument('end_date', nargs='+', type=str)
 
     def handle(self, *args, **options):
-        start_date = datetime.datetime.strptime(options['start_date'], '%d/%m/%Y')
-        end_date = datetime.datetime.strptime(options['end_date'], '%d/%m/%Y')
+        start_date = datetime.datetime.strptime(options['start_date'][0], '%d/%m/%Y')
+        end_date = datetime.datetime.strptime(options['end_date'][0], '%d/%m/%Y')
         csvfile = open('/tmp/report_finance.csv','w')
         filter_processes = Q(no_process=False)|Q(Q(is_combo=True)|~Q(product__product_class__slug__in=settings.COURSE_SLUG)&Q(no_process=True))
         writer=csv.writer(csvfile, delimiter=';')
 
         writer.writerow([
             'Order_Id','Email','Owner_name','Order_Date','Payment_Date','Sales_executive','Sales_TL', 'Branch_Head',
-            'Transaction_ID', 'Item_Id', 'Item_Category', 'Product Name', 'Status',
+            'Transaction_ID', 'Item_Id', 'Item_Category', 'Product Name', 'Item Name','Status',
             'Price of item on site according to order (without tax including context)', 'Discount (includes wallet and coupon)',
             'Price of order with no discount/wallet', 'Actual collection of order', 'Effective collection per item',
             'Price of item on site ', 'Transaction_Amount', 'Coupon_Code', 'Payment_mode'])
@@ -84,7 +42,7 @@ class Command(BaseCommand):
         order__payment_date__lte=end_date,order__status__in=[1,2,3,4]).filter(filter_processes):
 
             discounts = reduce(lambda x, y: x + y, [x.discount_amount for x in oi.order.orderitems.all()])
-            fictitious_collection_with_no_discounts = ((oi.order.total_incl_tax/1.18)+discounts)*1.18
+            fictitious_collection_with_no_discounts = ((oi.order.total_incl_tax/Decimal(1.18))+discounts)*1.18
             collection_after_discounts = oi.order.total_incl_tax
             c = re.sub("'", "\"", oi.order.sales_user_info)
             if c:
@@ -102,6 +60,7 @@ class Command(BaseCommand):
                 oi.id,
                 oi.product.get_type_flow_display(),
                 oi.product.name,
+                oi.parent.product.name if oi.parent else oi.product.name,
                 oi.order.get_status_display(),
                 oi.cost_price if not (oi.is_combo and not oi.no_process) else 0,
                 discounts,
@@ -109,9 +68,9 @@ class Command(BaseCommand):
                 collection_after_discounts,
                 get_selling_price(oi),
                 oi.cost_price,
-                ', '.join([str(tx.txn_amount) for tx in oi.order.get_txns()]),
-                ', '.join([str(o.coupon_code) for o in oi.order.couponorder_set.all()]),
-                ', '.join([tx.get_payment_mode_display() for tx in oi.order.get_txns()])
+                '| '.join([str(tx.txn_amount) for tx in oi.order.get_txns()]),
+                '| '.join([str(o.coupon_code) for o in oi.order.couponorder_set.all()]),
+                '| '.join([tx.get_payment_mode_display() for tx in oi.order.get_txns()])
             ]
             writer.writerow(e)
 

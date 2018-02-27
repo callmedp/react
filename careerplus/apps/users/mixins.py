@@ -285,7 +285,7 @@ class WriterInvoiceMixin(object):
                         if finish_days <= REGULAR_SLA:
                             success_closure += 1
 
-                if oi.order.payment_date.date() < order_before:
+                if oi.created.date() < order_before:
                     oi_dict = {}
                     oi_dict.update({
                         "item_id": oi.pk,
