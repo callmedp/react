@@ -138,10 +138,10 @@
                           </td>
                           <td>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <select class="form-control" id="id-subcategory{{oi.pk}}" name="subcategory{{oi.pk}}" required>
+                              <select class="form-control sub_cat_item" id="id-subcategory{{oi.pk}}" name="subcategory{{oi.pk}}" required>
                                 <option value="">Select SubCategory</option>
                                 {% for key, value in sub_cat2_dict.items %}
-                                    <option value="{{key}}">{{value}}</option>
+                                  <option value="{{key}}">{{value}}</option>
                                 {% endfor %}
                               </select>
                               <span class="error"></span>
@@ -164,7 +164,7 @@
                     {% endfor %}
                   </select>
               </div>
-              <div class="col-md-6 col-xs-12" id="id-subcat-div">
+              <div class="col-md-6 col-xs-12">
                   <label for="subcat">Sub Category:</label>
                   <select id="id-subcat" required="required" name="subcat" class="form-control">
                     <option value="">Select Sub Category</option>
@@ -179,11 +179,14 @@
                 {% endfor %}
               </select>
 
-              <select id="sub_cat2"class="form-control">
-                        
-              {% for key , value in sub_cat2_dict.items %}
-                  <option value="{{key}}">{{value}}</option>
-              {% endfor %}
+              <select id="sub_cat2"class="form-control">    
+                <option value="61">Service Issue</option>
+              </select>
+
+              <select id="sub_cat_service"class="form-control">    
+                {% for key , value in sub_cat2_dict.items %}
+                    <option value="{{key}}">{{value}}</option>
+                {% endfor %}
               </select>
 
               <select id="sub_cat3"class="form-control">
