@@ -8,8 +8,11 @@ from django.urls import reverse
 from django.db.models import Q
 from django.conf import settings
 from django.core.paginator import Paginator
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
+from django.http import (
+    HttpResponseRedirect,
+    Http404)
 from django.contrib.auth import get_user_model
+from django.core.exceptions import PermissionDenied
 
 
 from order.models import Order
@@ -19,16 +22,23 @@ from console.decorators import (
     stop_browser_cache,
     check_group
 )
-
+from core.mixins import InvoiceGenerate
 from console.welcome_form import (
-    WelcomeCallActionForm, WelcomeCallAssignedForm)
+    WelcomeCallAssignedForm)
 from console.tasks import mock_welcomecall_assignment
 from console.order_form import (
     OrderFilterForm,
 )
+from order.choices import (
+    WC_CATEGORY, WC_SUB_CATEGORY1,
+    WC_SUB_CATEGORY2, WC_SUB_CATEGORY3
+)
+
+User = get_user_model()
 
 
 @Decorate(stop_browser_cache())
+@Decorate(check_group([settings.OPS_HEAD_GROUP_LIST]))
 class WelcomeQueueView(ListView, PaginationMixin):
     context_object_name = 'object_list'
     template_name = 'console/welcomecall/welcome-queue.html'
@@ -53,13 +63,29 @@ class WelcomeQueueView(ListView, PaginationMixin):
     def post(self, request, *args, **kwargs):
         try:
             order_list = request.POST.getlist('table_records', [])
-            action_type = int(request.POST.get('action_type', '0'))
-            order_objs = Order.objects.filter(id__in=order_list)
-            if not action_type:
+            user = int(request.POST.get('action_type', '0'))
+            order_objs = Order.objects.filter(
+                id__in=order_list, welcome_call_done=False)
+            try:
+                user = User.objects.get(
+                    pk=user,
+                    groups__name__in=settings.WELCOMECALL_GROUP_LIST,
+                    is_active=True)
+                for order in order_objs:
+                    op_status = 1
+                    if order.assigned_to:
+                        op_status = 2
+                    order.assigned_to = user
+                    order.save()
+                    order.welcomecalloperation_set.create(
+                        wc_cat=order.wc_cat,
+                        wc_sub_cat=order.wc_cat,
+                        wc_status=op_status,
+                        assigned_to=order.assigned_to
+                    )
+                messages.add_message(request, messages.SUCCESS, str(len(order_objs)) + ' orders are assigned successfully.')
+            except:
                 messages.add_message(request, messages.ERROR, 'Please select valid action first')
-            elif action_type == 1:
-                
-                messages.add_message(request, messages.SUCCESS, str(len(order_objs)) + ' welcome calls are done.')
         except Exception as e:
             messages.add_message(request, messages.ERROR, str(e))
 
@@ -473,3 +499,95 @@ class WelcomeCallDoneView(ListView, PaginationMixin):
             pass
 
         return queryset.order_by('-modified')
+
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.WELCOMECALL_GROUP_LIST + settings.OPS_HEAD_GROUP_LIST]))
+class WelcomeCallUpdateView(DetailView):
+    model = Order
+    template_name = "console/welcomecall/wc_detail.html"
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get('pk')
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        if pk is not None:
+            queryset = queryset.filter(pk=pk)
+        try:
+            obj = queryset.get()
+            user = self.request.user
+            if obj.assigned_to == user:
+                pass
+            else:
+                raise PermissionDenied
+        except:
+            raise Http404
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = super(WelcomeCallUpdateView, self).get(request, *args, **kwargs)
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(WelcomeCallUpdateView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        order = self.get_object()
+
+        order_items = InvoiceGenerate().get_order_item_list(
+            order=order)
+
+        wc_items = []
+        for data in order_items:
+            data_dict = {}
+            oi = data.get('oi')
+            addons = data.get('addons')
+            variations = data.get('variations')
+            combos = data.get('combos')
+            if oi.product.is_course and variations:
+                data_dict = {
+                    "oi": variations.first(),
+                    "combos": [],
+                }
+                wc_items.append(data_dict)
+                for addon in addons:
+                    data_dict = {
+                        "oi": addon,
+                        "combos": [],
+                    }
+                    wc_items.append(data_dict)
+
+            else:
+                data_dict = {
+                    "oi": oi,
+                    "combos": combos,
+                }
+                wc_items.append(data_dict)
+                for var in variations:
+                    data_dict = {
+                        "oi": var,
+                        "combos": [],
+                    }
+                    wc_items.append(data_dict)
+                for addon in addons:
+                    data_dict = {
+                        "oi": addon,
+                        "combos": [],
+                    }
+                    wc_items.append(data_dict)
+
+        cat_dict = dict(WC_CATEGORY)
+        sub_cat1_dict = dict(WC_SUB_CATEGORY1)
+        sub_cat2_dict = dict(WC_SUB_CATEGORY2)
+        sub_cat3_dict = dict(WC_SUB_CATEGORY3)
+        context.update({
+            "order": order,
+            "orderitems": wc_items,
+            "messages": alert,
+            "cat_dict": cat_dict,
+            "sub_cat1_dict": sub_cat1_dict,
+            "sub_cat2_dict": sub_cat2_dict,
+            "sub_cat3_dict": sub_cat3_dict
+        })
+        return context

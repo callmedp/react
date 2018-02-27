@@ -58,9 +58,39 @@ $(function(){
 	            $('#actionModal').modal("show");
             } 
         }
-        
+    });
 
-      
+
+    $(document).on('change', '#id-cat', function(){
+        var select = $('#id-subcat');
+        select.empty();
+        select.append("<option value='-1'>Select SubCategory</option>");
+        var parent = $(this).val(); 
+        switch(parent){ 
+            case '21':{
+                $("#sub_cat1 option").each(function()
+                {
+                    select.append("<option value="+ $(this).val()+ ">" + $(this).text() + "</option>");
+                });
+                break;
+            }
+            case '22':{
+                $("#sub_cat2 option").each(function()
+                {
+                    select.append("<option value="+ $(this).val()+ ">" + $(this).text() + "</option>");
+                });
+                break;
+            }
+            case '23':{
+                $("#sub_cat3 option").each(function()
+                {
+                    select.append("<option value="+ $(this).val()+ ">" + $(this).text() + "</option>");
+                });
+                break;
+            }  
+            default: //default child option is blank
+                break;
+            }
     });
 
 });

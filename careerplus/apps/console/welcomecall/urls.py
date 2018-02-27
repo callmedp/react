@@ -13,4 +13,8 @@ urlpatterns = [
         name='service-issue'),
     url(r'^done/$', views.WelcomeCallDoneView.as_view(),
         name='done'),
+
+    url(r'^update/(?P<pk>\d+)/$',
+        views.WelcomeCallUpdateView.as_view(),
+        name='update'),
 ]

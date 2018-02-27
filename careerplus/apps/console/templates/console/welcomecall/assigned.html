@@ -140,8 +140,8 @@
                     <th class="column-title">Name</th>
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
-                    <th class="column-title">Detail Info</th>
-                    <th class="column-title">Transactions</th>
+                    <th class="column-title">Update Welcome Call</th>
+                    <th class="column-title">Detail order</th>
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">LTV</th>
                     <th class="column-title">Added On</th>
@@ -161,8 +161,10 @@
                       <td>{{obj.first_name}} {{obj.last_name}}</td>
                       <td>{{obj.email}}</td>
                       <td>{{obj.country_code}} {{obj.mobile}}</td>
+
+                      <td><a target="_blank" href="{% url "console:welcomecall:update" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-edit"></i>Update Wc</button></a></td>
+
                       <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
-                      <td><a href="">Detail Txns</a></td>
                       <td>{{obj.payment_date}}</td>
                       <td><span class="ltv-value" data-pk="{{obj.pk}}">Loading..</span></td>
                       <td>{{obj.created}}</td>
