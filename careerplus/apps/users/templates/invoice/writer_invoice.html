@@ -1,7 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Invoice</title>
 </head>
 <body style="margin: 0px; padding: 0px;text-rendering: optimize-speed;font-family: Arial; background-color: #fff;">
@@ -10,41 +10,41 @@
 	  	<td height="20"></td>
 	  </tr>
 	  	  <tr>
-      <td>
+      <td valign="top" >
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="text-transform: uppercase; border: solid 1px #000; width: 100%;margin: 0 0 0 0; padding: 0 0 0 0;">
     <tr>
-      <td width="33.3%" style="padding: 0 0 0 0;width: 33.33%;margin: 0 0 0 0;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; ">invoice number - {{invoice_no}}</span></td>
-      <td width="33.3%" style="padding: 0 0 0 0;width: 33.33%;margin: 0 0 0 0;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; ">invoice date - {{invoice_date|date:"d M Y"}}</span></td>
-      <td width="33.3%" style="padding: 0 0 0 0;width: 33.33%;margin: 0 0 0 0;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; ">purchase order number - {{writer_po_number}}</span></td>
+      <td valign="top"  width="33.3%" style="padding: 0 0 0 0;width: 33.33%;margin: 0 0 0 0; "><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px;word-wrap: break-word;">invoice number - {{invoice_no}}</span></td>
+      <td valign="top"  width="33.3%" style="padding: 0 0 0 0;width: 33.33%;margin: 0 0 0 0;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; word-wrap: break-word;">invoice date - {{invoice_date|date:"d M Y"}}</span></td>
+      <td valign="top"  width="33.3%" style="padding: 0 0 0 0;width: 33.33%;margin: 0 0 0 0;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; word-wrap: break-word;">purchase order number - {{writer_po_number}}</span></td>
     </tr>
 </table>
 	</td>
     </tr>
     <tr>
-      <td>
+      <td valign="top" >
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="text-transform: uppercase;  width: 100%; margin: 0 0 0 0; padding: 0 0 0 0; border: solid 1px #000;">
     <tr>
-      <td colspan="3" style="margin: 0 0 0 0; padding: 0 0 0 0;">
+      <td valign="top"  colspan="3" style="margin: 0 0 0 0; padding: 0 0 0 0;">
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 0 0 0 0; padding: 0 0 40px 0; width: 100%;">
     <tr>
-      <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; ">To,</span></td>
-      <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; ">From:</span></td>
+      <td valign="top"  width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; word-wrap: break-word;">To,</span></td>
+      <td valign="top"  width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; word-wrap: break-word;">From:</span></td>
     </tr>
 	  <tr>
-      <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:0 0 2px 5px; ">HT Media Ltd., Park Centra Building,</span></td>
-      <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:0 0 2px 5px; ">name of writer: {{writer_name}}</span></td>
+      <td valign="top"  width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:0 0 2px 5px; word-wrap: break-word;">HT Media Ltd., Park Centra Building,</span></td>
+      <td valign="top"  width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:0 0 2px 5px; word-wrap: break-word;">name of writer: {{writer_name}}</span></td>
     </tr>
 	   <tr>
-      <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="margin: 0 0 0 0; padding:0 0 2px 5px;">11th Floor, Sector 30, Gurgaon, Haryana-122001</span></td>
-      <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:0 0 2px 5px; ">pan of writer: {{writer_pan}}</span></td>
+      <td valign="top"  width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="margin: 0 0 0 0; padding:0 0 2px 5px;word-wrap: break-word;">11th Floor, Sector 30, Gurgaon, Haryana-122001</span></td>
+      <td valign="top"  width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:0 0 2px 5px; word-wrap: break-word;">pan of writer: {{writer_pan}}</span></td>
     </tr>
 	   <tr>
-      <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="margin: 0 0 0 0; padding:0 0 2px 5px;">Pan: AABCH3165P</span></td>
-      <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:0 0 2px 5px; ">gstin of writer: {{writer_gstin}}</span></td>
+      <td valign="top"  width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="margin: 0 0 0 0; padding:0 0 2px 5px;word-wrap: break-word;">Pan: AABCH3165P</span></td>
+      <td  valign="top" width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:0 0 2px 5px; word-wrap: break-word;">gstin of writer: {{writer_gstin}}</span></td>
     </tr>
 	   <tr>
-      <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="margin: 0 0 0 0; padding:0 0 2px 5px;">Gst No: 06AABCH3165P2ZA</span></td>
-      <td width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:0 0 2px 5px; ">address of writer: {{writer_address}}</span></td>
+      <td  valign="top" width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="margin: 0 0 0 0; padding:0 0 2px 5px;word-wrap: break-word;">Gst No: 06AABCH3165P2ZA</span></td>
+      <td valign="top"  width="50%" style="padding: 0 0 0 0;margin: 0 0 0 0; width: 50%;"><span style="display: block; margin: 0 0 0 0; padding:0 0 2px 5px; word-wrap: break-word;">address of writer: {{writer_address}}</span></td>
     </tr>
 </table>
 		</td>
@@ -56,42 +56,42 @@
 	  	<td height="20"></td>
 	  </tr>
 	  <tr>
-      <td>
+      <td valign="top" >
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border: solid 1px #000; width: 100%;margin: 0; padding: 0;">
     <tr>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">S.No</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Order Item Id</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Product Name</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Closure Date</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Combo Discount</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;margin: 0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Amount</span></td>
+      <td width="10%" valign="top"  style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">S.No</span></td>
+      <td width="15%" valign="top"  style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">Order Item Id</span></td>
+      <td width="30%" valign="top"  style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">Product Name</span></td>
+      <td width="15%" valign="top"  style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">Closure Date</span></td>
+      <td width="15%"   valign="top" style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">Combo Discount</span></td>
+      <td width="15%"  valign="top"  style="padding:0;border-bottom: solid 1px #000;margin: 0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">Amount</span></td>
     </tr>
     {% for oi in item_list %}
     <tr>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{forloop.counter}}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;">{% if oi.item_type == 'older' %}<span style="color:red; float:left;">* </span>{% endif %}<span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.item_id}}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.product_name}}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.closed_on|date:"d M Y"}}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"> <span style="display: block; margin:0; padding:3px 0 3px 5px; ">-{% if oi.combo_discount %} {{oi.combo_discount}}{% endif %}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;margin: 0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.amount}}</span></td>
+      <td width="10%" valign="top"  style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">{{forloop.counter}}</span></td>
+      <td width="15%" valign="top"  style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;">{% if oi.item_type == 'older' %}<span style="color:red;">* </span>{% endif %}<span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">{{oi.item_id}}</span></td>
+      <td width="30%" valign="top"  style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">{{oi.product_name}}</span></td>
+      <td width="15%"  valign="top"  style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">{{oi.closed_on|date:"d M Y"}}</span></td>
+      <td width="15%"  valign="top"  style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"> <span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">-{% if oi.combo_discount %} {{oi.combo_discount}}{% endif %}</span></td>
+      <td width="15%"  valign="top"  style="padding:0;border-bottom: solid 1px #000;margin: 0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">{{oi.amount}}</span></td>
     </tr>
     {% endfor %}
 
     <tr>
-      <td colspan="4" style="padding:0;text-align: center; border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; "><strong>Sub Total</strong></span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">-{% if total_combo_discount%} {{total_combo_discount}}{% endif %}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;margin: 0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{sub_total}}</span></td>
+      <td width="70%" valign="top"  colspan="4" style="padding:0;text-align: center; border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;"><strong>Sub Total</strong></span></td>
+      <td width="15%" valign="top"  style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">-{% if total_combo_discount%} {{total_combo_discount}}{% endif %}</span></td>
+      <td width="15%" valign="top"  style="padding:0;border-bottom: solid 1px #000;margin: 0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">{{sub_total}}</span></td>
     </tr>
     {% if incentive or penalty %}
     <tr>
-      <td colspan="4" style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0; text-align: center;"><strong><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Total</span></strong></td>
-      <td colspan="2" style="padding:0; border-bottom: solid 1px #000; text-align: center;margin: 0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{total}}</span></td>
+      <td width="70%" valign="top"  colspan="4" style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0; text-align: center;"><strong><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">Total</span></strong></td>
+      <td width="30%" valign="top"  colspan="2" style="padding:0; border-bottom: solid 1px #000; text-align: center;margin: 0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">{{total}}</span></td>
     </tr>
     {% endif %}
     {% if incentive or penalty %}
     <tr>
-      <td colspan="4" style="padding:0; border-bottom: solid 1px #000; border-right: solid 1px #000; margin:0; text-align: center;"><strong>
-        <span style="display: block; margin:0; padding:3px 0 3px 5px; ">
+      <td valign="top"  colspan="4" style="padding:0; border-bottom: solid 1px #000; border-right: solid 1px #000; margin:0; text-align: center;"><strong>
+        <span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">
           {% if incentive %}
             Incentive @ {{incentive_per}}%
           {% elif penalty %}
@@ -99,8 +99,8 @@
           {%endif%}
         </span></strong>
       </td>
-      <td colspan="2" style="padding:0; border-bottom: solid 1px #000; text-align: center;margin: 0;">
-        <span style="display: block; margin:0; padding:3px 0 3px 5px; ">
+      <td valign="top"  colspan="2" style="padding:0; border-bottom: solid 1px #000; text-align: center;margin: 0;">
+        <span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">
           {% if incentive %}
             + {{incentive}}
           {% elif penalty %}
@@ -111,8 +111,8 @@
     </tr>
     {% endif %}
     <tr>
-      <td colspan="4" style="padding:0;border-right: solid 1px #000; margin:0; text-align: center;"><strong><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Total Payable</span></strong></td>
-      <td colspan="2" style="padding:0; text-align: center;margin: 0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{total_payable}}</span></td>
+      <td valign="top"  colspan="4" style="padding:0;border-right: solid 1px #000; margin:0; text-align: center;"><strong><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">Total Payable</span></strong></td>
+      <td valign="top"  colspan="2" style="padding:0; text-align: center;margin: 0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; word-wrap: break-word;">{{total_payable}}</span></td>
     </tr>
 </table>
 	</td>
@@ -121,12 +121,12 @@
 	  	<td height="20"></td>
 	  </tr>
 	  <tr>
-      <td>
+      <td valign="top" >
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="text-transform: uppercase; border: solid 1px #000;width: 100%;margin: 0; padding: 0;">
     <tr>
-      <td width="33.3%" style="padding: 0;border-right: solid 1px #000;width: 33.3%;margin: 0;"><span style="display: block; margin:0; padding:5px 0 5px 5px; ">Place</span></td>
-      <td width="33.3%" style="padding: 0;border-right: solid 1px #000;width: 33.3%;margin: 0;"><span style="display: block; margin:0; padding:5px 0 5px 5px; ">Date</span></td>
-      <td width="33.3%" style="padding: 0; width: 33.3%;margin: 0;"><span style="display: block; margin:0; padding:5px 0 5px 5px; ">Sign</span></td>
+      <td valign="top"  width="33.3%" style="padding: 0;border-right: solid 1px #000;width: 33.3%;margin: 0;"><span style="display: block; margin:0; padding:5px 0 5px 5px; word-wrap: break-word;">Place</span></td>
+      <td valign="top"  width="33.3%" style="padding: 0;border-right: solid 1px #000;width: 33.3%;margin: 0;"><span style="display: block; margin:0; padding:5px 0 5px 5px; word-wrap: break-word;">Date</span></td>
+      <td valign="top"  width="33.3%" style="padding: 0; width: 33.3%;margin: 0;"><span style="display: block; margin:0; padding:5px 0 5px 5px; word-wrap: break-word;">Sign</span></td>
     </tr>
 </table>
 	</td>
