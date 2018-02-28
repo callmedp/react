@@ -39,8 +39,8 @@ META_FB_PROFILE_ID = '282244838633660'
 SHINE_API_USER = 'scpapiuser@gmail.com'
 SHINE_API_USER_PWD = 'tarun@123'
 SHINE_API_TIMEOUT = 60
-SHINE_SITE = 'https://www.shine.com'
-SHINE_API_URL = 'https://mapi.shine.com/api/v2'
+SHINE_SITE = 'https://gcp-www.shine.com'
+SHINE_API_URL = 'https://gcp-www.shine.com/api/v2'
 CLIENT_ACCESS_KEY = 'ZiHCJeTKh4EppsrOEHXIQPd2OKvV4JWrlKql0Y1JONE'
 CLIENT_ACCESS_SECRET = 'QdEhIXFmhlHQdveZB1h9u9xxnfvFleET6bNUPlKYwU4'
 
@@ -203,7 +203,7 @@ ROUNDONE_API_DICT = {
 
 #### CRM SETTINGS CRONS #################
 SHINECPCRM_DICT = {
-    'base_url': 'http://shinecpcrm.shine.com',
+    'base_url': 'http://gcp-shinecpcrm.shine.com',
     'token': '73f53cf358b94156feb49d034081ed507334e02a',
     'create_lead_url': '/api/v1/create-lead/',
     'timeout': 8,
