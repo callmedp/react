@@ -125,7 +125,7 @@ $(function(){
                 $(".sub_cat_item").each(function() {
                     var select = $(this);
                     select.empty();
-                    select.append("<option value="+ parent_this.val()+ ">" + parent_this.text() + "</option>");
+                    select.append("<option value="+ parent_this.val()+ ">" + parent_this.find('option:selected').text() + "</option>");
                 });
                 break;
             } 
@@ -133,7 +133,7 @@ $(function(){
                 $(".sub_cat_item").each(function() {
                     var select = $(this);
                     select.empty();
-                    select.append("<option value="+ parent_this.val()+ ">" + parent_this.text() + "</option>");
+                    select.append("<option value="+ parent_this.val()+ ">" + parent_this.find('option:selected').text() + "</option>");
                 });
                 break;
             }
@@ -141,7 +141,7 @@ $(function(){
                 $(".sub_cat_item").each(function() {
                     var select = $(this);
                     select.empty();
-                    select.append("<option value="+ parent_this.val()+ ">" + parent_this.text() + "</option>");
+                    select.append("<option value="+ parent_this.val()+ ">" + parent_this.find('option:selected').text() + "</option>");
                 });
                 break;
             } 
@@ -149,6 +149,37 @@ $(function(){
                 break;
         }
         
+    });
+
+    $(document).on("change", "#id-welcome-call-form", function() {
+        var cat = $("#id-cat").val();
+        var $followdiv = $("#id-follow-div");
+        var $follow = $("#id-follow")
+        if(cat == "23")
+        {
+            $followdiv.show();
+            $follow.attr('required', true);
+        }
+        else{
+            $followdiv.hide();
+            $follow.attr('required', false);
+        }
+    });
+
+    $(document).on("click", "#id-welcomecall-update", function() {
+        $('#id-welcome-call-form').parsley().validate();
+        if($('#id-welcome-call-form').parsley().isValid()){
+            $('#id-welcome-call-form').submit();
+        }
+    });
+
+    var d = new Date($.now());
+      $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd hh:ii:ss",
+        autoclose: true,
+        todayBtn: true,
+        minuteStep: 5,
+        startDate: d
     });
 
 });

@@ -164,6 +164,18 @@ class Order(AbstractAutoDate):
         currency_dict = dict(CURRENCY_SYMBOL)
         return currency_dict.get(self.currency)
 
+    def get_wc_cat(self):
+        sub_dict = dict(WC_CATEGORY)
+        return sub_dict.get(self.wc_cat, '')
+
+    def get_wc_sub_cat(self):
+        cat_dict = dict(WC_SUB_CATEGORY)
+        return cat_dict.get(self.wc_sub_cat, '')
+
+    def get_wc_status(self):
+        status_dict = dict(WC_FLOW_STATUS)
+        return status_dict.get(self.wc_status, '')
+
 
 class OrderItem(AbstractAutoDate):
     coi_id = models.IntegerField(
@@ -439,6 +451,18 @@ class OrderItem(AbstractAutoDate):
         refund_amount += self.delivery_price_incl_tax
         return refund_amount
 
+    def get_wc_cat(self):
+        sub_dict = dict(WC_CATEGORY)
+        return sub_dict.get(self.wc_cat, '')
+
+    def get_wc_sub_cat(self):
+        cat_dict = dict(WC_SUB_CATEGORY)
+        return cat_dict.get(self.wc_sub_cat, '')
+
+    def get_wc_status(self):
+        status_dict = dict(WC_FLOW_STATUS)
+        return status_dict.get(self.wc_status, '')
+
 
 class OrderItemOperation(AbstractAutoDate):
     coio_id = models.IntegerField(
@@ -689,3 +713,18 @@ class WelcomeCallOperation(AbstractAutoDate):
         null=True,
         related_name='wop_created_by',
         verbose_name=_("Created By"))
+
+    def __str__(self):
+        return str(self.pk)
+
+    def get_wc_cat(self):
+        sub_dict = dict(WC_CATEGORY)
+        return sub_dict.get(self.wc_cat, '')
+
+    def get_wc_sub_cat(self):
+        cat_dict = dict(WC_SUB_CATEGORY)
+        return cat_dict.get(self.wc_sub_cat, '')
+
+    def get_wc_status(self):
+        status_dict = dict(WC_FLOW_STATUS)
+        return status_dict.get(self.wc_status, '')

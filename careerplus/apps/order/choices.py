@@ -387,6 +387,10 @@ WC_SUB_CATEGORY2 = (
     (65, 'Replacement Order'),
 )
 
+WC_SUB_CAT2 = (
+    (61, 'Service Issue'),
+)
+
 WC_SUB_CATEGORY3 = (
     # 81 - 100
     (81, 'No answer'),
@@ -394,11 +398,8 @@ WC_SUB_CATEGORY3 = (
     (83, 'User is busy'),
 )
 
-EXTRA_SUB_CAT = (
-    (61, 'Service Issue'),
-)
 
-WC_SUB_CATEGORY = WC_SUB_CATEGORY1 + WC_SUB_CATEGORY2 + WC_SUB_CATEGORY3 + EXTRA_SUB_CAT
+WC_SUB_CATEGORY = WC_SUB_CATEGORY1 + WC_SUB_CATEGORY2 + WC_SUB_CATEGORY3 + WC_SUB_CAT2
 
 WC_FLOW_STATUS = (
     # 0-20
@@ -412,10 +413,11 @@ WC_FLOW_STATUS = (
     (21, 'No Issue'),
 
     # 61 - 80
-    (61, 'On Hold'),
-    (62, 'Process order'),
-    (63, 'Refund'),
-    (64, 'Replacement Order'),
+    (61, 'Service Issue'),
+    (62, 'On Hold'),
+    (63, 'Process order'),
+    (64, 'Refund'),
+    (65, 'Replacement Order'),
 
     # 81 - 100
     (81, 'No answer'),
