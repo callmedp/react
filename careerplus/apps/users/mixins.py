@@ -271,6 +271,7 @@ class WriterInvoiceMixin(object):
             order_before = datetime.date(2017, 11, 3)
 
             for oi in orderitems:
+                process = False
                 oi_dict = {}
                 # sla incentive or penalty calculation
                 if oi.assigned_date and oi.closed_on and oi.assigned_date < oi.closed_on:
@@ -377,6 +378,8 @@ class WriterInvoiceMixin(object):
                     item_list.append(oi_dict)
                     total_sum += amount
 
+                    process = True
+
                 elif oi.is_addon:
                     pk = oi.pk
                     product_name = oi.product.get_name
@@ -391,9 +394,10 @@ class WriterInvoiceMixin(object):
                             oi=oi, invoice_date=invoice_date,
                             user_type=user_type)
                         total_combo_discount += combo_discount
-
+                        process = True
                     elif product_pk in COVER_LETTER_PRODUCT_LIST:
                         amount = COVER_LETTER
+                        process = True
                     elif product_pk in SECOND_REGULAR_RESUME_PRODUCT_LIST:
                         amount = SECOND_REGULAR_RESUME
                         # combo discount calculation
@@ -401,20 +405,19 @@ class WriterInvoiceMixin(object):
                             oi=oi, invoice_date=invoice_date,
                             user_type=user_type)
                         total_combo_discount += combo_discount
-                    else:
-                        error = 'Addon Product id - %s is missing in product_list (backend).' % (product_pk)
-                        break
-
-                    oi_dict.update({
-                        "item_id": pk,
-                        "product_name": product_name,
-                        "closed_on": closed_on,
-                        "combo_discount": combo_discount,
-                        "amount": amount,
-                        "item_type": "addon",
-                    })
-                    item_list.append(oi_dict)
-                    total_sum += amount
+                        process = True
+                    
+                    if process:
+                        oi_dict.update({
+                            "item_id": pk,
+                            "product_name": product_name,
+                            "closed_on": closed_on,
+                            "combo_discount": combo_discount,
+                            "amount": amount,
+                            "item_type": "addon",
+                        })
+                        item_list.append(oi_dict)
+                        total_sum += amount
                 elif oi.is_combo:
                     pk = oi.pk
                     product_name = oi.product.get_name
@@ -506,7 +509,8 @@ class WriterInvoiceMixin(object):
                             item_list.append(d_dict)
                             added_delivery_object.append(p_oi.pk)
                             total_sum += amount
-                else:
+                    process = True
+                elif not process:
                     pk = oi.pk
                     product_name = oi.product.get_name
                     closed_on = oi.closed_on.date()
@@ -587,6 +591,8 @@ class WriterInvoiceMixin(object):
                         }
                         item_list.append(d_dict)
                         total_sum += amount
+
+                    process = True
 
             # penalty and incentive calc
             penalty = 0
