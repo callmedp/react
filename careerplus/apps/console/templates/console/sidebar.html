@@ -40,6 +40,19 @@
         </li>
       </ul>
     {% endif %}
+
+    {% if request.user|has_group:MARKETING_GROUP_LIST %} 
+      <h3>Tasks</h3>
+        
+      <ul class="nav side-menu">
+        <li><a><i class="fa fa-list-alt"></i> Task <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url 'console:tasks:generate-autologintoken' %}">Generate AutoLogin</a></li>
+              <li><a href="{% url 'console:tasks:tasklist' %}">Task List</a></li>
+            </ul>
+        </li>
+      </ul>
+    {% endif %}
     
     {% if request.user|has_group:PRODUCT_GROUP_LIST %}
         <h3>Live Catalog</h3>

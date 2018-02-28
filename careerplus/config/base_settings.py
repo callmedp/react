@@ -92,7 +92,8 @@ LOCAL_APPS = [
     'crmapi',
     'api',
     'marketing',
-    'talenteconomy'
+    'talenteconomy',
+    'scheduler',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -112,7 +113,8 @@ MIDDLEWARE = [
     'core.middleware.UpgradedSetFlavourMiddleware',
     'core.middleware.LearningShineMiddleware',
     'core.middleware.LoginMiddleware',
-    'core.middleware.TrackingMiddleware'
+    'core.middleware.TrackingMiddleware',
+    'core.middleware.AmpMiddleware',
 ]
 
 ROOT_URLCONF = 'careerplus.config.urls'
@@ -526,6 +528,9 @@ SKILL_GROUP_LIST = ['SKILL_USER']
 COURSE_GROUP_LIST = ['COURSE_USER']
 SERVICE_GROUP_LIST = ['SERVICE_USER']
 USER_QUERY_GROUP_LIST = CMS_GROUP_LIST + SKILL_GROUP_LIST + COURSE_GROUP_LIST + SERVICE_GROUP_LIST
+
+# Marketing User Auto login token Generation
+MARKETING_GROUP_LIST = ['MARKETING']
 
 
 # Course catalogoue cache time

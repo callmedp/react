@@ -459,12 +459,13 @@ class GenerateWriterInvoiceView(View):
 class DownloadWriterInvoiceView(View):
     def get(self, request, *args, **kwargs):
         try:
+            import os
             user = request.user
             invoice = None
             if user.is_authenticated() and user.userprofile and user.userprofile.user_invoice:
                 invoice = user.userprofile.user_invoice
             if invoice:
-                file_path = settings.INVOICE_DIR + invoice.name
+                file_path = os.path.join(settings.MEDIA_ROOT, invoice.name)
                 fsock = FileWrapper(open(file_path, 'rb'))
                 filename = invoice.name.split('/')[-1]
                 response = HttpResponse(

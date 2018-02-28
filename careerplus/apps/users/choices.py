@@ -9,31 +9,31 @@ WRITER_TYPE = (
 
 # writer invoices variants
 
-WRITING_STARTER_VALUE = 175
+WRITING_STARTER_VALUE = 180
 
 # starter is value calculation on WRITING_STARTER_VALUE
 # runner, expert, and veteran value is given percentage of starter value 
 # matrix value is in percentages
 RESUME_WRITING_MATRIX_DICT = {
 	'FR': {
-		1: 100, 2: 110,
-		3: 115, 4: 120},
+		1: 100, 2: 108,
+		3: 115, 4: 122},
 
 	'FP': {
-		1: 170, 2: 110,
-		3: 115, 4: 120},
+		1: 170, 2: 184,
+		3: 196, 4: 207},
 
 	'SP': {
-		1: 225, 2: 110,
-		3: 115, 4: 120},
+		1: 225, 2: 243,
+		3: 259, 4: 275},
 
 	'EP': {
-		1: 357, 2: 110,
-		3: 115, 4: 120},
+		1: 357, 2: 386,
+		3: 411, 4: 436},
 
 	'DP': {
-		1: 357, 2: 110,
-		3: 115, 4: 120},
+		1: 357, 2: 386,
+		3: 411, 4: 436},
 
 }
 
@@ -54,16 +54,16 @@ LINKEDIN_WRITING_MATRIX_DICT = {
 		3: 135, 4: 140},
 
 	'SP': {
-		1: 135, 2: 100,
-		3: 135, 4: 140},
+		1: 135, 2: 135,
+		3: 182, 4: 189},
 
 	'EP': {
-		1: 135, 2: 100,
-		3: 135, 4: 140},
+		1: 135, 2: 135,
+		3: 182, 4: 189},
 
 	'DP': {
-		1: 135, 2: 100,
-		3: 135, 4: 140},
+		1: 135, 2: 135,
+		3: 182, 4: 189},
 }
 
 

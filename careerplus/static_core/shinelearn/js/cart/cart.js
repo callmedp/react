@@ -100,7 +100,15 @@ function updateCheckedPrice(this_obj){
     var fbt_price, sum_price, actual_price, actual_total;
     try{
         fbt_price =  parseFloat($(this_obj).attr('data-price'));
-        actual_price = parseFloat($(this_obj).attr('actual-price'));
+
+        //actual_price = parseFloat($(this_obj).attr('actual-price'));
+        
+        if(typeof $(this).attr('actual-price') != "undefined"){
+            actual_price =  parseFloat($(this).attr('actual-price'));
+        } else{
+            actual_price =  parseFloat($(this).data('actual-price'));
+        }
+
         try{
             sum_price = parseFloat($('#total-price').attr('sum-price'));
             actual_total = parseFloat($('#id-total-actual-price').attr('total-actual-price'));
@@ -147,7 +155,12 @@ function updateUnCheckedPrice(this_obj){
     var fbt_price, sum_price, actual_price, actual_total;
     try{
         fbt_price =  parseFloat($(this_obj).attr('data-price'));
-        actual_price = parseFloat($(this_obj).attr('actual-price'));
+        //actual_price = parseFloat($(this_obj).attr('actual-price'));
+        if(typeof $(this).attr('actual-price') != "undefined"){
+            actual_price =  parseFloat($(this).attr('actual-price'));
+        } else{
+            actual_price =  parseFloat($(this).data('actual-price'));
+        }
         try{
             sum_price = parseFloat($('#total-price').attr('sum-price'));
             actual_total = parseFloat($('#id-total-actual-price').attr('total-actual-price'));
@@ -261,7 +274,11 @@ $(document).ready(function() {
             var var_price, actual_price;
             try{
                 var_price =  parseFloat($(this).attr('data-price'));
-                actual_price =  parseFloat($(this).attr('actual-price'));
+                if(typeof $(this).attr('actual-price') != "undefined"){
+                    actual_price =  parseFloat($(this).attr('actual-price'));
+                } else{
+                    actual_price =  parseFloat($(this).data('actual-price'));
+                }
 
                 // update current price
                 var str_price = 'Rs. ' + var_price.toString() + '/- ' + '<small>(+taxes)</small>';
@@ -489,8 +506,8 @@ $(document).ready(function() {
     });
 
 
-    $('#add-to-cart').click(function() {
-
+    $('#add-to-cart').click(function(e) {
+        e.preventDefault();
         $('#add-to-cart').attr('disabled', true);
 
         var prod_id = $('#add-to-cart').attr('prod-id');
@@ -578,7 +595,8 @@ $(document).ready(function() {
     });
 
 
-    $('#enrol-now-button').click(function() {
+    $('#enrol-now-button').click(function(e) {
+        e.preventDefault();
         var prod_id = $('#enrol-now-button').attr('prod-id');
 
         var req_options = [];

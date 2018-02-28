@@ -4,7 +4,19 @@
         <div class="provided-by">
             <div class="media">         
                 <figure class="media-left">
-                  <span><img src="{{prd_vendor_img}}"></span>
+                  <span>
+                    {% if amp %}
+                    <amp-img 
+                        src="{{prd_vendor_img}}"
+                        width="40"
+                        height="17">
+                     </amp-img>
+                    {% else %}
+                    <img src="{{prd_vendor_img}}">
+                    {% endif %}
+
+
+                    </span>
                 </figure>
                 <div class="media-body rel pl-5">
                     <p class="pb-0">Provided by</p>
@@ -15,7 +27,7 @@
         </div>
         {% if pop %}
             <div class="select-provider">
-                <a href="javascript:void(0)" class="form-control sidebar-secondary-trigger">
+                <a href="#" class="form-control sidebar-secondary-trigger" on="tap:sidebar-right.toggle">
                     Select other provider
                 </a>
             </div>
@@ -34,7 +46,7 @@
         </div>
         {% if pop_list %}
         <div class="select-provider">
-            <a href="javascript:void(0)" class="form-control sidebar-secondary-trigger">Other packages</a>
+            <a href="#" class="form-control sidebar-secondary-trigger">Other packages</a>
         </div>
         {% endif %}
     </div>
@@ -51,7 +63,7 @@
         </div>
         {% if pop_list %}
         <div class="select-provider">
-            <a href="javascript:void(0)" class="form-control sidebar-secondary-trigger">Other packages</a>
+            <a href="#" class="form-control sidebar-secondary-trigger">Other packages</a>
         </div>
         {% endif %}
     </div>
@@ -68,7 +80,7 @@
         </div>
         {% if pop_list %}
         <div class="select-provider">
-            <a href="javascript:void(0)" class="form-control sidebar-secondary-trigger">Other packages</a>
+            <a href="#" class="form-control sidebar-secondary-trigger">Other packages</a>
         </div>
         {% endif %}
     </div>
@@ -88,7 +100,7 @@
         </div>
         {% if pop_list %}
         <div class="select-provider">
-            <a href="javascript:void(0)" class="form-control sidebar-secondary-trigger">Other packages</a>
+            <a href="#" class="form-control sidebar-secondary-trigger">Other packages</a>
         </div>
         {% endif %}
     </div>

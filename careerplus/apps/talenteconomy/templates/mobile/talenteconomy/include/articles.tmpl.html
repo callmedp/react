@@ -5,7 +5,18 @@
   <a title="{{articlelist.title}}" href="{% url 'talent:te-articles-detail' articlelist.p_cat.slug articlelist.slug %}" itemprop="url">
     <figure class="media-left">
       {% thumbnail articlelist.image "96x73" crop="center" as im %}
+      {% if amp %}
+      <amp-img 
+        class="media-object" 
+        width="{{ im.width }}" 
+        height="{{ im.height }}" 
+        src="{{articlelist.image.url}}" 
+        alt="{{articlelist.image_alt}}" 
+        itemprop="image">
+      </amp-img>
+      {% else %}
       <img class="media-object" width="{{ im.width }}" height="{{ im.height }}" src="{{articlelist.image.url}}" alt="{{articlelist.image_alt}}" itemprop="image">
+      {% endif %}
       {% endthumbnail %}
     </figure>
     <div class="media-body rel">
@@ -40,3 +51,4 @@
   
 </div>
 {% endfor %}
+<!-- <a href="/category.html" class="blue-link fs-14 text-right block">View all articles</a> -->
