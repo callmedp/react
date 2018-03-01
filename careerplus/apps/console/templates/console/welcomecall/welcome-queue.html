@@ -190,6 +190,7 @@
                     <th class="column-title">Category</th>
                     <th class="column-title">Sub Category</th>
                     <th class="column-title">Update Welcome Call</th>
+                    <th class="column-title">Ops History</th>
                     <th class="column-title">Detail Info</th>
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">Assigned To</th>
@@ -220,6 +221,8 @@
                       <td>{{obj.get_wc_sub_cat}}</td>
 
                       <td><a target="_blank" href="{% url "console:welcomecall:update" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-edit"></i>Update Wc</button></a></td>
+
+                      <td><a target="_blank" href="{% url "console:welcomecall:history" obj.pk %}"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-eye"></i>ops history</button></a></td>
 
                       <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
                       <td>{{obj.payment_date}}</td>

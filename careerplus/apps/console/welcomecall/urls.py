@@ -17,4 +17,8 @@ urlpatterns = [
     url(r'^update/(?P<pk>\d+)/$',
         views.WelcomeCallUpdateView.as_view(),
         name='update'),
+
+    url(r'^history/(?P<pk>\d+)/$',
+        views.WelcomeCallHistoryView.as_view(),
+        name='history'),
 ]

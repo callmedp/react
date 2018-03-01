@@ -37,6 +37,48 @@ from order.choices import (
 
 User = get_user_model()
 
+class WelcomeCallInfo(object):
+    def get_welcome_list(self, order_items=[]):
+        wc_items = []
+        for data in order_items:
+            data_dict = {}
+            oi = data.get('oi')
+            addons = data.get('addons')
+            variations = data.get('variations')
+            combos = data.get('combos')
+            if oi.product.is_course and variations:
+                data_dict = {
+                    "oi": variations.first(),
+                    "combos": [],
+                }
+                wc_items.append(data_dict)
+                for addon in addons:
+                    data_dict = {
+                        "oi": addon,
+                        "combos": [],
+                    }
+                    wc_items.append(data_dict)
+
+            else:
+                data_dict = {
+                    "oi": oi,
+                    "combos": combos,
+                }
+                wc_items.append(data_dict)
+                for var in variations:
+                    data_dict = {
+                        "oi": var,
+                        "combos": [],
+                    }
+                    wc_items.append(data_dict)
+                for addon in addons:
+                    data_dict = {
+                        "oi": addon,
+                        "combos": [],
+                    }
+                    wc_items.append(data_dict)
+        return wc_items
+
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.OPS_HEAD_GROUP_LIST]))
@@ -500,7 +542,7 @@ class WelcomeCallDoneView(ListView, PaginationMixin):
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.WELCOMECALL_GROUP_LIST + settings.OPS_HEAD_GROUP_LIST]))
-class WelcomeCallUpdateView(DetailView):
+class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
     model = Order
     template_name = "console/welcomecall/wc_detail.html"
 
@@ -522,47 +564,6 @@ class WelcomeCallUpdateView(DetailView):
         except:
             raise Http404
         return obj
-
-    def get_welcome_list(self, order_items=[]):
-        wc_items = []
-        for data in order_items:
-            data_dict = {}
-            oi = data.get('oi')
-            addons = data.get('addons')
-            variations = data.get('variations')
-            combos = data.get('combos')
-            if oi.product.is_course and variations:
-                data_dict = {
-                    "oi": variations.first(),
-                    "combos": [],
-                }
-                wc_items.append(data_dict)
-                for addon in addons:
-                    data_dict = {
-                        "oi": addon,
-                        "combos": [],
-                    }
-                    wc_items.append(data_dict)
-
-            else:
-                data_dict = {
-                    "oi": oi,
-                    "combos": combos,
-                }
-                wc_items.append(data_dict)
-                for var in variations:
-                    data_dict = {
-                        "oi": var,
-                        "combos": [],
-                    }
-                    wc_items.append(data_dict)
-                for addon in addons:
-                    data_dict = {
-                        "oi": addon,
-                        "combos": [],
-                    }
-                    wc_items.append(data_dict)
-        return wc_items
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -785,5 +786,50 @@ class WelcomeCallUpdateView(DetailView):
             "sub_cat2_dict": sub_cat2_dict,
             "sub_cat3_dict": sub_cat3_dict,
             "wc_sub_cat2_dict": wc_sub_cat2_dict
+        })
+        return context
+
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.WELCOMECALL_GROUP_LIST + settings.OPS_HEAD_GROUP_LIST]))
+class WelcomeCallHistoryView(DetailView, WelcomeCallInfo):
+    model = Order
+    template_name = "console/welcomecall/history.html"
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get('pk')
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        if pk is not None:
+            queryset = queryset.filter(
+                pk=pk)
+        try:
+            obj = queryset.get()
+        except:
+            raise Http404
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = super(WelcomeCallHistoryView, self).get(request, *args, **kwargs)
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(WelcomeCallHistoryView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        order = self.get_object()
+
+        order_items = InvoiceGenerate().get_order_item_list(
+            order=order)
+        wc_items = self.get_welcome_list(
+            order_items=order_items)
+        ops = order.welcomecalloperation_set.all()
+        ops = ops.order_by('-created')
+        context.update({
+            "order": order,
+            "orderitems": wc_items,
+            "messages": alert,
+            "ops": ops,
         })
         return context
