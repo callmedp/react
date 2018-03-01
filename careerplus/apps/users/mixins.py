@@ -222,6 +222,8 @@ class WriterInvoiceMixin(object):
                 invoice_date.year, invoice_date.month, last_day)
             first_invoice_date = datetime.date(
                 invoice_date.year, invoice_date.month, 1)
+            last_invoice_date = last_invoice_date + datetime.timedelta(
+                days=1)
 
             orderitems = OrderItem.objects.filter(
                 order__status__in=[1, 3],
