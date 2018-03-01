@@ -109,7 +109,9 @@ class Review(AbstractAutoDate):
 
 
 class DetailPageWidget(AbstractAutoDate):
-    content_type = models.ForeignKey(ContentType)
+    limit_choices = models.Q(app_label='shop', model='Product')
+    content_type = models.ForeignKey(
+        ContentType, limit_choices_to=limit_choices)
     object_id = models.CharField(
         max_length=500,
         null=True,

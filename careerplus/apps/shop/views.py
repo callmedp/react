@@ -332,6 +332,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         return ['shop/detail1.html']
 
     def get_context_data(self, **kwargs):
+        pk = self.kwargs.get('pk')
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
         product = self.product_obj
         ctx['product'] = product
@@ -396,7 +397,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
         ctx.update(self.getSelectedProduct_solr(self.sqs))
         # ctx.update(self.getSelectedProductPrice_solr(self.sqs))
-        ctx['widget_objs'] = DetailPageWidget.objects.all()[0:5]
+        ctx['widget_objs'] = DetailPageWidget.objects.filter(
+            object_id=pk)[0:5]
         ctx['domain_name'] = '{}//{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
         ctx.update({'sqs': self.sqs})
         ctx.update({'get_fakeprice': get_fakeprice})

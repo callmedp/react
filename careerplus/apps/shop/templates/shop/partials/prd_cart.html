@@ -47,10 +47,13 @@
         <figure class="calling-icon"></figure> 0124-395 5001
       </a>
     </div>
-  </div>  
+  </div>
+  {% comment %}  
   <a href="#" class="take-test mt-40">
   <figure class="test-icon"></figure>Take free Assessment test</a>
+  {% endcomment %}
   <!-- check free sample start -->
+  {% if widget_objs %}
     <div class="free-sample">
       <span class="sample-pic"></span>
       <strong>Check free samples</strong>
@@ -60,6 +63,7 @@
       {% endfor %}
       </ul>
     </div>
+  {% endif %}
   </div>
 <!-- right fixed content end -->
 
