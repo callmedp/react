@@ -42,11 +42,23 @@ class WriterInvoiceMixin(object):
         if oi.assigned_to:
             assigned_to = oi.assigned_to
             assigned_date = oi.assigned_date
+            if not assigned_date:
+                ops = oi.orderitemoperation_set.filter(oi_status=1).order_by('id')
+                if ops.exists():
+                    assigned_date = ops[0].created
+                else:
+                    assigned_date = datetime.datetime.today()
         else:
             oi_assigned = oi.orderitem_set.all().exclude(
                 assigned_to=None)
             assigned_to = oi_assigned[0].assigned_to
             assigned_date = oi_assigned[0].assigned_date
+            if not assigned_date:
+                ops = oi_assigned[0].orderitemoperation_set.filter(oi_status=1).order_by('id')
+                if ops.exists():
+                    assigned_date = ops[0].created
+                else:
+                    assigned_date = datetime.datetime.today()
 
         start_date = assigned_date - datetime.timedelta(days=DISCOUNT_ALLOCATION_DAYS)
         end_date = assigned_date + datetime.timedelta(days=DISCOUNT_ALLOCATION_DAYS)
@@ -64,7 +76,7 @@ class WriterInvoiceMixin(object):
                     oi_status=4,
                     assigned_to=assigned_to,
                     assigned_date__range=[start_date, end_date],
-                    closed_on__date__lte=prev_month).order_by('-id')
+                    closed_on__lte=prev_month).order_by('-id')
                 if linkedin_ois.exists():
                     linkedin_obj = linkedin_ois[0]
                     writing_ois = linkedin_obj.order.orderitems.filter(
@@ -89,7 +101,7 @@ class WriterInvoiceMixin(object):
                             oi_status=4,
                             assigned_to=assigned_to,
                             assigned_date__range=[start_date, end_date],
-                            closed_on__date__lte=closed_on_last).exclude(
+                            closed_on__lte=closed_on_last).exclude(
                             product__id__in=COVER_LETTER_PRODUCT_LIST)
 
                         if writing_ois.exists():
@@ -137,7 +149,7 @@ class WriterInvoiceMixin(object):
                         oi_status=4,
                         assigned_to=assigned_to,
                         assigned_date__range=[start_date, end_date],
-                        closed_on__date__lte=last_invoice_date).exclude(
+                        closed_on__lte=last_invoice_date).exclude(
                         product__id__in=COVER_LETTER_PRODUCT_LIST)
                     if writing_ois.exists() and oi.pk not in self.combo_discount_object:
                         combo_discount = (linkedin_amount * COMBO_DISCOUNT) / 100
@@ -229,7 +241,7 @@ class WriterInvoiceMixin(object):
                 order__status__in=[1, 3],
                 product__type_flow__in=[1, 8, 12, 13],
                 oi_status=4, assigned_to=user,
-                closed_on__date__range=[first_invoice_date, last_invoice_date],
+                closed_on__range=[first_invoice_date, last_invoice_date],
                 no_process=False).select_related('product').order_by('id')
 
             writing_dict = RESUME_WRITING_MATRIX_DICT
@@ -276,7 +288,7 @@ class WriterInvoiceMixin(object):
                         if finish_days <= REGULAR_SLA:
                             success_closure += 1
 
-                if oi.order.payment_date.date() < order_before:
+                if oi.created.date() < order_before:
                     oi_dict = {}
                     oi_dict.update({
                         "item_id": oi.pk,
@@ -642,9 +654,9 @@ class WriterInvoiceMixin(object):
         return data
 
     def save_writer_invoice_pdf(self, user=None, invoice_date=None):
-        error = ""
-        data = {"error": error}
-        try:
+            error = ""
+            data = {"error": error}
+        #try:
             if not user:
                 try:
                     user = self.request.user
@@ -689,12 +701,12 @@ class WriterInvoiceMixin(object):
             elif not error and not item_list:
                 error = 'No invoice for last month(no item is closed)'
 
-        except Exception as e:
-            error = 'something went wrong, try again later.'
-            logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
-        if error:
-            data.update({"error": error, })
-        return data
+        # except Exception as e:
+        #     error = 'something went wrong, try again later.'
+        #     logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+            if error:
+                data.update({"error": error, })
+            return data
 
 
 class RegistrationLoginApi(object):
