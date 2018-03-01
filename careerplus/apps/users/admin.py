@@ -57,10 +57,53 @@ class UserChangeForm(UserChangeForm):
         model = User
 
 
+class UserProfileForm(forms.ModelForm):
+ 
+    class Meta:
+        model = UserProfile
+        fields = '__all__'
+ 
+    def clean_pan_no(self):
+        writer_type = self.cleaned_data['writer_type']
+        if writer_type != 0 and not self.cleaned_data['pan_no']:
+            raise forms.ValidationError(
+                "Pan no is required for writer")
+        return self.cleaned_data['pan_no']
+
+    def clean_address(self):
+        writer_type = self.cleaned_data['writer_type']
+        if writer_type != 0 and not self.cleaned_data['address']:
+            raise forms.ValidationError(
+                "Address is required")
+        return self.cleaned_data['address']
+
+    def clean_po_number(self):
+        writer_type = self.cleaned_data['writer_type']
+        if writer_type != 0 and not self.cleaned_data['po_number']:
+            raise forms.ValidationError(
+                "Po number is required")
+        return self.cleaned_data['po_number']
+
+    def clean_valid_from(self):
+        writer_type = self.cleaned_data['writer_type']
+        if writer_type != 0 and not self.cleaned_data['valid_from']:
+            raise forms.ValidationError(
+                "Valid from date is required")
+        return self.cleaned_data['valid_from']
+
+    def clean_valid_to(self):
+        writer_type = self.cleaned_data['writer_type']
+        if writer_type != 0 and not self.cleaned_data['valid_to']:
+            raise forms.ValidationError(
+                "Valid to date is required")
+        return self.cleaned_data['valid_to']
+
+
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     fk_name = 'user'
     readonly_fields = ('last_writer_type', 'wt_changed_date')
+    form = UserProfileForm
 
 
 class UserAdmin(BaseUserAdmin):
