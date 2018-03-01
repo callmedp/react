@@ -53,6 +53,20 @@
         </li>
       </ul>
     {% endif %}
+    {% if request.user.is_superuser or request.user|has_group:VENDOR_GROUP_LIST %} 
+      <h3>Badge User</h3>
+        
+      <ul class="nav side-menu">
+        <li><a><i class="fa fa-list-alt"></i> Badge User <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url 'console:badge:upload-certificate' %}">
+              Upload Certificate</a></li>
+              <li><a href="#"></a>Candidate Certificate</li>
+              <li><a href="{% url 'console:badge:upload-tasklist' %}">Upload Task List</a></li>
+            </ul>
+        </li>
+      </ul>
+    {% endif %}
     
     {% if request.user|has_group:PRODUCT_GROUP_LIST %}
         <h3>Live Catalog</h3>

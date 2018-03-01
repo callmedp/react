@@ -9,6 +9,8 @@ from .functions import get_scheduler_upload_path
 TASK_TYPE = (
     (0, 'Select_Type'),
     (1, 'AutoLogin Token Genaration'),
+    (2, 'Upload Certificate'),
+    (3, 'Upload Candidate Certificate'),
 )
 
 TASK_STATUS = (
