@@ -116,7 +116,7 @@ class DetailPageWidget(AbstractAutoDate):
         max_length=500,
         null=True,
         blank=True,
-        help_text='comma(,) comma separated e.g. 123,145, ...')
+        help_text='give id correspondig content type..')
     name = models.CharField(max_length=255)
     url = models.CharField(
         max_length=2048, null=True,
