@@ -19,6 +19,7 @@ from partner.models import Vendor
 from review.models import Review
 from shop.models import Product
 from .mixins import SkillPageMixin
+from review.models import DetailPageWidget
 
 # Create your views here.
 
@@ -162,6 +163,10 @@ class SkillPageView(DetailView, SkillPageMixin):
             'show_chat': True,
             'amp': self.request.amp
         })
+        widget_obj = DetailPageWidget.objects.get(
+            content_type__model='Category', object_id=self.pk)
+        context['widget_objs'] = widget_obj.widget.iw.indexcolumn_set.filter(
+            column=1)
         context.update(self.get_breadcrumb_data())
         return context
 

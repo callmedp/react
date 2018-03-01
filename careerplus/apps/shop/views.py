@@ -397,8 +397,10 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
         ctx.update(self.getSelectedProduct_solr(self.sqs))
         # ctx.update(self.getSelectedProductPrice_solr(self.sqs))
-        ctx['widget_objs'] = DetailPageWidget.objects.filter(
-            object_id=pk)[0:5]
+        widget_obj = DetailPageWidget.objects.get(
+            content_type__model='Product', object_id=pk)
+        ctx['widget_objs'] = widget_obj.widget.iw.indexcolumn_set.filter(
+            column=1)
         ctx['domain_name'] = '{}//{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
         ctx.update({'sqs': self.sqs})
         ctx.update({'get_fakeprice': get_fakeprice})
