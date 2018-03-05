@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext, ugettext_lazy as _
 from seo.models import AbstractAutoDate
 from ckeditor.fields import RichTextField
+from cms.models import Widget
 
 DEFAULT_CHOICES = (
     ('5', '5'),
@@ -22,7 +23,7 @@ STATUS_CHOICES = (
     (1, _("Approved")),
     (2, _("Rejected")),
 )
-    
+
 
 class Review(AbstractAutoDate):
     content_type = models.ForeignKey(ContentType)
@@ -107,3 +108,23 @@ class Review(AbstractAutoDate):
         return remarks
 
 
+class DetailPageWidget(AbstractAutoDate):
+    limit_choices = models.Q(app_label='shop', model='Product') | models.Q(app_label='shop', model='Category') |  models.Q(app_label='blog', model='Blog')
+    content_type = models.ForeignKey(
+        ContentType, limit_choices_to=limit_choices)
+    object_id = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True,
+        help_text='give id correspondig content type..')
+    name = models.CharField(max_length=255)
+    url = models.CharField(
+        max_length=2048, null=True,
+        blank=True)
+    widget = models.ForeignKey(Widget, null=True, blank=True)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return '%s' % self.name

@@ -458,3 +458,45 @@
 		}
 	}
 }
+
+/*check free sample css*/
+.free-sample {
+	border: 1px solid $border-color;
+	padding: 20px;
+	display: block;
+	background: $white-bg;
+	margin: 30px 20px 0 20px;
+
+	strong {
+		font-size: $font-size+5;
+		font-weight: $font-weight+300;
+		display: block;
+	}
+
+	ul {
+		font-size: $font-size+2;
+		font-weight: $font-weight+300;
+		display: block;
+		list-style-type: none;
+		margin: 10px 0 0 0;
+		padding: 0;
+
+		li {
+			display: block;
+			margin-bottom: 8px;
+
+			a {
+				line-height: 16px;
+			}
+		}
+	}
+
+	.sample-pic {
+		background: $sprite -715px -309px;
+		width: 84px;
+		height: 110px;
+		display: inline-block;
+		float: right;
+		margin: 5px -10px 0 0;
+	}
+}

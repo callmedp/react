@@ -1,5 +1,5 @@
 import json
-
+import logging
 from django.views.generic import (
     TemplateView,
     ListView,
@@ -26,6 +26,7 @@ from users.mixins import RegistrationLoginApi
 
 from .mixins import BlogMixin, PaginationMixin, LoadCommentMixin
 from .models import Category, Blog, Tag
+from review.models import DetailPageWidget
 
 
 class LoginToCommentView(View):
@@ -171,10 +172,10 @@ class BlogDetailView(DetailView, BlogMixin):
         categories = Category.objects.filter(is_active=True, visibility=1)
         blog = self.object
         p_cat = blog.p_cat
+        pk = self.kwargs.get('pk')
         articles = p_cat.primary_category.filter(status=1, visibility=1).exclude(pk=blog.pk)
         pop_aricles = articles[: 5]
         articles = articles.order_by('-publish_date')
-        
         context['meta'] = blog.as_meta(self.request)
         context.update({
             "categories": categories,
@@ -221,7 +222,16 @@ class BlogDetailView(DetailView, BlogMixin):
             "registerform": ModalRegistrationApiForm(),
             "amp": self.request.amp
         })
-
+        widget_objs = None
+        try:
+            widget_obj = DetailPageWidget.objects.get(
+                content_type__model='Blog', object_id=pk)
+            widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
+                column=1)
+        except Exception as e:
+            widget_objs = None
+            logging.getLogger('error_log').error("%(err)s" % {'err': e})
+        context['widget_objs'] = widget_objs
         return context
 
     def get_breadcrumb_data(self):
