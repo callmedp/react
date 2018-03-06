@@ -1,8 +1,5 @@
 import os
 import logging
-import csv
-from wsgiref.util import FileWrapper
-
 from django.views.generic import FormView, ListView, View
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -14,7 +11,6 @@ from django.conf import settings
 
 from blog.mixins import PaginationMixin
 from scheduler.models import Scheduler
-from partner.models import Vendor
 from .tasks import (
     upload_certificate_task)
 from . import forms
@@ -22,7 +18,6 @@ from . import forms
 
 class UploadCertificate(FormView):
     template_name = "console/badgeuser/upload_certificate.html"
-    # success_url = "/console/tasks/tasklist/"
     http_method_names = [u'get', u'post']
     form_class = forms.UploadCertificateForm
 
