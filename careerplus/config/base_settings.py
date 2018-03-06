@@ -535,6 +535,8 @@ MARKETING_GROUP_LIST = ['MARKETING']
 # welcome call Group List
 WELCOMECALL_GROUP_LIST = ['WELCOME_CALL']
 
+REFUND_GROUP_LIST += WELCOMECALL_GROUP_LIST
+
 
 # Course catalogoue cache time
 COURSE_CATALOGUE_CASH_TIME = 24 * 60 * 60  # in seconds

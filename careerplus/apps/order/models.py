@@ -1,8 +1,11 @@
+import datetime
+
 from decimal import Decimal
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.utils import timezone
 
 from seo.models import AbstractAutoDate
 from geolocation.models import Country, CURRENCY_SYMBOL
@@ -175,6 +178,20 @@ class Order(AbstractAutoDate):
     def get_wc_status(self):
         status_dict = dict(WC_FLOW_STATUS)
         return status_dict.get(self.wc_status, '')
+
+    def follow_up_color(self):
+        c_time = timezone.now()
+        follow_up = self.wc_follow_up
+        if follow_up:
+            before_time = follow_up - datetime.timedelta(
+                minutes=30
+            )
+            later_time = follow_up + datetime.timedelta(
+                minutes=60
+            )
+            if c_time >= before_time and c_time <= later_time:
+                return 'pink'
+        return ''
 
 
 class OrderItem(AbstractAutoDate):

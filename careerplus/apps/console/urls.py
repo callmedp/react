@@ -183,7 +183,6 @@ urlpatterns += [
 ]
 
 
-
 urlpatterns += [
     url(r'^geolocation/country/$',
         adminviews.CountryListView.as_view(), name='geo-country'),
@@ -198,8 +197,10 @@ urlpatterns += [
         order_view.ConsoleResumeDownloadView.as_view(), name='queue-resume-download'),
     url(r'^queue/orders/$',
         order_view.OrderListView.as_view(), name='queue-order'),
-    url(r'^queue/welcomecall/$',
-        order_view.WelcomeCallVeiw.as_view(), name='queue-welcome'),
+
+    # url(r'^queue/welcomecall/$',
+    #     order_view.WelcomeCallVeiw.as_view(), name='queue-welcome'),
+
     url(r'^queue/midout/$',
         order_view.MidOutQueueView.as_view(), name='queue-midout'),
     url(r'^queue/inbox/$',

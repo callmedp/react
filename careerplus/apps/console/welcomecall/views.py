@@ -2,11 +2,13 @@ import logging
 import datetime
 
 from django.views.generic import (
-    TemplateView, ListView, DetailView, View, UpdateView)
+    TemplateView, ListView, DetailView,
+    View, UpdateView)
 from django.contrib import messages
 from django.urls import reverse
 from django.db.models import Q
 from django.conf import settings
+from django.utils import timezone
 from django.core.paginator import Paginator
 from django.http import (
     HttpResponseRedirect,
@@ -36,6 +38,7 @@ from order.choices import (
 )
 
 User = get_user_model()
+
 
 class WelcomeCallInfo(object):
     def get_welcome_list(self, order_items=[]):
@@ -122,7 +125,7 @@ class WelcomeQueueView(ListView, PaginationMixin):
                     order.save()
                     order.welcomecalloperation_set.create(
                         wc_cat=order.wc_cat,
-                        wc_sub_cat=order.wc_cat,
+                        wc_sub_cat=order.wc_sub_cat,
                         wc_status=op_status,
                         assigned_to=order.assigned_to
                     )
@@ -156,15 +159,14 @@ class WelcomeQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(WelcomeQueueView, self).get_queryset()
-        queryset = queryset.filter(status=1, welcome_call_done=False)
-
+        queryset = queryset.filter(
+            status=1, welcome_call_done=False)
         try:
             if self.query:
                 queryset = queryset.filter(
-                    Q(number__iexacts=self.query) |
-                    Q(email__iexacts=self.query) |
-                    Q(mobile__iexacts=self.query) |
-                    Q(id__iexacts=self.query))
+                    Q(number=self.query) |
+                    Q(email=self.query) |
+                    Q(mobile=self.query))
         except:
             pass
 
@@ -236,8 +238,22 @@ class WelcomeAssignedView(ListView, PaginationMixin):
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
 
+        today = timezone.now()
+        date_start = datetime.datetime(
+            today.year, today.month, today.day, 0, 0, 0, 0, today.tzinfo)
+        date_end = datetime.datetime(
+            today.year, today.month, today.day, 23, 59, 59, 0, today.tzinfo)
+        followup_today = Order.objects.filter(
+            assigned_to=self.request.user,
+            welcome_call_done=False,
+            wc_cat=23,
+            wc_follow_up__range=[date_start, date_end]
+        )
+
         context.update({
             "messages": alert,
+            "followup_today": followup_today,
+            "count_follow_up": len(followup_today),
         })
 
         return context
@@ -302,10 +318,9 @@ class WelcomeCallbackView(ListView, PaginationMixin):
         try:
             if self.query:
                 queryset = queryset.filter(
-                    Q(number__iexacts=self.query) |
-                    Q(email__iexacts=self.query) |
-                    Q(mobile__iexacts=self.query) |
-                    Q(id__iexacts=self.query))
+                    Q(number=self.query) |
+                    Q(email=self.query) |
+                    Q(mobile=self.query))
         except:
             pass
 
@@ -389,10 +404,9 @@ class WelcomeServiceIssueView(ListView, PaginationMixin):
         try:
             if self.query:
                 queryset = queryset.filter(
-                    Q(number__iexacts=self.query) |
-                    Q(email__iexacts=self.query) |
-                    Q(mobile__iexacts=self.query) |
-                    Q(id__iexacts=self.query))
+                    Q(number=self.query) |
+                    Q(email=self.query) |
+                    Q(mobile=self.query))
         except:
             pass
 
@@ -487,10 +501,9 @@ class WelcomeCallDoneView(ListView, PaginationMixin):
         try:
             if self.query:
                 queryset = queryset.filter(
-                    Q(number__iexacts=self.query) |
-                    Q(email__iexacts=self.query) |
-                    Q(mobile__iexacts=self.query) |
-                    Q(id__iexacts=self.query))
+                    Q(number=self.query) |
+                    Q(email=self.query) |
+                    Q(mobile=self.query))
         except:
             pass
 
@@ -684,7 +697,8 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
                 order.save()
                 order.welcomecalloperation_set.create(
                     wc_cat=order.wc_cat,
-                    wc_sub_cat=order.wc_cat,
+                    wc_sub_cat=order.wc_sub_cat,
+                    message=message,
                     wc_status=order.wc_status,
                     assigned_to=order.assigned_to,
                     created_by=request.user
@@ -705,8 +719,9 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
                 order.save()
                 order.welcomecalloperation_set.create(
                     wc_cat=order.wc_cat,
-                    wc_sub_cat=order.wc_cat,
+                    wc_sub_cat=order.wc_sub_cat,
                     wc_status=order.wc_status,
+                    message=message,
                     assigned_to=order.assigned_to,
                     created_by=request.user
                 )
@@ -734,7 +749,8 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
                 order.save()
                 order.welcomecalloperation_set.create(
                     wc_cat=order.wc_cat,
-                    wc_sub_cat=order.wc_cat,
+                    wc_sub_cat=order.wc_sub_cat,
+                    message=message,
                     wc_status=order.wc_status,
                     assigned_to=order.assigned_to,
                     created_by=request.user

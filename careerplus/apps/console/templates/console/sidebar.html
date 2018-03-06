@@ -274,10 +274,6 @@
                 <li><a href="{% url "console:queue-order" %}">Orders</a></li>
             {% endif %}
 
-            {% if perms.order.can_show_welcome_queue %}
-                <li><a href="{% url "console:queue-welcome" %}">Welcome Call</a></li>
-            {% endif %}
-
             {% if perms.order.can_show_midout_queue %}
                 <li><a href="{% url "console:queue-midout" %}">Midout</a></li>
             {% endif %}
