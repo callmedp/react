@@ -7,6 +7,7 @@
 {% block canonical_url %}
   <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
   <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}?type=amp">
 {% endblock canonical_url %}
 
         {% block django_meta %}
@@ -272,7 +273,8 @@
             <input type='hidden' name='csrfmiddlewaretoken' value='{{csrf_token}}'/>
           </div>
           <div class="form-group">
-            <input type="text" class="form-control" name="name" placeholder="Name" maxlength="100">
+            <input type="text" class="form-control" name="name" 
+            placeholder="Name" maxlength="100" value="{{request.session.full_name}}">
             <span class="error position-error" style="color:red"></span>
           </div>
           <div class="form-group">
@@ -285,7 +287,7 @@
                 </select>
               </div>
               <input type="text" class="form-control" name="number" 
-              placeholder="Mobile" maxlength="15">
+              placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
               <span class="error position-error" style="color:red"></span>
             </div>
           </div>

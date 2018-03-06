@@ -20,6 +20,8 @@ class ActionUserMixin(object):
         orderitem_objs = OrderItem.objects.filter(id__in=orderitem_list).select_related('order')
         for obj in orderitem_objs:
             obj.assigned_to = assigned_to
+            if not obj.assigned_date:
+                obj.assigned_date = timezone.now()
             obj.assigned_by = user
             obj.save()
 
@@ -53,6 +55,7 @@ class ActionUserMixin(object):
         for obj in orderitem_objs:
             if not obj.assigned_to:
                 obj.assigned_to = assigned_to
+                obj.assigned_date = timezone.now()
                 obj.assigned_by = user
                 obj.save()
 
@@ -131,6 +134,7 @@ class ActionUserMixin(object):
                 for oi in addons:
                     if not oi.assigned_to:
                         oi.assigned_to = assigned_to
+                        oi.assigned_date = timezone.now()
                         oi.assigned_by = user
                         oi.save()
 
@@ -173,6 +177,7 @@ class ActionUserMixin(object):
                 for oi in variations:
                     if not oi.assigned_to:
                         oi.assigned_to = assigned_to
+                        oi.assigned_date = timezone.now()
                         oi.assigned_by = user
                         oi.save()
 
@@ -215,6 +220,7 @@ class ActionUserMixin(object):
                 for oi in combos:
                     if not oi.assigned_to:
                         oi.assigned_to = assigned_to
+                        oi.assigned_by = timezone.now()
                         oi.assigned_by = user
                         oi.save()
 

@@ -1,4 +1,5 @@
 import json
+import logging
 from django.http import (
     Http404, HttpResponse,
     HttpResponseRedirect,
@@ -19,13 +20,14 @@ from partner.models import Vendor
 from review.models import Review
 from shop.models import Product
 from .mixins import SkillPageMixin
+from review.models import DetailPageWidget
 
 # Create your views here.
 
 
 class SkillPageView(DetailView, SkillPageMixin):
     model = Category
-    template_name = "skillpage/skill.html"
+    # template_name = "skillpage/skill.html"
     page = 1
 
     def get_object(self, queryset=None):
@@ -42,6 +44,11 @@ class SkillPageView(DetailView, SkillPageMixin):
             return queryset[0]
         else:
             raise Http404
+
+    def get_template_names(self):
+        if self.request.amp:
+            return ["skillpage/skill-amp.html"]
+        return ["skillpage/skill.html"]
         
     def redirect_if_necessary(self, current_path, skill):
         expected_path = skill.get_absolute_url()
@@ -137,7 +144,6 @@ class SkillPageView(DetailView, SkillPageMixin):
         context['meta'] = self.object.as_meta(self.request)
         context['canonical_url'] = self.object.get_canonical_url()
         context['meta']._url = context.get('canonical_url', '')
-        
         meta_dict = context['meta'].__dict__
         meta_dict['description'] = meta_desc
         meta_dict['og_description'] = meta_desc
@@ -156,7 +162,18 @@ class SkillPageView(DetailView, SkillPageMixin):
             'country_choices': country_choices,
             'initial_country': initial_country,
             'show_chat': True,
+            'amp': self.request.amp
         })
+        widget_objs = None
+        try:
+            widget_obj = DetailPageWidget.objects.get(
+                content_type__model='Category', object_id=self.pk)
+            widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
+                column=1)
+        except Exception as e:
+            widget_objs = None
+            logging.getLogger('error_log').error("%(err)s" % {'err': e})
+        context['widget_objs'] = widget_objs
         context.update(self.get_breadcrumb_data())
         return context
 
@@ -171,21 +188,3 @@ class SkillPageView(DetailView, SkillPageMixin):
         breadcrumbs.append({"url": '', "name": self.object.name})
         data = {"breadcrumbs": breadcrumbs}
         return data
-
-
-class SkillQueryLead(View, UploadInFile):
-    http_method_names = [u'post']
-
-    def post(self, request, *args, **kwargs):
-        data_dict = {}
-        name = request.POST.get('name', '')
-        mobile = request.POST.get('mobile_number', '')
-        message = request.POST.get('message_box', '')
-
-        data_dict = {
-            "name": name,
-            "mobile": mobile,
-            "message": message,
-        }
-        self.write_in_file(data_dict=data_dict)
-        return HttpResponse(status=200)

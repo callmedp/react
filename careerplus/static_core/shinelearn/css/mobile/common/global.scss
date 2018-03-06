@@ -342,6 +342,11 @@
 }
 
 article {
+  h4, h5 {
+    color: $txt-grey-333;
+    font-weight: 600;
+  }
+
   ol {
     padding-left: 15px;
     padding-bottom: 15px;
@@ -422,6 +427,7 @@ article {
   li {
     list-style-type: disc;
     margin-bottom: 10px;
+    min-height: auto;
   }
 }
 
