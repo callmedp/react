@@ -58,7 +58,7 @@ def pending_item_email(pk=None):
                         data.update({
                             'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                                 settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                                token.decode())
+                                token)
                         })
                         send_email(to_emails, mail_type, data, 21, oi.pk)
                         try:
@@ -77,7 +77,7 @@ def pending_item_email(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 41 not in email_sets and 41 not in sms_sets:
                         send_email(to_emails, mail_type, data, 41, oi.pk)
@@ -97,7 +97,7 @@ def pending_item_email(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 61 not in email_sets and 61 not in sms_sets:
                         send_email(to_emails, mail_type, data, 61, oi.pk)
@@ -117,7 +117,7 @@ def pending_item_email(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 71 not in email_sets and 71 not in sms_sets:
                         send_email(to_emails, mail_type, data, 71, oi.pk)
@@ -137,7 +137,7 @@ def pending_item_email(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 91 not in email_sets and 91 not in sms_sets:
                         send_email(to_emails, mail_type, data, 91, oi.pk)
@@ -157,7 +157,7 @@ def pending_item_email(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 141 not in email_sets and 141 not in sms_sets:
                         send_email(to_emails, mail_type, data, 141, oi.pk)
@@ -177,7 +177,7 @@ def pending_item_email(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 151 not in email_sets and 151 not in sms_sets:
                         send_email(to_emails, mail_type, data, 151, oi.pk)
@@ -197,7 +197,7 @@ def pending_item_email(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 108 not in email_sets and 108 not in sms_sets:
                         send_email(to_emails, mail_type, data, 108, oi.pk)
@@ -217,7 +217,7 @@ def pending_item_email(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard/roundone/profile/" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 121 not in email_sets and 121 not in sms_sets:
                         send_email(to_emails, mail_type, data, 121, oi.pk)
@@ -294,7 +294,7 @@ def process_mailer(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
                     if 25 not in email_sets and 25 not in sms_sets:
                         send_email(to_emails, mail_type, data, 25, oi.pk)
@@ -312,7 +312,7 @@ def process_mailer(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
                     if 44 not in email_sets and 44 not in sms_sets:
                         send_email(to_emails, mail_type, data, 44, oi.pk)
@@ -330,7 +330,7 @@ def process_mailer(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
                     if 64 not in email_sets and 64 not in sms_sets:
                         send_email(to_emails, mail_type, data, 64, oi.pk)
@@ -348,7 +348,7 @@ def process_mailer(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
                     if 74 not in email_sets and 74 not in sms_sets:
                         send_email(to_emails, mail_type, data, 74, oi.pk)
@@ -366,7 +366,7 @@ def process_mailer(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_DOMAIN, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
                     if 145 not in email_sets and 145 not in sms_sets:
                         send_email(to_emails, mail_type, data, 145, oi.pk)
@@ -384,7 +384,7 @@ def process_mailer(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
                     if 155 not in email_sets and 155 not in sms_sets:
                         send_email(to_emails, mail_type, data, 155, oi.pk)
@@ -402,7 +402,7 @@ def process_mailer(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
                     if 94 not in email_sets and 94 not in sms_sets:
                         send_email(to_emails, mail_type, data, 94, oi.pk)
@@ -446,7 +446,7 @@ def process_mailer(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
                     if 105 not in email_sets and 105 not in sms_sets:
                         send_email(to_emails, mail_type, data, 105, oi.pk)
@@ -464,7 +464,7 @@ def process_mailer(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard/roundone/profile/" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 122 not in email_sets and 122 not in sms_sets:
                         send_email(to_emails, mail_type, data, 122, oi.pk)
@@ -583,7 +583,7 @@ def service_initiation(pk=None):
                     'mobile': oi.order.mobile,
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                         settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                        token.decode()),
+                        token),
                 })
                 sms_sets = list(
                     oi.smsorderitemoperation_set.all().values_list(

@@ -54,7 +54,7 @@ def draft_reminder_mail():
                         'mobile': oi.order.mobile,
                         'days': 22,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                     })
                     send_email_task.delay(
                         to_emails, mail_type, data, status=26, oi=oi.pk)
@@ -79,7 +79,7 @@ def draft_reminder_mail():
                         'mobile': oi.order.mobile,
                         'days': 15,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                     })
                     send_email_task.delay(
                         to_emails, mail_type, data, status=26, oi=oi.pk)
@@ -103,7 +103,7 @@ def draft_reminder_mail():
                         'mobile': oi.order.mobile,
                         'days': 7,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                     })
                     send_email_task.delay(
                         to_emails, mail_type, data, status=26, oi=oi.pk)
@@ -126,7 +126,7 @@ def draft_reminder_mail():
                         'draft_added': oi.draft_added_on,
                         'mobile': oi.order.mobile,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                     })
                     last_oi_status = oi.oi_status
                     oi.oi_status = 4
@@ -162,7 +162,7 @@ def draft_reminder_mail():
                         'mobile': oi.order.mobile,
                         'days': 7,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                     })
                     send_email_task.delay(
                         to_emails, mail_type, data, status=27, oi=oi.pk)
@@ -185,7 +185,7 @@ def draft_reminder_mail():
                         'mobile': oi.order.mobile,
                         'days': 4,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                     })
                     send_email_task.delay(
                         to_emails, mail_type, data, status=27, oi=oi.pk)
@@ -208,7 +208,7 @@ def draft_reminder_mail():
                         'draft_added': oi.draft_added_on,
                         'mobile': oi.order.mobile,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                     })
 
                     try:
