@@ -921,7 +921,7 @@ GCP_INVOICE_BUCKET = 'learning-invoices'
 # GS_AUTO_CREATE_BUCKET = True
 STATIC_URL = 'https://gcp-static.shine.com/l/s/'
 MEDIA_URL = 'https://gcp-static.shine.com/l/m/'
-
+# DOWNLOAD_URL = 'https://gcp-static.shine.com/l/m/download/'
 
 ##### EMAIL SETTINGS #######
 EMAIL_HOST = '10.136.0.20'
