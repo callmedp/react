@@ -1,6 +1,5 @@
 from django.db import models
 
-from django.utils.translation import ugettext_lazy as _
 from seo.models import AbstractSEO, AbstractAutoDate
 from django.conf import settings
 from meta.models import ModelMeta
