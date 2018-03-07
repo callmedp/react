@@ -5,9 +5,10 @@ from datetime import datetime, timedelta, date
 
 from .sms import SendSMS
 from .email import SendMail
+from emailers import mailers_config
 
 from wallet.models import WalletTransaction, Wallet
-# from core.common import CampaignUrl
+from core.common import CampaignUrl
 
 from order.models import Order
 
@@ -46,7 +47,7 @@ def get_eligible_orders():
                 email = order.candidate.email
                 mobile = order.order_mobile
             except Exception as e:
-                logging.getLogger('cashback_log').error(str(e))
+                logging.getLogger('error_log').error(str(e))
                 # user_info = wallet_tran_obj.get_user_info()
                 # email = user_info.get('email', '')
                 # mobile = user_info.get('mobile', '')
@@ -82,13 +83,13 @@ def get_eligible_orders():
 
                         email_sent.append(email)
                     except Exception as e:
-                        logging.getLogger('email_log').error(
+                        logging.getLogger('error_log').error(
                             "OrderID#%s - %s" % (str(order.pk), str(e)))
             else:
-                logging.getLogger('cashback_log').error("%s-%s" % (
+                logging.getLogger('error_log').error("%s-%s" % (
                     str(wallet_tran_obj.id), "email and mobile not fetched"))
     except Exception as e:
-        logging.getLogger('cashback_log').error(str(e))
+        logging.getLogger('error_log').error(str(e))
 
 
 def get_eligible_orders_3lastdays():
@@ -139,13 +140,13 @@ def get_eligible_orders_3lastdays():
 
                         email_sent.append(email)
                     except Exception as e:
-                        logging.getLogger('email_log').error(
+                        logging.getLogger('error_log').error(
                             "Wallet ID#%s - %s" % (str(wallet_obj.pk), str(e)))
             else:
-                logging.getLogger('cashback_log').error("%s-%s" % (
+                logging.getLogger('error_log').error("%s-%s" % (
                     str(wallet_obj.id), "email and mobile not fetched"))
     except Exception as e:
-        logging.getLogger('cashback_log').error(str(e))
+        logging.getLogger('error_log').error(str(e))
 
 
 def get_eligible_orders_lastdays():
@@ -196,10 +197,10 @@ def get_eligible_orders_lastdays():
 
                         email_sent.append(email)
                     except Exception as e:
-                        logging.getLogger('email_log').error(
+                        logging.getLogger('error_log').error(
                             "Wallet ID#%s - %s" % (str(wallet_obj.pk), str(e)))
             else:
-                logging.getLogger('cashback_log').error("%s-%s" % (
+                logging.getLogger('error_log').error("%s-%s" % (
                     str(wallet_obj.id), "email and mobile not fetched"))
     except Exception as e:
-        logging.getLogger('cashback_log').error(str(e))
+        logging.getLogger('error_log').error(str(e))

@@ -38,5 +38,5 @@ def feedback_emailer():
                     subject, html, to=[oi_item.order.email],
                     headers=headers_dict, oi=oi_item.pk, status=5)
         except Exception as e:
-            logging.getLogger('email_log').error(
+            logging.getLogger('error_log').error(
                 "%s - %s" % (str(oi_item), str(e)))

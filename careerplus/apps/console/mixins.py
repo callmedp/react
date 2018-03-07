@@ -41,7 +41,7 @@ class ActionUserMixin(object):
             # try:
             #     SendMail().send(to_emails, mail_type, email_data)
             # except Exception as e:
-            #     logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+            #     logging.getLogger('error_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
 
             obj.orderitemoperation_set.create(
                 oi_status=1,
@@ -88,7 +88,7 @@ class ActionUserMixin(object):
                     try:
                         SendSMS().send(sms_type=mail_type, data=email_data)
                     except Exception as e:
-                        logging.getLogger('sms_log').error(
+                        logging.getLogger('error_log').error(
                             "%s - %s" % (str(mail_type), str(e)))
 
                 addons = []
@@ -170,7 +170,7 @@ class ActionUserMixin(object):
                                     SendSMS().send(
                                         sms_type=mail_type, data=email_data)
                                 except Exception as e:
-                                    logging.getLogger('sms_log').error(
+                                    logging.getLogger('error_log').error(
                                         "%s - %s" % (str(mail_type), str(e)))
 
                         # sms to writer in case of express and super express delivery
@@ -213,7 +213,7 @@ class ActionUserMixin(object):
                                     SendSMS().send(
                                         sms_type=mail_type, data=email_data)
                                 except Exception as e:
-                                    logging.getLogger('sms_log').error(
+                                    logging.getLogger('error_log').error(
                                         "%s - %s" % (str(mail_type), str(e)))
 
                         # sms to writer in case of express and super express delivery
@@ -255,7 +255,7 @@ class ActionUserMixin(object):
                                 SendSMS().send(
                                     sms_type=mail_type, data=email_data)
                             except Exception as e:
-                                logging.getLogger('sms_log').error(
+                                logging.getLogger('error_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
 
                         # sms to writer in case of express and super express delivery
@@ -364,13 +364,13 @@ class ActionUserMixin(object):
                 try:
                     SendMail().send(to_emails, mail_type, email_dict)
                 except Exception as e:
-                    logging.getLogger('email_log').error(
+                    logging.getLogger('error_log').error(
                         "%s - %s - %s" % (
                             str(to_emails), str(e), str(mail_type)))
                 try:
                     SendSMS().send(sms_type=mail_type, data=email_dict)
                 except Exception as e:
-                    logging.getLogger('sms_log').error(
+                    logging.getLogger('error_log').error(
                         "%s - %s" % (str(mail_type), str(e)))
 
             elif oi.product.type_flow == 6:

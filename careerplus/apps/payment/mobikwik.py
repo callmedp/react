@@ -229,7 +229,7 @@ class MobikwikResponseView(View, PaymentMixin, OrderMixin):
                                         pass
                                     return HttpResponseRedirect(return_url)
                                 except Exception as e:
-                                    logging.getLogger('payment_log').error(str(e))
+                                    logging.getLogger('error_log').error(str(e))
                                     return HttpResponseRedirect(reverse('payment:payment_oops')+'?error=success&txn_id='+txn)
                             else:
                                 err_mesg = "Fraud Detected for order id - %s" % orderid
@@ -245,7 +245,7 @@ class MobikwikResponseView(View, PaymentMixin, OrderMixin):
         else:
             err_mesg = str(request.POST)
 
-        logging.getLogger('payment_log').error(err_mesg)
+        logging.getLogger('error_log').error(err_mesg)
         return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure')
 
     @csrf_exempt

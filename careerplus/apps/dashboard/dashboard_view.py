@@ -398,7 +398,7 @@ class DashboardFeedbackView(TemplateView):
                         try:
                             SendMail().send(to_emails, mail_type, email_dict)
                         except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+                            logging.getLogger('error_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
 
                 else:
                     data['display_message'] = "select valid input for feedback"
@@ -542,7 +542,7 @@ class DashboardAcceptService(View):
                                     to_mobile=email_dict.get('mobile'),
                                     status=1)
                             except Exception as e:
-                                logging.getLogger('sms_log').error(
+                                logging.getLogger('error_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
 
                         elif oi.product.type_flow == 8 and (9 not in email_sets and 4 not in sms_sets):
@@ -556,7 +556,7 @@ class DashboardAcceptService(View):
                                     to_mobile=email_dict.get('mobile'),
                                     status=1)
                             except Exception as e:
-                                logging.getLogger('sms_log').error(
+                                logging.getLogger('error_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
                     else:
                         data['display_message'] = "please do valid action only"

@@ -19,7 +19,7 @@ class SendSMS(object):
                 "method": "sms", 'sender': 'SHINEM'}
             resp = requests.get(settings.HTMSL_URL, params=payload)
         except Exception as e:
-            logging.getLogger('sms_log').error("%s - %s" % (str(mob), str(e)))
+            logging.getLogger('error_log').error("%s - %s" % (str(mob), str(e)))
 
     def render_template(self, template, context):
         return render_to_string(template, context)
@@ -33,7 +33,7 @@ class SendSMS(object):
                 self.base_send_sms(mobile, self.render_template(
                     send_dict.get('template'), data))
             except Exception as e:
-                logging.getLogger('sms_log').error("%s - %s" % (
+                logging.getLogger('error_log').error("%s - %s" % (
                     str(mobile), str(e)))
         else:
             return False
