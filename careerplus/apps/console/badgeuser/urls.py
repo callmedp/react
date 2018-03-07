@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
 
     # partner inbox Queue
-    url(r'^upload-certificate/$',
+    url(r'^upload-certificate/(?P<upload_type>[a-z\-]+)$',
         views.UploadCertificate.as_view(),
         name='upload-certificate'),
 
@@ -12,7 +12,7 @@ urlpatterns = [
         views.UploadTaskListView.as_view(),
         name='upload-tasklist'),
 
-    # url(r'^download-task/$',
-    #     views.DownloadTaskView.as_view(),
-    #     name='download-task'),
+    url(r'^badge-user-task/$',
+        views.DownloadBadgeUserView.as_view(),
+        name='badge-user-task'),
 ]

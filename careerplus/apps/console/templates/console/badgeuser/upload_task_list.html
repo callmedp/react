@@ -70,7 +70,9 @@
                     <th class="column-title">Task</th>
                     <th class="column-title">Added On</th>
                     <th class="column-title">Created By</th>
-                    <th class="column-title">Completed On</th>
+                    <th class="column-title">Uploaded</th>
+                    <th class="column-title">Generated</th>
+                    <th class="column-title">Completed On</th>  
                   </tr>
                 </thead>
 
@@ -96,6 +98,27 @@
                       </td>
                       <td>{{obj.created}}</td>
                       <td>{{obj.created_by}}</td>
+                      <td>
+                        {% if  obj.file_uploaded %}
+                          <a href="{% url 'console:badge:badge-user-task' %}?task={{obj.pk}}&type=u" class="btn btn-primary btn-circle btn-lg">
+                           <i class="fa fa-upload"></i>
+                          </a>
+                        {% else %}
+                          <a class="btn btn-primary btn-circle btn-lg" disabled="true">
+                            <i class="fa fa-upload"></i>
+                          </a>
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if obj.file_generated %}
+                          <a href="{% url 'console:badge:badge-user-task' %}?task={{obj.pk}}&type=d" class="btn btn-info btn-circle btn-lg">
+                            <i class="fa fa-download"></i>
+                          </a>
+                        {%else%}
+                          <a  class="btn btn-info btn-circle btn-lg" disabled="true">
+                            <i class="fa fa-download"></i></a>
+                        {% endif %}
+                      </td>
                       <td>
                         {% if obj.completed_on %}
                           {{obj.completed_on}}

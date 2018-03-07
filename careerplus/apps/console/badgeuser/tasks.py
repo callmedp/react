@@ -8,6 +8,7 @@ from django.urls import reverse
 from celery.decorators import task
 from scheduler.models import Scheduler
 from partner.models import Certificate, UserCertificate
+from users.mixins import RegistrationLoginApi
 User = get_user_model()
 
 
@@ -93,4 +94,115 @@ def upload_certificate_task(task=None, user=None, vendor=None):
     except Exception as e:
         logging.getLogger('error_log').error(
             "%(msg)s : %(err)s" % {'msg': 'upload certificate task', 'err': str(e)})
+    return f
+
+
+@task(name="upload_candidate_certificate_task")
+def upload_candidate_certificate_task(task=None, user=None):
+    f = False
+    try:
+        up_task = Scheduler.objects.get(pk=task)
+        if up_task:
+            try:
+                up_task.status = 3
+                up_task.save()
+                upload_path = up_task.file_uploaded.name
+                total_rows = 0
+                try:
+                    user = User.objects.get(pk=user)
+                    exist_file = os.path.isfile(
+                        settings.MEDIA_ROOT + '/' + upload_path)
+                    if exist_file:
+                        f = True
+                        with open(
+                            settings.MEDIA_ROOT + '/' + upload_path,
+                            'r', encoding='utf-8', errors='ignore') as upload:
+                            uploader = csv.DictReader(
+                                upload, delimiter=',', quotechar='"')
+                            try:
+                                for i, line in enumerate(uploader):
+                                    pass
+                                total_rows = i + 1
+                            except Exception as e:
+                                total_rows = 2000
+                                logging.getLogger('error_log').error(
+                                    "%(err)s" % {'err': str(e)})
+                        upload.close()
+                        gen_dir = os.path.dirname(upload_path)
+                        filename_tuple = upload_path.split('.')
+                        extension = filename_tuple[len(filename_tuple) - 1]
+                        gen_file_name = str(up_task.pk) + '_GENERATED' + '.' + extension
+                        generated_path = gen_dir + '/' + gen_file_name
+                        generated_file = open(
+                            settings.MEDIA_ROOT + '/' + generated_path, 'w')
+                        with open(settings.MEDIA_ROOT + '/' + upload_path, 'r', encoding='utf-8', errors='ignore') as upload:
+                            uploader = csv.DictReader(
+                                upload, delimiter=',', quotechar='"')
+                            fieldnames = uploader.fieldnames
+                            fieldnames.append('status')
+                            fieldnames.append('reason_for_failure')
+                            csvwriter = csv.DictWriter(
+                                generated_file, delimiter=',', fieldnames=fieldnames)
+                            csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
+                            count = 0
+                            for row in uploader:
+                                try:
+                                    email = row.get('candidate_email', '').strip()
+                                    mobile = row.get('candidate_mobile', '').strip()
+                                    certificate_name = row.get('certificate_name').strip()
+                                    certi_yr_passing = row.get('certificate_year_passing').strip()
+                                    name = row.get('candidate_name').strip()
+                                    resp = RegistrationLoginApi.check_email_exist(email)
+                                    if not certificate_name:
+                                        row['reason_for_failure'] = str(e)
+                                        csvwriter.writerow(row)
+                                    if not resp.get('exists'):
+                                        row['reason_for_failure'] = "user not register on shine"
+                                        csvwriter.writerow(row)
+                                        row['status'] = "failure"
+                                        csvwriter.writerow(row)
+                                    if resp.get('exists'):
+                                        obj, created = Certificate.objects.get_or_create(
+                                            name=certificate_name)
+                                        if created:
+                                            UserCertificate.objects.create(
+                                                user=user, certificate=obj,
+                                                year=certi_yr_passing,
+                                                candidate_email=email,
+                                                candidate_mobile=mobile,
+                                                candidate_name=name)
+                                except Exception as e:
+                                    row['reason_for_failure'] = str(e)
+                                    csvwriter.writerow(row)
+                                count = count + 1
+                                if count % 20 == 0:
+                                    try:
+                                        up_task.percent_done = round((count / float(total_rows))*100, 2)
+                                        up_task.save()
+                                    except:
+                                        pass
+                            up_task.file_generated = generated_path
+                            up_task.percent_done = 100
+                            up_task.status = 2
+                            up_task.completed_on = timezone.now()
+                            up_task.save()
+                            upload.close()
+                            generated_file.close()
+                    else:
+                        up_task.status = 1
+                        up_task.save()
+                except Exception as e:
+                    logging.getLogger('error_log').error(
+                        "%(err)s" % {'err': str(e)})
+                    up_task.status = 1
+                    up_task.save()
+            except Exception as e:
+                logging.getLogger('error_log').error(
+                    "%(err)s" % {'err': str(e)})
+                up_task.status = 1
+                up_task.save()
+        return f
+    except Exception as e:
+        logging.getLogger('error_log').error(
+            "%(err)s" % {'err': str(e)})
     return f

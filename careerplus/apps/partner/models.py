@@ -128,7 +128,8 @@ class Certificate(AbstractAutoDate):
 
 
 class UserCertificate(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True)
     certificate = models.ForeignKey(Certificate)
     year = models.PositiveIntegerField(
         null=True, blank=True, default=datetime.now().year)

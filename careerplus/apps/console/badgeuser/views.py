@@ -4,6 +4,7 @@ from django.views.generic import FormView, ListView, View
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.urls import reverse
+from wsgiref.util import FileWrapper
 from django.http import (
     HttpResponseRedirect, HttpResponseForbidden,
     HttpResponse)
@@ -12,7 +13,8 @@ from django.conf import settings
 from blog.mixins import PaginationMixin
 from scheduler.models import Scheduler
 from .tasks import (
-    upload_certificate_task)
+    upload_certificate_task,
+    upload_candidate_certificate_task)
 from . import forms
 
 
@@ -32,8 +34,10 @@ class UploadCertificate(FormView):
     def get_context_data(self, **kwargs):
         context = super(UploadCertificate, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
+        upload_type = self.kwargs.get('upload_type')
         context.update({
-            'messages': alert})
+            'messages': alert,
+            'upload_type': upload_type})
         return context
 
     def post(self, request, *args, **kwargs):
@@ -41,7 +45,12 @@ class UploadCertificate(FormView):
         if form.is_valid():
             file = request.FILES.get('file', None)
             vendor = request.POST.get('user')
-            task_type = 2
+            upload_type = self.kwargs.get('upload_type')
+            task_type = 0
+            if upload_type == "upload-certificate":
+                task_type = 2
+            elif upload_type == "upload-candidate-certificate":
+                task_type = 3
             try:
                 import time
                 timestr = time.strftime("%Y_%m_%d")
@@ -65,8 +74,12 @@ class UploadCertificate(FormView):
                 dest.close()
                 Task.file_uploaded = path + file_name
                 Task.save()
-                upload_certificate_task(
-                    task=Task.pk, user=request.user.pk, vendor=vendor)
+                if upload_type == "upload-certificate":
+                    upload_certificate_task(
+                        task=Task.pk, user=request.user.pk, vendor=vendor)
+                elif upload_type == "upload-candidate-certificate":
+                    upload_certificate_task(
+                        task=Task.pk, user=request.user.pk, vendor=vendor)
                 messages.add_message(
                     request, messages.SUCCESS,
                     'Task Created SuccessFully')
@@ -104,5 +117,46 @@ class UploadTaskListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(UploadTaskListView, self).get_queryset()
-        queryset = queryset.filter(task_type=2)
+        queryset = queryset.filter(task_type__in=[2, 3])
         return queryset.order_by('-modified')
+
+
+class DownloadBadgeUserView(View):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            task = request.GET.get('task', None)
+            download_type = request.GET.get('type', None)
+            file_path = ''
+            if task:
+                task = Scheduler.objects.get(id=task)
+            else:
+                return HttpResponseForbidden()
+            if task:
+                if download_type == 'u':
+                    file_path = task.file_uploaded.path
+                    filename_tuple = file_path.split('.')
+                    extension = filename_tuple[len(filename_tuple) - 1]
+                    file_name = str(task.pk) + '_UPLOAD' + '.' + extension
+                elif download_type == 'd':
+                    file_path = task.file_generated.path
+                    filename_tuple = file_path.split('.')
+                    extension = filename_tuple[len(filename_tuple) - 1]
+                    file_name = str(task.pk) + '_GENERATED' + '.' + extension
+                if os.path.exists(file_path):
+                    path = file_path
+                else:
+                    path = settings.MEDIA_ROOT + '/' + file_path
+                try:
+                    fsock = FileWrapper(open(path, 'rb'))
+                except IOError:
+                    messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
+                    response = HttpResponseRedirect(reverse('console:tasks:tasklist'))
+                    return response
+                response = HttpResponse(fsock, content_type=mimetypes.guess_type(path)[0])
+                response['Content-Disposition'] = 'attachment; filename="%s"' % (file_name)
+                return response
+        except:
+            messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
+            response = HttpResponseRedirect(reverse('console:tasks:tasklist'))
+            return response
