@@ -49,7 +49,7 @@ def draft_reminder_mail_for_linkedin():
                     'mobile': oi.order.mobile,
                     'days': 22,
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                 })
                 send_email_task.delay(
                     to_emails, mail_type, data, status=106, oi=oi.pk)
@@ -74,7 +74,7 @@ def draft_reminder_mail_for_linkedin():
                     'mobile': oi.order.mobile,
                     'days': 15,
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                 })
                 send_email_task.delay(to_emails, mail_type, data, status=106, oi=oi.pk)
                 try:
@@ -94,7 +94,7 @@ def draft_reminder_mail_for_linkedin():
                     'mobile': oi.order.mobile,
                     'days': 7,
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                 })
                 send_email_task.delay(
                     to_emails, mail_type, data, status=106, oi=oi.pk)
@@ -117,7 +117,7 @@ def draft_reminder_mail_for_linkedin():
                     'draft_added': oi.draft_added_on,
                     'mobile': oi.order.mobile,
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                 })
                 send_email_task.delay(
                     to_emails, mail_type, email_dict, status=9, oi=oi.pk)
@@ -151,7 +151,7 @@ def draft_reminder_mail_for_linkedin():
                     'mobile': oi.order.mobile,
                     'days': 7,
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                 })
                 send_email_task.delay(
                     to_emails, mail_type, data, status=107, oi=oi.pk)
@@ -174,7 +174,7 @@ def draft_reminder_mail_for_linkedin():
                     'mobile': oi.order.mobile,
                     'days': 3,
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                 })
                 send_email_task.delay(
                     to_emails, mail_type, data, status=107, oi=oi.pk)
@@ -197,7 +197,7 @@ def draft_reminder_mail_for_linkedin():
                     'draft_added': oi.draft_added_on,
                     'mobile': oi.order.mobile,
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                 })
 
                 try:

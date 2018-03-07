@@ -59,7 +59,7 @@ class SendSMS(object):
             elif draft == 3:
                 send_dict['template'] = 'emailers/sms/draft3.html'
             token = AutoLogin().encode(data.get('email', ''), data.get('candidateid', ''), data.get('order_id', ''))
-            data['autologin'] = "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode())
+            data['autologin'] = "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
             self.process(data, send_dict)
 
         elif sms_type == "REMINDER":

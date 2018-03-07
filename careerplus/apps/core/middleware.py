@@ -224,3 +224,19 @@ class LearningShineMiddleware(object):
                 logging.getLogger('error_log').error(str(e))
         response = self.get_response(request)
         return response
+
+
+class AmpMiddleware(object):
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        flag = False
+        if 'type' in request.GET:
+            amp_content = request.GET.get('type', '')
+            if amp_content == 'amp':
+                flag = True
+        request.amp = flag
+        response = self.get_response(request)
+        return response

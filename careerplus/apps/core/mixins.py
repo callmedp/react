@@ -258,10 +258,8 @@ class InvoiceGenerate(object):
                 pdf_file = SimpleUploadedFile(
                     file_name, pdf_file,
                     content_type='application/pdf')
-
                 GCPInvoiceStorage().save(settings.INVOICE_DIR + full_path + file_name, pdf_file)
                 order.invoice = settings.INVOICE_DIR + full_path + file_name
-
                 order.save()
                 return order, order.invoice
         except Exception as e:

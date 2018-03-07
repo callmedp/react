@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import datetime
+import calendar
 
 from django.contrib.gis.geoip import GeoIP
 from django.conf import settings
@@ -42,11 +43,23 @@ class WriterInvoiceMixin(object):
         if oi.assigned_to:
             assigned_to = oi.assigned_to
             assigned_date = oi.assigned_date
+            if not assigned_date:
+                ops = oi.orderitemoperation_set.filter(oi_status=1).order_by('id')
+                if ops.exists():
+                    assigned_date = ops[0].created
+                else:
+                    assigned_date = datetime.datetime.today()
         else:
             oi_assigned = oi.orderitem_set.all().exclude(
                 assigned_to=None)
             assigned_to = oi_assigned[0].assigned_to
             assigned_date = oi_assigned[0].assigned_date
+            if not assigned_date:
+                ops = oi_assigned[0].orderitemoperation_set.filter(oi_status=1).order_by('id')
+                if ops.exists():
+                    assigned_date = ops[0].created
+                else:
+                    assigned_date = datetime.datetime.today()
 
         start_date = assigned_date - datetime.timedelta(days=DISCOUNT_ALLOCATION_DAYS)
         end_date = assigned_date + datetime.timedelta(days=DISCOUNT_ALLOCATION_DAYS)
@@ -54,6 +67,9 @@ class WriterInvoiceMixin(object):
             if oi.product and oi.product.type_flow in [1, 12, 13]:
                 prev_month = invoice_date.replace(day=1)
                 prev_month = prev_month - datetime.timedelta(days=1)
+                _, last_day = calendar.monthrange(
+                    prev_month.year, prev_month.month)
+                prev_month = datetime.date(prev_month.year, prev_month.month, last_day)
 
                 linkedin_ois = OrderItem.objects.filter(
                     order__candidate_id=oi.order.candidate_id,
@@ -61,8 +77,7 @@ class WriterInvoiceMixin(object):
                     oi_status=4,
                     assigned_to=assigned_to,
                     assigned_date__range=[start_date, end_date],
-                    closed_on__month__lte=prev_month.month,
-                    closed_on__year__lte=prev_month.year).order_by('-id')
+                    closed_on__lte=prev_month).order_by('-id')
                 if linkedin_ois.exists():
                     linkedin_obj = linkedin_ois[0]
                     writing_ois = linkedin_obj.order.orderitems.filter(
@@ -77,14 +92,17 @@ class WriterInvoiceMixin(object):
                         start_date = assigned_date - datetime.timedelta(days=DISCOUNT_ALLOCATION_DAYS)
                         end_date = assigned_date + datetime.timedelta(days=DISCOUNT_ALLOCATION_DAYS)
                         closed_on = linkedin_obj.closed_on
+                        _, last_day = calendar.monthrange(
+                            closed_on.year, closed_on.month)
+                        closed_on_last = datetime.date(
+                            closed_on.year, closed_on.month, last_day)
                         writing_ois = OrderItem.objects.filter(
                             order__candidate_id=oi.order.candidate_id,
                             product__type_flow__in=[1, 12, 13],
                             oi_status=4,
                             assigned_to=assigned_to,
                             assigned_date__range=[start_date, end_date],
-                            closed_on__month__lte=closed_on.month,
-                            closed_on__year__lte=closed_on.year).exclude(
+                            closed_on__lte=closed_on_last).exclude(
                             product__id__in=COVER_LETTER_PRODUCT_LIST)
 
                         if writing_ois.exists():
@@ -96,9 +114,9 @@ class WriterInvoiceMixin(object):
                             if not exp_code:
                                 exp_code = 'FR'
                             value_dict = linkedin_dict.get(exp_code, {})
-                            starter_value = (LINKEDIN_STARTER_VALUE * value_dict.get(1)) / 100
+                            starter_value = LINKEDIN_STARTER_VALUE
                             linkedin_amount = starter_value
-                            if value_dict and value_dict.get(user_type) != 1:
+                            if value_dict and value_dict.get(user_type):
                                 linkedin_amount = (starter_value * value_dict.get(user_type)) / 100
                                 linkedin_amount = int(linkedin_amount)
 
@@ -113,23 +131,26 @@ class WriterInvoiceMixin(object):
                 if not exp_code:
                     exp_code = 'FR'
                 value_dict = linkedin_dict.get(exp_code, {})
-                starter_value = (LINKEDIN_STARTER_VALUE * value_dict.get(1)) / 100
+                starter_value = LINKEDIN_STARTER_VALUE
                 linkedin_amount = starter_value
-                if value_dict and value_dict.get(user_type) and user_type != 1:
+                if value_dict and value_dict.get(user_type):
                     linkedin_amount = (starter_value * value_dict.get(user_type)) / 100
                     linkedin_amount = int(linkedin_amount)
                 if writing_ois.exists() and oi.pk not in self.combo_discount_object:
                     combo_discount = (linkedin_amount * COMBO_DISCOUNT) / 100
                     self.combo_discount_object.add(oi.pk)
                 else:
+                    _, last_day = calendar.monthrange(
+                        invoice_date.year, invoice_date.month) 
+                    last_invoice_date = datetime.date(
+                        invoice_date.year, invoice_date.month, last_day)
                     writing_ois = OrderItem.objects.filter(
                         order__candidate_id=oi.order.candidate_id,
                         product__type_flow__in=[1, 12, 13],
                         oi_status=4,
                         assigned_to=assigned_to,
                         assigned_date__range=[start_date, end_date],
-                        closed_on__month__lte=invoice_date.month,
-                        closed_on__year__lte=invoice_date.year).exclude(
+                        closed_on__lte=last_invoice_date).exclude(
                         product__id__in=COVER_LETTER_PRODUCT_LIST)
                     if writing_ois.exists() and oi.pk not in self.combo_discount_object:
                         combo_discount = (linkedin_amount * COMBO_DISCOUNT) / 100
@@ -208,12 +229,21 @@ class WriterInvoiceMixin(object):
             error = msg
 
         if user and invoice_date and not error:
+            _, last_day = calendar.monthrange(
+                invoice_date.year, invoice_date.month)  #  _  return weekday of first day of the month
+            last_invoice_date = datetime.date(
+                invoice_date.year, invoice_date.month, last_day)
+            first_invoice_date = datetime.date(
+                invoice_date.year, invoice_date.month, 1)
+            last_invoice_date = last_invoice_date + datetime.timedelta(
+                days=1)
+
             orderitems = OrderItem.objects.filter(
                 order__status__in=[1, 3],
                 product__type_flow__in=[1, 8, 12, 13],
                 oi_status=4, assigned_to=user,
-                closed_on__month=invoice_date.month,
-                closed_on__year=invoice_date.year, no_process=False).select_related('product').order_by('id')
+                closed_on__range=[first_invoice_date, last_invoice_date],
+                no_process=False).select_related('product').order_by('id')
 
             writing_dict = RESUME_WRITING_MATRIX_DICT
             linkedin_dict = LINKEDIN_WRITING_MATRIX_DICT
@@ -235,13 +265,16 @@ class WriterInvoiceMixin(object):
                 else:
                     user_type = user.userprofile.last_writer_type
             else:
-                user_type = user.userprofile.writer_type if user.userprofile else 0
+                user_type = user.userprofile.writer_type if user.userprofile else 1
 
             total_combo_discount = 0
             total_sum = 0
             success_closure = 0
 
+            order_before = datetime.date(2017, 11, 3)
+
             for oi in orderitems:
+                process = False
                 oi_dict = {}
                 # sla incentive or penalty calculation
                 if oi.assigned_date and oi.closed_on and oi.assigned_date < oi.closed_on:
@@ -255,6 +288,19 @@ class WriterInvoiceMixin(object):
                     else:
                         if finish_days <= REGULAR_SLA:
                             success_closure += 1
+
+                if oi.created.date() < order_before:
+                    oi_dict = {}
+                    oi_dict.update({
+                        "item_id": oi.pk,
+                        "product_name": oi.product.get_name,
+                        "closed_on": oi.closed_on.date(),
+                        "combo_discount": 0,
+                        "amount": 0,
+                        "item_type": "older",
+                    })
+                    item_list.append(oi_dict)
+                    continue
 
                 if oi.is_variation:
                     p_oi = oi.parent
@@ -273,9 +319,9 @@ class WriterInvoiceMixin(object):
                         if not exp_code:
                             exp_code = 'FR'
                         value_dict = writing_dict.get(exp_code, {})
-                        starter_value = (WRITING_STARTER_VALUE * value_dict.get(1)) / 100
+                        starter_value = WRITING_STARTER_VALUE
                         amount = starter_value
-                        if value_dict and value_dict.get(user_type) and user_type != 1:
+                        if value_dict and value_dict.get(user_type):
                             amount = (starter_value * value_dict.get(user_type)) / 100
                             amount = int(amount)
 
@@ -335,6 +381,8 @@ class WriterInvoiceMixin(object):
                     item_list.append(oi_dict)
                     total_sum += amount
 
+                    process = True
+
                 elif oi.is_addon:
                     pk = oi.pk
                     product_name = oi.product.get_name
@@ -349,9 +397,10 @@ class WriterInvoiceMixin(object):
                             oi=oi, invoice_date=invoice_date,
                             user_type=user_type)
                         total_combo_discount += combo_discount
-
+                        process = True
                     elif product_pk in COVER_LETTER_PRODUCT_LIST:
                         amount = COVER_LETTER
+                        process = True
                     elif product_pk in SECOND_REGULAR_RESUME_PRODUCT_LIST:
                         amount = SECOND_REGULAR_RESUME
                         # combo discount calculation
@@ -359,20 +408,19 @@ class WriterInvoiceMixin(object):
                             oi=oi, invoice_date=invoice_date,
                             user_type=user_type)
                         total_combo_discount += combo_discount
-                    else:
-                        error = 'Addon Product id - %s is missing in product_list (backend).' % (product_pk)
-                        break
-
-                    oi_dict.update({
-                        "item_id": pk,
-                        "product_name": product_name,
-                        "closed_on": closed_on,
-                        "combo_discount": combo_discount,
-                        "amount": amount,
-                        "item_type": "addon",
-                    })
-                    item_list.append(oi_dict)
-                    total_sum += amount
+                        process = True
+                    
+                    if process:
+                        oi_dict.update({
+                            "item_id": pk,
+                            "product_name": product_name,
+                            "closed_on": closed_on,
+                            "combo_discount": combo_discount,
+                            "amount": amount,
+                            "item_type": "addon",
+                        })
+                        item_list.append(oi_dict)
+                        total_sum += amount
                 elif oi.is_combo:
                     pk = oi.pk
                     product_name = oi.product.get_name
@@ -404,13 +452,13 @@ class WriterInvoiceMixin(object):
                             exp_code = 'FR'
                         if oi.product.type_flow == 8:
                             value_dict = linkedin_dict.get(exp_code, {})
-                            starter_value = (LINKEDIN_STARTER_VALUE * value_dict.get(1)) / 100
+                            starter_value = LINKEDIN_STARTER_VALUE
                         else:
                             value_dict = writing_dict.get(exp_code, {})
-                            starter_value = (WRITING_STARTER_VALUE * value_dict.get(1)) / 100
+                            starter_value = WRITING_STARTER_VALUE
 
                         amount = starter_value
-                        if value_dict and value_dict.get(user_type) and user_type != 1:
+                        if value_dict and value_dict.get(user_type):
                             amount = (starter_value * value_dict.get(user_type)) / 100
 
                         if product_pk in VISUAL_RESUME_PRODUCT_LIST:
@@ -464,7 +512,8 @@ class WriterInvoiceMixin(object):
                             item_list.append(d_dict)
                             added_delivery_object.append(p_oi.pk)
                             total_sum += amount
-                else:
+                    process = True
+                elif not process:
                     pk = oi.pk
                     product_name = oi.product.get_name
                     closed_on = oi.closed_on.date()
@@ -494,13 +543,13 @@ class WriterInvoiceMixin(object):
                             exp_code = 'FR'
                         if oi.product.type_flow == 8:
                             value_dict = linkedin_dict.get(exp_code, {})
-                            starter_value = (LINKEDIN_STARTER_VALUE * value_dict.get(1)) / 100
+                            starter_value = LINKEDIN_STARTER_VALUE
                         else:
                             value_dict = writing_dict.get(exp_code, {})
-                            starter_value = (WRITING_STARTER_VALUE * value_dict.get(1)) / 100
+                            starter_value = WRITING_STARTER_VALUE
 
                         amount = starter_value
-                        if value_dict and value_dict.get(user_type) and user_type != 1:
+                        if value_dict and value_dict.get(user_type):
                             amount = (starter_value * value_dict.get(user_type)) / 100
 
                         if product_pk in VISUAL_RESUME_PRODUCT_LIST:
@@ -545,6 +594,8 @@ class WriterInvoiceMixin(object):
                         }
                         item_list.append(d_dict)
                         total_sum += amount
+
+                    process = True
 
             # penalty and incentive calc
             penalty = 0
@@ -628,7 +679,7 @@ class WriterInvoiceMixin(object):
                 pdf_file = InvoiceGenerate().generate_pdf(
                     context_dict=data,
                     template_src='invoice/writer_invoice.html')
-                full_path = "user/{user_pk}/{month}_{year}/".format(
+                path = "invoice/user/{user_pk}/{month}_{year}/".format(
                     user_pk=user.pk, month=invoice_date.month,
                     year=invoice_date.year)
                 file_name = 'invoice-' + str(user.name) + '-'\
@@ -636,10 +687,8 @@ class WriterInvoiceMixin(object):
                 pdf_file = SimpleUploadedFile(
                     file_name, pdf_file,
                     content_type='application/pdf')
-
-                GCPInvoiceStorage().save(settings.INVOICE_DIR + full_path + file_name, pdf_file)
-
-                user.userprofile.user_invoice = settings.INVOICE_DIR + full_path + file_name
+                GCPInvoiceStorage().save(path + file_name, pdf_file)
+                user.userprofile.user_invoice = path + file_name
                 user.userprofile.invoice_date = invoice_date
                 user.userprofile.save()
                 user.save()

@@ -49,7 +49,7 @@
             </li>
           </ul>
         </li>
-
+        {% comment %}
         {% if request.user|has_group:WRITING_GROUP_LIST %}
         <li class="">
           <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -73,6 +73,7 @@
           </ul>
         </li>
         {% endif %}
+        {% endcomment %}
 
       </ul>
     </nav>

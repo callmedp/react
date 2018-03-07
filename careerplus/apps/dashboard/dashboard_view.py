@@ -231,7 +231,7 @@ class DashboardDetailView(TemplateView):
         if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
             ops = []
             if self.oi.product.type_flow in [1, 12, 13]:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27, 161, 162, 163])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27, 161, 162, 163, 181])
             elif self.oi.product.type_flow == 2:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 161, 162, 163])
 
@@ -246,7 +246,7 @@ class DashboardDetailView(TemplateView):
             elif self.oi.product.type_flow == 7:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 4, 5, 6, 61, 161, 162, 163])
             elif self.oi.product.type_flow == 8:
-                oi_status_list = [2, 49, 5, 46, 48, 27, 4, 161, 162, 163]
+                oi_status_list = [2, 49, 5, 46, 48, 27, 4, 161, 162, 163, 181]
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=oi_status_list)
             elif self.oi.product.type_flow == 10:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 101, 161, 162, 163])
@@ -528,7 +528,7 @@ class DashboardAcceptService(View):
                             'draft_added': oi.draft_added_on,
                             'mobile': oi.order.mobile,
                             'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                         })
 
                         if oi.product.type_flow in [1, 12, 13] and (9 not in email_sets and 4 not in sms_sets):

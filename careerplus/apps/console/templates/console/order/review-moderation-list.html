@@ -56,6 +56,13 @@
                             </div>
                             <br/>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.created.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.created }}
+                            </div>
+                            <br/>
+                        </div>
                        {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
                        {% endif %}
@@ -139,7 +146,8 @@
                       <input type="checkbox" id="check-all" class="flat">
                     </th>
                     <th class="column-title">Content Type</th>
-                    <th class="column-title">Review Item</th>
+                    <th class="column-title">Created Date</th>
+                    <th class="column-title">Product Name</th>
                     <th class="column-title">Review Content</th>
                     <th class="column-title">Review Status</th>
                     <th class="column-title">#Edit</th>
@@ -156,6 +164,7 @@
                       <input type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
                     </td>
                     <td class=" ">{{obj.content_type}}</td>
+                    <td class=" ">{{obj.created}}</td>
                     <td class=" ">{{obj.reviewed_item}}</td>
                     <td class=" ">{{obj.content|truncatechars:20|safe}}</td>
                     {% if obj.status == 0 %}
@@ -248,10 +257,30 @@
 {% block js_block %}
     {{block.super}}
     <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
     <script type="text/javascript" src="{% static "console/js/order/review_action.js" %}">
     </script>
     <script type="text/javascript">
       $(document).ready(function() {
+        $('.date-range-picker').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+              format: 'DD/MM/YYYY',
+              cancelLabel: 'Clear',
+            },
+            maxDate: moment().endOf("day"),
+        },function(start, end, label) {
+          
+        });
+
+        $('.date-range-picker').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+        });
+
+        $('.date-range-picker').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        })
+
         $('#review_filter').click(function(){
             $('#review-filter-form').submit();
         });

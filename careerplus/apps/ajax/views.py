@@ -260,7 +260,7 @@ class ApproveByAdminDraft(View):
                         'mobile': obj.order.mobile,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
 
                     mail_type = 'RESUME_CRITIQUE_CLOSED'
@@ -317,7 +317,7 @@ class ApproveByAdminDraft(View):
                         'mobile': obj.order.mobile,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
 
                     draft_upload_mail(
@@ -349,7 +349,7 @@ class ApproveByAdminDraft(View):
                             'draft_added': obj.draft_added_on,
                             'mobile': obj.order.mobile,
                             'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                         })
                         send_email_task.delay(
                             to_emails, mail_type, email_dict, status=9,
@@ -426,6 +426,7 @@ class SaveWaitingInput(View):
         if request.is_ajax() and request.user.is_authenticated():
             data = {"message": "Waiting input Not Updated"}
             oi_pk = request.POST.get('oi_pk', None)
+            msg = request.POST.get('inputmsg', None)
             waiting_input = request.POST.get('waiting_input', None)
             try:
                 obj = OrderItem.objects.get(pk=oi_pk)
@@ -434,6 +435,22 @@ class SaveWaitingInput(View):
                 else:
                     obj.waiting_for_input = False
                 obj.save()
+                obj.message_set.create(
+                    message=msg,
+                    added_by=request.user
+                )
+                if obj.waiting_for_input:
+                    obj.orderitemoperation_set.create(
+                        oi_status=181,
+                        last_oi_status=obj.oi_status,
+                        added_by=request.user
+                    )
+                elif not obj.waiting_for_input:
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=181,
+                        added_by=request.user
+                    )
                 data['message'] = 'Waiting Input Updated Successfully.'
             except Exception as e:
                 data['message'] = str(e)
@@ -478,7 +495,7 @@ class ApproveDraftByLinkedinAdmin(View):
                         'mobile': obj.order.mobile,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
 
                     if obj.draft_counter == 1:

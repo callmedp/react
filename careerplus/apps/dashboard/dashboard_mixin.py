@@ -20,7 +20,7 @@ class DashboardInfo(object):
 
     def check_empty_inbox(self, candidate_id=None):
         if candidate_id:
-            days = 6 * 30
+            days = 18 * 30
             last_payment_date = timezone.now() - datetime.timedelta(days=days)
             orderitems = OrderItem.objects.filter(
                 order__status__in=[1, 3],
@@ -30,7 +30,7 @@ class DashboardInfo(object):
                 return False
         return True
 
-    def get_inbox_list(self, candidate_id=None, request=None, last_month_from=6, select_type=0, page=1):
+    def get_inbox_list(self, candidate_id=None, request=None, last_month_from=18, select_type=0, page=1):
         if candidate_id:
             days = last_month_from * 30
             last_payment_date = timezone.now() - datetime.timedelta(days=days)

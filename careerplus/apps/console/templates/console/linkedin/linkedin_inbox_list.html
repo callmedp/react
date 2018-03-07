@@ -346,6 +346,8 @@
                             <input type="checkbox" class="flat form-control" {% if obj.waiting_for_input %}checked="checked"{% endif %} name="waiting_input"></div>
                             <div style="display:none">
                                 <input type="hidden" name="oi_pk" value="{{obj.pk}}">
+                                <textarea id="msgid" maxlength="255" name="inputmsg">
+                                </textarea>
                             </div>
                             <button type="button" onclick="saveWaitingForInput('{{obj.pk}}',)" class="btn btn-success btn-xs">Save</button>
                         </form>

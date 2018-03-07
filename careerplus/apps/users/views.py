@@ -459,6 +459,7 @@ class GenerateWriterInvoiceView(View):
 class DownloadWriterInvoiceView(View):
     def get(self, request, *args, **kwargs):
         try:
+            import os
             user = request.user
             invoice = None
             if user.is_authenticated() and user.userprofile and user.userprofile.user_invoice:

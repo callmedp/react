@@ -58,12 +58,12 @@ PAYMENT_DROP_LEAD = 10 * 60
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
-        'URL': 'http://172.22.65.36:8983/solr/prdt',
+        'URL': 'http://10.136.2.43:8989/solr/prdt',
         'INCLUDE_SPELLING': False,
     },
     'index': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
-        'URL': 'http://10.136.2.3:8989/solr/prdt',
+        'URL': 'http://10.136.2.25:8989/solr/prdt',
         'INCLUDE_SPELLING': False,
     }
 }
@@ -222,9 +222,9 @@ TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
 OAUTH_URL = "https://www.linkedin.com/oauth/v2/authorization?"
 
 # Addon List For writer Invoice
-VISUAL_RESUME_PRODUCT_LIST = []
+VISUAL_RESUME_PRODUCT_LIST = [2052, 2053, 2054, 2055, 2056]
 COVER_LETTER_PRODUCT_LIST = [40]
-SECOND_REGULAR_RESUME_PRODUCT_LIST = [35,36,37,38,39]
+SECOND_REGULAR_RESUME_PRODUCT_LIST = [35, 36, 37, 38, 39]
 
 # Booster Recruiters
 BOOSTER_RECRUITERS = [
