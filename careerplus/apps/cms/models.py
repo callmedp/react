@@ -269,8 +269,8 @@ class PageWidget(AbstractCommonModel):
 
 
 def get_upload_path_cms_doc(instance, filename):
-    return "documents/{pr_id}/{filename}".format(
-        pr_id=instance.id, filename=filename)
+    return "documents/{filename}".format(
+        filename=filename)
 
 
 class Document(models.Model):
@@ -286,12 +286,6 @@ class Document(models.Model):
 
     def __str__(self):
         return str(self.id)
-
-    # def get_url(self):
-    #     if self.doc:
-    #         filename = self.doc.name
-    #         url = settings.DOWNLOAD_URL + filename
-    #         return url
 
 
 class Comment(AbstractCommonModel):
