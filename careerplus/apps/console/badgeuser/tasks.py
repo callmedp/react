@@ -98,7 +98,7 @@ def upload_certificate_task(task=None, user=None, vendor=None):
 
 
 @task(name="upload_candidate_certificate_task")
-def upload_candidate_certificate_task(task=None, user=None):
+def upload_candidate_certificate_task(task=None, user=None, vendor=None):
     f = False
     try:
         up_task = Scheduler.objects.get(pk=task)
@@ -150,17 +150,8 @@ def upload_candidate_certificate_task(task=None, user=None):
                                     email = row.get('candidate_email', '').strip()
                                     mobile = row.get('candidate_mobile', '').strip()
                                     certificate_name = row.get('certificate_name').strip()
-                                    certi_yr_passing = row.get('certificate_year_passing').strip()
-                                    name = row.get('candidate_name').strip()
+                                    certi_yr_passing = row.get('year').strip()
                                     resp = RegistrationLoginApi.check_email_exist(email)
-                                    if not certificate_name:
-                                        row['reason_for_failure'] = str(e)
-                                        csvwriter.writerow(row)
-                                    if not resp.get('exists'):
-                                        row['reason_for_failure'] = "user not register on shine"
-                                        csvwriter.writerow(row)
-                                        row['status'] = "failure"
-                                        csvwriter.writerow(row)
                                     if resp.get('exists'):
                                         obj, created = Certificate.objects.get_or_create(
                                             name=certificate_name)
@@ -169,8 +160,11 @@ def upload_candidate_certificate_task(task=None, user=None):
                                                 user=user, certificate=obj,
                                                 year=certi_yr_passing,
                                                 candidate_email=email,
-                                                candidate_mobile=mobile,
-                                                candidate_name=name)
+                                                candidate_mobile=mobile)
+                                    else:
+                                        row['reason_for_failure'] = "user not register on shine"
+                                        row['status'] = "failure"
+                                    csvwriter.writerow(row)
                                 except Exception as e:
                                     row['reason_for_failure'] = str(e)
                                     csvwriter.writerow(row)

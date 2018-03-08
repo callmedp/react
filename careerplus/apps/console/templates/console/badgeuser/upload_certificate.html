@@ -62,7 +62,7 @@
           </div>
           <div class="x_content">
             {% if form %}
-            <form class="form-horizontal form-label-left" novalidate data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="id-token-gen-form">{% csrf_token %}
+            <form class="form-horizontal form-label-left" novalidate data-parsley-validate method="POST" action="{% url 'console:badge:upload-certificate' upload_type %}" enctype="multipart/form-data" id="id-token-gen-form">{% csrf_token %}
               {{form.media}}
               <fieldset>
                     {% for field in form %}
@@ -115,7 +115,7 @@
                         <th class="column-title">year</th>
                         <th class="column-title">candidate_email</th>
                         <th class="column-title">candidate_mobile</th>
-                        <th class="column-title">candidate_name</th>
+                        <th class="column-title">certificate_name</th>
                       {% endif %}
                     </tr>
                   </thead>
