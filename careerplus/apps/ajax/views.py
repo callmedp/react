@@ -260,7 +260,7 @@ class ApproveByAdminDraft(View):
                         'mobile': obj.order.mobile,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
 
                     mail_type = 'RESUME_CRITIQUE_CLOSED'
@@ -317,7 +317,7 @@ class ApproveByAdminDraft(View):
                         'mobile': obj.order.mobile,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
 
                     draft_upload_mail(
@@ -349,7 +349,7 @@ class ApproveByAdminDraft(View):
                             'draft_added': obj.draft_added_on,
                             'mobile': obj.order.mobile,
                             'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                         })
                         send_email_task.delay(
                             to_emails, mail_type, email_dict, status=9,
@@ -495,7 +495,7 @@ class ApproveDraftByLinkedinAdmin(View):
                         'mobile': obj.order.mobile,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
 
                     if obj.draft_counter == 1:

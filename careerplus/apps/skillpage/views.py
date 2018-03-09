@@ -1,4 +1,5 @@
 import json
+import logging
 from django.http import (
     Http404, HttpResponse,
     HttpResponseRedirect,
@@ -19,6 +20,7 @@ from partner.models import Vendor
 from review.models import Review
 from shop.models import Product
 from .mixins import SkillPageMixin
+from review.models import DetailPageWidget
 
 # Create your views here.
 
@@ -162,6 +164,16 @@ class SkillPageView(DetailView, SkillPageMixin):
             'show_chat': True,
             'amp': self.request.amp
         })
+        widget_objs = None
+        try:
+            widget_obj = DetailPageWidget.objects.get(
+                content_type__model='Category', object_id=self.pk)
+            widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
+                column=1)
+        except Exception as e:
+            widget_objs = None
+            logging.getLogger('error_log').error("%(err)s" % {'err': e})
+        context['widget_objs'] = widget_objs
         context.update(self.get_breadcrumb_data())
         return context
 

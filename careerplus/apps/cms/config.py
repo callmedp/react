@@ -18,6 +18,7 @@ WIDGET_CHOICES = (
     (6, 'Call Back'),
     (7, 'BannerLink'),
     (8, 'Indexer Widget'),
+    (9, 'Detail Page Widget'),
 )
 
 SECTION = (

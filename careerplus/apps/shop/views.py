@@ -35,6 +35,7 @@ from homepage.models import Testimonial
 from review.models import Review
 
 from .models import Product
+from review.models import DetailPageWidget
 from .mixins import CourseCatalogueMixin
 
 
@@ -331,6 +332,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         return ['shop/detail1.html']
 
     def get_context_data(self, **kwargs):
+        pk = self.kwargs.get('pk')
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
         product = self.product_obj
         ctx['product'] = product
@@ -395,12 +397,23 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
         ctx.update(self.getSelectedProduct_solr(self.sqs))
         # ctx.update(self.getSelectedProductPrice_solr(self.sqs))
+        widget_objs = None
+        try:
+            widget_obj = DetailPageWidget.objects.get(
+                content_type__model='Product', object_id=pk)
+            widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
+                column=1)
+        except Exception as e:
+            widget_objs = None
+            logging.getLogger('error_log').error("%(err)s" % {'err': e})
+        ctx['domain_name'] = '{}//{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
         ctx.update({'sqs': self.sqs})
         ctx.update({'get_fakeprice': get_fakeprice})
         ctx['meta'] = self.product_obj.as_meta(self.request)
         ctx['meta']._url = ctx.get('canonical_url', '')
         ctx['show_chat'] = True
         ctx['amp'] = self.request.amp
+        ctx['widget_objs'] = widget_objs
         return ctx
 
     def redirect_if_necessary(self, current_path, product):

@@ -526,7 +526,7 @@ class DashboardAcceptService(View):
                             'draft_added': oi.draft_added_on,
                             'mobile': oi.order.mobile,
                             'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                         })
 
                         if oi.product.type_flow in [1, 12, 13] and (9 not in email_sets and 4 not in sms_sets):
