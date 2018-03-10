@@ -86,7 +86,7 @@ DATABASES = {
         'NAME': 'careerplus',
         'USER': 'careerplus',
         'PASSWORD': 'jWP4gEq2eV',
-        'HOST': 'lmysql-01',
+        'HOST': 'lmysqldb-01',
         'PORT': '3306',
     },
     'master': {
@@ -94,7 +94,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'careerplus',
         'PASSWORD': 'jWP4gEq2eV',
-        'HOST': 'lmysql-01',
+        'HOST': 'lmysqldb-01',
         'PORT': '3306',
     },
     'slave': {
@@ -102,7 +102,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'careerplus',
         'PASSWORD': 'jWP4gEq2eV',
-        'HOST': 'lmysql-02',
+        'HOST': 'lmysqldb-02',
         'PORT': '3306',
     },
 }
