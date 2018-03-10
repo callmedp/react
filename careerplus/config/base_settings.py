@@ -354,13 +354,13 @@ LOGGING = {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.handlers.SysLogHandler',
-            'facility': 'local5',
+            'facility': 'local4',
             'formatter': 'simple'
         },
         'syslog': {
          'level': 'DEBUG',
          'class': 'logging.handlers.SysLogHandler',
-         'facility': 'local5',
+         'facility': 'local4',
          'formatter': 'verbose'
        },
     },
