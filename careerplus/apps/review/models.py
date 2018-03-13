@@ -121,7 +121,8 @@ class DetailPageWidget(AbstractAutoDate):
     #     help_text='give id correspondig content type..')
     listid = ListCharField(
         base_field=CharField(max_length=10), size=6,
-        max_length=(6 * 11), null=True, blank=True)
+        max_length=(6 * 11), null=True, blank=True,
+        help_text='Give comma separeted id like 1,2,3 .. in product, blog and skill')
     name = models.CharField(max_length=255)
     url = models.CharField(
         max_length=2048, null=True,

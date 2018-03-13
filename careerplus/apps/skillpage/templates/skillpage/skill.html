@@ -352,10 +352,10 @@
 	{% if widget_objs %}
     <div class="free-sample">
       <span class="sample-pic"></span>
-      <strong>Check free samples</strong>
+      <strong>{{widget_obj.name}}</strong>
       <ul>
       {% for widget_obj in widget_objs %}
-        <li><a href="{{widget_obj.url}}">{{widget_obj.name}}</a></li>
+        <li><a href="{{widget_obj.url}}" target="_blank">{{widget_obj.name}}</a></li>
       {% endfor %}
       </ul>
     </div>

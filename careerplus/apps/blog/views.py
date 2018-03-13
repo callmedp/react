@@ -222,16 +222,17 @@ class BlogDetailView(DetailView, BlogMixin):
             "registerform": ModalRegistrationApiForm(),
             "amp": self.request.amp
         })
-        widget_objs = None
+        widget_objs, widget_obj = None, None
         try:
             widget_obj = DetailPageWidget.objects.get(
-                content_type__model='Blog', object_id=pk)
+                content_type__model='Blog', listid_contains=pk)
             widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
                 column=1)
         except Exception as e:
             widget_objs = None
             logging.getLogger('error_log').error("%(err)s" % {'err': e})
         context['widget_objs'] = widget_objs
+        context['widget_obj'] = widget_obj
         return context
 
     def get_breadcrumb_data(self):

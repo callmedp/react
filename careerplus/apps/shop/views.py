@@ -397,14 +397,15 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
         ctx.update(self.getSelectedProduct_solr(self.sqs))
         # ctx.update(self.getSelectedProductPrice_solr(self.sqs))
-        widget_objs = None
+        widget_objs, widget_obj = None, None
         try:
             widget_obj = DetailPageWidget.objects.get(
-                content_type__model='Product', object_id=pk)
+                content_type__model='Product', listid__contains=pk)
             widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
                 column=1)
         except Exception as e:
             widget_objs = None
+            widget_obj = None
             logging.getLogger('error_log').error("%(err)s" % {'err': e})
         ctx['domain_name'] = '{}//{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
         ctx.update({'sqs': self.sqs})
@@ -414,6 +415,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx['show_chat'] = True
         ctx['amp'] = self.request.amp
         ctx['widget_objs'] = widget_objs
+        ctx['widget_obj'] = widget_obj
         return ctx
 
     def redirect_if_necessary(self, current_path, product):
