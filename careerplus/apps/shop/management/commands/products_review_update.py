@@ -44,5 +44,4 @@ class Command(BaseCommand):
                 else:
                     continue
         except:
-            
-            print('Fail')
+            logging.getLogger('info_log').info("Fail")

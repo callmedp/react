@@ -34,7 +34,7 @@ def send_linkedin_tips():
                     subject, html, to=[oi.order.email], headers=headers,
                     oi=oi.pk, status=109)
                 count1 += 1
-                print("{} tip1 mail sent".format(str(count1)))
+                logging.getLogger('info_log').info("{} tip1 mail sent".format(count1))
             elif 110 not in email_sets:
                 subject = "Connect with more and more people"
                 context_dict['subject'] = "Connect with more and more people"
@@ -45,7 +45,7 @@ def send_linkedin_tips():
                     to=[oi.order.email], headers=headers,
                     oi=oi.pk, status=110)
                 count2 += 1
-                print("{} tip2 mail sent".format(str(count2)))
+                logging.getLogger('info_log').info("{} tip2 mail sent".format(count2))
             elif 111 not in email_sets:
                 subject = "Customize your LinkedIn URL"
                 context_dict['subject'] = "Customize your LinkedIn URL"
@@ -56,7 +56,7 @@ def send_linkedin_tips():
                     to=[oi.order.email],
                     headers=headers, oi=oi.pk, status=111)
                 count3 += 1
-                print("{} tip3 mail sent".format(str(count3)))
+                logging.getLogger('info_log').info("{} tip3 mail sent".format(count3))
             elif 112 not in email_sets:
                 subject = "Importance of joining groups on LinkedIn"
                 context_dict['subject'] = "Importance of joining groups on Linkedin"
@@ -67,7 +67,7 @@ def send_linkedin_tips():
                     to=[oi.order.email],
                     headers=headers, oi=oi.pk, status=112)
                 count4 += 1
-                print("{} tip4 mail sent".format(str(count4)))
+                logging.getLogger('info_log').info("{} tip4 mail sent".format(count4))
             elif 113 not in email_sets:
                 subject = "Will you trust a profile without a profile picture?"
                 context_dict['subject'] = "Will you trust a profile without a profile picture?"
@@ -78,7 +78,7 @@ def send_linkedin_tips():
                     to=[oi.order.email],
                     headers=headers, oi=oi.pk, status=113)
                 count5 += 1
-                print("{} tip5 mail sent".format(str(count5)))
+                logging.getLogger('info_log').info("{} tip5 mail sent".format(count5))
             elif 114 not in email_sets:
                 subject = "You like writing?"
                 context_dict['subject'] = "You like writing?"
@@ -88,9 +88,12 @@ def send_linkedin_tips():
                     subject, html,
                     to=[oi.order.email],
                     headers=headers, oi=oi.pk, status=114)
-                print("{} tip6 mail sent".format(str(count6)))
+                logging.getLogger('info_log').info("{} tip6 mail sent".format(count6))
         except Exception as e:
             logging.getLogger('email_log').error(
                 "%s - %s" % (str(oi.id), str(e)))
-        print("{} of {} tip mails sent".format(
-            count1 + count2 + count3 + count4 + count5 + count6, orderitems.count()))
+
+        logging.getLogger('info_log').info(
+            "{} of {} tip mails sent".format(
+                count1 + count2 + count3 + count4 + count5 + count6,
+                orderitems.count()))

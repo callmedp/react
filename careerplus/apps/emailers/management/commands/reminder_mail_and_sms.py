@@ -62,7 +62,8 @@ def draft_reminder_mail():
                         urlshortener = create_short_url(login_url=data)
                         data.update({'url': urlshortener.get('url')})
                         SendSMS().send(sms_type=mail_type, data=data)
-                        print(str(count) + ' - 8 day Reminder SMS Sent')
+                        logging.getLogger('info_log').info(
+                            "{} - 8 day Reminder SMS Sent".format(count))
                     except Exception as e:
                         logging.getLogger('sms_log').error(
                             "%s - %s" % (str(mail_type), str(e)))
@@ -87,7 +88,8 @@ def draft_reminder_mail():
                         urlshortener = create_short_url(login_url=data)
                         data.update({'url': urlshortener.get('url')})
                         SendSMS().send(sms_type=mail_type, data=data)
-                        print(str(count) + ' - 15 day Reminder SMS Sent')
+                        logging.getLogger('info_log').info(
+                            "{} - 15 day Reminder SMS Sent".format(count))
                     except Exception as e:
                         logging.getLogger('sms_log').error(
                             "%s - %s" % (str(mail_type), str(e)))
@@ -111,7 +113,8 @@ def draft_reminder_mail():
                         urlshortener = create_short_url(login_url=data)
                         data.update({'url': urlshortener.get('url')})
                         SendSMS().send(sms_type=mail_type, data=data)
-                        print(str(count) + ' - 22 day Reminder SMS Sent')
+                        logging.getLogger('info_log').info(
+                            "{} - 22 day Reminder SMS Sent".format(count))
                     except Exception as e:
                         logging.getLogger('sms_log').error(
                             "%s - %s" % (str(mail_type), str(e)))
@@ -146,7 +149,8 @@ def draft_reminder_mail():
                         SendSMS().send(sms_type=mail_type, data=data)
                         oi.smsorderitemoperation_set.create(
                             sms_oi_status=4)
-                        print(str(count) + ' Service closed SMS Sent')
+                        logging.getLogger('info_log').info(
+                            "{} Service closed SMS Sent".format(count))
                     except Exception as e:
                         logging.getLogger('sms_log').error(
                             "%s - %s" % (str(mail_type), str(e)))
@@ -170,7 +174,8 @@ def draft_reminder_mail():
                         urlshortener = create_short_url(login_url=data)
                         data.update({'url': urlshortener.get('url')})
                         SendSMS().send(sms_type=mail_type, data=data)
-                        print(str(count) + ' level 2 SMS Sent')
+                        logging.getLogger('info_log').info(
+                            "{} level 2 SMS Sent".format(count))
                     except Exception as e:
                         logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
 
@@ -193,7 +198,8 @@ def draft_reminder_mail():
                         urlshortener = create_short_url(login_url=data)
                         data.update({'url': urlshortener.get('url')})
                         SendSMS().send(sms_type=mail_type, data=data)
-                        print(str(count) + ' level 2 2nd SMS Sent')
+                        logging.getLogger('info_log').info(
+                            "{} level 2 2nd SMS Sent".format(count))
                     except Exception as e:
                         logging.getLogger('sms_log').error(
                             "%s - %s" % (str(mail_type), str(e)))
@@ -215,7 +221,8 @@ def draft_reminder_mail():
                         send_email_task.delay(
                             to_emails, mail_type, data,
                             status=9, oi=oi.pk)
-                        print(str(count) + ' Service closed Email Sent')
+                        logging.getLogger('info_log').info(
+                            "{} Service closed Email Sent".format(count))
                     except Exception as e:
                         logging.getLogger('email_log').error(
                             "%s - %s - %s" % (
@@ -225,7 +232,8 @@ def draft_reminder_mail():
                         urlshortener = create_short_url(login_url=data)
                         data.update({'url': urlshortener.get('url')})
                         SendSMS().send(sms_type=mail_type, data=data)
-                        print(str(count) + ' Service closed SMS Sent')
+                        logging.getLogger('info_log').info(
+                            "{} Service closed SMS Sent".format(count))
                     except Exception as e:
                         logging.getLogger('sms_log').error(
                             "%s - %s" % (str(mail_type), str(e)))
