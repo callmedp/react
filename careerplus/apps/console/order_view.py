@@ -33,6 +33,9 @@ from core.mixins import TokenExpiry
 from payment.models import PaymentTxn
 from linkedin.autologin import AutoLogin
 from order.functions import send_email
+
+
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from review.models import Review
 
 from .decorators import (
@@ -1995,7 +1998,7 @@ class ActionOrderItemView(View):
                             oi.emailorderitemoperation_set.create(
                                 email_oi_status=92)
                 except Exception as e:
-                    logging.getLogger('cron_log').error("%s" % (str(e)))
+                    logging.getLogger('error_log').error("%s" % (str(e)))
 
                 success_message = "%s Mail sent Successfully." % (str(mail_send))
                 messages.add_message(request, messages.SUCCESS, success_message)
@@ -2118,7 +2121,7 @@ class ActionOrderItemView(View):
                     try:
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:
-                        logging.getLogger('sms_log').error(
+                        logging.getLogger('error_log').error(
                             "%s - %s" % (str(mail_type), str(e)))
 
                 msg = str(approval) + ' orderitems approved.'
@@ -2209,7 +2212,7 @@ class ActionOrderItemView(View):
                         'username': order.first_name if order.first_name else order.candidate_id,
                         'type_flow': oi.product.type_flow,
                         'product_name': oi.product.name,
-                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                     })
                     try:
                         SendMail().send(to_emails, mail_type, data)
@@ -2217,7 +2220,7 @@ class ActionOrderItemView(View):
                         order.save()
                     except Exception as e:
                         messages.add_message(request, messages.ERROR, str(e))
-                        logging.getLogger('email_log').error("midout mail %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                        logging.getLogger('error_log').error("midout mail %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
 
             messages.add_message(request, messages.SUCCESS, "Midout sent Successfully for selected items")
             return HttpResponseRedirect(reverse('console:queue-midout'))
@@ -2273,7 +2276,7 @@ class ConsoleResumeDownloadView(View):
             next_url = request.GET.get('next', None)
             if file:
                 file_path = settings.RESUME_DIR + file
-                fsock = FileWrapper(open(file_path, 'rb'))
+                fsock = GCPPrivateMediaStorage().open(file_path)
                 filename = file.split('/')[-1]
                 response = HttpResponse(fsock, content_type=mimetypes.guess_type(filename)[0])
                 response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)

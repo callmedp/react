@@ -58,7 +58,7 @@ def pending_item_email(pk=None):
                         data.update({
                             'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                                 settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                                token.decode())
+                                token)
                         })
                         send_email(to_emails, mail_type, data, 21, oi.pk)
                         try:
@@ -70,14 +70,14 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 3:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 41 not in email_sets and 41 not in sms_sets:
                         send_email(to_emails, mail_type, data, 41, oi.pk)
@@ -90,14 +90,14 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 4:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 61 not in email_sets and 61 not in sms_sets:
                         send_email(to_emails, mail_type, data, 61, oi.pk)
@@ -110,14 +110,14 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (
+                            logging.getLogger('error_log').error("%s - %s" % (
                                 str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 5:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 71 not in email_sets and 71 not in sms_sets:
                         send_email(to_emails, mail_type, data, 71, oi.pk)
@@ -130,14 +130,14 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 7:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 91 not in email_sets and 91 not in sms_sets:
                         send_email(to_emails, mail_type, data, 91, oi.pk)
@@ -150,14 +150,14 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 12:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 141 not in email_sets and 141 not in sms_sets:
                         send_email(to_emails, mail_type, data, 141, oi.pk)
@@ -170,14 +170,14 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 13:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 151 not in email_sets and 151 not in sms_sets:
                         send_email(to_emails, mail_type, data, 151, oi.pk)
@@ -190,14 +190,14 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 8:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 108 not in email_sets and 108 not in sms_sets:
                         send_email(to_emails, mail_type, data, 108, oi.pk)
@@ -210,14 +210,14 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 9:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard/roundone/profile/" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 121 not in email_sets and 121 not in sms_sets:
                         send_email(to_emails, mail_type, data, 121, oi.pk)
@@ -230,7 +230,7 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 10:
@@ -248,7 +248,7 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
             except Exception as e:
@@ -294,7 +294,7 @@ def process_mailer(pk=None):
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
                     if 25 not in email_sets and 25 not in sms_sets:
                         send_email(to_emails, mail_type, data, 25, oi.pk)
@@ -305,14 +305,14 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 3:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
                     if 44 not in email_sets and 44 not in sms_sets:
                         send_email(to_emails, mail_type, data, 44, oi.pk)
@@ -323,14 +323,14 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 4:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
                     if 64 not in email_sets and 64 not in sms_sets:
                         send_email(to_emails, mail_type, data, 64, oi.pk)
@@ -341,14 +341,14 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 5:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
                     if 74 not in email_sets and 74 not in sms_sets:
                         send_email(to_emails, mail_type, data, 74, oi.pk)
@@ -359,14 +359,14 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 12:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_DOMAIN, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
                     if 145 not in email_sets and 145 not in sms_sets:
                         send_email(to_emails, mail_type, data, 145, oi.pk)
@@ -377,14 +377,14 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 13:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
                     if 155 not in email_sets and 155 not in sms_sets:
                         send_email(to_emails, mail_type, data, 155, oi.pk)
@@ -395,14 +395,14 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 7:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
                     if 94 not in email_sets and 94 not in sms_sets:
                         send_email(to_emails, mail_type, data, 94, oi.pk)
@@ -413,7 +413,7 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 2:
@@ -426,7 +426,7 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 6:
@@ -439,14 +439,14 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 8:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
                     if 105 not in email_sets and 105 not in sms_sets:
                         send_email(to_emails, mail_type, data, 105, oi.pk)
@@ -457,14 +457,14 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 9:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard/roundone/profile/" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
                     if 122 not in email_sets and 122 not in sms_sets:
                         send_email(to_emails, mail_type, data, 122, oi.pk)
@@ -475,7 +475,7 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
             except Exception as e:
                 raise e
@@ -487,7 +487,7 @@ def payment_pending_mailer(pk=None):
     try:
         order = Order.objects.get(pk=pk)
     except Exception as e:
-        logging.getLogger('email_log').error("%s - %s" % (str(order), str(e)))
+        logging.getLogger('error_log').error("%s - %s" % (str(order), str(e)))
     try:
         pymt_objs = PaymentTxn.objects.filter(
             order=order, payment_mode__in=[1, 4])
@@ -522,10 +522,10 @@ def payment_pending_mailer(pk=None):
                             to_mobile=data.get('mobile'),
                             status=1)
                     except Exception as e:
-                        logging.getLogger('sms_log').error(
+                        logging.getLogger('error_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
     except Exception as e:
-        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+        logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 
 
 @task(name="payment_realisation_mailer")
@@ -551,15 +551,15 @@ def payment_realisation_mailer(pk=None):
                 })
                 try:
                     SendMail().send(to_emails, mail_type, invoice_data)
-                    logging.getLogger('email_log').error(
+                    logging.getLogger('error_log').error(
                         "payment realisation mail send to %s - %s" % (
                             str(to_emails), str(mail_type)))
                 except Exception as e:
-                    logging.getLogger('email_log').error(
+                    logging.getLogger('error_log').error(
                         "payment realisation %s - %s - %s" % (
                             str(to_emails), str(mail_type), str(e)))
     except Exception as e:
-        logging.getLogger('sms_log').error(
+        logging.getLogger('error_log').error(
             "%s - %s" % (str(mail_type), str(e)))
 
 
@@ -583,7 +583,7 @@ def service_initiation(pk=None):
                     'mobile': oi.order.mobile,
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                         settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                        token.decode()),
+                        token),
                 })
                 sms_sets = list(
                     oi.smsorderitemoperation_set.all().values_list(
@@ -598,7 +598,7 @@ def service_initiation(pk=None):
                             to_mobile=data.get('mobile'),
                             status=1)
                     except Exception as e:
-                        logging.getLogger('sms_log').error(
+                        logging.getLogger('error_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
                 elif oi.product.type_flow == 6 and 172 not in sms_sets:
                     try:
@@ -610,7 +610,7 @@ def service_initiation(pk=None):
                             to_mobile=data.get('mobile'),
                             status=1)
                     except Exception as e:
-                        logging.getLogger('sms_log').error("%s - %s" % (
+                        logging.getLogger('error_log').error("%s - %s" % (
                             str(sms_type), str(e)))
                 elif oi.product.type_flow == 10 and 133 not in sms_sets:
                     try:
@@ -622,7 +622,7 @@ def service_initiation(pk=None):
                             to_mobile=data.get('mobile'),
                             status=1)
                     except Exception as e:
-                        logging.getLogger('sms_log').error(
+                        logging.getLogger('error_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
     except Exception as e:
         logging.getLogger('error_log').error(str(e))
