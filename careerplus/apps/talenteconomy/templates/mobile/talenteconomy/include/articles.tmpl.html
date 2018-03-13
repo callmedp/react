@@ -1,4 +1,4 @@
-{% load thumbnail %}
+{% load thumbnail static %}
 
 {% for articlelist in articlelists %}
 <div class="media article-list" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
@@ -44,7 +44,7 @@
   
   <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" >
     <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
-      <meta itemprop="url" content="https://learning.shine.com/media/static/shinelearn/images/logo.png">
+      <meta itemprop="url" content="{% static 'shinelearn/images/logo.png' %}">
     </div>
     <meta itemprop="name" content="Shine">
   </div>

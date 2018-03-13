@@ -90,7 +90,7 @@ def send_linkedin_tips():
                     headers=headers, oi=oi.pk, status=114)
                 print("{} tip6 mail sent".format(str(count6)))
         except Exception as e:
-            logging.getLogger('email_log').error(
+            logging.getLogger('error_log').error(
                 "%s - %s" % (str(oi.id), str(e)))
         print("{} of {} tip mails sent".format(
             count1 + count2 + count3 + count4 + count5 + count6, orderitems.count()))

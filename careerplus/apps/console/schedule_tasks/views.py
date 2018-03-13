@@ -13,6 +13,7 @@ from django.http import (
     HttpResponse)
 from django.conf import settings
 
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from blog.mixins import PaginationMixin
 from console.decorators import (
     Decorate, stop_browser_cache,
@@ -65,15 +66,15 @@ class GenerateAutoLoginTask(FormView):
                     created_by=request.user)
                 file_name = str(Task.pk) + '_' + 'UPLOAD' + extention
                 path = 'scheduler/' + timestr + '/'
-                full_path = os.path.join(settings.MEDIA_ROOT, path)
 
-                if not os.path.exists(full_path):
-                    os.makedirs(full_path)
-                dest = open(full_path + file_name, 'wb')
+#                if not os.path.exists(full_path):
+#                   os.makedirs(full_path)
+#                dest = open(full_path + file_name, 'wb')
 
-                for chunk in f_obj.chunks():
-                    dest.write(chunk)
-                dest.close()
+#                for chunk in f_obj.chunks():
+#                    dest.write(chunk)
+#                dest.close()
+                GCPPrivateMediaStorage().save(path + file_name, file)
                 Task.file_uploaded = path + file_name
                 Task.save()
 
@@ -141,7 +142,6 @@ class DownloadTaskView(View):
         try:
             task = request.GET.get('task', None)
             download_type = request.GET.get('type', None)
-            file_path = ''
             if task:
                 task = Scheduler.objects.get(id=task)
             else:
@@ -152,23 +152,19 @@ class DownloadTaskView(View):
                     filename_tuple = file_path.split('.')
                     extension = filename_tuple[len(filename_tuple) - 1]
                     file_name = str(task.pk) + '_UPLOAD' + '.' + extension
-                elif download_type == 'd':
+                else:
                     file_path = task.file_generated.path
                     filename_tuple = file_path.split('.')
                     extension = filename_tuple[len(filename_tuple) - 1]
                     file_name = str(task.pk) + '_GENERATED' + '.' + extension
-                if os.path.exists(file_path):
-                    path = file_path
-                else:
-                    path = settings.MEDIA_ROOT + '/' + file_path
                 try:
-                    fsock = FileWrapper(open(path, 'rb'))
+                    fsock = GCPPrivateMediaStorage().open(file_path)
                 except IOError:
                     messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
                     response = HttpResponseRedirect(reverse('console:tasks:tasklist'))
                     return response
-                response = HttpResponse(fsock, content_type=mimetypes.guess_type(path)[0])
-                response['Content-Disposition'] = 'attachment; filename="%s"' % (file_name)
+                response = HttpResponse(fsock, content_type=mimetypes.guess_type(file_path)[0])
+                response['Content-Disposition'] = 'attachment; filename="%s"' % file_name
                 return response
         except:
             messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")

@@ -20,18 +20,18 @@
     
     {% block css_block %}
       <!-- Bootstrap -->
-      <link href="{% static "/packages/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet" type="text/css">
+      <link href="{% static 'packages/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
       <!-- Font Awesome -->
-      <link href="{% static "/packages/font-awesome/css/font-awesome.min.css"  %}" rel="stylesheet" type="text/css">
+      <link href="{% static 'packages/font-awesome/css/font-awesome.min.css'  %}" rel="stylesheet" type="text/css">
       <!-- NProgress -->
-      <link href="{% static "/packages/nprogress/nprogress.css"  %}" rel="stylesheet" type="text/css">
+      <link href="{% static 'packages/nprogress/nprogress.css'  %}" rel="stylesheet" type="text/css">
 
       <!-- Custom Theme Style -->
-      <link href="{% static "/console/css/custom.min.css" %}" rel="stylesheet" type="text/css">
+      <link href="{% static 'console/css/custom.min.css' %}" rel="stylesheet" type="text/css">
     
       <!-- bootstrap-daterangepicker -->
-      <link href="{% static "/packages/bootstrap-daterangepicker/daterangepicker.css"  %}" rel="stylesheet" type="text/css">
-      <link href="{% static "/console/css/datepicker/bootstrap-datetimepicker.min.css"  %}" rel="stylesheet" type="text/css">
+      <link href="{% static 'packages/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet" type="text/css">
+      <link href="{% static 'console/css/datepicker/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" type="text/css">
     {% endblock css_block %}
 
     {{ JS_SETTINGS|safe }}
@@ -55,7 +55,7 @@
               <!-- menu profile quick info -->
               <div class="profile clearfix">
                 <div class="profile_pic">
-                  <img src="/static/console/images/user.png" alt="..." class="img-circle profile_img">
+                  <img src="{% static 'console/images/user.png' %}" alt="..." class="img-circle profile_img">
                 </div>
                 <div class="profile_info">
                   <span>Welcome,</span>
@@ -182,28 +182,28 @@
     
     {% block js_block %}
       <!-- jQuery -->
-      <script type="text/javascript" src="{% static "packages/jquery/dist/jquery.min.js" %}"></script>
+      <script type="text/javascript" src="{% static 'packages/jquery/dist/jquery.min.js' %}"></script>
       <!-- Bootstrap -->
-      <script type="text/javascript" src="{% static "packages/bootstrap/js/bootstrap.min.js" %}"></script>
+      <script type="text/javascript" src="{% static 'packages/bootstrap/js/bootstrap.min.js' %}"></script>
       <!-- FastClick -->
-      <script type="text/javascript" src="{% static "packages/fastclick/fastclick.js" %}"></script>
+      <script type="text/javascript" src="{% static 'packages/fastclick/fastclick.js' %}"></script>
       
       <!-- NProgress -->
-      <script type="text/javascript" src="{% static "packages/nprogress/nprogress.js" %}"></script>
+      <script type="text/javascript" src="{% static 'packages/nprogress/nprogress.js' %}"></script>
       
-      <script type="text/javascript" src="{% static "packages/switchery/dist/switchery.min.js" %}"></script>
+      <script type="text/javascript" src="{% static 'packages/switchery/dist/switchery.min.js' %}"></script>
 
-      <script type="text/javascript" src="{% static "console/js/common.js" %}"></script>
+      <script type="text/javascript" src="{% static 'console/js/common.js' %}"></script>
 
       <!-- PJAX -->
-      <script type="text/javascript" src="{% static "console/js/jquery.pjax.js" %}"></script>
+      <script type="text/javascript" src="{% static 'console/js/jquery.pjax.js' %}"></script>
 
       <!-- bootstrap-daterangepicker -->
-      <script type="text/javascript" src="{% static "packages/moment/min/moment.min.js" %}"></script>
-      <script type="text/javascript" src="{% static "console/js/datepicker/bootstrap-datetimepicker.min.js" %}"></script>
+      <script type="text/javascript" src="{% static 'packages/moment/min/moment.min.js' %}"></script>
+      <script type="text/javascript" src="{% static 'console/js/datepicker/bootstrap-datetimepicker.min.js' %}"></script>
 
       <!-- Parsley -->
-      <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+      <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
       <script type="text/javascript">
         function getCookie(name) {
           var cookieValue = null;
@@ -226,7 +226,7 @@
         }
         
       </script>
-      <!--script type="text/javascript" src="{% static "console/js/custom.min.js" %}"></script-->
+      <!--script type="text/javascript" src="{% static 'console/js/custom.min.js' %}"></script-->
     {% endblock js_block %}
     
   </body>

@@ -76,8 +76,6 @@ class Command(BaseCommand):
             writer.writerow(e)
 
 
-
-
 '''
 SQL Dash Report
 

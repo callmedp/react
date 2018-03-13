@@ -630,7 +630,7 @@ class CartMixin(object):
                         no_process=True).count()
 
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error("{},{}".format(str(e), cart_pk))
         return total_count
 
     def closeCartObject(self, cart_obj=None):

@@ -28,7 +28,10 @@ GEOIP_PATH = BASE_DIR + '/apps/users/GeoIP.dat'
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+###### KEYS ################################
 SECRET_KEY = 'g58#1(xdr&s%t@$erwjosc@nuiuy4j)9#g+*jhr#m1o6c)zws7'
+MOBILE_ADSERVER_ENCODE_KEY = 'el!bomen!h$'
+ACROSS_ENCODE_KEY = '@$h1n3c4r33rplu5'
 
 TEMPLATE_DEBUG = False  # django sorl required
 
@@ -58,7 +61,8 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'haystack',
     'celery',
-    'compressor'
+    'compressor',
+    'storages'
 ]
 
 # Apps specific for this project go here.
@@ -193,6 +197,10 @@ COMPRESS_CSS_FILTERS = (
     'compressor.filters.cssmin.CSSMinFilter'
 )
 
+COMPRESS_PRECOMPILERS = (
+   ('text/scss', 'sass --scss {infile} {outfile}'),
+)
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -246,8 +254,14 @@ CKEDITOR_CONFIGS = {
 CKEDITOR_RESTRICT_BY_USER = False
 CKEDITOR_REQUIRE_STAFF = False
 
-
+######## CELERY SETTINGS ###########
 BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_IMPORTS = (
+    'emailers.tasks',
+)
 
 # try:
 #     REDIS_CON = redis.StrictRedis(host='localhost', port=6379, db=0)
@@ -271,8 +285,17 @@ SITE_DOMAIN = 'learning.shine.com'
 SITE_PROTOCOL = 'https'
 MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN) #'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
-
+SITE_ID = 1
 CART_MAX_LIMIT = 5
+META_SITE_TYPE = 'Website'
+META_SITE_NAME = 'ShineLearning'
+META_USE_SITES = True
+META_DEFAULT_KEYWORDS = ['E-Learning', 'Skills', 'Resume', 'India']
+META_USE_OG_PROPERTIES = True
+META_USE_TWITTER_PROPERTIES = False
+META_USE_GOOGLEPLUS_PROPERTIES = True
+META_FB_TYPE = 'Website'
+META_GPLUS_TYPE = 'Website'
 
 ############ SOLR SETTINGS #######################
 HAYSTACK_ITERATOR_LOAD_PER_QUERY = 100
@@ -300,26 +323,25 @@ URL_SHORTENER_ACCESS_KEY='AIzaSyBtmK_SIBfhb_hXkgLlfk7IwVlnKZxTb2I'
 RESUME_WRITING_INDIA = [2]
 
 ######## LOGGING CONFIG ############################
-LOGS_ROOT = os.path.join(BASE_DIR, "log")
-
-for d in ['debug', 'error', 'info', 'email', 'sms', 'profile', 'payment']:
-    if not os.path.exists(os.path.join(LOGS_ROOT, d)):
-        os.makedirs(os.path.join(LOGS_ROOT, d))
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'filters': {
         'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
     },
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(pathname)s %(lineno)s %(message)s'
+            'format': 'shinelearning_%(name)s: %(levelname)s %(asctime)s %(pathname)s %(lineno)s %(message)s'
         },
         'simple': {
-            'format': '%(levelname)s %(asctime)s %(message)s'
+            'format': '[%(asctime)s] %(levelname)s %(message)s',
+            'datefmt': '%d/%b/%Y %H:%M:%S'
         },
     },
     'handlers': {
@@ -328,150 +350,46 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'debug_handler': {
+        'console': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'formatter': 'verbose',
-            'filename': os.path.join(LOGS_ROOT, 'debug', 'debug.log')
+            'filters': ['require_debug_true'],
+            'class': 'logging.handlers.SysLogHandler',
+            'facility': 'local4',
+            'formatter': 'simple'
         },
-        'info_handler': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'formatter': 'verbose',
-            'filename': os.path.join(LOGS_ROOT, 'info', 'info.log')
-        },
-        'error_handler': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'formatter': 'verbose',
-            'filename': os.path.join(LOGS_ROOT, 'error', 'error.log')
-        },
-        'email_handler': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'formatter': 'verbose',
-            'filename': os.path.join(LOGS_ROOT, 'email', 'email.log')
-        },
-        'sms_handler': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'formatter': 'verbose',
-            'filename': os.path.join(LOGS_ROOT, 'sms', 'sms.log')
-        },
-        'profile_handler': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'formatter': 'verbose',
-            'filename': os.path.join(LOGS_ROOT, 'profile', 'profile.log')
-        },
-        'unsubs_handler': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'formatter': 'verbose',
-            'filename': os.path.join(LOGS_ROOT, 'info', 'unsubs.log')
-        },
-        'feedback_handler': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'formatter': 'verbose',
-            'filename': os.path.join(LOGS_ROOT, 'email', 'feedback.log')
-        },
-        'payment_handler': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'formatter': 'verbose',
-            'filename': os.path.join(LOGS_ROOT, 'payment', 'error.log')
-        },
-        'cron_handler': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'formatter': 'verbose',
-            'filename': os.path.join(LOGS_ROOT, 'error', 'cron.log')
-        },
-        'command_handler': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'formatter': 'verbose',
-            'filename': os.path.join(LOGS_ROOT, 'error', 'command.log')
-        },
-        'cashback_handler': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'formatter': 'verbose',
-            'filename': os.path.join(LOGS_ROOT, 'error', 'cashback.log')
-        },
+        'syslog': {
+         'level': 'DEBUG',
+         'class': 'logging.handlers.SysLogHandler',
+         'facility': 'local4',
+         'formatter': 'verbose'
+       },
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins', 'error_handler'],
-            'level': 'ERROR',
-            'propagate': True,
+        # root logger
+        '':{
+            'handlers': ['console', 'syslog'],
+            'level': 'INFO',
+            'disabled': False
         },
-        'debug_log': {
-            'handlers': ['debug_handler'],
-            'level': 'DEBUG',
+        'django.request': {
+            'handlers': ['mail_admins', 'syslog'],
+            'level': 'ERROR',
             'propagate': True,
         },
         'info_log': {
-            'handlers': ['info_handler'],
+            'handlers': ['syslog'],
             'level': 'INFO',
             'propagate': True,
         },
         'error_log': {
-            'handlers': ['error_handler'],
+            'handlers': ['syslog'],
             'level': 'ERROR',
             'propagate': True,
         },
-        'email_log': {
-            'handlers': ['email_handler', ],
-            'level': 'INFO',
-            'propagate': True,
-        },
-        'sms_log': {
-            'handlers': ['sms_handler', ],
-            'level': 'INFO',
-            'propagate': True,
-        },
-        'profile_import_log': {
-            'handlers': ['profile_handler', ],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-        'unsubs_log': {
-            'handlers': ['unsubs_handler', ],
-            'level': 'INFO',
-            'propagate': True,
-        },
-        'feedback_log': {
-            'handlers': ['feedback_handler', ],
-            'level': 'INFO',
-            'propagate': True,
-        },
-        'payment_log': {
-            'handlers': ['payment_handler', ],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-        'cron_log': {
-            'handlers': ['cron_handler', ],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-        'command_log': {
-            'handlers': ['command_handler', ],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-        'cashback_log': {
-            'handlers': ['cashback_handler', ],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
+    },
 }
 
 
-############ SEARCH SPECIFIC SETTINGS ##############
 PRODUCT_ALTERNATE_SEARCH_TERMS = []     # TODO: Enter commonly search terms
 
 
@@ -535,3 +453,16 @@ MARKETING_GROUP_LIST = ['MARKETING']
 
 # Course catalogoue cache time
 COURSE_CATALOGUE_CASH_TIME = 24 * 60 * 60  # in seconds
+
+####### EMAIL SETTINGS #########
+ROUNDONE_DEFAULT_CP_EMAIL = "learning@shine.com"
+CONSULTANTS_EMAIL = 'Shine.com <learning@shine.com>'
+REPLY_TO = 'resume@shine.com'
+
+##### CCAVENUE SETTINGS ############
+CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
+SESSION_CACHE_ALIAS = 'session'
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
+
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = PROJECT_DIR + '/careerplus/config/code-learning-key.json'

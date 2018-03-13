@@ -70,7 +70,7 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 3:
@@ -90,7 +90,7 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 4:
@@ -110,7 +110,7 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (
+                            logging.getLogger('error_log').error("%s - %s" % (
                                 str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 5:
@@ -130,7 +130,7 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 7:
@@ -150,7 +150,7 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 12:
@@ -170,7 +170,7 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 13:
@@ -190,7 +190,7 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 8:
@@ -210,7 +210,7 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 9:
@@ -230,7 +230,7 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 10:
@@ -248,7 +248,7 @@ def pending_item_email(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
             except Exception as e:
@@ -305,7 +305,7 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 3:
@@ -323,7 +323,7 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 4:
@@ -341,7 +341,7 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 5:
@@ -359,7 +359,7 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 12:
@@ -377,7 +377,7 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 13:
@@ -395,7 +395,7 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 7:
@@ -413,7 +413,7 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 2:
@@ -426,7 +426,7 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 6:
@@ -439,7 +439,7 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 8:
@@ -457,7 +457,7 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 9:
@@ -475,7 +475,7 @@ def process_mailer(pk=None):
                                 to_mobile=data.get('mobile'),
                                 status=1)
                         except Exception as e:
-                            logging.getLogger('sms_log').error(
+                            logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
             except Exception as e:
                 raise e
@@ -487,7 +487,7 @@ def payment_pending_mailer(pk=None):
     try:
         order = Order.objects.get(pk=pk)
     except Exception as e:
-        logging.getLogger('email_log').error("%s - %s" % (str(order), str(e)))
+        logging.getLogger('error_log').error("%s - %s" % (str(order), str(e)))
     try:
         pymt_objs = PaymentTxn.objects.filter(
             order=order, payment_mode__in=[1, 4])
@@ -522,10 +522,10 @@ def payment_pending_mailer(pk=None):
                             to_mobile=data.get('mobile'),
                             status=1)
                     except Exception as e:
-                        logging.getLogger('sms_log').error(
+                        logging.getLogger('error_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
     except Exception as e:
-        logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+        logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 
 
 @task(name="payment_realisation_mailer")
@@ -551,15 +551,15 @@ def payment_realisation_mailer(pk=None):
                 })
                 try:
                     SendMail().send(to_emails, mail_type, invoice_data)
-                    logging.getLogger('email_log').error(
+                    logging.getLogger('error_log').error(
                         "payment realisation mail send to %s - %s" % (
                             str(to_emails), str(mail_type)))
                 except Exception as e:
-                    logging.getLogger('email_log').error(
+                    logging.getLogger('error_log').error(
                         "payment realisation %s - %s - %s" % (
                             str(to_emails), str(mail_type), str(e)))
     except Exception as e:
-        logging.getLogger('sms_log').error(
+        logging.getLogger('error_log').error(
             "%s - %s" % (str(mail_type), str(e)))
 
 
@@ -598,7 +598,7 @@ def service_initiation(pk=None):
                             to_mobile=data.get('mobile'),
                             status=1)
                     except Exception as e:
-                        logging.getLogger('sms_log').error(
+                        logging.getLogger('error_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
                 elif oi.product.type_flow == 6 and 172 not in sms_sets:
                     try:
@@ -610,7 +610,7 @@ def service_initiation(pk=None):
                             to_mobile=data.get('mobile'),
                             status=1)
                     except Exception as e:
-                        logging.getLogger('sms_log').error("%s - %s" % (
+                        logging.getLogger('error_log').error("%s - %s" % (
                             str(sms_type), str(e)))
                 elif oi.product.type_flow == 10 and 133 not in sms_sets:
                     try:
@@ -622,7 +622,7 @@ def service_initiation(pk=None):
                             to_mobile=data.get('mobile'),
                             status=1)
                     except Exception as e:
-                        logging.getLogger('sms_log').error(
+                        logging.getLogger('error_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
     except Exception as e:
         logging.getLogger('error_log').error(str(e))

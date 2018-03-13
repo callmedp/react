@@ -11,6 +11,7 @@ from django.middleware.csrf import get_token
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from core.api_mixin import ShineCandidateDetail
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from order.models import Order, OrderItem
 from payment.models import PaymentTxn
 
@@ -130,13 +131,14 @@ class DashboardInfo(object):
                             file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random()*9999)) \
                                 + '_' + timezone.now().strftime('%Y%m%d') + extention
                             full_path = '%s/' % str(order.pk)
-                            if not os.path.exists(settings.RESUME_DIR + full_path):
-                                os.makedirs(settings.RESUME_DIR + full_path)
-                            dest = open(
-                                settings.RESUME_DIR + full_path + file_name, 'wb')
-                            for chunk in file.chunks():
-                                dest.write(chunk)
-                            dest.close()
+                            # if not os.path.exists(settings.RESUME_DIR + full_path):
+                            #     os.makedirs(settings.RESUME_DIR + full_path)
+                            # dest = open(
+                            #     settings.RESUME_DIR + full_path + file_name, 'wb')
+                            # for chunk in file.chunks():
+                            #     dest.write(chunk)
+                            # dest.close()
+                            GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                             path_dict[order.pk] = full_path + file_name
                     except Exception as e:
                         logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 

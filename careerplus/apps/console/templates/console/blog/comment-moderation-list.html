@@ -7,7 +7,7 @@
 
 {% block css_block %}
     {{block.super}}
-    <link href="{% static "/packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
 {% endblock css_block %}
 
 
@@ -206,7 +206,7 @@
 
 {% block js_block %}
     {{block.super}}
-    <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
-    <script type="text/javascript" src="{% static "console/js/blog/comment-action.js" %}"></script>
+    <script type="text/javascript" src="{% static 'packages/iCheck/icheck.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'console/js/blog/comment-action.js' %}"></script>
 {% endblock js_block %}
 

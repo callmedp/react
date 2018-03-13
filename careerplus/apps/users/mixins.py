@@ -14,6 +14,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from geolocation.models import Country
 from order.models import OrderItem
 from core.mixins import InvoiceGenerate
+from core.library.gcloud.custom_cloud_storage import GCPInvoiceStorage
 
 from .choices import (
     WRITING_STARTER_VALUE, RESUME_WRITING_MATRIX_DICT,
@@ -654,9 +655,9 @@ class WriterInvoiceMixin(object):
         return data
 
     def save_writer_invoice_pdf(self, user=None, invoice_date=None):
-            error = ""
-            data = {"error": error}
-        #try:
+        error = ""
+        data = {"error": error}
+        try:
             if not user:
                 try:
                     user = self.request.user
@@ -683,18 +684,12 @@ class WriterInvoiceMixin(object):
                 path = "invoice/user/{user_pk}/{month}_{year}/".format(
                     user_pk=user.pk, month=invoice_date.month,
                     year=invoice_date.year)
-                full_path = os.path.join(settings.MEDIA_ROOT, path)
                 file_name = 'invoice-' + str(user.name) + '-'\
                     + timezone.now().strftime('%d%m%Y') + '.pdf'
-                if not os.path.exists(full_path):
-                    os.makedirs(full_path)
-                dest = open(full_path + file_name, 'wb')
                 pdf_file = SimpleUploadedFile(
                     file_name, pdf_file,
                     content_type='application/pdf')
-                for chunk in pdf_file.chunks():
-                    dest.write(chunk)
-                dest.close()
+                GCPInvoiceStorage().save(path + file_name, pdf_file)
                 user.userprofile.user_invoice = path + file_name
                 user.userprofile.invoice_date = invoice_date
                 user.userprofile.save()
@@ -703,12 +698,12 @@ class WriterInvoiceMixin(object):
             elif not error and not item_list:
                 error = 'No invoice for last month(no item is closed)'
 
-        # except Exception as e:
-        #     error = 'something went wrong, try again later.'
-        #     logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
-            if error:
-                data.update({"error": error, })
-            return data
+        except Exception as e:
+            error = 'something went wrong, try again later.'
+            logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
+        if error:
+            data.update({"error": error, })
+        return data
 
 
 class RegistrationLoginApi(object):
