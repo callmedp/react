@@ -3,11 +3,13 @@ from decimal import Decimal
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models import CharField
 from django.utils import timezone
 from django.utils.translation import ugettext, ugettext_lazy as _
 from seo.models import AbstractAutoDate
 from ckeditor.fields import RichTextField
 from cms.models import Widget
+from django_mysql.models import ListCharField
 
 DEFAULT_CHOICES = (
     ('5', '5'),
@@ -112,11 +114,14 @@ class DetailPageWidget(AbstractAutoDate):
     limit_choices = models.Q(app_label='shop', model='Product') | models.Q(app_label='shop', model='Category') |  models.Q(app_label='blog', model='Blog')
     content_type = models.ForeignKey(
         ContentType, limit_choices_to=limit_choices)
-    object_id = models.CharField(
-        max_length=500,
-        null=True,
-        blank=True,
-        help_text='give id correspondig content type..')
+    # object_id = models.CharField(
+    #     max_length=500,
+    #     null=True,
+    #     blank=True,
+    #     help_text='give id correspondig content type..')
+    listid = ListCharField(
+        base_field=CharField(max_length=10), size=6,
+        max_length=(6 * 11), null=True, blank=True)
     name = models.CharField(max_length=255)
     url = models.CharField(
         max_length=2048, null=True,
