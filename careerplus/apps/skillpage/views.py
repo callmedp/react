@@ -170,9 +170,9 @@ class SkillPageView(DetailView, SkillPageMixin):
                 content_type__model='Category', listid=self.pk)
             widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
                 column=1)
-        except Exception as e:
+        except DetailPageWidget.DoesNotExist:
             widget_objs = None
-            logging.getLogger('error_log').error("%(err)s" % {'err': e})
+            widget_obj = None
         context['widget_objs'] = widget_objs
         context['widget_obj'] = widget_obj
         context.update(self.get_breadcrumb_data())

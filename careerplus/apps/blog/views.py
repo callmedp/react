@@ -228,9 +228,9 @@ class BlogDetailView(DetailView, BlogMixin):
                 content_type__model='Blog', listid_contains=pk)
             widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
                 column=1)
-        except Exception as e:
+        except DetailPageWidget.DoesNotExist:
             widget_objs = None
-            logging.getLogger('error_log').error("%(err)s" % {'err': e})
+            widget_obj = None
         context['widget_objs'] = widget_objs
         context['widget_obj'] = widget_obj
         return context
