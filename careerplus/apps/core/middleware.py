@@ -186,7 +186,7 @@ class LearningShineMiddleware(object):
             try:
                 decoded_ad = AdServerShine().decode(
                     request.session.get('_adserver_'))
-                if decoded_ad:
+                if len(decoded_ad) == 4:
                     email = decoded_ad[1]
                     mobile = decoded_ad[2]
                     timestamp = decoded_ad[3]
@@ -220,6 +220,9 @@ class LearningShineMiddleware(object):
                         'utm_parameter': utm_parameter,
                         'campaign_slug': campaign_slug,
                     })
+                else:
+                    logging.getLogger('info_log').info(
+                        "decoded list length less than four")
             except Exception as e:
                 logging.getLogger('error_log').error(str(e))
         response = self.get_response(request)
