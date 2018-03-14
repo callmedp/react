@@ -315,6 +315,14 @@ class WelcomeCallbackView(ListView, PaginationMixin):
         queryset = queryset.filter(
             status=1, welcome_call_done=False, wc_cat=23)
 
+        user = self.request.user
+
+        if has_group(user=user, grp_list=settings.OPS_HEAD_GROUP_LIST):
+            pass
+        else:
+            queryset = queryset.filter(
+                assigned_to=user)
+
         try:
             if self.query:
                 queryset = queryset.filter(
@@ -400,6 +408,14 @@ class WelcomeServiceIssueView(ListView, PaginationMixin):
         queryset = super(WelcomeServiceIssueView, self).get_queryset()
         queryset = queryset.filter(
             status=1, welcome_call_done=False, wc_cat=22)
+
+        user = self.request.user
+
+        if has_group(user=user, grp_list=settings.OPS_HEAD_GROUP_LIST):
+            pass
+        else:
+            queryset = queryset.filter(
+                assigned_to=user)
 
         try:
             if self.query:
