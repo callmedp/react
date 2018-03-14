@@ -1,6 +1,7 @@
 import logging
 import os
 import csv
+import requests
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
@@ -8,7 +9,7 @@ from django.urls import reverse
 from celery.decorators import task
 from scheduler.models import Scheduler
 from partner.models import Certificate, UserCertificate
-from users.mixins import RegistrationLoginApi
+from core.api_mixin import ShineCandidateDetail, ShineToken
 User = get_user_model()
 
 
@@ -151,8 +152,13 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                     mobile = row.get('candidate_mobile', '').strip()
                                     certificate_name = row.get('certificate_name').strip()
                                     certi_yr_passing = row.get('year').strip()
-                                    resp = RegistrationLoginApi.check_email_exist(email)
-                                    if resp.get('exists'):
+                                    shineid = ShineCandidateDetail().get_shine_id(
+                                        email=None, headers=None)
+                                    if not certificate_name:
+                                        row['certificate_name'] = "certificate not found"
+                                    if not shineid:
+                                        row['reason_for_failure'] = "user not register on shine"
+                                    if shineid and certificate_name:
                                         obj, created = Certificate.objects.get_or_create(
                                             name=certificate_name)
                                         if created:
@@ -161,9 +167,19 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                                 year=certi_yr_passing,
                                                 candidate_email=email,
                                                 candidate_mobile=mobile)
-                                    else:
-                                        row['reason_for_failure'] = "user not register on shine"
-                                        row['status'] = "failure"
+                                        post_data = {
+                                            'certification_name': certificate_name,
+                                            'certification_year': certi_yr_passing
+                                        }
+                                        certification_url = settings.SHINE_API_URL + "/candidate/" +shine_id + "/certifications/?format=json"
+                                        headers = ShineToken().get_api_headers()
+                                        certification_response = requests.post(
+                                            certification_url, data=post_data,
+                                            headers=headers)
+                                        if certification_response.status_code == 200:
+                                            row['status'] = "Success"
+                                        elif certification_response.status_code != 200:
+                                            row['status'] = "Failure"
                                     csvwriter.writerow(row)
                                 except Exception as e:
                                     row['reason_for_failure'] = str(e)
