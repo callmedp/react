@@ -620,7 +620,8 @@ class CartMixin(object):
 
             if cart_pk:
 
-                course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
+                course_classes = ProductClass.objects.filter(
+                    slug__in=settings.COURSE_SLUG)
 
                 cart_obj = Cart.objects.get(pk=cart_pk)
                 if cart_obj.status in [0, 2]:
