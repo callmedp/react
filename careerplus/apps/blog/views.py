@@ -225,7 +225,7 @@ class BlogDetailView(DetailView, BlogMixin):
         widget_objs, widget_obj = None, None
         try:
             widget_obj = DetailPageWidget.objects.get(
-                content_type__model='Blog', listid_contains=pk)
+                content_type__model='Blog', listid__contains=pk)
             widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
                 column=1)
         except DetailPageWidget.DoesNotExist:
