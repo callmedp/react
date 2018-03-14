@@ -92,7 +92,7 @@
           
           <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" >
             <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
-              <meta itemprop="url" content="https://learning.shine.com/media/static/shinelearn/images/logo.png">
+              <meta itemprop="url" content="{% static 'shinelearn/images/logo.png' %}">
             </div>
             <meta itemprop="name" content="Shine">
           </div>
@@ -117,7 +117,7 @@
 
 {% block js_section %}
     {{block.super}}
-    <script type="text/javascript" src="{% static "shinelearn/js/mobile/talenteconomy/article.js" %}"></script>
+    <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
     <script>
         $(function() {
             Article.init();

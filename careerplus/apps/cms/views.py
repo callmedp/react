@@ -1,6 +1,6 @@
 import datetime
 import json
-
+import logging
 from django.views.generic import View, DetailView
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse,\
@@ -42,7 +42,8 @@ class CMSPageView(DetailView, LoadMoreMixin):
             queryset = queryset.filter(slug=slug, is_active=True)
         try:
             obj = queryset.get()
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             raise Http404
         return obj
 

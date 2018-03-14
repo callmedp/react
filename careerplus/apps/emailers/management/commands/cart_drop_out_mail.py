@@ -95,7 +95,7 @@ def get_last_cart_item():
     #                     m_prod.save()
     #                     count += 1
     #                 except Exception as e:
-    #                     logging.getLogger('email_log').error(
+    #                     logging.getLogger('error_log').error(
     #                         "{}-{}-{}".format(
     #                             str(to_email), str(mail_type), str(e)))
     #     except Exception as e:

@@ -48,5 +48,5 @@ def shine_roundone_report():
             attachments=attachments,#[attachments, csvfile.getvalue(), 'text/csv'],
             mimetype='text/csv')
     except Exception as excep:
-        logging.getLogger('email_log').error("%s - %s" % (
+        logging.getLogger('error_log').error("%s - %s" % (
             "Daily RounOne Report", str(excep)))

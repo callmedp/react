@@ -11,10 +11,12 @@ from django.core.management.base import BaseCommand
 
 def get_selling_price(oi):
     if oi.is_combo and not oi.no_process:
-        return oi.cost_price*oi.parent.selling_price/(
-            sum(oi.parent.orderitem_set.filter(no_process=False, is_combo=True).values_list('cost_price')))
+        return oi.cost_price*oi.parent.selling_price/sum(oi.parent.orderitem_set.filter(
+            no_process=False, is_combo=True).values_list('cost_price',flat=True))
+    elif oi.is_combo and oi.no_process:
+        return 0
     else:
-        return oi.selling_price
+        return oi.selling_price + oi.delivery_price_incl_tax
 
 
 class Command(BaseCommand):
@@ -32,7 +34,7 @@ class Command(BaseCommand):
 
         writer.writerow([
             'Order_Id','Email','Owner_name','Order_Date','Payment_Date','Sales_executive','Sales_TL', 'Branch_Head',
-            'Transaction_ID', 'Item_Id', 'Item_Category', 'Product Name', 'Item Name','Status',
+            'Transaction_ID', 'Item_Id', 'Product Name', 'Item Name','Status',
             'Price of item on site according to order (without tax including context)', 'Discount (includes wallet and coupon)',
             'Price of order with no discount/wallet', 'Actual collection of order', 'Effective collection per item',
             'Price of item on site ', 'Transaction_Amount', 'Coupon_Code', 'Payment_mode'])
@@ -41,8 +43,8 @@ class Command(BaseCommand):
         for oi in OrderItem.objects.filter(order__payment_date__gte=start_date,
         order__payment_date__lte=end_date,order__status__in=[1,2,3,4]).filter(filter_processes):
 
-            discounts = reduce(lambda x, y: x + y, [x.discount_amount for x in oi.order.orderitems.all()])
-            fictitious_collection_with_no_discounts = ((oi.order.total_incl_tax/Decimal(1.18))+discounts)*1.18
+            discounts = reduce(lambda x, y: x + y, [x.discount_amount for x in oi.order.orderitems.filter(filter_processes)])
+            fictitious_collection_with_no_discounts = ((oi.order.total_incl_tax/Decimal(1.18))+discounts)*Decimal(1.18)
             collection_after_discounts = oi.order.total_incl_tax
             c = re.sub("'", "\"", oi.order.sales_user_info)
             if c:
@@ -56,9 +58,8 @@ class Command(BaseCommand):
                 oi.order.crm_sales_id,
                 c['team_lead'] if c else '',
                 c['branch_head'] if c else '',
-                ', '.join([tx.txn for tx in oi.order.get_txns()]),
+                '| '.join([tx.txn for tx in oi.order.get_txns()]),
                 oi.id,
-                oi.product.get_type_flow_display(),
                 oi.product.name,
                 oi.parent.product.name if oi.parent else oi.product.name,
                 oi.order.get_status_display(),
@@ -67,14 +68,12 @@ class Command(BaseCommand):
                 fictitious_collection_with_no_discounts,
                 collection_after_discounts,
                 get_selling_price(oi),
-                oi.cost_price,
+                0 if (oi.is_combo and oi.no_process) else oi.cost_price,
                 '| '.join([str(tx.txn_amount) for tx in oi.order.get_txns()]),
                 '| '.join([str(o.coupon_code) for o in oi.order.couponorder_set.all()]),
                 '| '.join([tx.get_payment_mode_display() for tx in oi.order.get_txns()])
             ]
             writer.writerow(e)
-
-
 
 
 '''

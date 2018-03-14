@@ -25,7 +25,7 @@
 {% block js_block %}
     {{block.super}}
     <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
-  	<script type="text/javascript" src="{% static "myadmin/js/blog/comment-action.js" %}"></script>
+  	<script type="text/javascript" src="{% static 'myadmin/js/blog/comment-action.js' %}"></script>
 	<script type="text/javascript">
      window.onload = function(){
       $.each($("select[multiple]"), function () {
@@ -39,9 +39,9 @@
       $('textarea').ckeditor()
     }
 	</script>
-  <script type="text/javascript" src='/static/console/js/ckeditor/ckeditor-init.js'></script>
-  <script type="text/javascript" src='/static/console/js/ckeditor/ckeditor/ckeditor.js'></script>
-  <script type="text/javascript" src='/static/console/js/ckeditor/ckeditor/adapters/jquery.js'></script>
-  <script type="text/javascript">window.CKEDITOR_BASEPATH = '/static/console/js/ckeditor/ckeditor/';</script>
+  <script type="text/javascript" src="{% static 'console/js/ckeditor/ckeditor-init.js' %}"></script>
+  <script type="text/javascript" src="{% static 'console/js/ckeditor/ckeditor/ckeditor.js' %}"></script>
+  <script type="text/javascript" src="{% static 'console/js/ckeditor/ckeditor/adapters/jquery.js' %}"></script>
+  <script type="text/javascript">window.CKEDITOR_BASEPATH = "{% static 'console/js/ckeditor/ckeditor/' %}";</script>
 
 {% endblock js_block %}

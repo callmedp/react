@@ -197,12 +197,12 @@ def cart_drop_out_mail(pk=None, cnd_email=None):
                 token = AutoLogin().encode(toemail, cart_id, days=None)
                 data['autologin'] = "{}://{}/autologin/{}/?next=/cart/".format(
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                    token.decode())
+                    token)
                 try:
                     SendMail().send(to_email, mail_type, data)
                     count += 1
                 except Exception as e:
-                    logging.getLogger('email_log').error(
+                    logging.getLogger('error_log').error(
                         "{}-{}-{}".format(
                             str(to_email), str(mail_type), str(e)))
     print("{} of {} cart dropout mails sent".format(count, cart_objs.count()))
