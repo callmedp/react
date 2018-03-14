@@ -2,20 +2,40 @@ from .settings import *
 
 DEBUG = False
 IS_LIVE = True
-STATIC_URL = 'https://origin-static3.shine.com/static/'
-MEDIA_URL = 'https://origin-static3.shine.com/'
-DOWNLOAD_URL = 'https://origin-static3.shine.com/download/'
+
+######## APPS SETTINGS ###############
+DJANGO_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sites',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'collectfaster',       # Needed here before staticfiles
+    'django.contrib.staticfiles',
+    'django.contrib.humanize',
+]
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+####### WSGI SETTINGS ############
+WSGI_APPLICATION = 'careerplus.config.wsgi_live.application'
+
+#DOWNLOAD_URL = 'https://origin-static3.shine.com/download/'
 DOWNLOAD_ROOT = os.path.join(MEDIA_ROOT, 'download')
-RESUME_DIR = '/shineresume/ResumeServices/'
+#RESUME_DIR = '/shineresume/ResumeServices/'
+INVOICE_DIR = 'invoice/'   # Cloud path
+RESUME_DIR = 'resume/'  # Cloud path
 CELERY_ALWAYS_EAGER = False
 
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning.shine.com'
 MOBILE_SITE_DOMAIN = 'mlearning.shine.com'
-SITEMAP_CACHING_TIME = 86400
 SITE_PROTOCOL = 'https'
 MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN) #'http://learning.shine.com'
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
+META_FB_PROFILE_ID = '282244838633660'
+
+###### SHINE SETTINGS ##########
 SHINE_API_USER = 'scpapiuser@gmail.com'
 SHINE_API_USER_PWD = 'tarun@123'
 SHINE_API_TIMEOUT = 60
@@ -38,12 +58,12 @@ PAYMENT_DROP_LEAD = 10 * 60
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
-        'URL': 'http://172.22.65.36:8983/solr/prdt',
+        'URL': 'http://10.136.2.43:8989/solr/prdt',
         'INCLUDE_SPELLING': False,
     },
     'index': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
-        'URL': 'http://172.22.65.35:8983/solr/prdt',
+        'URL': 'http://10.136.2.25:8989/solr/prdt',
         'INCLUDE_SPELLING': False,
     }
 }
@@ -58,22 +78,46 @@ CCAVENUE_MOBILE_WORKING_KEY = 'A5BD19BE780D68E36598D8FB051CF66C'
 
 CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
 
+########## DATABASE SETTINGS #################
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'careerplus',
-        'USER': 'carrerplus',
-        'PASSWORD': 'permitted@321',
-        'HOST': '172.22.65.153',
+        'USER': 'careerplus',
+        'PASSWORD': 'jWP4gEq2eV',
+        'HOST': 'lmysqldb-01',
         'PORT': '3306',
-    }
+    },
+    'master': {
+        'NAME': 'careerplus',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'careerplus',
+        'PASSWORD': 'jWP4gEq2eV',
+        'HOST': 'lmysqldb-01',
+        'PORT': '3306',
+    },
+    'slave': {
+        'NAME': 'careerplus',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'careerplus',
+        'PASSWORD': 'jWP4gEq2eV',
+        'HOST': 'lmysqldb-02',
+        'PORT': '3306',
+    },
 }
+DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
 
+###### CACHE settings ###############
+
+##### Cache Setting #####################
+SITEMAP_CACHING_TIME = 86400
 CACHES = {
     'default': {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": [
-            "redis://172.22.65.131:6379/1",
+            "redis://redis-01/6",
+            "redis://redis-02/6",
             ],
         "TIMEOUT": 86400,
         "OPTIONS": {
@@ -84,8 +128,8 @@ CACHES = {
     'session': {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": [
-            "redis://172.22.65.131:6379/2",
-            "redis://172.22.65.141:6379/2",
+            "redis://redis-01/5",
+            "redis://redis-02/5",
             ],
         "TIMEOUT": 86400,
         "OPTIONS": {
@@ -95,7 +139,7 @@ CACHES = {
     },
     'search_lookup': {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://172.22.65.131:6379/0",
+        "LOCATION": "redis://redis-01/6",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             'CONNECTION_POOL_KWARGS': {'max_connections': 50},
@@ -103,16 +147,61 @@ CACHES = {
     },
 }
 
+###### LOGGING SETTINGS #############
+SYSLOG_ADDRESS = '/run/applog.sock'
+
+LOGGING['handlers']['syslog']['address'] = SYSLOG_ADDRESS
+
+
 ADMINS = [
     '123snig@gmail.com',
     'snig_b@yahoo.com'
     'snigdha.batra@hindustantimes.com'
 ]
 
+####### ROUNDONE ID SETTINGS ##############
 ROUNDONE_PRODUCT_ID = 2129
+ROUNDONE_API_BASEURL = "http://api.roundone.in"  # This is the live api
+ROUNDONE_API_BASEURL_ORDER = "http://www.roundone.in"
+ROUNDONE_ORDER_SECRET_KEY = 'xHVEbrvpiH8BMol5rZt7YuDO'
+ROUNDONE_JOBDETAIL_SECRET_KEY = 'cQMYGVYxrMqHGPSAZeRDm4G'
+ROUNDONE_CP_CLIENT_ID = 'lnVPB3Oe9YPA3g)!F9zrFbg'
+ROUNDONE_CP_CLIENT_SECRET = 'c&OMxZ^0T*6qvyi0e3lU9OjWc!(%Wp+'
+ROUNDONE_ENCODING_KEY = '#r0und0n3k3y'
+ROUNDONE_ENCODING_SALT = '#r0und0n354l7'
+ROUNDONE_DEFAULT_PASSWORD = 'cp@roundone'
+ROUNDONE_API_TIMEOUT = 60
+ROUNDONE_API_DICT = {
+    'amount': 1999,
+    'organisationId': 11,
+    'affiliateName': 'CP',
+    'client_id': ROUNDONE_CP_CLIENT_ID,
+    'client_secret': ROUNDONE_CP_CLIENT_SECRET,
+    'order_secret_key': ROUNDONE_ORDER_SECRET_KEY,
+    'jobdetail_secret_key': ROUNDONE_JOBDETAIL_SECRET_KEY,
+    'location_url': ROUNDONE_API_BASEURL + "/applicant/location-list",
+    'order_save_url': ROUNDONE_API_BASEURL_ORDER + "/api/careerplus/save",
+    'job_search_url': ROUNDONE_API_BASEURL + "/applicant/search",
+    'oauth_url': ROUNDONE_API_BASEURL + "/oauth-token",
+    'job_detail_url': ROUNDONE_API_BASEURL + "/applicant/job-details",
+    'is_premium_url': ROUNDONE_API_BASEURL + "/applicant/is-premium",
+    'save_job_url': ROUNDONE_API_BASEURL + "/applicant/save-jobs",
+    'get_profile_url': ROUNDONE_API_BASEURL + "/applicant/get-profile",
+    'post_profile_url': ROUNDONE_API_BASEURL + "/applicant/post-profile",
+    'submit_resume': ROUNDONE_API_BASEURL + "/applicant/submit-resume",
+    'referral_request_url': ROUNDONE_API_BASEURL + "/applicant/referral-request",
+    'referral_status_url': ROUNDONE_API_BASEURL + "/applicant/referral-status",
+    'referral_confirm_url': ROUNDONE_API_BASEURL + "/applicant/confirm-interaction",
+    'upcoming_interaction_url': ROUNDONE_API_BASEURL + "/applicant/upcoming-interactions",
+    'past_interaction_url': ROUNDONE_API_BASEURL + "/applicant/past-interactions",
+    'saved_history_url': ROUNDONE_API_BASEURL + "/applicant/get-saved-jobs",
+    'delete_job_url': ROUNDONE_API_BASEURL + "/applicant/delete-saved-job",
+    'feedback_submit_url': ROUNDONE_API_BASEURL + "/applicant/submit-feedback",
+    'interaction_result_url': ROUNDONE_API_BASEURL + "/applicant/view-interaction-result",
+    'update_credential_url': ROUNDONE_API_BASEURL + "/applicant/update-credentials"
+}
 
-
-#### LEAD CRONS
+#### CRM SETTINGS CRONS #################
 SHINECPCRM_DICT = {
     'base_url': 'http://shinecpcrm.shine.com',
     'token': '73f53cf358b94156feb49d034081ed507334e02a',
@@ -123,13 +212,19 @@ SHINECPCRM_DICT = {
     'ad_server_url': '/api/mobile-version-leads/'
 }
 
-### LINKEDIN SETTINGS
+### LINKEDIN SETTINGS ###########
 REDIRECT_URI = '{}/linkedin/login'.format(MAIN_DOMAIN_PREFIX)
+CLIENT_ID = "815g8q57sg0q6q"
+CLIENT_SECRET = "NljH5Pdr6e80MTuR"
+STATE = "9899002507upender"
+SCOPE = 'r_emailaddress r_basicprofile'
+TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
+OAUTH_URL = "https://www.linkedin.com/oauth/v2/authorization?"
 
 # Addon List For writer Invoice
-VISUAL_RESUME_PRODUCT_LIST = []
-COVER_LETTER_PRODUCT_LIST = []
-SECOND_REGULAR_RESUME_PRODUCT_LIST = []
+VISUAL_RESUME_PRODUCT_LIST = [2052, 2053, 2054, 2055, 2056]
+COVER_LETTER_PRODUCT_LIST = [40]
+SECOND_REGULAR_RESUME_PRODUCT_LIST = [35, 36, 37, 38, 39]
 
 # Booster Recruiters
 BOOSTER_RECRUITERS = [
@@ -805,45 +900,36 @@ BOOSTER_RECRUITERS = [
 '3rdeyeitjobs@3rdeyeconsultants.com'
 ]
 
-###### ROUNDONE SETTING ###############################
 
-ROUNDONE_API_BASEURL = "http://api.roundone.in"  # This is the live api
-ROUNDONE_API_BASEURL_ORDER = "http://www.roundone.in"
-ROUNDONE_ORDER_SECRET_KEY = 'xHVEbrvpiH8BMol5rZt7YuDO'
-ROUNDONE_JOBDETAIL_SECRET_KEY = 'cQMYGVYxrMqHGPSAZeRDm4G'
-ROUNDONE_CP_CLIENT_ID = 'lnVPB3Oe9YPA3g)!F9zrFbg'
-ROUNDONE_CP_CLIENT_SECRET = 'c&OMxZ^0T*6qvyi0e3lU9OjWc!(%Wp+'
-ROUNDONE_ENCODING_KEY = '#r0und0n3k3y'
-ROUNDONE_ENCODING_SALT = '#r0und0n354l7'
-ROUNDONE_DEFAULT_PASSWORD = 'cp@roundone'
-ROUNDONE_API_TIMEOUT = 60
+###### STORAGE SETTINGS #############
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.join(PROJECT_DIR, 'careerplus/config', 'code-learning-gcp-key.json')
 
-ROUNDONE_API_DICT = {
-    'amount': 1999,
-    'organisationId': 11,
-    'affiliateName': 'CP',
-    'client_id': ROUNDONE_CP_CLIENT_ID,
-    'client_secret': ROUNDONE_CP_CLIENT_SECRET,
-    'order_secret_key': ROUNDONE_ORDER_SECRET_KEY,
-    'jobdetail_secret_key': ROUNDONE_JOBDETAIL_SECRET_KEY,
-    'location_url': ROUNDONE_API_BASEURL + "/applicant/location-list",
-    'order_save_url': ROUNDONE_API_BASEURL_ORDER + "/api/careerplus/save",
-    'job_search_url': ROUNDONE_API_BASEURL + "/applicant/search",
-    'oauth_url': ROUNDONE_API_BASEURL + "/oauth-token",
-    'job_detail_url': ROUNDONE_API_BASEURL + "/applicant/job-details",
-    'is_premium_url': ROUNDONE_API_BASEURL + "/applicant/is-premium",
-    'save_job_url': ROUNDONE_API_BASEURL + "/applicant/save-jobs",
-    'get_profile_url': ROUNDONE_API_BASEURL + "/applicant/get-profile",
-    'post_profile_url': ROUNDONE_API_BASEURL + "/applicant/post-profile",
-    'submit_resume': ROUNDONE_API_BASEURL + "/applicant/submit-resume",
-    'referral_request_url': ROUNDONE_API_BASEURL + "/applicant/referral-request",
-    'referral_status_url': ROUNDONE_API_BASEURL + "/applicant/referral-status",
-    'referral_confirm_url': ROUNDONE_API_BASEURL + "/applicant/confirm-interaction",
-    'upcoming_interaction_url': ROUNDONE_API_BASEURL + "/applicant/upcoming-interactions",
-    'past_interaction_url': ROUNDONE_API_BASEURL + "/applicant/past-interactions",
-    'saved_history_url': ROUNDONE_API_BASEURL + "/applicant/get-saved-jobs",
-    'delete_job_url': ROUNDONE_API_BASEURL + "/applicant/delete-saved-job",
-    'feedback_submit_url': ROUNDONE_API_BASEURL + "/applicant/submit-feedback",
-    'interaction_result_url': ROUNDONE_API_BASEURL + "/applicant/view-interaction-result",
-    'update_credential_url': ROUNDONE_API_BASEURL + "/applicant/update-credentials"
-}
+DEFAULT_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPMediaStorage'
+GS_BUCKET_NAME = 'learning-media'
+
+PRIVATE_MEDIA_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPPrivateMediaStorage'
+GCP_PRIVATE_MEDIA_BUCKET = 'learning-misc'
+
+COMPRESS_STORAGE = STATICFILES_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPStaticStorage'
+COMPRESS_OFFLINE_MANIFEST = 'manifest_123Z.json'
+GS_PROJECT_ID = 'shinesumoplus'
+GCP_STATIC_BUCKET = 'learning-static'
+
+INVOICE_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPInvoiceStorage'
+GCP_INVOICE_BUCKET = 'learning-invoices'
+
+# GS_AUTO_CREATE_BUCKET = True
+STATIC_URL = 'https://static1.shine.com/l/s/'
+MEDIA_URL = 'https://static1.shine.com/l/m/'
+# DOWNLOAD_URL = 'https://gcp-static.shine.com/l/m/download/'
+
+##### EMAIL SETTINGS #######
+EMAIL_HOST = '172.22.65.188'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = 0
+SERVER_EMAIL = 'recruiter@shine.com'
+DEFAULT_FROM_EMAIL = CONSULTANTS_EMAIL
+
+CP_VENDOR_ID = '12345'

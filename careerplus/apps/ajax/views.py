@@ -260,7 +260,7 @@ class ApproveByAdminDraft(View):
                         'mobile': obj.order.mobile,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
 
                     mail_type = 'RESUME_CRITIQUE_CLOSED'
@@ -274,7 +274,7 @@ class ApproveByAdminDraft(View):
                             email_dict.update({'url': urlshortener.get('url')})
                             SendSMS().send(sms_type=mail_type, data=email_dict)
                         except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                            logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
                     obj.orderitemoperation_set.create(
                         oi_draft=obj.oi_draft,
                         draft_counter=obj.draft_counter,
@@ -317,7 +317,7 @@ class ApproveByAdminDraft(View):
                         'mobile': obj.order.mobile,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
 
                     draft_upload_mail(
@@ -349,7 +349,7 @@ class ApproveByAdminDraft(View):
                             'draft_added': obj.draft_added_on,
                             'mobile': obj.order.mobile,
                             'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                         })
                         send_email_task.delay(
                             to_emails, mail_type, email_dict, status=9,
@@ -495,7 +495,7 @@ class ApproveDraftByLinkedinAdmin(View):
                         'mobile': obj.order.mobile,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
 
                     if obj.draft_counter == 1:
@@ -513,7 +513,7 @@ class ApproveDraftByLinkedinAdmin(View):
                                 obj.smsorderitemoperation_set.create(
                                     sms_oi_status=102)
                             except Exception as e:
-                                logging.getLogger('sms_log').error(
+                                logging.getLogger('error_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
                     elif obj.draft_counter == 2:
                         if 103 not in email_sets and 103 not in sms_sets:
@@ -530,7 +530,7 @@ class ApproveDraftByLinkedinAdmin(View):
                                 obj.smsorderitemoperation_set.create(
                                     sms_oi_status=103)
                             except Exception as e:
-                                logging.getLogger('sms_log').error(
+                                logging.getLogger('error_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
 
                     elif obj.draft_counter == settings.DRAFT_MAX_LIMIT and 104 not in email_sets:
@@ -548,7 +548,7 @@ class ApproveDraftByLinkedinAdmin(View):
                                 obj.smsorderitemoperation_set.create(
                                     sms_oi_status=104)
                             except Exception as e:
-                                logging.getLogger('sms_log').error(
+                                logging.getLogger('error_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
 
                     if obj.oi_status == 4:

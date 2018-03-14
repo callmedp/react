@@ -8,7 +8,7 @@
     {% block css_section %}
         {{block.super}}
         {% compress css %}
-        <link type="text/scss" href="{% static "shinelearn/css/dashboard/dashboard.scss" %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/dashboard/dashboard.scss' %}" rel="stylesheet">
         {% endcompress %}
             <style>
               .reject-msg .input-file .upload-file {
@@ -149,7 +149,7 @@
     {% block js_section %}
         {{block.super}}
         {% compress js %}
-        <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+        <script src="{% static 'shinelearn/js/dashboard/dashboard.js' %}"></script>
         {% endcompress %}
     {% endblock js_section %}
 

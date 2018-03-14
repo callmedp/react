@@ -23,7 +23,7 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                     to_mobile=email_dict.get('mobile'),
                     status=1)
             except Exception as e:
-                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 
         elif oi.draft_counter == 2 and (23 not in email_sets and 23 not in sms_sets):
             email_dict['subject'] = "Your developed document is ready"
@@ -37,7 +37,7 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                     to_mobile=email_dict.get('mobile'),
                     status=1)
             except Exception as e:
-                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 
         elif oi.draft_counter == settings.DRAFT_MAX_LIMIT and (24 not in email_sets and 24 not in sms_sets):
             email_dict['subject'] = "Your final document is ready"
@@ -51,7 +51,7 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                     to_mobile=email_dict.get('mobile'),
                     status=1)
             except Exception as e:
-                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 
     elif oi.product.type_flow == 12:
         if oi.draft_counter == 1 and (142 not in email_sets and 142 not in sms_sets):
@@ -66,7 +66,7 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                     to_mobile=email_dict.get('mobile'),
                     status=1)
             except Exception as e:
-                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 
         elif oi.draft_counter == 2 and (143 not in email_sets and 143 not in sms_sets):
             email_dict['subject'] = "Your developed document is ready"
@@ -80,7 +80,7 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                     to_mobile=email_dict.get('mobile'),
                     status=1)
             except Exception as e:
-                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 
         elif oi.draft_counter == settings.DRAFT_MAX_LIMIT and (144 not in email_sets and 144 not in sms_sets):
             email_dict['subject'] = "Your final document is ready"
@@ -94,7 +94,7 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                     to_mobile=email_dict.get('mobile'),
                     status=1)
             except Exception as e:
-                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 
     elif oi.product.type_flow == 13:
         if oi.draft_counter == 1 and (152 not in email_sets and 152 not in sms_sets):
@@ -109,7 +109,7 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                     to_mobile=email_dict.get('mobile'),
                     status=1)
             except Exception as e:
-                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 
         elif oi.draft_counter == 2 and (153 not in email_sets and 153 not in sms_sets):
             email_dict['subject'] = "Your developed document is ready"
@@ -123,7 +123,7 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                     to_mobile=email_dict.get('mobile'),
                     status=1)
             except Exception as e:
-                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 
         elif oi.draft_counter == settings.DRAFT_MAX_LIMIT and (154 not in email_sets and 154 not in sms_sets):
             email_dict['subject'] = "Your final document is ready"
@@ -137,7 +137,7 @@ def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
                     to_mobile=email_dict.get('mobile'),
                     status=1)
             except Exception as e:
-                logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
     else:
         pass
 

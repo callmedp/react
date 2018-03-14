@@ -14,6 +14,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from geolocation.models import Country
 from order.models import OrderItem
 from core.mixins import InvoiceGenerate
+from core.library.gcloud.custom_cloud_storage import GCPInvoiceStorage
 
 from .choices import (
     WRITING_STARTER_VALUE, RESUME_WRITING_MATRIX_DICT,
@@ -42,11 +43,23 @@ class WriterInvoiceMixin(object):
         if oi.assigned_to:
             assigned_to = oi.assigned_to
             assigned_date = oi.assigned_date
+            if not assigned_date:
+                ops = oi.orderitemoperation_set.filter(oi_status=1).order_by('id')
+                if ops.exists():
+                    assigned_date = ops[0].created
+                else:
+                    assigned_date = datetime.datetime.today()
         else:
             oi_assigned = oi.orderitem_set.all().exclude(
                 assigned_to=None)
             assigned_to = oi_assigned[0].assigned_to
             assigned_date = oi_assigned[0].assigned_date
+            if not assigned_date:
+                ops = oi_assigned[0].orderitemoperation_set.filter(oi_status=1).order_by('id')
+                if ops.exists():
+                    assigned_date = ops[0].created
+                else:
+                    assigned_date = datetime.datetime.today()
 
         start_date = assigned_date - datetime.timedelta(days=DISCOUNT_ALLOCATION_DAYS)
         end_date = assigned_date + datetime.timedelta(days=DISCOUNT_ALLOCATION_DAYS)
@@ -64,7 +77,7 @@ class WriterInvoiceMixin(object):
                     oi_status=4,
                     assigned_to=assigned_to,
                     assigned_date__range=[start_date, end_date],
-                    closed_on__date__lte=prev_month).order_by('-id')
+                    closed_on__lte=prev_month).order_by('-id')
                 if linkedin_ois.exists():
                     linkedin_obj = linkedin_ois[0]
                     writing_ois = linkedin_obj.order.orderitems.filter(
@@ -89,7 +102,7 @@ class WriterInvoiceMixin(object):
                             oi_status=4,
                             assigned_to=assigned_to,
                             assigned_date__range=[start_date, end_date],
-                            closed_on__date__lte=closed_on_last).exclude(
+                            closed_on__lte=closed_on_last).exclude(
                             product__id__in=COVER_LETTER_PRODUCT_LIST)
 
                         if writing_ois.exists():
@@ -137,7 +150,7 @@ class WriterInvoiceMixin(object):
                         oi_status=4,
                         assigned_to=assigned_to,
                         assigned_date__range=[start_date, end_date],
-                        closed_on__date__lte=last_invoice_date).exclude(
+                        closed_on__lte=last_invoice_date).exclude(
                         product__id__in=COVER_LETTER_PRODUCT_LIST)
                     if writing_ois.exists() and oi.pk not in self.combo_discount_object:
                         combo_discount = (linkedin_amount * COMBO_DISCOUNT) / 100
@@ -222,12 +235,14 @@ class WriterInvoiceMixin(object):
                 invoice_date.year, invoice_date.month, last_day)
             first_invoice_date = datetime.date(
                 invoice_date.year, invoice_date.month, 1)
+            last_invoice_date = last_invoice_date + datetime.timedelta(
+                days=1)
 
             orderitems = OrderItem.objects.filter(
                 order__status__in=[1, 3],
                 product__type_flow__in=[1, 8, 12, 13],
                 oi_status=4, assigned_to=user,
-                closed_on__date__range=[first_invoice_date, last_invoice_date],
+                closed_on__range=[first_invoice_date, last_invoice_date],
                 no_process=False).select_related('product').order_by('id')
 
             writing_dict = RESUME_WRITING_MATRIX_DICT
@@ -259,6 +274,7 @@ class WriterInvoiceMixin(object):
             order_before = datetime.date(2017, 11, 3)
 
             for oi in orderitems:
+                process = False
                 oi_dict = {}
                 # sla incentive or penalty calculation
                 if oi.assigned_date and oi.closed_on and oi.assigned_date < oi.closed_on:
@@ -273,7 +289,7 @@ class WriterInvoiceMixin(object):
                         if finish_days <= REGULAR_SLA:
                             success_closure += 1
 
-                if oi.order.payment_date.date() < order_before:
+                if oi.created.date() < order_before:
                     oi_dict = {}
                     oi_dict.update({
                         "item_id": oi.pk,
@@ -365,6 +381,8 @@ class WriterInvoiceMixin(object):
                     item_list.append(oi_dict)
                     total_sum += amount
 
+                    process = True
+
                 elif oi.is_addon:
                     pk = oi.pk
                     product_name = oi.product.get_name
@@ -379,9 +397,10 @@ class WriterInvoiceMixin(object):
                             oi=oi, invoice_date=invoice_date,
                             user_type=user_type)
                         total_combo_discount += combo_discount
-
+                        process = True
                     elif product_pk in COVER_LETTER_PRODUCT_LIST:
                         amount = COVER_LETTER
+                        process = True
                     elif product_pk in SECOND_REGULAR_RESUME_PRODUCT_LIST:
                         amount = SECOND_REGULAR_RESUME
                         # combo discount calculation
@@ -389,20 +408,19 @@ class WriterInvoiceMixin(object):
                             oi=oi, invoice_date=invoice_date,
                             user_type=user_type)
                         total_combo_discount += combo_discount
-                    else:
-                        error = 'Addon Product id - %s is missing in product_list (backend).' % (product_pk)
-                        break
-
-                    oi_dict.update({
-                        "item_id": pk,
-                        "product_name": product_name,
-                        "closed_on": closed_on,
-                        "combo_discount": combo_discount,
-                        "amount": amount,
-                        "item_type": "addon",
-                    })
-                    item_list.append(oi_dict)
-                    total_sum += amount
+                        process = True
+                    
+                    if process:
+                        oi_dict.update({
+                            "item_id": pk,
+                            "product_name": product_name,
+                            "closed_on": closed_on,
+                            "combo_discount": combo_discount,
+                            "amount": amount,
+                            "item_type": "addon",
+                        })
+                        item_list.append(oi_dict)
+                        total_sum += amount
                 elif oi.is_combo:
                     pk = oi.pk
                     product_name = oi.product.get_name
@@ -494,7 +512,8 @@ class WriterInvoiceMixin(object):
                             item_list.append(d_dict)
                             added_delivery_object.append(p_oi.pk)
                             total_sum += amount
-                else:
+                    process = True
+                elif not process:
                     pk = oi.pk
                     product_name = oi.product.get_name
                     closed_on = oi.closed_on.date()
@@ -576,6 +595,8 @@ class WriterInvoiceMixin(object):
                         item_list.append(d_dict)
                         total_sum += amount
 
+                    process = True
+
             # penalty and incentive calc
             penalty = 0
             incentive = 0
@@ -648,11 +669,13 @@ class WriterInvoiceMixin(object):
                 today_date = today_date.replace(day=1)
                 prev_month = today_date - datetime.timedelta(days=1)
                 invoice_date = prev_month
-
             data = self.get_context_writer_invoice(
                 user=user, invoice_date=invoice_date)
             error = data.get("error", "")
+
             item_list = data.get('item_list', [])
+            # item_list = [5] * 60
+            # data.update({'item_list': item_list})
 
             if not error and item_list:
                 pdf_file = InvoiceGenerate().generate_pdf(
@@ -661,18 +684,12 @@ class WriterInvoiceMixin(object):
                 path = "invoice/user/{user_pk}/{month}_{year}/".format(
                     user_pk=user.pk, month=invoice_date.month,
                     year=invoice_date.year)
-                full_path = os.path.join(settings.MEDIA_ROOT, path)
                 file_name = 'invoice-' + str(user.name) + '-'\
                     + timezone.now().strftime('%d%m%Y') + '.pdf'
-                if not os.path.exists(full_path):
-                    os.makedirs(full_path)
-                dest = open(full_path + file_name, 'wb')
                 pdf_file = SimpleUploadedFile(
                     file_name, pdf_file,
                     content_type='application/pdf')
-                for chunk in pdf_file.chunks():
-                    dest.write(chunk)
-                dest.close()
+                GCPInvoiceStorage().save(path + file_name, pdf_file)
                 user.userprofile.user_invoice = path + file_name
                 user.userprofile.invoice_date = invoice_date
                 user.userprofile.save()

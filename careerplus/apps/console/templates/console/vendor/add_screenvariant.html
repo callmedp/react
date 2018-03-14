@@ -10,7 +10,7 @@
 {% block css_block %}
   {{ block.super }}
   <!-- Switchery -->
-  <link href="{% static "/packages/switchery/dist/switchery.min.css"  %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'packages/switchery/dist/switchery.min.css' %}" rel="stylesheet" type="text/css">
 
   <style type="text/css">
       ul.parsley-errors-list {
@@ -218,13 +218,13 @@
   {{ block.super }}
 
   <!-- Parsley Validate Scripts -->
-  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+  <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
   
     <!-- Switchery -->
-  <script type="text/javascript" src="{% static "packages/switchery/dist/switchery.min.js" %}"></script>
+  <script type="text/javascript" src="{% static 'packages/switchery/dist/switchery.min.js' %}"></script>
 	    
   <!-- Custom Theme Scripts -->
-  <script type="text/javascript" src="{% static "console/js/shop/console_shop.js" %}"></script>
+  <script type="text/javascript" src="{% static 'console/js/shop/console_shop.js' %}"></script>
 
 
 {% endblock js_block %}
