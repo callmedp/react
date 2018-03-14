@@ -627,7 +627,8 @@ class CartMixin(object):
                 if cart_obj.status in [0, 2]:
                     total_count += cart_obj.lineitems.all().count()
                     total_count -= cart_obj.lineitems.filter(
-                        parent=None, product__product_class__in=course_classes,
+                        parent=None,
+                        product__product_class__in=course_classes,
                         no_process=True).count()
 
         except Exception as e:
