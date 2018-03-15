@@ -167,7 +167,7 @@ class SkillPageView(DetailView, SkillPageMixin):
         widget_objs, widget_obj = None, None
         try:
             widget_obj = DetailPageWidget.objects.get(
-                content_type__model='Category', listid=self.pk)
+                content_type__model='Category', listid__contains=self.pk)
             widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
                 column=1)
         except DetailPageWidget.DoesNotExist:
