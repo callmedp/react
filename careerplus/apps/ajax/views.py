@@ -238,7 +238,8 @@ class ApproveByAdminDraft(View):
         if request.is_ajax() and request.user.is_authenticated():
             oi_pk = request.POST.get('oi_pk', None)
             try:
-                obj = OrderItem.objects.get(pk=oi_pk)
+                obj = OrderItem.objects.get(
+                    pk=oi_pk).select_releted('order', 'product')
                 data['status'] = 1
                 product_flow = obj.product.type_flow
 
@@ -306,7 +307,7 @@ class ApproveByAdminDraft(View):
                     # mail to candidate
                     email_sets = list(
                         obj.emailorderitemoperation_set.all().values_list(
-                            'email_oi_status', flat=True).distinct()) 
+                            'email_oi_status', flat=True).distinct())
                     to_emails = [obj.order.email]
                     token = AutoLogin().encode(
                         obj.order.email, obj.order.candidate_id, days=None)
@@ -408,7 +409,8 @@ class UploadDraftView(View):
             if form.is_valid():
                 try:
                     oi_pk = request.POST.get('oi_pk', None)
-                    obj = OrderItem.objects.get(pk=oi_pk)
+                    obj = OrderItem.objects.get(
+                        pk=oi_pk).select_releted('order', 'product')
                     mixin_data = {
                         "oi_draft": request.FILES.get('file', ''), }
                     data = ActionUserMixin().upload_draft_orderitem(oi=obj, data=mixin_data, user=request.user)
@@ -465,7 +467,8 @@ class ApproveDraftByLinkedinAdmin(View):
         if request.is_ajax():
             oi_pk = request.POST.get('oi_pk', None)
             try:
-                obj = OrderItem.objects.get(pk=oi_pk)
+                obj = OrderItem.objects.get(
+                    pk=oi_pk).select_releted('order', 'product')
                 data['status'] = 1
                 last_status = obj.oi_status
                 if obj.product.type_flow == 8:

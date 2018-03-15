@@ -96,15 +96,20 @@ class LinkedinQueueView(ListView, PaginationMixin):
             data = {"display_message": ''}
             orderitem_list = request.POST.getlist('selected_id[]', [])
             writer_pk = int(request.POST.get('action_type', '0'))
-            orderitem_objs = OrderItem.objects.filter(id__in=orderitem_list)
+            orderitem_objs = OrderItem.objects.filter(
+                id__in=orderitem_list).select_related(
+                'order', 'delivery_service', 'product')
             if writer_pk == 0:
-                messages.add_message(request, messages.ERROR, 'Please select valid action first')
+                messages.add_message(
+                    request, messages.ERROR, 'Please select valid action first')
             else:
                 User = get_user_model()
                 try:
                     writer = User.objects.get(pk=writer_pk)
                     for obj in orderitem_objs:
-                        email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
+                        email_sets = list(
+                            obj.emailorderitemoperation_set.all().values_list(
+                                'email_oi_status', flat=True).distinct())
                         obj.assigned_to = writer
                         obj.assigned_date = timezone.now()
                         obj.assigned_by = request.user
@@ -142,7 +147,8 @@ class LinkedinQueueView(ListView, PaginationMixin):
                         )
                     data['display_message'] = str(len(orderitem_objs)) + ' orderitems are Assigned.'
                 except Exception as e:
-                    logging.getLogger('error_log').error("Linkedin Queue:",str(e))
+                    logging.getLogger('error_log').error(
+                        "Linkedin Queue:%s", str(e))
                     data['display_message'] = str(e)
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
@@ -256,7 +262,8 @@ class ChangeDraftView(DetailView):
         try:
             flag = False
             self.object = self.get_object()
-            ord_obj = OrderItem.objects.get(oio_linkedin=self.object)
+            ord_obj = OrderItem.objects.get(
+                oio_linkedin=self.object).select_related('assigned_to')
             q_resp = QuizResponse.objects.get(oi=ord_obj)
             org_obj = Organization.objects.filter(draft=self.object)
             edu_obj = Education.objects.filter(draft=self.object)
