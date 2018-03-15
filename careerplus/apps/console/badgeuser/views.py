@@ -88,7 +88,7 @@ class UploadCertificate(FormView):
                 messages.add_message(
                     request, messages.SUCCESS,
                     'Task Created SuccessFully')
-                return HttpResponseRedirect(reverse('console:tasks:tasklist'))
+                return HttpResponseRedirect(reverse('console:badge:upload-tasklist'))
             except Exception as e:
                 messages.add_message(
                     request, messages.ERROR, "%(msg)s : %(err)s" % {'msg': 'Error in uploading', 'err': str(e)})
@@ -167,5 +167,5 @@ class DownloadBadgeUserView(View):
                 return response
         except:
             messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
-            response = HttpResponseRedirect(reverse('console:tasks:tasklist'))
+            response = HttpResponseRedirect(reverse('console:badge:upload-tasklist'))
             return response
