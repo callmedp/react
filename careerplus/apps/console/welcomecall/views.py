@@ -631,7 +631,7 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
             valid = False
             error = 'Enter valid sub-category'
 
-        if valid and not message:
+        if valid and not message and cat != 21:
             valid = False
             error = 'message is required'
         elif valid and not cat:

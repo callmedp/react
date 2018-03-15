@@ -65,7 +65,16 @@ $(function(){
         var select = $('#id-subcat');
         select.empty();
         select.append("<option value=''>Select SubCategory</option>");
-        var parent = $(this).val(); 
+        var parent = $(this).val();
+
+        if (parent == '21'){
+            $("#id-message").prop('required', false);
+        }
+        else{
+            $("#id-message").prop('required', true);
+        }
+
+
         switch(parent){ 
             case '21':{
                 $("#sub_cat1 option").each(function()
