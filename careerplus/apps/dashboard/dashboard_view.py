@@ -761,7 +761,9 @@ class DashboardResumeDownload(View):
             order = Order.objects.get(pk=order_pk)
             if candidate_id and order.status in [1, 3] and (order.email == email or order.candidate_id == candidate_id):
                 file = request.GET.get('path', None)
-                if file:  
+                if file:
+                    if file.startswith('/'):
+                        file = file[1:]
                     file_path = settings.RESUME_DIR + file
                     fsock = GCPPrivateMediaStorage().open(file_path)
                     filename = file.split('/')[-1]
