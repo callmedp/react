@@ -137,8 +137,7 @@ class AjaxProductLoadMoreView(TemplateView):
             except PageNotAnInteger:
                 products = paginator.page(1)
             except EmptyPage:
-                # products=paginator.page(paginator.num_pages)
-                products = 0
+                products = paginator.page(paginator.num_pages)
             for product in products:
                 if float(product.pPfin):
                     product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
@@ -147,7 +146,7 @@ class AjaxProductLoadMoreView(TemplateView):
                 'slug': slug,
             })
         except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
+            logging.getLogger('error_log').error("%s" % str(e))
         return context
 
 
@@ -176,10 +175,12 @@ class AjaxReviewLoadMoreView(TemplateView):
             except PageNotAnInteger:
                 page_reviews = paginator.page(1)
             except EmptyPage:
-                page_reviews = 0
-            context.update({'page_reviews': page_reviews, 'page': page, 'slug': slug})
+                page_reviews = paginator.page(paginator.num_pages)
+            context.update({
+                'page_reviews': page_reviews,
+                'page': page, 'slug': slug})
         except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
+            logging.getLogger('error_log').error("%s" % str(e))
         return context
 
 
