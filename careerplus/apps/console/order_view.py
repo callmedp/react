@@ -2275,6 +2275,8 @@ class ConsoleResumeDownloadView(View):
             file = request.GET.get('path', None)
             next_url = request.GET.get('next', None)
             if file:
+                if file.startswith('/'):
+                    file = file[1:]
                 file_path = settings.RESUME_DIR + file
                 fsock = GCPPrivateMediaStorage().open(file_path)
                 filename = file.split('/')[-1]

@@ -669,11 +669,13 @@ class WriterInvoiceMixin(object):
                 today_date = today_date.replace(day=1)
                 prev_month = today_date - datetime.timedelta(days=1)
                 invoice_date = prev_month
-
             data = self.get_context_writer_invoice(
                 user=user, invoice_date=invoice_date)
             error = data.get("error", "")
+
             item_list = data.get('item_list', [])
+            # item_list = [5] * 60
+            # data.update({'item_list': item_list})
 
             if not error and item_list:
                 pdf_file = InvoiceGenerate().generate_pdf(
