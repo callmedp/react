@@ -15,9 +15,14 @@ from scheduler.models import Scheduler
 from .tasks import (
     upload_certificate_task,
     upload_candidate_certificate_task)
+from console.decorators import (
+    Decorate, stop_browser_cache,
+    check_group)
 from . import forms
 
 
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.VENDOR_GROUP_LIST]))
 class UploadCertificate(FormView):
     template_name = "console/badgeuser/upload_certificate.html"
     http_method_names = [u'get', u'post']
@@ -92,6 +97,8 @@ class UploadCertificate(FormView):
         return self.form_invalid(form)
 
 
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.VENDOR_GROUP_LIST]))
 class UploadTaskListView(ListView, PaginationMixin):
     template_name = 'console/badgeuser/upload_task_list.html'
     model = Scheduler
@@ -121,6 +128,8 @@ class UploadTaskListView(ListView, PaginationMixin):
         return queryset.order_by('-modified')
 
 
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.VENDOR_GROUP_LIST]))
 class DownloadBadgeUserView(View):
 
     def get(self, request, *args, **kwargs):
