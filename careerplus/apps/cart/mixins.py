@@ -256,7 +256,7 @@ class CartMixin(object):
                     cart_items.append(data)
             return cart_items
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to fetch cart items  %s' %str(e))
         return cart_items
 
     def get_solr_cart_items(self, cart_obj=None):
@@ -375,6 +375,7 @@ class CartMixin(object):
                             addon.delete()
 
                     combo_list = json.loads(sqs.pCmbs).get('combo_list', [])
+                    
 
                     data = {
                         "id": main_id,
@@ -394,7 +395,8 @@ class CartMixin(object):
                     }
                     cart_items.append(data)
 
-                except:
+                except  Exception as e:
+                    logging.getLogger('error_log').error(" Msg= Unable to add item on cart %s " % str(e))
                     m_prod.delete()
 
         return {"cart_items": cart_items, "total_amount": total_amount}
@@ -523,7 +525,10 @@ class CartMixin(object):
             try:
                 product = Product.objects.get(id=sqs.id)
                 parent_li = cart_obj.lineitems.get(product=product)
-            except:
+                raise Exception
+            except Exception as e:
+                logging.getLogger('error_log').error(" Msg= Unable to select product %s " % str(e))
+
                 parent_li = None
             if parent_li:
                 selected_product = cart_obj.lineitems.filter(parent=parent_li).values_list('product__pk', flat=True)

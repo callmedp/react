@@ -4,6 +4,7 @@ from rest_framework.serializers import (
 )
 from order.models import Order, OrderItem
 from payment.models import PaymentTxn
+import logging
 
 
 class PaymentSerializer(ModelSerializer):
@@ -34,7 +35,8 @@ class ParentSerializer(ModelSerializer):
         try:
             return obj.product.name
         except:
-            pass
+            logging.getLogger('error_log').error(" Msg= Unable to fetch Product name")
+
         return ''
 
     def get_prd_parent_id(self, obj):
