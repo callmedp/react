@@ -290,7 +290,7 @@
                             {% if test.image %}
                             <img src="{{test.image.url}}" alt="profile-pic" width="100" height="100">
                             {% else %}
-                            <img src="{% static "shinelearn/images/user-loggedin.jpg" %}" alt="profile-pic" width="100" height="100">
+                            <img src="{% static 'shinelearn/images/user-loggedin.jpg' %}" alt="profile-pic" width="100" height="100">
                             {% endif %}
                             <div class="carousel-caption">
                                 {{test.review|striptags|safe}}

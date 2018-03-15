@@ -1,5 +1,6 @@
-{% load console_tags %}  
-  <!-- top navigation -->
+{% load static console_tags %}
+
+<!-- top navigation -->
 <div class="top_nav">
   <div class="nav_menu">
     <nav>
@@ -10,7 +11,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li class="">
           <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            <img src="/static/console/images/user.png" alt="">{{request.user}}
+            <img src="{% static 'console/images/user.png' %}" alt="">{{request.user}}
             <span class=" fa fa-angle-down"></span>
           </a>
           <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -28,7 +29,7 @@
           <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
             <li>
               <a>
-                <span class="image"><img src="/static/console/images/img.jpg" alt="Profile Image" /></span>
+                <span class="image"><img src="{% static 'console/images/img.jpg' %}" alt="Profile Image" /></span>
                 <span>
                   <span>John Smith</span>
                   <span class="time">3 mins ago</span>
@@ -58,13 +59,13 @@
           <ul class="dropdown-menu dropdown-usermenu pull-right">
             
               {% if not writer_invoice or not IS_LIVE %}
-              <li><a href="{% url "users:generate-writer-invoice"%}">
+              <li><a href="{% url 'users:generate-writer-invoice' %}">
                 Generate Invoice
               </a></li>
               {% endif %}
               {% if writer_invoice %}
               <li>
-                <a href="{% url "users:download-writer-invoice" %}">
+                <a href="{% url 'users:download-writer-invoice' %}">
                   Download Invoice
                 </a>
               </li>

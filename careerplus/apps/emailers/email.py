@@ -28,7 +28,7 @@ class SendMail():
                     filename=attachments[0], content=attachments[1],
                     mimetype=mimetype)
             except Exception as e:
-                logging.getLogger('email_log').error(
+                logging.getLogger('error_log').error(
                     "%s - %s" % (str(to), str(e)))
         emsg.send()
 
@@ -39,7 +39,7 @@ class SendMail():
         try:
             body = self.render_template(send_dict['template'], data)
         except Exception as e:
-            logging.getLogger('email_log').error("%s - %s" % (str(to), str(e)))
+            logging.getLogger('error_log').error("%s - %s" % (str(to), str(e)))
 
         self.base_send_mail(subject=send_dict.get('subject', 'Shinelearning'), body=body, to=to, from_email=send_dict.get('from_email', settings.DEFAULT_FROM_EMAIL), headers=send_dict.get('header', None), cc=send_dict.get('cc_list', None), bcc=send_dict.get('bcc_list', None), fail_silently=False, attachments=[])
 

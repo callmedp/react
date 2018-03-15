@@ -175,7 +175,7 @@ class RoundOneAPI(object):
                     response_json.update({'last_page': True})
 
         except Exception as e:
-            logging.getLogger('sms_log').error("%s - %s" % (str(response_json.json()), str(e)))
+            logging.getLogger('error_log').error("%s - %s" % (str(response_json.json()), str(e)))
         return response_json
 
     def get_job_detail(self, request, **kwargs):

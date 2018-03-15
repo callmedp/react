@@ -144,7 +144,7 @@ def booster():
                 )
 
             except Exception as e:
-                logging.getLogger('cron_log').error("%s" % (str(e)))
+                logging.getLogger('error_log').error("%s" % (str(e)))
         else:
             continue
     try:
@@ -157,4 +157,4 @@ def booster():
             for oi in booster_ois:
                 oi.emailorderitemoperation_set.create(email_oi_status=92)
     except Exception as e:
-        logging.getLogger('cron_log').error("%s" % (str(e)))
+        logging.getLogger('error_log').error("%s" % (str(e)))
