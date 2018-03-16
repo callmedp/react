@@ -30,4 +30,6 @@ def update_close_date():
             else:
                 logging.getLogger('error_log').error("orderitem id %s is closed but closed operation not found" % (oi.id))
 
-    print("close date updated on ", ct, " orderitems out of", closed_ois.count())
+    logging.getLogger('info_log').info(
+        "close date updated on {} orderitems out of {}".format(
+            ct, closed_ois.count()))

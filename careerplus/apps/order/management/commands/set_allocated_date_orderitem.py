@@ -1,3 +1,4 @@
+import logging
 from django.core.management.base import BaseCommand
 
 from order.models import OrderItem
@@ -25,4 +26,5 @@ def update_allocation_date():
                 oi.save()
                 updated += 1
 
-    print(updated, 'allocation date out of', orderitems.count())
+    logging.getLogger('info_log').info(
+        "{} allocation date out of {}".format(updated, orderitems.count()))
