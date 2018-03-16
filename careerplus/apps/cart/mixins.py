@@ -525,7 +525,6 @@ class CartMixin(object):
             try:
                 product = Product.objects.get(id=sqs.id)
                 parent_li = cart_obj.lineitems.get(product=product)
-                raise Exception
             except Exception as e:
                 logging.getLogger('error_log').error(" Msg= Unable to select product %s " % str(e))
 

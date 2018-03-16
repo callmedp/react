@@ -52,7 +52,7 @@ def create_lead_on_crm(pk=None, source_type=None, name=None):
             })
             lead_creation_function(filter_dict=filter_dict, cndi_name=name)
     except Exception as e:
-        logging.getLogger('error_log').error("%s" % str(e))
+        logging.getLogger('error_log').error("error occured in lead creation  %s" % str(e))
 
 
 def lead_creation_function(filter_dict=None, cndi_name=None):

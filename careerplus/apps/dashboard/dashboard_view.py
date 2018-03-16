@@ -215,12 +215,15 @@ class DashboardDetailView(TemplateView):
             self.oi_pk = request.GET.get('oi_pk')
 
             try:
+
                 self.oi = OrderItem.objects.get(pk=self.oi_pk)
                 if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
                     pass
+
                 else:
                     return ''
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('Msg=unable to fetch order item %s'%str(e))
                 return ''
             return super(DashboardDetailView, self).get(request, args, **kwargs)
         else:
@@ -276,7 +279,8 @@ class DashboardCommentView(TemplateView):
                     pass
                 else:
                     return ''
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get comments %s'%str(e))
                 return ''
             return super(DashboardCommentView, self).get(request, args, **kwargs)
         else:
@@ -304,8 +308,8 @@ class DashboardCommentView(TemplateView):
                         message=comment,
                         candidate_id=self.candidate_id,
                     )
-            except:
-                pass
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to create comment %s'%str(e))
             redirect_url = reverse('dashboard:dashboard-comment') + '?oi_pk=%s' % (self.oi_pk)
             return HttpResponseRedirect(redirect_url)
         else:
