@@ -452,13 +452,14 @@ class ActionUserMixin(object):
                     + '_' + str(int(random() * 9999)) \
                     + '_' + timezone.now().strftime('%Y%m%d') + extention
                 full_path = '%s/' % str(order.pk)
-                if not os.path.exists(settings.RESUME_DIR + full_path):
-                    os.makedirs(settings.RESUME_DIR + full_path)
-                dest = open(
-                    settings.RESUME_DIR + full_path + file_name, 'wb')
-                for chunk in file.chunks():
-                    dest.write(chunk)
-                dest.close()
+                # if not os.path.exists(settings.RESUME_DIR + full_path):
+                #     os.makedirs(settings.RESUME_DIR + full_path)
+                # dest = open(
+                #     settings.RESUME_DIR + full_path + file_name, 'wb')
+                # for chunk in file.chunks():
+                #     dest.write(chunk)
+                # dest.close()
+                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                 oi_draft = full_path + file_name
             except Exception as e:
                 logging.getLogger('error_log').error(
