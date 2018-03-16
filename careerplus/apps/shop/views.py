@@ -398,6 +398,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx.update(self.getSelectedProduct_solr(self.sqs))
         # ctx.update(self.getSelectedProductPrice_solr(self.sqs))
         widget_objs = None
+        widget_obj = None
         try:
             widget_obj = DetailPageWidget.objects.get(
                 content_type__model='Product', object_id=pk)
@@ -414,6 +415,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx['show_chat'] = True
         ctx['amp'] = self.request.amp
         ctx['widget_objs'] = widget_objs
+        ctx['widget_obj'] = widget_obj
         return ctx
 
     def redirect_if_necessary(self, current_path, product):

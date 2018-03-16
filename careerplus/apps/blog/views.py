@@ -223,6 +223,7 @@ class BlogDetailView(DetailView, BlogMixin):
             "amp": self.request.amp
         })
         widget_objs = None
+        widget_obj = None
         try:
             widget_obj = DetailPageWidget.objects.get(
                 content_type__model='Blog', object_id=pk)
@@ -232,6 +233,7 @@ class BlogDetailView(DetailView, BlogMixin):
             widget_objs = None
             logging.getLogger('error_log').error("%(err)s" % {'err': e})
         context['widget_objs'] = widget_objs
+        context['widget_obj'] = widget_obj
         return context
 
     def get_breadcrumb_data(self):
