@@ -121,8 +121,10 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
                     m_prod = m_prods[0]
                     if m_prod.product.is_course:
                         lead_type = 2
+                    else:
+                        lead_type = 1
                 elif m_prods.count() > 1:
-                    lead_type = 1
+                    lead_type = 2
 
             data_dict.update({
                 "extra_info": json.dumps(extra_info),
