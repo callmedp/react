@@ -38,9 +38,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         response = requests.get('http://10.136.2.25:8989/solr/prdt/replication?command=disablereplication')
-        print("Disabled Replication on master. Response:", response, response.__dict__)
+        logging.getLogger('info_log').info(
+            "Disabled Replication on master. Response: {} {}".format(
+                response, response.__dict__))
         call_command('rebuild_index', **options)
         response = requests.get('http://10.136.2.25:8989/solr/prdt/replication?command=enablereplication')
-        print("Enabled Replication on master. Response:", response, response.__dict__)
+        logging.getLogger('info_log').info(
+            "Enabled Replication on master. Response: {} {}".format(
+                response, response.__dict__))
         # response = requests.get('http://172.22.65.36:8983/solr/prdt/replication?command=fetchIndex')
         # print("Fetched indexes on slave. Response:", response, response.__dict__)

@@ -165,6 +165,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             'amp': self.request.amp
         })
         widget_objs = None
+        widget_obj = None
         try:
             widget_obj = DetailPageWidget.objects.get(
                 content_type__model='Category', object_id=self.pk)
@@ -174,6 +175,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             widget_objs = None
             logging.getLogger('error_log').error("%(err)s" % {'err': e})
         context['widget_objs'] = widget_objs
+        context['widget_obj'] = widget_obj
         context.update(self.get_breadcrumb_data())
         return context
 

@@ -1,7 +1,8 @@
 $(function(){
 
 	$('#action_button_go').click(function(){
-		var action_type = $('#id_action').val();		
+		var action_type = $('#id_action').val();
+        console.log(action_type);
 		if (action_type == 0){
             $('#myModalbody').html('<div class="alert alert-danger">Please select any action first.</div>');
             $('#action_welcome').hide();
@@ -57,9 +58,137 @@ $(function(){
 	            $('#actionModal').modal("show");
             } 
         }
-        
+    });
 
-      
+
+    $(document).on('change', '#id-cat', function(){
+        var select = $('#id-subcat');
+        select.empty();
+        select.append("<option value=''>Select SubCategory</option>");
+        var parent = $(this).val();
+
+        if (parent == '21'){
+            $("#id-message").prop('required', false);
+        }
+        else{
+            $("#id-message").prop('required', true);
+        }
+
+
+        switch(parent){ 
+            case '21':{
+                $("#sub_cat1 option").each(function()
+                {
+                    select.append("<option value="+ $(this).val()+ ">" + $(this).text() + "</option>");
+                });
+                break;
+            }
+            case '22':{
+                $("#sub_cat2 option").each(function()
+                {
+                    select.append("<option value="+ $(this).val()+ ">" + $(this).text() + "</option>");
+                });
+                break;
+            }
+            case '23':{
+                $("#sub_cat3 option").each(function()
+                {
+                    select.append("<option value="+ $(this).val()+ ">" + $(this).text() + "</option>");
+                });
+                break;
+            }  
+            default: //default child option is blank
+                break;
+            }
+    });
+
+    $(document).on('change', '#id-subcat', function(){
+
+        var parent = $(this).val(); 
+        var parent_this = $(this);
+
+        switch(parent){ 
+            case '41':{
+                $(".sub_cat_item").each(function() {
+                    var select = $(this);
+                    select.empty();
+                    $("#sub_cat1 option").each(function(){
+                        select.append("<option value="+ $(this).val()+ ">" + $(this).text() + "</option>");
+                    });
+                });
+                
+                break;
+            }
+            case '61':{
+                $(".sub_cat_item").each(function() {
+                    var select = $(this);
+                    select.empty();
+                    select.append("<option value=''>Select SubCategory</option>");
+                    $("#sub_cat_service option").each(function(){
+                        select.append("<option value="+ $(this).val()+ ">" + $(this).text() + "</option>");
+                    });
+                });
+                break;
+            }
+            case '81':{
+                $(".sub_cat_item").each(function() {
+                    var select = $(this);
+                    select.empty();
+                    select.append("<option value="+ parent_this.val()+ ">" + parent_this.find('option:selected').text() + "</option>");
+                });
+                break;
+            } 
+            case '82':{
+                $(".sub_cat_item").each(function() {
+                    var select = $(this);
+                    select.empty();
+                    select.append("<option value="+ parent_this.val()+ ">" + parent_this.find('option:selected').text() + "</option>");
+                });
+                break;
+            }
+            case '83':{
+                $(".sub_cat_item").each(function() {
+                    var select = $(this);
+                    select.empty();
+                    select.append("<option value="+ parent_this.val()+ ">" + parent_this.find('option:selected').text() + "</option>");
+                });
+                break;
+            } 
+            default: //default child option is blank
+                break;
+        }
+        
+    });
+
+    $(document).on("change", "#id-welcome-call-form", function() {
+        var cat = $("#id-cat").val();
+        var $followdiv = $("#id-follow-div");
+        var $follow = $("#id-follow")
+        if(cat == "23")
+        {
+            $followdiv.show();
+            $follow.attr('required', true);
+        }
+        else{
+            $followdiv.hide();
+            $follow.attr('required', false);
+        }
+    });
+
+    $(document).on("click", "#id-welcomecall-update", function() {
+        $('#id-welcome-call-form').parsley().validate();
+        if($('#id-welcome-call-form').parsley().isValid()){
+            $('#id-welcome-call-form').submit();
+        }
+    });
+
+    var d = new Date($.now());
+      $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd hh:ii:ss",
+        autoclose: true,
+        todayBtn: true,
+        minuteStep: 5,
+        startDate: d
     });
 
 });

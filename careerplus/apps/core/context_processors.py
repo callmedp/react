@@ -76,5 +76,6 @@ def common_context_processor(request):
         "roundone_user": roundone_user,
         "IS_LIVE": settings.IS_LIVE,
         "writer_invoice": writer_invoice,
+        "WELCOMECALL_GROUP_LIST": settings.WELCOMECALL_GROUP_LIST,
     })
     return context
