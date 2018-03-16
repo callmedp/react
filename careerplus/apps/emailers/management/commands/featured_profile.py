@@ -42,9 +42,7 @@ def featured_updated():
             try:
                 data = {}
                 data.update({
-                    "ShineCareerPlus": {"xfr": 1},
-                    "is_email_verified": 1,
-                    "is_cell_phone_verified": 1
+                    "ShineCareerPlus": {"xfr": 1}
                 })
                 flag = FeatureProfileUpdate().update_feature_profile(
                     candidate_id=candidate_id, data=data)
@@ -131,9 +129,7 @@ def unfeature():
             try:
                 data = {}
                 data.update({
-                    "ShineCareerPlus": {"xfr": 0},
-                    "is_email_verified": 1,
-                    "is_cell_phone_verified": 1
+                    "ShineCareerPlus": {"xfr": 0}
                 })
                 flag = FeatureProfileUpdate().update_feature_profile(
                     candidate_id=candidate_id, data=data)
