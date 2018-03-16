@@ -14,6 +14,8 @@ urlpatterns = [
     url(r'^userquery/', include('console.userquery.urls', namespace='userquery')),
     url(r'^tasks/',
         include('console.schedule_tasks.urls', namespace='tasks')),
+    url(r'^welcomecall/',
+        include('console.welcomecall.urls', namespace='welcomecall')),
 ]
 
 
@@ -181,7 +183,6 @@ urlpatterns += [
 ]
 
 
-
 urlpatterns += [
     url(r'^geolocation/country/$',
         adminviews.CountryListView.as_view(), name='geo-country'),
@@ -196,8 +197,10 @@ urlpatterns += [
         order_view.ConsoleResumeDownloadView.as_view(), name='queue-resume-download'),
     url(r'^queue/orders/$',
         order_view.OrderListView.as_view(), name='queue-order'),
-    url(r'^queue/welcomecall/$',
-        order_view.WelcomeCallVeiw.as_view(), name='queue-welcome'),
+
+    # url(r'^queue/welcomecall/$',
+    #     order_view.WelcomeCallVeiw.as_view(), name='queue-welcome'),
+
     url(r'^queue/midout/$',
         order_view.MidOutQueueView.as_view(), name='queue-midout'),
     url(r'^queue/inbox/$',

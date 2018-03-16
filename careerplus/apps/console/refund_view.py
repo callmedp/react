@@ -220,7 +220,7 @@ class RefundOrderRequestView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(RefundOrderRequestView, self).get_queryset()
         user = self.request.user
-        grp_list = settings.OPS_GROUP_LIST + settings.OPS_HEAD_GROUP_LIST
+        grp_list = settings.OPS_GROUP_LIST + settings.OPS_HEAD_GROUP_LIST + settings.WELCOMECALL_GROUP_LIST
         if user.is_superuser:
             pass
         elif has_group(user=user, grp_list=grp_list):
@@ -410,7 +410,7 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
         try:
             obj = queryset.get()
             user = self.request.user
-            edit_group = settings.OPS_GROUP_LIST + settings.OPS_HEAD_GROUP_LIST
+            edit_group = settings.OPS_GROUP_LIST + settings.OPS_HEAD_GROUP_LIST + settings.WELCOMECALL_GROUP_LIST
             if obj.status in [0, 1, 9] and has_group(user=user, grp_list=edit_group):
                 pass
             else:
