@@ -78,6 +78,9 @@ DEV_MIDDLEWARE = [
 MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
 
 
+#### CELERY SETTINGS ########
+BROKER_URL = 'redis://localhost:6379/0'
+
 ####### WSGI SETTINGS ############
 WSGI_APPLICATION = 'careerplus.config.wsgi.application'
 
