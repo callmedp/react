@@ -57,7 +57,8 @@ def draft_reminder_mail_for_linkedin():
                     urlshortener = create_short_url(login_url=data)
                     data.update({'url': urlshortener.get('url')})
                     SendSMS().send(sms_type=mail_type, data=data)
-                    print(str(count) + '8 day linkedin SMS Sent')
+                    logging.getLogger('info_log').info(
+                        "{} 8 day linkedin SMS Sent".format(count))
                 except Exception as e:
                     logging.getLogger('error_log').error(
                         "%s - %s" % (str(mail_type), str(e)))
@@ -79,7 +80,8 @@ def draft_reminder_mail_for_linkedin():
                 send_email_task.delay(to_emails, mail_type, data, status=106, oi=oi.pk)
                 try:
                     SendSMS().send(sms_type=mail_type, data=data)
-                    print(str(count) + '15 day linkedin SMS & Email Sent')
+                    logging.getLogger('info_log').info(
+                        "{} 15 day linkedin SMS & Email Sent".format(count))
                 except Exception as e:
                     logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 
@@ -102,7 +104,8 @@ def draft_reminder_mail_for_linkedin():
                     urlshortener = create_short_url(login_url=data)
                     data.update({'url': urlshortener.get('url')})
                     SendSMS().send(sms_type=mail_type, data=data)
-                    print(str(count) + ' 22 day linkedin SMS & Email Sent')
+                    logging.getLogger('info_log').info(
+                        "{} 22 day linkedin SMS & Email Sent".format(count))
                 except Exception as e:
                     logging.getLogger('error_log').error(
                         "%s - %s" % (str(mail_type), str(e)))
@@ -125,7 +128,8 @@ def draft_reminder_mail_for_linkedin():
                     urlshortener = create_short_url(login_url=email_dict)
                     data.update({'url': urlshortener.get('url')})
                     SendSMS().send(sms_type=mail_type, data=email_dict)
-                    print(str(count) + ' linekdin Service closed SMS & Email Sent')
+                    logging.getLogger('info_log').info(
+                        "{} linekdin Service closed SMS & Email Sent".format(count))
                 except Exception as e:
                     logging.getLogger('error_log').error(
                         "%s - %s" % (str(mail_type), str(e)))
@@ -159,7 +163,8 @@ def draft_reminder_mail_for_linkedin():
                     urlshortener = create_short_url(login_url=data)
                     data.update({'url': urlshortener.get('url')})
                     SendSMS().send(sms_type=mail_type, data=data)
-                    print(str(count) + ' level 2 linkedin SMS Sent')
+                    logging.getLogger('info_log').info(
+                        "{} level 2 linkedin SMS Sent".format(count))
                 except Exception as e:
                     logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 
@@ -182,7 +187,8 @@ def draft_reminder_mail_for_linkedin():
                     urlshortener = create_short_url(login_url=data)
                     data.update({'url': urlshortener.get('url')})
                     SendSMS().send(sms_type=mail_type, data=data)
-                    print(str(count) + ' level 2 7 day linkedin SMS Sent')
+                    logging.getLogger('info_log').info(
+                        "{} level 2 7 day linkedin SMS Sent".format(count))
                 except Exception as e:
                     logging.getLogger('error_log').error(
                         "%s - %s" % (str(mail_type), str(e)))
@@ -204,7 +210,8 @@ def draft_reminder_mail_for_linkedin():
                     send_email_task.delay(
                         to_emails, mail_type, email_dict,
                         status=9, oi=oi.pk)
-                    print(str(count) + ' Service closed Email Sent')
+                    logging.getLogger('info_log').info(
+                        "{} Service closed Email Sent".format(count))
                 except Exception as e:
                     logging.getLogger('error_log').error(
                         "%s - %s - %s" % (
@@ -212,7 +219,8 @@ def draft_reminder_mail_for_linkedin():
 
                 try:
                     SendSMS().send(sms_type=mail_type, data=email_dict)
-                    print(str(count) + ' Service closed SMS Sent')
+                    logging.getLogger('info_log').info(
+                        "{} SService closed SMS Sent".format(count))
                 except Exception as e:
                     logging.getLogger('error_log').error(
                         "%s - %s" % (str(mail_type), str(e)))

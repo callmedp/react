@@ -1,3 +1,4 @@
+import logging
 from django.core.management.base import BaseCommand
 
 from order.models import OrderItem
@@ -23,4 +24,6 @@ def update_product_buy_count():
             product.save()
             updated += 1
 
-    print(updated, 'product buy count updated out of', products.count())
+    logging.getLogger('info_log').info(
+        "{} product buy count updated out of {}".format(
+            updated, products.count()))

@@ -88,7 +88,7 @@ def featured_updated():
     out_str = out_str = '%s profile featured out of %s' % (
         featured_count, featured_orderitems.count())
 
-    print (out_str)
+    logging.getLogger('info_log').info("{}".format(out_str))
 
 
 def unfeature():
@@ -155,4 +155,4 @@ def unfeature():
     out_str = '%s profile expired out of %s featured items' % (
         unfeature_count, featured_orderitems.count())
 
-    print (out_str)
+    logging.getLogger('info_log').info("{}".format(out_str))
