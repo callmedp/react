@@ -9,8 +9,8 @@
 
 {% block css_block %}
     {{block.super}}
-    <link href="{% static "/packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
-    <link type="text/css" href="{% static "console/css/datepicker/daterangepicker.css" %}" rel="stylesheet">
+    <link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
+    <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
 {% endblock css_block %}
 
 
@@ -424,13 +424,13 @@
         
 {% block js_block %}
   {{ block.super }}
-  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
-  <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
-  <script type="text/javascript" src="{% static "console/js/order/draft-upload.js" %}"></script>
-  <script type="text/javascript" src="{% static "console/js/order/orderitem-action.js" %}"></script>
+  <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'packages/iCheck/icheck.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'console/js/order/draft-upload.js' %}"></script>
+  <script type="text/javascript" src="{% static 'console/js/order/orderitem-action.js' %}"></script>
 
-  <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
-  <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
+  <script type="text/javascript" src="{% static 'console/js/moment/moment.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'console/js/datepicker/daterangepicker.js' %}"></script>
   <script type="text/javascript">
 
         $(document).ready(function() {

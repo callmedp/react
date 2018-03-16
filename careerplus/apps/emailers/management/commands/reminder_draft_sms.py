@@ -44,7 +44,7 @@ def draft_reminder_sms():
                 try:
                     SendSMS().send(sms_type=mail_type, data=data)
                 except Exception as e:
-                    logging.getLogger('sms_log').error(
+                    logging.getLogger('error_log').error(
                         "%s - %s" % (str(mail_type), str(e)))
 
                 # last_oi_status = oi.oi_status
@@ -59,5 +59,5 @@ def draft_reminder_sms():
                 print(str(count) + ' SMS Sent')
 
     except Exception as e:
-        logging.getLogger('sms_log').error("%s - %s" % (
+        logging.getLogger('error_log').error("%s - %s" % (
             "Reminder mail cron", str(e)))

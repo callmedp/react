@@ -22,7 +22,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.files.base import ContentFile
 
 # from console.decorators import Decorate, stop_browser_cache
-from core.library.haystack.query import SQS
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage
 from order.models import Order, OrderItem
 from review.models import Review
 from emailers.email import SendMail
@@ -111,13 +111,14 @@ class DashboardView(TemplateView):
                             file_name = 'resumeupload_shine_resume_' + str(order.pk) + '_' + str(obj.pk) + '_' + str(int(random()*9999)) \
                                 + '_' + timezone.now().strftime('%Y%m%d') + '.' + resume_extn
                             full_path = '%s/' % str(order.pk)
-                            if not os.path.exists(settings.RESUME_DIR + full_path):
-                                os.makedirs(settings.RESUME_DIR +  full_path)
-                            dest = open(
-                                settings.RESUME_DIR + full_path + file_name, 'wb')
-                            for chunk in file.chunks():
-                                dest.write(chunk)
-                            dest.close()
+                            # if not os.path.exists(settings.RESUME_DIR + full_path):
+                            #     os.makedirs(settings.RESUME_DIR +  full_path)
+                            # dest = open(
+                            #     settings.RESUME_DIR + full_path + file_name, 'wb')
+                            # for chunk in file.chunks():
+                            #     dest.write(chunk)
+                            # dest.close()
+                            GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                         except Exception as e:
                             logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
                             continue
@@ -397,7 +398,7 @@ class DashboardFeedbackView(TemplateView):
                         try:
                             SendMail().send(to_emails, mail_type, email_dict)
                         except Exception as e:
-                            logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+                            logging.getLogger('error_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
 
                 else:
                     data['display_message'] = "select valid input for feedback"
@@ -433,14 +434,15 @@ class DashboardRejectService(View):
                                 file_name = 'draftreject_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(int(random()*9999)) \
                                     + '_' + timezone.now().strftime('%Y%m%d') + extention
                                 full_path = '%s/' % str(order.pk)
-                                if not os.path.exists(settings.RESUME_DIR + full_path):
-                                    os.makedirs(settings.RESUME_DIR +  full_path)
-                                dest = open(
-                                    settings.RESUME_DIR + full_path + file_name, 'wb')
-                                for chunk in file.chunks():
-                                    dest.write(chunk)
-                                dest.close()
-                                reject_file = full_path + file_name 
+                                # if not os.path.exists(settings.RESUME_DIR + full_path):
+                                #     os.makedirs(settings.RESUME_DIR +  full_path)
+                                # dest = open(
+                                #     settings.RESUME_DIR + full_path + file_name, 'wb')
+                                # for chunk in file.chunks():
+                                #     dest.write(chunk)
+                                # dest.close()
+                                reject_file = full_path + file_name
+                                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                             except Exception as e:
                                 logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
                                 raise 
@@ -526,7 +528,7 @@ class DashboardAcceptService(View):
                             'draft_added': oi.draft_added_on,
                             'mobile': oi.order.mobile,
                             'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                         })
 
                         if oi.product.type_flow in [1, 12, 13] and (9 not in email_sets and 4 not in sms_sets):
@@ -540,7 +542,7 @@ class DashboardAcceptService(View):
                                     to_mobile=email_dict.get('mobile'),
                                     status=1)
                             except Exception as e:
-                                logging.getLogger('sms_log').error(
+                                logging.getLogger('error_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
 
                         elif oi.product.type_flow == 8 and (9 not in email_sets and 4 not in sms_sets):
@@ -554,7 +556,7 @@ class DashboardAcceptService(View):
                                     to_mobile=email_dict.get('mobile'),
                                     status=1)
                             except Exception as e:
-                                logging.getLogger('sms_log').error(
+                                logging.getLogger('error_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
                     else:
                         data['display_message'] = "please do valid action only"
@@ -678,10 +680,10 @@ class DashboardNotificationBoxView(TemplateView):
 
 class DownloadQuestionnaireView(View):
     def get(self, request, *args, **kwargs):
-        file_path = settings.MEDIA_ROOT + '/attachment/' + 'Resume Questionnaire.docx'
+        file_path = 'attachment/' + 'Resume Questionnaire.docx'
         path = file_path
         try:
-            fsock = FileWrapper(open(path, 'rb'))
+            fsock = GCPMediaStorage().open(path)
         except IOError:
             raise Exception("Resume not found.")
 
@@ -736,8 +738,8 @@ class DashboardInvoiceDownload(View):
                 else:
                     order, invoice = InvoiceGenerate().save_order_invoice_pdf(order=order)
                 if invoice:
-                    file_path = settings.INVOICE_DIR + invoice.name
-                    fsock = FileWrapper(open(file_path, 'rb'))
+                    file_path = invoice.name
+                    fsock = GCPInvoiceStorage().open(file_path)
                     filename = invoice.name.split('/')[-1]
                     response = HttpResponse(fsock, content_type=mimetypes.guess_type(filename)[0])
                     response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
@@ -759,9 +761,11 @@ class DashboardResumeDownload(View):
             order = Order.objects.get(pk=order_pk)
             if candidate_id and order.status in [1, 3] and (order.email == email or order.candidate_id == candidate_id):
                 file = request.GET.get('path', None)
-                if file:  
+                if file:
+                    if file.startswith('/'):
+                        file = file[1:]
                     file_path = settings.RESUME_DIR + file
-                    fsock = FileWrapper(open(file_path, 'rb'))
+                    fsock = GCPPrivateMediaStorage().open(file_path)
                     filename = file.split('/')[-1]
                     response = HttpResponse(fsock, content_type=mimetypes.guess_type(filename)[0])
                     response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)

@@ -369,19 +369,19 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 
 
 class Comment(AbstractCommonModel):
-	blog = models.ForeignKey(Blog)
-	candidate_id = models.CharField(max_length=255, null=True)
-	name = models.CharField(max_length=255, null=True, blank=True)
-	message = models.TextField(null=False, blank=False)
-	is_published = models.BooleanField(default=False)
-	is_removed = models.BooleanField(default=False)
-	replied_to = models.ForeignKey("self", on_delete=models.CASCADE, null=True,
-		blank=True, related_name="comments")
+    blog = models.ForeignKey(Blog)
+    candidate_id = models.CharField(max_length=255, null=True)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    message = models.TextField(null=False, blank=False)
+    is_published = models.BooleanField(default=False)
+    is_removed = models.BooleanField(default=False)
+    replied_to = models.ForeignKey("self", on_delete=models.CASCADE, null=True,
+    blank=True, related_name="comments")
 
-	class Meta:
-		ordering = ['-created_on', ]
+    class Meta:
+        ordering = ['-created_on', ]
 
-	def __str__(self):
-		return str(self.id) + '_' + str(self.created_on.date())
+    def __str__(self):
+        return str(self.id) + '_' + str(self.created_on.date())
 
 

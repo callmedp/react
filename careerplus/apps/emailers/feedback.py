@@ -27,10 +27,10 @@ def feedback_emailer():
                     oi_item.order.id)
                 data_dict['autologin'] = "%s://%s/autologin/%s/?next=dashboard" % (
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                    token.decode())
+                    token)
                 data_dict['order_detail'] = "%s://%s/autologin/%s/?next=/dashboard/myorder/" % (
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                    token.decode())
+                    token)
                 html = render_to_string(
                     'emailers/candidate/feedback.html', data_dict)
                 headers_dict = {'Reply-To': settings.REPLY_TO}
@@ -38,5 +38,5 @@ def feedback_emailer():
                     subject, html, to=[oi_item.order.email],
                     headers=headers_dict, oi=oi_item.pk, status=5)
         except Exception as e:
-            logging.getLogger('email_log').error(
+            logging.getLogger('error_log').error(
                 "%s - %s" % (str(oi_item), str(e)))

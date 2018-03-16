@@ -132,7 +132,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
                                 try:
                                     SendSMS().send(sms_type=mail_type, data=data)
                                 except Exception as e:
-                                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                                    logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 
                         obj.orderitemoperation_set.create(
                             oi_status=1,
