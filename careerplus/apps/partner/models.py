@@ -4,6 +4,7 @@ from seo.models import AbstractSEO, AbstractAutoDate
 from django.conf import settings
 from meta.models import ModelMeta
 from shop.functions import get_upload_path_vendor
+from django.utils.translation import ugettext_lazy as _
 from geolocation.models import (
     Country,
     State,
