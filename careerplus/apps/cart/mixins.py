@@ -620,13 +620,15 @@ class CartMixin(object):
 
             if cart_pk:
 
-                course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
+                course_classes = ProductClass.objects.filter(
+                    slug__in=settings.COURSE_SLUG)
 
-                cart_obj = Cart.objects.get(pk=cart_pk)
-                if cart_obj.status in [0, 2]:
+                cart_obj = Cart.objects.filter(pk=cart_pk).first()
+                if cart_obj and cart_obj.status in [0, 2]:
                     total_count += cart_obj.lineitems.all().count()
                     total_count -= cart_obj.lineitems.filter(
-                        parent=None, product__product_class__in=course_classes,
+                        parent=None,
+                        product__product_class__in=course_classes,
                         no_process=True).count()
 
         except Exception as e:

@@ -100,7 +100,7 @@
                             <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
                                 <input type="hidden" name="reference_id" value="{{variations.0.reference}}">
                                 <li class="col-sm-2 col-md-1">
-                                    <a role="button" onclick="removeFromCart('{{item.id}}')">Remove</a>
+                                    <a role="button" id="id-remove-cart{{item.id}}" onclick="removeFromCart('{{item.id}}')">Remove</a>
                                 </li>
                             </form>
                         </ul>
@@ -120,7 +120,7 @@
                               <form role="form" id="cart_remove_form{{addon.id}}">{% csrf_token %}
                                 <input type="hidden" name="reference_id" value="{{addon.reference}}">
                                 <li class="col-sm-2 col-md-1">
-                                    <a role="button" onclick="removeFromCart('{{addon.id}}')">Remove</a>
+                                    <a role="button" id="id-remove-cart{{addon.id}}" onclick="removeFromCart('{{addon.id}}')">Remove</a>
                                 </li>
                             </form>
                             </ul>
@@ -171,7 +171,7 @@
                             <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
                                 <input type="hidden" name="reference_id" value="{{item.reference}}">
                                 <li class="col-sm-2 col-md-1">
-                                    <a role="button" onclick="removeFromCart('{{item.id}}')">Remove</a>
+                                    <a role="button" id="id-remove-cart{{item.id}}" onclick="removeFromCart('{{item.id}}')">Remove</a>
                                 </li>
                             </form>
                         </ul>
@@ -189,7 +189,7 @@
                                   <form role="form" id="cart_remove_form{{var.id}}">{% csrf_token %}
                                     <input type="hidden" name="reference_id" value="{{var.reference}}">
                                     <li class="col-sm-2 col-md-1">
-                                        <a role="button" onclick="removeFromCart('{{var.id}}')">Remove</a>
+                                        <a role="button" id="id-remove-cart{{var.id}}" onclick="removeFromCart('{{var.id}}')">Remove</a>
                                     </li>
                                 </form>
                                 </ul>
@@ -209,7 +209,7 @@
                                   <form role="form" id="cart_remove_form{{addon.id}}">{% csrf_token %}
                                     <input type="hidden" name="reference_id" value="{{addon.reference}}">
                                     <li class="col-sm-2 col-md-1">
-                                        <a role="button" onclick="removeFromCart('{{addon.id}}')">Remove</a>
+                                        <a role="button" id="id-remove-cart{{addon.id}}" onclick="removeFromCart('{{addon.id}}')">Remove</a>
                                     </li>
                                 </form>
                                 </ul>
