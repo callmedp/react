@@ -13,7 +13,6 @@ SITEMAP_CACHING_TIME = 1
 
 #### Database SETTINGS ##############
 DATABASES = {
-
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'careerplus1',
