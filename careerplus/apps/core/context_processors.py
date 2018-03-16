@@ -72,8 +72,10 @@ def common_context_processor(request):
         "SKILL_GROUP_LIST": settings.SKILL_GROUP_LIST,
         "COURSE_GROUP_LIST": settings.COURSE_GROUP_LIST,
         "SERVICE_GROUP_LIST": settings.SERVICE_GROUP_LIST,
+        "MARKETING_GROUP_LIST": settings.MARKETING_GROUP_LIST,
         "roundone_user": roundone_user,
         "IS_LIVE": settings.IS_LIVE,
         "writer_invoice": writer_invoice,
+        "WELCOMECALL_GROUP_LIST": settings.WELCOMECALL_GROUP_LIST,
     })
     return context

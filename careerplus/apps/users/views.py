@@ -4,7 +4,6 @@ import json
 import urllib.parse
 
 from django.shortcuts import render
-from wsgiref.util import FileWrapper
 from django.http import (
     HttpResponse,
     HttpResponseRedirect,)
@@ -16,6 +15,7 @@ from django.utils import timezone
 
 from shine.core import ShineCandidateDetail
 from core.mixins import TokenExpiry, TokenGeneration
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCPInvoiceStorage
 from order.models import OrderItem
 from users.mixins import WriterInvoiceMixin
 
@@ -212,14 +212,17 @@ class DownloadBoosterResume(View):
                     resume = oi.oi_resume
 
                 if resume:
-                    file_path = settings.RESUME_DIR + resume.name
+                    resume_name = resume.name
+                    if resume_name.startswith('/'):
+                        resume_name = resume_name[1:]
+                    file_path = settings.RESUME_DIR + resume_name
                     filename = resume.name
                     extn = filename.split('.')[-1]
                     newfilename = 'resume_' + oi.order.first_name + '.' + extn
 
                     path = file_path
                     try:
-                        fsock = FileWrapper(open(path, 'rb'))
+                        fsock = GCPPrivateMediaStorage().open(file_path)
                     except IOError:
                         raise Exception("Resume not found.")
 
@@ -465,8 +468,8 @@ class DownloadWriterInvoiceView(View):
             if user.is_authenticated() and user.userprofile and user.userprofile.user_invoice:
                 invoice = user.userprofile.user_invoice
             if invoice:
-                file_path = os.path.join(settings.MEDIA_ROOT, invoice.name)
-                fsock = FileWrapper(open(file_path, 'rb'))
+                file_path = invoice.name
+                fsock = GCPInvoiceStorage().open(file_path)
                 filename = invoice.name.split('/')[-1]
                 response = HttpResponse(
                     fsock,

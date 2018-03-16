@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin, BaseUserManager)
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 
 from .choices import WRITER_TYPE
@@ -99,14 +100,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
+    writer_type = models.PositiveIntegerField(
+        choices=WRITER_TYPE,
+        default=0)
     pan_no = models.CharField(
         max_length=100, null=True, blank=True)
     gstin = models.CharField(
         max_length=255, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
-    writer_type = models.PositiveIntegerField(
-        choices=WRITER_TYPE,
-        default=0)
     po_number = models.CharField(
         max_length=255, unique=True,
         null=True, blank=True)

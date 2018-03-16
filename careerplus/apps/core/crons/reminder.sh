@@ -1,0 +1,2 @@
+/var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py reminder_mail_for_linkedin --settings=careerplus.config.settings_live
+/var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py reminder_mail_and_sms --settings=careerplus.config.settings_live

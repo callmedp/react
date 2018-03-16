@@ -13,6 +13,7 @@ from django.template.loader import get_template
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
 # from django.http import HttpResponse
+from core.library.gcloud.custom_cloud_storage import GCPInvoiceStorage
 
 from weasyprint import HTML
 
@@ -241,12 +242,7 @@ class InvoiceGenerate(object):
             rendered_html = html_template.render(context).encode(encoding='UTF-8')
 
             pdf_file = HTML(string=rendered_html).write_pdf()
-            # stylesheets=[CSS(settings.STATICFILES_DIRS[0] +  '/shinelearn/css/invoice/invoice.css')]
             return pdf_file
-
-            # http_response = HttpResponse(pdf_file, content_type='application/pdf')
-            # http_response['Content-Disposition'] = 'filename="report.pdf"'
-            # return http_response
 
     def save_order_invoice_pdf(self, order=None):
         try:
@@ -258,17 +254,12 @@ class InvoiceGenerate(object):
                 full_path = 'order/%s/' % str(order.pk)
                 file_name = 'invoice-' + str(order.number) + '-'\
                     + timezone.now().strftime('%Y%m%d') + '.pdf'
-                if not os.path.exists(settings.INVOICE_DIR + full_path):
-                    os.makedirs(settings.INVOICE_DIR +  full_path)
-                dest = open(
-                    settings.INVOICE_DIR + full_path + file_name, 'wb')
+
                 pdf_file = SimpleUploadedFile(
                     file_name, pdf_file,
                     content_type='application/pdf')
-                for chunk in pdf_file.chunks():
-                    dest.write(chunk)
-                dest.close()
-                order.invoice = full_path + file_name
+                GCPInvoiceStorage().save(settings.INVOICE_DIR + full_path + file_name, pdf_file)
+                order.invoice = settings.INVOICE_DIR + full_path + file_name
                 order.save()
                 return order, order.invoice
         except Exception as e:

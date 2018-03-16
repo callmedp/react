@@ -71,7 +71,10 @@ class HomePageView(TemplateView, MetadataMixin):
         else:
             show_pcourses = True
         if show_pcourses:
-            pcourses = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm pBC pRC').order_by('-pBC')[:9]
+            pcourses = SQS().filter(
+                pPc='course').only(
+                'pTt pURL pHd pAR pNJ pImA pImg pNm pBC pRC').order_by(
+                '-pBC')[:9]
 
         i = 0
         tabs = ['home', 'profile', 'message', 'settings']

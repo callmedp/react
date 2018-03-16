@@ -6,6 +6,7 @@ from random import random
 
 from django.utils import timezone
 from django.conf import settings
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
@@ -40,7 +41,7 @@ class ActionUserMixin(object):
             # try:
             #     SendMail().send(to_emails, mail_type, email_data)
             # except Exception as e:
-            #     logging.getLogger('email_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+            #     logging.getLogger('error_log').error("%s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
 
             obj.orderitemoperation_set.create(
                 oi_status=1,
@@ -87,7 +88,7 @@ class ActionUserMixin(object):
                     try:
                         SendSMS().send(sms_type=mail_type, data=email_data)
                     except Exception as e:
-                        logging.getLogger('sms_log').error(
+                        logging.getLogger('error_log').error(
                             "%s - %s" % (str(mail_type), str(e)))
 
                 addons = []
@@ -169,7 +170,7 @@ class ActionUserMixin(object):
                                     SendSMS().send(
                                         sms_type=mail_type, data=email_data)
                                 except Exception as e:
-                                    logging.getLogger('sms_log').error(
+                                    logging.getLogger('error_log').error(
                                         "%s - %s" % (str(mail_type), str(e)))
 
                         # sms to writer in case of express and super express delivery
@@ -212,7 +213,7 @@ class ActionUserMixin(object):
                                     SendSMS().send(
                                         sms_type=mail_type, data=email_data)
                                 except Exception as e:
-                                    logging.getLogger('sms_log').error(
+                                    logging.getLogger('error_log').error(
                                         "%s - %s" % (str(mail_type), str(e)))
 
                         # sms to writer in case of express and super express delivery
@@ -254,7 +255,7 @@ class ActionUserMixin(object):
                                 SendSMS().send(
                                     sms_type=mail_type, data=email_data)
                             except Exception as e:
-                                logging.getLogger('sms_log').error(
+                                logging.getLogger('error_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
 
                         # sms to writer in case of express and super express delivery
@@ -270,13 +271,14 @@ class ActionUserMixin(object):
                 file_name = 'resumeupload_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(int(random()*9999)) \
                     + '_' + timezone.now().strftime('%Y%m%d') + extention
                 full_path = '%s/' % str(order.pk)
-                if not os.path.exists(settings.RESUME_DIR + full_path):
-                    os.makedirs(settings.RESUME_DIR + full_path)
-                dest = open(
-                    settings.RESUME_DIR + full_path + file_name, 'wb')
-                for chunk in oi_resume.chunks():
-                    dest.write(chunk)
-                dest.close()
+                # if not os.path.exists(settings.RESUME_DIR + full_path):
+                #     os.makedirs(settings.RESUME_DIR + full_path)
+                # dest = open(
+                #     settings.RESUME_DIR + full_path + file_name, 'wb')
+                # for chunk in oi_resume.chunks():
+                #     dest.write(chunk)
+                # dest.close()
+                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, oi_resume)
 
                 oi.oi_resume = full_path + file_name
                 last_oi_status = oi.oi_status
@@ -311,13 +313,14 @@ class ActionUserMixin(object):
                 file_name = 'draftupload_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(int(random()*9999)) \
                     + '_' + timezone.now().strftime('%Y%m%d') + extention
                 full_path = '%s/' % str(order.pk)
-                if not os.path.exists(settings.RESUME_DIR + full_path):
-                    os.makedirs(settings.RESUME_DIR +  full_path)
-                dest = open(
-                    settings.RESUME_DIR + full_path + file_name, 'wb')
-                for chunk in file.chunks():
-                    dest.write(chunk)
-                dest.close()
+                # if not os.path.exists(settings.RESUME_DIR + full_path):
+                #     os.makedirs(settings.RESUME_DIR +  full_path)
+                # dest = open(
+                #     settings.RESUME_DIR + full_path + file_name, 'wb')
+                # for chunk in file.chunks():
+                #     dest.write(chunk)
+                # dest.close()
+                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                 oi_draft = full_path + file_name
             except Exception as e:
                 logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
@@ -361,13 +364,13 @@ class ActionUserMixin(object):
                 try:
                     SendMail().send(to_emails, mail_type, email_dict)
                 except Exception as e:
-                    logging.getLogger('email_log').error(
+                    logging.getLogger('error_log').error(
                         "%s - %s - %s" % (
                             str(to_emails), str(e), str(mail_type)))
                 try:
                     SendSMS().send(sms_type=mail_type, data=email_dict)
                 except Exception as e:
-                    logging.getLogger('sms_log').error(
+                    logging.getLogger('error_log').error(
                         "%s - %s" % (str(mail_type), str(e)))
 
             elif oi.product.type_flow == 6:

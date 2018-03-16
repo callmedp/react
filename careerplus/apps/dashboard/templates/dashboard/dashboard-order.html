@@ -8,7 +8,7 @@
     {% block css_section %}
         {{block.super}}
         {% compress css %}
-        <link type="text/scss" href="{% static "/shinelearn/css/dashboard/dashboard.scss" %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/dashboard/dashboard.scss' %}" rel="stylesheet">
         {% endcompress %}
     {% endblock css_section %}
     
@@ -46,7 +46,9 @@
                         <a href="{% url "dashboard:roundone-dashboard"%}"><span class="referal-icon"></span> Referral</a>
                     {% endif %}
                     <div class="please-call">
-                      Please call us at <a href="tel:08061843697"><strong>08061843697</strong></a> or mail us at <a href="mailto:resume@shine.com">resume@shine.com</a> if you have any query regarding your services.
+                      <b>For any query regarding your services</b><br/>
+                      Contact - <a href="tel:08061843697"><strong>08061843697</strong></a><br/> Email - <a href="mailto:resume@shine.com">resume@shine.com</a><br/>
+                      Timings - 9:00am to 6:30pm (Mon - Sat)
                     </div>
                 </div>  
                 <!-- left content end -->
@@ -87,7 +89,7 @@
     {% block js_section %}
         {{block.super}}
         {% compress js %}
-        <script src="{% static "shinelearn/js/dashboard/dashboard.js" %}"></script>
+        <script src="{% static 'shinelearn/js/dashboard/dashboard.js' %}"></script>
         {% endcompress %}
     {% endblock js_section %}
     {% block johukum %}

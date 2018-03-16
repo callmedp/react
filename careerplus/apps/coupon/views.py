@@ -53,7 +53,7 @@ class CouponRedeemView(APIView, CartMixin):
                 {'success': 0,
                  'error': 'Points already applied!.'
                  }, status=400, content_type='application/json')
-        
+
         user_email = cart_obj.email
         old_coupon = cart_obj.coupon
 
@@ -79,8 +79,25 @@ class CouponRedeemView(APIView, CartMixin):
             {'success': 0,
              'error': 'This code is suspended.'
              }, status=400, content_type='application/json')
-            
-        try:  
+
+        if coupon.site not in [0, 1]:
+            return Response(
+                {'success': 0,
+                 'error': 'This code is not valid.'
+                 }, status=400, content_type='application/json')
+
+        if not coupon.is_valid_coupon(site=1, source=None, cart_obj=cart_obj):
+            if coupon.coupon_scope == 2:
+                error = 'This code is valid on particular sources.'
+            else:
+                error = 'This code is valid on particular products.'
+
+            return Response(
+                {'success': 0,
+                 'error': error
+                }, status=400, content_type='application/json')
+
+        try:
             user_coupon = coupon.users.get(user=user_email)
             if user_coupon.redeemed_at is not None:
                 return Response(
@@ -181,7 +198,7 @@ class CouponRemoveView(APIView, CartMixin):
                 return Response(
                     {'success': True,'msg': 'Successfully Removed'
                     }, status=200, content_type='application/json')
-               
+   
         except:
             return Response(
             {'success': 0,

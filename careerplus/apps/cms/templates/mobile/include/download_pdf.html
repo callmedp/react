@@ -1,10 +1,31 @@
 {% load static %}
 <!-- download wrap starts here -->
-<div class="download-wrap">
-    <div class="content-box">
-        <div class="download-pdf">
-            {% if download_doc %}
-            <a id="id_download_button" href="{{download_doc.get_url}}" pop-up="{% if request.session.candidate_id %}no{% else %}yes{% endif %}">
+<div class="download-wrap mt-30 mb-15">
+    <div class="download-pdf">
+        {% if download_doc %}
+        {% if amp %}
+        <a download href="{{download_doc.doc.url}}">
+                <div class="wrap">
+                    <div class="table">
+                        <div class="table-cell">
+                            <span class="mt-10"><sup class="icon-download"></sup></span>
+                            <p class="pb-0 fs-15">{{heading}}</p>
+                        </div>
+                    </div>
+                </div>
+                <amp-img
+                    src="{{image.url}}"
+                    alt="{{image_alt}}"
+                    width="315"
+                    height="90"
+                    layout="responsive">
+                </amp-img>
+            </a>
+
+            
+
+        {% else %}
+            <a id="id_download_button" href="{{download_doc.doc.url}}" pop-up="{% if request.session.candidate_id %}no{% else %}yes{% endif %}">
                 <div class="wrap">
                     <div class="table">
                         <div class="table-cell">
@@ -13,13 +34,22 @@
                         </div>
                     </div>
                 </div>
+
                 <img src="{{image.url}}" alt="{{image_alt}}">
             </a>
-            {% endif %}
-        </div><!-- end of download pdf -->
-    </div><!-- end of Content box -->
+        {% endif %}
+        {% endif %}
+
+    </div><!-- end of download pdf -->
 </div><!-- download wrap Ends here -->
 
+
+{% if amp %}
+<!-- Select countries (optional) start here -->
+<div class="sidebar hide"></div>
+<!-- Select countries (optional) ends here -->
+
+{% else %}
 <!-- Select countries (optional) start here -->
 <div class="sidebar" id="sidebar-countries">
     <div class="content-box cms-right packages pt-0">
@@ -78,3 +108,4 @@
         </div>
     </div>
 </div><!-- Select countries (optional) ends here -->
+{% endif %}

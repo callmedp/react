@@ -272,7 +272,7 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
                             pass
                         return HttpResponseRedirect(return_url)
                     except Exception as e:
-                        logging.getLogger('payment_log').error(str(e))
+                        logging.getLogger('error_log').error(str(e))
                         return HttpResponseRedirect(
                             reverse('payment:payment_oops') +
                             '?error=success&txn_id=' + txn_id)
@@ -280,29 +280,29 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
                 elif order_status.upper() == "FAILURE":
                     txn_obj.status = 2
                     txn_obj.save()
-                    logging.getLogger('payment_log').error('Order_id - %s Order_status - %s' %(order_id, order_status))
+                    logging.getLogger('error_log').error('Order_id - %s Order_status - %s' %(order_id, order_status))
                     return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id='+txn_id)
 
                 elif order_status.upper() == "ABORTED":
                     txn_obj.status = 3
                     txn_obj.save()
-                    logging.getLogger('payment_log').error('Order_id - %s Order_status - %s' %(order_id, order_status))
+                    logging.getLogger('error_log').error('Order_id - %s Order_status - %s' %(order_id, order_status))
                     return HttpResponseRedirect(
                         reverse('payment:payment_oops') + '?error=aborted&txn_id='+txn_id)
 
                 elif order_status.upper() == "INVALID":
                     txn_obj.status = 4
                     txn_obj.save()
-                    logging.getLogger('payment_log').error('Order_id - %s Order_status - %s' %(order_id, order_status))
+                    logging.getLogger('error_log').error('Order_id - %s Order_status - %s' %(order_id, order_status))
                     return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=invalid&txn_id='+txn_id)
 
             elif stresp.upper() == "CANCEL":
                 txn_obj.status = 5
                 txn_obj.save()
-                logging.getLogger('payment_log').error('Order_id - %s Order_status - %s' %(order_id, order_status))
+                logging.getLogger('error_log').error('Order_id - %s Order_status - %s' %(order_id, order_status))
                 return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=cancel&txn_id='+txn_id)
 
         # order_id = b64encode(str(order_id)) if order_id in (request.session.get('email_invoice_for') or []) else str(order_id)
         # payloads = '?tab=payment&error=payment_error&orderid='+order_id + '#internationalcard'
-        # logging.getLogger('payment_log').error(str(request))
+        # logging.getLogger('error_log').error(str(request))
         return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure')

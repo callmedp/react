@@ -417,13 +417,13 @@ class AddFaqView(FormView):
             messages.success(
                 self.request,
                 "You have successfully added a faq"
-            )    
+            )
             self.success_url = reverse_lazy('console:faq-list')
             return super(AddFaqView, self).form_valid(form)
         else:
             messages.error(
                 self.request,
-                "You don't have permission to add faq.")          
+                "You don't have permission to add faq.")
             return super(AddFaqView, self).form_invalid(form)
         
     def form_invalid(self, form):

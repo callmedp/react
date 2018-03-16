@@ -137,8 +137,7 @@ class AjaxProductLoadMoreView(TemplateView):
             except PageNotAnInteger:
                 products = paginator.page(1)
             except EmptyPage:
-                # products=paginator.page(paginator.num_pages)
-                products = 0
+                products = paginator.page(paginator.num_pages)
             for product in products:
                 if float(product.pPfin):
                     product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
@@ -147,7 +146,7 @@ class AjaxProductLoadMoreView(TemplateView):
                 'slug': slug,
             })
         except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
+            logging.getLogger('error_log').error("%s" % str(e))
         return context
 
 
@@ -176,10 +175,12 @@ class AjaxReviewLoadMoreView(TemplateView):
             except PageNotAnInteger:
                 page_reviews = paginator.page(1)
             except EmptyPage:
-                page_reviews = 0
-            context.update({'page_reviews': page_reviews, 'page': page, 'slug': slug})
+                page_reviews = paginator.page(paginator.num_pages)
+            context.update({
+                'page_reviews': page_reviews,
+                'page': page, 'slug': slug})
         except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
+            logging.getLogger('error_log').error("%s" % str(e))
         return context
 
 
@@ -237,7 +238,8 @@ class ApproveByAdminDraft(View):
         if request.is_ajax() and request.user.is_authenticated():
             oi_pk = request.POST.get('oi_pk', None)
             try:
-                obj = OrderItem.objects.get(pk=oi_pk)
+                obj = OrderItem.objects.get(
+                    pk=oi_pk).select_releted('order', 'product')
                 data['status'] = 1
                 product_flow = obj.product.type_flow
 
@@ -260,7 +262,7 @@ class ApproveByAdminDraft(View):
                         'mobile': obj.order.mobile,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode())
+                            token)
                     })
 
                     mail_type = 'RESUME_CRITIQUE_CLOSED'
@@ -274,7 +276,7 @@ class ApproveByAdminDraft(View):
                             email_dict.update({'url': urlshortener.get('url')})
                             SendSMS().send(sms_type=mail_type, data=email_dict)
                         except Exception as e:
-                            logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                            logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
                     obj.orderitemoperation_set.create(
                         oi_draft=obj.oi_draft,
                         draft_counter=obj.draft_counter,
@@ -305,7 +307,7 @@ class ApproveByAdminDraft(View):
                     # mail to candidate
                     email_sets = list(
                         obj.emailorderitemoperation_set.all().values_list(
-                            'email_oi_status', flat=True).distinct()) 
+                            'email_oi_status', flat=True).distinct())
                     to_emails = [obj.order.email]
                     token = AutoLogin().encode(
                         obj.order.email, obj.order.candidate_id, days=None)
@@ -317,7 +319,7 @@ class ApproveByAdminDraft(View):
                         'mobile': obj.order.mobile,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
 
                     draft_upload_mail(
@@ -349,7 +351,7 @@ class ApproveByAdminDraft(View):
                             'draft_added': obj.draft_added_on,
                             'mobile': obj.order.mobile,
                             'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                         })
                         send_email_task.delay(
                             to_emails, mail_type, email_dict, status=9,
@@ -407,7 +409,8 @@ class UploadDraftView(View):
             if form.is_valid():
                 try:
                     oi_pk = request.POST.get('oi_pk', None)
-                    obj = OrderItem.objects.get(pk=oi_pk)
+                    obj = OrderItem.objects.get(
+                        pk=oi_pk).select_releted('order', 'product')
                     mixin_data = {
                         "oi_draft": request.FILES.get('file', ''), }
                     data = ActionUserMixin().upload_draft_orderitem(oi=obj, data=mixin_data, user=request.user)
@@ -489,7 +492,8 @@ class ApproveDraftByLinkedinAdmin(View):
         if request.is_ajax():
             oi_pk = request.POST.get('oi_pk', None)
             try:
-                obj = OrderItem.objects.get(pk=oi_pk)
+                obj = OrderItem.objects.get(
+                    pk=oi_pk).select_releted('order', 'product')
                 data['status'] = 1
                 last_status = obj.oi_status
                 if obj.product.type_flow == 8:
@@ -520,7 +524,7 @@ class ApproveDraftByLinkedinAdmin(View):
                         'mobile': obj.order.mobile,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token.decode()),
+                            token),
                     })
 
                     if obj.draft_counter == 1:
@@ -538,7 +542,7 @@ class ApproveDraftByLinkedinAdmin(View):
                                 obj.smsorderitemoperation_set.create(
                                     sms_oi_status=102)
                             except Exception as e:
-                                logging.getLogger('sms_log').error(
+                                logging.getLogger('error_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
                     elif obj.draft_counter == 2:
                         if 103 not in email_sets and 103 not in sms_sets:
@@ -555,7 +559,7 @@ class ApproveDraftByLinkedinAdmin(View):
                                 obj.smsorderitemoperation_set.create(
                                     sms_oi_status=103)
                             except Exception as e:
-                                logging.getLogger('sms_log').error(
+                                logging.getLogger('error_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
 
                     elif obj.draft_counter == settings.DRAFT_MAX_LIMIT and 104 not in email_sets:
@@ -573,7 +577,7 @@ class ApproveDraftByLinkedinAdmin(View):
                                 obj.smsorderitemoperation_set.create(
                                     sms_oi_status=104)
                             except Exception as e:
-                                logging.getLogger('sms_log').error(
+                                logging.getLogger('error_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
 
                     if obj.oi_status == 4:

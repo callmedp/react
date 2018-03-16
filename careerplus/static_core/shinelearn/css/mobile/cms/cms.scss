@@ -20,10 +20,30 @@
 /* Right Nav Bar CSS */
 @import '../components/right-navbar';
 
+article {
+
+  ul {
+    padding-left: 20px;
+    padding-bottom: 15px;
+
+    li {
+      padding-bottom: 10px;
+      list-style-type: disc;
+    }
+  }
+}
+
+.smk_accordion {
+  border-bottom: none !important;
+}
+
+.acc_content ul li {
+  margin-bottom: 0;
+}
+
 /* Blog landing page */
 .download-wrap {
   background-color: $bg-grey-fc;
-  height: 140px;
 
   .download-pdf {
   	background-color: $bg-black;

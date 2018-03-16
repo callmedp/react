@@ -7,6 +7,7 @@
 {% block canonical_url %}
   <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
   <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}">
+  <link rel="amphtml" href="https://{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}?type=amp">
 {% endblock canonical_url %}
 
 {% block title %}	
@@ -348,6 +349,17 @@
 	</div> 
 	<!-- request a call --> 
 	<!-- right content end -->
+	{% if widget_objs %}
+    <div class="free-sample">
+      <span class="sample-pic"></span>
+      <strong>{{widget_obj.name}}</strong>
+      <ul>
+      {% for widget_obj in widget_objs %}
+        <li><a href="{{widget_obj.url}}"target="_blank" >{{widget_obj.name}}</a></li>
+      {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
 	</div>
 	<!-- page content body end -->
 </section>

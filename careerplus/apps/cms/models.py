@@ -268,10 +268,15 @@ class PageWidget(AbstractCommonModel):
         return 'Widget #' + str(self.widget.id) + ' with type ' + dict(WIDGET_CHOICES).get(self.widget.widget_type)
 
 
+def get_upload_path_cms_doc(instance, filename):
+    return "documents/{filename}".format(
+        filename=filename)
+
+
 class Document(models.Model):
     doc = models.FileField(
         "Document", max_length=200,
-        storage=my_store, null=False, blank=False)
+        upload_to=get_upload_path_cms_doc, null=False, blank=False)
     is_active = models.BooleanField(default=False)
     priority = models.IntegerField(default=0)
     page = models.ForeignKey(Page)
@@ -281,12 +286,6 @@ class Document(models.Model):
 
     def __str__(self):
         return str(self.id)
-
-    def get_url(self):
-        if self.doc:
-            filename = self.doc.name
-            url = settings.DOWNLOAD_URL + filename
-            return url
 
 
 class Comment(AbstractCommonModel):

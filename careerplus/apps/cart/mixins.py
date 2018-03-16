@@ -448,14 +448,30 @@ class CartMixin(object):
                 total_amount = InvoiceGenerate().get_quantize(total_amount)
                 coupon_obj = cart_obj.coupon
                 wal_txn = cart_obj.wallettxn.filter(txn_type=2).order_by('-created').select_related('wallet')
-                if coupon_obj and coupon_obj.coupon_type == 'flat':
+                valid_coupon = False
+                if coupon_obj:
+                    valid_coupon = coupon_obj.is_valid_coupon(
+                        site=1, source=None, cart_obj=cart_obj)
+                if valid_coupon and coupon_obj.coupon_type == 'flat':
                     coupon_amount = coupon_obj.value
-                elif coupon_obj and coupon_obj.coupon_type == 'percent':
+                elif valid_coupon and coupon_obj.coupon_type == 'percent':
                     coupon_amount = (total_amount * coupon_obj.value) / 100
                     coupon_amount = InvoiceGenerate().get_quantize(coupon_amount)
                 elif wal_txn.exists():
                     wal_txn = wal_txn[0]
                     redeemed_reward_point = wal_txn.point_value
+
+                if not valid_coupon and coupon_obj:
+                    try:
+                        user_coupon = coupon_obj.users.get(
+                            user=cart_obj.email)
+                        user_coupon.redeemed_at = None
+                        user_coupon.save()
+                        cart_obj.coupon = None
+                        cart_obj.save()
+                    except:
+                        cart_obj.coupon = None
+                        cart_obj.save()
 
                 if coupon_amount >= total_amount:
                     coupon_amount = total_amount
@@ -620,17 +636,19 @@ class CartMixin(object):
 
             if cart_pk:
 
-                course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
+                course_classes = ProductClass.objects.filter(
+                    slug__in=settings.COURSE_SLUG)
 
-                cart_obj = Cart.objects.get(pk=cart_pk)
-                if cart_obj.status in [0, 2]:
+                cart_obj = Cart.objects.filter(pk=cart_pk).first()
+                if cart_obj and cart_obj.status in [0, 2]:
                     total_count += cart_obj.lineitems.all().count()
                     total_count -= cart_obj.lineitems.filter(
-                        parent=None, product__product_class__in=course_classes,
+                        parent=None,
+                        product__product_class__in=course_classes,
                         no_process=True).count()
 
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error("{},{}".format(str(e), cart_pk))
         return total_count
 
     def closeCartObject(self, cart_obj=None):
