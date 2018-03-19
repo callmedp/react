@@ -17,7 +17,7 @@ class UploadCertificateForm(forms.Form):
 
     def __init__(self, requestuser=None, *args, **kwargs):
         super(UploadCertificateForm, self).__init__(*args, **kwargs)
-        self.fields['file'].widget.attrs['data-parsley-filemimetypes'] = 'text/csv'
+        # self.fields['file'].widget.attrs['data-parsley-filemimetypes'] = 'text/csv'
         try:
             vobj = Vendor.objects.get(email=requestuser.user.email)
             self.fields['user'].empty_label = vobj.name
