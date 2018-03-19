@@ -439,7 +439,12 @@ class InboxQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(InboxQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, product__type_flow__in=[1, 3, 12, 13], oi_status__in=[5, 3])
+        queryset = queryset.filter(
+            order__status=1, no_process=False,
+            product__type_flow__in=[1, 3, 12, 13],
+            oi_status__in=[5, 3],
+            order__welcome_call_done=True).exclude(
+            wc_sub_cat__in=[64, 65])
 
         user = self.request.user
         if user.is_superuser:
@@ -718,7 +723,12 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ApprovalQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, oi_status=23, product__type_flow__in=[1, 3, 12, 13])
+        queryset = queryset.filter(
+            order__status=1, no_process=False,
+            oi_status=23,
+            product__type_flow__in=[1, 3, 12, 13],
+            order__welcome_call_done=True).exclude(
+            wc_sub_cat__in=[64, 65])
         user = self.request.user
        
         if user.has_perm('order.can_view_all_approval_list'):
@@ -838,7 +848,11 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ApprovedQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, oi_status=24, product__type_flow__in=[1, 3, 5])
+        queryset = queryset.filter(
+            order__status=1, no_process=False,
+            oi_status=24, product__type_flow__in=[1, 3, 5],
+            order__welcome_call_done=True).exclude(
+            wc_sub_cat__in=[64, 65])
         user = self.request.user
 
         if user.has_perm('order.can_view_all_approved_list'):
@@ -961,7 +975,11 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(RejectedByAdminQueue, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, oi_status=25, product__type_flow__in=[1, 3, 12, 13])
+        queryset = queryset.filter(
+            order__status=1, no_process=False,
+            oi_status=25, product__type_flow__in=[1, 3, 12, 13],
+            order__welcome_call_done=True).exclude(
+            wc_sub_cat__in=[64, 65])
 
         user = self.request.user
 
@@ -1085,7 +1103,11 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(RejectedByCandidateQueue, self).get_queryset()
-        queryset = queryset.filter(order__status=1, no_process=False, oi_status=26, product__type_flow__in=[1, 3, 12, 13])
+        queryset = queryset.filter(
+            order__status=1, no_process=False,
+            oi_status=26, product__type_flow__in=[1, 3, 12, 13],
+            order__welcome_call_done=True).exclude(
+            wc_sub_cat__in=[64, 65])
 
         user = self.request.user
 
@@ -1205,7 +1227,13 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(AllocatedQueueVeiw, self).get_queryset()
 
-        queryset = queryset.filter(order__status__in=[1, 3], no_process=False, product__type_flow__in=[1, 12, 13, 8, 3]).exclude(oi_status=4)
+        queryset = queryset.filter(
+            order__status__in=[1, 3],
+            no_process=False,
+            product__type_flow__in=[1, 12, 13, 8, 3],
+            order__welcome_call_done=True).exclude(
+            wc_sub_cat__in=[64, 65]).exclude(
+            oi_status=4)
         # user = self.request.user
 
         # if user.has_perm('order.can_view_all_allocated_list'):
@@ -1316,7 +1344,9 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(ClosedOrderItemQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status__in=[1, 3], oi_status=4, no_process=False)
+        queryset = queryset.filter(
+            order__status__in=[1, 3], oi_status=4,
+            no_process=False)
         user = self.request.user
         vendor_employee_list = user.employees.filter(active=True).values_list('vendee', flat=True)  # user's associated vendor ids
 
@@ -1420,7 +1450,12 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(DomesticProfileUpdateQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status__in=[1, 3], product__type_flow=5, no_process=False, oi_status__in=[5, 25, 61])
+        queryset = queryset.filter(
+            order__status__in=[1, 3],
+            product__type_flow=5, no_process=False,
+            oi_status__in=[5, 25, 61],
+            order__welcome_call_done=True).exclude(
+            wc_sub_cat__in=[64, 65])
         # queryset = queryset.exclude(oi_resume__isnull=True).exclude(oi_resume__exact='')
         user = self.request.user
 
@@ -1543,7 +1578,11 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(DomesticProfileApprovalQueue, self).get_queryset()
-        queryset = queryset.filter(order__status=1, product__type_flow=5, oi_status=23, no_process=False)
+        queryset = queryset.filter(
+            order__status=1, product__type_flow=5,
+            oi_status=23, no_process=False,
+            order__welcome_call_done=True).exclude(
+            wc_sub_cat__in=[64, 65])
 
         try:
             if self.query:
@@ -1631,7 +1670,11 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(BoosterQueueVeiw, self).get_queryset()
-        queryset = queryset.filter(order__status=1, product__type_flow=7, no_process=False, oi_status__in=[5, 61])
+        queryset = queryset.filter(
+            order__status=1, product__type_flow=7,
+            no_process=False, oi_status__in=[5, 61],
+            order__welcome_call_done=True).exclude(
+            wc_sub_cat__in=[64, 65])
         queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
         q1 = queryset.filter(oi_status=61)
         exclude_list = []
@@ -2275,6 +2318,8 @@ class ConsoleResumeDownloadView(View):
             file = request.GET.get('path', None)
             next_url = request.GET.get('next', None)
             if file:
+                if file.startswith('/'):
+                    file = file[1:]
                 file_path = settings.RESUME_DIR + file
                 fsock = GCPPrivateMediaStorage().open(file_path)
                 filename = file.split('/')[-1]

@@ -4,17 +4,16 @@ from django.conf import settings
 from django.db import IntegrityError
 from django.db import models
 from django.dispatch import Signal
+from django.core.validators import validate_comma_separated_integer_list
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+
 from seo.models import AbstractAutoDate
 
 from .choices import (
-    COUPON_TYPES,
-    CODE_LENGTH,
-    CODE_CHARS,
-    SEGMENTED_CODES,
-    SEGMENT_LENGTH,
-    SEGMENT_SEPARATOR,
+    COUPON_TYPES, CODE_LENGTH, CODE_CHARS,
+    SEGMENTED_CODES, SEGMENT_LENGTH, SEGMENT_SEPARATOR,
+    SITE_CHOICES, COUPON_SCOPE_CHOICES
 )
 
 
@@ -80,6 +79,23 @@ class Coupon(AbstractAutoDate):
         verbose_name=_("Campaign"),
         blank=True, null=True, related_name='coupons')
     active = models.BooleanField(default=True)
+
+    site = models.PositiveIntegerField(
+        _("Site"), choices=SITE_CHOICES, default=0)
+
+    coupon_scope = models.PositiveIntegerField(
+        _("Coupon Scope"), choices=COUPON_SCOPE_CHOICES, default=0)
+
+    products = models.ManyToManyField(
+        "shop.Product",
+        verbose_name=_('Coupon Products'),
+        related_name='couponproducts',
+        blank=True)
+
+    source = models.CharField(
+        max_length=255,
+        validators=[validate_comma_separated_integer_list],
+        blank=True)
     
     objects = CouponManager()
 
@@ -124,6 +140,46 @@ class Coupon(AbstractAutoDate):
         else:
             return prefix + code
 
+    def is_valid_coupon(self, site=1, source=None, cart_obj=None, product_list=[]):
+        # site=1 for learning
+        flag = False
+        if site == 2:
+            if self.coupon_scope == 2 and source:
+                source_list = self.source.split(',')
+                if source and str(source) in source_list:
+                    flag = True
+            elif self.coupon_scope == 1 and product_list:
+                coupon_products = list(self.products.all().values_list('id', flat=True))
+                if set(coupon_products) & set(product_list):
+                    flag = True
+            elif self.coupon_scope == 0:
+                flag = True
+
+        elif site == 1:
+            if cart_obj and self.coupon_scope == 1:
+                product_list = list(cart_obj.lineitems.all().values_list('product', flat=True))
+                coupon_products = list(self.products.all().values_list('id', flat=True))
+                if set(product_list) & set(coupon_products):
+                    flag = True
+            elif self.coupon_scope == 0:
+                flag = True
+        else:
+            # site = 0
+            if self.coupon_scope == 2 and source:
+                source_list = self.source.split(',')
+                if source and str(source) in source_list:
+                    flag = True
+
+            elif cart_obj and self.coupon_scope == 1:
+                product_list = list(cart_obj.lineitems.all().values_list('product', flat=True))
+                coupon_products = list(self.products.all().values_list('id', flat=True))
+                if set(product_list) & set(coupon_products):
+                    flag = True
+            elif self.coupon_scope == 0:
+                flag = True
+
+        return flag
+
 
 class Campaign(AbstractAutoDate):
     name = models.CharField(_("Name"), max_length=255, unique=True)
@@ -141,7 +197,10 @@ class Campaign(AbstractAutoDate):
 class CouponUser(AbstractAutoDate):
     coupon = models.ForeignKey(Coupon, related_name='users')
     user = models.CharField(
-        _("User Email"), max_length=255, blank=True, null=True)
+        _("User Email"),
+        max_length=255, blank=True,
+        null=True)
+
     redeemed_at = models.DateTimeField(_("Redeemed at"), blank=True, null=True)
 
     def __str__(self):

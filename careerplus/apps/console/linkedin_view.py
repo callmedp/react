@@ -96,15 +96,20 @@ class LinkedinQueueView(ListView, PaginationMixin):
             data = {"display_message": ''}
             orderitem_list = request.POST.getlist('selected_id[]', [])
             writer_pk = int(request.POST.get('action_type', '0'))
-            orderitem_objs = OrderItem.objects.filter(id__in=orderitem_list)
+            orderitem_objs = OrderItem.objects.filter(
+                id__in=orderitem_list).select_related(
+                'order', 'delivery_service', 'product')
             if writer_pk == 0:
-                messages.add_message(request, messages.ERROR, 'Please select valid action first')
+                messages.add_message(
+                    request, messages.ERROR, 'Please select valid action first')
             else:
                 User = get_user_model()
                 try:
                     writer = User.objects.get(pk=writer_pk)
                     for obj in orderitem_objs:
-                        email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
+                        email_sets = list(
+                            obj.emailorderitemoperation_set.all().values_list(
+                                'email_oi_status', flat=True).distinct())
                         obj.assigned_to = writer
                         obj.assigned_date = timezone.now()
                         obj.assigned_by = request.user
@@ -142,7 +147,8 @@ class LinkedinQueueView(ListView, PaginationMixin):
                         )
                     data['display_message'] = str(len(orderitem_objs)) + ' orderitems are Assigned.'
                 except Exception as e:
-                    logging.getLogger('error_log').error("Linkedin Queue:",str(e))
+                    logging.getLogger('error_log').error(
+                        "Linkedin Queue:%s", str(e))
                     data['display_message'] = str(e)
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
@@ -152,7 +158,10 @@ class LinkedinQueueView(ListView, PaginationMixin):
         queryset = queryset.filter(
             order__status=1,
             no_process=False,
-            product__type_flow=8, oi_status__in=[5, 3, 42])
+            product__type_flow=8,
+            oi_status__in=[5, 3, 42],
+            order__welcome_call_done=True).exclude(
+            wc_sub_cat__in=[64, 65])
         for query in queryset:
             try:
                 query.quizresponse
@@ -256,7 +265,8 @@ class ChangeDraftView(DetailView):
         try:
             flag = False
             self.object = self.get_object()
-            ord_obj = OrderItem.objects.get(oio_linkedin=self.object)
+            ord_obj = OrderItem.objects.get(
+                oio_linkedin=self.object).select_related('assigned_to')
             q_resp = QuizResponse.objects.get(oi=ord_obj)
             org_obj = Organization.objects.filter(draft=self.object)
             edu_obj = Education.objects.filter(draft=self.object)
@@ -467,8 +477,10 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(LinkedinRejectedByAdminView, self).get_queryset()
         queryset = queryset.filter(
-            order__status=1, no_process=False, oi_status=47,
-            product__type_flow=8)
+            order__status=1, no_process=False,
+            oi_status=47, product__type_flow=8,
+            order__welcome_call_done=True).exclude(
+            wc_sub_cat__in=[64, 65])
         user = self.request.user
         if user.has_perm('order.can_view_all_rejectedbyadmin_list'):
             pass
@@ -574,7 +586,11 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(LinkedinRejectedByCandidateView, self).get_queryset()
         queryset = queryset.filter(
-            order__status=1, oi_status=48, product__type_flow=8)
+            order__status=1, oi_status=48,
+            product__type_flow=8,
+            order__welcome_call_done=True).exclude(
+            wc_sub_cat__in=[64, 65])
+
         user = self.request.user
         if user.has_perm('order.can_view_all_rejectedbycandidate_list'):
             pass
@@ -683,7 +699,9 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
         queryset = super(LinkedinApprovalVeiw, self).get_queryset()
         queryset = queryset.filter(
             order__status=1, oi_status=45,
-            product__type_flow__in=[8]).exclude(oi_status=9)
+            product__type_flow__in=[8],
+            order__welcome_call_done=True).exclude(
+            wc_sub_cat__in=[64, 65]).exclude(oi_status=9)
         if self.query:
             queryset = queryset.filter(
                 Q(id__icontains=self.query) |
@@ -770,7 +788,12 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(InterNationalUpdateQueueView, self).get_queryset()
-        queryset = queryset.filter(order__status__in=[1, 3], product__type_flow=4, no_process=False, oi_status__in=[5, 25, 61])
+        queryset = queryset.filter(
+            order__status__in=[1, 3],
+            product__type_flow=4, no_process=False,
+            oi_status__in=[5, 25, 61],
+            order__welcome_call_done=True).exclude(
+            wc_sub_cat__in=[64, 65])
         user = self.request.user
         q1 = queryset.filter(oi_status=61)
         exclude_list = []
@@ -884,7 +907,11 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(InterNationalApprovalQueue, self).get_queryset()
-        queryset = queryset.filter(order__status=1, product__type_flow=4, oi_status=23, no_process=False)
+        queryset = queryset.filter(
+            order__status=1, product__type_flow=4,
+            oi_status=23, no_process=False,
+            order__welcome_call_done=True).exclude(
+            wc_sub_cat__in=[64, 65])
 
         if self.query:
             queryset = queryset.filter(Q(id__icontains=self.query) |

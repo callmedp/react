@@ -428,6 +428,12 @@ class PaymentSummaryView(TemplateView, CartMixin):
         cart_obj, wal_obj = self.cart_obj, None
         cart_coupon, cart_wallet = None, None
         wal_txn, wal_total, wal_point = None, None, None
+
+        cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+        cart_items = cart_dict.get('cart_items', [])
+        payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
+        context.update(payment_dict)
+
         if cart_obj:
             wal_txn = cart_obj.wallettxn.filter(txn_type=2).order_by('-created').select_related('wallet')
             cart_coupon = cart_obj.coupon
@@ -471,7 +477,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
                 wal_obj, created = Wallet.objects.get_or_create(owner=cart_obj.owner_id)
                 if cart_obj.owner_email:
                     wal_obj.owner_email = cart_obj.owner_email
-                    wal_obj.save()  
+                    wal_obj.save()
                 wal_total = wal_obj.get_current_amount()
                 if wal_total <= Decimal(0):
                     wal_obj = None
@@ -479,11 +485,6 @@ class PaymentSummaryView(TemplateView, CartMixin):
         context.update({
             'cart_coupon': cart_coupon, 'cart_wallet': cart_wallet, 'wallet': wal_obj,
             'cart': cart_obj, 'wallet_total': wal_total, 'wallet_point': wal_point})
-
-        cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
-        cart_items = cart_dict.get('cart_items', [])
-        payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
-        context.update(payment_dict)
 
         context.update({
             "cart_items": cart_items,

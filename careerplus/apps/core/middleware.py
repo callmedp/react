@@ -58,11 +58,13 @@ class LoginMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
-        cookies_data = request.COOKIES.get('_em_', '').split('|')
-        resp_status = ShineCandidateDetail().get_status_detail(
-            email=cookies_data[0], shine_id=None, token=None)
-        if resp_status:
-            request.session.update(resp_status)
+        em_data = request.COOKIES.get('_em_', '')
+        if em_data and '|' in em_data:
+            cookies_data = em_data.split('|')
+            resp_status = ShineCandidateDetail().get_status_detail(
+                email=cookies_data[0], shine_id=None, token=None)
+            if resp_status:
+                request.session.update(resp_status)
         response = self.get_response(request)
         return response
 

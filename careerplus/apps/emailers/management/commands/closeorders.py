@@ -1,4 +1,5 @@
 import csv
+import logging
 from io import StringIO
 from collections import OrderedDict
 from django.core.management.base import BaseCommand
@@ -56,6 +57,8 @@ def close_order_report():
                 from_email=send_dict.get('from_email', None),
                 attachments=[file_name, csvfile.getvalue(), 'text/csv'],
                 mimetype='text/csv')
-        print (closed_order, "orders are closed out of", paid_orders.count())
+        logging.getLogger('info_log').info(
+            "{} orders are closed out of {}".format(
+                closed_order, paid_orders.count()))
     except Exception as e:
         raise e
