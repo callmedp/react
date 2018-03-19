@@ -42,9 +42,7 @@ def featured_updated():
             try:
                 data = {}
                 data.update({
-                    "ShineCareerPlus": {"xfr": 1},
-                    "is_email_verified": 1,
-                    "is_cell_phone_verified": 1
+                    "ShineCareerPlus": {"xfr": 1}
                 })
                 flag = FeatureProfileUpdate().update_feature_profile(
                     candidate_id=candidate_id, data=data)
@@ -90,7 +88,7 @@ def featured_updated():
     out_str = out_str = '%s profile featured out of %s' % (
         featured_count, featured_orderitems.count())
 
-    print (out_str)
+    logging.getLogger('info_log').info("{}".format(out_str))
 
 
 def unfeature():
@@ -131,9 +129,7 @@ def unfeature():
             try:
                 data = {}
                 data.update({
-                    "ShineCareerPlus": {"xfr": 0},
-                    "is_email_verified": 1,
-                    "is_cell_phone_verified": 1
+                    "ShineCareerPlus": {"xfr": 0}
                 })
                 flag = FeatureProfileUpdate().update_feature_profile(
                     candidate_id=candidate_id, data=data)
@@ -159,4 +155,4 @@ def unfeature():
     out_str = '%s profile expired out of %s featured items' % (
         unfeature_count, featured_orderitems.count())
 
-    print (out_str)
+    logging.getLogger('info_log').info("{}".format(out_str))

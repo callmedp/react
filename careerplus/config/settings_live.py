@@ -25,7 +25,11 @@ DOWNLOAD_ROOT = os.path.join(MEDIA_ROOT, 'download')
 #RESUME_DIR = '/shineresume/ResumeServices/'
 INVOICE_DIR = 'invoice/'   # Cloud path
 RESUME_DIR = 'resume/'  # Cloud path
+
+#### CELERY SETTINGS ############
 CELERY_ALWAYS_EAGER = False
+BROKER_URL = 'redis://redis-03/6'
+
 
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning.shine.com'
@@ -46,8 +50,6 @@ CLIENT_ACCESS_SECRET = 'QdEhIXFmhlHQdveZB1h9u9xxnfvFleET6bNUPlKYwU4'
 
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
 
 # Cart Drop Out Set Time For Task
 CART_DROP_OUT_EMAIL = 45 * 60

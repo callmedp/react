@@ -172,7 +172,12 @@
                   <tbody>
                       {% for obj in orderitems %}
                       <tr>
-                          <td>{{obj.id}}</td>
+                          <td>{{obj.id}}<br/>
+                            <strong>
+                              Welcome Call Status:<br>
+                              {{obj.get_wc_sub_cat}}
+                            </strong>
+                          </td>
                           <td>
                             {% if obj.parent and obj.is_variation %}
                               <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>

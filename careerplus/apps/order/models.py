@@ -1,8 +1,11 @@
+import datetime
+
 from decimal import Decimal
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.utils import timezone
 
 from seo.models import AbstractAutoDate
 from geolocation.models import Country, CURRENCY_SYMBOL
@@ -11,7 +14,8 @@ from linkedin.models import Draft
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, OI_LINKEDIN_FLOW_STATUS,\
     OI_USER_STATUS, OI_EMAIL_STATUS, REFUND_MODE, REFUND_OPS_STATUS,\
-    TYPE_REFUND, OI_SMS_STATUS
+    TYPE_REFUND, OI_SMS_STATUS, WC_CATEGORY, WC_SUB_CATEGORY,\
+    WC_FLOW_STATUS
 from .functions import get_upload_path_order_invoice
 
 
@@ -83,6 +87,21 @@ class Order(AbstractAutoDate):
     country = models.ForeignKey(Country, null=True)
 
     # welcome call done or not
+    assigned_to = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        related_name='order_assigned',
+        null=True, blank=True)
+    wc_cat = models.PositiveIntegerField(
+        _("Welcome Call Category"), default=0,
+        choices=WC_CATEGORY)
+    wc_sub_cat = models.PositiveIntegerField(
+        _("Welcome Call Sub-Category"), default=0,
+        choices=WC_SUB_CATEGORY)
+    wc_status = models.PositiveIntegerField(
+        _("Welcome Call Status"), default=0,
+        choices=WC_FLOW_STATUS)
+    wc_follow_up = models.DateTimeField(null=True, blank=True)
+
     welcome_call_done = models.BooleanField(default=False)
     midout_sent_on = models.DateTimeField(null=True, blank=True)
 
@@ -147,6 +166,32 @@ class Order(AbstractAutoDate):
     def get_currency(self):
         currency_dict = dict(CURRENCY_SYMBOL)
         return currency_dict.get(self.currency)
+
+    def get_wc_cat(self):
+        sub_dict = dict(WC_CATEGORY)
+        return sub_dict.get(self.wc_cat, '')
+
+    def get_wc_sub_cat(self):
+        cat_dict = dict(WC_SUB_CATEGORY)
+        return cat_dict.get(self.wc_sub_cat, '')
+
+    def get_wc_status(self):
+        status_dict = dict(WC_FLOW_STATUS)
+        return status_dict.get(self.wc_status, '')
+
+    def follow_up_color(self):
+        c_time = timezone.now()
+        follow_up = self.wc_follow_up
+        if follow_up:
+            before_time = follow_up - datetime.timedelta(
+                minutes=30
+            )
+            later_time = follow_up + datetime.timedelta(
+                minutes=60
+            )
+            if c_time >= before_time and c_time <= later_time:
+                return 'pink'
+        return ''
 
 
 class OrderItem(AbstractAutoDate):
@@ -263,6 +308,18 @@ class OrderItem(AbstractAutoDate):
     expiry_date = models.DateTimeField(null=True, blank=True)
     user_feedback = models.BooleanField(default=False)
     buy_count_updated = models.BooleanField(default=False)
+
+    # welcome call flow
+    wc_cat = models.PositiveIntegerField(
+        _("Welcome Call Category"), default=0,
+        choices=WC_CATEGORY)
+    wc_sub_cat = models.PositiveIntegerField(
+        _("Welcome Call Sub-Category"), default=0,
+        choices=WC_SUB_CATEGORY)
+    wc_status = models.PositiveIntegerField(
+        _("Welcome Call Status"), default=0,
+        choices=WC_FLOW_STATUS)
+    wc_follow_up = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         app_label = 'order'
@@ -411,6 +468,18 @@ class OrderItem(AbstractAutoDate):
         refund_amount += self.selling_price
         refund_amount += self.delivery_price_incl_tax
         return refund_amount
+
+    def get_wc_cat(self):
+        sub_dict = dict(WC_CATEGORY)
+        return sub_dict.get(self.wc_cat, '')
+
+    def get_wc_sub_cat(self):
+        cat_dict = dict(WC_SUB_CATEGORY)
+        return cat_dict.get(self.wc_sub_cat, '')
+
+    def get_wc_status(self):
+        status_dict = dict(WC_FLOW_STATUS)
+        return status_dict.get(self.wc_status, '')
 
 
 class OrderItemOperation(AbstractAutoDate):
@@ -637,3 +706,43 @@ class RefundOperation(AbstractAutoDate):
     def get_last_status(self):
         statusD = dict(REFUND_OPS_STATUS)
         return statusD.get(self.last_status)
+
+
+class WelcomeCallOperation(AbstractAutoDate):
+    order = models.ForeignKey(Order)
+    message = models.TextField(blank=True)
+    wc_cat = models.PositiveIntegerField(
+        _("Welcome Call Category"), default=0,
+        choices=WC_CATEGORY)
+    wc_sub_cat = models.PositiveIntegerField(
+        _("Welcome Call Sub-Category"), default=0,
+        choices=WC_SUB_CATEGORY)
+    wc_status = models.PositiveIntegerField(
+        _("Welcome Call Status"), default=0,
+        choices=WC_FLOW_STATUS)
+    wc_follow_up = models.DateTimeField(null=True, blank=True)
+    assigned_to = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        related_name='wcall_assigned',
+        null=True, blank=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        null=True,
+        related_name='wop_created_by',
+        verbose_name=_("Created By"))
+
+    def __str__(self):
+        return str(self.pk)
+
+    def get_wc_cat(self):
+        sub_dict = dict(WC_CATEGORY)
+        return sub_dict.get(self.wc_cat, '')
+
+    def get_wc_sub_cat(self):
+        cat_dict = dict(WC_SUB_CATEGORY)
+        return cat_dict.get(self.wc_sub_cat, '')
+
+    def get_wc_status(self):
+        status_dict = dict(WC_FLOW_STATUS)
+        return status_dict.get(self.wc_status, '')
