@@ -67,7 +67,7 @@ def upload_cart_leads():
                     cart_obj.lead_archive = True
                     cart_obj.save()
                 time.sleep(1)
-                print (str(count) + ' Leads Updated')
+                logging.getLogger('info_log').info("{} Leads Updated".format(count))
             except Exception as e:
                 logging.getLogger('error_log').error("%s" % str(e))
         except Exception as e:

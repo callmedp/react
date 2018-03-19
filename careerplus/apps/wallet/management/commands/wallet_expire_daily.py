@@ -9,11 +9,12 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from wallet.models import *
 
+
 class Command(BaseCommand):
     help = ('Expires Wallet Points Daily')
 
     def handle(self, *args, **options):
-        print('OK')
+        logging.getLogger('info_log').info("OK")
         today = timezone.now()
         today = timezone.make_aware(datetime(today.year, today.month, today.day, 0,0,0), timezone.get_current_timezone())
         points_exp = RewardPoint.objects.filter(status=1, expiry__lte=today).values_list('wallet', flat=True).distinct()
@@ -32,14 +33,14 @@ class Command(BaseCommand):
                 notes='expired from cron',
                 point_value=total,
                 current_value=wall.get_current_amount()
-                )
+            )
             for pt in points:
                 PointTransaction.objects.create(
                     transaction=txn,
                     point=pt,
                     point_value=pt.current,
                     txn_type=4)
-            print(wall)
+            logging.getLogger('info_log').info("{}".format(wall))
         # points_df = pd.DataFrame(list(points_exp))
         # cur_df = points_df.groupby('wallet')['current'].sum().reset_index()
         # pt_df = points_df.groupby('wallet')['pk'].apply(list).reset_index()
@@ -64,4 +65,4 @@ class Command(BaseCommand):
         #             point=pt,
         #             point_value=pt.current,
         #             txn_type=4)
-        print('Finish')
+        logging.getLogger('info_log').info("Finish")

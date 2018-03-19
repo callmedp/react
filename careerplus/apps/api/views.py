@@ -17,7 +17,7 @@ from users.tasks import user_register
 from order.models import Order, OrderItem, RefundRequest
 from shop.views import ProductInformationMixin
 from shop.models import Product
-from coupon.models import Coupon
+from coupon.models import Coupon, CouponUser
 from core.api_mixin import ShineCandidateDetail
 from .serializers import OrderListHistorySerializer
 from payment.tasks import add_reward_point_in_wallet
@@ -115,7 +115,21 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     order.sales_user_info = sales_user_info
                     order.save()
                     coupon_amount = request.data.get('coupon', 0)
-                    if coupon_amount > 0:
+                    coupon_code = request.data.get('coupon_code', '')
+                    flag = False
+                    if coupon_amount > 0 and coupon_code:
+                        try:
+                            coupon_obj = Coupon.objects.get(code=coupon_code)
+                            order.couponorder_set.create(
+                                coupon=coupon_obj,
+                                coupon_code=coupon_obj.code,
+                                value=coupon_amount
+                            )
+                            flag = True
+                        except Exception as e:
+                            logging.getLogger('error_log').error(str(e))
+
+                    if coupon_amount > 0 and not flag:
                         coupon_obj = Coupon.objects.create_coupon(
                             coupon_type='flat',
                             value=coupon_amount,
@@ -143,10 +157,9 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                             value=coupon_amount
                         )
 
-                        total_discount = coupon_amount
-                        total_amount_before_discount = order.total_excl_tax  # berfore discount and excl tax
-
-                        percentage_discount = (total_discount * 100) / total_amount_before_discount
+                    total_discount = coupon_amount
+                    total_amount_before_discount = order.total_excl_tax  # berfore discount and excl tax
+                    percentage_discount = (total_discount * 100) / total_amount_before_discount
 
                     for data in item_list:
                         parent_id = data.get('id')
@@ -375,3 +388,183 @@ class OrderHistoryAPIView(ListAPIView):
                 email=email,
                 status__in=[1, 2, 3]).distinct()
             return queryset_list
+
+
+class ValidateCouponApiView(APIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def post(self, request, format=None):
+        coupon_code = request.data.get('coupon_code', '')
+        crm_order_amount = request.data.get('order_amount', 0)
+        lead_source = request.data.get('lead_source', 0)
+        product_list = request.data.get('product_list', [])
+        lead_mobile = request.data.get('lead_mobile', '')
+
+        if coupon_code:
+            try:
+                coupon = Coupon.objects.get(code=coupon_code)
+            except Exception as e:
+                msg = str(e)
+                logging.getLogger('error_log').error(msg)
+                return Response({
+                    "status": "FAIL",
+                    "msg": 'This code is not valid.'},
+                    status=status.HTTP_400_BAD_REQUEST)
+
+            if coupon.is_redeemed:
+                return Response({
+                    "status": "FAIL",
+                    "msg": 'This code has already been used.'},
+                    status=status.HTTP_400_BAD_REQUEST)
+
+            if coupon.expired():
+                return Response({
+                    "status": "FAIL",
+                    "msg": 'This code is expired.'},
+                    status=status.HTTP_400_BAD_REQUEST)
+
+            if coupon.suspended():
+                return Response({
+                    "status": "FAIL",
+                    "msg": 'This code is suspended.'},
+                    status=status.HTTP_400_BAD_REQUEST)
+
+            if coupon.site not in [0, 2]:
+                return Response({
+                    "status": "FAIL",
+                    "msg": 'This code is not valid.'},
+                    status=status.HTTP_400_BAD_REQUEST)
+
+            if not coupon.is_valid_coupon(site=2, source=lead_source, cart_obj=None, product_list=product_list):
+                if coupon.coupon_scope == 2:
+                    error = 'This code is valid on particular sources.'
+                elif coupon.coupon_scope == 1:
+                    error = 'This code is valid on particular products.'
+
+                return Response({
+                    "status": "FAIL",
+                    "msg": error},
+                    status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                user_coupon = coupon.users.get(user=lead_mobile)
+                if user_coupon.redeemed_at is not None:
+                    return Response({
+                        "status": "FAIL",
+                        "msg": 'This code has already been used by your account.'},
+                        status=status.HTTP_400_BAD_REQUEST)
+            except:
+                if coupon.user_limit is not 0:  # zero means no limit of user count
+                    # only user bound coupons left and you don't have one
+                    if coupon.user_limit is coupon.users.filter(user__isnull=False).count():
+                        return Response({
+                            "status": "FAIL",
+                            "msg": 'This code is not valid for your account.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+                        
+                    if coupon.user_limit is coupon.users.filter(redeemed_at__isnull=False).count():  # all coupons redeemed
+                        return Response({
+                            "status": "FAIL",
+                            "msg": 'This code has already been used.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                total = Decimal(crm_order_amount)
+                if coupon.min_purchase:
+                    if total < coupon.min_purchase:
+                        error = 'This cart total is below minimum purchase.(%s)' % (coupon.min_purchase)
+                        return Response({
+                            "status": "FAIL",
+                            "msg": error},
+                            status=status.HTTP_400_BAD_REQUEST)
+                try:
+                    coupon_user = coupon.users.get(user=lead_mobile)
+                except CouponUser.DoesNotExist:
+                    try:  # silently fix unbouned or nulled coupon users
+                        coupon_user = coupon.users.get(user__isnull=True)
+                        coupon_user.user = lead_mobile
+                    except CouponUser.DoesNotExist:
+                        coupon_user = CouponUser(coupon=coupon, user=lead_mobile)
+                
+                coupon_user.redeemed_at = timezone.now()
+                coupon_user.save()
+                discount_amount = 0
+                if coupon.coupon_type == 'percent':
+                    discount_amount = (total * coupon.value) / 100
+                else:
+                    discount_amount = coupon.value
+
+                discount_amount = int(discount_amount)
+
+                return Response({
+                    "status": "SUCCESS",
+                    "discount_amount": discount_amount,
+                    "msg": 'Successfully Redeemed'},
+                    status=status.HTTP_200_OK)
+               
+            except Exception as e:
+                msg = str(e)
+                logging.getLogger('error_log').error(msg)
+                return Response({
+                    "status": "FAIL",
+                    "msg": 'Try after some Time'},
+                    status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({
+                "status": "FAIL",
+                "msg": 'The coupon is not valid'},
+                status=status.HTTP_400_BAD_REQUEST)
+
+
+class RemoveCouponApiView(APIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def post(self, request, format=None):
+        try:
+            coupon_code = request.data.get('coupon_code', '')
+            user_mobile = request.data.get('lead_mobile', '')
+
+            if coupon_code:
+                coupon = None
+                try:
+                    coupon = Coupon.objects.get(code=coupon_code)
+                except Exception as e:
+                    msg = str(e)
+                    logging.getLogger('error_log').error(msg)
+                    return Response({
+                        "status": "FAIL",
+                        "msg": 'This code is not valid.'},
+                        status=status.HTTP_400_BAD_REQUEST)
+
+                if not coupon:
+                    return Response({
+                        "status": "FAIL",
+                        "msg": 'No coupon is found.'},
+                        status=status.HTTP_400_BAD_REQUEST)
+                if not user_mobile:
+                    return Response({
+                        "status": "FAIL",
+                        "msg": 'Coupon is not applied by this user'},
+                        status=status.HTTP_400_BAD_REQUEST)
+                try:
+                    user_coupon = coupon.users.get(user=user_mobile)
+                    user_coupon.redeemed_at = None
+                    user_coupon.save()
+                    return Response({
+                        "status": "SUCCESS",
+                        "msg": 'Coupon is removed successfully!'},
+                        status=status.HTTP_200_OK)
+                except CouponUser.DoesNotExist:
+                    return Response({
+                        "status": "SUCCESS",
+                        "msg": 'Coupon is removed successfully!'},
+                        status=status.HTTP_200_OK)
+        except Exception as e:
+            msg = str(e)
+            logging.getLogger('error_log').error(msg)
+        return Response({
+            "status": "FAIL",
+            "msg": 'Coupon code is not found!.'},
+            status=status.HTTP_400_BAD_REQUEST)

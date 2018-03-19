@@ -4,15 +4,14 @@
 {% load thumbnail %}
 
 {% block title %}
-  <title>Orders- Shinelearning</title>
+  <title>Welcome Call- Shinelearning</title>
 {% endblock title %}
 
 {% block css_block %}
     {{block.super}}
-    <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
+    <link href="{% static "packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
+    <link type="text/css" href="{% static "console/css/datepicker/daterangepicker.css" %}" rel="stylesheet">
 {% endblock css_block %}
-
-
 
 {% block pagecontent %}
 <!-- page content -->
@@ -20,14 +19,15 @@
   <div class="">
     <div class="page-title">
       <div class="title_left">
-        <h3>Orders</h3>
+        <h3>Welcome Call Done</h3>
       </div>
 
-      <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-order" %}" id="filter-tables">
+      <form autocomplete="off" class="form-group" method="GET" action="{% url "console:welcomecall:done" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
               <div class="input-group">
                 <input type="text" name="query" class="form-control" {% if query %} value="{{query}}" {% endif %} placeholder="Search for...">
+
                 <div style="display:none">
                     <div class="form-group">
                         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -39,7 +39,13 @@
                             {{ filter_form.created }}
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            {{ filter_form.assigned }}
+                        </div>
+                    </div>
                 </div>
+
                 <span class="input-group-btn">
                   <button type="submit" class="btn btn-default" id="search_button" type="button">Go!</button>
                 </span>
@@ -64,8 +70,8 @@
                   <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
                 </div>
                 <div class="modal-body">
-                  <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-order" %}" id="list-filter-form">
-                       <div class="form-group">
+                  <form autocomplete="off" class="form-group" method="GET" action="{% url "console:welcomecall:done" %}" id="list-filter-form">
+                        <div class="form-group">
                             <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.payment_date.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 {{ filter_form.payment_date }}
@@ -76,6 +82,13 @@
                             <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.created.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 {{ filter_form.created }}
+                            </div>
+                            <br/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.assigned.label }}</label></br>
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                {{ filter_form.assigned }}
                             </div>
                             <br/>
                         </div>
@@ -94,8 +107,6 @@
         <!-- /modals -->
     </div>
 
-
-
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
         {% if messages %}
@@ -112,8 +123,6 @@
       </div>
     </div>
 
-
-
     
     <div class="clearfix"></div>
     
@@ -122,7 +131,7 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2>Listing</h2>
+            
             <ul class="nav navbar-right panel_toolbox">
               <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
               </li>
@@ -135,90 +144,69 @@
                 <b>{{page.object_list.count}}</b> item listed out of <b>{{ page.paginator.count }}</b>
             {% endif %}
             <div class="table-responsive">
-              <table class="table table-striped jambo_table bulk_action">
+              <form autocomplete="off" id="welcome_table_form" method="post" action=".">{% csrf_token %}
+              <input type="hidden" name="action_type" id="action_type_id" class="flat">
+              <table class="table table-striped jambo_table bulk_action" id="welcome-table">
                 <thead>
                   <tr class="headings">
+                    <th>
+                      <input autocomplete="off" type="checkbox" id="check-all" class="flat">
+                    </th>
                     <th class="column-title">#OrderId</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
-                    <th class="column-title">Detail Info</th>
-                    <th class="column-title">Transactions</th>
-                    <th class="column-title">Currency</th>
-                    <th class="column-title">Amount Payable</th>
-                    <th class="column-title">Gross Amount(excl tax. and excl. dis)</th>
-                    <th class="column-title">LTV(in Rs.)</th>
+                    <th class="column-title">Follow Up</th>
+                    <th class="column-title">Category</th>
+                    <th class="column-title">Sub Category</th>
                     
-                    <th class="column-title">Agent ID</th>
-                    <th class="column-title">Order Status</th>
+                    <th class="column-title">Ops History</th>
+                    <th class="column-title">Detail Info</th>
                     <th class="column-title">Payment Date</th>
+                    <th class="column-title">Assigned To</th>
+                    <th class="column-title">LTV</th>
                     <th class="column-title">Added On</th>
-                    <th class="column-title">Instrument Number</th>
-                    <th class="column-title">Instrument Issuer</th>
-                    <th class="column-title">Instrument Issue Date</th>
-
+                    <th class="bulk-actions" colspan="100%">
+                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                    </th>
                   </tr>
                 </thead>
 
-                <tbody>
+                <tbody id="body-table-list">
                   {% for obj in page %}
                     <tr class="even pointer">
+                      <td class="a-center ">
+                          <input autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
+                      </td>
                       <td>{{obj.number}}</td>
-                      <td>{% if obj.first_name %}{{obj.first_name}}{% endif %}{% if obj.last_name %} {{obj.last_name}}{% endif %}</td>
+                      <td>{{obj.first_name}} {{obj.last_name}}</td>
                       <td>{{obj.email}}</td>
                       <td>{{obj.country_code}} {{obj.mobile}}</td>
-                      <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
+
                       <td>
-                          {% for txn in obj.get_txns %}
-                              {{txn.txn}}<br>{{txn.get_payment_mode}} {{txn.get_payment_status}}<br>
-                          {% endfor %}
-                      </td>
-                      <td>{% if obj.currency %}{{obj.currency}}{% else %}Rs.{% endif %}</td>
-                      <td>{{obj.total_incl_tax}}</td>
-                      <td>{{obj.total_excl_tax}}</td>
-                      <td><span class="ltv-value" data-pk="{{obj.pk}}">Loading..</span></td>
-                      
-                      <td>{% if obj.crm_sales_id %}{{obj.crm_sales_id}}{% endif %}</td>
-                      <td>{{obj.get_status}}
-                        {% if obj.status == 0 and perms.order.can_mark_order_as_paid %}
-                            <form autocomplete="off" role="form" method="post" id="order-paid-form{{obj.id}}">{% csrf_token %}
-                           <input type="hidden" name="order_pk" id="order-id" value="{{obj.pk}}">
-                          <center>
-                            <button type="button" onclick="clickMarkPaidButton('{{obj.pk}}',)" class="btn btn-success btn-xs">Mark Paid</button>
-                          </center>
-                          </form>
-
-                          <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="paidmodal{{obj.pk}}">
-                                <div class="modal-dialog modal-lg">
-                                  <div class="modal-content">
-
-                                    <div class="modal-header">
-                                      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                                      </button>
-                                      <h4 class="modal-title" id="myModalLabel">Action On Order</h4>
-                                    </div>
-                                    <div class="modal-body" id="paidModalbody{{obj.pk}}">
-                                      Are You Sure to mark paid orderno - {{obj.number}} ?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                        <button type="button" id="markPaidActionId{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="markPaidOrder('{{obj.id}}',)">Yes</button>
-                                    </div>
-
-                                  </div>
-                                </div>
-                            </div>
+                        {% if obj.wc_follow_up %}
+                          {{obj.wc_follow_up}}
                         {% endif %}
                       </td>
+                      <td>{{obj.get_wc_cat}}</td>
+                      <td>{{obj.get_wc_sub_cat}}</td>
+
+                      <td><a target="_blank" href="{% url "console:welcomecall:history" obj.pk %}"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-eye"></i>ops history</button></a></td>
+
+                      <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
                       <td>{{obj.payment_date}}</td>
+                      <td>
+                        {% if obj.assigned_to %}
+                          {{obj.assigned_to}}
+                        {% endif %}
+                      </td>
+                      <td><span class="ltv-value" data-pk="{{obj.pk}}">Loading..</span></td>
                       <td>{{obj.created}}</td>
-                      <td>{{obj.get_txns.first.instrument_number}}</td> 
-                      <td>{{obj.get_txns.first.instrument_issuer}}</td> 
-                      <td>{{obj.get_txns.first.instrument_issue_date}}</td> 
                     </tr>
                   {% endfor %}
                 </tbody>
               </table>
+              </form>
             </div>
                    
             {% block main_pagination %}
@@ -295,13 +283,13 @@
 {% block js_block %}
   {{ block.super }}
   <!-- Parsley Validate Scripts -->
-  <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'console/js/moment/moment.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'console/js/datepicker/daterangepicker.js' %}"></script>
-  <script type="text/javascript" src="{% static 'console/js/order/order-action.js' %}"></script>
+  <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/order/welcome-call.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
 
   <script type="text/javascript">
-  function load_json () {
+      function load_json () {
         var ltv_list = [];
         $(".ltv-value").each(function() { 
           ltv_list.push($(this).attr('data-pk')); 
@@ -330,7 +318,6 @@
         });
       }
     
-    
 
     $(document).ready(function() {
         $('.date-range-picker').daterangepicker({
@@ -355,10 +342,9 @@
         $('#id_filter').click(function(){
             $('#list-filter-form').submit();
         });
-             load_json();
 
+        load_json();
     });
-
 
   </script>
 
