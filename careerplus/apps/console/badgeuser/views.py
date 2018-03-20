@@ -70,16 +70,17 @@ class UploadCertificate(FormView):
                     created_by=request.user)
                 file_name = str(Task.pk) + '_' + 'UPLOAD' + extention
                 path = 'scheduler/' + timestr + '/'
-                # full_path = os.path.join(settings.MEDIA_ROOT, path)
+                full_path = os.path.join(settings.MEDIA_ROOT, path)
+                if not settings.IS_GCP:
+                    if not os.path.exists(full_path):
+                        os.makedirs(full_path)
+                    dest = open(full_path + file_name, 'wb')
 
-                # if not os.path.exists(full_path):
-                #     os.makedirs(full_path)
-                # dest = open(full_path + file_name, 'wb')
-
-                # for chunk in f_obj.chunks():
-                #     dest.write(chunk)
-                # dest.close()
-                GCPPrivateMediaStorage().save(path + file_name, file)
+                    for chunk in f_obj.chunks():
+                        dest.write(chunk)
+                    dest.close()
+                else:
+                    GCPPrivateMediaStorage().save(path + file_name, file)
                 Task.file_uploaded = path + file_name
                 Task.save()
                 if upload_type == "upload-certificate":
@@ -159,13 +160,15 @@ class DownloadBadgeUserView(View):
                     filename_tuple = file_path.split('.')
                     extension = filename_tuple[len(filename_tuple) - 1]
                     file_name = str(task.pk) + '_GENERATED' + '.' + extension
-                # if os.path.exists(file_path):
-                #     path = file_path
-                # else:
-                #     path = settings.MEDIA_ROOT + '/' + file_path
+                if os.path.exists(file_path):
+                    path = file_path
+                else:
+                    path = settings.MEDIA_ROOT + '/' + file_path
                 try:
-                    # fsock = FileWrapper(open(path, 'rb'))
-                    fsock = GCPPrivateMediaStorage().open(file_path)
+                    if not settings.IS_GCP:
+                        fsock = FileWrapper(open(path, 'rb'))
+                    else:
+                        fsock = GCPPrivateMediaStorage().open(file_path)
                 except IOError:
                     messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
                     response = HttpResponseRedirect(reverse('console:tasks:tasklist'))

@@ -9,6 +9,7 @@ from django.urls import reverse
 from celery.decorators import task
 from scheduler.models import Scheduler
 from partner.models import Certificate, UserCertificate
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from core.api_mixin import ShineCandidateDetail, ShineToken
 User = get_user_model()
 
@@ -26,58 +27,128 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                 total_rows = 0
                 try:
                     user = User.objects.get(pk=user)
-                    exist_file = os.path.isfile(
-                        settings.MEDIA_ROOT + '/' + upload_path)
+                    if not settings.IS_GCP:
+                        exist_file = os.path.isfile(
+                            settings.MEDIA_ROOT + '/' + upload_path)
+                    else:
+                        exist_file = GCPPrivateMediaStorage().exists(
+                            upload_path)
                     if exist_file:
                         f = True
-                        with open(
-                            settings.MEDIA_ROOT + '/' + upload_path,
-                            'r', encoding='utf-8', errors='ignore') as upload:
-                            uploader = csv.DictReader(
-                                upload, delimiter=',', quotechar='"')
-                            try:
-                                for i, line in enumerate(uploader):
-                                    line.update({'provider': vendor})
-                                    obj, created = Certificate.objects.get_or_create(**line)
-                                    if created:
-                                        usr_certi_obj = UserCertificate()
-                                        usr_certi_obj.user = user
-                                        usr_certi_obj.certificate = obj
-                                        usr_certi_obj.save()
-                                total_rows = i + 1
-                            except Exception as e:
-                                total_rows = 2000
-                                logging.getLogger('error_log').error(
-                                    "%(msg)s : %(err)s" % {'msg': 'upload certificate task', 'err': str(e)})
-                        upload.close()
+                        if not settings.IS_GCP:
+                            with open(
+                                settings.MEDIA_ROOT + '/' + upload_path,
+                                    'r', encoding='utf-8', errors='ignore') as upload:
+                                uploader = csv.DictReader(
+                                    upload, delimiter=',', quotechar='"')
+                                try:
+                                    for i, line in enumerate(uploader):
+                                        line.update({'provider': vendor})
+                                        obj, created = Certificate.objects.get_or_create(**line)
+                                        if created:
+                                            usr_certi_obj = UserCertificate()
+                                            usr_certi_obj.user = user
+                                            usr_certi_obj.certificate = obj
+                                            usr_certi_obj.save()
+                                    total_rows = i + 1
+                                except Exception as e:
+                                    total_rows = 2000
+                                    logging.getLogger('error_log').error(
+                                        "%(msg)s : %(err)s" % {
+                                            'msg': 'upload certificate task',
+                                            'err': str(e)})
+                            upload.close()
+                        else:
+                            with GCPPrivateMediaStorage().open(upload_path) as upload:
+                                uploader = csv.DictReader(
+                                    upload, delimiter=',', quotechar='"')
+                                try:
+                                    for i, line in enumerate(uploader):
+                                        line.update({'provider': vendor})
+                                        obj, created = Certificate.objects.get_or_create(**line)
+                                        if created:
+                                            usr_certi_obj = UserCertificate()
+                                            usr_certi_obj.user = user
+                                            usr_certi_obj.certificate = obj
+                                            usr_certi_obj.save()
+                                    total_rows = i + 1
+                                except Exception as e:
+                                    total_rows = 2000
+                                    logging.getLogger('error_log').error(
+                                        "%(msg)s : %(err)s" % {
+                                            'msg': 'upload certificate task',
+                                            'err': str(e)})
+                            upload.close()
                         gen_dir = os.path.dirname(upload_path)
                         filename_tuple = upload_path.split('.')
                         extension = filename_tuple[len(filename_tuple) - 1]
                         gen_file_name = str(up_task.pk) + '_GENERATED' + '.' + extension
                         generated_path = gen_dir + '/' + gen_file_name
-                        generated_file = open(
-                            settings.MEDIA_ROOT + '/' + generated_path, 'w')
-                        with open(
-                            settings.MEDIA_ROOT + '/' + upload_path,
-                            'r', encoding='utf-8', errors='ignore') as upload:
-                            uploader = csv.DictReader(
-                                upload, delimiter=',', quotechar='"')
-                            count = 0
-                            for row in uploader:
-                                count = count + 1
-                                if count % 20 == 0:
+                        if not settings.IS_GCP:
+                            generated_file = open(
+                                settings.MEDIA_ROOT + '/' + generated_path, 'w')
+                            with open(
+                                settings.MEDIA_ROOT + '/' + upload_path,
+                                    'r', encoding='utf-8', errors='ignore') as upload:
+                                uploader = csv.DictReader(
+                                    upload, delimiter=',', quotechar='"')
+                                fieldnames = uploader.fieldnames
+                                fieldnames.append('error_report')
+                                csvwriter = csv.DictWriter(
+                                    generated_file, delimiter=',',
+                                    fieldnames=fieldnames)
+                                csvwriter.writerow(
+                                    dict((fn, fn) for fn in fieldnames))
+                                count = 0
+                                for row in uploader:
                                     try:
-                                        up_task.percent_done = round((count / float(total_rows))*100, 2)
-                                        up_task.save()
-                                    except:
-                                        pass
-                            up_task.file_generated = generated_path
-                            up_task.percent_done = 100
-                            up_task.status = 2
-                            up_task.completed_on = timezone.now()
-                            up_task.save()
-                            upload.close()
-                            generated_file.close()
+                                        csvwriter.writerow(row)
+                                    except Exception as e:
+                                        row['error_report'] = str(e)
+                                        csvwriter.writerow(row)
+                                    count = count + 1
+                                    if count % 20 == 0:
+                                        try:
+                                            up_task.percent_done = round((count / float(total_rows))*100, 2)
+                                            up_task.save()
+                                        except:
+                                            pass
+                                up_task.file_generated = generated_path
+                                up_task.percent_done = 100
+                                up_task.status = 2
+                                up_task.completed_on = timezone.now()
+                                up_task.save()
+                                upload.close()
+                                generated_file.close()
+                        else:
+                            generated_file = GCPPrivateMediaStorage().open(
+                                generated_path, 'wb')
+                            with GCPPrivateMediaStorage().open(upload_path) as upload:
+                                uploader = csv.DictReader(
+                                    upload, delimiter=',', quotechar='"')
+                                fieldnames = uploader.fieldnames
+                                fieldnames.append('error_report')
+                                csvwriter = csv.DictWriter(
+                                    generated_file, delimiter=',',
+                                    fieldnames=fieldnames)
+                                csvwriter.writerow(
+                                    dict((fn, fn) for fn in fieldnames))
+                                count = 0
+                                for row in uploader:
+                                    count = count + 1
+                                    if count % 20 == 0:
+                                        try:
+                                            up_task.percent_done = round((count / float(total_rows))*100, 2)
+                                            up_task.save()
+                                        except:
+                                            pass
+                                up_task.file_generated = generated_path
+                                up_task.percent_done = 100
+                                up_task.status = 2
+                                up_task.completed_on = timezone.now()
+                                up_task.save()
+                                upload.close()
+                                generated_file.close()
                     else:
                         up_task.status = 1
                         up_task.save()
@@ -111,93 +182,180 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                 total_rows = 0
                 try:
                     user = User.objects.get(pk=user)
-                    exist_file = os.path.isfile(
-                        settings.MEDIA_ROOT + '/' + upload_path)
+                    if not settings.IS_GCP:
+                        exist_file = os.path.isfile(
+                            settings.MEDIA_ROOT + '/' + upload_path)
+                    else:
+                        exist_file = GCPPrivateMediaStorage().exists(
+                            upload_path)
                     if exist_file:
                         f = True
-                        with open(
-                            settings.MEDIA_ROOT + '/' + upload_path,
-                            'r', encoding='utf-8', errors='ignore') as upload:
-                            uploader = csv.DictReader(
-                                upload, delimiter=',', quotechar='"')
-                            try:
-                                for i, line in enumerate(uploader):
-                                    pass
-                                total_rows = i + 1
-                            except Exception as e:
-                                total_rows = 2000
-                                logging.getLogger('error_log').error(
-                                    "%(err)s" % {'err': str(e)})
-                        upload.close()
+                        if not settings.IS_GCP:
+                            with open(
+                                settings.MEDIA_ROOT + '/' + upload_path,
+                                    'r', encoding='utf-8', errors='ignore') as upload:
+                                uploader = csv.DictReader(
+                                    upload, delimiter=',', quotechar='"')
+                                try:
+                                    for i, line in enumerate(uploader):
+                                        pass
+                                    total_rows = i + 1
+                                except Exception as e:
+                                    total_rows = 2000
+                                    logging.getLogger('error_log').error(
+                                        "%(err)s" % {'err': str(e)})
+                            upload.close()
+                        else:
+                            with GCPPrivateMediaStorage().open(upload_path) as upload:
+                                uploader = csv.DictReader(
+                                    upload, delimiter=',', quotechar='"')
+                                try:
+                                    for i, line in enumerate(uploader):
+                                        pass
+                                    total_rows = i + 1
+                                except Exception as e:
+                                    total_rows = 2000
+                                    logging.getLogger('error_log').error(
+                                        "%(err)s" % {'err': str(e)})
+                            upload.close()
                         gen_dir = os.path.dirname(upload_path)
                         filename_tuple = upload_path.split('.')
                         extension = filename_tuple[len(filename_tuple) - 1]
                         gen_file_name = str(up_task.pk) + '_GENERATED' + '.' + extension
                         generated_path = gen_dir + '/' + gen_file_name
-                        generated_file = open(
-                            settings.MEDIA_ROOT + '/' + generated_path, 'w')
-                        with open(settings.MEDIA_ROOT + '/' + upload_path, 'r', encoding='utf-8', errors='ignore') as upload:
-                            uploader = csv.DictReader(
-                                upload, delimiter=',', quotechar='"')
-                            fieldnames = uploader.fieldnames
-                            fieldnames.append('status')
-                            fieldnames.append('reason_for_failure')
-                            csvwriter = csv.DictWriter(
-                                generated_file, delimiter=',', fieldnames=fieldnames)
-                            csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
-                            count = 0
-                            for row in uploader:
-                                try:
-                                    email = row.get('candidate_email', '').strip()
-                                    mobile = row.get('candidate_mobile', '').strip()
-                                    certificate_name = row.get('certificate_name').strip()
-                                    certi_yr_passing = row.get('year').strip()
-                                    shineid = ShineCandidateDetail().get_shine_id(
-                                        email=None, headers=None)
-                                    if not certificate_name:
-                                        row['certificate_name'] = "certificate not found"
-                                    if not shineid:
-                                        row['reason_for_failure'] = "user not register on shine"
-                                    if shineid and certificate_name:
-                                        obj, created = Certificate.objects.get_or_create(
-                                            name=certificate_name)
-                                        if created:
-                                            UserCertificate.objects.create(
-                                                user=user, certificate=obj,
-                                                year=certi_yr_passing,
-                                                candidate_email=email,
-                                                candidate_mobile=mobile)
-                                        post_data = {
-                                            'certification_name': certificate_name,
-                                            'certification_year': certi_yr_passing
-                                        }
-                                        certification_url = settings.SHINE_API_URL + "/candidate/" +shine_id + "/certifications/?format=json"
-                                        headers = ShineToken().get_api_headers()
-                                        certification_response = requests.post(
-                                            certification_url, data=post_data,
-                                            headers=headers)
-                                        if certification_response.status_code == 200:
-                                            row['status'] = "Success"
-                                        elif certification_response.status_code != 200:
-                                            row['status'] = "Failure"
-                                    csvwriter.writerow(row)
-                                except Exception as e:
-                                    row['reason_for_failure'] = str(e)
-                                    csvwriter.writerow(row)
-                                count = count + 1
-                                if count % 20 == 0:
+                        if not settings.IS_GCP:
+                            generated_file = open(
+                                settings.MEDIA_ROOT + '/' + generated_path, 'w')
+                            with open(
+                                settings.MEDIA_ROOT + '/' + upload_path,
+                                    'r', encoding='utf-8', errors='ignore') as upload:
+                                uploader = csv.DictReader(
+                                    upload, delimiter=',', quotechar='"')
+                                fieldnames = uploader.fieldnames
+                                fieldnames.append('status')
+                                fieldnames.append('reason_for_failure')
+                                csvwriter = csv.DictWriter(
+                                    generated_file, delimiter=',', fieldnames=fieldnames)
+                                csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
+                                count = 0
+                                for row in uploader:
                                     try:
-                                        up_task.percent_done = round((count / float(total_rows))*100, 2)
-                                        up_task.save()
-                                    except:
-                                        pass
-                            up_task.file_generated = generated_path
-                            up_task.percent_done = 100
-                            up_task.status = 2
-                            up_task.completed_on = timezone.now()
-                            up_task.save()
-                            upload.close()
-                            generated_file.close()
+                                        email = row.get('candidate_email', '').strip()
+                                        mobile = row.get('candidate_mobile', '').strip()
+                                        certificate_name = row.get('certificate_name').strip()
+                                        certi_yr_passing = row.get('year').strip()
+                                        shineid = ShineCandidateDetail().get_shine_id(
+                                            email=None, headers=None)
+                                        if not certificate_name:
+                                            row['certificate_name'] = "certificate not found"
+                                        if not shineid:
+                                            row['reason_for_failure'] = "user not register on shine"
+                                        if shineid and certificate_name:
+                                            obj, created = Certificate.objects.get_or_create(
+                                                name=certificate_name)
+                                            if created:
+                                                UserCertificate.objects.create(
+                                                    user=user, certificate=obj,
+                                                    year=certi_yr_passing,
+                                                    candidate_email=email,
+                                                    candidate_mobile=mobile)
+                                            post_data = {
+                                                'certification_name': certificate_name,
+                                                'certification_year': certi_yr_passing
+                                            }
+                                            certification_url = settings.SHINE_API_URL + "/candidate/" +shine_id + "/certifications/?format=json"
+                                            headers = ShineToken().get_api_headers()
+                                            certification_response = requests.post(
+                                                certification_url, data=post_data,
+                                                headers=headers)
+                                            if certification_response.status_code == 200:
+                                                row['status'] = "Success"
+                                            elif certification_response.status_code != 200:
+                                                row['status'] = "Failure"
+                                        csvwriter.writerow(row)
+                                    except Exception as e:
+                                        row['reason_for_failure'] = str(e)
+                                        csvwriter.writerow(row)
+                                    count = count + 1
+                                    if count % 20 == 0:
+                                        try:
+                                            up_task.percent_done = round((count / float(total_rows))*100, 2)
+                                            up_task.save()
+                                        except:
+                                            pass
+                                up_task.file_generated = generated_path
+                                up_task.percent_done = 100
+                                up_task.status = 2
+                                up_task.completed_on = timezone.now()
+                                up_task.save()
+                                upload.close()
+                                generated_file.close()
+                        else:
+                            generated_file = GCPPrivateMediaStorage().open(
+                                generated_path, 'wb')
+                            with GCPPrivateMediaStorage().open(
+                                    upload_path) as upload:
+                                uploader = csv.DictReader(
+                                    upload, delimiter=',', quotechar='"')
+                                fieldnames = uploader.fieldnames
+                                fieldnames.append('status')
+                                fieldnames.append('reason_for_failure')
+                                csvwriter = csv.DictWriter(
+                                    generated_file, delimiter=',', fieldnames=fieldnames)
+                                csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
+                                count = 0
+                                for row in uploader:
+                                    try:
+                                        email = row.get('candidate_email', '').strip()
+                                        mobile = row.get('candidate_mobile', '').strip()
+                                        certificate_name = row.get('certificate_name').strip()
+                                        certi_yr_passing = row.get('year').strip()
+                                        shineid = ShineCandidateDetail().get_shine_id(
+                                            email=None, headers=None)
+                                        if not certificate_name:
+                                            row['certificate_name'] = "certificate not found"
+                                        if not shineid:
+                                            row['reason_for_failure'] = "user not register on shine"
+                                        if shineid and certificate_name:
+                                            obj, created = Certificate.objects.get_or_create(
+                                                name=certificate_name)
+                                            if created:
+                                                UserCertificate.objects.create(
+                                                    user=user, certificate=obj,
+                                                    year=certi_yr_passing,
+                                                    candidate_email=email,
+                                                    candidate_mobile=mobile)
+                                            post_data = {
+                                                'certification_name': certificate_name,
+                                                'certification_year': certi_yr_passing
+                                            }
+                                            certification_url = settings.SHINE_API_URL + "/candidate/" +shine_id + "/certifications/?format=json"
+                                            headers = ShineToken().get_api_headers()
+                                            certification_response = requests.post(
+                                                certification_url, data=post_data,
+                                                headers=headers)
+                                            if certification_response.status_code == 200:
+                                                row['status'] = "Success"
+                                            elif certification_response.status_code != 200:
+                                                row['status'] = "Failure"
+                                        csvwriter.writerow(row)
+                                    except Exception as e:
+                                        row['reason_for_failure'] = str(e)
+                                        csvwriter.writerow(row)
+                                    count = count + 1
+                                    if count % 20 == 0:
+                                        try:
+                                            up_task.percent_done = round((count / float(total_rows))*100, 2)
+                                            up_task.save()
+                                        except:
+                                            pass
+                                up_task.file_generated = generated_path
+                                up_task.percent_done = 100
+                                up_task.status = 2
+                                up_task.completed_on = timezone.now()
+                                up_task.save()
+                                upload.close()
+                                generated_file.close()
                     else:
                         up_task.status = 1
                         up_task.save()

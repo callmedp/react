@@ -2,7 +2,7 @@ from .settings import *
 
 DEBUG = True
 IS_LIVE = False
-
+IS_GCP = True
 ALLOWED_HOSTS = ['*']
 
 ######## DATABASE SETTINGS ###########
