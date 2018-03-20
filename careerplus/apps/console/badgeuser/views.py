@@ -12,6 +12,7 @@ from django.conf import settings
 
 from blog.mixins import PaginationMixin
 from scheduler.models import Scheduler
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from .tasks import (
     upload_certificate_task,
     upload_candidate_certificate_task)
@@ -68,15 +69,16 @@ class UploadCertificate(FormView):
                     created_by=request.user)
                 file_name = str(Task.pk) + '_' + 'UPLOAD' + extention
                 path = 'scheduler/' + timestr + '/'
-                full_path = os.path.join(settings.MEDIA_ROOT, path)
+                # full_path = os.path.join(settings.MEDIA_ROOT, path)
 
-                if not os.path.exists(full_path):
-                    os.makedirs(full_path)
-                dest = open(full_path + file_name, 'wb')
+                # if not os.path.exists(full_path):
+                #     os.makedirs(full_path)
+                # dest = open(full_path + file_name, 'wb')
 
-                for chunk in f_obj.chunks():
-                    dest.write(chunk)
-                dest.close()
+                # for chunk in f_obj.chunks():
+                #     dest.write(chunk)
+                # dest.close()
+                GCPPrivateMediaStorage().save(path + file_name, file)
                 Task.file_uploaded = path + file_name
                 Task.save()
                 if upload_type == "upload-certificate":
