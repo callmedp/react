@@ -33,7 +33,7 @@
           <i class="fa fa-edit"></i> Add Category</a>
         </div>
         <div class="col-lg-3">
-           <a class="btn btn-app" target="_blank" href="{% url "blog:articles-deatil" slug=object.slug pk=object.pk %}">
+           <a class="btn btn-app" target="_blank" href="{{object.get_full_url()}}">
           <i class="fa fa-eye"></i> View on Site</a>
         </div>
     </div>
