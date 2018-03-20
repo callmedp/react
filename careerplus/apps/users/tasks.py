@@ -55,7 +55,7 @@ def user_register(data={}, order=None):
             try:
                 SendMail().send(to_emails, mail_type, email_data)
             except Exception as e:
-                logging.getLogger('email_log').error("auto regitser user task %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
+                logging.getLogger('error_log').error("auto regitser user task %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
         if candidate_id and order:
             order.candidate_id = candidate_id
             order.save()

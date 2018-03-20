@@ -1,39 +1,54 @@
 {% load static %}
 <!-- download wrap starts here -->
-<div class="download-wrap">
+<div class="download-wrap mt-30 mb-15">
     <div class="download-pdf">
         {% if download_doc %}
-        <a id="id_download_button" href="{{download_doc.get_url}}" pop-up="{% if request.session.candidate_id %}no{% else %}yes{% endif %}">
-            <div class="wrap">
-                <div class="table">
-                    <div class="table-cell">
-                        <span class="mt-10" id="sidebar-countries-trigger"><sup class="icon-download"></sup></span>
-                        <p class="pb-0 fs-15">{{heading}}</p>
+        {% if amp %}
+        <a download href="{{download_doc.doc.url}}">
+                <div class="wrap">
+                    <div class="table">
+                        <div class="table-cell">
+                            <span class="mt-10"><sup class="icon-download"></sup></span>
+                            <p class="pb-0 fs-15">{{heading}}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <amp-img
+                    src="{{image.url}}"
+                    alt="{{image_alt}}"
+                    width="315"
+                    height="90"
+                    layout="responsive">
+                </amp-img>
+            </a>
 
-            {% if not amp %}
-            <amp-img
-                src="{{image.url}}"
-                alt="{{image_alt}}"
-                width="315"
-                height="90"
-                layout="responsive">
-            </amp-img>
+            
 
-            {% else %}
-            <img src="{{image.url}}" alt="{{image_alt}}">
-            {% endif %}
-        </a>
+        {% else %}
+            <a id="id_download_button" href="{{download_doc.doc.url}}" pop-up="{% if request.session.candidate_id %}no{% else %}yes{% endif %}">
+                <div class="wrap">
+                    <div class="table">
+                        <div class="table-cell">
+                            <span class="mt-10" id="sidebar-countries-trigger"><sup class="icon-download"></sup></span>
+                            <p class="pb-0 fs-15">{{heading}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <img src="{{image.url}}" alt="{{image_alt}}">
+            </a>
         {% endif %}
+        {% endif %}
+
     </div><!-- end of download pdf -->
 </div><!-- download wrap Ends here -->
 
 
-{% if not amp %}
+
+{% if amp %}
 <!-- Select countries (optional) start here -->
-<div class="sidebar" style='display:none'></div>
+<div class="sidebar hide"></div>
+
 <!-- Select countries (optional) ends here -->
 
 {% else %}

@@ -5,7 +5,8 @@
         <h2>{{heading}}</h2>
         <div class="media">
             <figure class="media-left">
-                {% if not is_amp %}
+
+                {% if amp %}
                 <amp-img 
                     class="media-object user" 
                     src="{{image.url}}" 
@@ -23,8 +24,12 @@
                 <p>{{writer_designation|title}}</p>
             </div>
         </div>
-        <hr>
-        {{ description|safe }}
-        <hr>
+        <hr class="row">
+        {% if amp %}
+        <pre>{{ description|striptags|safe }}</pre>
+        {% else %}
+               {{ description|safe }}
+        {% endif %}
+        </hr>     
     </div>
 </div><!-- box ends here -->

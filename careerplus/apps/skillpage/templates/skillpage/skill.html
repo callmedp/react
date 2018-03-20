@@ -7,6 +7,7 @@
 {% block canonical_url %}
   <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
   <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}">
+  <link rel="amphtml" href="https://{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}?type=amp">
 {% endblock canonical_url %}
 
 {% block title %}	
@@ -307,7 +308,8 @@
             <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
         </div>
         <div class="form-group">
-          <input type="text" class="form-control" name="name" placeholder="Name" maxlength="100">
+          <input type="text" class="form-control" name="name" placeholder="Name" 
+          maxlength="100" value="{{request.session.full_name}}">
           <span class="error-txt position-error"></span>
         </div>
         <div class="form-group">
@@ -319,7 +321,8 @@
                   {% endfor %}
                   </select>
                 </div>
-                <input type="text" class="form-control" name="number" placeholder="Mobile" maxlength="15">
+                <input type="text" class="form-control" name="number" 
+                placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
                 <span class="error-txt position-error"></span>
             </div>
         </div>
@@ -346,6 +349,17 @@
 	</div> 
 	<!-- request a call --> 
 	<!-- right content end -->
+	{% if widget_objs %}
+    <div class="free-sample">
+      <span class="sample-pic"></span>
+      <strong>{{widget_obj.name}}</strong>
+      <ul>
+      {% for widget_obj in widget_objs %}
+        <li><a href="{{widget_obj.url}}"target="_blank" >{{widget_obj.name}}</a></li>
+      {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
 	</div>
 	<!-- page content body end -->
 </section>

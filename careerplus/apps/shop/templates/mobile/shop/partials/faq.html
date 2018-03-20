@@ -2,13 +2,12 @@
     <!-- Accordion FAQ’s Starts here  -->
         <!-- Section 1 -->
         {% for ques in faq_list %}
-            <div class="acc_head">
+
+            <h4 class="acc_head">
                 {{ques.question}}
-            </div>
+            </h4>
             <div class="acc_content">
-                <p>
-                    {{ques.answer|safe}}
-                </p>
+                <p>{{ques.answer|safe}}</p>
             </div>
         {% endfor %}
     <!-- Accordion FAQ’s Ends here  -->

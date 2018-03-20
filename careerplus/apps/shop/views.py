@@ -35,6 +35,7 @@ from homepage.models import Testimonial
 from review.models import Review
 
 from .models import Product
+from review.models import DetailPageWidget
 from .mixins import CourseCatalogueMixin
 
 
@@ -326,9 +327,12 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         super(ProductDetailView, self).__init__(*args, **kwargs)
 
     def get_template_names(self):
+        if self.request.amp:
+            return ['shop/detail-amp.html']
         return ['shop/detail1.html']
 
     def get_context_data(self, **kwargs):
+        pk = self.kwargs.get('pk')
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
         product = self.product_obj
         ctx['product'] = product
@@ -393,11 +397,25 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
         ctx.update(self.getSelectedProduct_solr(self.sqs))
         # ctx.update(self.getSelectedProductPrice_solr(self.sqs))
+        widget_objs = None
+        widget_obj = None
+        try:
+            widget_obj = DetailPageWidget.objects.get(
+                content_type__model='Product', object_id=pk)
+            widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
+                column=1)
+        except Exception as e:
+            widget_objs = None
+            logging.getLogger('error_log').error("%(err)s" % {'err': e})
+        ctx['domain_name'] = '{}//{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
         ctx.update({'sqs': self.sqs})
         ctx.update({'get_fakeprice': get_fakeprice})
         ctx['meta'] = self.product_obj.as_meta(self.request)
         ctx['meta']._url = ctx.get('canonical_url', '')
         ctx['show_chat'] = True
+        ctx['amp'] = self.request.amp
+        ctx['widget_objs'] = widget_objs
+        ctx['widget_obj'] = widget_obj
         return ctx
 
     def redirect_if_necessary(self, current_path, product):
@@ -576,20 +594,20 @@ class ProductReviewListView(ListView, ProductInformationMixin):
 
 class CourseCatalogueView(TemplateView, MetadataMixin, CourseCatalogueMixin):
     template_name = 'shop/course-catalogue.html'
-    use_title_tag = False
+    use_title_tag = True
     use_og = True
-    use_twitter = False
+    use_twitter = True
+    twitter_site = True
+    twitter_card = True
     
-    def get_meta_title(self, context):
-        return 'Online Courses and Certifications - Shine Learning'
+    def get_meta_title(self, context=None):
+        return 'Online Courses and Certifications : Free Online Education'
 
-    def get_meta_description(self, context):
-        return 'Join India\'s Largest E-Learning Online \
-        Courses and Education Platform. Get Certifications in Top \
-        Courses under Finance, IT, Analytics, Marketing and more'
+    def get_meta_description(self, context=None):
+        return 'Join India\'s Largest E-Learning Online Courses and Education Platform. Get Certifications in Top Courses under Finance, IT, Analytics, Marketing and more'
     
-    def get_meta_url(self, context):
-        return settings.MAIN_DOMAIN_PREFIX
+    def get_meta_url(self, context=None):
+        return settings.MAIN_DOMAIN_PREFIX + '/online-courses.html'
 
     def get_testimonials(self):
         testimonials = Testimonial.objects.filter(
@@ -599,10 +617,15 @@ class CourseCatalogueView(TemplateView, MetadataMixin, CourseCatalogueMixin):
 
     def get_context_data(self, **kwargs):
         context = super(CourseCatalogueView, self).get_context_data(**kwargs)
-        context['meta'] = self.get_meta()
+        context['meta'] = self.get_meta(context=context)
         context.update(self.get_testimonials())
         if cache.get('course_catalogue'):
             context['course_dict'] = cache.get('course_catalogue')
         else:
             context['course_dict'] = self.get_course_catalogue_context()
+        context.update({
+            "meta_url": self.get_meta_url(),
+            "meta_title": self.get_meta_title(),
+            "meta_desc": self.get_meta_description(),
+        })
         return context

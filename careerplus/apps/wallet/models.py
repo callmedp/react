@@ -226,7 +226,6 @@ class PointTransaction(AbstractAutoDate):
         verbose_name_plural = _('Point Transactions')
 
 
-
 class ECash(AbstractAutoDate):
     wallet = models.ForeignKey(
         Wallet,

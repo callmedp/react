@@ -49,7 +49,7 @@ def draft_reminder_mail_for_linkedin():
                     'mobile': oi.order.mobile,
                     'days': 22,
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                 })
                 send_email_task.delay(
                     to_emails, mail_type, data, status=106, oi=oi.pk)
@@ -57,9 +57,10 @@ def draft_reminder_mail_for_linkedin():
                     urlshortener = create_short_url(login_url=data)
                     data.update({'url': urlshortener.get('url')})
                     SendSMS().send(sms_type=mail_type, data=data)
-                    print(str(count) + '8 day linkedin SMS Sent')
+                    logging.getLogger('info_log').info(
+                        "{} 8 day linkedin SMS Sent".format(count))
                 except Exception as e:
-                    logging.getLogger('sms_log').error(
+                    logging.getLogger('error_log').error(
                         "%s - %s" % (str(mail_type), str(e)))
 
             elif draft_level == 1 and today_date >= approved_date + datetime.timedelta(days=15) and len(email_sets) == 1:
@@ -74,14 +75,15 @@ def draft_reminder_mail_for_linkedin():
                     'mobile': oi.order.mobile,
                     'days': 15,
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                 })
                 send_email_task.delay(to_emails, mail_type, data, status=106, oi=oi.pk)
                 try:
                     SendSMS().send(sms_type=mail_type, data=data)
-                    print(str(count) + '15 day linkedin SMS & Email Sent')
+                    logging.getLogger('info_log').info(
+                        "{} 15 day linkedin SMS & Email Sent".format(count))
                 except Exception as e:
-                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                    logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 
             elif draft_level == 1 and today_date >= approved_date + datetime.timedelta(days=22) and len(email_sets) == 2:
                 to_emails = [oi.order.email]
@@ -94,7 +96,7 @@ def draft_reminder_mail_for_linkedin():
                     'mobile': oi.order.mobile,
                     'days': 7,
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                 })
                 send_email_task.delay(
                     to_emails, mail_type, data, status=106, oi=oi.pk)
@@ -102,9 +104,10 @@ def draft_reminder_mail_for_linkedin():
                     urlshortener = create_short_url(login_url=data)
                     data.update({'url': urlshortener.get('url')})
                     SendSMS().send(sms_type=mail_type, data=data)
-                    print(str(count) + ' 22 day linkedin SMS & Email Sent')
+                    logging.getLogger('info_log').info(
+                        "{} 22 day linkedin SMS & Email Sent".format(count))
                 except Exception as e:
-                    logging.getLogger('sms_log').error(
+                    logging.getLogger('error_log').error(
                         "%s - %s" % (str(mail_type), str(e)))
 
             elif draft_level == 1 and today_date >= approved_date + datetime.timedelta(days=29) and len(email_sets) == 3:
@@ -117,7 +120,7 @@ def draft_reminder_mail_for_linkedin():
                     'draft_added': oi.draft_added_on,
                     'mobile': oi.order.mobile,
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                 })
                 send_email_task.delay(
                     to_emails, mail_type, email_dict, status=9, oi=oi.pk)
@@ -125,9 +128,10 @@ def draft_reminder_mail_for_linkedin():
                     urlshortener = create_short_url(login_url=email_dict)
                     data.update({'url': urlshortener.get('url')})
                     SendSMS().send(sms_type=mail_type, data=email_dict)
-                    print(str(count) + ' linekdin Service closed SMS & Email Sent')
+                    logging.getLogger('info_log').info(
+                        "{} linekdin Service closed SMS & Email Sent".format(count))
                 except Exception as e:
-                    logging.getLogger('sms_log').error(
+                    logging.getLogger('error_log').error(
                         "%s - %s" % (str(mail_type), str(e)))
 
                 last_oi_status = oi.oi_status
@@ -151,7 +155,7 @@ def draft_reminder_mail_for_linkedin():
                     'mobile': oi.order.mobile,
                     'days': 7,
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                 })
                 send_email_task.delay(
                     to_emails, mail_type, data, status=107, oi=oi.pk)
@@ -159,9 +163,10 @@ def draft_reminder_mail_for_linkedin():
                     urlshortener = create_short_url(login_url=data)
                     data.update({'url': urlshortener.get('url')})
                     SendSMS().send(sms_type=mail_type, data=data)
-                    print(str(count) + ' level 2 linkedin SMS Sent')
+                    logging.getLogger('info_log').info(
+                        "{} level 2 linkedin SMS Sent".format(count))
                 except Exception as e:
-                    logging.getLogger('sms_log').error("%s - %s" % (str(mail_type), str(e)))
+                    logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 
             elif draft_level == 2 and today_date >= approved_date + datetime.timedelta(days=7) and len(email_sets) == 1:
                 to_emails = [oi.order.email]
@@ -174,7 +179,7 @@ def draft_reminder_mail_for_linkedin():
                     'mobile': oi.order.mobile,
                     'days': 3,
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                 })
                 send_email_task.delay(
                     to_emails, mail_type, data, status=107, oi=oi.pk)
@@ -182,9 +187,10 @@ def draft_reminder_mail_for_linkedin():
                     urlshortener = create_short_url(login_url=data)
                     data.update({'url': urlshortener.get('url')})
                     SendSMS().send(sms_type=mail_type, data=data)
-                    print(str(count) + ' level 2 7 day linkedin SMS Sent')
+                    logging.getLogger('info_log').info(
+                        "{} level 2 7 day linkedin SMS Sent".format(count))
                 except Exception as e:
-                    logging.getLogger('sms_log').error(
+                    logging.getLogger('error_log').error(
                         "%s - %s" % (str(mail_type), str(e)))
 
             elif draft_level == 2 and today_date >= approved_date + datetime.timedelta(days=10) and len(email_sets) == 2:
@@ -197,24 +203,26 @@ def draft_reminder_mail_for_linkedin():
                     'draft_added': oi.draft_added_on,
                     'mobile': oi.order.mobile,
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token.decode()),
+                        settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                 })
 
                 try:
                     send_email_task.delay(
                         to_emails, mail_type, email_dict,
                         status=9, oi=oi.pk)
-                    print(str(count) + ' Service closed Email Sent')
+                    logging.getLogger('info_log').info(
+                        "{} Service closed Email Sent".format(count))
                 except Exception as e:
-                    logging.getLogger('email_log').error(
+                    logging.getLogger('error_log').error(
                         "%s - %s - %s" % (
                             str(to_emails), str(e), str(mail_type)))
 
                 try:
                     SendSMS().send(sms_type=mail_type, data=email_dict)
-                    print(str(count) + ' Service closed SMS Sent')
+                    logging.getLogger('info_log').info(
+                        "{} SService closed SMS Sent".format(count))
                 except Exception as e:
-                    logging.getLogger('sms_log').error(
+                    logging.getLogger('error_log').error(
                         "%s - %s" % (str(mail_type), str(e)))
 
                 last_oi_status = oi.oi_status
@@ -227,5 +235,5 @@ def draft_reminder_mail_for_linkedin():
                     last_oi_status=oi.last_oi_status,
                     assigned_to=oi.assigned_to)
     except Exception as e:
-        logging.getLogger('email_log').error("%s - %s" % (
+        logging.getLogger('error_log').error("%s - %s" % (
             "Reminder mail cron", str(e)))

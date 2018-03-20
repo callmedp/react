@@ -12,6 +12,10 @@ urlpatterns = [
     url(r'^partner/', include('console.partner.urls', namespace='partner')),
     url(r'^operations/', include('console.operations.urls', namespace='operations')),
     url(r'^userquery/', include('console.userquery.urls', namespace='userquery')),
+    url(r'^tasks/',
+        include('console.schedule_tasks.urls', namespace='tasks')),
+    url(r'^welcomecall/',
+        include('console.welcomecall.urls', namespace='welcomecall')),
 ]
 
 
@@ -54,7 +58,7 @@ urlpatterns += [
     url(r'^screenproduct/action/(?P<action>[\w-]+)/$',
         vendor_view.ActionScreenProductView.as_view(),
         name='screenproduct-action'),
-    
+
     url(r'^screenfaq/list/$',
         vendor_view.ListScreenFaqView.as_view(),
         name='screenfaq-list'),
@@ -179,7 +183,6 @@ urlpatterns += [
 ]
 
 
-
 urlpatterns += [
     url(r'^geolocation/country/$',
         adminviews.CountryListView.as_view(), name='geo-country'),
@@ -194,8 +197,10 @@ urlpatterns += [
         order_view.ConsoleResumeDownloadView.as_view(), name='queue-resume-download'),
     url(r'^queue/orders/$',
         order_view.OrderListView.as_view(), name='queue-order'),
-    url(r'^queue/welcomecall/$',
-        order_view.WelcomeCallVeiw.as_view(), name='queue-welcome'),
+
+    # url(r'^queue/welcomecall/$',
+    #     order_view.WelcomeCallVeiw.as_view(), name='queue-welcome'),
+
     url(r'^queue/midout/$',
         order_view.MidOutQueueView.as_view(), name='queue-midout'),
     url(r'^queue/inbox/$',

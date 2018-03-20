@@ -3,8 +3,8 @@
     <div class="box row mb-15">
         <div class="media">
             <div class="media-left">
-                <a href="javascript:void(0);" class="sigma-pro">
-                    {% if not amp %}
+                <a href="#" class="sigma-pro">
+                    {% if amp %}
                     <amp-img
                         src="{{ product.pImg}}"
                         width="50"
@@ -26,8 +26,10 @@
                         {{product.pARx |floatformat:1}}/5
                     </div>
                     <div class="inline-block fs-12">
-                        <figure class="icon-comments"></figure>
-                        <a href="javascript:void(0);">{{product.no_review}}</a>
+                        {%if product.no_review%}
+                            <figure class="icon-comments"></figure>
+                            <a href="#">{{product.no_review}}</a>
+                        {%endif%}
                         <figure class="icon-jobs ml-10"></figure>
                         {% if product.pNJ %}
                             <strong>{{product.pNJ}}</strong> Jobs
@@ -40,7 +42,7 @@
                 </div><!-- end of icons wrapper -->
                 <p class="pb-5 fs-12 c6">
                     Providers
-                    <a href="javascript:void(0);" class="tag-bg fs-11 ml-5">
+                    <a href="#" class="tag-bg fs-11 ml-5">
                     {{product.pPvn}}
                     </a>
                 </p>
@@ -53,7 +55,7 @@
 {% endfor %}
 {% if products.has_next %}
     <p class="text-right pb-0">
-        <a href="javascript:void(0);" id="product_load_more"
+        <a href="#" id="product_load_more"
         class="load-more loadmore">
         <strong>Load More</strong></a>
     </p>

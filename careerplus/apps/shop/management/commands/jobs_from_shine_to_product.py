@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.core.management.base import BaseCommand
 from ...models import Product
 
+
 class Command(BaseCommand):
     """
         Custom command to Update Jobs form Shine to Products.
@@ -38,6 +39,6 @@ class Command(BaseCommand):
                 prod.num_jobs = data_dict.get('job_count', 0)
                 prod.save()
                 count += 1
-                if not count%10:
-                    print(count)
+                if not count % 10:
+                    logging.getLogger('info_log').info("{}".format(count))
             time.sleep(0.1)

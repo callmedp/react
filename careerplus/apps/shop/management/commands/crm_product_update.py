@@ -40,10 +40,10 @@ class Command(BaseCommand):
                     timeout=settings.SHINECPCRM_DICT.get('timeout'))
                 count += 1
                 if count % 10 == 0:
-                    print(str(count) + ' Product Updated')
+                    logging.getLogger('info_log').info(
+                        "{} Product Updated".format(count))
                 if response.status_code == 400:
-                    print(response.content)
-                
+                    logging.getLogger('info_log').info(
+                        "{}".format(response.content))
             except Exception as e:
                 logging.getLogger('error_log').error("%s" % str(e))
-                        

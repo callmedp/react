@@ -48,24 +48,22 @@
       </a>
     </div>
   </div>
-  {% comment %}
-    
-  <a href="#" class="take-test mt-40"><figure class="test-icon"></figure> Take free Assessment test</a>
+  {% comment %}  
+  <a href="#" class="take-test mt-40">
+  <figure class="test-icon"></figure>Take free Assessment test</a>
   {% endcomment %}
-  {% comment %}
   <!-- check free sample start -->
+  {% if widget_objs %}
     <div class="free-sample">
       <span class="sample-pic"></span>
-      <strong>Check free samples</strong>
+      <strong>{{widget_obj.name}}</strong>
       <ul>
-        <li><a href="#">Resume Format</a></li>
-        <li><a href="#">Cover Letter Format</a></li>
-        <li><a href="#">Resignation Letter Format</a></li>
-        <li><a href="#">Resume Format for Freshers</a></li>
-        <li><a href="#">Resume Format for Experienced Professionals</a></li>
+      {% for widget_obj in widget_objs %}
+        <li><a href="{{widget_obj.url}}" target="_blank">{{widget_obj.name}}</a></li>
+      {% endfor %}
       </ul>
     </div>
-  {% endcomment %}
+  {% endif %}
   </div>
 <!-- right fixed content end -->
 

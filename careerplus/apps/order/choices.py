@@ -83,6 +83,9 @@ OI_OPS_STATUS = (
     (161, 'Refund initiated'),
     (162, 'Refund under progress'),
     (163, 'Refunded'),
+
+    # extra operation 181 - 190
+    (181, "Waiting for input")
 )
 
 OI_USER_STATUS = (
@@ -362,4 +365,62 @@ REFUND_OPS_STATUS = (
     (11, "Refunded"),
     (12, "Request Updated"),
     (13, "Cancel Request"),
+)
+
+WC_CATEGORY = (
+    # 21 - 40
+    (21, 'Process Order'),
+    (22, 'Service Issue'),
+    (23, 'Call Back')
+)
+
+WC_SUB_CATEGORY1 = (
+    # 41 - 60
+    (41, 'No Issue'),
+)
+
+WC_SUB_CATEGORY2 = (
+    # 61 - 80
+    (62, 'On Hold'),
+    (63, 'Process order'),
+    (64, 'Refund'),
+    (65, 'Replacement Order'),
+)
+
+WC_SUB_CAT2 = (
+    (61, 'Service Issue'),
+)
+
+WC_SUB_CATEGORY3 = (
+    # 81 - 100
+    (81, 'No answer'),
+    (82, 'Not reachable'),
+    (83, 'User is busy'),
+)
+
+
+WC_SUB_CATEGORY = WC_SUB_CATEGORY1 + WC_SUB_CATEGORY2 + WC_SUB_CATEGORY3 + WC_SUB_CAT2
+
+WC_FLOW_STATUS = (
+    # 0-20
+    (0, 'Default'),
+    (1, 'Assigned'),
+    (2, 'Re Allocated'),
+
+    # 21 - 40
+
+    # 41 - 60
+    (21, 'No Issue'),
+
+    # 61 - 80
+    (61, 'Service Issue'),
+    (62, 'On Hold'),
+    (63, 'Process order'),
+    (64, 'Refund'),
+    (65, 'Replacement Order'),
+
+    # 81 - 100
+    (81, 'No answer'),
+    (82, 'Not reachable'),
+    (83, 'User is busy'),
 )

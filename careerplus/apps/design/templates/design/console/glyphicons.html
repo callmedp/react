@@ -11,14 +11,14 @@
     <title>Gentelella Alela! | </title>
 
     <!-- Bootstrap -->
-    <link href="{% static "/packages/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'packages/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
     <!-- Font Awesome -->
-    <link href="{% static "/packages/font-awesome/css/font-awesome.min.css"  %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'packages/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
     <!-- NProgress -->
-    <link href="{% static "/packages/nprogress/nprogress.css"  %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'packages/nprogress/nprogress.css' %}" rel="stylesheet" type="text/css">
     
     <!-- Custom styling plus plugins -->
-    <link href="{% static "/console/css/custom.min.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'console/css/custom.min.css' %}" rel="stylesheet" type="text/css">
   </head>
 
   <body class="nav-md">
@@ -35,7 +35,7 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="/static/console/images/img.jpg" alt="..." class="img-circle profile_img">
+                <img src="{% static 'console/images/img.jpg' %}" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
@@ -180,7 +180,7 @@
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="/static/console/images/img.jpg" alt="">John Doe
+                    <img src="{% static 'console/images/img.jpg' %}" alt="">John Doe
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -204,7 +204,7 @@
                   <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                     <li>
                       <a>
-                        <span class="image"><img src="/static/console/images/img.jpg" alt="Profile Image" /></span>
+                        <span class="image"><img src="{% static 'console/images/img.jpg' %}" alt="Profile Image" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -216,7 +216,7 @@
                     </li>
                     <li>
                       <a>
-                        <span class="image"><img src="/static/console/images/img.jpg" alt="Profile Image" /></span>
+                        <span class="image"><img src="{% static 'console/images/img.jpg' %}" alt="Profile Image" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -228,7 +228,7 @@
                     </li>
                     <li>
                       <a>
-                        <span class="image"><img src="/static/console/images/img.jpg" alt="Profile Image" /></span>
+                        <span class="image"><img src="{% static 'console/images/img.jpg' %}" alt="Profile Image" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -240,7 +240,7 @@
                     </li>
                     <li>
                       <a>
-                        <span class="image"><img src="/static/console/images/img.jpg" alt="Profile Image" /></span>
+                        <span class="image"><img src="{% static 'console/images/img.jpg' %}" alt="Profile Image" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -1727,16 +1727,16 @@
     </div>
 
     <!-- jQuery -->
-    <script type="text/javascript" src="{% static "packages/jquery/dist/jquery.min.js" %}"></script>
+    <script type="text/javascript" src="{% static 'packages/jquery/dist/jquery.min.js' %}"></script>
     <!-- Bootstrap -->
-    <script type="text/javascript" src="{% static "packages/bootstrap/js/bootstrap.min.js" %}"></script>
+    <script type="text/javascript" src="{% static 'packages/bootstrap/js/bootstrap.min.js' %}"></script>
     <!-- FastClick -->
-    <script type="text/javascript" src="{% static "packages/fastclick/lib/fastclick.js" %}"></script>
+    <script type="text/javascript" src="{% static 'packages/fastclick/lib/fastclick.js' %}"></script>
     <!-- NProgress -->
-    <script type="text/javascript" src="{% static "packages/nprogress/nprogress.js" %}"></script>
+    <script type="text/javascript" src="{% static 'packages/nprogress/nprogress.js' %}"></script>
 
     <!-- Custom Theme Scripts -->
-    <script type="text/javascript" src="{% static "console/js/custom.min.js" %}"></script>
+    <script type="text/javascript" src="{% static 'console/js/custom.min.js' %}"></script>
 
   </body>
 </html>

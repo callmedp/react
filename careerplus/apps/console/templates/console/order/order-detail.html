@@ -152,7 +152,7 @@
                         <th>
                             <h2><small>Order items operations/actions:</small></h2>
                             <table class="table table-bordered table-responsive">
-                               <th>How Old</th>
+                               <th>Date & Time</th>
                                <th>Action</th>
                                <th>Added By / Assigned</th>
                                <th>Download Document</th>
@@ -172,7 +172,12 @@
                   <tbody>
                       {% for obj in orderitems %}
                       <tr>
-                          <td>{{obj.id}}</td>
+                          <td>{{obj.id}}<br/>
+                            <strong>
+                              Welcome Call Status:<br>
+                              {{obj.get_wc_sub_cat}}
+                            </strong>
+                          </td>
                           <td>
                             {% if obj.parent and obj.is_variation %}
                               <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
@@ -192,6 +197,9 @@
                             {% endif %}
                             {% if obj.partner %}
                               <strong>Partner:</strong> {{obj.partner}}
+                            {% endif %}<br/><br/>
+                            {% if obj.delivery_service %}
+                              <strong>Delivery Type:</strong> {{obj.delivery_service.name}}
                             {% endif %}
 
                           </td>
@@ -201,7 +209,7 @@
                               <table class="table table-bordered table-responsive">
                                   {% for op in obj.get_oi_operations %}
                                     <tr>
-                                      <td>{{op.created|naturaltime}}</td>
+                                      <td>{{op.created}}</td>
                                       <td>{{op.get_oi_status}}</td>
                                       <td>{{op.added_by.name}} / {{op.assigned_to.name}}</td>
                                       <td>
@@ -290,7 +298,7 @@
 {% block js_block %}
   {{ block.super }}
   <!-- Parsley Validate Scripts -->
-  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
-  <script type="text/javascript" src="{% static "console/js/order/draft-upload.js" %}"></script>
+  <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'console/js/order/draft-upload.js' %}"></script>
 
 {% endblock js_block %}

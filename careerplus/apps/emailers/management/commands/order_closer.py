@@ -1,3 +1,4 @@
+import logging
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
@@ -23,4 +24,5 @@ def close_order():
             od.save()
             closed_order += 1
 
-    print(closed_order, "orders are closed out of", paid_orders.count())
+    logging.getLogger('info_log').info(
+        "{} orders are closed out of {}".format(closed_order, paid_orders.count()))

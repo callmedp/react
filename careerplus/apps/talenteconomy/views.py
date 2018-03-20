@@ -179,6 +179,11 @@ class TEBlogDetailView(DetailView, BlogMixin):
             raise Http404
         return obj
 
+    def get_template_names(self):
+        if self.request.amp:
+            return ["talenteconomy/article-detail-amp.html"]
+        return ["talenteconomy/article-detail.html"]    
+
 #    def redirect_if_necessary(self, current_path, article):
 #        expected_path = article.get_absolute_url()
 #        if expected_path != urlquote(current_path):
@@ -227,6 +232,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
         context.update({
             "detail_article": detail_article,
             "main_article": main_obj[0],
+            "amp": self.request.amp
         })
 
 
@@ -323,8 +329,13 @@ class AuthorListingView(TemplateView):
         return {"meta": meta}
 
 class AuthorDetailView(DetailView):
-    template_name = "talenteconomy/author-detail.html"
+    # template_name = "talenteconomy/author-detail-amp.html"
     model = Author
+
+    def get_template_names(self):
+        if self.request.amp:
+            return ["talenteconomy/author-detail-amp.html"]
+        return ["talenteconomy/author-detail.html"]
 
     def get(self, request, *args, **kwargs):
         context = super(self.__class__, self).get(request, args, **kwargs)
@@ -369,6 +380,7 @@ class AuthorDetailView(DetailView):
             'authors_list': list(author_list),
             "article_list":article_list,
             "popular_courses": popular_courses,
+            "amp": self.request.amp
         })
 
         context.update(self.get_meta_details())

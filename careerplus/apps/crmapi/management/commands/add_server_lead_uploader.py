@@ -56,12 +56,12 @@ def upload_addserver_leads():
                     continue
                 create_lead_crm(pk=ld.pk)
                 count += 1
-                print(str(count) + ' Leads Updated')
+                logging.getLogger('info_log').info("{} Leads Updated".format(count))
                 time.sleep(1)
         except Exception as e:
             logging.getLogger('error_log').error("%s" % str(e))
-
-    print (str(count) + ' lead created out of ' + str(lead_list.count()))
+    logging.getLogger('info_log').info(
+        "{} lead created out of {}".format(count, lead_list.count()))
 
 
 # def upload_addserver_leads1():

@@ -13,11 +13,11 @@
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
-        <link type="text/scss" href="{% static "shinelearn/css/common/bootstrap.scss" %}" rel="stylesheet">
-        <link href="{% static "shinelearn/css/bootstrap-datepicker.min.css" %}" rel="stylesheet">
-        <link type="text/scss" href="{% static "shinelearn/css/mobile/common/checkbox.scss" %}" rel="stylesheet">
-        <link type="text/scss" href="{% static "shinelearn/css/mobile/payment/payment.scss" %}" rel="stylesheet">
-        <link type="text/scss" href="{% static "shinelearn/css/mobile/common/smk-accordion.scss" %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
+        <link href="{% static 'shinelearn/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/payment/payment.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/smk-accordion.scss' %}" rel="stylesheet">
     {% endcompress %}
 
     {% compress css inline %}
@@ -208,9 +208,9 @@
 {% block js_section %}
     {{block.super}}
     {% compress js %}
-        <script src="{% static "shinelearn/js/common/bootstrap.min.js" %}"></script>
-        <script src="{% static "shinelearn/js/common/bootstrap-datepicker.min.js" %}"></script>
-        <script src="{% static "shinelearn/js/payment/payment.js" %}"></script>
+        <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
+        <script src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>
+        <script src="{% static 'shinelearn/js/payment/payment.js' %}"></script>
     {% endcompress %}
 
     {% compress js inline %}

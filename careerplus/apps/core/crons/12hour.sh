@@ -1,0 +1,1 @@
+/var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py crm_product_update --settings=careerplus.config.settings_live

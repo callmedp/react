@@ -1,4 +1,7 @@
+import datetime
+
 from django.conf import settings
+
 from cart.mixins import CartMixin
 from cart.models import Subscription
 
@@ -31,6 +34,20 @@ def common_context_processor(request):
     except:
         roundone_user = None
 
+    console_user = request.user
+    writer_invoice = False
+    try:
+        if console_user and console_user.userprofile and console_user.userprofile.invoice_date:
+            today_date = datetime.datetime.now().date()
+            invoice_date = today_date.replace(day=1)
+            invoice_date = invoice_date - datetime.timedelta(days=1)
+            userprofile = console_user.userprofile
+            if userprofile.user_invoice and userprofile.invoice_date.month==invoice_date.month and userprofile.invoice_date.year==invoice_date.year:
+                writer_invoice = True
+
+    except:
+        pass
+
     context.update({
         "SITE_DOMAIN": settings.SITE_DOMAIN,
         "MOBILE_SITE_DOMAIN": settings.MOBILE_SITE_DOMAIN,
@@ -55,7 +72,10 @@ def common_context_processor(request):
         "SKILL_GROUP_LIST": settings.SKILL_GROUP_LIST,
         "COURSE_GROUP_LIST": settings.COURSE_GROUP_LIST,
         "SERVICE_GROUP_LIST": settings.SERVICE_GROUP_LIST,
+        "MARKETING_GROUP_LIST": settings.MARKETING_GROUP_LIST,
         "roundone_user": roundone_user,
-        "IS_LIVE": settings.IS_LIVE
+        "IS_LIVE": settings.IS_LIVE,
+        "writer_invoice": writer_invoice,
+        "WELCOMECALL_GROUP_LIST": settings.WELCOMECALL_GROUP_LIST,
     })
     return context

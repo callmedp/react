@@ -141,6 +141,11 @@ class OrderFilterForm(forms.Form):
 
         NEWSTATUS = ((-1, 'All'),) + STATUS_CHOICES
 
+        writer_choice = [(-1, 'ALL'), (-2, "Assigned"), (-3, 'Not Assigned')]
+        writers = User.objects.filter(groups__name__in=settings.WELCOMECALL_GROUP_LIST)
+        writer_list = list(writers.all().values_list('pk', 'email'))
+        writer_choice += writer_list
+
         self.fields['status'] = forms.ChoiceField(
             label=("Status:"), choices=NEWSTATUS,
             initial=-1,
@@ -163,8 +168,14 @@ class OrderFilterForm(forms.Form):
                 'placeholder': "from date - to date",
                 "readonly": True, }))
 
+        self.fields['assigned'] = forms.ChoiceField(
+            label=("Assigned"), choices=writer_choice,
+            initial=-1,
+            widget=forms.Select(
+                attrs={'class': 'form-control'}))
+
     class Meta:
-        fields = ['status', 'payment_date', 'created']
+        fields = ['status', 'payment_date', 'created', 'assigned']
 
 
 class OIFilterForm(forms.Form):
@@ -375,6 +386,14 @@ class ReviewFilterForm(forms.Form):
             'class': 'form-control col-md-7 col-xs-12',
             'required': True}))
 
+    created = forms.CharField(
+        label=("Added On:"), required=False,
+        initial='',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control date-range-picker',
+            'placeholder': "from date - to date",
+            "readonly": True, }))
+
 
 class ReviewUpdateForm(forms.ModelForm):
 
@@ -389,9 +408,14 @@ class ReviewUpdateForm(forms.ModelForm):
             'required': True}))
 
     reviewed_item = forms.CharField(
-        label=("Review Item*:"), max_length=200,
+        label=("Product Name*:"), max_length=200,
         required=True, widget=forms.TextInput(
             attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    created = forms.CharField(
+        label=("Created Date:"), required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-7 col-xs-12'}))
 
     class Meta:
         model = Review
@@ -403,7 +427,8 @@ class ReviewUpdateForm(forms.ModelForm):
         obj = kwargs.get('instance')
         self.initial['content'] = strip_tags(obj.content)
         self.fields['content_type'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
-        self.initial['reviewed_item'] = '{} - {}'.format(obj.reviewed_item.name, obj.object_id)
+        self.initial['reviewed_item'] = '{}'.format(obj.reviewed_item)
         self.fields['reviewed_item'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
         self.fields['user_email'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
+        self.initial['created'] = obj.created.strftime("%b. %e, %Y %H:%I %P")
         self.fields['average_rating'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
