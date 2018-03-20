@@ -66,7 +66,7 @@ class GenerateAutoLoginTask(FormView):
                     created_by=request.user)
                 file_name = str(Task.pk) + '_' + 'UPLOAD' + extention
                 path = 'scheduler/' + timestr + '/'
-                if settings.IS_GCP:
+                if not settings.IS_GCP:
                     full_path = os.path.join(settings.MEDIA_ROOT, path)
                     if not os.path.exists(full_path):
                         os.makedirs(full_path)

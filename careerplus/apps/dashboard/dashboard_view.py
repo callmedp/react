@@ -111,7 +111,7 @@ class DashboardView(TemplateView):
                             file_name = 'resumeupload_shine_resume_' + str(order.pk) + '_' + str(obj.pk) + '_' + str(int(random()*9999)) \
                                 + '_' + timezone.now().strftime('%Y%m%d') + '.' + resume_extn
                             full_path = '%s/' % str(order.pk)
-                            if settings.IS_GCP:
+                            if not settings.IS_GCP:
                                 if not os.path.exists(settings.RESUME_DIR + full_path):
                                     os.makedirs(settings.RESUME_DIR +  full_path)
                                 dest = open(
@@ -436,7 +436,7 @@ class DashboardRejectService(View):
                                 file_name = 'draftreject_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(int(random()*9999)) \
                                     + '_' + timezone.now().strftime('%Y%m%d') + extention
                                 full_path = '%s/' % str(order.pk)
-                                if settings.IS_GCP:
+                                if not settings.IS_GCP:
                                     if not os.path.exists(settings.RESUME_DIR + full_path):
                                         os.makedirs(settings.RESUME_DIR +  full_path)
                                     dest = open(
