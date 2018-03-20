@@ -238,8 +238,8 @@ class ApproveByAdminDraft(View):
         if request.is_ajax() and request.user.is_authenticated():
             oi_pk = request.POST.get('oi_pk', None)
             try:
-                obj = OrderItem.objects.get(
-                    pk=oi_pk).select_releted('order', 'product')
+                obj = OrderItem.objects.select_related('order', 'product').get(
+                    pk=oi_pk)
                 data['status'] = 1
                 product_flow = obj.product.type_flow
 
@@ -409,8 +409,8 @@ class UploadDraftView(View):
             if form.is_valid():
                 try:
                     oi_pk = request.POST.get('oi_pk', None)
-                    obj = OrderItem.objects.get(
-                        pk=oi_pk).select_releted('order', 'product')
+                    obj = OrderItem.objects.select_related('order', 'product').get(
+                        pk=oi_pk)
                     mixin_data = {
                         "oi_draft": request.FILES.get('file', ''), }
                     data = ActionUserMixin().upload_draft_orderitem(oi=obj, data=mixin_data, user=request.user)
@@ -492,8 +492,8 @@ class ApproveDraftByLinkedinAdmin(View):
         if request.is_ajax():
             oi_pk = request.POST.get('oi_pk', None)
             try:
-                obj = OrderItem.objects.get(
-                    pk=oi_pk).select_releted('order', 'product')
+                obj = OrderItem.objects.select_related('order', 'product').get(
+                    pk=oi_pk)
                 data['status'] = 1
                 last_status = obj.oi_status
                 if obj.product.type_flow == 8:
