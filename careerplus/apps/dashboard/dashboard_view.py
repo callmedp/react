@@ -315,7 +315,6 @@ class DashboardCommentView(TemplateView):
         else:
             return HttpResponseForbidden()
 
-
 class DashboardFeedbackView(TemplateView):
     template_name = 'partial/myinbox-feedback.html'
 

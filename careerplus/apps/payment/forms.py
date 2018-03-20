@@ -1,5 +1,6 @@
 from django import forms
 from geolocation.models import Country
+import logging
 
 
 class StateForm(forms.Form):
@@ -17,6 +18,7 @@ class StateForm(forms.Form):
             for st in states:
                 state_choices.append((st.id, st.name))
         except:
+            logging.getLogger('error_log').error('unable to set states')
             pass
         self.fields['state'].choices = state_choices
         self.fields['state'].initial = -1

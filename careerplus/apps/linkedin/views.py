@@ -82,7 +82,8 @@ class CounsellingSubmit(TemplateView):
     def post(self, request, *args, **kwargs):
         try:
             orderitem = OrderItem.objects.get(pk=kwargs.get('order_item', ''))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('order item object is empty %s'%str(e))
             orderitem = None
         if request.POST.get('save') == 'save':
             if orderitem:
@@ -145,7 +146,7 @@ class CounsellingForm(TemplateView):
             quiz_resp = QuizResponse()
             quiz_resp.oi = orderitem
             quiz_resp.save()
-            logging.getLogger('error_log').error("%s" % (str(e)))
+            logging.getLogger('error_log').error("quiz response not found%s" % (str(e)))
 
         context = {
             'ques_dict': ques_dict,
@@ -515,4 +516,6 @@ class DashboardDraftDownloadView(View):
             else:
                 return HttpResponseRedirect('/login/')
         except:
+            logging.getLogger('error_log').error('unable to get order item id')
+
             return HttpResponseRedirect('/')

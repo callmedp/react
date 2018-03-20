@@ -201,7 +201,7 @@ class AjaxStateView(View):
             states = country_obj.state_set.all().values_list('name', flat=True)
             data['states'] = list(states)
         except Exception as e:
-            logging.getLogger('error_log').error(" Msg= Unable to get location details " % str(e))
+            logging.getLogger('error_log').error(" Msg= Unable to get location details " %str(e))
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 

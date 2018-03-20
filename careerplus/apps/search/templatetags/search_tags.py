@@ -14,6 +14,7 @@ from search import choices
 
 #third party imports
 import urllib
+import logging
 
 register = template.Library()
 
@@ -34,4 +35,5 @@ def get_choice_display(value, choice):
                 value = value.upper()
         return mapping[value]
     except:
+        logging.getLogger('error_log').error('error in mapping ')
         return 'Others'

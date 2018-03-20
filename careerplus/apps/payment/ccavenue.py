@@ -268,11 +268,12 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
                             del request.session['cart_pk']
                             del request.session['checkout_type']
                             request.session.modified = True
-                        except:
+                        except Exception as e:
+                            logging.getLogger('error_log').error('unable to modify request session  %s'%str(e))
                             pass
                         return HttpResponseRedirect(return_url)
                     except Exception as e:
-                        logging.getLogger('error_log').error(str(e))
+                        logging.getLogger('error_log').error('Response redirection for order success failed %s'%str(e))
                         return HttpResponseRedirect(
                             reverse('payment:payment_oops') +
                             '?error=success&txn_id=' + txn_id)
