@@ -1,4 +1,5 @@
 import os
+import mimetypes
 import logging
 from django.views.generic import FormView, ListView, View
 from django.contrib import messages
@@ -84,9 +85,13 @@ class UploadCertificate(FormView):
                 if upload_type == "upload-certificate":
                     upload_certificate_task.delay(
                         task=Task.pk, user=request.user.pk, vendor=vendor)
+                    # upload_certificate_task(
+                    #     task=Task.pk, user=request.user.pk, vendor=vendor)
                 elif upload_type == "upload-candidate-certificate":
                     upload_candidate_certificate_task.delay(
                         task=Task.pk, user=request.user.pk, vendor=vendor)
+                    # upload_candidate_certificate_task(
+                    #     task=Task.pk, user=request.user.pk, vendor=vendor)
                 messages.add_message(
                     request, messages.SUCCESS,
                     'Task Created SuccessFully')
@@ -154,12 +159,13 @@ class DownloadBadgeUserView(View):
                     filename_tuple = file_path.split('.')
                     extension = filename_tuple[len(filename_tuple) - 1]
                     file_name = str(task.pk) + '_GENERATED' + '.' + extension
-                if os.path.exists(file_path):
-                    path = file_path
-                else:
-                    path = settings.MEDIA_ROOT + '/' + file_path
+                # if os.path.exists(file_path):
+                #     path = file_path
+                # else:
+                #     path = settings.MEDIA_ROOT + '/' + file_path
                 try:
-                    fsock = FileWrapper(open(path, 'rb'))
+                    # fsock = FileWrapper(open(path, 'rb'))
+                    fsock = GCPPrivateMediaStorage().open(file_path)
                 except IOError:
                     messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
                     response = HttpResponseRedirect(reverse('console:tasks:tasklist'))
