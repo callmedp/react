@@ -13,7 +13,7 @@
         {% for art in related_arts %}
             <div class="slide">
                 <div class="media">
-                    <a href="{% url 'blog:articles-deatil' art.slug art.pk %}">
+                    <a href="{{art.get_full_url}}">
                         {% if art.image %}
                         <figure class="media-left">
                             {% thumbnail art.image "98x64" crop="center" as im %}
@@ -49,7 +49,7 @@
         {% for art in related_arts %}
         <li>
             <div class="media">
-                <a href="{% url 'blog:articles-deatil' art.slug art.pk %}">
+                <a href="{{art.get_full_url}}">
                     {% if art.image %}
                     <figure class="media-left">
                         {% thumbnail art.image "98x64" crop="center" as im %}
