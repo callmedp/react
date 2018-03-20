@@ -25,7 +25,7 @@ class LoginTokenGenerateForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(LoginTokenGenerateForm, self).__init__(*args, **kwargs)
-        self.fields['file'].widget.attrs['data-parsley-filemimetypes'] = 'text/csv'
+        # self.fields['file'].widget.attrs['data-parsley-filemimetypes'] = 'text/csv'
         self.fields['expiry'].widget.attrs['data-parsley-type'] = 'number'
         self.fields['expiry'].widget.attrs['min'] = 0
         self.fields['expiry'].widget.attrs['max'] = 100
