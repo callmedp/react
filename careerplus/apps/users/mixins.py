@@ -690,7 +690,22 @@ class WriterInvoiceMixin(object):
                 pdf_file = SimpleUploadedFile(
                     file_name, pdf_file,
                     content_type='application/pdf')
-                GCPInvoiceStorage().save(path + file_name, pdf_file)
+
+                if not settings.IS_GCP:
+
+                    if not os.path.exists(settings.INVOICE_DIR + path):
+                        os.makedirs(settings.INVOICE_DIR + path)
+                    dest = open(
+                        settings.INVOICE_DIR + path + file_name, 'wb')
+                    pdf_file = SimpleUploadedFile(
+                        file_name, pdf_file,
+                        content_type='application/pdf')
+                    for chunk in pdf_file.chunks():
+                        dest.write(chunk)
+                    dest.close()
+                else:
+                    GCPInvoiceStorage().save(path + file_name, pdf_file)
+
                 user.userprofile.user_invoice = path + file_name
                 user.userprofile.invoice_date = invoice_date
                 user.userprofile.save()

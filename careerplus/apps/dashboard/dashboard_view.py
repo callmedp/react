@@ -111,14 +111,16 @@ class DashboardView(TemplateView):
                             file_name = 'resumeupload_shine_resume_' + str(order.pk) + '_' + str(obj.pk) + '_' + str(int(random()*9999)) \
                                 + '_' + timezone.now().strftime('%Y%m%d') + '.' + resume_extn
                             full_path = '%s/' % str(order.pk)
-                            # if not os.path.exists(settings.RESUME_DIR + full_path):
-                            #     os.makedirs(settings.RESUME_DIR +  full_path)
-                            # dest = open(
-                            #     settings.RESUME_DIR + full_path + file_name, 'wb')
-                            # for chunk in file.chunks():
-                            #     dest.write(chunk)
-                            # dest.close()
-                            GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
+                            if settings.IS_GCP:
+                                if not os.path.exists(settings.RESUME_DIR + full_path):
+                                    os.makedirs(settings.RESUME_DIR +  full_path)
+                                dest = open(
+                                    settings.RESUME_DIR + full_path + file_name, 'wb')
+                                for chunk in file.chunks():
+                                    dest.write(chunk)
+                                dest.close()
+                            else:
+                                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                         except Exception as e:
                             logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
                             continue
@@ -434,15 +436,17 @@ class DashboardRejectService(View):
                                 file_name = 'draftreject_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(int(random()*9999)) \
                                     + '_' + timezone.now().strftime('%Y%m%d') + extention
                                 full_path = '%s/' % str(order.pk)
-                                # if not os.path.exists(settings.RESUME_DIR + full_path):
-                                #     os.makedirs(settings.RESUME_DIR +  full_path)
-                                # dest = open(
-                                #     settings.RESUME_DIR + full_path + file_name, 'wb')
-                                # for chunk in file.chunks():
-                                #     dest.write(chunk)
-                                # dest.close()
+                                if settings.IS_GCP:
+                                    if not os.path.exists(settings.RESUME_DIR + full_path):
+                                        os.makedirs(settings.RESUME_DIR +  full_path)
+                                    dest = open(
+                                        settings.RESUME_DIR + full_path + file_name, 'wb')
+                                    for chunk in file.chunks():
+                                        dest.write(chunk)
+                                    dest.close()
+                                else:
+                                    GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                                 reject_file = full_path + file_name
-                                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                             except Exception as e:
                                 logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
                                 raise 
@@ -683,7 +687,10 @@ class DownloadQuestionnaireView(View):
         file_path = 'attachment/' + 'Resume Questionnaire.docx'
         path = file_path
         try:
-            fsock = GCPMediaStorage().open(path)
+            if not settings.IS_GCP:
+                fsock = FileWrapper(open(settings.MEDIA_ROOT + '/' + path, 'rb'))
+            else:
+                fsock = GCPMediaStorage().open(path)
         except IOError:
             raise Exception("Resume not found.")
 
@@ -739,7 +746,11 @@ class DashboardInvoiceDownload(View):
                     order, invoice = InvoiceGenerate().save_order_invoice_pdf(order=order)
                 if invoice:
                     file_path = invoice.name
-                    fsock = GCPInvoiceStorage().open(file_path)
+                    if not settings.IS_GCP:
+                        file_path = settings.INVOICE_DIR + invoice.name
+                        fsock = FileWrapper(open(file_path, 'rb'))
+                    else:
+                        fsock = GCPInvoiceStorage().open(file_path)
                     filename = invoice.name.split('/')[-1]
                     response = HttpResponse(fsock, content_type=mimetypes.guess_type(filename)[0])
                     response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
@@ -765,7 +776,10 @@ class DashboardResumeDownload(View):
                     if file.startswith('/'):
                         file = file[1:]
                     file_path = settings.RESUME_DIR + file
-                    fsock = GCPPrivateMediaStorage().open(file_path)
+                    if not settings.IS_GCP:
+                        fsock = FileWrapper(open(file_path, 'rb'))
+                    else:
+                        fsock = GCPPrivateMediaStorage().open(file_path)
                     filename = file.split('/')[-1]
                     response = HttpResponse(fsock, content_type=mimetypes.guess_type(filename)[0])
                     response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)

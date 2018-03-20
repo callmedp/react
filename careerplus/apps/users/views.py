@@ -3,6 +3,8 @@ import mimetypes
 import json
 import urllib.parse
 
+from wsgiref.util import FileWrapper
+
 from django.shortcuts import render
 from django.http import (
     HttpResponse,
@@ -222,7 +224,10 @@ class DownloadBoosterResume(View):
 
                     path = file_path
                     try:
-                        fsock = GCPPrivateMediaStorage().open(file_path)
+                        if not settings.IS_GCP:
+                            fsock = FileWrapper(open(path, 'rb'))
+                        else:
+                            fsock = GCPPrivateMediaStorage().open(file_path)
                     except IOError:
                         raise Exception("Resume not found.")
 
@@ -469,7 +474,11 @@ class DownloadWriterInvoiceView(View):
                 invoice = user.userprofile.user_invoice
             if invoice:
                 file_path = invoice.name
-                fsock = GCPInvoiceStorage().open(file_path)
+                if not settings.IS_GCP:
+                    file_path = os.path.join(settings.MEDIA_ROOT, invoice.name)
+                    fsock = FileWrapper(open(file_path, 'rb'))
+                else:
+                    fsock = GCPInvoiceStorage().open(file_path)
                 filename = invoice.name.split('/')[-1]
                 response = HttpResponse(
                     fsock,

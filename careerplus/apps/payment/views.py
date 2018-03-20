@@ -261,14 +261,16 @@ class ThankYouView(TemplateView):
                 file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random()*9999)) \
                     + '_' + timezone.now().strftime('%Y%m%d') + extention
                 full_path = '%s/' % str(order.pk)
-                # if not os.path.exists(settings.RESUME_DIR + full_path):
-                #     os.makedirs(settings.RESUME_DIR +  full_path)
-                # dest = open(
-                #     settings.RESUME_DIR + full_path + file_name, 'wb')
-                # for chunk in file.chunks():
-                #     dest.write(chunk)
-                # dest.close()
-                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
+                if not settings.IS_GCP:
+                    if not os.path.exists(settings.RESUME_DIR + full_path):
+                        os.makedirs(settings.RESUME_DIR +  full_path)
+                    dest = open(
+                        settings.RESUME_DIR + full_path + file_name, 'wb')
+                    for chunk in file.chunks():
+                        dest.write(chunk)
+                    dest.close()
+                else:
+                    GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
             except Exception as e:
                 logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
                 return HttpResponseRedirect(reverse('payment:thank-you'))
@@ -310,14 +312,16 @@ class ThankYouView(TemplateView):
                     file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random()*9999)) \
                         + '_' + timezone.now().strftime('%Y%m%d') + '.' + resume_extn
                     full_path = '%s/' % str(order.pk)
-                    # if not os.path.exists(settings.RESUME_DIR + full_path):
-                    #     os.makedirs(settings.RESUME_DIR + full_path)
-                    # dest = open(
-                    #     settings.RESUME_DIR + full_path + file_name, 'wb')
-                    # for chunk in file.chunks():
-                    #     dest.write(chunk)
-                    # dest.close()
-                    GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
+                    if not settings.IS_GCP:
+                        if not os.path.exists(settings.RESUME_DIR + full_path):
+                            os.makedirs(settings.RESUME_DIR + full_path)
+                        dest = open(
+                            settings.RESUME_DIR + full_path + file_name, 'wb')
+                        for chunk in file.chunks():
+                            dest.write(chunk)
+                        dest.close()
+                    else:
+                        GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                 except Exception as e:
                     logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
                     return HttpResponseRedirect(reverse('payment:thank-you'))

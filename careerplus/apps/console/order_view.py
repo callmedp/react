@@ -2321,7 +2321,11 @@ class ConsoleResumeDownloadView(View):
                 if file.startswith('/'):
                     file = file[1:]
                 file_path = settings.RESUME_DIR + file
-                fsock = GCPPrivateMediaStorage().open(file_path)
+                if not settings.IS_GCP:
+                    fsock = FileWrapper(open(file_path, 'rb'))
+                else:
+                    fsock = GCPPrivateMediaStorage().open(file_path)
+    
                 filename = file.split('/')[-1]
                 response = HttpResponse(fsock, content_type=mimetypes.guess_type(filename)[0])
                 response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
