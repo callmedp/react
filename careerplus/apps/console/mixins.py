@@ -438,6 +438,45 @@ class ActionUserMixin(object):
             message_dict['display_message'] = 'User is not active or draft or orderitem obj not found'
         return message_dict
 
+    def detail_page_upload_draft_orderitem(self, oi=None, data={}, user=None):
+        oi_draft = data.get('oi_draft', '')
+        message_dict = {'display_message': "", }
+        if oi and oi_draft and user and user.is_active:
+            try:
+                order = oi.order
+                file = oi_draft
+                filename = os.path.splitext(file.name)
+                extention = filename[len(filename) - 1] if len(
+                    filename) > 1 else ''
+                file_name = 'draftupload_' + str(order.pk) + '_' + str(oi.pk)\
+                    + '_' + str(int(random() * 9999)) \
+                    + '_' + timezone.now().strftime('%Y%m%d') + extention
+                full_path = '%s/' % str(order.pk)
+                if not settings.IS_GCP:
+                    if not os.path.exists(settings.RESUME_DIR + full_path):
+                        os.makedirs(settings.RESUME_DIR + full_path)
+                    dest = open(
+                        settings.RESUME_DIR + full_path + file_name, 'wb')
+                    for chunk in file.chunks():
+                        dest.write(chunk)
+                    dest.close()
+                else:
+                    GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
+                oi_draft = full_path + file_name
+            except Exception as e:
+                logging.getLogger('error_log').error(
+                    "%s-%s" % ('resume_upload', str(e)))
+                raise
+            if oi_draft:
+                oi.orderitemoperation_set.filter(
+                    oi_status=4).update(
+                    oi_draft=oi_draft,
+                    added_by=user)
+                message_dict['display_message'] = 'Draft uploaded Successfully.'
+            else:
+                message_dict['display_message'] = 'Draft not uploaded Successfully.'
+        return message_dict
+
     def product_flow_wise_mail(self, orderitem_obj=None, to_emails=[], mail_type=None, data={}):
         email_sets = list(
             orderitem_obj.emailorderitemoperation_set.all().values_list(

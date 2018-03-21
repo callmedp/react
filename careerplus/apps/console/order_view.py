@@ -667,6 +667,7 @@ class OrderDetailVeiw(DetailView):
             "max_limit_draft": max_limit_draft,
             "messages": alert,
             "message_form": MessageForm(),
+            "draft_form": FileUploadForm(),
         })
         return context
 
