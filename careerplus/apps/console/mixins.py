@@ -452,23 +452,25 @@ class ActionUserMixin(object):
                     + '_' + str(int(random() * 9999)) \
                     + '_' + timezone.now().strftime('%Y%m%d') + extention
                 full_path = '%s/' % str(order.pk)
-                # if not os.path.exists(settings.RESUME_DIR + full_path):
-                #     os.makedirs(settings.RESUME_DIR + full_path)
-                # dest = open(
-                #     settings.RESUME_DIR + full_path + file_name, 'wb')
-                # for chunk in file.chunks():
-                #     dest.write(chunk)
-                # dest.close()
-                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
+                if not settings.IS_GCP:
+                    if not os.path.exists(settings.RESUME_DIR + full_path):
+                        os.makedirs(settings.RESUME_DIR + full_path)
+                    dest = open(
+                        settings.RESUME_DIR + full_path + file_name, 'wb')
+                    for chunk in file.chunks():
+                        dest.write(chunk)
+                    dest.close()
+                else:
+                    GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                 oi_draft = full_path + file_name
             except Exception as e:
                 logging.getLogger('error_log').error(
                     "%s-%s" % ('resume_upload', str(e)))
                 raise
-            if oi.oi_draft:
+            if oi_draft:
                 oi.orderitemoperation_set.filter(
                     oi_status=4).update(
-                    oi_draft=oi.oi_draft,
+                    oi_draft=oi_draft,
                     added_by=user)
                 message_dict['display_message'] = 'Draft uploaded Successfully.'
             else:
