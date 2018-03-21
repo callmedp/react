@@ -57,7 +57,6 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                                         "%(msg)s : %(err)s" % {
                                             'msg': 'upload certificate task',
                                             'err': str(e)})
-                            upload.close()
                         else:
                             with GCPPrivateMediaStorage().open(upload_path) as upload:
                                 uploader = csv.DictReader(
@@ -78,7 +77,6 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                                         "%(msg)s : %(err)s" % {
                                             'msg': 'upload certificate task',
                                             'err': str(e)})
-                            upload.close()
                         gen_dir = os.path.dirname(upload_path)
                         filename_tuple = upload_path.split('.')
                         extension = filename_tuple[len(filename_tuple) - 1]
