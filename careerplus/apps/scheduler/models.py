@@ -51,7 +51,7 @@ class Scheduler(AbstractAutoDate):
 
     def __str__(self):
         type_dict = dict(TASK_TYPE)
-        return type_dict[self.task_type] + "-" + str(self.pk)
+        return str(type_dict[self.task_type]) + " - " + str(self.pk)
 
     @property
     def get_type(self):
