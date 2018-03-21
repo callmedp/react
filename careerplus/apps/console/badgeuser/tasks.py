@@ -2,6 +2,7 @@ import logging
 import os
 import csv
 import requests
+import codecs
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
@@ -60,7 +61,8 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                         else:
                             with GCPPrivateMediaStorage().open(upload_path) as upload:
                                 uploader = csv.DictReader(
-                                    upload, delimiter=',', quotechar='"')
+                                    codecs.iterdecode(upload, 'utf-8'),
+                                    delimiter=',', quotechar='"')
                                 try:
                                     for i, line in enumerate(uploader):
                                         line.update({'provider': vendor})
@@ -123,7 +125,8 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                                 generated_path, 'wb')
                             with GCPPrivateMediaStorage().open(upload_path) as upload:
                                 uploader = csv.DictReader(
-                                    upload, delimiter=',', quotechar='"')
+                                    codecs.iterdecode(upload, 'utf-8'),
+                                    delimiter=',', quotechar='"')
                                 fieldnames = uploader.fieldnames
                                 fieldnames.append('error_report')
                                 csvwriter = csv.DictWriter(
@@ -210,7 +213,8 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                         else:
                             with GCPPrivateMediaStorage().open(upload_path) as upload:
                                 uploader = csv.DictReader(
-                                    upload, delimiter=',', quotechar='"')
+                                    codecs.iterdecode(upload, 'utf-8'),
+                                    delimiter=',', quotechar='"')
                                 try:
                                     for i, line in enumerate(uploader):
                                         pass
@@ -302,7 +306,8 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                 fieldnames.append('status')
                                 fieldnames.append('reason_for_failure')
                                 csvwriter = csv.DictWriter(
-                                    generated_file, delimiter=',', fieldnames=fieldnames)
+                                    codecs.iterdecode(generated_file, 'utf-8'),
+                                    delimiter=',', fieldnames=fieldnames)
                                 csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
                                 count = 0
                                 for row in uploader:
