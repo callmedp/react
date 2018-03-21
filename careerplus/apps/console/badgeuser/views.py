@@ -151,7 +151,7 @@ class DownloadBadgeUserView(View):
                 return HttpResponseForbidden()
             if task:
                 if download_type == 'u':
-                    file_path = task.file_uploaded.path
+                    file_path = task.file_uploaded.name
                     filename_tuple = file_path.split('.')
                     extension = filename_tuple[len(filename_tuple) - 1]
                     file_name = str(task.pk) + '_UPLOAD' + '.' + extension
@@ -166,17 +166,31 @@ class DownloadBadgeUserView(View):
                     path = settings.MEDIA_ROOT + '/' + file_path
                 try:
                     if not settings.IS_GCP:
+                        if os.path.exists(file_path):
+                            path = file_path
+                        else:
+                            path = settings.MEDIA_ROOT + '/' + file_path
                         fsock = FileWrapper(open(path, 'rb'))
                     else:
                         fsock = GCPPrivateMediaStorage().open(file_path)
                 except IOError:
-                    messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
-                    response = HttpResponseRedirect(reverse('console:tasks:tasklist'))
+                    logging.getLogger("error_log").error(
+                        "Sorry, the document is currently unavailable.")
+                    messages.add_message(
+                        request, messages.ERROR,
+                        "Sorry, the document is currently unavailable.")
+                    response = HttpResponseRedirect(
+                        reverse('console:badge:upload-tasklist'))
                     return response
-                response = HttpResponse(fsock, content_type=mimetypes.guess_type(path)[0])
+                response = HttpResponse(
+                    fsock, content_type=mimetypes.guess_type(path)[0])
                 response['Content-Disposition'] = 'attachment; filename="%s"' % (file_name)
                 return response
         except:
-            messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
+            logging.getLogger("error_log").error(
+                "Sorry, the document is currently unavailable.")
+            messages.add_message(
+                request, messages.ERROR,
+                "Sorry, the document is currently unavailable.")
             response = HttpResponseRedirect(reverse('console:badge:upload-tasklist'))
             return response
