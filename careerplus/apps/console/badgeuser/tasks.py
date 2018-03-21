@@ -133,6 +133,11 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                                     dict((fn, fn) for fn in fieldnames))
                                 count = 0
                                 for row in uploader:
+                                    try:
+                                        csvwriter.writerow(row)
+                                    except Exception as e:
+                                        row['error_report'] = str(e)
+                                        csvwriter.writerow(row)
                                     count = count + 1
                                     if count % 20 == 0:
                                         try:
@@ -202,7 +207,6 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                     total_rows = 2000
                                     logging.getLogger('error_log').error(
                                         "%(err)s" % {'err': str(e)})
-                            upload.close()
                         else:
                             with GCPPrivateMediaStorage().open(upload_path) as upload:
                                 uploader = csv.DictReader(
@@ -215,7 +219,6 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                     total_rows = 2000
                                     logging.getLogger('error_log').error(
                                         "%(err)s" % {'err': str(e)})
-                            upload.close()
                         gen_dir = os.path.dirname(upload_path)
                         filename_tuple = upload_path.split('.')
                         extension = filename_tuple[len(filename_tuple) - 1]
