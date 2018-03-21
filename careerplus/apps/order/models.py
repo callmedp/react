@@ -475,6 +475,8 @@ class OrderItem(AbstractAutoDate):
 
     def get_wc_sub_cat(self):
         cat_dict = dict(WC_SUB_CATEGORY)
+        if self.is_combo and self.parent:
+            return cat_dict.get(self.parent.wc_sub_cat, '')
         return cat_dict.get(self.wc_sub_cat, '')
 
     def get_wc_status(self):

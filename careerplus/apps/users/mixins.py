@@ -513,7 +513,8 @@ class WriterInvoiceMixin(object):
                             added_delivery_object.append(p_oi.pk)
                             total_sum += amount
                     process = True
-                elif not process:
+                
+                if not process:
                     pk = oi.pk
                     product_name = oi.product.get_name
                     closed_on = oi.closed_on.date()
