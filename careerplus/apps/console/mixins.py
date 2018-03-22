@@ -271,14 +271,16 @@ class ActionUserMixin(object):
                 file_name = 'resumeupload_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(int(random()*9999)) \
                     + '_' + timezone.now().strftime('%Y%m%d') + extention
                 full_path = '%s/' % str(order.pk)
-                # if not os.path.exists(settings.RESUME_DIR + full_path):
-                #     os.makedirs(settings.RESUME_DIR + full_path)
-                # dest = open(
-                #     settings.RESUME_DIR + full_path + file_name, 'wb')
-                # for chunk in oi_resume.chunks():
-                #     dest.write(chunk)
-                # dest.close()
-                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, oi_resume)
+                if not settings.IS_GCP:
+                    if not os.path.exists(settings.RESUME_DIR + full_path):
+                        os.makedirs(settings.RESUME_DIR + full_path)
+                    dest = open(
+                        settings.RESUME_DIR + full_path + file_name, 'wb')
+                    for chunk in oi_resume.chunks():
+                        dest.write(chunk)
+                    dest.close()
+                else:
+                    GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, oi_resume)
 
                 oi.oi_resume = full_path + file_name
                 last_oi_status = oi.oi_status
@@ -313,14 +315,16 @@ class ActionUserMixin(object):
                 file_name = 'draftupload_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(int(random()*9999)) \
                     + '_' + timezone.now().strftime('%Y%m%d') + extention
                 full_path = '%s/' % str(order.pk)
-                # if not os.path.exists(settings.RESUME_DIR + full_path):
-                #     os.makedirs(settings.RESUME_DIR +  full_path)
-                # dest = open(
-                #     settings.RESUME_DIR + full_path + file_name, 'wb')
-                # for chunk in file.chunks():
-                #     dest.write(chunk)
-                # dest.close()
-                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
+                if not settings.IS_GCP:
+                    if not os.path.exists(settings.RESUME_DIR + full_path):
+                        os.makedirs(settings.RESUME_DIR +  full_path)
+                    dest = open(
+                        settings.RESUME_DIR + full_path + file_name, 'wb')
+                    for chunk in file.chunks():
+                        dest.write(chunk)
+                    dest.close()
+                else:
+                    GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                 oi_draft = full_path + file_name
             except Exception as e:
                 logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 

@@ -4,8 +4,9 @@ from django.conf import settings
 from celery import Celery
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'careerplus.config.settings_staging')
-from django.conf import settings
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'careerplus.config.settings_live')
+
 app = Celery('careerplus', backend=None, broker=settings.BROKER_URL)
 
 # Using a string here means the worker don't have to serialize
