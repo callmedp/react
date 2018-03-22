@@ -20,6 +20,7 @@ from .tasks import (
 from console.decorators import (
     Decorate, stop_browser_cache,
     check_group)
+from partner.models import Vendor
 from . import forms
 
 
@@ -60,6 +61,8 @@ class UploadCertificate(FormView):
                 task_type = 3
             try:
                 import time
+                vnd_obj = Vendor.objects.get(pk=vendor)
+                vendor = vnd_obj.name
                 timestr = time.strftime("%Y_%m_%d")
                 f_obj = file
                 file_name_tuple = os.path.splitext(f_obj.name)
