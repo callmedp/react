@@ -301,7 +301,8 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                             with GCPPrivateMediaStorage().open(
                                     upload_path) as upload:
                                 uploader = csv.DictReader(
-                                    upload, delimiter=',', quotechar='"')
+                                    codecs.iterdecode(upload, 'utf-8'),
+                                    delimiter=',', quotechar='"')
                                 fieldnames = uploader.fieldnames
                                 fieldnames.append('status')
                                 fieldnames.append('reason_for_failure')
