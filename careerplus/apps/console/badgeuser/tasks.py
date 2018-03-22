@@ -317,8 +317,9 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                         mobile = row.get('candidate_mobile', '')
                                         certificate_name = row.get('certificate_name')
                                         certi_yr_passing = row.get('year')
+                                        headers = ShineToken().get_api_headers()
                                         shineid = ShineCandidateDetail().get_shine_id(
-                                            email=None, headers=None)
+                                            email=email, headers=headers)
                                         if not certificate_name:
                                             row['certificate_name'] = "certificate not found"
                                         if not shineid:
@@ -337,7 +338,6 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                                 'certification_year': certi_yr_passing
                                             }
                                             certification_url = settings.SHINE_API_URL + "/candidate/" +shine_id + "/certifications/?format=json"
-                                            headers = ShineToken().get_api_headers()
                                             certification_response = requests.post(
                                                 certification_url, data=post_data,
                                                 headers=headers)
