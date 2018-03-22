@@ -70,6 +70,7 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
                 "lead_source": 2,
             })
             if cart_obj:
+                lead_type = 0
                 total_amount = CartMixin().getPayableAmount(cart_obj)
                 pay_amount = total_amount.get('total_payable_amount')
                 extra_info.update({
@@ -116,9 +117,19 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
                         "addon": addon_list,
                         "variation": variation_list
                     })
+                if m_prods.count() == 1:
+                    m_prod = m_prods[0]
+                    if m_prod.product.is_course:
+                        lead_type = 2
+                    else:
+                        lead_type = 1
+                elif m_prods.count() > 1:
+                    lead_type = 2
+
             data_dict.update({
                 "extra_info": json.dumps(extra_info),
-                "campaign_slug": "cartleads"
+                "campaign_slug": "cartleads",
+                'lead_type': lead_type,
             })
             # create lead on crm
             lead_create_on_crm(cart_obj, data_dict=data_dict)
