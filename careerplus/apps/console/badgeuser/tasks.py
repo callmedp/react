@@ -307,8 +307,7 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                 fieldnames.append('status')
                                 fieldnames.append('reason_for_failure')
                                 csvwriter = csv.DictWriter(
-                                    codecs.iterdecode(generated_file, 'utf-8'),
-                                    delimiter=',', fieldnames=fieldnames)
+                                    generated_file, delimiter=',', fieldnames=fieldnames)
                                 csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
                                 count = 0
                                 for row in uploader:
