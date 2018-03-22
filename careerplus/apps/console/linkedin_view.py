@@ -169,7 +169,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
                 quiz_resp = QuizResponse()
                 quiz_resp.oi = query
                 quiz_resp.save()
-                logging.getLogger('error_log').error("%s" % (str(e)))
+                logging.getLogger('error_log').error("error in accessing quiz response %s" % (str(e)))
         user = self.request.user
         if user.is_superuser:
             pass

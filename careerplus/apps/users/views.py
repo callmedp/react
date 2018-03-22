@@ -366,6 +366,7 @@ class SocialLoginView(View):
                 elif gplus_user.get('response') == 400:
                     return HttpResponseRedirect('/login/')
         except Exception as e:
+            logging.getLogger('error_log').error('unable to do social login%s'%str(e))
             return HttpResponseRedirect('/login/')
 
 
@@ -383,6 +384,8 @@ class LinkedinLoginView(View):
             url = settings.OAUTH_URL + urllib.parse.urlencode(params)
             return HttpResponseRedirect(url)
         except Exception as e:
+            logging.getLogger('error_log').error('unable to do linked login%s'%str(e))
+
             raise e
 
 
@@ -419,6 +422,8 @@ class LinkedinCallbackView(View):
                 return HttpResponseRedirect('/login/')
 
         except Exception as e:
+            logging.getLogger('error_log').error('unable to do linked in callback view %s'%str(e))
+
             return HttpResponseRedirect('/login/')
 
 

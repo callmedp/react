@@ -135,7 +135,9 @@ class BlogDetailView(DetailView, BlogMixin):
             queryset = queryset.filter(slug=slug, status=1, visibility=1)
         try:
             obj = queryset.get()
-        except:
+
+        except :
+
             raise Http404
         return obj
 

@@ -641,7 +641,8 @@ class WriterInvoiceMixin(object):
         if not user:
             try:
                 user = self.request.user
-            except:
+            except user.DoesNotExist:
+                logging.getLogger('error_log').error('User  not found ')
                 pass
         if not invoice_date:
             today_date = datetime.datetime.now().date()
@@ -662,7 +663,8 @@ class WriterInvoiceMixin(object):
             if not user:
                 try:
                     user = self.request.user
-                except:
+                except user.DoesNotExist:
+                    logging.getLogger('error_log').error('User  not found ')
                     pass
 
             if not invoice_date:

@@ -47,7 +47,7 @@ def get_eligible_orders():
                 email = order.candidate.email
                 mobile = order.order_mobile
             except Exception as e:
-                logging.getLogger('error_log').error(str(e))
+                logging.getLogger('error_log').error('unable to fetch order object/object-deails %s'%str(e))
                 # user_info = wallet_tran_obj.get_user_info()
                 # email = user_info.get('email', '')
                 # mobile = user_info.get('mobile', '')
@@ -89,7 +89,7 @@ def get_eligible_orders():
                 logging.getLogger('error_log').error("%s-%s" % (
                     str(wallet_tran_obj.id), "email and mobile not fetched"))
     except Exception as e:
-        logging.getLogger('error_log').error(str(e))
+        logging.getLogger('error_log').error('unable to get eligible order details %s'%str(e))
 
 
 def get_eligible_orders_3lastdays():
@@ -146,7 +146,7 @@ def get_eligible_orders_3lastdays():
                 logging.getLogger('error_log').error("%s-%s" % (
                     str(wallet_obj.id), "email and mobile not fetched"))
     except Exception as e:
-        logging.getLogger('error_log').error(str(e))
+        logging.getLogger('error_log').error('unable to get eligible orders for last 3 days%s'%str(e))
 
 
 def get_eligible_orders_lastdays():
@@ -203,4 +203,4 @@ def get_eligible_orders_lastdays():
                 logging.getLogger('error_log').error("%s-%s" % (
                     str(wallet_obj.id), "email and mobile not fetched"))
     except Exception as e:
-        logging.getLogger('error_log').error(str(e))
+        logging.getLogger('error_log').error('unable to get eligible order details for last days%s'%str(e))
