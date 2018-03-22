@@ -89,7 +89,7 @@ class GenerateAutoLoginTask(FormView):
                 else:
                     exp_days = None
 
-                gen_auto_login_token_task.delay(
+                gen_auto_login_token_task(
                     task=Task.pk, user=request.user.pk,
                     next_url=next_url, exp_days=exp_days)
                 messages.add_message(
@@ -166,6 +166,10 @@ class DownloadTaskView(View):
                             path = settings.MEDIA_ROOT + '/' + file_path
                         fsock = FileWrapper(open(path, 'rb'))
                     else:
+                        # if download_type == 'u':
+                        #     path = task.file_uploaded.name
+                        # else:
+                        #     path = task.file_generated.name
                         fsock = GCPPrivateMediaStorage().open(file_path)
                 except IOError:
                     messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")

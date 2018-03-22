@@ -1,6 +1,7 @@
 import logging
 import os
 import csv
+import codecs
 
 from django.contrib.auth import get_user_model
 from django.conf import settings
@@ -54,7 +55,7 @@ def gen_auto_login_token_task(task=None, user=None, next_url=None, exp_days=None
                         else:
                             with GCPPrivateMediaStorage().open(upload_path) as upload:
                                 uploader = csv.DictReader(
-                                    upload, delimiter=',', quotechar='"')
+                                    codecs.iterdecode(upload, 'utf-8'), delimiter=',', quotechar='"')
 
                                 try:
                                     for i, line in enumerate(uploader):
@@ -146,7 +147,7 @@ def gen_auto_login_token_task(task=None, user=None, next_url=None, exp_days=None
                         else:
                             with GCPPrivateMediaStorage().open(upload_path) as upload:
                                 uploader = csv.DictReader(
-                                    upload, delimiter=',', quotechar='"')
+                                    codecs.iterdecode(upload, 'utf-8'), delimiter=',', quotechar='"')
                                 fieldnames = uploader.fieldnames
                                 fieldnames.append('token')
                                 fieldnames.append('auto_login_url')
