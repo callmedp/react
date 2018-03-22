@@ -11,6 +11,9 @@ function clickSubmitDraft(oi_id, ){
             else if (flow_type && flow_type == 6){
                 $('#myModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to upload document?</div>');
             }
+            else if (flow_type && flow_type == 'detailpage'){
+                $('#myModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to upload document?</div>');
+            }
             else{
                 $('#myModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to upload draft and send for approval?</div>');
             }
@@ -51,6 +54,36 @@ function uploadDraft(oi_id, ){
     }
 };
 
+function detailPageUploadDraft(oi_id, ){
+    if (oi_id){
+        $('#draftmodal' + oi_id).modal("hide");
+        $('#draft-upload-form' + oi_id).parsley().validate();
+        if ($('#draft-upload-form' + oi_id).parsley().isValid()){
+            var formData = new FormData($('#draft-upload-form' + oi_id)[0]);
+            $.ajax({
+                url: '/ajax/orderitem/detaii-page-upload-draft/',
+                type: "POST",
+                cache: false,
+                processData: false,
+                contentType: false,
+                async: false,
+                data : formData,
+                enctype: "multipart/form-data",
+                success: function(json) {
+                    //$('#draft-upload-form' + oi_id)[0].reset();
+                    var message = json.display_message;
+                    alert(message);
+                    window.location.reload();
+
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert("Something went wrong. Try again later");
+                     window.location.reload();
+                }
+            });
+        }
+    }
+};
 
 function submitMessage(oi_id, ){
     if (oi_id){

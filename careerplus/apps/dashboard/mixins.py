@@ -33,7 +33,7 @@ class RoundOneMixin(RoundOneAPI):
                         "roundone_profile": roundone_profile})
                     return True, response_json.get("msg")
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to submit details%s'%str(e))
 
         return False, 'Profile Not Updated'
 
@@ -93,7 +93,7 @@ class RoundOneMixin(RoundOneAPI):
                             "roundone_profile": roundone_profile})
                         return response_json.get("status"), response_json.get("msg")
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to edit education details %s'%str(e))
 
         return False, 'Education Not Updated'
 
@@ -160,7 +160,7 @@ class RoundOneMixin(RoundOneAPI):
                             "roundone_profile": roundone_profile})
                         return True, response_json.get("msg")
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to update employment information %s'%str(e))
 
         return False, 'Education Not Updated'
 
@@ -209,7 +209,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                         return True, ""
 
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to update personal details %s'%str(e))
         if personal_response and personal_response.json():
             personal_response_json = personal_response.json()
             error_msg = personal_response_json.get("non_field_errors", error_msg)
@@ -306,7 +306,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                 if False not in returnlist:
                     return True, ""
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to update employment information%s'%str(e))
 
         if jobs_response and jobs_response.json():
             jobs_response_json = jobs_response.json()
@@ -374,7 +374,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                     return True, ""
 
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to update candidate education %s'%str(e))
 
         if edu_rsp and edu_rsp.json():
             edu_rsp_json = edu_rsp.json()
@@ -430,7 +430,7 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                 if False not in returnlist:
                     return True, ""
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to update candidate skills%s'%str(e))
 
         if skills_response and skills_response.json():
             skills_response_json = skills_response.json()
@@ -468,4 +468,4 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                         json_rsp = resume_response.json()
                         return False, json_rsp
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to upload resume%s'%str(e))

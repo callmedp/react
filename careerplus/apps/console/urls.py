@@ -342,6 +342,10 @@ urlpatterns += [
         linkedin_view.LinkedinApprovalVeiw.as_view(),
         name='linkedin-approval'),
 
+    url(r'^linkedin/linkedin-approved-queue/$',
+        linkedin_view.ApprovedLinkedinQueueVeiw.as_view(),
+        name='linkedin-approved-queue'),
+
     url(r'^queue/internationalprofileupdate/$',
         linkedin_view.InterNationalUpdateQueueView.as_view(),
         name='queue-internationalprofileupdate'),

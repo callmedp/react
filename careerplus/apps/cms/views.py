@@ -43,7 +43,7 @@ class CMSPageView(DetailView, LoadMoreMixin):
         try:
             obj = queryset.get()
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to get cms page view%s'%str(e))
             raise Http404
         return obj
 

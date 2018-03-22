@@ -106,7 +106,7 @@ class LeadManagement(View):
             if lead.lead_source in valid_source_list:
                 create_lead_crm.delay(pk=lead.pk)
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('lead creation is failed%s'%str(e))
 
         response_dict = json.dumps({'status': created, })
         response = HttpResponse(response_dict)
@@ -201,7 +201,7 @@ class LeadManagementWithCaptcha(View, ReCaptchaMixin):
             response = HttpResponse(response_dict)
             return response
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('lead creation with captcha is failed%s'%str(e))
 
         response_dict = json.dumps({'status': False, 'recaptcha': True})
         response = HttpResponse(response_dict)

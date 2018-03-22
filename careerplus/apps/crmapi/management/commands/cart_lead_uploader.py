@@ -17,8 +17,8 @@ class Command(BaseCommand):
 
         try:
             upload_cart_leads()
-        except Exception:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error("unable to upload cart leads%s" % str(e))
 
 
 def upload_cart_leads():

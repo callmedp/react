@@ -29,6 +29,7 @@ class NewOrdersVendorUpload(APIView):
             orderitem_id = int(orderitem_id)
             order_item = OrderItem.objects.get(id=orderitem_id, partner__id=vendor_id)
         except OrderItem.DoesNotExist:
+
             return Response(status=status.HTTP_404_NOT_FOUND)
         try:
             order_item_operation_obj = OrderItemOperations.objects.get(order_item__id=orderitem_id)

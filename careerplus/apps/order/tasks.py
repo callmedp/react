@@ -19,7 +19,7 @@ def invoice_generation_order(order_pk=None):
         order = Order.objects.get(pk=order_pk)
         InvoiceGenerate().save_order_invoice_pdf(order=order)
     except Exception as e:
-        logging.getLogger('error_log').error("%s" % (str(e)))
+        logging.getLogger('error_log').error("invoice generation failed%s" % (str(e)))
 
 
 @task(name="pending_item_email")
@@ -28,7 +28,7 @@ def pending_item_email(pk=None):
     try:
         order = Order.objects.get(pk=pk)
     except Exception as e:
-        logging.getLogger('error_log').error("%s - %s" % (str(order), str(e)))
+        logging.getLogger('error_log').error(" unable to get order object %s - %s" % (str(order), str(e)))
 
     if order:
         orderitems = order.orderitems.filter(no_process=False).select_related(
@@ -534,7 +534,7 @@ def payment_realisation_mailer(pk=None):
     try:
         order = Order.objects.get(pk=pk)
     except Exception as e:
-        logging.getLogger('error_log').error(str(e))
+        logging.getLogger('error_log').error('unable to get order object %s'%str(e))
     try:
         invoice_data = InvoiceGenerate().get_invoice_data(order=order)
         pymt_objs = PaymentTxn.objects.filter(order=order)
@@ -569,7 +569,7 @@ def service_initiation(pk=None):
     try:
         order = Order.objects.get(pk=pk)
     except Exception as e:
-        logging.getLogger('error_log').error((str(e)))
+        logging.getLogger('error_log').error('unable to get order object%s'%str(e))
     try:
         if order:
             orderitems = order.orderitems.filter(
@@ -625,4 +625,4 @@ def service_initiation(pk=None):
                         logging.getLogger('error_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
     except Exception as e:
-        logging.getLogger('error_log').error(str(e))
+        logging.getLogger('error_log').error('service initiation failed%s'%str(e))
