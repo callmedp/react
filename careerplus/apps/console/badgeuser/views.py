@@ -156,14 +156,10 @@ class DownloadBadgeUserView(View):
                     extension = filename_tuple[len(filename_tuple) - 1]
                     file_name = str(task.pk) + '_UPLOAD' + '.' + extension
                 elif download_type == 'd':
-                    file_path = task.file_generated.path
+                    file_path = task.file_generated.name
                     filename_tuple = file_path.split('.')
                     extension = filename_tuple[len(filename_tuple) - 1]
                     file_name = str(task.pk) + '_GENERATED' + '.' + extension
-                if os.path.exists(file_path):
-                    path = file_path
-                else:
-                    path = settings.MEDIA_ROOT + '/' + file_path
                 try:
                     if not settings.IS_GCP:
                         if os.path.exists(file_path):
