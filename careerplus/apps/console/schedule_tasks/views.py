@@ -152,12 +152,19 @@ class DownloadTaskView(View):
                 return HttpResponseForbidden()
             if task:
                 if download_type == 'u':
-                    file_path = task.file_uploaded.path
+                    if not settings.IS_GCP:
+                        file_path = task.file_uploaded.path
+                    else:
+                        file_path = task.file_uploaded.name
                     filename_tuple = file_path.split('.')
                     extension = filename_tuple[len(filename_tuple) - 1]
                     file_name = str(task.pk) + '_UPLOAD' + '.' + extension
                 else:
-                    file_path = task.file_generated.path
+                    if not settings.IS_GCP:
+                        file_path = task.file_generated.path
+                    else:
+                        file_path = task.file_generated.name
+                    # file_path = task.file_generated.path
                     filename_tuple = file_path.split('.')
                     extension = filename_tuple[len(filename_tuple) - 1]
                     file_name = str(task.pk) + '_GENERATED' + '.' + extension
@@ -169,10 +176,6 @@ class DownloadTaskView(View):
                             path = settings.MEDIA_ROOT + '/' + file_path
                         fsock = FileWrapper(open(path, 'rb'))
                     else:
-                        if download_type == 'u':
-                            file_path = task.file_uploaded.name
-                        else:
-                            file_path = task.file_generated.name
                         fsock = GCPPrivateMediaStorage().open(file_path)
                 except IOError:
                     messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
