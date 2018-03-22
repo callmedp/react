@@ -169,6 +169,7 @@ class DownloadBadgeUserView(View):
                         fsock = FileWrapper(open(path, 'rb'))
                     else:
                         fsock = GCPPrivateMediaStorage().open(file_path)
+                        path = file_path
                 except IOError:
                     logging.getLogger("error_log").error(
                         "Sorry, the document is currently unavailable.")
