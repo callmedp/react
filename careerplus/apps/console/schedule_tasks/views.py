@@ -170,10 +170,10 @@ class DownloadTaskView(View):
                         fsock = FileWrapper(open(path, 'rb'))
                     else:
                         if download_type == 'u':
-                            path = task.file_uploaded.name
+                            file_path = task.file_uploaded.name
                         else:
-                            path = task.file_generated.name
-                        fsock = GCPPrivateMediaStorage().open(path)
+                            file_path = task.file_generated.name
+                        fsock = GCPPrivateMediaStorage().open(file_path)
                 except IOError:
                     messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
                     response = HttpResponseRedirect(reverse('console:tasks:tasklist'))
