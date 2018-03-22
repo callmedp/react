@@ -140,7 +140,7 @@ class RemoveFromCartView(View, CartMixin):
 
             except Exception as e:
                 data['error_message'] = str(e)
-                logging.getLogger('error_log').error("%s " % str(e))
+                logging.getLogger('error_log').error("unable to remove item from cart%s " % str(e))
 
             return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -156,7 +156,8 @@ class PaymentLoginView(TemplateView):
         cart_pk = request.session.get('cart_pk')
         try:
             self.cart_obj = Cart.objects.get(pk=cart_pk)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(" Msg= unable to assign cart object to self %s " % str(e))
             return HttpResponseRedirect(reverse('homepage'))
         if candidate_id:
             return HttpResponseRedirect(reverse('cart:payment-shipping'))
@@ -175,6 +176,7 @@ class PaymentLoginView(TemplateView):
                 validate_email(email)
                 valid_email = True
             except Exception as e:
+                logging.getLogger('error_log').error(" Msg= email validation failed  %s " % str(e))
                 valid_email = False
 
             if valid_email:
@@ -237,7 +239,7 @@ class PaymentLoginView(TemplateView):
                 return TemplateResponse(request, self.template_name, context)
 
         except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
+            logging.getLogger('error_log').error("payment login execution failed  %s " % str(e))
             return HttpResponseRedirect(reverse('homepage'))
 
     def get_context_data(self, **kwargs):
@@ -273,7 +275,7 @@ class PaymentShippingView(UpdateView, CartMixin):
         try:
             cart_obj = Cart.objects.get(pk=cart_pk)
         except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
+            logging.getLogger('error_log').error("unable to fetch cart object%s " % str(e))
             return HttpResponseRedirect(reverse('homepage'))
 
         if cart_obj and not (cart_obj.email or self.request.session.get('candidate_id')):

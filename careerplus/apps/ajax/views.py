@@ -56,7 +56,7 @@ class ArticleCommentView(View):
                     blog.no_comment += 1
                     blog.save()
             except Exception as e:
-                logging.getLogger('error_log').error("%s " % str(e))
+                logging.getLogger('error_log').error("Unable to comment on article %s " % str(e))
             data = {"status": status}
             return HttpResponse(json.dumps(data), content_type="application/json")
         else:
@@ -73,7 +73,7 @@ class ArticleShareView(View):
                 obj.update_score()
                 obj.save()
             except Exception as e:
-                logging.getLogger('error_log').error("%s " % str(e))
+                logging.getLogger('error_log').error("Unable to share the article: %s " % str(e))
             data = {"status": "success"}
             return HttpResponse(json.dumps(data), content_type="application/json")
         else:
@@ -94,7 +94,7 @@ class AjaxCommentLoadMoreView(View, LoadMoreMixin):
                     comment_list=comments, page_obj=page_obj)
                 return HttpResponse(json.dumps({'comment_list': comment_list}))
             except Exception as e:
-                logging.getLogger('error_log').error("Error in loading more comments %s " % str(e))
+                logging.getLogger('error_log').error("Unable to load more comments: %s " % str(e))
         return HttpResponseForbidden()
 
 
@@ -114,7 +114,7 @@ class CmsShareView(View):
                 pg_counter.save()
 
             except Exception as e:
-                logging.getLogger('error_log').error("%s " % str(e))
+                logging.getLogger('error_log').error("Unable to do cmsshare %s " % str(e))
             data = ["Success"]
             return HttpResponse(json.dumps(list(data)), content_type="application/json")
 
@@ -146,7 +146,7 @@ class AjaxProductLoadMoreView(TemplateView):
                 'slug': slug,
             })
         except Exception as e:
-            logging.getLogger('error_log').error("%s" % str(e))
+            logging.getLogger('error_log').error("Unable to load more products: %s" % str(e))
         return context
 
 
@@ -180,7 +180,7 @@ class AjaxReviewLoadMoreView(TemplateView):
                 'page_reviews': page_reviews,
                 'page': page, 'slug': slug})
         except Exception as e:
-            logging.getLogger('error_log').error("%s" % str(e))
+            logging.getLogger('error_log').error("Unable to load product reviews: %s " % str(e))
         return context
 
 
@@ -202,32 +202,33 @@ class AjaxStateView(View):
             states = country_obj.state_set.all().values_list('name', flat=True)
             data['states'] = list(states)
         except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
+            logging.getLogger('error_log').error("Unable to get location details: %s " % str(e))
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 class AjaxOrderItemCommentView(View):
+
     def post(self, request, *args, **kwargs):
         if request.is_ajax() and request.user.is_active:
-            try:
-                data = {"status": 0}
-                if request.is_ajax():
-                    oi_pk = request.POST.get('pk', None)
-                    message = request.POST.get('message', '').strip()
-                    is_internal = request.POST.get('is_internal', False)
-                    if is_internal:
-                        is_internal = True
-                    else:
-                        is_internal = False
-                    if oi_pk and message:
+            data = {"status": 0}
+            if request.is_ajax():
+                oi_pk = request.POST.get('pk', None)
+                message = request.POST.get('message', '').strip()
+                is_internal = request.POST.get('is_internal', False)
+                if is_internal:
+                    is_internal = True
+                else:
+                    is_internal = False
+                if oi_pk and message:
+                    try:
                         oi_obj = OrderItem.objects.get(pk=oi_pk)
                         oi_obj.message_set.create(
                             message=message,
                             added_by=request.user,
                             is_internal=is_internal)
                         data['status'] = 1
-            except Exception as e:
-                logging.getLogger('error_log').error("%s " % str(e))
+                    except OrderItem.DoesNotExist:
+                        pass
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
 
@@ -276,7 +277,8 @@ class ApproveByAdminDraft(View):
                             email_dict.update({'url': urlshortener.get('url')})
                             SendSMS().send(sms_type=mail_type, data=email_dict)
                         except Exception as e:
-                            logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
+                            logging.getLogger('error_log').error(
+                                "Unable to shortern url %s - %s" % (str(mail_type), str(e)))
                     obj.orderitemoperation_set.create(
                         oi_draft=obj.oi_draft,
                         draft_counter=obj.draft_counter,
@@ -365,7 +367,7 @@ class ApproveByAdminDraft(View):
                             assigned_to=obj.assigned_to,
                             added_by=request.user)
             except Exception as e:
-                logging.getLogger('error_log').error("%s " % str(e))
+                logging.getLogger('error_log').error("Unable to Approve Draft By Admin %s " % str(e))
             return HttpResponse(
                 json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
@@ -388,7 +390,7 @@ class RejectByAdminDraft(View):
                     assigned_to=obj.assigned_to,
                     added_by=request.user)
             except Exception as e:
-                logging.getLogger('error_log').error("%s " % str(e))
+                logging.getLogger('error_log').error("Unable to reject by Admin %s " % str(e))
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
 
@@ -400,7 +402,9 @@ class UploadDraftView(View):
             try:
                 flow = int(request.POST.get('flow', 0))
             except Exception as e:
+                logging.getLogger('error_log').error("Making flow=0 explicitly failed: %s " % str(e))
                 flow = 0
+
 
             if flow in [2, 6, 10]:
                 form = VendorFileUploadForm(request.POST, request.FILES)
@@ -416,6 +420,7 @@ class UploadDraftView(View):
                     data = ActionUserMixin().upload_draft_orderitem(oi=obj, data=mixin_data, user=request.user)
                 except Exception as e:
                     data['display_message'] = str(e)
+
             else:
                 error_message = form.errors.get('file')
                 if error_message:
@@ -482,6 +487,8 @@ class SaveWaitingInput(View):
                 data['message'] = 'Waiting Input Updated Successfully.'
             except Exception as e:
                 data['message'] = str(e)
+                logging.getLogger('error_log').error("Waiting input is not updated %s " %
+                                                     str(e))
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
 
@@ -543,7 +550,7 @@ class ApproveDraftByLinkedinAdmin(View):
                                     sms_oi_status=102)
                             except Exception as e:
                                 logging.getLogger('error_log').error(
-                                    "%s - %s" % (str(mail_type), str(e)))
+                                    " %s - %s" % (str(mail_type), str(e)))
                     elif obj.draft_counter == 2:
                         if 103 not in email_sets and 103 not in sms_sets:
                             send_email_task.delay(
@@ -559,8 +566,9 @@ class ApproveDraftByLinkedinAdmin(View):
                                 obj.smsorderitemoperation_set.create(
                                     sms_oi_status=103)
                             except Exception as e:
+
                                 logging.getLogger('error_log').error(
-                                    "%s - %s" % (str(mail_type), str(e)))
+                                    " %s - %s" % (str(mail_type), str(e)))
 
                     elif obj.draft_counter == settings.DRAFT_MAX_LIMIT and 104 not in email_sets:
                         if 104 not in email_sets and 104 not in sms_sets:
@@ -603,7 +611,7 @@ class ApproveDraftByLinkedinAdmin(View):
                             assigned_to=obj.assigned_to,
                             added_by=request.user)
             except Exception as e:
-                logging.getLogger('error_log').error("%s " % str(e))
+                logging.getLogger('error_log').error("Linkedin Admin unable to approve%s " % str(e))
                 pass
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
@@ -626,7 +634,7 @@ class RejectDraftByLinkedinAdmin(View):
                     assigned_to=obj.assigned_to,
                     added_by=request.user)
             except Exception as e:
-                logging.getLogger('error_log').error("%s " % str(e))
+                logging.getLogger('error_log').error("unable to reject by linkedin Admin %s " % str(e))
                 pass
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()

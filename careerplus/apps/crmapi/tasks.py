@@ -44,7 +44,7 @@ def post_psedu_lead(query_dict):
             elif rsp.status_code != 201:
                 logging.getLogger('error_log').error("%s" % str(rsp.json()))
     except Exception as e:
-        logging.getLogger('error_log').error("%s" % str(e))
+        logging.getLogger('error_log').error("unable to lead query%s" % str(e))
 
 
 # @task()
@@ -141,6 +141,6 @@ def create_lead_crm(pk=None):
             lead.save()
     except Exception as e:
         print (str(e))
-        logging.getLogger('error_log').error("%s" % str(e))
+        logging.getLogger('error_log').error("unable to create lead from crm%s" % str(e))
 
     return flag

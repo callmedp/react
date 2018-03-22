@@ -156,7 +156,8 @@ class DashboardResultView(RoundOneAPI, TemplateView):
             result_html = self.get_result_template(
                 self.request, data_dict, show_feedback)
             context.update({'result_html': result_html})
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to load result template %s' %str(e))
             pass
         context.update(kwargs)
         return context
@@ -212,7 +213,9 @@ class DashboardResultView(RoundOneAPI, TemplateView):
                     "subjectKnowledge": subjectKnowledge_str,
                     "culturalFit": culturalFit_str
                 })
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to fetch details from result template function %s' %
+                                                     str(e))
                 pass
 
         context = {
@@ -279,7 +282,7 @@ class DashboardMyProfileView(ShineCandidateDetail, ShineUserDetail, TemplateView
                 "passout_yr": [yr for yr in range(1960, 2017)]
             })
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to load profile in dashboard %s'%str(e))
         context.update({"myprofile_active": True})
         return context
 
@@ -349,6 +352,6 @@ class UpdateShineProfileView(UpdateShineProfileMixin, View):
                     else:
                         return HttpResponse(json.dumps({'status': False, "msg": update_msg}))
         except Exception as e:
-            logging.getLogger("error_log").error(str(e))
+            logging.getLogger("error_log").error(' unable to update ShineUserProfile %s'%str(e))
 
         return HttpResponse(json.dumps({'status': False, "msg": "Something went wrong, Please Try Again."}))

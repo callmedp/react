@@ -18,7 +18,7 @@ def send_email_task(to_emails, mail_type, email_dict, status=None, oi=None):
                     to_email=to_email, status=1)
     except Exception as e:
         logging.getLogger('error_log').error(
-            "%s - %s - %s" % (str(e), str(mail_type), str(to_emails)))
+            "emailing sending failed %s - %s - %s" % (str(e), str(mail_type), str(to_emails)))
 
 
 @task(name="send_email_for_base_task")
@@ -34,4 +34,4 @@ def send_email_for_base_task(subject=None, body=None, to=[], headers=None, oi=No
                 to_email=to, status=1)
     except Exception as e:
         logging.getLogger('error_log').error(
-            "%s - %s" % (str(to), str(e)))
+            "emailing from base task failed%s - %s" % (str(to), str(e)))
