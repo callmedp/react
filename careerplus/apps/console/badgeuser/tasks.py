@@ -245,16 +245,17 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                 count = 0
                                 for row in uploader:
                                     try:
-                                        email = row.get('candidate_email', '').strip()
-                                        mobile = row.get('candidate_mobile', '').strip()
-                                        certificate_name = row.get('certificate_name').strip()
-                                        certi_yr_passing = row.get('year').strip()
+                                        email = row.get('candidate_email', '')
+                                        mobile = row.get('candidate_mobile', '')
+                                        certificate_name = row.get('certificate_name')
+                                        certi_yr_passing = row.get('year')
                                         shineid = ShineCandidateDetail().get_shine_id(
-                                            email=None, headers=None)
+                                            email=email, headers=None)
                                         if not certificate_name:
                                             row['certificate_name'] = "certificate not found"
                                         if not shineid:
                                             row['reason_for_failure'] = "user not register on shine"
+                                            row['status'] = "Failure"
                                         if shineid and certificate_name:
                                             obj, created = Certificate.objects.get_or_create(
                                                 name=certificate_name)
@@ -268,12 +269,12 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                                 'certification_name': certificate_name,
                                                 'certification_year': certi_yr_passing
                                             }
-                                            certification_url = settings.SHINE_API_URL + "/candidate/" +shine_id + "/certifications/?format=json"
+                                            certification_url = settings.SHINE_API_URL + "/candidate/" +shineid + "/certifications/?format=json"
                                             headers = ShineToken().get_api_headers()
                                             certification_response = requests.post(
                                                 certification_url, data=post_data,
                                                 headers=headers)
-                                            if certification_response.status_code == 200:
+                                            if certification_response.status_code == 201:
                                                 row['status'] = "Success"
                                             elif certification_response.status_code != 200:
                                                 row['status'] = "Failure"
@@ -312,10 +313,10 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                 count = 0
                                 for row in uploader:
                                     try:
-                                        email = row.get('candidate_email', '').strip()
-                                        mobile = row.get('candidate_mobile', '').strip()
-                                        certificate_name = row.get('certificate_name').strip()
-                                        certi_yr_passing = row.get('year').strip()
+                                        email = row.get('candidate_email', '')
+                                        mobile = row.get('candidate_mobile', '')
+                                        certificate_name = row.get('certificate_name')
+                                        certi_yr_passing = row.get('year')
                                         shineid = ShineCandidateDetail().get_shine_id(
                                             email=None, headers=None)
                                         if not certificate_name:
