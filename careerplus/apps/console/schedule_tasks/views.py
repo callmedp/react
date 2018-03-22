@@ -17,7 +17,7 @@ from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from blog.mixins import PaginationMixin
 from console.decorators import (
     Decorate, stop_browser_cache,
-    check_group)
+    check_group, has_group)
 from scheduler.models import Scheduler
 
 from .tasks import (
@@ -132,6 +132,9 @@ class TaskListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(TaskListView, self).get_queryset()
+        user = self.request.user
+        if has_group(user=user, grp_list=settings.MARKETING_GROUP_LIST):
+            queryset = queryset.filter(task_type=1)
         return queryset.order_by('-modified')
 
 
@@ -170,7 +173,7 @@ class DownloadTaskView(View):
                             path = task.file_uploaded.name
                         else:
                             path = task.file_generated.name
-                        fsock = GCPPrivateMediaStorage().open(file_path)
+                        fsock = GCPPrivateMediaStorage().open(path)
                 except IOError:
                     messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
                     response = HttpResponseRedirect(reverse('console:tasks:tasklist'))
