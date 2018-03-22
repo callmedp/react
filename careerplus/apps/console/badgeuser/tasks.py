@@ -249,13 +249,16 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                         mobile = row.get('candidate_mobile', '')
                                         certificate_name = row.get('certificate_name')
                                         certi_yr_passing = row.get('year')
+                                        headers = ShineToken().get_api_headers()
                                         shineid = ShineCandidateDetail().get_shine_id(
-                                            email=email, headers=None)
+                                            email=email, headers=headers)
                                         if not certificate_name:
                                             row['certificate_name'] = "certificate not found"
                                         if not shineid:
                                             row['reason_for_failure'] = "user not register on shine"
                                             row['status'] = "Failure"
+                                        else:
+                                            row['status'] = "Success"
                                         if shineid and certificate_name:
                                             obj, created = Certificate.objects.get_or_create(
                                                 name=certificate_name)
@@ -328,6 +331,8 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                             obj, created = Certificate.objects.get_or_create(
                                                 name=certificate_name)
                                             if created:
+                                                obj.provider = vendor
+                                                obj.save()
                                                 UserCertificate.objects.create(
                                                     user=user, certificate=obj,
                                                     year=certi_yr_passing,
