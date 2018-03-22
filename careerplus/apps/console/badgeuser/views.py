@@ -84,15 +84,15 @@ class UploadCertificate(FormView):
                 Task.file_uploaded = path + file_name
                 Task.save()
                 if upload_type == "upload-certificate":
-                    # upload_certificate_task.delay(
-                    #     task=Task.pk, user=request.user.pk, vendor=vendor)
-                    upload_certificate_task(
+                    upload_certificate_task.delay(
                         task=Task.pk, user=request.user.pk, vendor=vendor)
+                    # upload_certificate_task(
+                    #     task=Task.pk, user=request.user.pk, vendor=vendor)
                 elif upload_type == "upload-candidate-certificate":
-                    # upload_candidate_certificate_task.delay(
-                    #     task=Task.pk, user=request.user.pk, vendor=vendor)
-                    upload_candidate_certificate_task(
+                    upload_candidate_certificate_task.delay(
                         task=Task.pk, user=request.user.pk, vendor=vendor)
+                    # upload_candidate_certificate_task(
+                    #     task=Task.pk, user=request.user.pk, vendor=vendor)
                 messages.add_message(
                     request, messages.SUCCESS,
                     'Task Created SuccessFully')
