@@ -19,7 +19,7 @@ class VendorAdmin(admin.ModelAdmin):
 
 
 class CeritficateAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'skill', 'provider')
+    list_display = ('id', 'name', 'skill')
     model = models.Certificate
 
 

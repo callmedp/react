@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.urls import reverse
 from celery.decorators import task
 from scheduler.models import Scheduler
+from partner.models import Vendor
 from partner.models import Certificate, UserCertificate
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from core.api_mixin import ShineCandidateDetail, ShineToken
@@ -20,6 +21,8 @@ def upload_certificate_task(task=None, user=None, vendor=None):
     f = False
     try:
         up_task = Scheduler.objects.get(pk=task)
+        vendor = Vendor.objects.get(pk=vendor)
+
         if up_task:
             try:
                 up_task.status = 3
@@ -44,13 +47,7 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                                     upload, delimiter=',', quotechar='"')
                                 try:
                                     for i, line in enumerate(uploader):
-                                        line.update({'provider': vendor})
-                                        obj, created = Certificate.objects.get_or_create(**line)
-                                        if created:
-                                            usr_certi_obj = UserCertificate()
-                                            usr_certi_obj.user = user
-                                            usr_certi_obj.certificate = obj
-                                            usr_certi_obj.save()
+                                        pass
                                     total_rows = i + 1
                                 except Exception as e:
                                     total_rows = 2000
@@ -65,13 +62,7 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                                     delimiter=',', quotechar='"')
                                 try:
                                     for i, line in enumerate(uploader):
-                                        line.update({'provider': vendor})
-                                        obj, created = Certificate.objects.get_or_create(**line)
-                                        if created:
-                                            usr_certi_obj = UserCertificate()
-                                            usr_certi_obj.user = user
-                                            usr_certi_obj.certificate = obj
-                                            usr_certi_obj.save()
+                                        pass
                                     total_rows = i + 1
                                 except Exception as e:
                                     total_rows = 2000
@@ -102,6 +93,19 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                                 count = 0
                                 for row in uploader:
                                     try:
+                                        name = row.get('name', '')
+                                        skill = row.get('skill', '')
+                                        obj, created = Certificate.objects.get_or_create(
+                                            name=name, skill=skill)
+                                        if created:
+                                            obj.vendor_provider = vendor
+                                            obj.save()
+                                            usr_certi_obj = UserCertificate()
+                                            usr_certi_obj.user = user
+                                            usr_certi_obj.certificate = obj
+                                            usr_certi_obj.save()
+                                        else:
+                                            row['error_report'] = "certifate already exist"
                                         csvwriter.writerow(row)
                                     except Exception as e:
                                         row['error_report'] = str(e)
@@ -137,6 +141,19 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                                 count = 0
                                 for row in uploader:
                                     try:
+                                        name = row.get('name', '')
+                                        skill = row.get('skill', '')
+                                        obj, created = Certificate.objects.get_or_create(
+                                            name=name, skill=skill)
+                                        if created:
+                                            obj.vendor_provider = vendor
+                                            obj.save()
+                                            usr_certi_obj = UserCertificate()
+                                            usr_certi_obj.user = user
+                                            usr_certi_obj.certificate = obj
+                                            usr_certi_obj.save()
+                                        else:
+                                            row['error_report'] = "certifate already exist"
                                         csvwriter.writerow(row)
                                     except Exception as e:
                                         row['error_report'] = str(e)
@@ -180,6 +197,7 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
     f = False
     try:
         up_task = Scheduler.objects.get(pk=task)
+        vendor = Vendor.objects.get(pk=vendor)
         if up_task:
             try:
                 up_task.status = 3
@@ -263,24 +281,27 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                             obj, created = Certificate.objects.get_or_create(
                                                 name=certificate_name)
                                             if created:
+                                                obj.vendor_provider = vendor
+                                                obj.save()
                                                 UserCertificate.objects.create(
                                                     user=user, certificate=obj,
                                                     year=certi_yr_passing,
                                                     candidate_email=email,
                                                     candidate_mobile=mobile)
-                                            post_data = {
-                                                'certification_name': certificate_name,
-                                                'certification_year': certi_yr_passing
-                                            }
-                                            certification_url = settings.SHINE_API_URL + "/candidate/" +shineid + "/certifications/?format=json"
-                                            headers = ShineToken().get_api_headers()
-                                            certification_response = requests.post(
-                                                certification_url, data=post_data,
-                                                headers=headers)
-                                            if certification_response.status_code == 201:
-                                                row['status'] = "Success"
-                                            elif certification_response.status_code != 200:
-                                                row['status'] = "Failure"
+                                                post_data = {
+                                                    'certification_name': certificate_name,
+                                                    'certification_year': certi_yr_passing
+                                                }
+                                                certification_url = settings.SHINE_API_URL + "/candidate/" +shineid + "/certifications/?format=json"
+                                                certification_response = requests.post(
+                                                    certification_url, data=post_data,
+                                                    headers=headers)
+                                                if certification_response.status_code == 201:
+                                                    pass
+                                                elif certification_response.status_code != 200:
+                                                    row['reason_for_failure'] = "Recruiter Api Fail"
+                                            else:
+                                                pass
                                         csvwriter.writerow(row)
                                     except Exception as e:
                                         row['reason_for_failure'] = str(e)
@@ -316,13 +337,13 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                 count = 0
                                 for row in uploader:
                                     try:
-                                        data_dict = {}
                                         email = row.get('candidate_email', '')
                                         mobile = row.get('candidate_mobile', '')
                                         certificate_name = row.get('certificate_name')
                                         certi_yr_passing = row.get('year')
+                                        headers = ShineToken().get_api_headers()
                                         shineid = ShineCandidateDetail().get_shine_id(
-                                            email=email, headers=None)
+                                            email=email, headers=headers)
                                         if not certificate_name:
                                             row['certificate_name'] = "certificate not found"
                                         if not shineid:
@@ -331,31 +352,32 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                         else:
                                             row['status'] = "Success"
                                         if shineid and certificate_name:
-                                            data_dict.update({
-                                                'name': certificate_name,
-                                                'provider': vendor
-                                            })
                                             obj, created = Certificate.objects.get_or_create(
-                                                **data_dict)
+                                                name=certificate_name)
                                             if created:
+                                                obj.vendor_provider = vendor
+                                                obj.save()
                                                 UserCertificate.objects.create(
                                                     user=user, certificate=obj,
                                                     year=certi_yr_passing,
                                                     candidate_email=email,
                                                     candidate_mobile=mobile)
-                                            post_data = {
-                                                'certification_name': certificate_name,
-                                                'certification_year': certi_yr_passing
-                                            }
-                                            headers = ShineToken().get_api_headers()
-                                            certification_url = settings.SHINE_API_URL + "/candidate/" +shine_id + "/certifications/?format=json"
-                                            certification_response = requests.post(
-                                                certification_url, data=post_data,
-                                                headers=headers)
-                                            if certification_response.status_code == 200:
-                                                row['status'] = "Success"
-                                            elif certification_response.status_code != 200:
-                                                row['status'] = "Failure"
+
+                                                post_data = {
+                                                    'certification_name': certificate_name,
+                                                    'certification_year': certi_yr_passing
+                                                }
+
+                                                certification_url = settings.SHINE_API_URL + "/candidate/" +shine_id + "/certifications/?format=json"
+                                                certification_response = requests.post(
+                                                    certification_url, data=post_data,
+                                                    headers=headers)
+                                                if certification_response.status_code == 200:
+                                                    pass
+                                                elif certification_response.status_code != 200:
+                                                    row['reason_for_failure'] = "Recruiter Api Fail"
+                                            else:
+                                                pass
                                         csvwriter.writerow(row)
                                     except Exception as e:
                                         row['reason_for_failure'] = str(e)

@@ -20,7 +20,6 @@ from .tasks import (
 from console.decorators import (
     Decorate, stop_browser_cache,
     check_group)
-from partner.models import Vendor
 from . import forms
 
 
@@ -61,8 +60,6 @@ class UploadCertificate(FormView):
                 task_type = 3
             try:
                 import time
-                vnd_obj = Vendor.objects.get(pk=vendor)
-                vendor = vnd_obj.name
                 timestr = time.strftime("%Y_%m_%d")
                 f_obj = file
                 file_name_tuple = os.path.splitext(f_obj.name)
@@ -92,10 +89,10 @@ class UploadCertificate(FormView):
                     # upload_certificate_task(
                     #     task=Task.pk, user=request.user.pk, vendor=vendor)
                 elif upload_type == "upload-candidate-certificate":
-                    # upload_candidate_certificate_task.delay(
-                    #     task=Task.pk, user=request.user.pk, vendor=vendor)
-                    upload_candidate_certificate_task(
+                    upload_candidate_certificate_task.delay(
                         task=Task.pk, user=request.user.pk, vendor=vendor)
+                    # upload_candidate_certificate_task(
+                    #     task=Task.pk, user=request.user.pk, vendor=vendor)
                 messages.add_message(
                     request, messages.SUCCESS,
                     'Task Created SuccessFully')
