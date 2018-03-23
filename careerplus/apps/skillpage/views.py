@@ -49,7 +49,7 @@ class SkillPageView(DetailView, SkillPageMixin):
     def get_template_names(self):
         if self.request.amp:
             return ["skillpage/skill-amp.html"]
-            return ["skillpage/skill.html"]
+        return ["skillpage/skill.html"]
         
     def redirect_if_necessary(self, current_path, skill):
         expected_path = skill.get_absolute_url()
@@ -96,7 +96,6 @@ class SkillPageView(DetailView, SkillPageMixin):
                     prod_id_list.append(prd.id)
                 if prd.pTP in [0, 2, 4, 5]:
                     prod_id_list.append(prd.id)
-                    raise Exception
 
             # prod_id_list = [pv.id for pv in products]
             vendor_list = [pv.pPv for pv in products]
