@@ -263,8 +263,6 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                             obj, created = Certificate.objects.get_or_create(
                                                 name=certificate_name)
                                             if created:
-                                                obj.provider=vendor
-                                                obj.save()
                                                 UserCertificate.objects.create(
                                                     user=user, certificate=obj,
                                                     year=certi_yr_passing,
@@ -318,13 +316,13 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                 count = 0
                                 for row in uploader:
                                     try:
+                                        data_dict = {}
                                         email = row.get('candidate_email', '')
                                         mobile = row.get('candidate_mobile', '')
                                         certificate_name = row.get('certificate_name')
                                         certi_yr_passing = row.get('year')
-                                        headers = ShineToken().get_api_headers()
                                         shineid = ShineCandidateDetail().get_shine_id(
-                                            email=email, headers=headers)
+                                            email=email, headers=None)
                                         if not certificate_name:
                                             row['certificate_name'] = "certificate not found"
                                         if not shineid:
@@ -333,11 +331,13 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                         else:
                                             row['status'] = "Success"
                                         if shineid and certificate_name:
+                                            data_dict.update({
+                                                'name': certificate_name,
+                                                'provider': vendor
+                                            })
                                             obj, created = Certificate.objects.get_or_create(
-                                                name=certificate_name)
+                                                **data_dict)
                                             if created:
-                                                obj.provider = vendor
-                                                obj.save()
                                                 UserCertificate.objects.create(
                                                     user=user, certificate=obj,
                                                     year=certi_yr_passing,
@@ -347,6 +347,7 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                                 'certification_name': certificate_name,
                                                 'certification_year': certi_yr_passing
                                             }
+                                            headers = ShineToken().get_api_headers()
                                             certification_url = settings.SHINE_API_URL + "/candidate/" +shine_id + "/certifications/?format=json"
                                             certification_response = requests.post(
                                                 certification_url, data=post_data,
