@@ -4,6 +4,7 @@ from django.conf import settings
 
 from cart.mixins import CartMixin
 from cart.models import Subscription
+import logging
 
 
 def js_settings(request):
@@ -45,7 +46,8 @@ def common_context_processor(request):
             if userprofile.user_invoice and userprofile.invoice_date.month==invoice_date.month and userprofile.invoice_date.year==invoice_date.year:
                 writer_invoice = True
 
-    except:
+    except Exception as e:
+        logging.getLogger('error_log').error('writer invoice is not reachable %s'%str(e))
         pass
 
     context.update({

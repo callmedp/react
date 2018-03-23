@@ -398,7 +398,7 @@ class ReviewFilterForm(forms.Form):
 class ReviewUpdateForm(forms.ModelForm):
 
     content = forms.CharField(
-        label=("Review Content*:"), max_length=200,
+        label=("Review Content*:"), max_length=1500,
         required=True, widget=forms.Textarea(
             attrs={'class': 'form-control col-md-7 col-xs-12'}))
     status = forms.ChoiceField(

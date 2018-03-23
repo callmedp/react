@@ -101,7 +101,7 @@ class PaymentMixin(object):
                 del request.session['checkout_type']
                 self.request.session.modified = True
             except Exception as e:
-                logging.getLogger('error_log').error("%s " % str(e))
+                logging.getLogger('error_log').error("unable to modify session request %s " % str(e))
                 pass
 
             # emails

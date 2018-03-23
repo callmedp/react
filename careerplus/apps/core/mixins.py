@@ -258,7 +258,17 @@ class InvoiceGenerate(object):
                 pdf_file = SimpleUploadedFile(
                     file_name, pdf_file,
                     content_type='application/pdf')
-                GCPInvoiceStorage().save(settings.INVOICE_DIR + full_path + file_name, pdf_file)
+
+                if not settings.IS_GCP:
+                    if not os.path.exists(settings.INVOICE_DIR + full_path):
+                        os.makedirs(settings.INVOICE_DIR +  full_path)
+                    dest = open(
+                        settings.INVOICE_DIR + full_path + file_name, 'wb')
+                    for chunk in pdf_file.chunks():
+                        dest.write(chunk)
+                    dest.close()
+                else:
+                    GCPInvoiceStorage().save(settings.INVOICE_DIR + full_path + file_name, pdf_file)
                 order.invoice = settings.INVOICE_DIR + full_path + file_name
                 order.save()
                 return order, order.invoice

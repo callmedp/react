@@ -18,7 +18,7 @@ class Command(BaseCommand):
         try:
             upload_addserver_leads()
         except Exception as e:
-            logging.getLogger('error_log').error("%s" % str(e))
+            logging.getLogger('error_log').error("unable to upload leads on server%s" % str(e))
 
 
 def upload_addserver_leads():
@@ -59,10 +59,9 @@ def upload_addserver_leads():
                 logging.getLogger('info_log').info("{} Leads Updated".format(count))
                 time.sleep(1)
         except Exception as e:
-            logging.getLogger('error_log').error("%s" % str(e))
+            logging.getLogger('error_log').error("error in adding lead to the leadlist: %s" % str(e))
     logging.getLogger('info_log').info(
         "{} lead created out of {}".format(count, lead_list.count()))
-
 
 # def upload_addserver_leads1():
 #     cur_datetime = timezone.now()
