@@ -430,5 +430,5 @@ class ReviewUpdateForm(forms.ModelForm):
         self.initial['reviewed_item'] = '{}'.format(obj.reviewed_item)
         self.fields['reviewed_item'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
         self.fields['user_email'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
-        self.initial['created'] = obj.created.strftime("%b. %e, %Y %H:%I %P")
+        self.initial['created'] = obj.created.astimezone().strftime("%b. %e, %Y %H:%I %P")
         self.fields['average_rating'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
