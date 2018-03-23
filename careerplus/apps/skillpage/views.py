@@ -96,7 +96,6 @@ class SkillPageView(DetailView, SkillPageMixin):
                     prod_id_list.append(prd.id)
                 if prd.pTP in [0, 2, 4, 5]:
                     prod_id_list.append(prd.id)
-                    raise Exception
 
             # prod_id_list = [pv.id for pv in products]
             vendor_list = [pv.pPv for pv in products]
