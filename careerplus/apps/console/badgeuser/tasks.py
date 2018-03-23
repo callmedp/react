@@ -368,7 +368,7 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                                     'certification_year': certi_yr_passing
                                                 }
 
-                                                certification_url = settings.SHINE_API_URL + "/candidate/" +shine_id + "/certifications/?format=json"
+                                                certification_url = settings.SHINE_API_URL + "/candidate/" +shineid + "/certifications/?format=json"
                                                 certification_response = requests.post(
                                                     certification_url, data=post_data,
                                                     headers=headers)
