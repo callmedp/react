@@ -278,6 +278,12 @@
               Linkedin Rejected By Admin</a>
             </li>
         {% endif %}
+        {% if perms.order.can_show_linkedin_approved_queue %}
+            <li>
+              <a href="{% url 'console:linkedin-approved-queue' %}">
+              Linkedin Approved</a>
+            </li>
+        {% endif %}
       </ul>
       </li>
       {% endif %}

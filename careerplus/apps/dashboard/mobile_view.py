@@ -3,6 +3,7 @@ from django.http import (
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.core.urlresolvers import reverse
+import logging
 # from django.views.decorators.cache import never_cache
 # from django.utils.decorators import method_decorator
 
@@ -31,8 +32,9 @@ class DashboardItemDetailView(TemplateView):
                 self.oi = OrderItem.objects.get(pk=self.oi_pk)
                 if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
                     return super(DashboardItemDetailView, self).get(request, args, **kwargs)
-            except:
-                pass
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get dashboard item details %s' % str(e))
+
         return HttpResponseRedirect(reverse('dashboard:dashboard'))
 
     def get_context_data(self, **kwargs):
@@ -102,8 +104,8 @@ class DashboardItemFeedbackView(TemplateView):
                 self.oi = OrderItem.objects.get(pk=self.oi_pk)
                 if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3] and self.oi.oi_status == 4 and not self.oi.user_feedback:
                     return super(DashboardItemFeedbackView, self).get(request, args, **kwargs)
-            except:
-                pass
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get item feedback on dashboard %s' % str(e))
         return HttpResponseRedirect(reverse('dashboard:dashboard'))
 
     def get_context_data(self, **kwargs):
@@ -133,7 +135,8 @@ class DashboardMobileCommentView(TemplateView):
                 self.oi = OrderItem.objects.get(pk=self.oi_pk)
                 if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
                     return super(DashboardMobileCommentView, self).get(request, args, **kwargs)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to view comment on mobile %s' % str(e))
                 pass
         return HttpResponseRedirect(reverse('dashboard:dashboard'))
 
@@ -159,7 +162,8 @@ class DashboardMobileCommentView(TemplateView):
                         message=comment,
                         candidate_id=candidate_id,
                     )
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to create order id message %s' % str(e))
                 pass
             redirect_url = reverse("dashboard:dashboard-conversation") + '?oi=%s' % (oi.pk)
             return HttpResponseRedirect(redirect_url)
@@ -180,12 +184,14 @@ class DashboardMobileRejectView(TemplateView):
     def get(self, request, *args, **kwargs):
         self.candidate_id = request.session.get('candidate_id', None)
         self.oi_pk = request.GET.get('oi', None)
+
         if self.oi_pk and self.candidate_id:
             try:
                 self.oi = OrderItem.objects.get(pk=self.oi_pk)
                 if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3] and self.oi.oi_status in [24, 46]:
                     return super(DashboardMobileRejectView, self).get(request, args, **kwargs)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to reject from mobile %s' % str(e))
                 pass
         return HttpResponseRedirect(reverse('dashboard:dashboard'))
 

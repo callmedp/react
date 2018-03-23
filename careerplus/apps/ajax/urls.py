@@ -46,6 +46,9 @@ urlpatterns = [
     url(r'^orderitem/upload-draft/$',
         views.UploadDraftView.as_view(), name='oi-draft-upload'),
 
+    url(r'^orderitem/detaii-page-upload-draft/$',
+        views.DetailPageUploadDraftView.as_view(), name='detaii-page-upload-draft'),
+
     url(r'^orderitem/waiting-input-save/$',
         views.SaveWaitingInput.as_view(), name='oi-waiting-input'),
 

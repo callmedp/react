@@ -2,6 +2,7 @@ from django.contrib import admin
 from linkedin.models import Organization, Draft, Education
 from order.models import OrderItem
 from django.utils import timezone
+import logging
 
 
 # Register your models here.
@@ -71,7 +72,8 @@ class DraftAdmin(admin.ModelAdmin):
                     order.first_name, order.last_name)
             else:
                 return '<b>No user</b>'
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get candidate information: %s' % str(e))
             return '<b>No user</b>'
     candidate_info.short_descriptixon = 'Candidate Information'
     candidate_info.allow_tags = True

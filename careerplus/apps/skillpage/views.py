@@ -40,6 +40,7 @@ class SkillPageView(DetailView, SkillPageMixin):
             queryset = queryset.prefetch_related('categoryproducts').filter(pk=pk, active=True, is_skill=True, type_level__in=[3,4])
         elif slug is not None:
             queryset = queryset.prefetch_related('categoryproducts').filter(slug=slug, active=True, is_skill=True, type_level__in=[3,4])
+
         if queryset:
             return queryset[0]
         else:
@@ -48,7 +49,7 @@ class SkillPageView(DetailView, SkillPageMixin):
     def get_template_names(self):
         if self.request.amp:
             return ["skillpage/skill-amp.html"]
-        return ["skillpage/skill.html"]
+            return ["skillpage/skill.html"]
         
     def redirect_if_necessary(self, current_path, skill):
         expected_path = skill.get_absolute_url()
@@ -95,6 +96,7 @@ class SkillPageView(DetailView, SkillPageMixin):
                     prod_id_list.append(prd.id)
                 if prd.pTP in [0, 2, 4, 5]:
                     prod_id_list.append(prd.id)
+                    raise Exception
 
             # prod_id_list = [pv.id for pv in products]
             vendor_list = [pv.pPv for pv in products]
@@ -106,8 +108,9 @@ class SkillPageView(DetailView, SkillPageMixin):
             for tp_prod in top_3_prod:
                 prd_list.append(tp_prod.pNm)
             top_4_vendors = Vendor.objects.filter(id__in=vendor_list)[:4] if len(vendor_list) >= 4 else Vendor.objects.filter(id__in=vendor_list)
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error(" MSG:unable to load the list   %s" %str(e))
+
 
         prd_obj = ContentType.objects.get_for_model(Product)
         all_results = products
@@ -164,16 +167,14 @@ class SkillPageView(DetailView, SkillPageMixin):
             'show_chat': True,
             'amp': self.request.amp
         })
-        widget_objs = None
-        widget_obj = None
         try:
             widget_obj = DetailPageWidget.objects.get(
-                content_type__model='Category', object_id=self.pk)
+                content_type__model='Category', listid__contains=self.pk)
             widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
                 column=1)
-        except Exception as e:
+        except DetailPageWidget.DoesNotExist:
             widget_objs = None
-            logging.getLogger('error_log').error("%(err)s" % {'err': e})
+            widget_obj = None
         context['widget_objs'] = widget_objs
         context['widget_obj'] = widget_obj
         context.update(self.get_breadcrumb_data())

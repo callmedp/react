@@ -27,4 +27,4 @@ def lead_create_on_crm(cart_obj, data_dict=None):
         else:
             logging.getLogger("error_log").error("cart have no mobile number")
     except Exception as e:
-        logging.getLogger('error_log').error("%s" % str(e))
+        logging.getLogger('error_log').error("lead creation from crm is failed%s" % str(e))
