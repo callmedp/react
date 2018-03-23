@@ -1,6 +1,7 @@
 import logging
 import os
 import csv
+import json
 import requests
 import codecs
 from django.contrib.auth import get_user_model
@@ -272,11 +273,6 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                             email=email, headers=headers)
                                         if not certificate_name:
                                             row['certificate_name'] = "certificate not found"
-                                        if not shineid:
-                                            row['reason_for_failure'] = "user not register on shine"
-                                            row['status'] = "Failure"
-                                        else:
-                                            row['status'] = "Success"
                                         if shineid and certificate_name:
                                             obj, created = Certificate.objects.get_or_create(
                                                 name=certificate_name)
@@ -297,11 +293,20 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                                     certification_url, data=post_data,
                                                     headers=headers)
                                                 if certification_response.status_code == 201:
-                                                    pass
-                                                elif certification_response.status_code != 200:
-                                                    row['reason_for_failure'] = "Recruiter Api Fail"
+                                                    jsonrsp = certification_response.json()
+                                                    logging.getLogger('info_log').info(
+                                                        "api response:{}").format(jsonrsp)
+                                                elif certification_response.status_code != 201:
+                                                    jsonrsp = certification_response.json()
+                                                    logging.getLogger('error_log').error(
+                                                        "api fail:{}").format(jsonrsp)
+                                                    row['reason_for_failure'] = jsonrsp
                                             else:
-                                                pass
+                                                row['reason_for_failure'] = "duplicate entry"
+                                                row['status'] = "Success"
+                                        else:
+                                            row['reason_for_failure'] = "user not register on shine"
+                                            row['status'] = "Failure"
                                         csvwriter.writerow(row)
                                     except Exception as e:
                                         row['reason_for_failure'] = str(e)
@@ -346,11 +351,6 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                             email=email, headers=headers)
                                         if not certificate_name:
                                             row['certificate_name'] = "certificate not found"
-                                        if not shineid:
-                                            row['reason_for_failure'] = "user not register on shine"
-                                            row['status'] = "Failure"
-                                        else:
-                                            row['status'] = "Success"
                                         if shineid and certificate_name:
                                             obj, created = Certificate.objects.get_or_create(
                                                 name=certificate_name)
@@ -372,12 +372,21 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                                                 certification_response = requests.post(
                                                     certification_url, data=post_data,
                                                     headers=headers)
-                                                if certification_response.status_code == 200:
-                                                    pass
-                                                elif certification_response.status_code != 200:
-                                                    row['reason_for_failure'] = "Recruiter Api Fail"
+                                                if certification_response.status_code == 201:
+                                                    jsonrsp = certification_response.json()
+                                                    logging.getLogger('info_log').info(
+                                                        "api response:{}").format(jsonrsp)
+                                                elif certification_response.status_code != 201:
+                                                    jsonrsp = certification_response.json()
+                                                    logging.getLogger('error_log').error(
+                                                        "api fail:{}").format(jsonrsp)
+                                                    row['reason_for_failure'] = jsonrsp
                                             else:
-                                                pass
+                                                row['reason_for_failure'] = "duplicate entry"
+                                                row['status'] = "Success"
+                                        else:
+                                            row['reason_for_failure'] = "user not register on shine"
+                                            row['status'] = "Failure"
                                         csvwriter.writerow(row)
                                     except Exception as e:
                                         row['reason_for_failure'] = str(e)
