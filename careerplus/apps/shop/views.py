@@ -416,6 +416,11 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx['amp'] = self.request.amp
         ctx['widget_objs'] = widget_objs
         ctx['widget_obj'] = widget_obj
+        ctx['linkedin_resume_services'] = settings.LINKEDIN_RESUME_PRODUCTS
+        navigation = True
+        if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
+            navigation = False
+        ctx['navigation'] = navigation
         return ctx
 
     def redirect_if_necessary(self, current_path, product):
