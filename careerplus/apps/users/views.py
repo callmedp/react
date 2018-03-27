@@ -380,10 +380,14 @@ class LinkedinLoginView(View):
     def get(self, request, *args, **kwargs):
         try:
             credential = request.GET.get('credential', '')
-            # if credential == '1':
-            #     client_id = settings.LINKEDIN_DICT.get('CLIENT_ID', '')
-            # else:
-            client_id = settings.CLIENT_ID
+            if credential == '1':
+                client_id = settings.LINKEDIN_DICT.get('CLIENT_ID', '')
+                request.session['linkedin_client_id'] = client_id
+            else:
+                client_id = settings.CLIENT_ID
+
+            request.session['next_url'] = request.GET.get('next', '')
+
             params = {
                 'client_id': client_id,
                 'redirect_uri': settings.REDIRECT_URI,
@@ -404,12 +408,27 @@ class LinkedinCallbackView(View):
 
     def get(self, request, *args, **kwargs):
         try:
+
+            linkedin_client_id = request.session.get('linkedin_client_id', '')
+
+            if linkedin_client_id and linkedin_client_id == settings.LINKEDIN_DICT.get('CLIENT_ID'):
+                client_id = client_id = settings.LINKEDIN_DICT.get('CLIENT_ID', '')
+                client_secret = settings.LINKEDIN_DICT.get('CLIENT_SECRET', '')
+            else:
+                client_id = settings.CLIENT_ID
+                client_secret = settings.CLIENT_SECRET
+
+            self.success_url = request.session.get('next_url') if request.session.get('next_url') else '/'
+
+            if request.session.get('next_url'):
+                del request.session['next_url']
+
             params = {
                 'grant_type': 'authorization_code',
                 'code': request.GET.get('code') if 'code' in request.GET else '',
                 'redirect_uri': settings.REDIRECT_URI,
-                'client_id': settings.CLIENT_ID,
-                'client_secret': settings.CLIENT_SECRET,
+                'client_id': client_id,
+                'client_secret': client_secret,
             }
             if not params['code']:
                 return HttpResponseRedirect('/login/')
