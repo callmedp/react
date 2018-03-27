@@ -381,7 +381,7 @@ class LinkedinLoginView(View):
         try:
             credential = request.GET.get('credential', '')
             if credential == '1':
-                client_id = settings.LINKEDIN_DICT('CLIENT_ID', '')
+                client_id = settings.LINKEDIN_DICT.get('CLIENT_ID', '')
             else:
                 client_id = settings.CLIENT_ID
             params = {
