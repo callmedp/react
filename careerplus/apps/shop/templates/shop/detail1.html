@@ -350,7 +350,7 @@
   </div>
 </div>
 
-{% if not request.session.canddate_id %}
+{% if not request.session.canddate_id and sqs.id in linkedin_resume_services %}
 <!--modals-->
 <!--login-->
 <div class="modal fade bs-example-modal-sm login-div" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="login-model">
@@ -368,7 +368,7 @@
             <!--button type="button" id="login-button" class="btn btn-primary submit">Login</button-->
             
             <div class="social-login">
-              <a class="" href="{% url 'users:linkedin-code' %}?credential=1"><button type="button" id="login-button" class="btn btn-primary submit">Login With Linkedin</button></a>
+              <a class="" href="{% url 'users:linkedin-code' %}?credential=1&next={{request.get_full_path}}"><button type="button" id="login-button" class="btn btn-primary submit">Login With Linkedin</button></a>
             </div>
 
           </form>
