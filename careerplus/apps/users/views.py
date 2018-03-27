@@ -379,8 +379,13 @@ class LinkedinLoginView(View):
 
     def get(self, request, *args, **kwargs):
         try:
+            credential = request.GET.get('credential', '')
+            if credential == '1':
+                client_id = settings.LINKEDIN_DICT('CLIENT_ID', '')
+            else:
+                client_id = settings.CLIENT_ID
             params = {
-                'client_id': settings.CLIENT_ID,
+                'client_id': client_id,
                 'redirect_uri': settings.REDIRECT_URI,
                 'response_type': 'code',
                 'scope': settings.SCOPE,
@@ -399,6 +404,7 @@ class LinkedinCallbackView(View):
 
     def get(self, request, *args, **kwargs):
         try:
+
             params = {
                 'grant_type': 'authorization_code',
                 'code': request.GET.get('code') if 'code' in request.GET else '',

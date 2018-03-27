@@ -30,7 +30,7 @@
         <div class="container-fluid">
           <!-- Brand and toggle get grouped for better mobile display -->
           <div class="navbar-header">
-            <a class="navbar-brand" href="">skdjskl</a>
+            <a class="navbar-brand" href=""></a>
           </div>
 
           <!-- Collect the nav links, forms, and other content for toggling -->
@@ -349,7 +349,41 @@
     </div>
   </div>
 </div>
+
+{% if not request.session.canddate_id %}
+<!--modals-->
+<!--login-->
+<div class="modal fade bs-example-modal-sm login-div" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="login-model">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+     <div class="register">
+       <div>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <span class="modal-title" id="myModalLabel">Login With Linkedin</span>
+          <label id="non-field-error" class="error"></label>
+        </div>
+
+         <form autocomplete="off" role method="post" id="login_form" >{% csrf_token %}
+            
+            <!--button type="button" id="login-button" class="btn btn-primary submit">Login</button-->
+            
+            <div class="social-login">
+              <a class="" href="{% url 'users:linkedin-code' %}?credential=1"><button type="button" id="login-button" class="btn btn-primary submit">Login With Linkedin</button></a>
+            </div>
+
+          </form>
+
+        </div>
+    </div>
+  </div>
+</div>
+<!-- end login modal -->
+{% endif %}
+
+
 {% endblock main_container %}
+
+
 
 
 {% block js_section %}

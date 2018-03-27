@@ -1,6 +1,12 @@
 
+$(window).on('load',function(){
+  $('#login-model').modal('show');
+});
 
 $(document).ready(function () {
+
+
+
     var processing = false;
   
     function LoadMoreProductReview(pv_id) {
