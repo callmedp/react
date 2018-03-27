@@ -3,9 +3,11 @@ import logging
 from collections import OrderedDict
 from decimal import Decimal
 from django.core.paginator import Paginator
-from django.http import (Http404,
+from django.http import (
+    Http404,
     HttpResponse,
     HttpResponseForbidden,
+    HttpResponseRedirect,
     HttpResponsePermanentRedirect,
 )
 from django.urls import reverse
@@ -33,6 +35,7 @@ from search.helpers import get_recommendations
 from search.choices import STUDY_MODE
 from homepage.models import Testimonial
 from review.models import Review
+from order.models import OrderItem
 
 from .models import Product
 from review.models import DetailPageWidget
@@ -452,6 +455,16 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             self.sqs = sqs[0]
             if not self.sqs:
                 raise Http404
+            linkedin_cid = settings.LINKEDIN_DICT.get('CLIENT_ID', None)
+            if request.session.get('candidate_id') and linkedin_cid == request.session.get('linkedin_client_id', '') and self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
+                services = OrderItem.objects.filter(
+                    order__status__in=[1, 3],
+                    order__candidate_id=request.session.get('candidate_id'),
+                    product__id__in=settings.LINKEDIN_RESUME_PRODUCTS)
+                if services.exists():
+                    return HttpResponseRedirect(reverse('dashboard:dashboard'))
+            elif request.session.get('candidate_id') and self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
+                request.session.flush()
         except Exception as e:
             logging.getLogger('error_log').error("SQS query error on product detail.ID:{}".format(pk))
             raise Http404
