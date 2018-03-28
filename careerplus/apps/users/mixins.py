@@ -867,9 +867,10 @@ class RegistrationLoginApi(object):
             response = requests.post(post_url, data=json.dumps(post_data), headers=request_header)
             if response.status_code == 201:
                 response_json = response.json()
-                response_json.update({'response':True})
+                response_json.update({'response': True})
                 logging.getLogger('info_log').info(
-                    '{}'.format(response_json))
+                    '{} - {}'.format(
+                        post_data.get('token'), post_data.get('expires_in')))
 
             if response.status_code == 400:
                 response_json = response.json()
