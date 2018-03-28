@@ -868,6 +868,8 @@ class RegistrationLoginApi(object):
             if response.status_code == 201:
                 response_json = response.json()
                 response_json.update({'response':True})
+                logging.getLogger('info_log').info(
+                    '{}'.format(response_json))
 
             if response.status_code == 400:
                 response_json = response.json()
