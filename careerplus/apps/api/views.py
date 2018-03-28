@@ -1,7 +1,6 @@
 import logging
 import datetime
 from decimal import Decimal
-
 from django.db.models import Sum
 from django.utils import timezone
 from rest_framework.views import APIView
@@ -82,7 +81,9 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                 if country_code:
                     try:
                         country_obj = Country.objects.get(phone=country_code)
-                    except:
+                    except Exception as e:
+                        logging.getLogger('error_log').error("Unable to get country object %s" % str(e))
+
                         country_obj = Country.objects.get(phone=91)
 
                 if flag:
@@ -259,7 +260,10 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                         try:
                             payment_date = txn_dict.get('payment_date')
                             payment_date = datetime.datetime.strptime(payment_date, "%Y-%m-%d %H:%M:%S")
-                        except:
+                        except Exception as e:
+                            logging.getLogger('error_log').error("Unable to get payment date as per specified format "
+                                                                 "%s" %
+                                                                 str(e))
                             payment_date = timezone.now()
                         order.ordertxns.create(
                             txn=txn_dict.get('txn_id', ''),

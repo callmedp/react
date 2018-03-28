@@ -123,7 +123,7 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
             # create lead on crm
             lead_create_on_crm(cart_obj, data_dict=data_dict)
     except Exception as e:
-        logging.getLogger('error_log').error("%s" % str(e))
+        logging.getLogger('error_log').error("lead creation from crm failed %s" % str(e))
 
 
 @task(name="cart_drop_out_mail")

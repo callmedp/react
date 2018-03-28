@@ -93,7 +93,8 @@ class CartMixin(object):
                 if country_code and not cart_obj.country_code:
                     try:
                         country_obj = Country.objects.get(phone=country_code, active=True)
-                    except:
+                    except Exception as e:
+                        logging.getLogger('error_log').error('unable to get country object%s'%str(e))
                         country_obj = Country.objects.get(phone='91', active=True)
 
                     cart_obj.country_code = country_obj.phone
@@ -508,7 +509,8 @@ class CartMixin(object):
             cart_obj = Cart.objects.get(pk=cart_pk)
             try:
                 parent_li = cart_obj.lineitems.get(product=product)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 parent_li = None
             if parent_li:
                 selected_product = cart_obj.lineitems.filter(parent=parent_li).values_list('product__pk', flat=True)
@@ -553,7 +555,8 @@ class CartMixin(object):
                         fake_total += parent_li.product.get_fakeprice()[0]
                     else:
                         fake_total += parent_li.product.get_price()
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 parent_li = None
             if parent_li:
                 lis = cart_obj.lineitems.filter(parent=parent_li).select_related('product')
@@ -593,7 +596,8 @@ class CartMixin(object):
                         fake_total += parent_li.product.get_fakeprice()[0]
                     else:
                         fake_total += parent_li.product.get_price()
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 parent_li = None
             if parent_li:
                 lis = cart_obj.lineitems.filter(parent=parent_li).select_related('product')

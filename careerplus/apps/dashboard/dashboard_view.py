@@ -333,7 +333,8 @@ class DashboardFeedbackView(TemplateView):
                     pass
                 else:
                     return ''
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get order item object%s'%str(e))
                 return ''
             return super(DashboardFeedbackView, self).get(request, args, **kwargs)
         else:
@@ -405,7 +406,9 @@ class DashboardFeedbackView(TemplateView):
 
                 else:
                     data['display_message'] = "select valid input for feedback"
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
+
                 data['display_message'] = "select valid input for feedback"
             return HttpResponse(json.dumps(data), content_type="application/json")
         else:
@@ -473,7 +476,9 @@ class DashboardRejectService(View):
                         data['display_message'] = "your draft is successfully rejected"
                     else:
                         data['display_message'] = "please do valid action only"
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
+
                 data['display_message'] = "please do valid action only"
             return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -563,7 +568,8 @@ class DashboardAcceptService(View):
                                     "%s - %s" % (str(mail_type), str(e)))
                     else:
                         data['display_message'] = "please do valid action only"
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 data['display_message'] = "please do valid action only"
             return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -586,7 +592,7 @@ class DashboardInboxLoadmoreView(View):
                 return HttpResponse(
                     json.dumps(data), content_type="application/json")
             except Exception as e:
-                logging.getLogger('error_log').error("%s " % str(e))
+                logging.getLogger('error_log').error(str(e))
 
         return HttpResponseForbidden()
 
@@ -606,7 +612,7 @@ class DashboardInboxFilterView(View):
                 return HttpResponse(
                     json.dumps(data), content_type="application/json")
             except Exception as e:
-                logging.getLogger('error_log').error("%s " % str(e))
+                logging.getLogger('error_log').error(str(e))
 
         return HttpResponseForbidden()
 

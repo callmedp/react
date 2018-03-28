@@ -98,7 +98,10 @@ def gen_auto_login_token_task(task=None, user=None, next_url=None, exp_days=None
                                     try:
                                         up_task.percent_done = round((count / float(total_rows))*100, 2)
                                         up_task.save()
-                                    except:
+                                    except Exception as e:
+                                        logging.getLogger('error_log').error('unable to get uptask done percent %s' %
+                                                                             str(e))
+
                                         pass
                             up_task.file_generated = generated_path
                             up_task.percent_done = 100

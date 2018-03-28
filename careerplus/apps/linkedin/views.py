@@ -61,7 +61,8 @@ class CounsellingSubmit(TemplateView):
         context = super(CounsellingSubmit, self).get_context_data(**kwargs)
         try:
             orderitem = OrderItem.objects.get(pk=kwargs.get('order_item', ''))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get order item object%s' % str(e))
             orderitem = None
         try:
             quiz_resp = orderitem.quizresponse
@@ -69,7 +70,7 @@ class CounsellingSubmit(TemplateView):
             quiz_resp = QuizResponse()
             quiz_resp.oi = orderitem
             quiz_resp.save()
-            logging.getLogger('error_log').error("%s" % (str(e)))
+            logging.getLogger('error_log').error(" unable to get quiz response%s" % (str(e)))
 
         context = {
             'ques_dict': ques_dict,
@@ -137,7 +138,8 @@ class CounsellingForm(TemplateView):
         context = super(CounsellingForm, self).get_context_data(**kwargs)
         try:
             orderitem = OrderItem.objects.get(pk=kwargs.get('order_item', ''))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get order item object%s' % str(e))
             orderitem = None
 
         try:
@@ -159,7 +161,9 @@ class CounsellingForm(TemplateView):
     def post(self, request, *args, **kwargs):
         try:
             orderitem = OrderItem.objects.get(pk=kwargs.get('order_item', ''))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get order item object%s' % str(e))
+
             orderitem = None
         if request.POST.get('save') == 'save':
             if orderitem:
@@ -254,10 +258,14 @@ class LinkedinDraftView(TemplateView):
                     })
                 else:
                     context.update({'draft': ''})
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
+
                 context.update({'draft': ''})
 
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+
             context.update({'draft': ''})
         return context
 
@@ -310,10 +318,12 @@ class ConsoleLinkedinDraftView(TemplateView):
                     })
                 else:
                     context.update({'draft': ''})
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 context.update({'draft': ''})
 
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             context.update({'draft': ''})
         return context
 
@@ -333,7 +343,8 @@ class DraftAdminView(TemplateView):
                 return HttpResponseForbidden()
 
             return super(DraftAdminView, self).get(request, *args, **kwargs)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             return HttpResponseForbidden()
 
     def get_context_data(self, **kwargs):
@@ -382,9 +393,11 @@ class DraftAdminView(TemplateView):
                     })
                 else:
                     context.update({'draft': ''})
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 context.update({'draft': ''})
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             context.update({'draft': ''})
         return context
 
@@ -447,11 +460,13 @@ class DraftDownloadView(View):
                         return http_response
                     else:
                         return HttpResponseRedirect('/')
-                except:
+                except Exception as e:
+                    logging.getLogger('error_log').error(str(e))
                     return HttpResponseRedirect('/')
             else:
                 return HttpResponseRedirect('/login/')
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             return HttpResponseRedirect('/')
 
 
@@ -511,11 +526,12 @@ class DashboardDraftDownloadView(View):
                         return http_response
                     else:
                         return HttpResponseRedirect('/')
-                except:
+                except Exception as e:
+                    logging.getLogger('error_log').error(str(e))
                     return HttpResponseRedirect('/')
             else:
                 return HttpResponseRedirect('/login/')
-        except:
-            logging.getLogger('error_log').error('unable to get order item id')
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get order item id%s'%str(e))
 
             return HttpResponseRedirect('/')

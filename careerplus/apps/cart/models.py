@@ -1,5 +1,5 @@
 import json
-
+import logging
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -135,7 +135,7 @@ class LineItem(AbstractAutoDate):
         super(LineItem, self).__init__(*args, **kwargs)
         
     class Meta:
-        app_label = 'cart'
+        app_label = 'cart'.lineitems.get
         ordering = ['modified', 'pk']
         # unique_together = ("cart", "reference")
         verbose_name = _('Cart Line Item')
@@ -167,7 +167,8 @@ class LineItem(AbstractAutoDate):
                     if p_data.get('id') == product.pk:
                         flag = True
                         break
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 pass
 
         else:
@@ -176,7 +177,8 @@ class LineItem(AbstractAutoDate):
             try:
                 sqs = sqs[0]
                 flag = True
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 pass
 
         return flag
@@ -204,7 +206,8 @@ class LineItem(AbstractAutoDate):
                 if not price:
                     price = product.get_price()
 
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 price = product.get_price()
 
         else:
@@ -213,7 +216,9 @@ class LineItem(AbstractAutoDate):
             try:
                 sqs = sqs[0]
                 price = sqs.pPinb
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
+
                 price = product.get_price()
 
         return round(price, 0)

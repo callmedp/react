@@ -45,7 +45,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                 self.cart_obj = Cart.objects.get(pk=cart_pk)
                 if not self.cart_obj.shipping_done or not self.cart_obj.owner_id:
                     return HttpResponsePermanentRedirect(reverse('cart:payment-shipping'))
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get cart object%s'%str(e))
                 return HttpResponsePermanentRedirect(reverse('homepage'))
         if self.cart_obj and not (self.cart_obj.shipping_done):
             return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
@@ -99,8 +100,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                     del request.session['cart_pk']
                     del request.session['checkout_type']
                     request.session.modified = True
-                except:
-                    logging.getLogger('error_log').error('unable to delete request session objects')
+                except Exception as e:
+                    logging.getLogger('error_log').error('unable to delete request session objects%s'%str(e))
                     pass
                 return HttpResponseRedirect(return_parameter)
 
@@ -134,9 +135,9 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                             del request.session['cart_pk']
                             del request.session['checkout_type']
                             request.session.modified = True
-                        except:
+                        except Exception as e:
 
-                            logging.getLogger('error_log').error('unable to delete session request object')
+                            logging.getLogger('error_log').error('unable to delete session request object%s'%str(e))
                             pass
                         return HttpResponseRedirect(return_parameter)
                 else:
@@ -177,8 +178,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                             del request.session['cart_pk']
                             del request.session['checkout_type']
                             request.session.modified = True
-                        except:
-                            logging.getLogger('error_log').error('unable to delete request session object')
+                        except Exception as e:
+                            logging.getLogger('error_log').error('unable to delete request session object%s'%str(e))
                             pass
                         return HttpResponseRedirect(return_parameter)
                 else:
@@ -253,8 +254,8 @@ class ThankYouView(TemplateView):
         candidate_id = request.session.get('candidate_id', None)
         try:
             order = Order.objects.get(pk=order_pk)
-        except:
-            logging.getLogger('error_log').error('unable to get order object')
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get order object %s'%str(e))
             return HttpResponseRedirect(reverse('payment:thank-you'))
         file = request.FILES.get('resume_file', '')
                 

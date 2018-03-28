@@ -83,7 +83,8 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
         self.created = request.GET.get('created', '')
         try:
             self.status = int(request.GET.get('status', -1))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get status %s' % str(e))
             self.status = -1
         return super(RefundRequestApprovalView, self).get(request, args, **kwargs)
 
@@ -134,14 +135,14 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
                 queryset = queryset.filter(
                     Q(order__number__icontains=self.query))
         except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
+            logging.getLogger('error_log').error('unable to get query-set%s'%str(e))
             pass
 
         try:
             if self.status != -1:
                 queryset = queryset.filter(status=self.status)
         except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
+            logging.getLogger('error_log').error('unable to get query-set%s'%str(e))
             pass
 
         try:
@@ -166,7 +167,7 @@ class RefundRequestApprovalView(ListView, PaginationMixin):
 
                 self.created = start + ' - ' + end
         except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
+            logging.getLogger('error_log').error('unable to get query-set within date-range%s'%str(e))
             pass
 
         return queryset.order_by('-modified')
@@ -191,7 +192,8 @@ class RefundOrderRequestView(ListView, PaginationMixin):
         self.created = request.GET.get('created', '')
         try:
             self.status = int(request.GET.get('status', -1))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get status %s' % str(e))
             self.status = -1
         return super(RefundOrderRequestView, self).get(request, args, **kwargs)
 
@@ -233,7 +235,7 @@ class RefundOrderRequestView(ListView, PaginationMixin):
                 queryset = queryset.filter(
                     Q(order__number__icontains=self.query))
         except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
+            logging.getLogger('error_log').error('unable to get query-set%s'%str(e))
             pass
 
         try:
@@ -265,7 +267,8 @@ class RefundOrderRequestView(ListView, PaginationMixin):
 
                 self.created = start + ' - ' + end
         except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
+            logging.getLogger('error_log').error('unable to get query-set within date range%s'%str(e))
+
             pass
 
         return queryset.order_by('-modified')
@@ -289,7 +292,8 @@ class RefundRequestDetail(DetailView, RefundInfoMixin):
                 pass
             else:
                 raise Http404
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get query-set%s'%str(e))
             raise Http404
         return obj
 
@@ -415,7 +419,8 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
                 pass
             else:
                 raise Http404
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get query-set%s'%str(e))
             raise Http404
         return obj
 
@@ -766,7 +771,9 @@ class RefundRaiseRequestView(TemplateView, RefundInfoMixin):
         order = None
         try:
             order = Order.objects.get(pk=order_pk, status__in=[1, 3])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get order object %s' % str(e))
+
             messages.add_message(
                 request, messages.ERROR,
                 'please select valid order to raise refund request.')
@@ -943,7 +950,8 @@ class RefundRaiseRequestView(TemplateView, RefundInfoMixin):
         if self.query:
             try:
                 order = Order.objects.get(number=self.query, status__in=[1, 3])
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get order object%s' % str(e))
                 messages.add_message(
                     self.request,
                     messages.ERROR,

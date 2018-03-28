@@ -59,7 +59,8 @@ class DraftAdmin(admin.ModelAdmin):
     def get_order(self, obj):
         try:
             return obj.orderitem.order_id
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to return order item object id %s' % str(e))
             return ''
     get_order.short_description = 'Order ID'
 
@@ -72,8 +73,8 @@ class DraftAdmin(admin.ModelAdmin):
                     order.first_name, order.last_name)
             else:
                 return '<b>No user</b>'
-        except:
-            logging.getLogger('error_log').error('unable to get candidate information')
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get candidate information %s'%str(e))
             return '<b>No user</b>'
     candidate_info.short_descriptixon = 'Candidate Information'
     candidate_info.allow_tags = True

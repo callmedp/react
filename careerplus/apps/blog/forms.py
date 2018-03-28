@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.conf import settings
-
+import logging
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 from .models import Tag, Category, Blog, Comment
@@ -96,10 +96,10 @@ class BlogAddForm(forms.ModelForm):
     def clean(self):
         fields = ['name', 'slug']
         for field in fields:
-            try:
                 val = self.cleaned_data.get(field).strip()
+                if not val:
+                    raise forms.ValidationError("value is empty")
                 self.cleaned_data[field] = val
-            except:
                 continue
         status = self.cleaned_data.get('status')
 
@@ -158,10 +158,10 @@ class TagAddForm(forms.ModelForm):
     def clean(self):
         fields_to_clean = ['name', 'slug']
         for field in fields_to_clean:
-            try:
                 value = self.cleaned_data.get(field).strip()
+                if not value:
+                    raise forms.ValidationError("value is empty")
                 self.cleaned_data[field] = value
-            except:
                 continue
         return super(TagAddForm, self).clean()
 
@@ -202,10 +202,12 @@ class CategoryAddForm(forms.ModelForm):
     def clean(self):
         fields_to_clean = ['name', 'slug']
         for field in fields_to_clean:
-            try:
+
                 value = self.cleaned_data.get(field).strip()
+                if not value:
+                    raise forms.ValidationError("value is empty")
                 self.cleaned_data[field] = value
-            except:
+
                 continue
         return super(CategoryAddForm, self).clean()
 
@@ -263,10 +265,10 @@ class CommentUpdateForm(forms.ModelForm):
     def clean(self):
         fields_to_clean = ['message', ]
         for field in fields_to_clean:
-            try:
                 value = self.cleaned_data.get(field).strip()
+                if not value:
+                    raise forms.ValidationError("value is empty")
                 self.cleaned_data[field] = value
-            except:
                 continue
         return super(CommentUpdateForm, self).clean()
 

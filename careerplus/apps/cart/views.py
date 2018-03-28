@@ -82,6 +82,7 @@ class AddToCartView(View, CartMixin):
                 try:
                     cart_obj = Cart.objects.get(pk=cart_pk)
                 except Exception as e:
+                    logging.getLogger('error_log').error('unable to get cart object %s'%str(e))
                     cart_obj = None
                 logging.getLogger('info_log').info("Cart Obj:{}, candidate_ID: {}, Owner ID:{}".format(cart_obj, candidate_id, cart_obj.owner_id))
                 if cart_obj and (candidate_id == cart_obj.owner_id):
@@ -297,7 +298,8 @@ class PaymentShippingView(UpdateView, CartMixin):
         if cart_pk:
             try:
                 obj = Cart.objects.get(pk=cart_pk)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get cart object%s' % str(e))
                 raise Http404
             return obj
         raise Http404
@@ -336,7 +338,8 @@ class PaymentShippingView(UpdateView, CartMixin):
         if not form.initial.get('country'):
             try:
                 initial_country = Country.objects.get(phone='91', active=True)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get country object %s'%str(e))
                 initial_country = None
             form.initial.update({
                 'country': initial_country})

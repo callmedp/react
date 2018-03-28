@@ -17,8 +17,8 @@ class StateForm(forms.Form):
             states = india_obj.state_set.all().order_by('name')
             for st in states:
                 state_choices.append((st.id, st.name))
-        except:
-            logging.getLogger('error_log').error('unable to set states')
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to set states %s'%str(e))
             pass
         self.fields['state'].choices = state_choices
         self.fields['state'].initial = -1
@@ -28,7 +28,8 @@ class StateForm(forms.Form):
         try:
             india_obj = Country.objects.filter(phone='91')[0]
             india_obj.state_set.get(id=state)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to set or get india state%s'%str(e))
             raise forms.ValidationError(
                 "Please select valid state")
         return state

@@ -261,6 +261,7 @@ def process_mailer(pk=None):
     try:
         order = Order.objects.get(pk=pk)
     except Exception as e:
+        logging.getLogger('error_log').error('unable to get order object%s' % str(e))
         raise e
     if order.status == 1:
         orderitems = order.orderitems.filter(no_process=False).select_related(
@@ -478,6 +479,7 @@ def process_mailer(pk=None):
                             logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
             except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 raise e
 
 

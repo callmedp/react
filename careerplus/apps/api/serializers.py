@@ -4,6 +4,7 @@ from rest_framework.serializers import (
 )
 from order.models import Order, OrderItem
 from payment.models import PaymentTxn
+
 import logging
 
 
@@ -34,16 +35,15 @@ class ParentSerializer(ModelSerializer):
     def get_product_name(self, obj):
         try:
             return obj.product.name
-        except:
-            logging.getLogger('error_log').error(" Msg= Unable to fetch Product name")
-
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to return Product name %s"% str(e))
         return ''
 
     def get_prd_parent_id(self, obj):
         try:
             return obj.product.id
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to return product parent id %s" % str(e))
         return ''
 
 
@@ -65,14 +65,16 @@ class VariationSerializer(ModelSerializer):
     def get_variation_product_name(self, obj):
         try:
             return obj.product.name
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(" Msg= Unable to return variant Product name %s"% str(e))
             pass
         return ''
 
     def get_variation_product_id(self, obj):
         try:
             return obj.product.id
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to get variant Product id  %s"% str(e))
             pass
         return ''
 
@@ -95,14 +97,16 @@ class AddonSerializer(ModelSerializer):
     def get_addon_product_name(self, obj):
         try:
             return obj.product.name
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to return addon Product name %s"% str(e))
             pass
         return ''
 
     def get_addon_product_id(self, obj):
         try:
             return obj.product.id
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to return addon Product id %s"% str(e))
             pass
         return ''
 
@@ -125,14 +129,16 @@ class ComboSerializer(ModelSerializer):
     def get_combo_product_name(self, obj):
         try:
             return obj.product.name
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to return combo Product name %s"% str(e))
             pass
         return ''
 
     def get_combo_product_id(self, obj):
         try:
             return obj.product.id
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to return combo Product id %s"% str(e))
             pass
         return ''
 
@@ -161,7 +167,8 @@ class OrderItemDetailSerializer(ModelSerializer):
         try:
             v = obj.order.orderitems.filter(parent=None)
             return ParentSerializer(v, many=True).data
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to return order item parent %s"% str(e))
             pass
         return ''
 
@@ -170,7 +177,8 @@ class OrderItemDetailSerializer(ModelSerializer):
             variations = obj.order.orderitems.filter(
                 parent=obj, no_process=False, is_variation=True)
             return VariationSerializer(variations, many=True).data
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to return variat order item  %s"% str(e))
             pass
         return ''
 
@@ -179,7 +187,8 @@ class OrderItemDetailSerializer(ModelSerializer):
             addons = obj.order.orderitems.filter(
                 parent=obj, no_process=False, is_addon=True)
             return AddonSerializer(addons, many=True).data
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to return addon order item %s"% str(e))
             pass
         return ''
 
@@ -188,7 +197,8 @@ class OrderItemDetailSerializer(ModelSerializer):
             combos = obj.order.orderitems.filter(
                 parent=obj, no_process=False, is_combo=True)
             return ComboSerializer(combos, many=True).data
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to return combo order item %s"% str(e))
             pass
         return ''
 

@@ -5,7 +5,7 @@ from django.views.generic import (
 from django.utils.decorators import method_decorator
 from django.http import HttpResponseForbidden
 from django.core.paginator import Paginator
-
+import logging
 from console.decorators import mobile_page_only
 
 from .models import Category, Blog, Tag
@@ -47,13 +47,15 @@ class ArticleLoadMoreMobileView(TemplateView, PaginationMixin):
                 self.active_tab = int(request.GET.get('tab', 0))
                 if self.active_tab not in [0, 1]:
                     self.active_tab = 0
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error("Unable to get active tab%s" % str(e))
                 self.active_tab = 0
             self.cat_slug = self.request.GET.get('cat_slug', '')
             try:
                 self.cat_obj = Category.objects.get(slug=self.cat_slug, is_active=True, visibility=1)
                 return super(ArticleLoadMoreMobileView, self).get(request, args, **kwargs)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error("Unable to get category object%s" % str(e))
                 return ''
         else:
             return HttpResponseForbidden()
@@ -97,13 +99,15 @@ class ArticleLoadMoreTagView(TemplateView, PaginationMixin):
                 self.active_tab = int(request.GET.get('tab', 0))
                 if self.active_tab not in [0, 1]:
                     self.active_tab = 0
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error("Unable to get active tab%s" % str(e))
                 self.active_tab = 0
             self.tag_slug = self.request.GET.get('tag_slug', '')
             try:
                 self.tag_obj = Tag.objects.get(slug=self.tag_slug, is_active=True, visibility=1)
                 return super(ArticleLoadMoreTagView, self).get(request, args, **kwargs)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error("Unable to get tag object%s" % str(e))
                 return ''
         else:
             return HttpResponseForbidden()

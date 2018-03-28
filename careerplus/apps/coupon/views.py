@@ -8,8 +8,7 @@ from cart.models import Cart
 from .models import Coupon, CouponUser
 from cart.mixins import CartMixin
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
-
-
+import logging
 class CsrfExemptSessionAuthentication(SessionAuthentication):
 
     def enforce_csrf(self, request):
@@ -128,7 +127,9 @@ class CouponRedeemView(APIView, CartMixin):
                 {'success': True, 'msg': 'Successfully Redeemed'
                  }, status=200, content_type='application/json')
            
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+
             return Response(
             {'success': 1,
              'error': 'Try after some Time'
@@ -182,7 +183,8 @@ class CouponRemoveView(APIView, CartMixin):
                     {'success': True,'msg': 'Successfully Removed'
                     }, status=200, content_type='application/json')
                
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             return Response(
             {'success': 0,
              'error': 'Try after some Time'

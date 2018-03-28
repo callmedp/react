@@ -83,7 +83,8 @@ class GenerateAutoLoginTask(FormView):
                 if exp_days:
                     try:
                         exp_days = int(exp_days)
-                    except:
+                    except Exception as e:
+                        logging.getLogger('error_log').error('unable to get exp_days %s' % str(e))
                         exp_days = None
                 else:
                     exp_days = None
@@ -166,7 +167,9 @@ class DownloadTaskView(View):
                 response = HttpResponse(fsock, content_type=mimetypes.guess_type(file_path)[0])
                 response['Content-Disposition'] = 'attachment; filename="%s"' % file_name
                 return response
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to download document  %s' % str(e))
+
             messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
             response = HttpResponseRedirect(reverse('console:tasks:tasklist'))
             return response
