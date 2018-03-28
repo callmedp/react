@@ -284,10 +284,11 @@
       <!-- main parent2 section end -->      
     {% endblock section2 %}
 
-    {% block prdrecommended %}
-
-    {% include "shop/partials/recommended_product.html" %}
-    {% endblock prdrecommended %}
+    {% if sqs.id not in linkedin_resume_services %}
+      {% block prdrecommended %}
+      {% include "shop/partials/recommended_product.html" %}
+      {% endblock prdrecommended %}
+    {% endif %}
     <!--equiry form-->
 <div class="modal fade bs-example-modal-sm3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="detailpage">
   <div class="modal-dialog modal-sm" role="document">

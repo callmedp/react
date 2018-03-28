@@ -440,10 +440,6 @@ class LinkedinCallbackView(View):
             str_data = str(read_data, 'utf-8')
             data_dict = json.loads(str_data)
             data_dict.update({'key': 'linkedin'})
-            logging.getLogger('info_log').info(
-                '{} - {}'.format(
-                data_dict.get('access_token'),
-                data_dict.get('expires_in')))
             linkedin_user = RegistrationLoginApi.social_login(data_dict)
             if linkedin_user.get('response'):
                 candidateid = linkedin_user['user_details']['candidate_id']

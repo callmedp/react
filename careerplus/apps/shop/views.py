@@ -39,7 +39,7 @@ from order.models import OrderItem
 
 from .models import Product
 from review.models import DetailPageWidget
-from .mixins import CourseCatalogueMixin
+from .mixins import CourseCatalogueMixin, LinkedinSeriviceMixin
 
 
 class ProductInformationMixin(object):
@@ -463,6 +463,19 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                     product__id__in=settings.LINKEDIN_RESUME_PRODUCTS)
                 if services.exists():
                     return HttpResponseRedirect(reverse('dashboard:dashboard'))
+
+                token = request.GET.get('token', '')
+
+                if token and request.session.get('email'):
+                    validate = LinkedinSeriviceMixin().validate_encrypted_key(
+                        token=token,
+                        email=request.session.get('email'),
+                        prd=self.sqs.id)
+                    if not validate:
+                        raise Http404
+                else:
+                    raise Http404
+
             elif request.session.get('candidate_id') and self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
                 request.session.flush()
         except Exception as e:
