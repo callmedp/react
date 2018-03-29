@@ -27,9 +27,12 @@
                     <a class="btn btn-yellow w100fl" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="#">Enrol now</a>
                 </li>
 
+                {% if sqs.id not in linkedin_resume_services %}
                 <li>
                     <a class="btn btn-outline w100fl" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="#">Add to cart</a>
                 </li>
+                {% endif %}
+                
             </ul>
         </div>
     </div>

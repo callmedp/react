@@ -276,7 +276,7 @@
         <ul class="underline">
         {% for package in pop_list|slice:"0:4"  %}
             <li>
-                <a href="{{package.url}}" class="blue-link pb-0">
+                <a href="{{package.url}}{% if sqs.id in linkedin_resume_services %}?token={{request.GET.token}}{% endif %}" class="blue-link pb-0">
                 {% if package.experience %} 
                     <strong>
                         {{package.experience|get_choice_display:"EXP_DICT"}}
