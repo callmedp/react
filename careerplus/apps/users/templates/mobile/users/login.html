@@ -13,22 +13,42 @@
     <!-- header menu Icon Starts here -->
     <header class="w100fl he-auto">
         <!-- header menu Icon Starts here -->
-        <div class="main-menu w100fl">
-            <div class="pull-left">
-                
-                <a class=" pull-left" id="sidebar-main-trigger" href="/"></a> 
-                
-                <a class="icon-back pull-left" href="/"></a> 
-            </div><!-- / Left side Icon ends here -->
 
-            <div class="pull-right">
-                
-                <!--a class=" pull-left" href="search-listing.html">search</a-->
+        {% if linkedin %}
+            <div class="main-menu w100fl">
+                <div class="pull-left">
+                    
+                    <a class=" pull-left" id="sidebar-main-trigger" href=""></a> 
+                    
+                    <a class="icon-back pull-left" href=""></a> 
+                </div><!-- / Left side Icon ends here -->
 
-                
-                <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
-            </div><!-- / Right side Icon ends here -->
-        </div><!-- header menu Icon ends here -->
+                <div class="pull-right">
+                    
+                    <!--a class=" pull-left" href="search-listing.html">search</a-->
+
+                    
+                    <!--a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a-->
+                </div><!-- / Right side Icon ends here -->
+            </div><!-- header menu Icon ends here -->
+        {% else %}
+            <div class="main-menu w100fl">
+                <div class="pull-left">
+                    
+                    <a class=" pull-left" id="sidebar-main-trigger" href="/"></a> 
+                    
+                    <a class="icon-back pull-left" href="/"></a> 
+                </div><!-- / Left side Icon ends here -->
+
+                <div class="pull-right">
+                    
+                    <!--a class=" pull-left" href="search-listing.html">search</a-->
+
+                    
+                    <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                </div><!-- / Right side Icon ends here -->
+            </div><!-- header menu Icon ends here -->
+        {% endif %}
 
     </header><!-- header ends here -->
 {% endblock header %}
@@ -37,56 +57,98 @@
 {% block container %}
     <div class="body-wrapper">
         <div class="tab-container">
-            <ul class="tabs box-panel p-0">
-                <li><a href="{% url 'login' %}" class="current">Login</a></li>
-                <li><a href="{% url 'register' %}">Register</a></li>
-            </ul>
 
-            <!-- Tab content Satrts here -->
-            <div class="content-box mt-20 login-form">
-                {% if messages %}
-                    {% for message in messages %}
-                    <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
-                <form method="post" id="login_form" data-role="form">
-                    {% csrf_token %}
-                    {% for field in form %}
-                        <div class="form-group">
-                            {{field}}
-                            {% for error in  field.errors %}{{ error }}{% endfor %}
+            {% if linkedin %}
+
+                <!-- Tab content Satrts here -->
+                <div class="content-box mt-20 login-form">
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    <form method="post" id="login_form" data-role="form">{% csrf_token %}
+
+                        <div class="form-group linkedin-tnc">
+                            <p class="c9 pb-0">
+                                <input type="checkbox" id="accept-condition">
+                                <label for="accept-condition">By syncing your LinkedIn account, you:</label>
+                                <p id="term-error" class="error"></p>
+                            </p>
+                            <ul>
+                                <li>
+                                    Agree to Shine <a href="{% url "tnc" %}">Terms & Conditions</a>
+                                </li>
+                                <li>
+                                    Agree to let Shine use your name, photo, headline, current positions and primary email address associated with your LinkedIn account under its <a href="{% url "privacy-policy" %}">Privacy policy</a> and LinkedIn will have no access to any financial information shared hereafter 
+                                </li>
+                                <li>
+                                    Agree to Shine sharing participation statistics with LinkedIn. The statistics will be reported in aggregate form only, and cannot be identified individually.
+                                </li>
+                            </ul>
                         </div>
-                    {% endfor %}
 
-                    <div class="form-group">
-                        <p class="c9 pb-0">
-                            <input type="checkbox" id="test10">
-                            <label for="test10">Remember me</label>
-                        </p>
-                    </div>
 
-                    <div class="form-group text-center">
-                        <button type="submit" class="btn btn-blue w100fl btn-round mb-20">Login</button>
-                        <a href="{% url "users:forgot-html" %}">Forgot Password?</a>
-                    </div>
 
-                    <div class="line_wrap w100fl">
-                        <span>or sign in with</span>
-                        <div class="line"></div>
-                    </div>
+                        <a href="{% url 'users:linkedin-code' %}?credential=1&next={{request.GET.next}}" class="btn btn-blue w100fl btn-round mb-20" onclick='return validate_linkedin_login_terms()'><i class="icon-linkedIn-login mr-5"></i>Sign in with LinkedIn</a>
 
-                    <div class="social-login w100fl text-center">
-                        <a class="fb" onclick="Login();">
-                        <sup class="icon-fb-2"></sup></a>
-                        <a href="{% url 'users:linkedin-code' %}" class="link"><sup class="icon-link-2"></sup></a>
-                        <a class="gp" onclick="glogin()">
-                        <sup class="icon-gp-2"></sup></a>
-                    </div>
-                    <div class="clearfix"></div>
+                        <a href="/contact-us" class="any-query block mt-20 text-center row">Any Query ? We are here to help you..</a>
+                    </form>
+                </div><!-- Tab content ends here -->
 
-                    <a href="/contact-us" class="any-query block mt-20 text-center row">Any Query ? We are here to help you..</a>
-                </form>
-            </div><!-- Tab content ends here -->
+            {% else %}
+                <ul class="tabs box-panel p-0">
+                    <li><a href="{% url 'login' %}" class="current">Login</a></li>
+                    <li><a href="{% url 'register' %}">Register</a></li>
+                </ul>
+
+                <!-- Tab content Satrts here -->
+                <div class="content-box mt-20 login-form">
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    <form method="post" id="login_form" data-role="form">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group">
+                                {{field}}
+                                {% for error in  field.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="form-group">
+                            <p class="c9 pb-0">
+                                <input type="checkbox" id="test10">
+                                <label for="test10">Remember me</label>
+                            </p>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-blue w100fl btn-round mb-20">Login</button>
+                            <a href="{% url "users:forgot-html" %}">Forgot Password?</a>
+                        </div>
+
+                        <div class="line_wrap w100fl">
+                            <span>or sign in with</span>
+                            <div class="line"></div>
+                        </div>
+
+                        <div class="social-login w100fl text-center">
+                            <a class="fb" onclick="Login();">
+                            <sup class="icon-fb-2"></sup></a>
+                            <a href="{% url 'users:linkedin-code' %}" class="link"><sup class="icon-link-2"></sup></a>
+                            <a class="gp" onclick="glogin()">
+                            <sup class="icon-gp-2"></sup></a>
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <a href="/contact-us" class="any-query block mt-20 text-center row">Any Query ? We are here to help you..</a>
+                    </form>
+                </div><!-- Tab content ends here -->
+            {% endif %}
+
         </div><!-- container -->
     </div>
 {% endblock container %}
