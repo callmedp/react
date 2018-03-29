@@ -15,6 +15,33 @@
 {% endblock css_section %}
 {% block container %}
 
+{% block navigation %}
+{% if linkedin %}
+    <!-- navigation bar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <a class="navbar-brand" href=""></a>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <!--div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown have-query">
+                <a href="tel:0124-3955001">Have a query? Call us at <strong>0124-3955001</strong></a>
+              </li>
+            </ul>
+          </div--><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+  </nav>
+{% else %}
+   {{block.super}}
+{% endif %}
+
+{% endblock navigation %}
+
 <!-- main section start -->
 <div class="container pr">
     <header class="login-page-bg">
@@ -38,42 +65,78 @@
     <!-- login form start -->
     <div class="register login-signup-box">
         <div>
+            {% if not linkedin %}
             <h1 class="modal-title">Login</h1>
+            {% endif %}
             {% if messages %}
                 {% for message in messages %}
                 <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</div>
                 {% endfor %}
             {% endif %}
         </div>
-        <form method="post" id="login_form" role="form">
-        {% csrf_token %}
-            <fieldset>
-                {% for field in form %}
-                    <div class="form-group {% if field.errors %}error{% endif %}">
-                        {{field}}
-                        {% for error in  field.errors %}{{ error }}{% endfor %}
-                    </div>
-                {% endfor %}
-            </fieldset>
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="checkbox" name="remember_me" class="form-check-input">
-                    Remember me
-                </label>
-            </div>
-            <button type="submit" class="btn btn-primary submit">Login</button>
-            <small class="form-text text-muted text-center">
-                <a href="javascript:void(0)" id="modalforgot">
-                Forgot Password?</a>
-            </small>
-            <div class="social-login">
-                <span>or login with</span>
-                <a class="facebook" onclick="Login();"></a>
-                <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
-                <a class="gplus" onclick="glogin()"></a>
-            </div>
-            <small class="form-text text-muted text-center">Don’t have an account yet? <a href="{% url 'register' %}">Register Now</a></small>
-        </form>
+
+        {% if linkedin %}
+            <form method="post" id="login_form" role="form">
+            {% csrf_token %}
+
+                <div class="form-check linkedin-tnc">
+                    <label class="form-check-label">
+                        <input type="checkbox" name="remember_me" class="form-check-input">
+                        By syncing your LinkedIn account, you:
+                    </label>
+                    <ul>
+                        <li>
+                            Agree to Shine <a href="{% url "tnc" %}">Terms & Conditions</a>
+                        </li>
+                        <li>
+                            Agree to let Shine use your name, photo, headline, current positions and primary email address associated with your LinkedIn account under its <a href="{% url "privacy-policy" %}">Privacy policy</a> and LinkedIn will have no access to any financial information shared hereafter 
+                        </li>
+                        <li>
+                            Agree to Shine sharing participation statistics with LinkedIn. The statistics will be reported in aggregate form only, and cannot be identified individually.
+                        </li>
+                    </ul>
+                </div>
+
+                <a href="{% url 'users:linkedin-code' %}?credential=1&next={{request.GET.next}}" class="btn submit-linkedin"><i class="icon-linkedIn-login mr-5"></i>Sign in with LinkedIn</a>
+
+            </form>
+        
+        {% else %}
+            <form method="post" id="login_form" role="form">
+            {% csrf_token %}
+                <fieldset>
+                    {% for field in form %}
+                        <div class="form-group {% if field.errors %}error{% endif %}">
+                            {{field}}
+                            {% for error in  field.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endfor %}
+                </fieldset>
+
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" name="remember_me" class="form-check-input">
+                        Remember me:
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary submit">Login</button>
+
+                <small class="form-text text-muted text-center">
+                    <a href="javascript:void(0)" id="modalforgot">
+                    Forgot Password?</a>
+                </small>
+                <div class="social-login">
+                    <span>or login with</span>
+                    <a class="facebook" onclick="Login();"></a>
+                    <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
+                    <a class="gplus" onclick="glogin()"></a>
+                </div>
+                <small class="form-text text-muted text-center">Don’t have an account yet? <a href="{% url 'register' %}">Register Now</a></small>
+            </form>
+
+        {% endif %}
+
     </div>
     <!-- login form end -->
 </div>

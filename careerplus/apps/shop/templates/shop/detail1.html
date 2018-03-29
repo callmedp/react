@@ -60,10 +60,13 @@
         
         <div class="detail-course-header">
           <div class="container">
-            <!-- breadcrums -->
-            {% block breadcrumbs %}
-              {% include "shop/partials/breadcrumb.html" %}  
-            {% endblock breadcrumbs %}
+
+            {% if sqs.id not in linkedin_resume_services %}
+              <!-- breadcrums -->
+              {% block breadcrumbs %}
+                {% include "shop/partials/breadcrumb.html" %}  
+              {% endblock breadcrumbs %}
+            {% endif %}
             
             {% block product_header %}
               <div class="course-caption col-sm-8 no-pad" itemscope itemtype="http://schema.org/Product">

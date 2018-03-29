@@ -455,29 +455,57 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             self.sqs = sqs[0]
             if not self.sqs:
                 raise Http404
-            linkedin_cid = settings.LINKEDIN_DICT.get('CLIENT_ID', None)
-            if request.session.get('candidate_id') and linkedin_cid == request.session.get('linkedin_client_id', '') and self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
-                services = OrderItem.objects.filter(
-                    order__status__in=[1, 3],
-                    order__candidate_id=request.session.get('candidate_id'),
-                    product__id__in=settings.LINKEDIN_RESUME_PRODUCTS)
-                if services.exists():
-                    return HttpResponseRedirect(reverse('dashboard:dashboard'))
 
+            if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
+                linkedin_cid = settings.LINKEDIN_DICT.get('CLIENT_ID', None)
                 token = request.GET.get('token', '')
-
+                login_url = reverse('login') + '?next=' + request.get_full_path() + '&linkedin=true'
                 if token and request.session.get('email'):
                     validate = LinkedinSeriviceMixin().validate_encrypted_key(
                         token=token,
                         email=request.session.get('email'),
                         prd=self.sqs.id)
                     if not validate:
-                        raise Http404
+                        return HttpResponseRedirect('/')
+                elif token:
+                    request.session.flush()
+                    return HttpResponseRedirect(login_url)
                 else:
-                    raise Http404
+                    return HttpResponseRedirect('/')
 
-            elif request.session.get('candidate_id') and self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
-                request.session.flush()
+                if request.session.get('candidate_id') and linkedin_cid == request.session.get('linkedin_client_id', ''):
+                    services = OrderItem.objects.filter(
+                        order__status__in=[1, 3],
+                        order__candidate_id=request.session.get('candidate_id'),
+                        product__id__in=settings.LINKEDIN_RESUME_PRODUCTS)
+                    if services.exists():
+                        return HttpResponseRedirect(reverse('dashboard:dashboard'))
+                else:
+                    request.session.flush()
+                    return HttpResponseRedirect(login_url)
+
+            # if request.session.get('candidate_id') and linkedin_cid == request.session.get('linkedin_client_id', '') and self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
+            #     services = OrderItem.objects.filter(
+            #         order__status__in=[1, 3],
+            #         order__candidate_id=request.session.get('candidate_id'),
+            #         product__id__in=settings.LINKEDIN_RESUME_PRODUCTS)
+            #     if services.exists():
+            #         return HttpResponseRedirect(reverse('dashboard:dashboard'))
+
+            #     token = request.GET.get('token', '')
+
+            #     if token and request.session.get('email'):
+            #         validate = LinkedinSeriviceMixin().validate_encrypted_key(
+            #             token=token,
+            #             email=request.session.get('email'),
+            #             prd=self.sqs.id)
+            #         if not validate:
+            #             raise HttpResponseRedirect('/')
+            #     else:
+            #         raise HttpResponseRedirect('/')
+
+            # elif request.session.get('candidate_id') and self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
+            #     request.session.flush()
         except Exception as e:
             logging.getLogger('error_log').error("SQS query error on product detail.ID:{}".format(pk))
             raise Http404

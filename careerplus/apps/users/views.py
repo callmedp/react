@@ -105,6 +105,11 @@ class LoginApiView(FormView):
         context = super(LoginApiView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         form = self.get_form()
+        linkedin = self.request.GET.get('linkedin', '')
+        if linkedin == 'true':
+            context.update({
+                "linkedin": True,
+            })
         context.update({
             'messages': alert,
             'form': form,

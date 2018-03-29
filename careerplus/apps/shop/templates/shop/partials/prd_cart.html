@@ -33,12 +33,14 @@
     {% endif %}
     <span class="clearfix db"></span>
 
+    {% comment %}
     {% if sqs.id in linkedin_resume_services and not request.session.candidate_id %}
       <a role="button" class="enrol-now" id="login-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enrol now</a>
     {% else %}
-      <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enrol now</a>
-    {% endif %}
-
+    {% endcomment %}
+    
+    <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enrol now</a>
+    
 
     {% if sqs.id not in linkedin_resume_services %}
       <a role="button" class="add-cart" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Add to cart</a>
