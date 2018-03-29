@@ -3,7 +3,6 @@ from .settings import *
 DEBUG = False
 IS_LIVE = True
 IS_GCP = True
-
 ######## APPS SETTINGS ###############
 DJANGO_APPS = [
     'django.contrib.admin',

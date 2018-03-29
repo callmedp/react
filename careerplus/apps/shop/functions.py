@@ -44,6 +44,11 @@ def get_upload_path_vendor(instance, filename):
         ven_id=instance.id, filename=get_file_name(filename))
 
 
+def get_upload_path_badge_file(instance, filename):
+    return "badge_file/{ven_id}/{filename}".format(
+        ven_id=instance.id, filename=get_file_name(filename))
+
+
 def upload_FA(filename):
     from .models import FunctionalArea, Product, ProductFA
     csvfile = open(filename)
