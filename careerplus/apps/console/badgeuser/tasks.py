@@ -310,6 +310,7 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                         if created:
                             obj.candidate_mobile = mobile
                             obj.candidate_email = email
+                            obj.save()
                             post_data = {
                                 'certification_name': certificate_name,
                                 'certification_year': certi_yr_passing
