@@ -144,7 +144,7 @@ class UserCertificate(models.Model):
         max_length=20, help_text=_('Candidate Name'))
     candidate_id = models.CharField(
         _('Candidate ID'), blank=True,
-        max_length=20, help_text=_('Candidate ID'))
+        max_length=30, help_text=_('Candidate ID'))
 
     def __str__(self):
         return '{}'.format(self.certificate.name)
