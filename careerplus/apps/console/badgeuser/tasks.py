@@ -266,14 +266,17 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                 settings.MEDIA_ROOT + '/' + generated_path, 'w')
             upload = open(
                 settings.MEDIA_ROOT + '/' + upload_path,
-                    'r', encoding='utf-8', errors='ignore')
+                'r', encoding='utf-8', errors='ignore')
+            uploader = csv.DictReader(
+                upload, delimiter=',', quotechar='"')
         else:
             generated_file = GCPPrivateMediaStorage().open(
                 generated_path, 'wb')
             upload = GCPPrivateMediaStorage().open(
                 upload_path)
-        uploader = csv.DictReader(
-            upload, delimiter=',', quotechar='"')
+            uploader = csv.DictReader(
+                codecs.iterdecode(upload, 'utf-8'),
+                delimiter=',', quotechar='"')
         fieldnames = uploader.fieldnames
         fieldnames.append('status')
         fieldnames.append('reason_for_failure')
