@@ -80,7 +80,23 @@ window.fbAsyncInit = function() {
        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
      })();
 
+
+function validate_linkedin_login_terms(){
+    if($('#accept-condition').is(":checked")){
+        return true;
+    }
+    else{
+        $('#term-error').text('Please agree the terms and conditions.');
+        return false
+    }
+}
+
 $(document).ready(function() {
+    $('#accept-condition').click(function(){
+        if ($(this).is(":checked")){
+            $('#term-error').text('');
+        }
+    });
     // login and registration js 
     var emailresponse;
     $.validator.addMethod("emailDoesNotExist",

@@ -26,14 +26,14 @@
           </div>
 
           <!-- Collect the nav links, forms, and other content for toggling -->
-          <!--div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown have-query">
                 <a href="tel:0124-3955001">Have a query? Call us at <strong>0124-3955001</strong></a>
               </li>
             </ul>
-          </div--><!-- /.navbar-collapse -->
+          </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
   </nav>
 {% else %}
@@ -76,14 +76,16 @@
         </div>
 
         {% if linkedin %}
-            <form method="post" id="login_form" role="form">
+            <form method="post" autocomplete="off" id="login_linkedin_form" role="form">
             {% csrf_token %}
 
                 <div class="form-check linkedin-tnc">
                     <label class="form-check-label">
-                        <input type="checkbox" name="remember_me" class="form-check-input">
+                        <input type="checkbox" id="accept-condition"  class="form-check-input">
                         By syncing your LinkedIn account, you:
                     </label>
+                    <p id="term-error" class="error"></p>
+
                     <ul>
                         <li>
                             Agree to Shine <a href="{% url "tnc" %}">Terms & Conditions</a>
@@ -97,7 +99,7 @@
                     </ul>
                 </div>
 
-                <a href="{% url 'users:linkedin-code' %}?credential=1&next={{request.GET.next}}" class="btn submit-linkedin"><i class="icon-linkedIn-login mr-5"></i>Sign in with LinkedIn</a>
+                <a href="{% url 'users:linkedin-code' %}?credential=1&next={{request.GET.next}}" class="btn submit-linkedin" onclick='return validate_linkedin_login_terms()'><i class="icon-linkedIn-login mr-5"></i>Sign in with LinkedIn</a>
 
             </form>
         
