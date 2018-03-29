@@ -270,11 +270,11 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                             if certification_response.status_code == 201:
                                 jsonrsp = certification_response.json()
                                 logging.getLogger('info_log').info(
-                                    "api response:{}").format(jsonrsp)
+                                    "api response:{}".format(jsonrsp))
                             elif certification_response.status_code != 201:
                                 jsonrsp = certification_response.json()
                                 logging.getLogger('error_log').error(
-                                    "api fail:{}").format(jsonrsp)
+                                    "api fail:{}".format(jsonrsp))
                                 row['reason_for_failure'] = jsonrsp
                                 row['status'] = 'Failure'
                         else:
