@@ -35,7 +35,6 @@ def upload_certificate_task(task=None, user=None, vendor=None):
         up_task.status = 3
         up_task.save()
         upload_path = up_task.file_uploaded.name
-        total_rows = 0
         try:
             user = User.objects.get(pk=user)
         except User.DoesNotExist as e:
@@ -52,7 +51,7 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                 upload_path)
         if exist_file:
             f = True
-            fieldnames = ['name', 'skills']
+            fieldnames = ['name', 'skill']
             if not settings.IS_GCP:
                 upload = open(
                     settings.MEDIA_ROOT + '/' + upload_path,
@@ -67,7 +66,7 @@ def upload_certificate_task(task=None, user=None, vendor=None):
             try:
                 for i, line in enumerate(uploader):
                     pass
-                total_rows = i + 1
+                total_rows = i
             except Exception as e:
                 total_rows = 2000
                 logging.getLogger('error_log').error(
@@ -101,6 +100,7 @@ def upload_certificate_task(task=None, user=None, vendor=None):
             csvwriter.writerow(
                 dict((fn, fn) for fn in fieldnames))
             count = 0
+            next(uploader, None)  # skip the headers
             for row in uploader:
                 try:
                     name = row.get('name', '')
@@ -177,8 +177,7 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
             upload_path)
     if exist_file:
         f = True
-        fieldnames = ['year', 'candidate_email', 'candidate_mobile',
-                                                                      'certificate_name']
+        fieldnames = ['year', 'candidate_email', 'candidate_mobile', 'certificate_name']
         if not settings.IS_GCP:
             with open(
                 settings.MEDIA_ROOT + '/' + upload_path,
@@ -188,7 +187,7 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                 try:
                     for i, line in enumerate(uploader):
                         pass
-                    total_rows = i + 1
+                    total_rows = i
                 except Exception as e:
                     total_rows = 2000
                     logging.getLogger('error_log').error(
@@ -201,7 +200,7 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                 try:
                     for i, line in enumerate(uploader):
                         pass
-                    total_rows = i + 1
+                    total_rows = i
                 except Exception as e:
                     total_rows = 2000
                     logging.getLogger('error_log').error(
@@ -233,6 +232,7 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
             generated_file, delimiter=',', fieldnames=fieldnames)
         csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
         count = 0
+        next(uploader, None)  # skip the headers
         for row in uploader:
             try:
                 email = row.get('candidate_email', '')
