@@ -14,6 +14,8 @@ urlpatterns = [
     url(r'^userquery/', include('console.userquery.urls', namespace='userquery')),
     url(r'^tasks/',
         include('console.schedule_tasks.urls', namespace='tasks')),
+    url(r'^badge/',
+        include('console.badgeuser.urls', namespace='badge')),
     url(r'^welcomecall/',
         include('console.welcomecall.urls', namespace='welcomecall')),
 ]

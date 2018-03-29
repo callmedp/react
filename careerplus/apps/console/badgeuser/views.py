@@ -1,59 +1,63 @@
-import logging
 import os
 import mimetypes
-
-from wsgiref.util import FileWrapper
-
+import logging
 from django.views.generic import FormView, ListView, View
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.urls import reverse
+from wsgiref.util import FileWrapper
 from django.http import (
     HttpResponseRedirect, HttpResponseForbidden,
     HttpResponse)
 from django.conf import settings
 
-from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from blog.mixins import PaginationMixin
+from scheduler.models import Scheduler
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
+from .tasks import (
+    upload_certificate_task,
+    upload_candidate_certificate_task)
 from console.decorators import (
     Decorate, stop_browser_cache,
-    check_group, has_group)
-from scheduler.models import Scheduler
-
-from .tasks import (
-    gen_auto_login_token_task)
+    check_group)
 from . import forms
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group([settings.MARKETING_GROUP_LIST]))
-class GenerateAutoLoginTask(FormView):
-    template_name = "console/tasks/auto_login_token_task.html"
-    success_url = "/console/tasks/tasklist/"
+@Decorate(check_group([settings.VENDOR_GROUP_LIST]))
+class UploadCertificate(FormView):
+    template_name = "console/badgeuser/upload_certificate.html"
     http_method_names = [u'get', u'post']
-    form_class = forms.LoginTokenGenerateForm
+    form_class = forms.UploadCertificateForm
 
     def get_form_kwargs(self):
-        kwargs = super(GenerateAutoLoginTask, self).get_form_kwargs()
+        kwargs = super(UploadCertificate, self).get_form_kwargs()
+        kwargs.update({'requestuser': self.request})
         return kwargs
 
     def get(self, request, *args, **kwargs):
-        return super(GenerateAutoLoginTask, self).get(request, args, **kwargs)
+        return super(UploadCertificate, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super(GenerateAutoLoginTask, self).get_context_data(**kwargs)
+        context = super(UploadCertificate, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
+        upload_type = self.kwargs.get('upload_type')
         context.update({
-            'messages': alert})
+            'messages': alert,
+            'upload_type': upload_type})
         return context
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
             file = request.FILES.get('file', None)
-            next_url = request.POST.get('next_url', '').strip()
-            exp_days = request.POST.get('expiry', 0).strip()
-            task_type = 1
+            vendor = request.POST.get('user')
+            upload_type = self.kwargs.get('upload_type')
+            task_type = 0
+            if upload_type == "upload-certificate":
+                task_type = 2
+            elif upload_type == "upload-candidate-certificate":
+                task_type = 3
             try:
                 import time
                 timestr = time.strftime("%Y_%m_%d")
@@ -66,11 +70,12 @@ class GenerateAutoLoginTask(FormView):
                     created_by=request.user)
                 file_name = str(Task.pk) + '_' + 'UPLOAD' + extention
                 path = 'scheduler/' + timestr + '/'
+                full_path = os.path.join(settings.MEDIA_ROOT, path)
                 if not settings.IS_GCP:
-                    full_path = os.path.join(settings.MEDIA_ROOT, path)
                     if not os.path.exists(full_path):
                         os.makedirs(full_path)
                     dest = open(full_path + file_name, 'wb')
+
                     for chunk in f_obj.chunks():
                         dest.write(chunk)
                     dest.close()
@@ -78,37 +83,32 @@ class GenerateAutoLoginTask(FormView):
                     GCPPrivateMediaStorage().save(path + file_name, file)
                 Task.file_uploaded = path + file_name
                 Task.save()
-
-                if not next_url:
-                    next_url = None
-                if exp_days:
-                    try:
-                        exp_days = int(exp_days)
-                    except:
-                        exp_days = None
-                else:
-                    exp_days = None
-
-                gen_auto_login_token_task.delay(
-                    task=Task.pk, user=request.user.pk,
-                    next_url=next_url, exp_days=exp_days)
+                if upload_type == "upload-certificate":
+                    upload_certificate_task.delay(
+                        task=Task.pk, user=request.user.pk, vendor=vendor)
+                    # upload_certificate_task(
+                    #     task=Task.pk, user=request.user.pk, vendor=vendor)
+                elif upload_type == "upload-candidate-certificate":
+                    upload_candidate_certificate_task.delay(
+                        task=Task.pk, user=request.user.pk, vendor=vendor)
+                    # upload_candidate_certificate_task(
+                    #     task=Task.pk, user=request.user.pk, vendor=vendor)
                 messages.add_message(
                     request, messages.SUCCESS,
-                    'Task Created SuccessFully, Tokens are generating')
-                return HttpResponseRedirect(reverse('console:tasks:tasklist'))
+                    'Task Created SuccessFully')
+                return HttpResponseRedirect(reverse('console:badge:upload-tasklist'))
             except Exception as e:
                 messages.add_message(
                     request, messages.ERROR, "%(msg)s : %(err)s" % {'msg': 'Error in uploading', 'err': str(e)})
                 logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Error in uploading', 'err': str(e)})
-                return HttpResponseRedirect(reverse('console:tasks:generate-autologintoken'))
-
+                return HttpResponseRedirect(reverse('console:badge:upload-certificate'))
         return self.form_invalid(form)
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group([settings.MARKETING_GROUP_LIST]))
-class TaskListView(ListView, PaginationMixin):
-    template_name = 'console/tasks/tasklist.html'
+@Decorate(check_group([settings.VENDOR_GROUP_LIST]))
+class UploadTaskListView(ListView, PaginationMixin):
+    template_name = 'console/badgeuser/upload_task_list.html'
     model = Scheduler
     http_method_names = [u'get', ]
 
@@ -118,10 +118,10 @@ class TaskListView(ListView, PaginationMixin):
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        return super(TaskListView, self).get(request, args, **kwargs)
+        return super(UploadTaskListView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super(TaskListView, self).get_context_data(**kwargs)
+        context = super(UploadTaskListView, self).get_context_data(**kwargs)
         paginator = Paginator(context['scheduler_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
@@ -131,38 +131,32 @@ class TaskListView(ListView, PaginationMixin):
         return context
 
     def get_queryset(self):
-        queryset = super(TaskListView, self).get_queryset()
-        queryset = queryset.filter(task_type=1)
+        queryset = super(UploadTaskListView, self).get_queryset()
+        queryset = queryset.filter(task_type__in=[2, 3])
         return queryset.order_by('-modified')
 
 
 @Decorate(stop_browser_cache())
-@Decorate(check_group([settings.MARKETING_GROUP_LIST]))
-class DownloadTaskView(View):
+@Decorate(check_group([settings.VENDOR_GROUP_LIST]))
+class DownloadBadgeUserView(View):
 
     def get(self, request, *args, **kwargs):
         try:
             task = request.GET.get('task', None)
             download_type = request.GET.get('type', None)
+            file_path = ''
             if task:
                 task = Scheduler.objects.get(id=task)
             else:
                 return HttpResponseForbidden()
             if task:
                 if download_type == 'u':
-                    if not settings.IS_GCP:
-                        file_path = task.file_uploaded.path
-                    else:
-                        file_path = task.file_uploaded.name
+                    file_path = task.file_uploaded.name
                     filename_tuple = file_path.split('.')
                     extension = filename_tuple[len(filename_tuple) - 1]
                     file_name = str(task.pk) + '_UPLOAD' + '.' + extension
-                else:
-                    if not settings.IS_GCP:
-                        file_path = task.file_generated.path
-                    else:
-                        file_path = task.file_generated.name
-                    # file_path = task.file_generated.path
+                elif download_type == 'd':
+                    file_path = task.file_generated.name
                     filename_tuple = file_path.split('.')
                     extension = filename_tuple[len(filename_tuple) - 1]
                     file_name = str(task.pk) + '_GENERATED' + '.' + extension
@@ -175,14 +169,25 @@ class DownloadTaskView(View):
                         fsock = FileWrapper(open(path, 'rb'))
                     else:
                         fsock = GCPPrivateMediaStorage().open(file_path)
+                        path = file_path
                 except IOError:
-                    messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
-                    response = HttpResponseRedirect(reverse('console:tasks:tasklist'))
+                    logging.getLogger("error_log").error(
+                        "Sorry, the document is currently unavailable.")
+                    messages.add_message(
+                        request, messages.ERROR,
+                        "Sorry, the document is currently unavailable.")
+                    response = HttpResponseRedirect(
+                        reverse('console:badge:upload-tasklist'))
                     return response
-                response = HttpResponse(fsock, content_type=mimetypes.guess_type(file_path)[0])
-                response['Content-Disposition'] = 'attachment; filename="%s"' % file_name
+                response = HttpResponse(
+                    fsock, content_type=mimetypes.guess_type(path)[0])
+                response['Content-Disposition'] = 'attachment; filename="%s"' % (file_name)
                 return response
         except:
-            messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
-            response = HttpResponseRedirect(reverse('console:tasks:tasklist'))
+            logging.getLogger("error_log").error(
+                "Sorry, the document is currently unavailable.")
+            messages.add_message(
+                request, messages.ERROR,
+                "Sorry, the document is currently unavailable.")
+            response = HttpResponseRedirect(reverse('console:badge:upload-tasklist'))
             return response
