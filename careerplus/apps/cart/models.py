@@ -135,7 +135,7 @@ class LineItem(AbstractAutoDate):
         super(LineItem, self).__init__(*args, **kwargs)
         
     class Meta:
-        app_label = 'cart'.lineitems.get
+        app_label = 'cart'
         ordering = ['modified', 'pk']
         # unique_together = ("cart", "reference")
         verbose_name = _('Cart Line Item')
