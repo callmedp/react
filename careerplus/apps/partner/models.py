@@ -129,7 +129,7 @@ class Certificate(AbstractAutoDate):
 
 class UserCertificate(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, blank=True)
+        settings.AUTH_USER_MODEL, null=True, blank=True, help_text=_('Created By'))
     certificate = models.ForeignKey(Certificate)
     year = models.PositiveIntegerField(
         null=True, blank=True, default=datetime.now().year)
@@ -142,6 +142,9 @@ class UserCertificate(models.Model):
     candidate_name = models.CharField(
         _('Name'), blank=True,
         max_length=20, help_text=_('Candidate Name'))
+    candidate_id = models.CharField(
+        _('Candidate ID'), blank=True,
+        max_length=20, help_text=_('Candidate ID'))
 
     def __str__(self):
         return '{}'.format(self.certificate.name)
