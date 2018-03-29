@@ -5,7 +5,6 @@ from .celery import *
 DEBUG = True
 IS_LIVE = False
 IS_GCP = False
-
 ALLOWED_HOSTS = ['*']
 
 

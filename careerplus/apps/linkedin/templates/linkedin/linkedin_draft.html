@@ -25,7 +25,7 @@
       <img src="{% static 'shinelearn/images/resume_linkedin.jpg' %}" class="pull-left mr-20 mt-20"
       alt="Linkedin">
       <div class="downloadpdf"><a href="{% url "linkedin-draf-download" orderitem.pk op_id.pk %}">Download PDF</a></div>
-        <div class="card card-block nobdr pull-left">
+        <div class="card card-block nobdr pull-left" style="width:50%;">
           <h2 class="card-title">{{orderitem.order.first_name}}</h2>
           <p class="card-text">{{draft.headline}}</p>
           <p class="card-text1"></p>
@@ -37,7 +37,7 @@
               {% for org in organization_list  %}
                   {% if forloop.counter == 1 %}
                       <span class="wd10">Previous</span>   
-                      <span class="wd80">&nbsp;{{org.org_name}}</span>  
+                      <span class="wd80">{{org.org_name}}</span>  
                   {%endif%}
               {%endfor%}
           {%endif%}
@@ -45,7 +45,7 @@
               {% for edu  in education_list  %}
                   {%if forloop.counter == 1%}
                       <span class="wd10">Education</span>   
-                      <span class="wd80">&nbsp;&nbsp;{{edu.school_name}}</span>
+                      <span class="wd80">{{edu.school_name}}</span>
                   {%endif%}
               {%endfor%}
           {%endif%}  

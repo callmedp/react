@@ -49,7 +49,7 @@ class SkillPageView(DetailView, SkillPageMixin):
     def get_template_names(self):
         if self.request.amp:
             return ["skillpage/skill-amp.html"]
-            return ["skillpage/skill.html"]
+        return ["skillpage/skill.html"]
         
     def redirect_if_necessary(self, current_path, skill):
         expected_path = skill.get_absolute_url()
@@ -96,7 +96,6 @@ class SkillPageView(DetailView, SkillPageMixin):
                     prod_id_list.append(prd.id)
                 if prd.pTP in [0, 2, 4, 5]:
                     prod_id_list.append(prd.id)
-                    raise Exception
 
             # prod_id_list = [pv.id for pv in products]
             vendor_list = [pv.pPv for pv in products]
@@ -167,16 +166,14 @@ class SkillPageView(DetailView, SkillPageMixin):
             'show_chat': True,
             'amp': self.request.amp
         })
-        widget_objs = None
-        widget_obj = None
         try:
             widget_obj = DetailPageWidget.objects.get(
-                content_type__model='Category', object_id=self.pk)
+                content_type__model='Category', listid__contains=self.pk)
             widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
                 column=1)
-        except Exception as e:
+        except DetailPageWidget.DoesNotExist:
             widget_objs = None
-            logging.getLogger('error_log').error("%(err)s" % {'err': e})
+            widget_obj = None
         context['widget_objs'] = widget_objs
         context['widget_obj'] = widget_obj
         context.update(self.get_breadcrumb_data())

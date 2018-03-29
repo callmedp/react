@@ -1,10 +1,12 @@
 from django.db import models
-
+from datetime import datetime
+from django.utils.translation import ugettext_lazy as _
 from seo.models import AbstractSEO, AbstractAutoDate
 from django.conf import settings
 from meta.models import ModelMeta
-from shop.functions import get_upload_path_vendor
-from django.utils.translation import ugettext_lazy as _
+from shop.functions import (
+    get_upload_path_vendor,
+    get_upload_path_badge_file)
 from geolocation.models import (
     Country,
     State,
@@ -54,6 +56,9 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     image = models.ImageField(
         _('Image'), upload_to=get_upload_path_vendor,
         blank=True, null=True)
+    badge_image = models.ImageField(
+        _('Badge Image'), upload_to=get_upload_path_badge_file,
+        blank=True, null=True)
     icon = models.ImageField(
         _('Icon'), upload_to=get_upload_path_vendor,
         blank=True, null=True)
@@ -81,7 +86,7 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
         verbose_name_plural = _('Vendors')
         ordering = ("-modified", "-created")
         get_latest_by = 'created'
-        
+
     def __str__(self):
         return self.name
 
@@ -110,3 +115,36 @@ class VendorHierarchy(AbstractAutoDate):
         return _("%(vendor)s to '%(employee)s'") % {
             'vendor': self.vendee,
             'employee': self.employee}
+
+
+class Certificate(AbstractAutoDate):
+    name = models.CharField(
+        max_length=255, null=False, blank=False, db_index=True, unique=True)
+    skill = models.CharField(max_length=128, null=False, blank=False)
+    vendor_provider = models.ForeignKey(Vendor, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class UserCertificate(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, help_text=_('Created By'))
+    certificate = models.ForeignKey(Certificate)
+    year = models.PositiveIntegerField(
+        null=True, blank=True, default=datetime.now().year)
+    candidate_email = models.EmailField(
+        _('Email'),
+        max_length=255, help_text=_('Candidate Email Address'))
+    candidate_mobile = models.CharField(
+        _('Mobile Number'), blank=True,
+        max_length=20, help_text=_('Candidate Mobile Number'))
+    candidate_name = models.CharField(
+        _('Name'), blank=True,
+        max_length=20, help_text=_('Candidate Name'))
+    candidate_id = models.CharField(
+        _('Candidate ID'), blank=True,
+        max_length=20, help_text=_('Candidate ID'))
+
+    def __str__(self):
+        return '{}'.format(self.certificate.name)

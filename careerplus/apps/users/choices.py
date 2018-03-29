@@ -87,5 +87,5 @@ EXPRESS_SLA = 12
 SUPER_EXPRESS_SLA = 10
 PASS_PERCENTAGE = 60  # in percentage
 INCENTIVE_PASS_PERCENTAGE = 85  # in percentage
-PENALTY_PERCENTAGE = 10  # in percentage
+PENALTY_PERCENTAGE = 0  # in percentage
 INCENTIVE_PERCENTAGE = 15  # in percentage
