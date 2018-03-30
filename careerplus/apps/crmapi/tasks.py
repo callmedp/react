@@ -88,14 +88,16 @@ def add_server_lead_task(query_dict):
 
     try:
         country_obj = Country.objects.get(phone=country_code)
-    except:
+    except Exception as e:
+        logging.getLogger('error_log').error('unable to get country object %s'%str(e))
         country_obj = Country.objects.get(phone='91')
 
     try:
         timestamp_obj = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
         timestamp_obj = timezone.make_aware(
             timestamp_obj, timezone.get_current_timezone())
-    except:
+    except Exception as e:
+        logging.getLogger('error_log').error(str(e))
         timestamp_obj = timezone.now()
 
     object_list = UserQuries.objects.filter(

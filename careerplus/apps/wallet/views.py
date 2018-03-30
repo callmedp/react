@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from cart.models import Cart
+import logging
 from .models import (
     Wallet, RewardPoint, ECash,
     WalletTransaction, ECashTransaction, PointTransaction)
@@ -127,7 +128,8 @@ class WalletRedeemView(APIView, CartMixin):
             return Response(
                 {'success': True,'msg': 'Successfully Redeemed'
                  }, status=200, content_type='application/json')
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to redeem the points %s' % str(e))
             return Response(
                 {'success': 0,
                  'error': 'Try after some Time'
@@ -188,7 +190,8 @@ class WalletRemoveView(APIView, CartMixin):
                  }, status=200, content_type='application/json')
         
                
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to remove %s' % str(e))
             return Response(
             {'success': 0,
              'error': 'Try after some Time'

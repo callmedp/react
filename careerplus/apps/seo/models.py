@@ -5,7 +5,7 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.conf import settings
-
+import logging
 class AbstractAutoDate(models.Model):
     created = models.DateTimeField(editable=False, auto_now_add=True,)
     modified = models.DateTimeField(null=True, blank=True, auto_now=True)
@@ -83,7 +83,8 @@ class AbstractSEO(models.Model):
         fix_field = False
         try:
             fix_field = getattr(self, url_slug_fix)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to set fix fields %s'%str(e))
             fix_field = False
         if not fix_field:    
             slug_field = self._meta.get_field(url_slug_name)

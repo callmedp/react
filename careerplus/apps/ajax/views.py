@@ -737,7 +737,7 @@ class GetLTVAjaxView(View):
                         ltv = ltv - rf_sum.get('rf_price')
 
                 candidate_dict[candidate] = str(ltv)
-            for k,v  in results.items():
+            for k,v in results.items():
                 if order_dict.get(k):
                     results[k] = candidate_dict.get(order_dict.get(k), "0")         
             for order in o_list:

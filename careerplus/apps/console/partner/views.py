@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
-
+import logging
 from order.models import OrderItem
 from blog.mixins import PaginationMixin
 from console.order_form import (
@@ -77,7 +77,8 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
                     Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset %s'%str(e))
             pass
 
         try:
@@ -91,7 +92,8 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset with date range %s'%str(e))
             pass
 
         try:
@@ -105,7 +107,9 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     order__payment_date__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get order payment queryset with date range %s'%str(e))
+
             pass
 
         return queryset.select_related('order', 'product').order_by('-modified')
@@ -172,7 +176,9 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
                     Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset %s' % str(e))
+
             pass
 
         try:
@@ -186,7 +192,9 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset with date range%s' % str(e))
+
             pass
 
         try:
@@ -200,7 +208,9 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     order__payment_date__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get order payment queryset with date range %s' % str(e))
+
             pass
 
         return queryset.select_related('order', 'product').order_by('-modified')
@@ -266,7 +276,9 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
                     Q(order__number__icontains=self.query) |
                     Q(order__mobile__icontains=self.query) |
                     Q(order__email__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset %s' % str(e))
+
             pass
 
         try:
@@ -280,7 +292,9 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset within date range %s' % str(e))
+
             pass
 
         try:
@@ -294,7 +308,9 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     order__payment_date__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get order payment queryset within date range %s' % str(e))
+
             pass
 
         return queryset.select_related('order', 'product').order_by('-modified')

@@ -32,7 +32,8 @@ def common_context_processor(request):
     try:
         candidate_id = request.session.get('candidate_id', None)
         roundone_user = Subscription.objects.filter(candidateid=candidate_id).exists()
-    except:
+    except Exception as e:
+        logging.getLogger('error_log').error('unable to get candidate id' % str(e))
         roundone_user = None
 
     console_user = request.user

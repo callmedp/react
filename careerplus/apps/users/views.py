@@ -239,7 +239,8 @@ class DownloadBoosterResume(View):
                     logging.getLogger(
                         'error_log').error("candidate booster resume not found")
                     raise Exception("Resume not found.")
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to download booster resume %s' % str(e))
             messages.add_message(
                 request, messages.ERROR,
                 "Sorry, the document is currently unavailable.")

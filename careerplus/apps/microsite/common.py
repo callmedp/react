@@ -1,5 +1,5 @@
 from django.template.defaultfilters import slugify
-
+import logging
 
 class SaveSlug(object):
 
@@ -9,7 +9,8 @@ class SaveSlug(object):
                 return slugify(slug.replace("_", "-"))
             elif not slug and name:
                 return slugify(name.replace("_", "-"))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to replace slug %s' % str(e))
             pass
         return slug
 
@@ -42,6 +43,7 @@ class ShineUserDetail(object):
                     tt_exp = str(experience.get('experience_in_years'))+"years"+"-"+str(experience.get('experience_in_months'))+'months'
             user_detail_dict['total_exp']=tt_exp
         except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             pass
         return user_detail_dict
 
@@ -78,5 +80,7 @@ class ShineUserDetail(object):
                         data.update({
                             'resume_name': files[0], 'extension': files[1]
                         })
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to update resume file %s' % str(e))
+
             pass

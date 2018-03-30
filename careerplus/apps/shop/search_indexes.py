@@ -5,6 +5,7 @@ from django.template.loader import render_to_string
 from shop.choices import DURATION_DICT, convert_to_month
 from shop.choices import (
     DURATION_DICT, convert_to_month)
+import logging
 
 def get_attributes(pv, currency='INR'):
     SM, CL, CERT, DM, PI = '', '', '', '', '' 
@@ -214,7 +215,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                 from bs4 import BeautifulSoup
                 soup = BeautifulSoup(content, 'html.parser')
                 strpcontent = soup.get_text()
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 strpcontent = content
             return strpcontent
         return ''
@@ -225,7 +227,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                 from bs4 import BeautifulSoup
                 soup = BeautifulSoup(obj.about, 'html.parser')
                 strpcontent = soup.get_text()
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 strpcontent = obj.about
             return strpcontent
         return ''

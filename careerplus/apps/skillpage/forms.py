@@ -47,7 +47,7 @@ class SkillAddForm(forms.ModelForm):
             try:
                 val = self.cleaned_data.get(field).strip()
                 self.cleaned_data[field] = val
-            except:
+            except Exception as e:
                 continue
         return super(SkillAddForm, self).clean()
 

@@ -1,6 +1,6 @@
 from django.utils import timezone
 from datetime import datetime, date
-
+import logging
 from decimal import Decimal
 from django.db import models
 from django.utils.html import strip_tags
@@ -176,7 +176,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
             soup = BeautifulSoup(self.description, 'html.parser')
             cleantext = soup.get_text()
             cleantext = cleantext.strip()
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             cleantext = ''
         return cleantext
 
@@ -346,7 +347,9 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
                 '%s_thumbnail.%s' % (os.path.splitext(suf.name)[0], FILE_EXTENSION),
                 suf,
             )
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to create icon%s'%str(e))
+
             pass
         return
 
@@ -1207,7 +1210,9 @@ class Product(AbstractProduct, ModelMeta):
                 return prod_cat[0]
             else:
                 return self.category_main
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to verify product category %s'%str(e))
+
             pass
         return None
 

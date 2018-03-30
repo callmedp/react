@@ -30,7 +30,8 @@ class PartnerHomeView(TemplateView):
             flag_status = Subscription.objects.filter(
                 candidateid=self.request.session.get('candidate_id', ''),
                 expire_on__gt=timezone.now()).exists()
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get subscription status%s' % str(e))
             pass
 
         try:
@@ -268,7 +269,8 @@ class GetReferenceView(View, RoundOneAPI):
                             try:
                                 del request.session['roundone_job_params']
                                 del request.session['roundone_source']
-                            except:
+                            except Exception as e:
+                                logging.getLogger('error_log').error(str(e))
                                 pass
                             if "/dashboard" in origin:
                                 return HttpResponse(json.dumps({

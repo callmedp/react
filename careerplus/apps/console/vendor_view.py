@@ -229,7 +229,8 @@ class ListScreenFaqView(ListView, PaginationMixin):
         try:
             if self.query:
                 queryset = queryset.filter(Q(text__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset %s'%str(e))
             pass
         return queryset
 
@@ -274,7 +275,8 @@ class ListModerationScreenFaqView(ListView, PaginationMixin):
         try:
             if self.query:
                 queryset = queryset.filter(Q(text__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset%s'%str(e))
             pass
         return queryset
 
@@ -330,7 +332,9 @@ class ListScreenProductView(ListView, PaginationMixin):
         try:
             if self.query:
                 queryset = queryset.filter(Q(name__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get query set %s'%str(e))
+
             pass
         return queryset
 
@@ -379,7 +383,8 @@ class ListModerationScreenProductView(ListView, PaginationMixin):
         try:
             if self.query:
                 queryset = queryset.filter(Q(name__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset %s'%str(e))
             pass
         return queryset
 
@@ -1147,7 +1152,8 @@ class ActionScreenFaqView(View):
                             self.request,
                                 "FAQ changes is reverted!") 
                         data = {'success': 'True', 'next_url': reverse('console:screenfaq-moderationlist') }
-                except:
+                except Exception as e:
+                    logging.getLogger('error_log').error(str(e))
                     data = {'error': 'True'}
                     messages.error(
                         self.request,
@@ -1258,7 +1264,8 @@ class ActionScreenProductView(View, ProductModeration):
                                 self.request,
                                     "Product Screen revert Failed!") 
                             data = {'error': True,}
-                except:
+                except Exception as e:
+                    logging.getLogger('error_log').error(str(e))
                     data = {'error': 'True'}
                     messages.error(
                         self.request,

@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.middleware.csrf import get_token
 from core.library.haystack.query import SQS
 from django.conf import settings
+import logging
 
 class BlogMixin(object):
 	def scrollPagination(self, paginated_by=1, page=1, object_list=None):
@@ -38,7 +39,9 @@ class BlogMixin(object):
 						'class':prd.pPc,
 						'star': prd.pStar
 						}))
-			except:
+			except Exception as e:
+				logging.getLogger('error_log').error("Unable to get product details%s" % str(e))
+
 				product = []
 			return product	
 		return []
