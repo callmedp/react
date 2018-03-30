@@ -456,7 +456,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 raise Http404
 
             if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
-                import ipdb; ipdb.set_trace()
                 linkedin_cid = settings.LINKEDIN_DICT.get('CLIENT_ID', None)
                 token = request.GET.get('token', '')
                 login_url = reverse('login') + '?next=' + request.get_full_path() + '&linkedin=true'

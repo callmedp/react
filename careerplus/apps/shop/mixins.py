@@ -108,7 +108,6 @@ class CourseCatalogueMixin(object):
 
 class LinkedinSeriviceMixin(object):
 	def validate_encrypted_key(self, token=None, email=None, prd=None):
-		import ipdb; ipdb.set_trace()
 		flag = False
 		products_ids = []
 		if token and email and prd:
