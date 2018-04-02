@@ -377,6 +377,7 @@ WC_CATEGORY = (
 WC_SUB_CATEGORY1 = (
     # 41 - 60
     (41, 'No Issue'),
+    (42, 'Order Processed After 3 Calls'),
 )
 
 WC_SUB_CATEGORY2 = (
@@ -410,7 +411,8 @@ WC_FLOW_STATUS = (
     # 21 - 40
 
     # 41 - 60
-    (21, 'No Issue'),
+    (41, 'No Issue'),
+    (42, 'Order Processed After 3 Calls'),
 
     # 61 - 80
     (61, 'Service Issue'),
