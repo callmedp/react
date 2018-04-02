@@ -251,6 +251,7 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                     except Certificate.DoesNotExist:
                         row['reason_for_failure'] = "Certificate not found"
                         row['status'] = "Failure"
+                        continue
                     else:
                         obj, created = UserCertificate.objects.get_or_create(
                             user=user, certificate=certificate,
