@@ -61,8 +61,14 @@
         <div class="detail-course-header">
           <div class="container">
 
-            {% if sqs.id not in linkedin_resume_services %}
+            {% if sqs.id in linkedin_resume_services %}
               <!-- breadcrums -->
+              {% block breadcrumbs %}
+                <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
+                    <li class="active" ></li>
+                </ol>
+              {% endblock breadcrumbs %}
+            {% else %}
               {% block breadcrumbs %}
                 {% include "shop/partials/breadcrumb.html" %}  
               {% endblock breadcrumbs %}
