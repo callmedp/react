@@ -119,7 +119,7 @@ class LinkedinSeriviceMixin(object):
 				products_ids = []
 
 			for prd_id in products_ids:
-				token_str = '{}{}'.format(email, prd_id)
+				token_str = '{}pd-{}'.format(email, prd_id)
 				gen_token = hashlib.sha256(
 					token_str.encode()).hexdigest()
 				if gen_token == token:
