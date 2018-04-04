@@ -40,6 +40,12 @@
 	<div class="row">
 		<!-- left content start -->
 	    <div class="col-md-9 col-sm-12">
+        <div class="row" itemscope itemtype="https://schema.org/ItemList">
+          <h2 class="main-heading-article ml-15">All Articles</h2>
+          <div id="related-talent-container">{{detail_article}}</div>
+          <div id="id_ajax_talentpage"></div>
+        </div>
+      <!--
 	    	{% if recent_articles %}
             <div class="row" itemscope itemtype="https://schema.org/ItemList">
                 <h2 class="main-heading-article ml-15">All Articles</h2>
@@ -89,6 +95,7 @@
             	{% endfor %}
 			</div>
 			{% endif %}
+      -->
 		</div>
 		<!-- left content end -->
 		<!-- right content start -->
@@ -117,10 +124,15 @@
     {{ block.super }}
     {% compress js %}
     <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
+    <script src="{% static 'shinelearn/js/talenteconomy/scrollpage.js' %}"></script>
     <script>
-    	$(function(){
-    		Article.init();
-    	});
+      if (window.location.hash == '#_=_') {
+        open(location, '_self').close();
+      }
+      showTalentpageOnScroll.scroll(); /* for calling infinite articles */
+      $(function(){
+        Article.init();
+      });
     </script>
     {% endcompress %}
 {% endblock js_section %}
