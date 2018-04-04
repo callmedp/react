@@ -169,7 +169,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
                 quiz_resp = QuizResponse()
                 quiz_resp.oi = query
                 quiz_resp.save()
-                logging.getLogger('error_log').error("%s" % (str(e)))
+                logging.getLogger('error_log').error("error in accessing quiz response %s" % (str(e)))
         user = self.request.user
         if user.is_superuser:
             pass
@@ -746,6 +746,127 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
             logging.getLogger('error_log').error("Delivery type:%s", str(e))
 
         return queryset.select_related('order', 'product', 'assigned_by', 'assigned_to').order_by('-modified')
+
+
+@method_decorator(permission_required('order.can_show_linkedin_approved_queue', login_url='/console/login/'), name='dispatch')
+class ApprovedLinkedinQueueVeiw(ListView, PaginationMixin):
+    context_object_name = 'approved_list'
+    template_name = 'console/linkedin/linkedin-approved-list.html'
+    model = OrderItem
+    http_method_names = [u'get', u'post']
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        self.modified, self.draft_level = '', -1
+        self.writer, self.delivery_type = '', ''
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        self.modified = request.GET.get('modified', '')
+        self.writer = request.GET.get('writer', '')
+        try:
+            self.draft_level = int(request.GET.get('draft_level', -1))
+        except:
+            self.draft_level = -1
+        self.delivery_type = request.GET.get('delivery_type', '')
+        return super(ApprovedLinkedinQueueVeiw, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(ApprovedLinkedinQueueVeiw, self).get_context_data(**kwargs)
+        paginator = Paginator(context['approved_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        max_limit_draft = settings.DRAFT_MAX_LIMIT
+        initial = {
+            "modified": self.modified,
+            "writer": self.writer,
+            "delivery_type": self.delivery_type,
+            "draft_level": self.draft_level, }
+        filter_form = LinkedinOIFilterForm(initial)
+        context.update({
+            "messages": alert,
+            "max_limit_draft": max_limit_draft,
+            "query": self.query,
+            "filter_form": filter_form,
+        })
+        return context
+
+    def get_queryset(self):
+        queryset = super(ApprovedLinkedinQueueVeiw, self).get_queryset()
+        queryset = queryset.filter(
+            order__status=1, no_process=False,
+            oi_status=46, product__type_flow=8)
+        user = self.request.user
+
+        if user.is_superuser:
+            pass
+        elif user.has_perm('order.can_show_linkedin_approved_queue'):
+            queryset = queryset.filter(assigned_to=user)
+        else:
+            queryset = queryset.none()
+
+        try:
+            if self.query:
+                queryset = queryset.filter(
+                    Q(id__icontains=self.query) |
+                    Q(product__name__icontains=self.query) |
+                    Q(order__number__icontains=self.query) |
+                    Q(order__mobile__icontains=self.query) |
+                    Q(order__email__icontains=self.query))
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            pass
+        try:
+            if self.modified:
+                date_range = self.modified.split('-')
+                start_date = date_range[0].strip()
+                start_date = datetime.datetime.strptime(
+                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+                end_date = date_range[1].strip()
+                end_date = datetime.datetime.strptime(
+                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+                queryset = queryset.filter(
+                    modified__range=[start_date, end_date])
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            pass
+
+        try:
+            if self.writer:
+                queryset = queryset.filter(
+                    assigned_to=self.writer)
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            pass
+
+        try:
+            if self.draft_level != -1:
+                queryset = queryset.filter(
+                    draft_counter=self.draft_level)
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            pass
+
+        try:
+            if self.delivery_type:
+                delivery_obj = DeliveryService.objects.get(pk=self.delivery_type)
+                if delivery_obj.slug == 'normal':
+                    queryset = queryset.filter(
+                        Q(delivery_service=self.delivery_type) |
+                        Q(delivery_service__isnull=True))
+                else:
+                    queryset = queryset.filter(
+                        delivery_service=self.delivery_type)
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            pass
+
+        return queryset.select_related(
+            'order', 'product', 'assigned_by',
+            'assigned_to', 'delivery_service').order_by('-modified')
 
 
 class InterNationalUpdateQueueView(ListView, PaginationMixin):

@@ -3,6 +3,17 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Invoice</title>
+<style>
+@page {
+    size: A4;
+    font-family: 'Open Sans';
+    padding: 0;
+    margin-top: 2cm;
+    margin-bottom: 1.6cm;
+    margin-left: 1cm;
+    margin-right: 1cm;
+}
+</style>
 </head>
 <body style="margin: 0px; padding: 0px;text-rendering: optimize-speed;font-family: Arial; background-color: #fff;">
   <table width="600px" border="0" cellspacing="0" cellpadding="0" style="font-family: Arial; font-size: 12px; color: #333; margin: 0 auto; padding: 0;background-color: #fff;">
@@ -13,9 +24,9 @@
       <td>
     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="text-transform: uppercase; border: solid 1px #000; width: 100%;margin: 0 0 0 0; padding: 0 0 0 0;">
     <tr>
-      <td width="33.3%" style="padding: 0 0 0 0;width: 33.33%;margin: 0 0 0 0;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; ">invoice number - {{invoice_no}}</span></td>
+      <td width="33.3%" style="padding: 0 0 0 0;width: 33.33%;margin: 0 0 0 0;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; ">invoice no. - {{invoice_no}}</span></td>
       <td width="33.3%" style="padding: 0 0 0 0;width: 33.33%;margin: 0 0 0 0;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; ">invoice date - {{invoice_date|date:"d M Y"}}</span></td>
-      <td width="33.3%" style="padding: 0 0 0 0;width: 33.33%;margin: 0 0 0 0;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; ">purchase order number - {{writer_po_number}}</span></td>
+      <td width="33.3%" style="padding: 0 0 0 0;width: 33.33%;margin: 0 0 0 0;"><span style="display: block; margin: 0 0 0 0; padding:5px 0 5px 5px; ">P.O no. - {{writer_po_number}}</span></td>
     </tr>
 </table>
   </td>
@@ -64,41 +75,26 @@
       <td>
 
     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border: solid 1px #000; width: 100%;margin: 0; padding: 0;">
-    {% endif %}
 
-    {% if forloop.first %}
     <tr>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">S.No</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Order Item Id</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Product Name</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Closure Date</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Combo Discount</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;margin: 0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Amount</span></td>
+      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;" width="5%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">S.No</span></td>
+      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;" width="15%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Item Id</span></td>
+      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;" width="40%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Product Name</span></td>
+      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; " width="10%">Closed On</span></td>
+      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;" width="15%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Combo Discount</span></td>
+      <td style="padding:0;border-bottom: solid 1px #000;margin: 0;" width="15%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Amount</span></td>
     </tr>
     {% endif %}
 
 
     <tr>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{forloop.counter}}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;">{% if oi.item_type == 'older' %}<span style="color:red; float:left;">* </span>{% endif %}<span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.item_id}}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.product_name}}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.closed_on|date:"d M Y"}}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"> <span style="display: block; margin:0; padding:3px 0 3px 5px; ">-{% if oi.combo_discount %} {{oi.combo_discount}}{% endif %}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;margin: 0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.amount}}</span></td>
+      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;" width="5%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{forloop.counter}}</span></td>
+      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;" width="15%">{% if oi.item_type == 'older' %}<span style="color:red; float:left;">* </span>{% endif %}<span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.item_id}}</span></td>
+      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;" width="40%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.product_name}}</span></td>
+      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;" width="10%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.closed_on|date:"d M Y"}}</span></td>
+      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;" width="15%"> <span style="display: block; margin:0; padding:3px 0 3px 5px; ">-{% if oi.combo_discount %} {{oi.combo_discount}}{% endif %}</span></td>
+      <td style="padding:0;border-bottom: solid 1px #000;margin: 0;" width="15%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.amount}}</span></td>
     </tr>
-
-    {% comment %}
-    {% for oi in item_list %}
-    <tr>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{forloop.counter}}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;">{% if oi.item_type == 'older' %}<span style="color:red; float:left;">* </span>{% endif %}<span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.item_id}}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.product_name}}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.closed_on|date:"d M Y"}}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"> <span style="display: block; margin:0; padding:3px 0 3px 5px; ">-{% if oi.combo_discount %} {{oi.combo_discount}}{% endif %}</span></td>
-      <td style="padding:0;border-bottom: solid 1px #000;margin: 0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.amount}}</span></td>
-    </tr>
-    {% endfor %}
-    {% endcomment %}
 
     {% if forloop.last %}
       <tr>

@@ -1,7 +1,6 @@
 from django import forms
 from django.db.models import Q
 from django.utils.safestring import mark_safe
-
 from geolocation.models import Country
 
 from .models import Cart

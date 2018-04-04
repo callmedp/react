@@ -4,7 +4,7 @@ from .celery import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 IS_LIVE = False
-
+IS_GCP = False
 ALLOWED_HOSTS = ['*']
 
 

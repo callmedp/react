@@ -14,6 +14,8 @@ urlpatterns = [
     url(r'^userquery/', include('console.userquery.urls', namespace='userquery')),
     url(r'^tasks/',
         include('console.schedule_tasks.urls', namespace='tasks')),
+    url(r'^badge/',
+        include('console.badgeuser.urls', namespace='badge')),
     url(r'^welcomecall/',
         include('console.welcomecall.urls', namespace='welcomecall')),
 ]
@@ -341,6 +343,10 @@ urlpatterns += [
     url(r'^linkedin/linkedin-approval/$',
         linkedin_view.LinkedinApprovalVeiw.as_view(),
         name='linkedin-approval'),
+
+    url(r'^linkedin/linkedin-approved-queue/$',
+        linkedin_view.ApprovedLinkedinQueueVeiw.as_view(),
+        name='linkedin-approved-queue'),
 
     url(r'^queue/internationalprofileupdate/$',
         linkedin_view.InterNationalUpdateQueueView.as_view(),

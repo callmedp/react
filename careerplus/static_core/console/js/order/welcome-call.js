@@ -112,13 +112,23 @@ $(function(){
                 $(".sub_cat_item").each(function() {
                     var select = $(this);
                     select.empty();
-                    $("#sub_cat1 option").each(function(){
-                        select.append("<option value="+ $(this).val()+ ">" + $(this).text() + "</option>");
-                    });
+                    select.append("<option value="+ parent_this.val() + ">" + parent_this.find('option:selected').text() + "</option>");
                 });
                 
                 break;
             }
+
+            case '42':{
+                $(".sub_cat_item").each(function() {
+                    var select = $(this);
+                    select.empty();
+                    select.append("<option value="+ parent_this.val() + ">" + parent_this.find('option:selected').text() + "</option>");
+                    
+                });
+                
+                break;
+            }
+
             case '61':{
                 $(".sub_cat_item").each(function() {
                     var select = $(this);

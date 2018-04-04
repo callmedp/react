@@ -49,7 +49,7 @@ class HomePageView(TemplateView, MetadataMixin):
             job_services = job_sqs[:5]
             job_asst_view_all = tjob.view_all
         except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
+            logging.getLogger('error_log').error("unable to load job assistance services%s " % str(e))
         return {"job_asst_services": list(job_services), "job_asst_view_all": job_asst_view_all}
 
     def get_courses(self):

@@ -9,6 +9,8 @@ from .functions import get_scheduler_upload_path
 TASK_TYPE = (
     (0, 'Select_Type'),
     (1, 'AutoLogin Token Genaration'),
+    (2, 'Upload Certificate'),
+    (3, 'Upload Candidate Certificate'),
 )
 
 TASK_STATUS = (
@@ -51,17 +53,17 @@ class Scheduler(AbstractAutoDate):
 
     def __str__(self):
         type_dict = dict(TASK_TYPE)
-        return type_dict[self.task_type] + "-" + str(self.pk)
+        return str(type_dict.get(self.task_type, '')) + " - " + str(self.pk)
 
     @property
     def get_type(self):
         type_dict = dict(TASK_TYPE)
-        return type_dict[self.task_type]
+        return type_dict.get(self.task_type, '')
 
     @property
     def get_status(self):
         status_dict = dict(TASK_STATUS)
-        return status_dict[self.status]
+        return status_dict.get(self.status, '')
 
     @property
     def get_complete(self):
@@ -80,4 +82,4 @@ class Scheduler(AbstractAutoDate):
             1: 'progress-bar-danger',
             2: 'progress-bar-success',
             3: 'progress-bar-warning'}
-        return progress_dict[self.status]
+        return progress_dict.get(self.status, '')

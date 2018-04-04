@@ -135,7 +135,9 @@ class BlogDetailView(DetailView, BlogMixin):
             queryset = queryset.filter(slug=slug, status=1, visibility=1)
         try:
             obj = queryset.get()
-        except:
+
+        except :
+
             raise Http404
         return obj
 
@@ -222,16 +224,14 @@ class BlogDetailView(DetailView, BlogMixin):
             "registerform": ModalRegistrationApiForm(),
             "amp": self.request.amp
         })
-        widget_objs = None
-        widget_obj = None
         try:
             widget_obj = DetailPageWidget.objects.get(
-                content_type__model='Blog', object_id=pk)
+                content_type__model='Blog', listid__contains=pk)
             widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
                 column=1)
-        except Exception as e:
+        except DetailPageWidget.DoesNotExist:
             widget_objs = None
-            logging.getLogger('error_log').error("%(err)s" % {'err': e})
+            widget_obj = None
         context['widget_objs'] = widget_objs
         context['widget_obj'] = widget_obj
         return context

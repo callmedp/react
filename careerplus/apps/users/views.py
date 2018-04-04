@@ -3,6 +3,8 @@ import mimetypes
 import json
 import urllib.parse
 
+from wsgiref.util import FileWrapper
+
 from django.shortcuts import render
 from django.http import (
     HttpResponse,
@@ -222,7 +224,10 @@ class DownloadBoosterResume(View):
 
                     path = file_path
                     try:
-                        fsock = GCPPrivateMediaStorage().open(file_path)
+                        if not settings.IS_GCP:
+                            fsock = FileWrapper(open(path, 'rb'))
+                        else:
+                            fsock = GCPPrivateMediaStorage().open(file_path)
                     except IOError:
                         raise Exception("Resume not found.")
 
@@ -366,6 +371,7 @@ class SocialLoginView(View):
                 elif gplus_user.get('response') == 400:
                     return HttpResponseRedirect('/login/')
         except Exception as e:
+            logging.getLogger('error_log').error('unable to do social login%s'%str(e))
             return HttpResponseRedirect('/login/')
 
 
@@ -383,6 +389,8 @@ class LinkedinLoginView(View):
             url = settings.OAUTH_URL + urllib.parse.urlencode(params)
             return HttpResponseRedirect(url)
         except Exception as e:
+            logging.getLogger('error_log').error('unable to do linked login%s'%str(e))
+
             raise e
 
 
@@ -419,6 +427,8 @@ class LinkedinCallbackView(View):
                 return HttpResponseRedirect('/login/')
 
         except Exception as e:
+            logging.getLogger('error_log').error('unable to do linked in callback view %s'%str(e))
+
             return HttpResponseRedirect('/login/')
 
 
@@ -469,7 +479,11 @@ class DownloadWriterInvoiceView(View):
                 invoice = user.userprofile.user_invoice
             if invoice:
                 file_path = invoice.name
-                fsock = GCPInvoiceStorage().open(file_path)
+                if not settings.IS_GCP:
+                    file_path = os.path.join(settings.MEDIA_ROOT, invoice.name)
+                    fsock = FileWrapper(open(file_path, 'rb'))
+                else:
+                    fsock = GCPInvoiceStorage().open(file_path)
                 filename = invoice.name.split('/')[-1]
                 response = HttpResponse(
                     fsock,

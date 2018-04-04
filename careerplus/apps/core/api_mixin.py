@@ -17,7 +17,7 @@ class ShineToken(object):
             if client_access_resp.status_code == 201:
                 return client_access_resp_json.get('access_token', None)
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('error in getting client token%s'%str(e))
         return None
 
     def get_access_token(self):
@@ -29,7 +29,7 @@ class ShineToken(object):
             if user_access_resp.status_code == 201:
                 return user_access_resp_json.get('access_token', None)
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('error in accessing token %s'%str(e))
         return None
 
     def get_api_headers(self):
@@ -43,7 +43,7 @@ class ShineToken(object):
                                "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
                     return headers
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('error in getting header %s'%str(e))
         return None
 
 
@@ -66,7 +66,7 @@ class ShineCandidateDetail(ShineToken):
                         shine_id = shine_id_json[0].get("id", None)
                         return shine_id
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to get shine id  %s'%str(e))
         return None
 
     def get_candidate_detail(self, email=None, shine_id=None):
@@ -90,7 +90,7 @@ class ShineCandidateDetail(ShineToken):
                     if detail_response.status_code == 200 and detail_response.json():
                         return detail_response.json()
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to get candidate details%s'%str(e))
         return None
 
     def get_candidate_public_detail(self, email=None, shine_id=None):
@@ -110,7 +110,7 @@ class ShineCandidateDetail(ShineToken):
             if detail_response.status_code == 200 and detail_response.json():
                 return detail_response.json()
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to get detail response %s'%str(e))
         return
 
     def get_status_detail(self, email=None, shine_id=None):
@@ -132,7 +132,7 @@ class ShineCandidateDetail(ShineToken):
                     if status_response.status_code == 200 and status_response.json():
                         return status_response.json()
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to get status details %s'%str(e))
         return None
 
     def get_shine_candidate_resume(self, candidate_id=None, resume_id=None, data={}, headers=None):
@@ -153,7 +153,7 @@ class ShineCandidateDetail(ShineToken):
                     if response.status_code == 200:
                         return response
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to return candidate resume response  %s'%str(e))
         return None
 
 
@@ -175,7 +175,7 @@ class FeatureProfileUpdate(ShineToken):
                         if response.status_code == 200:
                             return True
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to update profile details %s'%str(e))
         return False
 
 
@@ -217,8 +217,9 @@ class AdServerShine(object):
             token = urllib.parse.unquote(encoded_str)
             xor_cipher = XOR.new(settings.MOBILE_ADSERVER_ENCODE_KEY)
             inp_str = xor_cipher.decrypt(token).decode("utf-8")
-            inp_list = inp_str.split('|')
-            if inp_list and len(inp_list) > 1 and inp_list[0] == settings.MOBILE_ADSERVER_ENCODE_KEY:
+            inp_list = inp_str.split('|') if "|" in inp_str else []
+            # inp_list = inp_str.split('|')
+            if inp_list and len(inp_list) == 4 and inp_list[0] == settings.MOBILE_ADSERVER_ENCODE_KEY:
                 return inp_list
         return None
 
@@ -251,7 +252,7 @@ class CrmApiMixin(object):
                 "Accept": 'application/json', }
             return headers
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to return header %s'%str(e))
         return None
 
     def create_lead_by_api(self, data_dict={}):
@@ -264,5 +265,5 @@ class CrmApiMixin(object):
             if resp.status_code == 201:
                 return True
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('error in creating lead by api %s'%str(e))
         return None

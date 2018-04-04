@@ -347,6 +347,7 @@ class OrderItem(AbstractAutoDate):
             ("can_show_linkedinrejectedbyadmin_queue", "Can View Linkedin Rejected By Admin Queue"),
             ("can_show_linkedinrejectedbycandidate_queue", "Can View LinkedinRejected By Candidate Queue"),
             ("can_show_linkedin_approval_queue", "Can View Linkedin Approval Queue"),
+            ("can_show_linkedin_approved_queue", "Can View Linkedin Approved Queue"),
             ("can_show_linkedin_inbox_queue", "Can View Linkedin Inbox Queue"),
             ("can_show_linkedin_writer_draft", "Can View Linkedin Writer Draft"),
             ("can_show_linkedin_counselling_form", "Can View Linkedin Counselling Form"),
@@ -474,6 +475,8 @@ class OrderItem(AbstractAutoDate):
 
     def get_wc_sub_cat(self):
         cat_dict = dict(WC_SUB_CATEGORY)
+        if self.is_combo and self.parent:
+            return cat_dict.get(self.parent.wc_sub_cat, '')
         return cat_dict.get(self.wc_sub_cat, '')
 
     def get_wc_status(self):
