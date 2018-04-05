@@ -260,7 +260,7 @@ class SearchBaseView(TemplateView):
         }
         context.update(self.get_extra_context())
         try:
-            context['search_params'].update({'prod_count': self.results.count()})
+            context['search_params'].update({'prod_count': len(self.results)})
         except:
             context['search_params'].update({'prod_count': 0})
         if self.request.is_ajax():
@@ -490,7 +490,6 @@ class FuncAreaPageView(SearchBaseView):
         if self.func_area:
             context['func_area_name'] = self.func_area[0].heading
             context['func_area_title'] = self.func_area[0].title
-            
             context['meta'] = self.func_area[0].as_meta(self.request)
             context['canonical_url'] = self.func_area[0].get_canonical_url()
         else:
