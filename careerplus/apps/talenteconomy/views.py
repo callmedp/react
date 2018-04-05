@@ -432,7 +432,6 @@ class TalentDetailAjaxView(View, BlogMixin):
         self.cat_obj = None
 
     def get(self, request, *args, **kwargs):
-        print(request.is_ajax())
         if request.is_ajax():
             self.page = self.request.GET.get('page', 1)
             self.slug = self.request.GET.get('slug')
