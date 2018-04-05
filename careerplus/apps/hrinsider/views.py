@@ -17,6 +17,7 @@ from django.template.loader import render_to_string
 from blog.mixins import BlogMixin, PaginationMixin
 from blog.models import Category, Blog, Tag, Author
 
+
 class HRLandingView(TemplateView, BlogMixin):
     model = Blog
     template_name = "hrinsider/hrindex.html"
@@ -32,24 +33,30 @@ class HRLandingView(TemplateView, BlogMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        categories = Category.objects.filter(is_active=True, visibility=3).order_by('-name')
+        categories = Category.objects.filter(
+            is_active=True, visibility=3).order_by('-name')
 
         if kwargs.get('list'):
-        	article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author').order_by('-no_views')
-        	context.update({'list':True})
+            article_list = Blog.objects.filter(
+                status=1, visibility=3).select_related('p_cat', 'author').order_by('-no_views')
+            context.update({'list': True})
         else:
-        	article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author').order_by('-publish_date')[:10]
-        top_article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author')[:9]
+            article_list = Blog.objects.filter(
+                status=1, visibility=3).select_related('p_cat', 'author').order_by('-publish_date')[:10]
+        top_article_list = Blog.objects.filter(
+            status=1, visibility=3).select_related('p_cat', 'author')[:9]
 
-        authors = Author.objects.filter(visibility=3,blog__visibility=3,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
-        author_list = zip_longest(*[iter(authors)]*6, fillvalue=None)
+        authors = Author.objects.filter(
+            visibility=3, blog__visibility=3,
+            blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
+        author_list = zip_longest(*[iter(authors)] * 6, fillvalue=None)
         
         context.update({
-        'top_article_list':[top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
-        'categories': categories,
-        'article_list': article_list,
-        'authors':authors,
-        'authors_list': list(author_list)
+            'top_article_list': [top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
+            'categories': categories,
+            'article_list': article_list,
+            'authors': authors,
+            'authors_list': list(author_list)
         })
 
         context.update(self.get_breadcrumb_data())
@@ -57,16 +64,18 @@ class HRLandingView(TemplateView, BlogMixin):
         return context
 
     def get_template_names(self):
-    	if self.kwargs.get('list'):
-    		temp = "hrinsider/hr_listing.html"
-    	else:
-    		temp = self.template_name
-    	return temp
+        if self.kwargs.get('list'):
+            temp = "hrinsider/hr_listing.html"
+        else:
+            temp = self.template_name
+        return temp
 
     def get_breadcrumb_data(self):
         breadcrumbs = []
-        breadcrumbs.append({"url": reverse('hrinsider:hr-landing') , "name": "HR Insider"})
-        breadcrumbs.append({"url": None , "name": "All Articles"})
+        breadcrumbs.append({
+            "url": reverse('hrinsider:hr-landing'),
+            "name": "HR Insider"})
+        breadcrumbs.append({"url": None, "name": "All Articles"})
         data = {"breadcrumbs": breadcrumbs}
         return data
 
@@ -76,7 +85,6 @@ class HRLandingView(TemplateView, BlogMixin):
             description="HR insider - The best way to choose better career options. Get experts' advice & ideas for planning your future growth @ Shine Learning",
         )
         return {"meta": meta}
-
 
 
 class HRBlogDetailView(DetailView, BlogMixin):
@@ -89,7 +97,7 @@ class HRBlogDetailView(DetailView, BlogMixin):
         self.page = 1
 
     def get_queryset(self):
-        qs = Blog.objects.filter(status=1,visibility=3)
+        qs = Blog.objects.filter(status=1, visibility=3)
         return qs
 
     def get_object(self, queryset=None):
@@ -121,7 +129,8 @@ class HRBlogDetailView(DetailView, BlogMixin):
         context = super(self.__class__, self).get_context_data(**kwargs)
         blog = self.object
         p_cat = blog.p_cat
-        articles = p_cat.primary_category.filter(status=1, visibility=3).exclude(pk=blog.pk)
+        articles = p_cat.primary_category.filter(
+            status=1, visibility=3).exclude(pk=blog.pk)
         articles = articles.order_by('-publish_date')
 
         context['meta'] = blog.as_meta(self.request)
@@ -129,9 +138,11 @@ class HRBlogDetailView(DetailView, BlogMixin):
         context.update(self.get_breadcrumb_data())
         context['SITEDOMAIN'] = settings.SITE_DOMAIN
 
-        main_obj = Blog.objects.filter(slug=blog.slug, status=1, visibility=3).prefetch_related('tags')
+        main_obj = Blog.objects.filter(
+            slug=blog.slug, status=1, visibility=3).prefetch_related('tags')
 
-        article_list = Blog.objects.filter(p_cat=p_cat, status=1, visibility=3).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1, visibility=3).order_by('-publish_date')
+        article_list = Blog.objects.filter(
+            p_cat=p_cat, status=1, visibility=3).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1, visibility=3).order_by('-publish_date')
         article_list = article_list.exclude(slug=blog.slug)
         article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
 
@@ -145,8 +156,8 @@ class HRBlogDetailView(DetailView, BlogMixin):
 
     def get_breadcrumb_data(self):
         breadcrumbs = []
-        breadcrumbs.append({"url": reverse('hrinsider:hr-landing') , "name": "HR Insider"})
-        breadcrumbs.append({"url": reverse('hrinsider:hr-listing') , "name": "All Articles"})
+        breadcrumbs.append({"url": reverse('hrinsider:hr-landing'), "name": "HR Insider"})
+        breadcrumbs.append({"url": reverse('hrinsider:hr-listing'), "name": "All Articles"})
         breadcrumbs.append({"url": None, "name": self.object.display_name})
         data = {"breadcrumbs": breadcrumbs}
         return data
@@ -155,7 +166,111 @@ class HRBlogDetailView(DetailView, BlogMixin):
         heading = self.object.heading
         des = self.object.get_description()
         meta = Meta(
-            title= heading + "- HR Insider",
-            description = des,
+            title=heading + "- HR Insider",
+            description=des,
+        )
+        return {"meta": meta}
+
+
+class HrConclaveView(TemplateView):
+    model = Blog
+    template_name = "hrinsider/conclave.html"
+
+    def __init__(self):
+        pass
+
+    def get(self, request, *args, **kwargs):
+        context = super(self.__class__, self).get(request, args, **kwargs)
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        categories = Category.objects.filter(is_active=True, visibility=3).order_by('-name')
+
+        if kwargs.get('list'):
+            article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author').order_by('-no_views')
+            context.update({'list': True})
+        else:
+            article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author').order_by('-publish_date')[:10]
+        top_article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author')[:9]
+
+        authors = Author.objects.filter(visibility=3,blog__visibility=3,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
+        author_list = zip_longest(*[iter(authors)]*6, fillvalue=None)
+        
+        context.update({
+        'top_article_list': [top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
+        'categories': categories,
+        'article_list': article_list,
+        'authors': authors,
+        'authors_list': list(author_list)
+        })
+
+        context.update(self.get_breadcrumb_data())
+        context.update(self.get_meta_details())
+        return context
+
+    def get_breadcrumb_data(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": reverse('hrinsider:hr-landing') , "name": "HR Insider"})
+        breadcrumbs.append({"url": None, "name": "HR Conclave"})
+        data = {"breadcrumbs": breadcrumbs}
+        return data
+
+    def get_meta_details(self):
+        meta = Meta(
+            title="HR insider: Career Skilling for a future ready India",
+            description="HR insider - The best way to choose better career options. Get experts' advice & ideas for planning your future growth @ Shine Learning",
+        )
+        return {"meta": meta}
+
+
+class HrJobFairView(TemplateView):
+    model = Blog
+    template_name = "hrinsider/jobfair.html"
+
+    def __init__(self):
+        pass
+
+    def get(self, request, *args, **kwargs):
+        context = super(self.__class__, self).get(request, args, **kwargs)
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        categories = Category.objects.filter(is_active=True, visibility=3).order_by('-name')
+
+        if kwargs.get('list'):
+            article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author').order_by('-no_views')
+            context.update({'list': True})
+        else:
+            article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author').order_by('-publish_date')[:10]
+        top_article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author')[:9]
+
+        authors = Author.objects.filter(visibility=3,blog__visibility=3,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
+        author_list = zip_longest(*[iter(authors)]*6, fillvalue=None)
+        
+        context.update({
+        'top_article_list': [top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
+        'categories': categories,
+        'article_list': article_list,
+        'authors': authors,
+        'authors_list': list(author_list)
+        })
+
+        context.update(self.get_breadcrumb_data())
+        context.update(self.get_meta_details())
+        return context
+
+    def get_breadcrumb_data(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": reverse('hrinsider:hr-landing'), "name": "HR Insider"})
+        breadcrumbs.append({"url": None, "name": "Job Fair"})
+        data = {"breadcrumbs": breadcrumbs}
+        return data
+
+    def get_meta_details(self):
+        meta = Meta(
+            title="HR insider: Career Skilling for a future ready India",
+            description="HR insider - The best way to choose better career options. Get experts' advice & ideas for planning your future growth @ Shine Learning",
         )
         return {"meta": meta}

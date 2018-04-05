@@ -19,7 +19,12 @@
         {% endcompress %}
     {% endblock css_section %}
 
+    {% block hr_tabs %}
+      {% include './include/hr-tabs.html' with arrow_down="no" %}  
+    {% endblock hr_tabs %}
+
     {% block container %}
+
     <!-- header carousel -->
     {% if top_article_list %}
       <header class="header-carousel-box">

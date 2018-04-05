@@ -317,7 +317,8 @@ class ArticleListView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related('p_cat', 'user', 'created_by', 'last_modified_by')
+        return queryset.select_related('p_cat', 'user', 'created_by', 'last_modified_by').order_by('last_modified_on')
+
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))
@@ -448,6 +449,7 @@ class CategoryAddView(FormView):
                 return self.form_invalid(form)
         return self.form_invalid(form)
 
+
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))
 class TagUpdateView(UpdateView):
@@ -535,6 +537,7 @@ class TagListView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
         return queryset
+
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))

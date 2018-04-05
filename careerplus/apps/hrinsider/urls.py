@@ -1,14 +1,18 @@
 from django.conf.urls import url
-from django.views.generic import TemplateView
 
-from .views import HRLandingView, HRBlogDetailView
+from .views import HRLandingView, HRBlogDetailView, HrConclaveView,\
+    HrJobFairView
 
 urlpatterns = [
-     url(r'^$', HRLandingView.as_view(), name='hr-landing'),
-     url(r'^list/$', HRLandingView.as_view(),{'list':True}, name='hr-listing'),
-     url(r'^(?P<cat_slug>[-\w]+)/(?P<slug>[-\w]+)/$', 
-     	HRBlogDetailView.as_view(), name='hr-articles-detail'),
-
+    url(r'^$', HRLandingView.as_view(), name='hr-landing'),
+    url(r'^articles/$', HRLandingView.as_view(), {'list': True},
+        name='hr-listing'),
+    url(r'^(?P<cat_slug>[-\w]+)/(?P<slug>[-\w]+)/$',
+        HRBlogDetailView.as_view(), name='hr-articles-detail'),
+    url(r'^hr-conclave/$', HrConclaveView.as_view(),
+        name='hr-conclave'),
+    url(r'^jobfair/$', HrJobFairView.as_view(),
+        name='jobfair'),
 ]
 
 
