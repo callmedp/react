@@ -73,6 +73,7 @@ class OrderListView(ListView, PaginationMixin):
         self.query = ''
         self.payment_date, self.created = '', ''
         self.status = -1
+        self.sel_opt= 'id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
@@ -80,12 +81,16 @@ class OrderListView(ListView, PaginationMixin):
         self.payment_date = request.GET.get('payment_date', '')
         self.created = request.GET.get('created', '')
         self.status = request.GET.get('status', -1)
+        self.sel_opt = self.request.GET.get("rad_search",'id')
+
         return super(OrderListView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(OrderListView, self).get_context_data(**kwargs)
         paginator = Paginator(context['order_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
+        var=self.sel_opt
+
         alert = messages.get_messages(self.request)
         initial = {"payment_date": self.payment_date, "created": self.created, "status": self.status}
         filter_form = OrderFilterForm(initial)
@@ -93,6 +98,8 @@ class OrderListView(ListView, PaginationMixin):
             "messages": alert,
             "filter_form": filter_form,
             "query": self.query,
+             var:"checked"
+
         })
         return context
 
@@ -111,23 +118,48 @@ class OrderListView(ListView, PaginationMixin):
 
         try:
             if self.query:
+
                 txns = PaymentTxn.objects.filter(txn__iexact=self.query)
                 if txns.exists():
                     order_ids = list(txns.values_list('order__id', flat=True))
                     queryset = queryset.filter(id__in=order_ids)
+
                 else:
-                    queryset = queryset.filter(
-                        Q(number__icontains=self.query) |
-                        Q(email__icontains=self.query) |
-                        Q(mobile__icontains=self.query) |
-                        Q(id__icontains=self.query))
+                    if self.sel_opt =='id':
+                        if (self.query.strip())[:2] == 'cp' or (self.query.strip())[:2] == 'CP':
+                            result= self.query.strip()[2:]
+                            try:
+                                queryset = queryset.filter(id=result)
+                            except Exception as e:
+                                queryset=queryset.none()
+                                logging.getLogger('error_log').error(str(e))
+
+                        else:
+                            result=self.query.strip()
+                            try:
+                                queryset=queryset.filter(id=result)
+                            except Exception as e:
+                                queryset = queryset.none()
+                                logging.getLogger('error_log').error(str(e))
+
+
+                    elif self.sel_opt =='mobile':
+                        queryset = queryset.filter(mobile=self.query)
+
+
+                    elif self.sel_opt =='email':
+                        result =self.query.strip()
+                        queryset = queryset.filter(email=result)
+
 
         except Exception as e:
+            queryset = queryset.none()
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
         try:
             if int(self.status) != -1:
+
                 queryset = queryset.filter(status=self.status)
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
@@ -162,9 +194,10 @@ class OrderListView(ListView, PaginationMixin):
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
-
-        return queryset.order_by('-modified')
-
+        if queryset.exists():
+            return queryset.order_by('-modified')
+        else:
+            return queryset.none()
 
 @Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_welcome_queue', login_url='/console/login/'), name='dispatch')
