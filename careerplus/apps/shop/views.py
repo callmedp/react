@@ -485,6 +485,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                     request.session.flush()
                     return HttpResponseRedirect(login_url)
                 else:
+                    request.session['linkedin_modal'] = 1
+                    return HttpResponseRedirect('/')
                     return HttpResponseRedirect('/')
 
         except Exception as e:
