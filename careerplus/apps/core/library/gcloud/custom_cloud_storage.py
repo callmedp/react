@@ -69,6 +69,7 @@ class GCPPrivateMediaStorage(GoogleCloudStorage):
         file.blob.upload_from_file(
             content, size=content.size,
             content_type=file.mime_type)
+        file.seek(0)
         return name
 
     def exists(self, name):
