@@ -472,6 +472,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                         if services.exists():
                             return HttpResponseRedirect(reverse('dashboard:dashboard'))
                     elif not validate and linkedin_cid == request.session.get('linkedin_client_id', ''):
+                        request.session['linkedin_modal'] = 1
                         return HttpResponseRedirect('/')
                     elif validate and linkedin_cid != request.session.get('linkedin_client_id', ''):
                         request.session.flush()

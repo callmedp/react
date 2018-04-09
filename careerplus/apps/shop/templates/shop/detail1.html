@@ -373,3 +373,9 @@
     <script src="{% static 'shinelearn/js/common/scroller.js' %}" type="text/javascript"></script>
     {% endcompress%}
 {% endblock js_section %}
+
+{% if sqs.id in linkedin_resume_services %}
+  {% block johukum %}
+
+  {% endblock johukum %}
+{% endif %}

@@ -149,6 +149,11 @@ class HomePageView(TemplateView, MetadataMixin):
         context.update(self.get_courses())
         context.update(self.get_testimonials())
         context['meta'] = self.get_meta()
+
+        linkedin_modal = self.request.session.get('linkedin_modal', 0)
+        if linkedin_modal:
+            del self.request.session['linkedin_modal']
+        context.update({'linkedin_modal': linkedin_modal})
         return context
 
 
