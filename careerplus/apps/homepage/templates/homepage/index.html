@@ -346,6 +346,10 @@
             skillsSet = {{ skills_set|safe }},
             prefetchedFuncArea = '{{ recmnd_func_area }}',
             prefetchedSkills = '{{ recmnd_skills }}';
+            
+        if ( {{linkedin_modal}} ){
+            $('#linkedin_modal').modal('show');
+        }
     </script>
     
     {% compress js inline %}
@@ -370,9 +374,6 @@
         $('#carousel-example-generic1').carousel({
             interval: 100000
         })
-        if ( {{linkedin_modal}} ){
-            $('#linkedin_modal').modal('show');
-        }
     </script>
     {% endcompress %}
 {% endblock js_section %}
