@@ -213,7 +213,6 @@ class Author(AbstractCommonModel, AbstractSEO, ModelMeta):
          'url': 'get_absolute_url'
      }
 
-
     def __str__(self):
         return self.name
 
@@ -222,6 +221,7 @@ class Author(AbstractCommonModel, AbstractSEO, ModelMeta):
             return reverse('talent:authors-detail', kwargs={'slug': self.slug})
         else:
             return '/'
+
 
 class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     
@@ -274,14 +274,34 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     comment_moderated = models.PositiveIntegerField(default=0)
     no_views = models.PositiveIntegerField(default=0)
     no_shares = models.PositiveIntegerField(default=0)
-    score = models.DecimalField(max_digits=10, default=0,
+    score = models.DecimalField(
+        max_digits=10, default=0,
         decimal_places=2, help_text=("popularity score"))
 
     publish_date = models.DateTimeField(null=True, blank=True)
     expiry_date = models.DateTimeField(null=True, blank=True)
 
+    # hr conclave and job fair....
+    speakers = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, blank=True,
+        related_name='speakers')
+    start_date = models.DateTimeField(
+        null=True, blank=True)
+    end_date = models.DateTimeField(
+        null=True, blank=True)
+    venue = models.CharField(
+        ('Venue'), max_length=255, blank=True,
+        help_text=("Location"))
+    address = models.TextField(
+        _('Address'),
+        blank=True, default='Conclave or job fair address')
+
+    sponsor_img = models.ImageField(
+        _('Sponsor Image'), upload_to='images/blog/sponsor/',
+        blank=True, null=True)
+
     _metadata_default = ModelMeta._metadata_default.copy()
-    
+
     _metadata = {
         'title': 'get_title',
         'description': 'get_description',

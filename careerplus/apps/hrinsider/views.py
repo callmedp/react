@@ -185,24 +185,29 @@ class HrConclaveView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        categories = Category.objects.filter(is_active=True, visibility=3).order_by('-name')
+        categories = Category.objects.filter(
+            is_active=True, visibility=3).order_by('-name')
 
         if kwargs.get('list'):
-            article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author').order_by('-no_views')
+            article_list = Blog.objects.filter(
+                status=1, visibility=3).select_related('p_cat', 'author').order_by('-no_views')
             context.update({'list': True})
         else:
-            article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author').order_by('-publish_date')[:10]
-        top_article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author')[:9]
+            article_list = Blog.objects.filter(
+                status=1, visibility=3).select_related('p_cat', 'author').order_by('-publish_date')[:10]
+        top_article_list = Blog.objects.filter(
+            status=1, visibility=3).select_related('p_cat', 'author')[:9]
 
-        authors = Author.objects.filter(visibility=3,blog__visibility=3,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
-        author_list = zip_longest(*[iter(authors)]*6, fillvalue=None)
-        
+        authors = Author.objects.filter(
+            visibility=3, blog__visibility=3, blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
+        author_list = zip_longest(*[iter(authors)] * 6, fillvalue=None)
+
         context.update({
-        'top_article_list': [top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
-        'categories': categories,
-        'article_list': article_list,
-        'authors': authors,
-        'authors_list': list(author_list)
+            'top_article_list': [top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
+            'categories': categories,
+            'article_list': article_list,
+            'authors': authors,
+            'authors_list': list(author_list)
         })
 
         context.update(self.get_breadcrumb_data())
@@ -211,7 +216,7 @@ class HrConclaveView(TemplateView):
 
     def get_breadcrumb_data(self):
         breadcrumbs = []
-        breadcrumbs.append({"url": reverse('hrinsider:hr-landing') , "name": "HR Insider"})
+        breadcrumbs.append({"url": reverse('hrinsider:hr-landing'), "name": "HR Insider"})
         breadcrumbs.append({"url": None, "name": "HR Conclave"})
         data = {"breadcrumbs": breadcrumbs}
         return data
@@ -237,24 +242,30 @@ class HrJobFairView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        categories = Category.objects.filter(is_active=True, visibility=3).order_by('-name')
+        categories = Category.objects.filter(
+            is_active=True, visibility=3).order_by('-name')
 
         if kwargs.get('list'):
-            article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author').order_by('-no_views')
+            article_list = Blog.objects.filter(
+                status=1, visibility=3).select_related('p_cat', 'author').order_by('-no_views')
             context.update({'list': True})
         else:
-            article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author').order_by('-publish_date')[:10]
-        top_article_list = Blog.objects.filter(status=1, visibility=3).select_related('p_cat','author')[:9]
+            article_list = Blog.objects.filter(
+                status=1, visibility=3).select_related('p_cat', 'author').order_by('-publish_date')[:10]
+        top_article_list = Blog.objects.filter(
+            status=1, visibility=3).select_related('p_cat', 'author')[:9]
 
-        authors = Author.objects.filter(visibility=3,blog__visibility=3,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
-        author_list = zip_longest(*[iter(authors)]*6, fillvalue=None)
+        authors = Author.objects.filter(
+            visibility=3, blog__visibility=3,
+            blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
+        author_list = zip_longest(*[iter(authors)] * 6, fillvalue=None)
         
         context.update({
-        'top_article_list': [top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
-        'categories': categories,
-        'article_list': article_list,
-        'authors': authors,
-        'authors_list': list(author_list)
+            'top_article_list': [top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
+            'categories': categories,
+            'article_list': article_list,
+            'authors': authors,
+            'authors_list': list(author_list)
         })
 
         context.update(self.get_breadcrumb_data())
