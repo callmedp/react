@@ -337,7 +337,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
         queryset = Order.objects.prefetch_related(
             'orderitems').filter(
             status=1, orderitems__oi_status=2,
-            orderitems__no_process=False)
+            orderitems__no_process=False).distinct()
         # queryset = OrderItem.objects.all().select_related('order', 'product')
         # queryset = queryset.filter(
         #     order__status=1, no_process=False, oi_status=2)
