@@ -122,6 +122,7 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
         # page_data = self.pagination(paginator, self.page)
 
         popular_courses = BlogMixin().get_product(cat_obj.slug)
+        detail_article = None
         if recent_articles:
             detail_article = render_to_string('include/talent_page.html', {
                 "page_obj": recent_articles,
