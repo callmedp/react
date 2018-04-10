@@ -99,7 +99,7 @@
                     </ul>
                 </div>
 
-                <a href="{% url 'users:linkedin-code' %}?credential=1&next={{request.GET.next}}" class="btn submit-linkedin" onclick='return validate_linkedin_login_terms()'><i class="icon-linkedIn-login mr-5"></i>Sign in with LinkedIn</a>
+                <a href="{% url 'users:linkedin-code' %}?credential=1&next={{request.GET.next}}" style="margin:10px auto; display:block; text-align:center;" onclick='return validate_linkedin_login_terms()'><img src="{% static 'shinelearn/images/Sign-In-Small---Default.png' %}"></a>
 
             </form>
         
