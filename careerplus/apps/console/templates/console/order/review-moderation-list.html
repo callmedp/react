@@ -1,5 +1,5 @@
 {% extends "console/base_console.html" %}
-{% load static %}
+{% load static compress %}
 {% load humanize %}
 {% load thumbnail %}
 
@@ -7,7 +7,9 @@
 
 {% block css_block %}
     {{block.super}}
-    <link href="{% static "/packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
+    {% compress css %}
+      <link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
+    {% endcompress %}
 {% endblock css_block %}
 
 
@@ -256,35 +258,13 @@
 
 {% block js_block %}
     {{block.super}}
+
+    {% compress js %}
     <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
     <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
     <script type="text/javascript" src="{% static "console/js/order/review_action.js" %}">
     </script>
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $('.date-range-picker').daterangepicker({
-            autoUpdateInput: false,
-            locale: {
-              format: 'DD/MM/YYYY',
-              cancelLabel: 'Clear',
-            },
-            maxDate: moment().endOf("day"),
-        },function(start, end, label) {
-          
-        });
-
-        $('.date-range-picker').on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
-        });
-
-        $('.date-range-picker').on('cancel.daterangepicker', function(ev, picker) {
-            $(this).val('');
-        })
-
-        $('#review_filter').click(function(){
-            $('#review-filter-form').submit();
-        });
-      });
-    </script>
+    {% endcompress %}
+    
 {% endblock js_block %}
 
