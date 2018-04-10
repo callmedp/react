@@ -19,11 +19,14 @@ from seo.models import AbstractSEO
 from .config import STATUS
 
 SITE_TYPE = (
-        (1, 'ShineLearning'),
-        (2, 'TalentEconomy'),
-        # (3, 'Both')
-        (3, 'HR-Insider'),
-    )
+    (1, 'ShineLearning'),
+    (2, 'TalentEconomy'),
+    # (3, 'Both')
+    (3, 'HR-Blogger'),
+    (4, 'HR-Conclave'),
+    (5, 'HR-Jobfair'),
+)
+
 
 class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
     name = models.CharField(
@@ -199,7 +202,6 @@ class Author(AbstractCommonModel, AbstractSEO, ModelMeta):
     
     is_active = models.BooleanField(default=False)
     
-
     _metadata_default = ModelMeta._metadata_default.copy()
     # _metadata_default['locale'] = 'dummy_locale'
 
@@ -266,7 +268,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True,
         help_text='for user or writer')
-    
+
     status = models.PositiveIntegerField(choices=STATUS, default=0)
     allow_comment = models.BooleanField(default=False)
 
@@ -283,7 +285,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
 
     # hr conclave and job fair....
     speakers = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, blank=True,
+        Author, blank=True,
         related_name='speakers')
     start_date = models.DateTimeField(
         null=True, blank=True)
@@ -294,7 +296,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
         help_text=("Location"))
     address = models.TextField(
         _('Address'),
-        blank=True, default='Conclave or job fair address')
+        blank=True, help_text='Conclave or job fair address')
 
     sponsor_img = models.ImageField(
         _('Sponsor Image'), upload_to='images/blog/sponsor/',
@@ -398,8 +400,9 @@ class Comment(AbstractCommonModel):
     message = models.TextField(null=False, blank=False)
     is_published = models.BooleanField(default=False)
     is_removed = models.BooleanField(default=False)
-    replied_to = models.ForeignKey("self", on_delete=models.CASCADE, null=True,
-    blank=True, related_name="comments")
+    replied_to = models.ForeignKey(
+        "self", on_delete=models.CASCADE,
+        null=True, blank=True, related_name="comments")
 
     class Meta:
         ordering = ['-created_on', ]

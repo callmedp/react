@@ -30,395 +30,359 @@
         {% block breadcrumb %}
             {% include './include/breadcrumb.html' %}
         {% endblock breadcrumb %}
-
-        <section class="conclave-box">
-            <div class="primary-heading">Upcoming Conclave</div>
-            <div class="col-sm-12 conclave_head">
-                <div class="row">
-                    <div class="col-sm-10 float-left">
-                        <h1>HR Analytics: Unlocking the power of data </h1></div>
-                    <div class="col-sm-2 float-right">
-                        <img class="conclave-img" src="images/shine-conclave.png" alt="Shine Conclave">
-                    </div>
-                    <div class="col-sm-12 event_speakers">
-                        Event Speakers</div>
-                    <div class="col speakers"><img src="images/uma.jpg"><strong>Uma Rao</strong><em> CHRO</em> HIL</div>
-                    <div class="col speakers"><img src="images/amitava.jpg"><strong>Amitava Saha</strong><em>Human Resources</em> Biocon Limite</div>
-                    <div class="col speakers"><img src="images/mahalingam.jpg"><strong>C Mahalingam Head</strong><em>HR Advisor & Executive</em>Coach </div>
-                    <div class="col speakers"><img src="images/girish.jpg"><strong>Girish Menon</strong><em> HR Head </em>Swiggy </div>
-                    <div class="col speakers"><img src="images/srinath.jpg"><strong>Srinath Gururajarao</strong> <em>CHRO & Vice President</em>Nexval Group </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="conclave-box-btm">
-            <div class="row">
-                <div class="col">
-                    <figure class="calender-box">
-                        <i class="calender-icon-box">
-                            <span class="icon-conclave1"></span>
-                        </i>
-                        <figcaption>
-                            Jan. 17, 2018
-                            <em>Entry by invitation</em>
-                        </figcaption>
-                    </figure>
-                </div>
-                <div class="col">
-                    <figure class="time-box">
-                        <i class="time-icon-box">
-                            <span class="icon-conclave2"></span>
-                        </i>
-                        <figcaption>
-                            6PM Onwards
-                        </figcaption>
-                    </figure>
-                </div>
-                <div class="col">
-                    <figure class="venue-box">
-                        <i class="venue-icon-box">
-                            <span class="icon-conclave3"></span>
-                        </i>
-                        <figcaption>
-                            The Westin Mindspace
-                            <a href="https://www.google.com/maps/place/The+Westin+Hyderabad+Mindspace/@17.442354,78.38179,14z/data=!4m5!3m4!1s0x0:0x7acc5d097f6e2e6!8m2!3d17.4423539!4d78.3817904?hl=en-US" target="_blank">Show on Map</a>
-                        </figcaption>
-                    </figure>
-                </div>
-
-            </div>
-        </section>
-
-    <!-- main section start -->
-        <section class="conclave-box-content">
-            <div class="row">
-                <!-- left content start -->
-                <div class="col-sm-8">
+        {% if obj %}
+            <section class="conclave-box">
+                <div class="primary-heading">{{conclave_type}} Conclave</div>
+                <div class="col-sm-12 conclave_head">
                     <div class="row">
-                        <div class="col-sm-8 conclave-content">
-                            <h2 class="secondary-heading">51<sup>st</sup> Shine HR Conclave</h2>
-                            <span class="sub-heading">Hyderabad Edition</span>
-                            <p>Is your company worried about the impact and cost of attrition? Are you trying to figure out how long does it take for your new employees to be productive? Do you want to know why certain leaders succeed and others fail?</p>
-                            <p>People are vital to the success of any company. Any business which can attract the right competencies, manage talent effectively, utilize capacity efficiently, and retain employees is setting itself up for long-term success.</p>
-                            <p>A few years back, companies took a considerable time analyzing employee data to answer above mentioned critical questions. Not anymore. Analytics is making a difference in places and ways you might not expect—the HR Function.</p>
-                            <p>HR leaders hit the gas on their adoption of HR analytics in 2016 — and there are no signs of slowing down heading into 2017!</p>
-                            <p>It seems HR practitioners and leaders are no longer thinking just about how workforce analytics will improve HR processes and decision-making, but also how analytics can further impact business-wide objectives and outcomes.</p>
-                            <p>The 51st Shine HR Conclave - Hyderabad Edition will pose the following questions to the HR Leaders:</p>
-
-                            <ul>
-                                <li>How has the idea of HR Analytics evolved over the past few years?</li>
-                                <li>How to align HR Analytics strategy to Business strategy?</li>
-                                <li>Why HR Needs Data-Driven Workforce Planning to Avoid Talent Shortfalls?</li>
-                                <li>How can you foster an Analytics oriented culture and advice on making the transition easier?</li>
-                            </ul>
-
-                            <div class="social-login noborder">
-                                <a class="icon-fb-social" href="#"></a>
-                                <a class="icon-twitter-social" href="#"></a>
-                                <a class="icon-gplus-social" href="#"></a>
-                            </div>
+                        <div class="col-sm-10 float-left">
+                            <h1>{{obj.heading}}</h1></div>
+                        <div class="col-sm-2 float-right">
+                            <img class="conclave-img" src="{{obj.image.url}}" alt="obj.image_alt">
+                        </div>
+                        <div class="col-sm-12 event_speakers">
+                            Event Speakers
                         </div>
 
-                        <div class="col-sm-4 schedule">
-                            <h2 class="secondary-heading">Schedule</h2>
-                            <ul>
-                                <li>
-                                    <small>06:00 p.m. - 06:45 p.m.</small>
-                                    <strong>Registration & Networking</strong>
-                                </li>
-                                <li>
-                                    <small>06:45 p.m. - 06:50 p.m.</small>
-                                    <strong>Welcome Note</strong>
-                                </li>
-                                <li>
-                                    <small>06:50 p.m. - 07:00 p.m.</small>
-                                    <strong>Opening Address</strong>
-                                </li>
-                                <li>
-                                    <small>07:00 p.m. - 08:30 p.m.</small>
-                                    <strong>Panel Discussion</strong>
-                                </li>
-                                <li>
-                                    <small>08:30 p.m. - 08:50 p.m.</small>
-                                    <strong>QA Session</strong>
-                                </li>
-                                <li>
-                                    <small>08:50 p.m. - 09:00 p.m.</small>
-                                    <strong>Closing Note</strong>
-                                </li>
-                                <li>
-                                    <small>09:00 p.m. onwards</small>
-                                    <strong>Cocktail & Dinner</strong>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="col-sm-6 mt-30">
-                            <div class="staytuned">
-                              <strong>Stay Tuned</strong>
-                              Subscribe to recieve upcoming conclave updates
-                              <form>
-                                  <div>
-                                    <input type="text"  id="formGroupExampleInput" placeholder="Enter your Email ID">
-                                    <button type="submit" class="btn subscribe">Subscribe</button>
-                                  </div>
-                              </form>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6 mt-30">
-                            <div class="sponsorship">
-                                <img src="images/banner-img.jpg" alt="Sponsorship">
-                                <article class="banner-txt">
-                                    <strong class="secondary-heading">Looking for sponsorship?</strong>
-                                    <h3>Become a sponsor of the Shine HR Conclave which witnesses 200+ top HR leaders from across the country. Drop us an enquiry for more details.</h3>
-                                    <a href="#" class="enquire mt-20" data-toggle="modal" data-target="#enquire-modal">Enquire now</a>
-                                </article>
-                            </div>
-                        </div>
-
+                        {% for speaker in speakers %}
+                            <div class="col speakers">
+                                {% if speaker.image %}
+                                <img src="{{speaker.image.url}}">
+                                {% endif %}
+                                <strong>{{speaker.name}}</strong><em> {{speaker.designation}}</em> {{speaker.company}}</div>
+                        {% endfor %}
                     </div>
                 </div>
+            </section>
 
-                <!-- right content start -->
-                <div class="col-sm-4">
-                    <div class="widget">
-                        <a class="twitter-timeline" href="https://twitter.com/Shinedotcom?ref_src=twsrc%5Etfw">Tweets by Shinedotcom</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+            {% if conclave_type == 'Upcoming' %}
+            <section class="conclave-box-btm">
+                <div class="row">
+                    <div class="col">
+                        <figure class="calender-box">
+                            <i class="calender-icon-box">
+                                <span class="icon-conclave1"></span>
+                            </i>
+                            <figcaption>
+                                {{obj.start_date.date}}
+                                <em>Entry by {{obj.author}}</em>
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <div class="col">
+                        <figure class="time-box">
+                            <i class="time-icon-box">
+                                <span class="icon-conclave2"></span>
+                            </i>
+                            <figcaption>
+                                {{obj.start_date.time}} Onwards
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <div class="col">
+                        <figure class="venue-box">
+                            <i class="venue-icon-box">
+                                <span class="icon-conclave3"></span>
+                            </i>
+                            <figcaption>
+                                {{obj.venue}}
+                                <!--a href="https://www.google.com/maps/place/The+Westin+Hyderabad+Mindspace/@17.442354,78.38179,14z/data=!4m5!3m4!1s0x0:0x7acc5d097f6e2e6!8m2!3d17.4423539!4d78.3817904?hl=en-US" target="_blank">Show on Map</a-->
+                            </figcaption>
+                        </figure>
                     </div>
 
-                    <div class="widget">
-                        <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fshinedotcom&tabs=timeline&width=360&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="360" height="300" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-                    </div>
+                </div>
+            </section>
+            {% endif %}
 
-                    <div class="pastconclave">
-                        <h2 class="secondary-heading">Past Conclaves</h2>
-                        <div class="greybox">
-                            <ul>
-                                <li>
-                                    <a href="#">
-                                        <figure>
-                                            <i>
-                                                <img src="images/conclave-50.jpg" alt="Shine Conclave">
-                                            </i>
-                                            <figcaption>
-                                                <h3>50th Hindustan Times Shine HR Conclave</h3> <em>Mumbai Edition</em>
-                                            </figcaption>
-                                        </figure>
-                                    </a>
-                                </li>
-                                  <li>
-                                    <a href="#">
-                                        <figure>
-                                            <i>
-                                                <img src="images/conclave-49.jpg" alt="Shine Conclave">
-                                            </i>
-                                            <figcaption>
-                                                <h3>49th Hindustan Times Shine HR Conclave</h3> <em>Bengaluru Edition</em>
-                                            </figcaption>
-                                        </figure>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <figure>
-                                            <i>
-                                                <img src="images/conclave-48.jpg" alt="Shine Conclave">
-                                            </i>
-                                            <figcaption>
-                                                <h3>48th Hindustan Times Shine HR Conclave</h3> <em>Mumbai Edition</em>
-                                            </figcaption>
-                                        </figure>
-                                    </a>
-                                </li>
-                            </ul>
+        <!-- main section start -->
+            <section class="conclave-box-content">
+                <div class="row">
+                    <!-- left content start -->
+                    <div class="col-sm-8">
+                        <div class="row">
+                            <div class="conclave-content">
+                                {{obj.content|safe}}
+
+                                <div class="social-login noborder">
+                                <a class="icon-fb-social" id="article_share" target="_blank" article-slug="{{obj.slug}}"  href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{obj.get_absolute_url}}"></a>
+
+                                <a class="icon-twitter-social" id="article_share" target="_blank" article-slug="{{obj.slug}}" href="https://twitter.com/home?status=https://{{SITEDOMAIN}}{{obj.get_absolute_url}}"></a>
+
+                                <a class="icon-gplus-social" id="article_share" target="_blank" article-slug="{{obj.slug}}" href="https://plus.google.com/share?url={{SITEDOMAIN}}{{obj.get_absolute_url}}"></a>
+                                </div>
+                            </div>
+
+                            {% comment %}
+                            <div class="col-sm-6 mt-30">
+                                <div class="staytuned">
+                                  <strong>Stay Tuned</strong>
+                                  Subscribe to recieve upcoming conclave updates
+                                  <form>
+                                      <div>
+                                        <input type="text"  id="formGroupExampleInput" placeholder="Enter your Email ID">
+                                        <button type="submit" class="btn subscribe">Subscribe</button>
+                                      </div>
+                                  </form>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 mt-30">
+                                <div class="sponsorship">
+                                    <img src="images/banner-img.jpg" alt="Sponsorship">
+                                    <article class="banner-txt">
+                                        <strong class="secondary-heading">Looking for sponsorship?</strong>
+                                        <h3>Become a sponsor of the Shine HR Conclave which witnesses 200+ top HR leaders from across the country. Drop us an enquiry for more details.</h3>
+                                        <a href="#" class="enquire mt-20" data-toggle="modal" data-target="#enquire-modal">Enquire now</a>
+                                    </article>
+                                </div>
+                            </div>
+                            {% endcomment %}
+
+
                         </div>
                     </div>
-                </div>
 
+                    <!-- right content start -->
+                    <div class="col-sm-4">
+                        <div class="widget">
+                            <a class="twitter-timeline" href="https://twitter.com/Shinedotcom?ref_src=twsrc%5Etfw">Tweets by Shinedotcom</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                        </div>
+
+                        <div class="widget">
+                            <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fshinedotcom&tabs=timeline&width=360&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="360" height="300" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+                        </div>
+
+                        <div class="pastconclave">
+                            <h2 class="secondary-heading">Past Conclaves</h2>
+                            <div class="greybox">
+                                <ul>
+                                    <li>
+                                        <a href="#">
+                                            <figure>
+                                                <i>
+                                                    <img src="images/conclave-50.jpg" alt="Shine Conclave">
+                                                </i>
+                                                <figcaption>
+                                                    <h3>50th Hindustan Times Shine HR Conclave</h3> <em>Mumbai Edition</em>
+                                                </figcaption>
+                                            </figure>
+                                        </a>
+                                    </li>
+                                      <li>
+                                        <a href="#">
+                                            <figure>
+                                                <i>
+                                                    <img src="images/conclave-49.jpg" alt="Shine Conclave">
+                                                </i>
+                                                <figcaption>
+                                                    <h3>49th Hindustan Times Shine HR Conclave</h3> <em>Bengaluru Edition</em>
+                                                </figcaption>
+                                            </figure>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <figure>
+                                                <i>
+                                                    <img src="images/conclave-48.jpg" alt="Shine Conclave">
+                                                </i>
+                                                <figcaption>
+                                                    <h3>48th Hindustan Times Shine HR Conclave</h3> <em>Mumbai Edition</em>
+                                                </figcaption>
+                                            </figure>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+
+                </div>
                 
+            </section>
 
-            </div>
-            
-        </section>
-
-        <section class="author-carousel-box mt-30">
-            <h2 class="secondary-heading">Past Speakers</h2>
-            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item  active">
-                        <div class="row">
-                            <div class="col-sm-2 author-carousel">
-                                <a href="#" class="box-panel">
-                                    <figure>
-                                        <i>
-                        <img src="https://origin-static3.shine.com/images/blog/author/Neha_Kaul.jpg">
-                      </i>
-                                        <figcaption>
-                                            <strong class="author-info author-info-primary">Neha Kaul</strong>
-                                            <strong class="author-info author-info-secondary">5 articles</strong>
-                                        </figcaption>
-                                    </figure>
-                                </a>
+            <section class="author-carousel-box mt-30">
+                <h2 class="secondary-heading">Past Speakers</h2>
+                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item  active">
+                            <div class="row">
+                                <div class="col-sm-2 author-carousel">
+                                    <a href="#" class="box-panel">
+                                        <figure>
+                                            <i>
+                            <img src="https://origin-static3.shine.com/images/blog/author/Neha_Kaul.jpg">
+                          </i>
+                                            <figcaption>
+                                                <strong class="author-info author-info-primary">Neha Kaul</strong>
+                                                <strong class="author-info author-info-secondary">5 articles</strong>
+                                            </figcaption>
+                                        </figure>
+                                    </a>
+                                </div>
+                                <div class="col-sm-2 author-carousel">
+                                    <a href="#" class="box-panel">
+                                        <figure>
+                                            <i>
+                            <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Neeraj-Author.jpg" alt="Neeraj Singh">
+                          </i>
+                                            <figcaption>
+                                                <strong class="author-info author-info-primary">Neeraj</strong>
+                                                <strong class="author-info author-info-secondary">5 articles</strong>
+                                            </figcaption>
+                                        </figure>
+                                    </a>
+                                </div>
+                                <div class="col-sm-2 author-carousel">
+                                    <a href="#" class="box-panel">
+                                        <figure>
+                                            <i>
+                            <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/naman_agrawal.jpg" alt="Naman Agrawal">
+                          </i>
+                                            <figcaption>
+                                                <strong class="author-info author-info-primary">Naman Agrawal</strong>
+                                                <strong class="author-info author-info-secondary">5 articles</strong>
+                                            </figcaption>
+                                        </figure>
+                                    </a>
+                                </div>
+                                <div class="col-sm-2 author-carousel">
+                                    <a href="#" class="box-panel">
+                                        <figure>
+                                            <i>
+                            <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Aman.jpg" alt="Aman Khare - AmanGoinPlaces">
+                          </i>
+                                            <figcaption>
+                                                <strong class="author-info author-info-primary">Aman Khare</strong>
+                                                <strong class="author-info author-info-secondary">5 articles</strong>
+                                            </figcaption>
+                                        </figure>
+                                    </a>
+                                </div>
+                                <div class="col-sm-2 author-carousel">
+                                    <a href="#" class="box-panel">
+                                        <figure>
+                                            <i>
+                            <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Honey-Singh.jpg" alt="Honey Singh">
+                          </i>
+                                            <figcaption>
+                                                <strong class="author-info author-info-primary">Honey Singh</strong>
+                                                <strong class="author-info author-info-secondary">5 articles</strong>
+                                            </figcaption>
+                                        </figure>
+                                    </a>
+                                </div>
+                                <div class="col-sm-2 author-carousel">
+                                    <a href="#" class="box-panel">
+                                        <figure>
+                                            <i>
+                            <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/guarav.jpg" alt="Gaurav Jain">
+                          </i>
+                                            <figcaption>
+                                                <strong class="author-info author-info-primary">Gaurav Jain</strong>
+                                                <strong class="author-info author-info-secondary">5 articles</strong>
+                                            </figcaption>
+                                        </figure>
+                                    </a>
+                                </div>
                             </div>
-                            <div class="col-sm-2 author-carousel">
-                                <a href="#" class="box-panel">
-                                    <figure>
-                                        <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Neeraj-Author.jpg" alt="Neeraj Singh">
-                      </i>
-                                        <figcaption>
-                                            <strong class="author-info author-info-primary">Neeraj</strong>
-                                            <strong class="author-info author-info-secondary">5 articles</strong>
-                                        </figcaption>
-                                    </figure>
-                                </a>
-                            </div>
-                            <div class="col-sm-2 author-carousel">
-                                <a href="#" class="box-panel">
-                                    <figure>
-                                        <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/naman_agrawal.jpg" alt="Naman Agrawal">
-                      </i>
-                                        <figcaption>
-                                            <strong class="author-info author-info-primary">Naman Agrawal</strong>
-                                            <strong class="author-info author-info-secondary">5 articles</strong>
-                                        </figcaption>
-                                    </figure>
-                                </a>
-                            </div>
-                            <div class="col-sm-2 author-carousel">
-                                <a href="#" class="box-panel">
-                                    <figure>
-                                        <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Aman.jpg" alt="Aman Khare - AmanGoinPlaces">
-                      </i>
-                                        <figcaption>
-                                            <strong class="author-info author-info-primary">Aman Khare</strong>
-                                            <strong class="author-info author-info-secondary">5 articles</strong>
-                                        </figcaption>
-                                    </figure>
-                                </a>
-                            </div>
-                            <div class="col-sm-2 author-carousel">
-                                <a href="#" class="box-panel">
-                                    <figure>
-                                        <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Honey-Singh.jpg" alt="Honey Singh">
-                      </i>
-                                        <figcaption>
-                                            <strong class="author-info author-info-primary">Honey Singh</strong>
-                                            <strong class="author-info author-info-secondary">5 articles</strong>
-                                        </figcaption>
-                                    </figure>
-                                </a>
-                            </div>
-                            <div class="col-sm-2 author-carousel">
-                                <a href="#" class="box-panel">
-                                    <figure>
-                                        <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/guarav.jpg" alt="Gaurav Jain">
-                      </i>
-                                        <figcaption>
-                                            <strong class="author-info author-info-primary">Gaurav Jain</strong>
-                                            <strong class="author-info author-info-secondary">5 articles</strong>
-                                        </figcaption>
-                                    </figure>
-                                </a>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="row">
+                                <div class="col-sm-2 author-carousel">
+                                    <a href="#" class="box-panel">
+                                        <figure>
+                                            <i>
+                            <img src="https://origin-static3.shine.com/images/blog/author/Neha_Kaul.jpg">
+                          </i>
+                                            <figcaption>
+                                                <strong class="author-info author-info-primary">Neha Kaul</strong>
+                                                <strong class="author-info author-info-secondary">5 articles</strong>
+                                            </figcaption>
+                                        </figure>
+                                    </a>
+                                </div>
+                                <div class="col-sm-2 author-carousel">
+                                    <a href="#" class="box-panel">
+                                        <figure>
+                                            <i>
+                            <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Neeraj-Author.jpg" alt="Neeraj Singh">
+                          </i>
+                                            <figcaption>
+                                                <strong class="author-info author-info-primary">Neeraj</strong>
+                                                <strong class="author-info author-info-secondary">5 articles</strong>
+                                            </figcaption>
+                                        </figure>
+                                    </a>
+                                </div>
+                                <div class="col-sm-2 author-carousel">
+                                    <a href="#" class="box-panel">
+                                        <figure>
+                                            <i>
+                            <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/naman_agrawal.jpg" alt="Naman Agrawal">
+                          </i>
+                                            <figcaption>
+                                                <strong class="author-info author-info-primary">Naman Agrawal</strong>
+                                                <strong class="author-info author-info-secondary">5 articles</strong>
+                                            </figcaption>
+                                        </figure>
+                                    </a>
+                                </div>
+                                <div class="col-sm-2 author-carousel">
+                                    <a href="#" class="box-panel">
+                                        <figure>
+                                            <i>
+                            <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Aman.jpg" alt="Aman Khare - AmanGoinPlaces">
+                          </i>
+                                            <figcaption>
+                                                <strong class="author-info author-info-primary">Aman Khare</strong>
+                                                <strong class="author-info author-info-secondary">5 articles</strong>
+                                            </figcaption>
+                                        </figure>
+                                    </a>
+                                </div>
+                                <div class="col-sm-2 author-carousel">
+                                    <a href="#" class="box-panel">
+                                        <figure>
+                                            <i>
+                            <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Honey-Singh.jpg" alt="Honey Singh">
+                          </i>
+                                            <figcaption>
+                                                <strong class="author-info author-info-primary">Honey Singh</strong>
+                                                <strong class="author-info author-info-secondary">5 articles</strong>
+                                            </figcaption>
+                                        </figure>
+                                    </a>
+                                </div>
+                                <div class="col-sm-2 author-carousel">
+                                    <a href="#" class="box-panel">
+                                        <figure>
+                                            <i>
+                            <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/guarav.jpg" alt="Gaurav Jain">
+                          </i>
+                                            <figcaption>
+                                                <strong class="author-info author-info-primary">Gaurav Jain</strong>
+                                                <strong class="author-info author-info-secondary">5 articles</strong>
+                                            </figcaption>
+                                        </figure>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="col-sm-2 author-carousel">
-                                <a href="#" class="box-panel">
-                                    <figure>
-                                        <i>
-                        <img src="https://origin-static3.shine.com/images/blog/author/Neha_Kaul.jpg">
-                      </i>
-                                        <figcaption>
-                                            <strong class="author-info author-info-primary">Neha Kaul</strong>
-                                            <strong class="author-info author-info-secondary">5 articles</strong>
-                                        </figcaption>
-                                    </figure>
-                                </a>
-                            </div>
-                            <div class="col-sm-2 author-carousel">
-                                <a href="#" class="box-panel">
-                                    <figure>
-                                        <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Neeraj-Author.jpg" alt="Neeraj Singh">
-                      </i>
-                                        <figcaption>
-                                            <strong class="author-info author-info-primary">Neeraj</strong>
-                                            <strong class="author-info author-info-secondary">5 articles</strong>
-                                        </figcaption>
-                                    </figure>
-                                </a>
-                            </div>
-                            <div class="col-sm-2 author-carousel">
-                                <a href="#" class="box-panel">
-                                    <figure>
-                                        <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/naman_agrawal.jpg" alt="Naman Agrawal">
-                      </i>
-                                        <figcaption>
-                                            <strong class="author-info author-info-primary">Naman Agrawal</strong>
-                                            <strong class="author-info author-info-secondary">5 articles</strong>
-                                        </figcaption>
-                                    </figure>
-                                </a>
-                            </div>
-                            <div class="col-sm-2 author-carousel">
-                                <a href="#" class="box-panel">
-                                    <figure>
-                                        <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Aman.jpg" alt="Aman Khare - AmanGoinPlaces">
-                      </i>
-                                        <figcaption>
-                                            <strong class="author-info author-info-primary">Aman Khare</strong>
-                                            <strong class="author-info author-info-secondary">5 articles</strong>
-                                        </figcaption>
-                                    </figure>
-                                </a>
-                            </div>
-                            <div class="col-sm-2 author-carousel">
-                                <a href="#" class="box-panel">
-                                    <figure>
-                                        <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/Honey-Singh.jpg" alt="Honey Singh">
-                      </i>
-                                        <figcaption>
-                                            <strong class="author-info author-info-primary">Honey Singh</strong>
-                                            <strong class="author-info author-info-secondary">5 articles</strong>
-                                        </figcaption>
-                                    </figure>
-                                </a>
-                            </div>
-                            <div class="col-sm-2 author-carousel">
-                                <a href="#" class="box-panel">
-                                    <figure>
-                                        <i>
-                        <img class="media-object" src="https://origin-static3.shine.com/images/blog/author/guarav.jpg" alt="Gaurav Jain">
-                      </i>
-                                        <figcaption>
-                                            <strong class="author-info author-info-primary">Gaurav Jain</strong>
-                                            <strong class="author-info author-info-secondary">5 articles</strong>
-                                        </figcaption>
-                                    </figure>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
                 </div>
-                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-          </a>
-            </div>
-        </section>
+            </section>
+        {% endif %}
 
     {% endblock container %}

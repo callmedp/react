@@ -10,6 +10,7 @@ from django.views.generic import (
 from django.http import HttpResponseForbidden, Http404,\
     HttpResponsePermanentRedirect, HttpResponse
 from django.conf import settings
+from django.utils import timezone
 from meta.views import Meta
 from django.db.models import Count
 from django.urls import reverse
@@ -172,7 +173,7 @@ class HRBlogDetailView(DetailView, BlogMixin):
         return {"meta": meta}
 
 
-class HrConclaveView(TemplateView):
+class HrConclaveLandingView(TemplateView):
     model = Blog
     template_name = "hrinsider/conclave.html"
 
@@ -185,31 +186,34 @@ class HrConclaveView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        categories = Category.objects.filter(
-            is_active=True, visibility=3).order_by('-name')
+        today_date = timezone.now()
+        obj = None
+        conclave_type = ''
+        conclaves = Blog.objects.filter(
+            visibility=4, status=1,
+            start_date__gte=today_date).order_by('start_date')
+        if conclaves.exists():
+            conclave_type = 'Upcoming'
+            obj = conclaves[0]
 
-        if kwargs.get('list'):
-            article_list = Blog.objects.filter(
-                status=1, visibility=3).select_related('p_cat', 'author').order_by('-no_views')
-            context.update({'list': True})
-        else:
-            article_list = Blog.objects.filter(
-                status=1, visibility=3).select_related('p_cat', 'author').order_by('-publish_date')[:10]
-        top_article_list = Blog.objects.filter(
-            status=1, visibility=3).select_related('p_cat', 'author')[:9]
+        past_conclaves = Blog.objects.filter(
+            visibility=4, status=1,
+            start_date__lte=today_date).order_by('-start_date')
 
-        authors = Author.objects.filter(
-            visibility=3, blog__visibility=3, blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
-        author_list = zip_longest(*[iter(authors)] * 6, fillvalue=None)
+        if not obj and past_conclaves.exists():
+            conclave_type = 'Past'
+            obj = past_conclaves[0]
+
+        speakers = []
+        if obj:
+            speakers = obj.speakers.all()[: 5]
 
         context.update({
-            'top_article_list': [top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
-            'categories': categories,
-            'article_list': article_list,
-            'authors': authors,
-            'authors_list': list(author_list)
+            'obj': obj,
+            'conclave_type': conclave_type,
+            'speakers': speakers
         })
-
+        context['SITEDOMAIN'] = settings.SITE_DOMAIN
         context.update(self.get_breadcrumb_data())
         context.update(self.get_meta_details())
         return context

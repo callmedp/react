@@ -140,6 +140,7 @@ class CommentModerateListView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e)) 
         return queryset
 
+
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))
 class ArticleUpdateView(UpdateView):
@@ -184,6 +185,7 @@ class ArticleUpdateView(UpdateView):
                 messages.add_message(request, messages.ERROR, 'Blog %s Not Updated. Due to %s' % (self.object.id, str(e)))
                 return self.form_invalid(form)
         return self.form_invalid(form)
+
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))
@@ -274,11 +276,17 @@ class ArticleListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(self.__class__, self).get_queryset()
-        visibility = [3]
+        visibility = []
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(1)
         if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(2)
+
+        if has_group(user=self.request.user, grp_list=[settings.HR_INSIDER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(3)
+            visibility.append(4)
+            visibility.append(5)
+
         queryset = queryset.filter(visibility__in=visibility)
 
         try:
@@ -317,7 +325,7 @@ class ArticleListView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related('p_cat', 'user', 'created_by', 'last_modified_by').order_by('last_modified_on')
+        return queryset.select_related('p_cat', 'user', 'created_by', 'last_modified_by').order_by('-last_modified_on')
 
 
 @Decorate(stop_browser_cache())
@@ -408,6 +416,7 @@ class CategoryListView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
         return queryset
+
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))
@@ -698,11 +707,15 @@ class AuthorListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(self.__class__, self).get_queryset()
-        visibility = [3]
+        visibility = []
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(1)
         if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(2)
+
+        if has_group(user=self.request.user, grp_list=[settings.HR_INSIDER, settings.PRODUCT_GROUP_LIST]):
+            visibility += [3, 4, 5]
+
         queryset = queryset.filter(visibility__in=visibility)
         
         try:
@@ -711,4 +724,4 @@ class AuthorListView(ListView, PaginationMixin):
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
-        return queryset
+        return queryset.order_by('-last_modified_on')
