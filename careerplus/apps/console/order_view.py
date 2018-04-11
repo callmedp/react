@@ -2242,7 +2242,7 @@ class ActionOrderItemView(View):
         elif action == -2 and queue_name == 'midout':
             orders = Order.objects.filter(id__in=selected_id)
             for order in orders:
-                ord_items = order.orderitems.all()
+                ord_items = order.orderitems.first()
                 mid_out_sent = True
                 if order.midout_sent_on and timezone.now().date() == order.midout_sent_on.date():
                     mid_out_sent = False
@@ -2256,10 +2256,10 @@ class ActionOrderItemView(View):
                     data.update({
                         'subject': 'To initiate your services fulfil these details',
                         'username': order.first_name if order.first_name else order.candidate_id,
-                        'type_flow': ord_items[0].product.type_flow,
-                        'product_name': ord_items[0].product.name,
-                        'product_url': ord_items[0].product.get_url(),
-                        'parent_name': ord_items[0].parent.product.name if ord_items[0].parent else None,
+                        'type_flow': ord_items.product.type_flow,
+                        'product_name': ord_items.product.name,
+                        'product_url': ord_items.product.get_url(),
+                        'parent_name': ord_items.parent.product.name if ord_items.parent else None,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                     })
                     try:
