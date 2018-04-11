@@ -107,7 +107,7 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                     skill = row.get('skill', '')
                     if name:
                         obj, created = Certificate.objects.get_or_create(
-                        name=name, vendor=vendor)
+                        name=name, vendor_provider=vendor)
                         if created:
                             obj.skill = skill
                             obj.save()
@@ -243,16 +243,18 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                 shineid = ShineCandidateDetail().get_shine_id(
                     email=email, headers=headers)
                 if not certificate_name:
-                    row['certificate_name'] = "certificate not found"
+                    row['reason_for_failure'] = "Certificate not found"
+                    row['status'] = "Failure"
                 if shineid and certificate_name:
                     try:
                         certificate = Certificate.objects.get(
                             name__iexact=certificate_name, vendor_provider=vendor)
                     except Certificate.DoesNotExist:
+                        logging.getLogger("error_log").error("Certificate not found,{}".format(certificate_name))
                         row['reason_for_failure'] = "Certificate not found"
                         row['status'] = "Failure"
-                        continue
                     else:
+                        logging.getLogger("error_log").info("working for,{}".format(certificate_name))
                         obj, created = UserCertificate.objects.get_or_create(
                             user=user, certificate=certificate,
                             year=certi_yr_passing,
