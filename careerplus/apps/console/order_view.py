@@ -317,10 +317,12 @@ class MidOutQueueView(TemplateView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query, self.modified = '', ''
+        self.sel_opt='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
+        self.sel_opt=request.GET.get('rad_search','id')
         self.modified = request.GET.get('modified', '')
         return super(MidOutQueueView, self).get(request, args, **kwargs)
 
@@ -352,6 +354,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
     def get_context_data(self, **kwargs):
         context = super(MidOutQueueView, self).get_context_data(**kwargs)
         midout_list = self.get_queryset()
+        var=self.sel_opt
         paginator = Paginator(midout_list, self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
@@ -365,6 +368,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
             "query": self.query,
             "filter_form": filter_form,
             "action_form": OIActionForm(queue_name='midout'),
+            var:"checked"
         })
         return context
 
@@ -375,12 +379,17 @@ class MidOutQueueView(TemplateView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__email__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__number__icontains=self.query))
+
+                if self.sel_opt == 'id':
+                    if  self.query[2:]=='cp' or self.query[:2]=='CP':
+                        queryset=queryset.filter(order__number__iexact=self.query)
+                    else:
+                        queryset = queryset.filter(id=self.query)
+                elif self.sel_opt == 'email':
+                    queryset = queryset.filter(order__email__iexact=self.query)
+                elif self.sel_opt == 'mobile':
+                        queryset = queryset.filter(order__mobile=self.query)
+
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
@@ -504,7 +513,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                 elif self.sel_opt == 'mobile':
                     queryset = queryset.filter(order__mobile=self.query)
                 elif self.sel_opt == 'email':
-                    queryset = queryset.filter(order__email__icontains=self.query)
+                    queryset = queryset.filter(order__email__iexact=self.query)
                 elif self.self_opt=='product':
                     queryset = queryset.filter(product__name__icontains=self.query)
         except Exception as e:

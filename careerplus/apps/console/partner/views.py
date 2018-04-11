@@ -28,10 +28,12 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
         self.paginated_by = 20
         self.query = ''
         self.payment_date, self.modified = '', ''
+        self.sel_opt='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
+        self.sel_opt=request.GET.get('rad_search','id')
         self.payment_date = request.GET.get('payment_date', '')
         self.modified = request.GET.get('modified', '')
         return super(PartnerInboxQueueView, self).get(request, args, **kwargs)
@@ -41,6 +43,7 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
         paginator = Paginator(context['inbox_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
+        var=self.sel_opt
         initial = {"modified": self.modified, "payment_date": self.payment_date}
         filter_form = OIFilterForm(initial)
         context.update({
@@ -50,6 +53,7 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
             "query": self.query,
             "draft_form": VendorFileUploadForm(),
             "action_form": OIActionForm(queue_name="partnerinbox"),
+            var:'checked'
         })
         return context
 
@@ -71,12 +75,20 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
+                if self.sel_opt=='id':
+                     if self.query[2:]== 'cp' or self.query[2:]=='CP':
+                         queryset = queryset.filter(order__number=self.query)
+                     else:
+                         queryset = queryset.filter(id=self.query)
+                elif self.sel_opt=='mobile':
+                     queryset=queryset.filter(order__mobile=self.query)
+                elif self.sel_opt=='email':
+                     queryset=queryset.filter(order__email__iexact=self.query)
+                elif self.sel_opt =='product':
+                     queryset = queryset.filter(product__name__icontains=self.query)
+
+
+
         except Exception as e:
             logging.getLogger('error_log').error('unable to get queryset %s'%str(e))
             pass
@@ -130,7 +142,7 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
         self.payment_date = request.GET.get('payment_date', '')
         self.modified = request.GET.get('modified', '')
         return super(PartnerHoldQueueView, self).get(request, args, **kwargs)
@@ -195,7 +207,6 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
         except Exception as e:
             logging.getLogger('error_log').error('unable to get queryset with date range%s' % str(e))
 
-            pass
 
         try:
             if self.payment_date:
