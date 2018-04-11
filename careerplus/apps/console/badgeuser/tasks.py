@@ -107,9 +107,9 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                     skill = row.get('skill', '')
                     if name:
                         obj, created = Certificate.objects.get_or_create(
-                        name=name, skill=skill)
+                        name=name, vendor=vendor)
                         if created:
-                            obj.vendor_provider = vendor
+                            obj.skill = skill
                             obj.save()
                         else:
                             row['error_report'] = "certificate already exist"
