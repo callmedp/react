@@ -1,5 +1,5 @@
 {% extends "console/base_console.html" %}
-{% load static %}
+{% load static compress %}
 {% load humanize %}
 
 {% block title %} 
@@ -8,7 +8,9 @@
 
 {% block css_block %}
     {{block.super}}
+    {% compress css %}
     <link type="text/css" href="{% static 'console/css/myadmin/django-admin-widgets.css' %}" rel="stylesheet">
+    {% endcompress %}
 {% endblock css_block %}
 
 {% block pagecontent %}
@@ -24,9 +26,19 @@
 
 {% block js_block %}
     {{block.super}}
+
+    {% compress js %}
     <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
   	<script type="text/javascript" src="{% static 'myadmin/js/blog/comment-action.js' %}"></script>
-	<script type="text/javascript">
+    {% endcompress %}
+
+  <script type="text/javascript" src="{% static 'console/js/ckeditor/ckeditor-init.js' %}"></script>
+  <script type="text/javascript" src="{% static 'console/js/ckeditor/ckeditor/ckeditor.js' %}"></script>
+  <script type="text/javascript" src="{% static 'console/js/ckeditor/ckeditor/adapters/jquery.js' %}"></script>
+  <script type="text/javascript">window.CKEDITOR_BASEPATH = "{% static 'console/js/ckeditor/ckeditor/' %}";</script>
+  
+  {% compress js inline %}
+  <script type="text/javascript">
      window.onload = function(){
       $.each($("select[multiple]"), function () {
         // "Locations" can be any label you want
@@ -38,10 +50,8 @@
       $('ul.nav.child_menu>li>a[data-pjax], tbody>tr>td>a[data-pjax], .right_col form>div>a[data-pjax], .right_col form button[data-pjax]').pjax();
       $('textarea').ckeditor()
     }
-	</script>
-  <script type="text/javascript" src="{% static 'console/js/ckeditor/ckeditor-init.js' %}"></script>
-  <script type="text/javascript" src="{% static 'console/js/ckeditor/ckeditor/ckeditor.js' %}"></script>
-  <script type="text/javascript" src="{% static 'console/js/ckeditor/ckeditor/adapters/jquery.js' %}"></script>
-  <script type="text/javascript">window.CKEDITOR_BASEPATH = "{% static 'console/js/ckeditor/ckeditor/' %}";</script>
+  </script>
+  {% endcompress %}
+  
 
 {% endblock js_block %}

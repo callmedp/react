@@ -1,5 +1,5 @@
 {% extends "console/base_console.html" %}
-{% load static %}
+{% load static compress %}
 {% load humanize %}
 
 {% block title %}
@@ -9,7 +9,9 @@
 
 {% block css_block %}
     {{block.super}} 
+    {% compress css %}
     <link type="text/css" href="{% static 'console/css/myadmin/django-admin-widgets.css' %}" rel="stylesheet">
+    {% endcompress %}
 {% endblock css_block %}
 
 
@@ -108,14 +110,13 @@
 {% block js_block %}
   {{ block.super }}
   <!-- Parsley Validate Scripts -->
-  <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
-  <script type="text/javascript">
-        jQuery.each($("select[multiple]"), function () {
-          // "Locations" can be any label you want
-          SelectFilter.init(this.id, this.name, 0, "/media/");
-         });
-  </script>
-  <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}">
-  </script>
+  {% compress js %}
+    <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
+
+    <script src="{% static 'console/js/blog/blog.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}">
+    </script>
+  {% endcompress %}
 
 {% endblock js_block %}

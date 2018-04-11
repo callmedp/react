@@ -1,5 +1,5 @@
 {% extends "console/base_console.html" %}
-{% load static %}
+{% load static compress %}
 
 {% block title %}
   <title>Category Tree</title>
@@ -7,84 +7,10 @@
 
 {% block css_block %}
   {{ block.super }}
-  <style type="text/css">
 
-        .label {
-          display: inline;
-          padding: .2em .6em .3em;
-          font-size: 100%;
-          font-weight: 700;
-          line-height: 2;
-          color: #fff;
-          text-align: center;
-          white-space: nowrap;
-          vertical-align: baseline;
-          border-radius: .25em;
-      }
-        .tree {
-            min-height:20px;
-            padding:19px;
-            margin-bottom:20px;
-            background-color:#f7f7f7;
-            border:3px solid #999;
-            -webkit-border-radius:4px;
-            -moz-border-radius:4px;
-            border-radius:4px;
-            -webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
-            -moz-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
-            box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05)
-        }
-        .tree li {
-            list-style-type:none;
-            margin:0;
-            padding:30px 5px 0 90px;
-            position:relative
-        }
-        .tree li::before, .tree li::after {
-            content:'';
-            left: 0px;
-            position:absolute;
-            right:auto
-        }
-        .tree li::before {
-            border-left:3px solid #999;
-            bottom:50px;
-            height:100%;
-            top:0;
-            width:1px
-        }
-        .tree li::after {
-            border-top:3px solid #999;
-            height:20px;
-            top:44px;
-            width:90px
-        }
-        .tree li span {
-            -moz-border-radius:5px;
-            -webkit-border-radius:5px;
-            border:2px solid #999;
-            border-radius:5px;
-            display:inline-block;
-            padding:1px 10px;
-            text-decoration:none
-        }
-        .tree li.parent_li>span {
-            cursor:pointer
-        }
-        .tree>ul>li::before, .tree>ul>li::after {
-            border:0
-        }
-        .tree li:last-child::before {
-            height:45px
-        }
-        .tree li.parent_li>span:hover, .tree li.parent_li>span:hover+ul li span {
-            background:#eee;
-            border:3px solid #94a0b4;
-            color:#000
-        }
-
-
-      </style>
+  {% compress css %}
+    <link type="text/css" href="{% static 'console/css/shop/tree-category.css' %}" rel="stylesheet">
+  {% endcompress  %}
       
 {% endblock css_block %}
 
@@ -173,8 +99,10 @@
       
 {% block js_block %}
   {{ block.super }}
+  {% compress js %}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
   <!-- Custom Theme Scripts -->
   <script type="text/javascript" src="{% static 'console/js/shop/console_shop.js' %}"></script>
+  {% endcompress %}
 {% endblock js_block %}
