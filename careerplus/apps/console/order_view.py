@@ -201,6 +201,7 @@ class OrderListView(ListView, PaginationMixin):
 
 @Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_welcome_queue', login_url='/console/login/'), name='dispatch')
+#updated one is currently being used
 class WelcomeCallVeiw(ListView, PaginationMixin):
     context_object_name = 'welcome_list'
     template_name = 'console/order/welcome-list.html'
@@ -415,13 +416,16 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         self.query = ''
         self.writer, self.created = '', ''
         self.delivery_type = ''
+        self.sel_opt  ='id'
+
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
         self.writer = request.GET.get('writer', '')
         self.created = request.GET.get('created', '')
         self.delivery_type = request.GET.get('delivery_type', '')
+        self.sel_opt = request.GET.get('rad_search','id')
         return super(InboxQueueVeiw, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -455,6 +459,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         context = super(InboxQueueVeiw, self).get_context_data(**kwargs)
         paginator = Paginator(context['inbox_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
+        var = self.sel_opt
         alert = messages.get_messages(self.request)
         initial = {
             "created": self.created, "writer": self.writer,
@@ -467,6 +472,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             "message_form": MessageForm(),
             "filter_form": filter_form,
             "query": self.query,
+            var:"checked"
         })
         return context
 
@@ -490,12 +496,17 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             queryset = queryset.none()
         try:
             if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
+                if self.sel_opt == 'id':
+                    if self.query[:2] =='cp' or self.query[:2] == 'CP':
+                        queryset=queryset.filter(order__number__iexact=self.query)
+                    else:
+                        queryset = queryset.filter(id=self.query)
+                elif self.sel_opt == 'mobile':
+                    queryset = queryset.filter(order__mobile=self.query)
+                elif self.sel_opt == 'email':
+                    queryset = queryset.filter(order__email__icontains=self.query)
+                elif self.self_opt=='product':
+                    queryset = queryset.filter(product__name__icontains=self.query)
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
