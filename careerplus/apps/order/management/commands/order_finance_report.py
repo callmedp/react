@@ -10,7 +10,7 @@ from django.core.management.base import BaseCommand
 
 
 def get_selling_price(oi):
-    if oi.is_combo and not oi.no_process:
+    if oi.is_combo and not oi.no_process and oi.parent:
         return oi.cost_price*oi.parent.selling_price/sum(oi.parent.orderitem_set.filter(
             no_process=False, is_combo=True).values_list('cost_price',flat=True))
     elif oi.is_combo and oi.no_process:

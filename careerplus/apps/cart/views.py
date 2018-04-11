@@ -158,7 +158,7 @@ class PaymentLoginView(TemplateView):
         try:
             self.cart_obj = Cart.objects.get(pk=cart_pk)
         except Exception as e:
-            logging.getLogger('error_log').error(" Msg= unable to assign cart object to self %s " % str(e))
+            logging.getLogger('error_log').error("unable to assign cart object to self %s " % str(e))
             return HttpResponseRedirect(reverse('homepage'))
         if candidate_id:
             return HttpResponseRedirect(reverse('cart:payment-shipping'))
@@ -177,7 +177,7 @@ class PaymentLoginView(TemplateView):
                 validate_email(email)
                 valid_email = True
             except Exception as e:
-                logging.getLogger('error_log').error(" Msg= email validation failed  %s " % str(e))
+                logging.getLogger('error_log').error("email validation failed  %s " % str(e))
                 valid_email = False
 
             if valid_email:

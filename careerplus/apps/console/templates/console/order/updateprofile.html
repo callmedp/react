@@ -1,5 +1,5 @@
 {% extends "console/base_console.html" %}
-{% load static %}
+{% load static compress %}
 {% load humanize %}
 {% load console_tags %}
 {% load thumbnail %}
@@ -10,8 +10,12 @@
 
 {% block css_block %}
     {{block.super}}
+
+    {% compress css %}
     <link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
     <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
+    {% endcompress %}
+
 {% endblock css_block %}
 
 
@@ -207,14 +211,15 @@
         
 {% block js_block %}
   {{ block.super }}
+
+  {% compress js %}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'packages/iCheck/icheck.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/moment/moment.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/datepicker/daterangepicker.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/order/profile_update.js' %}"></script>
-<script type="text/javascript">
+  {% endcompress %}
 
-</script>
 
 {% endblock js_block %}

@@ -260,7 +260,7 @@ class SearchBaseView(TemplateView):
         }
         context.update(self.get_extra_context())
         try:
-            context['search_params'].update({'prod_count': self.results.count()})
+            context['search_params'].update({'prod_count': len(self.results)})
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
             context['search_params'].update({'prod_count': 0})
@@ -489,10 +489,13 @@ class FuncAreaPageView(SearchBaseView):
         self.func_area = Category.objects.filter(id=self.kwargs['pk'], type_level__in=[2, 3])
         context = super(FuncAreaPageView, self).get_extra_context()
         if self.func_area:
+            meta_desc = "Online {} services. Get expert advice & tips for {} at Shine Learning".format(
+                self.func_area[0].title, self.func_area[0].title)
             context['func_area_name'] = self.func_area[0].heading
             context['func_area_title'] = self.func_area[0].title
-            
             context['meta'] = self.func_area[0].as_meta(self.request)
+            meta_dict = context['meta'].__dict__
+            meta_dict['description'] = meta_desc
             context['canonical_url'] = self.func_area[0].get_canonical_url()
         else:
             raise Http404

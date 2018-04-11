@@ -133,9 +133,7 @@ class TaskListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(TaskListView, self).get_queryset()
-        user = self.request.user
-        if has_group(user=user, grp_list=settings.MARKETING_GROUP_LIST):
-            queryset = queryset.filter(task_type=1)
+        queryset = queryset.filter(task_type=1)
         return queryset.order_by('-modified')
 
 
