@@ -1,5 +1,5 @@
 {% extends "console/base_console.html" %}
-{% load static %}
+{% load static compress %}
 {% load humanize %}
 
 {% block title %}
@@ -107,6 +107,8 @@
 {% block js_block %}
   {{ block.super }}
   <!-- Parsley Validate Scripts -->
+  {% compress js %}
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
+  {% endcompress %}
 
 {% endblock js_block %}

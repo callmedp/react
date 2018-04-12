@@ -276,7 +276,7 @@ class WelcomeCallVeiw(ListView, PaginationMixin):
 class MidOutQueueView(TemplateView, PaginationMixin):
     # context_object_name = 'midout_list'
     template_name = 'console/order/midout-list.html'
-    model = OrderItem
+    model = Order
     http_method_names = [u'get', u'post']
 
     def __init__(self):
@@ -295,8 +295,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
         obj_pk = request.POST.get('oi_pk', None)
         if form.is_valid():
             try:
-                oi = OrderItem.objects.get(pk=obj_pk)
-                order = oi.order
+                order = Order.objects.get(pk=obj_pk)
                 orderitems = order.orderitems.filter(oi_status=2)  # filter(product__type_flow__in=[1])
                 for oi in orderitems:
                     if not oi.oi_resume:
@@ -335,18 +334,21 @@ class MidOutQueueView(TemplateView, PaginationMixin):
         return context
 
     def get_queryset(self):
-        queryset = OrderItem.objects.all().select_related('order', 'product')
-        queryset = queryset.filter(
-            order__status=1, no_process=False, oi_status=2)
+        queryset = Order.objects.prefetch_related(
+            'orderitems').filter(
+            status=1, orderitems__oi_status=2,
+            orderitems__no_process=False).distinct()
+        # queryset = OrderItem.objects.all().select_related('order', 'product')
+        # queryset = queryset.filter(
+        #     order__status=1, no_process=False, oi_status=2)
 
         try:
             if self.query:
                 queryset = queryset.filter(
                     Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__email__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__number__icontains=self.query))
+                    Q(email__icontains=self.query) |
+                    Q(mobile__icontains=self.query) |
+                    Q(number__icontains=self.query))
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
@@ -2238,24 +2240,26 @@ class ActionOrderItemView(View):
             return HttpResponseRedirect(reverse('console:partner:' + queue_name))
 
         elif action == -2 and queue_name == 'midout':
-            orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
-            for oi in orderitems:
-                order = oi.order
+            orders = Order.objects.filter(id__in=selected_id)
+            for order in orders:
+                ord_items = order.orderitems.first()
                 mid_out_sent = True
                 if order.midout_sent_on and timezone.now().date() == order.midout_sent_on.date():
                     mid_out_sent = False
-
                 if mid_out_sent:
                     # mail to user about writer information
                     to_emails = [order.email]
                     mail_type = "PENDING_ITEMS"
-                    token = AutoLogin().encode(oi.order.email, oi.order.candidate_id, days=None)
+                    token = AutoLogin().encode(
+                        order.email, order.candidate_id, days=None)
                     data = {}
                     data.update({
                         'subject': 'To initiate your services fulfil these details',
                         'username': order.first_name if order.first_name else order.candidate_id,
-                        'type_flow': oi.product.type_flow,
-                        'product_name': oi.product.name,
+                        'type_flow': ord_items.product.type_flow,
+                        'product_name': ord_items.product.name,
+                        'product_url': ord_items.product.get_url(),
+                        'parent_name': ord_items.parent.product.name if ord_items.parent else None,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                     })
                     try:
@@ -2265,10 +2269,8 @@ class ActionOrderItemView(View):
                     except Exception as e:
                         messages.add_message(request, messages.ERROR, str(e))
                         logging.getLogger('error_log').error("midout mail %s - %s - %s" % (str(to_emails), str(mail_type), str(e)))
-
             messages.add_message(request, messages.SUCCESS, "Midout sent Successfully for selected items")
             return HttpResponseRedirect(reverse('console:queue-midout'))
-
         messages.add_message(request, messages.ERROR, "Select Valid Action")
         try:
             return HttpResponseRedirect(reverse('console:queue-' + queue_name))

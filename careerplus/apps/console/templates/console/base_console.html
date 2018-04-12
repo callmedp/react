@@ -1,4 +1,4 @@
-{% load static %}
+{% load static compress %}
 {% load console_tags %}
 {% spaceless %}
 <!DOCTYPE html>
@@ -19,6 +19,8 @@
     {% endblock title %}
     
     {% block css_block %}
+
+      {% compress css %}
       <!-- Bootstrap -->
       <link href="{% static 'packages/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
       <!-- Font Awesome -->
@@ -32,6 +34,7 @@
       <!-- bootstrap-daterangepicker -->
       <link href="{% static 'packages/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet" type="text/css">
       <link href="{% static 'console/css/datepicker/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" type="text/css">
+      {% endcompress %}
     {% endblock css_block %}
 
     {{ JS_SETTINGS|safe }}
@@ -181,6 +184,8 @@
     {% endblock container %}
     
     {% block js_block %}
+
+      {% compress js %}
       <!-- jQuery -->
       <script type="text/javascript" src="{% static 'packages/jquery/dist/jquery.min.js' %}"></script>
       <!-- Bootstrap -->
@@ -204,6 +209,9 @@
 
       <!-- Parsley -->
       <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
+      {% endcompress %}
+
+      {% compress js inline %}
       <script type="text/javascript">
         function getCookie(name) {
           var cookieValue = null;
@@ -226,6 +234,7 @@
         }
         
       </script>
+      {% endcompress %}
       <!--script type="text/javascript" src="{% static 'console/js/custom.min.js' %}"></script-->
     {% endblock js_block %}
     
