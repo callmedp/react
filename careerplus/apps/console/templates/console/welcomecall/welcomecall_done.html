@@ -1,5 +1,5 @@
 {% extends "console/base_console.html" %}
-{% load static %}
+{% load static compress %}
 {% load humanize %}
 {% load thumbnail %}
 
@@ -9,8 +9,10 @@
 
 {% block css_block %}
     {{block.super}}
+    {% compress css %}
     <link href="{% static "packages/iCheck/skins/flat/green.css"  %}" rel="stylesheet" type="text/css">
     <link type="text/css" href="{% static "console/css/datepicker/daterangepicker.css" %}" rel="stylesheet">
+    {% endcompress %}
 {% endblock css_block %}
 
 {% block pagecontent %}
@@ -282,70 +284,17 @@
         
 {% block js_block %}
   {{ block.super }}
+
+  {% compress js %}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/order/welcome-call.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/datepicker/daterangepicker.js" %}"></script>
 
-  <script type="text/javascript">
-      function load_json () {
-        var ltv_list = [];
-        $(".ltv-value").each(function() { 
-          ltv_list.push($(this).attr('data-pk')); 
-        });
-        load_ltv({"order_list":ltv_list});
-      }
-      function dump_json (data) {
-      }
-      function load_ltv (data) {
-        $.ajax({
-          url: '/ajax/get-ltv/',
-          type: 'post',
-          data: data,
-          dataType: "json",
-          success: function(data){
-              if(data.status == 1){
-                $(".ltv-value").each(function() { 
-                  $(this).text("Rs."+data[$(this).attr('data-pk')]); 
-                });
-              }
-              return
-          },
-          error: function (xhr, ajaxOptions, thrownError) {
-              console.log(errorMsg = 'Ajax request failed: ' + xhr.responseText);
-            }
-        });
-      }
-    
+  <script type="text/javascript" src="{% static "console/js/order/filter.js" %}"></script>
+  <script type="text/javascript" src="{% static "console/js/order/ltv.js" %}"></script>
 
-    $(document).ready(function() {
-        $('.date-range-picker').daterangepicker({
-            autoUpdateInput: false,
-            locale: {
-              format: 'DD/MM/YYYY',
-              cancelLabel: 'Clear',
-            },
-            maxDate: moment().endOf("day"),
-        },function(start, end, label) {
-          
-        });
-
-        $('.date-range-picker').on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
-        });
-
-        $('.date-range-picker').on('cancel.daterangepicker', function(ev, picker) {
-            $(this).val('');
-        })
-
-        $('#id_filter').click(function(){
-            $('#list-filter-form').submit();
-        });
-
-        load_json();
-    });
-
-  </script>
+  {% endcompress %}
 
 {% endblock js_block %}

@@ -107,9 +107,9 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                     skill = row.get('skill', '')
                     if name:
                         obj, created = Certificate.objects.get_or_create(
-                        name=name, skill=skill)
+                        name=name, vendor_provider=vendor)
                         if created:
-                            obj.vendor_provider = vendor
+                            obj.skill = skill
                             obj.save()
                         else:
                             row['error_report'] = "certificate already exist"
@@ -243,15 +243,18 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                 shineid = ShineCandidateDetail().get_shine_id(
                     email=email, headers=headers)
                 if not certificate_name:
-                    row['certificate_name'] = "certificate not found"
+                    row['reason_for_failure'] = "Certificate not found"
+                    row['status'] = "Failure"
                 if shineid and certificate_name:
                     try:
                         certificate = Certificate.objects.get(
                             name__iexact=certificate_name, vendor_provider=vendor)
                     except Certificate.DoesNotExist:
+                        logging.getLogger("error_log").error("Certificate not found,{}".format(certificate_name))
                         row['reason_for_failure'] = "Certificate not found"
                         row['status'] = "Failure"
                     else:
+                        logging.getLogger("error_log").info("working for,{}".format(certificate_name))
                         obj, created = UserCertificate.objects.get_or_create(
                             user=user, certificate=certificate,
                             year=certi_yr_passing,
@@ -259,6 +262,7 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                         if created:
                             obj.candidate_mobile = mobile
                             obj.candidate_email = email
+                            obj.save()
                             post_data = {
                                 'certification_name': certificate_name,
                                 'certification_year': certi_yr_passing
@@ -270,11 +274,11 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                             if certification_response.status_code == 201:
                                 jsonrsp = certification_response.json()
                                 logging.getLogger('info_log').info(
-                                    "api response:{}").format(jsonrsp)
+                                    "api response:{}".format(jsonrsp))
                             elif certification_response.status_code != 201:
                                 jsonrsp = certification_response.json()
                                 logging.getLogger('error_log').error(
-                                    "api fail:{}").format(jsonrsp)
+                                    "api fail:{}".format(jsonrsp))
                                 row['reason_for_failure'] = jsonrsp
                                 row['status'] = 'Failure'
                         else:

@@ -35,5 +35,5 @@ def get_choice_display(value, choice):
                 value = value.upper()
         return mapping[value]
     except Exception as e:
-        logging.getLogger('error_log').error('error in mapping: %s' % str(e))
+        logging.getLogger('error_log').error('error in mapping: {}, {}'.format(str(e), choice))
         return 'Others'

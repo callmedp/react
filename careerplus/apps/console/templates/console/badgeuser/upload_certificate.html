@@ -1,5 +1,5 @@
 {% extends "console/base_console.html" %}
-{% load static %}
+{% load static compress %}
 {% load humanize %}
 
 {% block title %}
@@ -135,27 +135,9 @@
 {% block js_block %}
   {{ block.super }}
   <!-- Parsley Validate Scripts -->
+  {% compress js %}
   <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}">
   </script>
-  <script type="text/javascript">
-    // window.Parsley.addValidator('filemimetypes', {
-    //     requirementType: 'string',
-    //     validateString: function (value, requirement, parsleyInstance) {
-    //         var file = parsleyInstance.$element[0].files;
-
-    //         if (file.length == 0) {
-    //             return true;
-    //         }
-
-    //         console.log(file[0].type);
-
-    //         var allowedMimeTypes = requirement.replace(/\s/g, "").split(',');
-    //         return allowedMimeTypes.indexOf(file[0].type) !== -1;
-    //     },
-    //     messages: {
-    //         en: 'Only .csv is allowed'
-    //     }
-    // });
-  </script>
+  {% endcompress %}
 
 {% endblock js_block %}

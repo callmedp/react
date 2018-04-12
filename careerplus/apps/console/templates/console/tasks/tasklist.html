@@ -1,5 +1,5 @@
 {% extends "console/base_console.html" %}
-{% load static %}
+{% load static compress %}
 {% load humanize %}
 
 {% block title %}
@@ -202,9 +202,7 @@
         
 {% block js_block %}
   {{ block.super }}
-  <script type="text/javascript">
-      setTimeout(function(){
-        location = ''
-      },20000)
-  </script>
+  {% compress js %}
+  <script type="text/javascript" src="{% static "console/js/tasks/tasklist.js" %}"></script>
+  {% endcompress %}
 {% endblock js_block %}

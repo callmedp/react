@@ -74,11 +74,13 @@ class ProductInformationMixin(object):
                             'url': parent[0].get_absolute_url(),
                             'active': True}))
             if product.is_service or product.is_writing:
-                breadcrumbs.append(
-                    OrderedDict({
-                        'label': category.name,
-                        'url': reverse('func_area_results', kwargs={'fa_slug':category.slug, 'pk': category.id}),
-                    'active': True}))
+                parent = category.get_parent()
+                if parent:
+                    breadcrumbs.append(
+                        OrderedDict({
+                            'label': parent[0].name,
+                            'url': reverse('func_area_results', kwargs={'fa_slug':parent[0].slug, 'pk': parent[0].id}),
+                        'active': True}))
             else:
                 breadcrumbs.append(
                     OrderedDict({

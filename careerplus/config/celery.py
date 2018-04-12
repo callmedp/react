@@ -5,7 +5,11 @@ from celery import Celery
 
 # set the default Django settings module for the 'celery' program.
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'careerplus.config.settings_staging')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'careerplus.config.settings_live')
+try:
+    from .celery_local import *
+except ImportError:
+    pass
 
 app = Celery('careerplus', backend=None, broker=settings.BROKER_URL)
 
