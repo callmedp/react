@@ -428,7 +428,7 @@ class TalentDetailAjaxView(View, BlogMixin):
 
     def __init__(self):
         self.page = 1
-        self.paginated_by = 1
+        self.paginated_by = 8
         self.slug = None
         self.cat_obj = None
 

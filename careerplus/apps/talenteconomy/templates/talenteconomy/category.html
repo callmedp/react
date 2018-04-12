@@ -126,9 +126,6 @@
     <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
     <script src="{% static 'shinelearn/js/talenteconomy/scrollpage.js' %}"></script>
     <script>
-      if (window.location.hash == '#_=_') {
-        open(location, '_self').close();
-      }
       showTalentpageOnScroll.scroll(); /* for calling infinite articles */
       $(function(){
         Article.init();
