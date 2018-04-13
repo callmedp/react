@@ -95,6 +95,7 @@
     {% endif %}
     {% endwith %} --><!-- /.tagged-in -->
 
+    {% comment %}
     <!-- Comments-box -->
     {% if main_article.allow_comment %}
     <div class="comments-box mb-40 mt-40">
@@ -110,5 +111,6 @@
         <div id="comment-box{{main_article.id}}" class="mt-20"></div>
     </div>
     {% endif %}<!-- /. comments-box -->
+    {% endcomment %}
 
   </div><!-- /.article detail content -->

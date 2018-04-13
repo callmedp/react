@@ -19,6 +19,7 @@
   <li class="gPlus"><a id="article_share" target="_blank" article-slug="{{main_article.slug}}" href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}"><span class="icon-sm-gPlus"></span></a></li>
 </ul>
 </div><!-- /.Follow -->
+
 {% comment %}
 <div class="tagging mt-30 mb-30">
   <p>Tagged in</p>
@@ -28,6 +29,7 @@
 </div>
 {% endcomment %}
 
+{% comment %}
 {% if main_article.allow_comment %}
   <p class="take-me pb-0 mt-10 is-clickable" onclick="openCommentBox('{{main_article.id}}', 2)" id="total_comment{{main_article.id}}">
     <span class="line"><sup></sup></span>
@@ -41,6 +43,8 @@
 
   </div>
 {% endif %}
+
+{% endcomment %}
 
 
 
