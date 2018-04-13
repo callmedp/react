@@ -1,6 +1,5 @@
 # import python module
 import logging
-import datetime
 
 # import django module
 from django.core.management.base import BaseCommand
@@ -37,6 +36,7 @@ def send_sms_paid_order_day1():
                 send_sms_for_base_task.delay(
                     mob=oi.mobile, message=message1,
                     oi=oi.pk, status=5)
+        logging.getLogger("info_log").info("cron run succesfully")
     except Exception as e:
         logging.getLogger('error_log').error_log("{}".format(e))
 
@@ -62,5 +62,6 @@ def send_sms_paid_order_day2():
                 send_sms_for_base_task.delay(
                     mob=oi.mobile, message=message2,
                     oi=oi.pk, status=6)
+        logging.getLogger("info_log").info("cron run succesfully")
     except Exception as e:
         logging.getLogger('error_log').error_log("{}".format(e))
