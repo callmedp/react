@@ -22,20 +22,14 @@ def send_sms_paid_order_day1():
         ShineLearning.com customer.\
         Kindly note that while we endeavor to enhance your career prospects,\
         we do not guarantee any jobs."
-        ois = Order.objects.filter(status=1)
-        pk_list = list(ois.values_list('pk', flat=True))
-        oi_lists = OrderItem.objects.filter(
-            order__pk__in=pk_list).values_list(
-            'smsorderitemoperation__sms_oi_status',
-            flat=True).exclude(
-            oi_status=4, smsorderitemoperation__sms_oi_status=5)
-
+        ois = Order.objects.filter(status=1).exclude(
+            orderitems__smsorderitemoperation__sms_oi_status=5,
+            orderitems__oi_status=4)
         for oi in ois:
-            if 5 not in list(oi_lists):
-                """ Send sms """
-                send_sms_for_base_task.delay(
-                    mob=oi.mobile, message=message1,
-                    oi=oi.pk, status=5)
+            """ Send sms """
+            send_sms_for_base_task.delay(
+                mob=oi.mobile, message=message1,
+                oi=oi.pk, status=5)
         logging.getLogger("info_log").info("cron run succesfully")
     except Exception as e:
         logging.getLogger('error_log').error_log("{}".format(e))
@@ -48,20 +42,15 @@ def send_sms_paid_order_day2():
         refund for its services through PayTM or any other channel.\
         Report any such fake recruiter calls\
         you get in name of Shine.com at 01206158822"
-        ois = Order.objects.filter(status=1)
-        pk_list = list(ois.values_list('pk', flat=True))
-        oi_lists = OrderItem.objects.filter(
-            order__pk__in=pk_list).values_list(
-            'smsorderitemoperation__sms_oi_status',
-            flat=True).exclude(
-            oi_status=4, smsorderitemoperation__sms_oi_status=6)
+        ois = Order.objects.filter(status=1).exclude(
+            orderitems__smsorderitemoperation__sms_oi_status=6,
+            orderitems__oi_status=4)
 
         for oi in ois:
-            if 6 not in list(oi_lists):
-                """ Send sms """
-                send_sms_for_base_task.delay(
-                    mob=oi.mobile, message=message2,
-                    oi=oi.pk, status=6)
+            """ Send sms """
+            send_sms_for_base_task.delay(
+                mob=oi.mobile, message=message2,
+                oi=oi.pk, status=6)
         logging.getLogger("info_log").info("cron run succesfully")
     except Exception as e:
         logging.getLogger('error_log').error_log("{}".format(e))
