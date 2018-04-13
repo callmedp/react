@@ -579,6 +579,11 @@ class ShowCommentBoxView(TemplateView, LoadCommentMixin):
             visibility = int(request.GET.get('visibility',1))
             if visibility == 2:
                 self.template_name = 'talenteconomy/include/commentBox.tmpl.html'
+            elif visibility == 3:
+                if request.flavour == 'mobile':
+                    self.template_name = 'mobile/hrinsider/include/commentBox.tmpl.html'
+                else:
+                    self.template_name = 'hrinsider/include/commentBox.tmpl.html'
             self.visibility = visibility
 
             return super(self.__class__, self).get(request, args, **kwargs)

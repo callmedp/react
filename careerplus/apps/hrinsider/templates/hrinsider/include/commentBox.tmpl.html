@@ -6,6 +6,7 @@
         <div class="form-group">
             <textarea class="form-control" placeholder="Your comment" rows="3" id="id_comment{{article.id}}" name="message"></textarea>
         </div>
+
         <input type="hidden" id="id_slug" name="slug" value="{{article.slug}}">
         <input type="hidden" id="pk_id" name="pk" value="{{article.pk}}" />
       <!--   <div class="form-inline row hidden">
@@ -16,7 +17,7 @@
                 <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
             </div>
         </div> -->
-        <button type="submit" class="submit-button" onclick="commentSubmit('{{article.id}}', '{{login_status}}')" id="comment-submit{{article.id}}">Post comment</button>
+        <button type="button" class="submit-button" onclick="commentSubmit('{{article.id}}', '{{login_status}}')" id="comment-submit{{article.id}}">Post comment</button>
     </form>
 </div>
 

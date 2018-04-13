@@ -294,6 +294,9 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     venue = models.CharField(
         ('Venue'), max_length=255, blank=True,
         help_text=("Location"))
+    city = models.CharField(
+        ('City'), max_length=255, blank=True,
+        help_text=("City"))
     address = models.TextField(
         _('Address'),
         blank=True, help_text='Conclave or job fair address')
@@ -372,7 +375,11 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
         if self.visibility == 2:
             return reverse('talent:te-articles-detail', kwargs={'cat_slug': self.p_cat.slug, 'slug': self.slug})
         if self.visibility == 3:
-            return reverse('hrinsider:hr-articles-detail', kwargs={ 'cat_slug': self.p_cat.slug ,'slug': self.slug})          
+            return reverse('hrinsider:hr-articles-detail', kwargs={'slug': self.slug})
+        elif self.visibility == 4:
+            return reverse('hrinsider:conclave-detail', kwargs={'slug': self.slug})
+        elif self.visibility == 5:
+            return reverse('hrinsider:jobfair-detail', kwargs={'slug': self.slug})
         else:
             return reverse('blog:articles-deatil', kwargs={'slug': self.slug, 'pk': self.pk})
 

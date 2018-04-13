@@ -80,7 +80,7 @@
           <div class="col-md-4 listing">
             <div class="box-panel">
               
-              <a href="{% url 'hrinsider:hr-articles-detail' articleItem.p_cat.slug articleItem.slug %}" title="{{artList.heading}}">
+              <a href="{% url 'hrinsider:hr-articles-detail' articleItem.slug %}" title="{{artList.heading}}">
                 <figure>
                   <i>
                     <img src="{{articleItem.image.url}}" alt="{{article.name_alt}}">

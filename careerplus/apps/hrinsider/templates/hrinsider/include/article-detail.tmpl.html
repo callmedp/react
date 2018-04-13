@@ -96,11 +96,11 @@
     {% endwith %} --><!-- /.tagged-in -->
 
     <!-- Comments-box -->
-    {% if main_article.allow_comment.0 %}
+    {% if main_article.allow_comment %}
     <div class="comments-box mb-40 mt-40">
         <!-- comments box heading-->
         <div class="comments-box-heading is-clickable">
-            <span class="comments-icon mr-10"></span> 
+            <span class="icon-comments"></span> 
             <strong>
                 <label for="total_comment{{main_article.id}}" class="is-clickable">{% if main_article.comment_moderated > 0 %}{{main_article.comment_moderated}} comments{% else %}Click to Comment {% endif %}</label>
             </strong>

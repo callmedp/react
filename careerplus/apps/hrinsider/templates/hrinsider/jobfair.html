@@ -1,6 +1,7 @@
 
 {% extends "hrinsider/base.html" %}
 {% load static humanize thumbnail compress %}
+{% load tz %}
 {% block django_meta %}
     {% include 'meta/meta.html' %}
 {%  endblock django_meta %}
@@ -11,7 +12,7 @@
 {% endblock canonical_url %}
 
 {% block title %}
-   HR Conclave | Shine Learning
+  Jobfair | Shine Learning
 {% endblock title %}
     
     {% block css_section %}
@@ -31,37 +32,41 @@
         {% block breadcrumb %}
             {% include './include/breadcrumb.html' %}
         {% endblock breadcrumb %}
-        
+
+        {% if obj %}
         <section class="jobfair-header">
           <div class="row">
             <section class="col-sm-12 conclave-slide">
                 <figure>
-                  <img src="images/header-image2.jpg" alt="HR Insider">
+                  <img src="{% static 'shinelearn/images/hr-insider/header-image2.jpg' %}" alt="job-fair-bg">
                   <span class="overlay"></span>
                   <figcaption class="conclave-slide-content">
                     <div class="col-sm-2 float-left">
-                      <img src="images/jobfair-calcutta.png" alt="Job Fair Calcutta">
+                      {% if obj.image %}
+                      <img src="{{obj.image.url}}" alt="{{obj.image_alt}}">
+                      {% endif %}
                     </div>
-                    <div class="col-sm-8 float-left">
+                    <div class="col-sm-10 float-left">
                       <H1>
-                        Calcutta Job Fair
+                        {{obj.display_name}}
                       </h1>
+                      {% if jobfair_type == 'Upcoming' %}
                       <div class="row">
                         <span class="col-sm-4 sub-text">
                           <i class="icon-conclave1"></i>
-                          <p>St. Xaviers College
-                            <b>(Auditorium) Park Street</b>
+                          <p>{{obj.venue}}
                           </p>
                         </span>
-                        <span class="col-sm-4 sub-text">
+                        <span class="col-sm-5 sub-text">
                           <i class="icon-conclave2"></i>
-                          9th & 10th Jan 2018
+                          {{obj.start_date.date}} {% if obj.start_date != obj.end_date %}To {{obj.end_date.date}}{% endif %}
                         </span>
-                        <span class="col-sm-4 sub-text">
+                        <span class="col-sm-3 sub-text">
                           <i class="icon-conclave3"></i>
-                          10am to 5pm
+                          {{obj.start_date|localtime|date:"g:iA"}} to {{obj.end_date|localtime|date:"g:iA"}}
                         </span>
                       </div>
+                      {% endif %}
                     </div>
                   </figcaption>
                 </figure>  
@@ -71,91 +76,30 @@
 
         <!-- main section start -->
         <section class="conclave-box-content">
-            <div class="row">
-                <!-- left content start -->
-                <div class="col-sm-8 jobfair-partner text-center">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="row">
+          <div class="row">
+            <!-- left content start -->
+            <div class="col-sm-8">
+              <div class="row">
+                  <div class="col-sm-12 conclave-content">
+                    {% if jobfair_type == 'Past' %}
+                      {{obj.content|safe}}
+                    {% endif %}
 
-                                <div class="col-sm-12">
-                                    <h2>Presenting Sponsor </h2>
-                                    <div class="col-sm-12 bdr">
-                                        <img src="images/adamas-logo.jpg" alt="Logo">
-                                        <img src="images/rice-logo.jpg" alt="Logo">
-                                    </div>
-                                </div>
+                    {% if obj.sponsor_img and jobfair_type == 'Upcoming' %}
+                    <img src="{{obj.sponsor_img.url}}" alt="sponsor-img">
+                    {% endif %}
+                  </div>
+              </div>
 
-                                <div class="col-sm-6">
-                                    <h2>Banking Partner </h2>
-                                    <div class="col-sm-12 bdr">
-                                        <img src="images/sbi-logo.jpg" alt="Logo">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <h2>Radio Partner </h2>
-                                    <div class="col-sm-12 bdr">
-                                        <img src="images/fm-logo.jpg" alt="Logo">
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <h2>FMCG Partner </h2>
-                                    <div class="col-sm-12 bdr">
-                                        <img src="images/birtannia-logo.jpg" alt="Logo">
-                                        <article>Looking for Experienced Candidates in similar Industry for Engineering (Mechanical and Food Technology), Finance, HR and Sales Positions. North East Candidates preferred.</article>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <h2>Pharma Partner </h2>
-                                    <div class="col-sm-12 bdr">
-                                        <img src="images/carrepgraph-logo.jpg" alt="Logo">
-                                        <article>"Hiring Medical Representatives at Kolkata & West Bengal for few Pharma majors. Graduates below 26 with Good Communication Skills"</article>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-12">
-                                    <h2>Participating Companies</h2>
-                                    <div class="col-sm-12 bdr">
-                                        <img src="images/gimt-logo.jpg" alt="Logo">
-                                        <img src="images/nihil-logo.jpg" alt="Logo">
-                                        <img src="images/vivekanand-logo.jpg" alt="Logo">
-                                        <img src="images/tata-logo.jpg" alt="Logo">
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                   </div>
-                </div>
-
-                <!-- right content start -->
-                <div class="col-sm-4">
-                    <div class="association">
-                        <article class="banner-txt">
-                            <strong class="secondary-heading">Looking for association?</strong>
-                            <h3>Be a part of the Shine Job Fair which brings candidates & top recruiters across cities. Drop us an enquiry for more details.</h3>
-                            <a href="#" class="enquire mt-20" data-toggle="modal" data-target="#hiring-modal">enquire for hiring</a> <a href="#" class="enquire mt-20" data-toggle="modal" data-target="#sponsor-modal">sponsor</a>
-                        </article>
-                    </div>  
-
-                    <div class="staytuned mt-30">
-                      <strong>Stay Tuned</strong>
-                      Subscribe to recieve upcoming conclave updates
-                      <form>
-                          <div>
-                            <input type="text"  id="formGroupExampleInput" placeholder="Enter your Email ID">
-                            <button type="submit" class="btn subscribe">Subscribe</button>
-                          </div>
-                      </form>
-                    </div>                                      
-                </div>
-
-                
-
+              <!-- right content start -->
+              <div class="col-sm-4">
+                                        
+              </div>
             </div>
+          </div>
             
         </section>
+        {% endif %}
 
 
     {% endblock container %}

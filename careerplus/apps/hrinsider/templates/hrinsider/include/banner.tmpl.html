@@ -1,5 +1,5 @@
 <div class="{% if bigtmpl%} slide1 {% else %} slide2 {% endif%}">
-  <a href="{{articlelist.url}}" title="{{articlelist.name}}">
+  <a href="{{articlelist.get_absolute_url}}" title="{{articlelist.name}}">
   <figure>
   	<img src="{{articlelist.image.url}}"  alt="{{articlelist.image_alt}}">
   </figure> 

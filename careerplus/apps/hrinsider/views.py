@@ -1,5 +1,4 @@
 import json
-from django.shortcuts import render
 from itertools import zip_longest
         
 from django.views.generic import (
@@ -14,9 +13,13 @@ from django.utils import timezone
 from meta.views import Meta
 from django.db.models import Count
 from django.urls import reverse
-from django.template.loader import render_to_string
-from blog.mixins import BlogMixin, PaginationMixin
-from blog.models import Category, Blog, Tag, Author
+
+from users.forms import (
+    ModalLoginApiForm,
+    ModalRegistrationApiForm,
+    PasswordResetRequestForm)
+from blog.mixins import BlogMixin
+from blog.models import Category, Blog, Author
 
 
 class HRLandingView(TemplateView, BlogMixin):
@@ -44,11 +47,13 @@ class HRLandingView(TemplateView, BlogMixin):
         else:
             article_list = Blog.objects.filter(
                 status=1, visibility=3).select_related('p_cat', 'author').order_by('-publish_date')[:10]
+
         top_article_list = Blog.objects.filter(
             status=1, visibility=3).select_related('p_cat', 'author')[:9]
 
         authors = Author.objects.filter(
-            visibility=3, blog__visibility=3,
+            is_active=True,
+            blog__visibility=3,
             blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
         author_list = zip_longest(*[iter(authors)] * 6, fillvalue=None)
         
@@ -102,7 +107,6 @@ class HRBlogDetailView(DetailView, BlogMixin):
         return qs
 
     def get_object(self, queryset=None):
-        cat_slug = self.kwargs.get('cat_slug')
         slug = self.kwargs.get('slug')
         if queryset is None:
             queryset = self.get_queryset()
@@ -152,6 +156,12 @@ class HRBlogDetailView(DetailView, BlogMixin):
             "article_list": article_list,
         })
 
+        context.update({
+            "loginform": ModalLoginApiForm(),
+            "registerform": ModalRegistrationApiForm(),
+            "reset_form": PasswordResetRequestForm()
+        })
+
         context.update(self.get_meta_details())
         return context
 
@@ -186,8 +196,8 @@ class HrConclaveLandingView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        today_date = timezone.now()
         obj = None
+        today_date = timezone.now()
         conclave_type = ''
         conclaves = Blog.objects.filter(
             visibility=4, status=1,
@@ -203,15 +213,25 @@ class HrConclaveLandingView(TemplateView):
         if not obj and past_conclaves.exists():
             conclave_type = 'Past'
             obj = past_conclaves[0]
+            past_conclaves = past_conclaves[1:7]
 
         speakers = []
         if obj:
             speakers = obj.speakers.all()[: 5]
+        past_speakers = Author.objects.prefetch_related('speakers').filter(
+            visibility=4, is_active=True, speakers__status=1,
+            speakers__visibility=4).annotate(
+            count=Count('speakers')).order_by('-count')
+
+        if self.request.flavour != 'mobile':
+            past_speakers = list(zip_longest(*[iter(past_speakers)] * 6, fillvalue=None))
 
         context.update({
             'obj': obj,
             'conclave_type': conclave_type,
-            'speakers': speakers
+            'speakers': speakers,
+            'past_speakers': past_speakers,
+            'past_conclaves': past_conclaves,
         })
         context['SITEDOMAIN'] = settings.SITE_DOMAIN
         context.update(self.get_breadcrumb_data())
@@ -233,7 +253,95 @@ class HrConclaveLandingView(TemplateView):
         return {"meta": meta}
 
 
-class HrJobFairView(TemplateView):
+class HrConclaveDetailView(DetailView):
+    template_name = "hrinsider/conclave-detail.html"
+    model = Blog
+
+    def get_queryset(self):
+        qs = Blog.objects.filter(status=1, visibility=4)
+        return qs
+
+    def get_object(self, queryset=None):
+        slug = self.kwargs.get('slug')
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        if slug is not None:
+            queryset = queryset.filter(
+                slug=slug, status=1, visibility=4)
+        try:
+            obj = queryset.get()
+        except:
+            raise Http404
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        self.obj = self.get_object()
+        self.obj.no_views += 1
+        self.obj.update_score()
+        self.obj.save()
+
+        context = super(self.__class__, self).get(request, args, **kwargs)
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        obj = self.obj
+        today_date = timezone.now()
+        conclave_type = ''
+        if obj.start_date > today_date:
+            conclave_type = 'Upcoming'
+        else:
+            conclave_type = 'Past'
+
+        past_conclaves = Blog.objects.filter(
+            visibility=4, status=1,
+            start_date__lte=today_date).exclude(
+            pk=obj.pk).order_by('-start_date')
+        past_conclaves = past_conclaves[0:6]
+
+        speakers = []
+        if obj:
+            speakers = obj.speakers.all()[: 5]
+
+        past_speakers = Author.objects.prefetch_related('speakers').filter(
+            is_active=True, speakers__status=1,
+            speakers__visibility=4).annotate(
+            count=Count('speakers')).order_by('-count')
+        if self.request.flavour != 'mobile':
+            past_speakers = list(zip_longest(*[iter(past_speakers)] * 6, fillvalue=None))
+
+        context.update({
+            'obj': obj,
+            'speakers': speakers,
+            'past_speakers': past_speakers,
+            'conclave_type': conclave_type,
+            'past_conclaves': past_conclaves
+        })
+
+        context.update(self.get_meta_details())
+        context.update(self.get_breadcrumb_data())
+        return context
+
+    def get_breadcrumb_data(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": reverse('hrinsider:hr-landing'), "name": "HR Insider"})
+        breadcrumbs.append({"url": reverse('hrinsider:hr-conclave'), "name": "HR Conclave"})
+        breadcrumbs.append({"url": None, "name": self.obj.display_name})
+        data = {"breadcrumbs": breadcrumbs}
+        return data
+
+    def get_meta_details(self):
+        heading = self.obj.heading
+        des = self.obj.get_description()
+        meta = Meta(
+            title=heading + "- HR Insider",
+            description=des,
+        )
+        return {"meta": meta}
+
+
+class HrJobFairLandingView(TemplateView):
     model = Blog
     template_name = "hrinsider/jobfair.html"
 
@@ -246,32 +354,30 @@ class HrJobFairView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        categories = Category.objects.filter(
-            is_active=True, visibility=3).order_by('-name')
+        obj = None
 
-        if kwargs.get('list'):
-            article_list = Blog.objects.filter(
-                status=1, visibility=3).select_related('p_cat', 'author').order_by('-no_views')
-            context.update({'list': True})
-        else:
-            article_list = Blog.objects.filter(
-                status=1, visibility=3).select_related('p_cat', 'author').order_by('-publish_date')[:10]
-        top_article_list = Blog.objects.filter(
-            status=1, visibility=3).select_related('p_cat', 'author')[:9]
+        jobfair_type = ''
+        today_date = timezone.now()
+        jobfairs = Blog.objects.filter(
+            visibility=5, status=1,
+            start_date__gte=today_date).order_by('start_date')
+        if jobfairs.exists():
+            obj = jobfairs[0]
+            jobfair_type = 'Upcoming'
 
-        authors = Author.objects.filter(
-            visibility=3, blog__visibility=3,
-            blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
-        author_list = zip_longest(*[iter(authors)] * 6, fillvalue=None)
-        
+        if not obj:
+            past_jobfairs = Blog.objects.filter(
+                visibility=5, status=1,
+                start_date__lte=today_date).exclude(
+                pk=obj.pk).order_by('-start_date')
+            if past_jobfairs.exists():
+                obj = past_jobfairs[0]
+                jobfair_type = 'Past'
+
         context.update({
-            'top_article_list': [top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
-            'categories': categories,
-            'article_list': article_list,
-            'authors': authors,
-            'authors_list': list(author_list)
+            'obj': obj,
+            'jobfair_type': jobfair_type
         })
-
         context.update(self.get_breadcrumb_data())
         context.update(self.get_meta_details())
         return context
@@ -285,7 +391,76 @@ class HrJobFairView(TemplateView):
 
     def get_meta_details(self):
         meta = Meta(
-            title="HR insider: Career Skilling for a future ready India",
-            description="HR insider - The best way to choose better career options. Get experts' advice & ideas for planning your future growth @ Shine Learning",
+            title="HR jobfair: Career Skilling for a future ready India",
+            description="HR jobfair - The best way to choose better career options. Get experts' advice & ideas for planning your future growth @ Shine Learning",
+        )
+        return {"meta": meta}
+
+
+class HrJobFairDetailView(DetailView):
+    template_name = "hrinsider/jobfair-detail.html"
+    model = Blog
+
+    def get_queryset(self):
+        qs = Blog.objects.filter(status=1, visibility=5)
+        return qs
+
+    def get_object(self, queryset=None):
+        slug = self.kwargs.get('slug')
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        if slug is not None:
+            queryset = queryset.filter(
+                slug=slug, status=1, visibility=5)
+        try:
+            obj = queryset.get()
+        except:
+            raise Http404
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        self.obj = self.get_object()
+        self.obj.no_views += 1
+        self.obj.update_score()
+        self.obj.save()
+
+        context = super(self.__class__, self).get(request, args, **kwargs)
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        obj = self.obj
+        today_date = timezone.now()
+
+        jobfair_type = ''
+        if obj.start_date > today_date:
+            jobfair_type = 'Upcoming'
+        else:
+            jobfair_type = 'Past'
+
+        context.update({
+            'obj': obj,
+            'jobfair_type': jobfair_type
+        })
+
+        context.update(self.get_meta_details())
+        context.update(self.get_breadcrumb_data())
+        return context
+
+    def get_breadcrumb_data(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": reverse('hrinsider:hr-landing'), "name": "HR Insider"})
+        breadcrumbs.append({"url": reverse('hrinsider:jobfair'), "name": "Job Fair"})
+        breadcrumbs.append({"url": None, "name": self.obj.display_name})
+        data = {"breadcrumbs": breadcrumbs}
+        return data
+
+    def get_meta_details(self):
+        heading = self.obj.heading
+        des = self.obj.get_description()
+        meta = Meta(
+            title=heading + "- HR Job Fair",
+            description=des,
         )
         return {"meta": meta}

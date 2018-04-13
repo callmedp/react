@@ -29,6 +29,8 @@
 	<link type="text/scss" href="{% static 'shinelearn/css/mobile/hr-insider/images.scss' %}" rel="stylesheet">
 	{% endcompress css %}
     {% endblock css_section %}
+    {{ JS_SETTINGS|safe }}
+    
 </head>
 {% endblock head %}
 
@@ -51,7 +53,9 @@
 	</header><!-- header ends here -->
 		<!-- body Wrapper -->
 		<div class="body-wrapper ">
+			{% block hr_tabs %}
 			{% include './include/hr-tabs.html' %}
+			{% endblock hr_tabs %}
 
 		<!-- main section start -->
 	    {% block container %}
@@ -67,6 +71,10 @@
 	    	{% include './include/footer.html'%}
 	    {% endblock footer %}
  	</div><!-- /. wrapper -->
+
+ 	{% block navigation %}
+	 	{% include './include/navigation.html' %}
+ 	{% endblock navigation %}
 
  	<!-- Google font API starts here -->
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">

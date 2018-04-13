@@ -20,25 +20,23 @@
         {% endcompress %}
     {% endblock css_section %}
 
+    {% block hr_tabs %}
+      {% include './include/hr-tabs.html' with arrow_down="articles" %}
+    {% endblock hr_tabs %}
+
     {% block container %}
 
     <!-- box panel starts here -->
     <div class="content-box" itemscope itemtype="https://schema.org/ItemList">
       <ul class="breadcrumb mt-0 mb-10" itemscope itemtype="http://schema.org/BreadcrumbList">
-        {% for bradcbs in breadcrumbs %}
-          {% if bradcbs.url %}
-            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
-          {% else %}
-            <li class="active">{{bradcbs.name}}</li>
-          {% endif %}
-        {% endfor %} 
+        {% include './include/breadcrumb.html' %}
       </ul>
 
       <h2>All Articles</h2>      
       <ul class="article-list">
         {% for articleItem in article_list %}
           <li class="media">
-            <a class="link-grey" title="{{articleItem.title}}" href="{% url 'hrinsider:hr-articles-detail' articleItem.p_cat.slug articleItem.slug %}">
+            <a class="link-grey" title="{{articleItem.title}}" href="{% url 'hrinsider:hr-articles-detail' articleItem.slug %}">
               {% thumbnail articleItem.image "96x73" crop="center" as im %}
               <figure class="media-left">
                 <img class="media-object w-auto" src="{{ articleItem.image.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ articleItem.image_alt}}">

@@ -208,7 +208,7 @@ class ArticleChangeForm(forms.ModelForm):
         fields = ['name', 'visibility', 'status', 'image', 'image_alt',
             'p_cat', 'content', 'sec_cat', 'tags', 'allow_comment', 'summary',
             'url', 'heading', 'title', 'slug', 'meta_desc', 'meta_keywords',
-            'author', 'speakers', 'start_date', 'end_date', 'venue', 'address']
+            'author', 'speakers', 'start_date', 'end_date', 'venue', 'city', 'address', 'sponsor_img']
 
         widgets = {
             'url': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
@@ -275,6 +275,8 @@ class ArticleChangeForm(forms.ModelForm):
         self.fields['end_date'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12 date form_datetime'
         self.fields['end_date'].help_text = 'conclave or jobfair end date'
         self.fields['venue'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
+        self.fields['city'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
+        self.fields['sponsor_img'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
 
         self.fields['url'].widget.attrs['readonly'] = True
 
@@ -324,20 +326,28 @@ class ArticleChangeForm(forms.ModelForm):
             raise forms.ValidationError("end date is required.")
         elif visibility in [4, 5] and start_date and end_date and end_date <= start_date:
             raise forms.ValidationError("select end date greater than start date")
-        return start_date
+        return end_date
 
     def clean_venue(self):
         visibility = self.cleaned_data.get('visibility', '0')
         visibility = int(visibility)
-        venue = self.cleaned_data.get('venue', '')
+        venue = self.cleaned_data.get('venue', '').strip()
         if visibility in [4, 5] and not venue:
             raise forms.ValidationError("Venue is required.")
         return venue
 
+    def clean_city(self):
+        visibility = self.cleaned_data.get('visibility', '0')
+        visibility = int(visibility)
+        city = self.cleaned_data.get('city', '').strip()
+        if visibility in [4, 5] and not city:
+            raise forms.ValidationError("City is required.")
+        return city
+
     def clean_address(self):
         visibility = self.cleaned_data.get('visibility', '0')
         visibility = int(visibility)
-        address = self.cleaned_data.get('address', '')
+        address = self.cleaned_data.get('address', '').strip()
         if visibility in [4, 5] and not address:
             raise forms.ValidationError("Address is required.")
         return address
