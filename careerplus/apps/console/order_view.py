@@ -199,110 +199,110 @@ class OrderListView(ListView, PaginationMixin):
         else:
             return queryset.none()
 
-@Decorate(stop_browser_cache())
-@method_decorator(permission_required('order.can_show_welcome_queue', login_url='/console/login/'), name='dispatch')
+# @Decorate(stop_browser_cache())
+# @method_decorator(permission_required('order.can_show_welcome_queue', login_url='/console/login/'), name='dispatch')
 #updated one is currently being used
-class WelcomeCallVeiw(ListView, PaginationMixin):
-    context_object_name = 'welcome_list'
-    template_name = 'console/order/welcome-list.html'
-    model = Order
-    http_method_names = [u'get', u'post']
-
-    def __init__(self):
-        self.page = 1
-        self.paginated_by = 50
-        self.query = ''
-        self.payment_date, self.created = '', ''
-
-    def get(self, request, *args, **kwargs):
-        self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
-        self.payment_date = request.GET.get('payment_date', '')
-        self.created = request.GET.get('created', '')
-        return super(WelcomeCallVeiw, self).get(request, args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        try:
-            order_list = request.POST.getlist('table_records', [])
-            action_type = int(request.POST.get('action_type', '0'))
-            order_objs = Order.objects.filter(id__in=order_list)
-            if action_type == 0:
-                messages.add_message(request, messages.ERROR, 'Please select valid action first')
-            elif action_type == 1:
-                for obj in order_objs:
-                    obj.welcome_call_done = True
-                    obj.save()
-                messages.add_message(request, messages.SUCCESS, str(len(order_objs)) + ' welcome calls are done.')
-        except Exception as e:
-            messages.add_message(request, messages.ERROR, str(e))
-
-        return HttpResponseRedirect(reverse('console:queue-welcome'))
-
-    def get_context_data(self, **kwargs):
-        context = super(WelcomeCallVeiw, self).get_context_data(**kwargs)
-        paginator = Paginator(context['welcome_list'], self.paginated_by)
-        context.update(self.pagination(paginator, self.page))
-        alert = messages.get_messages(self.request)
-        initial = {
-            "payment_date": self.payment_date,
-            "created": self.created,
-        }
-        filter_form = OrderFilterForm(initial)
-        context.update({
-            "action_form": WelcomeCallActionForm(),
-            "messages": alert,
-            "filter_form": filter_form,
-            "query": self.query,
-        })
-
-        return context
-
-    def get_queryset(self):
-        queryset = super(WelcomeCallVeiw, self).get_queryset()
-        queryset = queryset.filter(status=1, welcome_call_done=False)
-
-        try:
-            if self.query:
-                queryset = queryset.filter(
-                    Q(number__icontains=self.query) |
-                    Q(email__icontains=self.query) |
-                    Q(mobile__icontains=self.query) |
-                    Q(id__icontains=self.query))
-        except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
-            pass
-
-        try:
-            if self.payment_date:
-                date_range = self.payment_date.split('-')
-                start_date = date_range[0].strip()
-                start_date = datetime.datetime.strptime(
-                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
-                end_date = date_range[1].strip()
-                end_date = datetime.datetime.strptime(
-                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
-                queryset = queryset.filter(
-                    payment_date__range=[start_date, end_date])
-        except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
-            pass
-
-        try:
-            if self.created:
-                date_range = self.created.split('-')
-                start_date = date_range[0].strip()
-                start_date = datetime.datetime.strptime(
-                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
-                end_date = date_range[1].strip()
-                end_date = datetime.datetime.strptime(
-                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
-                queryset = queryset.filter(
-                    created__range=[start_date, end_date])
-        except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
-            pass
-
-        return queryset.order_by('-modified')
+# class WelcomeCallVeiw(ListView, PaginationMixin):
+#     context_object_name = 'welcome_list'
+#     template_name = 'console/order/welcome-list.html'
+#     model = Order
+#     http_method_names = [u'get', u'post']
+#
+#     def __init__(self):
+#         self.page = 1
+#         self.paginated_by = 50
+#         self.query = ''
+#         self.payment_date, self.created = '', ''
+#
+#     def get(self, request, *args, **kwargs):
+#         self.page = request.GET.get('page', 1)
+#         self.query = request.GET.get('query', '')
+#         self.payment_date = request.GET.get('payment_date', '')
+#         self.created = request.GET.get('created', '')
+#         return super(WelcomeCallVeiw, self).get(request, args, **kwargs)
+#
+#     def post(self, request, *args, **kwargs):
+#         try:
+#             order_list = request.POST.getlist('table_records', [])
+#             action_type = int(request.POST.get('action_type', '0'))
+#             order_objs = Order.objects.filter(id__in=order_list)
+#             if action_type == 0:
+#                 messages.add_message(request, messages.ERROR, 'Please select valid action first')
+#             elif action_type == 1:
+#                 for obj in order_objs:
+#                     obj.welcome_call_done = True
+#                     obj.save()
+#                 messages.add_message(request, messages.SUCCESS, str(len(order_objs)) + ' welcome calls are done.')
+#         except Exception as e:
+#             messages.add_message(request, messages.ERROR, str(e))
+#
+#         return HttpResponseRedirect(reverse('console:queue-welcome'))
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(WelcomeCallVeiw, self).get_context_data(**kwargs)
+#         paginator = Paginator(context['welcome_list'], self.paginated_by)
+#         context.update(self.pagination(paginator, self.page))
+#         alert = messages.get_messages(self.request)
+#         initial = {
+#             "payment_date": self.payment_date,
+#             "created": self.created,
+#         }
+#         filter_form = OrderFilterForm(initial)
+#         context.update({
+#             "action_form": WelcomeCallActionForm(),
+#             "messages": alert,
+#             "filter_form": filter_form,
+#             "query": self.query,
+#         })
+#
+#         return context
+#
+#     def get_queryset(self):
+#         queryset = super(WelcomeCallVeiw, self).get_queryset()
+#         queryset = queryset.filter(status=1, welcome_call_done=False)
+#
+#         try:
+#             if self.query:
+#                 queryset = queryset.filter(
+#                     Q(number__icontains=self.query) |
+#                     Q(email__iexact=self.query) |
+#                     Q(mobile__iexact=self.query) |
+#                     Q(id__iexact=self.query))
+#         except Exception as e:
+#             logging.getLogger('error_log').error("%s " % str(e))
+#             pass
+#
+#         try:
+#             if self.payment_date:
+#                 date_range = self.payment_date.split('-')
+#                 start_date = date_range[0].strip()
+#                 start_date = datetime.datetime.strptime(
+#                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+#                 end_date = date_range[1].strip()
+#                 end_date = datetime.datetime.strptime(
+#                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+#                 queryset = queryset.filter(
+#                     payment_date__range=[start_date, end_date])
+#         except Exception as e:
+#             logging.getLogger('error_log').error("%s " % str(e))
+#             pass
+#
+#         try:
+#             if self.created:
+#                 date_range = self.created.split('-')
+#                 start_date = date_range[0].strip()
+#                 start_date = datetime.datetime.strptime(
+#                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+#                 end_date = date_range[1].strip()
+#                 end_date = datetime.datetime.strptime(
+#                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+#                 queryset = queryset.filter(
+#                     created__range=[start_date, end_date])
+#         except Exception as e:
+#             logging.getLogger('error_log').error("%s " % str(e))
+#             pass
+#
+#         return queryset.order_by('-modified')
 
 
 @Decorate(stop_browser_cache())
@@ -384,7 +384,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
                     if  self.query[2:]=='cp' or self.query[:2]=='CP':
                         queryset=queryset.filter(order__number__iexact=self.query)
                     else:
-                        queryset = queryset.filter(id=self.query)
+                        queryset = queryset.filter(id__iexact=self.query)
                 elif self.sel_opt == 'email':
                     queryset = queryset.filter(order__email__iexact=self.query)
                 elif self.sel_opt == 'mobile':
@@ -509,7 +509,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                     if self.query[:2] =='cp' or self.query[:2] == 'CP':
                         queryset=queryset.filter(order__number__iexact=self.query)
                     else:
-                        queryset = queryset.filter(id=self.query)
+                        queryset = queryset.filter(id__iexact=self.query)
                 elif self.sel_opt == 'mobile':
                     queryset = queryset.filter(order__mobile=self.query)
                 elif self.sel_opt == 'email':
@@ -739,12 +739,14 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
         self.query = ''
         self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', ''
+        self.sel_opt= 'id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
+        self.sel_opt=request.GET.get('rad_search','id')
         try:
             self.draft_level = int(request.GET.get('draft_level', -1))
         except:
@@ -756,6 +758,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
         context = super(ApprovalQueueVeiw, self).get_context_data(**kwargs)
         paginator = Paginator(context['approval_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
+        var=self.sel_opt
         alert = messages.get_messages(self.request)
         max_limit_draft = settings.DRAFT_MAX_LIMIT
 
@@ -772,6 +775,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
             "filter_form": filter_form,
             "query": self.query,
             "action_form": OIActionForm(),
+             var: "checked",
         })
         return context
 
@@ -793,12 +797,16 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
             queryset = queryset.none()
         try:
             if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
+                if self.sel_opt=='id':
+                    queryset = queryset.filter(id__iexact=self.query)
+                elif self.sel_opt=='number':
+                    queryset = queryset.filter(order__number__iexact=self.query)
+                elif self.sel_opt== 'product':
+                    queryset=queryset.filter(product__name__icontains=self.query)
+                elif self.sel_opt== 'mobile':
+                    queryset=queryset.filter(order__mobile=self.query)
+                elif self.sel_opt=='email':
+                    queryset=queryset.filter(order__email__iexact=self.query)
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
@@ -867,12 +875,14 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         self.query = ''
         self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', ''
+        self.sel_opt='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
+        self.sel_opt=request.GET.get('rad_search','id')
         try:
             self.draft_level = int(request.GET.get('draft_level', -1))
         except:
@@ -885,6 +895,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         paginator = Paginator(context['approved_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
+        var=self.sel_opt
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
             "modified": self.modified,
@@ -897,6 +908,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
             "max_limit_draft": max_limit_draft,
             "query": self.query,
             "filter_form": filter_form,
+             var: "checked",
         })
         return context
 
@@ -918,12 +930,18 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
+
+                if self.sel_opt== 'id':
+                    queryset = queryset.filter(id__iexact=self.query)
+                elif self.sel_opt== 'product':
+                    queryset = queryset.filter(product__name__icontains=self.query)
+                elif self.sel_opt== 'number':
+                    queryset=queryset.filter(order__number__iexact=self.query)
+                elif self.sel_opt == 'mobile':
+                    queryset=queryset.filter(order__mobile=self.query)
+                elif self.sel_opt == 'email':
+                    queryset=queryset.filter(order__email__iexact=self.query)
+
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
@@ -991,12 +1009,14 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
         self.query = ''
         self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', ''
+        self.sel_opt ='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
+        self.sel_opt =request.GET.get('rad_search','id')
         try:
             self.draft_level = int(request.GET.get('draft_level', -1))
         except:
@@ -1009,6 +1029,7 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
         paginator = Paginator(context['rejectedbyadmin_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
+        var=self.sel_opt
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
             "modified": self.modified,
@@ -1024,6 +1045,7 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
             "filter_form": filter_form,
             "query": self.query,
             "action_form": OIActionForm(),
+            var:'checked',
         })
         return context
 
@@ -1046,12 +1068,17 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
+                if self.sel_opt=='id':
+                    queryset=queryset.filter(id__iexact=self.query)
+                elif self.sel_opt=='product':
+                    queryset = queryset.filter(product__name__icontains=self.query)
+                elif self.sel_opt=='number':
+                    queryset=queryset.filter(order__number__iexact=self.query)
+                elif self.sel_opt=='email':
+                    queryset = queryset.filter(order__email__iexact=self.query)
+                elif self.sel_opt== 'mobile':
+                    queryset=queryset.filter(order__mobile=self.query)
+
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
@@ -1119,12 +1146,14 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         self.query = ''
         self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', ''
+        self.sel_opt ='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
+        self.sel_opt=request.GET.get('rad_search','id')
         try:
             self.draft_level = int(request.GET.get('draft_level', -1))
         except:
@@ -1137,6 +1166,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         paginator = Paginator(context['rejectedbycandidate_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
+        var=self.sel_opt
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
             "modified": self.modified,
@@ -1152,6 +1182,7 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
             "filter_form": filter_form,
             "query": self.query,
             "action_form": OIActionForm(),
+            var:'checked',
         })
         return context
 
@@ -1173,13 +1204,20 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
             queryset = queryset.none()
 
         try:
+
             if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
+
+                if self.sel_opt == 'id':
+                    queryset = queryset.filter(id__iexact=self.query)
+                elif self.sel_opt == 'product':
+                    queryset = queryset.filter(product__name__icontains=self.query)
+                elif self.sel_opt == 'number':
+                    queryset = queryset.filter(order__number__iexact=self.query)
+                elif self.sel_opt == 'email':
+                    queryset = queryset.filter(order__email__iexact=self.query)
+                elif self.sel_opt == 'mobile':
+                    queryset = queryset.filter(order__mobile=self.query)
+
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
@@ -1248,10 +1286,12 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         self.query = ''
         self.writer, self.created, self.delivery_type = '', '', ''
         self.oi_status = -1
+        self.sel_opt='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
+        self.sel_opt=request.GET.get('rad_search','id')
         self.writer = request.GET.get('writer', '')
         self.created = request.GET.get('created', '')
         self.oi_status = request.GET.get('oi_status', '')
@@ -1262,6 +1302,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         context = super(AllocatedQueueVeiw, self).get_context_data(**kwargs)
         paginator = Paginator(context['allocated_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
+        var=self.sel_opt
         alert = messages.get_messages(self.request)
         initial = {
             "created": self.created,
@@ -1274,6 +1315,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
             "messages": alert,
             "query": self.query,
             "filter_form": filter_form,
+             var :'checked',
         })
 
         return context
@@ -1300,12 +1342,16 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
+                if self.sel_opt == 'id':
+                    queryset = queryset.filter(id__iexact=self.query)
+                elif self.sel_opt == 'product':
+                    queryset = queryset.filter(product__name__icontains=self.query)
+                elif self.sel_opt == 'number':
+                    queryset = queryset.filter(order__number__iexact=self.query)
+                elif self.sel_opt == 'email':
+                    queryset = queryset.filter(order__email__iexact=self.query)
+                elif self.sel_opt == 'mobile':
+                    queryset = queryset.filter(order__mobile=self.query)
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
@@ -1371,18 +1417,21 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
         self.paginated_by = 50
         self.query = ''
         self.payment_date, self.created = '', ''
+        self.sel_opt ='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
         self.created = request.GET.get('created', '')
+        self.sel_opt=request.GET.get('rad_search','id')
         return super(ClosedOrderItemQueueVeiw, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(ClosedOrderItemQueueVeiw, self).get_context_data(**kwargs)
         paginator = Paginator(context['closed_oi_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
+        var =self.sel_opt
         alert = messages.get_messages(self.request)
         initial = {
             "created": self.created,
@@ -1392,6 +1441,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
             "messages": alert,
             "query": self.query,
             "filter_form": filter_form,
+            var:'checked',
         })
 
         return context
@@ -1416,12 +1466,18 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
+
+                if self.sel_opt == 'id':
+
+                    queryset = queryset.filter(id__iexact=self.query)
+                elif self.sel_opt == 'product':
+                    queryset = queryset.filter(product__name__icontains=self.query)
+                elif self.sel_opt == 'number':
+                    queryset = queryset.filter(order__number__iexact=self.query)
+                elif self.sel_opt == 'email':
+                    queryset = queryset.filter(order__email__iexact=self.query)
+                elif self.sel_opt == 'mobile':
+                    queryset = queryset.filter(order__mobile=self.query)
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
@@ -1474,11 +1530,13 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
         self.paginated_by = 20
         self.query = ''
         self.payment_date, self.modified = '', ''
+        self.sel_opt='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
+        self.sel_opt=request.GET.get('rad_search','id')
         self.modified = request.GET.get('modified', '')
         return super(DomesticProfileUpdateQueueView, self).get(request, args, **kwargs)
 
@@ -1486,6 +1544,7 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
         context = super(DomesticProfileUpdateQueueView, self).get_context_data(**kwargs)
         paginator = Paginator(context['object_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
+        var=self.sel_opt
         alert = messages.get_messages(self.request)
         initial = {
             "payment_date": self.payment_date,
@@ -1498,6 +1557,7 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
             "message_form": MessageForm(),
             "filter_form": filter_form,
             "action_form": OIActionForm(queue_name="domesticprofileupdate"),
+            var:'checked',
         })
 
         return context
@@ -1547,12 +1607,17 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
+                if self.sel_opt == 'id':
+                    if self.query[:2] == 'cp' or self.query[:2] == 'CP':
+                        queryset = queryset.filter(order__number__iexact=self.query)
+                    else:
+                        queryset = queryset.filter(id__iexact=self.query)
+                elif self.sel_opt == 'mobile':
+                    queryset = queryset.filter(order__mobile=self.query)
+                elif self.sel_opt == 'email':
+                    queryset = queryset.filter(order__email__iexact=self.query)
+                elif self.self_opt == 'product':
+                    queryset = queryset.filter(product__name__icontains=self.query)
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
@@ -1603,18 +1668,21 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
         self.paginated_by = 50
         self.query = ''
         self.payment_date, self.modified = '', ''
+        self.sel_opt='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
         self.modified = request.GET.get('modified', '')
+        self.sel_opt =request.GET.get('rad_search','id')
         return super(DomesticProfileApprovalQueue, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(DomesticProfileApprovalQueue, self).get_context_data(**kwargs)
         paginator = Paginator(context['object_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
+        var =self.sel_opt
         alert = messages.get_messages(self.request)
         initial = {
             "payment_date": self.payment_date,
@@ -1626,6 +1694,7 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
             "message_form": MessageForm(),
             "filter_form": filter_form,
             "action_form": OIActionForm(queue_name="domesticprofileapproval"),
+             var:'checked',
         })
 
         return context
@@ -1640,12 +1709,18 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
+
+                if self.sel_opt == 'id':
+
+                    queryset = queryset.filter(id__iexact=self.query)
+                elif self.sel_opt == 'product':
+                    queryset = queryset.filter(product__name__icontains=self.query)
+                elif self.sel_opt == 'number':
+                    queryset = queryset.filter(order__number__iexact=self.query)
+                elif self.sel_opt == 'email':
+                    queryset = queryset.filter(order__email__iexact=self.query)
+                elif self.sel_opt == 'mobile':
+                    queryset = queryset.filter(order__mobile=self.query)
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
@@ -1696,10 +1771,12 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
+        self.sel_opt='id'
         self.payment_date = ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
+        self.sel_opt=request.GET.get('rad_search','id')
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
         return super(BoosterQueueVeiw, self).get(request, args, **kwargs)
@@ -1707,6 +1784,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
     def get_context_data(self, **kwargs):
         context = super(BoosterQueueVeiw, self).get_context_data(**kwargs)
         paginator = Paginator(context['booster_list'], self.paginated_by)
+        var=self.sel_opt
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
         initial = {
@@ -1718,6 +1796,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
             "query": self.query,
             "message_form": MessageForm(),
             "filter_form": filter_form,
+             var:'checked',
         })
 
         return context
@@ -1758,12 +1837,19 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
+
+                if self.sel_opt == 'id':
+
+                    queryset = queryset.filter(id__iexact=self.query)
+                elif self.sel_opt == 'product':
+                    queryset = queryset.filter(product__name__icontains=self.query)
+                elif self.sel_opt == 'number':
+                    queryset = queryset.filter(order__number__iexact=self.query)
+                elif self.sel_opt == 'email':
+                    queryset = queryset.filter(order__email__iexact=self.query)
+                elif self.sel_opt == 'mobile':
+                    queryset = queryset.filter(order__mobile=self.query)
+
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass

@@ -12,7 +12,7 @@ from celery.decorators import task
 from scheduler.models import Scheduler
 from linkedin.autologin import AutoLogin
 
-User = get_user_model()
+# No usage    User = get_user_model()
 
 
 @task(name="gen_auto_login_token_task")
@@ -27,7 +27,7 @@ def gen_auto_login_token_task(task=None, user=None, next_url=None, exp_days=None
                 upload_path = up_task.file_uploaded.name
                 total_rows = 0
                 try:
-                    user = User.objects.get(pk=user)
+# No usage      user = User.objects.get(pk=user)
                     exist_file = os.path.isfile(
                         settings.MEDIA_ROOT + '/' + upload_path)
                     if exist_file:

@@ -204,6 +204,7 @@ class LeadManagementWithCaptcha(View, ReCaptchaMixin):
             )
 
             created = True
+
             valid_source_list = [4]
             if lead.lead_source in valid_source_list:
                 create_lead_crm.delay(pk=lead.pk)

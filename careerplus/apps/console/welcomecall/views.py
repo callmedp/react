@@ -167,7 +167,8 @@ class WelcomeQueueView(ListView, PaginationMixin):
                     Q(number=self.query) |
                     Q(email=self.query) |
                     Q(mobile=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             pass
 
         try:
