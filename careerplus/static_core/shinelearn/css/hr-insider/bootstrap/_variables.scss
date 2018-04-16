@@ -1,3 +1,4 @@
+@import "../../_path";
 // Variables
 //
 // Variables should follow the `$component-state-property-size` formula for
@@ -899,7 +900,7 @@ $print-body-min-width:              map-get($grid-breakpoints, "lg") !default;
 $font-family:  'Roboto', sans-serif;
 
 // images
-$path:        '/media/static/shinelearn/images/hr-insider/';
+//$path:        '/media/static/shinelearn/images/hr-insider/';
 $image-path: $path + 'sprite.png';
 
 $sprite: url($path + 'sprite.png') no-repeat;

@@ -1,3 +1,4 @@
+@import "../../../_path";
 // fonts
 
 $font-family: 'Roboto', sans-serif;
@@ -94,7 +95,7 @@ $error: #f34a38;
 
 
 // images
-$path:        '/media/static/shinelearn/images/mobile/hr-insider/';
+// $path:        '/media/static/shinelearn/images/mobile/hr-insider/';
 $image-path:         $path + 'sprites.svg';
 $dropdown-default:   $path + 'dropdown.svg';
 $dropdown-white:   $path + 'dropdown-white.svg';
