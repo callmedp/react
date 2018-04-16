@@ -20,6 +20,7 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from geolocation.models import Country
 from django.db.models import Q
+from django.template.loader import render_to_string
 
 from haystack.query import SearchQuerySet
 from meta.views import MetadataMixin
@@ -421,8 +422,18 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
     def get_context_data(self, **kwargs):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
-        ctx.update(self.get_product_detail_context(
-            self.product_obj, self.sqs))
+        product_data = self.get_product_detail_context(
+            self.product_obj, self.sqs)
+
+        product_detail_content = render_to_string(
+            'shop/product-detail.html', product_data)
+
+        ctx.update({
+            'product_detail': product_detail_content
+        })
+
+
+
         # pk = self.kwargs.get('pk')
         # product = self.product_obj
         # ctx['product'] = product
@@ -718,3 +729,45 @@ class CourseCatalogueView(TemplateView, MetadataMixin, CourseCatalogueMixin):
             "meta_desc": self.get_meta_description(),
         })
         return context
+
+
+class ProductDetailAjaxView(View, ):
+
+    def __init__(self):
+        
+        self.sqs = None
+        self.product = None
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            self.pk = self.request.GET.get('pk', None)
+            
+            try:
+                self.blog = Blog.objects.get(slug=self.slug, status=1, visibility=1)
+                main_objs = Blog.objects.filter(slug=self.blog.slug, status=1, visibility=1)
+
+                article_list = Blog.objects.filter(p_cat=self.blog.p_cat, status=1, visibility=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[self.blog.p_cat], status=1).order_by('-publish_date')
+                article_list = article_list.exclude(slug=self.blog.slug)
+                article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
+
+                object_list = list(main_objs) + list(article_list)
+
+                page_obj = self.scrollPagination(
+                    paginated_by=self.paginated_by, page=self.page,
+                    object_list=object_list)
+
+                detail_article = render_to_string('include/detail-article-list.html',
+                    {"page_obj": page_obj,
+                    "slug": self.blog.slug,
+                    "SITEDOMAIN": settings.SITE_DOMAIN, })
+
+                data = {
+                    'article_detail': detail_article,
+                    'url': page_obj.object_list[0].get_absolute_url(),
+                    'title': page_obj.object_list[0].display_name,
+                }
+
+                return HttpResponse(json.dumps(data), content_type="application/json")
+            except:
+                pass
+        return HttpResponseForbidden()
