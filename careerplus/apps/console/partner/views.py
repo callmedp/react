@@ -53,7 +53,7 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
             "query": self.query,
             "draft_form": VendorFileUploadForm(),
             "action_form": OIActionForm(queue_name="partnerinbox"),
-            var:'checked'
+            var:'checked',
         })
         return context
 
@@ -73,20 +73,21 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
             queryset = queryset.filter(Q(partner__in=vendor_employee_list) |
                 Q(product__vendor__in=vendor_employee_list))
 
+
         try:
             if self.query:
-                if self.sel_opt=='id':
-                     if self.query[2:]== 'cp' or self.query[2:]=='CP':
-                         queryset = queryset.filter(order__number=self.query)
-                     else:
-                         queryset = queryset.filter(id=self.query)
-                elif self.sel_opt=='mobile':
-                     queryset=queryset.filter(order__mobile=self.query)
-                elif self.sel_opt=='email':
-                     queryset=queryset.filter(order__email__iexact=self.query)
-                elif self.sel_opt =='product':
-                     queryset = queryset.filter(product__name__icontains=self.query)
 
+                if self.sel_opt == 'id':
+
+                    queryset = queryset.filter(id__iexact=self.query)
+                elif self.sel_opt == 'product':
+                    queryset = queryset.filter(product__name__icontains=self.query)
+                elif self.sel_opt == 'number':
+                    queryset = queryset.filter(order__number__iexact=self.query)
+                elif self.sel_opt == 'email':
+                    queryset = queryset.filter(order__email__iexact=self.query)
+                elif self.sel_opt == 'mobile':
+                    queryset = queryset.filter(order__mobile=self.query)
 
 
         except Exception as e:
@@ -139,12 +140,14 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
         self.paginated_by = 20
         self.query = ''
         self.payment_date, self.modified = '', ''
+        self.sel_opt ='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
         self.payment_date = request.GET.get('payment_date', '')
         self.modified = request.GET.get('modified', '')
+        self.sel_opt=request.GET.get('rad_search','id')
         return super(PartnerHoldQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -154,12 +157,14 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
         alert = messages.get_messages(self.request)
         initial = {"modified": self.modified, "payment_date": self.payment_date}
         filter_form = OIFilterForm(initial)
+        var=self.sel_opt
         context.update({
             "messages": alert,
             "message_form": MessageForm(),
             "filter_form": filter_form,
             "query": self.query,
             "action_form": OIActionForm(queue_name="partnerholdqueue"),
+            var:'checked',
         })
         return context
 
@@ -182,12 +187,18 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
+
+                if self.sel_opt == 'id':
+
+                    queryset = queryset.filter(id__iexact=self.query)
+                elif self.sel_opt == 'product':
+                    queryset = queryset.filter(product__name__icontains=self.query)
+                elif self.sel_opt == 'number':
+                    queryset = queryset.filter(order__number__iexact=self.query)
+                elif self.sel_opt == 'email':
+                    queryset = queryset.filter(order__email__iexact=self.query)
+                elif self.sel_opt == 'mobile':
+                    queryset = queryset.filter(order__mobile=self.query)
         except Exception as e:
             logging.getLogger('error_log').error('unable to get queryset %s' % str(e))
 
@@ -239,12 +250,14 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
         self.paginated_by = 20
         self.query = ''
         self.payment_date, self.modified = '', ''
+        self.sel_opt ='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
         self.modified = request.GET.get('modified', '')
+        self.sel_opt=request.GET.get('rad_search','id')
         return super(PartnerVarificationQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -252,6 +265,7 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
         paginator = Paginator(context['object_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
+        var=self.sel_opt
         initial = {"modified": self.modified, "payment_date": self.payment_date}
         filter_form = OIFilterForm(initial)
         context.update({
@@ -261,6 +275,7 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
             "query": self.query,
             "draft_form": VendorFileUploadForm(),
             "action_form": OIActionForm(queue_name="partnerinbox"),
+            var:'checked',
         })
         return context
 
@@ -279,18 +294,25 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
             queryset = queryset.filter(Q(partner__in=vendor_employee_list) |
                 Q(product__vendor__in=vendor_employee_list))
 
+
         try:
             if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
+                if self.sel_opt=='id':
+                     if self.query[2:]== 'cp' or self.query[2:]=='CP':
+                         queryset = queryset.filter(order__number=self.query)
+                     else:
+                         queryset = queryset.filter(id__iexact=self.query)
+                elif self.sel_opt=='mobile':
+                     queryset=queryset.filter(order__mobile=self.query)
+                elif self.sel_opt=='email':
+                     queryset=queryset.filter(order__email__iexact=self.query)
+                elif self.sel_opt =='product':
+                     queryset = queryset.filter(product__name__icontains=self.query)
+
+
         except Exception as e:
             logging.getLogger('error_log').error('unable to get queryset %s' % str(e))
 
-            pass
 
         try:
             if self.modified:
