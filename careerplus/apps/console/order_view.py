@@ -1777,7 +1777,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.sel_opt=request.GET.get('rad_search','id')
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
         self.payment_date = request.GET.get('payment_date', '')
         return super(BoosterQueueVeiw, self).get(request, args, **kwargs)
 

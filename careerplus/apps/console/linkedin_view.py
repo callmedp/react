@@ -59,12 +59,14 @@ class LinkedinQueueView(ListView, PaginationMixin):
         self.writer, self.created = '', ''
         self.draft_level = -1
         self.delivery_type = ''
+        self.sel_opt='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
         self.writer = request.GET.get('writer', '')
         self.modified = request.GET.get('modified', '')
+        self.sel_opt=request.GET.get('rad_search','id')
         self.delivery_type = request.GET.get('delivery_type', '')
         try:
             self.draft_level = int(request.GET.get('draft_level', -1))
@@ -76,6 +78,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
         context = super(LinkedinQueueView, self).get_context_data(**kwargs)
         paginator = Paginator(context['orderitem_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
+        var=self.sel_opt
         alert = messages.get_messages(self.request)
         initial = {
             "modified": self.modified, "writer": self.writer,
@@ -88,6 +91,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
             'filter_form': filter_form,
             "message_form": MessageForm(),
             "query": self.query,
+            var:'checked',
         })
         return context
 
@@ -180,12 +184,18 @@ class LinkedinQueueView(ListView, PaginationMixin):
         else:
             queryset = queryset.none()
         if self.query:
-            queryset = queryset.filter(Q(id__icontains=self.query) |
-                Q(product__name__icontains=self.query) |
-                Q(order__number__icontains=self.query) |
-                Q(order__mobile__icontains=self.query) |
-                Q(order__email__icontains=self.query))
 
+            if self.sel_opt == 'id':
+
+                queryset = queryset.filter(id__iexact=self.query)
+            elif self.sel_opt == 'product':
+                queryset = queryset.filter(product__name__icontains=self.query)
+            elif self.sel_opt == 'number':
+                queryset = queryset.filter(order__number__iexact=self.query)
+            elif self.sel_opt == 'email':
+                queryset = queryset.filter(order__email__iexact=self.query)
+            elif self.sel_opt == 'mobile':
+                queryset = queryset.filter(order__mobile=self.query)
 
         try:
             if self.modified:
@@ -439,12 +449,14 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
         self.query = ''
         self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', ''
+        self.sel_opt='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
+        self.sel_opt=request.GET.get('rad_search','id')
         try:
             self.draft_level = int(request.GET.get('draft_level', -1))
         except:
@@ -456,6 +468,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
         context = super(LinkedinRejectedByAdminView, self).get_context_data(**kwargs)
         paginator = Paginator(context['rejectedbylinkedinadmin_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
+        var=self.sel_opt
         alert = messages.get_messages(self.request)
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
@@ -471,6 +484,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
             "filter_form": filter_form,
             "query": self.query,
             "action_form": OIActionForm(),
+            var:'checked',
         })
         return context
 
@@ -490,13 +504,18 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
             queryset = queryset.none()
 
         if self.query:
-            queryset = queryset.filter(
-                Q(id__icontains=self.query) |
-                Q(product__name__icontains=self.query) |
-                Q(order__number__icontains=self.query) |
-                Q(order__mobile__icontains=self.query) |
-                Q(order__email__icontains=self.query))
 
+            if self.sel_opt == 'id':
+
+                queryset = queryset.filter(id__iexact=self.query)
+            elif self.sel_opt == 'product':
+                queryset = queryset.filter(product__name__icontains=self.query)
+            elif self.sel_opt == 'number':
+                queryset = queryset.filter(order__number__iexact=self.query)
+            elif self.sel_opt == 'email':
+                queryset = queryset.filter(order__email__iexact=self.query)
+            elif self.sel_opt == 'mobile':
+                queryset = queryset.filter(order__mobile=self.query)
         try:
             if self.modified:
                 date_range = self.modified.split('-')
@@ -548,10 +567,12 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
         self.query = ''
         self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', ''
+        self.sel_opt='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
+        self.sel_opt=request.GET.get('rad_search','id')
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
         try:
@@ -565,6 +586,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
         context = super(LinkedinRejectedByCandidateView, self).get_context_data(**kwargs)
         paginator = Paginator(context['rejectedbylinkedincandidate_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
+        var=self.sel_opt
         alert = messages.get_messages(self.request)
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
@@ -580,6 +602,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
             "filter_form": filter_form,
             "query": self.query,
             "action_form": LinkedinInboxActionForm(),
+            var:'checked',
         })
         return context
 
@@ -600,12 +623,18 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
             queryset = queryset.none()
 
         if self.query:
-            queryset = queryset.filter(
-                Q(id__icontains=self.query) |
-                Q(product__name__icontains=self.query) |
-                Q(order__number__icontains=self.query) |
-                Q(order__mobile__icontains=self.query) |
-                Q(order__email__icontains=self.query))
+
+            if self.sel_opt == 'id':
+
+                queryset = queryset.filter(id__iexact=self.query)
+            elif self.sel_opt == 'product':
+                queryset = queryset.filter(product__name__icontains=self.query)
+            elif self.sel_opt == 'number':
+                queryset = queryset.filter(order__number__iexact=self.query)
+            elif self.sel_opt == 'email':
+                queryset = queryset.filter(order__email__iexact=self.query)
+            elif self.sel_opt == 'mobile':
+                queryset = queryset.filter(order__mobile=self.query)
 
         try:
             if self.modified:
@@ -658,10 +687,12 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
     draft_level = -1
     writer = ''
     delivery_type = ''
+    sel_opt='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
+        self.sel_opt=request.GET.get('rad_search','id')
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
         try:
@@ -703,13 +734,18 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
             order__welcome_call_done=True).exclude(
             wc_sub_cat__in=[64, 65]).exclude(oi_status=9)
         if self.query:
-            queryset = queryset.filter(
-                Q(id__icontains=self.query) |
-                Q(product__name__icontains=self.query) |
-                Q(order__number__icontains=self.query) |
-                Q(order__mobile__icontains=self.query) |
-                Q(order__email__icontains=self.query))
 
+            if self.sel_opt == 'id':
+
+                queryset = queryset.filter(id__iexact=self.query)
+            elif self.sel_opt == 'product':
+                queryset = queryset.filter(product__name__icontains=self.query)
+            elif self.sel_opt == 'number':
+                queryset = queryset.filter(order__number__iexact=self.query)
+            elif self.sel_opt == 'email':
+                queryset = queryset.filter(order__email__iexact=self.query)
+            elif self.sel_opt == 'mobile':
+                queryset = queryset.filter(order__mobile=self.query)
         try:
             if self.modified:
                 date_range = self.modified.split('-')
@@ -761,12 +797,14 @@ class ApprovedLinkedinQueueVeiw(ListView, PaginationMixin):
         self.query = ''
         self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', ''
+        self.sel_opt='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
+        self.sel_opt=request.GET.get('rad_search','id')
         try:
             self.draft_level = int(request.GET.get('draft_level', -1))
         except:
@@ -778,6 +816,7 @@ class ApprovedLinkedinQueueVeiw(ListView, PaginationMixin):
         context = super(ApprovedLinkedinQueueVeiw, self).get_context_data(**kwargs)
         paginator = Paginator(context['approved_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
+        var=self.sel_opt
         alert = messages.get_messages(self.request)
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
@@ -791,6 +830,7 @@ class ApprovedLinkedinQueueVeiw(ListView, PaginationMixin):
             "max_limit_draft": max_limit_draft,
             "query": self.query,
             "filter_form": filter_form,
+            var:'checked',
         })
         return context
 
@@ -810,12 +850,18 @@ class ApprovedLinkedinQueueVeiw(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(
-                    Q(id__icontains=self.query) |
-                    Q(product__name__icontains=self.query) |
-                    Q(order__number__icontains=self.query) |
-                    Q(order__mobile__icontains=self.query) |
-                    Q(order__email__icontains=self.query))
+
+                if self.sel_opt == 'id':
+
+                    queryset = queryset.filter(id__iexact=self.query)
+                elif self.sel_opt == 'product':
+                    queryset = queryset.filter(product__name__icontains=self.query)
+                elif self.sel_opt == 'number':
+                    queryset = queryset.filter(order__number__iexact=self.query)
+                elif self.sel_opt == 'email':
+                    queryset = queryset.filter(order__email__iexact=self.query)
+                elif self.sel_opt == 'mobile':
+                    queryset = queryset.filter(order__mobile=self.query)
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
@@ -1272,7 +1318,7 @@ class ProfileCredentialDownload(View):
     def get(self, request, *args, **kwargs):
         session_usr = request.session.get('candidate_id')
         oi = kwargs.get('oi', '')
-        orderitem = OrderItem.objects.get(pk=oi)
+        orderitem = OrderItem.objects.select_related('order').get(pk=oi)
         profile_credentials = InternationalProfileCredential.objects.filter(
             oi=oi)
         if session_usr == orderitem.order.candidate_id:
