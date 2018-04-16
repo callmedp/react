@@ -368,8 +368,7 @@ class HrJobFairLandingView(TemplateView):
         if not obj:
             past_jobfairs = Blog.objects.filter(
                 visibility=5, status=1,
-                start_date__lte=today_date).exclude(
-                pk=obj.pk).order_by('-start_date')
+                start_date__lte=today_date).order_by('-start_date')
             if past_jobfairs.exists():
                 obj = past_jobfairs[0]
                 jobfair_type = 'Past'
