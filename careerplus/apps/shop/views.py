@@ -334,8 +334,9 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         return ['shop/detail1.html']
 
     def get_context_data(self, **kwargs):
-        pk = self.kwargs.get('pk')
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
+        
+        pk = self.kwargs.get('pk')
         product = self.product_obj
         ctx['product'] = product
         ctx['num_jobs_url'] = self.get_jobs_url(product)
