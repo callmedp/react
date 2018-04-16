@@ -73,6 +73,7 @@ class CommentModerateView(UpdateView):
                 return self.form_invalid(form)
         return self.form_invalid(form)
 
+
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))
 class CommentModerateListView(ListView, PaginationMixin):
@@ -270,7 +271,7 @@ class ArticleListView(ListView, PaginationMixin):
             "sel_status": self.sel_status,
             "sel_p_cat": self.sel_p_cat,
             "sel_writer": self.sel_writer,
-            "visibility":self.visibility,
+            "visibility": self.visibility,
         })
         return context
 
@@ -372,6 +373,7 @@ class CategoryUpdateView(UpdateView):
                 return self.form_invalid(form)
         return self.form_invalid(form)
 
+
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))
 class CategoryListView(ListView, PaginationMixin):
@@ -402,11 +404,16 @@ class CategoryListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(self.__class__, self).get_queryset()
-        visibility = [3]
+        visibility = []
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(1)
         if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(2)
+        if has_group(user=self.request.user, grp_list=[settings.HR_INSIDER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(3)
+            visibility.append(4)
+            visibility.append(5)
+
         queryset = queryset.filter(visibility__in=visibility)
         
         try:
@@ -532,11 +539,15 @@ class TagListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(self.__class__, self).get_queryset()
-        visibility = [3]
+        visibility = []
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(1)
         if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(2)
+        if has_group(user=self.request.user, grp_list=[settings.HR_INSIDER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(3)
+            visibility.append(4)
+            visibility.append(5)
         queryset = queryset.filter(visibility__in=visibility)
         
         try:
