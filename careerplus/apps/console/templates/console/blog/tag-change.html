@@ -1,5 +1,5 @@
 {% extends "console/base_console.html" %}
-{% load static %}
+{% load static compress %}
 {% load humanize %}
 {% load console_tags %}
 
@@ -9,8 +9,11 @@
 
 {% block css_block %}
   {{ block.super }}
+
+  {% compress css %}
   <!-- Switchery -->
   <link href="{% static 'packages/switchery/dist/switchery.min.css' %}" rel="stylesheet" type="text/css">
+  {% endcompress %}
                 
 {% endblock css_block %}
 
@@ -113,11 +116,14 @@
         
 {% block js_block %}
   {{ block.super }}
+
+  {% compress js %}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
 
   <!-- Switchery -->
   <script type="text/javascript" src="{% static 'packages/switchery/dist/switchery.min.js' %}"></script>
+  {% endcompress %}
 
 
 {% endblock js_block %}

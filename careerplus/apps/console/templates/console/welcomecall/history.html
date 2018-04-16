@@ -1,5 +1,5 @@
 {% extends "console/base_console.html" %}
-{% load static %}
+{% load static compress %}
 {% load humanize %}
 {% load thumbnail %}
 
@@ -225,6 +225,4 @@
         
 {% block js_block %}
   {{ block.super }}
-  <!-- Parsley Validate Scripts -->
-
 {% endblock js_block %}

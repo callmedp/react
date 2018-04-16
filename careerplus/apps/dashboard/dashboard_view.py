@@ -225,7 +225,7 @@ class DashboardDetailView(TemplateView):
                 else:
                     return ''
             except Exception as e:
-                logging.getLogger('error_log').error('Msg=unable to fetch order item %s'%str(e))
+                logging.getLogger('error_log').error('unable to fetch order item %s'%str(e))
                 return ''
             return super(DashboardDetailView, self).get(request, args, **kwargs)
         else:

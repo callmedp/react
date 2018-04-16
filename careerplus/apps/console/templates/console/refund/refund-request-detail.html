@@ -1,5 +1,5 @@
 {% extends "console/base_console.html" %}
-{% load static %}
+{% load static compress %}
 {% load humanize %}
 {% load thumbnail %}
 {% load console_tags %}
@@ -11,6 +11,8 @@
 
 {% block css_block %}
     {{block.super}}
+
+    {% compress css inline %}
     <style>
         ul.parsley-errors-list {
             list-style: none;
@@ -26,6 +28,7 @@
             color: #E74C3C;
         }
     </style>
+    {% endcompress %}
 {% endblock css_block %}
 
 
@@ -339,7 +342,11 @@
         
 {% block js_block %}
   {{ block.super }}
+
+  {% compress js %}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/refund/refund.js' %}"></script>
+  {% endcompress %}
+  
 {% endblock js_block %}
