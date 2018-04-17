@@ -416,11 +416,9 @@
                 },
                 highlight:function(element, errorClass) {
                   $(element).closest('.form-group').addClass('error');
-                  $(element).siblings('.js-error').addClass('error-txt');
                 },
                 unhighlight:function(element, errorClass) {
                   $(element).closest('.form-group').removeClass('error');
-                  $(element).siblings('.js-error').removeClass('error-txt');
                   $(element).siblings('.js-error').html();
                 },
                 errorPlacement: function(error, element){
