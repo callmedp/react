@@ -250,6 +250,7 @@ CKEDITOR_CONFIGS = {
         'width': 'auto',
         # 'removePlugins': 'stylesheetparser',
         # 'extraPlugins': 'codesnippet',
+        # 'extraAllowedContent': 'iframe[*]',
     },
 }
 CKEDITOR_RESTRICT_BY_USER = False

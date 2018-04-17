@@ -86,16 +86,22 @@
                     {% endif %}
 
                     {% if obj.sponsor_img and jobfair_type == 'Upcoming' %}
-                    <img src="{{obj.sponsor_img.url}}" alt="sponsor-img">
+                    <img src="{{obj.sponsor_img.url}}" class="img-fluid" alt="sponsor-img">
                     {% endif %}
                   </div>
               </div>
-
-              <!-- right content start -->
-              <div class="col-sm-4">
-                                        
-              </div>
             </div>
+            <!-- right content start -->
+            <div class="col-sm-4">
+                <div class="widget">
+                    <a class="twitter-timeline" href="https://twitter.com/Shinedotcom?ref_src=twsrc%5Etfw">Tweets by Shinedotcom</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                </div>
+
+                <div class="widget">
+                    <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fshinedotcom&tabs=timeline&width=360&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="360" height="300" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+                </div>
+            </div>
+
           </div>
             
         </section>
