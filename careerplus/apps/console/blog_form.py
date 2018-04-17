@@ -222,6 +222,9 @@ class ArticleChangeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(ArticleChangeForm, self).__init__(*args, **kwargs)
+
+        self.required_field = False  # used in clean methods
+
         visibility = []
         site_type = []
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
@@ -314,6 +317,10 @@ class ArticleChangeForm(forms.ModelForm):
         visibility = int(visibility)
         start_date = self.cleaned_data.get('start_date', None)
         if visibility in [4, 5] and not start_date:
+            if not self.required_field:
+                self.required_field = True
+                messages.add_message(
+                    self.request, messages.ERROR, 'Please fill the required fields.')
             raise forms.ValidationError("Start date is required.")
         return start_date
 
@@ -323,8 +330,16 @@ class ArticleChangeForm(forms.ModelForm):
         start_date = self.cleaned_data.get('start_date', None)
         end_date = self.cleaned_data.get('end_date', None)
         if visibility in [4, 5] and not end_date:
+            if not self.required_field:
+                self.required_field = True
+                messages.add_message(
+                    self.request, messages.ERROR, 'Please fill the required fields.')
             raise forms.ValidationError("end date is required.")
         elif visibility in [4, 5] and start_date and end_date and end_date <= start_date:
+            if not self.required_field:
+                self.required_field = True
+                messages.add_message(
+                    self.request, messages.ERROR, 'Please fill the required fields.')
             raise forms.ValidationError("select end date greater than start date")
         return end_date
 
@@ -333,6 +348,10 @@ class ArticleChangeForm(forms.ModelForm):
         visibility = int(visibility)
         venue = self.cleaned_data.get('venue', '').strip()
         if visibility in [4, 5] and not venue:
+            if not self.required_field:
+                self.required_field = True
+                messages.add_message(
+                    self.request, messages.ERROR, 'Please fill the required fields.')
             raise forms.ValidationError("Venue is required.")
         return venue
 
@@ -341,6 +360,10 @@ class ArticleChangeForm(forms.ModelForm):
         visibility = int(visibility)
         city = self.cleaned_data.get('city', '').strip()
         if visibility in [4, 5] and not city:
+            if not self.required_field:
+                self.required_field = True
+                messages.add_message(
+                    self.request, messages.ERROR, 'Please fill the required fields.')
             raise forms.ValidationError("City is required.")
         return city
 
@@ -349,6 +372,10 @@ class ArticleChangeForm(forms.ModelForm):
         visibility = int(visibility)
         address = self.cleaned_data.get('address', '').strip()
         if visibility in [4, 5] and not address:
+            if not self.required_field:
+                self.required_field = True
+                messages.add_message(
+                    self.request, messages.ERROR, 'Please fill the required fields.')
             raise forms.ValidationError("Address is required.")
         return address
 
