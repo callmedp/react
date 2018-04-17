@@ -26,8 +26,7 @@ def send_sms_paid_order_day1():
         Kindly note that while we endeavor to enhance your career prospects,\
         we do not guarantee any jobs."
         orders = Order.objects.filter(status=1, payment_date__gt=two_days_date).exclude(
-            orderitems__smsorderitemoperation__sms_oi_status=5,
-            orderitems__oi_status=4)
+            orderitems__smsorderitemoperation__sms_oi_status=5)
         for order in orders:
             """ Send sms """
             send_sms_for_base_task.delay(
@@ -46,8 +45,7 @@ def send_sms_paid_order_day2():
         Report any such fake recruiter calls\
         you get in name of Shine.com at 01206158822"
         orders = Order.objects.filter(status=1, orderitems__smsorderitemoperation__sms_oi_status=5).exclude(
-            orderitems__smsorderitemoperation__sms_oi_status=6,
-            orderitems__oi_status=4)
+            orderitems__smsorderitemoperation__sms_oi_status=6)
 
         for order in orders:
             """ Send sms """
