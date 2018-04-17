@@ -3077,16 +3077,26 @@ input.error {
   border-bottom: 1px solid #f74343 !important;
 }
 
-/*.error-txt {
+.error-txt {
   position: absolute;
   font-size: 11px;
   color: #f74343;
   bottom: -20px;
   left: 0;
   font-weight: 400;
-}*/
+}
 
-.error-txt {
+.error {
+  font-size: 11px;
+  color: #f74343;
+  font-weight: 400;
+}
+
+.error input{
+  border-bottom: 1px solid #f74343 !important;
+}
+
+/*.error-txt {
   position: absolute;
   font-size: 11px;
   border: 1px solid #f74343;
@@ -3099,7 +3109,7 @@ input.error {
   border-radius: 100%;
   text-align: center;
   vertical-align: middle;
-}
+}*/
 
 
 /* ---- respnsive css start ---- */
