@@ -77,7 +77,7 @@
                 <div class="form-group arrow">
                   <select class="form-control" name="selection" id="selection">
                     <option selected="selected" value="5133">
-                    GST Pro Certification - Rs.5200</option>
+                    Lean Six Sigma Expert - Rs.35499</option>
                   </select>
                 </div>
                 <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
@@ -416,14 +416,15 @@
                 },
                 highlight:function(element, errorClass) {
                   $(element).closest('.form-group').addClass('error');
-                  $(element).siblings('.js-error').addClass('error-txt'); 
+                  $(element).siblings('.js-error').addClass('error-txt');
                 },
                 unhighlight:function(element, errorClass) {
                   $(element).closest('.form-group').removeClass('error');
-                  $(element).siblings('.js-error').removeClass('error-txt');    
+                  $(element).siblings('.js-error').removeClass('error-txt');
+                  $(element).siblings('.js-error').html();
                 },
                 errorPlacement: function(error, element){
-                  $(element).siblings('.error-txt').html(error.text());
+                  $(element).siblings('.js-error').html(error.text());
                 } 
             });
         </script>
