@@ -62,15 +62,17 @@
                 action="{% url "crmapi:lead-management" %}"> {% csrf_token %}
                 <strong>Let’s get started</strong>
                 <div class="form-group">
-                  <input type="text" class="form-control error" id="name" name="name" 
+                  <input type="text" class="form-control" id="name" name="name" 
                   placeholder="Your Full Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}">
-                  <label type="button" class="error-txt" data-toggle="tooltip" data-placement="bottom" title="Type your name here">i</label>
+                  <label class="error-txt js-error"></label>
                 </div>
                 <div class="form-group">
                   <input type="text" class="form-control" id="email" placeholder="Email Address" name="email" value="{{request.session.email}}">
+                  <label class="error-txt js-error"></label>
                 </div>
                 <div class="form-group">
                   <input type="text" class="form-control" id="mobile" placeholder="Mobile Number" name="number">
+                  <label class="error-txt js-error"></label>
                 </div>
                 <div class="form-group arrow">
                   <select class="form-control" name="selection" id="selection">
@@ -411,7 +413,18 @@
                     //     maxlength:"No more than 500 characters."
 
                     // }
-                }
+                },
+                highlight:function(element, errorClass) {
+                  $(element).closest('.form-group').addClass('error');
+                  $(element).siblings('.js-error').addClass('error-txt'); 
+                },
+                unhighlight:function(element, errorClass) {
+                  $(element).closest('.form-group').removeClass('error');
+                  $(element).siblings('.js-error').removeClass('error-txt');    
+                },
+                errorPlacement: function(error, element){
+                  $(element).siblings('.error-txt').html(error.text());
+                } 
             });
         </script>
         <!-- Facebook Pixel Code -->
