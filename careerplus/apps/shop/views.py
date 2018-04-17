@@ -309,7 +309,7 @@ class ProductInformationMixin(object):
                 'prd_rv_page': page
             }
 
-    def get_product_detail_context(self, product, sqs):
+    def get_product_detail_context(self, product, sqs, product_main, sqs_main):
         pk = product.pk
         ctx = {}
 
@@ -331,7 +331,7 @@ class ProductInformationMixin(object):
             'initial_country': initial_country,
         })
         if sqs.pPc == 'course':
-            ctx.update(json.loads(sqs.pPOP))
+            ctx.update(json.loads(sqs_main.pPOP))
             pvrs_data = json.loads(sqs.pVrs)
             try:
                 selected_var = pvrs_data['var_list'][0]
@@ -342,7 +342,7 @@ class ProductInformationMixin(object):
             ctx['canonical_url'] = product.get_canonical_url()
         else:
             if ctx.get('prd_exp', None) in ['EP', 'FP']:
-                pPOP = json.loads(sqs.pPOP)
+                pPOP = json.loads(sqs_main.pPOP)
                 pid = None
                 for pop in pPOP.get('pop_list'):
                     if pop.get('experience', '') == 'FR' and ctx.get('prd_exp', None) == 'FP':
@@ -363,7 +363,7 @@ class ProductInformationMixin(object):
                         "%(msg)s : %(err)s" % {'msg': 'Canonical Url ERROR', 'err': e})
             else:
                 ctx['canonical_url'] = product.get_canonical_url()
-            ctx.update(json.loads(sqs.pPOP))
+            ctx.update(json.loads(sqs_main.pPOP))
             pvrs_data = json.loads(sqs.pVrs)
             ctx.update(pvrs_data)
         if self.is_combos(sqs):
@@ -423,6 +423,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     def get_context_data(self, **kwargs):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
         product_data = self.get_product_detail_context(
+            self.product_obj, self.sqs,
             self.product_obj, self.sqs)
 
         product_detail_content = render_to_string(
@@ -731,43 +732,65 @@ class CourseCatalogueView(TemplateView, MetadataMixin, CourseCatalogueMixin):
         return context
 
 
-class ProductDetailAjaxView(View, ):
+class ProductDetailContent(View, ProductInformationMixin, CartMixin):
 
     def __init__(self):
         
-        self.sqs = None
-        self.product = None
+        self.sqs_obj = None
+        self.sqs_main = None
+        self.product_obj = None
+        self.product_main = None
 
     def get(self, request, *args, **kwargs):
+        data = {'status': 0}
         if request.is_ajax():
-            self.pk = self.request.GET.get('pk', None)
-            
+            self.main_pk = self.request.GET.get('main_pk', None)
+            self.obj_pk = self.request.GET.get('obj_pk', None)
+
             try:
-                self.blog = Blog.objects.get(slug=self.slug, status=1, visibility=1)
-                main_objs = Blog.objects.filter(slug=self.blog.slug, status=1, visibility=1)
-
-                article_list = Blog.objects.filter(p_cat=self.blog.p_cat, status=1, visibility=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[self.blog.p_cat], status=1).order_by('-publish_date')
-                article_list = article_list.exclude(slug=self.blog.slug)
-                article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
-
-                object_list = list(main_objs) + list(article_list)
-
-                page_obj = self.scrollPagination(
-                    paginated_by=self.paginated_by, page=self.page,
-                    object_list=object_list)
-
-                detail_article = render_to_string('include/detail-article-list.html',
-                    {"page_obj": page_obj,
-                    "slug": self.blog.slug,
-                    "SITEDOMAIN": settings.SITE_DOMAIN, })
-
-                data = {
-                    'article_detail': detail_article,
-                    'url': page_obj.object_list[0].get_absolute_url(),
-                    'title': page_obj.object_list[0].display_name,
-                }
-
-                return HttpResponse(json.dumps(data), content_type="application/json")
+                self.product_obj = Product.browsable.get(pk=self.obj_pk)
             except:
-                pass
+                logging.getLogger('error_log').error(
+                    "Product is not browsable:product-id {}".format(
+                        self.obj_pk))
+
+            try:
+                self.product_main = Product.browsable.get(pk=self.main_pk)
+            except:
+                logging.getLogger('error_log').error(
+                    "Main Product is not browsable:product-id {}".format(
+                        self.main_pk))
+
+            try:
+                sqs = SearchQuerySet().filter(id=self.obj_pk)
+                self.sqs_obj = sqs[0]
+            except:
+                logging.getLogger('error_log').error(
+                    "SQS query error on product detail.ID :{}".format(
+                        self.obj_pk))
+
+            try:
+                sqs = SearchQuerySet().filter(id=self.main_pk)
+                self.sqs_main = sqs[0]
+            except:
+                logging.getLogger('error_log').error(
+                    "SQS query error on product detail.ID :{}".format(
+                        self.main_pk))
+
+            if self.sqs_obj and self.sqs_main and self.product_obj and self.product_main:
+                product_data = self.get_product_detail_context(
+                    self.product_obj, self.sqs_obj,
+                    self.product_main, self.sqs_main)
+
+                product_detail_content = render_to_string(
+                    'shop/product-detail.html', product_data)
+
+                data.update({
+                    'status': 1,
+                    'url': self.product_obj.get_absolute_url(),
+                    'detail_content': product_detail_content,
+                    'title': self.product_obj.get_name,
+                })
+
+            return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()

@@ -45,10 +45,36 @@ $(document).ready(function () {
       }
     };
 
+
+    $(document).on("click", ".other-product", function() {
+      var data_pk = $(this).attr('data-id');
+      var main_pk = $(this).attr('main-id');
+
+      data = "?main_pk="+ main_pk + "&obj_pk=" + data_pk;
+      $.ajax({
+        url: "/shop/product/content-by-ajax/" + data,
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+          $("#load_more").remove();
+          var dynamicDiv = $('<div/>',{'class' : 'cls_ajax_article','html' : data.article_detail,'data-url':data.url,'data-title':data.title});
+          $('#related-container').append(dynamicDiv);
+          ajaxCalled = false;
+        },
+        failure: function(response){}
+      });
+
+      console.log(data_pk);
+      console.log(main_pk);
+
+    });
+
+
     $(document).on("click", ".review-load-more", function() {
    
            LoadMoreProductReview($(this).attr('data-product'));
       });
+
     
     $.validator.addMethod("indiaMobile", function(value, element) {
         var country_code = $("input[name=country_code]").val(); //$('#call_back_country_code-id').val();
