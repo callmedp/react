@@ -35,7 +35,7 @@ def send_sms_paid_order_day1():
             logging.getLogger("info_log").info("Paid order day 1 sms sent for {}".format(order.id))
         logging.getLogger("info_log").info("Paid order day 1 sms cron run succesfully")
     except Exception as e:
-        logging.getLogger('error_log').error_log("{}".format(e))
+        logging.getLogger('error_log').error("{}".format(e))
 
 
 def send_sms_paid_order_day2():
@@ -54,12 +54,12 @@ def send_sms_paid_order_day2():
             orderitems = order.orderitems.filter(smsorderitemoperation__sms_oi_status=5)
             if orderitems:
                 oi = orderitems[0]
-                sms_op = oi.smsorderitemoperation.filter(sms_oi_status=5)
-                if sms_op.created > one_day_date:
+                sms_op = oi.smsorderitemoperation_set.filter(sms_oi_status=5, created__lt=one_day_date)
+                if sms_op:
                     send_sms_for_base_task.delay(
                         mob=order.mobile, message=message2,
                         oi=order.pk, status=6)
                     logging.getLogger("info_log").info("Paid order day 2 sms sent for {}".format(order.id))
         logging.getLogger("info_log").info("Paid order day 2 sms cron run succesfully")
     except Exception as e:
-        logging.getLogger('error_log').error_log("{}".format(e))
+        logging.getLogger('error_log').error("{}".format(e))
