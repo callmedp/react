@@ -182,12 +182,16 @@
                             <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
                         </th>
                     {% endif %}
+                    <!--
                     <th class="column-title">#Id</th>
+                    -->
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
+                    <!--
                     <th class="column-title">Item Name</th>
+                    -->
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">Midout sent on</th>
                     <th class="column-title">How Old</th>
@@ -204,11 +208,14 @@
                               <input autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
                             </td>
                       {% endif %}
+                      <!--
                       <td>{{obj.pk}}</td>
-                      <td>{{obj.order.number}}</td>
-                      <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
-                      <td>{{obj.order.email}}</td>
-                      <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
+                      -->
+                      <td>{{obj.number}}</td>
+                      <td>{{obj.first_name}} {{obj.last_name}}</td>
+                      <td>{{obj.email}}</td>
+                      <td>{{obj.country_code}} {{obj.mobile}}</td>
+                      <!--
                       <td>
                             {% if obj.parent and obj.is_variation %}
                               <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
@@ -227,13 +234,14 @@
                                 <strong>Duration:</strong> {{obj.product.get_duration_db}}
                             {% endif %}
                       </td>
-                      <td>{{obj.order.payment_date}}</td>
-                      <td>{{obj.order.midout_sent_on}}</td>
+                      -->
+                      <td>{{obj.payment_date}}</td>
+                      <td>{{obj.midout_sent_on}}</td>
                       <td>
                           {{obj.modified|naturaltime}}</br>
                           <b>Updated On: {{obj.modified}}</b>
                       </td>
-                      <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
+                      <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
                       <td>
                         <form autocomplete="off" data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="resume-upload-form">{% csrf_token %}
                           {{form.oi_resume}}
