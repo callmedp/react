@@ -419,7 +419,7 @@
                 },
                 unhighlight:function(element, errorClass) {
                   $(element).closest('.form-group').removeClass('error');
-                  $(element).siblings('.js-error').html();
+                  $(element).siblings('.js-error').html("");
                 },
                 errorPlacement: function(error, element){
                   $(element).siblings('.js-error').html(error.text());
