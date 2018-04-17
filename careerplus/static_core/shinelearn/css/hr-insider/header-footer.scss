@@ -1,6 +1,9 @@
 @import "bootstrap/functions";
 @import "bootstrap/mixins";
 @import "bootstrap/variables";
+@import "bootstrap/forms";
+@import "bootstrap/input-group";
+@import "bootstrap/utilities/spacing";
 
 
 a {
@@ -30,15 +33,19 @@ figure {
 }
 
 .ml-20 {
-	margin-left: 20px;
+	margin-left: ($spacer * 1.25);
 }
 
 .mt-20 {
-	margin-top: 20px;
+	margin-top: ($spacer * 1.25);
 }
 
 .mt-30 {
-	margin-top: 30px;
+	margin-top: ($spacer * 1.875);
+}
+
+.mt-25 {
+	margin-top: ($spacer * 1.563);
 }
 
 .mt-20-less {
