@@ -217,7 +217,7 @@ class HrConclaveLandingView(TemplateView):
 
         speakers = []
         if obj:
-            speakers = obj.speakers.all()[: 5]
+            speakers = obj.speakers.filter(is_active=True)[: 5]
         past_speakers = Author.objects.prefetch_related('speakers').filter(
             is_active=True, speakers__status=1,
             speakers__visibility=4).annotate(
@@ -302,7 +302,7 @@ class HrConclaveDetailView(DetailView):
 
         speakers = []
         if obj:
-            speakers = obj.speakers.all()[: 5]
+            speakers = obj.speakers.filter(is_active=True)[: 5]
 
         past_speakers = Author.objects.prefetch_related('speakers').filter(
             is_active=True, speakers__status=1,
