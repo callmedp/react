@@ -32,13 +32,15 @@ def send_sms_paid_order_day1():
             send_sms_for_base_task.delay(
                 mob=order.mobile, message=message1,
                 oi=order.pk, status=5)
-        logging.getLogger("info_log").info("cron run succesfully")
+            logging.getLogger("info_log").info("Paid order day 1 sms sent for {}".format(order.id))
+        logging.getLogger("info_log").info("Paid order day 1 sms cron run succesfully")
     except Exception as e:
         logging.getLogger('error_log').error_log("{}".format(e))
 
 
 def send_sms_paid_order_day2():
     """ send sms cron for paid order """
+    one_day_date = timezone.now() - datetime.timedelta(days=1)
     try:
         message2 = "Shine.com does not offer cash back or\
         refund for its services through PayTM or any other channel.\
@@ -49,9 +51,15 @@ def send_sms_paid_order_day2():
 
         for order in orders:
             """ Send sms """
-            send_sms_for_base_task.delay(
-                mob=order.mobile, message=message2,
-                oi=order.pk, status=6)
-        logging.getLogger("info_log").info("cron run succesfully")
+            orderitems = order.orderitems.filter(smsorderitemoperation__sms_oi_status=5)
+            if orderitems:
+                oi = orderitems[0]
+                sms_op = oi.smsorderitemoperation.filter(sms_oi_status=5)
+                if sms_op.created > one_day_date:
+                    send_sms_for_base_task.delay(
+                        mob=order.mobile, message=message2,
+                        oi=order.pk, status=6)
+                    logging.getLogger("info_log").info("Paid order day 2 sms sent for {}".format(order.id))
+        logging.getLogger("info_log").info("Paid order day 2 sms cron run succesfully")
     except Exception as e:
         logging.getLogger('error_log').error_log("{}".format(e))
