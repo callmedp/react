@@ -74,10 +74,10 @@
                   <input type="text" class="form-control" id="mobile" placeholder="Mobile Number" name="number">
                   <label class="error-txt js-error"></label>
                 </div>
-                <div class="form-group arrow">
+                <div class="form-group arrow" style="display:none;">
                   <select class="form-control" name="selection" id="selection">
                     <option selected="selected" value="5133">
-                    Lean Six Sigma Expert - Rs.35499</option>
+                    Lean Six Sigma Expert-Rs.35499</option>
                   </select>
                 </div>
                 <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
@@ -93,7 +93,7 @@
                   <a href="/tnc">Terms & Conditions</a>
                 </div>
                 <button type="submit" class="btn btn-default" 
-                  onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enquiry Now</button>
+                  onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enroll Now</button>
                 <p>Apply Coupon code on next page.<br>
                   *Easy EMI option available</p>
               </form>
