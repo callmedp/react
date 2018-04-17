@@ -219,7 +219,7 @@ class HrConclaveLandingView(TemplateView):
         if obj:
             speakers = obj.speakers.all()[: 5]
         past_speakers = Author.objects.prefetch_related('speakers').filter(
-            visibility=4, is_active=True, speakers__status=1,
+            is_active=True, speakers__status=1,
             speakers__visibility=4).annotate(
             count=Count('speakers')).order_by('-count')
 
