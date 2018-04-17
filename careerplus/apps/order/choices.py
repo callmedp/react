@@ -266,6 +266,8 @@ OI_SMS_STATUS = (
     (3, 'Sent Resume Auto Closer Sms'),
     # this closer sms for flow 2,6 and 10.
     (4, 'Sent Closer Sms'),
+    (5, 'Sent Sms For Paid Order day1'),
+    (6, 'Sent Sms For Paid Order day2'),
 
     # flow1 :21 - 40
     (21, 'Sent Flow1 Pending Resume Sms'),
@@ -335,7 +337,7 @@ OI_SMS_STATUS = (
     # flow6 :171 - 180
     (171, 'Sent Flow6 Process Sms'),
     (172, 'Sent Flow6 Service Initiation Sms'),
-)  
+)
 
 REFUND_MODE = (
     ('select', 'Select Refund Mode'),
