@@ -3,10 +3,12 @@ import logging
 
 # import django module
 from django.core.management.base import BaseCommand
+from django.utils import timezone
+import datetime
 
 # import apps module
 from emailers.tasks import send_sms_for_base_task
-from order.models import Order, OrderItem
+from order.models import Order
 
 
 class Command(BaseCommand):
@@ -16,20 +18,21 @@ class Command(BaseCommand):
 
 
 def send_sms_paid_order_day1():
+    two_days_date = timezone.now() - datetime.timedelta(days=2)
     """ send sms cron for paid order """
     try:
         message1 = "Thank you for becoming a valued\
         ShineLearning.com customer.\
         Kindly note that while we endeavor to enhance your career prospects,\
         we do not guarantee any jobs."
-        ois = Order.objects.filter(status=1).exclude(
+        orders = Order.objects.filter(status=1, payment_date__gt=two_days_date).exclude(
             orderitems__smsorderitemoperation__sms_oi_status=5,
             orderitems__oi_status=4)
-        for oi in ois:
+        for order in orders:
             """ Send sms """
             send_sms_for_base_task.delay(
-                mob=oi.mobile, message=message1,
-                oi=oi.pk, status=5)
+                mob=order.mobile, message=message1,
+                oi=order.pk, status=5)
         logging.getLogger("info_log").info("cron run succesfully")
     except Exception as e:
         logging.getLogger('error_log').error_log("{}".format(e))
@@ -42,15 +45,15 @@ def send_sms_paid_order_day2():
         refund for its services through PayTM or any other channel.\
         Report any such fake recruiter calls\
         you get in name of Shine.com at 01206158822"
-        ois = Order.objects.filter(status=1).exclude(
+        orders = Order.objects.filter(status=1, orderitems__smsorderitemoperation__sms_oi_status=5).exclude(
             orderitems__smsorderitemoperation__sms_oi_status=6,
             orderitems__oi_status=4)
 
-        for oi in ois:
+        for order in orders:
             """ Send sms """
             send_sms_for_base_task.delay(
-                mob=oi.mobile, message=message2,
-                oi=oi.pk, status=6)
+                mob=order.mobile, message=message2,
+                oi=order.pk, status=6)
         logging.getLogger("info_log").info("cron run succesfully")
     except Exception as e:
         logging.getLogger('error_log').error_log("{}".format(e))
