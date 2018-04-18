@@ -266,7 +266,7 @@ class ListModerationScreenFaqView(ListView, PaginationMixin):
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
         return super(ListModerationScreenFaqView, self).get(request, args, **kwargs)
 
     def get_queryset(self):

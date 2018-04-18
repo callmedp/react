@@ -35,7 +35,7 @@ class WalletRedeemView(APIView, CartMixin):
         cart_obj = None
         cart_pk = request.session.get('cart_pk')
         try:
-            cart_obj = Cart.objects.get(pk=cart_pk)
+            cart_obj = Cart.objects.select_related('coupon').get(pk=cart_pk)
         except Cart.DoesNotExist:
             return Response(
                 {'success': 0,

@@ -1,4 +1,5 @@
 import logging
+from django.db.models import F
 
 from django.views.generic import FormView, ListView, UpdateView
 from django.contrib import messages
@@ -109,20 +110,21 @@ class CommentModerateListView(ListView, PaginationMixin):
             comment_list = request.POST.getlist('table_records', [])
             action_type = int(request.POST.get('action_type', '0'))
             comment_objs = Comment.objects.filter(id__in=comment_list)
+
+            blg_list=comment_objs.values_list('blog__id',flat=True)
+
+
+
+
             if action_type == 0:
                 messages.add_message(request, messages.ERROR, 'Please select valid action first')
             elif action_type == 1:
-                for obj in comment_objs:
-                    obj.is_published = True
-                    obj.save()
-                    blog = obj.blog
-                    blog.comment_moderated += 1
-                    blog.save()
+                comment_objs.update(is_published=True)
+                Blog.objects.filter(id__in=blg_list).update(comment_moderated=F('comment_moderated') + 1)
+
                 messages.add_message(request, messages.SUCCESS, str(len(comment_list)) + ' Comments are published.')
             elif action_type == 2:
-                for obj in comment_objs:
-                    obj.is_removed = True
-                    obj.save()
+                comment_objs.update(is_removed=True)
                 messages.add_message(request, messages.SUCCESS, str(len(comment_list)) + ' Comments removed.')
         except Exception as e:
             messages.add_message(request, messages.ERROR, str(e))
@@ -244,7 +246,7 @@ class ArticleListView(ListView, PaginationMixin):
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
         self.sel_status = int(request.GET.get('status', '-1'))
         self.sel_p_cat = request.GET.get('p_cat', '')
         self.sel_writer = request.GET.get('author', '')

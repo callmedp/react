@@ -163,10 +163,12 @@ class WelcomeQueueView(ListView, PaginationMixin):
             status=1, welcome_call_done=False)
         try:
             if self.query:
+
                 queryset = queryset.filter(
                     Q(number=self.query) |
                     Q(email=self.query) |
                     Q(mobile=self.query))
+
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
             pass
@@ -424,7 +426,8 @@ class WelcomeServiceIssueView(ListView, PaginationMixin):
                     Q(number=self.query) |
                     Q(email=self.query) |
                     Q(mobile=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             pass
 
         try:
@@ -521,7 +524,8 @@ class WelcomeCallDoneView(ListView, PaginationMixin):
                     Q(number=self.query) |
                     Q(email=self.query) |
                     Q(mobile=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             pass
 
         try:
