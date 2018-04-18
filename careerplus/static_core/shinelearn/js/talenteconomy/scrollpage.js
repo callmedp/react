@@ -12,7 +12,9 @@ var showTalentpageOnScroll = (function(){
         };
 
         $(window).scroll(function() {
-            if ($(window).scrollTop() > $('#id_ajax_talentpage').offset().top - ajaxOffSetDistance) {
+            var position = $(window).scrollTop();
+            var bottom = $(document).height() - $(window).height();
+            if (position == bottom) {
                makeAjax();
             };
          });
