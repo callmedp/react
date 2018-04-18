@@ -2,6 +2,8 @@ import logging
 from celery.decorators import task
 from django.conf import settings
 from emailers.email import SendMail
+from emailers.sms import SendSMS
+from order.models import Order
 
 
 @task(name="send_email_task")
@@ -35,3 +37,19 @@ def send_email_for_base_task(subject=None, body=None, to=[], headers=None, oi=No
     except Exception as e:
         logging.getLogger('error_log').error(
             "emailing from base task failed%s - %s" % (str(to), str(e)))
+
+
+@task(name="send_sms_for_base_task")
+def send_sms_for_base_task(mob=None, message=None, oi=None, status=None):
+    try:
+        SendSMS().base_send_sms(mob, message)
+        if oi:
+            obj = Order.objects.get(pk=oi)
+            oi_objs = obj.orderitems.all()
+            for oi in oi_objs:
+                oi.smsorderitemoperation_set.create(
+                    sms_oi_status=status,
+                    to_mobile=mob, status=1)
+    except Exception as e:
+        logging.getLogger('error_log').error(
+            "sms from base task failed%s - %s" % (str(mob), str(e)))

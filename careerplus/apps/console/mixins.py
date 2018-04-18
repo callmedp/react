@@ -13,6 +13,7 @@ from emailers.sms import SendSMS
 from order.models import OrderItem
 from linkedin.models import Draft, Organization, Education
 from quizs.models import QuizResponse
+from django.core.files.uploadedfile import UploadedFile
 
 
 class ActionUserMixin(object):
@@ -271,6 +272,7 @@ class ActionUserMixin(object):
                 file_name = 'resumeupload_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(int(random()*9999)) \
                     + '_' + timezone.now().strftime('%Y%m%d') + extention
                 full_path = '%s/' % str(order.pk)
+                oi_resume = UploadedFile(oi_resume)
                 if not settings.IS_GCP:
                     if not os.path.exists(settings.RESUME_DIR + full_path):
                         os.makedirs(settings.RESUME_DIR + full_path)

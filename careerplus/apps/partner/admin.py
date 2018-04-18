@@ -19,13 +19,19 @@ class VendorAdmin(admin.ModelAdmin):
 
 
 class CeritficateAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'skill')
+    list_display = ('id', 'name', 'skill', "vendor_provider")
     model = models.Certificate
 
 
 class UserCertificateAdmin(admin.ModelAdmin):
-    list_display = ('id', 'year', 'candidate_email', 'candidate_mobile')
+    list_display = (
+        'id', 'year', 'candidate_email',
+        'candidate_mobile', 'certificate', "get_vendor")
     model = models.UserCertificate
+
+    def get_vendor(self, obj):
+        return obj.certificate.vendor_provider
+    get_vendor.short_description = 'Vendor'
 
 
 admin.site.register(models.Vendor, VendorAdmin)
