@@ -70,19 +70,27 @@
 
 
       <!-- Recenty added -->
-      {% if  article_list %}
       <section class="listing-box">
         <div class="row">
-        <h1 class="primary-heading col-md-8">Recenty added</h1>
+        <h1 class="primary-heading col-md-8">
+          {% if search %}
+            Search Result for '{{search}}'
+          {% else %}
+            Recenty added
+          {% endif %}
+        </h1>
         <div class="col-md-4">
-            <div class="input-group mt-25">
-              <input type="text" class="form-control" placeholder="Search here..." aria-describedby="basic-addon2">
-              <div class="input-group-append">
-                <span class="input-group-text">Search</span>
+            <form id="id-search-form" autocomplete="off" action="." method="GET">
+              <div class="input-group mt-25">
+                <input type="text" maxlength="255" class="form-control" name="search" placeholder="Search here..." aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                  <button type="submit" class="input-group-text">Search</button>
+                </div>
               </div>
-            </div>
+            </form>
         </div>
       </div><!-- /. row -->
+
         <div class="row">
           
           {% for articleItem in article_list %}
@@ -118,7 +126,6 @@
           {% endfor %}
         </div>
       </section><!-- /. Recenty added -->
-      {% endif %}
 
       <!-- Contributors and Speakers -->
       {% if authors %} 
@@ -127,5 +134,15 @@
 
 
     {% endblock container %}
+
+    {% block js_section %}
+    {{ block.super }}
+    {% compress js %}
+    <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+
+    <!--script src="{% static "shinelearn/js/hrinsider/article.js" %}"></script-->
+    {% endcompress %}
+
+{% endblock js_section %}
 
     

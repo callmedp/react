@@ -422,7 +422,7 @@ class CategoryListView(ListView, PaginationMixin):
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
-        return queryset
+        return queryset.order_by('-last_modified_on')
 
 
 @Decorate(stop_browser_cache())
@@ -556,7 +556,7 @@ class TagListView(ListView, PaginationMixin):
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
-        return queryset
+        return queryset.order_by('-last_modified_on')
 
 
 @Decorate(stop_browser_cache())

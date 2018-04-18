@@ -395,7 +395,7 @@ class TagAddForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(TagAddForm, self).__init__(*args, **kwargs)
-        visibility = [3]
+        visibility = []
         site_type = []
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(1)
@@ -403,6 +403,15 @@ class TagAddForm(forms.ModelForm):
         if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(2)
             site_type.append((2, "TalentEconomy"))
+        if has_group(user=self.request.user, grp_list=[settings.HR_INSIDER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(3)
+            visibility.append(4)
+            visibility.append(5)
+            site_type.append((3, "HR Blogger"))
+            site_type.append((4, 'HR-Conclave'))
+            site_type.append((5, 'HR-Jobfair'))
+
+        self.fields['visibility'].choices = site_type
 
         self.fields['visibility'].choices = site_type
         
@@ -455,7 +464,7 @@ class TagChangeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(TagChangeForm, self).__init__(*args, **kwargs)
-        visibility = [3]
+        visibility = []
         site_type = []
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(1)
@@ -463,8 +472,16 @@ class TagChangeForm(forms.ModelForm):
         if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(2)
             site_type.append((2, "TalentEconomy"))
+        if has_group(user=self.request.user, grp_list=[settings.HR_INSIDER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(3)
+            visibility.append(4)
+            visibility.append(5)
+            site_type.append((3, "HR Blogger"))
+            site_type.append((4, 'HR-Conclave'))
+            site_type.append((5, 'HR-Jobfair'))
+
         self.fields['visibility'].choices = site_type
-        
+
         self.fields['slug'].required = False
         self.fields['slug'].widget.attrs['readonly'] = True
 

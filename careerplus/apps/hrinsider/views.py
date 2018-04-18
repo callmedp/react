@@ -27,11 +27,10 @@ class HRLandingView(TemplateView, BlogMixin):
     template_name = "hrinsider/hrindex.html"
 
     def __init__(self):
-        self.page = 1
-        self.paginated_by = 1
+        self.search = ''
 
     def get(self, request, *args, **kwargs):
-        self.page = self.request.GET.get('page', 1)
+        self.search = request.GET.get('search', '').strip()
         context = super(self.__class__, self).get(request, args, **kwargs)
         return context
 
@@ -45,18 +44,30 @@ class HRLandingView(TemplateView, BlogMixin):
                 status=1, visibility=3).select_related('p_cat', 'author').order_by('-no_views')
             context.update({'list': True})
         else:
-            article_list = Blog.objects.filter(
-                status=1, visibility=3).select_related('p_cat', 'author').order_by('-publish_date')[:10]
+            if self.search:
+                article_list = Blog.objects.filter(
+                    name__icontains=self.search,
+                    status=1,
+                    visibility=3).select_related(
+                    'p_cat', 'author').order_by('-no_views')[:48]
+                context.update({
+                    'search': self.search})
+            else:
+                article_list = Blog.objects.filter(
+                    status=1,
+                    visibility=3).select_related(
+                    'p_cat', 'author').order_by('-publish_date')[:15]
 
         top_article_list = Blog.objects.filter(
-            status=1, visibility=3).select_related('p_cat', 'author')[:9]
+            status=1, visibility=3).select_related(
+                'p_cat', 'author').order_by('-score')[:9]
 
         authors = Author.objects.filter(
             is_active=True,
             blog__visibility=3,
             blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
         author_list = zip_longest(*[iter(authors)] * 6, fillvalue=None)
-        
+
         context.update({
             'top_article_list': [top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
             'categories': categories,
