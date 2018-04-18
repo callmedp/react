@@ -52,6 +52,13 @@ class HRLandingView(TemplateView, BlogMixin):
                     'p_cat', 'author').order_by('-no_views')[:48]
                 context.update({
                     'search': self.search})
+                if not article_list.exists():
+                    article_list = Blog.objects.filter(
+                        status=1,
+                        visibility=3).select_related(
+                        'p_cat', 'author').order_by('-publish_date')[:15]
+                    context.update({
+                        "no_results": True})
             else:
                 article_list = Blog.objects.filter(
                     status=1,

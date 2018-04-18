@@ -80,17 +80,23 @@
           {% endif %}
         </h1>
         <div class="col-md-4">
-            <form id="id-search-form" autocomplete="off" action="." method="GET">
-              <div class="input-group mt-25">
-                <input type="text" maxlength="255" class="form-control" name="search" placeholder="Search here..." aria-describedby="basic-addon2">
-                <div class="input-group-append">
-                  <button type="submit" class="input-group-text">Search</button>
-                </div>
+          <form id="id-search-form" autocomplete="off" action="." method="GET">
+            <div class="input-group mt-25">
+              <input type="text" maxlength="255" class="form-control" name="search" placeholder="Search here..." aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <button type="submit" class="input-group-text">Search</button>
               </div>
-            </form>
+            </div>
+          </form>
         </div>
       </div><!-- /. row -->
-
+      <div class="row">
+        <div class="col-md-8">
+          {% if no_results %}
+            <span style="font-size:17px; color:#333; margin-bottom:25px; display: block;">No articles found. Have a look at our most recent articles.</span>
+          {% endif %}
+        </div>
+      </div>
         <div class="row">
           
           {% for articleItem in article_list %}
