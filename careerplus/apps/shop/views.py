@@ -1,9 +1,12 @@
 import json
 import logging
+
 from collections import OrderedDict
 from decimal import Decimal
+
 from django.core.paginator import Paginator
-from django.http import (Http404,
+from django.http import (
+    Http404,
     HttpResponse,
     HttpResponseForbidden,
     HttpResponsePermanentRedirect,
@@ -393,6 +396,8 @@ class ProductInformationMixin(object):
         ctx['amp'] = self.request.amp
         ctx['widget_objs'] = widget_objs
         ctx['widget_obj'] = widget_obj
+        ctx['product_main'] = product_main,
+        ctx['sqs_main'] = sqs_main
         return ctx
 
 
@@ -432,8 +437,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx.update({
             'product_detail': product_detail_content
         })
-
-
 
         # pk = self.kwargs.get('pk')
         # product = self.product_obj
