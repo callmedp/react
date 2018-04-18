@@ -207,7 +207,7 @@ class DownloadBoosterResume(View):
             token = request.GET.get('token', '')
             email, oi_pk, valid = TokenExpiry().decode(token)
             if valid:
-                oi = OrderItem.objects.search_related('order').get(pk=oi_pk)
+                oi = OrderItem.objects.select_related('order').get(pk=oi_pk)
                 if oi.oi_draft:
                     resume = oi.oi_draft
                 elif oi.oi_resume:
