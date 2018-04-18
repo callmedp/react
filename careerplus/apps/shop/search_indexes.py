@@ -168,33 +168,34 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             return [cat.name for cat in categories_list]
         
     def prepare_pFA(self, obj):
-        if obj.is_course:    
-            categories = obj.categories.filter(
-                productcategories__active=True,
-                active=True)
-            if len(categories) > 0:
-                if categories[0].type_level == 4:
-                    categories = categories[0].get_parent()
-            if len(categories) > 0:
-                p_category = [pcat for cat in categories for pcat in cat.get_parent()]
-                # pp_category = [pcat for cat in p_category for pcat in cat.get_parent()]
-                parents = [p_category,]
-                return [item.pk for sublist in parents for item in sublist if sublist]
+        # if obj.is_course:
+        categories = obj.categories.filter(
+            productcategories__active=True,
+            active=True)
+        if len(categories) > 0:
+            if categories[0].type_level == 4:
+                categories = categories[0].get_parent()
+
+        if len(categories) > 0:
+            p_category = [pcat for cat in categories for pcat in cat.get_parent()]
+            # pp_category = [pcat for cat in p_category for pcat in cat.get_parent()]
+            parents = [p_category,]
+            return [item.pk for sublist in parents for item in sublist if sublist]
         return []
 
     def prepare_pFAn(self, obj):
-        if obj.is_course:    
-            categories = obj.categories.filter(
-                productcategories__active=True,
-                active=True)
-            if len(categories) > 0:
-                if categories[0].type_level == 4:
-                    categories = categories[0].get_parent()
-            if len(categories) > 0:
-                p_category = [pcat for cat in categories for pcat in cat.get_parent()]
-                # pp_category = [pcat for cat in p_category for pcat in cat.get_parent()]
-                parents = [p_category,]
-                return [item.name for sublist in parents for item in sublist if sublist]
+        # if obj.is_course:
+        categories = obj.categories.filter(
+            productcategories__active=True,
+            active=True)
+        if len(categories) > 0:
+            if categories[0].type_level == 4:
+                categories = categories[0].get_parent()
+        if len(categories) > 0:
+            p_category = [pcat for cat in categories for pcat in cat.get_parent()]
+            # pp_category = [pcat for cat in p_category for pcat in cat.get_parent()]
+            parents = [p_category,]
+            return [item.name for sublist in parents for item in sublist if sublist]
         return []
 
     def prepare_pCC(self, obj):
