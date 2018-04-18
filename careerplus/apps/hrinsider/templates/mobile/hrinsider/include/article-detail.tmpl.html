@@ -20,14 +20,16 @@
 </ul>
 </div><!-- /.Follow -->
 
-{% comment %}
-<div class="tagging mt-30 mb-30">
-  <p>Tagged in</p>
-  <a href="#">CIVILSERVICES</a>
-  <a href="#">UPSC</a>
-  <a href="#">Government News</a>
-</div>
-{% endcomment %}
+{% with main_article.tags.all as tags %}
+{% if tags %}
+  <div class="tagging mt-30 mb-30">
+    <p>Tagged in</p>
+    {% for tag in tags %}
+    <a role="button">{{tag.name}}</a>
+    {% endfor %}
+  </div>
+{% endif %}
+{% endwith %}
 
 {% comment %}
 {% if main_article.allow_comment %}

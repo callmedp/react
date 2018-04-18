@@ -81,19 +81,17 @@
     </div><!-- /.social Login -->
 
 
-    <!-- tagged-in -->
-    <!-- {% with main_article.tags.all as tags %}
+    <!--tagged-in -->
+    {% with main_article.tags.all as tags %}
     {% if tags %}
     <div class="tagged-in mt-30">
       <strong>Tagged in</strong>
         {% for tag in tags %}
-        <span><a href="#">{{tag.name}}</a></span> 
-        <span><a href="#">{{tag.name}}</a></span> 
-        <span><a href="#">{{tag.name}}</a></span>
+        <span><a>{{tag.name}}</a></span> 
         {% endfor %}
     </div>
     {% endif %}
-    {% endwith %} --><!-- /.tagged-in -->
+    {% endwith %}<!-- /.tagged-in -->
 
     {% comment %}
     <!-- Comments-box -->
