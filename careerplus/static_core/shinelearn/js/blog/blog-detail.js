@@ -98,9 +98,8 @@ function commentSubmit(article_id, login_status){
 $(function(){
 
     $(document).on('click', '#article_share', function(event) {
-            console.log('click');
             // console.log($(this).attr('page-id'));
-            console.log($(this).attr('article-slug'));
+            // console.log($(this).attr('article-slug'));
             $.ajax({
                 url: "/ajax/article-share/",
                 type: 'GET',
