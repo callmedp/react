@@ -1,7 +1,7 @@
 import json
 from django.shortcuts import render
 from itertools import zip_longest
-        
+
 from django.views.generic import (
     TemplateView,
     DetailView,
@@ -41,25 +41,34 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        categories = Category.objects.filter(is_active=True, visibility=2).order_by('-name')
+        categories = Category.objects.filter(
+            is_active=True, visibility=2).order_by('-name')
 
-        article_list = Blog.objects.filter(status=1, visibility=2).select_related('p_cat','author').order_by('-publish_date')[:10]
-        top_article_list = Blog.objects.filter(status=1, visibility=2).select_related('p_cat','author')[:9]
+        article_list = Blog.objects.filter(
+            status=1, visibility=2).select_related(
+            'p_cat', 'author').order_by('-publish_date')[:10]
+        top_article_list = Blog.objects.filter(
+            status=1, visibility=2).select_related('p_cat', 'author')[:9]
 
-        authors = Author.objects.filter(visibility=2,blog__visibility=2,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
-        author_list = zip_longest(*[iter(authors)]*5, fillvalue=None)
-        
+        authors = Author.objects.filter(
+            visibility=2, blog__visibility=2,
+            blog__status=1).annotate(
+            no_of_blog=Count('blog')).order_by('-no_of_blog')
+        author_list = zip_longest(*[iter(authors)] * 5, fillvalue=None)
+
         top_3_cats = [article.p_cat.slug for article in top_article_list][:3]
         top_cats = '+'.join(top_3_cats)
         popular_courses = self.get_product(top_cats)
-        
+
         context.update({
-        'top_article_list':[top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
-        'categories': categories,
-        'article_list': article_list,
-        'popular_courses':popular_courses,
-        'authors':authors,
-        'authors_list': list(author_list)
+            'top_article_list': [
+                top_article_list[:3], top_article_list[3:6],
+                top_article_list[6:9]],
+            'categories': categories,
+            'article_list': article_list,
+            'popular_courses': popular_courses,
+            'authors': authors,
+            'authors_list': list(author_list)
         })
 
         context.update(self.get_breadcrumb_data())
@@ -102,17 +111,25 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
         return context
 
     def get_context_data(self, **kwargs):
-        context = super(TEBlogCategoryListView, self).get_context_data(**kwargs)
+        context = super(
+            TEBlogCategoryListView, self).get_context_data(**kwargs)
         cat_obj = self.cat_obj
 
-        categories = Category.objects.filter(is_active=True, visibility=2).order_by('-name')
+        categories = Category.objects.filter(
+            is_active=True, visibility=2).order_by('-name')
 
         authors = Author.objects.filter(
             visibility=2, is_active=1, blog__visibility=2,
-            blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
+            blog__status=1).annotate(
+            no_of_blog=Count('blog')).order_by('-no_of_blog')
         author_list = zip_longest(*[iter(authors)] * 5, fillvalue=None)
-        main_articles = Blog.objects.filter(p_cat=cat_obj, status=1, visibility=2) | Blog.objects.filter(sec_cat__in=[cat_obj.pk], status=1, visibility=2)
-        main_articles = main_articles.order_by('-publish_date').distinct().select_related('author')
+        main_articles = Blog.objects.filter(
+            p_cat=cat_obj,
+            status=1,
+            visibility=2) | Blog.objects.filter(
+            sec_cat__in=[cat_obj.pk], status=1, visibility=2)
+        main_articles = main_articles.order_by(
+            '-publish_date').distinct().select_related('author')
 
         recent_articles = self.scrollPagination(
             paginated_by=self.paginated_by, page=self.page,
@@ -221,7 +238,8 @@ class TEBlogDetailView(DetailView, BlogMixin):
         context = super(self.__class__, self).get_context_data(**kwargs)
         blog = self.object
         p_cat = blog.p_cat
-        articles = p_cat.primary_category.filter(status=1, visibility=2).exclude(pk=blog.pk)
+        articles = p_cat.primary_category.filter(
+            status=1, visibility=2).exclude(pk=blog.pk)
         articles = articles.order_by('-publish_date')
 
         context['meta'] = blog.as_meta(self.request)
@@ -231,7 +249,8 @@ class TEBlogDetailView(DetailView, BlogMixin):
         context.update(self.get_breadcrumb_data())
         context['SITEDOMAIN'] = settings.SITE_DOMAIN
 
-        main_obj = Blog.objects.filter(slug=blog.slug, status=1, visibility=2).prefetch_related('tags')
+        main_obj = Blog.objects.filter(
+            slug=blog.slug, status=1, visibility=2).prefetch_related('tags')
 
         detail_obj = self.scrollPagination(
             paginated_by=self.paginated_by, page=self.page,
@@ -248,18 +267,28 @@ class TEBlogDetailView(DetailView, BlogMixin):
             "amp": self.request.amp
         })
 
-        article_list = Blog.objects.filter(p_cat=p_cat, status=1, visibility=2).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1, visibility=2).order_by('-publish_date')
+        article_list = Blog.objects.filter(
+            p_cat=p_cat,
+            status=1,
+            visibility=2).order_by('-publish_date') | Blog.objects.filter(
+            sec_cat__in=[p_cat], status=1,
+            visibility=2).order_by('-publish_date')
         article_list = article_list.exclude(slug=blog.slug)
-        article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
+        article_list = article_list.distinct().select_related(
+            'created_by').prefetch_related('tags')
 
         page_obj = self.scrollPagination(
             paginated_by=self.paginated_by, page=self.page,
             object_list=article_list)
 
         context.update({
-            "scroll_article": render_to_string('talenteconomy/include/detail-article-list.tmpl.html', {
-                "page_obj": page_obj,
-                "slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
+            "scroll_article": render_to_string(
+                'talenteconomy/include/detail-article-list.tmpl.html',
+                {
+                    "page_obj": page_obj,
+                    "slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN
+                }
+            )
         })
 
         context.update({
@@ -278,8 +307,13 @@ class TEBlogDetailView(DetailView, BlogMixin):
     def get_breadcrumb_data(self):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy"})
-        breadcrumbs.append({"url": reverse('talent:te-articles-by-category', kwargs={'slug': self.object.p_cat.slug}), "name": self.object.p_cat.name})
+        breadcrumbs.append({
+            "url": reverse('talent:talent-landing'), "name": "Talent Economy"})
+        breadcrumbs.append({
+            "url": reverse(
+                'talent:te-articles-by-category',
+                kwargs={'slug': self.object.p_cat.slug}),
+            "name": self.object.p_cat.name})
         breadcrumbs.append({"url": None, "name": self.object.display_name})
         data = {"breadcrumbs": breadcrumbs}
         return data
@@ -305,12 +339,17 @@ class AuthorListingView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
 
-        categories = Category.objects.filter(is_active=True, visibility=2).order_by('-name')
+        categories = Category.objects.filter(
+            is_active=True, visibility=2).order_by('-name')
 
-        authors = Author.objects.filter(visibility=2,is_active=1,blog__visibility=2,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
-        author_list = zip_longest(*[iter(authors)]*5, fillvalue=None)
+        authors = Author.objects.filter(
+            visibility=2, is_active=1,
+            blog__visibility=2, blog__status=1).annotate(
+            no_of_blog=Count('blog')).order_by('-no_of_blog')
+        author_list = zip_longest(*[iter(authors)] * 5, fillvalue=None)
 
-        top_article_list = Blog.objects.filter(status=1, visibility=2).select_related('p_cat')[:9]
+        top_article_list = Blog.objects.filter(
+            status=1, visibility=2).select_related('p_cat')[:9]
         top_3_cats = [article.p_cat.slug for article in top_article_list][:3]
         top_cats = '+'.join(top_3_cats)
         popular_courses = BlogMixin().get_product(top_cats)
@@ -329,15 +368,19 @@ class AuthorListingView(TemplateView):
     def get_breadcrumb_data(self):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy"})
+        breadcrumbs.append({
+            "url": reverse('talent:talent-landing'), "name": "Talent Economy"})
         breadcrumbs.append({"url": None, "name": "Authors"})
         data = {"breadcrumbs": breadcrumbs}
         return data
 
     def get_meta_details(self):
         meta = Meta(
-            title="Career & Certification Guidance Top Authors @ Shine Learning",
-            description="Use experts’ advice & guidance to decide your career path. Get the list of authors and related articles written by experts @ Shine Learning",
+            title="Career & Certification Guidance Top Authors\
+            @ Shine Learning",
+            description="Use experts’ advice & guidance to decide your career path.\
+            Get the list of authors and related articles written by experts\
+            @ Shine Learning",
         )
         return {"meta": meta}
 
@@ -356,7 +399,7 @@ class AuthorDetailView(DetailView):
         return context
 
     def get_queryset(self):
-        qs = Author.objects.filter(is_active=1,visibility=2)
+        qs = Author.objects.filter(is_active=1, visibility=2)
         return qs
 
     def get_object(self, queryset=None):
@@ -365,7 +408,10 @@ class AuthorDetailView(DetailView):
             queryset = self.get_queryset()
 
         if slug is not None:
-            queryset = queryset.filter(slug=slug, is_active=1, visibility=2, blog__visibility=2, blog__status=1).annotate(no_of_blog=Count('blog'))
+            queryset = queryset.filter(
+                slug=slug, is_active=1,
+                visibility=2, blog__visibility=2,
+                blog__status=1).annotate(no_of_blog=Count('blog'))
         try:
             obj = queryset.get()
         except:
@@ -380,13 +426,18 @@ class AuthorDetailView(DetailView):
         context.update(self.get_breadcrumb_data())
         context['SITEDOMAIN'] = settings.SITE_DOMAIN
 
-        article_list = Blog.objects.filter(status=1, visibility=2, author=author).order_by('-publish_date')
+        article_list = Blog.objects.filter(
+            status=1, visibility=2, author=author).order_by('-publish_date')
         most_recent_cat = article_list[0].p_cat.slug if article_list else ''
 
         popular_courses = BlogMixin().get_product(most_recent_cat)
 
-        authors = Author.objects.filter(visibility=2,is_active=1,blog__visibility=2,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog').exclude(id=author.id)
-        author_list = zip_longest(*[iter(authors)]*5, fillvalue=None)
+        authors = Author.objects.filter(
+            visibility=2, is_active=1,
+            blog__visibility=2, blog__status=1).annotate(
+            no_of_blog=Count('blog')).order_by('-no_of_blog').exclude(
+            id=author.id)
+        author_list = zip_longest(*[iter(authors)] * 5, fillvalue=None)
 
         context.update({
             "author": author,
@@ -404,8 +455,10 @@ class AuthorDetailView(DetailView):
     def get_breadcrumb_data(self):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy"})
-        breadcrumbs.append({"url": reverse('talent:authors-listing'), "name": "Authors"})
+        breadcrumbs.append({
+            "url": reverse('talent:talent-landing'), "name": "Talent Economy"})
+        breadcrumbs.append({
+            "url": reverse('talent:authors-listing'), "name": "Authors"})
         breadcrumbs.append({"url": None, "name": self.object.name})
         data = {"breadcrumbs": breadcrumbs}
         return data
@@ -444,7 +497,8 @@ class TalentDetailAjaxView(View, BlogMixin):
                     status=1,
                     visibility=2) | Blog.objects.filter(
                     sec_cat__in=[self.cat_obj.pk], status=1, visibility=2)
-                main_articles = main_articles.order_by('-publish_date').distinct().select_related('author')
+                main_articles = main_articles.order_by(
+                    '-publish_date').distinct().select_related('author')
                 page_obj = self.scrollPagination(
                     paginated_by=self.paginated_by, page=self.page,
                     object_list=main_articles)
@@ -458,7 +512,8 @@ class TalentDetailAjaxView(View, BlogMixin):
                     'article_detail': detail_article,
                 }
 
-                return HttpResponse(json.dumps(data), content_type="application/json")
+                return HttpResponse(
+                    json.dumps(data), content_type="application/json")
             except:
                 pass
         return HttpResponseForbidden()
