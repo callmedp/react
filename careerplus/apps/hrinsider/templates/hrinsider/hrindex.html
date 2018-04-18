@@ -90,13 +90,13 @@
           </form>
         </div>
       </div><!-- /. row -->
-      <div class="row">
-        <div class="col-md-8">
-          {% if no_results %}
-            <span style="font-size:17px; color:#333; margin-bottom:25px; display: block;">No articles found. Have a look at our most recent articles.</span>
-          {% endif %}
+      {% if no_results %}
+        <div class="row">
+          <div class="col-md-8">
+              <span style="font-size:17px; color:#333; margin-bottom:25px; display: block;">No articles found. Have a look at our most popular articles.</span>
+          </div>
         </div>
-      </div>
+      {% endif %}
         <div class="row">
           
           {% for articleItem in article_list %}
