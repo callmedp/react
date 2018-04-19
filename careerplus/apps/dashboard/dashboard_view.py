@@ -324,10 +324,14 @@ class DashboardFeedbackView(TemplateView):
         self.oi_pk = None
         self.oi = None
         self.candidate_id = None
+        self.rating =None
+        self.sel_rat=None
 
     def get(self, request, *args, **kwargs):
         self.candidate_id = request.session.get('candidate_id', None)
         self.oi_pk = request.GET.get('oi_pk')
+        self.rating=request.GET.get('rating',None)
+        print(self.rating)
         if request.is_ajax() and self.oi_pk and self.candidate_id:
             try:
                 self.oi = OrderItem.objects.get(pk=self.oi_pk)
@@ -343,9 +347,18 @@ class DashboardFeedbackView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardFeedbackView, self).get_context_data(**kwargs)
+        ratings=self.rating
+        if ratings:
+            self.sel_rat=ratings[-1:]
+        else :
+            self.sel_rat=0
+
         if self.oi and self.oi.order.candidate_id == self.candidate_id:
             context.update({
                 "oi": self.oi,
+                ratings:'checked',
+                "var":self.sel_rat,
+
             })
         return context
 

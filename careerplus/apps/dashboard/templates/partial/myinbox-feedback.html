@@ -11,24 +11,25 @@
         <div class="add-rating-feedback-box">
             <div class="add-rating-feedback">
                 <fieldset class="rate">
-                    <input type="radio" required id="rating5" name="rating" value="5" />
+                    <input type="radio" required id="rating5" name="rating" value="5" {{rating5}}   />
                     <label for="rating5" title="5 stars"></label>
                     <span class="error"></span>
 
-                    <input type="radio" id="rating4" name="rating" value="4" />
+                    <input type="radio" id="rating4" name="rating" value="4" {{rating4}} />
                     <label for="rating4" title="4 stars"></label>
 
-                    <input type="radio" id="rating3" name="rating" value="3" />
+                    <input type="radio" id="rating3" name="rating" value="3" {{rating3}}/>
                     <label for="rating3" title="3 stars"></label>
 
-                    <input type="radio" id="rating2" name="rating" value="2" />
+                    <input type="radio" id="rating2" name="rating" value="2" {{rating2}}/>
                     <label for="rating2" title="2 stars"></label>
 
-                    <input type="radio" id="rating1" name="rating" value="1" />
+                    <input type="radio" id="rating1" name="rating" value="1" {{rating1}}  />
                     <label for="rating1" title="1 star"></label>
                 </fieldset>
-                <strong id="selected-rating">0<small>/5</small></strong>
+                <strong id="selected-rating">{{var}}<small>/5</small></strong>
             </div>
+
             <span>Click to rate on scale of 1-5</span></br>
             <span class="error" style="color:red" id="rating-error"></span>    
        </div> 
