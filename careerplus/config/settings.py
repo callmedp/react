@@ -162,6 +162,15 @@ SHINE_API_USER = 'scpapiuser@gmail.com'
 SHINE_API_USER_PWD = 'tarun@123'
 SHINE_API_TIMEOUT = 5
 
+# sumosc settings
+SHINE_SITE = 'https://sumosc.shine.com'
+SHINE_API_URL = 'https://sumosc.shine.com/api/v2'
+CLIENT_ACCESS_KEY = "M2XFaFVHHJwlISEQxFQis1cQoKe6lIBKUGaEDG0WiHA"
+CLIENT_ACCESS_SECRET = "aSQrGC9VZ866os5AZNGsor4CThxfGNz3s8V7rSMX3TY"
+SHINE_API_USER = 'scpapiuser@gmail.com'
+SHINE_API_USER_PWD = 'password'
+SHINE_API_TIMEOUT = 5
+
 ########## CRM SETTINGS #############
 SHINECPCRM_DICT = {
     'base_url': 'http://172.22.65.32:8003',
