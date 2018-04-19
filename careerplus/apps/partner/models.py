@@ -119,12 +119,15 @@ class VendorHierarchy(AbstractAutoDate):
 
 class Certificate(AbstractAutoDate):
     name = models.CharField(
-        max_length=255, null=False, blank=False, db_index=True, unique=True)
+        max_length=255, null=False, blank=False, db_index=True)
     skill = models.CharField(max_length=128, null=False, blank=False)
     vendor_provider = models.ForeignKey(Vendor, null=True, blank=True)
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        unique_together = ("name", "vendor_provider")
 
 
 class UserCertificate(models.Model):
@@ -144,7 +147,7 @@ class UserCertificate(models.Model):
         max_length=20, help_text=_('Candidate Name'))
     candidate_id = models.CharField(
         _('Candidate ID'), blank=True,
-        max_length=20, help_text=_('Candidate ID'))
+        max_length=30, help_text=_('Candidate ID'))
 
     def __str__(self):
         return '{}'.format(self.certificate.name)

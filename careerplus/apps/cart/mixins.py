@@ -396,7 +396,7 @@ class CartMixin(object):
                     cart_items.append(data)
 
                 except  Exception as e:
-                    logging.getLogger('error_log').error(" Msg= Unable to add item on cart %s " % str(e))
+                    logging.getLogger('error_log').error("Unable to add item on cart %s " % str(e))
                     m_prod.delete()
 
         return {"cart_items": cart_items, "total_amount": total_amount}
@@ -542,7 +542,7 @@ class CartMixin(object):
                 product = Product.objects.get(id=sqs.id)
                 parent_li = cart_obj.lineitems.get(product=product)
             except Exception as e:
-                logging.getLogger('error_log').error(" Msg= Unable to select product %s " % str(e))
+                logging.getLogger('error_log').error("Unable to select product, {},{}".format(str(e), cart_pk))
 
                 parent_li = None
             if parent_li:

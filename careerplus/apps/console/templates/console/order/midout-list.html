@@ -1,5 +1,5 @@
 {% extends "console/base_console.html" %}
-{% load static %}
+{% load static compress %}
 {% load humanize %}
 {% load thumbnail %}
 
@@ -9,13 +9,19 @@
 
 {% block css_block %}
     {{block.super}} 
+
+    {% compress css %}
     <link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
     <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
+    {% endcompress %}
+
+    {% compress css inline %}
     <style type="text/css">
         .error{
             color: red;
         }
     </style>
+    {% endcompress %}
 {% endblock css_block %}
 
 
@@ -176,12 +182,16 @@
                             <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
                         </th>
                     {% endif %}
+                    <!--
                     <th class="column-title">#Id</th>
+                    -->
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
+                    <!--
                     <th class="column-title">Item Name</th>
+                    -->
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">Midout sent on</th>
                     <th class="column-title">How Old</th>
@@ -198,11 +208,14 @@
                               <input autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
                             </td>
                       {% endif %}
+                      <!--
                       <td>{{obj.pk}}</td>
-                      <td>{{obj.order.number}}</td>
-                      <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
-                      <td>{{obj.order.email}}</td>
-                      <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
+                      -->
+                      <td>{{obj.number}}</td>
+                      <td>{{obj.first_name}} {{obj.last_name}}</td>
+                      <td>{{obj.email}}</td>
+                      <td>{{obj.country_code}} {{obj.mobile}}</td>
+                      <!--
                       <td>
                             {% if obj.parent and obj.is_variation %}
                               <strong>{{obj.parent.product.get_name}}{% if obj.parent.product.get_exp_db %} - Exp: {{obj.parent.product.get_exp_db}}{% endif %}:</strong><br/>
@@ -221,13 +234,14 @@
                                 <strong>Duration:</strong> {{obj.product.get_duration_db}}
                             {% endif %}
                       </td>
-                      <td>{{obj.order.payment_date}}</td>
-                      <td>{{obj.order.midout_sent_on}}</td>
+                      -->
+                      <td>{{obj.payment_date}}</td>
+                      <td>{{obj.midout_sent_on}}</td>
                       <td>
                           {{obj.modified|naturaltime}}</br>
                           <b>Updated On: {{obj.modified}}</b>
                       </td>
-                      <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
+                      <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
                       <td>
                         <form autocomplete="off" data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="resume-upload-form">{% csrf_token %}
                           {{form.oi_resume}}
@@ -317,6 +331,8 @@
         
 {% block js_block %}
   {{ block.super }}
+
+  {% compress js %}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'packages/iCheck/icheck.min.js' %}"></script>
@@ -324,33 +340,9 @@
 
   <script type="text/javascript" src="{% static 'console/js/moment/moment.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/datepicker/daterangepicker.js' %}"></script>
-  <script type="text/javascript">
 
-        $(document).ready(function() {
-            $('.date-range-picker').daterangepicker({
-                autoUpdateInput: false,
-                locale: {
-                  format: 'DD/MM/YYYY',
-                  cancelLabel: 'Clear',
-                },
-                maxDate: moment().endOf("day"),
-            },function(start, end, label) {
-              
-            });
+  <script type="text/javascript" src="{% static 'console/js/order/filter.js' %}"></script>
 
-            $('.date-range-picker').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
-            });
-
-            $('.date-range-picker').on('cancel.daterangepicker', function(ev, picker) {
-                $(this).val('');
-            })
-
-            $('#id_filter').click(function(){
-                $('#list-filter-form').submit();
-            });
-        });
-
-  </script>
+  {% endcompress %}
 
 {% endblock js_block %}
