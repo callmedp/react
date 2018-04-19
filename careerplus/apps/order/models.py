@@ -593,7 +593,7 @@ class SmsOrderItemOperation(AbstractAutoDate):
         ordering = ['-created']
 
     def __str__(self):
-        return str(self.oi) + '-' + str(self.to_mobile)
+        return "{} - {}".format(self.oi, self.to_mobile)
 
 
 class CouponOrder(AbstractAutoDate):

@@ -2,14 +2,8 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Digital Marketing Certification Course - ShineLearning</title>
-
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Six Sigma</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Become Digital Marketing Certified Professional, to get salary hike upto 40%. Register Now at learning.shine.com or call {{config.MOBILE_SALES_NOS}}.">
-<meta name="keywords" content="Digital Marketing Certification">
-
-
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -22,27 +16,15 @@
 
 <link href="{% static 'shinelearn/css/marketing/six-sigma-cert/six-sigma-cert.css' %}?v=3" rel="stylesheet" type="text/css" />
 
-<!--link href="{{ STATIC_CSS_URL }}css/version1/site/six-sigma-cert-version2.css?v=3" rel="stylesheet" type="text/css" / -->
-
-
-<style>
-.cert-form label.error {
-        font-size: 10px;
-        color: #fff;
-        top: 10px;
-        float:right;
-        display:inline;
-
-    }
-</style>
-    <!-- Google Tag Manager -->
+<!-- Google Tag Manager -->
         <!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':-->
         <!--new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],-->
         <!--j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=-->
         <!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);-->
         <!--})(window,document,'script','dataLayer','GTM-M323HB');</script>-->
         <!-- End Google Tag Manager -->
-    <script>
+
+<script>
               (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
               (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
               m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -56,14 +38,14 @@
 <body>
     <div class="top_section"> 
 		<div class="container martb_30">
-	    	<a href="/" target="_blank" class="logo_cp sprite_call"> </a>
+	    	<a href="/" target="_self" class="logo_cp sprite_call"> </a>
             <span class="martb_30 contact_box"> <span class="sprite_call icon_contact"> </span> 0124-3955001</span>
             
             <div class="fl_lt w550"> 
-            	<h1>Become a Digital Marketing Certified Professional</h1>
+            	<h1>Become a Six Sigma Green/Black Belt Professional </h1>
                 <h3>Benefits of taking it from Shine Learning</h3>
                 <ul> 
-                	<li> Get a 40% Salary Hike as compared to your peers.</li>
+                	<li> Get a 30% Salary Hike as compared to your peers.</li>
 					<li> More than 6000 jobs in the market.</li>
 					<li> Certification from verified course providers.</li>
 					<li>Top international quality content from global providers.</li>
@@ -74,36 +56,35 @@
             
             <div class="fl_rt w325"> 
             	<h2>Register Now</h2>
+                <P> and get 10% discount <br> of all six sigma courses</P>
+            
+
             <form class="cert-form"  id="lead" action="{% url "crmapi:lead-management" %}" method="POST" class="STYLE-NAME">    {% csrf_token %}
 
-                <input id="name" type="text" name="name" placeholder="Your Full Name" maxlength="50" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}"/>
+                <input id="name" type="text" name="name" placeholder="Your Full Name" maxlength="100" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}"/>
 
-                <input id="email" type="email" name="email" placeholder="Valid Email Address" maxlength="50" value="{{request.session.email}}" />
-
+                <input id="email" type="email" name="email" placeholder="Valid Email Address" maxlength="100" value="{{request.session.email}}" />
                 
                 <div style="display:inline-block!important;">
                 <select id="selection" name="country" style="width:16%!important;float:left!important;">
                                 {% for country in countries %}
                                     <option {% if country.phone == "91"%} selected="selected"{%endif%} value="{{country.phone}}">{{country.code2}}&nbsp;&nbsp; ({{country.phone}}) -- {{country.name}}</option>
-                                {% endfor %}
+                                        {% endfor %}
                 </select> 
-                <input id="mobile" type="text" style="width:80%!important;float:right!important;" name="number" placeholder="Enter mobile number" maxlength="15" value="{{request.session.mobile_no}}">
+                <input id="mobile" type="text" style="width:80%!important;float:right!important;" name="number" placeholder="Enter mobile number" maxlength="15">
                 </div>
 
                 <textarea class="message_input" placeholder="Message" name="msg" maxlength="600" rows="3"></textarea>
 
                 <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
 
-                <input type="hidden" name="prd" value="Digital Marketing Certification">
-
+                <input type="hidden" name="prd" value="Six sigma Certification">
                 <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
-
                 <input type="hidden" name="lsource" value="{{ lead_source }}">
-                <input type="hidden" name="path" value="{{request.path}}">
 
                 <input type="button" class="button" value="Send" onclick="_gaq.push(['resume._trackEvent','Lead','submit']);$('#lead').submit();return false;" id="submit"/>
             </form>
-
+            
             
             </div>
     	</div>
@@ -111,10 +92,10 @@
 	
     
     <div class="main_col"> 
-        <ul> 
-            <!--<li> <span class="sprite_call course_icon"> </span> Courses starting from  <br> <strong>Rs. 4000/-</strong> </li>-->
+    	<ul> 
+        	<li> <span class="sprite_call course_icon"> </span> Courses starting from  <br> <strong>Rs. 4500/-</strong> </li>
             <li> <span class="sprite_call support_icon"> </span>Support &amp; Mentoring <br> <strong>24/7</strong> </li>
-            <li> <span class="sprite_call online_icon"> </span> Online Learning</li> 
+        	<li> <span class="sprite_call e_learning_icon"> </span> Online Learning</li> 
         </ul>
     </div>
     
@@ -125,31 +106,32 @@
     
 <div class="table_widget">
 
-
-    <div class="column" style="text-align:center">
-        <div class="cell "> <span class="sprite_call logo_vskills"> </span></div>
-        <div class="cell"> <span class="sprite_call logo_dig_vidya"> </span></div>
-        
-       
+    <div class="column">
+        <div class="cell bg_red txt-center"> <span class="sprite_call simplilearn_icon"> </span></div>
+        <div class="cell bg_red txt-center"> <span class="sprite_call iact_icon"> </span></div>
+        <div class="cell bg_red txt-center"> <span class="sprite_call grey_campus_icon"> </span> </div>        
     </div>
 
 
 
     <div class="column bg_grey">
         <div class="cell">Over 100,000+ professionals trained across 150+ countries</div>
-        <div class="cell">Asia's leading Digital Marketing training company and the first to launch Social Media Marketing Workshop Series in India.</div>
+        <div class="cell">Largest Six Sigma Training Organization in India led by IIT &amp; IIM alumni</div>
+		<div class="cell"> 35 PDU certificate for a PMP credential holder.</div>
     </div>
 
 
     <div class="column">
         <div class="cell">Trusted by employees of Fortune 500 companies as their learning provider for career growth and training.</div>
-        <div class="cell">24 Countries, 500+ Trainings, 11000+ Participants</div>   
+        <div class="cell"> Published 1800+ books read by 7 million students in India.</div>
+        <div class="cell"> 100% passing guarantee</div>        
     </div>
 
 
     <div class="column bg_grey">
         <div class="cell">300+ workshops conducted globally every month</div>
-        <div class="cell">500+ Digital Marketing trainings across Asia.</div>
+        <div class="cell"> Trained 30,000+ students and working professionals.</div>
+        <div class="cell"> </div>        
     </div>
 </div>
 
@@ -158,11 +140,17 @@
     
 <div class="ftr_box"> 
 <h4>Learn From</h4>
-<a class="sprite_call logo_vskills" href="/digital-marketing-certification-courses/skill/161.html" target="_blank"> </a>
-<a class="sprite_call logo_dig_vidya" href="/digital-marketing-certification-courses/skill/161.html" target="_blank"> </a>
+<a class="sprite_call logo_skillsoft" href="#"> </a>
+<a class="sprite_call logo_simplilearn" href="#"> </a>
+<a class="sprite_call logo_vskills" href="#"> </a>
+<a class="sprite_call logo_iact" href="#"> </a>
+<a class="sprite_call logo_greycampus" href="#"> </a>
 </div>
 
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    </div> <!--lead main wrapper end here-->
+
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
         <script type="text/javascript">
         var _gaq = _gaq || [];
@@ -188,7 +176,7 @@
                             var ga_code = document.createElement('div');
                             ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
                            document.body.appendChild(ga_code);
-                            window.location.href ='thankyou-for-query';
+                           window.location.href ='thankyou-for-query';
                             return false;
                         }
                     }, 'json');
@@ -206,7 +194,6 @@
 
                     },
                     name:{
-                        required:true,
                         lettersonly:true,
 
                     },
@@ -234,7 +221,6 @@
             });
         </script>
 
-
         <!-- Facebook Pixel Code -->
 
         <script>
@@ -261,7 +247,7 @@
 
         /></noscript>
 
-
+        <!-- End Facebook Pixel Code -->
 
 </body>
 </html>
