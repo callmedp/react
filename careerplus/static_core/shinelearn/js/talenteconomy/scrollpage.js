@@ -13,8 +13,8 @@ var showTalentpageOnScroll = (function(){
 
         $(window).scroll(function() {
             var position = $(window).scrollTop();
-            var bottom = $(document).height() - $(window).height();
-            if (position == bottom) {
+            var bottom = ($(document).height() - $(window).height())*0.8;
+            if (position >= bottom) {
                makeAjax();
             };
          });
