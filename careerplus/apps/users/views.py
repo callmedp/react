@@ -14,7 +14,9 @@ from django.views.generic import FormView, TemplateView, View
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils import timezone
+from django.db.models import Q
 
+from geolocation.models import Country
 from shine.core import ShineCandidateDetail
 from core.mixins import TokenExpiry, TokenGeneration
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCPInvoiceStorage
@@ -106,10 +108,19 @@ class LoginApiView(FormView):
         alert = messages.get_messages(self.request)
         form = self.get_form()
         linkedin = self.request.GET.get('linkedin', '')
+        linkedin_mobile = self.request.GET.get('linkedin_mobile', '')
         if linkedin == 'true':
             context.update({
                 "linkedin": True,
             })
+        if linkedin_mobile == 'true':
+            country_objs = Country.objects.exclude(
+                Q(phone__isnull=True) | Q(phone__exact=''))
+            context.update({
+                "country_objs": country_objs,
+                "linkedin_mobile": True
+            })
+
         context.update({
             'messages': alert,
             'form': form,
@@ -384,6 +395,7 @@ class LinkedinLoginView(View):
 
     def get(self, request, *args, **kwargs):
         try:
+            print(request.GET)
             credential = request.GET.get('credential', '')
             if credential == '1':
                 client_id = settings.LINKEDIN_DICT.get('CLIENT_ID', '')
@@ -392,6 +404,8 @@ class LinkedinLoginView(View):
                 client_id = settings.CLIENT_ID
 
             request.session['next_url'] = request.GET.get('next', '')
+            request.session['mobile_code'] = request.GET.get('country_code', '91')
+            request.session['mobile'] = request.GET.get('mobile', '')
 
             params = {
                 'client_id': client_id,
@@ -447,6 +461,7 @@ class LinkedinCallbackView(View):
             data_dict.update({'key': 'linkedin'})
             linkedin_user = RegistrationLoginApi.social_login(data_dict)
             if linkedin_user.get('response'):
+                logging.getLogger('info_log').info(linkedin_user)
                 candidateid = linkedin_user['user_details']['candidate_id']
                 resp_status = ShineCandidateDetail().get_status_detail(
                     email=None, shine_id=candidateid)

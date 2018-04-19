@@ -99,7 +99,13 @@
                     </ul>
                 </div>
 
-                <a href="{% url 'users:linkedin-code' %}?credential=1&next={{request.GET.next}}" style="margin:10px auto; display:block; text-align:center;" onclick='return validate_linkedin_login_terms()'><img src="{% static 'shinelearn/images/Sign-In-Small---Default.png' %}"></a>
+                <!--a href="#" class="submit-button" data-toggle="modal" data-target=".bs-example-modal-sm-linkedin">Login to Comments</a-->
+
+                {% if linkedin_mobile %}
+                    <a href="{% url 'users:linkedin-code' %}?credential=1&next={{request.GET.next}}" id="linkedin_url_id" style="margin:10px auto; display:block; text-align:center;" onclick='return validate_linkedin_login_terms()' mobile="mobile"><img src="{% static 'shinelearn/images/Sign-In-Small---Default.png' %}"></a>
+                {% else %}
+                    <a href="{% url 'users:linkedin-code' %}?credential=1&next={{request.GET.next}}" id="linkedin_url_id" style="margin:10px auto; display:block; text-align:center;" onclick='return validate_linkedin_login_terms()'><img src="{% static 'shinelearn/images/Sign-In-Small---Default.png' %}"></a>
+                {% endif %}
 
             </form>
         
@@ -163,6 +169,41 @@
                         {% for error in  field.errors %}{{ error }}{% endfor %}
                     </div>
                 {% endfor %}
+              <button type="submit" class="btn btn-primary submit mt-20">Submit</button>
+            </form>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- linkedin Modal-->
+
+<div class="modal fade bs-example-modal-sm-linkedin" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="linkedin_div">
+  <div class="modal-dialog modal-sm modal-custom" role="document">
+    <div class="modal-content">
+        <div class="register">
+            <div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h1 class="modal-title" id="myModalLabel">Mobile No Required</h1>
+            </div>
+            <div id="msg_for_user"></div>
+            <form method="GET" id="linkedin-form-id" 
+            action="{% url 'users:linkedin-code' %}">
+              <div class="form-group">
+                <div class="country-code">
+                  <div class="custom-select">
+                    <select class="form-control" id="id_country_code" name="country_code">
+                      {% for country in country_objs %}
+                          <option value="{{country.phone}}" {% if country.phone == '91' %}selected{% endif %}>{{country.phone}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <input type="text" name="mobile" class="form-control" placeholder="Mobile">
+                  <span class="ml-50 js-error"></span>
+                </div>
+              </div>
+              <input type="hidden" name="next" value="{{request.GET.next}}">
+              <input type="hidden" name="credential" value="1">
               <button type="submit" class="btn btn-primary submit mt-20">Submit</button>
             </form>
         </div>
