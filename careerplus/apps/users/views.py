@@ -492,7 +492,7 @@ class LinkedinCallbackView(View):
                             'user_type': 14,
                             'vendor_id': settings.CP_VENDOR_ID
                         }
-                        reg_res = RegistrationLoginApi.social_login(register_data)
+                        reg_res = RegistrationLoginApi.auto_registration(register_data)
                         if reg_res and reg_res.get('id'):
                             candidateid = reg_res.get('id')
                             resp_status = ShineCandidateDetail().get_status_detail(
