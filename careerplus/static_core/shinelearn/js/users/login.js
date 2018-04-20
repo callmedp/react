@@ -84,7 +84,6 @@ window.fbAsyncInit = function() {
 function validate_linkedin_login_terms(){
     if($('#accept-condition').is(":checked")){
         var mobile_attr = $('#linkedin_url_id').attr('mobile');
-        console.log(mobile_attr);
         if (mobile_attr == 'mobile') {
             $('.bs-example-modal-sm-linkedin').modal('show');
             return false;
@@ -105,6 +104,16 @@ $(document).ready(function() {
             $('#term-error').text('');
         }
     });
+
+    try{
+        var mobile_attr = $('#linkedin_url_id').attr('mobile');
+        if (mobile_attr == 'mobile') {
+            $('.bs-example-modal-sm-linkedin').modal('show');
+        }
+    }catch(err){
+    }
+
+
     // login and registration js 
     var emailresponse;
     $.validator.addMethod("emailDoesNotExist",

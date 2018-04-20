@@ -81,7 +81,7 @@
 
                 <div class="form-check linkedin-tnc">
                     <label class="form-check-label">
-                        <input type="checkbox" id="accept-condition"  class="form-check-input">
+                        <input type="checkbox" id="accept-condition" {% if linkedin_mobile %} checked {% endif %} class="form-check-input">
                         By syncing your LinkedIn account, you:
                     </label>
                     <p id="term-error" class="error"></p>
