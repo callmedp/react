@@ -477,7 +477,7 @@ class LinkedinCallbackView(View):
                     request.session.update(resp_status)
                     return HttpResponseRedirect(self.success_url)
                 elif linkedin_client_id == settings.LINKEDIN_DICT.get('CLIENT_ID') and not mobile:
-                    url = '/login/' + '&next=' + self.success_url + '&linedin=true' + '&mobile=true'
+                    url = '/login/' + '?next=' + self.success_url + '&linedin=true' + '&mobile=true'
                     return HttpResponseRedirect(url)
                 elif linkedin_client_id == settings.LINKEDIN_DICT.get('CLIENT_ID') and mobile and linkedin_user.get('prefill_details'):
                     prefill_details = linkedin_user.get('prefill_details', {})
