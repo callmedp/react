@@ -926,7 +926,7 @@ MEDIA_URL = 'https://static1.shine.com/l/m/'
 # DOWNLOAD_URL = 'https://gcp-static.shine.com/l/m/download/'
 
 ##### EMAIL SETTINGS #######
-EMAIL_HOST = '172.22.65.188'
+EMAIL_HOST = '10.136.0.20'
 EMAIL_PORT = 25
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
