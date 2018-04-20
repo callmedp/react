@@ -727,6 +727,40 @@ class WriterInvoiceMixin(object):
 class RegistrationLoginApi(object):
 
     @staticmethod
+    def auto_registration(post_data):
+        # auto registration with email and mobile
+        response_json = {"response": "exist_user"}
+        post_url = "{}/api/v3/web/candidate-profiles/?format=json".format(settings.SHINE_SITE)
+        try:
+            country_obj = Country.objects.get(phone=post_data['country_code'])
+        except Country.DoesNotExist:
+            country_obj = Country.objects.get(phone='91')
+
+        headers = {'Content-Type': 'application/json'}
+        post_data.update({"country_code": country_obj.phone})
+        try:
+            response = requests.post(
+                post_url, data=json.dumps(post_data), headers=headers)
+
+            if response.status_code == 201:
+                response_json = response.json()
+                response_json.update({'response': "new_user"})
+
+            elif "non_field_errors" in response.json():
+                response_json = response.json()
+                response_json.update({'response': "exist_user"})
+
+            elif response.status_code == 400:
+                response_json = response.json()
+                response_json.update({'response': "form_error"})
+
+        except Exception as e:
+            logging.getLogger('error_log').error("Error getting response from shine for"
+                                                 " registration. %s " % str(e))
+
+        return response_json
+
+    @staticmethod
     def user_registration(post_data):
         response_json = {"response": "exist_user"}
         post_url = "{}/api/v2/web/candidate-profiles/?format=json".format(settings.SHINE_SITE)
