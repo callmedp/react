@@ -102,7 +102,7 @@ class DashboardView(TemplateView):
                     order_items = OrderItem.objects.filter(
                         order__status=1,
                         id__in=list_ids, order__candidate_id=candidate_id,
-                        no_process=False, oi_status=2)
+                        no_process=False, oi_status=2).select_related('order')
 
                     for obj in order_items:
                         try:
