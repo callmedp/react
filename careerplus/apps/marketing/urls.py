@@ -37,4 +37,8 @@ urlpatterns = [
     url(r'^thankyou-for-query$',
         marketing_views.MarketingPages.as_view(),
         name='thankyou-for-query'),
+
+    url(r'^six-sigma-green-belt$',
+        marketing_views.MarketingPages.as_view(),
+        name='six-sigma-green-belt'),
 ]
