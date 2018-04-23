@@ -129,7 +129,7 @@ class OrderListView(ListView, PaginationMixin):
                         if (self.query.strip())[:2] == 'cp' or (self.query.strip())[:2] == 'CP':
                             result= self.query.strip()[2:]
                             try:
-                                queryset = queryset.filter(id=result)
+                                queryset = queryset.filter(id__iexact=result)
                             except Exception as e:
                                 queryset=queryset.none()
                                 logging.getLogger('error_log').error(str(e))
@@ -137,19 +137,19 @@ class OrderListView(ListView, PaginationMixin):
                         else:
                             result=self.query.strip()
                             try:
-                                queryset=queryset.filter(id=result)
+                                queryset=queryset.filter(id__iexact=result)
                             except Exception as e:
                                 queryset = queryset.none()
                                 logging.getLogger('error_log').error(str(e))
 
 
                     elif self.sel_opt =='mobile':
-                        queryset = queryset.filter(mobile=self.query)
+                        queryset = queryset.filter(mobile__iexact=self.query)
 
 
                     elif self.sel_opt =='email':
                         result =self.query.strip()
-                        queryset = queryset.filter(email=result)
+                        queryset = queryset.filter(email__iexact=result)
 
 
         except Exception as e:
@@ -382,16 +382,15 @@ class MidOutQueueView(TemplateView, PaginationMixin):
 
         try:
             if self.query:
-
                 if self.sel_opt == 'id':
-                    if  self.query[2:]=='cp' or self.query[:2]=='CP':
-                        queryset=queryset.filter(order__number__iexact=self.query)
+                    if self.query[:2]=='cp' or self.query[:2]=='CP':
+                        queryset=queryset.filter(number__iexact=self.query)
                     else:
                         queryset = queryset.filter(id__iexact=self.query)
                 elif self.sel_opt == 'email':
-                    queryset = queryset.filter(order__email__iexact=self.query)
+                    queryset = queryset.filter(email__iexact=self.query)
                 elif self.sel_opt == 'mobile':
-                        queryset = queryset.filter(order__mobile=self.query)
+                        queryset = queryset.filter(mobile__iexact=self.query)
 
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
@@ -484,7 +483,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             "message_form": MessageForm(),
             "filter_form": filter_form,
             "query": self.query,
-            var:"checked"
+            var: "checked",
         })
         return context
 
@@ -514,7 +513,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                     else:
                         queryset = queryset.filter(id__iexact=self.query)
                 elif self.sel_opt == 'mobile':
-                    queryset = queryset.filter(order__mobile=self.query)
+                    queryset = queryset.filter(order__mobile__iexact=self.query)
                 elif self.sel_opt == 'email':
                     queryset = queryset.filter(order__email__iexact=self.query)
                 elif self.self_opt=='product':
@@ -807,7 +806,7 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
                 elif self.sel_opt== 'product':
                     queryset=queryset.filter(product__name__icontains=self.query)
                 elif self.sel_opt== 'mobile':
-                    queryset=queryset.filter(order__mobile=self.query)
+                    queryset=queryset.filter(order__mobile__iexact=self.query)
                 elif self.sel_opt=='email':
                     queryset=queryset.filter(order__email__iexact=self.query)
         except Exception as e:
@@ -941,7 +940,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
                 elif self.sel_opt== 'number':
                     queryset=queryset.filter(order__number__iexact=self.query)
                 elif self.sel_opt == 'mobile':
-                    queryset=queryset.filter(order__mobile=self.query)
+                    queryset=queryset.filter(order__mobile__iexact=self.query)
                 elif self.sel_opt == 'email':
                     queryset=queryset.filter(order__email__iexact=self.query)
 
@@ -1305,7 +1304,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         context = super(AllocatedQueueVeiw, self).get_context_data(**kwargs)
         paginator = Paginator(context['allocated_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
-        var=self.sel_opt
+        var = self.sel_opt
         alert = messages.get_messages(self.request)
         initial = {
             "created": self.created,
@@ -1318,7 +1317,7 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
             "messages": alert,
             "query": self.query,
             "filter_form": filter_form,
-             var :'checked',
+            var: 'checked',
         })
 
         return context
@@ -1610,10 +1609,12 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
 
         try:
             if self.query:
-                if self.sel_opt == 'id':
+                if self.sel_opt == 'number':
                     if self.query[:2] == 'cp' or self.query[:2] == 'CP':
                         queryset = queryset.filter(order__number__iexact=self.query)
                     else:
+                        queryset=None
+                elif self.sel_opt == 'id':
                         queryset = queryset.filter(id__iexact=self.query)
                 elif self.sel_opt == 'mobile':
                     queryset = queryset.filter(order__mobile=self.query)
@@ -1678,7 +1679,7 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
         self.modified = request.GET.get('modified', '')
-        self.sel_opt =request.GET.get('rad_search','id')
+        self.sel_opt = request.GET.get('rad_search','id')
         return super(DomesticProfileApprovalQueue, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1723,7 +1724,7 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
                 elif self.sel_opt == 'email':
                     queryset = queryset.filter(order__email__iexact=self.query)
                 elif self.sel_opt == 'mobile':
-                    queryset = queryset.filter(order__mobile=self.query)
+                    queryset = queryset.filter(order__mobile__iexact=self.query)
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass

@@ -76,9 +76,7 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
 
         try:
             if self.query:
-
                 if self.sel_opt == 'id':
-
                     queryset = queryset.filter(id__iexact=self.query)
                 elif self.sel_opt == 'product':
                     queryset = queryset.filter(product__name__icontains=self.query)
@@ -254,7 +252,7 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
         self.payment_date = request.GET.get('payment_date', '')
         self.modified = request.GET.get('modified', '')
         self.sel_opt=request.GET.get('rad_search','id')
@@ -275,7 +273,7 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
             "query": self.query,
             "draft_form": VendorFileUploadForm(),
             "action_form": OIActionForm(queue_name="partnerinbox"),
-            var:'checked',
+             var: 'checked',
         })
         return context
 
@@ -297,17 +295,22 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
 
         try:
             if self.query:
-                if self.sel_opt=='id':
-                     if self.query[2:]== 'cp' or self.query[2:]=='CP':
-                         queryset = queryset.filter(order__number=self.query)
+                if self.sel_opt == 'number':
+                     if self.query[2:] == 'cp' or self.query[2:] =='CP':
+                        queryset = queryset.filter(order__number__iexact=self.query)
                      else:
-                         queryset = queryset.filter(id__iexact=self.query)
-                elif self.sel_opt=='mobile':
-                     queryset=queryset.filter(order__mobile=self.query)
-                elif self.sel_opt=='email':
-                     queryset=queryset.filter(order__email__iexact=self.query)
-                elif self.sel_opt =='product':
-                     queryset = queryset.filter(product__name__icontains=self.query)
+                        queryset = None
+                elif self.sel_opt == 'id':
+                        queryset = queryset.filter(id__iexact=self.query)
+
+                elif self.sel_opt == 'mobile':
+                        queryset=queryset.filter(order__mobile__iexact=self.query)
+
+                elif self.sel_opt == 'email':
+                        queryset=queryset.filter(order__email__iexact=self.query)
+
+                elif self.sel_opt == 'product':
+                        queryset = queryset.filter(product__name__icontains=self.query)
 
 
         except Exception as e:
