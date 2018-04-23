@@ -516,7 +516,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                     queryset = queryset.filter(order__mobile__iexact=self.query)
                 elif self.sel_opt == 'email':
                     queryset = queryset.filter(order__email__iexact=self.query)
-                elif self.self_opt=='product':
+                elif self.sel_opt =='product':
                     queryset = queryset.filter(product__name__icontains=self.query)
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
@@ -1620,7 +1620,7 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
                     queryset = queryset.filter(order__mobile=self.query)
                 elif self.sel_opt == 'email':
                     queryset = queryset.filter(order__email__iexact=self.query)
-                elif self.self_opt == 'product':
+                elif self.sel_opt == 'product':
                     queryset = queryset.filter(product__name__icontains=self.query)
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
