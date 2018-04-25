@@ -1,15 +1,15 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
+<!-- saved from url=(0095)file:///C:/Users/ft0734/Documents/Six%20Sigma%20Green%20Belt%20Page%20-%20Shine%20Learning.html -->
+<html lang="en" class="gr__learning_shine_com"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Six Sigma Green Belt Page - Shine Learning</title>
+    <title>Resume Writing - Shine Learning</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
     <!-- Bootstrap -->
-    <link href="{% static 'shinelearn/css/marketing/bootstrap.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'shinelearn/css/marketing/bootstrap.css' %}" rel="stylesheet" type="text/css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -18,7 +18,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body>
+  <body data-gr-c-s-loaded="true">
     <!-- header -->
     <header class="container-fluid ds-bg">
       <div class="row">
@@ -30,22 +30,20 @@
                 <img src="{% static 'shinelearn/images/marketing/data-science-cert/shine-learning-logo.png' %}" alt="Shinelearning">
               </a>
 
-              <a class="ht-logo" href="/">
+              <a class="ht-logo" href="https://learning.shine.com/">
                 <img src="{% static 'shinelearn/images/marketing/data-science-cert/ht-media-logo.png' %}" alt="Shinelearning">
               </a>
             </div>
 
             <!-- content & punchline -->
             <div class="col-xs-12 col-sm-7 col-md-5 col-lg-6 header-content">
-              <strong>Earn 17% more than your peers</strong>
-              <h1>Become Lean Six Sigma Green Belt Certified</h1>
+              <h1>Beat the Competition with a Professionally Written Resume</h1>
               <div class="hidden-xs header-txt">
                 <ul>
-                  <li>Certification from Simplilearn</li>
-                  <li>40 hours of instructor led online training</li>
-                  <li>27 hours of high quality e-learning content by industry experts</li>
+                  <li>Written and reviewed by Resume Writing Experts</li>
+                  <li>Application Tracking System (ATS) friendly</li>
+                  <li>Customized to individual needs</li>
                 </ul>
-                <div class="punch-line">Your Journey to become Six Sigma Green Belt Expert begins today!</div>
               </div>
             </div>
 
@@ -56,17 +54,15 @@
 
             <!-- enquiry form -->
             <div class="col-xs-12 col-sm-5 col-md-4 col-lg-3">
-              <form class="enquiry-form" id="lead" method="POST"
-                action="{% url 'crmapi:lead-management' %}"> {% csrf_token %}
+              <form class="enquiry-form" id="lead" method="POST" action="{% url 'crmapi:lead-management' %}" novalidate="novalidate">
+                {% csrf_token %}
                 <strong>Let’s get started</strong>
                 <div class="form-group">
-                  <input type="text" class="form-control" id="name" 
-                  placeholder="Your Full Name" name="name">
+                  <input type="text" class="form-control" id="name" placeholder="Your Full Name" name="name">
                   <label class="error-txt js-error"></label>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" id="email" 
-                  placeholder="Email Address" name="email">
+                  <input type="text" class="form-control" id="email" placeholder="Email Address" name="email">
                   <label class="error-txt js-error"></label>
                 </div>
                 <div class="form-group">
@@ -75,7 +71,7 @@
                 </div>
                 <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
 
-                <input type="hidden" name="prd" value="Six sigma Certification">
+                <input type="hidden" name="prd" value="Resume Writing">
 
                 <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 
@@ -83,10 +79,10 @@
                 
                 <div class="tnc">
                   By registering with us you agree to our 
-                  <a href="/tnc">Terms & Conditions</a>
+                  <a href="/tnc">Terms &amp; Conditions</a>
                 </div>
-                <button type="submit" class="btn btn-default" 
-                  onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enroll Now</button>
+                <button type="submit" class="btn btn-default"
+                        onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enroll Now</button>
                 <p>*Easy EMI option available</p>
               </form>
             </div>
@@ -94,11 +90,10 @@
             <!-- content repeat for mobile device -->
             <div class="col-xs-12 col-sm-6 visible-xs mt-20 mb-30 header-txt">
               <ul>
-                <li>Certification from Simplilearn</li>
-                <li>40 hours of instructor led online training</li>
-                <li>27 hours of high quality e-learning content by industry experts</li>
+                <li>Written and reviewed by Resume Writing Experts</li>
+                <li>Application Tracking System (ATS) friendly</li>
+                <li>Customized to individual needs</li>
               </ul>
-              <div class="punch-line">Your Journey to become Six Sigma Green Belt Expert begins today!</div>
             </div>
 
           </div>
@@ -114,74 +109,43 @@
         <div class="col-xs-12 col-sm-7">
           <!-- Course Highlights -->
           <div class="course-highlight">
-            <h2>Course Highlights</h2>
+            <h2>Key Benefits</h2>
             <ul>
               <li>
-                <strong>Execute 4 real life projects</strong>
-                Acquire hands-on knowledge and expertise!
-              </li>
+                <strong>Resume written by professional resume writers with over 10+ years of experience</strong></li>
               <li>
-                <strong>4 simulation test papers</strong>
-                Gain confidence to ace the certification exams!
-              </li>
+                <strong>Individually assigned executive to give your resume full attention</strong></li>
               <li>
-                <strong>Aligned to IASSC, ASQ </strong>
-                Course Curriculum designed which is aligned to the highest body of knowledge for Six Sigma Experts
-              </li>
+                <strong>Detailed discussions with our expert for highly targeted profiling</strong></li>
               <li>
-                <strong>Achieve 33 PDUs offered </strong>
-                Get PDUs which will help in maintaining your credentials
-              </li>
+                <strong>Delivery of first cut resume within the mentioned SLA</strong></li>
               <li>
-                <strong>Training by 10+ years of industry experts </strong>
-                Get trained by experts in implementing Quality Management
-              </li>
+                <strong>Building first draft and finalization of resume done only after client approval</strong></li>
             </ul>
           </div>
 
           <!-- Who should attend? -->
-          <div class="course-attend mt-50">
-            <h2>Who should attend?</h2>
-            <ul>
-              <li>
-                Quality Control supervisors/ Engineers/ Managers
-              </li>
-              <li>
-                Quality / IT Analysts
-              </li>
-              <li>
-                Project Mangers
-              </li>
-              <li>
-                Quality Auditors
-              </li>
-              <li>
-                Individuals who want to learn and practice Lean Six Sigma Principles
-              </li>
-            </ul>
-          </div>
+          
         </div>
 
         <!-- Course Preview -->
         <div class="col-xs-12 col-sm-5">
-          <h2>Course Outline</h2>
+          <h2>Salient Features</h2>
           <div class="panel-group course-preview" id="accordion" role="tablist" aria-multiselectable="true">
             <div class="panel panel-default">
               <div class="panel-heading" role="tab" id="headingOne">
                 <h4 class="panel-title">
-                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    Six Sigma and the Organization
-                  </a>
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed">Custom Resume Layouts</a>
                 </h4>
               </div>
-              <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+              <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;">
                 <div class="panel-body">
                   <ul>
-                    <li>Introduction to Six Sigma and the Organization</li>
-                    <li>Six sigma and organizational goals</li>
-                    <li>Lean principles in the organization</li>
-                    <li>Design for six sigma (DFSS) methodologies</li>
-                    <li>Summary to Six sigma and organization</li>
+                    <li>For the unique demands of every profile</li>
+                    
+                    
+                    
+                    
                   </ul>
                 </div>
               </div>
@@ -189,23 +153,21 @@
             <div class="panel panel-default">
               <div class="panel-heading" role="tab" id="headingTwo">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    Define Phase
-                  </a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Resume Writing Best Practices</a>
                 </h4>
               </div>
-              <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+              <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" aria-expanded="false" style="height: 0px;">
                 <div class="panel-body">
                   <ul>
-                    <li>Introduction to Define phase</li>
-                    <li>Project identification</li>
-                    <li>Voice of the customer (VOC)</li>
-                    <li>Project Management Basics</li>
-                    <li>Management and planning tools (Apply)</li>
-                    <li>Business results for projects</li>
-                    <li>Team dynamics and performance</li>
-                    <li>Summary of Define phase</li>
-                    <li>Project 1</li>
+                    <li>With unique insights from recruiters</li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                   </ul>
                 </div>
               </div>
@@ -213,23 +175,21 @@
             <div class="panel panel-default">
               <div class="panel-heading" role="tab" id="headingThree">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    Measure Phase
-                  </a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Keyword Rich For Digital Screening</a>
                 </h4>
               </div>
-              <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+              <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree" aria-expanded="false" style="height: 0px;">
                 <div class="panel-body">
                   <ul>
-                    <li>Introduction to Measure phase</li>
-                    <li>Process analysis and documentation (Create)</li>
-                    <li>Probability and statistics</li>
-                    <li>Collecting and summarizing data</li>
-                    <li>Statistical distributions (Understand)</li>
-                    <li>Measurement system analysis (MSA) (Evaluate)</li>
-                    <li>Process and performance capability</li>
-                    <li>Summary of Measure Phase</li>
-                    <li>Project 1- Contd.</li>
+                    <li>With keyword research for every profile</li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                   </ul>
                 </div>
               </div>
@@ -237,78 +197,33 @@
             <div class="panel panel-default">
               <div class="panel-heading" role="tab" id="headingFour">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                    Analyze Phase
-                  </a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Print Friendly And Appealing Formats</a>
                 </h4>
               </div>
-              <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+              <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour" aria-expanded="false" style="height: 0px;">
                 <div class="panel-body">
                   <ul>
-                    <li>Introduction to Analyze phase </li>
-                    <li>Hypothesis testing </li>
-                    <li>Exploratory data analysis</li> 
-                    <li>Summary of Measure phase </li>
-                    <li>Project 1- Contd.</li>
+                    <li>To give the competitive edge during screening and interview</li>
+                    
+                     
+                    
+                    
                   </ul>
                 </div>
               </div>
             </div>
-            <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="headingFive">
-                <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                    Improve Phase
-                  </a>
-                </h4>
-              </div>
-              <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
-                <div class="panel-body">
-                  <ul>
-                    <li>Introduction to Improve phase </li>
-                    <li>Design of experiments (DOE) </li>
-                    <li>Root cause analysis (Analyze</li>
-                    <li>Lean Tools </li>
-                    <li>Selecting a solution</li> 
-                    <li>Summary Improve Phase</li>
-                    <li>Project 1-Contd.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="headingSix">
-                <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                    Control Phase
-                  </a>
-                </h4>
-              </div>
-              <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
-                <div class="panel-body">
-                  <ul>
-                    <li>Introduction to Control phase </li>
-                    <li>Statistical process control (SPC) </li>
-                    <li>Control plan (Apply) </li>
-                    <li>Lean tools for process control</li> 
-                    <li>Summary of Control Phase</li>
-                    <li>Project 1- Concluded</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            
+            
             <div class="panel panel-default">
               <div class="panel-heading" role="tab" id="headingSeven">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
-                    LSSGB Exam Tips and Tricks 
-                  </a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">Increased Visibility With Resume Boost</a>
                 </h4>
               </div>
-              <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+              <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven" aria-expanded="false" style="height: 0px;">
                 <div class="panel-body">
                   <ul>
-                    <li>ASQ & IASSC</li>
+                    <li>To leave no stone unturned in your job search</li>
                   </ul>
                 </div>
               </div>
@@ -325,42 +240,24 @@
       <div class="row">
         <div class="container">
           <div class="row">
-            <h2 class="white-color mt-50 ml-15 mb-30">Why buy from Shine Learning?</h2>
+            <h2 class="white-color mt-50 ml-15 mb-30">For the extra competitive edge, we recommend</h2>
             <div class="col-xs-12 col-sm-4">
               <div class="why-buy">
-                <strong>Free featured profile</strong>
-                FREE featured profile worth Rs. 1440 for 1 month on Shine.com
-              </div>
+                <strong>Cover Letter</strong>Unique &amp; Customized to your job application requirements</div>
             </div>
             <div class="col-xs-12 col-sm-4">
               <div class="why-buy">
-                <strong>Shine credits</strong>
-                10% Shine credits redeemable on next purchase*
-              </div>
+                <strong>Visual Resume for Freshers </strong>Designed by professionals for the right appeal</div>
             </div>
+            
             <div class="col-xs-12 col-sm-4">
               <div class="why-buy">
-                <strong>Top Global Providers</strong>
-                Choose from a list of global providers as per your requirement
-              </div>
+                <strong>Resume Booster</strong>Increased visibility throughout the Shine network and its affiliates</div>
             </div>
+            
             <div class="col-xs-12 col-sm-4">
               <div class="why-buy">
-                <strong>0% EMI</strong>
-                Easy EMI payment option
-              </div>
-            </div>
-            <div class="col-xs-12 col-sm-4">
-              <div class="why-buy">
-                <strong>Free Services</strong>
-                Free Resume, Cover Letter Formats and Career Guidance Services
-              </div>
-            </div>
-            <div class="col-xs-12 col-sm-4">
-              <div class="why-buy">
-                <strong>Refer and Earn</strong>
-                Refer your friend and get an Amazon Voucher worth Rs. 2000*
-              </div>
+                <strong>Second Regular Resume</strong>To target different profiles correctly</div>
             </div>
           </div>
         </div>
@@ -371,13 +268,13 @@
     <!-- Outcomes of the training -->
     <div class="container mt-50">
       <div class="row">
-        <h2 class="ml-15 mb-30">Outcomes of the training</h2>
+        <h2 class="ml-15 mb-30">Your expertly written resume is the key to</h2>
         <div class="outcomes-training col-xs-12 col-sm-7">
           <ul>
-            <li>Learn how to apply the DMAIC methodology in your project</li>
-            <li>Use DFSS Tools such as Quality Function Deployment (QFD), Failure Mode and Effects Analysis (FMEA), and Risk Priority Number (RPN)</li>
-            <li>Learn how to measure current performance to identify projects, identify root causes of issues, and generate and implement solutions with real life applications on various industry case studies</li>
-            <li>Learn how to apply lean concepts in real business scenarios</li>
+            <li>Clear the screening process, be it digital or manual, to get you the interview calls.</li>
+            <li>Leave a positive mark on the recruiter before and during the interview process.</li>
+            <li>Print-friendly and software-based documentation and application.</li>
+            <li>Targeting the right applications the right ways to give you a competitive edge over other candidates.</li>
           </ul>
         </div>
         <div class="col-sm-5 hidden-xs">
@@ -477,5 +374,6 @@
             } 
           });
         </script>
-  </body>
-</html>
+  
+
+<span class="gr__tooltip"><span class="gr__tooltip-content"></span><i class="gr__tooltip-logo"></i><span class="gr__triangle"></span></span></body></html>
