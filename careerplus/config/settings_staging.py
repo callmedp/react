@@ -290,6 +290,9 @@ SERVER_EMAIL = 'recruiter@shine.com'
 DEFAULT_FROM_EMAIL = CONSULTANTS_EMAIL
 EMAIL_SERVER = 'http://localhost:8000'
 
+###### SEARCH SETTINGS #######
+EXCLUDE_SEARCH_PRODUCTS = LINKEDIN_RESUME_PRODUCTS
+
 try:
     from .settings_local import *
 except:

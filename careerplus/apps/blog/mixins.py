@@ -22,7 +22,8 @@ class BlogMixin(object):
 			product = []
 			slug = settings.COURSE_SLUG[0]
 			try:
-				results = SQS().filter(text=query, pPc=slug).extra({'qt': 'edismax', 'qf': 'text pHd^10 pFA^6 pCtg^4 pCC^2 pAb^1'}).only( 'pTt pURL pHd pAR pNJ pImA pImg pNm pBC pARx pPc , pStar')[:5]
+				results = SQS().filter(text=query, pPc=slug).exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).extra({
+					'qt': 'edismax', 'qf': 'text pHd^10 pFA^6 pCtg^4 pCC^2 pAb^1'}).only( 'pTt pURL pHd pAR pNJ pImA pImg pNm pBC pARx pPc , pStar')[:5]
 				for prd in results:
 					product.append(OrderedDict({
 						'title': prd.pTt,

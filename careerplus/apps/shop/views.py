@@ -489,7 +489,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 else:
                     request.session['linkedin_modal'] = 1
                     return HttpResponseRedirect('/')
-                    return HttpResponseRedirect('/')
 
         except Exception as e:
             logging.getLogger('error_log').error("SQS query error on product detail.ID:{}".format(pk))

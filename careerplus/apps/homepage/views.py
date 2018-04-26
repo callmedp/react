@@ -45,7 +45,7 @@ class HomePageView(TemplateView, MetadataMixin):
             # services_class = ProductClass.objects.filter(slug__in=settings.SERVICE_SLUG)
             job_services = job_services.filter(product__type_product__in=[0, 1, 3])
             job_services_pks = list(job_services.all().values_list('product', flat=True))
-            job_sqs = SearchQuerySet().filter(id__in=job_services_pks)
+            job_sqs = SearchQuerySet().filter(id__in=job_services_pks).exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS)
             job_services = job_sqs[:5]
             job_asst_view_all = tjob.view_all
         except Exception as e:
@@ -72,7 +72,7 @@ class HomePageView(TemplateView, MetadataMixin):
             show_pcourses = True
         if show_pcourses:
             pcourses = SQS().filter(
-                pPc='course').only(
+                pPc='course').exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only(
                 'pTt pURL pHd pAR pNJ pImA pImg pNm pBC pRC').order_by(
                 '-pBC')[:9]
 
@@ -84,7 +84,7 @@ class HomePageView(TemplateView, MetadataMixin):
 
             tprds = tprds.filter(product__product_class__in=course_classes, product__type_product__in=[0, 1, 3])
             product_pks = list(tprds.all().values_list('product', flat=True))
-            tprds = SearchQuerySet().filter(id__in=product_pks)[:9]
+            tprds = SearchQuerySet().filter(id__in=product_pks).exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS)[:9]
             data = {
                 'name': tcourse.name,
                 'tprds': list(tprds),
