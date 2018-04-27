@@ -514,7 +514,7 @@ footer {
 		border-radius: 2px;
 		font-size: $font-size+4;
 		color: $primary-color;
-		padding: 5px 15px;
+		padding: 9px 15px;
 		background-color: #fff;
 		font-weight: 400;
 		display: inline-block;
@@ -545,7 +545,6 @@ footer {
 	.payment-options {
 		border-radius: 2px;
 		display: inline-block;
-		float: right;
 		background-color: #fff;
 		padding: 5px 10px;
 
@@ -561,6 +560,52 @@ footer {
 			color: $grey-color;
 			font-size: 11px;
 			margin-bottom: 3px;
+		}
+	}
+
+	.footer-social-login {
+		text-align: center;
+		display: block;
+		font-size: $font-size+3;
+		color: $secondary-color;
+		margin: 5px 0 15px 0;
+		float: right;
+
+		span {
+			display: block;
+			margin-bottom: 5px;
+			text-align: left;
+			font-size: $font-size+1;
+			line-height: 12px;
+		}
+
+		.facebook {
+			background: $sprite -637px 10px #e3e8ea;
+			width: 42px;
+			height: 42px;
+			border: 1px solid #c0c7cb;
+			display: inline-block;
+			text-align: center;
+		}
+
+		.gplus {
+			background: $sprite -724px 12px #e3e8ea;
+			width: 42px;
+			height: 42px;
+			border: 1px solid #c0c7cb;
+			display: inline-block;
+			text-align: center;
+			margin-left: 10px;
+		}
+
+		.linkedin {
+			background: $sprite -677px 10px #e3e8ea;
+			width: 42px;
+			height: 42px;
+			border: 1px solid #c0c7cb;
+			display: inline-block;
+			text-align: center;
+			margin-left: 10px;
 		}
 	}
 
