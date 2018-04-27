@@ -107,6 +107,15 @@ CLIENT_ACCESS_KEY = "ZiHCJeTKh4EppsrOEHXIQPd2OKvV4JWrlKql0Y1JONE"
 CLIENT_ACCESS_SECRET = "QdEhIXFmhlHQdveZB1h9u9xxnfvFleET6bNUPlKYwU4"
 SHINE_API_TIMEOUT = 5
 
+# sumosc settings
+SHINE_SITE = 'https://sumosc.shine.com'
+SHINE_API_URL = 'https://sumosc.shine.com/api/v2'
+CLIENT_ACCESS_KEY = "M2XFaFVHHJwlISEQxFQis1cQoKe6lIBKUGaEDG0WiHA"
+CLIENT_ACCESS_SECRET = "aSQrGC9VZ866os5AZNGsor4CThxfGNz3s8V7rSMX3TY"
+SHINE_API_USER = 'scpapiuser@gmail.com'
+SHINE_API_USER_PWD = 'password'
+SHINE_API_TIMEOUT = 5
+
 CELERY_ALWAYS_EAGER = False
 
 
@@ -227,6 +236,10 @@ STATE = "9899002507upender"
 SCOPE = 'r_emailaddress r_basicprofile'
 TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
 OAUTH_URL = "https://www.linkedin.com/oauth/v2/authorization?"
+LINKEDIN_DICT = {
+    "CLIENT_ID": "81fbxkgs5558q0",
+    "CLIENT_SECRET": "ECioffWZKBbXhkbu",
+}
 
 ###### STORAGE SETTINGS #############
 DEFAULT_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPMediaStorage'
@@ -251,6 +264,11 @@ VISUAL_RESUME_PRODUCT_LIST = [305, 306, 307, 308, 309]
 COVER_LETTER_PRODUCT_LIST = [83, ]
 SECOND_REGULAR_RESUME_PRODUCT_LIST = [126, 127, 128, 129, 130]
 
+# product list for linkedin resume services
+LINKEDIN_RESUME_FREE = [2684, 2685]
+LINKEDIN_RESUME_COST = [2682, 2683]
+LINKEDIN_RESUME_PRODUCTS = LINKEDIN_RESUME_FREE + LINKEDIN_RESUME_COST
+
 ########## CRM SETTINGS #############
 SHINECPCRM_DICT = {
     'base_url': 'http://172.22.65.32:8003',
@@ -271,6 +289,9 @@ EMAIL_USE_TLS = 0
 SERVER_EMAIL = 'recruiter@shine.com'
 DEFAULT_FROM_EMAIL = CONSULTANTS_EMAIL
 EMAIL_SERVER = 'http://localhost:8000'
+
+###### SEARCH SETTINGS #######
+EXCLUDE_SEARCH_PRODUCTS = LINKEDIN_RESUME_PRODUCTS
 
 try:
     from .settings_local import *

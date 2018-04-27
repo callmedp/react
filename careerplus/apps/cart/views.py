@@ -403,11 +403,11 @@ class PaymentSummaryView(TemplateView, CartMixin):
             cart_pk = self.request.session.get('cart_pk')
             try:
                 self.cart_obj = Cart.objects.get(pk=cart_pk)
-                cart_dict = self.get_solr_cart_items(cart_obj=self.cart_obj)
+                # cart_dict = self.get_solr_cart_items(cart_obj=self.cart_obj)
                 if not self.cart_obj.shipping_done or not self.cart_obj.owner_id:
                     return HttpResponseRedirect(reverse('cart:payment-shipping'))
 
-                elif not self.cart_obj.lineitems.all().exists() or not cart_dict.get('total_amount'):
+                elif not self.cart_obj.lineitems.all().exists():
                     return HttpResponseRedirect(reverse('homepage'))
 
             except Exception as e:

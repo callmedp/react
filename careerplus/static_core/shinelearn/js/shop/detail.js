@@ -1,6 +1,16 @@
 
 
 $(document).ready(function () {
+
+  // $(window).on('load',function(){
+  //   $('#login-model').modal('show');
+  // });
+
+  // $(document).on("click", "#login-now-button", function() {
+  //   $('#login-model').modal('show');
+  // });
+
+
     var processing = false;
   
     function LoadMoreProductReview(pv_id) {

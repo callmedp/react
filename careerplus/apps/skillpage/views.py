@@ -80,7 +80,7 @@ class SkillPageView(DetailView, SkillPageMixin):
         meta_desc = None
         prod_id_list = []
         try:
-            products = SQS().filter(pCtg=self.pk)
+            products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=self.pk)
             for prd in products:
                 if prd.pTP == 1:
                     prd_vars = json.loads(prd.pVrs)
