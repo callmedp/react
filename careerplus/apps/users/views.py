@@ -402,7 +402,7 @@ class LinkedinLoginView(View):
                 request.session['linkedin_client_id'] = client_id
             else:
                 client_id = settings.CLIENT_ID
-
+            logging.getLogger('info_log').error('unable to do linked login%s' % str(e))
             request.session['next_url'] = request.GET.get('next', '')
             request.session['mobile_code'] = request.GET.get('country_code', '91')
             request.session['mobile'] = request.GET.get('mobile', '')
@@ -468,6 +468,7 @@ class LinkedinCallbackView(View):
             data_dict = json.loads(str_data)
             data_dict.update({'key': 'linkedin'})
             linkedin_user = RegistrationLoginApi.social_login(data_dict)
+            logging.getLogger('info_log').error('Response Received from shine for linkedin login: {}'.format(linkedin_user))
             if linkedin_user.get('response'):
                 logging.getLogger('info_log').info(linkedin_user)
                 if linkedin_user.get('user_details'):
