@@ -753,7 +753,9 @@ class RegistrationLoginApi(object):
             elif response.status_code == 400:
                 response_json = response.json()
                 response_json.update({'response': "form_error"})
-
+            else:
+                logging.getLogger('error_log').error("Error getting response from shine for"
+                                                     " registration. {} ".format(response))
         except Exception as e:
             logging.getLogger('error_log').error("Error getting response from shine for"
                                                  " registration. %s " % str(e))
@@ -786,6 +788,9 @@ class RegistrationLoginApi(object):
             elif response.status_code == 400:
                 response_json = response.json()
                 response_json.update({'response': "form_error"})
+            else:
+                logging.getLogger('error_log').error("Error getting response from shine for"
+                                                 " registration. {}".format(response))
 
         except Exception as e:
             logging.getLogger('error_log').error("Error getting response from shine for"
@@ -814,6 +819,9 @@ class RegistrationLoginApi(object):
             elif response.status_code == 400:
                 response_json = response.json()
                 response_json.update({'response': "form_error"})
+            else:
+                logging.getLogger('error_log').error("Error getting response from shine for"
+                                                 " login. {}".format(response))
 
         except Exception as e:
             logging.getLogger('error_log').error("Error in getting response from shine for login. %s " % str(e))
@@ -859,11 +867,14 @@ class RegistrationLoginApi(object):
                 response_json = response.json()
                 response_json.update({'response':True})
 
-            if response.status_code == 400:
+            elif response.status_code == 400:
                 response_json = response.json()
                 response_json.update({'status_code':response.status_code})
                 logging.getLogger('error_log').error(
                     "Error in getting response from shine for existing email check. ""%s " % str(response.status_code))
+            else:
+                logging.getLogger('error_log').error("Error getting response from shine for"
+                                                 " reset update. {}".format(response))
         except Exception as e:
             logging.getLogger('error_log').error("Error in getting response from shine for existing email check. "
                                                  "%s " % str(e))
@@ -903,11 +914,14 @@ class RegistrationLoginApi(object):
                 response_json = response.json()
                 response_json.update({'response': True})
 
-            if response.status_code == 400:
+            elif response.status_code == 400:
                 response_json = response.json()
                 response_json.update({'status_code':response.status_code})
                 logging.getLogger('error_log').error(
                     "Error in getting response from shine for existing email check. ""%s " % str(response.status_code))
+            else:
+                logging.getLogger('error_log').error("Error getting response from shine for"
+                                                 " social login. {}".format(response))
         except Exception as e:
             logging.getLogger('error_log').error("Error in getting response from shine for existing email check. "
                                                  "%s " % str(e))

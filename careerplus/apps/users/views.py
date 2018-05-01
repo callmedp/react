@@ -426,40 +426,39 @@ class LinkedinCallbackView(View):
     success_url = '/'
 
     def get(self, request, *args, **kwargs):
+
+        linkedin_client_id = request.session.get('linkedin_client_id', '')
+
+        if linkedin_client_id and linkedin_client_id == settings.LINKEDIN_DICT.get('CLIENT_ID'):
+            client_id = settings.LINKEDIN_DICT.get('CLIENT_ID', '')
+            client_secret = settings.LINKEDIN_DICT.get('CLIENT_SECRET', '')
+        else:
+            client_id = settings.CLIENT_ID
+            client_secret = settings.CLIENT_SECRET
+
+        self.success_url = request.session.get('next_url') if request.session.get('next_url') else '/'
+        country_code = request.session.get('mobile_code', '91')
+        mobile = request.session.get('mobile')
+        if request.session.get('next_url'):
+            del request.session['next_url']
+
+        if request.session.get('mobile_code'):
+            del request.session['mobile_code']
+
+        if request.session.get('mobile'):
+            del request.session['mobile']
+
+        params = {
+            'grant_type': 'authorization_code',
+            'code': request.GET.get('code') if 'code' in request.GET else '',
+            'redirect_uri': settings.REDIRECT_URI,
+            'client_id': client_id,
+            'client_secret': client_secret,
+        }
+        if not params['code']:
+            return HttpResponseRedirect('/login/')
+        params = urllib.parse.urlencode(params)
         try:
-
-            linkedin_client_id = request.session.get('linkedin_client_id', '')
-
-            if linkedin_client_id and linkedin_client_id == settings.LINKEDIN_DICT.get('CLIENT_ID'):
-                client_id = client_id = settings.LINKEDIN_DICT.get('CLIENT_ID', '')
-                client_secret = settings.LINKEDIN_DICT.get('CLIENT_SECRET', '')
-            else:
-                client_id = settings.CLIENT_ID
-                client_secret = settings.CLIENT_SECRET
-
-            self.success_url = request.session.get('next_url') if request.session.get('next_url') else '/'
-            country_code = request.session.get('mobile_code', '91')
-            mobile = request.session.get('mobile')
-
-            if request.session.get('next_url'):
-                del request.session['next_url']
-
-            if request.session.get('mobile_code'):
-                del request.session['mobile_code']
-
-            if request.session.get('mobile'):
-                del request.session['mobile']
-
-            params = {
-                'grant_type': 'authorization_code',
-                'code': request.GET.get('code') if 'code' in request.GET else '',
-                'redirect_uri': settings.REDIRECT_URI,
-                'client_id': client_id,
-                'client_secret': client_secret,
-            }
-            if not params['code']:
-                return HttpResponseRedirect('/login/')
-            params = urllib.parse.urlencode(params)
             info = urllib.request.urlopen(
                 settings.TOKEN_URL, params.encode("utf-8"))
             read_data = info.read()
@@ -498,7 +497,11 @@ class LinkedinCallbackView(View):
                             candidateid = reg_res.get('id')
                             resp_status = ShineCandidateDetail().get_status_detail(
                                 email=None, shine_id=candidateid)
-                            request.session.update(resp_status)
+                            if resp_status:
+                                request.session.update(resp_status)
+                            else:
+                                logging.getLogger('error_log').error('Did not receive correct response from shine.com '
+                                                                     'for candidate status api')
                             return HttpResponseRedirect(self.success_url)
 
             elif linkedin_user['status_code'] == 400:
