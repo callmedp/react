@@ -2761,6 +2761,19 @@ h2 {
   display: block;
 }
 
+.ds-bg-new {
+  background: url(/l/s/shinelearn/images/marketing/data-science-cert/ds-bg-1.jpg) #e9f1fd 0 0;
+  background-size: cover;
+  display: block;
+}
+
+.pmp-bg {
+  background-size: cover;
+  background: url(/l/s/shinelearn/images/marketing/pmp-cert/pmp-bg.jpg) #fbfef7 0 0;
+  background-size: cover;
+  display: block;
+}
+
 .white-color {
   color: #fff;
 }
@@ -3022,6 +3035,10 @@ h2 {
   width: 15px;
   height: 9px;
   background: url(/l/s/shinelearn/images/marketing/data-science-cert/down-arrow.png);
+}
+
+.course-preview .arrow-end a:after {
+  display:none;
 }
 
 .course-preview .panel-heading a, .course-preview .panel-heading a:hover{

@@ -1,290 +1,450 @@
 {% load static %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta charset="utf-8">
-        <meta name="description" content="">
-        <meta name="keywords" content="">
-        <title>Project Management Pro!</title>
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>PMP Certification - Shine Learning</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="{% static 'shinelearn/css/marketing/bootstrap.css' %}" rel="stylesheet" type="text/css" />
 
-        <link href="{% static 'shinelearn/css/marketing/pmp-cert/style_pmp.css' %}" rel="stylesheet">
-        <!--[if IE]>
-            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-
-        <style>
-            @media screen and (max-height: 1048px){
-                #rc-imageselect, #captcha1 {transform:scale(0.60);-webkit-transform:scale(0.60);transform-origin:0 0;-webkit-transform-origin:0 0;}
-            }
-            .noerror {
-                display: none;
-            }
-        </style>
-        <script type="text/javascript">
-            var recaptcha1;
-            var recaptcha2;
-            function recaptchaCallBack() {
-                if($("#captcha1").length){
-                //Render the recaptcha1 on the element with ID "recaptcha1"
-                recaptcha1 = grecaptcha.render('captcha1', {
-                  'sitekey' : '6Lfa5zYUAAAAAFFe_gV2u2h3XovQzmQCUzRm4MYY', //Replace this with your Site key
-                  'theme' : 'light'
-                });}};
-            function openPopupRecaptcha() {
-                if($('#recaptcha2').is(':empty')){
-                grecaptcha.render("captcha2", {sitekey: "6Lfa5zYUAAAAAFFe_gV2u2h3XovQzmQCUzRm4MYY", theme: "light"});}
-            };
-        </script>
-        <script src="https://www.google.com/recaptcha/api.js?onload=recaptchaCallBack&render=explicit" async defer></script>
-        <!-- Google Tag Manager -->
-        <!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':-->
-        <!--new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],-->
-        <!--j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=-->
-        <!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);-->
-        <!--})(window,document,'script','dataLayer','GTM-M323HB');</script>-->
-        <!-- End Google Tag Manager -->
-        <script>
-              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-              ga('create', 'UA-3537905-1', 'auto', {'name': 'a'});
-              ga('a.send', 'pageview');
-              ga('create', 'UA-3537905-41', 'auto');
-              ga('send', 'pageview');
-            </script>
-
-    </head>
-    <body>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <!-- header -->
+    <header class="container-fluid pmp-bg">
+      <div class="row">
         <div class="container">
-            <div class="header">
-                <a href="/" class="logo sprite"></a>
-                <div style="clear:both">
-                </div>
-            </div>
-            <div class="header_banner">
-                <div class="punchline">
-                    <h1>Buy a PMP certification course and become a Project Management pro!</h1><span>Get a 23% salary hike* as compared to your peers</span>
-                </div>
-            </div>
-            <div class="query">
-                <h2>Need more details?</h2>
-                <p style="padding: 0px 10px;">Our team will assist you with the details of the course and help you take an informed decision.</p>
-                <form id="lead" 
-          action="{% url "crmapi:lead-management-captcha" %}"  data-non_captcha_action="{% url "crmapi:lead-management" %}"
-          >
-                    {% csrf_token %}
-                    <input type="text" id="name" name="name" placeholder="Full Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}" maxlength="60">
+          <div class="row">
+            <!-- logo -->
+            <div class="col-xs-12">
+              <a class="shinelearning-logo" href="/">
+                <img src="{% static 'shinelearn/images/marketing/data-science-cert/shine-learning-logo.png' %}" alt="Shinelearning">
+              </a>
 
-                    <input type="email" id="email" name="email" placeholder="yourname@email.com" value="{{request.session.email}}" maxlength="60">
-
-                    <div style="clear:both; display:block;">
-                    <input type="hidden" id="country" name="country" aria-invalid="false" value="91">
-
-                    <input type="mobile" id="mobile" name="number" onblur="leadSubmit();return false;" placeholder="Phone Number" value="{{request.session.mobile_no}}" maxlength="15">
-                    </div>
-
-                    <input id="message" name="msg" type="hidden" value="Project Management pro!">
-                    <!--
-                    <div style="clear:both; height:53px; overflow:hidden; display:block;">
-                    <div id="captcha1" class="input-field" style="width:45%; margin:0 2% 10px 5%; float:left" >
-                    </div>
-                    <p style="display:none; color:#ff0000;
-                              font-size: 13px;
-                              margin: 0;
-                              padding: 0;
-                              width: 36%;
-                              float: right;
-                              z-index: 5;" id="hiddenrecaptcha"> Captcha Validation is required</p>
-                              </div>
-                    -->
-                    
-                    <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
-
-                    <input type="hidden" name="prd" value="pmp certifications">
-
-                    <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
-                    <input type="hidden" name="lsource" value="{{ lead_source }}">
-                    <input type="submit" value="Submit" class="submit" onclick="_gaq.push(['resume._trackEvent','Lead','submit']);$('#lead').submit();return false;" id="submit">
-                </form>
+              <a class="ht-logo" href="#">
+                <img src="{% static 'shinelearn/images/marketing/data-science-cert/ht-media-logo.png' %}" alt="Shinelearning">
+              </a>
             </div>
 
-            <div class="marqueebox">
-                <div class="marquee">
-                    <div class="mcontent"><span class="hike sprite"></span><p>Our course can get you up to 23% salary hike as compared to your peers</p></div>
-                    <div class="mcontent"><span class="verified sprite"></span><p>Certifications are offered by global and verified course providers like Vskills, Skillsoft, iACT Global </p></div>
-                    <div class="mcontent"><span class="course sprite"></span><p>Unparallel course content by industry experts and knowledge leaders</p></div>
-                    <div class="mcontent"><span class="expert sprite"></span><p>Both classroom and online courses available </p></div>
-                </div>
-            </div>
+            <!-- content & punchline -->
+            <div class="col-xs-12 col-sm-7 col-md-5 col-lg-6 header-content header-content-pmp">
+              <h1><strong>Don’t let appraisals bog you down<br></strong><br> Get promotion ready with PMP Certification</h1>
 
-            <div class="about"><h3>About Shine Learning</h3>
+              <div class="hidden-xs header-txt">
                 <ul>
-                    <li>Shine Learning is the largest career services marketplace which provides end to end solutions to enhance your career trajectory. </li>
-                    <li>We thrive for the best quality services in the career enhancement industry. </li>
-                    <li>Our services range from resume writing, social media profile enhancement, learning and skill development courses, certifications, free resume formats along with expert career advice. </li>
+                  <li>Certification from Simplilearn to claim the 35 PDUs. </li>
+                  <li>35+ hours of instructor led online training.</li>
+                  <li>29 hours of high quality e-learning content by industry experts </li>
                 </ul>
+                <div class="punch-line">Your Journey to become Project Management Certified begins today!</div>
+              </div>
             </div>
-            <div class="course">
-                <h3>Popular Courses</h3>
-                <div class="course1"><img src="{% static 'shinelearn/css/marketing/pmp-cert/img2.jpg' %}" alt="Certified Digital Marketing Master Course" width="371" height="158"><h4>PMI Project Management Professional PMP</h4></div>
 
-                <div class="course2"><img src="{% static 'shinelearn/css/marketing/pmp-cert/img3.jpg' %}" alt="Vskills Certified facebook apps Developer" width="371" height="170"><h4>Project Management Professional Training</h4></div>
-
-                <div class="course1"><img src="{% static 'shinelearn/css/marketing/pmp-cert/img4.jpg' %}" alt="Certified Web Analytics Master course" width="371" height="170"><h4>PMP Certification Classroom Training Program</h4></div>
-
-                <div class="course2"><img src="{% static 'shinelearn/css/marketing/pmp-cert/img5.jpg' %}" alt="Vskills Certified SEO Professional" width="371" height="170"><h4>Vskills Certified Project Management Professional</h4></div>
+            <!-- girl -->
+            <div class="hidden-xs hidden-sm col-md-3 men-pic">
+              <img src="{% static 'shinelearn/images/marketing/pmp-cert/pmp-g.png' %}" alt="Shinelearning" class="img-responsive">
             </div>
-            <div class="footer"><p>*Disclaimer: "The information mentioned above is based on the internal research by the experts in the relevant domain in HT Media Limited. The said information is merely illustration of probability in increase and no guarantee is being provided by the company for the same"</p></div>
 
+            <!-- enquiry form -->
+            <div class="col-xs-12 col-sm-5 col-md-4 col-lg-3">
+              <form class="enquiry-form" id="lead" method="POST"
+                action="{% url 'crmapi:lead-management' %}"> {% csrf_token %}
+                <strong>Let’s get started</strong>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="name" 
+                  placeholder="Your Full Name" name="name">
+                  <label class="error-txt js-error"></label>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="email" 
+                  placeholder="Email Address" name="email">
+                  <label class="error-txt js-error"></label>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="mobile" placeholder="Mobile Number" name="number">
+                  <label class="error-txt js-error"></label>
+                </div>
+                <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+
+                <input type="hidden" name="prd" value="PMP Certification">
+
+                <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+                <input type="hidden" name="lsource" value="{{ lead_source }}">
+                
+                <div class="tnc">
+                  By registering with us you agree to our 
+                  <a href="/tnc">Terms & Conditions</a>
+                </div>
+                <button type="submit" class="btn btn-default" 
+                  onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enroll Now</button>
+                <p>*Easy EMI option available</p>
+              </form>
+            </div>
+
+            <!-- content repeat for mobile device -->
+            <div class="col-xs-12 col-sm-6 visible-xs mt-20 mb-30 header-txt">
+              <ul>
+               <li>Certification from Simplilearn to claim the 35 PDUs. </li>
+                  <li>35+ hours of instructor led online training.</li>
+                  <li>29 hours of high quality e-learning content by industry experts </li>
+              </ul>
+              <div class="punch-line">Your Journey to become Project Management Certified begins today!</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- header end -->
+
+    <!-- Courses Box -->
+    <div class="container mt-50">
+      <div class="row">
+        <!-- Courses -->
+        <div class="col-xs-12 col-sm-7">
+          <!-- Course Highlights -->
+          <div class="course-highlight">
+            <h2>Course Highlights</h2>
+            <ul>
+              <li>
+                <strong>8 industry case studies, 20 industry-based scenarios</strong>
+                Acquire hands-on knowledge and expertise!</li>
+              <li>
+                <strong>6 hands-on projects, 7 simulation test papers</strong>
+                Gain confidence to ace the certification exams!
+              </li>
+              <li>
+                <strong>Achieve 35 PDUs offered </strong>
+                Get PDUs which will help in maintaining your credentials &amp; take PMP certification exam.</li>
+              <li>
+                <strong>Expert Trainers</strong>
+                Get trained by PMP certified trainers with 15+ years of experience</li>
+              <li>
+                <strong>100% Money Back Guarantee</strong>
+              </li>
+             
+            </ul>
+          </div>
+
+          <!-- Who should attend? -->
+          <div class="course-attend mt-50">
+            <h2>Who should attend?</h2>
+            <ul>
+              <li>
+               Project Managers
+              </li>
+              <li>Associate/Assistant Project Managers
+              </li>
+              <li>
+             Team Leads/Team Managers
+              </li>
+              <li>
+               Project Executives/Project Engineers
+              </li>
+              <li>
+                Software Developers
+              </li>
+            </ul>
+          </div>
         </div>
 
-        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+        <!-- Course Preview -->
+        <div class="col-xs-12 col-sm-5">
+          <h2>Course Preview</h2>
+          <div class="panel-group course-preview" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    Professional and Social Responsibility</a>
+                </h4>
+              </div>
 
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingTwo">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Project Management Framework</a>
+                </h4>
+              </div>
+              
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingThree">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Project Management Processes</a>
+                </h4>
+              </div>
+              
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingFour">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Project Integration Management</a>
+                </h4>
+              </div>              
+            </div>
         
-        <script type="text/javascript">
-            $(function() {
-              $('a[href*=#]:not([href=#])').click(function() {
-                if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+        <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingFive">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                   Project Scope Management</a>
+                </h4>
+              </div>              
+            </div>
+        
+        
+        <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingSix">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                   Project Schedule Management</a>
+                </h4>
+              </div>              
+            </div>
+        
+        
+        <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingSeven">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                   Project Cost Management </a>
+                </h4>
+              </div>              
+            </div>
+        
+        <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingEight">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                    Project Quality Management </a>
+                </h4>
+              </div>              
+            </div>
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingNine">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                   Project Resource Management</a>
+                </h4>
+              </div>              
+            </div>
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingTen">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+                    Project Communications Management</a>
+                </h4>
+              </div>              
+            </div>
+        
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingEleven">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
+                    Project Risk Management </a>
+                </h4>
+              </div>              
+            </div>
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingTwelve">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">
+                    Project Procurement Management </a>
+                </h4>
+              </div>              
+            </div>
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingThirteen">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThirteen" aria-expanded="false" aria-controls="collapseThirteen">
+                    Project Stakeholder Management</a>
+                </h4>
+              </div>              
+            </div>
+        
+           
+          </div>
+        </div>
 
-                  var target = $(this.hash);
-                  target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-                  if (target.length) {
-                    $('html,body').animate({
-                      scrollTop: target.offset().top
-                    }, 1000);
-                    return false;
-                  }
-                }
-              });
-            });
-        </script>
-        <script type="text/javascript">
-        var _gaq = _gaq || [];
-        $.validator.addMethod("lettersonly", function (value, element){
-            return this.optional(element) || /^[a-z\s]*$/i.test(value);
-        }, "Letters only please");
+      </div>
+    </div>
+    <!-- Courses Box end -->
 
-        $.validator.addMethod("defaultInvalid", function (value, element) {
-            return !(element.value == element.defaultValue);
-        }, "This field is required.");
-        $.validator.addMethod("custommobile",
-            function(value, element) {
-                return value.length == 10 ;
-        });
+    <!-- Why buy from Shine Learning? -->
+    <div class="container-fluid blue-bg mt-50">
+      <div class="row">
+        <div class="container">
+          <div class="row">
+            <h2 class="white-color mt-50 ml-15 mb-30">Shine Learning Advantage</h2>
+            <div class="col-xs-12 col-sm-4">
+              <div class="why-buy">
+                <strong>Free featured profile</strong>
+                FREE featured profile worth Rs. 1440 for 1 month on Shine.com
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+              <div class="why-buy">
+                <strong>Shine credits</strong>
+                10% Shine credits redeemable on next purchase*
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+              <div class="why-buy">
+                <strong>Top Global Education Providers </strong>
+                Choose from a list of global providers as per your requirement</div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+              <div class="why-buy">
+                <strong>0% EMI</strong>
+                Easy EMI payment option
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+              <div class="why-buy">
+                <strong>Free Services</strong>
+                Free Resume, Cover Letter Formats and Career Guidance Services
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+              <div class="why-buy">
+                <strong>Refer and Earn</strong>
+                Refer your friend and get an Amazon Voucher worth Rs. 2000*
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Why buy from Shine Learning? end -->
 
-        function leadSubmit() {
-            var form = $('#lead');
-            var action = form.data('non_captcha_action');
-            $.post(action, (form).serialize(), function (data) {
-                }, 'json');
-        }
+    <!-- Outcomes of the training -->
+    <div class="container mt-50">
+      <div class="row">
+        <h2 class="ml-15 mb-30">Outcomes of the training</h2>
+        <div class="course-attend col-xs-12 col-sm-7">
+          <ul>
+            <li>Learn modern project management tools such as work breakdown structure, resource allocation, Gant charts, mathematical project scheduling models, project cost estimating, cost management and engineering economics</li>
+            <li>Learn to develop a broad and flexible toolkit of techniques and adapting your approach to the context and constraints of projects</li>
+            <li>Learn how to cultivate the people skills, trust and leadership necessary to meet project requirements</li>
+            <li>Learn how to deliver projects on scope, on time and on budget</li>
+          </ul>
+        </div>
+        <div class="col-sm-5 hidden-xs">
+          <img src="images/outcomes-training.jpg" alt="Shinelearning" class="img-responsive">
+        </div>
+      </div>
+    </div>
+    <!-- Outcomes of the training end -->
 
+    <!-- footer -->
+    <footer>
+      Copyright © 2018 HT Media Limited.
+    </footer>
+    <!-- footer end -->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'shinelearn/js/marketing/bootstrap.min.js' %}"></script>
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+
+    $.validator.addMethod("lettersonly", function (value, element){
+        return this.optional(element) || /^[a-z\s]*$/i.test(value);
+    }, "Letters only please");
+
+    $.validator.addMethod("defaultInvalid", function (value, element) {
+        return !(element.value == element.defaultValue);
+    }, "This field is required.");
         $("#lead").validate({
-                submitHandler:function (form) {
-                    
-                    if(grecaptcha.getResponse(recaptcha1) == '') {
-                        $('#hiddenrecaptcha').show();
-                    } else {
-                        $('#hiddenrecaptcha').hide();
-                        var action = $(form).attr('action');
-                        $.post(action, $(form).serialize(), function (data) {
-                            if (data['recaptcha']) {
-                                if (data['status']){
-                                $.each($("#lead"), function (i, e) {
-                                    e.reset();
-                                });
-                                $("#lead label").remove();
-                                grecaptcha.reset(recaptcha1);
-                                var conversion_id = 991709191;
-                                var conversion_label = "ciw9CIetw1gQh5Dx2AM";
-                                var ga_code = document.createElement('div');
-                                ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
-                                document.body.appendChild(ga_code);
-                                window.location.href ='thankyou-for-query'
-                                return false;
-                                    
-                                } else {
-                                    alert("Error! Something went wrong. Please try again");
-                                    grecaptcha.reset(recaptcha1);
-                                    
-                                }
-                        }
-                        else{
-                            alert("Only humans are allowed to submit this form.");
-                            grecaptcha.reset(recaptcha1);
-                        }
-
-                        }, 'json');
+            submitHandler:function (form) {
+                var action = $(form).attr('action');
+                $.post(action, $(form).serialize(), function (data) {
+                    if (data && data['status']){
+                        $.each($("#lead"), function (i, e) {
+                            e.reset();
+                        });
+                        $("#lead label").remove();
+                        var conversion_id = 991709191;
+                        var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                        var ga_code = document.createElement('div');
+                        ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                       document.body.appendChild(ga_code);
+                       window.location.href ='thankyou-for-query';
+                        return false;
                     }
+                }, 'json');
+            },
+            rules:{
+                number:{
+                    required:true,
+                    minlength:10,
+                    maxlength:20,
+                    number:true,
+                },
+                email:{
+                    email:true,
+                    required:true,
 
                 },
-                rules:{
-                    number:{
-                        required:true,
-                        custommobile:true,
-                        number:true,
-                    },
-                    email:{
-                        email:true,
-                        required:true,
+                name:{
+                    required:true,
+                    lettersonly:true,
 
-                    },
-                    name:{
-                        required:true,
-                        lettersonly:true,
-
-                    },
-                    msg:{
-                        maxlength:500
-                    }
                 },
-                messages:{
-                    number:{
-                       required:"Field is required",
-                       number:"Enter only number",
-                       custommobile: "Please enter 10 digits mobile number",
-                    },
-                    email:{
-                        required:"Field is required"
-                    },
-                    name:{
-                        required:"Field is required"
-                    },
-                    msg:{
-                        maxlength:"No more than 500 characters."
+                // msg:{
+                //     required:true,
+                //     maxlength:500
+                // }
+            },
+            messages:{
+                number:{
+                   required:"Field is required"
+                },
+                email:{
+                    required:"Field is required"
+                },
+                name:{
+                    required:"Field is required"
+                },
+                // msg:{
+                //     required:"Field is required",
+                //     maxlength:"No more than 500 characters."
 
-                    }
-                }
-            });
+                // }
+            },
+            highlight:function(element, errorClass) {
+              $(element).closest('.form-group').addClass('error');
+            },
+            unhighlight:function(element, errorClass) {
+              $(element).closest('.form-group').removeClass('error');
+              $(element).siblings('.js-error').html("");
+            },
+            errorPlacement: function(error, element){
+              $(element).siblings('.js-error').html(error.text());
+            } 
+          });
         </script>
-
-        <!-- Facebook Pixel Code -->
-
-        <script>
-
-        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-
-        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-
-        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-
-        document,'script','//connect.facebook.net/en_US/fbevents.js');
-
-
-
-        fbq('init', '630068977028888');
-
-        fbq('track', "PageView");</script>
-
-        <noscript><img height="1" width="1" style="display:none"
-
-        src="https://www.facebook.com/tr?id=630068977028888&ev=PageView&noscript=1"
-
-        /></noscript>
-    </body>
+  </body>
 </html>
