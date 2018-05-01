@@ -65,13 +65,15 @@ class ShineCandidateDetail(ShineToken):
                     if access_token:
                         headers = {
                             "User-Access-Token": access_token,
-                            "Client-Access-Token": client_token
+                            "Client-Access-Token": client_token,
+                            "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'
                         }
                         return headers
             elif client_token and token:
                 headers = {
                     "User-Access-Token": token,
                     "Client-Access-Token": client_token,
+                    "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'
                 }
                 return headers
         except Exception as e:
