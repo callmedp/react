@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -5,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>PMP - Shine Learning</title>
+    <title>PMP Certification - Shine Learning</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
     <!-- Bootstrap -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="{% static 'shinelearn/css/marketing/bootstrap.css' %}" rel="stylesheet" type="text/css" />
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -25,56 +26,67 @@
           <div class="row">
             <!-- logo -->
             <div class="col-xs-12">
-              <a class="shinelearning-logo" href="#">
-                <img src="images/shine-learning-logo.png" alt="Shinelearning">
+              <a class="shinelearning-logo" href="/">
+                <img src="{% static 'shinelearn/images/marketing/data-science-cert/shine-learning-logo.png' %}" alt="Shinelearning">
               </a>
 
               <a class="ht-logo" href="#">
-                <img src="images/ht-media-logo.png" alt="Shinelearning">
+                <img src="{% static 'shinelearn/images/marketing/data-science-cert/ht-media-logo.png' %}" alt="Shinelearning">
               </a>
             </div>
 
             <!-- content & punchline -->
             <div class="col-xs-12 col-sm-7 col-md-5 col-lg-6 header-content header-content-pmp">
-              <h1><strong>Don’t let appraisals bog you down<br></strong><br> Get promotion ready with 
-PMP Certification</h1>
-<!--              <strong>with Simplilearn’s Masters Program</strong>-->
+              <h1><strong>Don’t let appraisals bog you down<br></strong><br> Get promotion ready with PMP Certification</h1>
+
               <div class="hidden-xs header-txt">
                 <ul>
                   <li>Certification from Simplilearn to claim the 35 PDUs. </li>
                   <li>35+ hours of instructor led online training.</li>
                   <li>29 hours of high quality e-learning content by industry experts </li>
                 </ul>
-                <div class="punch-line">Your Journey to become Project Management 
-Certified begins today!</div>
+                <div class="punch-line">Your Journey to become Project Management Certified begins today!</div>
               </div>
             </div>
 
             <!-- girl -->
             <div class="hidden-xs hidden-sm col-md-3 men-pic">
-              <img src="images/pmp-g.png" alt="Shinelearning"  class="img-responsive">
+              <img src="{% static 'shinelearn/images/marketing/pmp-cert/pmp-g.png' %}" alt="Shinelearning" class="img-responsive">
             </div>
 
             <!-- enquiry form -->
             <div class="col-xs-12 col-sm-5 col-md-4 col-lg-3">
-              <form class="enquiry-form">
+              <form class="enquiry-form" id="lead" method="POST"
+                action="{% url 'crmapi:lead-management' %}"> {% csrf_token %}
                 <strong>Let’s get started</strong>
-                <div class="form-group error">
-                  <input type="text" class="form-control" id="name" placeholder="Your Full Name">
-                  <label class="error-txt">Error Message</label>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="name" 
+                  placeholder="Your Full Name" name="name">
+                  <label class="error-txt js-error"></label>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" id="email" placeholder="Email Address">
+                  <input type="text" class="form-control" id="email" 
+                  placeholder="Email Address" name="email">
+                  <label class="error-txt js-error"></label>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" id="mobile" placeholder="Mobile Number">
+                  <input type="text" class="form-control" id="mobile" placeholder="Mobile Number" name="number">
+                  <label class="error-txt js-error"></label>
                 </div>
+                <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+
+                <input type="hidden" name="prd" value="PMP Certification">
+
+                <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+                <input type="hidden" name="lsource" value="{{ lead_source }}">
                 
                 <div class="tnc">
                   By registering with us you agree to our 
-                  <a href="#">Terms & Conditions</a>
+                  <a href="/tnc">Terms & Conditions</a>
                 </div>
-                <button type="submit" class="btn btn-default">ENROL NOW</button>
+                <button type="submit" class="btn btn-default" 
+                  onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enroll Now</button>
                 <p>*Easy EMI option available</p>
               </form>
             </div>
@@ -86,8 +98,7 @@ Certified begins today!</div>
                   <li>35+ hours of instructor led online training.</li>
                   <li>29 hours of high quality e-learning content by industry experts </li>
               </ul>
-              <div class="punch-line">Your Journey to become Project Management 
-Certified begins today!</div>
+              <div class="punch-line">Your Journey to become Project Management Certified begins today!</div>
             </div>
 
           </div>
@@ -107,17 +118,17 @@ Certified begins today!</div>
             <ul>
               <li>
                 <strong>8 industry case studies, 20 industry-based scenarios</strong>
-				  Acquire hands-on knowledge and expertise!</li>
+                Acquire hands-on knowledge and expertise!</li>
               <li>
                 <strong>6 hands-on projects, 7 simulation test papers</strong>
-				  Gain confidence to ace the certification exams!
+                Gain confidence to ace the certification exams!
               </li>
               <li>
                 <strong>Achieve 35 PDUs offered </strong>
-				  Get PDUs which will help in maintaining your credentials &amp; take PMP certification exam.</li>
+                Get PDUs which will help in maintaining your credentials &amp; take PMP certification exam.</li>
               <li>
                 <strong>Expert Trainers</strong>
-				  Get trained by PMP certified trainers with 15+ years of experience</li>
+                Get trained by PMP certified trainers with 15+ years of experience</li>
               <li>
                 <strong>100% Money Back Guarantee</strong>
               </li>
@@ -154,30 +165,11 @@ Certified begins today!</div>
             <div class="panel panel-default">
               <div class="panel-heading arrow-end" role="tab" id="headingOne">
                 <h4 class="panel-title">
-                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                     Professional and Social Responsibility</a>
                 </h4>
               </div>
-<!--
-              <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                <div class="panel-body">
-                  <ul>
-                    <li>Course Introduction</li>
-                    <li>Analytics Overview</li>
-                    <li>Introduction to SAS</li>
-                    <li>Combining and Modifying Datasets</li>
-                    <li>PROC SQL</li>
-                    <li>SAS Macros</li>
-                    <li>Basics of Statistics</li>
-                    <li>Statistical Procedures</li>
-                    <li>Data Exploration</li>
-                    <li>Advanced Statistics</li>
-                    <li>Working with Time Series Data</li>
-                    <li>Designing Optimization Models</li>
-                  </ul>
-                </div>
-              </div>
--->
+
             </div>
             <div class="panel panel-default">
               <div class="panel-heading arrow-end" role="tab" id="headingTwo">
@@ -205,91 +197,91 @@ Certified begins today!</div>
                 </h4>
               </div>              
             </div>
-			  
-			  <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingFour">
+        
+        <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingFive">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
                    Project Scope Management</a>
                 </h4>
               </div>              
             </div>
-			  
-			  
-			  <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingFour">
+        
+        
+        <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingSix">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
                    Project Schedule Management</a>
                 </h4>
               </div>              
             </div>
-			  
-			  
-			  <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingFour">
+        
+        
+        <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingSeven">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
                    Project Cost Management </a>
                 </h4>
               </div>              
             </div>
-			  
-			  <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingFour">
+        
+        <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingEight">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
                     Project Quality Management </a>
                 </h4>
               </div>              
             </div>
-			  
-			   <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingFour">
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingNine">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
                    Project Resource Management</a>
                 </h4>
               </div>              
             </div>
-			  
-			   <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingFour">
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingTen">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
                     Project Communications Management</a>
                 </h4>
               </div>              
             </div>
-			  
-			  
-			   <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingFour">
+        
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingEleven">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
                     Project Risk Management </a>
                 </h4>
               </div>              
             </div>
-			  
-			   <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingFour">
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingTwelve">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">
                     Project Procurement Management </a>
                 </h4>
               </div>              
             </div>
-			  
-			   <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingFour">
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingThirteen">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThirteen" aria-expanded="false" aria-controls="collapseThirteen">
                     Project Stakeholder Management</a>
                 </h4>
               </div>              
             </div>
-			  
+        
            
           </div>
         </div>
@@ -372,7 +364,87 @@ Certified begins today!</div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="{% static 'shinelearn/js/marketing/bootstrap.min.js' %}"></script>
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+
+    $.validator.addMethod("lettersonly", function (value, element){
+        return this.optional(element) || /^[a-z\s]*$/i.test(value);
+    }, "Letters only please");
+
+    $.validator.addMethod("defaultInvalid", function (value, element) {
+        return !(element.value == element.defaultValue);
+    }, "This field is required.");
+        $("#lead").validate({
+            submitHandler:function (form) {
+                var action = $(form).attr('action');
+                $.post(action, $(form).serialize(), function (data) {
+                    if (data && data['status']){
+                        $.each($("#lead"), function (i, e) {
+                            e.reset();
+                        });
+                        $("#lead label").remove();
+                        var conversion_id = 991709191;
+                        var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                        var ga_code = document.createElement('div');
+                        ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                       document.body.appendChild(ga_code);
+                       window.location.href ='thankyou-for-query';
+                        return false;
+                    }
+                }, 'json');
+            },
+            rules:{
+                number:{
+                    required:true,
+                    minlength:10,
+                    maxlength:20,
+                    number:true,
+                },
+                email:{
+                    email:true,
+                    required:true,
+
+                },
+                name:{
+                    required:true,
+                    lettersonly:true,
+
+                },
+                // msg:{
+                //     required:true,
+                //     maxlength:500
+                // }
+            },
+            messages:{
+                number:{
+                   required:"Field is required"
+                },
+                email:{
+                    required:"Field is required"
+                },
+                name:{
+                    required:"Field is required"
+                },
+                // msg:{
+                //     required:"Field is required",
+                //     maxlength:"No more than 500 characters."
+
+                // }
+            },
+            highlight:function(element, errorClass) {
+              $(element).closest('.form-group').addClass('error');
+            },
+            unhighlight:function(element, errorClass) {
+              $(element).closest('.form-group').removeClass('error');
+              $(element).siblings('.js-error').html("");
+            },
+            errorPlacement: function(error, element){
+              $(element).siblings('.js-error').html(error.text());
+            } 
+          });
+        </script>
   </body>
 </html>
