@@ -105,13 +105,13 @@ $(document).ready(function() {
         }
     });
 
-    try{
+    /*try{
         var mobile_attr = $('#linkedin_url_id').attr('mobile');
         if (mobile_attr == 'mobile') {
             $('.bs-example-modal-sm-linkedin').modal('show');
         }
     }catch(err){
-    }
+    }*/
 
 
     // login and registration js 
