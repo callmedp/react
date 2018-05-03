@@ -30,7 +30,19 @@ urlpatterns = [
         marketing_views.MarketingPages.as_view(),
         name='digital-marketing-certification'),
 
+    url(r'^data-science-certification$',
+        marketing_views.MarketingPages.as_view(),
+        name='data-science-certification'),
+
     url(r'^thankyou-for-query$',
         marketing_views.MarketingPages.as_view(),
         name='thankyou-for-query'),
+
+    url(r'^six-sigma-green-belt$',
+        marketing_views.MarketingPages.as_view(),
+        name='six-sigma-green-belt'),
+
+    url(r'^resume-writing$',
+        marketing_views.MarketingPages.as_view(),
+        name='resume-writing'),
 ]

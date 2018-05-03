@@ -63,9 +63,11 @@ class ShineCandidateDetail(ShineToken):
                         access_token_json.get('SUCCESS', False):
                     access_token = access_token_json.get('access_token', None)
                     if access_token:
-                        headers = {"User-Access-Token": access_token,
-                                   "Client-Access-Token": client_token,
-                                   "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
+                        headers = {
+                            "User-Access-Token": access_token,
+                            "Client-Access-Token": client_token,
+                            "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'
+                        }
                         return headers
             elif client_token and token:
                 headers = {
@@ -126,6 +128,11 @@ class ShineCandidateDetail(ShineToken):
                 headers = self.get_api_headers(token=token)
                 status_url = "{}/api/v2/candidate/{}/status/?format=json".format(settings.SHINE_SITE, shine_id)
                 status_response = requests.get(status_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+                try:
+                    logging.getLogger('error_log').error(
+                    'Response Received from shine for shine candidate status: {}'.format(status_response.__dict__))
+                except Exception as e:
+                    logging.getLogger('error_log').error(str(e))
                 if status_response.status_code == 200 and status_response.json():
                     return status_response.json()
             elif email:
@@ -136,6 +143,12 @@ class ShineCandidateDetail(ShineToken):
                         "/api/v2/candidate/" +\
                         shine_id + "/status/?format=json"
                     status_response = requests.get(status_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+                    try:
+                        logging.getLogger('error_log').error(
+                            'Response Received from shine for shine candidate status: {}'.format(
+                                status_response.__dict__))
+                    except Exception as e:
+                        logging.getLogger('error_log').error(str(e))
                     if status_response.status_code == 200 and status_response.json():
                         return status_response.json()
         except Exception as e:

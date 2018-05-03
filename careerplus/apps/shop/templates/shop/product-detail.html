@@ -8,7 +8,13 @@
             <div class="container">
               <!-- breadcrums -->
               {% block breadcrumbs %}
-                {% include "shop/partials/breadcrumb.html" %}  
+                {% if sqs.id in linkedin_resume_services %}
+                  <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
+                      <li class="active" ></li>
+                  </ol>
+                {% else %}
+                  {% include "shop/partials/breadcrumb.html" %}
+                {% endif %}  
               {% endblock breadcrumbs %}
               
               {% block product_header %}
@@ -230,10 +236,11 @@
         <!-- main parent2 section end -->      
       {% endblock section2 %}
 
-      {% block prdrecommended %}
-
-      {% include "shop/partials/recommended_product.html" %}
-      {% endblock prdrecommended %}
+      {% if sqs.id not in linkedin_resume_services %}
+        {% block prdrecommended %}
+          {% include "shop/partials/recommended_product.html" %}
+        {% endblock prdrecommended %}
+      {% endif %}
       <!--equiry form-->
   <div class="modal fade bs-example-modal-sm3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="detailpage">
     <div class="modal-dialog modal-sm" role="document">

@@ -21,6 +21,35 @@
     <link type="text/css" href="{% static 'shinelearn/css/skill/extra.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
+
+
+{% block navigation %}
+{% if not navigation %}
+    <!-- navigation bar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <a class="navbar-brand" href=""></a>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown have-query">
+                <a href="tel:0124-3955001">Have a query? Call us at <strong>0124-3955001</strong></a>
+              </li>
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+  </nav>
+{% else %}
+   {{block.super}}
+{% endif %}
+
+  {% endblock navigation %}
+
     
 
 {% block main_container %}
@@ -28,310 +57,11 @@
     <div id="id-detail-body">
 
       {{product_detail|safe}}
-      
-      {% comment %}
-      {% block page_heading %}
 
-        <!-- header -->
-        <header>
-          
-          <div class="detail-course-header">
-            <div class="container">
-              <!-- breadcrums -->
-              {% block breadcrumbs %}
-                {% include "shop/partials/breadcrumb.html" %}  
-              {% endblock breadcrumbs %}
-              
-              {% block product_header %}
-                <div class="course-caption col-sm-8 no-pad" itemscope itemtype="http://schema.org/Product">
-                  <div class="course-caption-img">
-                    <figure style="background-color:#fff;">
-                      <img itemprop="image" src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive" >
-                    </figure>
-                  </div>
-
-                  <div class="course-caption-content">
-                    <h1 itemprop="name">{{prd_H1}}</h1>
-                    <div itemprop="aggregateRating"
-                  itemscope itemtype="http://schema.org/AggregateRating">
-                  <meta itemprop="ratingValue" content="{{prd_rating}}">
-                  <meta itemprop="reviewCount" content="{% if prd_num_rating > 0 %}
-                  {{prd_num_rating}}
-                  {% else %}
-                    1      
-                  {% endif %}">
-            </div>
-
-                    {% include "shop/partials/packagediv.html" %}
-                  </div>
-                </div>
-              {% endblock product_header %}
-            </div>
-          </div>
-
-              {% block product_cart %}
-                {% include "shop/partials/prd_cart.html" %}
-              {% endblock product_cart %}
-          
-        </header>
-
-        
-      {% endblock page_heading %}
-
-      {% block section1 %}
-        <!-- main parent1 section start -->
-        <section class="container-fluid cls_scroller_parent pr">
-            <div class="row detail-box bt-none">
-
-              <!-- sticky sub header 1 -->
-              <div class="course-caption-bottom cls_scroller" >
-                <div class="container">
-                  <div class="visible-onscroll hidden cls_scroller_hiddenDiv">
-                    <strong>{{prd_H1}}</strong> by <small>{{prd_vendor}}</small>
-                  </div>
-
-                    <ul >
-                      {% if prd_num_rating %}
-                      <li>
-                        <div class="rating-review-box">
-
-                          {% for star in prd_rating_star %}
-                            {% if star == '*' %}
-                              <figure class="full-star"></figure>
-                            {% elif star == '+' %}
-                              <figure class="half-star"></figure>
-                            {% else %}
-                              <figure class="blank-star"></figure>
-                            {% endif %}
-                          {% endfor %}  
-                          <strong>{{prd_rating}}/5</strong>ratings
-                        </div> 
-                      </li>
-                      {% endif %}
-                      <li>
-                       <a href="#review">
-                        <figure class="review-icon"></figure>
-                        <span>{% if prd_num_rating %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;reviews{% else %}Be the first to review{% endif %}</span>
-                       </a> 
-                      </li>
-                      <li>
-                      <figure class="bought-icon"></figure>
-                      <span>
-                      {% if prd_num_bought %}<strong>&nbsp;{{prd_num_bought}}</strong>{% else %}<strong>&nbsp;10</strong>{% endif %}&nbsp;people bought</span>
-                      </li>
-                      {% if prd_service == 'course' %}
-                    
-                      {% if prd_num_jobs %}
-                        <li>
-                         <a href="{% if num_jobs_url %}{{num_jobs_url}}{% else %}javascript:void(0);{% endif %}" target="_blank">
-                          <figure class="course-jobs-icon"></figure>
-                          <span><strong class="anchor-color">&nbsp;{{prd_num_jobs}}</strong>&nbsp;Jobs available</span>
-                         </a> 
-                        </li>
-                      {% endif %}
-                      
-                      {% if prd_cert %}
-                        <li>
-                          <figure class="certification-icon"></figure>
-                          <span>&nbsp;Certification</span>
-                        </li>
-                      {% endif %}
-                    {% endif %}
-                  </ul>
-
-                </div>
-              </div>
-
-              
-              <div class="container">
-              <!-- About course -->
-                <div class="row">
-                  <div class="col-sm-12 col-md-8 mt-40">
-                  {% if prd_about %}
-                    <h2 class="detail-heading">About {% if prd_service == 'course' %}course{% else %}service{% endif %}</h2>
-                    <style>
-                      .morecontent span {
-                            display: none;
-                        }
-                        .morelink {
-                            display: block;
-                        }
-                    </style>
-                    <span class="more">
-                    {{prd_about|safe}}
-                    </span>
-                  {% endif %}
-                  </div>
-                </div>
-
-              {% include "shop/partials/product_child.html" %}
-              
-              {% include "shop/partials/product_variations.html" %}
-              
-              {% include "shop/partials/frequentlybought.html" %}
-            </div>
-        </section>
-        <!-- main parent1 section end -->
-
-
-      {% endblock section1 %}
-
-      {% block section2 %}
-        
-        <!-- main parent2 section start -->
-        <section class="container-fluid cls_scroller_parent pr">
-          <div class="row">
-
-               <!-- About course container -->
-              <section id="about-course" class="container-fluid">
-                <div class="row detail-course-links cls_scroller pr">
-                <!-- sticky sub header 2 -->
-                  <div class="container">
-                    <div class="col-sm-12 col-md-8 about-tab cls_scroll_tab">
-                    {% if prd_desc %}
-                      <a title="About product" class="active cls_tab_child" href="#course">About product</a>
-                    {% endif %}
-                    {% if prd_uget %}
-                      <a title="What’ll you get" class="cls_tab_child" href="#get">What’ll you get</a>
-                    {% endif %}
-                    {% if prd_service == 'course' and chapter_list %}
-                      <a title="Program structure" class="cls_tab_child" href="#programs">Program structure</a>
-                    {% endif %}
-                    {% if sqs.pTF != 8 %}
-                      <a title="How to begin" class="cls_tab_child" href="#delivery">How to begin</a>
-                    {% endif %}
-                       
-                    {% if prd_faq %}
-                      <a title="FAQs" class="cls_tab_child" href="#faq">FAQs</a>  
-                    {% endif %}
-                    {% if prd_review_list %}
-                      <a title="Review" class="cls_tab_child" href="#review">Review</a> 
-                    {% endif %}
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              {% if prd_desc %}
-                  <section class="container-fluid detail-box">
-                  <div class="container">
-                    <div class="row">
-                      <div id="course" class="col-sm-12 col-md-8 scroll">
-                        <h2>About {{prd_H1}}</h2>
-                          {% if prd_video %}
-                            <iframe width="100%" height="315" src="https://{{prd_video}}" frameborder="0" allowfullscreen></iframe>
-                          {% endif %}
-                              {{prd_desc|safe}}
-                       </div>
-                    </div>
-                  </div>
-                </section>
-        
-              {% endif %}
-
-              {% if prd_uget %}
-        
-              <!-- What’ll you get container -->
-                <section class="container-fluid detail-box">
-                  <div class="container">
-                    <div class="row">
-                      <div id="get" class="col-sm-12 col-md-8 scroll">
-                      <h2>What’ll you get</h2>
-                          {{prd_uget|safe}}
-                     </div>
-                    </div>
-                  </div>      
-              </section>
-              {% endif %}
-                
-            {% if prd_service == 'course' %}
-              {% include "shop/partials/program_structure.html" %}
-            {% endif %}  
-            
-            {% include "shop/partials/delivery_flow.html" %}
-              
-            {% include "shop/partials/faq.html" %}
-
-            {% include "shop/partials/reviews.html" %}
-      
-      
-            
-        </div>
-        </section>
-        <!-- main parent2 section end -->      
-      {% endblock section2 %}
-
-      {% block prdrecommended %}
-
-      {% include "shop/partials/recommended_product.html" %}
-      {% endblock prdrecommended %}
-      <!--equiry form-->
-  <div class="modal fade bs-example-modal-sm3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="detailpage">
-    <div class="modal-dialog modal-sm" role="document">
-      <div class="modal-content">
-       <div class="request-call call1">
-       <div>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <span class="modal-title" id="myModalLabel">Have a Query?</span>
-        </div>
-          <form id="callback_form" role="form" action="" method="get">
-            <div style='display:none'>
-              <input type='hidden' name='csrfmiddlewaretoken' value='{{csrf_token}}'/>
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" name="name" 
-              placeholder="Name" maxlength="100" value="{{request.session.full_name}}">
-              <span class="error position-error" style="color:red"></span>
-            </div>
-            <div class="form-group">
-              <div class="country-code">
-                <div class="custom-select">
-                  <select class="form-control" name="country_code">
-                    {% for country in country_choices %}
-                        <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; --&nbsp;&nbsp;&nbsp;&nbsp; {{country.1}}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <input type="text" class="form-control" name="number" 
-                placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
-                <span class="error position-error" style="color:red"></span>
-              </div>
-            </div>
-            <div class="form-group">
-              <textarea class="form-control" rows="1" placeholder="Message" 
-              name="msg" maxlength="500"></textarea>
-              <span class="error position-error" style="color:red"></span>
-            </div>
-            {% if  prd_service == 'course' %}
-              <input type="hidden" name="lsource" value="2">
-            {% else %}
-              <input type="hidden" name="lsource" value="8">
-            {% endif %}
-            <input type="hidden" name="product" value="{{product.pk}}">
-            <input type="hidden" name="prd" value="{{product.heading}}">
-            <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
-          
-            <button type="submit" id="id_callback" class="submit-button">
-              Submit
-            </button>
-          </form>
-          <div class="call-service">
-            <strong>
-              <span class="call-service-icon"></span>
-              0124-395 5001
-            </strong>
-            9am to 7pm ist monday-saturday
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  {% endcomment %}
-
-</div>
-
+   </div>
 {% endblock main_container %}
+
+
 
 
 {% block js_section %}
@@ -343,3 +73,8 @@
     <script src="{% static 'shinelearn/js/common/scroller.js' %}" type="text/javascript"></script>
     {% endcompress %}
 {% endblock js_section %}
+
+{% if sqs.id in linkedin_resume_services %}
+  {% block johukum %}
+  {% endblock johukum %}
+{% endif %}

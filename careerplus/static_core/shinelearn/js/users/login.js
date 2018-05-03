@@ -80,7 +80,40 @@ window.fbAsyncInit = function() {
        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
      })();
 
+
+function validate_linkedin_login_terms(){
+    if($('#accept-condition').is(":checked")){
+        var mobile_attr = $('#linkedin_url_id').attr('mobile');
+        if (mobile_attr == 'mobile') {
+            $('.bs-example-modal-sm-linkedin').modal('show');
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    else{
+        $('#term-error').text('Please agree the terms and conditions.');
+        return false
+    }
+}
+
 $(document).ready(function() {
+    $('#accept-condition').click(function(){
+        if ($(this).is(":checked")){
+            $('#term-error').text('');
+        }
+    });
+
+    /*try{
+        var mobile_attr = $('#linkedin_url_id').attr('mobile');
+        if (mobile_attr == 'mobile') {
+            $('.bs-example-modal-sm-linkedin').modal('show');
+        }
+    }catch(err){
+    }*/
+
+
     // login and registration js 
     var emailresponse;
     $.validator.addMethod("emailDoesNotExist",
@@ -131,6 +164,48 @@ $(document).ready(function() {
                 required: "Please provide a password"
             }
         }
+    });
+
+    $.validator.addMethod("indiaMobile", function(value, element) {
+        var country_code = $('#id_country_code').val();
+        if(country_code == '91'){
+            return value.length == 10;
+        }
+        return true;
+    });
+
+    $("#linkedin-form-id").validate({
+        rules: {
+            mobile:{
+                required:true,
+                number: true,
+                indiaMobile: true,
+                minlength: 6,
+                maxlength: 15
+            }
+        },
+        messages:{
+            mobile: {
+                required:"Please enter valid mobile number",
+                number:"Enter only numbers",
+                indiaMobile: "Length must be 10 digits.",
+                maxlength: "Please enter up to 15 digits",
+                minlength: "Please enter at least 6 digits",
+            },
+        },
+        highlight:function(element, errorClass) {
+            $(element).closest('.form-group').addClass('error');
+            $(element).siblings('.js-error').addClass('error-txt'); 
+        },
+        unhighlight:function(element, errorClass) {
+            $(element).closest('.form-group').removeClass('error');
+            $(element).siblings('.js-error').removeClass('error-txt');
+            $(element).siblings('.js-error').html('');      
+        },
+        errorPlacement: function(error, element){
+            $(element).siblings('.js-error').html(error.text());
+        },
+
     });
 
     $("#forgot_form").validate({

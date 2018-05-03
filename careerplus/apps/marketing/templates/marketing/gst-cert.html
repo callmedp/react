@@ -18,29 +18,14 @@
                 display: none;
             }
         </style>
-        <script type="text/javascript">
-            var recaptcha1;
-            var recaptcha2;
-            function recaptchaCallBack() {
-                if($("#captcha1").length){
-                //Render the recaptcha1 on the element with ID "recaptcha1"
-                recaptcha1 = grecaptcha.render('captcha1', {
-                  'sitekey' : '6Lfa5zYUAAAAAFFe_gV2u2h3XovQzmQCUzRm4MYY', //Replace this with your Site key
-                  'theme' : 'light'
-                });}};
-            function openPopupRecaptcha() {
-                if($('#recaptcha2').is(':empty')){
-                grecaptcha.render("captcha2", {sitekey: "6Lfa5zYUAAAAAFFe_gV2u2h3XovQzmQCUzRm4MYY", theme: "light"});}
-            };
-        </script>
-        <script src="https://www.google.com/recaptcha/api.js?onload=recaptchaCallBack&render=explicit" async defer></script>
-        <!-- Google Tag Manager -->
-        <!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':-->
-        <!--new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],-->
-        <!--j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=-->
-        <!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);-->
-        <!--})(window,document,'script','dataLayer','GTM-M323HB');</script>-->
-        <!-- End Google Tag Manager -->
+        <!--<script src="https://www.google.com/recaptcha/api.js?onload=recaptchaCallBack&render=explicit" async defer></script>-->
+         <!--Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-M323HB');</script>
+         <!--End Google Tag Manager -->
     <script>
               (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
               (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -64,8 +49,9 @@
     <div class="clear-fix"></div>
     
     <div class="">
+    <!--
      <div class="offer"></div>
-     
+    --> 
      
      <!-- banner left section start -->
       <div class="top-baner-left">
@@ -89,8 +75,8 @@
           
           <div class="clear-fix"></div>
           <form id="lead" 
-          action="{% url "crmapi:lead-management-captcha" %}"  data-non_captcha_action="{% url "crmapi:lead-management" %}"
-
+          action="{% url 'crmapi:lead-management' %}"  data-non_captcha_action="{% url 'crmapi:lead-management' %}"
+            novalidate="novalidate"
           method="post" class="cert-form">{% csrf_token %}
           <div>          
           <input type="text" id="name" name="name" placeholder="Your Full Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}" maxlength="100">
@@ -105,7 +91,7 @@
         <div>
             <input type="hidden" id="country" name="country" aria-invalid="false" value="91">
                             
-            <input id="mobile" type="text" name="number" onblur="leadSubmit();return false;"
+            <input id="mobile" type="text" name="number"
             placeholder="Mobile Number" maxlength="10" class="pull-right">          
             
             <span class="error" for="mobile" style="color: rgb(255, 0, 0);font-size: 11px;width:100%;" ></span>
@@ -117,16 +103,10 @@
             </div>
            
            <select id="selection" name="selection" aria-invalid="false" class="register-bx-sec-cod pull-left">
-               <option selected="selected" value="5133">GST Pro Certification - Rs.5200</option>
-            </select>  
-            
-            <div style="clear:both; height:77px; overflow:hidden; display:block; position: relative;">
-                <div id="captcha1" class="input-field" style="width:45%; margin: 0px;" ></div>
-                <p style="color: rgb(255, 0, 0); display: none; font-size: 11px; margin: 0px; padding: 0px;  position: absolute; top: 58px;" id="hiddenrecaptcha"> Captcha Validation is required</p>
-            </div>
-                            
-            <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
-            <input type="hidden" name="prd" value="GST Pro Certification">
+               <option selected="selected" value="5133">GST Certification Program – 8900</option>
+            </select>
+            <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}1884{% endif %}">
+            <input type="hidden" name="prd" value="GST Certification Program">
             <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
             <input type="hidden" name="lsource" value="{{ lead_source }}">
 
@@ -137,8 +117,7 @@
           </form>
           
 <!--        <a href="#" class="emi-butn">Easy EMI payment option</a>-->
-       <p>Apply Coupon code on next page.<br>
-*Easy EMI option available</p>
+       <p>*Easy EMI option available</p>
         </div>
       </div><!-- banner right section start -->
       
@@ -251,12 +230,7 @@
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
 <script type="text/javascript">
-            function leadSubmit() {
-                var form = $('#lead');
-                var action = form.data('non_captcha_action');
-                $.post(action, (form).serialize(), function (data) {
-                    }, 'json');
-            }
+
 
             $(function() {
               $('a[href*=#]:not([href=#])').click(function() {
@@ -291,40 +265,25 @@
             
             $("#lead").validate({
                 submitHandler:function (form) {
-                    if(grecaptcha.getResponse(recaptcha1) == '') {
-                        $('#hiddenrecaptcha').show();
-                    } else {
-                        $('#hiddenrecaptcha').hide();
-                        var action = $(form).attr('action');
-                        $.post(action, $(form).serialize(), function (data) {
-                            if (data['recaptcha']) {
-                                if (data['status']){
-                                $.each($("#lead"), function (i, e) {
-                                    e.reset();
-                                });
-                                $("#lead label").remove();
-                                grecaptcha.reset(recaptcha1);
-                                var conversion_id = 991709191;
-                                var conversion_label = "ciw9CIetw1gQh5Dx2AM";
-                                var ga_code = document.createElement('div');
-                                ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
-                                document.body.appendChild(ga_code);
-                                window.location.href ='thankyou-for-query'
-                                return false;
-                                    
-                                } else {
-                                    alert("Error! Something went wrong. Please try again");
-                                    grecaptcha.reset(recaptcha1);
-                                    
-                                }
-                            }
-                            else{
-                                alert("Only humans are allowed to submit this form.");
-                                grecaptcha.reset(recaptcha1);
-                            }
+                    var action = $(form).attr('action');
+                    $.post(action, $(form).serialize(), function (data) {
+                       if (data && data['status']){
+                            $.each($("#lead"), function (i, e) {
+                                e.reset();
+                            });
+                            $("#lead label").remove();
+                            var conversion_id = 991709191;
+                            var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                            var ga_code = document.createElement('div');
+                            ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                            document.body.appendChild(ga_code);
+                            window.location.href ='thankyou-for-query'
+                            return false;
 
-                        }, 'json');
-                    }
+                       }
+
+                    }, 'json');
+
 
                 },
                 rules:{
@@ -339,8 +298,8 @@
 
                     },
                     name:{
-                        lettersonly:true
-
+                        lettersonly:true,
+                        required:true,
                     },
                     msg:{
                         maxlength:500
@@ -353,6 +312,9 @@
                        custommobile: "Please enter 10 digits mobile number",
                     },
                     email:{
+                        required:"Field is required"
+                    },
+                    name:{
                         required:"Field is required"
                     },
                     msg:{

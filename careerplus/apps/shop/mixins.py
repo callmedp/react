@@ -1,3 +1,5 @@
+import hashlib
+
 from django.conf import settings
 from django.core.cache import cache
 
@@ -102,3 +104,25 @@ class CourseCatalogueMixin(object):
 			'course_catalogue',
 			data, settings.COURSE_CATALOGUE_CASH_TIME)
 		return data
+
+
+class LinkedinSeriviceMixin(object):
+	def validate_encrypted_key(self, token=None, email=None, prd=None):
+		flag = False
+		products_ids = []
+		if token and email and prd:
+			if prd in settings.LINKEDIN_RESUME_FREE:
+				products_ids = settings.LINKEDIN_RESUME_FREE
+			elif prd in settings.LINKEDIN_RESUME_COST:
+				products_ids = settings.LINKEDIN_RESUME_COST
+			else:
+				products_ids = []
+
+			for prd_id in products_ids:
+				token_str = '{}pd-{}'.format(email, prd_id)
+				gen_token = hashlib.sha256(
+					token_str.encode()).hexdigest()
+				if gen_token == token:
+					flag = True
+					break
+		return flag
