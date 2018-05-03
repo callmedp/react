@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>PMP Certification - Shine Learning</title>
+    <title>Courses Landing Page - Shine Learning</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
     <!-- Bootstrap -->
-    <link href="{% static 'shinelearn/css/marketing/bootstrap.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'shinelearn/css/marketing/data-science-cert/bootstrap.css' %}" rel="stylesheet" type="text/css" />
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -20,7 +20,7 @@
   </head>
   <body>
     <!-- header -->
-    <header class="container-fluid pmp-bg">
+    <header class="container-fluid dm-bg">
       <div class="row">
         <div class="container">
           <div class="row">
@@ -37,21 +37,21 @@
 
             <!-- content & punchline -->
             <div class="col-xs-12 col-sm-7 col-md-5 col-lg-6 header-content header-content-pmp">
-              <h1><strong>Don’t let appraisals bog you down<br></strong><br> Get promotion ready with PMP Certification</h1>
+              <h1><strong>Change yourself to a Digital Marketing Powerhouse</strong>Become Digital Marketing Certified Associate</h1>
 
               <div class="hidden-xs header-txt">
                 <ul>
-                  <li>Certification from Simplilearn to claim the 35 PDUs. </li>
-                  <li>35+ hours of instructor led online training.</li>
-                  <li>29 hours of high quality e-learning content by industry experts </li>
+                  <li>Certification from Simplilearn</li>
+                  <li>48 hours of instructor-led online training</li>
+                  <li>24 hours of high quality e-learning content by industry experts </li>
                 </ul>
-                <div class="punch-line">Your Journey to become Project Management Certified begins today!</div>
+                <div class="punch-line">Your Journey to become Digital Marketing Certified Associate begins today!</div>
               </div>
             </div>
 
             <!-- girl -->
             <div class="hidden-xs hidden-sm col-md-3 men-pic">
-              <img src="{% static 'shinelearn/images/marketing/pmp-cert/pmp-g.png' %}" alt="Shinelearning" class="img-responsive">
+              <img src="{% static 'shinelearn/images/marketing/digital-marketing/dm-men.png' %}" alt="Shinelearning" class="img-responsive">
             </div>
 
             <!-- enquiry form -->
@@ -73,9 +73,14 @@
                   <input type="text" class="form-control" id="mobile" placeholder="Mobile Number" name="number">
                   <label class="error-txt js-error"></label>
                 </div>
-                <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+                <div class="form-group arrow">
+                  <select id="selection" name="selection" class="form-control">
+                    <option selected="selected" value="3126">Digital Marketing-Rs.20999/-</option>
+                  </select>
+                </div>
+                <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3126{% endif %}">
 
-                <input type="hidden" name="prd" value="PMP Certification">
+                <input type="hidden" name="prd" value="Digital Marketing Certified Associate">
 
                 <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 
@@ -94,11 +99,11 @@
             <!-- content repeat for mobile device -->
             <div class="col-xs-12 col-sm-6 visible-xs mt-20 mb-30 header-txt">
               <ul>
-               <li>Certification from Simplilearn to claim the 35 PDUs. </li>
-                  <li>35+ hours of instructor led online training.</li>
-                  <li>29 hours of high quality e-learning content by industry experts </li>
-              </ul>
-              <div class="punch-line">Your Journey to become Project Management Certified begins today!</div>
+                  <li>Certification from Simplilearn</li>
+                  <li>48 hours of instructor-led online training</li>
+                  <li>24 hours of high quality e-learning content by industry experts </li>
+                </ul>
+              <div class="punch-line">Your Journey to become Digital Marketing Certified Associate begins today!</div>
             </div>
 
           </div>
@@ -117,20 +122,21 @@
             <h2>Course Highlights</h2>
             <ul>
               <li>
-                <strong>8 industry case studies, 20 industry-based scenarios</strong>
+                <strong>Execute 4 real life projects</strong>
                 Acquire hands-on knowledge and expertise!</li>
               <li>
-                <strong>6 hands-on projects, 7 simulation test papers</strong>
-                Gain confidence to ace the certification exams!
+                <strong>Hands-on training on 5+ tools</strong>
+                Learn various tools which includes Google AdWords, Google Analytics, Facebook, etc.
               </li>
               <li>
-                <strong>Achieve 35 PDUs offered </strong>
-                Get PDUs which will help in maintaining your credentials &amp; take PMP certification exam.</li>
+                <strong>10 simulation test papers</strong>
+                Gain confidence to ace the certification exams!</li>
               <li>
-                <strong>Expert Trainers</strong>
-                Get trained by PMP certified trainers with 15+ years of experience</li>
+                <strong>Training by industry experts</strong>
+                Get trained by “Dream Team” of Silicon Valley authors for Digital marketing role.</li>
               <li>
-                <strong>100% Money Back Guarantee</strong>
+                <strong>Comprehensive Course Curriculum</strong>
+                Go through in-depth knowledge on 8 topics and 11 domains which covers solid foundation learning for all digital marketing aspects.
               </li>
              
             </ul>
@@ -141,18 +147,19 @@
             <h2>Who should attend?</h2>
             <ul>
               <li>
-               Project Managers
-              </li>
-              <li>Associate/Assistant Project Managers
+               Sales or business professional who are looking to accelerate their career.
               </li>
               <li>
-             Team Leads/Team Managers
+                A student looking to build a career in one of the most sought-after domains today.
               </li>
               <li>
-               Project Executives/Project Engineers
+                Entrepreneur interested in leveraging digital marketing to improve the ROI for your company.
               </li>
               <li>
-                Software Developers
+               Traditional marketer striving to enhance your knowledge and skills in digital marketing.
+              </li>
+              <li>
+                Digital marketer hoping to broaden your skillsets and accelerate your career to the next level
               </li>
             </ul>
           </div>
@@ -166,7 +173,7 @@
               <div class="panel-heading arrow-end" role="tab" id="headingOne">
                 <h4 class="panel-title">
                   <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                    Professional and Social Responsibility</a>
+                    Search Engine Optimization</a>
                 </h4>
               </div>
 
@@ -175,7 +182,7 @@
               <div class="panel-heading arrow-end" role="tab" id="headingTwo">
                 <h4 class="panel-title">
                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    Project Management Framework</a>
+                    Social Media</a>
                 </h4>
               </div>
               
@@ -184,7 +191,7 @@
               <div class="panel-heading arrow-end" role="tab" id="headingThree">
                 <h4 class="panel-title">
                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    Project Management Processes</a>
+                    Content Writing</a>
                 </h4>
               </div>
               
@@ -193,7 +200,7 @@
               <div class="panel-heading arrow-end" role="tab" id="headingFour">
                 <h4 class="panel-title">
                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                    Project Integration Management</a>
+                    Email Marketing</a>
                 </h4>
               </div>              
             </div>
@@ -201,8 +208,8 @@
         <div class="panel panel-default">
               <div class="panel-heading arrow-end" role="tab" id="headingFive">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                   Project Scope Management</a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFive">
+                   Mobile Marketing </a>
                 </h4>
               </div>              
             </div>
@@ -211,8 +218,8 @@
         <div class="panel panel-default">
               <div class="panel-heading arrow-end" role="tab" id="headingSix">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                   Project Schedule Management</a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseSix">
+                   Pay-Per-Click</a>
                 </h4>
               </div>              
             </div>
@@ -221,8 +228,8 @@
         <div class="panel panel-default">
               <div class="panel-heading arrow-end" role="tab" id="headingSeven">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
-                   Project Cost Management </a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseSeven">
+                   Website Conversion Optimization</a>
                 </h4>
               </div>              
             </div>
@@ -230,8 +237,8 @@
         <div class="panel panel-default">
               <div class="panel-heading arrow-end" role="tab" id="headingEight">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
-                    Project Quality Management </a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseEight">
+                    Digital Analytics </a>
                 </h4>
               </div>              
             </div>
@@ -239,8 +246,8 @@
          <div class="panel panel-default">
               <div class="panel-heading arrow-end" role="tab" id="headingNine">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
-                   Project Resource Management</a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseNine">
+                   Marketing Automation</a>
                 </h4>
               </div>              
             </div>
@@ -248,8 +255,8 @@
          <div class="panel panel-default">
               <div class="panel-heading arrow-end" role="tab" id="headingTen">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
-                    Project Communications Management</a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseTen">
+                    Programmatic Buying</a>
                 </h4>
               </div>              
             </div>
@@ -258,8 +265,8 @@
          <div class="panel panel-default">
               <div class="panel-heading arrow-end" role="tab" id="headingEleven">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
-                    Project Risk Management </a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseEleven">
+                    Digital Marketing Strategy </a>
                 </h4>
               </div>              
             </div>
@@ -267,17 +274,8 @@
          <div class="panel panel-default">
               <div class="panel-heading arrow-end" role="tab" id="headingTwelve">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">
-                    Project Procurement Management </a>
-                </h4>
-              </div>              
-            </div>
-        
-         <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingThirteen">
-                <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThirteen" aria-expanded="false" aria-controls="collapseThirteen">
-                    Project Stakeholder Management</a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseTwelve">
+                    Twitter Advertising</a>
                 </h4>
               </div>              
             </div>
@@ -343,10 +341,10 @@
         <h2 class="ml-15 mb-30">Outcomes of the training</h2>
         <div class="course-attend col-xs-12 col-sm-7">
           <ul>
-            <li>Learn modern project management tools such as work breakdown structure, resource allocation, Gant charts, mathematical project scheduling models, project cost estimating, cost management and engineering economics</li>
-            <li>Learn to develop a broad and flexible toolkit of techniques and adapting your approach to the context and constraints of projects</li>
-            <li>Learn how to cultivate the people skills, trust and leadership necessary to meet project requirements</li>
-            <li>Learn how to deliver projects on scope, on time and on budget</li>
+            <li>The DMCA course will prepare you to become a complete digital marketer and make you industry ready on day one. </li>
+            <li>Become a virtual digital marketing manager for an e-commerce company with Mimic Pro simulations included in our course. Practice SEO, SEM, Website Conversion Rate Optimization, email marketing and more.</li>
+            <li>Learn how to formulate, plan, and execute effective digital marketing strategies with the right channel mix for your digital marketing strategy.</li>
+            <li>Learn how to optimize marketing strategy with the right kind of insights gained from execution of different campaigns.</li>
           </ul>
         </div>
         <div class="col-sm-5 hidden-xs">

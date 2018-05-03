@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>PMP Certification - Shine Learning</title>
+    <title>Courses Landing Page - Shine Learning</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
     <!-- Bootstrap -->
-    <link href="{% static 'shinelearn/css/marketing/bootstrap.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'shinelearn/css/marketing/data-science-cert/bootstrap.css' %}" rel="stylesheet" type="text/css" />
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -20,7 +20,7 @@
   </head>
   <body>
     <!-- header -->
-    <header class="container-fluid pmp-bg">
+    <header class="container-fluid aws-bg">
       <div class="row">
         <div class="container">
           <div class="row">
@@ -37,21 +37,22 @@
 
             <!-- content & punchline -->
             <div class="col-xs-12 col-sm-7 col-md-5 col-lg-6 header-content header-content-pmp">
-              <h1><strong>Don’t let appraisals bog you down<br></strong><br> Get promotion ready with PMP Certification</h1>
+              <strong>Become an</strong>
+              <h1>AWS Solution Architect Certified</h1>
 
               <div class="hidden-xs header-txt">
                 <ul>
-                  <li>Certification from Simplilearn to claim the 35 PDUs. </li>
-                  <li>35+ hours of instructor led online training.</li>
-                  <li>29 hours of high quality e-learning content by industry experts </li>
+                  <li>Certification from Simplilearn</li>
+                  <li>47+ hours of online & instructir</li>
+                  <li>Hands-on training on CloudLab</li>
                 </ul>
-                <div class="punch-line">Your Journey to become Project Management Certified begins today!</div>
+                
               </div>
             </div>
 
             <!-- girl -->
             <div class="hidden-xs hidden-sm col-md-3 men-pic">
-              <img src="{% static 'shinelearn/images/marketing/pmp-cert/pmp-g.png' %}" alt="Shinelearning" class="img-responsive">
+              <img src="{% static 'shinelearn/images/marketing/aws-girl.png' %}" alt="Shinelearning" class="img-responsive">
             </div>
 
             <!-- enquiry form -->
@@ -73,9 +74,14 @@
                   <input type="text" class="form-control" id="mobile" placeholder="Mobile Number" name="number">
                   <label class="error-txt js-error"></label>
                 </div>
-                <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+                <div class="form-group arrow">
+                  <select class="form-control" name="selection">
+                    <option selected="selected" value="3133">AWS Architect – Rs. 17000/-</option>
+                  </select>
+                </div>
+                <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3133{% endif %}">
 
-                <input type="hidden" name="prd" value="PMP Certification">
+                <input type="hidden" name="prd" value="AWS Architect">
 
                 <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 
@@ -94,11 +100,10 @@
             <!-- content repeat for mobile device -->
             <div class="col-xs-12 col-sm-6 visible-xs mt-20 mb-30 header-txt">
               <ul>
-               <li>Certification from Simplilearn to claim the 35 PDUs. </li>
-                  <li>35+ hours of instructor led online training.</li>
-                  <li>29 hours of high quality e-learning content by industry experts </li>
-              </ul>
-              <div class="punch-line">Your Journey to become Project Management Certified begins today!</div>
+                  <li>Certification from Simplilearn</li>
+                  <li>47+ hours of online & instructir</li>
+                  <li>Hands-on training on CloudLab</li>
+                </ul>
             </div>
 
           </div>
@@ -117,20 +122,21 @@
             <h2>Course Highlights</h2>
             <ul>
               <li>
-                <strong>8 industry case studies, 20 industry-based scenarios</strong>
-                Acquire hands-on knowledge and expertise!</li>
+                <strong>16 Live Demos of AWS </strong>
+                Master popular AWS Services and real world scenarios using step by step instructions and the actual AWS console!</li>
               <li>
-                <strong>6 hands-on projects, 7 simulation test papers</strong>
-                Gain confidence to ace the certification exams!
+                <strong>3 Simulations Exams</strong>
+                Gain confidence to ace the certification exam!
               </li>
               <li>
-                <strong>Achieve 35 PDUs offered </strong>
-                Get PDUs which will help in maintaining your credentials &amp; take PMP certification exam.</li>
+                <strong>3 Practice Projects</strong>
+                Acquire hands-on knowledge and expertise by executing projects on CloudLab!</li>
               <li>
-                <strong>Expert Trainers</strong>
-                Get trained by PMP certified trainers with 15+ years of experience</li>
+                <strong>Free Course & Practice Test </strong>
+                Free Course on CompTIA Linux+ & Free Practice Test.</li>
               <li>
-                <strong>100% Money Back Guarantee</strong>
+                <strong>Training by industry experts</strong>
+                Get trained by 12+ years of industry experts or AWS Certified Experts.
               </li>
              
             </ul>
@@ -141,18 +147,25 @@
             <h2>Who should attend?</h2>
             <ul>
               <li>
-               Project Managers
-              </li>
-              <li>Associate/Assistant Project Managers
+               Product managers
               </li>
               <li>
-             Team Leads/Team Managers
+                Systems administrators and IT managers
               </li>
               <li>
-               Project Executives/Project Engineers
+                IT administrators and operators
               </li>
               <li>
-                Software Developers
+               IT engineers
+              </li>
+              <li>
+                Cloud engineers
+              </li>
+              <li>
+                Software developers
+              </li>
+              <li>
+                Software architects
               </li>
             </ul>
           </div>
@@ -166,7 +179,7 @@
               <div class="panel-heading arrow-end" role="tab" id="headingOne">
                 <h4 class="panel-title">
                   <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                    Professional and Social Responsibility</a>
+                    AWS Overview</a>
                 </h4>
               </div>
 
@@ -175,7 +188,7 @@
               <div class="panel-heading arrow-end" role="tab" id="headingTwo">
                 <h4 class="panel-title">
                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    Project Management Framework</a>
+                    Designing highly available, cost efficient, fault-tolerant, scallable system</a>
                 </h4>
               </div>
               
@@ -184,7 +197,7 @@
               <div class="panel-heading arrow-end" role="tab" id="headingThree">
                 <h4 class="panel-title">
                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    Project Management Processes</a>
+                    Identify & Access Management</a>
                 </h4>
               </div>
               
@@ -193,91 +206,91 @@
               <div class="panel-heading arrow-end" role="tab" id="headingFour">
                 <h4 class="panel-title">
                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                    Project Integration Management</a>
+                    Amazon Virtual Private Cloud</a>
                 </h4>
               </div>              
             </div>
         
         <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingFive">
+              <div class="panel-heading arrow-end" role="tab" id="headingFour">
                 <h4 class="panel-title">
                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                   Project Scope Management</a>
+                   Elastic Cloud Compute - EC2 </a>
                 </h4>
               </div>              
             </div>
         
         
         <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingSix">
+              <div class="panel-heading arrow-end" role="tab" id="headingFour">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                   Project Schedule Management</a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                   Amazon Simple Storage Services</a>
                 </h4>
               </div>              
             </div>
         
         
         <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingSeven">
+              <div class="panel-heading arrow-end" role="tab" id="headingFour">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
-                   Project Cost Management </a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                   Route 53</a>
                 </h4>
               </div>              
             </div>
         
         <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingEight">
+              <div class="panel-heading arrow-end" role="tab" id="headingFour">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
-                    Project Quality Management </a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Databases </a>
                 </h4>
               </div>              
             </div>
         
          <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingNine">
+              <div class="panel-heading arrow-end" role="tab" id="headingFour">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
-                   Project Resource Management</a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                   Application Services</a>
                 </h4>
               </div>              
             </div>
         
          <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingTen">
+              <div class="panel-heading arrow-end" role="tab" id="headingFour">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
-                    Project Communications Management</a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Security Practices for Optimum Cloud Deployment</a>
                 </h4>
               </div>              
             </div>
         
         
          <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingEleven">
+              <div class="panel-heading arrow-end" role="tab" id="headingFour">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
-                    Project Risk Management </a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Disaster Recovery </a>
                 </h4>
               </div>              
             </div>
         
          <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingTwelve">
+              <div class="panel-heading arrow-end" role="tab" id="headingFour">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">
-                    Project Procurement Management </a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Troubleshooting</a>
                 </h4>
               </div>              
             </div>
-        
-         <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingThirteen">
+
+            <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingFour">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThirteen" aria-expanded="false" aria-controls="collapseThirteen">
-                    Project Stakeholder Management</a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    AWS Solution Architect Exam</a>
                 </h4>
               </div>              
             </div>
@@ -340,13 +353,15 @@
     <!-- Outcomes of the training -->
     <div class="container mt-50">
       <div class="row">
-        <h2 class="ml-15 mb-30">Outcomes of the training</h2>
+        <h2 class="ml-15 mb-30">Course Outcomes</h2>
         <div class="course-attend col-xs-12 col-sm-7">
           <ul>
-            <li>Learn modern project management tools such as work breakdown structure, resource allocation, Gant charts, mathematical project scheduling models, project cost estimating, cost management and engineering economics</li>
-            <li>Learn to develop a broad and flexible toolkit of techniques and adapting your approach to the context and constraints of projects</li>
-            <li>Learn how to cultivate the people skills, trust and leadership necessary to meet project requirements</li>
-            <li>Learn how to deliver projects on scope, on time and on budget</li>
+            <li>Formulate solution plans and provide guidance on AWS architectural best practices.</li>
+            <li>Design and deploy scalable, highly available, and fault tolerant systems on AWS.</li>
+            <li>Identify the lift and shift of an existing on-premises application to AWS.</li>
+            <li>Decipher the ingress and egress of data to and from AWS.</li>
+            <li>Select the appropriate AWS service based on data, compute, database, or security requirements.</li>
+            <li>Estimate AWS costs and identify cost control mechanisms.</li>
           </ul>
         </div>
         <div class="col-sm-5 hidden-xs">

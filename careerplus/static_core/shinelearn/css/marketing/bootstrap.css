@@ -2774,6 +2774,18 @@ h2 {
   display: block;
 }
 
+.dm-bg {
+  background: url(/l/s/shinelearn/images/marketing/dm-bg.jpg) #e8f7ff 0 0;
+  background-size: cover;
+  display: block;
+}
+
+.aws-bg {
+  background: url(/l/s/shinelearn/images/marketing/aws-bg.jpg) #e8eeee 0 0;
+  background-size: cover;
+  display: block;
+}
+
 .white-color {
   color: #fff;
 }
@@ -2910,7 +2922,7 @@ h2 {
 .enquiry-form .arrow:after {
   content: '';
   position: absolute;
-  right: 15px;
+  right: 2px;
   top: 15px;
   width: 0;
   height: 0;

@@ -736,7 +736,7 @@ class RegistrationLoginApi(object):
         except Country.DoesNotExist:
             country_obj = Country.objects.get(phone='91')
 
-        headers = {'Content-Type': 'application/json'}
+        headers = ShineCandidateDetail().get_api_headers_non_auth()
         post_data.update({"country_code": country_obj.phone})
         try:
             response = requests.post(
@@ -771,7 +771,7 @@ class RegistrationLoginApi(object):
         except Country.DoesNotExist:
             country_obj = Country.objects.get(phone='91')
 
-        headers = {'Content-Type': 'application/json'}
+        headers = ShineCandidateDetail().get_api_headers_non_auth()
         post_data.update({"country_code": country_obj.phone})
         try:
             response = requests.post(
@@ -803,7 +803,7 @@ class RegistrationLoginApi(object):
         response_json = {"response": False}
         post_url = "{}/api/v2/user/access/?format=json".format(settings.SHINE_SITE)
 
-        headers = {'Content-Type': 'application/json'}
+        headers = ShineCandidateDetail().get_api_headers_non_auth()
         try:
             response = requests.post(
                 post_url, data=json.dumps(login_dict), headers=headers)
@@ -832,7 +832,7 @@ class RegistrationLoginApi(object):
     def check_email_exist(email):
         response_json = {"exists": False}
         email_url = "{}/api/v3/email-exists/?email={}&format=json".format(settings.SHINE_SITE, email)
-        headers = {'Content-Type': 'application/json'}
+        headers = ShineCandidateDetail().get_api_headers_non_auth()
         try:
             response = requests.get(email_url, headers=headers)
             if response.status_code == 200:
