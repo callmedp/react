@@ -45,4 +45,12 @@ urlpatterns = [
     url(r'^resume-writing$',
         marketing_views.MarketingPages.as_view(),
         name='resume-writing'),
+
+    url(r'^digital-marketing$',
+        marketing_views.MarketingPages.as_view(),
+        name='digital-marketing'),
+
+    url(r'^aws-cert',
+        marketing_views.MarketingPages.as_view(),
+        name='aws-cert'),
 ]
