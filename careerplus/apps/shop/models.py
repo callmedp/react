@@ -1189,7 +1189,7 @@ class Product(AbstractProduct, ModelMeta):
         return Decimal(0)
 
     def get_fakeprice(self):
-        if self.inr_price:
+        if self.inr_price is not None:
             inr_price = self.inr_price
             fake_inr_price = self.fake_inr_price
             if fake_inr_price > Decimal('0.00'):

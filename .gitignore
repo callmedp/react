@@ -108,3 +108,6 @@ celery_local.py
 
 # Sass
 .sass-cache
+
+
+code-learning-key.json
