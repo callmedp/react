@@ -11,41 +11,23 @@
 
 {% block header %}
     <!-- header menu Icon Starts here -->
-    <header class="w100fl he-auto">
+    <header class="w100fl">
         <!-- header menu Icon Starts here -->
 
         {% if linkedin %}
             <div class="main-menu w100fl">
                 <div class="pull-left">
-                    
-                    <a class=" pull-left" id="sidebar-main-trigger" href=""></a> 
-                    
-                    <a class="icon-back pull-left" href=""></a> 
+                    <a href="/" class="icon-logo pull-left"></a>
                 </div><!-- / Left side Icon ends here -->
-
-                <div class="pull-right">
-                    
-                    <!--a class=" pull-left" href="search-listing.html">search</a-->
-
-                    
-                    <!--a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a-->
-                </div><!-- / Right side Icon ends here -->
             </div><!-- header menu Icon ends here -->
         {% else %}
             <div class="main-menu w100fl">
                 <div class="pull-left">
-                    
-                    <a class=" pull-left" id="sidebar-main-trigger" href="/"></a> 
-                    
-                    <a class="icon-back pull-left" href="/"></a> 
+                    <a class="icon-logo pull-left" href="/"></a> 
                 </div><!-- / Left side Icon ends here -->
 
                 <div class="pull-right">
-                    
-                    <!--a class=" pull-left" href="search-listing.html">search</a-->
-
-                    
-                    <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                    <a class="icon-cart" href="{% url 'cart:cart-product-list' %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                 </div><!-- / Right side Icon ends here -->
             </div><!-- header menu Icon ends here -->
         {% endif %}
@@ -77,7 +59,7 @@
                             </p>
                             <ul>
                                 <li>
-                                    Agree to Shine <a href="{% url "tnc" %}">Terms & Conditions</a>
+                                    Agree to Shine <a href="{% url 'tnc' %}">Terms & Conditions</a>
                                 </li>
                                 <li>
                                     Agree to let Shine use your name, photo, headline, current positions and primary email address associated with your LinkedIn account under its <a href="{% url "privacy-policy" %}">Privacy policy</a> and LinkedIn will have no access to any financial information shared hereafter 
@@ -90,7 +72,7 @@
 
 
 
-                        <a href="{% url 'users:linkedin-code' %}?credential=1&next={{request.GET.next}}" class="btn btn-blue w100fl btn-round mb-20" onclick='return validate_linkedin_login_terms()'><i class="icon-linkedIn-login mr-5"></i>Sign in with LinkedIn</a>
+                        <a href="{% url 'users:linkedin-code' %}?credential=1&next={{request.GET.next}}" class="btn w100fl btn-round" onclick='return validate_linkedin_login_terms()'><img src="{% static 'shinelearn/images/Sign-In-Small---Default.png' %}"></a>
                         <div class="clearfix"></div>
                         <a href="/contact-us" class="any-query block mt-20 text-center row">Any Query ? We are here to help you..</a>
                     </form>
@@ -127,7 +109,7 @@
 
                         <div class="form-group text-center">
                             <button type="submit" class="btn btn-blue w100fl btn-round mb-20">Login</button>
-                            <a href="{% url "users:forgot-html" %}">Forgot Password?</a>
+                            <a href="{% url 'users:forgot-html' %}">Forgot Password?</a>
                         </div>
 
                         <div class="line_wrap w100fl">
