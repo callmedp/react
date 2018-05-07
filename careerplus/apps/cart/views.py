@@ -365,6 +365,7 @@ class PaymentShippingView(UpdateView, CartMixin):
                     obj.owner_id = candidate_id
 
                     if request.session.get('email'):
+                        # for linkedin services
                         del request.session['email']
 
                 elif request.session.get('candidate_id'):
