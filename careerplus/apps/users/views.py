@@ -402,8 +402,6 @@ class LinkedinLoginView(View):
             else:
                 client_id = settings.CLIENT_ID
             request.session['next_url'] = request.GET.get('next', '')
-            request.session['mobile_code'] = request.GET.get('country_code', '91')
-            request.session['mobile'] = request.GET.get('mobile', '')
 
             params = {
                 'client_id': client_id,
@@ -435,16 +433,8 @@ class LinkedinCallbackView(View):
             client_secret = settings.CLIENT_SECRET
 
         self.success_url = request.session.get('next_url') if request.session.get('next_url') else '/'
-        country_code = request.session.get('mobile_code', '91')
-        mobile = request.session.get('mobile')
         if request.session.get('next_url'):
             del request.session['next_url']
-
-        if request.session.get('mobile_code'):
-            del request.session['mobile_code']
-
-        if request.session.get('mobile'):
-            del request.session['mobile']
 
         params = {
             'grant_type': 'authorization_code',
