@@ -84,7 +84,7 @@ class CartMixin(object):
                     cart_obj = Cart.objects.create(session_id=session_id, status=3)
 
             if cart_obj:
-                if email and email != "None" and not cart_obj.owner_email:
+                if email and not cart_obj.owner_email:
                     cart_obj.owner_email = email
                     if not cart_obj.email:
                         cart_obj.email = email
@@ -442,7 +442,7 @@ class CartMixin(object):
                 if not self.request.session.get('cart_pk'):
                     self.getCartObject()
                 cart_pk = self.request.session.get('cart_pk')
-                cart_obj = Cart.objects.get(pk=cart_pk)
+                cart_obj = Cart.objects.get(pk=cart_pk).select_related('coupon','country')
             if cart_obj:
                 if not total_amount:
                     cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)

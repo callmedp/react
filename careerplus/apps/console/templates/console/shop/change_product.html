@@ -573,6 +573,14 @@
                     </div>
                     <div class="alert">{{seo_form.description.errors}}</div>
                   </div>
+                <div class="item form-group {% if seo_form.description.errors %}bad{% endif %}">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ seo_form.visibility.id_for_label }}">Description visibility <span class="required">*</span>
+                    </label>
+                    <div class="col-md-18 col-sm-7 col-xs-12">
+                      {{seo_form.visibility}}
+                    </div>
+                    <div class="alert">{{seo_form.visibility.errors}}</div>
+                  </div>
 
                   <div class="item form-group {% if seo_form.buy_shine.errors %}bad{% endif %}">
                     <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ seo_form.buy_shine.id_for_label }}">What u'll get <span class="required">*</span>
@@ -582,6 +590,16 @@
                     </div>
                     <div class="alert">{{seo_form.buy_shine.errors}}</div>
                   </div>
+
+                  <div class="item form-group {% if seo_form.attend.errors %}bad{% endif %}">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ seo_form.attend.id_for_label }}">Who can Attend <span class="required">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-7 col-xs-12">
+                      {{seo_form.attend}}
+                    </div>
+                    <div class="alert">{{seo_form.attend.errors}}</div>
+                  </div>
+
                   
                   <input type="hidden" name="product" value="{{object.pk}}">
                   <input type="hidden" name="slug" value="seo">
@@ -591,6 +609,7 @@
                       <button type="submit" class="btn btn-success save_scroll">Submit</button>
                     </div>
                   </div>
+
                 </form>
                   
           </div>

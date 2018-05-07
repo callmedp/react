@@ -182,25 +182,43 @@
               <!-- sticky sub header 2 -->
                 <div class="container">
                   <div class="col-sm-12 col-md-8 about-tab cls_scroll_tab">
-                  {% if prd_desc %}
-                    <a title="About product" class="active cls_tab_child" href="#course">About product</a>
-                  {% endif %}
+
                   {% if prd_uget %}
-                    <a title="What’ll you get" class="cls_tab_child" href="#get">Course Highlights</a>
+                    <a title="Course Highlights" class="cls_tab_child" href="#get">Course Highlights</a>
                   {% endif %}
-                  {% if prd_service == 'course' and chapter_list %}
-                    <a title="Program structure" class="cls_tab_child" href="#programs">Program structure</a>
-                  {% endif %}
-                  {% if sqs.pTF != 8 %}
-                    <a title="How to begin" class="cls_tab_child" href="#delivery">How to begin</a>
+
+                      {% if product.attend %}
+
+                      <a title="How to begin" class="cls_tab_child" href="#attends">Who Should Attend</a>
+
+                      {% endif %}
+
+                        {% if product.visibility %}
+                    <a title="About product" class="active cls_tab_child" href="#course">About product</a>
+                    {% else %}
+                        {% if prd_desc %}
+                        <a title="Shine Advantage" class="active cls_tab_child" href="#course">Shine Advantage</a>
+
+                        {% endif %}
+                    {% endif %}
+
+
+
+                      {% if prd_service == 'course' and chapter_list %}
+                    <a title="Course Outline" class="cls_tab_child" href="#programs">Course Outline</a>
                   {% endif %}
                      
-                  {% if prd_faq %}
-                    <a title="FAQs" class="cls_tab_child" href="#faq">FAQs</a>  
-                  {% endif %}
+
+
+
+
                   {% if prd_review_list %}
                     <a title="Review" class="cls_tab_child" href="#review">Review</a> 
                   {% endif %}
+
+                      {% if faq %}
+                   <a title="FAQs" class="cls_tab_child" href="#faq">FAQs</a>
+                        {% endif %}
                   </div>
                 </div>
               </div>
@@ -229,12 +247,26 @@
               <section class="container-fluid detail-box">
                 <div class="container">
                   <div class="row">
-                    <div id="get" class="col-sm-12 col-md-8 scroll">
+                    <div id="get" class="col-sm-12 col-md-8 scroll program-structure scroll">
                     <h2>Course Highlights</h2>
+
                         {{prd_uget|safe}}
                    </div>
                   </div>
                 </div>      
+            </section>
+            {% endif %}
+
+                {% if product.attend %}
+             <section class="container-fluid detail-box">
+                <div class="container">
+                  <div class="row">
+                    <div id="attends" class="col-sm-12 col-md-8 scroll">
+                    <h2>Who Should Attend</h2>
+                        {{product.attend|safe}}
+                   </div>
+                  </div>
+                </div>
             </section>
             {% endif %}
               

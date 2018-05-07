@@ -761,6 +761,13 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
         verbose_name=_('About Product'), blank=True, default='')
     description = RichTextField(
         verbose_name=_('Description Product'), blank=True, default='')
+
+    visibility = models.BooleanField(verbose_name=_('Visible'), default=True)
+
+    attend = RichTextField(
+        verbose_name=_('Who Should Attend'), blank=True, default='')
+
+
     buy_shine = RichTextField(
         verbose_name=_('What you will get'), blank=True, default='')
     mail_desc = RichTextField(
@@ -944,6 +951,7 @@ class Product(AbstractProduct, ModelMeta):
         'published_time': 'created',
         'modified_time': 'modified',
         'url': 'get_canonical_url',
+
     }
 
     class Meta:
