@@ -10,9 +10,10 @@ from django.conf import settings
 class ShineToken(object):
     def get_client_token(self):
         try:
+            headers = {"User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
             client_access_url = settings.SHINE_SITE + '/api/v2/client/access/?format=json'
             client_data = {'key': settings.CLIENT_ACCESS_KEY, 'secret': settings.CLIENT_ACCESS_SECRET}
-            client_access_resp = requests.post(client_access_url, data=client_data)
+            client_access_resp = requests.post(client_access_url, data=client_data, headers=headers)
             client_access_resp_json = client_access_resp.json()
             if client_access_resp.status_code == 201:
                 return client_access_resp_json.get('access_token', None)
@@ -22,9 +23,11 @@ class ShineToken(object):
 
     def get_access_token(self):
         try:
+            headers = {
+                "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
             user_access_url = settings.SHINE_SITE + '/api/v2/user/access/?format=json'
             user_data = {"email": settings.SHINE_API_USER, "password": settings.SHINE_API_USER_PWD}
-            user_access_resp = requests.post(user_access_url, data=user_data)
+            user_access_resp = requests.post(user_access_url, data=user_data, headers=headers)
             user_access_resp_json = user_access_resp.json()
             if user_access_resp.status_code == 201:
                 return user_access_resp_json.get('access_token', None)

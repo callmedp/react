@@ -1189,7 +1189,7 @@ class Product(AbstractProduct, ModelMeta):
         return Decimal(0)
 
     def get_fakeprice(self):
-        if self.inr_price:
+        if self.inr_price is not None:
             inr_price = self.inr_price
             fake_inr_price = self.fake_inr_price
             if fake_inr_price > Decimal('0.00'):
@@ -1288,10 +1288,24 @@ class Product(AbstractProduct, ModelMeta):
                         vendor=self.vendor).distinct()
                     return pop_list
                 elif self.is_writing or self.is_service:
-                    pop_list = category.get_products().filter(
-                        type_product__in=[0, 1, 3, 5],
-                        is_indexable=True).exclude(
-                        pk=self.pk).distinct()
+
+                    if int(self.pk) in settings.LINKEDIN_RESUME_FREE:
+                        pop_list = category.get_products().filter(
+                            type_product__in=[0, 1, 3, 5],
+                            is_indexable=True,
+                            pk__in=settings.LINKEDIN_RESUME_FREE).exclude(
+                            pk=self.pk).distinct()
+                    elif int(self.pk) in settings.LINKEDIN_RESUME_COST:
+                        pop_list = category.get_products().filter(
+                            type_product__in=[0, 1, 3, 5],
+                            is_indexable=True,
+                            pk__in=settings.LINKEDIN_RESUME_COST).exclude(
+                            pk=self.pk).distinct()
+                    else:
+                        pop_list = category.get_products().filter(
+                            type_product__in=[0, 1, 3, 5],
+                            is_indexable=True).exclude(
+                            pk=self.pk).distinct()
                     return pop_list
             return []
         else:

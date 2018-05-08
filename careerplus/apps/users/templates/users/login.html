@@ -15,6 +15,33 @@
 {% endblock css_section %}
 {% block container %}
 
+{% block navigation %}
+{% if linkedin %}
+    <!-- navigation bar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <a class="navbar-brand" href=""></a>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown have-query">
+                <a href="tel:0124-3955001">Have a query? Call us at <strong>0124-3955001</strong></a>
+              </li>
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+  </nav>
+{% else %}
+   {{block.super}}
+{% endif %}
+
+{% endblock navigation %}
+
 <!-- main section start -->
 <div class="container pr">
     <header class="login-page-bg">
@@ -38,42 +65,86 @@
     <!-- login form start -->
     <div class="register login-signup-box">
         <div>
+            {% if not linkedin %}
             <h1 class="modal-title">Login</h1>
+            {% endif %}
             {% if messages %}
                 {% for message in messages %}
                 <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</div>
                 {% endfor %}
             {% endif %}
         </div>
-        <form method="post" id="login_form" role="form">
-        {% csrf_token %}
-            <fieldset>
-                {% for field in form %}
-                    <div class="form-group {% if field.errors %}error{% endif %}">
-                        {{field}}
-                        {% for error in  field.errors %}{{ error }}{% endfor %}
-                    </div>
-                {% endfor %}
-            </fieldset>
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="checkbox" name="remember_me" class="form-check-input">
-                    Remember me
-                </label>
-            </div>
-            <button type="submit" class="btn btn-primary submit">Login</button>
-            <small class="form-text text-muted text-center">
-                <a href="javascript:void(0)" id="modalforgot">
-                Forgot Password?</a>
-            </small>
-            <div class="social-login">
-                <span>or login with</span>
-                <a class="facebook" onclick="Login();"></a>
-                <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
-                <a class="gplus" onclick="glogin()"></a>
-            </div>
-            <small class="form-text text-muted text-center">Don’t have an account yet? <a href="{% url 'register' %}">Register Now</a></small>
-        </form>
+
+        {% if linkedin %}
+            <form method="post" autocomplete="off" id="login_linkedin_form" role="form">
+            {% csrf_token %}
+
+                <div class="form-check linkedin-tnc">
+                    <label class="form-check-label">
+                        <input type="checkbox" id="accept-condition" class="form-check-input">
+                        By syncing your LinkedIn account, you:
+                    </label>
+                    <p id="term-error" class="error"></p>
+
+                    <ul>
+                        <li>
+                            Agree to Shine <a href="{% url 'tnc' %}">Terms & Conditions</a>
+                        </li>
+                        <li>
+                            Agree to let Shine use your name, photo, headline, current positions and primary email address associated with your LinkedIn account under its <a href="{% url 'privacy-policy' %}">Privacy policy</a> and LinkedIn will have no access to any financial information shared hereafter
+                        </li>
+                        <li>
+                            Agree to Shine sharing participation statistics with LinkedIn. The statistics will be reported in aggregate form only, and cannot be identified individually.
+                        </li>
+                    </ul>
+                </div>
+
+                <!--a href="#" class="submit-button" data-toggle="modal" data-target=".bs-example-modal-sm-linkedin">Login to Comments</a-->
+
+                {% if linkedin_mobile %}
+                    <a href="{% url 'users:linkedin-code' %}?credential=1&next={{request.GET.next}}" id="linkedin_url_id" style="margin:10px auto; display:block; text-align:center;" onclick='return validate_linkedin_login_terms()' mobile="mobile"><img src="{% static 'shinelearn/images/Sign-In-Small---Default.png' %}"></a>
+                {% else %}
+                    <a href="{% url 'users:linkedin-code' %}?credential=1&next={{request.GET.next}}" id="linkedin_url_id" style="margin:10px auto; display:block; text-align:center;" onclick='return validate_linkedin_login_terms()'><img src="{% static 'shinelearn/images/Sign-In-Small---Default.png' %}"></a>
+                {% endif %}
+
+            </form>
+        
+        {% else %}
+            <form method="post" id="login_form" role="form">
+            {% csrf_token %}
+                <fieldset>
+                    {% for field in form %}
+                        <div class="form-group {% if field.errors %}error{% endif %}">
+                            {{field}}
+                            {% for error in  field.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endfor %}
+                </fieldset>
+
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="checkbox" name="remember_me" class="form-check-input">
+                        Remember me:
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary submit">Login</button>
+
+                <small class="form-text text-muted text-center">
+                    <a href="javascript:void(0)" id="modalforgot">
+                    Forgot Password?</a>
+                </small>
+                <div class="social-login">
+                    <span>or login with</span>
+                    <a class="facebook" onclick="Login();"></a>
+                    <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
+                    <a class="gplus" onclick="glogin()"></a>
+                </div>
+                <small class="form-text text-muted text-center">Don’t have an account yet? <a href="{% url 'register' %}">Register Now</a></small>
+            </form>
+
+        {% endif %}
+
     </div>
     <!-- login form end -->
 </div>
@@ -98,6 +169,41 @@
                         {% for error in  field.errors %}{{ error }}{% endfor %}
                     </div>
                 {% endfor %}
+              <button type="submit" class="btn btn-primary submit mt-20">Submit</button>
+            </form>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- linkedin Modal-->
+
+<div class="modal fade bs-example-modal-sm-linkedin" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="linkedin_div">
+  <div class="modal-dialog modal-sm modal-custom" role="document">
+    <div class="modal-content">
+        <div class="register">
+            <div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h1 class="modal-title" id="myModalLabel">Mobile Number Required</h1>
+            </div>
+            <div id="msg_for_user">Mobile number is required to complete your registration on Shine to avail the offer.</div>
+            <form method="GET" id="linkedin-form-id" 
+            action="{% url 'users:linkedin-code' %}">
+              <div class="form-group">
+                <div class="country-code">
+                  <div class="custom-select">
+                    <select class="form-control" id="id_country_code" name="country_code">
+                      {% for country in country_objs %}
+                          <option value="{{country.phone}}" {% if country.phone == '91' %}selected{% endif %}>{{country.phone}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <input type="text" name="mobile" class="form-control" placeholder="Mobile">
+                  <span class="ml-50 js-error"></span>
+                </div>
+              </div>
+              <input type="hidden" name="next" value="{{request.GET.next}}">
+              <input type="hidden" name="credential" value="1">
               <button type="submit" class="btn btn-primary submit mt-20">Submit</button>
             </form>
         </div>

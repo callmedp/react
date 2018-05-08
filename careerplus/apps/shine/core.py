@@ -7,8 +7,10 @@ class ShineToken(object):
     def get_client_token(self):
         try:
             client_access_url = settings.SHINE_SITE + '/api/v2/client/access/?format=json'
+            headers = {
+                "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
             client_data = {'key': settings.CLIENT_ACCESS_KEY, 'secret': settings.CLIENT_ACCESS_SECRET}
-            client_access_resp = requests.post(client_access_url, data=client_data)
+            client_access_resp = requests.post(client_access_url, data=client_data, headers=headers)
             client_access_resp_json = client_access_resp.json()
             if client_access_resp.status_code == 201:
                 return client_access_resp_json.get('access_token', None)
@@ -19,9 +21,12 @@ class ShineToken(object):
     def get_access_token(self, email=None, password=None):
         if email and password:
             try:
+                headers = {
+                    "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
+
                 user_access_url = settings.SHINE_SITE + '/api/v2/user/access/?format=json'
                 user_data = {"email": email, "password": password}
-                user_access_resp = requests.post(user_access_url, data=user_data)
+                user_access_resp = requests.post(user_access_url, data=user_data, headers=headers)
                 user_access_resp_json = user_access_resp.json()
                 if user_access_resp.status_code == 201:
                     user_access_resp_json.update({'SUCCESS': True})
@@ -63,9 +68,11 @@ class ShineCandidateDetail(ShineToken):
                         access_token_json.get('SUCCESS', False):
                     access_token = access_token_json.get('access_token', None)
                     if access_token:
-                        headers = {"User-Access-Token": access_token,
-                                   "Client-Access-Token": client_token,
-                                   "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
+                        headers = {
+                            "User-Access-Token": access_token,
+                            "Client-Access-Token": client_token,
+                            "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'
+                        }
                         return headers
             elif client_token and token:
                 headers = {
@@ -77,6 +84,13 @@ class ShineCandidateDetail(ShineToken):
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
         return None
+
+    def get_api_headers_non_auth(self):
+        headers = {
+            "Content-Type": 'application/json',
+            "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'
+        }
+        return headers
 
     def get_shine_id(self, email=None, headers=None):
         try:
@@ -126,6 +140,11 @@ class ShineCandidateDetail(ShineToken):
                 headers = self.get_api_headers(token=token)
                 status_url = "{}/api/v2/candidate/{}/status/?format=json".format(settings.SHINE_SITE, shine_id)
                 status_response = requests.get(status_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+                try:
+                    logging.getLogger('error_log').error(
+                    'Response Received from shine for shine candidate status: {}'.format(status_response.__dict__))
+                except Exception as e:
+                    logging.getLogger('error_log').error(str(e))
                 if status_response.status_code == 200 and status_response.json():
                     return status_response.json()
             elif email:
@@ -136,6 +155,12 @@ class ShineCandidateDetail(ShineToken):
                         "/api/v2/candidate/" +\
                         shine_id + "/status/?format=json"
                     status_response = requests.get(status_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+                    try:
+                        logging.getLogger('error_log').error(
+                            'Response Received from shine for shine candidate status: {}'.format(
+                                status_response.__dict__))
+                    except Exception as e:
+                        logging.getLogger('error_log').error(str(e))
                     if status_response.status_code == 200 and status_response.json():
                         return status_response.json()
         except Exception as e:

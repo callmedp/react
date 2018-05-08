@@ -1,6 +1,16 @@
 
 
 $(document).ready(function () {
+
+  // $(window).on('load',function(){
+  //   $('#login-model').modal('show');
+  // });
+
+  // $(document).on("click", "#login-now-button", function() {
+  //   $('#login-model').modal('show');
+  // });
+
+
     var processing = false;
   
     function LoadMoreProductReview(pv_id) {
@@ -207,6 +217,16 @@ $(document).ready(function () {
           $('html,body').animate({scrollTop : $(''+target.attr('href')).offset().top - 30},1000);
         }
       });
+      
+      function getUrlVar(key){
+        var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
+        return result && unescape(result[1]) || ""; 
+      }
+      var res = getUrlVar('query');
+      if (res == 'True')
+      {
+        $('#detailpage').modal('show');
+      }
         
   });
-    
+          
