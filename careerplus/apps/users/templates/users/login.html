@@ -100,12 +100,15 @@
                 </div>
 
                 <!--a href="#" class="submit-button" data-toggle="modal" data-target=".bs-example-modal-sm-linkedin">Login to Comments</a-->
-
+                {% comment %}
                 {% if linkedin_mobile %}
                     <a href="{% url 'users:linkedin-code' %}?credential=1&next={{request.GET.next}}" id="linkedin_url_id" style="margin:10px auto; display:block; text-align:center;" onclick='return validate_linkedin_login_terms()' mobile="mobile"><img src="{% static 'shinelearn/images/Sign-In-Small---Default.png' %}"></a>
                 {% else %}
-                    <a href="{% url 'users:linkedin-code' %}?credential=1&next={{request.GET.next}}" id="linkedin_url_id" style="margin:10px auto; display:block; text-align:center;" onclick='return validate_linkedin_login_terms()'><img src="{% static 'shinelearn/images/Sign-In-Small---Default.png' %}"></a>
                 {% endif %}
+                {% endcomment %}
+                
+                <a href="{% url 'users:linkedin-code' %}?credential=1&next={{request.GET.next}}" id="linkedin_url_id" style="margin:10px auto; display:block; text-align:center;" onclick='return validate_linkedin_login_terms()'><img src="{% static 'shinelearn/images/Sign-In-Small---Default.png' %}"></a>
+                
 
             </form>
         
@@ -176,8 +179,8 @@
   </div>
 </div>
 
+{% comment %}
 <!-- linkedin Modal-->
-
 <div class="modal fade bs-example-modal-sm-linkedin" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="linkedin_div">
   <div class="modal-dialog modal-sm modal-custom" role="document">
     <div class="modal-content">
@@ -210,6 +213,7 @@
     </div>
   </div>
 </div>
+{% endcomment %}
   
 {% endblock container %}
 

@@ -395,7 +395,6 @@ class LinkedinLoginView(View):
 
     def get(self, request, *args, **kwargs):
         try:
-            print(request.GET)
             credential = request.GET.get('credential', '')
             if credential == '1':
                 client_id = settings.LINKEDIN_DICT.get('CLIENT_ID', '')
@@ -403,8 +402,6 @@ class LinkedinLoginView(View):
             else:
                 client_id = settings.CLIENT_ID
             request.session['next_url'] = request.GET.get('next', '')
-            request.session['mobile_code'] = request.GET.get('country_code', '91')
-            request.session['mobile'] = request.GET.get('mobile', '')
 
             params = {
                 'client_id': client_id,
@@ -436,16 +433,8 @@ class LinkedinCallbackView(View):
             client_secret = settings.CLIENT_SECRET
 
         self.success_url = request.session.get('next_url') if request.session.get('next_url') else '/'
-        country_code = request.session.get('mobile_code', '91')
-        mobile = request.session.get('mobile')
         if request.session.get('next_url'):
             del request.session['next_url']
-
-        if request.session.get('mobile_code'):
-            del request.session['mobile_code']
-
-        if request.session.get('mobile'):
-            del request.session['mobile']
 
         params = {
             'grant_type': 'authorization_code',
@@ -475,33 +464,35 @@ class LinkedinCallbackView(View):
                         email=None, shine_id=candidateid)
                     request.session.update(resp_status)
                     return HttpResponseRedirect(self.success_url)
-                elif linkedin_client_id == settings.LINKEDIN_DICT.get('CLIENT_ID') and not mobile:
-                    url = '/login/' + '?next=' + self.success_url + '&linkedin=true' + '&linkedin_mobile=true'
-                    return HttpResponseRedirect(url)
-                elif linkedin_client_id == settings.LINKEDIN_DICT.get('CLIENT_ID') and mobile and linkedin_user.get('prefill_details'):
+                # elif linkedin_client_id == settings.LINKEDIN_DICT.get('CLIENT_ID') and not mobile:
+                #     url = '/login/' + '?next=' + self.success_url + '&linkedin=true' + '&linkedin_mobile=true'
+                #     return HttpResponseRedirect(url)
+                elif linkedin_client_id == settings.LINKEDIN_DICT.get('CLIENT_ID') and linkedin_user.get('prefill_details'):
                     prefill_details = linkedin_user.get('prefill_details', {})
                     email = prefill_details.get('email')
                     if email:
-                        register_data = {
-                            'email': email,
-                            'cell_phone': mobile,
-                            'country_code': country_code,
-                            'sms_alert_flag': 0,
-                            'is_job_seeker': False,  # flag set false for Career Plus Registration (won't receive shine mails)
-                            'user_type': 14,
-                            'vendor_id': settings.CP_VENDOR_ID
-                        }
-                        reg_res = RegistrationLoginApi.auto_registration(register_data)
-                        if reg_res and reg_res.get('id'):
-                            candidateid = reg_res.get('id')
-                            resp_status = ShineCandidateDetail().get_status_detail(
-                                email=None, shine_id=candidateid)
-                            if resp_status:
-                                request.session.update(resp_status)
-                            else:
-                                logging.getLogger('error_log').error('Did not receive correct response from shine.com '
-                                                                     'for candidate status api')
-                            return HttpResponseRedirect(self.success_url)
+                        request.session['email'] = email
+                        return HttpResponseRedirect(self.success_url)
+                        # register_data = {
+                        #     'email': email,
+                        #     'cell_phone': mobile,
+                        #     'country_code': country_code,
+                        #     'sms_alert_flag': 0,
+                        #     'is_job_seeker': False,  # flag set false for Career Plus Registration (won't receive shine mails)
+                        #     'user_type': 14,
+                        #     'vendor_id': settings.CP_VENDOR_ID
+                        # }
+                        # reg_res = RegistrationLoginApi.auto_registration(register_data)
+                        # if reg_res and reg_res.get('id'):
+                        #     candidateid = reg_res.get('id')
+                        #     resp_status = ShineCandidateDetail().get_status_detail(
+                        #         email=None, shine_id=candidateid)
+                        #     if resp_status:
+                        #         request.session.update(resp_status)
+                        #     else:
+                        #         logging.getLogger('error_log').error('Did not receive correct response from shine.com '
+                        #                                              'for candidate status api')
+                        #     return HttpResponseRedirect(self.success_url)
 
             elif linkedin_user['status_code'] == 400:
                 return HttpResponseRedirect('/login/')
