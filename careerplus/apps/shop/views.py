@@ -45,7 +45,7 @@ from .mixins import CourseCatalogueMixin, LinkedinSeriviceMixin
 class ProductInformationMixin(object):
 
     def get_solar_fakeprice(self, inr_price, fake_inr_price):
-        if inr_price:
+        if inr_price is not None:
             inr_price = inr_price
             fake_inr_price = fake_inr_price
             if fake_inr_price > Decimal('0.00'):
