@@ -181,10 +181,12 @@
               <div class="row detail-course-links cls_scroller pr">
               <!-- sticky sub header 2 -->
                 <div class="container">
-                  <div class="col-sm-12 col-md-8 about-tab cls_scroll_tab">
+                  <div class="col-sm-12 col-md-8 tab cls_scroll_tab">
 
                   {% if prd_uget %}
-                    <a title="Course Highlights" class="cls_tab_child" href="#get">Course Highlights</a>
+
+                    <a title="Course Highlights" class=" cls_tab_child" href="#get">Course Highlights</a>
+
                   {% endif %}
 
                       {% if product.attend %}
@@ -194,7 +196,7 @@
                       {% endif %}
 
                         {% if product.visibility %}
-                    <a title="About product" class="active cls_tab_child" href="#course">About product</a>
+                    <a title="About Product" class=" cls_tab_child" href="#course">About Product</a>
                     {% else %}
                         {% if prd_desc %}
                         <a title="Shine Advantage" class="active cls_tab_child" href="#course">Shine Advantage</a>
@@ -207,13 +209,13 @@
                       {% if prd_service == 'course' and chapter_list %}
                     <a title="Course Outline" class="cls_tab_child" href="#programs">Course Outline</a>
                   {% endif %}
-                     
+
 
 
 
 
                   {% if prd_review_list %}
-                    <a title="Review" class="cls_tab_child" href="#review">Review</a> 
+                    <a title="Reviews" class="cls_tab_child" href="#review">Reviews</a>
                   {% endif %}
 
                       {% if faq %}
@@ -224,11 +226,40 @@
               </div>
             </section>
 
+             {% if prd_uget %}
+
+            <!-- What’ll you get container -->
+              <section class="container-fluid detail-box">
+                <div class="container">
+                  <div class="row">
+                    <div id="get" class="col-sm-12 col-md-8 scroller ">
+                    <h2>Course Highlights</h2>
+
+                        {{prd_uget|safe}}
+                   </div>
+                  </div>
+                </div>
+            </section>
+            {% endif %}
+
+               {% if product.attend %}
+             <section class="container-fluid detail-box">
+                <div class="container">
+                  <div class="row">
+                    <div id="attends" class="col-sm-12 col-md-8 scroll">
+                    <h2>Who Should Attend</h2>
+                        {{product.attend|safe}}
+                   </div>
+                  </div>
+                </div>
+            </section>
+            {% endif %}
+
             {% if prd_desc %}
                 <section class="container-fluid detail-box">
                 <div class="container">
                   <div class="row">
-                    <div id="course" class="col-sm-12 col-md-8 scroll">
+                    <div id="course" class="col-sm-12 col-md-8 scroller">
                       <h2>About {{prd_H1}}</h2>
                         {% if prd_video %}
                           <iframe width="100%" height="315" src="https://{{prd_video}}" frameborder="0" allowfullscreen></iframe>
@@ -241,47 +272,22 @@
       
             {% endif %}
 
-            {% if prd_uget %}
-      
-            <!-- What’ll you get container -->
-              <section class="container-fluid detail-box">
-                <div class="container">
-                  <div class="row">
-                    <div id="get" class="col-sm-12 col-md-8 scroll program-structure scroll">
-                    <h2>Course Highlights</h2>
 
-                        {{prd_uget|safe}}
-                   </div>
-                  </div>
-                </div>      
-            </section>
-            {% endif %}
 
-                {% if product.attend %}
-             <section class="container-fluid detail-box">
-                <div class="container">
-                  <div class="row">
-                    <div id="attends" class="col-sm-12 col-md-8 scroll">
-                    <h2>Who Should Attend</h2>
-                        {{product.attend|safe}}
-                   </div>
-                  </div>
-                </div>
-            </section>
-            {% endif %}
-              
+
+
           {% if prd_service == 'course' %}
             {% include "shop/partials/program_structure.html" %}
-          {% endif %}  
-          
+          {% endif %}
+
           {% include "shop/partials/delivery_flow.html" %}
-            
-          {% include "shop/partials/faq.html" %}
+
+
 
           {% include "shop/partials/reviews.html" %}
-    
-    
-          
+            {% include "shop/partials/faq.html" %}
+
+
       </div>
       </section>
       <!-- main parent2 section end -->      
