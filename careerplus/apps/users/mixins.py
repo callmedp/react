@@ -727,15 +727,16 @@ class WriterInvoiceMixin(object):
 class RegistrationLoginApi(object):
 
     @staticmethod
-    def user_registration(post_data):
+    def auto_registration(post_data):
+        # auto registration with email and mobile
         response_json = {"response": "exist_user"}
-        post_url = "{}/api/v2/web/candidate-profiles/?format=json".format(settings.SHINE_SITE)
+        post_url = "{}/api/v3/web/candidate-profiles/?format=json".format(settings.SHINE_SITE)
         try:
             country_obj = Country.objects.get(phone=post_data['country_code'])
         except Country.DoesNotExist:
             country_obj = Country.objects.get(phone='91')
 
-        headers = {'Content-Type': 'application/json'}
+        headers = ShineCandidateDetail().get_api_headers_non_auth()
         post_data.update({"country_code": country_obj.phone})
         try:
             response = requests.post(
@@ -752,6 +753,44 @@ class RegistrationLoginApi(object):
             elif response.status_code == 400:
                 response_json = response.json()
                 response_json.update({'response': "form_error"})
+            else:
+                logging.getLogger('error_log').error("Error getting response from shine for"
+                                                     " registration. {} ".format(response))
+        except Exception as e:
+            logging.getLogger('error_log').error("Error getting response from shine for"
+                                                 " registration. %s " % str(e))
+
+        return response_json
+
+    @staticmethod
+    def user_registration(post_data):
+        response_json = {"response": "exist_user"}
+        post_url = "{}/api/v2/web/candidate-profiles/?format=json".format(settings.SHINE_SITE)
+        try:
+            country_obj = Country.objects.get(phone=post_data['country_code'])
+        except Country.DoesNotExist:
+            country_obj = Country.objects.get(phone='91')
+
+        headers = ShineCandidateDetail().get_api_headers_non_auth()
+        post_data.update({"country_code": country_obj.phone})
+        try:
+            response = requests.post(
+                post_url, data=json.dumps(post_data), headers=headers)
+
+            if response.status_code == 201:
+                response_json = response.json()
+                response_json.update({'response': "new_user"})
+
+            elif "non_field_errors" in response.json():
+                response_json = response.json()
+                response_json.update({'response': "exist_user"})
+
+            elif response.status_code == 400:
+                response_json = response.json()
+                response_json.update({'response': "form_error"})
+            else:
+                logging.getLogger('error_log').error("Error getting response from shine for"
+                                                 " registration. {}".format(response))
 
         except Exception as e:
             logging.getLogger('error_log').error("Error getting response from shine for"
@@ -764,7 +803,7 @@ class RegistrationLoginApi(object):
         response_json = {"response": False}
         post_url = "{}/api/v2/user/access/?format=json".format(settings.SHINE_SITE)
 
-        headers = {'Content-Type': 'application/json'}
+        headers = ShineCandidateDetail().get_api_headers_non_auth()
         try:
             response = requests.post(
                 post_url, data=json.dumps(login_dict), headers=headers)
@@ -780,6 +819,9 @@ class RegistrationLoginApi(object):
             elif response.status_code == 400:
                 response_json = response.json()
                 response_json.update({'response': "form_error"})
+            else:
+                logging.getLogger('error_log').error("Error getting response from shine for"
+                                                 " login. {}".format(response))
 
         except Exception as e:
             logging.getLogger('error_log').error("Error in getting response from shine for login. %s " % str(e))
@@ -790,7 +832,7 @@ class RegistrationLoginApi(object):
     def check_email_exist(email):
         response_json = {"exists": False}
         email_url = "{}/api/v3/email-exists/?email={}&format=json".format(settings.SHINE_SITE, email)
-        headers = {'Content-Type': 'application/json'}
+        headers = ShineCandidateDetail().get_api_headers_non_auth()
         try:
             response = requests.get(email_url, headers=headers)
             if response.status_code == 200:
@@ -825,11 +867,14 @@ class RegistrationLoginApi(object):
                 response_json = response.json()
                 response_json.update({'response':True})
 
-            if response.status_code == 400:
+            elif response.status_code == 400:
                 response_json = response.json()
                 response_json.update({'status_code':response.status_code})
                 logging.getLogger('error_log').error(
                     "Error in getting response from shine for existing email check. ""%s " % str(response.status_code))
+            else:
+                logging.getLogger('error_log').error("Error getting response from shine for"
+                                                 " reset update. {}".format(response))
         except Exception as e:
             logging.getLogger('error_log').error("Error in getting response from shine for existing email check. "
                                                  "%s " % str(e))
@@ -867,13 +912,16 @@ class RegistrationLoginApi(object):
             response = requests.post(post_url, data=json.dumps(post_data), headers=request_header)
             if response.status_code == 201:
                 response_json = response.json()
-                response_json.update({'response':True})
+                response_json.update({'response': True})
 
-            if response.status_code == 400:
+            elif response.status_code == 400:
                 response_json = response.json()
                 response_json.update({'status_code':response.status_code})
                 logging.getLogger('error_log').error(
                     "Error in getting response from shine for existing email check. ""%s " % str(response.status_code))
+            else:
+                logging.getLogger('error_log').error("Error getting response from shine for"
+                                                 " social login. {}".format(response))
         except Exception as e:
             logging.getLogger('error_log').error("Error in getting response from shine for existing email check. "
                                                  "%s " % str(e))

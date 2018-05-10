@@ -20,7 +20,7 @@
 # For more information see the manual pages of crontab(5) and cron(8)
 #
 # m h  dom mon dow   command
-*/15 * * * * /bin/bash /var/www/site/learning/current/careerplus/apps/core/crons/15min.sh
+#*/15 * * * * /bin/bash /var/www/site/learning/current/careerplus/apps/core/crons/15min.sh
 15 01 * * * /bin/bash /var/www/site/learning/current/careerplus/apps/core/crons/daily.sh
 30 07 * * * /bin/bash /var/www/site/learning/current/careerplus/apps/core/crons/reminder.sh
 15 04 * * 1,2,3 /bin/bash /var/www/site/learning/current/careerplus/apps/core/crons/3days.sh
@@ -29,3 +29,4 @@
 15 01 * * * /bin/bash /var/www/site/learning/current/careerplus/apps/core/crons/12hour.sh
 0 */3 * * * /bin/bash /var/www/site/learning/current/careerplus/apps/core/crons/3hours.sh
 0 * * * * /bin/bash /var/www/site/learning/current/careerplus/apps/core/crons/1hour.sh
+0 18 * * * /bin/bash /var/www/site/learning/current/careerplus/apps/core/crons/daily1.sh

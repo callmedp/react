@@ -14,7 +14,9 @@ from django.views.generic import FormView, TemplateView, View
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils import timezone
+from django.db.models import Q
 
+from geolocation.models import Country
 from shine.core import ShineCandidateDetail
 from core.mixins import TokenExpiry, TokenGeneration
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCPInvoiceStorage
@@ -105,6 +107,20 @@ class LoginApiView(FormView):
         context = super(LoginApiView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         form = self.get_form()
+        linkedin = self.request.GET.get('linkedin', '')
+        linkedin_mobile = self.request.GET.get('linkedin_mobile', '')
+        if linkedin == 'true':
+            context.update({
+                "linkedin": True,
+            })
+        if linkedin_mobile == 'true':
+            country_objs = Country.objects.exclude(
+                Q(phone__isnull=True) | Q(phone__exact=''))
+            context.update({
+                "country_objs": country_objs,
+                "linkedin_mobile": True
+            })
+
         context.update({
             'messages': alert,
             'form': form,
@@ -379,8 +395,16 @@ class LinkedinLoginView(View):
 
     def get(self, request, *args, **kwargs):
         try:
+            credential = request.GET.get('credential', '')
+            if credential == '1':
+                client_id = settings.LINKEDIN_DICT.get('CLIENT_ID', '')
+                request.session['linkedin_client_id'] = client_id
+            else:
+                client_id = settings.CLIENT_ID
+            request.session['next_url'] = request.GET.get('next', '')
+
             params = {
-                'client_id': settings.CLIENT_ID,
+                'client_id': client_id,
                 'redirect_uri': settings.REDIRECT_URI,
                 'response_type': 'code',
                 'scope': settings.SCOPE,
@@ -398,17 +422,31 @@ class LinkedinCallbackView(View):
     success_url = '/'
 
     def get(self, request, *args, **kwargs):
+
+        linkedin_client_id = request.session.get('linkedin_client_id', '')
+
+        if linkedin_client_id and linkedin_client_id == settings.LINKEDIN_DICT.get('CLIENT_ID'):
+            client_id = settings.LINKEDIN_DICT.get('CLIENT_ID', '')
+            client_secret = settings.LINKEDIN_DICT.get('CLIENT_SECRET', '')
+        else:
+            client_id = settings.CLIENT_ID
+            client_secret = settings.CLIENT_SECRET
+
+        self.success_url = request.session.get('next_url') if request.session.get('next_url') else '/'
+        if request.session.get('next_url'):
+            del request.session['next_url']
+
+        params = {
+            'grant_type': 'authorization_code',
+            'code': request.GET.get('code') if 'code' in request.GET else '',
+            'redirect_uri': settings.REDIRECT_URI,
+            'client_id': client_id,
+            'client_secret': client_secret,
+        }
+        if not params['code']:
+            return HttpResponseRedirect('/login/')
+        params = urllib.parse.urlencode(params)
         try:
-            params = {
-                'grant_type': 'authorization_code',
-                'code': request.GET.get('code') if 'code' in request.GET else '',
-                'redirect_uri': settings.REDIRECT_URI,
-                'client_id': settings.CLIENT_ID,
-                'client_secret': settings.CLIENT_SECRET,
-            }
-            if not params['code']:
-                return HttpResponseRedirect('/login/')
-            params = urllib.parse.urlencode(params)
             info = urllib.request.urlopen(
                 settings.TOKEN_URL, params.encode("utf-8"))
             read_data = info.read()
@@ -417,12 +455,45 @@ class LinkedinCallbackView(View):
             data_dict = json.loads(str_data)
             data_dict.update({'key': 'linkedin'})
             linkedin_user = RegistrationLoginApi.social_login(data_dict)
+            logging.getLogger('info_log').info('Response Received from shine for linkedin login: {}'.format(linkedin_user))
             if linkedin_user.get('response'):
-                candidateid = linkedin_user['user_details']['candidate_id']
-                resp_status = ShineCandidateDetail().get_status_detail(
-                    email=None, shine_id=candidateid)
-                request.session.update(resp_status)
-                return HttpResponseRedirect(self.success_url)
+                logging.getLogger('info_log').info(linkedin_user)
+                if linkedin_user.get('user_details'):
+                    candidateid = linkedin_user['user_details']['candidate_id']
+                    resp_status = ShineCandidateDetail().get_status_detail(
+                        email=None, shine_id=candidateid)
+                    request.session.update(resp_status)
+                    return HttpResponseRedirect(self.success_url)
+                # elif linkedin_client_id == settings.LINKEDIN_DICT.get('CLIENT_ID') and not mobile:
+                #     url = '/login/' + '?next=' + self.success_url + '&linkedin=true' + '&linkedin_mobile=true'
+                #     return HttpResponseRedirect(url)
+                elif linkedin_client_id == settings.LINKEDIN_DICT.get('CLIENT_ID') and linkedin_user.get('prefill_details'):
+                    prefill_details = linkedin_user.get('prefill_details', {})
+                    email = prefill_details.get('email')
+                    if email:
+                        request.session['email'] = email
+                        return HttpResponseRedirect(self.success_url)
+                        # register_data = {
+                        #     'email': email,
+                        #     'cell_phone': mobile,
+                        #     'country_code': country_code,
+                        #     'sms_alert_flag': 0,
+                        #     'is_job_seeker': False,  # flag set false for Career Plus Registration (won't receive shine mails)
+                        #     'user_type': 14,
+                        #     'vendor_id': settings.CP_VENDOR_ID
+                        # }
+                        # reg_res = RegistrationLoginApi.auto_registration(register_data)
+                        # if reg_res and reg_res.get('id'):
+                        #     candidateid = reg_res.get('id')
+                        #     resp_status = ShineCandidateDetail().get_status_detail(
+                        #         email=None, shine_id=candidateid)
+                        #     if resp_status:
+                        #         request.session.update(resp_status)
+                        #     else:
+                        #         logging.getLogger('error_log').error('Did not receive correct response from shine.com '
+                        #                                              'for candidate status api')
+                        #     return HttpResponseRedirect(self.success_url)
+
             elif linkedin_user['status_code'] == 400:
                 return HttpResponseRedirect('/login/')
 

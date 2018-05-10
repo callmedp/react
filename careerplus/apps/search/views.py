@@ -107,7 +107,7 @@ class SearchBaseView(TemplateView):
         Render response directly. No relaxing/redirects required.
         """
         if (not self.query and not self.allow_empty_query) or self.none_query:
-            self.results = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
+            self.results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
             return self.create_response()
 
     def get_results(self):

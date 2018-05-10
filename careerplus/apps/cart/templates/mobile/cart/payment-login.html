@@ -64,7 +64,7 @@
                    </p>
               {% else %}
                   <div class="form-group {% if email_error %}error{% endif %}">
-                    <input type="email" name="email" class="form-control" placeholder="Enter your email id">
+                    <input type="email" name="email" class="form-control" placeholder="Enter your email id" value="{% if request.session.email%}{{request.session.email}}{% endif %}" {% if request.session.email %} readonly {% endif %}>
                     <p class="error-txt">{{email_error}}</p>
                   </div>
               {% endif %}

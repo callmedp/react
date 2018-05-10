@@ -21,6 +21,35 @@
     <link type="text/css" href="{% static 'shinelearn/css/skill/extra.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
+
+
+{% block navigation %}
+{% if not navigation %}
+    <!-- navigation bar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <a class="navbar-brand" href=""></a>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown have-query">
+                <a href="tel:0124-3955001">Have a query? Call us at <strong>0124-3955001</strong></a>
+              </li>
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+  </nav>
+{% else %}
+   {{block.super}}
+{% endif %}
+
+  {% endblock navigation %}
+
     
 
 {% block main_container %}
@@ -31,10 +60,17 @@
         
         <div class="detail-course-header">
           <div class="container">
-            <!-- breadcrums -->
-            {% block breadcrumbs %}
-              {% include "shop/partials/breadcrumb.html" %}  
-            {% endblock breadcrumbs %}
+
+              <!-- breadcrums -->
+              {% block breadcrumbs %}
+                  {% if sqs.id in linkedin_resume_services %}
+                    <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
+                        <li class="active" ></li>
+                    </ol>
+                  {% else %}
+                    {% include "shop/partials/breadcrumb.html" %}
+                  {% endif %}
+              {% endblock breadcrumbs %}
             
             {% block product_header %}
               <div class="course-caption col-sm-8 no-pad" itemscope itemtype="http://schema.org/Product">
@@ -255,10 +291,11 @@
       <!-- main parent2 section end -->      
     {% endblock section2 %}
 
-    {% block prdrecommended %}
-
-    {% include "shop/partials/recommended_product.html" %}
-    {% endblock prdrecommended %}
+    {% if sqs.id not in linkedin_resume_services %}
+      {% block prdrecommended %}
+      {% include "shop/partials/recommended_product.html" %}
+      {% endblock prdrecommended %}
+    {% endif %}
     <!--equiry form-->
 <div class="modal fade bs-example-modal-sm3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="detailpage">
   <div class="modal-dialog modal-sm" role="document">
@@ -320,7 +357,11 @@
     </div>
   </div>
 </div>
+
+
 {% endblock main_container %}
+
+
 
 
 {% block js_section %}
@@ -332,3 +373,8 @@
     <script src="{% static 'shinelearn/js/common/scroller.js' %}" type="text/javascript"></script>
     {% endcompress%}
 {% endblock js_section %}
+
+{% if sqs.id in linkedin_resume_services %}
+  {% block johukum %}
+  {% endblock johukum %}
+{% endif %}
