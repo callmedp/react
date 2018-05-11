@@ -2769,19 +2769,25 @@ h2 {
 
 .pmp-bg {
   background-size: cover;
-  background: url(/l/s/shinelearn/images/marketing/pmp-cert/pmp-bg.jpg) #fbfef7 0 0;
+  background: url(/l/s/shinelearn/images/marketing/data-science-cert/pmp-bg.jpg) #fbfef7 0 0;
   background-size: cover;
   display: block;
 }
 
 .dm-bg {
-  background: url(/l/s/shinelearn/images/marketing/dm-bg.jpg) #e8f7ff 0 0;
+  background: url(/l/s/shinelearn/images/marketing/data-science-cert/dm-bg.jpg) #e8f7ff 0 0;
   background-size: cover;
   display: block;
 }
 
 .aws-bg {
-  background: url(/l/s/shinelearn/images/marketing/aws-bg.jpg) #e8eeee 0 0;
+  background: url(/l/s/shinelearn/images/marketing/data-science-cert/aws-bg.jpg) #e8eeee 0 0;
+  background-size: cover;
+  display: block;
+}
+
+.ba-bg {
+  background: url(/l/s/shinelearn/images/marketing/ba-bg.jpg) #e8eeee 0 0;
   background-size: cover;
   display: block;
 }
@@ -2807,6 +2813,7 @@ h2 {
   font-size: 24px;
   color: #1f3c6b;
   font-weight: 600;
+  line-height: 26px;
 }
 
 .header-content h1 strong {
@@ -2912,7 +2919,7 @@ h2 {
   -moz-appearance: none;
   -webkit-appearance: none;
   -ms-appearance: none;
-  
+
 }
 
 .enquiry-form .arrow {
@@ -3059,6 +3066,7 @@ h2 {
   font-size: 16px;
   display: block;
   font-weight: 600;
+  line-height: 20px;
 }
 
 .course-preview .panel-body {
@@ -3195,6 +3203,10 @@ input.error {
   text-align: center;
   vertical-align: middle;
 }*/
+
+.form-group {
+  margin-bottom: 10px;
+}
 
 
 /* ---- respnsive css start ---- */
