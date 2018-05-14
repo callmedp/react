@@ -247,8 +247,7 @@ class ArticleChangeForm(forms.ModelForm):
             is_active=True,
             visibility__in=visibility)
         self.fields['tags'].queryset = Tag.objects.filter(
-            is_active=True,
-            visibility__in=visibility)
+            is_active=True)
         self.fields['author'].queryset = Author.objects.filter(
             is_active=True,
             visibility__in=visibility)
@@ -384,36 +383,36 @@ class TagAddForm(forms.ModelForm):
     name = forms.CharField(label=("Tag*:"), max_length=70,
         widget=forms.TextInput(
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
-    visibility = forms.ChoiceField(label=("Visibility*:"),
-            choices=SITE_TYPE, widget=forms.Select(attrs={
-                'class': 'form-control col-md-7 col-xs-12'}))
+    # visibility = forms.ChoiceField(label=("Visibility*:"),
+    #         choices=SITE_TYPE, widget=forms.Select(attrs={
+    #             'class': 'form-control col-md-7 col-xs-12'}))
 
     class Meta:
         model = Tag
-        fields = ['name', 'visibility']
+        fields = ['name']
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(TagAddForm, self).__init__(*args, **kwargs)
-        visibility = []
-        site_type = []
-        if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
-            visibility.append(1)
-            site_type.append((1, "ShineLearning"))
-        if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
-            visibility.append(2)
-            site_type.append((2, "TalentEconomy"))
-        if has_group(user=self.request.user, grp_list=[settings.HR_INSIDER, settings.PRODUCT_GROUP_LIST]):
-            visibility.append(3)
-            visibility.append(4)
-            visibility.append(5)
-            site_type.append((3, "HR Blogger"))
-            site_type.append((4, 'HR-Conclave'))
-            site_type.append((5, 'HR-Jobfair'))
+        # visibility = []
+        # site_type = []
+        # if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+        #     visibility.append(1)
+        #     site_type.append((1, "ShineLearning"))
+        # if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+        #     visibility.append(2)
+        #     site_type.append((2, "TalentEconomy"))
+        # if has_group(user=self.request.user, grp_list=[settings.HR_INSIDER, settings.PRODUCT_GROUP_LIST]):
+        #     visibility.append(3)
+        #     visibility.append(4)
+        #     visibility.append(5)
+        #     site_type.append((3, "HR Blogger"))
+        #     site_type.append((4, 'HR-Conclave'))
+        #     site_type.append((5, 'HR-Jobfair'))
 
-        self.fields['visibility'].choices = site_type
+        # self.fields['visibility'].choices = site_type
 
-        self.fields['visibility'].choices = site_type
+        # self.fields['visibility'].choices = site_type
         
         self.fields['name'].required = True
 
@@ -445,13 +444,13 @@ class TagChangeForm(forms.ModelForm):
         widget=forms.NumberInput(
             attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    visibility = forms.ChoiceField(label=("Visibility*:"),
-            choices=SITE_TYPE, widget=forms.Select(attrs={
-                'class': 'form-control col-md-7 col-xs-12'}))
+    # visibility = forms.ChoiceField(label=("Visibility*:"),
+    #         choices=SITE_TYPE, widget=forms.Select(attrs={
+    #             'class': 'form-control col-md-7 col-xs-12'}))
 
     class Meta:
         model = Tag
-        fields = ['name', 'is_active', 'priority','visibility',
+        fields = ['name', 'is_active', 'priority',
             'title', 'slug', 'url', 'meta_desc', 'meta_keywords']
 
         widgets = {
@@ -464,23 +463,23 @@ class TagChangeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(TagChangeForm, self).__init__(*args, **kwargs)
-        visibility = []
-        site_type = []
-        if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
-            visibility.append(1)
-            site_type.append((1, "ShineLearning"))
-        if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
-            visibility.append(2)
-            site_type.append((2, "TalentEconomy"))
-        if has_group(user=self.request.user, grp_list=[settings.HR_INSIDER, settings.PRODUCT_GROUP_LIST]):
-            visibility.append(3)
-            visibility.append(4)
-            visibility.append(5)
-            site_type.append((3, "HR Blogger"))
-            site_type.append((4, 'HR-Conclave'))
-            site_type.append((5, 'HR-Jobfair'))
+        # visibility = []
+        # site_type = []
+        # if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+        #     visibility.append(1)
+        #     site_type.append((1, "ShineLearning"))
+        # if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+        #     visibility.append(2)
+        #     site_type.append((2, "TalentEconomy"))
+        # if has_group(user=self.request.user, grp_list=[settings.HR_INSIDER, settings.PRODUCT_GROUP_LIST]):
+        #     visibility.append(3)
+        #     visibility.append(4)
+        #     visibility.append(5)
+        #     site_type.append((3, "HR Blogger"))
+        #     site_type.append((4, 'HR-Conclave'))
+        #     site_type.append((5, 'HR-Jobfair'))
 
-        self.fields['visibility'].choices = site_type
+        # self.fields['visibility'].choices = site_type
 
         self.fields['slug'].required = False
         self.fields['slug'].widget.attrs['readonly'] = True

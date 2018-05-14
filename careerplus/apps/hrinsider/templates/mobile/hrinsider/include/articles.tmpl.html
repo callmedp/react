@@ -2,7 +2,7 @@
 {% for articlelist in articlelists %}
 
 <li class="media">
-  <a class="link-grey" title="{{articlelist.title}}" href="{% url 'talent:te-articles-detail' articlelist.p_cat.slug articlelist.slug %}">
+  <a class="link-grey" title="{{articlelist.title}}" href="{% url 'hrinsider:hr-articles-detail' articlelist.slug %}">
     {% thumbnail articlelist.image "96x73" crop="center" as im %}
     <figure class="media-left">
       <img class="media-object w-auto" src="{{ articlelist.image.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ articlelist.image_alt}}">

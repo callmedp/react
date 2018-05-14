@@ -342,7 +342,7 @@ class BlogTagListView(TemplateView, PaginationMixin):
         except:
             self.active_tab = 0
         try:
-            self.tag_obj = Tag.objects.get(slug=slug, is_active=True, visibility=1)
+            self.tag_obj = Tag.objects.get(slug=slug, is_active=True)
         except Exception:
             raise Http404
         context = super(BlogTagListView, self).get(request, args, **kwargs)

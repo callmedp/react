@@ -19,7 +19,7 @@ from users.forms import (
     ModalRegistrationApiForm,
     PasswordResetRequestForm)
 from blog.mixins import BlogMixin
-from blog.models import Category, Blog, Author
+from blog.models import Category, Blog, Author, Tag
 
 
 class HRLandingView(TemplateView, BlogMixin):
@@ -111,6 +111,69 @@ class HRLandingView(TemplateView, BlogMixin):
         return {"meta": meta}
 
 
+class HRBlogTagView(TemplateView, BlogMixin):
+    model = Blog
+    template_name = "hrinsider/hrtag-article.html"
+
+    def __init__(self):
+        self.tag_obj = None
+        pass
+
+    def get(self, request, *args, **kwargs):
+        slug = kwargs.get('slug', None)
+        try:
+            self.tag_obj = Tag.objects.get(slug=slug, is_active=True)
+        except Exception:
+            raise Http404
+        context = super(self.__class__, self).get(request, args, **kwargs)
+
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        categories = Category.objects.filter(
+            is_active=True, visibility=3).order_by('-name')
+
+        article_list = self.tag_obj.blog_set.filter(
+            status=1,
+            visibility=3).select_related(
+            'p_cat', 'author').order_by('-publish_date')[:20]
+
+        authors = Author.objects.filter(
+            is_active=True,
+            blog__visibility=3,
+            blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
+        author_list = zip_longest(*[iter(authors)] * 6, fillvalue=None)
+
+        context.update({
+            'categories': categories,
+            'article_list': article_list,
+            'authors': authors,
+            'authors_list': list(author_list),
+            'tag': self.tag_obj
+        })
+
+        context.update(self.get_breadcrumb_data())
+        context.update(self.get_meta_details())
+        return context
+
+    def get_breadcrumb_data(self):
+        breadcrumbs = []
+        breadcrumbs.append({
+            "url": reverse('hrinsider:hr-landing'),
+            "name": "HR Insider"})
+        breadcrumbs.append({"url": None, "name": self.tag_obj.name})
+        data = {"breadcrumbs": breadcrumbs}
+        return data
+
+    def get_meta_details(self):
+        meta = Meta(
+            title="HR insider: Career Skilling for a future ready India",
+            description="HR insider - The best way to choose better career options. Get experts' advice & ideas for planning your future growth @ Shine Learning",
+        )
+        return {"meta": meta}
+
+
 class HRBlogDetailView(DetailView, BlogMixin):
     template_name = "hrinsider/hr_detail.html"
     model = Blog
@@ -144,7 +207,6 @@ class HRBlogDetailView(DetailView, BlogMixin):
         self.object.no_views += 1
         self.object.update_score()
         self.object.save()
-
         context = super(self.__class__, self).get(request, args, **kwargs)
         return context
 

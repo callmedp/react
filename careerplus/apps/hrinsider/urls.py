@@ -1,12 +1,21 @@
 from django.conf.urls import url
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic import RedirectView
 
 from .views import HRLandingView, HRBlogDetailView, HrConclaveLandingView,\
-    HrJobFairLandingView, HrConclaveDetailView, HrJobFairDetailView
+    HrJobFairLandingView, HrConclaveDetailView, HrJobFairDetailView, \
+    HRBlogTagView
 
 urlpatterns = [
     url(r'^$', HRLandingView.as_view(), name='hr-landing'),
     url(r'^blog/$', HRLandingView.as_view(), {'list': True},
         name='hr-listing'),
+
+    url(r'^tags/$', RedirectView.as_view(
+        url=reverse_lazy('hrinsider:hr-landing'), permanent=True)),
+    url(r'^tags/(?P<slug>[-\w]+)/$', HRBlogTagView.as_view(),
+        name='hr-tag-article'),
+
     url(r'^blog/(?P<slug>[-\w]+)/$',
         HRBlogDetailView.as_view(), name='hr-articles-detail'),
 

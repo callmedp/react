@@ -1,0 +1,47 @@
+{% load static %}
+{% load humanize %}
+{% load thumbnail compress %}
+
+{% for artList in page_obj %}
+  <div class="media article-list" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
+    <a title="{{artList.heading}}" href="{{artList.url}}" itemprop="url">
+      <figure class="media-left">
+        {% thumbnail artList.image "96x73" crop="center" as im %}
+        <img class="media-object w-auto" width="{{ im.width }}" height="{{ im.height }}" src="{{artList.image.url}}" alt="{{artList.image_alt}}" itemprop="image">
+        {% endthumbnail %}
+      </figure>
+      <div class="media-body rel">
+        <h3 class="media-heading" itemprop="name">{{artList.heading}}</h3>
+
+        <div class="blog-author fs-11">
+          <span class="editor" itemprop="author">{{artList.author.name}}</span>
+          <span class="view-forward pull-right">
+              <figure class="icon-forward"></figure> {{artList.no_shares}}
+              <figure class="icon-view icon-grey-view ml-10"></figure> {{artList.no_views}}
+          </span>
+        </div>
+      </div>
+    </a>
+      <meta itemprop="datePublished" content="{{artList.publish_date.date}}"></meta>
+      <meta itemprop="position" content="{{forloop.counter}}">
+      <meta itemprop="headline" content="{{artList.heading}}">
+      <meta itemprop="dateModified" content="{{artList.publish_date.date}}">
+      <meta itemprop="mainEntityOfPage" content="{% url 'talent:talent-landing' %}">
+      
+      <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" >
+        <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+          <meta itemprop="url" content="{% static 'shinelearn/images/logo.png' %}">
+        </div>
+        <meta itemprop="name" content="Shine">
+      </div>
+  </div>
+  {% endfor %}
+
+{% if page_obj.has_next %}
+<div id="talent_load_more" style='display:none'>
+    <div>
+    <input type="hidden" id="talentpg_id" name="page" value="{{page_obj.next_page_number}}">
+    <input type="hidden" id="talentpg_slug" name="slug" value="{{slug}}">
+    </div>
+</div>
+{% endif %}

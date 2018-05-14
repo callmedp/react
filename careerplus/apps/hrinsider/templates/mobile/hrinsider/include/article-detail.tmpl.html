@@ -7,10 +7,32 @@
     </span>
   </div>
 
+  <div class="follow-widgets">
+  <p class="inline-block">Share on</p>
+  <ul>
+    <li class="fb"><a id="article_share" target="_blank" article-slug="{{main_article.slug}}"  href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}"><span class="icon-sm-fb"></span></a></li>
+
+    <li class="twitter"><a id="article_share" target="_blank" article-slug="{{main_article.slug}}" href="https://twitter.com/home?status=https://{{SITEDOMAIN}}{{main_article.get_absolute_url}}"><span class="icon-sm-twitter"></span></a></li>
+
+    <li class="gPlus"><a id="article_share" target="_blank" article-slug="{{main_article.slug}}" href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}"><span class="icon-sm-gPlus"></span></a></li>
+  </ul>
+  </div><!-- /.Follow -->
+
+  {% with main_article.tags.all as tags %}
+  {% if tags %}
+    <div class="tagging mt-30 mb-30">
+      <p>Tagged in</p>
+      {% for tag in tags %}
+      <a href="{% url "hrinsider:hr-tag-article" tag.slug %}" title="{{tag.name}}">{{tag.name}}</a>
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% endwith %}
+
   {{main_article.content|safe}}
 
 <div class="follow-widgets">
-<p class="inline-block">Share this event on</p>
+<p class="inline-block">Share on</p>
 <ul>
   <li class="fb"><a id="article_share" target="_blank" article-slug="{{main_article.slug}}"  href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}"><span class="icon-sm-fb"></span></a></li>
 
@@ -25,7 +47,7 @@
   <div class="tagging mt-30 mb-30">
     <p>Tagged in</p>
     {% for tag in tags %}
-    <a role="button">{{tag.name}}</a>
+    <a href="{% url "hrinsider:hr-tag-article" tag.slug %}" title="{{tag.name}}">{{tag.name}}</a>
     {% endfor %}
   </div>
 {% endif %}
