@@ -111,3 +111,8 @@ celery_local.py
 
 
 code-learning-key.json
+
+# Settings files
+careerplus/config/settings.py
+careerplus/config/settings_live.py
+careerplus/config/settings_staging.py
