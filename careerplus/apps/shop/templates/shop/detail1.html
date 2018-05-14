@@ -185,13 +185,13 @@
 
                   {% if prd_uget %}
 
-                    <a title="Course Highlights" class=" cls_tab_child" href="#get">Course Highlights</a>
+                    <a title="Course Highlights" class="active cls_tab_child" href="#get">Course Highlights</a>
 
                   {% endif %}
 
                       {% if product.attend %}
 
-                      <a title="How to begin" class="cls_tab_child" href="#attends">Who Should Attend</a>
+                      <a title="How to begin" class=" cls_tab_child" href="#attends">Who Should Attend</a>
 
                       {% endif %}
 
@@ -199,7 +199,7 @@
                     <a title="About Product" class=" cls_tab_child" href="#course">About Product</a>
                     {% else %}
                         {% if prd_desc %}
-                        <a title="Shine Advantage" class="active cls_tab_child" href="#course">Shine Advantage</a>
+                        <a title="Shine Advantage" class=" cls_tab_child" href="#course">Shine Advantage</a>
 
                         {% endif %}
                     {% endif %}
@@ -232,7 +232,7 @@
               <section class="container-fluid detail-box">
                 <div class="container">
                   <div class="row">
-                    <div id="get" class="col-sm-12 col-md-8 scroller ">
+                    <div id="get" class="col-sm-12 col-md-8 scroll ">
                     <h2>Course Highlights</h2>
 
                         {{prd_uget|safe}}
@@ -259,7 +259,7 @@
                 <section class="container-fluid detail-box">
                 <div class="container">
                   <div class="row">
-                    <div id="course" class="col-sm-12 col-md-8 scroller">
+                    <div id="course" class="col-sm-12 col-md-8 scroll">
                         {%if product.visibility %}
                       <h2>About {{prd_H1}}</h2>
                         {%else%}
