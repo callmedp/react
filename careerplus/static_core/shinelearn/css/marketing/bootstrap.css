@@ -2750,38 +2750,38 @@ h2 {
 }
 
 .bg {
-  background: url(/l/s/shinelearn/images/marketing/data-science-cert/bg.jpg) #fafafa 0 0;
+  background: url(/l/s/shinelearn/images/marketing/bg.jpg) #fafafa 0 0;
   background-size: cover;
   display: block;
 }
 
 .ds-bg {
-  background: url(/l/s/shinelearn/images/marketing/data-science-cert/ds-bg.jpg) #e9f1fd 0 0;
+  background: url(/l/s/shinelearn/images/marketing/ds-bg.jpg) #e9f1fd 0 0;
   background-size: cover;
   display: block;
 }
 
 .ds-bg-new {
-  background: url(/l/s/shinelearn/images/marketing/data-science-cert/ds-bg-1.jpg) #e9f1fd 0 0;
+  background: url(/l/s/shinelearn/images/marketing/ds-bg-1.jpg) #e9f1fd 0 0;
   background-size: cover;
   display: block;
 }
 
 .pmp-bg {
   background-size: cover;
-  background: url(/l/s/shinelearn/images/marketing/data-science-cert/pmp-bg.jpg) #fbfef7 0 0;
+  background: url(/l/s/shinelearn/images/marketing/pmp-bg.jpg) #fbfef7 0 0;
   background-size: cover;
   display: block;
 }
 
 .dm-bg {
-  background: url(/l/s/shinelearn/images/marketing/data-science-cert/dm-bg.jpg) #e8f7ff 0 0;
+  background: url(/l/s/shinelearn/images/marketing/dm-bg.jpg) #e8f7ff 0 0;
   background-size: cover;
   display: block;
 }
 
 .aws-bg {
-  background: url(/l/s/shinelearn/images/marketing/data-science-cert/aws-bg.jpg) #e8eeee 0 0;
+  background: url(/l/s/shinelearn/images/marketing/aws-bg.jpg) #e8eeee 0 0;
   background-size: cover;
   display: block;
 }
@@ -3043,7 +3043,7 @@ h2 {
   top: 20px;
   width: 15px;
   height: 9px;
-  background: url(/l/s/shinelearn/images/marketing/data-science-cert/up-arrow.png);
+  background: url(/l/s/shinelearn/images/marketing/up-arrow.png);
 }
 
 .course-preview .panel-heading a.collapsed:after {
@@ -3053,7 +3053,7 @@ h2 {
   top: 20px;
   width: 15px;
   height: 9px;
-  background: url(/l/s/shinelearn/images/marketing/data-science-cert/down-arrow.png);
+  background: url(/l/s/shinelearn/images/marketing/down-arrow.png);
 }
 
 .course-preview .arrow-end a:after {
@@ -3093,7 +3093,7 @@ h2 {
   position: absolute;
   width: 17px;
   height: 17px;
-  background: url(/l/s/shinelearn/images/marketing/data-science-cert/tick-icon.png);
+  background: url(/l/s/shinelearn/images/marketing/tick-icon.png);
   display: block;
   left: -39px;
   top: 2px;
