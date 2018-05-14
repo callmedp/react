@@ -286,7 +286,7 @@ EMAIL_PORT = 25
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = 0
-SERVER_EMAIL = 'recruiter@shine.com'
+SERVER_EMAIL = 'learning@shine.com'
 DEFAULT_FROM_EMAIL = CONSULTANTS_EMAIL
 EMAIL_SERVER = 'http://localhost:8000'
 
