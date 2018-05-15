@@ -1,6 +1,7 @@
 import logging
 import os
 import csv
+import codecs
 
 from django.contrib.auth import get_user_model
 from django.conf import settings
@@ -8,11 +9,11 @@ from django.utils import timezone
 from django.urls import reverse
 
 from celery.decorators import task
-
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from scheduler.models import Scheduler
 from linkedin.autologin import AutoLogin
 
-# No usage    User = get_user_model()
+User = get_user_model()
 
 
 @task(name="gen_auto_login_token_task")
@@ -27,89 +28,175 @@ def gen_auto_login_token_task(task=None, user=None, next_url=None, exp_days=None
                 upload_path = up_task.file_uploaded.name
                 total_rows = 0
                 try:
-# No usage      user = User.objects.get(pk=user)
-                    exist_file = os.path.isfile(
-                        settings.MEDIA_ROOT + '/' + upload_path)
+                    user = User.objects.get(pk=user)
+                    if not settings.IS_GCP:
+                        exist_file = os.path.isfile(
+                            settings.MEDIA_ROOT + '/' + upload_path)
+                    else:
+                        exist_file = GCPPrivateMediaStorage().exists(
+                            upload_path)
                     if exist_file:
                         f = True
-                        with open(
-                            settings.MEDIA_ROOT + '/' + upload_path,
-                            'r', encoding='utf-8', errors='ignore') as upload:
-                            uploader = csv.DictReader(
-                                upload, delimiter=',', quotechar='"')
-                            try:
-                                for i, line in enumerate(uploader):
-                                    pass
-                                total_rows = i + 1
-                            except Exception as e:
-                                total_rows = 2000
-                                logging.getLogger('error_log').error(
-                                    "%(msg)s : %(err)s" % {'msg': 'generate auto login token task', 'err': str(e)})
+
+                        if not settings.IS_GCP:
+                            with open(
+                                settings.MEDIA_ROOT + '/' + upload_path,
+                                'r', encoding='utf-8', errors='ignore') as upload:
+                                uploader = csv.DictReader(
+                                    upload, delimiter=',', quotechar='"')
+                                try:
+                                    for i, line in enumerate(uploader):
+                                        pass
+                                    total_rows = i + 1
+                                except Exception as e:
+                                    total_rows = 2000
+                                    logging.getLogger('error_log').error(
+                                        "%(msg)s : %(err)s" % {'msg': 'generate auto login token task', 'err': str(e)})
+                        else:
+                            with GCPPrivateMediaStorage().open(upload_path) as upload:
+                                uploader = csv.DictReader(
+                                    codecs.iterdecode(upload, 'utf-8'), delimiter=',', quotechar='"')
+
+                                try:
+                                    for i, line in enumerate(uploader):
+                                        pass
+                                    total_rows = i + 1
+                                except Exception as e:
+                                    total_rows = 2000
+                                    logging.getLogger('error_log').error(
+                                        "%(msg)s : %(err)s" % {'msg': 'generate auto login token task', 'err': str(e)})
+
+                            # try:
+                            #     for i, line in enumerate(uploader):
+                            #         pass
+                            #     total_rows = i + 1
+                            # except Exception as e:
+                            #     total_rows = 2000
+                            #     logging.getLogger('error_log').error(
+                            #         "%(msg)s : %(err)s" % {'msg': 'generate auto login token task', 'err': str(e)})
                         upload.close()
                         gen_dir = os.path.dirname(upload_path)
                         filename_tuple = upload_path.split('.')
                         extension = filename_tuple[len(filename_tuple) - 1]
                         gen_file_name = str(up_task.pk) + '_GENERATED' + '.' + extension
                         generated_path = gen_dir + '/' + gen_file_name
-                        generated_file = open(
-                            settings.MEDIA_ROOT + '/' + generated_path, 'w')
-                        with open(
-                            settings.MEDIA_ROOT + '/' + upload_path,
-                            'r', encoding='utf-8', errors='ignore') as upload:
-                            uploader = csv.DictReader(
-                                upload, delimiter=',', quotechar='"')
-                            fieldnames = uploader.fieldnames
-                            fieldnames.append('token')
-                            fieldnames.append('auto_login_url')
-                            fieldnames.append('error_report')
-                            csvwriter = csv.DictWriter(
-                                generated_file, delimiter=',', fieldnames=fieldnames)
-                            csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
-                            count = 0
-                            for row in uploader:
-                                try:
-                                    email = row.get('email_id', '').strip()
-                                    candidate_id = row.get('user_id', '').strip()
 
+                        if not settings.IS_GCP:
+                            generated_file = open(
+                                settings.MEDIA_ROOT + '/' + generated_path, 'w')
+                        else:
+                            generated_file = GCPPrivateMediaStorage().open(
+                                generated_path, 'wb')
+
+                        if not settings.IS_GCP:
+                            with open(
+                                settings.MEDIA_ROOT + '/' + upload_path,
+                                'r', encoding='utf-8', errors='ignore') as upload:
+                                uploader = csv.DictReader(
+                                    upload, delimiter=',', quotechar='"')
+                                fieldnames = uploader.fieldnames
+                                fieldnames.append('token')
+                                fieldnames.append('auto_login_url')
+                                fieldnames.append('error_report')
+                                csvwriter = csv.DictWriter(
+                                    generated_file, delimiter=',', fieldnames=fieldnames)
+                                csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
+                                count = 0
+                                for row in uploader:
                                     try:
-                                        if email and candidate_id:
-                                            token = AutoLogin().encode(
-                                                email,
-                                                candidate_id,
-                                                days=exp_days)
-                                            row['token'] = token
-                                            if next_url:
-                                                login_url = reverse('autologin', kwargs={'token': token})
-                                                autologin_url = settings.MAIN_DOMAIN_PREFIX + login_url + '?next=' + next_url
-                                                row['auto_login_url'] = autologin_url
-                                            csvwriter.writerow(row)
+                                        email = row.get('email_id', '').strip()
+                                        candidate_id = row.get('user_id', '').strip()
 
-                                        else:
-                                            row['error_report'] = 'email or candidate_id not found'
+                                        try:
+                                            if email and candidate_id:
+                                                token = AutoLogin().encode(
+                                                    email,
+                                                    candidate_id,
+                                                    days=exp_days)
+                                                row['token'] = token
+                                                if next_url:
+                                                    login_url = reverse('autologin', kwargs={'token': token})
+                                                    autologin_url = settings.MAIN_DOMAIN_PREFIX + login_url + '?next=' + next_url
+                                                    row['auto_login_url'] = autologin_url
+                                                csvwriter.writerow(row)
+
+                                            else:
+                                                row['error_report'] = 'email or candidate_id not found'
+                                                csvwriter.writerow(row)
+                                        except Exception as e:
+                                            row['error_report'] = str(e)
                                             csvwriter.writerow(row)
                                     except Exception as e:
                                         row['error_report'] = str(e)
                                         csvwriter.writerow(row)
-                                except Exception as e:
-                                    row['error_report'] = str(e)
-                                    csvwriter.writerow(row)
-                                count = count + 1
-                                if count % 20 == 0:
-                                    try:
-                                        up_task.percent_done = round((count / float(total_rows))*100, 2)
-                                        up_task.save()
-                                    except Exception as e:
-                                        logging.getLogger('error_log').error('unable to get uptask done percent %s' %
-                                                                             str(e))
+                                    count = count + 1
+                                    if count % 20 == 0:
+                                        try:
+                                            up_task.percent_done = round((count / float(total_rows))*100, 2)
+                                            up_task.save()
+                                        except:
+                                            pass
+                                up_task.file_generated = generated_path
+                                up_task.percent_done = 100
+                                up_task.status = 2
+                                up_task.completed_on = timezone.now()
+                                up_task.save()
+                                upload.close()
+                                generated_file.close()
 
-                                        pass
-                            up_task.file_generated = generated_path
-                            up_task.percent_done = 100
-                            up_task.status = 2
-                            up_task.completed_on = timezone.now()
-                            up_task.save()
-                            upload.close()
-                            generated_file.close()
+                        else:
+                            with GCPPrivateMediaStorage().open(upload_path) as upload:
+                                uploader = csv.DictReader(
+                                    codecs.iterdecode(upload, 'utf-8'), delimiter=',', quotechar='"')
+                                fieldnames = uploader.fieldnames
+                                fieldnames.append('token')
+                                fieldnames.append('auto_login_url')
+                                fieldnames.append('error_report')
+                                csvwriter = csv.DictWriter(
+                                    generated_file, delimiter=',', fieldnames=fieldnames)
+                                csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
+                                count = 0
+                                for row in uploader:
+                                    try:
+                                        email = row.get('email_id', '').strip()
+                                        candidate_id = row.get('user_id', '').strip()
+
+                                        try:
+                                            if email and candidate_id:
+                                                token = AutoLogin().encode(
+                                                    email,
+                                                    candidate_id,
+                                                    days=exp_days)
+                                                row['token'] = token
+                                                if next_url:
+                                                    login_url = reverse('autologin', kwargs={'token': token})
+                                                    autologin_url = settings.MAIN_DOMAIN_PREFIX + login_url + '?next=' + next_url
+                                                    row['auto_login_url'] = autologin_url
+                                                csvwriter.writerow(row)
+
+                                            else:
+                                                row['error_report'] = 'email or candidate_id not found'
+                                                csvwriter.writerow(row)
+                                        except Exception as e:
+                                            row['error_report'] = str(e)
+                                            csvwriter.writerow(row)
+                                    except Exception as e:
+                                        row['error_report'] = str(e)
+                                        csvwriter.writerow(row)
+                                    count = count + 1
+                                    if count % 20 == 0:
+                                        try:
+                                            up_task.percent_done = round((count / float(total_rows))*100, 2)
+                                            up_task.save()
+                                        except:
+                                            pass
+                                up_task.file_generated = generated_path
+                                up_task.percent_done = 100
+                                up_task.status = 2
+                                up_task.completed_on = timezone.now()
+                                up_task.save()
+                                upload.close()
+                                generated_file.close()
                     else:
                         up_task.status = 1
                         up_task.save()
