@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from random import random
 from django.utils.translation import ugettext_lazy as _
 import csv
+import logging
 
 def get_file_name(f_obj):
     file_name_tuple = os.path.splitext(f_obj)
@@ -62,7 +63,8 @@ def upload_FA(filename):
                 if faname not in ['', 'ALL']:
                     try:
                         int(faname)
-                    except:
+                    except Exception as e:
+                        logging.getLogger('error_log').error(str(e))
                         try:
                             faobj = FunctionalArea.objects.get_or_create(name=faname)
                             ProductFA.objects.get_or_create(product=product, fa=faobj[0])
@@ -84,7 +86,8 @@ def upload_Skill(filename):
                 if skill not in ['', 'ALL']:
                     try:
                         int(skill)
-                    except:
+                    except Exception as e:
+                        logging.getLogger('error_log').error(str(e))
                         try:
                             faobj = Skill.objects.get_or_create(name=skill)
                             ProductSkill.objects.get_or_create(product=product, skill=faobj[0])

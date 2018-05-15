@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
-
+import logging
 from .forms import PasswordResetRequestForm, SetConfirmPasswordForm
 
 
@@ -96,7 +96,8 @@ class ConsoleForgotPasswordView(FormView):
                 result = self.form_valid(form)
                 messages.success(request, 'An email has been sent to ' + data + ". Please check its inbox to continue reseting password.")
                 return result
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to send forgotpassword email %s' % str(e))
                 result = self.form_invalid(form)
                 messages.error(request, 'No user is associated with this email address')
                 return result

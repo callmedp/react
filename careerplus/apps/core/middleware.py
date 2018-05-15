@@ -95,6 +95,7 @@ class TrackingMiddleware(object):
                     if timezone.now() > expiry:
                         utm = {}
                 except Exception as e:
+                    logging.getLogger('error_log').error(str(e))
                     pass
             ref_url = request.get_full_path()
             if '?' in ref_url:
@@ -207,7 +208,8 @@ class LearningShineMiddleware(object):
                         last_ele = url[-1]
                         product_id = re.findall('\d+', last_ele)[0]
                         product = url[-2]
-                    except:
+                    except Exception as e:
+                        logging.getLogger('error_log').error(str(e))
                         url = ''
                         product_id = 0
                         product = ''

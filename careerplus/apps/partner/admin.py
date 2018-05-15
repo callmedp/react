@@ -9,12 +9,11 @@ class VendorHierarchyInline(admin.TabularInline):
 
 class VendorAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'slug', 'email', 'mobile', 'pan', 'website')
-
     inlines = [VendorHierarchyInline]
     model = models.VendorHierarchy
     fk_name = 'vendee'
     readonly_fields = ('modified',)
-
+    raw_id_fields = ('city', 'country','state')
     extra = 0
 
 

@@ -61,7 +61,8 @@ class CounsellingSubmit(TemplateView):
         context = super(CounsellingSubmit, self).get_context_data(**kwargs)
         try:
             orderitem = OrderItem.objects.get(pk=kwargs.get('order_item', ''))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get order item object%s' % str(e))
             orderitem = None
         try:
             quiz_resp = orderitem.quizresponse
@@ -69,7 +70,7 @@ class CounsellingSubmit(TemplateView):
             quiz_resp = QuizResponse()
             quiz_resp.oi = orderitem
             quiz_resp.save()
-            logging.getLogger('error_log').error("%s" % (str(e)))
+            logging.getLogger('error_log').error(" unable to get quiz response%s" % (str(e)))
 
         context = {
             'ques_dict': ques_dict,
@@ -137,7 +138,8 @@ class CounsellingForm(TemplateView):
         context = super(CounsellingForm, self).get_context_data(**kwargs)
         try:
             orderitem = OrderItem.objects.get(pk=kwargs.get('order_item', ''))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get order item object%s' % str(e))
             orderitem = None
 
         try:
@@ -159,7 +161,9 @@ class CounsellingForm(TemplateView):
     def post(self, request, *args, **kwargs):
         try:
             orderitem = OrderItem.objects.get(pk=kwargs.get('order_item', ''))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get order item object%s' % str(e))
+
             orderitem = None
         if request.POST.get('save') == 'save':
             if orderitem:
@@ -254,10 +258,14 @@ class LinkedinDraftView(TemplateView):
                     })
                 else:
                     context.update({'draft': ''})
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
+
                 context.update({'draft': ''})
 
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+
             context.update({'draft': ''})
         return context
 
@@ -310,10 +318,12 @@ class ConsoleLinkedinDraftView(TemplateView):
                     })
                 else:
                     context.update({'draft': ''})
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 context.update({'draft': ''})
 
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             context.update({'draft': ''})
         return context
 
@@ -333,7 +343,8 @@ class DraftAdminView(TemplateView):
                 return HttpResponseForbidden()
 
             return super(DraftAdminView, self).get(request, *args, **kwargs)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             return HttpResponseForbidden()
 
     def get_context_data(self, **kwargs):
@@ -382,9 +393,11 @@ class DraftAdminView(TemplateView):
                     })
                 else:
                     context.update({'draft': ''})
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 context.update({'draft': ''})
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             context.update({'draft': ''})
         return context
 
@@ -447,11 +460,13 @@ class DraftDownloadView(View):
                         return http_response
                     else:
                         return HttpResponseRedirect('/')
-                except:
+                except Exception as e:
+                    logging.getLogger('error_log').error(str(e))
                     return HttpResponseRedirect('/')
             else:
                 return HttpResponseRedirect('/login/')
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             return HttpResponseRedirect('/')
 
 
@@ -461,57 +476,62 @@ class DashboardDraftDownloadView(View):
         orderitem_id = kwargs.get('order_item', '')
         try:
             order_item = OrderItem.objects.get(pk=orderitem_id)
-        except OrderItem.DoesNotExist:
-            logging.getLogger('error_log').error('unable to get order item id')
-            return HttpResponseRedirect('/')
-        ord_candidate = order_item.order.candidate_id
-        req_candidate = request.session.get('candidate_id')
-        if ord_candidate and (ord_candidate == req_candidate):
-            try:
-                flag2 = False
-                draft = order_item.oio_linkedin
-                name = draft.candidate_name
-                skill_list = draft.key_skills
-                organization_list = draft.from_organization.filter(org_current=False).order_by('-work_to')
-                education_list = draft.from_education.filter(edu_current=False).order_by('-study_to')
-                current_org = draft.from_organization.filter(org_current=True)
-                current_edu = draft.from_education.filter(edu_current=True)
-                if current_edu:
-                    current_edu = current_edu[0]
-                if current_org:
-                    current_org = current_org[0]
-                if draft.profile_photo:
-                    flag2 = True
-                if draft.public_url:
-                    flag2 = True
-                if draft.recommendation:
-                    flag2 = True
-                if draft.follow_company:
-                    flag2 = True
-                if draft.join_group:
-                    flag2 = True
+            ord_candidate = order_item.order.candidate_id
+            req_candidate = request.session.get('candidate_id')
+            if ord_candidate and (ord_candidate == req_candidate):
+                try:
+                    draft = ''
+                    if order_item:
+                        flag2 = False
+                        draft = order_item.oio_linkedin
+                        name = draft.candidate_name
+                        skill_list = draft.key_skills
+                        organization_list = draft.from_organization.filter(org_current=False).order_by('-work_to')
+                        education_list = draft.from_education.filter(edu_current=False).order_by('-study_to')
+                        current_org = draft.from_organization.filter(org_current=True)
+                        current_edu = draft.from_education.filter(edu_current=True)
+                        if current_edu:
+                            current_edu = current_edu[0]
+                        if current_org:
+                            current_org = current_org[0]
+                        if draft.profile_photo:
+                            flag2 = True
+                        if draft.public_url:
+                            flag2 = True
+                        if draft.recommendation:
+                            flag2 - True
+                        if draft.follow_company:
+                            flag2 = True
+                        if draft.join_group:
+                            flag2 = True
 
-                context_dict = {
-                    'pagesize': 'A4',
-                    'orderitem': order_item,
-                    'draft': draft,
-                    'name': name,
-                    'skill_list': skill_list.split(','),
-                    'organization_list': organization_list,
-                    'education_list': education_list,
-                    'flag2': flag2,
-                    'current_edu': current_edu,
-                    'current_org': current_org,
-                }
-                template = get_template('linkedin/linkedin-resume-pdf.html')
-                context = Context(context_dict)
-                html = template.render(context)
-                pdf_file = HTML(string=html).write_pdf()
-                http_response = HttpResponse(pdf_file, content_type='application/pdf')
-                http_response['Content-Disposition'] = 'filename="linkedin-draft.pdf"'
-                return http_response
-            except Exception as e:
-                logging.getLogger('error_log').error('unable to get order item id: %s' % str(e))
-                return HttpResponseRedirect('/')
-        else:
-            return HttpResponseRedirect('/login/')
+                        context_dict = {
+                            'pagesize': 'A4',
+                            'orderitem': order_item,
+                            'draft': draft,
+                            'name': name,
+                            'skill_list': skill_list.split(','),
+                            'organization_list': organization_list,
+                            'education_list': education_list,
+                            'flag2': flag2,
+                            'current_edu': current_edu,
+                            'current_org': current_org,
+                        }
+                        template = get_template('linkedin/linkedin-resume-pdf.html')
+                        context = Context(context_dict)
+                        html = template.render(context)
+                        pdf_file = HTML(string=html).write_pdf()
+                        http_response = HttpResponse(pdf_file, content_type='application/pdf')
+                        http_response['Content-Disposition'] = 'filename="linkedin-draft.pdf"'
+                        return http_response
+                    else:
+                        return HttpResponseRedirect('/')
+                except Exception as e:
+                    logging.getLogger('error_log').error(str(e))
+                    return HttpResponseRedirect('/')
+            else:
+                return HttpResponseRedirect('/login/')
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get order item id%s'%str(e))
+
+            return HttpResponseRedirect('/')

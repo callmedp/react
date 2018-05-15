@@ -1,11 +1,12 @@
 from geolocation.models import Country
-
+import logging
 
 def get_country_obj(country_code2):
     try:
         country_objs = Country.objects.filter(code2=country_code2, active=True)
         country_obj = country_objs[0]
-    except:
+    except Exception as e:
+        logging.getLogger('error_log').error('unable to get country object %s'%str(e))
         country_obj = Country.objects.get(phone='91', active=True)
     return country_obj
 

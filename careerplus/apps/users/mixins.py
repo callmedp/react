@@ -937,8 +937,8 @@ class UserMixin(object):
             else:
                 ip = request.META.get('REMOTE_ADDR')
             return ip
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get user_ip %s' % str(e))
         return None
 
     def get_client_country(self, request):
@@ -949,7 +949,8 @@ class UserMixin(object):
                 code2 = g.country(ip)['country_code']
             else:
                 code2 = 'IN'
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get country code %s' % str(e))
             code2 = 'IN'
 
         if not code2:
@@ -960,7 +961,9 @@ class UserMixin(object):
         try:
             country_objs = Country.objects.filter(code2=code2)
             country_obj = country_objs[0]
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get country object %s' % str(e))
+
             country_obj = Country.objects.get(phone='91')
 
         return country_obj

@@ -58,11 +58,14 @@ class LeadManagement(View):
                 return HttpResponse(json.dumps({'status': False}))
             try:
                 product_id = int(product_id)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get product id%s'%str(e))
                 product_id = 0
             try:
                 lead_source = int(lead_source)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get lead source%s'%str(e))
+
                 lead_source = 0
 
             medium = 0
@@ -76,7 +79,8 @@ class LeadManagement(View):
 
             try:
                 country = Country.objects.get(phone=country)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get country object%s'%str(e))
                 country = Country.objects.get(phone='91')
 
             utm = request.session.get('utm', {})
@@ -129,7 +133,9 @@ class LeadManagementWithCaptcha(View, ReCaptchaMixin):
             prd = request.POST.get('prd', '')
             try:
                 product_id = int(request.POST.get('product', 0))
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get product id%s'%str(e))
+
                 product_id = 0
                 
             country = request.POST.get('country', '91')
@@ -153,7 +159,9 @@ class LeadManagementWithCaptcha(View, ReCaptchaMixin):
             
             try:
                 lead_source = int(lead_source)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get lead source %s'%str(e))
+
                 lead_source = 0
 
             medium = 0
@@ -167,7 +175,9 @@ class LeadManagementWithCaptcha(View, ReCaptchaMixin):
 
             try:
                 country = Country.objects.get(phone=country)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get country object%s'%str(e))
+
                 country = Country.objects.get(phone='91')
 
             utm = request.session.get('utm', {})
@@ -194,6 +204,7 @@ class LeadManagementWithCaptcha(View, ReCaptchaMixin):
             )
 
             created = True
+
             valid_source_list = [4]
             if lead.lead_source in valid_source_list:
                 create_lead_crm.delay(pk=lead.pk)

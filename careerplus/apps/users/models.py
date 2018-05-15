@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
+import logging
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin, BaseUserManager)
@@ -165,7 +166,9 @@ def create_user_profile(sender, instance, created, **kwargs):
     # this code run on every save of user object
     try:
         UserProfile.objects.get_or_create(user=instance)
-    except:
+    except Exception as e:
+        logging.getLogger('error_log').error('unable to get/create userprofile object %s' % str(e))
+
         pass
 post_save.connect(create_user_profile, sender=User)
 

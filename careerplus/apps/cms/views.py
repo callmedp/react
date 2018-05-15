@@ -83,7 +83,8 @@ class CMSPageView(DetailView, LoadMoreMixin):
             pk = kwargs.get('pk')
             try:
                 self.page_obj = Page.objects.get(pk=pk, is_active=True)
-            except Exception:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get page object %s'%str(e))
                 raise Http404
             if request.session.get('candidate_id') and message and self.page_obj:
                 name = ''

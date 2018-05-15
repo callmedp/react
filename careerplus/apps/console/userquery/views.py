@@ -1,6 +1,6 @@
 import json
 import datetime
-
+import logging
 from django.views.generic import ListView, View
 from django.core.paginator import Paginator
 from django.contrib import messages
@@ -74,7 +74,8 @@ class CMSUserQueryView(ListView, PaginationMixin):
                     Q(product__iexact=self.query) |
                     Q(product_id__iexact=self.query) |
                     Q(campaign_slug__iexact=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset %s' % str(e))
             pass
 
         try:
@@ -88,7 +89,8 @@ class CMSUserQueryView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     created__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset with the daterange %s' % str(e))
             pass
 
         return queryset.select_related('country').order_by('-modified')
@@ -145,7 +147,8 @@ class SkillQueryView(ListView, PaginationMixin):
                     Q(product__iexact=self.query) |
                     Q(product_id__iexact=self.query) |
                     Q(campaign_slug__iexact=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset %s' % str(e))
             pass
 
         try:
@@ -159,7 +162,9 @@ class SkillQueryView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     created__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset within date range %s' % str(e))
+
             pass
 
         return queryset.select_related('country').order_by('-modified')
@@ -216,7 +221,8 @@ class CourseQueryView(ListView, PaginationMixin):
                     Q(product__iexact=self.query) |
                     Q(product_id__iexact=self.query) |
                     Q(campaign_slug__iexact=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset %s' % str(e))
             pass
 
         try:
@@ -230,7 +236,8 @@ class CourseQueryView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     created__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset within date range %s' % str(e))
             pass
 
         return queryset.select_related('country').order_by('-modified')
@@ -287,7 +294,8 @@ class ServiceQueryView(ListView, PaginationMixin):
                     Q(product__iexact=self.query) |
                     Q(product_id__iexact=self.query) |
                     Q(campaign_slug__iexact=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset %s' % str(e))
             pass
 
         try:
@@ -301,7 +309,8 @@ class ServiceQueryView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     created__range=[start_date, end_date])
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset within date range %s' % str(e))
             pass
 
         return queryset.select_related('country').order_by('-modified')
@@ -311,7 +320,8 @@ class UserQueryActionView(View):
     def post(self, request, *args, **kwargs):
         try:
             action = int(request.POST.get('action', '0'))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get action %s' % str(e))
             action = 0
 
         selected = request.POST.get('selected_id', '')
@@ -356,5 +366,6 @@ class UserQueryActionView(View):
         messages.add_message(request, messages.ERROR, "Select Valid Action")
         try:
             return HttpResponseRedirect(reverse('console:userquery:' + queue_name))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             return HttpResponseForbidden()
