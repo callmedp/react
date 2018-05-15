@@ -189,7 +189,8 @@ class LinkedinQueueView(ListView, PaginationMixin):
 
                 queryset = queryset.filter(id__iexact=self.query)
             elif self.sel_opt == 'product':
-                queryset = queryset.filter(product__name__icontains=self.query)
+                queryset = queryset.filter(Q(product__name__icontains=self.query) |
+                                           Q(parent__isnull=False, parent__product__name__icontains=self.query))
             elif self.sel_opt == 'number':
                 queryset = queryset.filter(order__number__iexact=self.query)
             elif self.sel_opt == 'email':
@@ -509,7 +510,8 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
 
                 queryset = queryset.filter(id__iexact=self.query)
             elif self.sel_opt == 'product':
-                queryset = queryset.filter(product__name__icontains=self.query)
+                queryset = queryset.filter(Q(product__name__icontains=self.query) |
+                                           Q(parent__isnull=False, parent__product__name__icontains=self.query))
             elif self.sel_opt == 'number':
                 queryset = queryset.filter(order__number__iexact=self.query)
             elif self.sel_opt == 'email':
@@ -628,7 +630,8 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
 
                 queryset = queryset.filter(id__iexact=self.query)
             elif self.sel_opt == 'product':
-                queryset = queryset.filter(product__name__icontains=self.query)
+                queryset = queryset.filter(Q(product__name__icontains=self.query) |
+                                           Q(parent__isnull=False, parent__product__name__icontains=self.query))
             elif self.sel_opt == 'number':
                 queryset = queryset.filter(order__number__iexact=self.query)
             elif self.sel_opt == 'email':
@@ -739,7 +742,8 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
 
                 queryset = queryset.filter(id__iexact=self.query)
             elif self.sel_opt == 'product':
-                queryset = queryset.filter(product__name__icontains=self.query)
+                queryset = queryset.filter(Q(product__name__icontains=self.query) |
+                                           Q(parent__isnull=False, parent__product__name__icontains=self.query))
             elif self.sel_opt == 'number':
                 queryset = queryset.filter(order__number__iexact=self.query)
             elif self.sel_opt == 'email':
@@ -855,7 +859,8 @@ class ApprovedLinkedinQueueVeiw(ListView, PaginationMixin):
 
                     queryset = queryset.filter(id__iexact=self.query)
                 elif self.sel_opt == 'product':
-                    queryset = queryset.filter(product__name__icontains=self.query)
+                    queryset = queryset.filter(Q(product__name__icontains=self.query) |
+                                               Q(parent__isnull=False, parent__product__name__icontains=self.query))
                 elif self.sel_opt == 'number':
                     queryset = queryset.filter(order__number__iexact=self.query)
                 elif self.sel_opt == 'email':
@@ -1005,7 +1010,8 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
 
                 queryset = queryset.filter(id__iexact=self.query)
             elif self.sel_opt == 'product':
-                queryset = queryset.filter(product__name__icontains=self.query)
+                queryset = queryset.filter(Q(product__name__icontains=self.query)|
+                                            Q(parent__isnull=False , parent__product__name__icontains=self.query))
             elif self.sel_opt == 'number':
                 queryset = queryset.filter(order__number__iexact=self.query)
             elif self.sel_opt == 'email':
@@ -1101,7 +1107,8 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
             if self.sel_opt == 'id':
                     queryset = queryset.filter(id__iexact=self.query)
             elif self.sel_opt == 'product':
-                    queryset = queryset.filter(product__name__icontains=self.query)
+                queryset = queryset.filter(Q(product__name__icontains=self.query) |
+                                           Q(parent__isnull=False, parent__product__name__icontains=self.query))
             elif self.sel_opt == 'number':
                     queryset = queryset.filter(order__number__iexact=self.query)
             elif self.sel_opt == 'email':

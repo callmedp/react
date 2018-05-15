@@ -517,7 +517,8 @@ class InboxQueueVeiw(ListView, PaginationMixin):
                 elif self.sel_opt == 'email':
                     queryset = queryset.filter(order__email__iexact=self.query)
                 elif self.sel_opt =='product':
-                    queryset = queryset.filter(product__name__icontains=self.query)
+                    queryset = queryset.filter(Q(product__name__icontains=self.query)|
+                                               Q(parent__isnull=False , parent__product__name__icontains=self.query))
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
@@ -804,7 +805,8 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
                 elif self.sel_opt=='number':
                     queryset = queryset.filter(order__number__iexact=self.query)
                 elif self.sel_opt== 'product':
-                    queryset=queryset.filter(product__name__icontains=self.query)
+                    queryset = queryset.filter(Q(product__name__icontains=self.query) |
+                                               Q(parent__isnull=False, parent__product__name__icontains=self.query))
                 elif self.sel_opt== 'mobile':
                     queryset=queryset.filter(order__mobile__iexact=self.query)
                 elif self.sel_opt=='email':
@@ -936,7 +938,8 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
                 if self.sel_opt== 'id':
                     queryset = queryset.filter(id__iexact=self.query)
                 elif self.sel_opt== 'product':
-                    queryset = queryset.filter(product__name__icontains=self.query)
+                    queryset = queryset.filter(Q(product__name__icontains=self.query) |
+                                               Q(parent__isnull=False, parent__product__name__icontains=self.query))
                 elif self.sel_opt== 'number':
                     queryset=queryset.filter(order__number__iexact=self.query)
                 elif self.sel_opt == 'mobile':
@@ -1073,7 +1076,8 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
                 if self.sel_opt=='id':
                     queryset=queryset.filter(id__iexact=self.query)
                 elif self.sel_opt=='product':
-                    queryset = queryset.filter(product__name__icontains=self.query)
+                    queryset = queryset.filter(Q(product__name__icontains=self.query) |
+                                               Q(parent__isnull=False, parent__product__name__icontains=self.query))
                 elif self.sel_opt=='number':
                     queryset=queryset.filter(order__number__iexact=self.query)
                 elif self.sel_opt=='email':
@@ -1212,7 +1216,8 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
                 if self.sel_opt == 'id':
                     queryset = queryset.filter(id__iexact=self.query)
                 elif self.sel_opt == 'product':
-                    queryset = queryset.filter(product__name__icontains=self.query)
+                    queryset = queryset.filter(Q(product__name__icontains=self.query) |
+                                               Q(parent__isnull=False, parent__product__name__icontains=self.query))
                 elif self.sel_opt == 'number':
                     queryset = queryset.filter(order__number__iexact=self.query)
                 elif self.sel_opt == 'email':
@@ -1347,7 +1352,8 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
                 if self.sel_opt == 'id':
                     queryset = queryset.filter(id__iexact=self.query)
                 elif self.sel_opt == 'product':
-                    queryset = queryset.filter(product__name__icontains=self.query)
+                    queryset = queryset.filter(Q(product__name__icontains=self.query) |
+                                               Q(parent__isnull=False, parent__product__name__icontains=self.query))
                 elif self.sel_opt == 'number':
                     queryset = queryset.filter(order__number__iexact=self.query)
                 elif self.sel_opt == 'email':
@@ -1473,7 +1479,8 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
 
                     queryset = queryset.filter(id__iexact=self.query)
                 elif self.sel_opt == 'product':
-                    queryset = queryset.filter(product__name__icontains=self.query)
+                    queryset = queryset.filter(Q(product__name__icontains=self.query) |
+                                               Q(parent__isnull=False, parent__product__name__icontains=self.query))
                 elif self.sel_opt == 'number':
                     queryset = queryset.filter(order__number__iexact=self.query)
                 elif self.sel_opt == 'email':
@@ -1613,7 +1620,7 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
                     if self.query[:2] == 'cp' or self.query[:2] == 'CP':
                         queryset = queryset.filter(order__number__iexact=self.query)
                     else:
-                        queryset=None
+                        queryset=queryset.none()
                 elif self.sel_opt == 'id':
                         queryset = queryset.filter(id__iexact=self.query)
                 elif self.sel_opt == 'mobile':
@@ -1621,7 +1628,8 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
                 elif self.sel_opt == 'email':
                     queryset = queryset.filter(order__email__iexact=self.query)
                 elif self.sel_opt == 'product':
-                    queryset = queryset.filter(product__name__icontains=self.query)
+                    queryset = queryset.filter(Q(product__name__icontains=self.query) |
+                                               Q(parent__isnull=False, parent__product__name__icontains=self.query))
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
@@ -1718,7 +1726,8 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
 
                     queryset = queryset.filter(id__iexact=self.query)
                 elif self.sel_opt == 'product':
-                    queryset = queryset.filter(product__name__icontains=self.query)
+                    queryset = queryset.filter(Q(product__name__icontains=self.query) |
+                                               Q(parent__isnull=False, parent__product__name__icontains=self.query))
                 elif self.sel_opt == 'number':
                     queryset = queryset.filter(order__number__iexact=self.query)
                 elif self.sel_opt == 'email':
@@ -1846,7 +1855,8 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
 
                     queryset = queryset.filter(id__iexact=self.query)
                 elif self.sel_opt == 'product':
-                    queryset = queryset.filter(product__name__icontains=self.query)
+                    queryset = queryset.filter(Q(product__name__icontains=self.query) |
+                                               Q(parent__isnull=False, parent__product__name__icontains=self.query))
                 elif self.sel_opt == 'number':
                     queryset = queryset.filter(order__number__iexact=self.query)
                 elif self.sel_opt == 'email':

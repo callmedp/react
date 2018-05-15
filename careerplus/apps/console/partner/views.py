@@ -299,7 +299,7 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
                      if self.query[2:] == 'cp' or self.query[2:] =='CP':
                         queryset = queryset.filter(order__number__iexact=self.query)
                      else:
-                        queryset = None
+                        queryset = queryset.none()
                 elif self.sel_opt == 'id':
                         queryset = queryset.filter(id__iexact=self.query)
 
