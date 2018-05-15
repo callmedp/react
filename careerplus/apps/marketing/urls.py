@@ -53,4 +53,7 @@ urlpatterns = [
     url(r'^aws-cert',
         marketing_views.MarketingPages.as_view(),
         name='aws-cert'),
+    url(r'^ban-cert',
+        marketing_views.MarketingPages.as_view(),
+        name='ban-cert'),
 ]

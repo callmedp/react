@@ -12,7 +12,8 @@ class CommonMethodMixin(object):
         try:
             template = self.partner_template.format(partner=partner)
             return select_template([template, self.default_template]).name
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get partner template%s'%str(e))
             return self.default_template
 
     def import_dynamically(self, fullpath):
@@ -30,7 +31,8 @@ class CommonMethodMixin(object):
                 user_ip = http_x_forwarded_for.split(',')[0]
             else:
                 user_ip = request.META.get('REMOTE_ADDR')
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get user_ip%s' % str(e))
             pass
         return user_ip
 
@@ -42,5 +44,5 @@ class CommonMethodMixin(object):
                 product_variation=product_variation, unit=1)
             return True
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('unable to add order item%s'%str(e))
         return False

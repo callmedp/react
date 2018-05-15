@@ -261,7 +261,8 @@ class SearchBaseView(TemplateView):
         context.update(self.get_extra_context())
         try:
             context['search_params'].update({'prod_count': len(self.results)})
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             context['search_params'].update({'prod_count': 0})
         if self.request.is_ajax():
             return HttpResponse(json.dumps({

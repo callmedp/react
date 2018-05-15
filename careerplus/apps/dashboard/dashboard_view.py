@@ -218,7 +218,7 @@ class DashboardDetailView(TemplateView):
 
             try:
 
-                self.oi = OrderItem.objects.get(pk=self.oi_pk)
+                self.oi = OrderItem.objects.select_related('order','product').get(pk=self.oi_pk)
                 if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
                     pass
 
@@ -235,8 +235,10 @@ class DashboardDetailView(TemplateView):
         context = super(DashboardDetailView, self).get_context_data(**kwargs)
         if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
             ops = []
+
             if self.oi.product.type_flow in [1, 12, 13]:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27, 161, 162, 163, 181])
+
             elif self.oi.product.type_flow == 2:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 161, 162, 163])
 
@@ -276,7 +278,8 @@ class DashboardCommentView(TemplateView):
         self.oi_pk = request.GET.get('oi_pk')
         if self.oi_pk and self.candidate_id:
             try:
-                self.oi = OrderItem.objects.get(pk=self.oi_pk)
+                self.oi = OrderItem.objects.select_related("order").get(pk=self.oi_pk)
+
                 if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
                     pass
                 else:
@@ -325,17 +328,24 @@ class DashboardFeedbackView(TemplateView):
         self.oi = None
         self.candidate_id = None
 
+
+
     def get(self, request, *args, **kwargs):
         self.candidate_id = request.session.get('candidate_id', None)
         self.oi_pk = request.GET.get('oi_pk')
+
+
         if request.is_ajax() and self.oi_pk and self.candidate_id:
             try:
-                self.oi = OrderItem.objects.get(pk=self.oi_pk)
+
+
+                self.oi = OrderItem.objects.select_related("order").get(pk=self.oi_pk)
                 if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3] and self.oi.oi_status == 4 and not self.oi.user_feedback:
                     pass
                 else:
                     return ''
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get order item object%s'%str(e))
                 return ''
             return super(DashboardFeedbackView, self).get(request, args, **kwargs)
         else:
@@ -358,7 +368,7 @@ class DashboardFeedbackView(TemplateView):
         }
         if request.is_ajax() and self.oi_pk and self.candidate_id:
             try:
-                self.oi = OrderItem.objects.get(pk=self.oi_pk)
+                self.oi = OrderItem.objects.select_related("order",'product ').get(pk=self.oi_pk)
                 review = request.POST.get('review', '').strip()
                 rating = int(request.POST.get('rating', 1))
                 if rating and self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
@@ -407,7 +417,9 @@ class DashboardFeedbackView(TemplateView):
 
                 else:
                     data['display_message'] = "select valid input for feedback"
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
+
                 data['display_message'] = "select valid input for feedback"
             return HttpResponse(json.dumps(data), content_type="application/json")
         else:
@@ -426,7 +438,7 @@ class DashboardRejectService(View):
                 "display_message": '',
             }
             try:
-                oi = OrderItem.objects.get(pk=oi_pk)
+                oi = OrderItem.objects.select_related('order').get(pk=oi_pk)
                 if oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
                     if oi.oi_status in [24, 46]:
                         if reject_file:    
@@ -477,7 +489,9 @@ class DashboardRejectService(View):
                         data['display_message'] = "your draft is successfully rejected"
                     else:
                         data['display_message'] = "please do valid action only"
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
+
                 data['display_message'] = "please do valid action only"
             return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -493,7 +507,7 @@ class DashboardAcceptService(View):
                 "display_message": '',
             }
             try:
-                oi = OrderItem.objects.get(pk=oi_pk)
+                oi = OrderItem.objects.select_related('order','product').get(pk=oi_pk)
                 if oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
                     if oi.oi_status in [24, 46]:
                         last_oi_status = oi.oi_status
@@ -567,7 +581,8 @@ class DashboardAcceptService(View):
                                     "%s - %s" % (str(mail_type), str(e)))
                     else:
                         data['display_message'] = "please do valid action only"
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 data['display_message'] = "please do valid action only"
             return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -590,7 +605,7 @@ class DashboardInboxLoadmoreView(View):
                 return HttpResponse(
                     json.dumps(data), content_type="application/json")
             except Exception as e:
-                logging.getLogger('error_log').error("%s " % str(e))
+                logging.getLogger('error_log').error(str(e))
 
         return HttpResponseForbidden()
 
@@ -610,7 +625,7 @@ class DashboardInboxFilterView(View):
                 return HttpResponse(
                     json.dumps(data), content_type="application/json")
             except Exception as e:
-                logging.getLogger('error_log').error("%s " % str(e))
+                logging.getLogger('error_log').error(str(e))
 
         return HttpResponseForbidden()
 

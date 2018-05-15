@@ -223,7 +223,7 @@ class DownloadBoosterResume(View):
             token = request.GET.get('token', '')
             email, oi_pk, valid = TokenExpiry().decode(token)
             if valid:
-                oi = OrderItem.objects.get(pk=oi_pk)
+                oi = OrderItem.objects.select_related('order').get(pk=oi_pk)
                 if oi.oi_draft:
                     resume = oi.oi_draft
                 elif oi.oi_resume:
@@ -255,7 +255,8 @@ class DownloadBoosterResume(View):
                     logging.getLogger(
                         'error_log').error("candidate booster resume not found")
                     raise Exception("Resume not found.")
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to download booster resume %s' % str(e))
             messages.add_message(
                 request, messages.ERROR,
                 "Sorry, the document is currently unavailable.")

@@ -1,6 +1,7 @@
 import json
 from django.shortcuts import render
 from itertools import zip_longest
+import logging
 
 from django.views.generic import (
     TemplateView,
@@ -103,7 +104,9 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
         self.page = request.GET.get('page', 1)
         try:
             self.cat_obj = Category.objects.get(slug=slug, is_active=True, visibility=2)
-        except Exception:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get category object %s' % str(e))
+
             raise Http404
 
         context = super(TEBlogCategoryListView, self).get(request, args, **kwargs)
@@ -205,7 +208,8 @@ class TEBlogDetailView(DetailView, BlogMixin):
             queryset = queryset.filter(slug=slug, status=1, visibility=2)
         try:
             obj = queryset.get()
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset %s' % str(e))
             raise Http404
         return obj
 
@@ -241,7 +245,6 @@ class TEBlogDetailView(DetailView, BlogMixin):
         articles = p_cat.primary_category.filter(
             status=1, visibility=2).exclude(pk=blog.pk)
         articles = articles.order_by('-publish_date')
-
         context['meta'] = blog.as_meta(self.request)
         context.update({
             "reset_form": PasswordResetRequestForm()
@@ -414,7 +417,8 @@ class AuthorDetailView(DetailView):
                 blog__status=1).annotate(no_of_blog=Count('blog'))
         try:
             obj = queryset.get()
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset %s' % str(e))
             raise Http404
         return obj
 

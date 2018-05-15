@@ -3,6 +3,7 @@ from datetime import datetime
 from django.utils.translation import ugettext_lazy as _
 from seo.models import AbstractSEO, AbstractAutoDate
 from django.conf import settings
+from django.forms import ValidationError
 from meta.models import ModelMeta
 from shop.functions import (
     get_upload_path_vendor,
@@ -89,6 +90,12 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
 
     def __str__(self):
         return self.name
+
+    def clean(self):
+
+        if not self.icon:
+            raise ValidationError(_('Please upload the partner icon'),code='upload_error')
+
 
 
 class VendorHierarchy(AbstractAutoDate):

@@ -312,7 +312,8 @@ class ListCategoryView(ListView, PaginationMixin):
         try:
             if self.query:
                 queryset = queryset.filter(Q(name__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get query set%s'%str(e))
             pass
         return queryset
 
@@ -459,7 +460,8 @@ class ListFaqView(ListView, PaginationMixin):
         try:
             if self.query:
                 queryset = queryset.filter(Q(text__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset %s'%str(e))
             pass
         return queryset
 
@@ -635,7 +637,8 @@ class ListKeywordView(ListView, PaginationMixin):
         try:
             if self.query:
                 queryset = queryset.filter(Q(name__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get query-set%s'%str(e))
             pass
         return queryset
 
@@ -787,7 +790,8 @@ class ListAttributeView(ListView, PaginationMixin):
         try:
             if self.query:
                 queryset = queryset.filter(Q(name__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get query-set%s'%str(e))
             pass
         return queryset
 
@@ -902,7 +906,8 @@ class ListProductView(ListView, PaginationMixin):
         try:
             if self.query:
                 queryset = queryset.filter(Q(name__icontains=self.query))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get query-set%s'%str(e))
             pass
         return queryset
 

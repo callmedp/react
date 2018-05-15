@@ -164,6 +164,8 @@ class ProductInformationMixin(object):
 
     def solar_faq(self, product):
         structure = json.loads(product.pFAQs)
+
+
         return structure
 
     def get_recommendation(self, product):
@@ -298,13 +300,15 @@ class ProductInformationMixin(object):
             rv_page = int(page if page else 1)
             try:
                 review_list = rv_paginator.page(rv_page)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 review_list = []
             return {
                 'prd_rv_total': rv_total,
                 'prd_review_list': review_list,
                 'prd_rv_page': rv_page}
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             return {
                 'prd_rv_total': 0,
                 'prd_review_list': [],
@@ -384,7 +388,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                         ctx['canonical_url'] = pid.get_canonical_url()
                     else:
                         ctx['canonical_url'] = self.product_obj.get_canonical_url()      
-                except:
+                except Exception as e:
                     ctx['canonical_url'] = self.product_obj.get_canonical_url()
                     logging.getLogger('error_log').error(
                         "%(msg)s : %(err)s" % {'msg': 'Canonical Url ERROR', 'err': e})
@@ -617,7 +621,8 @@ class ProductReviewListView(ListView, ProductInformationMixin):
             try:
                 self._product = Product.objects.get(
                     pk=self.kwargs['product_pk'])
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get product object %s'%str(e))
                 pass
 
             if self._product:
