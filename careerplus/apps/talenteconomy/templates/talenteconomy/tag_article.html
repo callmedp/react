@@ -11,7 +11,7 @@
 
 
 {% block title %}
-   {{category.name}} - Career & Certification Guidance @ Shine Learning
+   {{tag.name}} - Career & Certification Guidance @ Shine Learning
 {% endblock title %}
 
 {% block css_section %}
@@ -42,8 +42,9 @@
 	    <div class="col-md-9 col-sm-12">
         <div class="row" itemscope itemtype="https://schema.org/ItemList">
           <h2 class="main-heading-article ml-15">All Articles</h2>
-          <div id="related-talent-container">{{detail_article}}</div>
-          <div id="id_ajax_talentpage"></div>
+          <div id="te-tag-article-container-id">
+            {{detail_article}}
+          </div>
         </div>
       
 		</div>

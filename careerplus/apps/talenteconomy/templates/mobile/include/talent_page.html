@@ -38,10 +38,14 @@
   {% endfor %}
 
 {% if page_obj.has_next %}
-<div id="talent_load_more" style='display:none'>
-    <div>
-    <input type="hidden" id="talentpg_id" name="page" value="{{page_obj.next_page_number}}">
-    <input type="hidden" id="talentpg_slug" name="slug" value="{{slug}}">
+<div id="talent_tag_load_more_id" class="text-center mt-30">
+    <div style='display:none'>
+      <form id="load-te-tag-form">
+        <input type="hidden" id="te_tag_page_id" name="page" value="{{page_obj.next_page_number}}">
+        <input type="hidden" id="te_tag_slug_id" name="slug" value="{{slug}}">
+      </form>
     </div>
+    <button class="btn-outline btn" id="load-more-te-tag">Load more
+    </button>
 </div>
 {% endif %}

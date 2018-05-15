@@ -10,9 +10,11 @@ from django.http import HttpResponseForbidden, Http404,\
     HttpResponsePermanentRedirect, HttpResponse
 from django.conf import settings
 from django.utils import timezone
-from meta.views import Meta
 from django.db.models import Count
+from django.template.loader import render_to_string
 from django.urls import reverse
+
+from meta.views import Meta
 
 from users.forms import (
     ModalLoginApiForm,
@@ -117,7 +119,8 @@ class HRBlogTagView(TemplateView, BlogMixin):
 
     def __init__(self):
         self.tag_obj = None
-        pass
+        self.page = 1
+        self.paginated_by = 9
 
     def get(self, request, *args, **kwargs):
         slug = kwargs.get('slug', None)
@@ -131,13 +134,22 @@ class HRBlogTagView(TemplateView, BlogMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
+        tag_obj = self.tag_obj
         categories = Category.objects.filter(
             is_active=True, visibility=3).order_by('-name')
-
         article_list = self.tag_obj.blog_set.filter(
             status=1,
             visibility=3).select_related(
-            'p_cat', 'author').order_by('-publish_date')[:20]
+            'p_cat', 'author').order_by('-publish_date')
+
+        page_obj = self.scrollPagination(
+            paginated_by=self.paginated_by, page=self.page,
+            object_list=article_list)
+        tag_article_list = None
+        if page_obj:
+            tag_article_list = render_to_string('hrinsider/include/tag-article-tmpl.html', {
+                "page_obj": page_obj,
+                "slug": tag_obj.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
 
         authors = Author.objects.filter(
             is_active=True,
@@ -147,7 +159,7 @@ class HRBlogTagView(TemplateView, BlogMixin):
 
         context.update({
             'categories': categories,
-            'article_list': article_list,
+            'tag_article_list': tag_article_list,
             'authors': authors,
             'authors_list': list(author_list),
             'tag': self.tag_obj
@@ -172,6 +184,48 @@ class HRBlogTagView(TemplateView, BlogMixin):
             description="HR insider - The best way to choose better career options. Get experts' advice & ideas for planning your future growth @ Shine Learning",
         )
         return {"meta": meta}
+
+
+class HRTagLoadArticleView(TemplateView, BlogMixin):
+    model = Blog
+    template_name = "hrinsider/include/tag-article-tmpl.html"
+
+    def __init__(self):
+        self.tag_obj = None
+        self.page = 1
+        self.paginated_by = 9
+
+    def get(self, request, *args, **kwargs):
+        slug = request.GET.get('slug', None)
+        self.page = request.GET.get('page', 1)
+        if request.is_ajax():
+            try:
+                self.tag_obj = Tag.objects.get(slug=slug, is_active=True)
+            except Exception:
+                return ''
+            context = super(self.__class__, self).get(request, args, **kwargs)
+            return context
+        return HttpResponseForbidden()
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        tag_obj = self.tag_obj
+        
+        article_list = self.tag_obj.blog_set.filter(
+            status=1,
+            visibility=3).select_related(
+            'p_cat', 'author').order_by('-publish_date')
+
+        page_obj = self.scrollPagination(
+            paginated_by=self.paginated_by, page=self.page,
+            object_list=article_list)
+        context.update({
+            'tag': self.tag_obj,
+            'page_obj': page_obj,
+            'slug': tag_obj.slug,
+            "SITEDOMAIN": settings.SITE_DOMAIN
+        })
+        return context
 
 
 class HRBlogDetailView(DetailView, BlogMixin):

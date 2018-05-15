@@ -811,3 +811,33 @@ footer {
 .hide {
 	display: none !important;
 }
+
+.load-button {
+	padding: 10px 20px;
+	font-size: $font-size+4;
+	color: $anchor-color;
+	border: 1px solid $blue-color;
+	display: table;
+	border-radius: 2px;
+	background-color: $white-color;
+	margin: 0 auto;
+	text-align: center;
+
+	&:hover, &:focus {
+		background-color: $white-color;
+		border: 1px solid $blue-color;;
+		color: $anchor-color;
+	}
+}
+
+.icon-load {
+	width: 24px;
+	height: 25px;
+	background: $sprite -301px -93px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+.mr-10{
+	margin-right: 10px;
+}

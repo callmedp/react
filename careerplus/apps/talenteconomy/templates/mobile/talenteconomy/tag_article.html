@@ -64,7 +64,9 @@
   <!-- box panel starts here -->
   <div class="box-panel row " itemscope itemtype="https://schema.org/ItemList">
     <h2 class="semi-head">All Articles</h2>
+    <div id="te-tag-article-container-id">
     {{detail_article}}
+    </div>
       
   </div><!-- box panel ends here -->
 
@@ -85,7 +87,7 @@
 
 {% block js_section %}
     {{block.super}}
-    <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
+    <script type="text/javascript" src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
     <script>
         $(function() {
             Article.init();

@@ -179,6 +179,53 @@ class TETagArticleView(TemplateView, BlogMixin):
         return {"meta": meta}
 
 
+class TETagLoadmoreArticleView(TemplateView, BlogMixin):
+
+    template_name = "include/talent_page.html"
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 10
+        self.tag_obj = None
+
+    def get(self, request, *args, **kwargs):
+        slug = request.GET.get('slug', None)
+        self.page = request.GET.get('page', 1)
+        if request.is_ajax():
+            try:
+                self.tag_obj = Tag.objects.get(slug=slug, is_active=True)
+            except Exception:
+                return ''
+
+            context = super(TETagLoadmoreArticleView, self).get(request, args, **kwargs)
+            return context
+        return ''
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            TETagLoadmoreArticleView, self).get_context_data(**kwargs)
+        tag_obj = self.tag_obj
+
+        tag_articles = tag_obj.blog_set.filter(
+            status=1, visibility=2).order_by('-publish_date')
+
+        tag_articles = self.scrollPagination(
+            paginated_by=self.paginated_by, page=self.page,
+            object_list=tag_articles)
+
+        # detail_article = None
+        # if recent_articles:
+        #     detail_article = render_to_string('include/talent_page.html', {
+        #         "page_obj": recent_articles,
+        #         "slug": tag_obj.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
+        context.update({
+            'page_obj': tag_articles,
+            'slug': tag_obj.slug,
+            "SITEDOMAIN": settings.SITE_DOMAIN
+        })
+        return context
+
+
 class TEBlogCategoryListView(TemplateView, BlogMixin):
     template_name = "talenteconomy/category.html"
 
