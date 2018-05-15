@@ -39,7 +39,8 @@ def common_context_processor(request):
     console_user = request.user
     writer_invoice = False
     try:
-        if console_user and console_user.userprofile and console_user.userprofile.invoice_date:
+        if console_user and hasattr(console_user, 'userprofile') and \
+                console_user.userprofile and console_user.userprofile.invoice_date:
             today_date = datetime.datetime.now().date()
             invoice_date = today_date.replace(day=1)
             invoice_date = invoice_date - datetime.timedelta(days=1)

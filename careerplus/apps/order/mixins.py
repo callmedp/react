@@ -167,7 +167,10 @@ class OrderMixin(CartMixin, ProductInformationMixin):
 
             total_discount = coupon_amount + redeemed_reward_point
 
-            percentage_discount = (total_discount * 100) / total_amount_before_discount
+            if total_amount_before_discount:
+                percentage_discount = (total_discount * 100) / total_amount_before_discount
+            else:
+                percentage_discount = 0
 
             self.request.session.update({
                 "order_pk": order.pk,

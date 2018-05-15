@@ -7,6 +7,7 @@ import ast
 
 # django imports
 from django.utils.text import slugify
+from django.conf import settings
 from core.library.haystack.query import SQS
 from haystack.query import EmptySearchQuerySet
 
@@ -361,7 +362,7 @@ def get_recommendations(func_area, skills, results=None):
     ids += list(func_area_prods.difference(products_fa_and_skill))
     if ids:
         if not results:
-            results = SQS().only('pTt pURL pHd pARx pNJ pImA pImg pStar pNm pBC pRC')
+            results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only('pTt pURL pHd pARx pNJ pImA pImg pStar pNm pBC pRC')
         results = results.narrow('id:(%s)' % ' '.join([str(pid) for pid in ids]))
     else:
         results = EmptySearchQuerySet()

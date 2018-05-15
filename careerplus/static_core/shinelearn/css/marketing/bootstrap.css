@@ -272,7 +272,7 @@ body {
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
-  color: #555;
+  color: #333;
   line-height: 1.42857143;
   background-color: #ffffff;
 }
@@ -2750,13 +2750,44 @@ h2 {
 }
 
 .bg {
-  background: url(../images/bg.jpg) #fafafa 0 0;
+  background: url(/l/s/shinelearn/images/marketing/bg.jpg) #fafafa 0 0;
   background-size: cover;
   display: block;
 }
 
 .ds-bg {
-  background: url('/media/static/shinelearn/images/marketing/data-science-cert/ds-bg.jpg') #e9f1fd 0 0;
+  background: url(/l/s/shinelearn/images/marketing/ds-bg.jpg) #e9f1fd 0 0;
+  background-size: cover;
+  display: block;
+}
+
+.ds-bg-new {
+  background: url(/l/s/shinelearn/images/marketing/ds-bg-1.jpg) #e9f1fd 0 0;
+  background-size: cover;
+  display: block;
+}
+
+.pmp-bg {
+  background-size: cover;
+  background: url(/l/s/shinelearn/images/marketing/pmp-bg.jpg) #fbfef7 0 0;
+  background-size: cover;
+  display: block;
+}
+
+.dm-bg {
+  background: url(/l/s/shinelearn/images/marketing/dm-bg.jpg) #e8f7ff 0 0;
+  background-size: cover;
+  display: block;
+}
+
+.aws-bg {
+  background: url(/l/s/shinelearn/images/marketing/aws-bg.jpg) #e8eeee 0 0;
+  background-size: cover;
+  display: block;
+}
+
+.ba-bg {
+  background: url(/l/s/shinelearn/images/marketing/ba-bg.jpg) #e8eeee 0 0;
   background-size: cover;
   display: block;
 }
@@ -2766,7 +2797,7 @@ h2 {
 }
 
 .header-content {
-  margin-top: 9%;
+  margin-top: 4%;
 }
 
 .header-content h1 {
@@ -2782,6 +2813,7 @@ h2 {
   font-size: 24px;
   color: #1f3c6b;
   font-weight: 600;
+  line-height: 26px;
 }
 
 .header-content h1 strong {
@@ -2791,10 +2823,21 @@ h2 {
   font-weight: 600;
 }
 
+.punch-line {
+  display: block;
+  font-size: 21px;
+  color: #1f3c6b;
+  font-weight: 600;
+  margin: 6% 0 20px 0;
+  line-height: 28px;
+}
+
 .header-txt {
   line-height: 24px;
   margin-top: 15px;
   display: block;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .header-txt ul {
@@ -2810,7 +2853,6 @@ h2 {
   padding-left: 15px;
   line-height: 20px;
   margin-bottom: 5px;
-  mar
 }
 
 .header-txt ul li:before {
@@ -2877,7 +2919,7 @@ h2 {
   -moz-appearance: none;
   -webkit-appearance: none;
   -ms-appearance: none;
-  
+
 }
 
 .enquiry-form .arrow {
@@ -2887,7 +2929,7 @@ h2 {
 .enquiry-form .arrow:after {
   content: '';
   position: absolute;
-  right: 15px;
+  right: 2px;
   top: 15px;
   width: 0;
   height: 0;
@@ -3001,7 +3043,7 @@ h2 {
   top: 20px;
   width: 15px;
   height: 9px;
-  background: url('/media/static/shinelearn/images/marketing/data-science-cert/up-arrow.png');
+  background: url(/l/s/shinelearn/images/marketing/up-arrow.png);
 }
 
 .course-preview .panel-heading a.collapsed:after {
@@ -3011,14 +3053,20 @@ h2 {
   top: 20px;
   width: 15px;
   height: 9px;
-  background: url('/media/static/shinelearn/images/marketing/data-science-cert/down-arrow.png');
+  background: url(/l/s/shinelearn/images/marketing/down-arrow.png);
 }
 
-.course-preview .panel-heading a, course-preview .panel-heading a:hover{
+.course-preview .arrow-end a:after {
+  display:none;
+}
+
+.course-preview .panel-heading a, .course-preview .panel-heading a:hover{
   color: #333;
   text-decoration: none;
   font-size: 16px;
   display: block;
+  font-weight: 600;
+  line-height: 20px;
 }
 
 .course-preview .panel-body {
@@ -3045,7 +3093,7 @@ h2 {
   position: absolute;
   width: 17px;
   height: 17px;
-  background: url('/media/static/shinelearn/images/marketing/data-science-cert/tick-icon.png');
+  background: url(/l/s/shinelearn/images/marketing/tick-icon.png);
   display: block;
   left: -39px;
   top: 2px;
@@ -3061,7 +3109,7 @@ h2 {
   min-height: 110px;
   margin-bottom: 30px;
   padding: 20px;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .why-buy strong{
@@ -3084,14 +3132,17 @@ h2 {
   padding-left: 20px;
   line-height: 20px;
   position: relative;
-  font-size: 16px;
 }
 
 .outcomes-training li:before{
-  content: '-';
+  content: '';
   position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 100%;
+  border: 2px solid #61a6e0;
   left: 0;
-  top: 2px;
+  top: 4px;
 }
 
 footer {
@@ -3153,6 +3204,10 @@ input.error {
   vertical-align: middle;
 }*/
 
+.form-group {
+  margin-bottom: 10px;
+}
+
 
 /* ---- respnsive css start ---- */
 
@@ -3163,6 +3218,10 @@ input.error {
 
   .men-pic {
     margin-top: 25px;
+  }
+
+  .header-content {
+    margin-top: 3%;
   }
 }
 
