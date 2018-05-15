@@ -186,9 +186,9 @@ class LinkedinQueueView(ListView, PaginationMixin):
         if self.query:
 
             if self.sel_opt == 'id':
-
                 queryset = queryset.filter(id__iexact=self.query)
             elif self.sel_opt == 'product':
+                queryset = queryset.select_related('parent')
                 queryset = queryset.filter(Q(product__name__icontains=self.query) |
                                            Q(parent__isnull=False, parent__product__name__icontains=self.query))
             elif self.sel_opt == 'number':
@@ -510,6 +510,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
 
                 queryset = queryset.filter(id__iexact=self.query)
             elif self.sel_opt == 'product':
+                queryset = queryset.select_related('parent')
                 queryset = queryset.filter(Q(product__name__icontains=self.query) |
                                            Q(parent__isnull=False, parent__product__name__icontains=self.query))
             elif self.sel_opt == 'number':
@@ -630,6 +631,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
 
                 queryset = queryset.filter(id__iexact=self.query)
             elif self.sel_opt == 'product':
+                queryset = queryset.select_related('parent')
                 queryset = queryset.filter(Q(product__name__icontains=self.query) |
                                            Q(parent__isnull=False, parent__product__name__icontains=self.query))
             elif self.sel_opt == 'number':
@@ -859,6 +861,7 @@ class ApprovedLinkedinQueueVeiw(ListView, PaginationMixin):
 
                     queryset = queryset.filter(id__iexact=self.query)
                 elif self.sel_opt == 'product':
+                    queryset = queryset.select_related('parent')
                     queryset = queryset.filter(Q(product__name__icontains=self.query) |
                                                Q(parent__isnull=False, parent__product__name__icontains=self.query))
                 elif self.sel_opt == 'number':
@@ -1010,6 +1013,7 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
 
                 queryset = queryset.filter(id__iexact=self.query)
             elif self.sel_opt == 'product':
+                queryset = queryset.select_related('parent')
                 queryset = queryset.filter(Q(product__name__icontains=self.query)|
                                             Q(parent__isnull=False , parent__product__name__icontains=self.query))
             elif self.sel_opt == 'number':
@@ -1107,6 +1111,7 @@ class InterNationalApprovalQueue(ListView, PaginationMixin):
             if self.sel_opt == 'id':
                     queryset = queryset.filter(id__iexact=self.query)
             elif self.sel_opt == 'product':
+                queryset = queryset.select_related('parent')
                 queryset = queryset.filter(Q(product__name__icontains=self.query) |
                                            Q(parent__isnull=False, parent__product__name__icontains=self.query))
             elif self.sel_opt == 'number':
