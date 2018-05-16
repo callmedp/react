@@ -122,7 +122,7 @@
                     {% for field in form %}
                         <div class="form-group {% if field.errors %}error{% endif %}">
                             {{field}}
-                            {% for error in  field.errors %}{{ error }}{% endfor %}
+                            <span class="error-txt">{{ field.errors.0 }}</span>
                         </div>
                     {% endfor %}
                 </fieldset>
@@ -172,7 +172,7 @@
                 {% for field in reset_form %}
                     <div class="form-group {% if field.errors %}error{% endif %}">
                         {{field}}
-                        {% for error in  field.errors %}{{ error }}{% endfor %}
+                        <span class="error-txt">{{ field.errors.0 }}</span>
                     </div>
                 {% endfor %}
               <button type="submit" class="btn btn-primary submit mt-20">Submit</button>
