@@ -1181,7 +1181,7 @@ footer {
 .error {
 	position: relative;
 
-	input {
+	input, textarea {
 		border-bottom: 1px solid $error-color !important;
 	}
 	
