@@ -270,7 +270,7 @@ $(document).ready(function() {
 
     updateCartPrice();
 
-    $('input[name="radio"]').click(function(){
+    $(document).on( "click", 'input[name="radio"]', function(e){
         if ($(this).is(':checked'))
         {
             var var_price, actual_price;
@@ -314,7 +314,7 @@ $(document).ready(function() {
     });
 
 
-    $('input[name="fbt"]').click(function(){
+    $(document).on( "click", 'input[name="fbt"]', function(e){
         if ($(this).is(':checked'))
         {
             updateCheckedPrice(this);
@@ -410,7 +410,7 @@ $(document).ready(function() {
         }
     });
 
-    $('input[name="required_option"]').click(function(){
+    $(document).on( "click", 'input[name="required_option"]', function(e){
         if ($(this).is(':checked'))
         {
             updateCheckedPrice(this);
@@ -508,7 +508,7 @@ $(document).ready(function() {
     });
 
 
-    $('#add-to-cart').click(function(e) {
+    $(document).on( "click", "#add-to-cart", function(e){
         e.preventDefault();
         $('#add-to-cart').attr('disabled', true);
 
@@ -597,7 +597,7 @@ $(document).ready(function() {
     });
 
 
-    $('#enrol-now-button').click(function(e) {
+    $(document).on( "click", "#enrol-now-button", function(e){
         e.preventDefault();
         var prod_id = $('#enrol-now-button').attr('prod-id');
 
