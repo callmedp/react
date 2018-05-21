@@ -736,7 +736,7 @@ class RegistrationLoginApi(object):
         except Country.DoesNotExist:
             country_obj = Country.objects.get(phone='91')
 
-        headers = {'Content-Type': 'application/json'}
+        headers = ShineCandidateDetail().get_api_headers_non_auth()
         post_data.update({"country_code": country_obj.phone})
         try:
             response = requests.post(
@@ -771,7 +771,7 @@ class RegistrationLoginApi(object):
         except Country.DoesNotExist:
             country_obj = Country.objects.get(phone='91')
 
-        headers = {'Content-Type': 'application/json'}
+        headers = ShineCandidateDetail().get_api_headers_non_auth()
         post_data.update({"country_code": country_obj.phone})
         try:
             response = requests.post(
@@ -803,7 +803,7 @@ class RegistrationLoginApi(object):
         response_json = {"response": False}
         post_url = "{}/api/v2/user/access/?format=json".format(settings.SHINE_SITE)
 
-        headers = {'Content-Type': 'application/json'}
+        headers = ShineCandidateDetail().get_api_headers_non_auth()
         try:
             response = requests.post(
                 post_url, data=json.dumps(login_dict), headers=headers)
@@ -832,7 +832,7 @@ class RegistrationLoginApi(object):
     def check_email_exist(email):
         response_json = {"exists": False}
         email_url = "{}/api/v3/email-exists/?email={}&format=json".format(settings.SHINE_SITE, email)
-        headers = {'Content-Type': 'application/json'}
+        headers = ShineCandidateDetail().get_api_headers_non_auth()
         try:
             response = requests.get(email_url, headers=headers)
             if response.status_code == 200:
@@ -937,8 +937,8 @@ class UserMixin(object):
             else:
                 ip = request.META.get('REMOTE_ADDR')
             return ip
-        except:
-            pass
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get user_ip %s' % str(e))
         return None
 
     def get_client_country(self, request):
@@ -949,7 +949,8 @@ class UserMixin(object):
                 code2 = g.country(ip)['country_code']
             else:
                 code2 = 'IN'
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get country code %s' % str(e))
             code2 = 'IN'
 
         if not code2:
@@ -960,7 +961,9 @@ class UserMixin(object):
         try:
             country_objs = Country.objects.filter(code2=code2)
             country_obj = country_objs[0]
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get country object %s' % str(e))
+
             country_obj = Country.objects.get(phone='91')
 
         return country_obj

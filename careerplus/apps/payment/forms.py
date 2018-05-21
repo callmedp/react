@@ -10,7 +10,6 @@ class StateForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(StateForm, self).__init__(*args, **kwargs)
-
         state_choices = [(-1, "Please select your state")]
         india_obj = Country.objects.filter(phone='91')
         if india_obj:
@@ -26,7 +25,8 @@ class StateForm(forms.Form):
         try:
             india_obj = Country.objects.filter(phone='91')[0]
             india_obj.state_set.get(id=state)
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to set or get india state%s'%str(e))
             raise forms.ValidationError(
                 "Please select valid state")
         return state

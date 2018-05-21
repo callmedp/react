@@ -2750,26 +2750,44 @@ h2 {
 }
 
 .bg {
-  background: url(/l/s/shinelearn/images/marketing/data-science-cert/bg.jpg) #fafafa 0 0;
+  background: url(/l/s/shinelearn/images/marketing/bg.jpg) #fafafa 0 0;
   background-size: cover;
   display: block;
 }
 
 .ds-bg {
-  background: url(/l/s/shinelearn/images/marketing/data-science-cert/ds-bg.jpg) #e9f1fd 0 0;
+  background: url(/l/s/shinelearn/images/marketing/ds-bg.jpg) #e9f1fd 0 0;
   background-size: cover;
   display: block;
 }
 
 .ds-bg-new {
-  background: url(/l/s/shinelearn/images/marketing/data-science-cert/ds-bg-1.jpg) #e9f1fd 0 0;
+  background: url(/l/s/shinelearn/images/marketing/ds-bg-1.jpg) #e9f1fd 0 0;
   background-size: cover;
   display: block;
 }
 
 .pmp-bg {
   background-size: cover;
-  background: url(/l/s/shinelearn/images/marketing/pmp-cert/pmp-bg.jpg) #fbfef7 0 0;
+  background: url(/l/s/shinelearn/images/marketing/pmp-bg.jpg) #fbfef7 0 0;
+  background-size: cover;
+  display: block;
+}
+
+.dm-bg {
+  background: url(/l/s/shinelearn/images/marketing/dm-bg.jpg) #e8f7ff 0 0;
+  background-size: cover;
+  display: block;
+}
+
+.aws-bg {
+  background: url(/l/s/shinelearn/images/marketing/aws-bg.jpg) #e8eeee 0 0;
+  background-size: cover;
+  display: block;
+}
+
+.ba-bg {
+  background: url(/l/s/shinelearn/images/marketing/ba-bg.jpg) #e8eeee 0 0;
   background-size: cover;
   display: block;
 }
@@ -2795,6 +2813,7 @@ h2 {
   font-size: 24px;
   color: #1f3c6b;
   font-weight: 600;
+  line-height: 26px;
 }
 
 .header-content h1 strong {
@@ -2900,7 +2919,7 @@ h2 {
   -moz-appearance: none;
   -webkit-appearance: none;
   -ms-appearance: none;
-  
+
 }
 
 .enquiry-form .arrow {
@@ -2910,7 +2929,7 @@ h2 {
 .enquiry-form .arrow:after {
   content: '';
   position: absolute;
-  right: 15px;
+  right: 2px;
   top: 15px;
   width: 0;
   height: 0;
@@ -3024,7 +3043,7 @@ h2 {
   top: 20px;
   width: 15px;
   height: 9px;
-  background: url(/l/s/shinelearn/images/marketing/data-science-cert/up-arrow.png);
+  background: url(/l/s/shinelearn/images/marketing/up-arrow.png);
 }
 
 .course-preview .panel-heading a.collapsed:after {
@@ -3034,7 +3053,7 @@ h2 {
   top: 20px;
   width: 15px;
   height: 9px;
-  background: url(/l/s/shinelearn/images/marketing/data-science-cert/down-arrow.png);
+  background: url(/l/s/shinelearn/images/marketing/down-arrow.png);
 }
 
 .course-preview .arrow-end a:after {
@@ -3047,6 +3066,7 @@ h2 {
   font-size: 16px;
   display: block;
   font-weight: 600;
+  line-height: 20px;
 }
 
 .course-preview .panel-body {
@@ -3073,7 +3093,7 @@ h2 {
   position: absolute;
   width: 17px;
   height: 17px;
-  background: url(/l/s/shinelearn/images/marketing/data-science-cert/tick-icon.png);
+  background: url(/l/s/shinelearn/images/marketing/tick-icon.png);
   display: block;
   left: -39px;
   top: 2px;
@@ -3183,6 +3203,10 @@ input.error {
   text-align: center;
   vertical-align: middle;
 }*/
+
+.form-group {
+  margin-bottom: 10px;
+}
 
 
 /* ---- respnsive css start ---- */

@@ -1,8 +1,9 @@
 beautifulsoup4==4.6.0
 bs4==0.0.1
 cairocffi==0.8.0
-CairoSVG==2.0.3
+CairoSVG
 cffi==1.10.0
+
 cssselect==1.0.1
 Django==1.10.6
 celery==4.0.2

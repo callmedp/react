@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.conf import settings
 from .models import User
 from .mixins import RegistrationLoginApi
+import logging
 
 from geolocation.models import Country
 
@@ -46,7 +47,8 @@ class RegistrationForm(forms.Form):
     try:
         country_choices = [(m.phone, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
         indian_obj = Country.objects.filter(name='India', phone='91')[0].phone if Country.objects.filter(name='India', phone='91').exists() else None
-    except:
+    except Exception as e:
+        logging.getLogger('error_log').error('unable to get country object %s' % str(e))
         country_choices, indian_obj = [], None
 
     email = forms.EmailField(
@@ -81,7 +83,8 @@ class RegistrationForm(forms.Form):
         try:
             country_choices = [(m.phone, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
             indian_obj = Country.objects.filter(name='India', phone='91')[0].phone if Country.objects.filter(name='India', phone='91').exists() else None
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get country object %s' % str(e))
             country_choices, indian_obj = [], None
         self.fields['country_code'].choices = country_choices
         self.fields['country_code'].initial = indian_obj
@@ -102,7 +105,8 @@ class ModalRegistrationApiForm(RegistrationForm):
         try:
             country_choices = [(m.phone, m.phone) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
             indian_obj = Country.objects.filter(name='India', phone='91')[0].phone if Country.objects.filter(name='India', phone='91').exists() else None
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get country object %s' % str(e))
             country_choices, indian_obj = [], None
         self.fields['country_code'].choices = country_choices
         self.fields['country_code'].initial = indian_obj

@@ -406,7 +406,7 @@ class ChangeProductSEOForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ('title', 'meta_desc', 'meta_keywords', 'heading', 'image_alt',
-            'about', 'description', 'buy_shine')
+            'about', 'description', 'buy_shine','visibility','attend')
 
     def clean_title(self):
         title = self.cleaned_data.get('title', '')
@@ -654,7 +654,6 @@ class ChangeProductOperationForm(forms.ModelForm):
         super(ChangeProductOperationForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
         self.fields['call_desc'].widget.attrs['class'] = form_class
-        
     class Meta:
         model = Product
         fields = ('call_desc',)

@@ -84,7 +84,7 @@ class CartMixin(object):
                     cart_obj = Cart.objects.create(session_id=session_id, status=3)
 
             if cart_obj:
-                if email and email != "None" and not cart_obj.owner_email:
+                if email and not cart_obj.owner_email:
                     cart_obj.owner_email = email
                     if not cart_obj.email:
                         cart_obj.email = email
@@ -93,7 +93,8 @@ class CartMixin(object):
                 if country_code and not cart_obj.country_code:
                     try:
                         country_obj = Country.objects.get(phone=country_code, active=True)
-                    except:
+                    except Exception as e:
+                        logging.getLogger('error_log').error('unable to get country object%s'%str(e))
                         country_obj = Country.objects.get(phone='91', active=True)
 
                     cart_obj.country_code = country_obj.phone
@@ -441,7 +442,7 @@ class CartMixin(object):
                 if not self.request.session.get('cart_pk'):
                     self.getCartObject()
                 cart_pk = self.request.session.get('cart_pk')
-                cart_obj = Cart.objects.get(pk=cart_pk)
+                cart_obj = Cart.objects.get(pk=cart_pk).select_related('coupon','country')
             if cart_obj:
                 if not total_amount:
                     cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
@@ -524,7 +525,8 @@ class CartMixin(object):
             cart_obj = Cart.objects.get(pk=cart_pk)
             try:
                 parent_li = cart_obj.lineitems.get(product=product)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 parent_li = None
             if parent_li:
                 selected_product = cart_obj.lineitems.filter(parent=parent_li).values_list('product__pk', flat=True)
@@ -569,7 +571,8 @@ class CartMixin(object):
                         fake_total += parent_li.product.get_fakeprice()[0]
                     else:
                         fake_total += parent_li.product.get_price()
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 parent_li = None
             if parent_li:
                 lis = cart_obj.lineitems.filter(parent=parent_li).select_related('product')
@@ -609,7 +612,8 @@ class CartMixin(object):
                         fake_total += parent_li.product.get_fakeprice()[0]
                     else:
                         fake_total += parent_li.product.get_price()
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 parent_li = None
             if parent_li:
                 lis = cart_obj.lineitems.filter(parent=parent_li).select_related('product')

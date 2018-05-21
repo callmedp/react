@@ -32,7 +32,8 @@ def post_roundone_order(data_dict):
 
                 try:
                     billingDate = ord_obj.payment_date.date().strftime("%Y-%m-%d")
-                except:
+                except Exception as e:
+                    logging.getLogger('error_log').error('unable to get billing date%s' % str(e))
                     billingDate = datetime.now().strftime("%Y-%m-%d")
 
                 data_dict = {

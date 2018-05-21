@@ -136,8 +136,8 @@ class BlogDetailView(DetailView, BlogMixin):
         try:
             obj = queryset.get()
 
-        except :
-
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to get query set %s"% str(e))
             raise Http404
         return obj
 
@@ -190,7 +190,6 @@ class BlogDetailView(DetailView, BlogMixin):
 
         main_obj = Blog.objects.filter(slug=blog.slug, status=1, visibility=1)
         main_obj_list = list(main_obj)
-
         article_list = Blog.objects.filter(p_cat=p_cat, status=1, visibility=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1, visibility=1).order_by('-publish_date')
         article_list = article_list.exclude(pk=blog.pk)
         article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
@@ -258,14 +257,18 @@ class BlogCategoryListView(TemplateView, PaginationMixin):
         slug = kwargs.get('slug', None)
         self.page = request.GET.get('page', 1)
         try:
+
             self.active_tab = int(request.GET.get('tab', 0))
             if self.active_tab not in [0, 1]:
                 self.active_tab = 0
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to get active tab %s"% str(e))
             self.active_tab = 0
+
         try:
             self.cat_obj = Category.objects.get(slug=slug, is_active=True, visibility=1)
-        except Exception:
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to get category object %s"% str(e))
             raise Http404
         context = super(BlogCategoryListView, self).get(request, args, **kwargs)
         return context
@@ -339,11 +342,13 @@ class BlogTagListView(TemplateView, PaginationMixin):
         self.page = request.GET.get('page', 1)
         try:
             self.active_tab = int(request.GET.get('tab', 0))
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to get active tab %s"% str(e))
             self.active_tab = 0
         try:
             self.tag_obj = Tag.objects.get(slug=slug, is_active=True, visibility=1)
-        except Exception:
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to get tag object %s"% str(e))
             raise Http404
         context = super(BlogTagListView, self).get(request, args, **kwargs)
         return context
@@ -433,7 +438,8 @@ class BlogLandingPageView(TemplateView, BlogMixin):
             if top_articles.count() > 3:
                 top_articles = top_articles[: 3]
             else:
-                top_articles = top_articles
+                pass
+                #top_articles = top_articles
 
             article_list.update({
                 p: top_articles.select_related('p_cat', 'user'),
@@ -555,7 +561,9 @@ class BlogDetailAjaxView(View, BlogMixin):
                 }
 
                 return HttpResponse(json.dumps(data), content_type="application/json")
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error("Unable to return get blog object%s" % str(e))
+
                 pass
         return HttpResponseForbidden()
 
@@ -574,7 +582,9 @@ class ShowCommentBoxView(TemplateView, LoadCommentMixin):
             self.art_id = request.GET.get('art_id')
             try:
                 self.article = Blog.objects.get(id=self.art_id)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error("Unable to get blog object%s" % str(e))
+
                 return ''
             visibility = int(request.GET.get('visibility',1))
             if visibility == 2:
@@ -632,7 +642,8 @@ class LoadMoreCommentView(TemplateView, LoadCommentMixin):
             self.slug = request.GET.get('slug')
             try:
                 self.article = Blog.objects.get(slug=self.slug)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error("Unable to get blog object%s" % str(e))
                 return ''
             visibility = int(request.GET.get('visibility',1))
             if visibility == 2:

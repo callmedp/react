@@ -41,7 +41,8 @@ class RoundOneAPI(object):
                 )
                 password = ast.literal_eval(roundone_order.remark)
                 password = password['pass']
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 password = settings.ROUNDONE_DEFAULT_PASSWORD
             post_url = settings.ROUNDONE_API_DICT.get("oauth_url")
             
@@ -110,7 +111,8 @@ class RoundOneAPI(object):
                 sort_by = int(request.GET.get('sort', 0))
                 if not sort_by in [0, 1]:
                     sort_by = 0
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to do sort by:-%s'%str(e))
                 pass
 
             try:
@@ -118,7 +120,8 @@ class RoundOneAPI(object):
                 if page < 0:
                     page = 0
                 start = rows * page
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get page%s'%str(e))
                 page = 0
 
             post_data = {
@@ -511,7 +514,8 @@ class RoundOneAPI(object):
                 user_ip = http_x_forwarded_for.split(',')[0]
             else:
                 user_ip = request.META.get('REMOTE_ADDR')
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get user_ip%s' % str(e))
             pass
         return user_ip
 

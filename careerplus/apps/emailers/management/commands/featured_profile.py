@@ -42,7 +42,10 @@ def featured_updated():
             try:
                 data = {}
                 data.update({
-                    "ShineCareerPlus": {"xfr": 1}
+                    "ShineCareerPlus": {"xfr": 1},
+                    # Temporary commented because of shine profile muddling
+                    # "is_email_verified": 1,
+                    # "is_cell_phone_verified": 1
                 })
                 flag = FeatureProfileUpdate().update_feature_profile(
                     candidate_id=candidate_id, data=data)
@@ -81,9 +84,9 @@ def featured_updated():
                                 status=72, oi=obj.pk)
                         SendSMS().send(sms_type=mail_type, data=data)
                     except Exception as e:
-                        logging.getLogger('error_log').error("%s" % (str(e)))
+                        logging.getLogger('error_log').error((str(e)))
             except Exception as e:
-                logging.getLogger('error_log').error("%s" % (str(e)))
+                logging.getLogger('error_log').error((str(e)))
 
     out_str = out_str = '%s profile featured out of %s' % (
         featured_count, featured_orderitems.count())
@@ -115,7 +118,7 @@ def unfeature():
         try:
             activation_date = featured_ops[0].created
         except Exception as e:
-            logging.getLogger('error_log').error("%s" % (str(e)))
+            logging.getLogger('error_log').error("unable to create activation date%s" % (str(e)))
             continue
 
         if getattr(obj.product.attr, S_ATTR_DICT.get('FD'), None):
@@ -129,7 +132,9 @@ def unfeature():
             try:
                 data = {}
                 data.update({
-                    "ShineCareerPlus": {"xfr": 0}
+                    "ShineCareerPlus": {"xfr": 0},
+                    # "is_email_verified": 1,
+                    # "is_cell_phone_verified": 1
                 })
                 flag = FeatureProfileUpdate().update_feature_profile(
                     candidate_id=candidate_id, data=data)
@@ -149,8 +154,8 @@ def unfeature():
                         last_oi_status=obj.last_oi_status,
                         assigned_to=obj.assigned_to)
             except Exception as e:
-                logging.getLogger('error_log').error("%s" % (str(e)))
-                print (str(e))
+                logging.getLogger('error_log').error((str(e)))
+                print(str(e))
 
     out_str = '%s profile expired out of %s featured items' % (
         unfeature_count, featured_orderitems.count())

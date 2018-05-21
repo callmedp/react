@@ -1,4 +1,5 @@
 import re
+import logging
 
 from django.db import models
 from django.contrib.sites.models import Site
@@ -316,7 +317,8 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
             try:
                 soup = BeautifulSoup(self.content, 'html.parser')
                 self.summary = soup.blockquote.text.strip()
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
                 self.summary = ''
         super(Blog, self).save(*args, **kwargs)
 
@@ -325,7 +327,8 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
             soup = BeautifulSoup(self.content, 'html.parser')
             cleantext = soup.get_text()
             cleantext = 'Read Article on ' + self.name + '.' + cleantext[:200]
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             cleantext = 'Read Article on ' + self.name + '.'
         return cleantext
 

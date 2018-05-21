@@ -49,6 +49,7 @@ def remote_call(url):
         response = urllib.request.urlopen(reqt)
         data = str(response.read().strip().decode())
     except Exception as e:
+        logging.getLogger('error_log').error(str(e))
         print (str(e))
         pass
     return data
@@ -188,17 +189,22 @@ class MobikwikResponseView(View, PaymentMixin, OrderMixin):
                             amount2 = tree.find('.//amount').text
                         except Exception as e:
                             err_mesg = "amount not found"
+                            logging.getLogger('error_log').error(str(e))
                         try:
                             statuscode2 = tree.find('.//statuscode').text
                         except Exception as e:
+                            logging.getLogger('error_log').error(str(e))
                             err_mesg = "statuscode not found"
                         try:
                             orderid2 = tree.find('.//orderid').text
                         except Exception as e:
+                            logging.getLogger('error_log').error(str(e))
                             err_mesg = "orderid not found"
                         try:
                             refid2 = tree.find('.//refid').text
                         except Exception as e:
+                            logging.getLogger('error_log').error(str(e))
+
                             err_mesg = "refid not found"
                         try:
                             statusmessage2 = tree.find('.//statusmessage').text
@@ -207,10 +213,12 @@ class MobikwikResponseView(View, PaymentMixin, OrderMixin):
                         try:
                             ordertype2 = tree.find('.//ordertype').text
                         except Exception as e:
+                            logging.getLogger('error_log').error(str(e))
                             err_mesg = "ordertype not found"
                         try:
                             checksum2 = tree.find('.//checksum').text
                         except Exception as e:
+                            logging.getLogger('error_log').error(str(e))
                             err_mesg = "checksum not found"
 
                         if not err_mesg and str(statuscode2) == "0":
@@ -225,7 +233,8 @@ class MobikwikResponseView(View, PaymentMixin, OrderMixin):
                                         del request.session['cart_pk']
                                         del request.session['checkout_type']
                                         request.session.modified = True
-                                    except:
+                                    except Exception as e:
+                                        logging.getLogger('error_log').error(str(e))
                                         pass
                                     return HttpResponseRedirect(return_url)
                                 except Exception as e:
@@ -237,6 +246,7 @@ class MobikwikResponseView(View, PaymentMixin, OrderMixin):
                             if not err_mesg:
                                 err_mesg = "Transaction failed because of reason = " + statusmessage2
                     except Exception as e:
+                        logging.getLogger('error_log').error(str(e))
                         err_mesg = "Error Occur = %s" % e
                 else:
                     err_mesg = "Txn Failed for order id - %s" % orderid

@@ -1,246 +1,293 @@
 {% load static %}
-{% block page_heading %}
 
-        <!-- header -->
-        <header>
-          
-          <div class="detail-course-header">
-            <div class="container">
+
+ {% block page_heading %}
+
+      <!-- header -->
+      <header>
+        
+        <div class="detail-course-header">
+          <div class="container">
+
               <!-- breadcrums -->
               {% block breadcrumbs %}
-                {% if sqs.id in linkedin_resume_services %}
-                  <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
-                      <li class="active" ></li>
-                  </ol>
-                {% else %}
-                  {% include "shop/partials/breadcrumb.html" %}
-                {% endif %}  
-              {% endblock breadcrumbs %}
-              
-              {% block product_header %}
-                <div class="course-caption col-sm-8 no-pad" itemscope itemtype="http://schema.org/Product">
-                  <div class="course-caption-img">
-                    <figure style="background-color:#fff;">
-                      <img itemprop="image" src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive" >
-                    </figure>
-                  </div>
-
-                  <div class="course-caption-content">
-                    <h1 itemprop="name">{{prd_H1}}</h1>
-                    <div itemprop="aggregateRating"
-                  itemscope itemtype="http://schema.org/AggregateRating">
-                  <meta itemprop="ratingValue" content="{{prd_rating}}">
-                  <meta itemprop="reviewCount" content="{% if prd_num_rating > 0 %}
-                  {{prd_num_rating}}
+                  {% if sqs.id in linkedin_resume_services %}
+                    <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
+                        <li class="active" ></li>
+                    </ol>
                   {% else %}
-                    1      
-                  {% endif %}">
-            </div>
-
-                    {% include "shop/partials/packagediv.html" %}
-                  </div>
+                    {% include "shop/partials/breadcrumb.html" %}
+                  {% endif %}
+              {% endblock breadcrumbs %}
+            
+            {% block product_header %}
+              <div class="course-caption col-sm-8 no-pad" itemscope itemtype="http://schema.org/Product">
+                <div class="course-caption-img">
+                  <figure style="background-color:#fff;">
+                    <img itemprop="image" src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive" >
+                  </figure>
                 </div>
-              {% endblock product_header %}
-            </div>
+
+                <div class="course-caption-content">
+                  <h1 itemprop="name">{{prd_H1}}</h1>
+                  <div itemprop="aggregateRating"
+                itemscope itemtype="http://schema.org/AggregateRating">
+                <meta itemprop="ratingValue" content="{{prd_rating}}">
+                <meta itemprop="reviewCount" content="{% if prd_num_rating > 0 %}
+                {{prd_num_rating}}
+                {% else %}
+                  1      
+                {% endif %}">
           </div>
 
-              {% block product_cart %}
-                {% include "shop/partials/prd_cart.html" %}
-              {% endblock product_cart %}
-          
-        </header>
+                  {% include "shop/partials/packagediv.html" %}
+                </div>
+              </div>
+            {% endblock product_header %}
+          </div>
+        </div>
 
+            {% block product_cart %}
+              {% include "shop/partials/prd_cart.html" %}
+            {% endblock product_cart %}
         
-      {% endblock page_heading %}
+      </header>
 
-      {% block section1 %}
-        <!-- main parent1 section start -->
-        <section class="container-fluid cls_scroller_parent pr">
-            <div class="row detail-box bt-none">
+      
+  {% endblock page_heading %}
 
-              <!-- sticky sub header 1 -->
-              <div class="course-caption-bottom cls_scroller" >
-                <div class="container">
-                  <div class="visible-onscroll hidden cls_scroller_hiddenDiv">
-                    <strong>{{prd_H1}}</strong> by <small>{{prd_vendor}}</small>
-                  </div>
+    {% block section1 %}
+      <!-- main parent1 section start -->
+      <section class="container-fluid cls_scroller_parent pr">
+          <div class="row detail-box bt-none">
 
-                    <ul >
-                      {% if prd_num_rating %}
+            <!-- sticky sub header 1 -->
+            <div class="course-caption-bottom cls_scroller" >
+              <div class="container">
+                <div class="visible-onscroll hidden cls_scroller_hiddenDiv">
+                  <strong>{{prd_H1}}</strong> by <small>{{prd_vendor}}</small>
+                </div>
+
+                  <ul >
+                    {% if prd_num_rating %}
+                    <li>
+                      <div class="rating-review-box">
+
+                        {% for star in prd_rating_star %}
+                          {% if star == '*' %}
+                            <figure class="full-star"></figure>
+                          {% elif star == '+' %}
+                            <figure class="half-star"></figure>
+                          {% else %}
+                            <figure class="blank-star"></figure>
+                          {% endif %}
+                        {% endfor %}  
+                        <strong>{{prd_rating}}/5</strong>ratings
+                      </div> 
+                    </li>
+                    {% endif %}
+                    <li>
+                     <a href="#review">
+                      <figure class="review-icon"></figure>
+                      <span>{% if prd_num_rating %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;reviews{% else %}Be the first to review{% endif %}</span>
+                     </a> 
+                    </li>
+                    <li>
+                    <figure class="bought-icon"></figure>
+                    <span>
+                    {% if prd_num_bought %}<strong>&nbsp;{{prd_num_bought}}</strong>{% else %}<strong>&nbsp;10</strong>{% endif %}&nbsp;people bought</span>
+                    </li>
+                    {% if prd_service == 'course' %}
+                  
+                    {% if prd_num_jobs %}
                       <li>
-                        <div class="rating-review-box">
-
-                          {% for star in prd_rating_star %}
-                            {% if star == '*' %}
-                              <figure class="full-star"></figure>
-                            {% elif star == '+' %}
-                              <figure class="half-star"></figure>
-                            {% else %}
-                              <figure class="blank-star"></figure>
-                            {% endif %}
-                          {% endfor %}  
-                          <strong>{{prd_rating}}/5</strong>ratings
-                        </div> 
-                      </li>
-                      {% endif %}
-                      <li>
-                       <a href="#review">
-                        <figure class="review-icon"></figure>
-                        <span>{% if prd_num_rating %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;reviews{% else %}Be the first to review{% endif %}</span>
+                       <a href="{% if num_jobs_url %}{{num_jobs_url}}{% else %}javascript:void(0);{% endif %}" target="_blank">
+                        <figure class="course-jobs-icon"></figure>
+                        <span><strong class="anchor-color">&nbsp;{{prd_num_jobs}}</strong>&nbsp;Jobs available</span>
                        </a> 
                       </li>
-                      <li>
-                      <figure class="bought-icon"></figure>
-                      <span>
-                      {% if prd_num_bought %}<strong>&nbsp;{{prd_num_bought}}</strong>{% else %}<strong>&nbsp;10</strong>{% endif %}&nbsp;people bought</span>
-                      </li>
-                      {% if prd_service == 'course' %}
-                    
-                      {% if prd_num_jobs %}
-                        <li>
-                         <a href="{% if num_jobs_url %}{{num_jobs_url}}{% else %}javascript:void(0);{% endif %}" target="_blank">
-                          <figure class="course-jobs-icon"></figure>
-                          <span><strong class="anchor-color">&nbsp;{{prd_num_jobs}}</strong>&nbsp;Jobs available</span>
-                         </a> 
-                        </li>
-                      {% endif %}
-                      
-                      {% if prd_cert %}
-                        <li>
-                          <figure class="certification-icon"></figure>
-                          <span>&nbsp;Certification</span>
-                        </li>
-                      {% endif %}
                     {% endif %}
-                  </ul>
+                    
+                    {% if prd_cert %}
+                      <li>
+                        <figure class="certification-icon"></figure>
+                        <span>&nbsp;Certification</span>
+                      </li>
+                    {% endif %}
+                  {% endif %}
+                </ul>
 
+              </div>
+            </div>
+
+            
+            <div class="container">
+            <!-- About course -->
+              <div class="row">
+                <div class="col-sm-12 col-md-8 mt-40">
+                {% if prd_about %}
+                  <h2 class="detail-heading">About {% if prd_service == 'course' %}course{% else %}service{% endif %}</h2>
+                  <style>
+                    .morecontent span {
+                          display: none;
+                      }
+                      .morelink {
+                          display: block;
+                      }
+                  </style>
+                  <span class="more">
+                  {{prd_about|safe}}
+                  </span>
+                {% endif %}
                 </div>
               </div>
 
-              
-              <div class="container">
-              <!-- About course -->
-                <div class="row">
-                  <div class="col-sm-12 col-md-8 mt-40">
-                  {% if prd_about %}
-                    <h2 class="detail-heading">About {% if prd_service == 'course' %}course{% else %}service{% endif %}</h2>
-                    <style>
-                      .morecontent span {
-                            display: none;
-                        }
-                        .morelink {
-                            display: block;
-                        }
-                    </style>
-                    <span class="more">
-                    {{prd_about|safe}}
-                    </span>
-                  {% endif %}
-                  </div>
-                </div>
-
-              {% include "shop/partials/product_child.html" %}
-              
-              {% include "shop/partials/product_variations.html" %}
-              
-              {% include "shop/partials/frequentlybought.html" %}
-            </div>
-        </section>
-        <!-- main parent1 section end -->
-
-
-      {% endblock section1 %}
-
-      {% block section2 %}
-        
-        <!-- main parent2 section start -->
-        <section class="container-fluid cls_scroller_parent pr">
-          <div class="row">
-
-               <!-- About course container -->
-              <section id="about-course" class="container-fluid">
-                <div class="row detail-course-links cls_scroller pr">
-                <!-- sticky sub header 2 -->
-                  <div class="container">
-                    <div class="col-sm-12 col-md-8 about-tab cls_scroll_tab">
-                    {% if prd_desc %}
-                      <a title="About product" class="active cls_tab_child" href="#course">About product</a>
-                    {% endif %}
-                    {% if prd_uget %}
-                      <a title="What’ll you get" class="cls_tab_child" href="#get">What’ll you get</a>
-                    {% endif %}
-                    {% if prd_service == 'course' and chapter_list %}
-                      <a title="Program structure" class="cls_tab_child" href="#programs">Program structure</a>
-                    {% endif %}
-                    {% if sqs.pTF != 8 %}
-                      <a title="How to begin" class="cls_tab_child" href="#delivery">How to begin</a>
-                    {% endif %}
-                       
-                    {% if prd_faq %}
-                      <a title="FAQs" class="cls_tab_child" href="#faq">FAQs</a>  
-                    {% endif %}
-                    {% if prd_review_list %}
-                      <a title="Review" class="cls_tab_child" href="#review">Review</a> 
-                    {% endif %}
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              {% if prd_desc %}
-                  <section class="container-fluid detail-box">
-                  <div class="container">
-                    <div class="row">
-                      <div id="course" class="col-sm-12 col-md-8 scroll">
-                        <h2>About {{prd_H1}}</h2>
-                          {% if prd_video %}
-                            <iframe width="100%" height="315" src="https://{{prd_video}}" frameborder="0" allowfullscreen></iframe>
-                          {% endif %}
-                              {{prd_desc|safe}}
-                       </div>
-                    </div>
-                  </div>
-                </section>
-        
-              {% endif %}
-
-              {% if prd_uget %}
-        
-              <!-- What’ll you get container -->
-                <section class="container-fluid detail-box">
-                  <div class="container">
-                    <div class="row">
-                      <div id="get" class="col-sm-12 col-md-8 scroll">
-                      <h2>What’ll you get</h2>
-                          {{prd_uget|safe}}
-                     </div>
-                    </div>
-                  </div>      
-              </section>
-              {% endif %}
-                
-            {% if prd_service == 'course' %}
-              {% include "shop/partials/program_structure.html" %}
-            {% endif %}  
+            {% include "shop/partials/product_child.html" %}
             
-            {% include "shop/partials/delivery_flow.html" %}
-              
+            {% include "shop/partials/product_variations.html" %}
+            
+            {% include "shop/partials/frequentlybought.html" %}
+          </div>
+      </section>
+      <!-- main parent1 section end -->
+
+
+    {% endblock section1 %}
+
+    {% block section2 %}
+      
+      <!-- main parent2 section start -->
+      <section class="container-fluid cls_scroller_parent pr">
+        <div class="row">
+
+             <!-- About course container -->
+            <section id="about-course" class="container-fluid">
+              <div class="row detail-course-links cls_scroller pr">
+              <!-- sticky sub header 2 -->
+                <div class="container">
+                  <div class="col-sm-12 col-md-8 tab cls_scroll_tab">
+
+                  {% if prd_uget %}
+
+                    <a title="Course Highlights" class="active cls_tab_child" href="#get">Course Highlights</a>
+
+                  {% endif %}
+
+                      {% if product.attend %}
+
+                      <a title="How to begin" class=" cls_tab_child" href="#attends">Who Should Attend</a>
+
+                      {% endif %}
+
+                        {% if product.visibility %}
+                    <a title="About Product" class=" cls_tab_child" href="#course">About Product</a>
+                    {% else %}
+                        {% if prd_desc %}
+                        <a title="Shine Advantage" class=" cls_tab_child" href="#course">Shine Advantage</a>
+
+                        {% endif %}
+                    {% endif %}
+
+
+
+                      {% if prd_service == 'course' and chapter_list %}
+                    <a title="Course Outline" class="cls_tab_child" href="#programs">Course Outline</a>
+                  {% endif %}
+
+
+
+
+
+                  {% if prd_review_list %}
+                    <a title="Reviews" class="cls_tab_child" href="#review">Reviews</a>
+                  {% endif %}
+
+                      {% if faq %}
+                   <a title="FAQs" class="cls_tab_child" href="#faq">FAQs</a>
+                        {% endif %}
+                  </div>
+                </div>
+              </div>
+            </section>
+
+             {% if prd_uget %}
+
+            <!-- What’ll you get container -->
+              <section class="container-fluid detail-box">
+                <div class="container">
+                  <div class="row">
+                    <div id="get" class="col-sm-12 col-md-8 scroll ">
+                    <h2>Course Highlights</h2>
+
+                        {{prd_uget|safe}}
+                   </div>
+                  </div>
+                </div>
+            </section>
+            {% endif %}
+
+               {% if product.attend %}
+             <section class="container-fluid detail-box">
+                <div class="container">
+                  <div class="row">
+                    <div id="attends" class="col-sm-12 col-md-8 scroll">
+                    <h2>Who Should Attend</h2>
+                        {{product.attend|safe}}
+                   </div>
+                  </div>
+                </div>
+            </section>
+            {% endif %}
+
+            {% if prd_desc %}
+                <section class="container-fluid detail-box">
+                <div class="container">
+                  <div class="row">
+                    <div id="course" class="col-sm-12 col-md-8 scroll">
+                        {%if product.visibility %}
+                      <h2>About {{prd_H1}}</h2>
+                        {%else%}
+                        <h2>Shine Advantage </h2>
+                        {%endif%}
+
+                        {% if prd_video %}
+                          <iframe width="100%" height="315" src="https://{{prd_video}}" frameborder="0" allowfullscreen></iframe>
+                        {% endif %}
+                            {{prd_desc|safe}}
+                     </div>
+                  </div>
+                </div>
+              </section>
+      
+            {% endif %}
+
+
+
+
+
+          {% if prd_service == 'course' %}
+            {% include "shop/partials/program_structure.html" %}
+          {% endif %}
+
+          {% include "shop/partials/delivery_flow.html" %}
+
+
+
+          {% include "shop/partials/reviews.html" %}
             {% include "shop/partials/faq.html" %}
 
-            {% include "shop/partials/reviews.html" %}
-      
-      
-            
-        </div>
-        </section>
-        <!-- main parent2 section end -->      
-      {% endblock section2 %}
 
-      {% if sqs.id not in linkedin_resume_services %}
-        {% block prdrecommended %}
-          {% include "shop/partials/recommended_product.html" %}
-        {% endblock prdrecommended %}
-      {% endif %}
+      </div>
+      </section>
+      <!-- main parent2 section end -->      
+    {% endblock section2 %}
+
+    {% if sqs.id not in linkedin_resume_services %}
+      {% block prdrecommended %}
+      {% include "shop/partials/recommended_product.html" %}
+      {% endblock prdrecommended %}
+    {% endif %}
+
   <!--equiry form-->
   <div class="modal fade bs-example-modal-sm3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="detailpage">
     <div class="modal-dialog modal-sm" role="document">

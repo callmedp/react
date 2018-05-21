@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-
+import logging
 from .config import TYPE_OF_PAGE
 
 
@@ -23,7 +23,8 @@ class MicrositeBanner(models.Model):
             if self.image:
                 extension = self.image.extension
                 return self.image.path.split(extension)[0] + "_" + quality + extension
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get low image%s' % str(e))
             pass
         return ""
 
