@@ -1,208 +1,254 @@
 {% load humanize search_tags %}
 {% if prd_service == 'course' %}
    
-   <!-- other package start -->
-          <div class="other-package-box">
-            <span>Provided by</span>
-            <a href="#" class="other-package selected">
-              <div class="other-package-img">
-                <img src="images/vskills-logo1.jpg" class="img-responsive text-center" alt="Vskills">
-              </div>
-              <div class="other-package-content">
-                <strong>Skillsoft</strong>
-                <p>Starting at <small>Rs. 4000/-</small></p>
-              </div>
-            </a>
+  <!-- other package start -->
+  <div class="other-package-box">
+    <span>Provided by</span>
 
-            <a href="#" class="other-package">
-              <div class="other-package-img">
-                <img src="images/vskills-logo1.jpg" class="img-responsive text-center" alt="Vskills">
-              </div>
-            </a>
+    {% if sqs_main.id == sqs.id %}
+      <a role="button" class="other-package selected">
+        <div class="other-package-img">
+          <img src="{{prd_vendor_img}}" class="img-responsive text-center" alt="{{prd_vendor}}">
+        </div>
+        <div class="other-package-content">
+          <strong>{{prd_vendor}}</strong>
+          <p>Starting at <small>Rs. {{start_price|floatformat}}/-</small></p>
+        </div>
+      </a>
+    {% else %}
+      <a role="button" class="other-package other-product" data-id="{{sqs_main.id}}" main-id="{{sqs_main.id}}">
+        <div class="other-package-img">
+          <img src="{{sqs_main.pVi}}" class="img-responsive text-center" alt="{{sqs_main.pPvn}}">
+        </div>
+      </a>
+    {% endif %}
+    {% if pop %} 
+      {% for provider in pop_list|slice:"0:4" %}
 
-            <a href="#" class="other-package">
-              <div class="other-package-img">
-                <img src="images/digital-vidya.jpg" class="img-responsive text-center" alt="Digital Vidya">
-              </div>
-            </a>
-          </div>
-          <!-- other package end -->
+        {% if provider.id == sqs.id %}
+          <a role="button" class="other-package selected">
+            <div class="other-package-img">
+              <img src="{{provider.vendor_image}}" class="img-responsive text-center" alt="{{provider.vendor}}">
+            </div>
+            <div class="other-package-content">
+              <strong>{{provider.vendor}}</strong>
+              <p>Starting at <small>Rs. {{provider.inr_price|floatformat}}/-</small></p>
+            </div>
+          </a>
+        {% else %}
+          <a role="button" class="other-package other-product" data-id="{{provider.id}}" main-id="{{sqs_main.id}}">
+            <div class="other-package-img">
+              <img src="{{provider.vendor_image}}" class="img-responsive text-center" alt="{{provider.vendor}}">
+            </div>
+          </a>
+        {% endif %}
 
-  {% comment %}
-  <!-- main package start -->
-  <div class="main-package">
-    <div class="main-package-img">
-      <img src="{{prd_vendor_img}}" class="img-responsive" alt="{{prd_vendor}}">
-    </div>
-    <div class="main-package-content">
-      <span>Provided by</span>
-      <strong>{{prd_vendor}}</strong>
-      <p>Starting at <small>Rs. {{start_price|floatformat}}/-</small></p>
-    </div>
-    <div class="main-package-arrow"></div>
+      {% endfor %}
+    {% endif %}
+
   </div>
-  <!-- main package start end-->
-  {% if pop %}
-    <!-- other package start -->
+  <!-- other package end -->
+
+{% elif sqs_main == "1941" %}
+
     <div class="other-package-box">
-      <span>Other providers</span>
-    {% for provider in pop_list|slice:"0:4" %}
-      <a href="{{provider.url}}" class="other-package">
-        <img src="{{provider.vendor_image}}" class="img-responsive text-center" alt="{{provider.vendor}}">
+      <span>Duration by</span>
+      {% if prd_exp %}
+        {% if sqs.id == "1941" %}
+        <a role="button" class="other-package selected">
+            <p>
+              <strong>30 days</strong>
+              Starting at <small>Rs. {{start_price|floatformat}}/-</small>
+            </p>
+        </a>
+        {% else %}
+          <a role="button" class="other-package other-product" data-id="1941" main-id="{{sqs_main.id}}">
+            <p>
+              <strong>30 days</strong>
+            </p>
+          </a>
+        {% endif %}
+
+        {% if sqs.id == "1939" %}
+        <a role="button" class="other-package selected">
+            <p>
+              <strong>90 days</strong>
+              Starting at <small>Rs. {{start_price|floatformat}}/-</small>
+            </p>
+        </a>
+        {% else %}
+          <a role="button" class="other-package other-product" data-id="1939" main-id="{{sqs_main.id}}">
+            <p>
+              <strong>90 days</strong>
+            </p>
+          </a>
+        {% endif %}
+
+        {% if sqs.id == "1942" %}
+        <a role="button" class="other-package selected">
+            <p>
+              <strong>180 days</strong>
+              Starting at <small>Rs. {{start_price|floatformat}}/-</small>
+            </p>
+        </a>
+        {% else %}
+          <a role="button" class="other-package other-product" data-id="1942" main-id="{{sqs_main.id}}">
+            <p>
+              <strong>180 days</strong>
+            </p>
+          </a>
+        {% endif %}
+      {% endif %}
+    </div>
+
+{% elif sqs_main.id == "1939" %}
+
+  <div class="other-package-box">
+    <span>Duration by</span>
+    {% if prd_exp %}
+      {% if sqs.id == "1939" %}
+      <a role="button" class="other-package selected">
+          <p>
+            <strong>90 days</strong>
+            Starting at <small>Rs. {{start_price|floatformat}}/-</small>
+          </p>
       </a>
-    {% endfor %}
-    </div>
-    <!-- other package end -->
-  {% endif %}
-  {% endcomment %}
+      {% else %}
+        <a role="button" class="other-package other-product" data-id="1939" main-id="{{sqs_main.id}}">
+          <p>
+            <strong>90 days</strong>
+          </p>
+        </a>
+      {% endif %}
 
-{% elif product.pk == 1941 %}
-  <!-- main package start -->
-    <div class="main-package">
-    <div class="main-package-content">
-      <span>Duration</span>
-        <strong>30 days</strong>
-      <p>Starting at <small>Rs. {{start_price|floatformat}}/-</small></p>
-    </div>
+      {% if sqs.id == "1941" %}
+      <a role="button" class="other-package selected">
+          <p>
+            <strong>30 days</strong>
+            Starting at <small>Rs. {{start_price|floatformat}}/-</small>
+          </p>
+      </a>
+      {% else %}
+        <a role="button" class="other-package other-product" data-id="1941" main-id="{{sqs_main.id}}">
+          <p>
+            <strong>30 days</strong>
+          </p>
+        </a>
+      {% endif %}
 
-    <div class="main-package-arrow"></div>
+      {% if sqs.id == "1942" %}
+      <a role="button" class="other-package selected">
+          <p>
+            <strong>180 days</strong>
+            Starting at <small>Rs. {{start_price|floatformat}}/-</small>
+          </p>
+      </a>
+      {% else %}
+        <a role="button" class="other-package other-product" data-id="1942" main-id="{{sqs_main.id}}">
+          <p>
+            <strong>180 days</strong>
+          </p>
+        </a>
+      {% endif %}
+    {% endif %}
   </div>
-  <!-- main package start end-->
   
-    <!-- other package start -->
-    <div class="other-package-box">
-      <span>Other durations</span>
-      <a href="/services/profile-update/featured-profile-10/pd-1939" class="other-package">
-        <p>
-          Duration
-          <strong>90 days</strong>
-        </p>
-      </a>
-      <a href="/services/profile-update/featured-profile-8/pd-1942" class="other-package">
-        <p>
-          Duration
-          <strong>180 days</strong>
-        </p>
-      </a>
-    </div>
-    <!-- other package end -->
-{% elif product.pk == 1939 %}
-  <!-- main package start -->
-    <div class="main-package">
-    <div class="main-package-content">
-      <span>Duration</span>
-        <strong>90 days</strong>
-      <p>Starting at <small>Rs. {{start_price|floatformat}}/-</small></p>
-    </div>
+{% elif sqs_main.id == "1942" %}
 
-    <div class="main-package-arrow"></div>
-  </div>
-  <!-- main package start end-->
-  
-    <!-- other package start -->
-    <div class="other-package-box">
-      <span>Other durations</span>
-      <a href="/services/profile-update/featured-profile-9/pd-1941" class="other-package">
-        <p>
-          Duration
-          <strong>30 days</strong>
-        </p>
+  <div class="other-package-box">
+    <span>Duration by</span>
+    {% if prd_exp %}
+      {% if sqs.id == "1942" %}
+      <a role="button" class="other-package selected">
+          <p>
+            <strong>180 days</strong>
+            Starting at <small>Rs. {{start_price|floatformat}}/-</small>
+          </p>
       </a>
-      <a href="/services/profile-update/featured-profile-8/pd-1942" class="other-package">
-        <p>
-          Duration
-          <strong>180 days</strong>
-        </p>
-      </a>
-    </div>
-    <!-- other package end -->
-  
-{% elif product.pk == 1942 %}
-  <!-- main package start -->
-    <div class="main-package">
-    <div class="main-package-content">
-      <span>Duration</span>
-        <strong>180 days</strong>
-      <p>Starting at <small>Rs. {{start_price|floatformat}}/-</small></p>
-    </div>
+      {% else %}
+        <a role="button" class="other-package other-product" data-id="1942" main-id="{{sqs_main.id}}">
+          <p>
+            <strong>180 days</strong>
+          </p>
+        </a>
+      {% endif %}
 
-    <div class="main-package-arrow"></div>
+      {% if sqs.id == "1941" %}
+      <a role="button" class="other-package selected">
+          <p>
+            <strong>30 days</strong>
+            Starting at <small>Rs. {{start_price|floatformat}}/-</small>
+          </p>
+      </a>
+      {% else %}
+        <a role="button" class="other-package other-product" data-id="1941" main-id="{{sqs_main.id}}">
+          <p>
+            <strong>30 days</strong>
+          </p>
+        </a>
+      {% endif %}
+
+      {% if sqs.id == "1939" %}
+      <a role="button" class="other-package selected">
+          <p>
+            <strong>90 days</strong>
+            Starting at <small>Rs. {{start_price|floatformat}}/-</small>
+          </p>
+      </a>
+      {% else %}
+        <a role="button" class="other-package other-product" data-id="1939" main-id="{{sqs_main.id}}">
+          <p>
+            <strong>90 days</strong>
+          </p>
+        </a>
+      {% endif %}
+    {% endif %}
   </div>
-  <!-- main package start end-->
-  
-    <!-- other package start -->
-    <div class="other-package-box">
-      <span>Other packages</span>
-      <a href="/services/profile-update/featured-profile-9/pd-1941" class="other-package">
-        <p>
-          Duration
-          <strong>30 days</strong>
-        </p>
-      </a>
-      <a href="/services/profile-update/featured-profile-10/pd-1939" class="other-package">
-        <p>
-          Duration
-          <strong>90 days</strong>
-        </p>
-      </a>
-    </div>
-    <!-- other package end -->
-  
   
 {% else %}
     <!-- other package start -->
-          <div class="other-package-box">
-            <span>Experienced by</span>
-            <a href="#" class="other-package selected">
-                <p><strong>1-4 years</strong>
-                Starting at <small>Rs. 4000/-</small></p>
-            </a>
-
-            <a href="#" class="other-package">
-                <p><strong>4-8 years</strong></p>
-            </a>
-
-            <a href="#" class="other-package">
-                <p><strong>8-15 years</strong></p>
-            </a>
-          </div>
-          <!-- other package end -->
-
-
-    {% comment %}
-    {% if prd_exp %}
-      <div class="main-package">
-        <div class="main-package-content">
-          <span>Experience</span>
-          
-            <strong>{{prd_exp|get_choice_display:"EXP_DICT"}}</strong>
-          
-          <p>Starting at <small>Rs. {{start_price|floatformat}}/-</small></p>
-        </div>
-
-        <div class="main-package-arrow"></div>
-      </div>
-    {% endif %}
-  <!-- main package start end-->
-  {% if pop %}
-
-    <!-- other package start -->
     <div class="other-package-box">
-      <span>Other experiences</span>
-    {% for package in pop_list|slice:"0:4"  %}
-      <a href="{{package.url}}{% if sqs.id in linkedin_resume_services %}?token={{request.GET.token}}{% endif %}" data-id="{{package.id}}" main-id="{{sqs.id}}" class="other-package other-product">
-        <p>
-          Experience
-      {% if package.experience %}
-        <strong>{{package.experience|get_choice_display:"EXP_DICT"}}</strong>
+      <span>Experienced by</span>
+      {% if prd_exp %}
+        {% if sqs_main.id == sqs.id %}
+        <a role="button" class="other-package selected">
+            <p>
+              {% if prd_exp %}
+              <strong>{{prd_exp|get_choice_display:"EXP_DICT"}}</strong>
+              {% endif %}
+              Starting at <small>Rs. {{start_price|floatformat}}/-</small>
+            </p>
+        </a>
+        {% else %}
+          <a role="button" class="other-package other-product" data-id="{{sqs_main.id}}" main-id="{{sqs_main.id}}">
+            <p>
+              {% if sqs_main.pEX %}
+              <strong>{{sqs_main.pEX|get_choice_display:"EXP_DICT"}}</strong>
+              {% endif %}
+            </p>
+          </a>
+        {% endif %}
       {% endif %}
-        </p>
-      </a>
 
-    {% endfor %}
+      {% for package in pop_list|slice:"0:4"  %}
+        {% if package.id == sqs.id %}
+        <a role="button" class="other-package selected">
+            <p>
+              {% if package.experience %}
+                <strong>{{package.experience|get_choice_display:"EXP_DICT"}}</strong>
+              {% endif %}
+            Starting at <small>Rs. {{package.inr_price|floatformat}}/-</small></p>
+        </a>
+        {% else %}
+          <a role="button" class="other-package other-product" data-id="{{package.id}}" main-id="{{sqs_main.id}}">
+            <p>
+              {% if package.experience %}
+              <strong>{{package.experience|get_choice_display:"EXP_DICT"}}</strong>
+              {% endif %}
+            </p>
+          </a>
+        {% endif %}
+      {% endfor %}
     </div>
     
-    <!-- other package end -->
-  {% endif %}
-  {% endcomment %}
 {% endif %}

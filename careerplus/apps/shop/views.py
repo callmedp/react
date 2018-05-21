@@ -434,7 +434,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             self.product_obj, self.sqs)
 
         product_detail_content = render_to_string(
-            'shop/product-detail.html', product_data)
+            'shop/product-detail.html', product_data,
+            request=self.request)
 
         ctx.update({
             'product_detail': product_detail_content
@@ -828,7 +829,8 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
                     self.product_main, self.sqs_main)
 
                 product_detail_content = render_to_string(
-                    'shop/product-detail.html', product_data)
+                    'shop/product-detail.html', product_data,
+                    request=request)
 
                 data.update({
                     'status': 1,

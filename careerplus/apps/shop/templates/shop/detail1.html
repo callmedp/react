@@ -2,7 +2,7 @@
 {% load static meta compress %}
 
 {% block title %}
-  {% if meta.title %}{{ meta.title }}{% endif %}
+  {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
 {% endblock title %}
 {% block canonical_url %}
   <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
