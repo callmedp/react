@@ -6,7 +6,7 @@
     <span>Provided by</span>
 
     {% if sqs_main.id == sqs.id %}
-      <a role="button" class="other-package selected">
+      <a role="button" class="other-package selected" data-id="{{sqs_main.id}}" main-id="{{sqs_main.id}}">
         <div class="other-package-img">
           <img src="{{prd_vendor_img}}" class="img-responsive text-center" alt="{{prd_vendor}}">
         </div>
@@ -26,7 +26,7 @@
       {% for provider in pop_list|slice:"0:4" %}
 
         {% if provider.id == sqs.id %}
-          <a role="button" class="other-package selected">
+          <a role="button" class="other-package selected" data-id="{{provider.id}}" main-id="{{sqs_main.id}}">
             <div class="other-package-img">
               <img src="{{provider.vendor_image}}" class="img-responsive text-center" alt="{{provider.vendor}}">
             </div>
@@ -55,7 +55,7 @@
       <span>Duration by</span>
       {% if prd_exp %}
         {% if sqs.id == "1941" %}
-        <a role="button" class="other-package selected">
+        <a role="button" class="other-package selected" data-id="1941" main-id="{{sqs_main.id}}">
             <p>
               <strong>30 days</strong>
               Starting at <small>Rs. {{start_price|floatformat}}/-</small>
@@ -70,7 +70,7 @@
         {% endif %}
 
         {% if sqs.id == "1939" %}
-        <a role="button" class="other-package selected">
+        <a role="button" class="other-package selected" data-id="1939" main-id="{{sqs_main.id}}">
             <p>
               <strong>90 days</strong>
               Starting at <small>Rs. {{start_price|floatformat}}/-</small>
@@ -85,7 +85,7 @@
         {% endif %}
 
         {% if sqs.id == "1942" %}
-        <a role="button" class="other-package selected">
+        <a role="button" class="other-package selected" data-id="1942" main-id="{{sqs_main.id}}">
             <p>
               <strong>180 days</strong>
               Starting at <small>Rs. {{start_price|floatformat}}/-</small>
@@ -107,7 +107,7 @@
     <span>Duration by</span>
     {% if prd_exp %}
       {% if sqs.id == "1939" %}
-      <a role="button" class="other-package selected">
+      <a role="button" class="other-package selected" data-id="1939" main-id="{{sqs_main.id}}">
           <p>
             <strong>90 days</strong>
             Starting at <small>Rs. {{start_price|floatformat}}/-</small>
@@ -122,7 +122,7 @@
       {% endif %}
 
       {% if sqs.id == "1941" %}
-      <a role="button" class="other-package selected">
+      <a role="button" class="other-package selected" data-id="1941" main-id="{{sqs_main.id}}">
           <p>
             <strong>30 days</strong>
             Starting at <small>Rs. {{start_price|floatformat}}/-</small>
@@ -137,7 +137,7 @@
       {% endif %}
 
       {% if sqs.id == "1942" %}
-      <a role="button" class="other-package selected">
+      <a role="button" class="other-package selected" data-id="1942" main-id="{{sqs_main.id}}">
           <p>
             <strong>180 days</strong>
             Starting at <small>Rs. {{start_price|floatformat}}/-</small>
@@ -159,7 +159,7 @@
     <span>Duration by</span>
     {% if prd_exp %}
       {% if sqs.id == "1942" %}
-      <a role="button" class="other-package selected">
+      <a role="button" class="other-package selected" data-id="1942" main-id="{{sqs_main.id}}">
           <p>
             <strong>180 days</strong>
             Starting at <small>Rs. {{start_price|floatformat}}/-</small>
@@ -174,7 +174,7 @@
       {% endif %}
 
       {% if sqs.id == "1941" %}
-      <a role="button" class="other-package selected">
+      <a role="button" class="other-package selected" data-id="1941" main-id="{{sqs_main.id}}">
           <p>
             <strong>30 days</strong>
             Starting at <small>Rs. {{start_price|floatformat}}/-</small>
@@ -189,7 +189,7 @@
       {% endif %}
 
       {% if sqs.id == "1939" %}
-      <a role="button" class="other-package selected">
+      <a role="button" class="other-package selected" data-id="1939" main-id="{{sqs_main.id}}">
           <p>
             <strong>90 days</strong>
             Starting at <small>Rs. {{start_price|floatformat}}/-</small>
@@ -211,7 +211,7 @@
       <span>Experienced by</span>
       {% if prd_exp %}
         {% if sqs_main.id == sqs.id %}
-        <a role="button" class="other-package selected">
+        <a role="button" class="other-package selected" data-id="{{sqs_main.id}}" main-id="{{sqs_main.id}}">
             <p>
               {% if prd_exp %}
               <strong>{{prd_exp|get_choice_display:"EXP_DICT"}}</strong>
@@ -232,7 +232,7 @@
 
       {% for package in pop_list|slice:"0:4"  %}
         {% if package.id == sqs.id %}
-        <a role="button" class="other-package selected">
+        <a role="button" class="other-package selected" data-id="{{package.id}}" main-id="{{sqs_main.id}}">
             <p>
               {% if package.experience %}
                 <strong>{{package.experience|get_choice_display:"EXP_DICT"}}</strong>
