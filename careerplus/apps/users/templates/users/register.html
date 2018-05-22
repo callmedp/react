@@ -5,14 +5,6 @@
 {% endblock title %}
 {% block css_section %}
     {{block.super}}
-    {% compress css inline %}
-    <style type="text/css">
-      .error {
-            color: red;
-            font-weight: 400;
-      }
-    </style>
-    {% endcompress %}
 {% endblock css_section %}
 {% block container %}
 
@@ -56,15 +48,13 @@
                 {% csrf_token %}
                 <div class="form-group {% if form.email.errors %}error{% endif %}">
                     {{ form.email }}
-                    <span class="error-txt" style="bottom:-25px">{{ form.email.errors }}</span>
-                    <div id="user_email"></div>
+                    <span class="error-txt">{{ form.email.errors.0 }}</span>
                 </div>
                 
                 <div class="form-group {% if form.email.errors %}error{% endif %}">
                     {{ form.raw_password }}
-                    <span class="error-txt" style="bottom:-25px">{{ form.raw_password.errors }}
+                    <span class="error-txt">{{ form.raw_password.errors.0 }}
                     </span>
-                    <div id="raw_psd"></div>
                 </div>
                 
                 <div class="form-group {% if form.cell_phone.errors %}error{% endif %}">
@@ -73,21 +63,21 @@
                             {{form.country_code}}
                         </div>
                         {{form.cell_phone}}
-                        <span class="error-txt" style="bottom:-33px">{{form.cell_phone.errors}}
+                        <span class="error-txt">{{form.cell_phone.errors.0}}
                         </span>
                     </div>
-                    <div id="cell_phone"></div>
                 </div>
                 
-                <div class="form-check">
+                <div class="form-check form-group error">
                     <label class="form-check-label">
                         <input type="checkbox" class="form-check-input"
                             name="term_conditions">
-                            I agree to <a href="/tnc">Terms & Conditions</a>
-                            and<a href="/privacy-policy"> Privacy policy</a>
+                        I agree to <a href="/tnc">Terms & Conditions</a>
+                        and<a href="/privacy-policy"> Privacy policy</a>
+                        <span class="error-txt">
+                        </span>
                     </label>
                 </div>
-                <div id="terms"></div>
                 <div class="form-check">
                     <label class="form-check-label">
                         <input type="checkbox" class="form-check-input"

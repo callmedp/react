@@ -80,23 +80,16 @@ $().ready(function() {
                 required:"Please accept terms & conditions"
             },
         },
-        errorPlacement: function(error, element) {
-            if (element.attr("name") == "email")
-            {
-                error.appendTo("#user_email");
-            }
-            if (element.attr("name") == "raw_password")
-            {
-                error.appendTo("#raw_psd");
-            }
-            if (element.attr("name") == "cell_phone")
-            {
-                error.appendTo("#cell_phone");
-            }
-            if (element.attr("name") == "term_conditions")
-            {
-                error.appendTo("#terms");
-            }
-        }
+        highlight:function(element, errorClass) {
+            $(element).closest('.form-group').addClass('error');
+        },
+        unhighlight:function(element, errorClass) {
+            if ($(element).attr('name') != "country_code"){
+                $(element).closest('.form-group').removeClass('error');
+            }      
+        },
+        errorPlacement: function(error, element){
+            $(element).siblings('.error-txt').html(error.text());
+        },
     });
 });

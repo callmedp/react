@@ -1171,10 +1171,17 @@ footer {
 		display: none;
 }
 
+.error-msg {
+	display: block;
+	color: $error-color;
+	font-size: $font-size;
+	font-weight: $font-weight+100;
+}
+
 .error {
 	position: relative;
 
-	input {
+	input, textarea {
 		border-bottom: 1px solid $error-color !important;
 	}
 	
@@ -1186,6 +1193,7 @@ footer {
 		left: 0;
 		bottom: -13px;
 		z-index: 9;
+		font-weight: $font-weight+100;
 	}
 }
 
