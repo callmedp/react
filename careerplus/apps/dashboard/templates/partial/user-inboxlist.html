@@ -284,7 +284,7 @@
 
             {% if obj.oi_status == 4 and not obj.user_feedback %}
                 <div class="col-sm-4 rating-feedback-box">
-                    <a role="button" onclick="giveFeedbackOrderitem('{{obj.pk}}')">
+                    <a role="button" href="javascript:void(0)" onclick="giveFeedbackOrderitem('{{obj.pk}}')">
                         <div class="rating-feedback">
                           <span>Your feedback</span>
                           <fieldset class="rate">

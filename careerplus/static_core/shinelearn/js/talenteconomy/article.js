@@ -56,6 +56,28 @@
 	            }
 	        });
     	});
+
+    	$(document).on('click', '#load-more-te-tag', function(event) {
+	        this.disabled = true;
+	        var formData = $("#load-te-tag-form").serialize();
+	        $.ajax({
+	            url : "/talenteconomy/tags/loadmore-article/",
+	            type: "GET",
+	            data : formData,
+	            dataType: 'html',
+	            success: function(html, textStatus, jqXHR)
+	            {
+	                $("#talent_tag_load_more_id").remove();
+	                $("#te-tag-article-container-id").append(html);
+	            },
+	            error: function (jqXHR, textStatus, errorThrown)
+	            {
+	                alert("Can't load more");
+	            }
+	         });   
+        });
+
+
 	}
 
 	Article.init = init;

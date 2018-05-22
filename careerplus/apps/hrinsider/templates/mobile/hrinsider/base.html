@@ -1,0 +1,102 @@
+{% load static compress %}
+{% spaceless %}
+<html lang="en">
+{% block head %}
+ <head>
+
+ 	{% block meta_html %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0' > -->
+    {% endblock meta_html %}
+
+    {% block django_meta %}
+    {% endblock django_meta %}
+
+    {% block canonical_url %}
+      <!-- <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}"> -->
+    {% endblock canonical_url %}
+    
+    <title>{% block title %}Shine Learning{%endblock title%}</title>
+
+    {% block css_section %}
+	{% compress css %}
+	<link type="text/scss" href="{% static 'shinelearn/css/mobile/hr-insider/global.scss' %}" rel="stylesheet">
+	<link type="text/scss" href="{% static 'shinelearn/css/mobile/hr-insider/icons.scss' %}" rel="stylesheet">
+	<link type="text/scss" href="{% static 'shinelearn/css/mobile/hr-insider/navigation.scss' %}" rel="stylesheet">
+	<link type="text/scss" href="{% static 'shinelearn/css/mobile/hr-insider/images.scss' %}" rel="stylesheet">
+	{% endcompress css %}
+    {% endblock css_section %}
+    {{ JS_SETTINGS|safe }}
+    
+</head>
+{% endblock head %}
+
+
+<body>
+ 	<div class="wrapper">
+	<!-- Header -->
+	<header class="">
+		<!-- header menu Icon Starts here -->
+		<div class="pull-left">
+			<a id="sidebar-main-trigger" class="icon-bar pull-left"  href="#" ></a> 
+			<a href="index.html" class="icon-logo pull-left"></a>
+		</div><!-- / Left side Icon ends here -->
+
+		<div class="pull-right">
+			<a href="#" class="btn btn-white btn-round btn-lg mt-8">
+			<span class="icon-user"></span>Recruiter login
+			</a>
+		</div>
+	</header><!-- header ends here -->
+		<!-- body Wrapper -->
+		<div class="body-wrapper ">
+			{% block hr_tabs %}
+			{% include './include/hr-tabs.html' %}
+			{% endblock hr_tabs %}
+
+		<!-- main section start -->
+	    {% block container %}
+
+	    {% endblock container %}
+	    <!-- main section ends here -->
+
+		</div><!-- /. body Wrapper -->
+
+
+
+		{% block footer %}
+	    	{% include './include/footer.html'%}
+	    {% endblock footer %}
+ 	</div><!-- /. wrapper -->
+
+ 	{% block navigation %}
+	 	{% include './include/navigation.html' %}
+ 	{% endblock navigation %}
+
+ 	<!-- Google font API starts here -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+	<!-- Google font API Ends here -->
+	<!-- JavaScript starts here -->
+	{% block js_section %}
+	    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
+        {% compress js %}
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery-ui.min.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.bxslider.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.simpler-sidebar.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/slick.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
+	    {% endcompress %}
+	{% endblock js_section %}
+	<!-- JavaScript starts here -->
+</body>
+</html>
+{% endspaceless %}

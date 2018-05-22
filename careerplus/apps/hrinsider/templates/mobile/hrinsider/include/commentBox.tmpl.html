@@ -1,0 +1,33 @@
+<div class="mt-20 mb-20 hello " >
+  <form id="blog-comment-form{{article.id}}">
+    {% csrf_token %}
+  <textarea placeholder="Your comment" class="form-control" id="id_comment{{article.id}}" name="message"></textarea>
+
+  <input type="hidden" id="id_slug" name="slug" value="{{article.slug}}">
+  <input type="hidden" id="pk_id" name="pk" value="{{article.pk}}" />
+  {% if request.session.candidate_id %}
+  <button type="button" class="btn-sm btn-blue btn-round mt-10" onclick="commentSubmit('{{article.id}}', '{{login_status}}')" id="comment-submit{{article.id}}">Submit</button>
+  {% else %}
+    <button class="btn btn-blue btn-round mt-10 js_redirect" type="button">Submit</button>
+  {% endif %}
+  </form>
+</div>
+
+<div class="comment-wrap mt-20" id="page_comment{{article.id}}">
+  {{ comment_list|safe|default:'' }}
+  {% comment %}
+  <ul class="mt-20 article-comment">
+    <li>
+      <sup><img src="images/default-user.jpg"></sup>
+      <p><strong>Krishna Singh</strong> <span class="spacer c-666">/</span><span class="c-666">06 Nov, 2016</span></p>
+      <p class="pb-0">Mix is a tech writer based in Amsterdam that loves cinema and probably hates the movies that you like. Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.</p>
+    </li><li>
+      <sup><img src="images/default-user.jpg"></sup>
+      <p><strong>Krishna Singh</strong> <span class="spacer c-666">/</span><span class="c-666">06 Nov, 2016</span></p>
+      <p class="pb-0">Mix is a tech writer based in Amsterdam that loves cinema and probably hates the movies that you like. Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.</p>
+    </li>
+  </ul>
+  {% endcomment %}
+
+  <!--a href="#" class="btn btn-grey block text-center">More comments</a-->
+</div><!-- end of Comment wrap here -->

@@ -163,7 +163,17 @@ $(document).ready(function() {
             password:{
                 required: "Please provide a password"
             }
-        }
+        },
+        highlight:function(element, errorClass) {
+            $(element).closest('.form-group').addClass('error');
+        },
+        unhighlight:function(element, errorClass) {
+            $(element).closest('.form-group').removeClass('error');
+            $(element).siblings('.error-txt').html('');      
+        },
+        errorPlacement: function(error, element){
+            $(element).siblings('.error-txt').html(error.text());
+        },
     });
 
     $.validator.addMethod("indiaMobile", function(value, element) {
@@ -247,7 +257,17 @@ $(document).ready(function() {
         },
         messages:{
             email: { required:"Please enter a valid email address"},
-        }
+        },
+        highlight:function(element, errorClass) {
+            $(element).closest('.form-group').addClass('error');
+        },
+        unhighlight:function(element, errorClass) {
+            $(element).closest('.form-group').removeClass('error');
+            $(element).siblings('.error-txt').html('');      
+        },
+        errorPlacement: function(error, element){
+            $(element).siblings('.error-txt').html(error.text());
+        },
     });
     // end login and registration js
 
