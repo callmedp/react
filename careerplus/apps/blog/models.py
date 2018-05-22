@@ -20,10 +20,14 @@ from seo.models import AbstractSEO
 from .config import STATUS
 
 SITE_TYPE = (
-        (1, 'ShineLearning'),
-        (2, 'TalentEconomy'),
-        # (3, 'Both')
-    )
+    (1, 'ShineLearning'),
+    (2, 'TalentEconomy'),
+    # (3, 'Both')
+    (3, 'HR-Blogger'),
+    (4, 'HR-Conclave'),
+    (5, 'HR-Jobfair'),
+)
+
 
 class Category(AbstractCommonModel, AbstractSEO, ModelMeta):
     name = models.CharField(
@@ -199,7 +203,6 @@ class Author(AbstractCommonModel, AbstractSEO, ModelMeta):
     
     is_active = models.BooleanField(default=False)
     
-
     _metadata_default = ModelMeta._metadata_default.copy()
     # _metadata_default['locale'] = 'dummy_locale'
 
@@ -213,7 +216,6 @@ class Author(AbstractCommonModel, AbstractSEO, ModelMeta):
          'url': 'get_absolute_url'
      }
 
-
     def __str__(self):
         return self.name
 
@@ -222,6 +224,7 @@ class Author(AbstractCommonModel, AbstractSEO, ModelMeta):
             return reverse('talent:authors-detail', kwargs={'slug': self.slug})
         else:
             return '/'
+
 
 class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     
@@ -266,7 +269,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True,
         help_text='for user or writer')
-    
+
     status = models.PositiveIntegerField(choices=STATUS, default=0)
     allow_comment = models.BooleanField(default=False)
 
@@ -274,14 +277,37 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     comment_moderated = models.PositiveIntegerField(default=0)
     no_views = models.PositiveIntegerField(default=0)
     no_shares = models.PositiveIntegerField(default=0)
-    score = models.DecimalField(max_digits=10, default=0,
+    score = models.DecimalField(
+        max_digits=10, default=0,
         decimal_places=2, help_text=("popularity score"))
 
     publish_date = models.DateTimeField(null=True, blank=True)
     expiry_date = models.DateTimeField(null=True, blank=True)
 
+    # hr conclave and job fair....
+    speakers = models.ManyToManyField(
+        Author, blank=True,
+        related_name='speakers')
+    start_date = models.DateTimeField(
+        null=True, blank=True)
+    end_date = models.DateTimeField(
+        null=True, blank=True)
+    venue = models.CharField(
+        ('Venue'), max_length=255, blank=True,
+        help_text=("Location"))
+    city = models.CharField(
+        ('City'), max_length=255, blank=True,
+        help_text=("City"))
+    address = models.TextField(
+        _('Address'),
+        blank=True, help_text='Conclave or job fair address')
+
+    sponsor_img = models.ImageField(
+        _('Sponsor Image'), upload_to='images/blog/sponsor/',
+        blank=True, null=True)
+
     _metadata_default = ModelMeta._metadata_default.copy()
-    
+
     _metadata = {
         'title': 'get_title',
         'description': 'get_description',
@@ -351,6 +377,12 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     def get_absolute_url(self):
         if self.visibility == 2:
             return reverse('talent:te-articles-detail', kwargs={'cat_slug': self.p_cat.slug, 'slug': self.slug})
+        if self.visibility == 3:
+            return reverse('hrinsider:hr-articles-detail', kwargs={'slug': self.slug})
+        elif self.visibility == 4:
+            return reverse('hrinsider:conclave-detail', kwargs={'slug': self.slug})
+        elif self.visibility == 5:
+            return reverse('hrinsider:jobfair-detail', kwargs={'slug': self.slug})
         else:
             return reverse('blog:articles-deatil', kwargs={'slug': self.slug, 'pk': self.pk})
 
@@ -378,8 +410,9 @@ class Comment(AbstractCommonModel):
     message = models.TextField(null=False, blank=False)
     is_published = models.BooleanField(default=False)
     is_removed = models.BooleanField(default=False)
-    replied_to = models.ForeignKey("self", on_delete=models.CASCADE, null=True,
-    blank=True, related_name="comments")
+    replied_to = models.ForeignKey(
+        "self", on_delete=models.CASCADE,
+        null=True, blank=True, related_name="comments")
 
     class Meta:
         ordering = ['-created_on', ]

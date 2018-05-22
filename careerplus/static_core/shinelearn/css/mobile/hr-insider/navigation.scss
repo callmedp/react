@@ -1,0 +1,124 @@
+@import 'library/variables';
+@import 'library/mixin';
+
+#main-sidebar {
+  overflow: scroll;
+}
+
+nav {
+  border-bottom: 1px solid $border-grey-f2;
+  position: relative;
+
+  &:last-child {
+    border-bottom: 0 none;
+  }
+}
+
+.sb-menu {
+  font-size: 14px;
+  font-weight: 400;
+  list-style-type: none;
+  margin: 0;
+  padding: 15px 0 0;
+  clear: left;
+  border-bottom: 1px solid $border-grey-f2;
+
+  &:last-child {
+    border-bottom: 0 none;
+  }
+  li {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+    a {
+      width: 100%;
+      color: $txt-grey-666;
+      /* Makes links full width. */
+      display: inline-block;
+      padding: 10px 15px;
+      /* Creates an even padding the same size as your font. */
+      position: relative;
+
+      span {
+        @include box(15px, 14px, inline-block);
+        margin-right: 12px;
+        position: relative;
+        top: 4px;
+      }
+    }
+  }
+
+  &:last-child {
+    border-bottom: 0 none;
+  }
+}
+
+.sb-menu li a:hover {
+  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0.05);
+  /* Will lighten any background colour you set. */
+}
+
+
+.sidebar,
+.sidebar-filter {
+  position: fixed;
+  top: 56px;
+  bottom: 0;
+  width: 300px;
+  background-color: $bg-white;
+  z-index: 999999999 !important;
+  right: -300px;
+}
+
+#sidebar-main {
+  top: 56px;
+}
+
+.sidebar.right {
+  right: -300px;
+  text-align: right;
+}
+
+.sidebar.left {
+  left: -300px;
+}
+
+.sidebar-filter {
+  position: fixed;
+  top: 56px;
+  bottom: 0;
+  width: 100%;
+  background-color: $bg-white;
+}
+
+.sidebar-filter.right {
+  right: -100%;
+  text-align: right;
+}
+
+.sidebar-filter.left {
+  left: -100%;
+}
+
+.top-gr {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#5b67bc+1,6745ba+40,7618b7+100 */
+background: rgb(91,103,188); /* Old browsers */
+background: -moz-linear-gradient(left, rgba(91,103,188,1) 1%, rgba(103,69,186,1) 40%, rgba(118,24,183,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(left, rgba(91,103,188,1) 1%,rgba(103,69,186,1) 40%,rgba(118,24,183,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to right, rgba(91,103,188,1) 1%,rgba(103,69,186,1) 40%,rgba(118,24,183,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5b67bc', endColorstr='#7618b7',GradientType=1 ); /* IE6-9 */
+  img {
+    opacity: .2;
+  }
+}
+
+.social-icon-wrap {
+  span {
+    @include box(20px, 20px, inline-block);
+    margin: 0 10px;
+    position: relative;
+    top: 4px;
+  }
+}

@@ -1,0 +1,121 @@
+.form-group {
+  margin-bottom: 15px;
+  position: relative;
+}
+
+// clear all inputs
+%normal-input {
+  font-family: $font-family;
+  font-size: 0.875em;
+  line-height: 1.3;
+  margin: 0;
+}
+
+label {
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+  padding-bottom: 5px;
+  display: inline-block;
+  max-width: 100%;
+}
+
+input {
+  @extend %normal-input;
+
+  &:focus {
+    border: 1;
+    box-shadow: none;
+    outline: none;
+  }
+}
+
+select {
+  @extend %normal-input;
+  @include appearance(none);
+  @include size(100%, 40px);
+  @include border-radius(4px);
+  background: url($dropdown-default);
+  background-color: $bg-white;
+  background-position: 98% 2px;
+  background-repeat: no-repeat;
+  border: 1px solid $border-grey-c1;
+  color: $txt-grey-999;
+  font-family: $font-family;
+  font-size: 12px;
+  outline: 0;
+  padding: 6px 30px 6px 6px;
+  text-align: left;
+  transition: all .3s ease;
+
+  option {
+    padding: 6px;
+  }
+}
+
+
+textarea {
+  @extend %normal-input;
+
+  &.form-control {
+    height: auto;
+  }
+}
+
+button {
+  @extend %normal-input;
+  @include appearance(none);
+}
+
+
+
+.form-control {
+  @extend %normal-input;
+  @include box(100%, 40px, block);
+  @include appearance(none);
+  @include border-radius(4px);
+  background-color: $bg-white;
+  //background-image: none;
+  border: 1px solid $border-grey-c1;
+  color: #555;
+  line-height: 1.42857;
+  padding: 6px 12px;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  
+  &::-moz-placeholder {
+    color: $txt-grey-999;
+    opacity: 1;
+  }
+}
+
+
+.checkbox label, .radio label {
+    min-height: 20px;
+    padding-left: 20px;
+    margin-bottom: 0;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
+    position: absolute;
+    margin-top: 4px\9;
+    margin-left: -20px;
+}
+
+input[type=checkbox], input[type=radio] {
+    margin: 4px 0 0;
+    margin-top: 1px\9;
+    line-height: normal;
+}
+
+input[type=checkbox], input[type=radio] {
+    padding: 0;
+}
+
+button, input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+

@@ -1,0 +1,206 @@
+@import 'library/variables';
+@import 'library/mixin';
+
+[class^="icon-"] {
+    display: block;
+    text-indent: 200%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.icon-bar {
+	background-position: 0 0;
+  width: 20px;
+  height: 20px;
+  position: relative;
+  top: 20px;
+}
+
+.icon-logo {
+  @include icon-block (79px, 55px, -48px 0);
+  margin-left: 15px;
+}
+
+.icon-article {
+  @include icon-inblock (17px, 20px, -139px 0);
+}
+
+.icon-conclave {
+  @include icon-inblock (20px, 20px, -161px 0);
+}
+
+.icon-fair {
+  @include icon-inblock (19px, 20px, -185px 0);
+}
+
+.icon-partners {
+  @include icon-inblock (26px, 20px, -208px 0);
+}
+
+.icon-user {
+  @include icon-inblock (20px, 20px, -239px 0);
+  position: relative;
+  top: 4px;
+  margin-right: 5px;
+}
+
+.icon-view {
+  @include icon-inblock (16px, 9px, -280px 0);
+  color: $txt-white;
+}
+
+.icon-forward {
+   @include icon-inblock (12px, 10px, -263px 0);
+}
+
+.icon-phone {
+   @include icon-inblock (19px, 15px, -324px 0);
+   position: relative;
+   top: 4px;
+   margin-right: 5px;
+}
+
+
+.icon-mail {
+   @include icon-inblock (19px, 18px, -302px 0);
+   position: relative;
+   top: 4px;
+   margin-right: 5px;
+}
+
+.icon-chat {
+   @include icon-inblock (15px, 12px, -478px -4px);
+   position: relative;
+   top: 4px;
+   margin-right: 5px;
+}
+
+.icon-share {
+  @include icon-inblock (27px, 22px, -139px -32px);
+  @extend %all-center;
+}
+
+.icon-fb-big {
+  @include icon-inblock (10px, 20px, -176px -35px);
+  @extend %all-center;
+}
+
+.icon-tw {
+  @include icon-inblock (18px, 15px, -228px -35px);
+  @extend %all-center;
+}
+
+.icon-gp {
+  @include icon-inblock (21px, 15px, -198px -35px);
+  @extend %all-center;
+}
+
+.icon-wp {
+  @include icon-inblock (23px, 22px, -256px -32px);
+  @extend %all-center;
+}
+
+.icon-leaveComment {
+  @include icon-inblock (20px, 20px, -290px -32px);
+  margin-right: 5px;
+  position: relative;
+  top: 5px;
+}
+
+.icon-mic {
+  @include icon-block (19px, 32px, -323px -27px);
+  position: absolute;
+  left: 0;
+  top: -4px;
+  padding-right: 10px;
+}
+
+.icon-calendar {
+  @include icon-inblock (15px, 15px, -438px -35px);
+  margin-right: 10px;
+}
+
+.icon-clock {
+  @include icon-inblock (15px, 15px, -460px -36px);
+  margin-right: 10px;
+}
+
+.icon-location {
+  @include icon-inblock (15px, 15px, -484px -35px);
+  margin-right: 10px;
+}
+
+.icon-loc {
+  @include icon-inblock (12px, 14px, -484px -35px);
+  position: relative;
+  top: 2px;
+  margin-right: 5px;
+}
+
+.icon-play {
+  @include icon-block (36px, 36px, -71px -60px);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -18px;
+  margin-left: -18px;
+  z-index: 1;
+}
+
+.icon-arrow {
+  @include icon-inblock (11px, 9px, -123px -73px);
+  margin-right: 5px;
+}
+
+.icon-close {
+  @include icon-block (15px, 15px, -158px -71px);
+}
+
+.icon {
+
+  &-about {
+    background-position: -345px 0;
+  }
+
+  &-hiring {
+    background-position: -361px 0;
+  }
+
+  &-jobSeeker {
+    background-position: -377px 0;
+  }
+
+  &-hrInsider {
+    background-position: -393px -0;
+  }
+}
+
+.icon {
+
+  &-linkedin {
+    background-position: -417px 0;
+  }
+
+  &-fb {
+    background-position: -437px 0;
+  }
+
+  &-twitter {
+    background-position: -456px 1px;
+  }
+}
+
+.icon-sm {
+
+  &-fb {
+    @include icon-block (9px, 16px, 0 -68px);
+  }
+
+  &-twitter {
+    @include icon-block (18px, 16px, -16px -68px);
+  }
+
+  &-gPlus {
+    @include icon-block (24px, 16px, -39px -68px);
+  }
+}
