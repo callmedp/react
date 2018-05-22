@@ -273,6 +273,7 @@ class ActionUserMixin(object):
                     + '_' + timezone.now().strftime('%Y%m%d') + extention
                 full_path = '%s/' % str(order.pk)
                 oi_resume = UploadedFile(oi_resume)
+                oi_resume.seek(0)
                 if not settings.IS_GCP:
                     if not os.path.exists(settings.RESUME_DIR + full_path):
                         os.makedirs(settings.RESUME_DIR + full_path)
