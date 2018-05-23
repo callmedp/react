@@ -97,7 +97,6 @@ LOCAL_APPS = [
     'api',
     'marketing',
     'talenteconomy',
-    'hrinsider',
     'scheduler',
 ]
 
@@ -250,7 +249,6 @@ CKEDITOR_CONFIGS = {
         'width': 'auto',
         # 'removePlugins': 'stylesheetparser',
         # 'extraPlugins': 'codesnippet',
-        # 'extraAllowedContent': 'iframe[*]',
     },
 }
 CKEDITOR_RESTRICT_BY_USER = False
@@ -432,8 +430,7 @@ BLOG_WRITER_GROUP_LIST = ['BLOG_WRITER']
 #BLOGGER#
 LEARNING_BLOGGER = ['LEARNING_BLOGGER']
 TALENT_BLOGGER = ['TALENT_BLOGGER']
-HR_INSIDER = ['HR_INSIDER']
-BLOGGER_GROUP_LIST = [LEARNING_BLOGGER, TALENT_BLOGGER, HR_INSIDER, PRODUCT_GROUP_LIST]
+BLOGGER_GROUP_LIST = [LEARNING_BLOGGER, TALENT_BLOGGER, PRODUCT_GROUP_LIST]
 # Refund Application level
 OPS_GROUP_LIST = ['OPERATION']
 OPS_HEAD_GROUP_LIST = ['OPS_HEAD']

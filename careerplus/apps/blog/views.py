@@ -346,8 +346,9 @@ class BlogTagListView(TemplateView, PaginationMixin):
             logging.getLogger('error_log').error("Unable to get active tab %s"% str(e))
             self.active_tab = 0
         try:
-            self.tag_obj = Tag.objects.get(slug=slug, is_active=True)
-        except Exception:
+            self.tag_obj = Tag.objects.get(slug=slug, is_active=True, visibility=1)
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to get tag object %s"% str(e))
             raise Http404
         context = super(BlogTagListView, self).get(request, args, **kwargs)
         return context
@@ -588,11 +589,6 @@ class ShowCommentBoxView(TemplateView, LoadCommentMixin):
             visibility = int(request.GET.get('visibility',1))
             if visibility == 2:
                 self.template_name = 'talenteconomy/include/commentBox.tmpl.html'
-            elif visibility == 3:
-                if request.flavour == 'mobile':
-                    self.template_name = 'mobile/hrinsider/include/commentBox.tmpl.html'
-                else:
-                    self.template_name = 'hrinsider/include/commentBox.tmpl.html'
             self.visibility = visibility
 
             return super(self.__class__, self).get(request, args, **kwargs)

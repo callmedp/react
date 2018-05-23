@@ -36,9 +36,8 @@ function viewCommentOrderitem(oi_pk, ) {
     }
 };
 
-function giveFeedbackOrderitem(oi_pk, ) {
+function giveFeedbackOrderitem(oi_pk) {
     if (oi_pk){
-        console.log(oi_pk);
         $.ajax({
             url: '/dashboard/inbox-feedback/',
             type: "GET",

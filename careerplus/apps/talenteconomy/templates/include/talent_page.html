@@ -47,13 +47,10 @@
 {% endfor %}
 
 {% if page_obj.has_next %}
-<div id="talent_tag_load_more_id">
-  <div style='display:none'>
-  <form id="load-te-tag-form">
-    <input type="hidden" id="te_tag_page_id" name="page" value="{{page_obj.next_page_number}}">
-    <input type="hidden" id="te_tag_slug_id" name="slug" value="{{slug}}">
-  </form>
-  </div>
-  <button type="button" id="load-more-te-tag" class="btn btn-primary load-button "><i class="icon-load mr-10"></i>Load more</button>
+<div id="talent_load_more" style='display:none'>
+    <div>
+    <input type="hidden" id="talentpg_id" name="page" value="{{page_obj.next_page_number}}">
+    <input type="hidden" id="talentpg_slug" name="slug" value="{{slug}}">
+    </div>
 </div>
 {% endif %}

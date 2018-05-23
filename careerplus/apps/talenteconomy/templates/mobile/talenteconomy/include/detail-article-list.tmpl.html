@@ -15,22 +15,6 @@
     </span>
 </div>
 
-{% if amp %}
-
-{% else %}
-{% with main_article.tags.all as tags %}
-{% if tags %}
-<div class="tagging mt-30 mb-30">
-    <p>Tagged in</p>
-    {% for tag in tags %}
-    <a href="{% url "talent:te-articles-by-tag" tag.slug %}" title="{{tag.name}}">{{tag.name}}</a>
-    {% endfor %}
-</div>
-{% endif %}
-{% endwith %}
-
-{% endif%}
-
 <p class="mt-15">
     {% if amp %}
     <amp-img 
@@ -68,7 +52,7 @@
 <div class="tagging mt-30 mb-30">
     <p>Tagged in</p>
     {% for tag in tags %}
-    <a href="{% url "talent:te-articles-by-tag" tag.slug %}" title="{{tag.name}}">{{tag.name}}</a>
+    <a href="#">{{tag.name}}</a>
     {% endfor %}
 </div>
 {% endif %}
