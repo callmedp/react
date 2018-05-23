@@ -79,6 +79,8 @@ $(document).ready(function () {
               history.pushState(obj, obj.Title, obj.Url);
               document.title = data.title;
             }
+            checkedInitialRequired();
+            updateCartPrice();
           }
           
         },

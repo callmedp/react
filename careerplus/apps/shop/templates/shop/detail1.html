@@ -61,14 +61,12 @@
 {% endblock main_container %}
 
 
-
-
 {% block js_section %}
     {{block.super}}
     {% compress js %}
     <script src="{% static 'shinelearn/js/common/plugin.activeOnScroll.js' %}"></script>
-    <script src="{% static 'shinelearn/js/shop/detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/shop/detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/scroller.js' %}" type="text/javascript"></script>
     {% endcompress %}
 {% endblock js_section %}

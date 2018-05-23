@@ -225,23 +225,7 @@ function updateCartPrice(){
 
 }
 
-function cartScroller() {
-  var item = $('.price-box'),
-  height = item.height();
-  $(window).scroll(function(){
-      var $recommendProductDiv = $('.recomend-product-bg');
-      if ($recommendProductDiv.length && item.length) {
-          if (item.offset().top + height > $recommendProductDiv.offset().top - 50) {
-              item.css({'visibility': 'hidden'})
-          } else {
-              item.css({'visibility': 'visible'});
-          }
-      }
-  });
-}
-
-$(document).ready(function() {
-
+function checkedInitialRequired(){
     var req_selected = true;
     $('input[name="required_option"]').each(function(){
         if ($(this).is(':checked')){
@@ -267,7 +251,26 @@ $(document).ready(function() {
             return false;
         });
     }
+}
 
+function cartScroller() {
+  var item = $('.price-box'),
+  height = item.height();
+  $(window).scroll(function(){
+      var $recommendProductDiv = $('.recomend-product-bg');
+      if ($recommendProductDiv.length && item.length) {
+          if (item.offset().top + height > $recommendProductDiv.offset().top - 50) {
+              item.css({'visibility': 'hidden'})
+          } else {
+              item.css({'visibility': 'visible'});
+          }
+      }
+  });
+}
+
+$(document).ready(function(){
+
+    checkedInitialRequired();
     updateCartPrice();
 
     $(document).on( "click", 'input[name="radio"]', function(e){

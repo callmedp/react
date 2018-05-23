@@ -209,7 +209,6 @@
     <!-- other package start -->
     <div class="other-package-box">
       <span>Experienced by</span>
-      {% if prd_exp %}
         {% if sqs_main.id == sqs.id %}
         <a role="button" class="other-package selected" data-id="{{sqs_main.id}}" main-id="{{sqs_main.id}}">
             <p>
@@ -228,7 +227,6 @@
             </p>
           </a>
         {% endif %}
-      {% endif %}
 
       {% for package in pop_list|slice:"0:4"  %}
         {% if package.id == sqs.id %}
