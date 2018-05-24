@@ -901,9 +901,9 @@ $font-family:  'Roboto', sans-serif;
 
 // images
 //$path:        '/media/static/shinelearn/images/hr-insider/';
-$image-path: $path + 'sprite.png';
+$image-path: $path + 'images/hr-insider/sprite.png';
 
-$sprite: url($path + 'sprite.png') no-repeat;
+$sprite: url($path + 'images/hr-insider/sprite.png') no-repeat;
 $black-color: #000;
 $white-color: #fff;
 $primary-color: #333;
