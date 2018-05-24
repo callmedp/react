@@ -1,0 +1,66 @@
+header {
+  @include box(100%, 55px);
+  @include position(relative, 0 0 null null, 9);
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#3f51b5+0,495cc3+44,5366ce+100 */
+background: rgb(63,81,181); /* Old browsers */
+background: -moz-linear-gradient(left, rgba(63,81,181,1) 0%, rgba(73,92,195,1) 44%, rgba(83,102,206,1) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(left, rgba(63,81,181,1) 0%,rgba(73,92,195,1) 44%,rgba(83,102,206,1) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to right, rgba(63,81,181,1) 0%,rgba(73,92,195,1) 44%,rgba(83,102,206,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3f51b5', endColorstr='#5366ce',GradientType=1 ); /* IE6-9 */
+padding: 0 15px;
+  img {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+    height: 100%;
+    opacity: .15
+  }
+}
+
+.heading-back {
+  font-size: 1.250em;
+  color: $txt-white;
+  font-weight: 600;
+  margin: 15px 0 0;
+  line-height: 26px;
+}
+
+footer {
+  background-color: $bg-grey-eb;
+  bottom: 0;
+  font-size: 80%;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  color: $txt-grey-666;
+
+  a {
+    color: $txt-grey-666;
+    padding: 0 5px;
+  }
+}
+
+.header-taging {
+  li {
+    display: inline-block;
+    font-size: 14px;
+    margin: 3px 2px;
+
+    a {
+      @include border-radius (3px); 
+      background-color: $blue-opacity;
+      display: block;
+      padding: 5px 10px;
+      color: $txt-white;
+    }
+  }
+}
+
+
+header {
+  .btn-round {
+    @include border-radius(4px);
+  }
+}

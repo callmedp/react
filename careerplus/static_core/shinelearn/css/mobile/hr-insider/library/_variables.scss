@@ -1,0 +1,287 @@
+@import "../../../_path";
+// fonts
+
+$font-family: 'Roboto', sans-serif;
+
+$font-size-base :   0.875rem;
+$font-size-lg   :   1.25rem;
+$font-size-md   :   1rem;
+$font-size-sm   :   .875rem;
+$font-size-xs   :   .75rem;
+
+$font-weight-normal :   400;
+$font-weight-medium :   600;
+$font-weight-bold   :   700;
+
+$font-weight-base: $font-weight-normal;
+$line-height-base: 1.5;
+
+$font-family-base: 'Open Sans', sans-serif;
+
+
+// Colors
+//
+// Grayscale and brand colors for use across Bootstrap.
+
+// Start with assigning color names to specific hex values.
+$white:  #fff;
+$black:  #000;
+$blue:   #3f51b5;
+$red:    #d9534f;
+
+// text
+$txt-black:        $black;
+$txt-grey-333:     #333;
+$txt-grey-555:     #555;
+$txt-grey-5563:    #55636c;
+$txt-grey-666:     #666;
+$txt-grey-89:      #898989;
+$txt-grey-999:     #999;
+$txt-success:      #9dbc07;
+$txt-success-top:  #a2c000;
+$txt-grey-b7:      #b7b7b7;
+$txt-grey-c7:      #c7ddf3;
+$txt-grey-ddd:     #ddd;
+$txt-white-f1:     #f1f1f1;
+$txt-white:        $white; 
+$txt-white-ffe:    #ffefef;
+$txt-green:        #00a651;
+$txt-red:          #c81b1b;
+$text-blue:        $blue;
+
+
+// Blue shades
+$txt-blue:         #2f5ea6;
+$txt-blue-1f3:     #1f3d6e;
+
+// background
+$bg-black:         $black;
+$bg-blue:          $blue;
+$bg-white:         $white;
+$bg-grey-eb:       #ebebeb;
+$bg-grey-777:      #777777;
+$bg-grey-f1:       #f1f1f1;
+$bg-grey-ed:       #ededed;
+$bg-grey-f6:       #f6f7f9;
+$bg-grey-fc:       #fcfcfc;
+$bg-grey-f5:       #f5f5f5;
+$grey-e5:          #e5e5e5;
+$light-blue:       #f8fbff;
+
+$bg-pager: #4a5cc3;
+
+// border color
+$border-grey-f5:    #f5f5f5;
+$border-grey-6b:    #6b6b6b;
+$border-grey-f2:    #f2f2f2;
+$border-grey-c1:    #c1c1c1;
+$border-light-blue: #b9c2fc;
+$border-blue: $blue;
+
+// opacity color
+$blue-opacity: rgba(8,49,111, .4);
+$white-opacity: rgba(255,255,255, .4);
+
+
+// box shadow
+$box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+$box-shadow-2: 0px 0px 5px rgba(0, 0, 0, 0.2);
+$box-shadow-5: 0px 0px 15px rgba(0, 0, 0, 0.5);
+
+$error: #f34a38;
+
+
+// text shadow:
+
+
+// images
+// $path:        '/media/static/shinelearn/images/mobile/hr-insider/';
+$image-path:         $path + 'sprites.svg';
+$dropdown-default:   $path + 'dropdown.svg';
+$dropdown-white:   $path + 'dropdown-white.svg';
+$dropdown-black:   $path + 'dropdown-black.svg';
+
+// border radius
+$global-radius: 20px;
+
+
+%remove-space {
+  margin: 0;
+  padding: 0;
+}
+
+%half-width {
+  width: 50%;
+}
+
+%display-cell {
+  display: table-cell;
+}
+
+%ul-clear {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  padding: 0.4em 1em;
+  position: relative;
+}
+
+%button {
+  background-color: transparent;
+  background-image: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1em;
+  font-weight: normal;
+  line-height: 1.6;
+  margin-bottom: 0;
+  padding: 5px 15px;
+  text-align: center;
+  touch-action: manipulation;
+  user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+
+%tablecell-top {
+  display: table-cell;
+  vertical-align: top;
+}
+
+%absolute-position {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+%table-gap {
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 1%;
+}
+
+%stream-content {
+  display: table;
+  height: 100%;
+  padding: 0 15px;
+}
+
+%stream-head {
+  color: $txt-white;
+  font-weight: 400;
+  margin: 0;
+  text-transform: none;
+}
+
+%bold {
+  font-size: 700;
+}
+
+%hidden {
+  display: none;
+}
+
+%rel {
+  position: relative;
+}
+
+%full-width {
+  width: 100%;
+}
+
+%relative-middle {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+}
+
+%marginl--1 {
+  margin-left: -1px;
+}
+
+%clear {
+  clear: both;
+  display: table;
+  margin: 0;
+  padding: 0;
+}
+
+%clearfix {
+  &::after {
+    @extend %clear;
+    content: '';
+  }
+
+  &::before {
+    @extend %clear;
+    content: '';
+  }
+}
+
+%list-none {
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+	}
+}
+
+%horizonatal-center {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+
+%full-size {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+%all-center {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+%white-box {
+  box-shadow: $box-shadow;
+  background-color: $bg-white;
+  padding: 10px 15px;
+}
+
+
+%cruve {
+  position: absolute;
+  display: block;
+  content: "";
+  bottom: 0;
+}
+
+%edit-close {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  margin-top: -7px;
+}
+
+%sub-line {
+  height: 1px;
+  width: 20px;
+  display: inline-block;
+  background-color: #e1e1e1;
+  margin-bottom: 4px;
+}

@@ -11,6 +11,7 @@
         <link rel="shortcut icon" href="{% static 'shinelearn/images/fav_icon.png' %}">
         
     {% endblock meta_html %}
+
     {% block django_meta %}
     {% endblock django_meta %}
     {% block canonical_url %}
@@ -50,6 +51,7 @@
           gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
         </script>
     {% endblock GA %}
+
     {% block banner_ads %}
         <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
         <script>
@@ -105,6 +107,8 @@
       <!-- footer -->
   {% include 'basic/footer.html' %}      
 {% endblock footer %}
+
+
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 
 {% block js_section %}

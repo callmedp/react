@@ -1,0 +1,195 @@
+{% extends "hrinsider/base.html" %}
+{% load static humanize thumbnail compress %}
+{% load tz %}
+
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ object.get_absolute_url }}">
+{% endblock canonical_url %}
+
+{% block title %}
+   HR Conclave | Shine Learning
+{% endblock title %}
+    
+    {% block css_section %}
+        {{block.super}}
+        {% compress css %}
+        <link type="text/scss" href="{% static 'shinelearn/css/hr-insider/header-footer.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/hr-insider/hr-conclave.scss' %}" rel="stylesheet">
+        {% endcompress %}
+    {% endblock css_section %}
+
+    {% block hr_tabs %}
+      {% include './include/hr-tabs.html' with arrow_down="hr-conclave" %}  
+    {% endblock hr_tabs %}
+
+    {% block container %}
+
+        {% block breadcrumb %}
+            {% include './include/breadcrumb.html' %}
+        {% endblock breadcrumb %}
+        {% if obj %}
+            <section class="conclave-box">
+                <div class="primary-heading">{{conclave_type}} Conclave</div>
+                <div class="col-sm-12 conclave_head">
+                    <div class="row">
+                        <div class="col-sm-10 float-left">
+                            <h1>{{obj.heading}}</h1></div>
+                        <div class="col-sm-2 float-right">
+                            <img class="conclave-img" src="{{obj.image.url}}" alt="{{obj.image_alt}}">
+                        </div>
+                        <div class="col-sm-12 event_speakers">
+                            Event Speakers
+                        </div>
+
+                        {% for speaker in speakers %}
+                            <div class="col speakers">
+                                {% if speaker.image %}
+                                <img src="{{speaker.image.url}}">
+                                {% endif %}
+                                <strong>{{speaker.name}}</strong><em> {{speaker.designation}}</em> {{speaker.company}}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+
+            {% if conclave_type == 'Upcoming' %}
+            <section class="conclave-box-btm">
+                <div class="row">
+                    <div class="col">
+                        <figure class="calender-box">
+                            <i class="calender-icon-box">
+                                <span class="icon-conclave1"></span>
+                            </i>
+                            <figcaption>
+                                {{obj.start_date.date}}
+                                <em>Entry by {{obj.author}}</em>
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <div class="col">
+                        <figure class="time-box">
+                            <i class="time-icon-box">
+                                <span class="icon-conclave2"></span>
+                            </i>
+                            <figcaption>
+                                {{obj.start_date|localtime|date:"g:iA"}} Onwards
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <div class="col">
+                        <figure class="venue-box">
+                            <i class="venue-icon-box">
+                                <span class="icon-conclave3"></span>
+                            </i>
+                            <figcaption>
+                                {{obj.venue}}
+                                <!--a href="https://www.google.com/maps/place/The+Westin+Hyderabad+Mindspace/@17.442354,78.38179,14z/data=!4m5!3m4!1s0x0:0x7acc5d097f6e2e6!8m2!3d17.4423539!4d78.3817904?hl=en-US" target="_blank">Show on Map</a-->
+                            </figcaption>
+                        </figure>
+                    </div>
+
+                </div>
+            </section>
+            {% endif %}
+
+        <!-- main section start -->
+            <section class="conclave-box-content">
+                <div class="row">
+                    <!-- left content start -->
+                    <div class="col-sm-8">
+                        <div class="row">
+                            <div class="col-sm-12 conclave-content">
+                                {{obj.content|safe}}
+
+                                <div class="social-login noborder">
+                                <a class="icon-fb-social" id="article_share" target="_blank" article-slug="{{obj.slug}}"  href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{obj.get_absolute_url}}"></a>
+
+                                <a class="icon-twitter-social" id="article_share" target="_blank" article-slug="{{obj.slug}}" href="https://twitter.com/home?status=https://{{SITEDOMAIN}}{{obj.get_absolute_url}}"></a>
+
+                                <a class="icon-gplus-social" id="article_share" target="_blank" article-slug="{{obj.slug}}" href="https://plus.google.com/share?url={{SITEDOMAIN}}{{obj.get_absolute_url}}"></a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- right content start -->
+                    <div class="col-sm-4">
+                        <div class="widget">
+                            <a class="twitter-timeline" href="https://twitter.com/Shinedotcom?ref_src=twsrc%5Etfw">Tweets by Shinedotcom</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                        </div>
+
+                        <div class="widget">
+                            <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fshinedotcom&tabs=timeline&width=360&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="360" height="300" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+                        </div>
+                        {% if past_conclaves %}
+                            {% include './include/past_conclave.html' with past_conclaves=past_conclaves %}
+                        {% endif %}
+
+
+                    </div>
+                </div>
+                
+            </section>
+            {% if past_speakers %}
+            <section class="author-carousel-box mt-30">
+                <h2 class="secondary-heading">Past Speakers</h2>
+                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+
+                        {% for speaker_slide in past_speakers %}
+
+                        <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+                            <div class="row">
+                                {% for speaker in speaker_slide %}
+                                {% if speaker %}
+                                <div class="col-sm-2 author-carousel">
+                                    <a class="box-panel">
+                                        <figure>
+                                            {% if speaker.image %}
+                                            <i>
+                                                <img src="{{speaker.image.url}}">
+                                            </i>
+                                            {% endif %}
+                                            <figcaption>
+                                                <strong class="author-info author-info-primary">{{speaker.name}}</strong>
+                                                <strong class="author-info author-info-secondary">{{speaker.count}} articles</strong>
+                                            </figcaption>
+                                        </figure>
+                                    </a>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+                </div>
+            </section>
+            {% endif %}
+        {% endif %}
+
+    {% endblock container %}
+
+    {% block js_section %}
+       {{block.super}}
+       {% compress js %}
+           <script src="{% static 'shinelearn/js/hrinsider/share.js' %}"></script>
+       {% endcompress %}
+    {% endblock js_section %}

@@ -91,6 +91,142 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
         return {"meta": meta}
 
 
+class TETagArticleView(TemplateView, BlogMixin):
+
+    template_name = "talenteconomy/tag_article.html"
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 10
+        self.tag_obj = None
+
+    def get(self, request, *args, **kwargs):
+        slug = kwargs.get('slug', None)
+        self.page = request.GET.get('page', 1)
+        try:
+            self.tag_obj = Tag.objects.get(slug=slug, is_active=True)
+        except Exception:
+            raise Http404
+
+        context = super(TETagArticleView, self).get(request, args, **kwargs)
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            TETagArticleView, self).get_context_data(**kwargs)
+        tag_obj = self.tag_obj
+
+        categories = Category.objects.filter(
+            is_active=True, visibility=2).order_by('-name')
+
+        authors = Author.objects.filter(
+            visibility=2, is_active=1, blog__visibility=2,
+            blog__status=1).annotate(
+            no_of_blog=Count('blog')).order_by('-no_of_blog')
+
+        author_list = zip_longest(*[iter(authors)] * 5, fillvalue=None)
+
+        main_articles = tag_obj.blog_set.filter(
+            status=1, visibility=2).order_by('-publish_date')
+
+        recent_articles = self.scrollPagination(
+            paginated_by=self.paginated_by, page=self.page,
+            object_list=main_articles)
+
+        # paginator = Paginator(main_articles, self.paginated_by)
+        # page_data = self.pagination(paginator, self.page)
+
+        popular_courses = BlogMixin().get_product(tag_obj.slug)
+        detail_article = None
+        if recent_articles:
+            detail_article = render_to_string('include/talent_page.html', {
+                "page_obj": recent_articles,
+                "slug": tag_obj.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
+        context.update({
+            # "recent_page": page_data.get('page'),
+            # "recent_end": page_data.get('page_end'),
+            # "recent_middle": page_data.get('middle'),
+            # "recent_begin": page_data.get('begin'),
+            # "recent_articles": detail_obj
+            "detail_article": detail_article,
+        })
+        context.update({
+            "authors": authors,
+            'authors_list': list(author_list),
+            "tag": tag_obj,
+            "categories": categories,
+            "popular_courses": popular_courses,
+        })
+        context.update(self.get_breadcrumb_data())
+        context['meta'] = tag_obj.as_meta(self.request)
+        context.update(self.get_meta_details())
+
+        return context
+
+    def get_breadcrumb_data(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy"})
+        breadcrumbs.append({"url": None, "name": self.tag_obj.name})
+        data = {"breadcrumbs": breadcrumbs}
+        return data
+
+    def get_meta_details(self):
+        name = self.tag_obj.name
+        meta = Meta(
+            title=name + " - Career & Certification Guidance @ Shine Learning",
+            description="Read Latest Articles on %s. Find the Most Relevant Information, News and other career guidance for %s at Shine Learning" %(name,name),
+        )
+        return {"meta": meta}
+
+
+class TETagLoadmoreArticleView(TemplateView, BlogMixin):
+
+    template_name = "include/talent_page.html"
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 10
+        self.tag_obj = None
+
+    def get(self, request, *args, **kwargs):
+        slug = request.GET.get('slug', None)
+        self.page = request.GET.get('page', 1)
+        if request.is_ajax():
+            try:
+                self.tag_obj = Tag.objects.get(slug=slug, is_active=True)
+            except Exception:
+                return ''
+
+            context = super(TETagLoadmoreArticleView, self).get(request, args, **kwargs)
+            return context
+        return ''
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            TETagLoadmoreArticleView, self).get_context_data(**kwargs)
+        tag_obj = self.tag_obj
+
+        tag_articles = tag_obj.blog_set.filter(
+            status=1, visibility=2).order_by('-publish_date')
+
+        tag_articles = self.scrollPagination(
+            paginated_by=self.paginated_by, page=self.page,
+            object_list=tag_articles)
+
+        # detail_article = None
+        # if recent_articles:
+        #     detail_article = render_to_string('include/talent_page.html', {
+        #         "page_obj": recent_articles,
+        #         "slug": tag_obj.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
+        context.update({
+            'page_obj': tag_articles,
+            'slug': tag_obj.slug,
+            "SITEDOMAIN": settings.SITE_DOMAIN
+        })
+        return context
+
+
 class TEBlogCategoryListView(TemplateView, BlogMixin):
     template_name = "talenteconomy/category.html"
 
@@ -153,6 +289,7 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
             # "recent_middle": page_data.get('middle'),
             # "recent_begin": page_data.get('begin'),
             # "recent_articles": detail_obj
+            "recent_articles": recent_articles,
             "detail_article": detail_article,
         })
         context.update({
