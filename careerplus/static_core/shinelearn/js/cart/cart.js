@@ -211,6 +211,47 @@ function toggler(divId) {
 
 function updateCartPrice(){
 
+    $('input[name="radio"]').each(function(){
+        if ($(this).is(':checked')){
+            var var_price, actual_price;
+            try{
+                var_price =  parseFloat($(this).attr('data-price'));
+                if(typeof $(this).attr('actual-price') != "undefined"){
+                    actual_price =  parseFloat($(this).attr('actual-price'));
+                } else{
+                    actual_price =  parseFloat($(this).data('actual-price'));
+                }
+
+                // update current price
+                var str_price = 'Rs. ' + var_price.toString() + '/- ' + '<small>(+taxes)</small>';
+                $('#total-price').html(str_price);
+                $('#total-price').attr("sum-price", var_price);
+
+                if (actual_price > var_price){
+                    var show_price = 'Rs. ' + actual_price.toString() + '/';
+                    $('#id-total-actual-price').text(show_price);
+                    $('#id-total-actual-price').attr("total-actual-price", actual_price);
+
+                    try{
+                        var per_off;
+                        per_off = actual_price - var_price;
+                        per_off = (per_off/actual_price)*100
+                        per_off = Math.round(per_off);
+                        $('#id_percentage-off').attr("percentage-off", per_off);
+                        var str_off = ' ' + per_off.toString() + '%' + ' ' + 'off';
+                        $('#id_percentage-off').text(str_off);
+
+                    }catch(err){
+                        console.log(err);
+                    }
+                }
+
+            }catch(err){
+                console.log(err);
+            }
+        }
+    });
+
     $('input[name="required_option"]').each(function(){
         if ($(this).is(':checked')){
             updateCheckedPrice(this);
@@ -270,7 +311,7 @@ function cartScroller() {
 
 $(document).ready(function(){
 
-    checkedInitialRequired();
+    checkedInitialRequired();  // for country specific products
     updateCartPrice();
 
     $(document).on( "click", 'input[name="radio"]', function(e){

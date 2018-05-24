@@ -167,8 +167,6 @@ class ProductInformationMixin(object):
 
     def solar_faq(self, product):
         structure = json.loads(product.pFAQs)
-
-
         return structure
 
     def get_recommendation(self, product):
