@@ -305,12 +305,18 @@ class ForgotPasswordResetView(ShineCandidateDetail, FormView):
                         messages.success(
                             request, 'Client Authentication Failed')
                         return self.form_valid(form)
+                    else:
+                        messages.success(request, 'Something went wrong, try again after sometimes')
+                        return self.form_valid(form)
                 elif not email_exist['exists']:
                     messages.success(request, 'email does not exist')
                     return self.form_valid(form)
+                else:
+                    messages.success(request, 'Something went wrong, try again after sometimes')
+                    return self.form_valid(form)
             else:
                 messages.error(
-                    request, 'Password reset has not been unsuccessful.')
+                    request, 'Please fill the password reset form correctly.')
                 return self.form_invalid(form)
         else:
             messages.error(
