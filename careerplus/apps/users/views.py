@@ -296,19 +296,19 @@ class ForgotPasswordResetView(ShineCandidateDetail, FormView):
                 data = request.POST
                 email_exist = RegistrationLoginApi.check_email_exist(
                     data.get('email'))
-                if email_exist['exists']:
+                if email_exist.get('exists'):
                     pass_resp = RegistrationLoginApi.reset_update(data)
-                    if pass_resp['response']:
+                    if pass_resp.get('response'):
                         messages.success(request, 'Password has been reset.')
                         return self.form_valid(form)
-                    elif pass_resp['status_code'] == 400:
+                    elif pass_resp.get('status_code') == 400:
                         messages.success(
                             request, 'Client Authentication Failed')
                         return self.form_valid(form)
                     else:
                         messages.success(request, 'Something went wrong, try again after sometimes')
                         return self.form_valid(form)
-                elif not email_exist['exists']:
+                elif not email_exist.get('exists'):
                     messages.success(request, 'email does not exist')
                     return self.form_valid(form)
                 else:
