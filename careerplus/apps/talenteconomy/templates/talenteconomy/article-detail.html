@@ -45,10 +45,13 @@
         <!-- left content start -->
         <div class="col-md-9 col-sm-12">
 
+          <div id="related-container">
+            {{detail_article}}
+          </div>
+          <div id="id_ajax_article"></div>
           <!-- content start -->
-          {% include "./include/detail-article-list.tmpl.html" %}
-
         </div>
+
 		<!-- left content end -->
 
 		<!-- right content start -->
@@ -219,10 +222,17 @@
     <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
+    {% endcompress %}
+
+    {% compress js inline %}
     <script>
-    	$(function(){
-    		Article.init();
-    	});
+      $(function(){
+        Article.init();
+      });
+      if (window.location.hash == '#_=_') {
+          open(location, '_self').close();
+      }
+      showArticleOnScroll.scroll(); /* for calling infinite articles */
     </script>
     {% endcompress %}
 {% endblock js_section %}

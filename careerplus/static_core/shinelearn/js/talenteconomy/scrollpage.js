@@ -11,31 +11,44 @@ var showTalentpageOnScroll = (function(){
             return;
         };
 
+
+
         $(window).scroll(function() {
-            var position = $(window).scrollTop();
-            var bottom = ($(document).height() - $(window).height())*0.8;
-            if (position >= bottom) {
+
+            if ($(window).scrollTop() > $('#id_ajax_talentpage').scrollTop()) {
                makeAjax();
             };
-         });
+
+            // var position = $(window).scrollTop();
+            // if (window.CURRENT_FLAVOUR == 'mobile'){
+            //     var bottom = ($(document).height() - $(window).height())*0.8;
+            // }
+            // else{
+            //     var bottom = ($(document).height() - $(window).height())*0.8;
+            // }
+            
+            // if (position >= bottom) {
+            //    makeAjax();
+            // };
+        });
     };
 
     function makeAjax() {
-        page = $("#talentpg_id").val();
-        slug = $("#talentpg_slug").val();
+        page = $("#te_cat_pg_id").val();
+        slug = $("#te_cat_slug").val();
         if(!ajaxCalled){
             if (page != undefined & page != prev_page){
                 prev_page = page;
                 data = "?page="+ page+ "&slug=" + slug;
                 ajaxCalled = true;
                 $.ajax({
-                    url: "/talenteconomy/ajax/talent-detail-loading/" + data,
+                    url: "/talenteconomy/ajax/te-category-article-load/" + data,
                     type: "GET",
                     dataType: "json",
                     success: function(data) {
-                        $("#talent_load_more").remove();
+                        $("#talent_cat_load_more").remove();
                         // var dynamicDiv = $('<div/>',{'class' : 'cls_ajax_article','html' : data.article_detail,'data-url':data.url,'data-title':data.title});
-                        $('#related-talent-container').append(data.article_detail);
+                        $('#related-talent-container').append(data.article_list);
                         ajaxCalled = false;
                     },
                     failure: function(response){}
