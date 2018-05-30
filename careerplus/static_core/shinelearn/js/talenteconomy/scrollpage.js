@@ -18,22 +18,19 @@ var showTalentpageOnScroll = (function(){
             // console.log($(window).scrollTop());
             // console.log($('#id_ajax_talentpage').offset().top);
             // console.log($(window).height());
+            // console.log($('#id_ajax_talentpage').height())
 
-            if ($(window).scrollTop() >= ($('#id_ajax_talentpage').offset().top - ajaxOffSetDistance)){
+            var position = $(window).scrollTop();
+            if (window.CURRENT_FLAVOUR == 'mobile'){
+                var bottom = ($(document).height() - $(window).height())*0.8;
+            }
+            else{
+                var bottom = ($(document).height() - $(window).height())*0.8;
+            }
+            
+            if (position >= bottom) {
                makeAjax();
             };
-
-            // var position = $(window).scrollTop();
-            // if (window.CURRENT_FLAVOUR == 'mobile'){
-            //     var bottom = ($(document).height() - $(window).height())*0.8;
-            // }
-            // else{
-            //     var bottom = ($(document).height() - $(window).height())*0.8;
-            // }
-            
-            // if (position >= bottom) {
-            //    makeAjax();
-            // };
         });
     };
 
