@@ -71,7 +71,9 @@
 {% endif %}
 <!-- contributors end -->
 {% endblock container %}
+
 {% block js_section %}
+    
     {{ block.super }}
     {% compress js %}
     <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
@@ -79,11 +81,11 @@
     {% endcompress %}
 
     {% compress js inline %}
-    <script>
-      $(function(){
-        Article.init();
-      });
-      showTalentpageOnScroll.scroll(); /* for calling infinite articles */
-    </script>
+      <script>
+        $(function(){
+          Article.init();
+        });
+        showTalentpageOnScroll.scroll(); /* for calling infinite articles */
+      </script>
     {% endcompress %}
 {% endblock js_section %}
