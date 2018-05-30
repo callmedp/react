@@ -2,7 +2,7 @@ from django.views.generic import ListView, UpdateView
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.db.models import Q
-
+import logging
 
 from blog.mixins import PaginationMixin
 
@@ -76,6 +76,7 @@ class CountryListView(ListView, PaginationMixin):
 		try:
 			if self.query:
 				queryset = queryset.filter(Q(name__icontains=self.query) | Q(code2__icontains=self.query) | Q(code3__icontains=self.query) | Q(phone__icontains=self.query))
-		except:
+		except Exception as e:
+			logging.getLogger('error_log').error('unable to get queryset%s' % str(e))
 			pass
 		return queryset

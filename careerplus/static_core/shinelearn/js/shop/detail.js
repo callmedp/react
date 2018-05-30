@@ -1,6 +1,16 @@
 
 
 $(document).ready(function () {
+
+  // $(window).on('load',function(){
+  //   $('#login-model').modal('show');
+  // });
+
+  // $(document).on("click", "#login-now-button", function() {
+  //   $('#login-model').modal('show');
+  // });
+
+
     var processing = false;
   
     function LoadMoreProductReview(pv_id) {
@@ -45,10 +55,48 @@ $(document).ready(function () {
       }
     };
 
+
+    $(document).on("click", ".other-product", function() {
+      var data_pk = $(this).attr('data-id');
+      var main_pk = $(this).attr('main-id');
+
+      data = "?main_pk="+ main_pk + "&obj_pk=" + data_pk;
+      $.ajax({
+        url: "/shop/product/content-by-ajax/" + data,
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+          // console.log("success");
+          if (data.status == 1 ){
+            currentUrl = top.window.location.pathname;
+            $("#id-detail-body").empty();
+            $('#id-detail-body').html(data.detail_content);
+            if (typeof (history.pushState) != "undefined") {
+              // console.log('hello');
+              // console.log(data.url);
+              // console.log(data.title);
+              var obj = { Title: data.title, Url: data.url };
+              history.pushState(obj, obj.Title, obj.Url);
+              document.title = data.title;
+            }
+            checkedInitialRequired();
+            updateCartPrice();
+          }
+          
+        },
+        failure: function(response){
+          console.log("failure");
+        }
+      });
+
+    });
+
+
     $(document).on("click", ".review-load-more", function() {
    
            LoadMoreProductReview($(this).attr('data-product'));
       });
+
     
     $.validator.addMethod("indiaMobile", function(value, element) {
         var country_code = $("input[name=country_code]").val(); //$('#call_back_country_code-id').val();
@@ -57,6 +105,10 @@ $(document).ready(function () {
         }
         return true;
     });
+    
+    
+
+  $(document).on('click', '#id_callback', function() {
     $('#callback_form').validate({
         rules:{
                 name:{
@@ -91,13 +143,14 @@ $(document).ready(function () {
             
         },
         highlight:function(element, errorClass) {
-            $(element).siblings('.error').removeClass('hide_error'); 
+            $(element).closest('.form-group').addClass('error');
         },
         unhighlight:function(element, errorClass) {
-            $(element).siblings('.error').addClass('hide_error');    
+            $(element).closest('.form-group').removeClass('error');
+            $(element).siblings('.error-txt').html('');      
         },
         errorPlacement: function(error, element){
-            $(element).siblings('.error').html(error.text());
+            $(element).siblings('.error-txt').html(error.text());
         },
         ignore : '',
         submitHandler: function(form){
@@ -131,6 +184,11 @@ $(document).ready(function () {
               });
 
         }
+    });
+
+    var flag = $('#callback_form').valid();
+    if (flag){
+      $('#callback_form').submit();}
   });
 
   
@@ -207,6 +265,16 @@ $(document).ready(function () {
           $('html,body').animate({scrollTop : $(''+target.attr('href')).offset().top - 30},1000);
         }
       });
+      
+      function getUrlVar(key){
+        var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
+        return result && unescape(result[1]) || ""; 
+      }
+      var res = getUrlVar('query');
+      if (res == 'True')
+      {
+        $('#detailpage').modal('show');
+      }
         
   });
-    
+          

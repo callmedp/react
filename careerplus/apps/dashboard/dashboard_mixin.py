@@ -131,7 +131,7 @@ class DashboardInfo(object):
                             file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random()*9999)) \
                                 + '_' + timezone.now().strftime('%Y%m%d') + extention
                             full_path = '%s/' % str(order.pk)
-                            if not setting.IS_GCP:
+                            if not settings.IS_GCP:
                                 if not os.path.exists(settings.RESUME_DIR + full_path):
                                     os.makedirs(settings.RESUME_DIR + full_path)
                                 dest = open(

@@ -1,0 +1,143 @@
+{% extends "hrinsider/base.html" %}
+{% load static humanize thumbnail compress %}
+{% load tz %}
+
+     {% block django_meta %}
+        {% include 'meta/meta.html' %}
+     {%  endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ object.get_absolute_url }}">
+    {% endblock canonical_url %}
+
+     {% block title %}
+      Job Fair | Shinelearning
+    {% endblock title %}
+
+    {% block css_section %}
+        {{block.super}}
+        {% compress css %}
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/hr-insider/blog.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/hr-insider/slick.scss' %}" rel="stylesheet">
+        {% endcompress %}
+    {% endblock css_section %}
+
+    {% block hr_tabs %}
+      {% include './include/hr-tabs.html' with arrow_down="jobfair" %}
+    {% endblock hr_tabs %}
+
+    {% block container %}
+
+    <!-- HR Insider -->
+    <section class="content-box">
+      <ul class="breadcrumb mb-5">
+        {% include './include/breadcrumb.html' %}
+      </ul><!-- /. breadcrumb -->
+
+
+      <!-- Job Fair -->
+      <div class="talent-gr mt-15 rel">
+        <div class="job-fair-content">
+          <div class="text-center">
+            {% if obj.image %}
+            <span><img src="{{obj.image.url}}" width="129" height="110"></span>
+            {% endif %}
+            <h1>{{obj.display_name}}</h1>
+          </div>
+          {% if jobfair_type == 'Upcoming' %}
+          <ul class="mt-20">
+            <li><figure class="icon-calendar"></figure>{{obj.venue}}</li>
+            <li><figure class="icon-clock"></figure>{{obj.start_date.date}} {% if obj.start_date != obj.end_date %}To {{obj.end_date.date}}{% endif %}</li>
+            <li><figure class="icon-location"></figure>{{obj.start_date|localtime|date:"g:iA"}} to {{obj.end_date|localtime|date:"g:iA"}}</li>
+          </ul>
+          {% endif %}
+        </div><!-- /. job-fair-content -->
+
+        <img src="{% static "shinelearn/images/mobile/hr-insider/job-fair.jpg" %}" class="img-responsive opacity-img-1">
+      </div><!-- /. Job Fair -->
+
+      <article class="mt-20 job-fair">
+
+        {% if jobfair_type == 'Past' %}
+          {{obj.content|safe}}
+        {% endif %}
+
+        {% if obj.sponsor_img and jobfair_type == 'Upcoming' %}
+            <img src="{{obj.sponsor_img.url}}" alt="sponsor-img">
+        {% endif %}
+
+        {% comment %}
+        <div class="text-center">
+          <h2 class="text-upper text-center">Presenting Sponsor </h2>
+          <div class="logo-box table">
+            <span class="table-cell"><img src="images/sponsor-1.jpg"></span>
+            <span class="table-cell"><img src="images/sponsor-2.jpg"></span>
+          </div>
+        </div><!-- /. Presenting Sponsor -->
+
+        <div class="flex-box mt-30">
+          <div class="flex-item rel pt-30">
+            <h2 class="text-upper">Banking Partner</h2>
+            <div class="logo-box text-center">
+              <span class="table-cell"><img src="images/banking.jpg"></span>
+            </div>
+          </div><!-- /. Banking -->
+
+          <div class="flex-item text-center rel pt-30">
+            <h2 class="text-upper">Radio Partner</h2>
+            <div class="logo-box">
+              <span class="table-cell"><img src="images/radio.jpg"></span>
+              <p></p>
+            </div>
+          </div><!-- /. Radio -->
+        </div><!-- /. flex box -->
+
+
+        <div class="flex-box mt-30">
+          <div class="flex-item rel pt-30">
+            <h2 class="text-upper">FMCG Partner</h2>
+            <div class="logo-box text-center">
+              <span class="table-cell pb-15"><img src="images/fmcg.jpg"></span>
+              <p class="fs-12">Looking for Experienced Candidates in similar Industry for Engineering (Mechanical and Food Technology), Finance, HR and Sales Positions. North East Candidates preferred.</p>
+            </div>
+          </div><!-- /. FMCG Partner -->
+
+          <div class="flex-item text-center rel pt-30">
+            <h2 class="text-upper">Pharma Partner</h2>
+            <div class="logo-box">
+              <span class="table-cell pb-15"><img src="images/pharma.jpg"></span>
+              <p class="fs-12">"Hiring Medical Representatives at Kolkata & West Bengal for few Pharma majors. Graduates below 26 with Good Communication Skills"</p>
+            </div>
+          </div><!-- /. Pharma Partner -->
+        </div><!-- /. flex box -->
+
+        <div class="text-center mt-30">
+          <h2 class="text-upper text-center">Participating Companies</h2>
+          <div class="logo-box table">
+            <div class="table">
+              <span class="table-cell"><img src="images/participating-1.jpg"></span>
+              <span class="table-cell"><img src="images/participating-2.jpg"></span>
+              <span class="table-cell"><img src="images/participating-3.jpg"></span>
+            </div>
+            <p class="pb-0"><img src="images/participating-4.jpg"></p>
+
+          </div>
+        </div><!-- /. Presenting Sponsor -->
+        {% endcomment %}
+
+      </article><!-- /. Article -->      
+
+    </section><!-- /. HR Insider here -->
+
+
+    {% include './include/contact-info.html' %}
+
+  
+    {% endblock container %}
+
+    {% block js_section %}
+      {{block.super}}
+      {% compress js %}
+        <script src="{% static 'shinelearn/js/hrinsider/share.js' %}"></script>
+      {% endcompress %}
+    {% endblock js_section %}

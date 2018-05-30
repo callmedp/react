@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from cart.models import Cart
+import logging
 from .models import (
     Wallet, RewardPoint, ECash,
     WalletTransaction, ECashTransaction, PointTransaction)
@@ -34,7 +35,7 @@ class WalletRedeemView(APIView, CartMixin):
         cart_obj = None
         cart_pk = request.session.get('cart_pk')
         try:
-            cart_obj = Cart.objects.get(pk=cart_pk)
+            cart_obj = Cart.objects.select_related('coupon').get(pk=cart_pk)
         except Cart.DoesNotExist:
             return Response(
                 {'success': 0,
@@ -127,7 +128,8 @@ class WalletRedeemView(APIView, CartMixin):
             return Response(
                 {'success': True,'msg': 'Successfully Redeemed'
                  }, status=200, content_type='application/json')
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to redeem the points %s' % str(e))
             return Response(
                 {'success': 0,
                  'error': 'Try after some Time'
@@ -188,7 +190,8 @@ class WalletRemoveView(APIView, CartMixin):
                  }, status=200, content_type='application/json')
         
                
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to remove %s' % str(e))
             return Response(
             {'success': 0,
              'error': 'Try after some Time'

@@ -1,4 +1,5 @@
 import logging
+from django.db.models import F
 
 from django.views.generic import FormView, ListView, UpdateView
 from django.contrib import messages
@@ -73,6 +74,7 @@ class CommentModerateView(UpdateView):
                 return self.form_invalid(form)
         return self.form_invalid(form)
 
+
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))
 class CommentModerateListView(ListView, PaginationMixin):
@@ -109,20 +111,21 @@ class CommentModerateListView(ListView, PaginationMixin):
             comment_list = request.POST.getlist('table_records', [])
             action_type = int(request.POST.get('action_type', '0'))
             comment_objs = Comment.objects.filter(id__in=comment_list)
+
+            blg_list=comment_objs.values_list('blog__id',flat=True)
+
+
+
+
             if action_type == 0:
                 messages.add_message(request, messages.ERROR, 'Please select valid action first')
             elif action_type == 1:
-                for obj in comment_objs:
-                    obj.is_published = True
-                    obj.save()
-                    blog = obj.blog
-                    blog.comment_moderated += 1
-                    blog.save()
+                comment_objs.update(is_published=True)
+                Blog.objects.filter(id__in=blg_list).update(comment_moderated=F('comment_moderated') + 1)
+
                 messages.add_message(request, messages.SUCCESS, str(len(comment_list)) + ' Comments are published.')
             elif action_type == 2:
-                for obj in comment_objs:
-                    obj.is_removed = True
-                    obj.save()
+                comment_objs.update(is_removed=True)
                 messages.add_message(request, messages.SUCCESS, str(len(comment_list)) + ' Comments removed.')
         except Exception as e:
             messages.add_message(request, messages.ERROR, str(e))
@@ -139,6 +142,7 @@ class CommentModerateListView(ListView, PaginationMixin):
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e)) 
         return queryset
+
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))
@@ -184,6 +188,7 @@ class ArticleUpdateView(UpdateView):
                 messages.add_message(request, messages.ERROR, 'Blog %s Not Updated. Due to %s' % (self.object.id, str(e)))
                 return self.form_invalid(form)
         return self.form_invalid(form)
+
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))
@@ -244,7 +249,7 @@ class ArticleListView(ListView, PaginationMixin):
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
         self.sel_status = int(request.GET.get('status', '-1'))
         self.sel_p_cat = request.GET.get('p_cat', '')
         self.sel_writer = request.GET.get('author', '')
@@ -268,17 +273,23 @@ class ArticleListView(ListView, PaginationMixin):
             "sel_status": self.sel_status,
             "sel_p_cat": self.sel_p_cat,
             "sel_writer": self.sel_writer,
-            "visibility":self.visibility,
+            "visibility": self.visibility,
         })
         return context
 
     def get_queryset(self):
         queryset = super(self.__class__, self).get_queryset()
-        visibility = [3]
+        visibility = []
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(1)
         if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(2)
+
+        if has_group(user=self.request.user, grp_list=[settings.HR_INSIDER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(3)
+            visibility.append(4)
+            visibility.append(5)
+
         queryset = queryset.filter(visibility__in=visibility)
 
         try:
@@ -317,7 +328,8 @@ class ArticleListView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related('p_cat', 'user', 'created_by', 'last_modified_by')
+        return queryset.select_related('p_cat', 'user', 'created_by', 'last_modified_by').order_by('-last_modified_on')
+
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))
@@ -363,6 +375,7 @@ class CategoryUpdateView(UpdateView):
                 return self.form_invalid(form)
         return self.form_invalid(form)
 
+
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))
 class CategoryListView(ListView, PaginationMixin):
@@ -393,11 +406,16 @@ class CategoryListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(self.__class__, self).get_queryset()
-        visibility = [3]
+        visibility = []
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(1)
         if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(2)
+        if has_group(user=self.request.user, grp_list=[settings.HR_INSIDER, settings.PRODUCT_GROUP_LIST]):
+            visibility.append(3)
+            visibility.append(4)
+            visibility.append(5)
+
         queryset = queryset.filter(visibility__in=visibility)
         
         try:
@@ -406,7 +424,8 @@ class CategoryListView(ListView, PaginationMixin):
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
-        return queryset
+        return queryset.order_by('-last_modified_on')
+
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))
@@ -447,6 +466,7 @@ class CategoryAddView(FormView):
                 messages.add_message(request, messages.ERROR, 'Category Not Created. Due to %s' % (str(e)))
                 return self.form_invalid(form)
         return self.form_invalid(form)
+
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))
@@ -521,20 +541,15 @@ class TagListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(self.__class__, self).get_queryset()
-        visibility = [3]
-        if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
-            visibility.append(1)
-        if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
-            visibility.append(2)
-        queryset = queryset.filter(visibility__in=visibility)
-        
+
         try:
             if self.query:
                 queryset = queryset.filter(Q(name__icontains=self.query))
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
-        return queryset
+        return queryset.order_by('-last_modified_on')
+
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.BLOGGER_GROUP_LIST]))
@@ -695,11 +710,15 @@ class AuthorListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(self.__class__, self).get_queryset()
-        visibility = [3]
+        visibility = []
         if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(1)
         if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
             visibility.append(2)
+
+        if has_group(user=self.request.user, grp_list=[settings.HR_INSIDER, settings.PRODUCT_GROUP_LIST]):
+            visibility += [3, 4, 5]
+
         queryset = queryset.filter(visibility__in=visibility)
         
         try:
@@ -708,4 +727,4 @@ class AuthorListView(ListView, PaginationMixin):
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
-        return queryset
+        return queryset.order_by('-last_modified_on')

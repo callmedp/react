@@ -1,5 +1,4 @@
 import csv
-import logging
 from io import StringIO
 from collections import OrderedDict
 from django.core.management.base import BaseCommand
@@ -7,7 +6,7 @@ from django.utils import timezone
 from django.conf import settings
 from order.models import Order
 from emailers.email import SendMail
-
+import logging
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -57,8 +56,9 @@ def close_order_report():
                 from_email=send_dict.get('from_email', None),
                 attachments=[file_name, csvfile.getvalue(), 'text/csv'],
                 mimetype='text/csv')
-        logging.getLogger('info_log').info(
-            "{} orders are closed out of {}".format(
-                closed_order, paid_orders.count()))
+            logging.getLogger('info_log').info(
+                "{} orders are closed out of {}".format(
+                    closed_order, paid_orders.count()))
     except Exception as e:
+        logging.getLogger('error_log').error('unable SENND order closer report%s' % str(e))
         raise e

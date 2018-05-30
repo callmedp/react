@@ -1,7 +1,8 @@
 import json
 from django.shortcuts import render
 from itertools import zip_longest
-        
+import logging
+
 from django.views.generic import (
     TemplateView,
     DetailView,
@@ -25,6 +26,7 @@ from users.forms import (
     PasswordResetRequestForm
 )
 
+
 class TalentEconomyLandingView(TemplateView, BlogMixin):
     model = Blog
     template_name = "talenteconomy/landing.html"
@@ -40,25 +42,34 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        categories = Category.objects.filter(is_active=True, visibility=2).order_by('-name')
+        categories = Category.objects.filter(
+            is_active=True, visibility=2).order_by('-name')
 
-        article_list = Blog.objects.filter(status=1, visibility=2).select_related('p_cat','author').order_by('-publish_date')[:10]
-        top_article_list = Blog.objects.filter(status=1, visibility=2).select_related('p_cat','author')[:9]
+        article_list = Blog.objects.filter(
+            status=1, visibility=2).select_related(
+            'p_cat', 'author').order_by('-publish_date')[:10]
+        top_article_list = Blog.objects.filter(
+            status=1, visibility=2).select_related('p_cat', 'author')[:9]
 
-        authors = Author.objects.filter(visibility=2,blog__visibility=2,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
-        author_list = zip_longest(*[iter(authors)]*5, fillvalue=None)
-        
+        authors = Author.objects.filter(
+            visibility=2, blog__visibility=2,
+            blog__status=1).annotate(
+            no_of_blog=Count('blog')).order_by('-no_of_blog')
+        author_list = zip_longest(*[iter(authors)] * 5, fillvalue=None)
+
         top_3_cats = [article.p_cat.slug for article in top_article_list][:3]
         top_cats = '+'.join(top_3_cats)
         popular_courses = self.get_product(top_cats)
-        
+
         context.update({
-        'top_article_list':[top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
-        'categories': categories,
-        'article_list': article_list,
-        'popular_courses':popular_courses,
-        'authors':authors,
-        'authors_list': list(author_list)
+            'top_article_list': [
+                top_article_list[:3], top_article_list[3:6],
+                top_article_list[6:9]],
+            'categories': categories,
+            'article_list': article_list,
+            'popular_courses': popular_courses,
+            'authors': authors,
+            'authors_list': list(author_list)
         })
 
         context.update(self.get_breadcrumb_data())
@@ -79,7 +90,144 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
         )
         return {"meta": meta}
 
-class TEBlogCategoryListView(TemplateView, PaginationMixin):
+
+class TETagArticleView(TemplateView, BlogMixin):
+
+    template_name = "talenteconomy/tag_article.html"
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 10
+        self.tag_obj = None
+
+    def get(self, request, *args, **kwargs):
+        slug = kwargs.get('slug', None)
+        self.page = request.GET.get('page', 1)
+        try:
+            self.tag_obj = Tag.objects.get(slug=slug, is_active=True)
+        except Exception:
+            raise Http404
+
+        context = super(TETagArticleView, self).get(request, args, **kwargs)
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            TETagArticleView, self).get_context_data(**kwargs)
+        tag_obj = self.tag_obj
+
+        categories = Category.objects.filter(
+            is_active=True, visibility=2).order_by('-name')
+
+        authors = Author.objects.filter(
+            visibility=2, is_active=1, blog__visibility=2,
+            blog__status=1).annotate(
+            no_of_blog=Count('blog')).order_by('-no_of_blog')
+
+        author_list = zip_longest(*[iter(authors)] * 5, fillvalue=None)
+
+        main_articles = tag_obj.blog_set.filter(
+            status=1, visibility=2).order_by('-publish_date')
+
+        recent_articles = self.scrollPagination(
+            paginated_by=self.paginated_by, page=self.page,
+            object_list=main_articles)
+
+        # paginator = Paginator(main_articles, self.paginated_by)
+        # page_data = self.pagination(paginator, self.page)
+
+        popular_courses = BlogMixin().get_product(tag_obj.slug)
+        detail_article = None
+        if recent_articles:
+            detail_article = render_to_string('include/talent_page.html', {
+                "page_obj": recent_articles,
+                "slug": tag_obj.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
+        context.update({
+            # "recent_page": page_data.get('page'),
+            # "recent_end": page_data.get('page_end'),
+            # "recent_middle": page_data.get('middle'),
+            # "recent_begin": page_data.get('begin'),
+            # "recent_articles": detail_obj
+            "detail_article": detail_article,
+        })
+        context.update({
+            "authors": authors,
+            'authors_list': list(author_list),
+            "tag": tag_obj,
+            "categories": categories,
+            "popular_courses": popular_courses,
+        })
+        context.update(self.get_breadcrumb_data())
+        context['meta'] = tag_obj.as_meta(self.request)
+        context.update(self.get_meta_details())
+
+        return context
+
+    def get_breadcrumb_data(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy"})
+        breadcrumbs.append({"url": None, "name": self.tag_obj.name})
+        data = {"breadcrumbs": breadcrumbs}
+        return data
+
+    def get_meta_details(self):
+        name = self.tag_obj.name
+        meta = Meta(
+            title=name + " - Career & Certification Guidance @ Shine Learning",
+            description="Read Latest Articles on %s. Find the Most Relevant Information, News and other career guidance for %s at Shine Learning" %(name,name),
+        )
+        return {"meta": meta}
+
+
+class TETagLoadmoreArticleView(TemplateView, BlogMixin):
+
+    template_name = "include/talent_page.html"
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 10
+        self.tag_obj = None
+
+    def get(self, request, *args, **kwargs):
+        slug = request.GET.get('slug', None)
+        self.page = request.GET.get('page', 1)
+        if request.is_ajax():
+            try:
+                self.tag_obj = Tag.objects.get(slug=slug, is_active=True)
+            except Exception:
+                return ''
+
+            context = super(TETagLoadmoreArticleView, self).get(request, args, **kwargs)
+            return context
+        return ''
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            TETagLoadmoreArticleView, self).get_context_data(**kwargs)
+        tag_obj = self.tag_obj
+
+        tag_articles = tag_obj.blog_set.filter(
+            status=1, visibility=2).order_by('-publish_date')
+
+        tag_articles = self.scrollPagination(
+            paginated_by=self.paginated_by, page=self.page,
+            object_list=tag_articles)
+
+        # detail_article = None
+        # if recent_articles:
+        #     detail_article = render_to_string('include/talent_page.html', {
+        #         "page_obj": recent_articles,
+        #         "slug": tag_obj.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
+        context.update({
+            'page_obj': tag_articles,
+            'slug': tag_obj.slug,
+            "SITEDOMAIN": settings.SITE_DOMAIN
+        })
+        return context
+
+
+class TEBlogCategoryListView(TemplateView, BlogMixin):
     template_name = "talenteconomy/category.html"
 
     def __init__(self):
@@ -92,43 +240,64 @@ class TEBlogCategoryListView(TemplateView, PaginationMixin):
         self.page = request.GET.get('page', 1)
         try:
             self.cat_obj = Category.objects.get(slug=slug, is_active=True, visibility=2)
-        except Exception:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get category object %s' % str(e))
+
             raise Http404
 
         context = super(TEBlogCategoryListView, self).get(request, args, **kwargs)
         context = super(TEBlogCategoryListView, self).get(request, args, **kwargs)
         return context
-        
+
     def get_context_data(self, **kwargs):
-        context = super(TEBlogCategoryListView, self).get_context_data(**kwargs)
+        context = super(
+            TEBlogCategoryListView, self).get_context_data(**kwargs)
         cat_obj = self.cat_obj
 
-        categories = Category.objects.filter(is_active=True, visibility=2).order_by('-name')
+        categories = Category.objects.filter(
+            is_active=True, visibility=2).order_by('-name')
 
-        authors = Author.objects.filter(visibility=2,is_active=1,blog__visibility=2,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
-        author_list = zip_longest(*[iter(authors)]*5, fillvalue=None)
-        
-        main_articles = Blog.objects.filter(p_cat=cat_obj, status=1, visibility=2) | Blog.objects.filter(sec_cat__in=[cat_obj.pk], status=1, visibility=2)
-        main_articles = main_articles.order_by('-publish_date').distinct().select_related('author')
+        authors = Author.objects.filter(
+            visibility=2, is_active=1, blog__visibility=2,
+            blog__status=1).annotate(
+            no_of_blog=Count('blog')).order_by('-no_of_blog')
+        author_list = zip_longest(*[iter(authors)] * 5, fillvalue=None)
+        main_articles = Blog.objects.filter(
+            p_cat=cat_obj,
+            status=1,
+            visibility=2) | Blog.objects.filter(
+            sec_cat__in=[cat_obj.pk], status=1, visibility=2)
+        main_articles = main_articles.order_by(
+            '-publish_date').distinct().select_related('author')
 
-        paginator = Paginator(main_articles, self.paginated_by)
-        page_data = self.pagination(paginator, self.page)
+        recent_articles = self.scrollPagination(
+            paginated_by=self.paginated_by, page=self.page,
+            object_list=main_articles)
+
+        # paginator = Paginator(main_articles, self.paginated_by)
+        # page_data = self.pagination(paginator, self.page)
 
         popular_courses = BlogMixin().get_product(cat_obj.slug)
-
+        detail_article = None
+        if recent_articles:
+            detail_article = render_to_string('include/talent_page.html', {
+                "page_obj": recent_articles,
+                "slug": cat_obj.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
         context.update({
-            "recent_page": page_data.get('page'),
-            "recent_end": page_data.get('page_end'),
-            "recent_middle": page_data.get('middle'),
-            "recent_begin": page_data.get('begin'),
-            "recent_articles": main_articles
+            # "recent_page": page_data.get('page'),
+            # "recent_end": page_data.get('page_end'),
+            # "recent_middle": page_data.get('middle'),
+            # "recent_begin": page_data.get('begin'),
+            # "recent_articles": detail_obj
+            "recent_articles": recent_articles,
+            "detail_article": detail_article,
         })
         context.update({
-            "authors":authors,
+            "authors": authors,
             'authors_list': list(author_list),
             "category": cat_obj,
             "categories": categories,
-            "popular_courses":popular_courses,
+            "popular_courses": popular_courses,
         })
         context.update(self.get_breadcrumb_data())
         context['meta'] = cat_obj.as_meta(self.request)
@@ -148,9 +317,10 @@ class TEBlogCategoryListView(TemplateView, PaginationMixin):
         name = self.cat_obj.name
         meta = Meta(
             title=name + " - Career & Certification Guidance @ Shine Learning",
-            description = "Read Latest Articles on %s. Find the Most Relevant Information, News and other career guidance for %s at Shine Learning" %(name,name),
+            description="Read Latest Articles on %s. Find the Most Relevant Information, News and other career guidance for %s at Shine Learning" %(name,name),
         )
         return {"meta": meta}
+
 
 class TEBlogDetailView(DetailView, BlogMixin):
     template_name = "talenteconomy/article-detail.html"
@@ -162,7 +332,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
         self.page = 1
 
     def get_queryset(self):
-        qs = Blog.objects.filter(status=1,visibility=2)
+        qs = Blog.objects.filter(status=1, visibility=2)
         return qs
 
     def get_object(self, queryset=None):
@@ -175,14 +345,15 @@ class TEBlogDetailView(DetailView, BlogMixin):
             queryset = queryset.filter(slug=slug, status=1, visibility=2)
         try:
             obj = queryset.get()
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset %s' % str(e))
             raise Http404
         return obj
 
     def get_template_names(self):
         if self.request.amp:
             return ["talenteconomy/article-detail-amp.html"]
-        return ["talenteconomy/article-detail.html"]    
+        return ["talenteconomy/article-detail.html"]
 
 #    def redirect_if_necessary(self, current_path, article):
 #        expected_path = article.get_absolute_url()
@@ -208,9 +379,9 @@ class TEBlogDetailView(DetailView, BlogMixin):
         context = super(self.__class__, self).get_context_data(**kwargs)
         blog = self.object
         p_cat = blog.p_cat
-        articles = p_cat.primary_category.filter(status=1, visibility=2).exclude(pk=blog.pk)
+        articles = p_cat.primary_category.filter(
+            status=1, visibility=2).exclude(pk=blog.pk)
         articles = articles.order_by('-publish_date')
-
         context['meta'] = blog.as_meta(self.request)
         context.update({
             "reset_form": PasswordResetRequestForm()
@@ -218,15 +389,16 @@ class TEBlogDetailView(DetailView, BlogMixin):
         context.update(self.get_breadcrumb_data())
         context['SITEDOMAIN'] = settings.SITE_DOMAIN
 
-        main_obj = Blog.objects.filter(slug=blog.slug, status=1, visibility=2).prefetch_related('tags')
+        main_obj = Blog.objects.filter(
+            slug=blog.slug, status=1, visibility=2).prefetch_related('tags')
 
         detail_obj = self.scrollPagination(
-                paginated_by=self.paginated_by, page=self.page,
-                object_list=main_obj)
+            paginated_by=self.paginated_by, page=self.page,
+            object_list=main_obj)
 
-        detail_article = render_to_string('include/detail-article-list.html',
-            {"page_obj": detail_obj,
-            "slug": blog.slug, 
+        detail_article = render_to_string('include/detail-article-list.html', {
+            "page_obj": detail_obj,
+            "slug": blog.slug,
             "SITEDOMAIN": settings.SITE_DOMAIN})
 
         context.update({
@@ -235,19 +407,28 @@ class TEBlogDetailView(DetailView, BlogMixin):
             "amp": self.request.amp
         })
 
-
-        article_list = Blog.objects.filter(p_cat=p_cat, status=1, visibility=2).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1, visibility=2).order_by('-publish_date')
+        article_list = Blog.objects.filter(
+            p_cat=p_cat,
+            status=1,
+            visibility=2).order_by('-publish_date') | Blog.objects.filter(
+            sec_cat__in=[p_cat], status=1,
+            visibility=2).order_by('-publish_date')
         article_list = article_list.exclude(slug=blog.slug)
-        article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
+        article_list = article_list.distinct().select_related(
+            'created_by').prefetch_related('tags')
 
         page_obj = self.scrollPagination(
-                paginated_by=self.paginated_by, page=self.page,
-                object_list=article_list)
+            paginated_by=self.paginated_by, page=self.page,
+            object_list=article_list)
 
         context.update({
-            "scroll_article": render_to_string('talenteconomy/include/detail-article-list.tmpl.html',
-                {"page_obj": page_obj,
-                "slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
+            "scroll_article": render_to_string(
+                'talenteconomy/include/detail-article-list.tmpl.html',
+                {
+                    "page_obj": page_obj,
+                    "slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN
+                }
+            )
         })
 
         context.update({
@@ -266,8 +447,13 @@ class TEBlogDetailView(DetailView, BlogMixin):
     def get_breadcrumb_data(self):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy"})
-        breadcrumbs.append({"url": reverse('talent:te-articles-by-category', kwargs={'slug': self.object.p_cat.slug}), "name": self.object.p_cat.name})
+        breadcrumbs.append({
+            "url": reverse('talent:talent-landing'), "name": "Talent Economy"})
+        breadcrumbs.append({
+            "url": reverse(
+                'talent:te-articles-by-category',
+                kwargs={'slug': self.object.p_cat.slug}),
+            "name": self.object.p_cat.name})
         breadcrumbs.append({"url": None, "name": self.object.display_name})
         data = {"breadcrumbs": breadcrumbs}
         return data
@@ -276,10 +462,11 @@ class TEBlogDetailView(DetailView, BlogMixin):
         heading = self.object.heading
         des = self.object.get_description()
         meta = Meta(
-            title= heading + "- Talent Economy",
-            description = des,
+            title=heading + "- Talent Economy",
+            description=des,
         )
         return {"meta": meta}
+
 
 class AuthorListingView(TemplateView):
     model = Author
@@ -292,21 +479,26 @@ class AuthorListingView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
 
-        categories = Category.objects.filter(is_active=True, visibility=2).order_by('-name')
+        categories = Category.objects.filter(
+            is_active=True, visibility=2).order_by('-name')
 
-        authors = Author.objects.filter(visibility=2,is_active=1,blog__visibility=2,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog')
-        author_list = zip_longest(*[iter(authors)]*5, fillvalue=None)
-        
-        top_article_list = Blog.objects.filter(status=1, visibility=2).select_related('p_cat')[:9]
+        authors = Author.objects.filter(
+            visibility=2, is_active=1,
+            blog__visibility=2, blog__status=1).annotate(
+            no_of_blog=Count('blog')).order_by('-no_of_blog')
+        author_list = zip_longest(*[iter(authors)] * 5, fillvalue=None)
+
+        top_article_list = Blog.objects.filter(
+            status=1, visibility=2).select_related('p_cat')[:9]
         top_3_cats = [article.p_cat.slug for article in top_article_list][:3]
         top_cats = '+'.join(top_3_cats)
         popular_courses = BlogMixin().get_product(top_cats)
 
         context.update({
-        'authors':authors,
-        'authors_list': list(author_list),
-        'categories': categories,
-        'popular_courses':popular_courses,
+            'authors': authors,
+            'authors_list': list(author_list),
+            'categories': categories,
+            'popular_courses': popular_courses,
         })
 
         context.update(self.get_breadcrumb_data())
@@ -316,17 +508,22 @@ class AuthorListingView(TemplateView):
     def get_breadcrumb_data(self):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy"})
+        breadcrumbs.append({
+            "url": reverse('talent:talent-landing'), "name": "Talent Economy"})
         breadcrumbs.append({"url": None, "name": "Authors"})
         data = {"breadcrumbs": breadcrumbs}
         return data
 
     def get_meta_details(self):
         meta = Meta(
-            title="Career & Certification Guidance Top Authors @ Shine Learning",
-            description="Use experts’ advice & guidance to decide your career path. Get the list of authors and related articles written by experts @ Shine Learning",
+            title="Career & Certification Guidance Top Authors\
+            @ Shine Learning",
+            description="Use experts’ advice & guidance to decide your career path.\
+            Get the list of authors and related articles written by experts\
+            @ Shine Learning",
         )
         return {"meta": meta}
+
 
 class AuthorDetailView(DetailView):
     # template_name = "talenteconomy/author-detail-amp.html"
@@ -342,7 +539,7 @@ class AuthorDetailView(DetailView):
         return context
 
     def get_queryset(self):
-        qs = Author.objects.filter(is_active=1,visibility=2)
+        qs = Author.objects.filter(is_active=1, visibility=2)
         return qs
 
     def get_object(self, queryset=None):
@@ -351,10 +548,14 @@ class AuthorDetailView(DetailView):
             queryset = self.get_queryset()
 
         if slug is not None:
-            queryset = queryset.filter(slug=slug, is_active=1, visibility=2, blog__visibility=2, blog__status=1).annotate(no_of_blog=Count('blog'))
+            queryset = queryset.filter(
+                slug=slug, is_active=1,
+                visibility=2, blog__visibility=2,
+                blog__status=1).annotate(no_of_blog=Count('blog'))
         try:
             obj = queryset.get()
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get queryset %s' % str(e))
             raise Http404
         return obj
 
@@ -366,19 +567,24 @@ class AuthorDetailView(DetailView):
         context.update(self.get_breadcrumb_data())
         context['SITEDOMAIN'] = settings.SITE_DOMAIN
 
-        article_list = Blog.objects.filter(status=1, visibility=2, author=author).order_by('-publish_date')
+        article_list = Blog.objects.filter(
+            status=1, visibility=2, author=author).order_by('-publish_date')
         most_recent_cat = article_list[0].p_cat.slug if article_list else ''
 
         popular_courses = BlogMixin().get_product(most_recent_cat)
 
-        authors = Author.objects.filter(visibility=2,is_active=1,blog__visibility=2,blog__status=1).annotate(no_of_blog=Count('blog')).order_by('-no_of_blog').exclude(id=author.id)
-        author_list = zip_longest(*[iter(authors)]*5, fillvalue=None)
-        
+        authors = Author.objects.filter(
+            visibility=2, is_active=1,
+            blog__visibility=2, blog__status=1).annotate(
+            no_of_blog=Count('blog')).order_by('-no_of_blog').exclude(
+            id=author.id)
+        author_list = zip_longest(*[iter(authors)] * 5, fillvalue=None)
+
         context.update({
-            "author":author,
-            "authors":authors,
+            "author": author,
+            "authors": authors,
             'authors_list': list(author_list),
-            "article_list":article_list,
+            "article_list": article_list,
             "popular_courses": popular_courses,
             "amp": self.request.amp
         })
@@ -390,21 +596,65 @@ class AuthorDetailView(DetailView):
     def get_breadcrumb_data(self):
         breadcrumbs = []
         breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy"})
-        breadcrumbs.append({"url": reverse('talent:authors-listing'), "name": "Authors"})
+        breadcrumbs.append({
+            "url": reverse('talent:talent-landing'), "name": "Talent Economy"})
+        breadcrumbs.append({
+            "url": reverse('talent:authors-listing'), "name": "Authors"})
         breadcrumbs.append({"url": None, "name": self.object.name})
         data = {"breadcrumbs": breadcrumbs}
         return data
 
     def get_meta_details(self):
         auth = self.object
-        desc  = ''
+        desc = ''
         if auth:
             about = auth.about
             desc = '.'.join(about.split('.')[:2])
             name = auth.name
         meta = Meta(
             description=desc,
-            title ="%s - Career Guidance Author @ Shine Learning" %name,
+            title="%s - Career Guidance Author @ Shine Learning" %name,
         )
         return {"meta": meta}
+
+
+class TalentDetailAjaxView(View, BlogMixin):
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 8
+        self.slug = None
+        self.cat_obj = None
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            self.page = self.request.GET.get('page', 1)
+            self.slug = self.request.GET.get('slug')
+            try:
+                self.cat_obj = Category.objects.get(
+                    slug=self.slug, is_active=True, visibility=2)
+                main_articles = Blog.objects.filter(
+                    p_cat=self.cat_obj,
+                    status=1,
+                    visibility=2) | Blog.objects.filter(
+                    sec_cat__in=[self.cat_obj.pk], status=1, visibility=2)
+                main_articles = main_articles.order_by(
+                    '-publish_date').distinct().select_related('author')
+                page_obj = self.scrollPagination(
+                    paginated_by=self.paginated_by, page=self.page,
+                    object_list=main_articles)
+
+                detail_article = render_to_string('include/talent_page.html', {
+                    "page_obj": page_obj,
+                    "slug": self.cat_obj.slug,
+                    "SITEDOMAIN": settings.SITE_DOMAIN, })
+
+                data = {
+                    'article_detail': detail_article,
+                }
+
+                return HttpResponse(
+                    json.dumps(data), content_type="application/json")
+            except:
+                pass
+        return HttpResponseForbidden()

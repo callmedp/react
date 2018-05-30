@@ -1,0 +1,17 @@
+.error {
+  .form-control {
+    border-color: $red;
+    background-color: #ffeeee;
+
+    &::placeholder {  
+      color: $red;
+    }
+  }
+
+  .mgs {
+    font-size: $font-size-xs;
+    color: #ff0000;
+    margin-top: 5px;
+    padding-bottom: 0;
+  }
+}

@@ -1,0 +1,53 @@
+{% extends "hrinsider/base.html" %}
+{% load static humanize thumbnail compress %}
+{% block django_meta %}
+        {% include 'meta/meta.html' %}
+    {%  endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ object.get_absolute_url }}">
+    {% endblock canonical_url %}
+
+     {% block title %}
+       {{object.display_name}} Career Articles | Shinelearning
+    {% endblock title %}
+
+    {% block css_section %}
+        {{block.super}}
+        {% compress css %}
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/hr-insider/blog.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/hr-insider/slick.scss' %}" rel="stylesheet">
+        {% endcompress %}
+    {% endblock css_section %}
+
+    {% block hr_tabs %}
+      {% include './include/hr-tabs.html' with arrow_down="articles" %}
+    {% endblock hr_tabs %}
+
+    {% block container %}
+
+    <!-- box panel starts here -->
+    <div class="content-box" itemscope itemtype="https://schema.org/ItemList">
+      <ul class="breadcrumb mt-0 mb-10" itemscope itemtype="http://schema.org/BreadcrumbList">
+        {% include './include/breadcrumb.html' %}
+      </ul>
+
+      <h2>{{tag.name}}</h2>      
+      <ul class="article-list" id="hr-tag-article-container">
+        {{tag_article_list}}
+      <ul>
+    </div>
+    <!-- box panel ends here -->
+
+    {% include './include/authorSlide.tmpl.html' with authors=authors %}
+
+    {% include './include/contact-info.html' %}
+    
+    {% endblock container %}
+
+    {% block js_section %}
+      {{ block.super }}
+      {% compress js %}
+         <script src="{% static 'shinelearn/js/hrinsider/hr-blog.js' %}"></script>
+      {% endcompress %}
+    {% endblock js_section %}

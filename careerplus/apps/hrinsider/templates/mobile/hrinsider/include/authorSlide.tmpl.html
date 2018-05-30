@@ -1,0 +1,29 @@
+{% load thumbnail %}
+
+
+<!-- Starts of Contributors and speakers list -->
+<section class="content-box light-blue-bg">
+  <h2>Contributors and Speakers</h2>
+    <div class="slide-container">
+      <ul class="contributors">
+        {% for author in authors %}
+        <li>
+          <a href="{% url 'talent:authors-detail' author.slug %}">
+            {% if author.image %}
+            {% thumbnail author.image "130x130" crop="center" as im %}
+             <img src="{{author.image.url}}" width="{{ im.width }}" height="{{ im.height }}">
+            {% endthumbnail %}
+            {% endif %}
+
+            <p class="head pb-0 pt-5">{{author.name}}</p>
+            <p class="fs-12 pt-5"><a href="#">{{author.no_of_blog}} articles</a></p>
+          </a>
+        </li>
+        {% endfor %}
+   
+      </ul>
+    </div>
+</section><!-- end of Contributors and speakers list -->
+
+
+

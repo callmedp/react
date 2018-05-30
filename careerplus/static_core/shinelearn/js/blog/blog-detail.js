@@ -7,6 +7,9 @@ function openCommentBox(article_id, visibility=1) {
         if (visibility == 2) {
             _arguments += '&visibility=2';
         }
+        else if (visibility == 3){
+            _arguments += '&visibility=3';
+        }
 
         $.ajax({
             url: '/article/show-comment-box/?art_id=' + _arguments,
@@ -95,8 +98,8 @@ function commentSubmit(article_id, login_status){
 $(function(){
 
     $(document).on('click', '#article_share', function(event) {
-            // console.log('click');
             // console.log($(this).attr('page-id'));
+            // console.log($(this).attr('article-slug'));
             $.ajax({
                 url: "/ajax/article-share/",
                 type: 'GET',

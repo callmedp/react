@@ -20,7 +20,7 @@
         <!--[if lt IE 7]><link rel="stylesheet" type="text/css" media="all" href="http://universal-ie6-css.googlecode.com/files/ie6.1.1.css"/><![endif]-->
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
-<link href="{% static 'shinelearn/css/marketing/six-sigma-cert/six-sigma-cert.css' %}?v=3" rel="stylesheet" type="text/css" />
+<link href="{% static 'shinelearn/css/marketing/digital-marketing/six-sigma-cert.css' %}?v=3" rel="stylesheet" type="text/css" />
 
 <!--link href="{{ STATIC_CSS_URL }}css/version1/site/six-sigma-cert-version2.css?v=3" rel="stylesheet" type="text/css" / -->
 
@@ -57,10 +57,43 @@
     <div class="top_section"> 
 		<div class="container martb_30">
 	    	<a href="/" target="_blank" class="logo_cp sprite_call"> </a>
-            <span class="martb_30 contact_box"> <span class="sprite_call icon_contact"> </span> 0124-3955001</span>
+            <!--
+            <span class="martb_30 contact_box"> <span class="sprite_call icon_contact"> </span> 0124-3955001</span>-->
             
             <div class="fl_lt w550"> 
             	<h1>Become a Digital Marketing Certified Professional</h1>
+                <div class="fl_rt w325 visible-xs"> 
+                <h2>Register Now</h2>
+                <form class="cert-form"  id="lead2" action="{% url "crmapi:lead-management" %}" method="POST" class="STYLE-NAME">    {% csrf_token %}
+
+                    <input id="name" type="text" name="name" placeholder="Your Full Name" maxlength="50" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}"/>
+
+                    <input id="email" type="email" name="email" placeholder="Valid Email Address" maxlength="50" value="{{request.session.email}}" />
+
+                    
+                    <div style="display:inline-block!important;">
+                    <select id="selection" name="country" style="width:16%!important;float:left!important;">
+                                    {% for country in countries %}
+                                        <option {% if country.phone == "91"%} selected="selected"{%endif%} value="{{country.phone}}">{{country.code2}}&nbsp;&nbsp; ({{country.phone}}) -- {{country.name}}</option>
+                                    {% endfor %}
+                    </select> 
+                    <input id="mobile" type="text" style="width:80%!important;float:right!important;" name="number" placeholder="Enter mobile number" maxlength="15" value="{{request.session.mobile_no}}">
+                    </div>
+
+                    <!--<textarea class="message_input" placeholder="Message" name="msg" maxlength="600" rows="3"></textarea>-->
+
+                    <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+
+                    <input type="hidden" name="prd" value="Digital Marketing Certification">
+
+                    <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+                    <input type="hidden" name="lsource" value="{{ lead_source }}">
+                    <input type="hidden" name="path" value="{{request.path}}">
+
+                    <input type="button" class="button" value="Send" onclick="_gaq.push(['resume._trackEvent','Lead','submit']);$('#lead2').submit();return false;" id="submit"/>
+                </form>
+            </div>
                 <h3>Benefits of taking it from Shine Learning</h3>
                 <ul> 
                 	<li> Get a 40% Salary Hike as compared to your peers.</li>
@@ -72,9 +105,10 @@
             </div>
             
             
-            <div class="fl_rt w325"> 
+            <div class="fl_rt w325 hidden-xs"> 
             	<h2>Register Now</h2>
-            <form class="cert-form"  id="lead" action="{% url "crmapi:lead-management" %}" method="POST" class="STYLE-NAME">    {% csrf_token %}
+            
+            <form class="cert-form"  id="lead1" action="{% url "crmapi:lead-management" %}" method="POST" class="STYLE-NAME">    {% csrf_token %}
 
                 <input id="name" type="text" name="name" placeholder="Your Full Name" maxlength="50" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}"/>
 
@@ -90,7 +124,7 @@
                 <input id="mobile" type="text" style="width:80%!important;float:right!important;" name="number" placeholder="Enter mobile number" maxlength="15" value="{{request.session.mobile_no}}">
                 </div>
 
-                <textarea class="message_input" placeholder="Message" name="msg" maxlength="600" rows="3"></textarea>
+                <!--<textarea class="message_input" placeholder="Message" name="msg" maxlength="600" rows="3"></textarea>-->
 
                 <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
 
@@ -101,7 +135,7 @@
                 <input type="hidden" name="lsource" value="{{ lead_source }}">
                 <input type="hidden" name="path" value="{{request.path}}">
 
-                <input type="button" class="button" value="Send" onclick="_gaq.push(['resume._trackEvent','Lead','submit']);$('#lead').submit();return false;" id="submit"/>
+                <input type="button" class="button" value="Send" onclick="_gaq.push(['resume._trackEvent','Lead','submit']);$('#lead1').submit();return false;" id="submit"/>
             </form>
 
             
@@ -167,19 +201,85 @@
         <script type="text/javascript">
         var _gaq = _gaq || [];
 
-        $.validator.addMethod("lettersonly", function (value, element){
+    $.validator.addMethod("lettersonly", function (value, element){
         return this.optional(element) || /^[a-z\s]*$/i.test(value);
     }, "Letters only please");
 
     $.validator.addMethod("defaultInvalid", function (value, element) {
         return !(element.value == element.defaultValue);
     }, "This field is required.");
-        $("#lead").validate({
+        $("#lead1").validate({
                 submitHandler:function (form) {
                     var action = $(form).attr('action');
                     $.post(action, $(form).serialize(), function (data) {
                         if (data && data['status']){
-                            $.each($("#lead"), function (i, e) {
+                            $.each($("#lead1"), function (i, e) {
+                                e.reset();
+                            });
+                            $("#lead label").remove();
+                            var conversion_id = 991709191;
+                            var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                            var ga_code = document.createElement('div');
+                            ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                           document.body.appendChild(ga_code);
+                            window.location.href ='thankyou-for-query';
+                            return false;
+                        }
+                    }, 'json');
+                },
+                rules:{
+                    number:{
+                        required:true,
+                        minlength:10,
+                        maxlength:20,
+                        number:true,
+                    },
+                    email:{
+                        email:true,
+                        required:true,
+
+                    },
+                    name:{
+                        required:true,
+                        lettersonly:true,
+
+                    },
+                    msg:{
+                        required:true,
+                        maxlength:500
+                    }
+                },
+                messages:{
+                    number:{
+                       required:"Field is required"
+                    },
+                    email:{
+                        required:"Field is required"
+                    },
+                    name:{
+                        required:"Field is required"
+                    },
+                    msg:{
+                        required:"Field is required",
+                        maxlength:"No more than 500 characters."
+
+                    }
+                }
+            });
+
+    $.validator.addMethod("lettersonly", function (value, element){
+        return this.optional(element) || /^[a-z\s]*$/i.test(value);
+    }, "Letters only please");
+
+    $.validator.addMethod("defaultInvalid", function (value, element) {
+        return !(element.value == element.defaultValue);
+    }, "This field is required.");
+        $("#lead2").validate({
+                submitHandler:function (form) {
+                    var action = $(form).attr('action');
+                    $.post(action, $(form).serialize(), function (data) {
+                        if (data && data['status']){
+                            $.each($("#lead2"), function (i, e) {
                                 e.reset();
                             });
                             $("#lead label").remove();

@@ -514,7 +514,7 @@ footer {
 		border-radius: 2px;
 		font-size: $font-size+4;
 		color: $primary-color;
-		padding: 5px 15px;
+		padding: 9px 15px;
 		background-color: #fff;
 		font-weight: 400;
 		display: inline-block;
@@ -545,7 +545,6 @@ footer {
 	.payment-options {
 		border-radius: 2px;
 		display: inline-block;
-		float: right;
 		background-color: #fff;
 		padding: 5px 10px;
 
@@ -561,6 +560,62 @@ footer {
 			color: $grey-color;
 			font-size: 11px;
 			margin-bottom: 3px;
+		}
+	}
+
+	.footer-social-login {
+		text-align: center;
+		display: block;
+		font-size: $font-size+3;
+		color: $secondary-color;
+		margin: 5px 0 15px 0;
+		float: right;
+
+		span {
+			display: block;
+			margin-bottom: 5px;
+			text-align: left;
+			font-size: $font-size+1;
+			line-height: 12px;
+		}
+
+		.facebook {
+			background: $sprite -637px 10px #e3e8ea;
+			width: 42px;
+			height: 42px;
+			border: 1px solid #c0c7cb;
+			display: inline-block;
+			text-align: center;
+		}
+
+		.gplus {
+			background: $sprite -724px 12px #e3e8ea;
+			width: 42px;
+			height: 42px;
+			border: 1px solid #c0c7cb;
+			display: inline-block;
+			text-align: center;
+			margin-left: 10px;
+		}
+
+		.linkedin {
+			background: $sprite -677px 10px #e3e8ea;
+			width: 42px;
+			height: 42px;
+			border: 1px solid #c0c7cb;
+			display: inline-block;
+			text-align: center;
+			margin-left: 10px;
+		}
+
+		.twitter {
+			background: $sprite -769px 12px #e3e8ea;
+			width: 42px;
+			height: 42px;
+			border: 1px solid #c0c7cb;
+			display: inline-block;
+			text-align: center;
+			margin-left: 10px;
 		}
 	}
 
@@ -1116,10 +1171,17 @@ footer {
 		display: none;
 }
 
+.error-msg {
+	display: block;
+	color: $error-color;
+	font-size: $font-size;
+	font-weight: $font-weight+100;
+}
+
 .error {
 	position: relative;
 
-	input {
+	input, textarea {
 		border-bottom: 1px solid $error-color !important;
 	}
 	
@@ -1131,6 +1193,7 @@ footer {
 		left: 0;
 		bottom: -13px;
 		z-index: 9;
+		font-weight: $font-weight+100;
 	}
 }
 
@@ -1404,7 +1467,23 @@ footer {
 	}
 }
 
+.load-button {
+	padding: 10px 20px;
+	font-size: $font-size+4;
+	color: $anchor-color;
+	border: 1px solid $blue-color;
+	display: table;
+	border-radius: 2px;
+	background-color: $white-color;
+	margin: 0 auto;
+	text-align: center;
 
+	&:hover, &:focus {
+		background-color: $white-color;
+		border: 1px solid $blue-color;;
+		color: $anchor-color;
+	}
+}
 
 
 /*---------icons css---------*/
@@ -1982,7 +2061,21 @@ footer {
 	vertical-align: sub;
 }
 
+.icon-linkedIn-login {
+	width: 21px;
+	height: 20px;
+	background: $sprite -261px -443px;
+	display: inline-block;
+	vertical-align: sub;
+}
 
+.icon-load {
+	width: 24px;
+	height: 25px;
+	background: $sprite -302px -442px;
+	display: inline-block;
+	vertical-align: sub;
+}
 
 /*---------login signup banner page css---------*/
 
@@ -2490,6 +2583,10 @@ footer {
 }
 
 
+.ml-50 {
+	margin-left: 50px;
+}
+
 .ml-30 {
 	margin-left: 30px;
 }
@@ -2575,3 +2672,33 @@ footer {
 .color6 {
 	background-color: #c8c04a;
 }
+
+.linkedin-tnc {
+	font-size: $font-size+2;
+	color: $secondary-color;
+
+	label {
+		font-weight: $font-weight+100 !important;
+	}	
+
+	ul {
+		margin: 0 0 0 34px;
+		padding: 0;
+
+		li {
+			margin-bottom: 5px;
+		}
+	}
+}
+
+.submit-linkedin {
+		background-color: #2f5da5;
+		font-size: 14px;
+		font-weight: 600;
+		color: $white-color !important;
+		display: block;
+		width: 100%;
+		line-height: 30px;
+		margin: 20px 0 10px 0;
+		
+	}

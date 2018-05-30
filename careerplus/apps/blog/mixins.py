@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.middleware.csrf import get_token
 from core.library.haystack.query import SQS
 from django.conf import settings
+import logging
 
 class BlogMixin(object):
 	def scrollPagination(self, paginated_by=1, page=1, object_list=None):
@@ -22,7 +23,8 @@ class BlogMixin(object):
 			product = []
 			slug = settings.COURSE_SLUG[0]
 			try:
-				results = SQS().filter(text=query, pPc=slug).extra({'qt': 'edismax', 'qf': 'text pHd^10 pFA^6 pCtg^4 pCC^2 pAb^1'}).only( 'pTt pURL pHd pAR pNJ pImA pImg pNm pBC pARx pPc , pStar')[:5]
+				results = SQS().filter(text=query, pPc=slug).exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).extra({
+					'qt': 'edismax', 'qf': 'text pHd^10 pFA^6 pCtg^4 pCC^2 pAb^1'}).only( 'pTt pURL pHd pAR pNJ pImA pImg pNm pBC pARx pPc , pStar')[:5]
 				for prd in results:
 					product.append(OrderedDict({
 						'title': prd.pTt,
@@ -38,7 +40,9 @@ class BlogMixin(object):
 						'class':prd.pPc,
 						'star': prd.pStar
 						}))
-			except:
+			except Exception as e:
+				logging.getLogger('error_log').error("Unable to get product details%s" % str(e))
+
 				product = []
 			return product	
 		return []

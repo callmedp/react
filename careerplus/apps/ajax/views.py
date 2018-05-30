@@ -70,8 +70,8 @@ class ArticleShareView(View):
             try:
                 obj = Blog.objects.get(slug=article_slug)
                 obj.no_shares += 1
-                obj.update_score()
                 obj.save()
+                obj.update_score()
             except Exception as e:
                 logging.getLogger('error_log').error("Unable to share the article: %s " % str(e))
             data = {"status": "success"}
@@ -130,7 +130,7 @@ class AjaxProductLoadMoreView(TemplateView):
         slug = self.request.GET.get('slug', '')
         page = int(self.request.GET.get('page', 1))
         try:
-            all_results = SQS().filter(pCtg=slug)
+            all_results = SQS().filter(pCtg=slug).exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS)
             paginator = Paginator(all_results, 5)
             try:
                 products = paginator.page(page)
@@ -162,7 +162,7 @@ class AjaxReviewLoadMoreView(TemplateView):
         page = int(self.request.GET.get('page', 1))
         try:
             prod_id_list = SQS().filter(
-                pCtg=slug).only('id').values_list('id', flat=True)
+                pCtg=slug).exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only('id').values_list('id', flat=True)
             product_obj = ContentType.objects.get(
                 app_label='shop', model='product')
             prod_reviews = Review.objects.filter(
@@ -737,7 +737,7 @@ class GetLTVAjaxView(View):
                         ltv = ltv - rf_sum.get('rf_price')
 
                 candidate_dict[candidate] = str(ltv)
-            for k,v  in results.items():
+            for k,v in results.items():
                 if order_dict.get(k):
                     results[k] = candidate_dict.get(order_dict.get(k), "0")         
             for order in o_list:

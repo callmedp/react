@@ -1,6 +1,6 @@
 from django.utils import timezone
 from datetime import datetime, date
-
+import logging
 from decimal import Decimal
 from django.db import models
 from django.utils.html import strip_tags
@@ -176,7 +176,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
             soup = BeautifulSoup(self.description, 'html.parser')
             cleantext = soup.get_text()
             cleantext = cleantext.strip()
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
             cleantext = ''
         return cleantext
 
@@ -346,7 +347,9 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
                 '%s_thumbnail.%s' % (os.path.splitext(suf.name)[0], FILE_EXTENSION),
                 suf,
             )
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to create icon%s'%str(e))
+
             pass
         return
 
@@ -758,6 +761,13 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
         verbose_name=_('About Product'), blank=True, default='')
     description = RichTextField(
         verbose_name=_('Description Product'), blank=True, default='')
+
+    visibility = models.BooleanField(verbose_name=_('Visible'), default=True)
+
+    attend = RichTextField(
+        verbose_name=_('Who Should Attend'), blank=True, default='')
+
+
     buy_shine = RichTextField(
         verbose_name=_('What you will get'), blank=True, default='')
     mail_desc = RichTextField(
@@ -941,6 +951,7 @@ class Product(AbstractProduct, ModelMeta):
         'published_time': 'created',
         'modified_time': 'modified',
         'url': 'get_canonical_url',
+
     }
 
     class Meta:
@@ -1189,7 +1200,7 @@ class Product(AbstractProduct, ModelMeta):
         return Decimal(0)
 
     def get_fakeprice(self):
-        if self.inr_price:
+        if self.inr_price is not None:
             inr_price = self.inr_price
             fake_inr_price = self.fake_inr_price
             if fake_inr_price > Decimal('0.00'):
@@ -1207,7 +1218,9 @@ class Product(AbstractProduct, ModelMeta):
                 return prod_cat[0]
             else:
                 return self.category_main
-        except:
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to verify product category %s'%str(e))
+
             pass
         return None
 
@@ -1288,10 +1301,24 @@ class Product(AbstractProduct, ModelMeta):
                         vendor=self.vendor).distinct()
                     return pop_list
                 elif self.is_writing or self.is_service:
-                    pop_list = category.get_products().filter(
-                        type_product__in=[0, 1, 3, 5],
-                        is_indexable=True).exclude(
-                        pk=self.pk).distinct()
+
+                    if int(self.pk) in settings.LINKEDIN_RESUME_FREE:
+                        pop_list = category.get_products().filter(
+                            type_product__in=[0, 1, 3, 5],
+                            is_indexable=True,
+                            pk__in=settings.LINKEDIN_RESUME_FREE).exclude(
+                            pk=self.pk).distinct()
+                    elif int(self.pk) in settings.LINKEDIN_RESUME_COST:
+                        pop_list = category.get_products().filter(
+                            type_product__in=[0, 1, 3, 5],
+                            is_indexable=True,
+                            pk__in=settings.LINKEDIN_RESUME_COST).exclude(
+                            pk=self.pk).distinct()
+                    else:
+                        pop_list = category.get_products().filter(
+                            type_product__in=[0, 1, 3, 5],
+                            is_indexable=True).exclude(
+                            pk=self.pk).distinct()
                     return pop_list
             return []
         else:

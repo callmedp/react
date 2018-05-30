@@ -82,6 +82,7 @@ class AddToCartView(View, CartMixin):
                 try:
                     cart_obj = Cart.objects.get(pk=cart_pk)
                 except Exception as e:
+                    logging.getLogger('error_log').error('unable to get cart object %s'%str(e))
                     cart_obj = None
                 logging.getLogger('info_log').info("Cart Obj:{}, candidate_ID: {}, Owner ID:{}".format(cart_obj, candidate_id, cart_obj.owner_id))
                 if cart_obj and (candidate_id == cart_obj.owner_id):
@@ -136,7 +137,7 @@ class RemoveFromCartView(View, CartMixin):
 
                     data['status'] = 1
                 else:
-                    data['error_message'] = 'this cart item alredy removed.'
+                    data['error_message'] = 'this cart item already removed.'
 
             except Exception as e:
                 data['error_message'] = str(e)
@@ -297,7 +298,8 @@ class PaymentShippingView(UpdateView, CartMixin):
         if cart_pk:
             try:
                 obj = Cart.objects.get(pk=cart_pk)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get cart object%s' % str(e))
                 raise Http404
             return obj
         raise Http404
@@ -336,7 +338,8 @@ class PaymentShippingView(UpdateView, CartMixin):
         if not form.initial.get('country'):
             try:
                 initial_country = Country.objects.get(phone='91', active=True)
-            except:
+            except Exception as e:
+                logging.getLogger('error_log').error('unable to get country object %s'%str(e))
                 initial_country = None
             form.initial.update({
                 'country': initial_country})
@@ -363,6 +366,10 @@ class PaymentShippingView(UpdateView, CartMixin):
                     })
                     candidate_id = user_register(data=data)
                     obj.owner_id = candidate_id
+
+                    if request.session.get('email'):
+                        # for linkedin services
+                        del request.session['email']
 
                 elif request.session.get('candidate_id'):
                     obj.owner_id = request.session.get('candidate_id')
@@ -403,11 +410,11 @@ class PaymentSummaryView(TemplateView, CartMixin):
             cart_pk = self.request.session.get('cart_pk')
             try:
                 self.cart_obj = Cart.objects.get(pk=cart_pk)
-                cart_dict = self.get_solr_cart_items(cart_obj=self.cart_obj)
+                # cart_dict = self.get_solr_cart_items(cart_obj=self.cart_obj)
                 if not self.cart_obj.shipping_done or not self.cart_obj.owner_id:
                     return HttpResponseRedirect(reverse('cart:payment-shipping'))
 
-                elif not self.cart_obj.lineitems.all().exists() or not cart_dict.get('total_amount'):
+                elif not self.cart_obj.lineitems.all().exists():
                     return HttpResponseRedirect(reverse('homepage'))
 
             except Exception as e:

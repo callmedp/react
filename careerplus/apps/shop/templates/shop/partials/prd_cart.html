@@ -33,9 +33,18 @@
     {% endif %}
     <span class="clearfix db"></span>
 
-    <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enrol now</a>
+    {% comment %}
+    {% if sqs.id in linkedin_resume_services and not request.session.candidate_id %}
+      <a role="button" class="enrol-now" id="login-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+    {% else %}
+    {% endcomment %}
+    
+    <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+    
 
-    <a role="button" class="add-cart" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Add to cart</a>
+    {% if sqs.id not in linkedin_resume_services %}
+      <a role="button" class="add-cart" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Add to cart</a>
+    {% endif %}
 
     <div class="cart-message"><span class="cart-success" id="id-cart-message"></span></div>
 

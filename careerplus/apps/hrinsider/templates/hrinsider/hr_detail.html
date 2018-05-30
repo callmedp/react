@@ -1,0 +1,116 @@
+{% extends "hrinsider/base.html" %}
+{% load static humanize thumbnail compress %}
+    {% block django_meta %}
+        {% include 'meta/meta.html' %}
+    {%  endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ object.get_absolute_url }}">
+    {% endblock canonical_url %}
+
+    {% block title %}
+       {{object.display_name}} Career Articles | Shinelearning
+    {% endblock title %}
+    
+    {% block css_section %}
+        {{block.super}}
+        {% compress css %}
+        <link type="text/scss" href="{% static 'shinelearn/css/hr-insider/header-footer.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/hr-insider/hr-conclave.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/talenteconomy/article.scss' %}" rel="stylesheet">
+        {% endcompress %}
+
+        {% compress css inline %}
+        <style type="text/css">
+          ul.parsley-errors-list {
+              list-style: none;
+              color: red;
+              padding-left: 0;
+          }
+          ul.errorlist {
+              list-style: none;
+              color: red;
+              padding-left: 0;
+          }
+        </style>
+        {% endcompress %}
+
+    {% endblock css_section %}
+
+    {% block hr_tabs %}
+      {% include './include/hr-tabs.html' with arrow_down="articles" %}  
+    {% endblock hr_tabs %}
+
+    {% block container %}
+
+    {% block breadcrumbs %}
+    <section class="breadcrumb-box">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb {% if white %} white {% endif %}" itemscope itemtype="http://schema.org/BreadcrumbList">
+           {% for breadcrumb in breadcrumbs %}
+            {% if breadcrumb.url %}
+              <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="{{breadcrumb.url}}" ><span itemprop="name">{{breadcrumb.name}}</span></a></li>
+
+            {% else %}
+              <li class="breadcrumb-item active">{{breadcrumb.name}}</li>
+            {% endif %}
+            
+          {% endfor %}
+        </ol>
+      </nav>
+    </section>
+    {% endblock breadcrumbs %}
+
+    <!-- /. breadcrumb -->
+
+<section class="detail-box-content">
+  <div class="row">
+    <!-- left content start -->
+    <div class="col-sm-8">
+      {% include './include/article-detail.tmpl.html'%}
+    </div><!-- /. col-sm-8 -->
+
+    <!-- right content start -->
+    {% if article_list %}
+    <div class="col-sm-4">
+      <div class="box-panel you-may-like">
+        <h2 class="primary-heading">You may also like</h2>
+        <ul>
+          {% for articleItem in article_list %}
+          <li>
+            <a href="{% url 'hrinsider:hr-articles-detail' articleItem.slug %}" title="{{artList.heading}}">
+              <figure>
+                <i><img class="img-fluid" src="{{articleItem.image.url}}" alt="{{articleItem.image_alt}}"></i>
+                <figcaption>
+                  {{articleItem.p_cat.name}}
+                  <h3>{{articleItem.heading}}</h3>
+                </figcaption>
+              </figure>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div><!-- /. col-sm-4 -->
+    {% endif %}
+  </div><!-- /. row -->
+</section>
+
+{% endblock container %}
+
+{% block js_section %}
+    {{ block.super }}
+    {% compress js %}
+       <script src="{% static 'shinelearn/js/hrinsider/share.js' %}"></script>
+    {% endcompress %}
+
+    {% compress js inline %}
+      <script>
+        $(function(){
+          Article.init();
+        });
+      </script>
+    {% endcompress %}
+{% endblock js_section %}
+
+    

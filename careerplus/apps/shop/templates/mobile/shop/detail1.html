@@ -33,18 +33,34 @@
     <header class="w100fl he-auto">
         <img src="{% static 'shinelearn/images/mobile/shop/header-img-3.png' %}">
         <!-- header menu Icon Starts here -->
-        <div class="main-menu w100fl">
-            <div class="pull-left">
-                <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button"></a>
-            </div>
 
-            <div class="pull-right">
-                
-               <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
-     
-               <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
-            </div><!-- / Right side Icon ends here -->
-        </div><!-- header menu Icon ends here -->
+        {% if not navigation %}
+            <div class="main-menu w100fl">
+                <div class="pull-left">
+                    <!--a id="sidebar-main-trigger" class="icon-bar pull-left" role="button"></a-->
+                </div>
+
+                <div class="pull-right">
+                    
+                   <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
+         
+                   <!--a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a-->
+                </div><!-- / Right side Icon ends here -->
+            </div><!-- header menu Icon ends here -->
+        {% else %}
+            <div class="main-menu w100fl">
+                <div class="pull-left">
+                    <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button"></a>
+                </div>
+
+                <div class="pull-right">
+                    
+                   <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
+         
+                   <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                </div><!-- / Right side Icon ends here -->
+            </div><!-- header menu Icon ends here -->
+        {% endif %}
         <h1 class="heading-back w100fl pb-0">{{prd_H1}}</h1>
         <div class="clearfix"></div>
         {% include "shop/partials/packagediv.html" %}
@@ -153,7 +169,9 @@
                     <div class="accordion_example1 faq-wrap row mt-40">
                         <h2>FAQ’s</h2>
                         <div class="accordion_in">
+
                             {% include "mobile/shop/partials/faq.html" %}
+
                         </div>
                     </div>
                     <!-- Accordion FAQ’s Ends here  -->
@@ -260,7 +278,7 @@
         <ul class="underline">
         {% for package in pop_list|slice:"0:4"  %}
             <li>
-                <a href="{{package.url}}" class="blue-link pb-0">
+                <a href="{{package.url}}{% if sqs.id in linkedin_resume_services %}?token={{request.GET.token}}{% endif %}" class="blue-link pb-0">
                 {% if package.experience %} 
                     <strong>
                         {{package.experience|get_choice_display:"EXP_DICT"}}
@@ -325,3 +343,7 @@
     </script>
 {% endblock js_section %}
 
+{% if sqs.id in linkedin_resume_services %}
+  {% block johukum %}
+  {% endblock johukum %}
+{% endif %}

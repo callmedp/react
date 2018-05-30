@@ -878,6 +878,7 @@
 			text-transform: uppercase;
 			border-radius: 2px;
 			margin-right: 10px;
+			margin-bottom: 10px;
 
 			a {
 				color: $grey-color;
@@ -1323,3 +1324,16 @@ header {
 		}
 	}
 }
+
+.parsley-errors-list {
+	position: relative;
+    left: -18px;
+    top: 10px;
+    list-style-type: none;
+    font-size: $font-size+1 !important;
+    color: $error-color;
+}
+
+.article-detail-content ol li, .article-detail-content ul li .parsley-errors-list {
+	font-size: $font-size+1 !important;
+} 

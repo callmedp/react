@@ -2,14 +2,15 @@ from django import template
 from django.contrib.auth.models import Group
 from django.core.urlresolvers import reverse_lazy, reverse
 from console.decorators import flatlist
-
+import logging
 register = template.Library()
 
 @register.filter
 def get_instance(form_set):
     try:
         return str(form_set.instance)
-    except:
+    except Exception as e:
+        logging.getLogger('error_log').error(str(e))
         pass    
     return False
 
@@ -21,8 +22,9 @@ def get_edit_url(form_set):
             return reverse('console:screenproductvariant-change', kwargs={
                 'pk': instance.sibling.pk,
                 'parent': instance.main.pk}) 
-    except:
-        pass    
+    except Exception as e:
+        logging.getLogger('error_log').error(str(e))
+        pass
     return ''
 
 @register.filter
@@ -33,7 +35,8 @@ def get_edit_purl(form_set):
             return reverse('console:productvariant-change', kwargs={
                 'pk': instance.sibling.pk,
                 'parent': instance.main.pk}) 
-    except:
+    except Exception as e:
+        logging.getLogger('error_log').error(str(e))
         pass    
     return ''
 
@@ -51,7 +54,8 @@ def has_group(user, grp_list):
         intersection = flat_list.intersection(groups)
 
         return True if intersection else False
-    except:
+    except Exception as e:
+        logging.getLogger('error_log').error(str(e))
         return False
     return False
 

@@ -11,6 +11,16 @@ header {
 	background: url(#{$imagePath}images/detail-header-bg.jpg) no-repeat center top;
 	background-size: cover;
 	display: block;
+
+	.breadcrumb {
+		color: $white-color;
+		font-size: $font-size;
+
+		a, .active {
+			color: $white-color;
+			font-size: $font-size;
+		}
+	}
 }
 
 .course-caption {
@@ -22,6 +32,7 @@ header {
 		margin-bottom: 8px;
 		line-height: 34px;
 		font-size: $font-size+13;
+		color: $white-color;
 	}
 
 	.course-caption-img {
@@ -31,13 +42,12 @@ header {
 		figure {
 			width: 100px;
 			height: 100px;
-			background: rgba(255, 255, 255, 0.5);
+			background: $white-color;
 
 			img {
-				padding-top: 15px;
-			}
+/*				padding-top: 15px;
+*/			}
 		}
-
 	}
 
 	.course-caption-content {
@@ -45,73 +55,10 @@ header {
 		display: table-cell;
 	}
 
-	.main-package {
-		padding: 10px;
-		border: 2px solid $blue-color;
-		background-color: $white-color;
-		font-size: 10px;
-		color: $grey-color;
-		display: table-cell;
-		position: relative;
-
-		.main-package-arrow {
-			position: absolute;
-			bottom: -12px;
-			left: 0;
-			right: 0;
-			width: 24px;
-			height: 12px;
-			display: inline-block;
-			background: $sprite -770px -71px; 
-			margin: 0 auto;
-			z-index: 999;
-		}
-
-		.main-package-img {
-			display: table-cell;
-			vertical-align: middle;
-			padding-right: 10px;
-			width: 65px;
-			height: 53px;
-		}
-
-		.main-package-content {
-			display: table-cell;
-			vertical-align: middle;
-
-			span {
-				display: block;
-				font-size: $font-size;
-				color: $primary-color;
-				font-weight: $font-weight;
-			}
-
-			strong {
-				display: block;
-				font-size: $font-size+4;
-				color: $anchor-color;
-				font-weight: $font-weight+300;
-			}
-
-			p {
-				font-size: 10px;
-				color: $grey-color;
-				margin: 0;
-				padding: 0;
-
-				small {
-					font-size: $font-size;
-					color: $primary-color;
-				}
-			}
-		}
-	}
-
 	.other-package-box {
-		display: table-cell;
+		display: block;
 		vertical-align: middle;
-		padding-left: 20px;
-		padding-bottom: 15px;
+		padding: 0;
 
 		.other-package {
 			background-color: $white-color;
@@ -119,37 +66,59 @@ header {
 			margin-right: 10px;
 			border: 1px solid $white-color;
 			overflow: hidden;
-			width: 84px;
-			height: 44px;
+			border-radius: 5px;
+			height: 50px;
+			width: 87px;
+			vertical-align: top;
+			padding: 5px 8px;
 
-			&:hover {
-				border: 1px solid $anchor-color;
-			} 
-
-			img {
-				margin: 0 auto;
+			&.selected {
+				width: auto;
+				border-bottom-left-radius: 0;
+				border-bottom-right-radius: 0;
+				height: 60px;
+				margin-bottom: -1px;
 			}
-		}
 
-		span {
-			display: block;
-			font-size: $font-size;
-			color: $primary-color;
-			font-weight: $font-weight;
-			margin-bottom: 3px;
-		}
+			.other-package-img {
+				display: table-cell;
+				vertical-align: middle;
+				padding-right: 10px;
+				width: 65px;
+				height: 50px;
+			}
 
-		a {
-			min-width: 90px;
-			height: 44px;
-			display: inline-block;
-			color: $primary-color;
+			.other-package-content {
+				display: table-cell;
+				vertical-align: middle;
+				padding-right: 10px;
+
+				strong {
+					display: block;
+					font-size: $font-size+4;
+					color: $anchor-color;
+					font-weight: $font-weight+300;
+				}
+
+				p {
+					font-size: 10px;
+					color: $grey-color;
+					margin: 0;
+					padding: 0;
+
+					small {
+						font-size: $font-size;
+						color: $primary-color;
+					}
+				}
+			}
 
 			p {
-				margin: 3px 8px 0 8px;
+				margin: 8px 0 0 0;
 				padding: 0;
 				line-height: 18px;
-				font-size: $font-size;
+				font-size: 10px;
+				color: $grey-color;
 
 				strong {
 					display: block;
@@ -157,7 +126,20 @@ header {
 					color: $anchor-color;
 					font-weight: $font-weight+300;
 				}
+
+				small {
+					font-size: $font-size;
+					color: $primary-color;
+				}
 			}
+		}
+
+		span {
+			display: block;
+			font-size: $font-size;
+			color: $white-color;
+			font-weight: $font-weight;
+			margin-bottom: 3px;
 		}
 	}
 }
@@ -1325,7 +1307,7 @@ header {
 	border-bottom: 50px solid transparent;
 }
 
-#faq:before, #review:before, #delivery:before, #programs:before, #get:before, #course:before {
+#faq:before, #review:before, #delivery:before, #programs:before, #get:before, #course:before ,#attends:before {
 	padding-top:50px;
 	display:block;
 	content:"";

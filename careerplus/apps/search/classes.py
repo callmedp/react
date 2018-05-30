@@ -18,14 +18,13 @@ from .lookups import FILLERS
 
 #inter app imports
 from core.library.haystack.query import SQS
-from shop.models import ProductFA, ProductSkill
 
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
 
 
 class BaseSearch(object):
 
-    results = SQS()
+    results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS)
     results_per_page = RESULTS_PER_PAGE
     search_params = {}
     allow_empty_query = True
@@ -119,7 +118,7 @@ class BaseSearch(object):
         Pop spell check parameters wherever possible.
         """
         if 'no_spelling' in self.params and self.params.get('no_spelling') == True:
-            self.results = SQS().using('no_spellcheck')
+            self.results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).using('no_spellcheck')
 
     def get_params(self):
         """
@@ -327,7 +326,7 @@ class BaseSearch(object):
         found = True
         results = self.add_basic_filters(results)
         if not results.count():
-            results = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
+            results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
             found = False
         # results = self.add_sws_filters(results)
         return results, found
@@ -385,7 +384,7 @@ class BaseSearch(object):
         Calls all other functions and returns the results.
         """
         if self.needed_params_options and not self.needed_params_options.intersection(self.get_params().keys()):
-            results = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
+            results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
             found = False
             return results, found
 
@@ -404,7 +403,7 @@ class BaseSearch(object):
                 asked_fields = map(str,self.params.getlist('fl')[0].split(","))
                 self.results = self.results.only(*asked_fields)
             if not self.results.count():
-                self.results = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
+                self.results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
                 found = False
         (start_offset, end_offset) = self.get_load_range()
         # self.results[start_offset:end_offset]
@@ -617,7 +616,7 @@ class FuncAreaSearch(BaseSearch):
         if self.params.get('pk') and search_clean_fields(self.params.get('pk')):
             results = results.narrow('pFA:%s' % self.params.get('pk'))
         if not results.count():
-            results = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
+            results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
             found = False
         return results, found
 
@@ -640,7 +639,7 @@ class RecommendedSearch(BaseSearch):
         results, found = super(RecommendedSearch, self).add_filters()
         results = get_recommendations(self.params['area'], self.params['skills'], results)
         if not results.count():
-            results = SQS().only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
+            results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
             found = False
         return results, found
 

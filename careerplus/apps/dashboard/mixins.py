@@ -48,23 +48,29 @@ class RoundOneMixin(RoundOneAPI):
             if institute_list and degree_list and year_list and marks_list and major_list:
                 try:
                     institute = institute_list[index_edu]
-                except:
+                except Exception as e:
+                    logging.getLogger('error_log').error('unable to get institution%s' % str(e))
                     institute = ''
                 try:
                     degree = degree_list[index_edu]
-                except:
+                except Exception as e:
+                    logging.getLogger('error_log').error('unable to get degree%s' % str(e))
                     degree = ''
                 try:
                     major = major_list[index_edu]
-                except:
+                except Exception as e:
+                    logging.getLogger('error_log').error('unable to get major %s' % str(e))
                     major = ''
                 try:
                     year = year_list[index_edu]
-                except:
+                except Exception as e:
+                    logging.getLogger('error_log').error('unable to get year %s' % str(e))
                     year = 1900
                 try:
                     marks = marks_list[index_edu]
-                except:
+                except Exception as e:
+                    logging.getLogger('error_log').error('unable to get marks%s' % str(e))
+
                     marks = 1
 
                 roundone_profile = request.session.get("roundone_profile")
@@ -109,19 +115,23 @@ class RoundOneMixin(RoundOneAPI):
             if company_list and position_list:
                 try:
                     company = company_list[index_job]
-                except:
+                except Exception as e:
+                    logging.getLogger('error_log').error('unable to get company %s' % str(e))
                     company = ''
                 try:
                     position = position_list[index_job]
-                except:
+                except Exception as e:
+                    logging.getLogger('error_log').error('unable to get position %s' % str(e))
                     position = ''
                 try:
                     emp_from = date(int(start_year_list[index_job]), 1, int(start_month_list[index_job])).strftime("%Y-%m-%d")
-                except:
+                except Exception as e:
+                    logging.getLogger('error_log').error('unable to get  job date from %s' % str(e))
                     emp_from = ''
                 try:
                     emp_to = date(int(end_year_list[index_job]), 1, int(end_month_list[index_job])).strftime("%Y-%m-%d")
-                except:
+                except Exception as e:
+                    logging.getLogger('error_log').error('unable to get job date to%s' % str(e))
                     emp_to = ''
 
                 roundone_profile = request.session.get("roundone_profile")
@@ -256,7 +266,8 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                     try:
                         end_year = end_year_list[job]
                         end_month = end_month_list[job]
-                    except Exception:
+                    except Exception as e:
+                        logging.getLogger('error_log').error(str(e))
                         end_year = ""
                         end_month = ""
                     if data.get('current', False) and end_year == "" and end_month == "":
@@ -405,7 +416,8 @@ class UpdateShineProfileMixin(ShineCandidateDetail, RoundOneMixin):
                     sk_list = []
                     try:
                         years_of_experience = int(level_id)
-                    except:
+                    except Exception as e:
+                        logging.getLogger('error_log').error('unable to get years of experience %s' % str(e))
                         years_of_experience = 4
 
                     sk_list.append({"value": skill, "years_of_experience": years_of_experience})
