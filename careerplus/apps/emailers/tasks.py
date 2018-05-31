@@ -26,7 +26,7 @@ def send_email_task(to_emails, mail_type, email_dict, status=None, oi=None):
 @task(name="send_email_for_base_task")
 def send_email_for_base_task(subject=None, body=None, to=[], headers=None, oi=None, status=None):
     try:
-        SendMail().base_send_mail(subject, body, to=[], headers=None, bcc=[settings.DEFAULT_FROM_EMAIL])
+        SendMail().base_send_mail(subject, body, to=to, headers=headers, bcc=[settings.DEFAULT_FROM_EMAIL])
         if oi:
             from order.models import OrderItem
             obj = OrderItem.objects.get(pk=oi)
