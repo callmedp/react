@@ -327,8 +327,8 @@ class DashboardFeedbackView(TemplateView):
         self.oi_pk = None
         self.oi = None
         self.candidate_id = None
-        self.rating =None
-        self.sel_rat=None
+        self.rating = None
+        self.sel_rat = None
 
 
 
@@ -355,17 +355,17 @@ class DashboardFeedbackView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardFeedbackView, self).get_context_data(**kwargs)
-        ratings=self.rating
+        ratings = self.rating
         if ratings:
-            self.sel_rat=ratings[-1:]
+            self.sel_rat = ratings[-1:]
         else :
-            self.sel_rat=0
+            self.sel_rat = 0
 
         if self.oi and self.oi.order.candidate_id == self.candidate_id:
             context.update({
                 "oi": self.oi,
-                ratings:'checked',
-                "var":self.sel_rat,
+                ratings: 'checked',
+                "var": self.sel_rat,
 
             })
         return context
@@ -379,7 +379,7 @@ class DashboardFeedbackView(TemplateView):
         }
         if request.is_ajax() and self.oi_pk and self.candidate_id:
             try:
-                self.oi = OrderItem.objects.select_related("order",'product ').get(pk=self.oi_pk)
+                self.oi = OrderItem.objects.select_related("order").get(pk=self.oi_pk)
                 review = request.POST.get('review', '').strip()
                 rating = int(request.POST.get('rating', 1))
                 if rating and self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
