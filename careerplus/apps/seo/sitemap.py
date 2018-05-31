@@ -166,7 +166,8 @@ class TalentAuthorSitemap(CustomSitemap):
         return 0.7
 
     def items(self):
-        return Author.objects.filter(is_active=True, visibility=2)
+        return Author.objects.filter(
+            is_active=True, blog__visibility=2, blog__status=1)
 
     def lastmod(self, item):
         return datetime.date.today() - datetime.timedelta(1)
