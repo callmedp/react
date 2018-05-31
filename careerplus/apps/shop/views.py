@@ -1,7 +1,9 @@
 import json
 import logging
+
 from collections import OrderedDict
 from decimal import Decimal
+
 from django.core.paginator import Paginator
 from django.http import (
     Http404,
@@ -22,6 +24,7 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from geolocation.models import Country
 from django.db.models import Q
+from django.template.loader import render_to_string
 
 from haystack.query import SearchQuerySet
 from meta.views import MetadataMixin
@@ -164,8 +167,6 @@ class ProductInformationMixin(object):
 
     def solar_faq(self, product):
         structure = json.loads(product.pFAQs)
-
-
         return structure
 
     def get_recommendation(self, product):
@@ -315,6 +316,101 @@ class ProductInformationMixin(object):
                 'prd_rv_page': page
             }
 
+    def get_product_detail_context(self, product, sqs, product_main, sqs_main):
+        pk = product.pk
+        ctx = {}
+
+        ctx['product'] = product
+        ctx['num_jobs_url'] = self.get_jobs_url(product)
+        if product:
+            ctx.update(self.get_breadcrumbs(product, product.category_main))
+        ctx.update(self.solar_info(sqs))
+        if product.is_course:
+            ctx.update(self.solar_program_structure(sqs))
+        ctx.update(self.solar_faq(sqs))
+        ctx.update(self.get_recommendation(product))
+        ctx.update(self.get_reviews(product, 1))
+        country_choices = [(m.phone, m.name) for m in
+                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        initial_country = Country.objects.filter(phone='91')[0].phone
+        ctx.update({
+            'country_choices': country_choices,
+            'initial_country': initial_country,
+        })
+        if sqs.pPc == 'course':
+            ctx.update(json.loads(sqs_main.pPOP))
+            pvrs_data = json.loads(sqs.pVrs)
+            try:
+                selected_var = pvrs_data['var_list'][0]
+            except Exception as e:
+                selected_var = None
+            ctx.update({'selected_var': selected_var})
+            ctx.update(pvrs_data)
+            ctx['canonical_url'] = product.get_canonical_url()
+        else:
+            if ctx.get('prd_exp', None) in ['EP', 'FP']:
+                pPOP = json.loads(sqs_main.pPOP)
+                pid = None
+                for pop in pPOP.get('pop_list'):
+                    if pop.get('experience', '') == 'FR' and ctx.get('prd_exp', None) == 'FP':
+                        pid = pop.get('id')
+                        break
+                    elif pop.get('experience', '') == 'SP' and ctx.get('prd_exp', None) == 'EP':
+                        pid = pop.get('id')
+                        break
+                try:
+                    if pid:
+                        pid = Product.objects.get(pk=pid)
+                        ctx['canonical_url'] = pid.get_canonical_url()
+                    else:
+                        ctx['canonical_url'] = product.get_canonical_url()
+                except Exception as e:
+                    ctx['canonical_url'] = product.get_canonical_url()
+                    logging.getLogger('error_log').error(
+                        "%(msg)s : %(err)s" % {'msg': 'Canonical Url ERROR', 'err': e})
+            else:
+                ctx['canonical_url'] = product.get_canonical_url()
+            ctx.update(json.loads(sqs_main.pPOP))
+            pvrs_data = json.loads(sqs.pVrs)
+            ctx.update(pvrs_data)
+        if self.is_combos(sqs):
+            ctx.update(json.loads(sqs.pCmbs))
+
+        ctx.update(json.loads(sqs.pFBT))
+        get_fakeprice = self.get_solar_fakeprice(
+            sqs.pPinb, sqs.pPfinb)
+
+        ctx.update(self.getSelectedProduct_solr(sqs))
+        # ctx.update(self.getSelectedProductPrice_solr(self.sqs))
+
+        try:
+            widget_obj = DetailPageWidget.objects.get(
+                content_type__model='Product', listid__contains=pk)
+            widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
+                column=1)
+        except DetailPageWidget.DoesNotExist:
+            widget_objs = None
+            widget_obj = None
+        ctx['domain_name'] = '{}//{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
+        ctx.update({'sqs': sqs})
+        ctx.update({'get_fakeprice': get_fakeprice})
+        ctx['meta'] = product.as_meta(self.request)
+        ctx['meta']._url = ctx.get('canonical_url', '')
+        ctx['show_chat'] = True
+        ctx['amp'] = self.request.amp
+        ctx['widget_objs'] = widget_objs
+        ctx['widget_obj'] = widget_obj
+        ctx['product_main'] = product_main,
+        ctx['sqs_main'] = sqs_main
+
+        ctx['linkedin_resume_services'] = settings.LINKEDIN_RESUME_PRODUCTS
+        navigation = True
+        if sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
+            navigation = False
+        ctx['navigation'] = navigation
+
+        return ctx
+
 
 @Decorate(stop_browser_cache())
 class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
@@ -341,94 +437,108 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         return ['shop/detail1.html']
 
     def get_context_data(self, **kwargs):
-        pk = self.kwargs.get('pk')
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
-        product = self.product_obj
-        ctx['product'] = product
-        ctx['num_jobs_url'] = self.get_jobs_url(product)
-        if product:
-            ctx.update(self.get_breadcrumbs(product, self.category))
-        ctx.update(self.solar_info(self.sqs))
-        if product.is_course:
-            ctx.update(self.solar_program_structure(self.sqs))
-        ctx.update(self.solar_faq(self.sqs))
-        ctx.update(self.get_recommendation(product))
-        ctx.update(self.get_reviews(product, 1))
-        country_choices = [(m.phone, m.name) for m in
-                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-        initial_country = Country.objects.filter(phone='91')[0].phone
+        product_data = self.get_product_detail_context(
+            self.product_obj, self.sqs,
+            self.product_obj, self.sqs)
+
+        product_detail_content = render_to_string(
+            'shop/product-detail.html', product_data,
+            request=self.request)
+
         ctx.update({
-            'country_choices': country_choices,
-            'initial_country': initial_country,
+            'product_detail': product_detail_content
         })
-        if self.sqs.pPc == 'course':
-            ctx.update(json.loads(self.sqs.pPOP))
-            pvrs_data = json.loads(self.sqs.pVrs)
-            try:
-                selected_var = pvrs_data['var_list'][0]
-            except Exception as e:
-                selected_var = None
-            ctx.update({'selected_var': selected_var})
-            ctx.update(pvrs_data)
-            ctx['canonical_url'] = self.product_obj.get_canonical_url()
-        else:
-            if ctx.get('prd_exp', None) in ['EP', 'FP']:
-                pPOP = json.loads(self.sqs.pPOP)
-                pid = None
-                for pop in pPOP.get('pop_list'):
-                    if pop.get('experience', '') == 'FR' and ctx.get('prd_exp', None) == 'FP':
-                        pid = pop.get('id')
-                        break
-                    elif pop.get('experience', '') == 'SP' and ctx.get('prd_exp', None) == 'EP':
-                        pid = pop.get('id')
-                        break
-                try:
-                    if pid:
-                        pid = Product.objects.get(pk=pid)
-                        ctx['canonical_url'] = pid.get_canonical_url()
-                    else:
-                        ctx['canonical_url'] = self.product_obj.get_canonical_url()      
-                except Exception as e:
-                    ctx['canonical_url'] = self.product_obj.get_canonical_url()
-                    logging.getLogger('error_log').error(
-                        "%(msg)s : %(err)s" % {'msg': 'Canonical Url ERROR', 'err': e})
-            else:
-                ctx['canonical_url'] = self.product_obj.get_canonical_url()
-            ctx.update(json.loads(self.sqs.pPOP))
-            pvrs_data = json.loads(self.sqs.pVrs)
-            ctx.update(pvrs_data)
-        if self.is_combos(self.sqs):
-            ctx.update(json.loads(self.sqs.pCmbs))
+        ctx.update(product_data)
 
-        ctx.update(json.loads(self.sqs.pFBT))
-        get_fakeprice = self.get_solar_fakeprice(
-            self.sqs.pPinb, self.sqs.pPfinb)
+        # pk = self.kwargs.get('pk')
+        # product = self.product_obj
+        # ctx['product'] = product
+        # ctx['num_jobs_url'] = self.get_jobs_url(product)
+        # if product:
+        #     ctx.update(self.get_breadcrumbs(product, self.category))
+        # ctx.update(self.solar_info(self.sqs))
+        # if product.is_course:
+        #     ctx.update(self.solar_program_structure(self.sqs))
+        # ctx.update(self.solar_faq(self.sqs))
+        # ctx.update(self.get_recommendation(product))
+        # ctx.update(self.get_reviews(product, 1))
+        # country_choices = [(m.phone, m.name) for m in
+        #                    Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        # initial_country = Country.objects.filter(phone='91')[0].phone
+        # ctx.update({
+        #     'country_choices': country_choices,
+        #     'initial_country': initial_country,
+        # })
+        # if self.sqs.pPc == 'course':
+        #     ctx.update(json.loads(self.sqs.pPOP))
+        #     pvrs_data = json.loads(self.sqs.pVrs)
+        #     try:
+        #         selected_var = pvrs_data['var_list'][0]
+        #     except Exception as e:
+        #         selected_var = None
+        #     ctx.update({'selected_var': selected_var})
+        #     ctx.update(pvrs_data)
+        #     ctx['canonical_url'] = self.product_obj.get_canonical_url()
+        # else:
+        #     if ctx.get('prd_exp', None) in ['EP', 'FP']:
+        #         pPOP = json.loads(self.sqs.pPOP)
+        #         pid = None
+        #         for pop in pPOP.get('pop_list'):
+        #             if pop.get('experience', '') == 'FR' and ctx.get('prd_exp', None) == 'FP':
+        #                 pid = pop.get('id')
+        #                 break
+        #             elif pop.get('experience', '') == 'SP' and ctx.get('prd_exp', None) == 'EP':
+        #                 pid = pop.get('id')
+        #                 break
+        #         try:
+        #             if pid:
+        #                 pid = Product.objects.get(pk=pid)
+        #                 ctx['canonical_url'] = pid.get_canonical_url()
+        #             else:
+        #                 ctx['canonical_url'] = self.product_obj.get_canonical_url()      
+        #         except:
+        #             ctx['canonical_url'] = self.product_obj.get_canonical_url()
+        #             logging.getLogger('error_log').error(
+        #                 "%(msg)s : %(err)s" % {'msg': 'Canonical Url ERROR', 'err': e})
+        #     else:
+        #         ctx['canonical_url'] = self.product_obj.get_canonical_url()
+        #     ctx.update(json.loads(self.sqs.pPOP))
+        #     pvrs_data = json.loads(self.sqs.pVrs)
+        #     ctx.update(pvrs_data)
+        # if self.is_combos(self.sqs):
+        #     ctx.update(json.loads(self.sqs.pCmbs))
 
-        ctx.update(self.getSelectedProduct_solr(self.sqs))
-        # ctx.update(self.getSelectedProductPrice_solr(self.sqs))
+        # ctx.update(json.loads(self.sqs.pFBT))
+        # get_fakeprice = self.get_solar_fakeprice(
+        #     self.sqs.pPinb, self.sqs.pPfinb)
 
-        try:
-            widget_obj = DetailPageWidget.objects.get(
-                content_type__model='Product', listid__contains=pk)
-            widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
-                column=1)
-        except DetailPageWidget.DoesNotExist:
-            widget_objs = None
-            widget_obj = None
-        ctx['domain_name'] = '{}//{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
-        ctx.update({'sqs': self.sqs})
-        ctx.update({'get_fakeprice': get_fakeprice})
-        ctx['meta'] = self.product_obj.as_meta(self.request)
-        ctx['meta']._url = ctx.get('canonical_url', '')
-        ctx['show_chat'] = True
-        ctx['amp'] = self.request.amp
-        ctx['widget_objs'] = widget_objs
-        ctx['widget_obj'] = widget_obj
-        ctx['linkedin_resume_services'] = settings.LINKEDIN_RESUME_PRODUCTS
-        navigation = True
-        if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
-            navigation = False
-        ctx['navigation'] = navigation
+        # ctx.update(self.getSelectedProduct_solr(self.sqs))
+        # # ctx.update(self.getSelectedProductPrice_solr(self.sqs))
+
+        # try:
+        #     widget_obj = DetailPageWidget.objects.get(
+        #         content_type__model='Product', listid__contains=pk)
+        #     widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
+        #         column=1)
+        # except DetailPageWidget.DoesNotExist:
+        #     widget_objs = None
+        #     widget_obj = None
+        # ctx['domain_name'] = '{}//{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
+        # ctx.update({'sqs': self.sqs})
+        # ctx.update({'get_fakeprice': get_fakeprice})
+        # ctx['meta'] = self.product_obj.as_meta(self.request)
+        # ctx['meta']._url = ctx.get('canonical_url', '')
+        # ctx['show_chat'] = True
+        # ctx['amp'] = self.request.amp
+        # ctx['widget_objs'] = widget_objs
+        # ctx['widget_obj'] = widget_obj
+        
+        # ctx['linkedin_resume_services'] = settings.LINKEDIN_RESUME_PRODUCTS
+        # navigation = True
+        # if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
+        #     navigation = False
+        # ctx['navigation'] = navigation
         return ctx
 
     def redirect_if_necessary(self, current_path, product):
@@ -677,3 +787,68 @@ class CourseCatalogueView(TemplateView, MetadataMixin, CourseCatalogueMixin):
             "meta_desc": self.get_meta_description(),
         })
         return context
+
+
+class ProductDetailContent(View, ProductInformationMixin, CartMixin):
+
+    def __init__(self):
+        
+        self.sqs_obj = None
+        self.sqs_main = None
+        self.product_obj = None
+        self.product_main = None
+
+    def get(self, request, *args, **kwargs):
+        data = {'status': 0}
+        if request.is_ajax():
+            self.main_pk = self.request.GET.get('main_pk', None)
+            self.obj_pk = self.request.GET.get('obj_pk', None)
+
+            try:
+                self.product_obj = Product.browsable.get(pk=self.obj_pk)
+            except:
+                logging.getLogger('error_log').error(
+                    "Product is not browsable:product-id {}".format(
+                        self.obj_pk))
+
+            try:
+                self.product_main = Product.browsable.get(pk=self.main_pk)
+            except:
+                logging.getLogger('error_log').error(
+                    "Main Product is not browsable:product-id {}".format(
+                        self.main_pk))
+
+            try:
+                sqs = SearchQuerySet().filter(id=self.obj_pk)
+                self.sqs_obj = sqs[0]
+            except:
+                logging.getLogger('error_log').error(
+                    "SQS query error on product detail.ID :{}".format(
+                        self.obj_pk))
+
+            try:
+                sqs = SearchQuerySet().filter(id=self.main_pk)
+                self.sqs_main = sqs[0]
+            except:
+                logging.getLogger('error_log').error(
+                    "SQS query error on product detail.ID :{}".format(
+                        self.main_pk))
+
+            if self.sqs_obj and self.sqs_main and self.product_obj and self.product_main:
+                product_data = self.get_product_detail_context(
+                    self.product_obj, self.sqs_obj,
+                    self.product_main, self.sqs_main)
+
+                product_detail_content = render_to_string(
+                    'shop/product-detail.html', product_data,
+                    request=request)
+
+                data.update({
+                    'status': 1,
+                    'url': self.product_obj.get_absolute_url(),
+                    'detail_content': product_detail_content,
+                    'title': self.product_obj.get_name,
+                })
+
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponseForbidden()

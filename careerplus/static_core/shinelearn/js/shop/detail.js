@@ -55,10 +55,48 @@ $(document).ready(function () {
       }
     };
 
+
+    $(document).on("click", ".other-product", function() {
+      var data_pk = $(this).attr('data-id');
+      var main_pk = $(this).attr('main-id');
+
+      data = "?main_pk="+ main_pk + "&obj_pk=" + data_pk;
+      $.ajax({
+        url: "/shop/product/content-by-ajax/" + data,
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+          // console.log("success");
+          if (data.status == 1 ){
+            currentUrl = top.window.location.pathname;
+            $("#id-detail-body").empty();
+            $('#id-detail-body').html(data.detail_content);
+            if (typeof (history.pushState) != "undefined") {
+              // console.log('hello');
+              // console.log(data.url);
+              // console.log(data.title);
+              var obj = { Title: data.title, Url: data.url };
+              history.pushState(obj, obj.Title, obj.Url);
+              document.title = data.title;
+            }
+            checkedInitialRequired();
+            updateCartPrice();
+          }
+          
+        },
+        failure: function(response){
+          console.log("failure");
+        }
+      });
+
+    });
+
+
     $(document).on("click", ".review-load-more", function() {
    
            LoadMoreProductReview($(this).attr('data-product'));
       });
+
     
     $.validator.addMethod("indiaMobile", function(value, element) {
         var country_code = $("input[name=country_code]").val(); //$('#call_back_country_code-id').val();
@@ -67,6 +105,10 @@ $(document).ready(function () {
         }
         return true;
     });
+    
+    
+
+  $(document).on('click', '#id_callback', function() {
     $('#callback_form').validate({
         rules:{
                 name:{
@@ -142,6 +184,11 @@ $(document).ready(function () {
               });
 
         }
+    });
+
+    var flag = $('#callback_form').valid();
+    if (flag){
+      $('#callback_form').submit();}
   });
 
   

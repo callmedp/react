@@ -524,9 +524,10 @@ class CartMixin(object):
         if cart_pk:
             cart_obj = Cart.objects.get(pk=cart_pk)
             try:
-                parent_li = cart_obj.lineitems.get(product=product)
+                parent_li = cart_obj.lineitems.get(
+                    product=product)
             except Exception as e:
-                logging.getLogger('error_log').error(str(e))
+                # logging.getLogger('error_log').error(str(e))
                 parent_li = None
             if parent_li:
                 selected_product = cart_obj.lineitems.filter(parent=parent_li).values_list('product__pk', flat=True)
@@ -544,8 +545,7 @@ class CartMixin(object):
                 product = Product.objects.get(id=sqs.id)
                 parent_li = cart_obj.lineitems.get(product=product)
             except Exception as e:
-                logging.getLogger('error_log').error("Unable to select product, {},{}".format(str(e), cart_pk))
-
+                # logging.getLogger('error_log').error("Unable to select product, {},{}".format(str(e), cart_pk))
                 parent_li = None
             if parent_li:
                 selected_product = cart_obj.lineitems.filter(parent=parent_li).values_list('product__pk', flat=True)
@@ -563,16 +563,16 @@ class CartMixin(object):
             cart_obj = Cart.objects.get(pk=cart_pk)
             try:
                 parent_li = cart_obj.lineitems.get(product=product)
-                if parent_li.product.is_course and parent_li.no_process == True:
+                if parent_li and parent_li.product.is_course and parent_li.no_process == True:
                     pass
-                else:
+                elif parent_li:
                     total += parent_li.product.get_price()
                     if parent_li.product.get_fakeprice():
                         fake_total += parent_li.product.get_fakeprice()[0]
                     else:
                         fake_total += parent_li.product.get_price()
             except Exception as e:
-                logging.getLogger('error_log').error(str(e))
+                # logging.getLogger('error_log').error(str(e))
                 parent_li = None
             if parent_li:
                 lis = cart_obj.lineitems.filter(parent=parent_li).select_related('product')
@@ -604,16 +604,16 @@ class CartMixin(object):
             try:
                 product = Product.objects.get(id=sqs.id)
                 parent_li = cart_obj.lineitems.get(product=product)
-                if parent_li.product.is_course and parent_li.no_process == True:
+                if parent_li and parent_li.product.is_course and parent_li.no_process == True:
                     pass
-                else:
+                elif parent_li:
                     total += parent_li.product.get_price()
                     if parent_li.product.get_fakeprice():
                         fake_total += parent_li.product.get_fakeprice()[0]
                     else:
                         fake_total += parent_li.product.get_price()
             except Exception as e:
-                logging.getLogger('error_log').error(str(e))
+                # logging.getLogger('error_log').error(str(e))
                 parent_li = None
             if parent_li:
                 lis = cart_obj.lineitems.filter(parent=parent_li).select_related('product')

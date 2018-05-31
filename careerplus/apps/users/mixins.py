@@ -848,14 +848,13 @@ class RegistrationLoginApi(object):
 
     @staticmethod
     def reset_update(data_dict):
-        
         response_json = {"response": False}
         post_data = {}
 
         post_url = "{}/api/v2/career-plus/login/change-password/?format=json".format(settings.SHINE_SITE)
 
         post_data.update({
-            'email': data_dict.get('email'),
+            'email': data_dict.get('email').lower(),
             'password':data_dict.get('new_password1'),
             'confirm_password':data_dict.get('new_password2')
         })
