@@ -36,13 +36,14 @@ function viewCommentOrderitem(oi_pk, ) {
     }
 };
 
-function giveFeedbackOrderitem(oi_pk, ) {
+function giveFeedbackOrderitem(oi_pk,rating) {
+
     if (oi_pk){
         console.log(oi_pk);
         $.ajax({
             url: '/dashboard/inbox-feedback/',
             type: "GET",
-            data : {'oi_pk': oi_pk, },
+            data : {'oi_pk': oi_pk, 'rating':rating},
             dataType: 'html',
             success: function(html) {
                 $('#right-content-id').html(html);
