@@ -371,6 +371,7 @@ class DashboardFeedbackView(TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
+
         email_dict = {}
         self.candidate_id = request.session.get('candidate_id', None)
         self.oi_pk = request.POST.get('oi_pk')
