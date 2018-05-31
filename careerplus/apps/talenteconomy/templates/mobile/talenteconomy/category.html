@@ -1,6 +1,6 @@
 {% extends "mobile/basic/base.html" %}
 {% load static compress %}
-{% load thumbnail compress %}
+{% load thumbnail %}
 
 {% block django_meta %}
     {% include 'meta/meta.html' %}
@@ -63,41 +63,13 @@
 <section class="content-box pt-0 pb-0">
   <!-- box panel starts here -->
   <div class="box-panel row " itemscope itemtype="https://schema.org/ItemList">
-    <h2 class="semi-head">All articles</h2>      
-    {% for artList in recent_articles %}
-      <div class="media article-list" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
-        <a title="{{artList.heading}}" href="{{artList.url}}" itemprop="url">
-          <figure class="media-left">
-            {% thumbnail artList.image "96x73" crop="center" as im %}
-            <img class="media-object w-auto" width="{{ im.width }}" height="{{ im.height }}" src="{{artList.image.url}}" alt="{{artList.image_alt}}" itemprop="image">
-            {% endthumbnail %}
-          </figure>
-          <div class="media-body rel">
-            <h3 class="media-heading" itemprop="name">{{artList.heading}}</h3>
+    <h2 class="semi-head">All articles</h2>
 
-            <div class="blog-author fs-11">
-              <span class="editor" itemprop="author">{{artList.author.name}}</span>
-              <span class="view-forward pull-right">
-                  <figure class="icon-forward"></figure> {{artList.no_shares}}
-                  <figure class="icon-view icon-grey-view ml-10"></figure> {{artList.no_views}}
-              </span>
-            </div>
-          </div>
-        </a>
-          <meta itemprop="datePublished" content="{{artList.publish_date.date}}"></meta>
-          <meta itemprop="position" content="{{forloop.counter}}">
-          <meta itemprop="headline" content="{{artList.heading}}">
-          <meta itemprop="dateModified" content="{{artList.publish_date.date}}">
-          <meta itemprop="mainEntityOfPage" content="{% url 'talent:talent-landing' %}">
-          
-          <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" >
-            <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
-              <meta itemprop="url" content="{% static 'shinelearn/images/logo.png' %}">
-            </div>
-            <meta itemprop="name" content="Shine">
-          </div>
-      </div>
-      {% endfor %}  
+    <div id="related-talent-container">
+      {{article_list}}
+    </div>
+    <div id="id_ajax_talentpage"></div>
+
   </div><!-- box panel ends here -->
 
   {% if popular_courses %}
@@ -117,12 +89,19 @@
 
 {% block js_section %}
     {{block.super}}
-    <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
-    <script>
+    {% compress js %}
+      <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
+      <script src="{% static 'shinelearn/js/talenteconomy/scrollpage.js' %}"></script>
+    {% endcompress %}
+
+    {% compress js inline %}
+      <script>
         $(function() {
-            Article.init();
+          Article.init();
         });
-    </script>
+        showTalentpageOnScroll.scroll(); /* for calling infinite articles */
+      </script>
+    {% endcompress %}
 {% endblock js_section %}
 
 {% block johukum %}

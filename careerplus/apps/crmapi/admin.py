@@ -47,13 +47,13 @@ class UserQuriesAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'name', 'phn_number', 'email', 'message',
         'product', 'lead_created', 'inactive',
-        'lead_source', 'source'
+        'lead_source', 'source', 'created', 'modified'
     )
     ordering = ['-created']
     actions = [lead_creted_on_crm]
     list_filter = ('lead_source', 'medium')
     search_fields = ('id', 'phn_number', 'email')
-    list_per_page = 20
+    list_per_page = 50
 
 
 class AdServerLeadAdmin(admin.ModelAdmin):
