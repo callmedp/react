@@ -1,4 +1,5 @@
 {% load static %}
+{% for main_article in page_obj %}
 <div itemscope itemtype="https://schema.org/Article">
 <h1 class="h1-head" itemprop="name">{{main_article.heading}}</h1>
 
@@ -94,3 +95,15 @@
 
 <!-- end of article -->
 </div>
+
+{% endfor %}
+
+{% if page_obj.has_next %}
+<div id="load_more" style='display:none'>
+    <div>
+    <input type="hidden" id="pg_id" name="page" value="{{page_obj.next_page_number}}">
+    <input type="hidden" id="pg_slug" name="slug" value="{{slug}}">
+    <input type="hidden" id="id_visibility" name="visibility" value="{{visibility}}">
+    </div>
+</div>
+{% endif %}
