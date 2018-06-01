@@ -104,7 +104,7 @@
         <div>
             <input type="hidden" id="country" name="country" aria-invalid="false" value="91">
 
-            <input id="mobile" type="text" name="number" onblur="leadSubmit();return false;"
+            <input id="mobile" type="text" name="number"
             placeholder="Mobile Number" maxlength="10" aria-required="true" class="pull-right" value="{{request.session.mobile_no}}">
 
             <span class="error" for="mobile" style="color: rgb(255, 0, 0);font-size: 11px;width:100%;" ></span>
@@ -245,12 +245,12 @@
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
         <script type="text/javascript">
-            function leadSubmit() {
-                var form = $('#lead');
-                var action = form.data('non_captcha_action');
-                $.post(action, (form).serialize(), function (data) {
-                    }, 'json');
-            }
+            // function leadSubmit() {
+            //     var form = $('#lead');
+            //     var action = form.data('non_captcha_action');
+            //     $.post(action, (form).serialize(), function (data) {
+            //         }, 'json');
+            // }
 
             $(function() {
               $('a[href*=#]:not([href=#])').click(function() {
