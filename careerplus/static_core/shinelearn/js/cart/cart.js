@@ -211,6 +211,47 @@ function toggler(divId) {
 
 function updateCartPrice(){
 
+    $('input[name="radio"]').each(function(){
+        if ($(this).is(':checked')){
+            var var_price, actual_price;
+            try{
+                var_price =  parseFloat($(this).attr('data-price'));
+                if(typeof $(this).attr('actual-price') != "undefined"){
+                    actual_price =  parseFloat($(this).attr('actual-price'));
+                } else{
+                    actual_price =  parseFloat($(this).data('actual-price'));
+                }
+
+                // update current price
+                var str_price = 'Rs. ' + var_price.toString() + '/- ' + '<small>(+taxes)</small>';
+                $('#total-price').html(str_price);
+                $('#total-price').attr("sum-price", var_price);
+
+                if (actual_price > var_price){
+                    var show_price = 'Rs. ' + actual_price.toString() + '/';
+                    $('#id-total-actual-price').text(show_price);
+                    $('#id-total-actual-price').attr("total-actual-price", actual_price);
+
+                    try{
+                        var per_off;
+                        per_off = actual_price - var_price;
+                        per_off = (per_off/actual_price)*100
+                        per_off = Math.round(per_off);
+                        $('#id_percentage-off').attr("percentage-off", per_off);
+                        var str_off = ' ' + per_off.toString() + '%' + ' ' + 'off';
+                        $('#id_percentage-off').text(str_off);
+
+                    }catch(err){
+                        console.log(err);
+                    }
+                }
+
+            }catch(err){
+                console.log(err);
+            }
+        }
+    });
+
     $('input[name="required_option"]').each(function(){
         if ($(this).is(':checked')){
             updateCheckedPrice(this);
@@ -225,23 +266,7 @@ function updateCartPrice(){
 
 }
 
-function cartScroller() {
-  var item = $('.price-box'),
-  height = item.height();
-  $(window).scroll(function(){
-      var $recommendProductDiv = $('.recomend-product-bg');
-      if ($recommendProductDiv.length && item.length) {
-          if (item.offset().top + height > $recommendProductDiv.offset().top - 50) {
-              item.css({'visibility': 'hidden'})
-          } else {
-              item.css({'visibility': 'visible'});
-          }
-      }
-  });
-}
-
-$(document).ready(function() {
-
+function checkedInitialRequired(){
     var req_selected = true;
     $('input[name="required_option"]').each(function(){
         if ($(this).is(':checked')){
@@ -267,10 +292,29 @@ $(document).ready(function() {
             return false;
         });
     }
+}
 
+function cartScroller() {
+  var item = $('.price-box'),
+  height = item.height();
+  $(window).scroll(function(){
+      var $recommendProductDiv = $('.recomend-product-bg');
+      if ($recommendProductDiv.length && item.length) {
+          if (item.offset().top + height > $recommendProductDiv.offset().top - 50) {
+              item.css({'visibility': 'hidden'})
+          } else {
+              item.css({'visibility': 'visible'});
+          }
+      }
+  });
+}
+
+$(document).ready(function(){
+
+    checkedInitialRequired();  // for country specific products
     updateCartPrice();
 
-    $('input[name="radio"]').click(function(){
+    $(document).on( "click", 'input[name="radio"]', function(e){
         if ($(this).is(':checked'))
         {
             var var_price, actual_price;
@@ -314,7 +358,7 @@ $(document).ready(function() {
     });
 
 
-    $('input[name="fbt"]').click(function(){
+    $(document).on( "click", 'input[name="fbt"]', function(e){
         if ($(this).is(':checked'))
         {
             updateCheckedPrice(this);
@@ -410,7 +454,7 @@ $(document).ready(function() {
         }
     });
 
-    $('input[name="required_option"]').click(function(){
+    $(document).on( "click", 'input[name="required_option"]', function(e){
         if ($(this).is(':checked'))
         {
             updateCheckedPrice(this);
@@ -508,7 +552,7 @@ $(document).ready(function() {
     });
 
 
-    $('#add-to-cart').click(function(e) {
+    $(document).on( "click", "#add-to-cart", function(e){
         e.preventDefault();
         $('#add-to-cart').attr('disabled', true);
 
@@ -597,7 +641,7 @@ $(document).ready(function() {
     });
 
 
-    $('#enrol-now-button').click(function(e) {
+    $(document).on( "click", "#enrol-now-button", function(e){
         e.preventDefault();
         var prod_id = $('#enrol-now-button').attr('prod-id');
 

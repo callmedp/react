@@ -1,0 +1,56 @@
+{% load static %}
+{% load humanize %}
+
+{% for artList in page_obj %}
+  <div class="article-list col-sm-6" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
+    	<a class="box-panel" href="{% url 'talent:te-articles-detail' artList.p_cat.slug artList.slug %}" title="{{artList.heading}}" itemprop="url">
+      	<figure class="pr">
+      		{% if artList.image  %}
+        			<img src="{{artList.image.url}}" alt="{{artList.image_alt}}" itemprop="image">
+        		{% endif %}
+        		<span class="product-title product-title-pos">{{artList.p_cat.name}}</span>
+      	</figure>
+      	<h3 class="heading-article" itemprop="name">{{artList.heading}}</h3>
+      	<article>
+          {{artList.summary|striptags|safe}}
+        </article>
+      	<hr>
+      	<span class="view-forward">
+          {% if artList.no_shares > 0 %}
+        	  <figure class="forward-icon"></figure> {{artList.no_shares}}
+          {% endif %}
+          {% if artList.no_views > 0 %}
+      		  <figure class="view-icon ml-20"></figure> {{artList.no_views}}
+          {% endif %}
+  		  </span>
+      <div class="author author-secondary">
+        <figure>
+        	{% if artList.author.image %}
+          <img src="{{artList.author.image.url}}" alt="{{artList.author.name}}">
+          {% endif %}
+        </figure>
+        <span itemprop="author">{{artList.author.name}}</span>
+      </div>
+		</a>
+		<meta itemprop="datePublished" content="{{artList.publish_date.date}}"></meta>
+		<meta itemprop="position" content="{{forloop.counter}}">
+		<meta itemprop="headline" content="{{artList.heading}}">
+    <meta itemprop="dateModified" content="{{artList.publish_date.date}}">
+    <meta itemprop="mainEntityOfPage" content="{% url 'talent:talent-landing' %}">
+     <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" >
+      <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+        <meta itemprop="url" content="{% static 'shinelearn/images/logo.png' %}">
+      </div>
+      <meta itemprop="name" content="Shine">
+    </div>
+  </div>
+{% endfor %}
+
+{% if page_obj.has_next %}
+<div id="talent_cat_load_more" style='display:none'>
+    <div>
+    <input type="hidden" id="te_cat_pg_id" name="page" value="{{page_obj.next_page_number}}">
+    <input type="hidden" id="te_cat_slug" name="slug" value="{{slug}}">
+    </div>
+</div>
+{% endif %}

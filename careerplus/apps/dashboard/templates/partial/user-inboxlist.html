@@ -284,23 +284,29 @@
 
             {% if obj.oi_status == 4 and not obj.user_feedback %}
                 <div class="col-sm-4 rating-feedback-box">
-                    <a role="button" onclick="giveFeedbackOrderitem('{{obj.pk}}')">
+
+
+                    <!--<a role="button" href="javascript:void(0)" onclick="giveFeedbackOrderitem('{{obj.pk}}')">-->
+
                         <div class="rating-feedback">
                           <span>Your feedback</span>
                           <fieldset class="rate">
-                            <input type="radio" id="rating5" name="rating" value="5" />
+                            <input type="radio" id="rating5" name="rating" value="5" onclick="giveFeedbackOrderitem('{{obj.pk}}','rating5')" />
+
                             <label for="rating5" title="5 stars"></label>
 
-                            <input type="radio" id="rating4" name="rating" value="4" />
+
+                            <input type="radio" id="rating4" name="rating" value="4" onclick="giveFeedbackOrderitem('{{obj.pk}}','rating4')"  />
                             <label for="rating4" title="4 stars"></label>
 
-                            <input type="radio" id="rating3" name="rating" value="3" />
+
+                            <input type="radio" id="rating3" name="rating" value="3" onclick="giveFeedbackOrderitem('{{obj.pk}}','rating3')" />
                             <label for="rating3" title="3 stars"></label>
 
-                            <input type="radio" id="rating2" name="rating" value="2" />
+                            <input type="radio" id="rating2" name="rating" value="2" onclick="giveFeedbackOrderitem('{{obj.pk}}','rating2')"  />
                             <label for="rating2" title="2 stars"></label>
 
-                            <input type="radio" id="rating1" name="rating" value="1" />
+                            <input type="radio" id="rating1" name="rating" value="1" onclick="giveFeedbackOrderitem('{{obj.pk}}','rating1')" />
                             <label for="rating1" title="1 star"></label>
 
                           </fieldset>

@@ -45,10 +45,13 @@
         <!-- left content start -->
         <div class="col-md-9 col-sm-12">
 
+          <div id="related-container">
+            {{detail_article}}
+          </div>
+          <div id="id_ajax_article"></div>
           <!-- content start -->
-          {% include "./include/detail-article-list.tmpl.html" %}
-
         </div>
+
 		<!-- left content end -->
 
 		<!-- right content start -->
@@ -80,7 +83,7 @@
      <div>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <span class="modal-title" id="myModalLabel">Login</span>
-        <label id="non-field-error" class="error"></label>
+        <label id="non-field-error" class="error-msg"></label>
       </div>
 
        <form autocomplete="off" role method="post" id="login_form" >{% csrf_token %}
@@ -199,7 +202,7 @@
             {% for field in reset_form %}
                 <div class="form-group {% if field.errors %}error{% endif %}">
                     {{field}}
-                    {% for error in  field.errors %}{{ error }}{% endfor %}
+                    <span class="error-txt">{{ field.errors.0 }}</span>
                 </div>
             {% endfor %}
           <button type="submit" class="btn btn-primary submit mt-20">Submit</button>
@@ -219,10 +222,17 @@
     <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
+    {% endcompress %}
+
+    {% compress js inline %}
     <script>
-    	$(function(){
-    		Article.init();
-    	});
+      $(function(){
+        Article.init();
+      });
+      if (window.location.hash == '#_=_') {
+          open(location, '_self').close();
+      }
+      showArticleOnScroll.scroll(); /* for calling infinite articles */
     </script>
     {% endcompress %}
 {% endblock js_section %}

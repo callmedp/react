@@ -192,26 +192,29 @@ class BlogDetailView(DetailView, BlogMixin):
         main_obj_list = list(main_obj)
         article_list = Blog.objects.filter(p_cat=p_cat, status=1, visibility=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[p_cat], status=1, visibility=1).order_by('-publish_date')
         article_list = article_list.exclude(pk=blog.pk)
-        article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
+        article_list = article_list.distinct().select_related(
+            'created_by').prefetch_related('tags')
 
         article_list = list(article_list)
 
         object_list = main_obj_list + article_list
 
         detail_obj = self.scrollPagination(
-                paginated_by=self.paginated_by, page=self.page,
-                object_list=object_list)
+            paginated_by=self.paginated_by, page=self.page,
+            object_list=object_list)
         
         if self.request.flavour == 'mobile':
             detail_article = render_to_string('include/detail-article-list.html',
                 {"page_obj": detail_obj,
                 "slug": blog.slug,
+                "visibility": blog.visibility,
                 "SITEDOMAIN": settings.SITE_DOMAIN,
                 "main_article": main_obj[0]})
         else:
             detail_article = render_to_string('include/detail-article-list.html',
                 {"page_obj": detail_obj,
-                "slug": blog.slug, "SITEDOMAIN": settings.SITE_DOMAIN})
+                "slug": blog.slug, "visibility": blog.visibility,
+                "SITEDOMAIN": settings.SITE_DOMAIN})
 
         context.update({
             "detail_article": detail_article,
@@ -346,9 +349,8 @@ class BlogTagListView(TemplateView, PaginationMixin):
             logging.getLogger('error_log').error("Unable to get active tab %s"% str(e))
             self.active_tab = 0
         try:
-            self.tag_obj = Tag.objects.get(slug=slug, is_active=True, visibility=1)
-        except Exception as e:
-            logging.getLogger('error_log').error("Unable to get tag object %s"% str(e))
+            self.tag_obj = Tag.objects.get(slug=slug, is_active=True)
+        except Exception:
             raise Http404
         context = super(BlogTagListView, self).get(request, args, **kwargs)
         return context
@@ -530,28 +532,47 @@ class BlogDetailAjaxView(View, BlogMixin):
         self.paginated_by = 1
         self.slug = None
         self.blog = None
+        self.visibility = 1
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
             self.page = self.request.GET.get('page', 1)
             self.slug = self.request.GET.get('slug')
             try:
-                self.blog = Blog.objects.get(slug=self.slug, status=1, visibility=1)
-                main_objs = Blog.objects.filter(slug=self.blog.slug, status=1, visibility=1)
+                self.visibility = int(self.request.GET.get('visibility', 1))
+                self.blog = Blog.objects.get(
+                    slug=self.slug, status=1,
+                    visibility=self.visibility)
+                main_objs = Blog.objects.filter(
+                    slug=self.blog.slug, status=1,
+                    visibility=self.visibility)
 
-                article_list = Blog.objects.filter(p_cat=self.blog.p_cat, status=1, visibility=1).order_by('-publish_date') | Blog.objects.filter(sec_cat__in=[self.blog.p_cat], status=1).order_by('-publish_date')
-                article_list = article_list.exclude(slug=self.blog.slug)
-                article_list = article_list.distinct().select_related('created_by').prefetch_related('tags')
+                article_list = Blog.objects.filter(
+                    p_cat=self.blog.p_cat, status=1,
+                    visibility=self.visibility).order_by(
+                    '-publish_date') | Blog.objects.filter(
+                    sec_cat__in=[self.blog.p_cat], status=1,
+                    visibility=self.visibility).order_by('-publish_date')
+                article_list = article_list.exclude(
+                    pk=self.blog.pk)
+                article_list = article_list.distinct().select_related(
+                    'created_by', 'author').prefetch_related('tags')
 
                 object_list = list(main_objs) + list(article_list)
 
                 page_obj = self.scrollPagination(
                     paginated_by=self.paginated_by, page=self.page,
                     object_list=object_list)
+                if self.visibility == 2:
+                    template_name = 'talenteconomy/include/detail-article-list.tmpl.html'
+                else:
+                    template_name = 'include/detail-article-list.html'
 
-                detail_article = render_to_string('include/detail-article-list.html',
+                detail_article = render_to_string(
+                    template_name,
                     {"page_obj": page_obj,
                     "slug": self.blog.slug,
+                    "visibility": self.blog.visibility,
                     "SITEDOMAIN": settings.SITE_DOMAIN, })
 
                 data = {
@@ -562,9 +583,8 @@ class BlogDetailAjaxView(View, BlogMixin):
 
                 return HttpResponse(json.dumps(data), content_type="application/json")
             except Exception as e:
-                logging.getLogger('error_log').error("Unable to return get blog object%s" % str(e))
-
-                pass
+                logging.getLogger('error_log').error(
+                    "Unable to return get blog object - %s" % str(e))
         return HttpResponseForbidden()
 
 
@@ -589,6 +609,11 @@ class ShowCommentBoxView(TemplateView, LoadCommentMixin):
             visibility = int(request.GET.get('visibility',1))
             if visibility == 2:
                 self.template_name = 'talenteconomy/include/commentBox.tmpl.html'
+            elif visibility == 3:
+                if request.flavour == 'mobile':
+                    self.template_name = 'mobile/hrinsider/include/commentBox.tmpl.html'
+                else:
+                    self.template_name = 'hrinsider/include/commentBox.tmpl.html'
             self.visibility = visibility
 
             return super(self.__class__, self).get(request, args, **kwargs)

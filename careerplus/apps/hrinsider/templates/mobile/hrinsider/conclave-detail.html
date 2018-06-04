@@ -1,0 +1,168 @@
+{% extends "hrinsider/base.html" %}
+{% load static humanize thumbnail compress %}
+{% load tz %}
+
+    {% block django_meta %}
+        {% include 'meta/meta.html' %}
+    {%  endblock django_meta %}
+    {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ object.get_absolute_url }}">
+    {% endblock canonical_url %}
+
+     {% block title %}
+       {{obj.display_name}} | Shinelearning
+    {% endblock title %}
+
+    {% block css_section %}
+        {{block.super}}
+        {% compress css %}
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/hr-insider/blog.scss' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/mobile/hr-insider/slick.scss' %}" rel="stylesheet">
+        {% endcompress %}
+    {% endblock css_section %}
+
+    {% block hr_tabs %}
+      {% include './include/hr-tabs.html' with arrow_down="hr-conclave" %}
+    {% endblock hr_tabs %}
+
+    {% block container %}
+
+    <!-- HR Insider -->
+    <section class="content-box">
+      <ul class="breadcrumb mb-5">
+        {% include './include/breadcrumb.html' %}
+      </ul><!-- /. breadcrumb -->
+
+      <h1 class="mb-20">{{conclave_type}} Conclave</h1>
+      <!-- upcoming conclave widgets starts here -->
+      <div class="talent-gr">
+        <div class="content-box">
+          <div class="hr-analytics">
+            <h2 class="mb-0">{{obj.heading}}</h2>
+            <span><img src="{{obj.image.url}}" width="91" height="72" alt="{{obj.image_alt}}"></span>
+          </div>
+        </div><!-- /. content-box -->
+        
+        <div class="speaker-slider-wrap">
+          <div class="black-gr"></div>
+
+          <div class="mic-line w100fl">
+            <span class="wrap-icon pull-left">
+              <sup class="icon-mic"></sup>Event Speakers
+            </span>
+            <span class="line pull-right"></span>
+          </div><!-- /. line -->
+          <div class="clearfix"></div>
+          
+          <div class="speakers-slider">
+            <ul class="hr-speaker-slide mt-5 pb-20">
+              {% for speaker in speakers %}
+              <li>
+                {% if speaker.image %}
+                <span><img src="{{speaker.image.url}}" width="88" height="58"></span>
+                {% endif %}
+                <h3>{{speaker.name}}</h3>
+                <p class="pb-0 fs-11">{{speaker.designation}}</p>
+                <p class="font-bold pb-0 fs-11">{{speaker.company}}</p>
+              </li>
+              {% endfor %}
+
+            </ul><!-- /. UL -->
+          </div><!-- /. Speakers-slider -->
+        </div><!-- /. speaker-slider-wrap -->
+
+      </div><!-- upcoming conclave Ends here -->
+
+      {% if conclave_type == 'Upcoming' %}
+      <div class="grey-bg">
+        <div class="content-box">
+          <ul class="event-detail">
+            <li>
+              <span class="calendar">
+                <i class="icon-calendar"></i>
+              </span>
+              <div>
+                <strong>{{obj.start_date.date}}</strong>
+                <p class="pb-0 c9 fs-12">Entry by {{obj.author}}</p>
+              </div>
+            </li>
+
+            <li>
+              <span class="clock">
+                <i class="icon-clock"></i>
+              </span>
+              <div>
+                <strong>{{obj.start_date|localtime|date:"g:iA"}} Onwards</strong>
+              </div>
+            </li>
+
+            <li>
+              <span class="location">
+                <i class="icon-location"></i>
+              </span>
+              <div>
+                <strong>{{obj.venue}}</strong>
+                <!--p class="fs-11 font-bold pb-0"><a href="#">Show on Map</a></p-->
+              </div>
+            </li>
+
+
+          </ul><!-- /. event-detail-->
+        </div><!-- /. content box -->
+      </div><!-- /. grey Bg -->
+      {% endif %}
+
+
+      <article class="mt-20">
+        {{obj.content|safe}}
+      </article><!-- /. Article -->
+
+      <div class="follow-widgets">
+        <p class="inline-block">Share this event on</p>
+        <ul>
+          <li class="fb"><a id="article_share" target="_blank" article-slug="{{obj.slug}}"  href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{obj.get_absolute_url}}"><span class="icon-sm-fb"></span></a></li>
+
+          <li class="twitter"><a id="article_share" target="_blank" article-slug="{{obj.slug}}" href="https://twitter.com/home?status=https://{{SITEDOMAIN}}{{obj.get_absolute_url}}"><span class="icon-sm-twitter"></span></a></li>
+
+          <li class="gPlus"><a id="article_share" target="_blank" article-slug="{{obj.slug}}" href="https://plus.google.com/share?url={{SITEDOMAIN}}{{obj.get_absolute_url}}"><span class="icon-sm-gPlus"></span></a></li>
+        </ul>
+      </div><!-- /.Follow -->
+
+    </section><!-- /. HR Insider here -->
+
+    {% if past_conclaves %}
+      {% include './include/past_conclave.html' with past_conclaves=past_conclaves %}
+    {% endif %}
+
+
+    {% if past_speakers %}
+      <!-- Past Speakers -->
+      <section class="content-box light-blue-bg">
+        <h2>Past Speakers</h2>
+         <div class="slide-container">
+          <ul class="contributors">
+            {% for speaker in past_speakers %}
+            <li>
+              <img src="{{speaker.image.url}}">
+              <p class="head pb-0 pt-5">{{speaker.name}}</p>
+              <p class="fs-12 pt-5"><a>{{speaker.count}} articles</a></p>
+            </li>
+            {% endfor %}
+          
+          </ul>
+          </div>
+      </section><!-- /. Past Speakers -->
+    {% endif %}
+
+    {% include './include/contact-info.html' %}
+
+  
+    {% endblock container %}
+
+    {% block js_section %}
+      {{block.super}}
+      {% compress js %}
+        <script src="{% static 'shinelearn/js/hrinsider/share.js' %}"></script>
+      {% endcompress %}
+    {% endblock js_section %}

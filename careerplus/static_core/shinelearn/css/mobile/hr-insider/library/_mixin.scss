@@ -1,0 +1,160 @@
+@function extend($obj, $ext-obj) {
+  @return map-merge($obj, $ext-obj);
+}
+
+@function -imp($value, $inset: !important) {
+  @return $value $inset;
+}
+
+@mixin appearance($value) {
+  -webkit-appearance: $value;
+  -moz-appearance: $value;
+  appearance: $value;
+}
+
+@mixin opacity($value) {
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=$value)";
+  filter: alpha(opacity=$value);
+  -khtml-opacity: $value;
+  -moz-opacity: $value;
+  opacity: $value;
+}
+
+@mixin icon-details($width, $height, $position) {
+  background-position: $position;
+  width: $width;
+  height: $height;
+}
+
+@mixin icon-block($width, $height, $position) {
+  @include icon-details($width, $height, $position);
+  display: block;
+}
+
+@mixin icon-inblock($width, $height, $position) {
+  @include icon-details($width, $height, $position);
+  display: inline-block;
+}
+
+@mixin box($width, $height, $display: null) {
+  @if $display != null { display: $display; }
+  height: $height;
+  width: $width;
+}
+
+@mixin square($value, $display: null) {
+  @include box($value, $value, $display);
+}
+
+@mixin size($width, $height:null, $display: null) {
+  @if $display != null { display: $display; }
+  width: $width;
+  @if $height != null { height: $height;}
+  @if $height == null { height: $width;}
+}
+
+@mixin absolute-box($width, $height, $display: null) {
+  @include box($width, $height, $display);
+  position: absolute;
+}
+
+@mixin absolute-square($value, $display: null) {
+  @include square($value, $display);
+  position: absolute;
+}
+
+@mixin relative-box($width, $height, $display: null) {
+  @include box($width, $height, $display);
+  position: relative;
+}
+
+@mixin relative-square($value, $display: null) {
+  @include square($value, $display);
+  position: relative;
+}
+
+@mixin fixed-box($width, $height, $display: null) {
+  @include box($width, $height, $display);
+  position: fixed;
+}
+
+@mixin fixed-square($value, $display: null) {
+  @include square($value, $display);
+  position: fixed;
+}
+
+%absolute-container{
+  @include absolute-box(100%, 100%);
+}
+
+
+@mixin position($position, $coordinates: null, $zindex: null){
+  position: $position;
+  @if $coordinates != null {
+	  $offsets: (
+	    top:    nth($coordinates, 1),
+	    left:   nth($coordinates, 2),
+	    bottom: nth($coordinates, 3),
+	    right:  nth($coordinates, 4),
+	  );
+	   @each $offset, $value in $offsets {
+	    @if _is-length($value) {
+	      #{$offset}: $value;
+	    }
+	  }
+	}
+  @if $zindex != null { z-index: $zindex}
+}
+
+@mixin transition($transition...) {
+  -webkit-transition: $transition;
+  -moz-transition: $transition;
+  -o-transition: $transition;
+  transition: $transition;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin flexbox {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+%flexbox { @include flexbox; }
+
+@mixin flex($fg: 1, $fs: null, $fb: null) {
+
+	// Set a variable to be used by box-flex properties
+  $fg-boxflex: $fg;
+
+	// Box-Flex only supports a flex-grow value so let's grab the
+	// first item in the list and just return that.
+  @if type-of($fg) == 'list' {
+		$fg-boxflex: nth($fg, 1);
+	}
+
+  -webkit-box-flex: $fg-boxflex;
+  -webkit-flex: $fg $fs $fb;
+  -moz-box-flex: $fg-boxflex;
+  -moz-flex: $fg $fs $fb;
+  -ms-flex: $fg $fs $fb;
+  flex: $fg $fs $fb;
+}
+
+@mixin transform($transforms) {
+  -moz-transform: $transforms;
+  -o-transform: $transforms;
+  -ms-transform: $transforms;
+  -webkit-transform: $transforms;
+  transform: $transforms;
+}
+
+
