@@ -297,3 +297,14 @@ try:
     from .settings_local import *
 except:
     pass
+
+
+######### CONTACT NUMBERS ###################
+
+
+GGN_CONTACT_FULL = '0124-4312500 /01'
+GGN_CONTACT = '0124-4312500'
+
+
+
+

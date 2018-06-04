@@ -62,9 +62,10 @@
             {% endif %}
           {% endfor %} 
         </ul>
-
-        {% include './include/detail-article-list.tmpl.html' %}
-
+        <div id="related-container">
+            {{detail_article}}
+        </div>
+        <div id="id_ajax_article"></div>
     </section>
     
     {% if popular_courses %}
@@ -121,14 +122,23 @@
 
 {% block js_section %}
     {{block.super}}
+    {% compress js %}
     <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
-    <script>
-        $(function() {
-            Article.init();
-        });
-    </script>
+    {% endcompress %}
+    {% compress js inline %}
+        <script>
+            $(function() {
+                Article.init();
+            });
+            if (window.location.hash == '#_=_') {
+                open(location, '_self').close();
+            }
+            showArticleOnScroll.scroll(); /* for calling infinite articles */
+        </script>
+
+    {% endcompress %}
 {% endblock js_section %}
 
 {% block johukum %}
