@@ -339,13 +339,13 @@ $(document).ready(function(){
             return false;
     });
 
-    // $.validator.addMethod("custom_review",
-    //     function(value, element) {
-    //         if($('#id_review').val().trim()){
-    //             return true;
-    //         }
-    //         return false;
-    // });
+     $.validator.addMethod("custom_review",
+         function(value, element) {
+             if($('#id_review').val().trim()){
+                 return true;
+             }
+             return false;
+     });
 
     $(document).on('click', '[name="rating"]', function () {
         var flavour = $('[name="flavour"]').val();
@@ -370,6 +370,7 @@ $(document).ready(function(){
                 },
                 review: {
                     maxlength: 1500,
+                    custom_review:true,
                 },
             },
             messages: {
