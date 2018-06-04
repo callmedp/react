@@ -262,7 +262,7 @@ $(document).ready(function () {
         e.stopPropagation();
         var target = $(e.target);
         if(target.hasClass('cls_tab_child')){
-          $('html,body').animate({scrollTop : $(''+target.attr('href')).offset().top - 30},1000);
+           $('html,body').animate({scrollTop : $(''+target.attr('href')).offset().top - 30},1000);
         }
       });
       

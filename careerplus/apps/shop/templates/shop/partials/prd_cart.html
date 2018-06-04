@@ -8,11 +8,7 @@
     </form>
 </div>
 
-
-<div class="container pr">
-  <!-- right fixed content start -->
-  <div id="price-box" class="col-sm-5 col-md-4 price-box">
-  <div class="box-panel enrol-cart">
+  <div class="box-panel enrol-cart no-pad">
      <strong id="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
      {{var_list.0.inr_price|floatformat}}{% else %}
      {{sqs.pPinb|floatformat}}{% endif %}/- <small>(+taxes)</small></strong>
@@ -40,13 +36,13 @@
     {% endcomment %}
     
     <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
-    
 
+    {% comment %}
     {% if sqs.id not in linkedin_resume_services %}
       <a role="button" class="add-cart" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Add to cart</a>
     {% endif %}
-
     <div class="cart-message"><span class="cart-success" id="id-cart-message"></span></div>
+    {% endcomment %}
 
     <!--a role="button" class="add-cart" onclick="addToCart('{{object.id}}')" data-price="{{object.get_price}}">Add to cart</a-->
     
@@ -73,7 +69,3 @@
       </ul>
     </div>
   {% endif %}
-  </div>
-<!-- right fixed content end -->
-
-</div>
