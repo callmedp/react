@@ -208,10 +208,11 @@ var showArticleOnScroll = (function(){
     function makeAjax() {
         page = $("#pg_id").val();
         slug = $("#pg_slug").val();
+        visibility = $("#id_visibility").val();
         if(!ajaxCalled){
             if (page != undefined & page != prev_page){
                 prev_page = page;
-                data = "?page="+ page+ "&slug=" + slug;
+                data = "?page="+ page+ "&slug=" + slug + "&visibility=" + visibility
                 ajaxCalled = true;
                 $.ajax({
                     url: "/article/ajax/article-detail-loading/" + data,
@@ -230,11 +231,11 @@ var showArticleOnScroll = (function(){
     };
 
     
-    function upDateUrl(urlPath) {
+    function upDateUrl(urlPath, newTitle) {
         var urlPath = urlPath,
         ret = false;
         if(urlPath != '' && top.window.location.pathname != urlPath) {
-            window.history.pushState({"html":'',"pageTitle":''},"", urlPath);
+            window.history.pushState({"html":'',"pageTitle": newTitle},"", urlPath);
             ret = true;
         }
         return ret;

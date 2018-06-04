@@ -102,7 +102,7 @@ class DashboardView(TemplateView):
                     order_items = OrderItem.objects.filter(
                         order__status=1,
                         id__in=list_ids, order__candidate_id=candidate_id,
-                        no_process=False, oi_status=2)
+                        no_process=False, oi_status=2).select_related('order')
 
                     for obj in order_items:
                         try:
@@ -218,7 +218,7 @@ class DashboardDetailView(TemplateView):
 
             try:
 
-                self.oi = OrderItem.objects.select_related('order','product').get(pk=self.oi_pk)
+                self.oi = OrderItem.objects.select_related('order').get(pk=self.oi_pk)
                 if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
                     pass
 
@@ -327,13 +327,15 @@ class DashboardFeedbackView(TemplateView):
         self.oi_pk = None
         self.oi = None
         self.candidate_id = None
+        self.rating = None
+        self.sel_rat = None
 
 
 
     def get(self, request, *args, **kwargs):
         self.candidate_id = request.session.get('candidate_id', None)
         self.oi_pk = request.GET.get('oi_pk')
-
+        self.rating=request.GET.get('rating',None)
 
         if request.is_ajax() and self.oi_pk and self.candidate_id:
             try:
@@ -353,13 +355,23 @@ class DashboardFeedbackView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardFeedbackView, self).get_context_data(**kwargs)
+        ratings = self.rating
+        if ratings:
+            self.sel_rat = ratings[-1:]
+        else :
+            self.sel_rat = 0
+
         if self.oi and self.oi.order.candidate_id == self.candidate_id:
             context.update({
                 "oi": self.oi,
+                ratings: 'checked',
+                "var": self.sel_rat,
+
             })
         return context
 
     def post(self, request, *args, **kwargs):
+
         email_dict = {}
         self.candidate_id = request.session.get('candidate_id', None)
         self.oi_pk = request.POST.get('oi_pk')
@@ -368,7 +380,7 @@ class DashboardFeedbackView(TemplateView):
         }
         if request.is_ajax() and self.oi_pk and self.candidate_id:
             try:
-                self.oi = OrderItem.objects.select_related("order",'product ').get(pk=self.oi_pk)
+                self.oi = OrderItem.objects.select_related("order").get(pk=self.oi_pk)
                 review = request.POST.get('review', '').strip()
                 rating = int(request.POST.get('rating', 1))
                 if rating and self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
@@ -507,7 +519,7 @@ class DashboardAcceptService(View):
                 "display_message": '',
             }
             try:
-                oi = OrderItem.objects.select_related('order','product').get(pk=oi_pk)
+                oi = OrderItem.objects.select_related('order').get(pk=oi_pk)
                 if oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
                     if oi.oi_status in [24, 46]:
                         last_oi_status = oi.oi_status

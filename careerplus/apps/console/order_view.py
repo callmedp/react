@@ -427,7 +427,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         self.query = ''
         self.writer, self.created = '', ''
         self.delivery_type = ''
-        self.sel_opt  ='id'
+        self.sel_opt  ='number'
 
 
     def get(self, request, *args, **kwargs):
@@ -436,7 +436,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         self.writer = request.GET.get('writer', '')
         self.created = request.GET.get('created', '')
         self.delivery_type = request.GET.get('delivery_type', '')
-        self.sel_opt = request.GET.get('rad_search','id')
+        self.sel_opt = request.GET.get('rad_search','number')
         return super(InboxQueueVeiw, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -508,10 +508,9 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         try:
             if self.query:
                 if self.sel_opt == 'id':
-                    if self.query[:2] =='cp' or self.query[:2] == 'CP':
-                        queryset=queryset.filter(order__number__iexact=self.query)
-                    else:
                         queryset = queryset.filter(id__iexact=self.query)
+                elif self.sel_opt =='number':
+                        queryset=queryset.filter(order__number__iexact=self.query)
                 elif self.sel_opt == 'mobile':
                     queryset = queryset.filter(order__mobile__iexact=self.query)
                 elif self.sel_opt == 'email':
@@ -743,14 +742,14 @@ class ApprovalQueueVeiw(ListView, PaginationMixin):
         self.query = ''
         self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', ''
-        self.sel_opt= 'id'
+        self.sel_opt= 'number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
-        self.sel_opt=request.GET.get('rad_search','id')
+        self.sel_opt=request.GET.get('rad_search','number')
         try:
             self.draft_level = int(request.GET.get('draft_level', -1))
         except:
@@ -881,14 +880,14 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         self.query = ''
         self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', ''
-        self.sel_opt='id'
+        self.sel_opt='number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
-        self.sel_opt=request.GET.get('rad_search','id')
+        self.sel_opt=request.GET.get('rad_search','number')
         try:
             self.draft_level = int(request.GET.get('draft_level', -1))
         except:
@@ -1017,14 +1016,14 @@ class RejectedByAdminQueue(ListView, PaginationMixin):
         self.query = ''
         self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', ''
-        self.sel_opt ='id'
+        self.sel_opt ='number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
-        self.sel_opt =request.GET.get('rad_search','id')
+        self.sel_opt =request.GET.get('rad_search','number')
         try:
             self.draft_level = int(request.GET.get('draft_level', -1))
         except:
@@ -1156,14 +1155,14 @@ class RejectedByCandidateQueue(ListView, PaginationMixin):
         self.query = ''
         self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', ''
-        self.sel_opt ='id'
+        self.sel_opt = 'number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
-        self.sel_opt=request.GET.get('rad_search','id')
+        self.sel_opt = request.GET.get('rad_search','number')
         try:
             self.draft_level = int(request.GET.get('draft_level', -1))
         except:
@@ -1298,12 +1297,12 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         self.query = ''
         self.writer, self.created, self.delivery_type = '', '', ''
         self.oi_status = -1
-        self.sel_opt='id'
+        self.sel_opt = 'number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
-        self.sel_opt=request.GET.get('rad_search','id')
+        self.sel_opt=request.GET.get('rad_search','number')
         self.writer = request.GET.get('writer', '')
         self.created = request.GET.get('created', '')
         self.oi_status = request.GET.get('oi_status', '')
@@ -1431,14 +1430,14 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
         self.paginated_by = 50
         self.query = ''
         self.payment_date, self.created = '', ''
-        self.sel_opt ='id'
+        self.sel_opt ='number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
         self.created = request.GET.get('created', '')
-        self.sel_opt=request.GET.get('rad_search','id')
+        self.sel_opt=request.GET.get('rad_search','number')
         return super(ClosedOrderItemQueueVeiw, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1546,13 +1545,13 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
         self.paginated_by = 20
         self.query = ''
         self.payment_date, self.modified = '', ''
-        self.sel_opt='id'
+        self.sel_opt='number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
-        self.sel_opt=request.GET.get('rad_search','id')
+        self.sel_opt=request.GET.get('rad_search','number')
         self.modified = request.GET.get('modified', '')
         return super(DomesticProfileUpdateQueueView, self).get(request, args, **kwargs)
 
@@ -1688,14 +1687,14 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
         self.paginated_by = 50
         self.query = ''
         self.payment_date, self.modified = '', ''
-        self.sel_opt='id'
+        self.sel_opt='number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
         self.payment_date = request.GET.get('payment_date', '')
         self.modified = request.GET.get('modified', '')
-        self.sel_opt = request.GET.get('rad_search','id')
+        self.sel_opt = request.GET.get('rad_search','number')
         return super(DomesticProfileApprovalQueue, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1793,12 +1792,12 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
-        self.sel_opt='id'
+        self.sel_opt='number'
         self.payment_date = ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.sel_opt=request.GET.get('rad_search','id')
+        self.sel_opt=request.GET.get('rad_search','number')
         self.query = request.GET.get('query', '').strip()
         self.payment_date = request.GET.get('payment_date', '')
         return super(BoosterQueueVeiw, self).get(request, args, **kwargs)

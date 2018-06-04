@@ -710,16 +710,16 @@ class AuthorListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(self.__class__, self).get_queryset()
-        visibility = []
-        if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
-            visibility.append(1)
-        if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
-            visibility.append(2)
+        # visibility = []
+        # if has_group(user=self.request.user, grp_list=[settings.LEARNING_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+        #     visibility.append(1)
+        # if has_group(user=self.request.user, grp_list=[settings.TALENT_BLOGGER, settings.PRODUCT_GROUP_LIST]):
+        #     visibility.append(2)
 
-        if has_group(user=self.request.user, grp_list=[settings.HR_INSIDER, settings.PRODUCT_GROUP_LIST]):
-            visibility += [3, 4, 5]
+        # if has_group(user=self.request.user, grp_list=[settings.HR_INSIDER, settings.PRODUCT_GROUP_LIST]):
+        #     visibility += [3, 4, 5]
 
-        queryset = queryset.filter(visibility__in=visibility)
+        # queryset = queryset.filter(visibility__in=visibility)
         
         try:
             if self.query:

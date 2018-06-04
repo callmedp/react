@@ -4,7 +4,7 @@ from django.views.generic import RedirectView
 
 from .views import TalentEconomyLandingView, TEBlogCategoryListView,\
     TEBlogDetailView, AuthorListingView, AuthorDetailView,\
-    TalentDetailAjaxView, TETagArticleView, TETagLoadmoreArticleView
+    TECategoryArticleLoadView, TETagArticleView, TETagLoadmoreArticleView
 #     LoginToCommentView, ShowCommentBoxView, LoadMoreCommentView,\
 #     BlogTagListView, RegisterToCommentView
 
@@ -14,8 +14,8 @@ urlpatterns = [
 
     url(r'^authors/$', AuthorListingView.as_view(), name='authors-listing'),
     url(r'^authors/(?P<slug>[-\w]+)/$', AuthorDetailView.as_view(), name='authors-detail'),
-    url(r'^ajax/talent-detail-loading/$', TalentDetailAjaxView.as_view(),
-        name='talent-detail-loading'),
+    url(r'^ajax/te-category-article-load/$', TECategoryArticleLoadView.as_view(),
+        name='te-cat-article-load'),
 
     url(r'^tags/$', RedirectView.as_view(
         url=reverse_lazy('talent:talent-landing'), permanent=True)),
