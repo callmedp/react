@@ -81,5 +81,7 @@ def common_context_processor(request):
         "IS_LIVE": settings.IS_LIVE,
         "writer_invoice": writer_invoice,
         "WELCOMECALL_GROUP_LIST": settings.WELCOMECALL_GROUP_LIST,
+        "ggn_contact_full": settings.GGN_CONTACT_FULL,
+        "ggn_contact": settings.GGN_CONTACT,
     })
     return context

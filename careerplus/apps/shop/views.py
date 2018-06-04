@@ -447,7 +447,9 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             request=self.request)
 
         ctx.update({
-            'product_detail': product_detail_content
+            'product_detail': product_detail_content,
+            "ggn_contact_full": settings.GGN_CONTACT_FULL,
+            "ggn_contact": settings.GGN_CONTACT,
         })
         ctx.update(product_data)
 
