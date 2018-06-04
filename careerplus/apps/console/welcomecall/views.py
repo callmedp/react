@@ -97,13 +97,15 @@ class WelcomeQueueView(ListView, PaginationMixin):
         self.query = ''
         self.assigned = -1
         self.payment_date, self.created = '', ''
+        self.sel_opt = 'number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
         self.payment_date = request.GET.get('payment_date', '')
         self.created = request.GET.get('created', '')
         self.assigned = request.GET.get('assigned', '-1')
+        self.sel_opt = request.GET.get('rad_search','')
         return super(WelcomeQueueView, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -153,6 +155,7 @@ class WelcomeQueueView(ListView, PaginationMixin):
             "messages": alert,
             "filter_form": filter_form,
             "query": self.query,
+            self.sel_opt: 'checked',
         })
 
         return context
@@ -164,10 +167,12 @@ class WelcomeQueueView(ListView, PaginationMixin):
         try:
             if self.query:
 
-                queryset = queryset.filter(
-                    Q(number=self.query) |
-                    Q(email=self.query) |
-                    Q(mobile=self.query))
+                if self.sel_opt == 'number':
+                    queryset = queryset.filter(number=self.query)
+                elif self.sel_opt == 'email':
+                    queryset = queryset.filter(email=self.query)
+                elif self.sel_opt == 'mobile':
+                    queryset = queryset.filter(mobile=self.query)
 
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
@@ -476,13 +481,17 @@ class WelcomeCallDoneView(ListView, PaginationMixin):
         self.paginated_by = 30
         self.query = ''
         self.payment_date, self.created = '', ''
+        self.sel_opt = 'number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.query = request.GET.get('query', '')
+        self.query = request.GET.get('query', '').strip()
         self.payment_date = request.GET.get('payment_date', '')
         self.created = request.GET.get('created', '')
         self.assigned = request.GET.get('assigned', '-1')
+        self.sel_opt = request.GET.get('rad_search','')
+
+
         return super(WelcomeCallDoneView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -500,6 +509,7 @@ class WelcomeCallDoneView(ListView, PaginationMixin):
             "messages": alert,
             "filter_form": filter_form,
             "query": self.query,
+            self.sel_opt: 'checked'
         })
 
         return context
@@ -519,10 +529,14 @@ class WelcomeCallDoneView(ListView, PaginationMixin):
 
         try:
             if self.query:
-                queryset = queryset.filter(
-                    Q(number=self.query) |
-                    Q(email=self.query) |
-                    Q(mobile=self.query))
+
+                if self.sel_opt == 'number':
+                    queryset = queryset.filter(number=self.query)
+                elif self.sel_opt =='email':
+                    queryset = queryset.filter(email=self.query)
+                elif self.sel_opt == 'mobile':
+                    queryset = queryset.filter(mobile=self.query)
+
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
             pass
