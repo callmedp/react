@@ -173,7 +173,7 @@ SHINE_API_TIMEOUT = 5
 
 ########## CRM SETTINGS #############
 SHINECPCRM_DICT = {
-    'base_url': 'http://172.22.65.32:8003',
+    'base_url': 'http://shinecpcrm1.shine.com',
     'token': '73f53cf358b94156feb49d034081ed507334e02a',
     'create_lead_url': '/api/v1/create-lead/',
     'update_products_url': '/product/update_sale_product/',
@@ -297,3 +297,14 @@ try:
     from .settings_local import *
 except:
     pass
+
+
+######### CONTACT NUMBERS ###################
+
+
+GGN_CONTACT_FULL = '0124-4312500/01'
+GGN_CONTACT = '0124-4312500'
+
+
+
+

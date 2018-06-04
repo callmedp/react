@@ -28,12 +28,12 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
         self.paginated_by = 20
         self.query = ''
         self.payment_date, self.modified = '', ''
-        self.sel_opt='id'
+        self.sel_opt = 'number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
-        self.sel_opt=request.GET.get('rad_search','id')
+        self.sel_opt=request.GET.get('rad_search','number')
         self.payment_date = request.GET.get('payment_date', '')
         self.modified = request.GET.get('modified', '')
         return super(PartnerInboxQueueView, self).get(request, args, **kwargs)
@@ -138,14 +138,14 @@ class PartnerHoldQueueView(ListView, PaginationMixin):
         self.paginated_by = 20
         self.query = ''
         self.payment_date, self.modified = '', ''
-        self.sel_opt ='id'
+        self.sel_opt ='number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
         self.payment_date = request.GET.get('payment_date', '')
         self.modified = request.GET.get('modified', '')
-        self.sel_opt=request.GET.get('rad_search','id')
+        self.sel_opt = request.GET.get('rad_search','number')
         return super(PartnerHoldQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -248,14 +248,14 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
         self.paginated_by = 20
         self.query = ''
         self.payment_date, self.modified = '', ''
-        self.sel_opt ='id'
+        self.sel_opt ='number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
         self.payment_date = request.GET.get('payment_date', '')
         self.modified = request.GET.get('modified', '')
-        self.sel_opt=request.GET.get('rad_search','id')
+        self.sel_opt=request.GET.get('rad_search','number')
         return super(PartnerVarificationQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):

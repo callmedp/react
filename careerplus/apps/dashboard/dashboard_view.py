@@ -218,7 +218,7 @@ class DashboardDetailView(TemplateView):
 
             try:
 
-                self.oi = OrderItem.objects.select_related('order','product').get(pk=self.oi_pk)
+                self.oi = OrderItem.objects.select_related('order').get(pk=self.oi_pk)
                 if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
                     pass
 
@@ -519,7 +519,7 @@ class DashboardAcceptService(View):
                 "display_message": '',
             }
             try:
-                oi = OrderItem.objects.select_related('order','product').get(pk=oi_pk)
+                oi = OrderItem.objects.select_related('order').get(pk=oi_pk)
                 if oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
                     if oi.oi_status in [24, 46]:
                         last_oi_status = oi.oi_status

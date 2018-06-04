@@ -3,6 +3,7 @@
 {% load humanize %}
 {% load thumbnail %}
 
+
 {% block title %}
   <title>Welcome Call- Shinelearning</title>
 {% endblock title %}
@@ -54,10 +55,15 @@
                   <button type="submit" class="btn btn-default" id="search_button" type="button">Go!</button>
                 </span>
               </div>
+             {% include "console/search_tabs.html" %}
+
             </div>
+
           </div>
+
       </form>
     </div>
+
 
     <div class="row top_tiles">
 
