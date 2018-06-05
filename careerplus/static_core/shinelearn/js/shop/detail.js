@@ -1,4 +1,26 @@
+function showMoreLess(){
+  // Configure/customize these variables.
+  var showChar = 280;  // How many characters are shown by default
+  var ellipsestext = "...";
+  var moretext = " know more";
+  var lesstext = " know less";
+  
 
+  $('.more').each(function() {
+    var content = $(this).html();
+
+    if(content.length > showChar) {
+
+        var c = content.substr(0, showChar);
+        var h = content.substr(showChar, content.length - showChar);
+
+        var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink" style="display:inline-block;">' + moretext + '</a></span>';
+
+        $(this).html(html);
+    }
+
+  });
+};
 
 $(document).ready(function () {
 
@@ -81,8 +103,11 @@ $(document).ready(function () {
             }
             checkedInitialRequired();
             updateCartPrice();
+            showMoreLess();
+            activeOnScroll.init({ className:'.cls_scroll_tab'});
+            $('.cls_scroller').scrollerdiv();
+            $('.cls_sticky_scroller').productdetailAnimations();
           }
-          
         },
         failure: function(response){
           console.log("failure");
@@ -224,29 +249,10 @@ $(document).ready(function () {
   activeOnScroll.init({ className:'.cls_scroll_tab'});
 });
       $(document).ready(function() {
-      // Configure/customize these variables.
-      var showChar = 280;  // How many characters are shown by default
-      var ellipsestext = "...";
-      var moretext = " know more";
-      var lesstext = " know less";
-      
 
-      $('.more').each(function() {
-          var content = $(this).html();
-   
-          if(content.length > showChar) {
-   
-              var c = content.substr(0, showChar);
-              var h = content.substr(showChar, content.length - showChar);
-   
-              var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink" style="display:inline-block;">' + moretext + '</a></span>';
-   
-              $(this).html(html);
-          }
-   
-      });
-   
-      $(".morelink").click(function(){
+        showMoreLess();
+
+      $(document).on('click', '.morelink', function(e){
           if($(this).hasClass("less")) {
               $(this).removeClass("less");
               $(this).html(moretext);
@@ -264,7 +270,7 @@ $(document).ready(function () {
       //   $(this).addClass('active');
       // });
 
-      $('.cls_scroll_tab').click(function(e){
+      $(document).on('click', '.cls_scroll_tab', function(e){
         e.preventDefault();
         e.stopPropagation();
         var target = $(e.target);
