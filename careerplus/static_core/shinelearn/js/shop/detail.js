@@ -110,80 +110,87 @@ $(document).ready(function () {
 
   $(document).on('click', '#id_callback', function() {
     $('#callback_form').validate({
-        rules:{
-                name:{
-                  required: true,
-                    maxlength: 80,
-                },
-                number:{
-                    required: true,
-                    number: true,
-                    indiaMobile: true,
-                    // minlength: 4,
-                    maxlength: 10
-                },
-                msg:{
-                  required: true,
-                  maxlength: 500,
-                },
-            },
-        messages:{
-            name:{
-              required: "Name is Mandatory.",
-                maxlength: "Maximum 80 characters.",
-            },
-            number:{
-                required: "Mobile Number is Mandatory",
-                number: "Enter only number",
-                indiaMobile: "Please enter 10 digits only",
-                maxlength: "Please enter 10 digits",
-                // minlength: "Please enter atleast 4 digits"
-            },
-            
-            
+      rules:{
+        name:{
+          required: true,
+            maxlength: 80,
         },
-        highlight:function(element, errorClass) {
-            $(element).closest('.form-group').addClass('error');
+        number:{
+            required: true,
+            number: true,
+            indiaMobile: true,
+            // minlength: 4,
+            maxlength: 10
         },
-        unhighlight:function(element, errorClass) {
-            $(element).closest('.form-group').removeClass('error');
-            $(element).siblings('.error-txt').html('');      
+        msg:{
+          required: true,
+          maxlength: 500,
         },
-        errorPlacement: function(error, element){
-            $(element).siblings('.error-txt').html(error.text());
-        },
-        ignore : '',
-        submitHandler: function(form){
-          // ga code
-          var path = window.location.pathname, 
-              action = '';
-          if (path.indexOf('/course/') > -1) {
-            action = 'Course Enquiry';
-          } else if (path.indexOf('/services/') > -1) {
-            action = 'Service Enquiry';
-          }
-          MyGA.SendEvent('QueryForm', 'Form Interactions', action, 'success');
-          //form.submit();
-          var formData = $(form).serialize();
-          $.ajax({
-                  url : "/lead/lead-management/",
-                  type: "POST",
-                  data : formData,
-                  success: function(data, textStatus, jqXHR)
-                  {
-                    alert('Your Query Submitted Successfully.');
-                    $("#detailpage").modal('toggle');
-                    form.reset();
-                  },
-                  error: function (jqXHR, textStatus, errorThrown)
-                  {
-                    alert('Oops Some error has occured. Kindly try again later.');
-                    $("#detailpage").modal('toggle');
-                    form.reset();
-                  }
-              });
-
+        email:{
+          required: true,
+          maxlength: 100,
+          email: true,
         }
+      },
+      messages:{
+        name:{
+          required: "Name is Mandatory.",
+          maxlength: "Maximum 80 characters.",
+        },
+        email:{
+          required: "Email is Mandatory.",
+          maxlength: "Please enter at most 100 characters.",
+          email: "Please enter valid email"
+        },
+        number:{
+          required: "Mobile Number is Mandatory",
+          number: "Enter only number",
+          indiaMobile: "Please enter 10 digits only",
+          maxlength: "Please enter 10 digits",
+          // minlength: "Please enter atleast 4 digits"
+        }, 
+      },
+      highlight:function(element, errorClass) {
+          $(element).closest('.form-group').addClass('error');
+      },
+      unhighlight:function(element, errorClass) {
+          $(element).closest('.form-group').removeClass('error');
+          $(element).siblings('.error-txt').html('');      
+      },
+      errorPlacement: function(error, element){
+          $(element).siblings('.error-txt').html(error.text());
+      },
+      ignore : '',
+      submitHandler: function(form){
+        // ga code
+        var path = window.location.pathname, 
+            action = '';
+        if (path.indexOf('/course/') > -1) {
+          action = 'Course Enquiry';
+        } else if (path.indexOf('/services/') > -1) {
+          action = 'Service Enquiry';
+        }
+        MyGA.SendEvent('QueryForm', 'Form Interactions', action, 'success');
+        //form.submit();
+        var formData = $(form).serialize();
+        $.ajax({
+          url : "/lead/lead-management/",
+          type: "POST",
+          data : formData,
+          success: function(data, textStatus, jqXHR)
+          {
+            alert('Your Query Submitted Successfully.');
+            $("#detailpage").modal('toggle');
+            form.reset();
+          },
+          error: function (jqXHR, textStatus, errorThrown)
+          {
+            alert('Oops Some error has occured. Kindly try again later.');
+            $("#detailpage").modal('toggle');
+            form.reset();
+          }
+        });
+      }
     });
 
     var flag = $('#callback_form').valid();
@@ -252,17 +259,17 @@ $(document).ready(function () {
           return false;
       });
 
-      $('.about-tab a').click(function(){
-        $('.about-tab a').removeClass('active');
-        $(this).addClass('active');
-      });
+      // $('.about-tab a').click(function(){
+      //   $('.about-tab a').removeClass('active');
+      //   $(this).addClass('active');
+      // });
 
       $('.cls_scroll_tab').click(function(e){
         e.preventDefault();
         e.stopPropagation();
         var target = $(e.target);
         if(target.hasClass('cls_tab_child')){
-           $('html,body').animate({scrollTop : $(''+target.attr('href')).offset().top - 30},1000);
+          $('html,body').animate({scrollTop : $(''+target.attr('href')).offset().top - target.outerHeight() - $('#id_nav').outerHeight()},1000);
         }
       });
       

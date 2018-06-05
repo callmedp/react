@@ -16,7 +16,8 @@
 			    child.each(function () {
 			        var currLink = $(this);
 			        var refElement = $(currLink.attr("href"));
-			        if (refElement.offset().top <= scrollPos + height && refElement.offset().top + refElement.outerHeight() > scrollPos + height) {
+			        if (refElement.offset().top - $('.cls_sticky_scroller').outerHeight() <= scrollPos + height && 
+			        		refElement.offset().top + refElement.outerHeight()  > scrollPos + height ) {
 			            child.removeClass("active");
 			            currLink.addClass("active");
 			        }

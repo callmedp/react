@@ -9,7 +9,7 @@
 </div>
 
   <div class="box-panel enrol-cart no-pad">
-     <strong id="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
+     <strong id="total-price" class="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
      {{var_list.0.inr_price|floatformat}}{% else %}
      {{sqs.pPinb|floatformat}}{% endif %}/- <small>(+taxes)</small></strong>
 
@@ -46,26 +46,72 @@
 
     <!--a role="button" class="add-cart" onclick="addToCart('{{object.id}}')" data-price="{{object.get_price}}">Add to cart</a-->
     
-    <div class="query-call">
+    <!--div class="query-call">
       <a href="#" data-toggle="modal" data-target=".bs-example-modal-sm3"><figure class="email-icon"></figure> Have a query?</a>
       <a href="tel:{{ggn_contact}}">
         <figure class="calling-icon"></figure> {{ggn_contact}}
       </a>
-    </div>
+    </div-->
   </div>
-  {% comment %}  
-  <a href="#" class="take-test mt-40">
-  <figure class="test-icon"></figure>Take free Assessment test</a>
-  {% endcomment %}
+
+
+
   <!-- check free sample start -->
-  {% if widget_objs %}
-    <div class="free-sample">
-      <span class="sample-pic"></span>
-      <strong>{{widget_obj.name}}</strong>
-      <ul>
-      {% for widget_obj in widget_objs %}
-        <li><a href="{{widget_obj.url}}" target="_blank">{{widget_obj.name}}</a></li>
-      {% endfor %}
-      </ul>
-    </div>
-  {% endif %}
+  <div class="cls_samples_enquiry samples_enquiry">
+      <!-- Interested in this course? -->
+      <div class="course-query box-panel mb-40 cleafix">
+          <h2 class="heading-right">Interested in this course?</h2>
+          <form id="callback_form" role="form" action="" method="get">
+            <div style='display:none'>
+              <input type='hidden' name='csrfmiddlewaretoken' value='{{csrf_token}}'/>
+            </div>
+            <div class="form-group">
+                <input type="text" name="name" class="form-control" placeholder="Name" maxlength="100" value="{{request.session.full_name}}">
+                <span class="error-txt"></span>
+            </div>
+            <div class="form-group">
+              <input type="text" name="email" class="form-control" placeholder="Email" maxlength="100" value="{{request.session.email}}">
+              <span class="error-txt"></span>
+            </div>
+            <div class="form-group">
+                <div class="country-code">
+                    <div class="custom-select">
+                        <select class="form-control" name="country_code">
+                          {% for country in country_choices %}
+                            <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; --&nbsp;&nbsp;&nbsp;&nbsp; {{country.1}}</option>
+                          {% endfor %}
+                        </select>
+                    </div>
+                    <input type="text" class="form-control" name="number" 
+                    placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
+                    <span class="error-txt"></span>
+                </div>
+            </div>
+            {% if  prd_service == 'course' %}
+              <input type="hidden" name="lsource" value="2">
+            {% else %}
+              <input type="hidden" name="lsource" value="8">
+            {% endif %}
+            <input type="hidden" name="product" value="{{product.pk}}">
+            <input type="hidden" name="prd" value="{{product.heading}}">
+            <input type="hidden" name="path" value="{{product.get_absolute_url}}">
+
+          </form>
+          <button type="button" id="id_callback" class="callback-button mt-10">Request a call back</button>
+          <!--button type="button" id="id_callback" class="submit-button">
+            Submit
+          </button-->
+      </div>
+
+      {% if widget_objs %}
+      <div class="box-panel free-sample">
+          <span class="sample-pic"></span>
+          <strong>{{widget_obj.name}}</strong>
+          <ul>
+            {% for w_obj in widget_objs %}
+              <li><a href="{{w_obj.url}}" target="_blank">{{w_obj.name}}</a></li>
+            {% endfor %}
+          </ul>
+      </div>
+      {% endif %}
+  </div>

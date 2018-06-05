@@ -69,6 +69,11 @@ function update_variation_price(req_price, actual_price){
         // current price updation
         sum_price = req_price + sum_price;
         var show_price = 'Rs. ' + sum_price.toString() + '/- ' + '<small>(+taxes)</small>';
+
+        var scroll_price = 'Rs. ' + sum_price.toString() + '/-';
+        $('#id-scroll-price').html(scroll_price);
+        $("#id-scroll-price").attr("sum-price", sum_price);
+
         $('#total-price').html(show_price);
         $("#total-price").attr("sum-price", sum_price);
 
@@ -118,6 +123,11 @@ function updateCheckedPrice(this_obj){
             // current price update
             sum_price = fbt_price + sum_price;
             var show_price = 'Rs. ' + sum_price.toString() + '/- ' + '<small>(+taxes)</small>';
+
+            var scroll_price = 'Rs. ' + sum_price.toString() + '/-';
+            $('#id-scroll-price').html(scroll_price);
+            $("#id-scroll-price").attr("sum-price", sum_price);
+            
             $('#total-price').html(show_price);
             $("#total-price").attr("sum-price", sum_price);
 
@@ -170,6 +180,11 @@ function updateUnCheckedPrice(this_obj){
             // current price update
             sum_price = sum_price - fbt_price;
             var show_price = 'Rs. ' + sum_price.toString() + '/- ' + '<small>(+taxes)</small>';
+
+            var scroll_price = 'Rs. ' + sum_price.toString() + '/-';
+            $('#id-scroll-price').html(scroll_price);
+            $("#id-scroll-price").attr("sum-price", sum_price);
+
             $('#total-price').html(show_price);
             $("#total-price").attr("sum-price", sum_price);
 
@@ -224,6 +239,11 @@ function updateCartPrice(){
 
                 // update current price
                 var str_price = 'Rs. ' + var_price.toString() + '/- ' + '<small>(+taxes)</small>';
+
+                var scroll_price = 'Rs. ' + var_price.toString() + '/-';
+                $('#id-scroll-price').html(scroll_price);
+                $("#id-scroll-price").attr("sum-price", var_price);
+
                 $('#total-price').html(str_price);
                 $('#total-price').attr("sum-price", var_price);
 
@@ -328,6 +348,11 @@ $(document).ready(function(){
 
                 // update current price
                 var str_price = 'Rs. ' + var_price.toString() + '/- ' + '<small>(+taxes)</small>';
+
+                var scroll_price = 'Rs. ' + var_price.toString() + '/-';
+                $('#id-scroll-price').html(scroll_price);
+                $("#id-scroll-price").attr("sum-price", var_price);
+
                 $('#total-price').html(str_price);
                 $('#total-price').attr("sum-price", var_price);
 
