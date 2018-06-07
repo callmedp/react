@@ -638,14 +638,14 @@ $(document).ready(function(){
                 success: function(json) {
                     if (json.status == 1){
                         var info = 'Added to cart. You have '+ json.cart_count + ' products in cart.'
-                        $('#id-cart-message').text(info);
+                        // $('#id-cart-message').text(info);
                         $('#cart-counter-id').addClass('cart-counter');
                         $('#cart-counter-id').text(json.cart_count);
-                        if (window.CURRENT_FLAVOUR == 'mobile'){
-                            alert("Product added successfully in cart.");
-                        }
+                        // if (window.CURRENT_FLAVOUR == 'mobile'){
+                        //     alert("Product added successfully in cart.");
+                        // }
+                        window.location.href = json.cart_url
                     }
-
                     else if (json.status == -1){
                         alert("Something went wrong, Please try again.");
                     }

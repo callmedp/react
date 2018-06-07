@@ -50,50 +50,6 @@
                 {% include "shop/partials/prd_cart.html" %}
               {% endblock product_cart %}
 
-                {% comment %}
-                <!-- check free sample start -->
-                <div class="cls_samples_enquiry samples_enquiry">
-                    <!-- Interested in this course? -->
-                    <div class="course-query box-panel mb-40 cleafix">
-                        <h2 class="heading-right">Interested in this course?</h2>
-                        <form>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="exampleInputName" placeholder="Name">
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="exampleInputName" placeholder="Email">
-                            </div>
-                            <div class="form-group">
-                                <div class="country-code">
-                                    <div class="custom-select">
-                                        <select class="form-control">
-                                            <option>+91</option>
-                                            <option>+91</option>
-                                        </select>
-                                    </div>
-                                    <input type="text" class="form-control" placeholder="Mobile">
-                                </div>
-                            </div>
-                            <button type="submit" class="callback-button mt-5">Request a call back</button>
-                        </form>
-                    </div>
-
-                    <div class="box-panel free-sample">
-                        <span class="sample-pic"></span>
-                        <strong>Check free samples</strong>
-                        <ul>
-                            <li><a href="#">Resume Format</a></li>
-                            <li><a href="#">Cover Letter Format</a></li>
-                            <li><a href="#">Resignation Letter Format</a></li>
-                            <li><a href="#">Resume Format for Freshers</a></li>
-                            <li><a href="#">Resume Format for Experienced Professionals</a></li>
-                        </ul>
-                    </div>
-
-                    
-                </div>
-                {% endcomment %}
-
             </div>
             <!-- query-price-box-scroll end -->
 
@@ -131,7 +87,15 @@
                       {{var_list.0.inr_price|floatformat}}{% else %}
                       {{sqs.pPinb|floatformat}}{% endif %}/- <small>(+taxes)</small></strong-->
 
+                    {% if sqs.id in linkedin_resume_services %}
+                    <!-- buy now button -->
                     <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                    {% endif %}
+
+                    <!-- Add to cart button and redirect to cart add class- enrol-now -->
+                    {% if sqs.id not in linkedin_resume_services %}
+                      <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                    {% endif %}
 
                     <!--a href="#" class="enrol-now" data-toggle="modal" data-target=".bs-example-modal-sm">Enroll now</a-->
                   </div>

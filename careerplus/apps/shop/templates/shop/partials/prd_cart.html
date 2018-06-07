@@ -34,15 +34,17 @@
       <a role="button" class="enrol-now" id="login-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
     {% else %}
     {% endcomment %}
-    
-    <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
 
-    {% comment %}
-    {% if sqs.id not in linkedin_resume_services %}
-      <a role="button" class="add-cart" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Add to cart</a>
+    {% if sqs.id in linkedin_resume_services %}
+    <!-- buy now button -->
+    <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
     {% endif %}
-    <div class="cart-message"><span class="cart-success" id="id-cart-message"></span></div>
-    {% endcomment %}
+
+    <!-- Add to cart button and redirect to cart add class- enrol-now -->
+    {% if sqs.id not in linkedin_resume_services %}
+      <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+    {% endif %}
+    <!--div class="cart-message"><span class="cart-success" id="id-cart-message"></span></div-->
 
     <!--a role="button" class="add-cart" onclick="addToCart('{{object.id}}')" data-price="{{object.get_price}}">Add to cart</a-->
     
@@ -54,13 +56,17 @@
     </div-->
   </div>
 
-
-
   <!-- check free sample start -->
   <div class="cls_samples_enquiry samples_enquiry">
       <!-- Interested in this course? -->
       <div class="course-query box-panel mb-40 cleafix">
-          <h2 class="heading-right">Interested in this course?</h2>
+          <h2 class="heading-right">
+            {% if product.is_course %}
+              Interested in this course?
+            {% else %}
+              Interested in this service?
+            {% endif %}
+          </h2>
           <form id="callback_form" role="form" action="" method="get">
             <div style='display:none'>
               <input type='hidden' name='csrfmiddlewaretoken' value='{{csrf_token}}'/>

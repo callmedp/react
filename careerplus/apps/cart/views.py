@@ -105,6 +105,7 @@ class AddToCartView(View, CartMixin):
                 data['redirect_url'] = reverse('cart:payment-login')
 
             data['cart_count'] = str(self.get_cart_count())
+            data['cart_url'] = reverse('cart:cart-product-list')
 
             return HttpResponse(json.dumps(data), content_type="application/json")
 
