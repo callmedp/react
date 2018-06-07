@@ -59,14 +59,14 @@ class LinkedinQueueView(ListView, PaginationMixin):
         self.writer, self.created = '', ''
         self.draft_level = -1
         self.delivery_type = ''
-        self.sel_opt='id'
+        self.sel_opt='number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
         self.writer = request.GET.get('writer', '')
         self.modified = request.GET.get('modified', '')
-        self.sel_opt=request.GET.get('rad_search','id')
+        self.sel_opt=request.GET.get('rad_search','number')
         self.delivery_type = request.GET.get('delivery_type', '')
         try:
             self.draft_level = int(request.GET.get('draft_level', -1))
@@ -78,7 +78,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
         context = super(LinkedinQueueView, self).get_context_data(**kwargs)
         paginator = Paginator(context['orderitem_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
-        var=self.sel_opt
+        var = self.sel_opt
         alert = messages.get_messages(self.request)
         initial = {
             "modified": self.modified, "writer": self.writer,
@@ -91,7 +91,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
             'filter_form': filter_form,
             "message_form": MessageForm(),
             "query": self.query,
-            var:'checked',
+            var: 'checked',
         })
         return context
 
@@ -450,14 +450,14 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
         self.query = ''
         self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', ''
-        self.sel_opt='id'
+        self.sel_opt='number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
-        self.sel_opt=request.GET.get('rad_search','id')
+        self.sel_opt=request.GET.get('rad_search','number')
         try:
             self.draft_level = int(request.GET.get('draft_level', -1))
         except:
@@ -469,7 +469,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
         context = super(LinkedinRejectedByAdminView, self).get_context_data(**kwargs)
         paginator = Paginator(context['rejectedbylinkedinadmin_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
-        var=self.sel_opt
+        var = self.sel_opt
         alert = messages.get_messages(self.request)
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
@@ -485,7 +485,7 @@ class LinkedinRejectedByAdminView(ListView, PaginationMixin):
             "filter_form": filter_form,
             "query": self.query,
             "action_form": OIActionForm(),
-            var:'checked',
+            var: 'checked',
         })
         return context
 
@@ -570,12 +570,12 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
         self.query = ''
         self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', ''
-        self.sel_opt='id'
+        self.sel_opt='number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
-        self.sel_opt=request.GET.get('rad_search','id')
+        self.sel_opt=request.GET.get('rad_search','number')
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
         try:
@@ -589,7 +589,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
         context = super(LinkedinRejectedByCandidateView, self).get_context_data(**kwargs)
         paginator = Paginator(context['rejectedbylinkedincandidate_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
-        var=self.sel_opt
+        var = self.sel_opt
         alert = messages.get_messages(self.request)
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         initial = {
@@ -605,7 +605,7 @@ class LinkedinRejectedByCandidateView(ListView, PaginationMixin):
             "filter_form": filter_form,
             "query": self.query,
             "action_form": LinkedinInboxActionForm(),
-            var:'checked',
+            var: 'checked',
         })
         return context
 
@@ -692,12 +692,12 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
     draft_level = -1
     writer = ''
     delivery_type = ''
-    sel_opt='id'
+    sel_opt = 'number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
-        self.sel_opt=request.GET.get('rad_search','id')
+        self.sel_opt=request.GET.get('rad_search','number')
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
         try:
@@ -728,6 +728,7 @@ class LinkedinApprovalVeiw(ListView, PaginationMixin):
             "filter_form": filter_form,
             "query": self.query,
             "action_form": OIActionForm(),
+            self.sel_opt: "checked",
         })
         return context
 
