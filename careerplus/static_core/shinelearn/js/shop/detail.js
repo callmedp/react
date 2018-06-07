@@ -104,9 +104,9 @@ $(document).ready(function () {
             checkedInitialRequired();
             updateCartPrice();
             showMoreLess();
-            activeOnScroll.init({ className:'.cls_scroll_tab'});
             $('.cls_scroller').scrollerdiv();
             $('.cls_sticky_scroller').productdetailAnimations();
+            activeOnScroll.init({ className:'.cls_scroll_tab'});
           }
         },
         failure: function(response){
@@ -222,28 +222,6 @@ $(document).ready(function () {
     if (flag){
       $('#callback_form').submit();}
   });
-
-  
-  // $('#id_callback').click(function(){
-  //   if ( $("#callback_form").valid()) {
-  //     var formData = $("#callback_form").serialize();
-  //     $.ajax({
-  //             url : "/shop/crm/lead/",
-  //             type: "POST",
-  //             data : formData,
-  //             success: function(data, textStatus, jqXHR)
-  //             {
-  //               $("#detailpage").modal('hide');
-  //               alert('Your Query Submitted Successfully.');
-  //                   window.location.reload();
-  //             },
-  //             error: function (jqXHR, textStatus, errorThrown)
-  //             {
-  //                 window.location.reload(); 
-  //             }
-  //         }); 
-  //   }  
-  //   });
 
   // scroll effect;
   activeOnScroll.init({ className:'.cls_scroll_tab'});

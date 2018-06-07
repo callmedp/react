@@ -8,11 +8,13 @@
 			child.first().addClass(this.class);
 		},
 		_scroll: function (container) {
-			var child = $(container).children();
-			var height = $(container).height();
+			
+			$(document).on("scroll", onScroll);
 
-			$(document).on("scroll", function(event) {
+			function onScroll(){
+				var child = $(container).children();
 				var scrollPos = $(document).scrollTop();
+				var height = $(container).height();
 			    child.each(function () {
 			        var currLink = $(this);
 			        var refElement = $(currLink.attr("href"));
@@ -22,7 +24,7 @@
 			            currLink.addClass("active");
 			        }
 			    });
-			});
+			}
 
 		}
 	}
