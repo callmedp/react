@@ -804,14 +804,14 @@ class ApprovedLinkedinQueueVeiw(ListView, PaginationMixin):
         self.query = ''
         self.modified, self.draft_level = '', -1
         self.writer, self.delivery_type = '', ''
-        self.sel_opt='id'
+        self.sel_opt='number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
         self.modified = request.GET.get('modified', '')
         self.writer = request.GET.get('writer', '')
-        self.sel_opt=request.GET.get('rad_search','id')
+        self.sel_opt=request.GET.get('rad_search','number')
         try:
             self.draft_level = int(request.GET.get('draft_level', -1))
         except:
