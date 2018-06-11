@@ -488,7 +488,7 @@ class FuncAreaPageView(SearchBaseView):
         self.request_get = request_get
         self.func_area = Category.objects.filter(id=self.kwargs['pk'], type_level__in=[2, 3])
         context = super(FuncAreaPageView, self).get_extra_context()
-        if self.func_area:
+        if self.func_area.exists():
             meta_desc = "Online {} services. Get expert advice & tips for {} at Shine Learning".format(
                 self.func_area[0].title, self.func_area[0].title)
             context['func_area_name'] = self.func_area[0].heading

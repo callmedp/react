@@ -395,7 +395,8 @@ class BaseSearch(object):
         self.results = self.add_sort()
         if found:
             self.results = self.results.extra(self.get_extra_params())
-            self.results = self.results.filter(content=Raw(self.get_query()))
+            if self.get_query():
+                self.results = self.results.filter(content=Raw(self.get_query()))
             self.results = self.add_facets()
             if self.fields and not self.params.getlist('fl'):
                 self.results = self.results.only(*self.fields)
@@ -610,15 +611,16 @@ class FuncAreaSearch(BaseSearch):
     needed_params_options = {'pk', 'fclevel', 'fcert', 'farea', 'frating', 'fduration', 'fmode'}
 
     def add_filters(self):
-        results, found = super(FuncAreaSearch, self).add_filters()
+        self.results, self.found = super(FuncAreaSearch, self).add_filters()
 
         # Functional Area Filter
         if self.params.get('pk') and search_clean_fields(self.params.get('pk')):
-            results = results.narrow('pFA:%s' % self.params.get('pk'))
-        if not results.count():
-            results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
-            found = False
-        return results, found
+            self.results = self.results.narrow('pFA:%s' % self.params.get('pk'))
+        if not self.results.count():
+            self.results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
+            self.found = False
+        return self.results, self.found
+
 
 class FuncAreaParams(BaseParams):
     query_param_name = None
