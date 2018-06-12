@@ -63,6 +63,8 @@
         {% if amp %}<pre>{{main_article.content|striptags|safe}}</pre>{%else%}{{main_article.content|safe}}{%endif%}
     </article>
 
+    <div class="clearfix"></div>
+
     <div class="social-login">
         <a class="facebook" id="article_share" href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}" article-slug="{{main_article.slug}}" target="_blank"></a>
         
