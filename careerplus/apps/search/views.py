@@ -73,7 +73,7 @@ class SearchBaseView(TemplateView):
 
     def get_template_names(self):
         if self.request.amp:
-             return ["search/search-amp.html"]
+            return ["search/search-amp.html"]
         return ["search/search.html"]
 
     def get_search_params(self):
@@ -133,7 +133,7 @@ class SearchBaseView(TemplateView):
             'fcert': 'certify'
         }
 
-        ## Following code is for generating starting from price according to variation filtered TODO: move to ajax later on
+        # Following code is for generating starting from price according to variation filtered TODO: move to ajax later on
         requested_filters = [x for x in ['fprice', 'fmode', 'fduration', 'fclevel', 'fcert'] if x in self.request.GET]
         # if filters are not applied, skip
         if len(requested_filters):
@@ -188,8 +188,8 @@ class SearchBaseView(TemplateView):
         context['search_params_string'] = self.search_params.urlencode()
         context = self.set_form_attributes_in_context(context)
         context['search_type'] = self.search_type
-        context['fshift'] = self.search_params.getlist('fshift',[])
-        context['fcid'] = self.search_params.getlist('fcid',[])
+        context['fshift'] = self.search_params.getlist('fshift', [])
+        context['fcid'] = self.search_params.getlist('fcid', [])
 
         context['CLICK_TRACKING'] = settings.CLICK_TRACKING
         context['tracking_source'] = self.request.META['PATH_INFO']
@@ -237,7 +237,7 @@ class SearchBaseView(TemplateView):
 
         try:
             if page_no > paginator.num_pages:
-                page_no=paginator.num_pages
+                page_no = paginator.num_pages
             page = paginator.page(page_no)
         except InvalidPage:
             raise Http404("No such page!")
@@ -273,8 +273,7 @@ class SearchBaseView(TemplateView):
         else:
             return render(self.request, self.get_template_names(), context)
 
-
-    def set_form_attributes_in_context(self,context):
+    def set_form_attributes_in_context(self, context):
         """
         Pass the form-attributes back into context.
         Used to fill the form after search is performed.
@@ -342,9 +341,9 @@ class SearchListView(SearchBaseView):
         self.keywords = self.args
         current_url = resolve(self.request.path_info).url_name
         if current_url == 'search_listing' and not self.request.GET:
-            return HttpResponsePermanentRedirect(reverse('search:recommended_listing',
-                                                         kwargs={'f_area': 'it-software',
-                                                                 'skill': 'development'}))
+            return HttpResponsePermanentRedirect(
+                reverse('search:recommended_listing',
+                kwargs={'f_area': 'it-software', 'skill': 'development'}))
         return super(SearchListView, self).prepare_response()
 
     def get_breadcrumbs(self):
@@ -486,7 +485,8 @@ class FuncAreaPageView(SearchBaseView):
         request_get.update(self.request.GET)
         request_get.update(self.request.POST)
         self.request_get = request_get
-        self.func_area = Category.objects.filter(id=self.kwargs['pk'], type_level__in=[2, 3])
+        self.func_area = Category.objects.filter(
+            id=self.kwargs['pk'], type_level__in=[2, 3])
         context = super(FuncAreaPageView, self).get_extra_context()
         if self.func_area.exists():
             meta_desc = "Online {} services. Get expert advice & tips for {} at Shine Learning".format(
@@ -540,11 +540,9 @@ class RedirectToRecommendationsView(FormView):
         skills_slug = '-'.join([skill.name for skill in skills])
         skills_slug = urlquote_plus(re.sub(rx, '', skills_slug))
         self.success_url = reverse_lazy('search:recommended_listing',
-                                        kwargs={
-                                            'area_slug': func_area_slug,
-                                            'area': func_area_obj.id if func_area_obj else 0,
-                                            'skills_slug': skills_slug,
-                                            'skills': '-'.join([str(skill.id) for skill in skills])
-                                        })
+            kwargs={
+            'area_slug': func_area_slug,
+            'area': func_area_obj.id if func_area_obj else 0,
+            'skills_slug': skills_slug,
+            'skills': '-'.join([str(skill.id) for skill in skills])})
         return self.success_url
-

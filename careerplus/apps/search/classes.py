@@ -1,22 +1,23 @@
-#python imports
+# python imports
 import re
 import itertools
 
-#django imports
+# django imports
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 
-#third party imports
+# third party imports
 from haystack.inputs import Raw
 
-#local imports
+# local imports
 from search import inputs
 from .helpers import clean_all_fields, clean_id_fields, clean_list_fields, \
-    handle_special_chars, get_filters, remove_quote_in_q, clear_empty_keys, search_clean_fields, get_recommendations
+    handle_special_chars, get_filters, remove_quote_in_q, clear_empty_keys, \
+    search_clean_fields, get_recommendations
 from .lookups import FILLERS
 
-#inter app imports
+# inter app imports
 from core.library.haystack.query import SQS
 
 RESULTS_PER_PAGE = getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
@@ -139,8 +140,8 @@ class BaseSearch(object):
         """
         results_per_page = self.results_per_page
         perpage = self.params.get('perpage')
-        if perpage and perpage.isdigit() and int(perpage)>0:
-            results_per_page = min(int(perpage),self.results_per_page)
+        if perpage and perpage.isdigit() and int(perpage) > 0:
+            results_per_page = min(int(perpage), self.results_per_page)
         if self.params.get('count_only'):
             return 0
         return results_per_page
@@ -230,11 +231,12 @@ class BaseSearch(object):
 
         if 'no_spelling' in self.params and self.params.get('no_spelling') == True:
 
-            params_to_pop = ['spellcheck','spellcheck.dictionary','spellcheck.maxCollations',
-                            'spellcheck.onlyMorePopular','spellcheck.maxResultsForSuggest',
-                            'spellcheck.maxCollationTries','spellcheck.collateExtendedResults']
+            params_to_pop = ['spellcheck', 'spellcheck.dictionary',
+            'spellcheck.maxCollations',
+            'spellcheck.onlyMorePopular', 'spellcheck.maxResultsForSuggest',
+            'spellcheck.maxCollationTries', 'spellcheck.collateExtendedResults']
             for param in params_to_pop:
-                extra_params.pop(param,None)
+                extra_params.pop(param, None)
 
         return extra_params
 
@@ -370,13 +372,13 @@ class BaseSearch(object):
         This will save the extra query due to lazy loading.
         """
 
-        page_no = str(self.params.get('page','1'))
+        page_no = str(self.params.get('page', '1'))
         if not page_no.isdigit() or not int(page_no) > 0:
             page_no = 1
         page_no = int(page_no)
-        start_offset = (page_no-1)*self.results_per_page
+        start_offset = (page_no - 1) * self.results_per_page
         end_offset = start_offset + self.results_per_page
-        return (start_offset,end_offset)
+        return (start_offset, end_offset)
 
     def get_results(self):
         """
@@ -401,7 +403,7 @@ class BaseSearch(object):
             if self.fields and not self.params.getlist('fl'):
                 self.results = self.results.only(*self.fields)
             else:
-                asked_fields = map(str,self.params.getlist('fl')[0].split(","))
+                asked_fields = map(str, self.params.getlist('fl')[0].split(","))
                 self.results = self.results.only(*asked_fields)
             if not self.results.count():
                 self.results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
@@ -493,7 +495,7 @@ class SimpleSearch(BaseSearch):
         Override to selectively boost the results.
         Take into consideration semantic inferred_words.
         """
-        extra_params = super(SimpleSearch,self).get_extra_params()
+        extra_params = super(SimpleSearch, self).get_extra_params()
         extra_params.update({'search_type': 'simple'})
 
         return extra_params
@@ -563,7 +565,7 @@ class SimpleParams(BaseParams):
 
         quoted_string = ""
         for s in q.split("\"")[1::2]:
-            quoted_string = quoted_string+"\""+s+"\" " if s else quoted_string
+            quoted_string = quoted_string + "\"" + s + "\" " if s else quoted_string
 
         quoted_string = quoted_string.strip()
         unquoted_string = (" ".join(q.split("\"")[0::2])).lower()
@@ -593,15 +595,15 @@ class SimpleParams(BaseParams):
                 actual_words = actual_words + " " + word if actual_words else actual_words + word
 
         if filler_words:
-            filler_words = "("+filler_words+")"
+            filler_words = "(" + filler_words + ")"
         if actual_words:
             actual_words = "(" + handle_special_chars(actual_words, False, True) + ")"
         if filler_words and actual_words:
             query_to_return = classified_words + " " + actual_words + " AND " + filler_words
         elif filler_words:
-            query_to_return = classified_words+" AND "+filler_words if classified_words else filler_words
+            query_to_return = classified_words + " AND " + filler_words if classified_words else filler_words
         else:
-            query_to_return = classified_words+" "+actual_words
+            query_to_return = classified_words + " " + actual_words
         query_to_return = re.sub("\(\s\s+\)", "", query_to_return).strip()
         return query_to_return
 
