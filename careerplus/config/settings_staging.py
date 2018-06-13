@@ -269,16 +269,6 @@ LINKEDIN_RESUME_FREE = [2684, 2685]
 LINKEDIN_RESUME_COST = [2682, 2683]
 LINKEDIN_RESUME_PRODUCTS = LINKEDIN_RESUME_FREE + LINKEDIN_RESUME_COST
 
-########## CRM SETTINGS #############
-SHINECPCRM_DICT = {
-    'base_url': 'http://172.22.65.32:8003',
-    'token': '73f53cf358b94156feb49d034081ed507334e02a',
-    'create_lead_url': '/api/v1/create-lead/',
-    'update_products_url': '/product/update_sale_product/',
-    'update_cartleads_url': '/api/update-cartleads/',
-    'ad_server_url': '/api/mobile-version-leads/',
-    'timeout': 30,
-}
 
 ######## EMAIL SETTINGS ############
 EMAIL_HOST = '172.22.65.188'
