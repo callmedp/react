@@ -825,6 +825,7 @@
 	iframe {
 		max-width: 360px;
 		max-height: 300px;
+        width: 100%;
 	}
 }
 
@@ -848,6 +849,7 @@
 
 		strong {
 			color: $white-color;
+            font-size: $font-size+13;
 		}
 
 		h3 {
@@ -875,11 +877,12 @@
 	background: #7079bd;
 
 	.banner-txt {
-		padding: 30px;
+		padding: 25px;
 		color: $white-color;
 
 		strong {
 			color: $white-color;
+            font-size: $font-size+13;
 		}
 
 		h3 {
@@ -900,7 +903,7 @@
 			display: inline-block;
 			background: $link-color;
 			display: inline-block;
-			margin-right: 10px;
+			margin-right: 5px;
 		}
 	}
 }
