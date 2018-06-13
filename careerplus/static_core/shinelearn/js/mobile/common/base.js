@@ -108,12 +108,7 @@ $(document).ready(function() {
 	$(".article-slider").slick({
 		autoplay:false,
 		arrows: false,
-		dots: false,
-		autoplaySpeed: 3000,
-		variableWidth: true,
-		slidesToShow: 3,
-		slidesToScroll: 1,
-		infinite: true
+		dots: true
 	});
 
 	$(".contributors").slick({
