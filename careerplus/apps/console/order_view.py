@@ -921,7 +921,7 @@ class ApprovedQueueVeiw(ListView, PaginationMixin):
         queryset = super(ApprovedQueueVeiw, self).get_queryset()
         queryset = queryset.filter(
             order__status=1, no_process=False,
-            oi_status=24, product__type_flow__in=[1, 3, 5],
+            oi_status=24, product__type_flow__in=[1, 3, 5, 12, 13],
             order__welcome_call_done=True).exclude(
             wc_sub_cat__in=[64, 65])
         user = self.request.user
