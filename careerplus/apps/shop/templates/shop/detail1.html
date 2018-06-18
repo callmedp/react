@@ -69,7 +69,9 @@
     {% endcompress %}
 {% endblock js_section %}
 
-{% if sqs.id in linkedin_resume_services %}
   {% block johukum %}
+    {% if sqs.id in linkedin_resume_services %}
+    {% else %}
+      {{block.super}}
+    {% endif %}
   {% endblock johukum %}
-{% endif %}
