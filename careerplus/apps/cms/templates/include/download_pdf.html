@@ -27,11 +27,11 @@
           {% csrf_token %}
           <div class="form-group">
             <input type="text" class="form-control" id="user_name" name="name" aria-describedby="nameHelp" placeholder="Name" {% if request.session.full_name %}value="{{request.session.full_name}}"{% endif %} maxlength="100">
-            <span class="error position-error"></span>
+            <span class="error-txt"></span>
           </div>
           <div class="form-group">
             <input type="text" class="form-control" id="id_email" name="email" aria-describedby="emailHelp" placeholder="Email" {% if request.session.email %}value="{{request.session.email}}"{% endif %} maxlength="100">
-            <span class="error position-error"></span>
+            <span class="error-txt"></span>
           </div>
           <div class="form-group">
             <div class="country-code">
@@ -45,7 +45,7 @@
                 </select>
               </div>
               <input type="text" id="id_mobile" name="number" class="form-control modal-form-control" placeholder="Mobile" {% if request.session.mobile_no %}value="{{request.session.mobile_no}}"{% endif %} maxlength="15">
-              <span class="error position-error"></span>
+              <span class="error-txt"></span>
             </div>
           </div>
           <div class="form-group">
@@ -54,7 +54,7 @@
               <label class="form-check-label">
                   <input type="checkbox" name="term_condition" class="form-check-input">
                   By downloading this sample, you hereby accept our <a href="#">Terms & Conditions</a>.
-                  <span class="error position-error"></span>
+                  <span class="error-txt"></span>
               </label>
               
           </div>

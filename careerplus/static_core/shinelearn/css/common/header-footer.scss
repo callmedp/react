@@ -1284,6 +1284,23 @@ footer {
 	}
 }
 
+.callback-button {
+	background-color: $anchor-color;
+	font-size: $font-size+2;
+	color: $white-color;
+	display: inline-block;
+	padding: 3px 6px;
+	border-radius: 3px;
+	border: 1px solid $anchor-color;
+	text-align: center;
+
+	&:hover, &:focus {
+		background-color: $anchor-color;
+		border: 1px solid $blue-color;
+		color: $white-color;
+	}
+}
+
 .view-article {
 	font-size: $font-size+4;
 	font-weight: $font-weight+300;

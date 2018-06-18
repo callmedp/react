@@ -7,7 +7,7 @@
         <div class="form-group">
 
           <input type="text" class="form-control" name="name" placeholder="Name" value="{{request.session.full_name|safe}}" maxlength="100">
-          <span class="error position-error"></span>
+          <span class="error-txt"></span>
         </div>
         <div class="form-group">
             <div class="country-code">
@@ -20,7 +20,7 @@
               </div>
 
               <input type="text" id="id_mobile" name="number" class="form-control modal-form-control" placeholder="Mobile" value="{{request.session.mobile_no|safe}}" maxlength="15">
-              <span class="error position-error"></span>
+              <span class="error-txt"></span>
             </div>
           </div>
           {% if  page_obj %}
@@ -36,7 +36,7 @@
         </div-->
         <div class="form-group">
           <textarea class="form-control" rows="3" name="msg" placeholder="Message" maxlength="500"></textarea>
-          <span class="error position-error"></span>
+          <span class="error-txt"></span>
         </div>
         
       </form>
@@ -44,7 +44,7 @@
       <div class="call-service">
         <strong>
           <span class="call-service-icon"></span>
-          0124-395 5001
+          {{GGN_CONTACT}}
         </strong>
         9am to 7pm ist monday-saturday
       </div>

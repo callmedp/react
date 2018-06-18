@@ -5,7 +5,7 @@ from django.conf import settings
 
 
 def lead_create_on_crm(cart_obj, data_dict=None):
-    headers = {}
+    headers = dict()
     headers['content-type'] = 'application/json'
     headers['Authorization'] = 'Token ' + settings.SHINECPCRM_DICT.get('token')
     post_url = settings.SHINECPCRM_DICT.get('base_url') + \

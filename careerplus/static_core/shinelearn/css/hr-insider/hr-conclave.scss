@@ -483,9 +483,11 @@
 
         img {
             display: block;
-            border-radius: 50px;
+            border-radius: 100%;
             border: solid 1px $blue-color;
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+            width: 88px;
+            height: 88px;
         }
     }
 }
@@ -823,6 +825,7 @@
 	iframe {
 		max-width: 360px;
 		max-height: 300px;
+        width: 100%;
 	}
 }
 
@@ -846,6 +849,7 @@
 
 		strong {
 			color: $white-color;
+            font-size: $font-size+13;
 		}
 
 		h3 {
@@ -873,11 +877,12 @@
 	background: #7079bd;
 
 	.banner-txt {
-		padding: 30px;
+		padding: 25px;
 		color: $white-color;
 
 		strong {
 			color: $white-color;
+            font-size: $font-size+13;
 		}
 
 		h3 {
@@ -898,7 +903,7 @@
 			display: inline-block;
 			background: $link-color;
 			display: inline-block;
-			margin-right: 10px;
+			margin-right: 5px;
 		}
 	}
 }
