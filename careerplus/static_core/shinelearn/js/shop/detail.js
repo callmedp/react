@@ -14,7 +14,7 @@ function showMoreLess(){
         var c = content.substr(0, showChar);
         var h = content.substr(showChar, content.length - showChar);
 
-        var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink" style="display:inline-block;">' + moretext + '</a></span>';
+        var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="#" class="morelink" style="display:inline-block;">' + moretext + '</a></span>';
 
         $(this).html(html);
     }
@@ -231,6 +231,8 @@ $(document).ready(function () {
         showMoreLess();
 
       $(document).on('click', '.morelink', function(e){
+       var moretext = " know more";
+       var lesstext = " know less";
           if($(this).hasClass("less")) {
               $(this).removeClass("less");
               $(this).html(moretext);
