@@ -89,7 +89,7 @@ class OrderListView(ListView, PaginationMixin):
         context = super(OrderListView, self).get_context_data(**kwargs)
         paginator = Paginator(context['order_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
-        var=self.sel_opt
+        var = self.sel_opt
 
         alert = messages.get_messages(self.request)
         initial = {"payment_date": self.payment_date, "created": self.created, "status": self.status}
@@ -98,7 +98,7 @@ class OrderListView(ListView, PaginationMixin):
             "messages": alert,
             "filter_form": filter_form,
             "query": self.query,
-             var:"checked"
+            var: "checked"
 
         })
         return context
@@ -125,32 +125,29 @@ class OrderListView(ListView, PaginationMixin):
                     queryset = queryset.filter(id__in=order_ids)
 
                 else:
-                    if self.sel_opt =='id':
+                    if self.sel_opt == 'id':
                         if (self.query.strip())[:2] == 'cp' or (self.query.strip())[:2] == 'CP':
-                            result= self.query.strip()[2:]
+                            result = self.query.strip()[2:]
                             try:
                                 queryset = queryset.filter(id__iexact=result)
-                            except Exception as e:
-                                queryset=queryset.none()
-                                logging.getLogger('error_log').error(str(e))
-
-                        else:
-                            result=self.query.strip()
-                            try:
-                                queryset=queryset.filter(id__iexact=result)
                             except Exception as e:
                                 queryset = queryset.none()
                                 logging.getLogger('error_log').error(str(e))
 
+                        else:
+                            result = self.query.strip()
+                            try:
+                                queryset = queryset.filter(id__iexact=result)
+                            except Exception as e:
+                                queryset = queryset.none()
+                                logging.getLogger('error_log').error(str(e))
 
-                    elif self.sel_opt =='mobile':
+                    elif self.sel_opt == 'mobile':
                         queryset = queryset.filter(mobile__iexact=self.query)
 
-
-                    elif self.sel_opt =='email':
-                        result =self.query.strip()
+                    elif self.sel_opt == 'email':
+                        result = self.query.strip()
                         queryset = queryset.filter(email__iexact=result)
-
 
         except Exception as e:
             queryset = queryset.none()
@@ -427,8 +424,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
         self.query = ''
         self.writer, self.created = '', ''
         self.delivery_type = ''
-        self.sel_opt  ='number'
-
+        self.sel_opt = 'number'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
