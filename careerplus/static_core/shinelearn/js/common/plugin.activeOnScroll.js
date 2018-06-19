@@ -8,20 +8,23 @@
 			child.first().addClass(this.class);
 		},
 		_scroll: function (container) {
-			var child = $(container).children();
-			var height = $(container).height();
+			
+			$(document).on("scroll", onScroll);
 
-			$(document).on("scroll", function(event) {
+			function onScroll(){
+				var child = $(container).children();
 				var scrollPos = $(document).scrollTop();
+				var height = $(container).height();
 			    child.each(function () {
 			        var currLink = $(this);
 			        var refElement = $(currLink.attr("href"));
-			        if (refElement.offset().top <= scrollPos + height && refElement.offset().top + refElement.outerHeight() > scrollPos + height) {
+			        if (refElement.offset().top - $('.cls_sticky_scroller').outerHeight() <= scrollPos + height && 
+			        		refElement.offset().top + refElement.outerHeight()  > scrollPos + height ) {
 			            child.removeClass("active");
 			            currLink.addClass("active");
 			        }
 			    });
-			});
+			}
 
 		}
 	}

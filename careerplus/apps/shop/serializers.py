@@ -152,7 +152,7 @@ class CRMProductSerializer(ModelSerializer):
         
     def get_attributes(self,obj):
         attr = ''
-        if obj.type_product in [0,3,4,5]:
+        if obj.type_product in [0,1,3,4,5]:
             if obj.is_course:
                 mode = get_choice_display(obj.get_studymode(), "STUDY_MODE")
                 duration = get_choice_display(obj.get_duration(), "DURATION_DICT")

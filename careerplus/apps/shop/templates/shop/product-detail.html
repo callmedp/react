@@ -5,7 +5,7 @@
       <header>
         
         <div class="detail-course-header">
-          <div class="container">
+          <div class="container pr">
 
               <!-- breadcrums -->
               {% block breadcrumbs %}
@@ -42,12 +42,25 @@
                 </div>
               </div>
             {% endblock product_header %}
+
+            <!-- query-price-box-scroll start -->
+            <div class="query-price-box-scroll">
+
+              {% block product_cart %}
+                {% include "shop/partials/prd_cart.html" %}
+              {% endblock product_cart %}
+
+            </div>
+            <!-- query-price-box-scroll end -->
+
+
           </div>
         </div>
-
+            {% comment %}
             {% block product_cart %}
               {% include "shop/partials/prd_cart.html" %}
             {% endblock product_cart %}
+            {% endcomment %}
         
       </header>
 
@@ -56,14 +69,37 @@
 
     {% block section1 %}
       <!-- main parent1 section start -->
-      <section class="container-fluid cls_scroller_parent pr">
+      <section class="container-fluid cls_sticky_scroller_p pr">
           <div class="row detail-box bt-none">
 
             <!-- sticky sub header 1 -->
-            <div class="course-caption-bottom cls_scroller" >
+            <div class="course-caption-bottom cls_sticky_scroller" >
               <div class="container">
                 <div class="visible-onscroll hidden cls_scroller_hiddenDiv">
                   <strong>{{prd_H1}}</strong> by <small>{{prd_vendor}}</small>
+
+                  <div class="enrol-cart-scroll pull-right">
+                    <strong id="id-scroll-price" class="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
+                      {{var_list.0.inr_price|floatformat}}{% else %}
+                    {{sqs.pPinb|floatformat}}{% endif %}/-</strong>
+
+                    <!--strong id="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
+                      {{var_list.0.inr_price|floatformat}}{% else %}
+                      {{sqs.pPinb|floatformat}}{% endif %}/- <small>(+taxes)</small></strong-->
+
+                    {% if sqs.id in linkedin_resume_services %}
+                    <!-- buy now button -->
+                    <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                    {% endif %}
+
+                    <!-- Add to cart button and redirect to cart add class- enrol-now -->
+                    {% if sqs.id not in linkedin_resume_services %}
+                      <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                    {% endif %}
+
+                    <!--a href="#" class="enrol-now" data-toggle="modal" data-target=".bs-example-modal-sm">Enroll now</a-->
+                  </div>
+
                 </div>
 
                   <ul >
@@ -163,7 +199,7 @@
               <div class="row detail-course-links cls_scroller pr">
               <!-- sticky sub header 2 -->
                 <div class="container">
-                  <div class="col-sm-12 col-md-8 tab cls_scroll_tab">
+                  <div class="col-sm-12 col-md-8 about-tab cls_scroll_tab">
 
                   {% if prd_uget %}
 
@@ -280,12 +316,16 @@
       <!-- main parent2 section end -->      
     {% endblock section2 %}
 
+
     {% if sqs.id not in linkedin_resume_services %}
       {% block prdrecommended %}
       {% include "shop/partials/recommended_product.html" %}
       {% endblock prdrecommended %}
     {% endif %}
-    <!--equiry form-->
+
+
+{% comment %}    
+<!--equiry form-->
 <div class="modal fade bs-example-modal-sm3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="detailpage">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
@@ -303,6 +343,7 @@
             placeholder="Name" maxlength="100" value="{{request.session.full_name}}">
             <span class="error-txt"></span>
           </div>
+
           <div class="form-group">
             <div class="country-code">
               <div class="custom-select">
@@ -346,3 +387,4 @@
     </div>
   </div>
 </div>
+{% endcomment %}
