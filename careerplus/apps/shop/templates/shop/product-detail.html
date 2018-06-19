@@ -202,8 +202,13 @@
                   <div class="col-sm-12 col-md-8 about-tab cls_scroll_tab">
 
                   {% if prd_uget %}
+                      {% if prd_service == 'course' %}
+   <a title="Course Highlights" class="active cls_tab_child" href="#get">Course Highlights</a>
 
-                    <a title="Course Highlights" class="active cls_tab_child" href="#get">{% if prd_service == 'course' %}Course{% else %}Service{% endif %} Highlights</a>
+
+                      {% else %}
+                         <a title="Service Highlights" class="active cls_tab_child" href="#get">Service Highlights</a>
+                      {% endif %}
 
                   {% endif %}
 
@@ -222,14 +227,9 @@
                         {% endif %}
                     {% endif %}
 
-
-
                       {% if prd_service == 'course' and chapter_list %}
                     <a title="Course Outline" class="cls_tab_child" href="#programs">Course Outline</a>
                   {% endif %}
-
-
-
 
 
                   {% if prd_review_list %}
