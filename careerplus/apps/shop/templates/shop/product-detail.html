@@ -251,7 +251,8 @@
                 <div class="container">
                   <div class="row">
                     <div id="get" class="col-sm-12 col-md-8 scroll ">
-                    <h2>Course Highlights</h2>
+
+                    <h2>{% if prd_service == 'course' %}Course{% else %}Service{% endif %}Highlights</h2>
 
                         {{prd_uget|safe}}
                    </div>
