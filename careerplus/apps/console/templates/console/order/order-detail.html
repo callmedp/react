@@ -274,9 +274,8 @@
                                         <li>
                                           <a>
                                             <span>
-                                              <span>{% if msg.added_by %}{{msg.added_by.name}}{% else %}{{order.first_name}} {{order.last_name}}{% endif %}</span>
-
-                                              <span class="time">{{msg.created.date}}</span>
+                                              <span>{% if msg.added_by %}{{msg.added_by.name}}{% else %}{{order.first_name}}{% endif %}</span>
+                                              <span class="time" style="position:static; margin-left:10px; display:inline-block">{{msg.created.date}}</span>
                                             </span>
                                             <span class="message">
                                               {{msg.message}}
