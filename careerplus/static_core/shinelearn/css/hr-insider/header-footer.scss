@@ -409,7 +409,7 @@ nav {
 			bottom: 0;
 			z-index: 9;
 			padding: 20px 30px;
-			height: 130px;
+			height: 100px;
 
 			strong {
 				font-size: $font-size+13;
@@ -446,7 +446,7 @@ nav {
 			bottom: 0;
 			z-index: 9;
 			padding: 10px;
-			height: 90px;
+			height: 60px;
 
 			strong {
 				font-size: $font-size+6;
@@ -463,7 +463,7 @@ nav {
 			background: rgba(0, 0, 0, .7);
 			font-size: $font-size;
 			padding: 6px 10px;
-			display: table;
+			display: none;
 			line-height: 9px;
 			font-weight: $font-weight+200;
 			text-transform: uppercase;
