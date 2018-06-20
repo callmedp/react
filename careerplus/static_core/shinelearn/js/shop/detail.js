@@ -1,10 +1,10 @@
+var showChar = 280;  // How many characters are shown by default
+var ellipsestext = "...";
+var moretext = " know more";
+var lesstext = " know less";
+
 function showMoreLess(){
   // Configure/customize these variables.
-  var showChar = 280;  // How many characters are shown by default
-  var ellipsestext = "...";
-  var moretext = " know more";
-  var lesstext = " know less";
-  
 
   $('.more').each(function() {
     var content = $(this).html();
@@ -14,12 +14,13 @@ function showMoreLess(){
         var c = content.substr(0, showChar);
         var h = content.substr(showChar, content.length - showChar);
 
-        var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink" style="display:inline-block;">' + moretext + '</a></span>';
+        var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a role="button" class="morelink" style="display:inline-block;">' + moretext + '</a></span>';
 
         $(this).html(html);
     }
 
   });
+
 };
 
 $(document).ready(function () {
@@ -226,9 +227,8 @@ $(document).ready(function () {
   // scroll effect;
   activeOnScroll.init({ className:'.cls_scroll_tab'});
 });
-      $(document).ready(function() {
-
-        showMoreLess();
+    $(document).ready(function() {
+      showMoreLess();
 
       $(document).on('click', '.morelink', function(e){
           if($(this).hasClass("less")) {
