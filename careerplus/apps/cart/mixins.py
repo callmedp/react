@@ -442,7 +442,7 @@ class CartMixin(object):
                 if not self.request.session.get('cart_pk'):
                     self.getCartObject()
                 cart_pk = self.request.session.get('cart_pk')
-                cart_obj = Cart.objects.get(pk=cart_pk).select_related('coupon','country')
+                cart_obj = Cart.objects.get(pk=cart_pk)
             if cart_obj:
                 if not total_amount:
                     cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
