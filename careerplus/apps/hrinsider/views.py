@@ -69,7 +69,7 @@ class HRLandingView(TemplateView, BlogMixin):
 
         top_article_list = Blog.objects.filter(
             status=1, visibility=3).select_related(
-                'p_cat', 'author').order_by('-score')[:9]
+                'p_cat', 'author').order_by('-score')[:3]
 
         authors = Author.objects.filter(
             is_active=True,
