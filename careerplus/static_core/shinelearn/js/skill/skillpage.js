@@ -121,7 +121,7 @@ $(function() {
     $('.about-course-links a').click(function(){
         $('.about-course-links a').removeClass('active');
         $(this).addClass('active');
-      });
+    });
 
     $('.cls_scroll_tab').click(function(e){
         e.preventDefault();

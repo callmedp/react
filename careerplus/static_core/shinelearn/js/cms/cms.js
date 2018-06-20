@@ -18,15 +18,19 @@ if (window.CURRENT_FLAVOUR == 'mobile'){
 }else{
 
     var highlightError = function(element, errorClass) {
-        $(element).siblings('.error').removeClass('hide_error');
+        // $(element).siblings('.error').removeClass('hide_error');
+        $(element).closest('.form-group').addClass('error');
     };
 
     var unhighlightError = function(element, errorClass) {
-        $(element).siblings('.error').addClass('hide_error');
+        // $(element).siblings('.error').addClass('hide_error');
+        $(element).closest('.form-group').removeClass('error');
+        $(element).siblings('.error-txt').html(''); 
     };
 
     var errorPlacement = function(error, element) {
-        $(element).siblings('.error').html(error.text());
+        // $(element).siblings('.error').html(error.text());
+        $(element).siblings('.error-txt').html(error.text());
     };
 
     var showLeadForm = function() {
@@ -290,13 +294,17 @@ $(function() {
 
         },
         highlight: function(element, errorClass) {
-            $(element).siblings('.error').removeClass('hide_error');
+            // $(element).siblings('.error').removeClass('hide_error');
+            $(element).closest('.form-group').addClass('error');
         },
         unhighlight: function(element, errorClass) {
-            $(element).siblings('.error').addClass('hide_error');
+            // $(element).siblings('.error').addClass('hide_error');
+            $(element).closest('.form-group').removeClass('error');
+            $(element).siblings('.error-txt').html('');
         },
         errorPlacement: function(error, element) {
-            $(element).siblings('.error').html(error.text());
+            /*$(element).siblings('.error').html(error.text());*/
+            $(element).siblings('.error-txt').html(error.text());
         }
     });
 

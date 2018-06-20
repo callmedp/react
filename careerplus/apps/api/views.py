@@ -327,6 +327,7 @@ class EmailLTValueApiView(APIView):
     def post(self, request, format=None):
         email = request.data.get('candidate_email', '')
         c_id = request.data.get('candidate_id', '')
+        last_order=""
         name = ''
         candidate_id = None
         if email or c_id:
@@ -348,17 +349,26 @@ class EmailLTValueApiView(APIView):
                 if ltv_pks:
                     ltv_order_sum = Order.objects.filter(
                         pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
+                    last_order = OrderItem.objects.select_related('order').filter(order__in = ltv_pks)\
+                        .exclude(oi_status=163).order_by('-order__payment_date').first()
+                    if last_order:
+                        last_order =last_order.order.payment_date.strftime('%Y-%m-%d %H:%M:%S')
+                    else:
+                        last_order=""
+
                     ltv = ltv_order_sum.get('ltv_price') if ltv_order_sum.get('ltv_price') else Decimal(0)
                     rf_ois = OrderItem.objects.filter(
                         order__in=ltv_pks,
                         oi_status=163).values_list('order', flat=True)
+
+
                     rf_sum = RefundRequest.objects.filter(
                         order__in=rf_ois).aggregate(rf_price=Sum('refund_amount'))
                     if rf_sum.get('rf_price'):
                         ltv = ltv - rf_sum.get('rf_price')
 
                 return Response(
-                    {"status": "SUCCESS", "ltv_price": str(ltv), "name": name},
+                    {"status": "SUCCESS", "ltv_price": str(ltv), "name": name, "last_order": str(last_order)},
                     status=status.HTTP_200_OK)
             else:
                 return Response(

@@ -49,12 +49,11 @@
   </div>
   <!-- other package end -->
 
-{% elif sqs_main == "1941" %}
+{% elif sqs_main.id == 1941 %}
 
     <div class="other-package-box">
-      <span>Durations</span>
-      {% if prd_exp %}
-        {% if sqs.id == "1941" %}
+      <span>Duration</span>
+        {% if sqs.id == 1941 %}
         <a role="button" class="other-package selected" data-id="1941" main-id="{{sqs_main.id}}">
             <p>
               <strong>30 days</strong>
@@ -69,7 +68,7 @@
           </a>
         {% endif %}
 
-        {% if sqs.id == "1939" %}
+        {% if sqs.id == 1939 %}
         <a role="button" class="other-package selected" data-id="1939" main-id="{{sqs_main.id}}">
             <p>
               <strong>90 days</strong>
@@ -84,7 +83,7 @@
           </a>
         {% endif %}
 
-        {% if sqs.id == "1942" %}
+        {% if sqs.id == 1942 %}
         <a role="button" class="other-package selected" data-id="1942" main-id="{{sqs_main.id}}">
             <p>
               <strong>180 days</strong>
@@ -98,15 +97,13 @@
             </p>
           </a>
         {% endif %}
-      {% endif %}
     </div>
 
-{% elif sqs_main.id == "1939" %}
+{% elif sqs_main.id == 1939 %}
 
   <div class="other-package-box">
     <span>Duration</span>
-    {% if prd_exp %}
-      {% if sqs.id == "1939" %}
+      {% if sqs.id == 1939 %}
       <a role="button" class="other-package selected" data-id="1939" main-id="{{sqs_main.id}}">
           <p>
             <strong>90 days</strong>
@@ -121,7 +118,7 @@
         </a>
       {% endif %}
 
-      {% if sqs.id == "1941" %}
+      {% if sqs.id == 1941 %}
       <a role="button" class="other-package selected" data-id="1941" main-id="{{sqs_main.id}}">
           <p>
             <strong>30 days</strong>
@@ -136,7 +133,7 @@
         </a>
       {% endif %}
 
-      {% if sqs.id == "1942" %}
+      {% if sqs.id == 1942 %}
       <a role="button" class="other-package selected" data-id="1942" main-id="{{sqs_main.id}}">
           <p>
             <strong>180 days</strong>
@@ -150,15 +147,13 @@
           </p>
         </a>
       {% endif %}
-    {% endif %}
   </div>
   
-{% elif sqs_main.id == "1942" %}
+{% elif sqs_main.id == 1942 %}
 
   <div class="other-package-box">
-    <span>Durations</span>
-    {% if prd_exp %}
-      {% if sqs.id == "1942" %}
+    <span>Duration</span>
+      {% if sqs.id == 1942 %}
       <a role="button" class="other-package selected" data-id="1942" main-id="{{sqs_main.id}}">
           <p>
             <strong>180 days</strong>
@@ -173,7 +168,7 @@
         </a>
       {% endif %}
 
-      {% if sqs.id == "1941" %}
+      {% if sqs.id == 1941 %}
       <a role="button" class="other-package selected" data-id="1941" main-id="{{sqs_main.id}}">
           <p>
             <strong>30 days</strong>
@@ -188,7 +183,7 @@
         </a>
       {% endif %}
 
-      {% if sqs.id == "1939" %}
+      {% if sqs.id == 1939 %}
       <a role="button" class="other-package selected" data-id="1939" main-id="{{sqs_main.id}}">
           <p>
             <strong>90 days</strong>
@@ -202,7 +197,6 @@
           </p>
         </a>
       {% endif %}
-    {% endif %}
   </div>
   
 {% else %}

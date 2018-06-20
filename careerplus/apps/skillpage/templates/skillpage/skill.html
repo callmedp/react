@@ -74,10 +74,10 @@
     <!-- page content body start -->
 	<div class="row">
 	<!-- left content start -->
-		<div class="col-md-9 col-sm-12 cls_scroller_parent">
+		<div id="about-courses" class="col-md-9 col-sm-12 cls_scroller_parent">
 
 			<div class="about-course-links mb-40 cls_scroller pr cls_scroll_tab">
-	        	<a title="About course" class="active cls_tab_child" href="#">About course</a> 
+	        	<a title="About course" class="active cls_tab_child" href="#about-courses">About course</a> 
 	        	{% if category_obj.graph_image or api_data.job_count or api_data.jFArea %}
 	        		<a title="Importance in Market" class="cls_tab_child" href="#market">Importance in Market</a>
 	        	{% endif %}
@@ -342,7 +342,7 @@
       <div class="call-service">
         <strong>
           <span class="call-service-icon"></span>
-          0124-395 5001
+          {{GGN_CONTACT}}
         </strong>
         9am to 7pm ist monday-saturday
       </div>
@@ -369,6 +369,6 @@
     {% compress js %}
     <script src="{% static 'console/js/jquery.validate.js' %}"></script>
     <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
-    <script src="{% static 'shinelearn/js/common/scroller.js' %}"></script>
+    <script src="{% static 'shinelearn/js/skill/skill_scroller.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}

@@ -58,6 +58,46 @@
                 </div>
             </section>
 
+            {% if conclave_type == 'Upcoming' %}
+            <section class="conclave-box-btm">
+                <div class="row">
+                    <div class="col">
+                        <figure class="calender-box">
+                            <i class="calender-icon-box">
+                                <span class="icon-conclave1"></span>
+                            </i>
+                            <figcaption>
+                                {{obj.start_date.date}}
+                                <em>Entry by {{obj.author}}</em>
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <div class="col">
+                        <figure class="time-box">
+                            <i class="time-icon-box">
+                                <span class="icon-conclave2"></span>
+                            </i>
+                            <figcaption>
+                                {{obj.start_date|localtime|date:"g:iA"}} Onwards
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <div class="col">
+                        <figure class="venue-box">
+                            <i class="venue-icon-box">
+                                <span class="icon-conclave3"></span>
+                            </i>
+                            <figcaption>
+                                {{obj.venue}}
+                                <!--a href="https://www.google.com/maps/place/The+Westin+Hyderabad+Mindspace/@17.442354,78.38179,14z/data=!4m5!3m4!1s0x0:0x7acc5d097f6e2e6!8m2!3d17.4423539!4d78.3817904?hl=en-US" target="_blank">Show on Map</a-->
+                            </figcaption>
+                        </figure>
+                    </div>
+
+                </div>
+            </section>
+            {% endif %}
+
         <!-- main section start -->
             <section class="conclave-box-content">
                 <div class="row">
@@ -114,7 +154,7 @@
                                             {% endif %}
                                             <figcaption>
                                                 <strong class="author-info author-info-primary">{{speaker.name}}</strong>
-                                                <strong class="author-info author-info-secondary">{{speaker.count}} articles</strong>
+                                                <strong class="author-info author-info-secondary">{{speaker.designation}}</strong>
                                             </figcaption>
                                         </figure>
                                     </a>
