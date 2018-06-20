@@ -70,13 +70,13 @@
 	</header>
 {% endblock pageheading %}
 {% block container %}
-<section class="container cls_scroller_parent pr">
+<section class="container">
     <!-- page content body start -->
 	<div class="row">
 	<!-- left content start -->
-		<div id="about-courses" class="col-md-9 col-sm-12 cls_scroller pr">
+		<div id="about-courses" class="col-md-9 col-sm-12 cls_scroller_parent">
 
-			<div class="about-course-links mb-40 cls_scroll_tab">
+			<div class="about-course-links mb-40 cls_scroller pr cls_scroll_tab">
 	        	<a title="About course" class="active cls_tab_child" href="#about-courses">About course</a> 
 	        	{% if category_obj.graph_image or api_data.job_count or api_data.jFArea %}
 	        		<a title="Importance in Market" class="cls_tab_child" href="#market">Importance in Market</a>
@@ -367,7 +367,6 @@
 {% block js_section %}
     {{ block.super }}
     {% compress js %}
-    <script src="{% static 'shinelearn/js/common/plugin.activeOnScroll.js' %}"></script>
     <script src="{% static 'console/js/jquery.validate.js' %}"></script>
     <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/scroller.js' %}"></script>
