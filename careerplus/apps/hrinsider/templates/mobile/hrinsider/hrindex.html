@@ -26,17 +26,15 @@
     <!-- Trending articles Starts here -->
     <div class="trending-articles">
       <ul class="article-slider">
-        {% for topArtList in top_article_list %}
-          {% if topArtList.0 %}
-            {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.0 %}
+          {% if top_article_list.0 %}
+            {% include './include/bannerbox.tmpl.html' with articlelist=top_article_list.0 %}
           {% endif %}
-          {% if topArtList.1 %}
-            {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.1 %}
+          {% if top_article_list.1 %}
+            {% include './include/bannerbox.tmpl.html' with articlelist=top_article_list.1 %}
           {% endif %}
-          {% if topArtList.1 %}
-            {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.2 %}
+          {% if top_article_list.2 %}
+            {% include './include/bannerbox.tmpl.html' with articlelist=top_article_list.2 %}
           {% endif %}
-        {% endfor %}
       </ul>
     </div><!-- Trending articles Ends here -->
     {% endif %}

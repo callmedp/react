@@ -69,7 +69,25 @@ class HRLandingView(TemplateView, BlogMixin):
 
         top_article_list = Blog.objects.filter(
             status=1, visibility=3).select_related(
-                'p_cat', 'author').order_by('-score')[:9]
+                'p_cat', 'author').order_by('-score')[:3]
+
+        today_date = timezone.now()
+        conclave_type = ''
+        latest_conclave = None
+        conclaves = Blog.objects.filter(
+            visibility=4, status=1,
+            start_date__gte=today_date).order_by('start_date')
+        if conclaves.exists():
+            conclave_type = 'Upcoming'
+            latest_conclave = conclaves[0]
+
+        past_conclaves = Blog.objects.filter(
+            visibility=4, status=1,
+            start_date__lte=today_date).order_by('-start_date')
+
+        if not latest_conclave and past_conclaves.exists():
+            conclave_type = 'Past'
+            latest_conclave = past_conclaves[0]
 
         authors = Author.objects.filter(
             is_active=True,
@@ -78,11 +96,13 @@ class HRLandingView(TemplateView, BlogMixin):
         author_list = zip_longest(*[iter(authors)] * 6, fillvalue=None)
 
         context.update({
-            'top_article_list': [top_article_list[:3], top_article_list[3:6], top_article_list[6:9]],
+            'top_article_list': top_article_list,
             'categories': categories,
             'article_list': article_list,
             'authors': authors,
-            'authors_list': list(author_list)
+            'authors_list': list(author_list),
+            'conclave_type': conclave_type,
+            'latest_conclave': latest_conclave
         })
 
         context.update(self.get_breadcrumb_data())
