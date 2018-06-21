@@ -296,22 +296,18 @@ class PartnerVarificationQueueView(ListView, PaginationMixin):
         try:
             if self.query:
                 if self.sel_opt == 'number':
-                     if self.query[2:] == 'cp' or self.query[2:] =='CP':
                         queryset = queryset.filter(order__number__iexact=self.query)
-                     else:
-                        queryset = queryset.none()
                 elif self.sel_opt == 'id':
                         queryset = queryset.filter(id__iexact=self.query)
 
                 elif self.sel_opt == 'mobile':
-                        queryset=queryset.filter(order__mobile__iexact=self.query)
+                        queryset = queryset.filter(order__mobile__iexact=self.query)
 
                 elif self.sel_opt == 'email':
-                        queryset=queryset.filter(order__email__iexact=self.query)
+                        queryset = queryset.filter(order__email__iexact=self.query)
 
                 elif self.sel_opt == 'product':
                         queryset = queryset.filter(product__name__icontains=self.query)
-
 
         except Exception as e:
             logging.getLogger('error_log').error('unable to get queryset %s' % str(e))
