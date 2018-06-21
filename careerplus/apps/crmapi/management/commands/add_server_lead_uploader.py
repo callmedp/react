@@ -47,13 +47,13 @@ def upload_addserver_leads():
             if minute_diff < 30:
                 continue
             else:
-                cart_list = Cart.objects.filter(
-                    owner_email=ld.email,
-                    created__range=(date_start, date_end),
-                    lead_archive=False)
-
-                if cart_list.exists():
-                    continue
+                # cart_list = Cart.objects.filter(
+                #     owner_email=ld.email,
+                #     created__range=(date_start, date_end),
+                #     lead_archive=False)
+                #
+                # if cart_list.exists():
+                #     continue
                 create_lead_crm(pk=ld.pk)
                 count += 1
                 logging.getLogger('info_log').info("{} Leads Updated".format(count))
