@@ -61,7 +61,7 @@
 <label class="radio-inline"><input type="radio" name="rad_search" value="id" {{id}}><b>ID</b></label>
 <label class="radio-inline"><input type="radio" name="rad_search" value="email" {{email}}><b>Email</b></label>
 <label class="radio-inline"><input type="radio" name="rad_search"value="mobile" {{mobile}}><b>Mobile</b></label>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="radio-inline"><input type="radio" name="rad_search"value="product" {{product}}><b>product</b></label>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label class="radio-inline"><input type="radio" name="rad_search"value="product" {{product}}><b>Product</b></label>
 
 
                       </div>
@@ -86,7 +86,7 @@
                   <h4 class="modal-title" id="myModalLabel2">Filter By</h4>
                 </div>
                 <div class="modal-body">
-                  <form autocomplete="off" class="form-group" method="GET" action="{% url "console:partner:partnerinbox" %}" id="list-filter-form">
+                  <form autocomplete="off" class="form-group" method="GET" action="{% url 'console:partner:partnerinbox' %}" id="list-filter-form">
                         <div class="form-group">
                             <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.payment_date.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -145,7 +145,7 @@
               </li>
             </ul>
             {% if perms.order.oi_action_permission %}
-            <form autocomplete="off" method="POST" role="form" id="action_form" action="{% url "console:action-orderitem-view" %}">{% csrf_token %}
+            <form autocomplete="off" method="POST" role="form" id="action_form" action="{% url 'console:action-orderitem-view' %}">{% csrf_token %}
                 <div class="col-sm-4">
                     <div class="input-group">
                         {{action_form.action}}

@@ -555,7 +555,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related('order', 'product', 'delivery_service').order_by('-modified')
+        return queryset.select_related('order').order_by('-modified')
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -667,7 +667,7 @@ class SearchOrderView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(SearchOrderView, self).get_queryset()
         excl_txns = PaymentTxn.objects.filter(status__in=[0, 2, 3, 4, 5], payment_mode__in=[6, 7])
-        excl_order_list = excl_txns.all().values_list('order__pk', flat=True)
+        excl_order_list = list(excl_txns.all().values_list('order__pk', flat=True))
         queryset = queryset.exclude(id__in=excl_order_list)
         queryset = queryset.filter(status=1)
 
@@ -679,7 +679,7 @@ class SearchOrderView(ListView, PaginationMixin):
                     Q(mobile=self.query))
 
                 pay_txns = PaymentTxn.objects.filter(txn=self.query)
-                order_pks = pay_txns.all().values_list('order__pk', flat=True)
+                order_pks = list(pay_txns.all().values_list('order__pk', flat=True))
                 q2 = queryset.filter(id__in=order_pks)
 
                 queryset = q1 | q2
@@ -1461,7 +1461,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
             order__status__in=[1, 3], oi_status=4,
             no_process=False)
         user = self.request.user
-        vendor_employee_list = user.employees.filter(active=True).values_list('vendee', flat=True)  # user's associated vendor ids
+        vendor_employee_list = list(user.employees.filter(active=True).values_list('vendee', flat=True))  # user's associated vendor ids
 
         if user.has_perm('order.can_view_all_closed_oi_list'):
             pass
