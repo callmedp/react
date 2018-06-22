@@ -35,39 +35,8 @@
       {% if  article_list %}
       <section class="listing-box">
         <h1 class="primary-heading">All Articles</h1>
-        <div class="row">
-          
-          {% for articleItem in article_list %}
-          <!-- listing box -->
-          <div class="col-md-4 listing">
-            <div class="box-panel">
-              
-              <a href="{% url 'hrinsider:hr-articles-detail' articleItem.slug %}" title="{{artList.heading}}">
-                <figure>
-                  <i>
-                    <img src="{{articleItem.image.url}}" alt="{{article.image_alt}}">
-                  </i>
-                  <!--figcaption>{{articleItem.p_cat.name}}</figcaption-->
-                  <div class="view-forward">
-                    <i class="icon-forward"></i> {{articleItem.no_shares}}
-                    <i class="icon-view ml-20"></i> {{articleItem.no_views}}
-                  </div>
-                </figure>
-                <h3 class="sub-heading">{{articleItem.heading|truncatechars:60}}</h3>
-                <article>{{articleItem.summary|striptags|safe|truncatechars:100}}</article>
-              </a>
-              
-              <a class="author">
-                {% if articleItem.author.image %}
-                <i>
-                  <img src="{{articleItem.author.image.url}}" alt="{{articleItem.author.image_alt}}">
-                </i>
-                {% endif %}
-                <strong>{{articleItem.author.name}}</strong>
-              </a>
-            </div>          
-          </div><!-- /. listing box -->
-          {% endfor %}
+        <div class="row" id="hr-listing-container">
+          {{article_list}}
         </div>
       </section><!-- /. Recenty added -->
       {% endif %}
@@ -79,5 +48,16 @@
 
 
     {% endblock container %}
+
+{% block js_section %}
+    {{ block.super }}
+    {% compress js %}
+    <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+
+    <script src="{% static "shinelearn/js/hrinsider/hr-blog.js" %}"></script>
+    {% endcompress %}
+
+{% endblock js_section %}
+
 
     

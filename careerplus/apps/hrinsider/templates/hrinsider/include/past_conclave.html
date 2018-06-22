@@ -4,7 +4,7 @@
         <ul>
             {% for past_conclave in past_conclaves %}
                 <li>
-                    <a href="{{past_conclave.get_absolute_url}}">
+                    <a href="{{past_conclave.get_absolute_url}}" title="{{past_conclave.display_name}}">
                         <figure>
                             {% if past_conclave.image %}
                             <i>

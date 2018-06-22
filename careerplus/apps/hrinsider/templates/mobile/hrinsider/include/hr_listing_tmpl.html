@@ -1,0 +1,62 @@
+{% load static humanize thumbnail compress %}
+
+
+{% for articlelist in page_obj %}
+
+<li class="media">
+  <a class="link-grey" title="{{articlelist.heading}}" href="{% url 'hrinsider:hr-articles-detail' articlelist.slug %}">
+    {% thumbnail articlelist.image "96x73" crop="center" as im %}
+    <figure class="media-left">
+      <img class="media-object w-auto" src="{{ articlelist.image.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ articlelist.image_alt}}">
+    </figure>
+    {% endthumbnail %}
+
+    <div class="media-body rel">
+      <p class="pb-5 text-upper c9 font-bold fs-11">{{articlelist.p_cat.name}}</p>
+      <h2 class="secondary-heading">{{articlelist.heading}}</h2>
+      <div class="blog-author fs-11">
+        <span class="editor pull-left">{{articlelist.author.name}}</span>
+        <span class="view-forward pull-right">
+          {% if article.no_shares > 0 %}
+          <figure class="icon-forward"></figure> {articlelist.no_shares}} 
+          {% endif %}
+
+          {% if article.no_views > 0 %}
+          <figure class="icon-view icon-grey-view ml-10"></figure> {{articlelist.no_views}}
+          {% endif %}
+        </span>
+      </div>
+    </div>
+
+  </a>
+</li>
+{% endfor %}
+
+{% if page_obj.has_next %}
+  <li class="text-center mt-30" id="hr_article_load_more_id">
+    <div style='display:none'>
+      <form id="load-hr_article-list-form">
+        <input type="hidden" id="hr_article_page_id" name="page" value="{{page_obj.next_page_number}}">
+        <input type="hidden" id="hr_article_search_id" name="search" value="{{search}}">
+        <input type="hidden" id="hr_article_list_id" name="list" value="{{list}}">
+      </form>
+    </div>
+    <button class="btn-outline btn" id="load-hr-article-list">Load more
+    </button>
+  </li>
+{% endif %}
+
+{% comment %}
+{% if page_obj.has_next %}
+  <div id="hr_article_load_more_id" class="col-sm-12">
+    <div style='display:none'>
+    <form id="load-hr_article-list-form">
+      <input type="hidden" id="hr_article_page_id" name="page" value="{{page_obj.next_page_number}}">
+      <input type="hidden" id="hr_article_search_id" name="search" value="{{search}}">
+      <input type="hidden" id="hr_article_list_id" name="list" value="{{list}}">
+    </form>
+    </div>
+    <button type="button" class="load-button" id="load-hr-article-list"><i class="icon-load mr-10"></i>Load more</button>
+  </div>
+{% endif %}
+{% endcomment %}

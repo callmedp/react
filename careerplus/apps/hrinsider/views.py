@@ -30,6 +30,9 @@ class HRLandingView(TemplateView, BlogMixin):
 
     def __init__(self):
         self.search = ''
+        self.list = ''
+        self.page = 1
+        self.paginated_by = 15
 
     def get(self, request, *args, **kwargs):
         self.search = request.GET.get('search', '').strip()
@@ -44,28 +47,42 @@ class HRLandingView(TemplateView, BlogMixin):
         if kwargs.get('list'):
             article_list = Blog.objects.filter(
                 status=1, visibility=3).select_related('p_cat', 'author').order_by('-no_views')
-            context.update({'list': True})
+            self.list = True
+            context.update({'list': self.list})
         else:
             if self.search:
                 article_list = Blog.objects.filter(
                     name__icontains=self.search,
                     status=1,
                     visibility=3).select_related(
-                    'p_cat', 'author').order_by('-no_views')[:48]
+                    'p_cat', 'author').order_by('-no_views')
                 context.update({
                     'search': self.search})
                 if not article_list.exists():
                     article_list = Blog.objects.filter(
                         status=1,
                         visibility=3).select_related(
-                        'p_cat', 'author').order_by('-score')[:15]
+                        'p_cat', 'author').order_by('-score')
                     context.update({
                         "no_results": True})
             else:
                 article_list = Blog.objects.filter(
                     status=1,
                     visibility=3).select_related(
-                    'p_cat', 'author').order_by('-publish_date')[:15]
+                    'p_cat', 'author').order_by('-publish_date')
+
+        page_obj = self.scrollPagination(
+            paginated_by=self.paginated_by, page=self.page,
+            object_list=article_list)
+        article_list = None
+        if page_obj:
+            article_list = render_to_string(
+                'hrinsider/include/hr_listing_tmpl.html',
+                {
+                    "page_obj": page_obj,
+                    "search": self.search,
+                    "list": self.list,
+                    "SITEDOMAIN": settings.SITE_DOMAIN})
 
         top_article_list = Blog.objects.filter(
             status=1, visibility=3).select_related(
@@ -133,6 +150,67 @@ class HRLandingView(TemplateView, BlogMixin):
         return {"meta": meta}
 
 
+class HRArticleLoadMoreView(TemplateView, BlogMixin):
+    template_name = "hrinsider/include/hr_listing_tmpl.html"
+
+    def __init__(self):
+        self.search = ''
+        self.list = ''
+        self.page = 1
+        self.paginated_by = 15
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.list = request.GET.get('list', '')
+        self.search = request.GET.get('search', '')
+        if request.is_ajax():
+            context = super(self.__class__, self).get(request, args, **kwargs)
+            return context
+        return HttpResponseForbidden()
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        article_list = []
+        if self.list:
+            article_list = Blog.objects.filter(
+                status=1, visibility=3).select_related('p_cat', 'author').order_by('-no_views')
+            self.list = True
+            context.update({'list': self.list})
+        else:
+            if self.search:
+                article_list = Blog.objects.filter(
+                    name__icontains=self.search,
+                    status=1,
+                    visibility=3).select_related(
+                    'p_cat', 'author').order_by('-no_views')
+                context.update({
+                    'search': self.search})
+                if not article_list.exists():
+                    article_list = Blog.objects.filter(
+                        status=1,
+                        visibility=3).select_related(
+                        'p_cat', 'author').order_by('-score')
+                    context.update({
+                        "no_results": True})
+            else:
+                article_list = Blog.objects.filter(
+                    status=1,
+                    visibility=3).select_related(
+                    'p_cat', 'author').order_by('-publish_date')
+
+        page_obj = self.scrollPagination(
+            paginated_by=self.paginated_by, page=self.page,
+            object_list=article_list)
+
+        context.update({
+            'page_obj': page_obj,
+            'list': self.list,
+            'search': self.search,
+            "SITEDOMAIN": settings.SITE_DOMAIN
+        })
+        return context
+
+
 class HRBlogTagView(TemplateView, BlogMixin):
     model = Blog
     template_name = "hrinsider/hrtag-article.html"
@@ -140,7 +218,7 @@ class HRBlogTagView(TemplateView, BlogMixin):
     def __init__(self):
         self.tag_obj = None
         self.page = 1
-        self.paginated_by = 9
+        self.paginated_by = 15
 
     def get(self, request, *args, **kwargs):
         slug = kwargs.get('slug', None)
@@ -213,7 +291,7 @@ class HRTagLoadArticleView(TemplateView, BlogMixin):
     def __init__(self):
         self.tag_obj = None
         self.page = 1
-        self.paginated_by = 9
+        self.paginated_by = 15
 
     def get(self, request, *args, **kwargs):
         slug = request.GET.get('slug', None)
@@ -230,7 +308,6 @@ class HRTagLoadArticleView(TemplateView, BlogMixin):
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
         tag_obj = self.tag_obj
-        
         article_list = self.tag_obj.blog_set.filter(
             status=1,
             visibility=3).select_related(
