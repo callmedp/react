@@ -343,9 +343,9 @@ class EmailLTValueApiView(APIView):
             else:
                 candidate_id = c_id
             if candidate_id:
-                ltv_pks = Order.objects.filter(
+                ltv_pks = list(Order.objects.filter(
                     candidate_id=candidate_id,
-                    status__in=[1,2,3]).values_list('pk', flat=True)
+                    status__in=[1,2,3]).values_list('pk', flat=True))
                 if ltv_pks:
                     ltv_order_sum = Order.objects.filter(
                         pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
@@ -357,9 +357,9 @@ class EmailLTValueApiView(APIView):
                         last_order=""
 
                     ltv = ltv_order_sum.get('ltv_price') if ltv_order_sum.get('ltv_price') else Decimal(0)
-                    rf_ois = OrderItem.objects.filter(
+                    rf_ois = list(OrderItem.objects.filter(
                         order__in=ltv_pks,
-                        oi_status=163).values_list('order', flat=True)
+                        oi_status=163).values_list('order', flat=True))
 
 
                     rf_sum = RefundRequest.objects.filter(
@@ -395,12 +395,12 @@ class OrderHistoryAPIView(ListAPIView):
         elif candidate_id:
             queryset_list = queryset_list.filter(
                 candidate_id=candidate_id,
-                status__in=[1, 2, 3]).distinct()
+                status__in=[1, 2, 3])
             return queryset_list
         elif email:
             queryset_list = queryset_list.filter(
                 email=email,
-                status__in=[1, 2, 3]).distinct()
+                status__in=[1, 2, 3])
             return queryset_list
 
 
