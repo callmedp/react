@@ -32,34 +32,9 @@
         {% include './include/breadcrumb.html' %}
       </ul>
 
-      <h2>All Articles</h2>      
-      <ul class="article-list">
-        {% for articleItem in article_list %}
-          <li class="media">
-            <a class="link-grey" title="{{articleItem.title}}" href="{% url 'hrinsider:hr-articles-detail' articleItem.slug %}">
-              {% thumbnail articleItem.image "96x73" crop="center" as im %}
-              <figure class="media-left">
-                <img class="media-object w-auto" src="{{ articleItem.image.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ articleItem.image_alt}}">
-              </figure>
-              {% endthumbnail %}
-
-              <div class="media-body rel">
-                <p class="pb-5 text-upper c9 font-bold fs-11">{{articleItem.p_cat.name}}</p>
-                <h3 class="media-heading">{{articleItem.heading}}</h3>
-                <div class="blog-author fs-11">
-                  <span class="editor pull-left">{{articleItem.author.name}}</span>
-                  
-                  <span class="view-forward pull-right">
-                    
-                    <figure class="icon-forward"></figure> {{articleItem.no_shares}}
-                    <figure class="icon-view icon-grey-view ml-10"></figure> {{articleItem.no_views}}
-                  </span>
-
-                </div>
-              </div>
-            </a>
-          </li>
-          {% endfor %}
+      <h1 class="primary-heading">All Articles</h1>      
+      <ul class="article-list" id="hr-listing-container">
+        {{article_list}}
       <ul>
     </div>
     <!-- box panel ends here -->
@@ -69,3 +44,12 @@
     {% include './include/contact-info.html' %}
     
     {% endblock container %}
+
+    {% block js_section %}
+      {{block.super}}
+      {% compress js %}
+        <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+
+        <script src="{% static "shinelearn/js/hrinsider/hr-blog.js" %}"></script>
+      {% endcompress %}
+    {% endblock js_section %}

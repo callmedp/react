@@ -4,6 +4,14 @@
 
 {% block django_meta %}
     {% include 'meta/meta.html' %}
+    <meta property="og:image" content="{{obj.image.url}}">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@shinelearning">
+
+    <meta name="twitter:domain" content="learning.shine.com">
+    <meta name="twitter:title" content="{{obj.heading}}">
+    <meta name="twitter:description" content="{{ obj.get_description }}" />
+    <meta name="twitter:image:src" content="{{obj.image.url}}">
 {%  endblock django_meta %}
 
 {% block canonical_url %}

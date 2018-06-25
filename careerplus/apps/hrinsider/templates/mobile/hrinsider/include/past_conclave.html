@@ -6,14 +6,14 @@
     
     {% for past_conclave in past_conclaves %}
     <li>
-      <a href="{{past_conclave.get_absolute_url}}">
+      <a href="{{past_conclave.get_absolute_url}}" title="{{past_conclave.display_name}}">
         <span class="youtube-img">
           <sup class="icon-play"></sup>
           <img class="img-responsive" src="{{past_conclave.image.url}}" alt="...">
         </span>
 
         <div class="">
-          <h3>{{past_conclave.display_name}}</h3>
+          <h2 class="past-conclave-heading">{{past_conclave.display_name}}</h2>
           <span class="view-forward font-bold">
             <figure class="icon-loc"></figure> {{past_conclave.city}} Edition
           </span>

@@ -365,7 +365,7 @@
     @extend %box-shadow;
     padding: 20px 20px 10px 20px;
 
-    h2 {
+    strong {
         font-weight: $font-weight+200;
     }
 
@@ -408,7 +408,7 @@
                     text-transform: uppercase;
                     padding-top: 5px;
 
-                    h3 {
+                    h3, h2 {
                         font-size: $font-size+3;
                         font-weight: $font-weight+200;
                         display: block;
