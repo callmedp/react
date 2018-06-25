@@ -69,8 +69,6 @@ class WalletView(FormView):
                         wal_total = sum(rew_points.values_list('current',flat=True))
                         wallettxn = WalletTransaction.objects.create(wallet=wal_obj, txn_type=2, point_value=points,
                                                                      notes= note)
-                        import ipdb;
-                        ipdb.set_trace()
                         for pts in rew_points:
                             if pts.current >= points:
                                 pts.current -= points
@@ -104,37 +102,3 @@ class WalletView(FormView):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
-
-
-
-
-
-    #
-    #             email = form.cleaned_data['email_id']
-    #             owner = form.cleaned_data['owner_id']
-    #             points = form.cleaned_data['point_value']
-    #             note = form.cleaned_data['notes']
-    #             action = form.cleaned_data['wallet_action']
-    #             try:
-    #                 if email:
-    #                     wal_obj = Wallet.objects.filter(owner_email=email)
-    #                 if owner and not wal_obj:
-    #                     wal_obj = Wallet.objects.filter(owner_email=email)
-    #                 if wal_obj:
-    #                     expiry = timezone.now() + datetime.timedelta(days=30)
-    #                     if action =='addpoints':
-    #                         wal_obj.point.create(original=points, current=points, expiry=expiry, status=1)
-    #                         wal_txn = wal_obj.wallettxn.create(txn_type=1, status=1, point_value=points)
-    #                         wal_txn.current_value = wal_obj.get_current_amount()
-    #                         wal_txn.save()
-    #                     else:
-    #                         points = wal_obj.point.filter(status=1, expiry__gt=timezone.now()).order_by('created')
-    #                         pass
-    #             except Exception as e:
-    #                 logging.getLogger('error_log').error(str(e))
-    #     else:
-    #         form = Walletform()
-    #
-    #     return render(request, 'console/wallet/walletrew.html', {'form': form})
-    # else:
-    #     return HttpResponseForbidden("you are not allowed ")
