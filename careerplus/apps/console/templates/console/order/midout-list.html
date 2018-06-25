@@ -84,9 +84,9 @@
                 <div class="modal-body">
                   <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-midout" %}" id="list-filter-form">
                         <div class="form-group">
-                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.modified.label }}</label></br>
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">{{ filter_form.payment_date.label }}</label></br>
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                {{ filter_form.modified }}
+                                {{ filter_form.payment_date }}
                             </div>
                             <br/>
                         </div>
