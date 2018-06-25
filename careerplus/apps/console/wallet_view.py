@@ -40,6 +40,7 @@ class WalletView(FormView):
 
 
     def post(self, request, *args, **kwargs):
+
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         if form.is_valid():
@@ -60,10 +61,29 @@ class WalletView(FormView):
                 if wal_obj:
                     expiry = timezone.now() + datetime.timedelta(days=30)
                     if action =='addpoints':
-                        wal_obj.point.create(original=points, current=points, expiry=expiry, status=1)
+
+                        point_obj = wal_obj.point.create(
+                            original=points,
+                            current=points,
+                            expiry=expiry,
+                            status=1
+                        )
+
+                        # wal_obj.point.create(original=points, current=points, expiry=expiry, status=1)
                         wal_txn = wal_obj.wallettxn.create(txn_type=1, status=1, point_value=points)
+
+                        point_obj.wallettxn.create(
+                            transaction=wal_txn,
+                            point_value=points,
+                            txn_type=1
+                        )
+
                         wal_txn.current_value = wal_obj.get_current_amount()
                         wal_txn.save()
+
+
+
+
                     else:
                         rew_points = wal_obj.point.filter(status=1, expiry__gt=timezone.now()).order_by('created')
                         wal_total = sum(rew_points.values_list('current',flat=True))

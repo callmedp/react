@@ -19,9 +19,9 @@ class Walletform(forms.Form):
     owner_id = forms.CharField(label='Owner id', max_length=255,help_text="Enter the owner id",required=False,
                                widget=forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12'}))
     notes = forms.CharField(widget=forms.Textarea(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}),help_text="This cannot be blank")
-    point_value = forms.DecimalField(label='Points', decimal_places=2, max_digits=12,widget=forms.NumberInput(attrs={'class': 'form-control col-md-7 col-xs-12'}))
-    wallet_action = forms.ChoiceField(label="Action", choices=WalletAction, widget=forms.RadioSelect(attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs={'class': 'form-control col-md-7 col-xs-12'}),help_text="This cannot be blank",required=False)
+    point_value = forms.DecimalField(label='Points', decimal_places=2, max_digits=12,widget=forms.NumberInput(attrs={'class': 'form-control col-md-7 col-xs-12'}),required=False)
+    wallet_action = forms.ChoiceField(label="Action", choices=WalletAction,required=False, widget=forms.RadioSelect(attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
 
 
@@ -36,7 +36,7 @@ class Walletform(forms.Form):
 
     def clean_point_value(self):
         points = self.cleaned_data.get('point_value', '')
-        if points == "":
+        if points == None:
             raise forms.ValidationError("Point value cannot be empty")
         return points
 
@@ -48,6 +48,8 @@ class Walletform(forms.Form):
 
 
     def clean(self):
+
+
         cleaned_data = super().clean()
         email = self.cleaned_data.get('email_id', '')
         owner = self.cleaned_data.get('owner_id', '')
