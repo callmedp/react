@@ -285,7 +285,6 @@ EXCLUDE_SEARCH_PRODUCTS = LINKEDIN_RESUME_PRODUCTS
 
 # used for coupon generation for free feature product on payment realization
 FEATURE_PROFILE_PRODUCTS = [1939]
-FP_COUPON_FLAT_AMOUNT = 1699
 
 try:
     from .settings_local import *

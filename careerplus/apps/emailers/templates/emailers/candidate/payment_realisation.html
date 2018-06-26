@@ -58,29 +58,59 @@
             {% for data in order_items %}
               {% with oi=data.oi addons=data.addons variations=data.variations combos=data.combos %}
 
-              <tr valign="top">
-                <td>{{oi.product.name}}<br>
-                {% if oi.product.get_exp %} - {{oi.product.get_exp}}{% endif %}</td>
-                <td>{{oi.cost_price}}</td>
-              </tr>
-              {% for combo in combos %}
+              {% if oi.product.is_course and variations %}
                 <tr valign="top">
-                  <td>{{combo.product.name}}</td>
-                  <td>{{combo.cost_price}}</td>
+                  <td>{{oi.product.get_name}}<br>
+                  {% if oi.product.get_exp_db %} - {{oi.product.get_exp_db}}{% endif %}</td>
+                  <td>{{variations.first.cost_price|floatformat:2}}</td>
                 </tr>
-              {% endfor %}
-              {% for addon in addons %}
+
+                {% if oi.delivery_service %}
+                  <td>{{oi.delivery_service.name}}</td>
+                  <td>{{oi.delivery_price_excl_tax|floatformat:2}}</td>
+                {% endif %}
+
+                {% for addon in addons %}
+                  <tr valign="top">
+                    <td>{{addon.product.get_name}}</td>
+                    <td>{{addon.cost_price}}</td>
+                  </tr>
+                {% endfor %}
+
+              {% else %}
                 <tr valign="top">
-                  <td>{{addon.product.name}}</td>
-                  <td>{{addon.cost_price}}</td>
+                  <td>{{oi.product.get_name}}<br>
+                  {% if oi.product.get_exp_db %} - {{oi.product.get_exp_db}}{% endif %}</td>
+                  <td>{{oi.cost_price}}</td>
                 </tr>
-              {% endfor %}
-              {% for var in variations %}
-                <tr valign="top">
-                  <td>{{var.product.name}}</td>
-                  <td>{{var.cost_price}}</td>
-                </tr>
-              {% endfor %}
+
+                {% if oi.delivery_service %}
+                  <td>{{oi.delivery_service.name}}</td>
+                  <td>{{oi.delivery_price_excl_tax|floatformat:2}}</td>
+                {% endif %}
+
+                {% for combo in combos %}
+                  <tr valign="top">
+                    <td>{{combo.product.get_name}}</td>
+                    <td>{{combo.cost_price}}</td>
+                  </tr>
+                {% endfor %}
+
+                {% for var in variations %}
+                  <tr valign="top">
+                    <td>{{var.product.get_name}}</td>
+                    <td>{{var.cost_price}}</td>
+                  </tr>
+                {% endfor %}
+
+                {% for addon in addons %}
+                  <tr valign="top">
+                    <td>{{addon.product.get_name}}</td>
+                    <td>{{addon.cost_price}}</td>
+                  </tr>
+                {% endfor %}
+
+              {% endif %}
               {% endwith %}
             {% endfor %}
               <tr>
@@ -88,7 +118,7 @@
               </tr>
               <tr valign="top" style="font-size: 16px;">
                 <td><strong>Total (T)</strong></td>
-                <td><strong>{{total_payable_amount}}</strong></td>
+                <td><strong>{{total_amount_before_discount|floatformat:2}}</strong></td>
               </tr>
               <tr valign="top">
                 <td>Discount / Shine loyalty points</td>
@@ -103,13 +133,11 @@
               </tr>
               <tr valign="top" style="font-size: 18px;">
                 <td><strong>Net Payable</strong></td>
-                <td><strong>{{total_payable_amount}}</strong></td>
+                <td><strong>{{total_payable_amount|floatformat:2}}</strong></td>
               </tr>
-              {% with total_sum=sgst_amount|add:cgst_amount%}
               <tr>
-                <td style="font-size: 12px;" colspan="2">The above Net Payable amount includes GST of {{total_payable_amount|add:total_sum}}</td>
+                <td style="font-size: 12px;" colspan="2">The above Net Payable amount includes GST of {{tax_amount|floatformat:2}}</td>
               </tr>
-              {% endwith %}
             </tbody>
           </table>
         </span>  

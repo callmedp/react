@@ -306,4 +306,4 @@ GGN_CONTACT_FULL = '0124-4312500/01'
 GGN_CONTACT = '0124-4312500'
 
 # used for coupon generation for free feature product on payment realization
-FEATURE_PROFILE_PRODUCTS = [1]
+FEATURE_PROFILE_PRODUCTS = [1939]
