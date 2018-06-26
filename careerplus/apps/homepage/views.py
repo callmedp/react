@@ -93,6 +93,9 @@ class HomePageView(TemplateView, MetadataMixin):
             }
             tcourses.append(data)
             i += 1
+        pcourses = [pcourses[count:count + 3] for count in range(0, len(pcourses), 3)]
+        rcourses = [rcourses[count:count + 3] for count in range(0, len(rcourses), 3)]
+
         return {'tcourses': tcourses, 'pcourses': pcourses, 'rcourses': rcourses}
 
     def get_testimonials(self):
