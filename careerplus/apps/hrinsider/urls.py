@@ -4,7 +4,7 @@ from django.views.generic import RedirectView
 
 from .views import HRLandingView, HRBlogDetailView, HrConclaveLandingView,\
     HrJobFairLandingView, HrConclaveDetailView, HrJobFairDetailView, \
-    HRBlogTagView, HRTagLoadArticleView
+    HRBlogTagView, HRTagLoadArticleView, HRArticleLoadMoreView
 
 urlpatterns = [
     url(r'^$', HRLandingView.as_view(), name='hr-landing'),
@@ -16,6 +16,9 @@ urlpatterns = [
 
     url(r'^tags/loadmore-article/$', HRTagLoadArticleView.as_view(),
         name='hr-tag-article-load'),
+
+    url(r'^article/loadmore-article/$', HRArticleLoadMoreView.as_view(),
+        name='hr-article-load-more'),
 
     url(r'^tags/(?P<slug>[-\w]+)/$', HRBlogTagView.as_view(),
         name='hr-tag-article'),

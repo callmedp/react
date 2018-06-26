@@ -30,7 +30,7 @@ from linkedin.autologin import AutoLogin
 
 # from order.mixins import OrderMixin
 
-from order.tasks import pending_item_email, process_mailer
+from order.tasks import pending_item_email, process_mailer, payment_realisation_mailer
 from payment.tasks import add_reward_point_in_wallet
 
 from .functions import draft_upload_mail, roundone_product
@@ -681,6 +681,9 @@ class MarkedPaidOrderView(View):
                         txn_obj.save()
 
                     data['display_message'] = "order %s marked paid successfully" % (str(order_pk))
+
+                    # payment_realisation_mailer
+                    payment_realisation_mailer.delay(obj.pk)
                     # add reward_point in wallet
                     add_reward_point_in_wallet.delay(order_pk=obj.pk)
                     # OrderMixin().addRewardPointInWallet(order=obj)
@@ -721,16 +724,16 @@ class GetLTVAjaxView(View):
             candidate_dict = {}
             for candidate in candidate_list:
                 ltv = Decimal(0)
-                ltv_pks = Order.objects.filter(
+                ltv_pks = list(Order.objects.filter(
                     candidate_id=candidate,
-                    status__in=[1,2,3]).values_list('pk', flat=True)
+                    status__in=[1,2,3]).values_list('pk', flat=True))
                 if ltv_pks:
                     ltv_order_sum = Order.objects.filter(
                         pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
                     ltv = ltv_order_sum.get('ltv_price') if ltv_order_sum.get('ltv_price') else Decimal(0)
-                    rf_ois = OrderItem.objects.filter(
+                    rf_ois = list(OrderItem.objects.filter(
                         order__in=ltv_pks,
-                        oi_status=163).values_list('order', flat=True)
+                        oi_status=163).values_list('order', flat=True))
                     rf_sum = RefundRequest.objects.filter(
                         order__in=rf_ois).aggregate(rf_price=Sum('refund_amount'))
                     if rf_sum.get('rf_price'):

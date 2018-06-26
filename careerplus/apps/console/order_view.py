@@ -313,14 +313,14 @@ class MidOutQueueView(TemplateView, PaginationMixin):
     def __init__(self):
         self.page = 1
         self.paginated_by = 50
-        self.query, self.modified = '', ''
+        self.query, self.payment_date = '', ''
         self.sel_opt='id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
-        self.sel_opt=request.GET.get('rad_search','id')
-        self.modified = request.GET.get('modified', '')
+        self.sel_opt = request.GET.get('rad_search','id')
+        self.payment_date = request.GET.get('payment_date', '')
         return super(MidOutQueueView, self).get(request, args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -350,12 +350,12 @@ class MidOutQueueView(TemplateView, PaginationMixin):
     def get_context_data(self, **kwargs):
         context = super(MidOutQueueView, self).get_context_data(**kwargs)
         midout_list = self.get_queryset()
-        var=self.sel_opt
+        var = self.sel_opt
         paginator = Paginator(midout_list, self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
         initial = {
-            "modified": self.modified,
+            "payment_date": self.payment_date,
         }
         filter_form = OIFilterForm(initial)
         context.update({
@@ -364,7 +364,7 @@ class MidOutQueueView(TemplateView, PaginationMixin):
             "query": self.query,
             "filter_form": filter_form,
             "action_form": OIActionForm(queue_name='midout'),
-            var:"checked"
+            var: "checked"
         })
         return context
 
@@ -393,8 +393,8 @@ class MidOutQueueView(TemplateView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
         try:
-            if self.modified:
-                date_range = self.modified.split('-')
+            if self.payment_date:
+                date_range = self.payment_date.split('-')
                 start_date = date_range[0].strip()
                 start_date = datetime.datetime.strptime(
                     start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
@@ -402,12 +402,12 @@ class MidOutQueueView(TemplateView, PaginationMixin):
                 end_date = datetime.datetime.strptime(
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
-                    modified__range=[start_date, end_date])
+                    payment_date__range=[start_date, end_date])
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.order_by('-modified')
+        return queryset.order_by('-payment_date')
 
 
 @Decorate(stop_browser_cache())
@@ -555,7 +555,7 @@ class InboxQueueVeiw(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
 
-        return queryset.select_related('order', 'product', 'delivery_service').order_by('-modified')
+        return queryset.select_related('order').order_by('-modified')
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -667,7 +667,7 @@ class SearchOrderView(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(SearchOrderView, self).get_queryset()
         excl_txns = PaymentTxn.objects.filter(status__in=[0, 2, 3, 4, 5], payment_mode__in=[6, 7])
-        excl_order_list = excl_txns.all().values_list('order__pk', flat=True)
+        excl_order_list = list(excl_txns.all().values_list('order__pk', flat=True))
         queryset = queryset.exclude(id__in=excl_order_list)
         queryset = queryset.filter(status=1)
 
@@ -679,7 +679,7 @@ class SearchOrderView(ListView, PaginationMixin):
                     Q(mobile=self.query))
 
                 pay_txns = PaymentTxn.objects.filter(txn=self.query)
-                order_pks = pay_txns.all().values_list('order__pk', flat=True)
+                order_pks = list(pay_txns.all().values_list('order__pk', flat=True))
                 q2 = queryset.filter(id__in=order_pks)
 
                 queryset = q1 | q2
@@ -1461,7 +1461,7 @@ class ClosedOrderItemQueueVeiw(ListView, PaginationMixin):
             order__status__in=[1, 3], oi_status=4,
             no_process=False)
         user = self.request.user
-        vendor_employee_list = user.employees.filter(active=True).values_list('vendee', flat=True)  # user's associated vendor ids
+        vendor_employee_list = list(user.employees.filter(active=True).values_list('vendee', flat=True))  # user's associated vendor ids
 
         if user.has_perm('order.can_view_all_closed_oi_list'):
             pass

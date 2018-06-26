@@ -283,6 +283,9 @@ EMAIL_SERVER = 'http://localhost:8000'
 ###### SEARCH SETTINGS #######
 EXCLUDE_SEARCH_PRODUCTS = LINKEDIN_RESUME_PRODUCTS
 
+# used for coupon generation for free feature product on payment realization
+FEATURE_PROFILE_PRODUCTS = [1939]
+
 try:
     from .settings_local import *
 except:

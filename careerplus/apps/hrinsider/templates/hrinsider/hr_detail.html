@@ -2,6 +2,15 @@
 {% load static humanize thumbnail compress %}
     {% block django_meta %}
         {% include 'meta/meta.html' %}
+        <meta property="og:image" content="{{main_article.image.url}}">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@shinelearning">
+
+        <meta name="twitter:domain" content="learning.shine.com">
+        <meta name="twitter:title" content="{{main_article.heading}}">
+        <meta name="twitter:description" content="{{ main_article.get_description }}" />
+        <meta name="twitter:image:src" content="{{main_article.image.url}}">
+
     {%  endblock django_meta %}
     {% block canonical_url %}
       <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
@@ -74,7 +83,7 @@
     {% if article_list %}
     <div class="col-sm-4">
       <div class="box-panel you-may-like">
-        <h2 class="primary-heading">You may also like</h2>
+        <strong class="primary-heading">You may also like</strong>
         <ul>
           {% for articleItem in article_list %}
           <li>
@@ -83,7 +92,7 @@
                 <i><img class="img-fluid" src="{{articleItem.image.url}}" alt="{{articleItem.image_alt}}"></i>
                 <figcaption>
                   {{articleItem.p_cat.name}}
-                  <h3>{{articleItem.heading}}</h3>
+                  <h2>{{articleItem.heading}}</h2>
                 </figcaption>
               </figure>
             </a>

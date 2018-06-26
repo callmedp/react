@@ -870,3 +870,28 @@ blockquote {
     }
   }
 }
+
+.primary-heading {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-base;
+  margin-bottom: 15px;
+  color: $blue;
+}
+
+.secondary-heading {
+  font-size: $font-size-base;
+  line-height: 1.2rem;
+  font-weight: $font-weight-medium;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.past-conclave-heading {
+  font-size: $font-size-base;
+  line-height: 1.2rem;
+  font-weight: $font-weight-medium + 100;
+  color: #333;
+  margin-bottom: 3px;
+}

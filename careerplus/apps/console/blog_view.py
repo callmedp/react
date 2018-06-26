@@ -112,7 +112,7 @@ class CommentModerateListView(ListView, PaginationMixin):
             action_type = int(request.POST.get('action_type', '0'))
             comment_objs = Comment.objects.filter(id__in=comment_list)
 
-            blg_list=comment_objs.values_list('blog__id',flat=True)
+            blg_list=list(comment_objs.values_list('blog__id',flat=True))
 
 
 
