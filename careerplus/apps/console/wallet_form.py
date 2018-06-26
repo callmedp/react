@@ -15,11 +15,11 @@ WalletAction = (
 
 class Walletform(forms.Form):
 
-    email_id = forms.EmailField(label='Email', max_length=255,help_text ="Enter the email address",required=False,widget=forms.EmailInput(attrs={'class': 'form-control col-md-7 col-xs-12'}))
-    owner_id = forms.CharField(label='Owner id', max_length=255,help_text="Enter the owner id",required=False,
+    email_id = forms.EmailField(label='Email', max_length=255,required=False,widget=forms.EmailInput(attrs={'class': 'form-control col-md-7 col-xs-12'}))
+    owner_id = forms.CharField(label='Owner id', max_length=255,required=False,
                                widget=forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12'}))
     notes = forms.CharField(widget=forms.Textarea(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}),help_text="This cannot be blank",required=False)
+            attrs={'class': 'form-control col-md-7 col-xs-12'}),required=False)
     point_value = forms.DecimalField(label='Points', decimal_places=2, max_digits=12,widget=forms.NumberInput(attrs={'class': 'form-control col-md-7 col-xs-12'}),required=False)
     wallet_action = forms.ChoiceField(label="Action", choices=WalletAction,required=False, widget=forms.RadioSelect(attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
@@ -71,7 +71,7 @@ class Walletform(forms.Form):
 
         if owner and email == "":
             try:
-                walobj = Wallet.objects.get(owner=owner).count()
+                walobj = Wallet.objects.get(owner=owner)
             except Exception as e:
                 logging.getLogger('error_log').error(str(e))
             if not walobj:
@@ -84,13 +84,13 @@ class Walletform(forms.Form):
                 if walobj>0 and walobj < 2:
                     return cleaned_data
                 else:
-                 walobj = Wallet.objects.get(owner=owner).count()
+                    walobj = Wallet.objects.get(owner=owner)
             except Exception as e:
                 logging.getLogger('error_log').error(str(e))
             if walobj:
                 return cleaned_data
             else:
-                    raise forms.ValidationError("unable to find wallet")
+                raise forms.ValidationError("unable to find wallet")
 
 
 

@@ -37,6 +37,13 @@ class WalletView(FormView):
         else:
             return HttpResponseForbidden("you are not allowed to view this page")
 
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert})
+        return context
+
 
 
     def post(self, request, *args, **kwargs):
@@ -53,6 +60,7 @@ class WalletView(FormView):
             wal_obj = ""
 
             try:
+
 
                 if email:
                     wal_obj = Wallet.objects.get(owner_email=email)
@@ -88,7 +96,7 @@ class WalletView(FormView):
                         rew_points = wal_obj.point.filter(status=1, expiry__gt=timezone.now()).order_by('created')
                         wal_total = sum(rew_points.values_list('current',flat=True))
                         wallettxn = WalletTransaction.objects.create(wallet=wal_obj, txn_type=2, point_value=points,
-                                                                     notes= note)
+                                                                     notes=note)
                         for pts in rew_points:
                             if pts.current >= points:
                                 pts.current -= points
@@ -98,6 +106,9 @@ class WalletView(FormView):
                                 pts.save()
                                 PointTransaction.objects.create(transaction=wallettxn,
                                                                 point=pts,point_value=points,txn_type=2)
+                                messages.add_message(request, messages.SUCCESS,
+                                                     'Successfull.')
+                                break
 
                             else:
                                 points -= pts.current
@@ -110,15 +121,19 @@ class WalletView(FormView):
                                     txn_type=2)
                                 pts.current = Decimal(0)
                                 pts.save()
-                                wallettxn.status = 1
-                                wallettxn.current_value = wal_obj.get_current_amount()
-                                wallettxn.save()
+                        wallettxn.status = 1
+                        wallettxn.current_value = wal_obj.get_current_amount()
+                        wallettxn.save()
+
                 else:
                     return self.form_invalid(form)
             except Exception as e:
                 logging.getLogger('error_log').error(str(e))
 
-
+            messages.add_message(request, messages.SUCCESS,
+                                 'Successfull')
             return self.form_valid(form)
         else:
+            messages.add_message(request, messages.SUCCESS,
+                                 'UnSuccessfull')
             return self.form_invalid(form)
