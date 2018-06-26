@@ -50,7 +50,6 @@ class WalletView(FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         if form.is_valid():
-
             email = form.cleaned_data['email_id']
             owner = form.cleaned_data['owner_id']
             note = form.cleaned_data['notes']
@@ -63,10 +62,13 @@ class WalletView(FormView):
                     wal_obj = Wallet.objects.get(owner=owner)
                     if wal_obj:
                         pass
-                elif email and not wal_obj:
+                if email and not wal_obj:
                     wal_obj = Wallet.objects.filter(owner_email=email).count()
                     if wal_obj != 1:
                         wal_obj = None
+                    elif wal_obj==1:
+                        wal_obj = Wallet.objects.filter(owner_email=email)
+
 
                 if wal_obj:
                     expiry = timezone.now() + datetime.timedelta(days=30)
