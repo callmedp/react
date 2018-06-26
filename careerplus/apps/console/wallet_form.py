@@ -80,17 +80,18 @@ class Walletform(forms.Form):
 
         if email and owner:
             try:
-                walobj = Wallet.objects.filter(owner_email=email).count()
-                if walobj>0 and walobj < 2:
-                    return cleaned_data
-                else:
-                    walobj = Wallet.objects.get(owner=owner)
+                walobj = Wallet.objects.get(owner=owner)
             except Exception as e:
                 logging.getLogger('error_log').error(str(e))
+
             if walobj:
                 return cleaned_data
             else:
-                raise forms.ValidationError("unable to find wallet")
+                walobj = Wallet.objects.filter(owner_email=email).count()
+                if walobj == 1:
+                    return cleaned_data
+                else:
+                    raise forms.ValidationError("unable to find wallet")
 
 
 

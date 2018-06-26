@@ -47,7 +47,6 @@ class WalletView(FormView):
 
 
     def post(self, request, *args, **kwargs):
-
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         if form.is_valid():
@@ -60,12 +59,15 @@ class WalletView(FormView):
             wal_obj = ""
 
             try:
-
-
-                if email:
-                    wal_obj = Wallet.objects.get(owner_email=email)
-                if owner and not wal_obj:
+                if owner:
                     wal_obj = Wallet.objects.get(owner=owner)
+                    if wal_obj:
+                        pass
+                elif email and not wal_obj:
+                    wal_obj = Wallet.objects.filter(owner_email=email).count()
+                    if wal_obj != 1:
+                        wal_obj = None
+
                 if wal_obj:
                     expiry = timezone.now() + datetime.timedelta(days=30)
                     if action =='addpoints':
@@ -88,6 +90,8 @@ class WalletView(FormView):
 
                         wal_txn.current_value = wal_obj.get_current_amount()
                         wal_txn.save()
+                        messages.add_message(request, messages.SUCCESS,
+                                             'Successfull.')
 
 
 
@@ -126,14 +130,17 @@ class WalletView(FormView):
                         wallettxn.save()
 
                 else:
+                    messages.add_message(request, messages.ERROR,
+                                         'UnSuccessfull')
                     return self.form_invalid(form)
             except Exception as e:
+                messages.add_message(request, messages.ERROR,
+                                     'UnSuccessfull')
                 logging.getLogger('error_log').error(str(e))
 
-            messages.add_message(request, messages.SUCCESS,
-                                 'Successfull')
+
             return self.form_valid(form)
         else:
-            messages.add_message(request, messages.SUCCESS,
+            messages.add_message(request, messages.ERROR,
                                  'UnSuccessfull')
             return self.form_invalid(form)
