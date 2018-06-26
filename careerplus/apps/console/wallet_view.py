@@ -66,8 +66,8 @@ class WalletView(FormView):
                     wal_obj = Wallet.objects.filter(owner_email=email).count()
                     if wal_obj != 1:
                         wal_obj = None
-                    elif wal_obj==1:
-                        wal_obj = Wallet.objects.filter(owner_email=email)
+                    elif wal_obj == 1:
+                        wal_obj = Wallet.objects.filter(owner_email=email)[0]
 
 
                 if wal_obj:
