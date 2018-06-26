@@ -226,6 +226,7 @@ class InvoiceGenerate(object):
                 "total_amount_after_discount": total_amount_after_discount,
                 "total_payable_amount": total_payable_amount,
                 "order": order,
+                "tax_amount": tax_amount,
                 "coupon_amount": coupon_amount,
                 "redeemed_reward_point": redeemed_reward_point,
                 "tax_rate_per": tax_rate_per,

@@ -1,6 +1,7 @@
 import logging
 from celery.decorators import task
 from django.conf import settings
+
 from linkedin.autologin import AutoLogin
 from order.models import Order
 from order.functions import (
@@ -11,6 +12,7 @@ from emailers.sms import SendSMS
 from emailers.email import SendMail
 from payment.models import PaymentTxn
 from core.mixins import InvoiceGenerate
+from coupon.mixins import CouponMixin
 
 
 @task(name="invoice_generation_order")
@@ -533,6 +535,7 @@ def payment_pending_mailer(pk=None):
 @task(name="payment_realisation_mailer")
 def payment_realisation_mailer(pk=None):
     order = None
+    mail_type = "SHINE_PAYMENT_CONFIRMATION"
     try:
         order = Order.objects.get(pk=pk)
     except Exception as e:
@@ -543,17 +546,29 @@ def payment_realisation_mailer(pk=None):
         for pymt_obj in pymt_objs:
             if pymt_obj.status == 1:
                 to_emails = [order.email]
-                mail_type = "SHINE_PAYMENT_CONFIRMATION"
+                # feature coupon
+                courses_p = order.orderitems.filter(
+                    product__product_class__slug__in=settings.COURSE_SLUG)
+                if courses_p.exists():
+                    coupon_obj = CouponMixin().create_feature_coupon(
+                        users=[order.email])
+                else:
+                    coupon_obj = None
+                if coupon_obj:
+                    feature_coupon_code = coupon_obj.code
+                else:
+                    feature_coupon_code = ''
                 invoice_data.update({
                     'subject': 'Your Shine Payment Confirmation',
                     "first_name": order.first_name,
                     "txn": pymt_obj.txn,
                     "order_id": order.id,
+                    'feature_coupon_code': feature_coupon_code,
                     'site': 'https://' + settings.SITE_DOMAIN + settings.STATIC_URL,
                 })
                 try:
                     SendMail().send(to_emails, mail_type, invoice_data)
-                    logging.getLogger('error_log').error(
+                    logging.getLogger('info_log').info(
                         "payment realisation mail send to %s - %s" % (
                             str(to_emails), str(mail_type)))
                 except Exception as e:
