@@ -62,6 +62,10 @@ class WalletView(FormView):
                     wal_obj = Wallet.objects.get(owner=owner)
                     if wal_obj:
                         pass
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
+                pass
+
                 if email and not wal_obj:
                     wal_obj = Wallet.objects.filter(owner_email=email).count()
                     if wal_obj != 1:
@@ -101,6 +105,8 @@ class WalletView(FormView):
                     else:
                         rew_points = wal_obj.point.filter(status=1, expiry__gt=timezone.now()).order_by('created')
                         wal_total = sum(rew_points.values_list('current',flat=True))
+                        if wal_total < points:
+                            points = wal_total
                         wallettxn = WalletTransaction.objects.create(wallet=wal_obj, txn_type=2, point_value=points,
                                                                      notes=note)
                         for pts in rew_points:
@@ -112,8 +118,7 @@ class WalletView(FormView):
                                 pts.save()
                                 PointTransaction.objects.create(transaction=wallettxn,
                                                                 point=pts,point_value=points,txn_type=2)
-                                messages.add_message(request, messages.SUCCESS,
-                                                     'Successfull.')
+
                                 break
 
                             else:
@@ -127,22 +132,21 @@ class WalletView(FormView):
                                     txn_type=2)
                                 pts.current = Decimal(0)
                                 pts.save()
+
                         wallettxn.status = 1
                         wallettxn.current_value = wal_obj.get_current_amount()
                         wallettxn.save()
+                        messages.add_message(request, messages.SUCCESS,
+                                             'Successfull')
 
                 else:
                     messages.add_message(request, messages.ERROR,
                                          'UnSuccessfull')
                     return self.form_invalid(form)
-            except Exception as e:
-                messages.add_message(request, messages.ERROR,
-                                     'UnSuccessfull')
-                logging.getLogger('error_log').error(str(e))
 
 
             return self.form_valid(form)
         else:
             messages.add_message(request, messages.ERROR,
-                                 'UnSuccessfull')
+                                 'PLEASE CHECK/FILLUP THE DETAILS ')
             return self.form_invalid(form)
