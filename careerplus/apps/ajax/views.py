@@ -30,7 +30,7 @@ from linkedin.autologin import AutoLogin
 
 # from order.mixins import OrderMixin
 
-from order.tasks import pending_item_email, process_mailer
+from order.tasks import pending_item_email, process_mailer, payment_realisation_mailer
 from payment.tasks import add_reward_point_in_wallet
 
 from .functions import draft_upload_mail, roundone_product
@@ -681,6 +681,9 @@ class MarkedPaidOrderView(View):
                         txn_obj.save()
 
                     data['display_message'] = "order %s marked paid successfully" % (str(order_pk))
+
+                    # payment_realisation_mailer
+                    payment_realisation_mailer.delay(obj.pk)
                     # add reward_point in wallet
                     add_reward_point_in_wallet.delay(order_pk=obj.pk)
                     # OrderMixin().addRewardPointInWallet(order=obj)
