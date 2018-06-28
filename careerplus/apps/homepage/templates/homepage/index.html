@@ -88,64 +88,70 @@
                 <div class="carousel slide row" id="myCarousel1">
                     <div class="carousel-inner">
                     {% if request.session.candidate_id and rcourses %}
-                    {% for product in rcourses %}
-                        <div class="item {% if forloop.first %}active{% endif %}">
-                      <ul class="listing col-sm-4">
-                        <li>
-                          <a title="{{ product.pHd|default:product.pNm}}" class="box-panel" href="{{ product.pURL }}">
-                            <div class="media">
-                              <div class="media-body">
-                                <h3 class="listing-heading">{{ product.pHd|default:product.pNm|truncatechars:40 }}</h3>
-                                <div class="rating-review-box">
-                                    {% if product.pRC %}<figure class="full-star"></figure>
-                                    <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
-                                    {% else %}
-                                        <strong>{{ product.pBC|default:"10" }}</strong> people bought
-                                    {% endif %}
-                                    <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs available</span>
-                                </div>
+                    {% for course_list in rcourses %}
+                      <div class="item {% if forloop.first %}active{% endif %}">
+                        {% for product in course_list %}
 
-                              </div>
-                              <div class="media-left">
-                                  <figure>
-                                    <img class="img-responsive" src="{{product.pImg}}" alt="{{product.pImA}}">
-                                  </figure>
-                              </div>
-                            </div>
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
+                          <ul class="listing col-sm-4">
+                            <li>
+                              <a title="{{ product.pHd|default:product.pNm}}" class="box-panel" href="{{ product.pURL }}">
+                                <div class="media">
+                                  <div class="media-body">
+                                    <h3 class="listing-heading">{{ product.pHd|default:product.pNm|truncatechars:40 }}</h3>
+                                    <div class="rating-review-box">
+                                        {% if product.pRC %}<figure class="full-star"></figure>
+                                        <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
+                                        {% else %}
+                                            <strong>{{ product.pBC|default:"10" }}</strong> people bought
+                                        {% endif %}
+                                        <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs available</span>
+                                    </div>
+
+                                  </div>
+                                  <div class="media-left">
+                                      <figure>
+                                        <img class="img-responsive" src="{{product.pImg}}" alt="{{product.pImA}}">
+                                      </figure>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        {% endfor %}
+                      </div>
                     {% endfor %}
                     {% else %}
-                    {% for product in pcourses %}
-                        <div class="item {% if forloop.first %}active{% endif %}">
-                      <ul class="listing col-sm-4">
-                        <li>
-                          <a title="{{ product.pHd|default:product.pNm}}" class="box-panel" href="{{ product.pURL }}">
-                            <div class="media">
-                              <div class="media-body">
-                                <h3 class="listing-heading">{{ product.pHd|default:product.pNm|truncatechars:50 }}</h3>
-                                <div class="rating-review-box">
-                                    {% if product.pRC %}<figure class="full-star"></figure>
-                                    <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
-                                    {% else %}
-                                        <strong>{{ product.pBC|default:"10" }}</strong> people bought
-                                    {% endif %}
-                                    <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs available</span>
+                    {% for course_list in pcourses %}
+                      <div class="item {% if forloop.first %}active{% endif %}">
+                       
+                      {% for product in course_list %}
+                        <ul class="listing col-sm-4" >
+                          <li>
+                            <a title="{{ product.pHd|default:product.pNm}}" class="box-panel" href="{{ product.pURL }}">
+                              <div class="media">
+                                <div class="media-body">
+                                  <h3 class="listing-heading">{{ product.pHd|default:product.pNm|truncatechars:50 }}</h3>
+                                  <div class="rating-review-box">
+                                      {% if product.pRC %}<figure class="full-star"></figure>
+                                      <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
+                                      {% else %}
+                                          <strong>{{ product.pBC|default:"10" }}</strong> people bought
+                                      {% endif %}
+                                      <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs available</span>
+                                  </div>
+
+
                                 </div>
-
-
+                                <div class="media-left">
+                                    <figure>
+                                      <img class="img-responsive" src="{{product.pImg}}" alt="{{product.pImA}}">
+                                    </figure>
+                                </div>
                               </div>
-                              <div class="media-left">
-                                  <figure>
-                                    <img class="img-responsive" src="{{product.pImg}}" alt="{{product.pImA}}">
-                                  </figure>
-                              </div>
-                            </div>
-                          </a>
-                        </li>
-                      </ul>
+                            </a>
+                          </li>
+                        </ul>
+                      {% endfor %}
                     </div>
                     {% endfor %}
                     {% endif %}
@@ -357,20 +363,7 @@
         $('#myCarousel1').carousel({
             interval: 4000,
         });
-        $('.product-carousel .carousel .item').each(function(){
-            var next = $(this).next();
-            if (!next.length) {
-              next = $(this).siblings(':first');
-            }
-            next.children(':first-child').clone().appendTo($(this));
 
-            if (next.next().length>0) {
-              next.next().children(':first-child').clone().appendTo($(this));
-            }
-            else {
-              $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
-            }
-        });
         $('#carousel-example-generic1').carousel({
             interval: 100000
         })
