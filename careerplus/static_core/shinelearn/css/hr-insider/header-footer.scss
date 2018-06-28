@@ -857,3 +857,82 @@ footer {
     border: 1px solid #3f51b5;
     border-radius: 0.25rem;
 }
+
+/* conclave slides*/ 
+
+.conclave_head_slide {
+
+    @extend %gradient;
+    @extend %gutter-space;
+    padding-top: 20px;
+    color: $white-color;
+
+    a {
+    	color: $white-color;
+    }
+
+    h1 {
+
+        font-size: 40px;
+        font-weight: $font-weight+200;
+    }
+
+    .event_speakers_slide {
+        font-size: $font-size + 3;
+
+
+        &:before {
+
+            width: 29px;
+            height: 40px;
+            background-image: url($image-path);
+            background-position: -3px -89px;
+            content: '';
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        &:after {
+            border-bottom: solid 1px $white-color;
+            content: '';
+            vertical-align: middle;
+            opacity: .2;
+            width: 86%;
+            float: right;
+            margin: 20px 12px 0 5px;
+        }
+    }
+
+    .speakers_slide {
+        margin: 25px 0 45px;
+
+        strong {
+            font-size: $font-size +7;
+            font-weight: $font-weight + 100;
+        }
+        em {
+            display: block;
+            font-style: normal;
+             color: $lightgrey;
+            line-height: 12px;
+        }
+
+        img {
+            display: block;
+            border-radius: 100%;
+            border: solid 1px $blue-color;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+            width: 88px !important;
+            height: 88px !important;
+        }
+    }
+    .conclave-img-slide {
+		width: 110px !important;
+		height: 86px !important;
+		margin-top: 0 !important;
+	}
+
+	.primary-heading {
+		color: $white-color;
+	}
+}
