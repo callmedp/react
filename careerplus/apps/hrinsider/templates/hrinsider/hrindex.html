@@ -100,8 +100,8 @@
             <div class="carousel-item {% if not top_article_list and latest_conclave %} active {% endif %}">
               <div class="row">
                 <div class="col-sm-12">
-                    
                     <div class="conclave_head_slide">
+                      <a href="{{latest_conclave.get_absolute_url}}">
                         <div class="row">
                             <div class="col-sm-10 float-left">
                               <div class="primary-heading">{{conclave_type}} Conclave</div>
@@ -121,6 +121,7 @@
                                     <strong>{{speaker.name}}</strong><em> {{speaker.designation}}</em> {{speaker.company}}</div>
                             {% endfor %}
                         </div>
+                      </a>
                     </div>
                 </div>
               </div>
