@@ -865,10 +865,10 @@ footer {
     @extend %gradient;
     @extend %gutter-space;
     padding-top: 20px;
-    color: $white-color;
+    color: $white-color !important;
 
     a {
-    	color: $white-color;
+    	color: $white-color !important;
     }
 
     h1 {
