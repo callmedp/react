@@ -18,9 +18,14 @@
 
     <style rel="stylesheet" type="text/css">
       .error {
-        font-size: 14px;
+        font-size: 11px;
         color: #f74343 !important;
         font-weight: 400;
+      }
+
+      .error p {
+        margin-top: 5px;
+        margin-bottom: 0;
       }
      
     </style>
@@ -63,42 +68,38 @@
               <div class="main-form mt-4 d-block d-sm-none">
                 <h2>Let’s get started</h2>
  
-                <form id="lead" method="POST"
+                <form id="lead_mobile" method="POST"
                 action="{% url 'crmapi:lead-management' %}">{% csrf_token %}
                   <ul class="mt-2 mb-2">
                     <li class="form-group">
                        <input id="name" name="name" type="text" class="form-control" placeholder="Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}">
-                       <label class="js-error"></label>
+                       <p class="js-error"></p>
                     </li>
                     <li class="form-group">
                        <input id="email" name="email" type="text" class="form-control" value="{{request.session.email}}" placeholder="Email">
-                       <label class="js-error"></label>
+                       <p class="js-error"></p>
                     </li>
                     <li class="form-group">
                        <input id="mobile" name="number" maxlength="10" minlength="10" type="text" class="form-control" placeholder="Mobile" value="{{request.session.mobile_no}}">
-                       <label class="js-error"></label>
+                       <p class="js-error"></p>
                     </li>
                     
                     <li class="form-group">
                        <select class="form-control" id="selection" name="selection">
-                           <option>1</option>
-                           <option>2</option>
-                           <option>3</option>
-                           <option>4</option>
-                           <option>5</option>
+                           <option selected="selected" value="3101">Data Scientist - Rs. 44999/-</option>
                          </select>
                     </li>
                   </ul>
 
-                  <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3126{% endif %}">
+                  <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
 
-                <input type="hidden" name="prd" value="Data Science">
+                <input type="hidden" name="prd" value="Data Scientist - Rs. 44999/-">
 
                 <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 
                 <input type="hidden" name="lsource" value="{{ lead_source }}">
  
-                 <button type="submit" class="btn btn-primary w-100 scrollTop" onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enroll Now</button>
+                 <button type="submit" class="btn btn-primary w-100 scrollTop" onclick="$('#lead_mobile').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enroll Now</button>
                  <p class="tnc mt-2 mb-2">By registering with us you agree to our <br><a href="/tnc">Terms & Conditions</a></p>
                  <div class="call-us">
                    <span></span>
@@ -128,31 +129,27 @@
                  <ul class="mt-2 mb-2">
                    <li class="form-group">
                       <input id="name" name="name" type="text" class="form-control" placeholder="Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}">
-                      <label class="js-error"></label>
+                      <p class="js-error"></p>
                    </li>
                    <li class="form-group">
                       <input id="email" name="email" type="text" class="form-control" value="{{request.session.email}}" placeholder="Email">
-                      <label class="js-error"></label>
+                      <p class="js-error"></p>
                    </li>
                    <li class="form-group">
                       <input id="mobile" name="number" maxlength="10" minlength="10" type="text" class="form-control" placeholder="Mobile" value="{{request.session.mobile_no}}">
-                      <label class="js-error"></label>
+                      <p class="js-error"></p>
                    </li>
                    
                    <li class="form-group">
                       <select class="form-control" id="selection" name="selection">
-                          <option>1</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option>4</option>
-                          <option>5</option>
-                        </select>
+                        <option selected="selected" value="3101">Data Scientist - Rs. 44999/-</option>
+                      </select>
                    </li>
                  </ul>
 
-                 <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3126{% endif %}">
+                 <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
 
-                <input type="hidden" name="prd" value="Data Science">
+                <input type="hidden" name="prd" value="Data Scientist - Rs. 44999/-">
 
                 <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 
@@ -834,6 +831,77 @@
               $(element).siblings('.js-error').html(error.text());
             } 
           });
+
+          $("#lead_mobile").validate({
+            submitHandler:function (form) {
+                var action = $(form).attr('action');
+                $.post(action, $(form).serialize(), function (data) {
+                    if (data && data['status']){
+                        $.each($("#lead"), function (i, e) {
+                            e.reset();
+                        });
+                        $("#lead label").remove();
+                        var conversion_id = 991709191;
+                        var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                        var ga_code = document.createElement('div');
+                        ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                       document.body.appendChild(ga_code);
+                       window.location.href ='thankyou-for-query';
+                        return false;
+                    }
+                }, 'json');
+            },
+            rules:{
+                number:{
+                    required:true,
+                    number:true,
+                    minlength:10,
+                    maxlength:20,
+                },
+                email:{
+                    email:true,
+                    required:true,
+
+                },
+                name:{
+                    required:true,
+                    lettersonly:true,
+
+                },
+                // msg:{
+                //     required:true,
+                //     maxlength:500
+                // }
+            },
+            messages:{
+                number:{
+                   required:"Field is required",
+                   number: "Please enter valid number only"
+                },
+                email:{
+                    required:"Field is required"
+                },
+                name:{
+                    required:"Field is required"
+                },
+                // msg:{
+                //     required:"Field is required",
+                //     maxlength:"No more than 500 characters."
+
+                // }
+            },
+            highlight:function(element, errorClass) {
+              $(element).closest('.form-group').addClass('error');
+            },
+            unhighlight:function(element, errorClass) {
+              $(element).closest('.form-group').removeClass('error');
+              $(element).siblings('.js-error').html("");
+            },
+            errorPlacement: function(error, element){
+              $(element).siblings('.js-error').html(error.text());
+            } 
+          });
+
         </script>
 
   </body>
