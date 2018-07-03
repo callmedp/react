@@ -51,7 +51,7 @@ class LeadManagement(View):
             source = request.POST.get('source', '')
             queried_for = request.POST.get('queried_for', '')
             lead_source = request.POST.get('lsource', 0)
-            selection = request.POST.get('selection', None)
+            selection = request.POST.get('selection', 0)
             path = request.POST.get('path', '')
             rejectlist = ['http', 'www', 'href', '***', 'url', '<html>']
             if any(rejectkey in msg for rejectkey in rejectlist):
