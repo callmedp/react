@@ -54,6 +54,7 @@
                 </div><!-- /. col 4 -->
               </div><!-- ./ row -->
             </div><!-- carousal item ends here -->
+            {% comment %}
             {% if latest_conclave and conclave_type == 'Upcoming' %}
             <div class="carousel-item {% if not top_article_list and latest_conclave %} active {% endif %}">
               <div class="row">
@@ -95,8 +96,8 @@
                 </div>
               </div>
             </div>
-
-            {% elif latest_conclave and conclave_type == 'Past' %}
+            {% endcomment %}
+            {% if latest_conclave %}
             <div class="carousel-item {% if not top_article_list and latest_conclave %} active {% endif %}">
               <div class="row">
                 <div class="col-sm-12">
