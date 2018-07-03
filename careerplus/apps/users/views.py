@@ -2,8 +2,10 @@ import logging
 import mimetypes
 import json
 import urllib.parse
-
+import calendar
+from time import strptime
 from wsgiref.util import FileWrapper
+from dateutil.relativedelta import relativedelta
 
 from django.shortcuts import render
 from django.http import (
@@ -572,4 +574,62 @@ class DownloadWriterInvoiceView(View):
             logging.getLogger(
                 'error_log').error(
                 'writer invoice download error - ' + str(e))
+        return HttpResponseRedirect(reverse('console:dashboard'))
+
+
+class DownloadMonthlyWriterInvoiceView(TemplateView):
+    template_name = "invoice/invoice_monthly_download.html"
+    success_url='/'
+    month=[]
+
+    def get(self,request,*args,**kwargs):
+        context = self.get_context_data(**kwargs)
+        diff=6
+        try:
+            self.month=[(timezone.now() - relativedelta(months=i)).strftime('%B-%Y') for i in range(1, 7)]
+
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+
+
+
+        context['month']=self.month
+
+
+        return self.render_to_response(context)
+
+
+    def post(self, request, *args, **kwargs):
+        import ipdb;
+        ipdb.set_trace()
+        d=self.request.POST.get('month',"")
+        m=d.split('-')[0]
+        y=d.split('-')[1]
+        month_number = strptime(m,'%B').tm_mon
+
+        u=self.request.user.name
+        # try:
+        #     import os
+        #     user = request.user
+        #     invoice = None
+        #     if user.is_authenticated() and user.userprofile and user.userprofile.user_invoice:
+        #         invoice = user.userprofile.user_invoice
+        #     if invoice:
+        #         file_path = invoice.name
+        #         if not settings.IS_GCP:
+        #             file_path = os.path.join(settings.MEDIA_ROOT, invoice.name)
+        #             fsock = FileWrapper(open(file_path, 'rb'))
+        #         else:
+        #             fsock = GCPInvoiceStorage().open(file_path)
+        #         filename = invoice.name.split('/')[-1]
+        #         response = HttpResponse(
+        #             fsock,
+        #             content_type=mimetypes.guess_type(filename)[0])
+        #         response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
+        #         return response
+        # except Exception as e:
+        #     logging.getLogger(
+        #         'error_log').error(
+        #         'writer invoice download error - ' + str(e))
+        # return HttpResponseRedirect(reverse('console:dashboard'))
         return HttpResponseRedirect(reverse('console:dashboard'))
