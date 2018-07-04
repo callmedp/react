@@ -1245,8 +1245,8 @@ class ProfileUpdationView(DetailView):
                 logging.getLogger('error_log').error("Internationa Profile:",str(e))
                 messages.add_message(request, messages.ERROR, str(e))
             return HttpResponseRedirect(reverse(
-                'console:international_profile_update',
-                kwargs={'pk': kwargs.get('pk')}))
+                'console:queue-internationalprofileupdate',
+            ))
 
         elif update_sub == "1":
             try:
