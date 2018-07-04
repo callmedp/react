@@ -41,7 +41,7 @@
                                             <div class="bottom-text">
                                                 <p class="pb-5">{{art.display_name}}</p>
                                                 <div class="mt-10">
-                                                    <span class="editor fs-12 pull-left">{{art.created_by.name}}, {{art.publish_date.date}}</span>
+                                                    <span class="editor fs-12 pull-left">{% if art.author %}{{art.author.name}}, {% endif %}{{art.publish_date.date}}</span>
                                                     <span class="view-forward text-white mr-10 fs-12 pull-right"><figure class="icon-view"></figure> {{art.no_views}}</span>
                                                 </div>
                                                 
