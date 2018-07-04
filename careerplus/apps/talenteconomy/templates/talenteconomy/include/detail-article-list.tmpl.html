@@ -41,16 +41,16 @@
         </div>
 
          <!-- Tagged in box -->
-        {% with main_article.tags.all as tags %}
-        {% if tags %}
-        <div class="tagged-in mt-20">
-            <strong>Tagged in</strong>
-            {% for tag in tags %}
-            <span><a href="{% url "talent:te-articles-by-tag" tag.slug %}" title="{{tag.name}}">{{tag.name}}</a></span>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% endwith %}
+        <!--{% with main_article.tags.all as tags %}-->
+        <!--{% if tags %}-->
+        <!--<div class="tagged-in mt-20">-->
+            <!--<strong>Tagged in</strong>-->
+            <!--{% for tag in tags %}-->
+            <!--<span><a href="{% url "talent:te-articles-by-tag" tag.slug %}" title="{{tag.name}}">{{tag.name}}</a></span>-->
+            <!--{% endfor %}-->
+        <!--</div>-->
+        <!--{% endif %}-->
+        <!--{% endwith %}-->
 
     </div>
 
