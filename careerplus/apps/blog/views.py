@@ -54,7 +54,8 @@ class LoginToCommentView(View):
                         resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])
                         self.request.session.update(resp_status)
                         if remember_me:
-                            self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
+                            self.request.session.set_expiry(
+                                settings.SESSION_COOKIE_AGE)  # 1 year
 
                     elif login_resp.get('response') == 'error_pass':
                         login_resp['error_message'] = login_resp.get("non_field_errors")[0]

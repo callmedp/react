@@ -152,7 +152,8 @@ class LoginApiView(FormView):
                         self.request.session.update(resp_status)
 
                     if remember_me:
-                        self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
+                        self.request.session.set_expiry(
+                            settings.SESSION_COOKIE_AGE)  # 1 year
                     return HttpResponseRedirect(self.success_url)
 
                 elif login_resp['response'] == 'error_pass':

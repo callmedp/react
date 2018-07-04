@@ -474,3 +474,6 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = PROJECT_DIR + '/careerplus/config/code-learning-key.json'
+
+
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 365  # 1 year
