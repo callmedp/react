@@ -317,6 +317,11 @@ class ListCategoryView(ListView, PaginationMixin):
             pass
         return queryset
 
+
+    def post(self,request,*args,**kwargs):
+        ...
+
+
     def get_context_data(self, **kwargs):
         context = super(ListCategoryView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
