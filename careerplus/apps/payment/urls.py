@@ -16,8 +16,8 @@ urlpatterns = [
 
     url(r'^oops/$', PaymentOopsView.as_view(), name='payment_oops'),
 
-    url("^mobikwik/request?$", MobikwikRequestView.as_view(), name='mobikwik_request'),
-    url("^mobikwik/response/$", MobikwikResponseView.as_view(), name='mobikwik_response'),
+    # url("^mobikwik/request?$", MobikwikRequestView.as_view(), name='mobikwik_request'),
+    # url("^mobikwik/response/$", MobikwikResponseView.as_view(), name='mobikwik_response'),
     # url("^dipifrs/application/$",
     #     PaymentPageDipIfrsView.as_view(), name='PaymentPageDipIfrsView'),
 ]
