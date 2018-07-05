@@ -32,6 +32,7 @@
       <header class="header-carousel-box">
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
           <div class="carousel-inner header-carousel">
+
             <div class="carousel-item {% if top_article_list %} active {% endif %}">
               <div class="row">
                 <!-- big image -->
@@ -53,7 +54,8 @@
                 </div><!-- /. col 4 -->
               </div><!-- ./ row -->
             </div><!-- carousal item ends here -->
-
+            {% comment %}
+            {% if latest_conclave and conclave_type == 'Upcoming' %}
             <div class="carousel-item {% if not top_article_list and latest_conclave %} active {% endif %}">
               <div class="row">
                 <div class="col-sm-12 conclave-slide">
@@ -94,6 +96,38 @@
                 </div>
               </div>
             </div>
+            {% endcomment %}
+            {% if latest_conclave %}
+            <div class="carousel-item {% if not top_article_list and latest_conclave %} active {% endif %}">
+              <div class="row">
+                <div class="col-sm-12">
+                    <div class="conclave_head_slide">
+                      <a href="{{latest_conclave.get_absolute_url}}">
+                        <div class="row">
+                            <div class="col-sm-10 float-left">
+                              <div class="primary-heading">{{conclave_type}} Conclave</div>
+                                <h1>{{latest_conclave.heading}}</h1></div>
+                            <div class="col-sm-2 float-right">
+                                <img class="conclave-img-slide" src="{{latest_conclave.image.url}}" alt="{{latest_conclave.image_alt}}">
+                            </div>
+                            <div class="col-sm-12 event_speakers_slide">
+                                Event Speakers
+                            </div>
+
+                            {% for speaker in speakers %}
+                                <div class="col speakers_slide">
+                                    {% if speaker.image %}
+                                    <img src="{{speaker.image.url}}">
+                                    {% endif %}
+                                    <strong>{{speaker.name}}</strong><em> {{speaker.designation}}</em> {{speaker.company}}</div>
+                            {% endfor %}
+                        </div>
+                      </a>
+                    </div>
+                </div>
+              </div>
+            </div>
+            {% endif %}
 
           </div>
 

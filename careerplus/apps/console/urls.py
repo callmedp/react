@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 
 from .views import ConsoleLoginView, ConsoleDashboardView, ConsoleLogoutView, \
     ConsoleForgotPasswordView, ConsolePasswordResetView
-from . import shop_view, vendor_view, blog_view, order_view, refund_view
+from . import shop_view, vendor_view, blog_view, order_view, refund_view,wallet_view
 from geolocation import adminviews
 
 
@@ -18,6 +18,7 @@ urlpatterns = [
         include('console.badgeuser.urls', namespace='badge')),
     url(r'^welcomecall/',
         include('console.welcomecall.urls', namespace='welcomecall')),
+    url(r'^wallet/', wallet_view.WalletView.as_view(), name='walletrewards'),
 ]
 
 

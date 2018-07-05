@@ -102,7 +102,8 @@
         <div class="slide-container">
             <ul class="login-slider">
                 {% if request.session.candidate_id and rcourses %}
-                    {% for product in rcourses %}
+                {% for course_list in rcourses %}
+                    {% for product in course_list %}
                         <li>
                             <div class="media"> 
                                 <div class="media-body">
@@ -124,8 +125,10 @@
                               </div><!-- end of media -->
                         </li>
                     {% endfor %}
+                    {% endfor %}
                 {% else %}
-                    {% for product in pcourses %}
+                {% for course_list in pcourses %}
+                    {% for product in course_list %}
                         <li>
                             <div class="media"> 
                                 <div class="media-body">
@@ -143,6 +146,7 @@
                                 </div><!-- end of media body -->
                               </div><!-- end of media -->
                         </li>
+                    {% endfor %}
                     {% endfor %}
                 {% endif %}
                 
@@ -265,7 +269,7 @@
 
     <!-- how it works starts here -->
     <div class="text-center how-it-works mb-20">
-        <h2>How it Works</h2>
+        <h2>Why us</h2>
         <ul>
             <li><figure><img src="{% static 'shinelearn/images/mobile/common/how-work-icon1.png' %}" class="img-responsive"></figure> Explore 500+ courses with reviews and ratings from fellow learners</li>
             <li><figure><img src="{% static 'shinelearn/images/mobile/common/how-work-icon2.png' %}" class="img-responsive"></figure> Learn at your own pace, choose your mode of study</li>
