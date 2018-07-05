@@ -201,7 +201,8 @@ class PaymentLoginView(TemplateView):
                             cart_obj.email = email
                             cart_obj.save()
                         if remember_me:
-                            self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
+                            self.request.session.set_expiry(
+                                settings.SESSION_COOKIE_AGE)  # 1 year
                         return HttpResponseRedirect(reverse('cart:payment-shipping'))
 
                     elif login_resp['response'] == 'error_pass':
