@@ -23,6 +23,7 @@ Search Result Page - Shine Learning
 {% block css_section %}
     {{ block.super }}
     {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/homepage/home.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/users/login.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/search/course-listing.scss' %}" rel="stylesheet">
@@ -59,8 +60,8 @@ Search Result Page - Shine Learning
         {% elif search_type == 'simple' %}
         <div class="custom-search mt-15">
             <input class="form-control key_press_js_search" id="id_q" placeholder="Search for courses, services"
-                   type="text" autocomplete="off">
-              <span class="error-txt"></span>
+                   type="text" autocomplete="off" value="{{ search_params.keywords }}">
+            <span class="error-txt"></span>
             <button type="images" onclick="redirectToSearch()" class="search-icon-tab"></button>
         </div>
         
@@ -153,6 +154,7 @@ Search Result Page - Shine Learning
     </script>
     {% compress js %}
     <script src="{% static 'shinelearn/js/mobile/search/search.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/homepage/index.js' %}" type="text/javascript"></script>
     {% endcompress %}
 {% endblock js_section %}
 

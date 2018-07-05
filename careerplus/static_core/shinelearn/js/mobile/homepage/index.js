@@ -11,9 +11,9 @@ function redirectToSearch(e) {
         return false;
     }
 
-    // $('html, body').animate({
-    //     scrollTop: $q.offset().top
-    // }, 1000);
+    $('html, body').animate({
+        scrollTop: ($('.error-txt').first().offset().top)
+    }, 500);
 }
 
 $(document).ready(function () {
@@ -49,20 +49,21 @@ $(document).ready(function () {
     });
 
 
-    $('.key_press_js_search').keypress(function (e) {
-        if (e.which == 13) {
-            redirectToSearch();
-            return false; 
-        }
-    });
-
-    // $('.key_press_js_search').keydown(function (e) {
-    // $(document).on('keydown keypress', '.key_press_js_search' function(e){
-    //      var code = e.keyCode || e.which;
-    //      console.log(code);
-    //     /*if (code == 9 || code == 13 || code == 229) {
+    // $('.key_press_js_search').keypress(function (e) {
+    //     console.log(e.which);
+    //     if (e.which == 13) {
     //         redirectToSearch();
     //         return false; 
-    //      }*/
+    //     }
     // });
+
+    // $('.key_press_js_search').keydown(function (e) {
+    $(document).on('keydown keypress keyup', '.key_press_js_search', function(e){
+         var code = e.keyCode || e.which;
+         console.log(code);
+        // if (code == 9 || code == 13 || code == 229) {
+        redirectToSearch();
+        return false; 
+         // }
+    });
 });
