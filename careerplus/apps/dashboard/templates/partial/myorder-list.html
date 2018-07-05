@@ -62,7 +62,7 @@
                 {% endif %}
 
                 {% if order.status == 0 %}
-                      <strong><a role="button" onclick="openCancelModal({{order.pk}})">Cancel Order</a></strong>
+                      <strong><a role="button" onclick="openCancelModal({{order.pk}});event.stopPropagation()">Cancel Order</a></strong>
                 {% endif %}                
 
               </datalist>
