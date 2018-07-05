@@ -168,10 +168,10 @@
                 </div>
                 </div>
               {% else %}
-                <a href="javascript:void(0)" onclick="toggler('showCoupon');">Apply coupon</a>
+                <a href="javascript:void(0)" onclick="toggler('showCoupon',true);" id="show_hide_coupon">Apply coupon</a>
                 {% if wallet %}
                   or
-                  <a href="javascript:void(0)" onclick="toggler('shineCredit');">Redeem Shine credit</a>
+                  <a href="javascript:void(0)" onclick="toggler('shineCredit',false);">Redeem Shine credit</a>
                   
                 {% endif %}
                   <form action="." id="discountForm">
