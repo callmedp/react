@@ -97,6 +97,16 @@ class RegistrationApiView(FormView):
         kwargs['flavour'] = self.request.flavour
         return kwargs
 
+    def dispatch(self, request, *args, **kwargs):
+
+        if request.session.get('candidate_id'):
+            if 'next' in request.GET:
+                return HttpResponseRedirect(request.GET.get(
+                    'next', self.success_url))
+            return HttpResponseRedirect(self.success_url)
+        else:
+            return super(RegistrationApiView, self).dispatch(request, *args, **kwargs)
+
 
 class LoginApiView(FormView):
     form_class = LoginApiForm
