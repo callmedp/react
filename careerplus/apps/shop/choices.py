@@ -138,15 +138,15 @@ COURSE_TYPE_DICT = dict((
 
 def convert_inr(price=Decimal(0)):
     if price:
-        if Decimal(0) <= price <= Decimal(1000):
+        if Decimal(0) <= price <= Decimal(10000):
             return '1'
-        elif Decimal(1000) < price <= Decimal(5000):
+        elif Decimal(1000) < price <= Decimal(20000):
             return '2'
-        elif Decimal(5000) < price <= Decimal(10000):
+        elif Decimal(20000) < price <= Decimal(30000):
             return '3'
-        elif Decimal(10000) < price <= Decimal(25000):
+        elif Decimal(30000) < price <= Decimal(40000):
             return '4'
-        elif Decimal(25000) < price:
+        elif Decimal(40000) < price:
             return '5'
     return '0'
 
