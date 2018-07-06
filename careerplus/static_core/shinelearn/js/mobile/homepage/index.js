@@ -53,7 +53,7 @@ $(document).ready(function () {
     //     }
     // });
 
-    $(document).on('keydown keypress', '.key_press_js_search', function(e){
+    $(document).on('keypress', '.key_press_js_search', function(e){
         var code = e.keyCode || e.which;
         if (code == 9 || code == 13 || code == 229) {
             redirectToSearch();
