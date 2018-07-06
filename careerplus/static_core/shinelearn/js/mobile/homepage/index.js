@@ -10,10 +10,6 @@ function redirectToSearch(e) {
         $q.closest('div').find('.error-txt').html('Please enter a query');
         return false;
     }
-
-    $('html, body').animate({
-        scrollTop: ($('.error-txt').first().offset().top)
-    }, 500);
 }
 
 $(document).ready(function () {
@@ -57,13 +53,11 @@ $(document).ready(function () {
     //     }
     // });
 
-    // $('.key_press_js_search').keydown(function (e) {
-    $(document).on('keydown keypress keyup', '.key_press_js_search', function(e){
-         var code = e.keyCode || e.which;
-         console.log(code);
-        // if (code == 9 || code == 13 || code == 229) {
-        redirectToSearch();
-        return false; 
-         // }
+    $(document).on('keydown keypress', '.key_press_js_search', function(e){
+        var code = e.keyCode || e.which;
+        if (code == 9 || code == 13 || code == 229) {
+            redirectToSearch();
+            return false; 
+        }
     });
 });
