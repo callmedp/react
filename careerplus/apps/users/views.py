@@ -10,7 +10,7 @@ from dateutil.relativedelta import relativedelta
 from django.shortcuts import render
 from django.http import (
     HttpResponse,
-    HttpResponseRedirect,)
+    HttpResponseRedirect,HttpResponseForbidden)
 from django.contrib import messages
 from django.views.generic import FormView, TemplateView, View
 from django.core.urlresolvers import reverse
@@ -26,6 +26,8 @@ from order.models import OrderItem
 from users.mixins import WriterInvoiceMixin
 
 from emailers.tasks import send_email_task
+
+
 
 from .forms import (
     RegistrationForm,
@@ -579,57 +581,64 @@ class DownloadWriterInvoiceView(View):
 
 class DownloadMonthlyWriterInvoiceView(TemplateView):
     template_name = "invoice/invoice_monthly_download.html"
-    success_url='/'
     month=[]
+    path="invoice/user/"
+
+
 
     def get(self,request,*args,**kwargs):
-        context = self.get_context_data(**kwargs)
-        diff=6
-        try:
-            self.month=[(timezone.now() - relativedelta(months=i)).strftime('%B-%Y') for i in range(1, 7)]
+        if self.request.user.is_authenticated() and self.request.user.userprofile and self.request.user.userprofile.writer_type!=0:
+            pass
+        else:
+            return HttpResponseForbidden("You are not allowed to view this page")
 
+
+        context = self.get_context_data(**kwargs)
+        try:
+            self.month=[(timezone.now() - relativedelta(months=i)).strftime('%B-%Y') for i in range(1, 13)]
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
-
-
-
         context['month']=self.month
-
-
         return self.render_to_response(context)
 
 
     def post(self, request, *args, **kwargs):
-        import ipdb;
-        ipdb.set_trace()
+        file_list=[]
         d=self.request.POST.get('month',"")
         m=d.split('-')[0]
         y=d.split('-')[1]
-        month_number = strptime(m,'%B').tm_mon
+        month_number = str(strptime(m,'%B').tm_mon)
 
-        u=self.request.user.name
-        # try:
-        #     import os
-        #     user = request.user
-        #     invoice = None
-        #     if user.is_authenticated() and user.userprofile and user.userprofile.user_invoice:
-        #         invoice = user.userprofile.user_invoice
-        #     if invoice:
-        #         file_path = invoice.name
-        #         if not settings.IS_GCP:
-        #             file_path = os.path.join(settings.MEDIA_ROOT, invoice.name)
-        #             fsock = FileWrapper(open(file_path, 'rb'))
-        #         else:
-        #             fsock = GCPInvoiceStorage().open(file_path)
-        #         filename = invoice.name.split('/')[-1]
-        #         response = HttpResponse(
-        #             fsock,
-        #             content_type=mimetypes.guess_type(filename)[0])
-        #         response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
-        #         return response
-        # except Exception as e:
-        #     logging.getLogger(
-        #         'error_log').error(
-        #         'writer invoice download error - ' + str(e))
-        # return HttpResponseRedirect(reverse('console:dashboard'))
+        u=self.request.user.pk
+        self.path= 'invoice/user/'
+        self.path=str(self.path+ str(u)+'/'+month_number+'_'+y)
+        try:
+            bucket = storage.Client().get_bucket(settings.GCP_INVOICE_BUCKET)
+            for blob in bucket.list_blobs(prefix=self.path):
+                file_list.append(blob.name)
+            file_list.sort(reverse=True)
+            if file_list:
+                file_list=file_list[0]
+                fsock = GCPInvoiceStorage().open(file_list)
+                filename = file_list.split('/')[-1]
+                response = HttpResponse(
+                    fsock,
+                    content_type=mimetypes.guess_type(filename)[0])
+                response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
+                return response
+
+
+            else:
+                messages.add_message(
+                    self.request, messages.ERROR,
+                  "NO INVOICE FOUND CHECK WITH OTHER MONTH")
+                return HttpResponseRedirect(reverse('console:dashboard'))
+
+        except Exception as e:
+            messages.add_message(
+                self.request, messages.ERROR,
+                "writer invoice download error")
+            logging.getLogger(
+                'error_log').error(
+                'writer invoice download error - ' + str(e))
         return HttpResponseRedirect(reverse('console:dashboard'))
