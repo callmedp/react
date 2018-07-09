@@ -3,7 +3,7 @@
 
 {% if main_article %}
     <div class="clearfix border-bottom pb-10 mb-10 fs-13 fl100">
-        <span class="editor pull-left mt-5">{{main_article.created_by.name|truncatechars:"15"}}, {{main_article.publish_date.date}}</span>
+        <span class="editor pull-left mt-5">{% if main_article.author %}{{main_article.author.name|truncatechars:"15"}}, {% endif %}{{main_article.publish_date.date}}</span>
         <span class="view-forward pull-right">
           <figure class="icon-chat-sm"></figure> <a role="button"> {{main_article.comment_moderated}} Comments</a> 
           <figure class="icon-view icon-grey-view ml-10"></figure> {{main_article.no_views}}
@@ -15,7 +15,7 @@
         {% if not main_article %}
             <h1>{{article.display_name}}</h1>
             <div class="clearfix border-bottom pb-10 mb-10 fs-13 fl100">
-                <span class="editor pull-left mt-5">{{article.created_by.name|truncatechars:"15"}}, {{article.publish_date.date}}</span>
+                <span class="editor pull-left mt-5">{% if main_article.author %}{{main_article.author.name|truncatechars:"15"}}, {% endif %}{{article.publish_date.date}}</span>
                 <span class="view-forward pull-right">
                   <figure class="icon-chat-sm"></figure> <a href="#"> {{article.comment_moderated}} Comments</a> 
                   <figure class="icon-view icon-grey-view ml-10"></figure> {{article.no_views}}

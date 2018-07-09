@@ -27,33 +27,35 @@
                 <strong>Trending articles</strong>
                   <div class="carousel slide row" id="myCarousel">
                       <div class="carousel-inner">
-                      {% for cat in categories %}
-                           {% with cat.primary_category.all.first as art %}
-                           {% if art %}
+                      {% for outer_cat in categories %}
                             <div class="item {% if forloop.counter == 1 %} active {% endif %}">
-                              <div class="col-sm-4">
-                                <a href="{% url "blog:articles-deatil" art.slug art.pk %}" title="{{art.display_name}}">
-                                 {% if art.image %}
-                                  {% thumbnail art.image "360x271" crop="center" as im %}
-                                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
-                                 {% endthumbnail %}
-                                  <!--img src="{{art.image.url}}" class="img-responsive" alt="{{cat.name}}" height="271px" width="360px"-->
-                                  {% endif %}
-                                    <div class="caption-bg-txt">
-                                      <span class="caption-heading">{{cat.name}}</span>
-                                        <div class="txt-bottom">
-                                         {{art.display_name}}
-                                        <div class="clearfix mt-5">
-                                          <span class="view-forward"><span class="view-icon1 mr-5"></span>{{art.no_views}}</span>
-                                          <span class="editor">{% if art.created_by.name %}{{art.created_by.name}}, {% endif %}{{art.publish_date.date }}</span>          
+                            {% for cat in outer_cat %}
+                              {% with cat.primary_category.all.first as art %}
+                               {% if art %}
+                                  <div class="col-sm-4">
+                                    <a href="{% url "blog:articles-deatil" art.slug art.pk %}" title="{{art.display_name}}">
+                                     {% if art.image %}
+                                      {% thumbnail art.image "360x271" crop="center" as im %}
+                                        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
+                                     {% endthumbnail %}
+                                      <!--img src="{{art.image.url}}" class="img-responsive" alt="{{cat.name}}" height="271px" width="360px"-->
+                                      {% endif %}
+                                        <div class="caption-bg-txt">
+                                          <span class="caption-heading">{{cat.name}}</span>
+                                            <div class="txt-bottom">
+                                             {{art.display_name}}
+                                            <div class="clearfix mt-5">
+                                              <span class="view-forward"><span class="view-icon1 mr-5"></span>{{art.no_views}}</span>
+                                              <span class="editor">{% if art.created_by.name %}{{art.created_by.name}}, {% endif %}{{art.publish_date.date }}</span>          
+                                            </div>
+                                          </div>
                                         </div>
-                                      </div>
-                                    </div>
-                                </a>
-                              </div>
+                                    </a>
+                                  </div>
+                                {% endif %}
+                              {% endwith %}
+                            {% endfor %}
                             </div>
-                            {% endif %}
-                            {% endwith %}
                       {% endfor %}
 
                       </div>
@@ -109,12 +111,14 @@
           <div class="categories box-panel mb-40">
             <h2 class="heading-right">Categories</h2>
             <ul>
-                {% for cat in categories %}
+                {% for outer_cat in categories %}
+                {% for cat in outer_cat %}
                    {% if cat.article_exists %}
                     <li>
                        <a href="{{cat.get_absolute_url}}">{{cat.name}}</a>
                     </li>
                     {% endif %}
+                    {% endfor %}
                 {% endfor %}
             </ul>
             <a href="{% url "blog:blog-landing" %}" class="view-article text-right db mt-10">View more</a>
