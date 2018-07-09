@@ -149,6 +149,11 @@ class SkillPageView(DetailView, SkillPageMixin):
         meta_dict = context['meta'].__dict__
         meta_dict['description'] = meta_desc
         meta_dict['og_description'] = meta_desc
+        if products.paginator.count:
+            meta_title = {} + ' Courses' + '({} Certification Programs)' + ' - ShineLearning'.format(self.object.name, products.paginator.count)
+        else:
+            meta_title = self.object.name + ' Courses - ShineLearning' 
+        meta_dict['title'] = meta_title
         context.update({
             "api_data": api_data,
             "career_outcomes": career_outcomes,
