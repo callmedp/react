@@ -1099,10 +1099,9 @@ class Product(AbstractProduct, ModelMeta):
         elif self.is_service or self.is_writing:
             if self.category_main:
                 return 'Online %s Services for %s. Get expert advice & tips for %s at Shine Learning' % (
-                        self.category_main.name,
-                        EXP_DICT.get(self.get_exp(), ''),
-                        self.category_main.name,
-                    )
+                    self.category_main.name,
+                    EXP_DICT.get(self.get_exp(), ''),
+                    self.category_main.name,)
         return ''
 
     def get_icon_url(self, relative=False):
