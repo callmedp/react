@@ -17,6 +17,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils import timezone
 from django.db.models import Q
+from google.cloud import storage
 
 from geolocation.models import Country
 from shine.core import ShineCandidateDetail
