@@ -110,7 +110,6 @@ class SkillPageView(DetailView, SkillPageMixin):
         except Exception as e:
             logging.getLogger('error_log').error(" MSG:unable to load the list   %s" %str(e))
 
-
         prd_obj = ContentType.objects.get_for_model(Product)
         all_results = products
         prod_reviews = Review.objects.filter(
@@ -150,9 +149,11 @@ class SkillPageView(DetailView, SkillPageMixin):
         meta_dict['description'] = meta_desc
         meta_dict['og_description'] = meta_desc
         if products.paginator.count:
-            meta_title = '{} Courses' + '({} Certification Programs)' + ' - ShineLearning'.format(self.object.name, products.paginator.count)
+            meta_title = '{} Courses' + '({} Certification Programs)' + ' - ShineLearning'.format(
+                self.object.name, products.paginator.count)
         else:
-            meta_title = self.object.name + ' Courses - ShineLearning' 
+            meta_title = '{} Courses - ShineLearning'.format(
+                self.object.name)
         meta_dict['title'] = meta_title
         context.update({
             "api_data": api_data,
