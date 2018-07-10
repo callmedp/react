@@ -455,6 +455,8 @@ class BlogLandingPageView(TemplateView, BlogMixin):
         else:
             article_list = render_to_string('include/top_article.html',
             {'page_obj': page_obj, 'article_list': article_list})
+
+        categories = [categories[count:count + 3] for count in range(0, len(categories), 3)]
         context.update({
             'categories': categories,
             'article_list': article_list

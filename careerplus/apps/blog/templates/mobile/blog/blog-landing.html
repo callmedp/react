@@ -32,7 +32,8 @@
                 <p class="heading">Trending articles</p>
                 <div class="slide-container">
                     <ul class="blog-slider">
-                        {% for cat in categories %}
+                        {% for outer_cat in categories %}
+                          {% for cat in outer_cat %}
                             {% with cat.primary_category.all.first as art %}
                                {% if art %}
                                     <li>
@@ -54,6 +55,7 @@
                                     
                                 {% endif %}
                             {% endwith %}
+                            {% endfor %}
                         {% endfor %}
                     </ul>
                 </div><!-- slide-container ends here -->
