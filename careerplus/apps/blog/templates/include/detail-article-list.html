@@ -39,7 +39,7 @@
     <strong>Tagged in</strong>
       {% for tag in tags %}
             {% if tag.is_active %}
-            <span><a href="{% url "blog:articles-by-tag" tag.slug %}">{{tag.name}}</a></span>
+            <span><a href="{% url "blog:articles-by-tag" tag.slug %}" title="{{tag.name}}">{{tag.name}}</a></span>
             {% endif %}
       {% endfor %}
   </div>

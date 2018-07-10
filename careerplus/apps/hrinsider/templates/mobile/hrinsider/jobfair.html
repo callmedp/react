@@ -48,7 +48,7 @@
         <div class="job-fair-content">
           <div class="text-center">
             {% if obj.image %}
-            <span><img src="{{obj.image.url}}" width="129" height="110"></span>
+            <span><img src="{{obj.image.url}}" width="129" height="110" alt="{{obj.image_alt}}"></span>
             {% endif %}
             <h1>{{obj.display_name}}</h1>
           </div>

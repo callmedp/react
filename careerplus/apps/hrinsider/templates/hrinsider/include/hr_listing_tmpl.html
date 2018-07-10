@@ -8,7 +8,7 @@
       <a href="{% url 'hrinsider:hr-articles-detail' articleItem.slug %}" title="{{articleItem.heading}}">
         <figure>
           <i>
-            <img src="{{articleItem.image.url}}" alt="{{article.name_alt}}">
+            <img src="{{articleItem.image.url}}" alt="{{articleItem.image_alt}}">
           </i>
           <!--figcaption>{{articleItem.p_cat.name}}</figcaption-->
           <div class="view-forward">
@@ -23,7 +23,7 @@
       <a class="author" >
         {% if articleItem.author.image %}
         <i>
-          <img src="{{articleItem.author.image.url}}" alt="{{articleItem.author.name}}">
+          <img src="{{articleItem.author.image.url}}" alt="{{articleItem.author.image_alt}}">
         </i>
         {% endif %}
         <strong>{{articleItem.author.name}}</strong>
