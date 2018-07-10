@@ -270,6 +270,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return []
 
     def get_products(self):
+
         # if self.type_level == 3:
         #     products = self.categoryproducts.filter(
         #         active=True,
