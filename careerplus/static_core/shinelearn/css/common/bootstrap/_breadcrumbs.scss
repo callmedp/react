@@ -26,11 +26,11 @@ header {
     }
 
     a, a:hover {
-      color: #ababab;
+      color: $white-color;
     }
 
     > .active {
-      color: #ababab;
+      color: $white-color;
     }
   }
 }
