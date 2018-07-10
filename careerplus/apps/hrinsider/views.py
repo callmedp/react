@@ -106,6 +106,10 @@ class HRLandingView(TemplateView, BlogMixin):
             conclave_type = 'Past'
             latest_conclave = past_conclaves[0]
 
+        speakers = []
+        if latest_conclave:
+            speakers = latest_conclave.speakers.filter(is_active=True)[: 5]
+
         authors = Author.objects.filter(
             is_active=True,
             blog__visibility=3,
@@ -119,7 +123,8 @@ class HRLandingView(TemplateView, BlogMixin):
             'authors': authors,
             'authors_list': list(author_list),
             'conclave_type': conclave_type,
-            'latest_conclave': latest_conclave
+            'latest_conclave': latest_conclave,
+            'speakers': speakers,
         })
 
         context.update(self.get_breadcrumb_data())
