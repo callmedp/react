@@ -202,7 +202,10 @@
 {% else %}
     <!-- other package start -->
     <div class="other-package-box">
+
+      {% if prd_exp or sqs_main.pEX %}
       <span>Experience</span>
+      {% endif %}
         {% if sqs_main.id == sqs.id %}
         <a role="button" class="other-package selected" data-id="{{sqs_main.id}}" main-id="{{sqs_main.id}}">
             <p>
