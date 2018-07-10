@@ -939,7 +939,6 @@ class ListProductView(ListView, PaginationMixin):
         paginator = Paginator(context['product_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
-        print(self.status)
         context.update({
             "query": self.query,
             "messages": alert,
