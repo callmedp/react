@@ -140,7 +140,7 @@ def convert_inr(price=Decimal(0)):
     if price:
         if Decimal(0) <= price <= Decimal(10000):
             return '1'
-        elif Decimal(1000) < price <= Decimal(20000):
+        elif Decimal(10000) < price <= Decimal(20000):
             return '2'
         elif Decimal(20000) < price <= Decimal(30000):
             return '3'
