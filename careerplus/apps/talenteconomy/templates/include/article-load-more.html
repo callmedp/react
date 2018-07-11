@@ -1,0 +1,58 @@
+{% load static %}
+{% load humanize %}
+
+{% for artList in page_obj %}
+                <div class="article-list col-sm-6" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
+                  	<div class="box-panel">
+                    	<a href="{% url 'talent:te-articles-detail' artList.p_cat.slug artList.slug %}" title="{{artList.heading}}" itemprop="url" class="db">
+                      <figure class="pr">
+                      		<img src="{{artList.image.url}}" alt="{{artList.image_alt}}" itemprop="image">
+                      		<span class="product-title product-title-pos">{{artList.p_cat.name}}</span>
+                    	</figure>
+                    	<h3 class="heading-article" itemprop="name">{{artList.heading}}</h3>
+                    	<article>
+	                      {{artList.summary|striptags|safe}}
+	                    </article>
+                    	<hr>
+                    </a>
+                    <a href="/talenteconomy/authors/{{artList.author.slug}}" class="db">
+                      <span class="view-forward">
+                        <figure class="forward-icon"></figure> {{artList.no_shares}}
+                        <figure class="view-icon ml-20"></figure> {{artList.no_views}}
+                    </span>
+		                <div class="author author-secondary">
+		                  <figure>
+		                  	{% if artList.author.image %}
+		                    <img src="{{artList.author.image.url}}" alt="{{artList.author.name}}">
+		                    {% endif %}
+		                  </figure>
+		                  <span itemprop="author">{{artList.author.name}}</span>
+
+		                </div>
+              		</a>
+                  </div>
+              		<meta itemprop="datePublished" content="{{artList.publish_date.date}}"></meta>
+              		<meta itemprop="position" content="{{forloop.counter}}">
+              		<meta itemprop="headline" content="{{artList.heading}}">
+                  <meta itemprop="dateModified" content="{{artList.publish_date.date}}">
+                  <meta itemprop="mainEntityOfPage" content="{% url 'talent:talent-landing' %}">
+
+                  <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" >
+                    <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+                      <meta itemprop="url" content="{% static 'shinelearn/images/logo.png' %}">
+                    </div>
+                    <meta itemprop="name" content="Shine">
+                  </div>
+            	</div>
+            {% endfor %}
+
+{% if page_obj.has_next %}
+<div id="talent_art_load_more">
+  <div style='display:none'>
+  <form id="load-te-art-form">
+    <input type="hidden" id="te_art_page_id" name="page" value="{{page_obj.next_page_number}}">
+  </form>
+  </div>
+  <button type="button" id="load-more-art" class="btn btn-primary load-button "><i class="icon-load mr-10"></i>Load more</button>
+</div>
+{% endif %}
