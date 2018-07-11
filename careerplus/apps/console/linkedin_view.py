@@ -924,6 +924,7 @@ class ApprovedLinkedinQueueVeiw(ListView, PaginationMixin):
             'assigned_to', 'delivery_service').order_by('-modified')
 
 
+@method_decorator(permission_required('order.can_show_international_profile_update_queue', login_url='/console/login/'), name='dispatch')
 class InterNationalUpdateQueueView(ListView, PaginationMixin):
     context_object_name = 'object_list'
     template_name = 'console/order/international-profile-update-list.html'
@@ -1056,6 +1057,7 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
 
+@method_decorator(permission_required('order.can_show_international_profile_approval_queue', login_url='/console/login/'), name='dispatch')
 class InterNationalApprovalQueue(ListView, PaginationMixin):
     context_object_name = 'object_list'
     template_name = 'console/order/international-profile-approval-list.html'
