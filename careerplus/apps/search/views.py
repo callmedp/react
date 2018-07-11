@@ -490,12 +490,15 @@ class FuncAreaPageView(SearchBaseView):
         context = super(FuncAreaPageView, self).get_extra_context()
         if self.func_area.exists():
             meta_desc = "Online {} services. Get expert advice & tips for {} at Shine Learning".format(
-                self.func_area[0].title, self.func_area[0].title)
+                self.func_area[0].heading, self.func_area[0].heading)
+            meta_title = "{} Courses – Online Certifications @ Shine Learning".format(
+                self.func_area[0].heading)
             context['func_area_name'] = self.func_area[0].heading
             context['func_area_title'] = self.func_area[0].title
             context['meta'] = self.func_area[0].as_meta(self.request)
             meta_dict = context['meta'].__dict__
             meta_dict['description'] = meta_desc
+            meta_dict['title'] = meta_title
             context['canonical_url'] = self.func_area[0].get_canonical_url()
         else:
             raise Http404
