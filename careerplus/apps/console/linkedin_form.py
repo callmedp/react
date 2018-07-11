@@ -10,7 +10,7 @@ User = get_user_model()
 
 
 LEVEL = (
-    ('', '---------'),
+    (-1, '---------'),
     (0, 'School'),
     (1, 'College'),)
 
@@ -176,11 +176,11 @@ class OrganizationForm(forms.ModelForm):
 
     work_from = forms.DateField(
         widget=forms.DateInput(
-            attrs={'class': 'form-control work_from'}, format='%m/%d/%Y'))
+            attrs={'class': 'form-control work_from','data-parsley-validatedate': 'work_to'}, format='%m/%d/%Y'))
 
     work_to = forms.DateField(
         widget=forms.DateInput(
-            attrs={'class': 'form-control work_to'}, format='%m/%d/%Y'))
+            attrs={'class': 'form-control work_to', 'data-parsley-validatedate': 'work_from'}, format='%m/%d/%Y'))
 
     org_current = forms.BooleanField(
         label=("Current Organization"),
@@ -283,11 +283,11 @@ class EducationForm(forms.ModelForm):
 
     study_from = forms.DateField(
         widget=forms.DateInput(
-            attrs={'class': 'form-control study_from'}, format='%m/%d/%Y'))
+            attrs={'class': 'form-control study_from', 'data-parsley-validatedate': 'study_to'}, format='%m/%d/%Y'))
 
     study_to = forms.DateField(
         widget=forms.DateInput(
-            attrs={'class': 'form-control study_to'}, format='%m/%d/%Y'))
+            attrs={'class': 'form-control study_to', 'data-parsley-validatedate':'study_from'}, format='%m/%d/%Y'))
 
     edu_current = forms.BooleanField(
         label=("Current Education"),
@@ -348,7 +348,7 @@ class EducationForm(forms.ModelForm):
     def clean_level(self):
         level = self.cleaned_data.get('level', '')
         if self.data.get('submit'):
-            if level == 'NA':
+            if level == -1:
                 raise forms.ValidationError("This field is required.")
         return level
 

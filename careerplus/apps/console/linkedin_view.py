@@ -276,8 +276,8 @@ class ChangeDraftView(DetailView):
         try:
             flag = False
             self.object = self.get_object()
-            ord_obj = OrderItem.objects.get(
-                oio_linkedin=self.object).select_related('assigned_to')
+            ord_obj = OrderItem.objects.select_related('assigned_to').get(
+                oio_linkedin=self.object)
             q_resp = QuizResponse.objects.get(oi=ord_obj)
             org_obj = Organization.objects.filter(draft=self.object)
             edu_obj = Education.objects.filter(draft=self.object)
@@ -409,7 +409,6 @@ class ChangeDraftView(DetailView):
 
                         for form in org_formset.deleted_forms:
                             form.instance.delete()
-
                         for form in edu_formset.forms:
                             edu_obj = form.save(commit=False)
                             edu_obj.draft = draft_obj
