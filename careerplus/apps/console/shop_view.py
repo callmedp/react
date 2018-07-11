@@ -17,6 +17,7 @@ from .decorators import (
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.conf import settings
+from partner.models import Vendor,VendorHierarchy
 
 from blog.mixins import PaginationMixin
 from shop.models import (
@@ -316,6 +317,9 @@ class ListCategoryView(ListView, PaginationMixin):
             logging.getLogger('error_log').error('unable to get query set%s'%str(e))
             pass
         return queryset
+
+
+
 
     def get_context_data(self, **kwargs):
         context = super(ListCategoryView, self).get_context_data(**kwargs)
@@ -888,6 +892,10 @@ class ListProductView(ListView, PaginationMixin):
     context_object_name = 'product_list'
     template_name = 'console/shop/list_product.html'
     http_method_names = [u'get', ]
+    vendor_list=[]
+    vendor_select=None
+    status=None
+
 
     def dispatch(self, request, *args, **kwargs):
         self.page = 1
@@ -896,9 +904,14 @@ class ListProductView(ListView, PaginationMixin):
         return super(ListProductView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '')
+        self.status = request.GET.get('is_active', '')
+        self.vendor_select = request.GET.get('vendor', '')
+        self.vendor_list=Vendor.objects.all().values_list('name',flat=True).distinct()
         return super(ListProductView, self).get(request, args, **kwargs)
+
 
     def get_queryset(self):
         queryset = super(ListProductView, self).get_queryset()
@@ -906,10 +919,18 @@ class ListProductView(ListView, PaginationMixin):
         try:
             if self.query:
                 queryset = queryset.filter(Q(name__icontains=self.query))
+            if self.vendor_select:
+               queryset=queryset.filter(vendor__name=self.vendor_select)
+            if self.status:
+                queryset = queryset.filter(active=self.status)
+
+
+
+
         except Exception as e:
             logging.getLogger('error_log').error('unable to get query-set%s'%str(e))
             pass
-        return queryset
+        return queryset.select_related('vendor')
 
     def get_context_data(self, **kwargs):
         context = super(ListProductView, self).get_context_data(**kwargs)
@@ -921,6 +942,9 @@ class ListProductView(ListView, PaginationMixin):
         context.update({
             "query": self.query,
             "messages": alert,
+            'vendor_list':self.vendor_list,
+            'vendor_select':self.vendor_select,
+            self.status: 'selected',
         })
         return context
 

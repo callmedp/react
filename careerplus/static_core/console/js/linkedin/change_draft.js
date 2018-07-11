@@ -1,5 +1,36 @@
+function clicked() {
+  $('.rmv-required').removeAttr('required')
+  debugger
+  var check = confirm('Do you wish to Save the changes made - Y/N ?')
+  if (check) {
+    $("#linkedin-draft-form").submit();
+  } else {
+      return false;
+  }
+}
+window.Parsley.addValidator('validatedate', {
+  validateString: function(value, requirement, parsleyInstance) {
+    var dcd = requirement.split("_")[1]
+    if(dcd == 'from'){
+      to_date = new Date(value)
+      from = parsleyInstance.$element[0].id.replace(requirement.replace('from', 'to'),requirement)
+      from_date = new Date($("#" + from).val())
+    }
+    else {
+      from_date = new Date(value)
+      to = parsleyInstance.$element[0].id.replace(requirement.replace('to', 'from'),requirement)
+      to_date =  new Date($("#" + to).val())
+    }
+    return (from_date<to_date) ? true : false
+  },
+  requirementType: 'string',
+  messages: {
+    en: 'From date should be less than To date',
+  }
+});
+
 $(document).ready(function() {
-	var d = new Date();
+  var d = new Date();
     var todayDate = '' + (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
 
     function dateclass(el) {
@@ -8,24 +39,18 @@ $(document).ready(function() {
         showDropdowns: true,
         maxDate:todayDate,
         autoUpdateInput: false,
+        locale: {
+          cancelLabel: 'Clear'
+        }
       }, function(chosen_date) {
         el.val(chosen_date.format('YYYY-MM-DD'));
       });
     }
 
     $('.study_from, .work_from, .work_to, .study_to').each(function(){
+      $(this).attr("readonly", "readonly")
       dateclass($(this));
     });
-
-    function clicked() {
-	    $('.rmv-required').removeAttr('required')
-	    var check = confirm('Do you wish to Save the changes made - Y/N ?')
-	    if (check) {
-	    	$("#linkedin-draft-form").submit();
-	    } else {
-	        return false;
-	    }
-    }
 
     $('#draft_form').click(function() {
       $('#linkedin-draft-form').parsley().on('field:validated', function() {

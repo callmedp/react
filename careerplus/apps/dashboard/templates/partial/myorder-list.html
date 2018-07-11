@@ -38,6 +38,8 @@
                     Unpaid
                 {% elif order.status == 3 %}
                     Closed
+                {% elif order.status == 5%}
+                    Cancelled
                 {% endif %}
 
               </datalist>
@@ -55,9 +57,14 @@
                           value="{{csrf_token}}" />
                           <input type="hidden" name="order_pk" value="{{order.pk}}" />
                      </div>
-                      <strong><a role="button" onclick="downloadOrderInvoice('{{order.pk}}')" id="download-order-invoice{{order.pk}}">Download invoice</a></strong>
+                      <strong><a role="button" onclick="downloadOrderInvoice('{{order.pk}}');event.stopPropagation()" id="download-order-invoice{{order.pk}}">Download invoice</a></strong>
                     </form>
                 {% endif %}
+
+                {% if order.status == 0 %}
+                      <strong><a role="button" onclick="openCancelModal({{order.pk}});event.stopPropagation()">Cancel Order</a></strong>
+                {% endif %}                
+
               </datalist>
             </div>
           </div>          
@@ -106,12 +113,54 @@
                         Unpaid
                     {% elif order.status == 1 %}
                         Service in progress
+                    {% elif order.status == 5%}
+                        Cancelled
                     {% endif %}
                   </datalist>
                 </li>
             {% endfor %}
           </ul>
         </li>
+        {% if order.status == 0 %}
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="mySmallModalLabel" id="cancelorder_div{{order.pk}}">
+          <div class="modal-dialog modal-sm modal-custom" role="document">
+            <div class="modal-content">
+              <div class="register credit-modal">
+                <div class="text-center">
+                    <span class="modal-title text" id="myModalLabel">Do you wish to cancel the order?</span>
+                </div>
+                <div id="msg_for_user"></div>
+                  <form role="form" id="download-invoice-form{{order.pk}}" method="POST" action="{% url "dashboard:cancel-order" %}">
+                    <div style="display:none">
+                      <input type="hidden" name="csrfmiddlewaretoken" 
+                          value="{{csrf_token}}" />
+                      <input type="hidden" name="order_pk" value="{{order.pk}}" />
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                      <p> Any credit points redeemed against this order will be refunded back to your wallet shortly. These points will be valid for the next 10 days.</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 text-center">
+                        <strong>
+                          <button class="btn btn-primary reject "><a role="button" id="cancel-order-btn{{order.pk}}">Yes</a>
+                        </strong></button>
+                      </div>
+                      <div class="col-md-6 text-center">
+                        <strong>
+                          <button type="button" class="btn btn-primary approve" data-dismiss="modal" aria-label="Close">
+                            <a role="button" >No</a>
+                          </button>
+                        </strong>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+        </div>
+     {% endif %}
     {% endwith %}
 {% endfor %}
 

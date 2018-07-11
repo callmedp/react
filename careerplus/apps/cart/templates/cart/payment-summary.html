@@ -154,7 +154,7 @@
               {% if cart_coupon %}
                 <div id="showCoupon" >
                   <div class="form-group">
-                    <input id="discount_code" type="text" value="Coupon {{cart_coupon.code}} is applied!" name="code" maxlength="15">
+                    <input id="discount_code" type="text" value="Coupon {{cart_coupon.code}} is applied!" name="code" maxlength="15" disabled>
                     <span class="error-txt" id="discount-alert"></span>
                     <button type="button" onclick="JSRemoveDiscount();">Remove</button>
                   </div>
@@ -162,7 +162,7 @@
               {% elif cart_wallet %}
                 <div id="shineCredit" >
                 <div class="form-group">
-                  <input id="loyalty_point" type="text" placeholder="{{wallet_point}} loyalty points redeemed!">
+                  <input id="loyalty_point" type="text" placeholder="{{wallet_point}} loyalty points redeemed!" disabled>
                   <span class="error-txt" id="point-alert" ></span>
                   <button type="button" onclick="JSRemovePoint();">Remove</button>
                 </div>

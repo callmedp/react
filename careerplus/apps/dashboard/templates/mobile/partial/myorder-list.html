@@ -70,9 +70,44 @@
                                 </form>
                             </td>
                         {% endif %}
+                        {% if order.status == 0 %}
+                            <td class="text-right">
+                                <a role="button" class="btn btn-outline" onClick="openPopup('cancelorder_div{{order.pk}}');" >Cancel Order</a>
+                            </td>
+                        {% endif %}
                     </tr>
                 </table>
             </div>
         </div><!-- Section 1 edns here  -->
+        {% if order.status == 0 %}
+          <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="mySmallModalLabel" id="cancelorder_div{{order.pk}}">
+            <div class="modal-helper">
+              <div class="modal-vertical-center">
+                 <!-- Modal content -->
+                  <div class="modal-content">
+                    <div class="header">
+                      <h2>Do you wish to cancel the order?</h2>
+                      <a role="button" class="icon-close" onclick="closePopup();"></a>
+                    </div><!-- end of header -->
+
+                    <div class="content-box pt-0 pb-0">
+                      <p class="c9 fs-12"> Any credit points redeemed against this order will be refunded back to your wallet shortly. These points will be valid for the next 10 days.</p>
+                      <div class="text-center mt-10">
+                          <form role="form" id="download-invoice-form{{order.pk}}" method="POST" action="{% url "dashboard:cancel-order" %}">
+                              <div style="display:none">
+                                <input type="hidden" name="csrfmiddlewaretoken" 
+                                    value="{{csrf_token}}" />
+                                <input type="hidden" name="order_pk" value="{{order.pk}}" />
+                              </div>
+                              <p><button class="btn w100 btn-round btn-blue" onClick="mobileAccept('{{obj.pk}}')">Yes</button></p>
+                              <p><button type="button" class="btn w100 btn-round btn-blue"  onclick="closePopup();">No</button></p>
+                          </form>
+                      </div>
+                    </div><!-- Tab content ends here -->
+                  </div><!-- end of modal content here -->
+              </div><!-- end of modal-vertical-center -->
+            </div><!-- end of modal-helper -->
+          </div>
+     {% endif %}
     {% endwith %}
 {% endfor %}
