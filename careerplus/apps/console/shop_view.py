@@ -1154,6 +1154,8 @@ class ChangeProductView(DetailView):
                         form = ProductPriceForm(request.POST, instance=obj)
                         if form.is_valid():
                             product = form.save()
+                            product.title = product.get_title()
+                            product.save()
                             messages.success(
                                 self.request,
                                 "Product Prices changed Successfully")
