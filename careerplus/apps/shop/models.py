@@ -1080,7 +1080,7 @@ class Product(AbstractProduct, ModelMeta):
     def get_title(self):
         if self.is_course:
             return '%s (INR %s) - Shine Learning' % (
-                self.name,
+                self.heading,
                 str(round(self.inr_price, 0)),
             )
         elif self.is_service or self.is_writing:
@@ -1094,7 +1094,7 @@ class Product(AbstractProduct, ModelMeta):
     def get_meta_desc(self):
         if self.is_course:
             return '%s - Get Online Access, Supports from Experts, Study Materials, Course Module, Fee Structure and other details at Shine Learning' % (
-                self.name,
+                self.heading,
             )
         elif self.is_service or self.is_writing:
             if self.category_main:
