@@ -33,7 +33,7 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
 
     def __init__(self):
         self.page = 1
-        self.paginated_by = 4
+        self.paginated_by = 10
 
 
     def get(self, request, *args, **kwargs):
@@ -116,7 +116,7 @@ class TalentEconomyLoadMoreView(TemplateView, BlogMixin):
     def __init__(self):
 
         self.page = 1
-        self.paginated_by = 4
+        self.paginated_by = 10
         self.article_obj=None
 
     def get(self, request, *args, **kwargs):
