@@ -33,7 +33,8 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
 
     def __init__(self):
         self.page = 1
-        self.paginated_by = 1
+        self.paginated_by = 4
+
 
     def get(self, request, *args, **kwargs):
         self.page = self.request.GET.get('page', 1)
@@ -45,9 +46,23 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
         categories = Category.objects.filter(
             is_active=True, visibility=2).order_by('-name')
 
+
         article_list = Blog.objects.filter(
             status=1, visibility=2).select_related(
-            'p_cat', 'author').order_by('-publish_date')[:10]
+            'p_cat', 'author').order_by('-publish_date')
+
+        page_obj = self.scrollPagination(
+            paginated_by=self.paginated_by, page=self.page,
+            object_list=article_list)
+
+        list_article = None
+        if article_list:
+            list_article = render_to_string('include/article-load-more.html', {
+                "page_obj": page_obj,
+                "SITEDOMAIN": settings.SITE_DOMAIN})
+
+
+
         top_article_list = Blog.objects.filter(
             status=1, visibility=2).select_related('p_cat', 'author')[:9]
 
@@ -66,10 +81,11 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
                 top_article_list[:3], top_article_list[3:6],
                 top_article_list[6:9]],
             'categories': categories,
-            'article_list': article_list,
+            'article_list': list_article,
             'popular_courses': popular_courses,
             'authors': authors,
             'authors_list': list(author_list)
+
         })
 
         context.update(self.get_breadcrumb_data())
@@ -89,6 +105,45 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
             description="Talent Economy - The best way to choose better career options. Get experts' advice & ideas for planning your future growth @ Shine Learning",
         )
         return {"meta": meta}
+
+
+
+class TalentEconomyLoadMoreView(TemplateView, BlogMixin):
+
+    model = Blog
+    template_name = 'include/article-load-more.html'
+
+    def __init__(self):
+
+        self.page = 1
+        self.paginated_by = 4
+        self.article_obj=None
+
+    def get(self, request, *args, **kwargs):
+        self.page = self.request.GET.get('page', 1)
+        context = super(self.__class__, self).get(request, args, **kwargs)
+        if request.is_ajax:
+            self.article_obj = Blog.objects.filter(
+                status=1, visibility=2).select_related(
+                'p_cat', 'author').order_by('-publish_date')
+
+            page_obj = self.scrollPagination(
+                paginated_by=self.paginated_by, page=self.page,
+                object_list=self.article_obj)
+
+            article_list = render_to_string(
+                'include/article-load-more.html', {
+                    "page_obj": page_obj,
+                    "SITEDOMAIN": settings.SITE_DOMAIN, })
+
+            data = {
+                'article_list': article_list,
+            }
+
+            return HttpResponse(
+                json.dumps(data), content_type="application/json")
+
+
 
 
 class TETagArticleView(TemplateView, BlogMixin):
