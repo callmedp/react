@@ -3,7 +3,7 @@ from ckeditor.fields import RichTextField
 from seo.models import AbstractAutoDate
 from django.utils.translation import ugettext_lazy as _
 
-LEVEL = (('NA', '---------'),(0, 'School'),(1,'College'),)
+LEVEL = ((-1, '---------'),(0, 'School'),(1,'College'),)
 
 
 class Draft(AbstractAutoDate):

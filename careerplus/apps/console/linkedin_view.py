@@ -276,8 +276,8 @@ class ChangeDraftView(DetailView):
         try:
             flag = False
             self.object = self.get_object()
-            ord_obj = OrderItem.objects.get(
-                oio_linkedin=self.object).select_related('assigned_to')
+            ord_obj = OrderItem.objects.select_related('assigned_to').get(
+                oio_linkedin=self.object)
             q_resp = QuizResponse.objects.get(oi=ord_obj)
             org_obj = Organization.objects.filter(draft=self.object)
             edu_obj = Education.objects.filter(draft=self.object)
@@ -409,7 +409,6 @@ class ChangeDraftView(DetailView):
 
                         for form in org_formset.deleted_forms:
                             form.instance.delete()
-
                         for form in edu_formset.forms:
                             edu_obj = form.save(commit=False)
                             edu_obj.draft = draft_obj
@@ -924,6 +923,7 @@ class ApprovedLinkedinQueueVeiw(ListView, PaginationMixin):
             'assigned_to', 'delivery_service').order_by('-modified')
 
 
+@method_decorator(permission_required('order.can_show_international_profile_update_queue', login_url='/console/login/'), name='dispatch')
 class InterNationalUpdateQueueView(ListView, PaginationMixin):
     context_object_name = 'object_list'
     template_name = 'console/order/international-profile-update-list.html'
@@ -1056,6 +1056,7 @@ class InterNationalUpdateQueueView(ListView, PaginationMixin):
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
 
+@method_decorator(permission_required('order.can_show_international_profile_approval_queue', login_url='/console/login/'), name='dispatch')
 class InterNationalApprovalQueue(ListView, PaginationMixin):
     context_object_name = 'object_list'
     template_name = 'console/order/international-profile-approval-list.html'

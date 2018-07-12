@@ -156,6 +156,11 @@ function downloadOrderInvoice(order_pk) {
     }
 };
 
+function openCancelModal(order_pk) {
+    modal_id = "#cancelorder_div" + order_pk
+    $(modal_id).modal('show');
+}
+
 
 
 
