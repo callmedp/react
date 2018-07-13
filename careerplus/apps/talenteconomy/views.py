@@ -9,7 +9,7 @@ from django.views.generic import (
     View)
 
 from django.http import HttpResponseForbidden, Http404,\
-    HttpResponsePermanentRedirect, HttpResponse
+    HttpResponse, HttpResponseRedirect
 from django.db.models import Count
 from django.core.paginator import Paginator
 from django.urls import reverse
@@ -42,12 +42,19 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        categories = Category.objects.filter(
-            is_active=True, visibility=2).order_by('-name')
 
+        # we are fetching categories from the articles instead of
+        # checking if article exists for each categories.
         article_list = Blog.objects.filter(
             status=1, visibility=2).select_related(
-            'p_cat', 'author').order_by('-publish_date')[:10]
+            'p_cat', 'author').order_by('-publish_date')
+        p_cat = [p for p in article_list.values_list('p_cat', flat=True)]
+        sec_cat = [sec for sec in article_list.values_list('sec_cat', flat=True)]
+        categories_id = set(p_cat + sec_cat)
+        categories = Category.objects.filter(
+            is_active=True, visibility=2, id__in=categories_id
+        ).order_by('-name')
+        article_list = article_list[:10]
         top_article_list = Blog.objects.filter(
             status=1, visibility=2).select_related('p_cat', 'author')[:9]
 
@@ -240,6 +247,8 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
         self.page = request.GET.get('page', 1)
         try:
             self.cat_obj = Category.objects.get(slug=slug, is_active=True, visibility=2)
+            if not self.cat_obj.article_exists():
+                return HttpResponseRedirect(reverse('talent:talent-landing'))
         except Exception as e:
             logging.getLogger('error_log').error('unable to get category object %s' % str(e))
             raise Http404
@@ -252,8 +261,17 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
             TEBlogCategoryListView, self).get_context_data(**kwargs)
         cat_obj = self.cat_obj
 
+        # we are fetching categories from the articles instead of
+        # checking if article exists for each categories.
+        article_for_category = Blog.objects.filter(
+            status=1, visibility=2).select_related(
+            'p_cat', 'author').order_by('-publish_date')
+        p_cat = [p for p in article_for_category.values_list('p_cat', flat=True)]
+        sec_cat = [sec for sec in article_for_category.values_list('sec_cat', flat=True)]
+        categories_id = set(p_cat + sec_cat)
         categories = Category.objects.filter(
-            is_active=True, visibility=2).order_by('-name')
+            is_active=True, visibility=2, id__in=categories_id
+        ).order_by('-name')
 
         authors = Author.objects.filter(
             is_active=1, blog__visibility=2,
