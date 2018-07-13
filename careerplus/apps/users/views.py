@@ -102,6 +102,16 @@ class RegistrationApiView(FormView):
         kwargs['flavour'] = self.request.flavour
         return kwargs
 
+    def dispatch(self, request, *args, **kwargs):
+
+        if request.session.get('candidate_id'):
+            if 'next' in request.GET:
+                return HttpResponseRedirect(request.GET.get(
+                    'next', self.success_url))
+            return HttpResponseRedirect(self.success_url)
+        else:
+            return super(RegistrationApiView, self).dispatch(request, *args, **kwargs)
+
 
 class LoginApiView(FormView):
     form_class = LoginApiForm
@@ -157,7 +167,8 @@ class LoginApiView(FormView):
                         self.request.session.update(resp_status)
 
                     if remember_me:
-                        self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
+                        self.request.session.set_expiry(
+                            settings.SESSION_COOKIE_AGE)  # 1 year
                     return HttpResponseRedirect(self.success_url)
 
                 elif login_resp['response'] == 'error_pass':

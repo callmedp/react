@@ -101,7 +101,7 @@
                                 <strong>{{obj.point_value}}</strong>
                               </datalist>
                               <datalist class="col-sm-2">
-                                {% if obj.txn_type == 1 %}
+                                {% if obj.txn_type == 1 or obj.txn_type == 5 %}
                                     {{obj.added_point_expiry}}
                                 {% endif %}
                               </datalist>

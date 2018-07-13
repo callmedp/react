@@ -5,7 +5,7 @@ import time
 import os
 import mimetypes
 from random import random
-
+from dateutil.relativedelta import relativedelta
 from wsgiref.util import FileWrapper
 
 from django.http import (
@@ -24,6 +24,7 @@ from django.core.files.base import ContentFile
 # from console.decorators import Decorate, stop_browser_cache
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage
 from order.models import Order, OrderItem
+from order.choices import CANCELLED, OI_CANCELLED
 from review.models import Review
 from emailers.email import SendMail
 from emailers.tasks import send_email_task
@@ -819,3 +820,62 @@ class DashboardResumeDownload(View):
                         
         return HttpResponseRedirect(reverse('dashboard:dashboard'))
 
+
+class DashboardCancelOrderView(View):
+
+    def post(self, request, *args, **kwargs):
+        candidate_id = request.session.get('candidate_id', None)
+        email = request.session.get('email', None)
+        try:
+            order_pk = request.POST.get('order_pk', None)
+            order = Order.objects.get(pk=order_pk)
+            if candidate_id and order.status == 0 and (order.email == email or order.candidate_id == candidate_id):
+                wal_obj = Wallet.objects.get(owner=candidate_id)
+                wallet_txn = order.wallettxn.filter(txn_type=2, order=order).first()
+                if wallet_txn:
+                    total_refund = 0
+                    used_points = wallet_txn.usedpoint.all().order_by('point__pk')
+                    for pts in used_points:
+                        total_refund += pts.point_value
+                    expiry = timezone.now() + relativedelta(days=10)
+
+                    point_obj = wal_obj.point.create(
+                        original=total_refund,
+                        current=total_refund,
+                        expiry=expiry,
+                        status=1,
+                        txn=order.number
+                    )
+
+                    wallet_txn_des = "Refunded"
+                    wal_txn = wal_obj.wallettxn.create(
+                        txn_type=5,
+                        status=1,
+                        order=order,
+                        txn=order.number,
+                        point_value=total_refund,
+                        notes=wallet_txn_des
+                    )
+
+                    point_obj.wallettxn.create(
+                        transaction=wal_txn,
+                        point_value=total_refund,
+                        txn_type=5
+                    )
+
+                    current_value = wal_obj.get_current_amount()
+                    wal_txn.current_value = current_value
+                    wal_txn.save()
+
+                for orderitem in order.orderitems.all():
+                    orderitem.last_oi_status = orderitem.oi_status
+                    orderitem.oi_status = OI_CANCELLED
+                    orderitem.save()
+
+                order.status = CANCELLED
+                order.save()
+
+        except Exception as e:
+            logging.getLogger('error_log').error("%s" % str(e))
+
+        return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))

@@ -220,10 +220,7 @@ class Author(AbstractCommonModel, AbstractSEO, ModelMeta):
         return self.name
 
     def get_absolute_url(self):
-        if self.visibility == 2:
-            return reverse('talent:authors-detail', kwargs={'slug': self.slug})
-        else:
-            return '/'
+        return reverse('talent:authors-detail', kwargs={'slug': self.slug})
 
 
 class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):

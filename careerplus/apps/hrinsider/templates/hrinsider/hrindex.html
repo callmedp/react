@@ -117,7 +117,7 @@
                             {% for speaker in speakers %}
                                 <div class="col speakers_slide">
                                     {% if speaker.image %}
-                                    <img src="{{speaker.image.url}}">
+                                    <img src="{{speaker.image.url}}" alt="{{speaker.image_alt}}">
                                     {% endif %}
                                     <strong>{{speaker.name}}</strong><em> {{speaker.designation}}</em> {{speaker.company}}</div>
                             {% endfor %}

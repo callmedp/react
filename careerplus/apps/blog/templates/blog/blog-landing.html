@@ -115,7 +115,7 @@
                 {% for cat in outer_cat %}
                    {% if cat.article_exists %}
                     <li>
-                       <a href="{{cat.get_absolute_url}}">{{cat.name}}</a>
+                       <a href="{{cat.get_absolute_url}}" title="{{cat.name}}">{{cat.name}}</a>
                     </li>
                     {% endif %}
                     {% endfor %}
