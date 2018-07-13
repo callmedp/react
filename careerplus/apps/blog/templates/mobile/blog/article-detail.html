@@ -3,8 +3,17 @@
 {% load thumbnail %}
 
 {% block django_meta %}
-        {% include 'meta/meta.html' %}
-    {%  endblock django_meta %}
+    {% include 'meta/meta.html' %}
+    <meta property="og:image" content="{{main_article.image.url}}">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@shinelearning">
+
+    <meta name="twitter:domain" content="learning.shine.com">
+    <meta name="twitter:title" content="{{main_article.heading}}">
+    <meta name="twitter:description" content="{{ main_article.get_description }}" />
+    <meta name="twitter:image:src" content="{{main_article.image.url}}">
+{%  endblock django_meta %}
     {% block canonical_url %}
       <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
       <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{ object.get_absolute_url }}?type=amp">
@@ -76,7 +85,7 @@
             <!--li class="wp-bg"><a href="#"><span class="icon-wp"></span></a></li-->
             <li class="gp-bg"><a id="article_share" article-slug="{{main_article.slug}}" href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}" target="_blank"><span class="icon-gp"></span></a></li>
             <li class="tw-bg"><a id="article_share" article-slug="{{main_article.slug}}" href="https://www.twitter.com/share?url=https://{{SITEDOMAIN}}{{main_article.get_absolute_url}}" target="_blank"><span class="icon-tw"></span></a></li>
-            <li class="fb-bg"><a class="facebook" id="article_share" href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{article.get_absolute_url}}" article-slug="{{article.slug}}" target="_blank"><span class="icon-fb"></span></a></li>
+            <li class="fb-bg"><a class="facebook" id="article_share" href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}" article-slug="{{main_article.slug}}" target="_blank"><span class="icon-fb"></span></a></li>
             <li class="share-bg"><a href="#">{{main_article.no_shares}}<br> {% if main_article.no_shares > 1 %}Shares{% else %}Share{% endif %}</a></li>
         </ul>
         <a href="JavaScript:Void(0);" id="share-btn" class="blue-circle-60"><span class="icon-share"></span></a>
