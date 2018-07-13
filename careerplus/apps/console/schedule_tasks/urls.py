@@ -15,4 +15,8 @@ urlpatterns = [
     url(r'^download-task/$',
         views.DownloadTaskView.as_view(),
         name='download-task'),
+
+    url(r'^download-product-list/$',
+        views.DownloadProductListView.as_view(),
+        name='download-product-list'),
 ]
