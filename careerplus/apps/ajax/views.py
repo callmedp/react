@@ -746,3 +746,32 @@ class GetLTVAjaxView(View):
             for order in o_list:
                 data.update({order:results.get(order,"0")})
         return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+class OrderListModal(View):
+
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax():
+                order_pk = request.POST.get('order_id', None)
+                alt_email = request.POST.get('alt_email', '').strip()
+                alt_num = request.POST.get('alt_num', '').strip()
+                data={}
+                if alt_email and order_pk:
+                    try:
+                        obj = Order.objects.get(number=order_pk)
+                        obj.alt_email = alt_email
+                        obj.save()
+                        data = {"status": "success"}
+                    except Exception as e:
+                        logging.getLogger('error_log').error(str(e))
+                elif alt_num and order_pk:
+                    try:
+                        obj = Order.objects.get(number=order_pk)
+                        obj.alt_mobile = alt_num
+                        obj.save()
+                        data = {"status": "success"}
+                    except Exception as e:
+                        logging.getLogger('error_log').error(str(e))
+                return HttpResponse(json.dumps(data), content_type="application/json")
+        else:
+            return HttpResponseForbidden()

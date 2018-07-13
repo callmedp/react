@@ -1,0 +1,54 @@
+
+
+{% block emailmodals %}
+
+<div id="emailmodal" class="modal">
+<div class="modal-dialog modal-lg">
+  <!-- Modal content -->
+      <div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <h2>Modal Header</h2>
+  </div>
+  <div class="modal-body">
+   <form method="POST" id="alteremail" >
+    {% csrf_token %}
+    <b>Alternative Email</b><input type="email" name="alt_email" id="alter_email" required>
+      <input type="hidden" name="order_id" id="order_id">
+      &nbsp;&nbsp;&nbsp;&nbsp;
+         <center>
+    <button type="button" onclick="email_alt_update()" class="btn btn-success btn-xs">update</button>
+  </center>
+
+    </form>
+  </div>
+  </div>
+    </div>
+
+</div>
+{% endblock  %}
+
+{% block numbermodals %}
+<div id="numbermodal" class="modal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+  <div class="modal-header">
+   <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <h2>Update Alternative Number</h2>
+  </div>
+  <div class="modal-body">
+   <form method="POST" id="alternumber" >
+      {% csrf_token %}
+    <b>Alternate Number</b><input type="text" name="alt_num" id="alt_num" required>
+      <input type=hidden name="order_id" id="order_id1"  >
+       &nbsp;&nbsp;&nbsp;&nbsp;<span>
+        <center>
+                            <button type="button" onclick="numb_alt_update()" class="btn btn-success btn-xs">update</button>
+                          </center>
+  </span>  </form>
+  </div>
+</div>
+</div>
+</div>
+
+{% endblock  %}

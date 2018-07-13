@@ -2,7 +2,6 @@
 {% load static compress %}
 {% load humanize %}
 {% load thumbnail %}
-
 {% block title %}
   <title>Orders- Shinelearning</title>
 {% endblock title %}
@@ -12,7 +11,9 @@
 
     {% compress css %}
     <link type="text/css" href="{% static 'console/css/datepicker/daterangepicker.css' %}" rel="stylesheet">
+
     {% endcompress %}
+<link type="text/css" href="{% static 'console/css/order/modal_order.css' %}" rel="stylesheet">
 
 {% endblock css_block %}
 
@@ -26,6 +27,7 @@
       <div class="title_left">
         <h3>Orders</h3>
       </div>
+
 
       <form autocomplete="off" class="form-group" method="GET" action="{% url "console:queue-order" %}" id="filter-tables">
           <div class="title_right">
@@ -105,8 +107,23 @@
               </div>
             </div>
         </div>
+
+         {%include "console/order/partials/modals.html" %}
+
+        {%block emailmodals%}
+        {%endblock%}
+
+
+        {%block numbermodals%}
+        {%endblock%}
+
+
+
+
+
         <!-- /modals -->
     </div>
+
 
 
 
@@ -179,8 +196,37 @@
                     <tr class="even pointer">
                       <td>{{obj.number}}</td>
                       <td>{% if obj.first_name %}{{obj.first_name}}{% endif %}{% if obj.last_name %} {{obj.last_name}}{% endif %}</td>
-                      <td>{{obj.email}}</td>
-                      <td>{{obj.country_code}} {{obj.mobile}}</td>
+                      <td> {% if obj.email == obj.alt_email %}
+                                 {{obj.email}}
+                            {% else %}
+                                {% if obj.alt_email%}
+                                {{obj.email}}<br/><b>alt-</b>{{obj.alt_email}}<br/>
+                                {%else %}
+                             {{obj.email}}
+                          {% endif %}
+                          {% endif %}
+
+                          <button type="button" class="glyphicon glyphicon-envelope" aria-hidden="true" onclick="alt_email_update('{{obj.email}}','{{obj.number}}')">
+                                <i class="fa fa-email"> </i>Alternate Email
+                              </button>
+                      </td>
+                      <td>{{obj.country_code}}
+                          {% if obj.mobile == obj.alt_mobile %}
+                                 {{obj.mobile}}
+                            {% else %}
+                                {% if obj.alt_mobile%}
+                                {{obj.mobile}}<br/><b>alt-</b>{{obj.alt_mobile}}<br/>
+                                {%else %}
+                             {{obj.mobile}}
+                          {% endif %}
+                          {% endif %}
+
+
+
+
+                          <button type="button" class="glyphicon glyphicon-phone-alt" aria-hidden="true" onclick="alt_num_update('{{obj.mobile}}','{{obj.number}}')">
+                                <i class="fa fa-phone"> </i>Alternate
+                              </button> </td>
                       <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
                       <td>
                           {% for txn in obj.get_txns %}
@@ -292,6 +338,8 @@
 
       </div><!-- main_pagination end here -->
       {% endblock main_pagination %}
+
+
      
                 
           </div>
@@ -317,7 +365,10 @@
   <script type="text/javascript" src="{% static 'console/js/order/order-action.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/order/filter.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/order/ltv.js' %}"></script>
+ <script type="text/javascript" src="{% static 'console/js/order/alter.js' %}"></script>
+
 
   {% endcompress %}
+
 
 {% endblock js_block %}

@@ -73,7 +73,7 @@ class OrderListView(ListView, PaginationMixin):
         self.query = ''
         self.payment_date, self.created = '', ''
         self.status = -1
-        self.sel_opt= 'id'
+        self.sel_opt = 'id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
@@ -82,7 +82,6 @@ class OrderListView(ListView, PaginationMixin):
         self.created = request.GET.get('created', '')
         self.status = request.GET.get('status', -1)
         self.sel_opt = self.request.GET.get("rad_search",'id')
-
         return super(OrderListView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):

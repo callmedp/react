@@ -61,6 +61,9 @@ urlpatterns = [
     url(r'^order/markedpaid/$',
         views.MarkedPaidOrderView.as_view(), name='order-markedpaid'),
 
+    url(r'^order/orderlistmodal/$',
+        views.OrderListModal.as_view(), name='order-orderlistmodal'),
+
     url(r'^get-ltv/$',
         csrf_exempt(views.GetLTVAjaxView.as_view()), name='bulk-ltv-view'),
 

@@ -78,6 +78,12 @@ class Order(AbstractAutoDate):
         max_length=15, null=True, blank=True, verbose_name=_("Country Code"))
 
     mobile = models.CharField(max_length=15, null=True, blank=True,)
+    alt_mobile = models.CharField(max_length=15, null=True, blank=True,verbose_name=_("Alternate Mobile"))
+    alt_email = models.CharField(
+        null=True,
+        blank=True,
+        max_length=255,
+        verbose_name=_("Alternate Email"))
 
     address = models.CharField(max_length=255, null=True, blank=True)
 
