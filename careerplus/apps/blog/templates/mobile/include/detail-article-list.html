@@ -30,7 +30,7 @@
                   <p>Tagged in</p>
                   {% for tag in tags %}
                       {% if tag.is_active %}
-                        <a href="{{tag.get_absolute_url}}">{{tag.name}}</a>
+                        <a href="{{tag.get_absolute_url}}" title="{{tag.name}}">{{tag.name}}</a>
                       {% endif %}
                   {% endfor %}
                 </div>

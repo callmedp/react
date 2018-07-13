@@ -37,7 +37,7 @@
                             {% with cat.primary_category.all.first as art %}
                                {% if art %}
                                     <li>
-                                        <a href="{% url "blog:articles-deatil" art.slug art.pk %}" class="caption-bg-txt">
+                                        <a title="{{art.display_name}}" href="{% url "blog:articles-deatil" art.slug art.pk %}" class="caption-bg-txt">
                                             <span class="caption-heading">{{cat.name}}</span>
                                             <div class="bottom-text">
                                                 <p class="pb-5">{{art.display_name}}</p>

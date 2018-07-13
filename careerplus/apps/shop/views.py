@@ -849,7 +849,7 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
                     'status': 1,
                     'url': self.product_obj.get_absolute_url(),
                     'detail_content': product_detail_content,
-                    'title': self.product_obj.get_name,
+                    'title': self.product_obj.title,
                 })
 
             return HttpResponse(json.dumps(data), content_type="application/json")
