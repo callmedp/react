@@ -71,7 +71,7 @@ def featured_updated():
                         email_sets = list(
                             obj.emailorderitemoperation_set.all().values_list(
                                 'email_oi_status', flat=True).distinct())
-                        to_emails = [obj.order.email]
+                        to_emails = [obj.order.get_email()]
                         data = {}
                         data.update({
                             "subject": 'Your Featured Profile Is Updated',

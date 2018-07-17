@@ -38,7 +38,7 @@ def pending_item_email(pk=None):
         for oi in orderitems:
             data = {}
             mail_type = "PENDING_ITEMS"
-            to_emails = [oi.order.email]
+            to_emails = [oi.order.get_email()]
             token = AutoLogin().encode(
                 oi.order.email, oi.order.candidate_id, days=None)
             data.update({
@@ -47,7 +47,7 @@ def pending_item_email(pk=None):
                 'type_flow': oi.product.type_flow,
                 'product_name': oi.product.name,
                 'product_url': oi.product.get_url(),
-                'mobile': oi.order.mobile,
+                'mobile': oi.order.get_mobile(),
                 'parent_name': oi.parent.product.name if oi.parent else None
             })
             email_sets = list(oi.emailorderitemoperation_set.all().values_list(
@@ -276,7 +276,7 @@ def process_mailer(pk=None):
                     'email_oi_status', flat=True).distinct())
                 sms_sets = list(oi.smsorderitemoperation_set.all().values_list(
                     'sms_oi_status', flat=True).distinct())
-                to_emails = [oi.order.email]
+                to_emails = [oi.order.get_email()]
                 mail_type = "PROCESS_MAILERS"
                 data = {}
                 data.update({
@@ -288,9 +288,9 @@ def process_mailer(pk=None):
                     'product_name': oi.product.name,
                     'product_url': oi.product.get_url(),
                     'vendor_name': oi.product.vendor.name,
-                    'email': oi.order.email,
+                    'email': oi.order.get_email(),
                     'candidateid': oi.order.email,
-                    'mobile': oi.order.mobile,
+                    'mobile': oi.order.get_mobile(),
                     'parent_name': oi.parent.product.name if oi.parent else None
                 })
                 if oi.product.type_flow in [1, 12, 13]:
@@ -508,7 +508,7 @@ def payment_pending_mailer(pk=None):
                     oi.smsorderitemoperation_set.all().values_list(
                         'sms_oi_status', flat=True).distinct())
                 if 1 not in email_sets and 1 not in sms_sets:
-                    to_emails = [order.email]
+                    to_emails = [order.get_email()]
                     mail_type = "PAYMENT_PENDING"
                     sms_type = 'OFFLINE_PAYMENT'
                     data = {}
@@ -516,7 +516,7 @@ def payment_pending_mailer(pk=None):
                         "subject": 'Your Shine Payment Confirmation pending',
                         "username": order.first_name,
                         "txn": pymt_obj.txn,
-                        'mobile': oi.order.mobile,
+                        'mobile': oi.order.get_mobile(),
                     })
                     send_email(to_emails, mail_type, data, status=1, oi=oi.pk)
                     try:
@@ -545,7 +545,7 @@ def payment_realisation_mailer(pk=None):
         pymt_objs = PaymentTxn.objects.filter(order=order)
         for pymt_obj in pymt_objs:
             if pymt_obj.status == 1:
-                to_emails = [order.email]
+                to_emails = [order.get_email()]
                 # feature coupon
                 courses_p = order.orderitems.filter(
                     product__product_class__slug__in=settings.COURSE_SLUG)
@@ -594,10 +594,10 @@ def service_initiation(pk=None):
             for oi in orderitems:
                 data = {}
                 token = token = AutoLogin().encode(
-                    oi.order.email, oi.order.candidate_id, days=None)
+                    oi.order.get_email(), oi.order.candidate_id, days=None)
                 sms_type = "SERVICE_INITIATION"
                 data.update({
-                    'mobile': oi.order.mobile,
+                    'mobile': oi.order.get_mobile(),
                     'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                         settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                         token),

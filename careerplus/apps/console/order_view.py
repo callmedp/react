@@ -55,7 +55,9 @@ from .order_form import (
     AssignmentActionForm,
     ReviewActionForm,
     ReviewFilterForm,
-    ReviewUpdateForm,)
+    ReviewUpdateForm,
+    emailupdateform,
+    mobileupdateform,)
 from .mixins import ActionUserMixin
 
 
@@ -93,11 +95,16 @@ class OrderListView(ListView, PaginationMixin):
         alert = messages.get_messages(self.request)
         initial = {"payment_date": self.payment_date, "created": self.created, "status": self.status}
         filter_form = OrderFilterForm(initial)
+        email_form=emailupdateform()
+        mobil_form=mobileupdateform()
         context.update({
             "messages": alert,
             "filter_form": filter_form,
             "query": self.query,
-            var: "checked"
+            var: "checked",
+            'email_form': email_form,
+            'mobil_form': mobil_form,
+
 
         })
         return context

@@ -44,14 +44,14 @@ def draft_reminder_mail():
                     email_oi_status=26) if draft_level == 1 else oi.emailorderitemoperation_set.filter(
                     email_oi_status=27)
                 if draft_level == 1 and today_date >= approved_date + datetime.timedelta(days=8) and len(email_sets) == 0:
-                    to_emails = [oi.order.email]
+                    to_emails = [oi.order.get_email()]
                     mail_type = 'REMINDER'
                     data = {}
                     data.update({
                         "subject": "Reminder:Your developed resume document has been uploaded",
                         "draft_level": draft_level,
                         "first_name": oi.order.first_name,
-                        'mobile': oi.order.mobile,
+                        'mobile': oi.order.get_mobile(),
                         'days': 22,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
@@ -70,14 +70,14 @@ def draft_reminder_mail():
 
                 elif draft_level == 1 and today_date >= approved_date + datetime.timedelta(days=15) and len(email_sets) == 1:
 
-                    to_emails = [oi.order.email]
+                    to_emails = [oi.order.get_email()]
                     mail_type = 'REMINDER'
                     data = {}
                     data.update({
                         "subject": "Reminder:Your developed resume document has been uploaded",
                         "draft_level": draft_level,
                         "first_name": oi.order.first_name,
-                        'mobile': oi.order.mobile,
+                        'mobile': oi.order.get_mobile(),
                         'days': 15,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
@@ -95,14 +95,14 @@ def draft_reminder_mail():
                             "%s - %s" % (str(mail_type), str(e)))
 
                 elif draft_level == 1 and today_date >= approved_date + datetime.timedelta(days=22) and len(email_sets) == 2:
-                    to_emails = [oi.order.email]
+                    to_emails = [oi.order.get_email()]
                     mail_type = 'REMINDER'
                     data = {}
                     data.update({
                         "subject": "Reminder:Your developed resume document has been uploaded",
                         "draft_level": draft_level,
                         "first_name": oi.order.first_name,
-                        'mobile': oi.order.mobile,
+                        'mobile': oi.order.get_mobile(),
                         'days': 7,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
@@ -120,14 +120,14 @@ def draft_reminder_mail():
                             "%s - %s" % (str(mail_type), str(e)))
 
                 elif draft_level == 1 and today_date >= approved_date + datetime.timedelta(days=29) and len(email_sets) == 3:
-                    to_emails = [oi.order.email]
+                    to_emails = [oi.order.get_email()]
                     mail_type = 'WRITING_SERVICE_CLOSED'
                     data = {}
                     data.update({
                         "subject": 'Closing your ' + oi.product.name + ' service',
                         "username": oi.order.first_name,
                         'draft_added': oi.draft_added_on,
-                        'mobile': oi.order.mobile,
+                        'mobile': oi.order.get_mobile(),
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                     })
@@ -156,14 +156,14 @@ def draft_reminder_mail():
                             "%s - %s" % (str(mail_type), str(e)))
 
                 elif draft_level == 2 and today_date >= approved_date + datetime.timedelta(days=4) and len(email_sets) == 0:
-                    to_emails = [oi.order.email]
+                    to_emails = [oi.order.get_email()]
                     mail_type = 'REMINDER'
                     data = {}
                     data.update({
                         "subject": "Reminder:Your developed resume document has been uploaded",
                         "draft_level": draft_level,
                         "first_name": oi.order.first_name,
-                        'mobile': oi.order.mobile,
+                        'mobile': oi.order.get_mobile(),
                         'days': 7,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
@@ -180,14 +180,14 @@ def draft_reminder_mail():
                         logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 
                 elif draft_level == 2 and today_date >= approved_date + datetime.timedelta(days=7) and len(email_sets) == 1:
-                    to_emails = [oi.order.email]
+                    to_emails = [oi.order.get_email()]
                     mail_type = 'REMINDER'
                     data = {}
                     data.update({
                         "subject": "Reminder:Your developed resume document has been uploaded",
                         "draft_level": draft_level,
                         "first_name": oi.order.first_name,
-                        'mobile': oi.order.mobile,
+                        'mobile': oi.order.get_mobile(),
                         'days': 4,
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
@@ -205,14 +205,14 @@ def draft_reminder_mail():
                             "%s - %s" % (str(mail_type), str(e)))
 
                 elif draft_level == 2 and today_date >= approved_date + datetime.timedelta(days=10) and len(email_sets) == 2:
-                    to_emails = [oi.order.email]
+                    to_emails = [oi.order.get_email()]
                     mail_type = 'WRITING_SERVICE_CLOSED'
                     data = {}
                     data.update({
                         "subject": 'Closing your ' + oi.product.name + ' service',
                         "username": oi.order.first_name,
                         'draft_added': oi.draft_added_on,
-                        'mobile': oi.order.mobile,
+                        'mobile': oi.order.get_mobile(),
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                     })

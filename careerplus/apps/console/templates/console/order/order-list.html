@@ -196,31 +196,24 @@
                     <tr class="even pointer">
                       <td>{{obj.number}}</td>
                       <td>{% if obj.first_name %}{{obj.first_name}}{% endif %}{% if obj.last_name %} {{obj.last_name}}{% endif %}</td>
-                      <td> {% if obj.email == obj.alt_email %}
-                                 {{obj.email}}
-                            {% else %}
-                                {% if obj.alt_email%}
-                                {{obj.email}}<br/><b>alt-</b>{{obj.alt_email}}<br/>
-                                {%else %}
-                             {{obj.email}}
-                          {% endif %}
-                          {% endif %}
+                      <td><div id="{{obj.id}}">
+                          {{obj.email}}
+                          {%if obj.alt_email%}<br/>
+                         <b>Alt-</b>  {{obj.alt_email}}
+                          {%endif%}
+                          </div>
 
                           <button type="button" class="glyphicon glyphicon-envelope" aria-hidden="true" onclick="alt_email_update('{{obj.email}}','{{obj.number}}')">
                                 <i class="fa fa-email"> </i>Alternate Email
                               </button>
                       </td>
-                      <td>{{obj.country_code}}
-                          {% if obj.mobile == obj.alt_mobile %}
-                                 {{obj.mobile}}
-                            {% else %}
-                                {% if obj.alt_mobile%}
-                                {{obj.mobile}}<br/><b>alt-</b>{{obj.alt_mobile}}<br/>
-                                {%else %}
-                             {{obj.mobile}}
-                          {% endif %}
-                          {% endif %}
+                      <td> <div id="{{obj.number}}" style="display: -moz-inline-stack;">{{obj.country_code}}-
+                          {{obj.mobile}}
+                          {%if obj.alt_mobile%}
+                          <span> <b>Alt-</b>{{obj.country_code}}-{{obj.alt_mobile}}</span>
+                          {%endif%}
 
+                          </div>
 
 
 

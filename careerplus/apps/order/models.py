@@ -177,6 +177,19 @@ class Order(AbstractAutoDate):
         sub_dict = dict(WC_CATEGORY)
         return sub_dict.get(self.wc_cat, '')
 
+    def get_email(self):
+        if self.alt_email:
+            return self.alt_email
+        else:
+            return self.email
+
+
+    def get_mobile(self):
+        if self.alt_mobile:
+            return self.alt_mobile
+        else:
+            return self.mobile
+
     def get_wc_sub_cat(self):
         cat_dict = dict(WC_SUB_CATEGORY)
         return cat_dict.get(self.wc_sub_cat, '')

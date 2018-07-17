@@ -26,9 +26,9 @@ def user_register(data={}, order=None):
         if not data:
             order = Order.objects.get(pk=order)
             data.update({
-                "email": order.email,
+                "email": order.get_email(),
                 "country_code": order.country_code,
-                "cell_phone": order.mobile,
+                "cell_phone": order.get_email(),
                 "name": order.first_name + ' ' + order.last_name,
             })
         data.update({
