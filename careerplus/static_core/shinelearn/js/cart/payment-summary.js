@@ -1,4 +1,14 @@
-function toggler(divId) {
+function toggler(divId, show_hide_coupon) {
+  if(show_hide_coupon){
+      var ele = $("#show_hide_coupon")
+      var text = ele.text()
+      if(text == 'Apply coupon'){
+        ele.text('Hide Coupon')
+      }
+      else {
+        ele.text('Apply coupon')
+       }
+   }
   $("#" + divId).toggle();
 }
 

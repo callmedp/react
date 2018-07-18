@@ -69,6 +69,11 @@
                 </a>
               </li>
               {% endif %}
+            {% if not writer_invoice or not IS_LIVE %}
+              <li><a href="{% url 'users:download-monthly-writer-invoice' %}">
+                Download Monthly Invoice
+              </a></li>
+              {% endif %}
           </ul>
         </li>
         {% endif %}

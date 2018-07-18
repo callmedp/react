@@ -35,20 +35,35 @@ def pending_item_email(pk=None):
     if order:
         orderitems = order.orderitems.filter(no_process=False).select_related(
             'order', 'product', 'partner')
+        mail_flag_flow12 = False
+        sms_flag_flow12 = False
+
+        mail_flag_flow4 = False
+        sms_flag_flow4 = False
         for oi in orderitems:
             data = {}
             mail_type = "PENDING_ITEMS"
             to_emails = [oi.order.get_email()]
             token = AutoLogin().encode(
                 oi.order.email, oi.order.candidate_id, days=None)
+            product_name = ''
+            if oi.product.type_flow in [4, 12]:
+                ois = orderitems.filter(
+                    product__type_flow__in=[4, 12])
+                for oi_item in ois:
+                    product_name = product_name + oi_item.product.name + ','
+            else:
+                product_name = oi.product.name
+
             data.update({
                 'subject': 'To initiate your services fulfil these details',
                 'user': oi.order.first_name,
                 'type_flow': oi.product.type_flow,
-                'product_name': oi.product.name,
+                'product_name': product_name,
                 'product_url': oi.product.get_url(),
                 'mobile': oi.order.get_mobile(),
-                'parent_name': oi.parent.product.name if oi.parent else None
+                'parent_name': oi.parent.product.name if oi.parent else ""
+
             })
             email_sets = list(oi.emailorderitemoperation_set.all().values_list(
                 'email_oi_status', flat=True).distinct())
@@ -101,8 +116,17 @@ def pending_item_email(pk=None):
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token)
                     })
-                    if 61 not in email_sets and 61 not in sms_sets:
+
+                    if not mail_flag_flow4 and 61 not in email_sets:
                         send_email(to_emails, mail_type, data, 61, oi.pk)
+                        mail_flag_flow4 = True
+                    elif 61 not in email_sets:
+                        to_email = to_emails[0] if to_emails else oi.order.get_email()
+                        oi.emailorderitemoperation_set.create(
+                            email_oi_status=61, to_email=to_email,
+                            status=1)
+
+                    if not sms_flag_flow4 and 61 not in sms_sets:
                         try:
                             urlshortener = create_short_url(login_url=data)
                             data.update({'url': urlshortener.get('url')})
@@ -111,9 +135,30 @@ def pending_item_email(pk=None):
                                 sms_oi_status=61,
                                 to_mobile=data.get('mobile'),
                                 status=1)
+                            sms_flag_flow4 = True
                         except Exception as e:
                             logging.getLogger('error_log').error("%s - %s" % (
                                 str(mail_type), str(e)))
+                    elif 61 not in sms_sets:
+                        oi.smsorderitemoperation_set.create(
+                            sms_oi_status=61,
+                            to_mobile=data.get('mobile'),
+                            status=1)
+
+
+                    # if 61 not in email_sets and 61 not in sms_sets:
+                    #     send_email(to_emails, mail_type, data, 61, oi.pk)
+                    #     try:
+                    #         urlshortener = create_short_url(login_url=data)
+                    #         data.update({'url': urlshortener.get('url')})
+                    #         SendSMS().send(sms_type=mail_type, data=data)
+                    #         oi.smsorderitemoperation_set.create(
+                    #             sms_oi_status=61,
+                    #             to_mobile=data.get('mobile'),
+                    #             status=1)
+                    #     except Exception as e:
+                    #         logging.getLogger('error_log').error("%s - %s" % (
+                    #             str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 5:
                     data.update({
@@ -161,8 +206,17 @@ def pending_item_email(pk=None):
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token)
                     })
-                    if 141 not in email_sets and 141 not in sms_sets:
+
+                    if not mail_flag_flow12 and 141 not in email_sets:
                         send_email(to_emails, mail_type, data, 141, oi.pk)
+                        mail_flag_flow12 = True
+                    elif 141 not in email_sets:
+                        to_email = to_emails[0] if to_emails else oi.order.get_email()
+                        oi.emailorderitemoperation_set.create(
+                            email_oi_status=141, to_email=to_email,
+                            status=1)
+
+                    if not sms_flag_flow12 and 141 not in sms_sets:
                         try:
                             urlshortener = create_short_url(login_url=data)
                             data.update({'url': urlshortener.get('url')})
@@ -171,9 +225,29 @@ def pending_item_email(pk=None):
                                 sms_oi_status=141,
                                 to_mobile=data.get('mobile'),
                                 status=1)
+                            sms_flag_flow12 = True
                         except Exception as e:
                             logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
+                    elif 141 not in sms_sets:
+                        oi.smsorderitemoperation_set.create(
+                            sms_oi_status=141,
+                            to_mobile=data.get('mobile'),
+                            status=1)
+
+                    # if 141 not in email_sets and 141 not in sms_sets:
+                    #     send_email(to_emails, mail_type, data, 141, oi.pk)
+                    #     try:
+                    #         urlshortener = create_short_url(login_url=data)
+                    #         data.update({'url': urlshortener.get('url')})
+                    #         SendSMS().send(sms_type=mail_type, data=data)
+                    #         oi.smsorderitemoperation_set.create(
+                    #             sms_oi_status=141,
+                    #             to_mobile=data.get('mobile'),
+                    #             status=1)
+                    #     except Exception as e:
+                    #         logging.getLogger('error_log').error(
+                    #             "%s - %s" % (str(mail_type), str(e)))
 
                 elif oi.product.type_flow == 13:
                     data.update({
@@ -499,6 +573,9 @@ def payment_pending_mailer(pk=None):
             orderitems = order.orderitems.filter(
                 no_process=False).select_related('order', 'product', 'partner')
 
+            mail_flag = False
+            sms_flag = False
+
             for oi in orderitems:
                 pymt_obj = oi.order.ordertxns.get(order=order)
                 email_sets = list(
@@ -507,18 +584,28 @@ def payment_pending_mailer(pk=None):
                 sms_sets = list(
                     oi.smsorderitemoperation_set.all().values_list(
                         'sms_oi_status', flat=True).distinct())
-                if 1 not in email_sets and 1 not in sms_sets:
-                    to_emails = [order.get_email()]
-                    mail_type = "PAYMENT_PENDING"
-                    sms_type = 'OFFLINE_PAYMENT'
-                    data = {}
-                    data.update({
-                        "subject": 'Your Shine Payment Confirmation pending',
-                        "username": order.first_name,
-                        "txn": pymt_obj.txn,
-                        'mobile': oi.order.get_mobile(),
-                    })
+
+                data = {}
+                data.update({
+                    "subject": 'Your Shine Payment Confirmation pending',
+                    "username": order.first_name,
+                    "txn": pymt_obj.txn,
+                    'mobile': oi.order.get_mobile(),
+                })
+                mail_type = "PAYMENT_PENDING"
+                sms_type = 'OFFLINE_PAYMENT'
+
+                to_emails = [order.get_email()]
+                if not mail_flag and 1 not in email_sets:
                     send_email(to_emails, mail_type, data, status=1, oi=oi.pk)
+                    mail_flag = True
+                elif 1 not in email_sets:
+                    to_email = to_emails[0] if to_emails else oi.order.get_email()
+                    oi.emailorderitemoperation_set.create(
+                        email_oi_status=1, to_email=to_email,
+                        status=1)
+
+                if not sms_flag and 1 not in sms_sets:
                     try:
                         SendSMS().send(sms_type=sms_type, data=data)
                         oi.smsorderitemoperation_set.create(
@@ -528,6 +615,33 @@ def payment_pending_mailer(pk=None):
                     except Exception as e:
                         logging.getLogger('error_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
+                elif 1 not in sms_sets:
+                    oi.smsorderitemoperation_set.create(
+                        sms_oi_status=1,
+                        to_mobile=data.get('mobile'),
+                        status=1)
+
+                # if 1 not in email_sets and 1 not in sms_sets:
+                #     to_emails = [order.email]
+                #     mail_type = "PAYMENT_PENDING"
+                #     sms_type = 'OFFLINE_PAYMENT'
+                #     data = {}
+                #     data.update({
+                #         "subject": 'Your Shine Payment Confirmation pending',
+                #         "username": order.first_name,
+                #         "txn": pymt_obj.txn,
+                #         'mobile': oi.order.mobile,
+                #     })
+                #     send_email(to_emails, mail_type, data, status=1, oi=oi.pk)
+                #     try:
+                #         SendSMS().send(sms_type=sms_type, data=data)
+                #         oi.smsorderitemoperation_set.create(
+                #             sms_oi_status=1,
+                #             to_mobile=data.get('mobile'),
+                #             status=1)
+                #     except Exception as e:
+                #         logging.getLogger('error_log').error(
+                #             "%s - %s" % (str(sms_type), str(e)))
     except Exception as e:
         logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
 

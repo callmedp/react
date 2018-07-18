@@ -239,11 +239,26 @@
 	}
 
 	.time {
-		display: $db;
+		display: inline-block;
 		color: $grey-color;
 		font-size: $font-size+1;
 		margin-top: 5px;
 	}
+		.author-name {
+		font-size: $font-size+4;
+		font-weight: $font-weight+300;
+		display: inline-block;
+		color: $primary-color;
+
+		&:after {
+			content: '/';
+			padding: 0 10px;
+			font-weight: $font-weight+100;
+			font-size: $font-size+1;
+			color: $grey-color;
+		}
+	}
+
 }
 
 
