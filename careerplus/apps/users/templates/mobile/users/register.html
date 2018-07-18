@@ -90,12 +90,30 @@
                           <label for="id_is_job_seeker">Receive jobs notifications</label>
                         </p>
                     </div>
-
                     <div class="form-group text-center tabs">
                         <button type="submit" class="btn btn-blue w100fl btn-round mb-20">Register</button>
+                    </div>
+
+                    <div class="line_wrap w100fl">
+                            <span>or rigister with</span>
+                            <div class="line"></div>
+                    </div>
+
+                    <div class="social-login w100fl text-center">
+                        <a class="fb" role="button" onclick="Login();">
+                        <sup class="icon-fb-2"></sup></a>
+                        <a href="{% url 'users:linkedin-code' %}" class="link"><sup class="icon-link-2"></sup></a>
+                        <a class="gp" role="button" onclick="glogin()">
+                        <sup class="icon-gp-2"></sup></a>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="form-group text-center tabs">
                         <div class="clearfix"></div>
                         <p>Already have an account? <a href="{% url 'login' %}" data-toggle="tab">Login now</a></p>
                     </div>
+
+
                 </form>
             </div>
         </div><!-- container -->
@@ -106,6 +124,7 @@
 {% block js_section %}
     {{block.super}}
     <script src="{% static 'shinelearn/js/users/registration.js' %}"></script>
+    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
 {% endblock js_section %}
 
 {% block johukum %}

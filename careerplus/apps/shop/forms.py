@@ -19,6 +19,7 @@ from shop.choices import BG_CHOICES
 from shop.utils import FIELD_FACTORIES
 from faq.models import FAQuestion
 
+
 class AddKeywordForm(forms.ModelForm):
 
     class Meta:
@@ -50,7 +51,6 @@ class AddKeywordForm(forms.ModelForm):
                 "This field is required.")
         return name
     
-
     def save(self, commit=True):
         keyword = super(AddKeywordForm, self).save(commit=False)
         if commit:
@@ -386,7 +386,7 @@ class ChangeProductSEOForm(forms.ModelForm):
         self.fields['title'].widget.attrs['placeholder'] = 'Add unique title'
         self.fields['title'].widget.attrs['data-parsley-trigger'] = 'change'
         self.fields['title'].widget.attrs['required'] = "required"
-        
+
         self.fields['title'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['title'].widget.attrs['data-parsley-length'] = "[2, 100]"
         self.fields['title'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-100 characters.'
@@ -405,8 +405,8 @@ class ChangeProductSEOForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ('title', 'meta_desc', 'meta_keywords', 'heading', 'image_alt',
-            'about', 'description', 'buy_shine','visibility','attend')
+        fields = ('title', 'meta_desc', 'meta_keywords', 'heading','image_alt',
+            'about', 'description', 'buy_shine', 'visibility', 'attend')
 
     def clean_title(self):
         title = self.cleaned_data.get('title', '')
