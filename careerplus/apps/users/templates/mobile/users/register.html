@@ -56,21 +56,23 @@
                             {{ form.email.errors}}
                         </span>
                     </div>
-                    <div id="user_email"></div>
                     <div class="form-group {% if form.raw_password.errors %}error{% endif %}">
                         {{ form.raw_password }}
-                        {% if form.raw_password.errors %}<p class="mgs">{{ form.raw_password.errors.0 }}</p>{% endif %}
+                        <span class="error-txt" style="bottom:-25px">
+                            {{ form.raw_password.errors }}
+                        </span>
                     </div>
-                    <div id="raw_psd"></div>
+
                     <div class="form-group {% if form.cell_phone.errors %}error{% endif %}">
                     <div class="pull-left code">
                          {{form.country_code}}
                     </div>
                         {{form.cell_phone}}
-                        {% if form.cell_phone.errors %}<p class="mgs">{{ form.cell_phone.errors.0 }}</p>{% endif %}
+                        <span class="error-txt" style="bottom:-25px; margin-left:70px">
+                            {{ form.cell_phone.errors }}
+                        </span>
                      <div class="clearfix"></div>
                     </div>
-                    <div id="cell_phone"></div>
                     <div class="form-group mt-30">
                         <p class="c9">
                           <input type="checkbox" id="id_term_conditions" name="term_conditions"/>
@@ -78,6 +80,9 @@
                           <a href="/tnc">Terms &amp; Conditions</a> and
                           <a href="/privacy-policy">Privacy policy</a>
                           </label>
+                          <span class="error-txt" style="bottom:-25px; margin-left:20px">
+                            {{ form.cell_phone.errors }}
+                        </span>
                         </p>
                         <div id="terms"></div>
                         <p class="c9">
@@ -85,12 +90,30 @@
                           <label for="id_is_job_seeker">Receive jobs notifications</label>
                         </p>
                     </div>
-
                     <div class="form-group text-center tabs">
                         <button type="submit" class="btn btn-blue w100fl btn-round mb-20">Register</button>
+                    </div>
+
+                    <div class="line_wrap w100fl">
+                            <span>or rigister with</span>
+                            <div class="line"></div>
+                    </div>
+
+                    <div class="social-login w100fl text-center">
+                        <a class="fb" role="button" onclick="Login();">
+                        <sup class="icon-fb-2"></sup></a>
+                        <a href="{% url 'users:linkedin-code' %}" class="link"><sup class="icon-link-2"></sup></a>
+                        <a class="gp" role="button" onclick="glogin()">
+                        <sup class="icon-gp-2"></sup></a>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="form-group text-center tabs">
                         <div class="clearfix"></div>
                         <p>Already have an account? <a href="{% url 'login' %}" data-toggle="tab">Login now</a></p>
                     </div>
+
+
                 </form>
             </div>
         </div><!-- container -->
@@ -101,6 +124,7 @@
 {% block js_section %}
     {{block.super}}
     <script src="{% static 'shinelearn/js/users/registration.js' %}"></script>
+    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
 {% endblock js_section %}
 
 {% block johukum %}

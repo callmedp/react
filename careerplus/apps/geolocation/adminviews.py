@@ -2,6 +2,7 @@ from django.views.generic import ListView, UpdateView
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.db.models import Q
+from django.conf import settings
 import logging
 
 from blog.mixins import PaginationMixin
@@ -9,7 +10,13 @@ from blog.mixins import PaginationMixin
 from .models import Country
 from .forms import CountryUpdateForm
 
+from console.decorators import (
+    Decorate,
+    check_group, stop_browser_cache
+)
 
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 class CountryUpdateView(UpdateView):
 	model = Country
 	template_name = 'geoadmin/country-update.html'
@@ -42,7 +49,8 @@ class CountryUpdateView(UpdateView):
 				return self.form_invalid(form)
 		return self.form_invalid(form)
 
-
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 class CountryListView(ListView, PaginationMixin):
 
 	context_object_name = 'country_list'

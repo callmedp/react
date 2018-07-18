@@ -43,8 +43,19 @@ $(document).ready(function () {
                 $(".js_advance_search_form").submit();
             }
     });
-    $('.key_press_js_search').keypress(function (e) {
-        if (e.which == 13) {
+
+
+    // $('.key_press_js_search').keypress(function (e) {
+    //     console.log(e.which);
+    //     if (e.which == 13) {
+    //         redirectToSearch();
+    //         return false; 
+    //     }
+    // });
+
+    $(document).on('keypress', '.key_press_js_search', function(e){
+        var code = e.keyCode || e.which;
+        if (code == 9 || code == 13 || code == 229) {
             redirectToSearch();
             return false; 
         }

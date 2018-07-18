@@ -68,7 +68,7 @@
               {% for speaker in speakers %}
               <li>
                 {% if speaker.image %}
-                <span><img src="{{speaker.image.url}}" width="88" height="58"></span>
+                <span><img src="{{speaker.image.url}}" width="88" height="58" alt="{{speaker.image_alt}}"></span>
                 {% endif %}
                 <h3>{{speaker.name}}</h3>
                 <p class="pb-0 fs-11">{{speaker.designation}}</p>
@@ -152,7 +152,7 @@
           <ul class="contributors">
             {% for speaker in past_speakers %}
             <li>
-              <img src="{{speaker.image.url}}">
+              <img src="{{speaker.image.url}}" alt="{{speaker.image_alt}}">
               <p class="head pb-0 pt-5">{{speaker.name}}</p>
               <p class="fs-12 pt-5"><a>{{speaker.company}}</a></p>
             </li>

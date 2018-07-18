@@ -49,7 +49,7 @@
                         <div class="col-sm-10 float-left">
                             <h1>{{obj.heading}}</h1></div>
                         <div class="col-sm-2 float-right">
-                            <img class="conclave-img" src="{{obj.image.url}}" alt="obj.image_alt">
+                            <img class="conclave-img" src="{{obj.image.url}}" alt="{{obj.image_alt}}">
                         </div>
                         <div class="col-sm-12 event_speakers">
                             Event Speakers
@@ -58,7 +58,7 @@
                         {% for speaker in speakers %}
                             <div class="col speakers">
                                 {% if speaker.image %}
-                                <img src="{{speaker.image.url}}">
+                                <img src="{{speaker.image.url}}" alt="{{speaker.image_alt}}">
                                 {% endif %}
                                 <strong>{{speaker.name}}</strong><em> {{speaker.designation}}</em> {{speaker.company}}</div>
                         {% endfor %}
@@ -157,7 +157,7 @@
                                         <figure>
                                             {% if speaker.image %}
                                             <i>
-                                                <img src="{{speaker.image.url}}">
+                                                <img src="{{speaker.image.url}}" alt="{{speaker.image_alt}}">
                                             </i>
                                             {% endif %}
                                             <figcaption>

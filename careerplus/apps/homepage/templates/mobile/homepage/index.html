@@ -107,7 +107,7 @@
                         <li>
                             <div class="media"> 
                                 <div class="media-body">
-                                    <p class="fs-15 bold"><a href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
+                                    <p class="fs-15 bold"><a title="{{ product.pHd|default:product.pNm}}" href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
                                     
                                     <div class="rating block ml-0 fs-12 pb-10">
                                         {% if product.pRC %}<sup class="fill-star"></sup>
@@ -120,7 +120,7 @@
                                     
                                 </div>
                                 <div class="media-left">
-                                  <a href="{{ product.pURL }}" class="home-banner-img"><img src="{{product.pImg}}" class="img-responsive" alt="{{product.pImA}}"></a>
+                                  <a title="{{ product.pHd|default:product.pNm}}" href="{{ product.pURL }}" class="home-banner-img" title="{{ product.pHd|default:product.pNm}}"><img src="{{product.pImg}}" alt="{{product.pImA}}" class="img-responsive" alt="{{product.pImA}}"></a>
                                 </div><!-- end of media body -->
                               </div><!-- end of media -->
                         </li>
@@ -132,7 +132,7 @@
                         <li>
                             <div class="media"> 
                                 <div class="media-body">
-                                    <p class="fs-15 bold"><a href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
+                                    <p class="fs-15 bold"><a title="{{ product.pHd|default:product.pNm|truncatechars:40 }}" href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
                                     
                                     <div class="rating block ml-0 fs-12 pb-10">
                                         <sup class="fill-star"></sup>
@@ -142,7 +142,7 @@
                                     
                                 </div>
                                 <div class="media-left">
-                                  <a href="{{ product.pURL }}" class="home-banner-img"><img src="{{product.pImg}}" class="img-responsive" alt="{{product.pImA}}"></a>
+                                  <a title="{{ product.pHd|default:product.pNm|truncatechars:40 }}" href="{{ product.pURL }}" class="home-banner-img"><img src="{{product.pImg}}" class="img-responsive" alt="{{product.pImA}}"></a>
                                 </div><!-- end of media body -->
                               </div><!-- end of media -->
                         </li>
@@ -165,52 +165,52 @@
         <p class="c6 mb-10">Browse the most popular and new courses!</p>
             
             <div class="media">
-                <a href="/courses/banking-and-finance/20/#courses1">
+                <a title="Finance" href="/courses/banking-and-finance/20/#courses1">
                     <div class="media-body">
                         <p class="title">Finance</p>
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
-                            <img src="{% static 'shinelearn/images/mobile/common/invetsment_banking.png' %}">
+                            <img src="{% static 'shinelearn/images/mobile/common/invetsment_banking.png' %}" alt="Finance">
                         </div>
                     </div>                
                 </a>
             </div>
             
             <div class="media">
-                <a href="/courses/operation-management/19/#courses2">
+                <a title="Operations" href="/courses/operation-management/19/#courses2">
                     <div class="media-body">
                         <p class="title">Operations</p>
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
-                            <img src="{% static 'shinelearn/images/mobile/common/operation-management.png' %}">
+                            <img src="{% static 'shinelearn/images/mobile/common/operation-management.png' %}" alt="Operation">
                         </div>
                     </div>                
                 </a>
             </div>
             
             <div class="media">
-                <a href="/courses/it-information-technology/it-language/80/#courses3">
+                <a title="Information Technology" href="/courses/it-information-technology/it-language/80/#courses3">
                     <div class="media-body">
                         <p class="title">Information Technology</p>
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
-                            <img src="{% static 'shinelearn/images/mobile/common/it.png' %}">
+                            <img src="{% static 'shinelearn/images/mobile/common/it.png' %}" alt="information">
                         </div>
                     </div>                
                 </a>
             </div>
             
             <div class="media">
-                <a href="/courses/hr-human-resource/25/#courses4">
+                <a title="Human Resources" href="/courses/hr-human-resource/25/#courses4">
                     <div class="media-body">
                         <p class="title">Human Resources</p>
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
-                            <img src="{% static 'shinelearn/images/mobile/common/hr.png' %}">
+                            <img src="{% static 'shinelearn/images/mobile/common/hr.png' %}" alt="human res">
                         </div>
                     </div>         
                 </a>
@@ -230,7 +230,7 @@
                 <ul class="trending-slide mt-10">
                     {% for tprd in job_asst_services %}
                     <li>
-                        <a href="{{tprd.pURL}}">
+                        <a title="{{tprd.pHd|default:tprd.pNm|truncatechars:40}}" href="{{tprd.pURL}}">
                             <div class="img-box">
                                 <img src="{{ tprd.pImg }}" class="img-responsive" alt="{{tprd.pImA}}">
                             </div>

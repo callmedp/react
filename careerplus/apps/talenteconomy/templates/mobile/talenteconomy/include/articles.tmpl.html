@@ -2,7 +2,7 @@
 
 {% for articlelist in articlelists %}
 <div class="media article-list" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
-  <a title="{{articlelist.title}}" href="{% url 'talent:te-articles-detail' articlelist.p_cat.slug articlelist.slug %}" itemprop="url">
+  <a title="{{articlelist.heading}}" href="{% url 'talent:te-articles-detail' articlelist.p_cat.slug articlelist.slug %}" itemprop="url">
     <figure class="media-left">
       {% thumbnail articlelist.image "96x73" crop="center" as im %}
       {% if amp %}
