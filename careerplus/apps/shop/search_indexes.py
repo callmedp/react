@@ -611,6 +611,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     'label': obj.name,
                     'mode': obj.get_studymode(),
                     'duration': obj.get_duration(),
+                    'dur_days': obj.get_duration_in_day(),
                     'type': obj.get_coursetype(),
                     'level': obj.get_courselevel(),
                     'certify': obj.get_cert(),
