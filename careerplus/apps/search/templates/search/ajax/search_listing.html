@@ -2,7 +2,6 @@
 {% for result in page.object_list %}
     <li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/Product">
         <a itemprop="url" title="{{ result.pHd|default:result.pNm }}" href="{{ result.pURL }}" target="_blank">
-        <meta itemprop="position" content="{{forloop.counter}}">
         <div class="media">
             <div class="media-left">
                 <figure >

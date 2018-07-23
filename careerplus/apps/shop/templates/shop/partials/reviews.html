@@ -15,7 +15,7 @@
           {% for review in prd_review_list %}
             <li class="box-panel" itemscope itemtype="http://schema.org/Review">
               <span class="review-heading" itemprop="name">{{review.get_remarks}}</span>
-              <div class="rating-review-box" >
+              <div class="rating-review-box" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
                   {% for star in review.get_ratings %}
                     {% if star == "*" %}
                       <figure class="full-star"></figure>
