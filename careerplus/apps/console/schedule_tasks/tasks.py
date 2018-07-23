@@ -246,7 +246,7 @@ def gen_product_list_task(task=None, user=None, status=None, vendor=None, produc
                         'Category', 'Study', 'Duration'
                     ]
                     count = 0
-                    path = '/scheduler/product_list/'
+                    path = 'scheduler/product_list/'
                     file_name = str(up_task.pk) + '_product_list_' + timestr + ".csv"
                     if not settings.IS_GCP:
                         upload_path = os.path.join(settings.MEDIA_ROOT + path)
