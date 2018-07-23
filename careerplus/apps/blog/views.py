@@ -607,9 +607,8 @@ class ShowCommentBoxView(TemplateView, LoadCommentMixin):
                 self.article = Blog.objects.get(id=self.art_id)
             except Exception as e:
                 logging.getLogger('error_log').error("Unable to get blog object%s" % str(e))
-
                 return ''
-            visibility = int(request.GET.get('visibility',1))
+            visibility = int(request.GET.get('visibility', 1))
             if visibility == 2:
                 self.template_name = 'talenteconomy/include/commentBox.tmpl.html'
             elif visibility == 3:
