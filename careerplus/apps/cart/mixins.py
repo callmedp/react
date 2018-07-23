@@ -267,7 +267,7 @@ class CartMixin(object):
             if not self.request.session.get('cart_pk'):
                 self.getCartObject()
             cart_pk = self.request.session.get('cart_pk')
-            cart_obj = Cart.objects.get(pk=cart_pk)
+            cart_obj = Cart.objects.filter(pk=cart_pk).first()
         if cart_obj:
             main_products = cart_obj.lineitems.filter(parent=None)
 
@@ -396,7 +396,7 @@ class CartMixin(object):
                     }
                     cart_items.append(data)
 
-                except  Exception as e:
+                except Exception as e:
                     logging.getLogger('error_log').error("Unable to add item on cart %s " % str(e))
                     m_prod.delete()
 
@@ -522,8 +522,8 @@ class CartMixin(object):
             self.getCartObject()
         cart_pk = self.request.session.get('cart_pk')
         if cart_pk:
-            cart_obj = Cart.objects.get(pk=cart_pk)
             try:
+                cart_obj = Cart.objects.get(pk=cart_pk)
                 parent_li = cart_obj.lineitems.get(
                     product=product)
             except Exception as e:
@@ -540,8 +540,8 @@ class CartMixin(object):
             self.getCartObject()
         cart_pk = self.request.session.get('cart_pk')
         if cart_pk:
-            cart_obj = Cart.objects.get(pk=cart_pk)
             try:
+                cart_obj = Cart.objects.get(pk=cart_pk)
                 product = Product.objects.get(id=sqs.id)
                 parent_li = cart_obj.lineitems.get(product=product)
             except Exception as e:
@@ -560,8 +560,8 @@ class CartMixin(object):
             self.getCartObject()
         cart_pk = self.request.session.get('cart_pk')
         if cart_pk:
-            cart_obj = Cart.objects.get(pk=cart_pk)
             try:
+                cart_obj = Cart.objects.get(pk=cart_pk)
                 parent_li = cart_obj.lineitems.get(product=product)
                 if parent_li and parent_li.product.is_course and parent_li.no_process == True:
                     pass
@@ -600,8 +600,8 @@ class CartMixin(object):
             self.getCartObject()
         cart_pk = self.request.session.get('cart_pk')
         if cart_pk:
-            cart_obj = Cart.objects.get(pk=cart_pk)
             try:
+                cart_obj = Cart.objects.get(pk=cart_pk)
                 product = Product.objects.get(id=sqs.id)
                 parent_li = cart_obj.lineitems.get(product=product)
                 if parent_li and parent_li.product.is_course and parent_li.no_process == True:

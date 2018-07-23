@@ -10,6 +10,7 @@ from django.conf import settings
 from django.utils import timezone
 from shine.core import ShineCandidateDetail
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.http import HttpResponseRedirect
 
 from geolocation.models import Country
 from order.models import OrderItem
@@ -966,3 +967,23 @@ class UserMixin(object):
             country_obj = Country.objects.get(phone='91')
 
         return country_obj
+
+
+class UserGroupMixin(object):
+    user_check_failure_path = '/console'  # can be path, url name or reverse_lazy
+    group_name = []
+
+    def check_group(self, user,group_name):
+        group_list = list(user.groups.all().values_list('name',flat=True))
+        for gname in group_name:
+            if gname not in group_list:
+                return False
+        return True
+
+    def user_check_failed(self, request, *args, **kwargs):
+        return HttpResponseRedirect(self.user_check_failure_path)
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.check_group(request.user,self.group_name):
+            return self.user_check_failed(request, *args, **kwargs)
+        return super(UserGroupMixin, self).dispatch(request, *args, **kwargs)
