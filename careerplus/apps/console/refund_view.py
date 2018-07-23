@@ -21,7 +21,7 @@ from order.models import RefundRequest, Order, OrderItem
 from blog.mixins import PaginationMixin
 from order.choices import TYPE_REFUND
 
-from .decorators import Decorate, stop_browser_cache, has_group
+from .decorators import Decorate, stop_browser_cache, has_group, check_group
 from .refund_form import RefundFilterForm
 
 
@@ -750,6 +750,7 @@ class RefundRequestEditView(DetailView, RefundInfoMixin):
 
 
 @Decorate(stop_browser_cache())
+@Decorate(check_group([settings.OPS_GROUP_LIST, settings.OPS_HEAD_GROUP_LIST]))
 class RefundRaiseRequestView(TemplateView, RefundInfoMixin):
     template_name = 'console/refund/raise-refundrequest.html'
     model = Order

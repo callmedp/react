@@ -61,8 +61,8 @@
 <div class="tab-container">
 
   <ul class="tabs box-panel p-0">
-    <li><a role="button" class="current" data-tab="tab-1">Recent</a></li>
-    <li><a role="button" data-tab="tab-2">Popularity</a></li>
+    <li class="current" data-tab="tab-1"><a role="button" >Recent</a></li>
+    <li data-tab="tab-2"><a role="button">Popularity</a></li>
   </ul>
 
   <!-- Tab content Satrts here -->
@@ -75,7 +75,7 @@
         {% if obj.image %}
             <figure class="media-left">
                 {% thumbnail obj.image "96x73" crop="center" as im %}
-                   <img class="media-object w-auto" src="{{im.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="...">
+                   <img class="media-object w-auto" src="{{im.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="{{obj.image_alt}}">
                 {% endthumbnail %}
             </figure>
         {% endif %}
@@ -119,7 +119,7 @@
             {% if obj.image %}
                 <figure class="media-left">
                     {% thumbnail obj.image "96x73" crop="center" as im %}
-                       <img class="media-object w-auto" src="{{im.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="...">
+                       <img class="media-object w-auto" src="{{im.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="{{obj.image_alt}}">
                     {% endthumbnail %}
                 </figure>
             {% endif %}

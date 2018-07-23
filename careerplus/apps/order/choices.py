@@ -1,9 +1,12 @@
+CANCELLED = 5
+OI_CANCELLED = 14
 STATUS_CHOICES = (
     (0, "Unpaid"),
     (1, "Paid"),
     (2, "InProcess"),
     (3, "Closed"),
     (4, "Archive"),
+    (CANCELLED, "Cancelled"),
 )
 
 SITE_CHOICES = (
@@ -38,6 +41,7 @@ OI_OPS_STATUS = (
     (11, 'Archived'),
     (12, 'Unhold by Vendor'),
     (13, 'Shine Resume'),
+    (OI_CANCELLED, 'Cancelled'),
 
     # flow1, flow3, flow12, flow13, and flow 5 status 21 - 40
     (21, 'Upload Draft'),

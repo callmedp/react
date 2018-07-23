@@ -2719,3 +2719,19 @@ footer {
 		margin: 20px 0 10px 0;
 		
 	}
+
+.credit-modal  {
+  .btn.approve, .btn.reject {
+	  background-color: #2f5da5;
+	  font-size: 14px;
+	  font-weight: 600;
+	  color: #fff;
+	  display: inline-block;
+	  width: 50%;
+	  line-height: 30px;
+	  margin: 20px 0 10px 0;
+  a {
+  	color: #fff;
+   }
+  }
+}

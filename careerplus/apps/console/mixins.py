@@ -475,6 +475,8 @@ class ActionUserMixin(object):
                     "%s-%s" % ('resume_upload', str(e)))
                 raise
             if oi_draft:
+                oi.oi_draft = oi_draft
+                oi.save()
                 oi.orderitemoperation_set.filter(
                     oi_status=4).update(
                     oi_draft=oi_draft,
