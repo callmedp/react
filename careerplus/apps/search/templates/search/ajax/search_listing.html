@@ -24,7 +24,13 @@
                 {% endfor %}
                 <meta itemprop="worstRating" content="1">
                 <meta itemprop="bestRating" content="5">
-                <strong itemprop="ratingValue">{{ result.pARx|floatformat }}/5</strong> | {{ result.pRC }} ratings
+                <meta itemprop="ratingValue" content="{{ result.pARx|floatformat }}">
+                <meta itemprop="reviewCount" content="{% if result.pRC > 0 %}
+                {{result.pRC}}
+                {% else %}
+                  1      
+                {% endif %}">
+                <strong>{{ result.pARx|floatformat }}/5</strong> | {{ result.pRC }} ratings
                 {% else %}
                     <strong>{{ result.pBC|default:"10" }}</strong> people bought
                 {% endif %}

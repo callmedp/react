@@ -183,10 +183,16 @@
 		    	<h2 itemprop="name">{{category_obj.name}} Programs</h2>
 		    	<ul class="listing1" id="product_list">
 		    		{% for product in products %}
-				        <li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/Course">
+				        <li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+				        	<meta itemprop="position" content="{{forloop.counter}}">
+				        	<meta itemprop="name" content="{{product.pNm}}">
+
+				        	<meta itemprop="name" content="{{product.pNm}}">
+
 				        	<a itemprop="url" title="{{product.pNm}}" 
 				        	href="{{product.pURL}}">
-					            <div class="media" itemprop="item" itemscope itemtype="http://schema.org/ProductGroup">
+
+					            <div class="media" >
 					            	<div class="media-left">
 					                	<img class="media-object" 
 					                	src="{{product.pImg}}" 
@@ -223,7 +229,9 @@
 						                    	</figure>
 						                    {% endif %}
 						                {% endfor %}
-						                    <strong itemprop="ratingValue">{{product.pARx |floatformat:1}}/5</strong>{% if product.pRC %} | {{ product.pRC }} ratings{% endif %} <b itemprop="reviewCount">{{product.pRC}} reviews</b>
+						                    <strong >{{product.pARx |floatformat:1}}/5</strong>{% if product.pRC %} | {{ product.pRC }} ratings{% endif %} <b>{{product.pRC}} reviews</b>
+						                    <meta itemprop="ratingValue" content="{{product.pARx |floatformat:1}}" />
+						                    <meta itemprop="reviewCount" content="{{product.pRC}}" />
 						                </div> 
 
 						                <div class="providers">
@@ -256,8 +264,9 @@
 		    {% endif %}
 		    <!-- Reviews -->
 		    {% if page_reviews %}
-		    <div id="reviews" class="reviews mb-40 scroll">
+		    <div id="reviews" class="reviews mb-40 scroll" itemscope itemtype="http://schema.org/Product">
 		    	<h2>Reviews</h2>
+			    <meta itemprop="name" content="{{category_obj.name|title}} Courses & Certifications" />
 		        <ul id="review_list">
 		        	{% for page_review in page_reviews %}
 		          		<li class="box-panel" itemscope itemtype="http://schema.org/Review">
@@ -284,7 +293,7 @@
 		            		<article itemprop="description">
 		            		{{page_review.content | safe}}
 		            		</article>
-		            		<span class="editor">By <a href="" itemprop="author">{{page_review.user_name}}</a>, {{page_review.created}}</span>
+		            		<span class="editor">By <a href="" itemprop="author">{% if page_review.user_name %}{{page_review.user_name}}{% else %}Anonymous{% endif %}</a>, {{page_review.created}}</span>
 		          		</li>
 		          	{% endfor %}
 		          	{% if page_reviews.has_next %}
