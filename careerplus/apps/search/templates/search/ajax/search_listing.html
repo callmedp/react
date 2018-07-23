@@ -22,17 +22,19 @@
                 {% for star in result.pStar %}
                 <figure {% if star == '*' %}class="full-star"{% elif star == '+'%}class="half-star"{% else %}class="blank-star"{% endif %}></figure>
                 {% endfor %}
+                <strong>{{ result.pARx|floatformat }}/5</strong> | {{ result.pRC }} ratings
+                {% else %}
+                    <strong>{{ result.pBC|default:"10" }}</strong> people bought
+                {% endif %}
                 <meta itemprop="ratingValue" content="{{ result.pARx|floatformat }}">
                 <meta itemprop="reviewCount" content="{% if result.pRC > 0 %}
                 {{result.pRC}}
                 {% else %}
                   1      
                 {% endif %}">
-                <strong>{{ result.pARx|floatformat }}/5</strong> | {{ result.pRC }} ratings
-                {% else %}
-                    <strong>{{ result.pBC|default:"10" }}</strong> people bought
-                {% endif %}
             </div>
+
+            <meta itemprop="position" content="{{forloop.counter}}">
 
             <div class="providers">
                Provider

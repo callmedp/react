@@ -29,7 +29,8 @@
                   <strong><span itemprop="ratingValue">{{review.average_rating|floatformat:"1"}}</span>/<span itemprop="bestRating">5</span></strong>
               </div>
               <article itemprop="description">{{review.content|safe}}</article>
-              <span class="editor" itemprop="author">By <a ><span >{% if review.user_name %}{{review.user_name}}{% else %}anonymous{% endif %}</span></a>, <span >{{review.created|date:"M d, Y" }}</span></span>
+              <meta itemprop="author" content="{% if review.user_name %}{{review.user_name}}{% else %}anonymous{% endif %}" />
+              <span class="editor">By <a ><span >{% if review.user_name %}{{review.user_name}}{% else %}anonymous{% endif %}</span></a>, <span >{{review.created|date:"M d, Y" }}</span></span>
 
               <div itemprop="itemReviewed" itemscope itemtype="http://schema.org/Product">
                 <meta itemprop="name" content="{{prd_H1}}" />

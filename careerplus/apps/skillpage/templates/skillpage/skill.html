@@ -32,7 +32,6 @@
                         <li itemprop="itemListElement" itemscope
 					      itemtype="http://schema.org/ListItem"><a href='{{bread.url}}' itemprop="name">{{bread.name}}
                         </a></li>
-                        <meta itemprop="position" content="{{forloop.counter}}" />
                     {% else %}
                         <li class="active" itemprop="name">{{bread.name}}</li>
                     {% endif %}
@@ -234,7 +233,10 @@
 						                      {% else %}
 						                        1      
 						                      {% endif %}">
-						                </div> 
+						                </div>
+
+						                <meta itemprop="position" content="{{forloop.counter}}">
+
 
 						                <div class="providers">
 						                   Providers
@@ -268,7 +270,6 @@
 		    {% if page_reviews %}
 		    <div id="reviews" class="reviews mb-40 scroll" itemscope itemtype="http://schema.org/Product">
 		    	<h2>Reviews</h2>
-			    <meta itemprop="name" content="{{category_obj.name|title}} Courses & Certifications" />
 		        <ul id="review_list">
 		        	{% for page_review in page_reviews %}
 		          		<li class="box-panel" itemscope itemtype="http://schema.org/Review">
@@ -295,7 +296,13 @@
 		            		<article itemprop="description">
 		            		{{page_review.content | safe}}
 		            		</article>
-		            		<span class="editor">By <a itemprop="author">{% if page_review.user_name %}{{page_review.user_name}}{% else %}Anonymous{% endif %}</a>, {{page_review.created}}</span>
+
+		            		 <meta itemprop="author" content="{% if page_review.user_name %}{{page_review.user_name}}{% else %}Anonymous{% endif %}" />
+
+		            		<span class="editor">By <a>{% if page_review.user_name %}{{page_review.user_name}}{% else %}Anonymous{% endif %}</a>, {{page_review.created}}</span>
+		            		<div itemprop="itemReviewed" itemscope itemtype="http://schema.org/Product">
+				                <meta itemprop="name" content="{{category_obj.name|title}} Courses & Certifications" />
+				            </div>
 		          		</li>
 		          	{% endfor %}
 		          	{% if page_reviews.has_next %}
