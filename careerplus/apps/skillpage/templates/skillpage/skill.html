@@ -235,7 +235,7 @@
 						                      {% endif %}">
 						                </div>
 
-						                <meta itemprop="position" content="{{forloop.counter}}">
+						                <!--meta itemprop="position" content="{{forloop.counter}}"-->
 
 
 						                <div class="providers">
@@ -268,7 +268,7 @@
 		    {% endif %}
 		    <!-- Reviews -->
 		    {% if page_reviews %}
-		    <div id="reviews" class="reviews mb-40 scroll" itemscope itemtype="http://schema.org/Product">
+		    <div id="reviews" class="reviews mb-40 scroll">
 		    	<h2>Reviews</h2>
 		        <ul id="review_list">
 		        	{% for page_review in page_reviews %}
