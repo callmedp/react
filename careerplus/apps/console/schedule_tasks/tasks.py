@@ -283,7 +283,7 @@ def gen_product_list_task(task=None, user=None, status=None, vendor=None, produc
                     up_task.percent_done = 100
                     up_task.status = 2
                     up_task.completed_on = timezone.now()
-                    up_task.file_generated = upload_path + file_name
+                    up_task.file_generated = upload_path
                     up_task.save()
 
                 except Exception as e:
