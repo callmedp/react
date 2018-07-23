@@ -1,11 +1,11 @@
 {% load static custom_filters %}
 {% for result in page.object_list %}
-    <li class="box-panel">
-        <a title="{{ result.pHd|default:result.pNm }}" href="{{ result.pURL }}" target="_blank">
+    <li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/Product">
+        <a itemprop="url" title="{{ result.pHd|default:result.pNm }}" href="{{ result.pURL }}" target="_blank">
         <div class="media">
             <div class="media-left">
                 <figure >
-                    <img class="media-object" src="{{ result.pImg}}" alt="{{ result.pImA|title }}">
+                    <img itemprop="logo" class="media-object" src="{{ result.pImg}}" alt="{{ result.pImA|title }}">
                 </figure>
             </div>
           <div class="media-body">
@@ -14,14 +14,17 @@
               {% if result.pNJ %}<span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">{{ result.pNJ }}</span> jobs available</span>{% endif %}
             </div>
 
-            <h3 class="listing-heading">{{ result.pHd|default:result.pNm }}</h3>
+            <h3 class="listing-heading" itemprop="name">{{ result.pHd|default:result.pNm }}</h3>
 
-            <div class="rating-review-box">
+            <div class="rating-review-box" itemprop="aggregateRating"
+              itemscope itemtype="http://schema.org/AggregateRating">
                 {% if result.pRC %}
                 {% for star in result.pStar %}
                 <figure {% if star == '*' %}class="full-star"{% elif star == '+'%}class="half-star"{% else %}class="blank-star"{% endif %}></figure>
                 {% endfor %}
-                <strong>{{ result.pARx|floatformat }}/5</strong> | {{ result.pRC }} ratings
+                <meta itemprop="worstRating" content="1">
+                <meta itemprop="bestRating" content="5">
+                <strong itemprop="ratingValue">{{ result.pARx|floatformat }}/5</strong> | {{ result.pRC }} ratings
                 {% else %}
                     <strong>{{ result.pBC|default:"10" }}</strong> people bought
                 {% endif %}

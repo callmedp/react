@@ -26,13 +26,15 @@
 	<header class="skill-header">
 		<div class="container">
 		<!-- breadcrums -->
-			<ol class="breadcrumb mt-30">
+			<ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
                 {% for bread in breadcrumbs %}
                     {% if bread.url %}
-                        <li><a href='{{bread.url}}'>{{bread.name}}
+                        <li itemprop="itemListElement" itemscope
+					      itemtype="http://schema.org/ListItem"><a href='{{bread.url}}' itemprop="name">{{bread.name}}
                         </a></li>
+                        <meta itemprop="position" content="{{forloop.counter}}" />
                     {% else %}
-                        <li class="active">{{bread.name}}</li>
+                        <li class="active" itemprop="name">{{bread.name}}</li>
                     {% endif %}
                 {% endfor %}
             </ol>
@@ -177,14 +179,14 @@
 
 		    <!-- certification programs listing -->
 		    {% if products %}
-		    <div id="programs" class="listing-box mb-40 scroll">
-		    	<h2>{{category_obj.name}} Programs</h2>
+		    <div id="programs" class="listing-box mb-40 scroll" itemscope itemtype="http://schema.org/ItemList">
+		    	<h2 itemprop="name">{{category_obj.name}} Programs</h2>
 		    	<ul class="listing1" id="product_list">
 		    		{% for product in products %}
-				        <li class="box-panel">
-				        	<a title="{{product.pNm}}" 
+				        <li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/Course">
+				        	<a itemprop="url" title="{{product.pNm}}" 
 				        	href="{{product.pURL}}">
-					            <div class="media">
+					            <div class="media" itemprop="item" itemscope itemtype="http://schema.org/ProductGroup">
 					            	<div class="media-left">
 					                	<img class="media-object" 
 					                	src="{{product.pImg}}" 
@@ -203,9 +205,10 @@
 					                  		</span>jobs available</span>
 					                  	{% endif %}
 					                	</div>
-					                	<h3 class="listing-heading">{{product.pNm}}</h3>
+					                	<h3 itemprop="name" class="listing-heading">{{product.pNm}}</h3>
 
-						                <div class="rating-review-box">
+						                <div class="rating-review-box" itemprop="aggregateRating"
+					                      itemscope itemtype="http://schema.org/AggregateRating">
 						                {% for rating in product.pStar %}
 						                    {% if rating == "*" %}
 						                    	<figure class="full-star">
@@ -220,7 +223,7 @@
 						                    	</figure>
 						                    {% endif %}
 						                {% endfor %}
-						                    <strong>{{product.pARx |floatformat:1}}/5</strong>{% if product.pRC %} | {{ product.pRC }} ratings{% endif %} <b>{{product.pRC}} reviews</b>
+						                    <strong itemprop="ratingValue">{{product.pARx |floatformat:1}}/5</strong>{% if product.pRC %} | {{ product.pRC }} ratings{% endif %} <b itemprop="reviewCount">{{product.pRC}} reviews</b>
 						                </div> 
 
 						                <div class="providers">
@@ -257,8 +260,8 @@
 		    	<h2>Reviews</h2>
 		        <ul id="review_list">
 		        	{% for page_review in page_reviews %}
-		          		<li class="box-panel">
-		            		<span class="review-heading">Excellent!</span>
+		          		<li class="box-panel" itemscope itemtype="http://schema.org/Review">
+		            		<span class="review-heading" itemprop="name">Excellent!</span>
 				            <div class="rating-review-box">
 				                {% for rating in page_review.get_ratings %}
 				                    {% if rating == "*" %}
@@ -274,12 +277,14 @@
 				                    	</figure>
 				                    {% endif %}
 				                {% endfor %}
-				                <strong>{{page_review.average_rating |floatformat:1}}/5</strong>
+				                <meta itemprop="worstRating" content="1">
+			                    <meta itemprop="bestRating" content="5">
+				                <strong itemprop="ratingValue">{{page_review.average_rating |floatformat:1}}/5</strong>
 				            </div>
-		            		<article>
+		            		<article itemprop="description">
 		            		{{page_review.content | safe}}
 		            		</article>
-		            		<span class="editor">By <a href="">{{page_review.user_name}}</a>, {{page_review.created}}</span>
+		            		<span class="editor">By <a href="" itemprop="author">{{page_review.user_name}}</a>, {{page_review.created}}</span>
 		          		</li>
 		          	{% endfor %}
 		          	{% if page_reviews.has_next %}
