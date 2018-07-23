@@ -1,14 +1,14 @@
 <div class="container">
     <div class="w100fl">
         <h2 class="pull-left">Reviews</h2>
-         <a class="write-review pull-right" role="button" data-toggle="collapse" id="write_review_btn" href="#collapseExampleform" aria-expanded="true" aria-controls="collapseExampleform">Write a review</a>
+         <a class="write-review pull-right" role="button" data-toggle="collapse" id="write_review_btn" href="#collapseExampleform" aria-expanded="true">Write a review</a>
     </div>
     <div class="clearfix"></div>
-    <div class="box row pb-30">
+    <div>
 
         <input type="hidden" name="page" id="id_review_page" value="{{prd_rv_page}}">
-        <div class="collapse {% if not prd_review_list %}in {% endif %} " id="collapseExampleform" aria-expanded="true" >
-          <div class="well box-panel write-review-box" id="write_review_container">
+        <div >
+          <div class="well box-panel write-review-box" {% if prd_review_list %}style="display:none" {% endif %}  id="write_review_container">
             <form role="form" id="feedback-form">
               {% csrf_token %}
               <div class="rating-feedback mt-10">
