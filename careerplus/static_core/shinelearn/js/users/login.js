@@ -13,10 +13,7 @@ window.fbAsyncInit = function() {
         FB.login(function(response) {
            if (response.status == 'connected')
                {
-                    var accessToken = response.authResponse.accessToken;
-                    var expiresIn = response.authResponse.expiresIn;
-                    window.location.href = '/user/social/login/?accessToken='+accessToken+'&expiresIn='+expiresIn+'&key=fb';
-                    console.log(response);
+                    ajaxCallSocialLogin(response.authResponse.accessToken, response.authResponse.expiresIn,'fb')
                } 
             else 
                 {
@@ -40,10 +37,7 @@ window.fbAsyncInit = function() {
 
         if(result['status']['signed_in'])
             {
-                console.log(result);
-                var access_token = result.access_token
-                var expiresIn = result.expires_in
-                window.location.href = '/user/social/login/?accessToken='+access_token+'&expiresIn='+expiresIn+'&key=gplus';
+                ajaxCallSocialLogin(result.access_token, result.expires_in,'gplus')
             }   
     }
 
@@ -97,6 +91,56 @@ function validate_linkedin_login_terms(){
         return false
     }
 }
+
+function saveReviewFormDataToLocalStorage(){
+    var formData = $('#feedback-form').serialize();
+    if(formData) {
+        localStorage.setItem('formData', formData );        
+    }
+}
+
+function googleLoginCallback(result) {
+
+    if(result['status']['signed_in']) {
+            saveReviewFormDataToLocalStorage()
+            ajaxCallSocialLogin(result.access_token, result.expires_in,'gplus',window.location.href)
+    }   
+}
+function reviewSocialLogin(next_url=undefined, social_id){
+    if(social_id=='fb'){
+        FB.login(function(response) {
+           if (response.status == 'connected')
+               {
+                    saveReviewFormDataToLocalStorage()
+                    ajaxCallSocialLogin(response.authResponse.accessToken, response.authResponse.expiresIn,'fb', next_url)
+               } 
+            else 
+                {
+                 console.log('User cancelled login or did not fully authorize.');
+                }
+        },{scope: 'email'});
+    }
+    else if(social_id=='gplus') {
+        var myParams = {
+            'clientid' : '960410196753-61mcnli7i3bfqfqljvc9qdl1vsvee890.apps.googleusercontent.com',
+            'cookiepolicy' : 'single_host_origin',
+            'callback' : 'googleLoginCallback', //callback function
+            'approvalprompt':'force',
+            'scope' : 'profile email',
+        };
+        gapi.auth.signIn(myParams);
+    }
+    
+}
+
+function ajaxCallSocialLogin(accessToken, expiresIn,social_id, next_url=undefined) {
+    var sign_in_url = '/user/social/login/?accessToken='+accessToken+'&expiresIn='+expiresIn+'&key='+social_id;
+    if(next_url){
+        sign_in_url = sign_in_url + '&next_url=' + next_url  ;
+    }
+    window.location.href = sign_in_url
+}
+
 
 $(document).ready(function() {
     $('#accept-condition').click(function(){

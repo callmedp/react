@@ -494,6 +494,12 @@ article {
   }
 }
 
+.collapse.in {
+    display: block;
+}
+.collapse {
+    display: none;
+}
 
 /* Call us  */
 @import '../components/call-us';

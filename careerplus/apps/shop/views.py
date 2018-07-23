@@ -13,12 +13,14 @@ from django.http import (
     HttpResponsePermanentRedirect,
 )
 from django.urls import reverse
+from django.utils import timezone
 from django.core.cache import cache
 from django.utils.http import urlquote
 from django.views.generic import (
     ListView,
     TemplateView,
-    View
+    View,
+    CreateView
 )
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
@@ -43,6 +45,10 @@ from order.models import OrderItem
 from .models import Product
 from review.models import DetailPageWidget
 from .mixins import CourseCatalogueMixin, LinkedinSeriviceMixin
+from users.forms import (
+    ModalLoginApiForm
+)
+from review.forms import ReviewForm
 
 
 class ProductInformationMixin(object):
@@ -402,8 +408,30 @@ class ProductInformationMixin(object):
         ctx['widget_obj'] = widget_obj
         ctx['product_main'] = product_main,
         ctx['sqs_main'] = sqs_main
-
+        ctx['is_logged_in'] = True if self.request.session.get('candidate_id') else False
+        ctx["loginform"] = ModalLoginApiForm()
         ctx['linkedin_resume_services'] = settings.LINKEDIN_RESUME_PRODUCTS
+        if self.request.session.get('candidate_id'):
+            candidate_id = self.request.session.get('candidate_id')
+            contenttype_obj = ContentType.objects.get_for_model(product)
+            review_obj = Review.objects.filter(
+                object_id=product.id, content_type=contenttype_obj, user_id=candidate_id
+            )
+            if review_obj.count() > 0:
+                ctx['review_obj'] = review_obj[0]
+            else:
+                ctx['review_obj'] = None
+            # user_reviews depicts if user already has a review for this product or not
+            product_type = ContentType.objects.get(
+                app_label='shop', model='product')
+            candidate_id = self.request.session.get('candidate_id', None)
+            user_reviews = Review.objects.filter(
+                content_type=product_type,
+                object_id=pk, status__in=[0, 1],
+                user_id=candidate_id
+            ).count()
+
+            ctx['user_reviews'] = True if user_reviews else False
         navigation = True
         if sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
             navigation = False
@@ -451,6 +479,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             "ggn_contact_full": settings.GGN_CONTACT_FULL,
             "ggn_contact": settings.GGN_CONTACT,
         })
+
         ctx.update(product_data)
 
         # pk = self.kwargs.get('pk')
@@ -750,6 +779,128 @@ class ProductReviewListView(ListView, ProductInformationMixin):
         context.update(self.get_reviews(
             self._product, self._page_kwarg))
         return context
+
+
+class ProductReviewCreateView(CreateView):
+
+    def __init__(self):
+        self.oi = None
+        self.candidate_id = None
+        self.rating = None
+        self.sel_rat = None
+
+
+    def post(self, request, *args, **kwargs):
+        """
+        This method create reviews for individual product.
+        """
+        self.candidate_id = request.session.get('candidate_id', None)
+        self.product_pk = request.POST.get('product_id')
+        self.product = None
+        data = {
+            "display_message": 'Thank you for posting a review. It will be displayed on the site after moderation',
+            "success": False
+        }
+        review_form = ReviewForm(request.POST)
+        if request.is_ajax() and self.product_pk and self.candidate_id:
+            if review_form.is_valid():
+                try:
+
+                    self.product = Product.objects.get(pk=self.product_pk)
+                    contenttype_obj = ContentType.objects.get_for_model(self.product)
+                    review_obj = Review.objects.filter(
+                        object_id=self.product.id,
+                        content_type=contenttype_obj,
+                        user_id=self.candidate_id
+                    )
+                    review = request.POST.get('review', '').strip()
+                    rating = int(request.POST.get('rating', 1))
+
+                    if rating and not review_obj and self.product:
+                        name = ''
+                        if request.session.get('first_name'):
+                            name += request.session.get('first_name')
+                        if request.session.get('last_name'):
+                            name += ' ' + request.session.get('last_name')
+                        product = self.oi.product if self.oi else self.product
+                        email = request.session.get('email')
+                        content_type = ContentType.objects.get(app_label="shop", model="product")
+                        review_obj = Review.objects.create(
+                            content_type=content_type,
+                            object_id=product.id,
+                            user_name=name,
+                            user_email=email,
+                            user_id=self.candidate_id,
+                            content=review,
+                            average_rating=rating
+                        )
+                        extra_content_obj = ContentType.obj.get(app_label="shop", model="product")
+
+                        review_obj.extra_content_type = extra_content_obj
+                        review_obj.extra_object_id = self.oi.id if self.oi else self.product.id
+                        review_obj.save()
+                        data['success'] = True
+                    else:
+                        if review_obj:
+                            data['display_message'] = "You have already submitted feedback"
+                        else:
+                            data['display_message'] = "select valid input for feedback"
+
+                except Exception as e:
+                    logging.getLogger('error_log').error(str(e))
+
+                    data['display_message'] = "select valid input for feedback"
+                    data['success'] = False
+                return HttpResponse(json.dumps(data), content_type="application/json")
+            else:
+                data['display_message'] = None
+                return HttpResponse(json.dumps(review_form.errors), content_type="application/json")
+        else:
+            return HttpResponseForbidden()
+
+
+class ProductReviewEditView(View):
+
+    http_method_names = ['post']
+
+    def post(self, request, *args, **kwargs):
+        product_pk = self.request.POST.get('product_id')
+        candidate_id = request.session.get('candidate_id', None)
+        data = {
+            "display_message": 'Thank you for posting a review. It will be displayed on the site after moderation',
+            "success": False
+        }
+        review_form = ReviewForm(request.POST)
+        if self.request.is_ajax() and candidate_id and product_pk:
+            if review_form.is_valid():
+                review = request.POST.get('review', '').strip()
+                rating = int(request.POST.get('rating', 1))
+                title = request.POST.get('title','').strip()
+
+                try:
+                    product_obj = Product.objects.get(pk=product_pk)
+                    contenttype_obj = ContentType.objects.get_for_model(product_obj)
+                    review_obj = Review.objects.filter(object_id=product_obj.id, content_type=contenttype_obj, user_id=candidate_id)
+
+                    # Setting status back to 0 for adding this review again to moderation list
+                    if review_obj[0].user_id == candidate_id:
+                        update_data = {
+                            "content": review,
+                            "average_rating": rating,
+                            "status": 0,
+                            "title": title,
+                            "created": timezone.now()
+                        }
+                        review_obj.update(**update_data)
+                        data['success'] = True
+                    else:
+                        data['display_message'] = "Not Allowed"
+                except Exception as e:
+                    logging.getLogger('error_log').error("%s" % str(e))
+            else:
+                data = review_form.errors
+
+        return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 class CourseCatalogueView(TemplateView, MetadataMixin, CourseCatalogueMixin):

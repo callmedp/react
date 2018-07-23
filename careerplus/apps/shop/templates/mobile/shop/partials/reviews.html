@@ -1,9 +1,74 @@
-{% if prd_review_list %}
 <div class="container">
     <div class="w100fl">
         <h2 class="pull-left">Reviews</h2>
+         <a class="write-review pull-right" role="button" data-toggle="collapse" id="write_review_btn" href="#collapseExampleform" aria-expanded="true" aria-controls="collapseExampleform">Write a review</a>
     </div>
     <div class="clearfix"></div>
+    <div class="box row pb-30">
+
+        <input type="hidden" name="page" id="id_review_page" value="{{prd_rv_page}}">
+        <div class="collapse {% if not prd_review_list %}in {% endif %} " id="collapseExampleform" aria-expanded="true" >
+          <div class="well box-panel write-review-box" id="write_review_container">
+            <form role="form" id="feedback-form">
+              {% csrf_token %}
+              <div class="rating-feedback mt-10">
+                <fieldset class="rate">
+                  <input type="radio" id="rating5" name="rating" value="5" {% if review_obj.average_rating == 5 %} checked {% endif %}>
+                  <label for="rating5" title="5 stars"></label>
+                  <input type="radio" id="rating4" name="rating" value="4"  {% if review_obj.average_rating == 4 %} checked {% endif %}>
+                  <label for="rating4" title="4 stars"></label>
+                  <input type="radio" id="rating3" name="rating" value="3"  {% if review_obj.average_rating == 3 %} checked {% endif %}>
+                  <label for="rating3" title="3 stars"></label>
+                  <input type="radio" id="rating2" name="rating" value="2"  {% if review_obj.average_rating == 2 %} checked {% endif %}>
+                  <label for="rating2" title="2 stars"></label>
+                  <input type="radio" id="rating1" name="rating" value="1" checked >
+                  <label for="rating1" title="1 star"></label>
+                </fieldset>
+               <strong id="selected-rating">{% if review_obj.average_rating %} {{review_obj.average_rating}} {% else  %} 1 {% endif%}<small>/5</small></strong>
+                  <div><span>Click to rate on scale of 1-5</span></br></div>
+                  <span class="error" style="color:red" id="rating-error"></span>      
+
+              </div>
+                <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Title</label>
+                <div class="col-sm-10">
+                  <input class="form-control" type="text" name="title" required maxlength="100" {%if review_obj.title %}  value="{{review_obj.title}}" {% endif %} >
+                  <small>
+                    Max 20 characters
+                    <p> 
+                      <span class="error" style="color:red" id="title-error"></span>  
+                    </p>
+                  </small>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputPassword3" name="review" placeholder="Feedback"  class="col-sm-2 control-label" >Review</label>
+                <div class="col-sm-10">
+                  <textarea class="form-control"  id="id_review" rows="4" maxlength="1500" name="review" required>{%if review_obj.content %}{{review_obj.content}}{% endif %}</textarea>
+                  <small>
+                  Max 1500 characters
+                  <p>
+                    <span class="error" style="color:red" id="review-error"></span>  
+                  </p>
+                  </small>
+                   
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <input type="hidden" name="product_id" value="{{product.pk}}" />
+                  {% if not review_obj %}
+                  <button type="button" onclick="submit_feedback_form('{{is_logged_in}}')" class="btn btn-round btn-blue">Submit</button>
+                  {% else  %}
+                  <button type="button" onclick="update_feedback_form({{product.pk}})" class="btn btn-round btn-blue">Update</button>
+                  {% endif %}
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
+    {% if prd_review_list %}
     <div class="box row pb-30">
         <div class="review-container rel">
             <ul class="review-slide">
@@ -29,5 +94,69 @@
             </ul>
         </div><!-- end of review wrap -->
     </div><!-- end of box -->
+    {% endif %}
+
 </div><!-- end of container -->
-{% endif %}
+{% if not is_logged_in%}
+
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="mySmallModalLabel" id="login-modal">
+  <div class="modal-helper">
+    <div class="modal-vertical-center">
+      <!-- Modal content -->
+        <div class="modal-content">
+         <div class="header">
+           <h2>Login</h2>
+           <p><label id="non-field-error" class="error"></label></p>
+           <a role="button" class="icon-close" onclick="closePopup();"></a>
+        </div><!-- end of header -->
+
+        <div class="content-box pt-0 pb-0">
+           
+           <div class="text-center mt-10">
+              <form autocomplete="off" role method="post" id="login_form" >{% csrf_token %}
+            
+            <div class="form-group {% if loginform.email.errors %} error {% endif %}">
+              {{loginform.email}}
+              <span class="error-txt">{{loginform.email.errors.0}}</span>
+            </div>
+            <div class="form-group {% if loginform.password.errors %} error {% endif %}">
+                 {{loginform.password}}
+                 <span class="error-txt">{{loginform.password.errors.0}}</span>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input type="checkbox" name="remember_me" class="form-check-input">
+                Remember me
+              </label>
+            </div>
+            <div class="form-group">
+              <button type="button" id="login-button" class="btn btn-round btn-blue">Login and submit</button>
+              <div>
+              <small class="form-text text-muted text-center">
+              <a href="javascript:void(0)" data-toggle="modal" data-dismiss="modal" 
+                id="modalforgot">
+                  Forgot Password?
+                </a>
+              </small>
+              </div>
+            </div>
+            <div>
+              <a class="facebook" onclick="reviewSocialLogin(window.location.href,'fb');"></a>
+            </div>
+            <div class="social-login">
+              <a class="facebook" onclick="reviewSocialLogin(window.location.href,'fb');"></a>
+              <a class="linkedin" onclick="reviewLinkedInLogin()"></a>
+              <a class="gplus" onclick="reviewSocialLogin(window.location.href,'gplus');"></a>
+            </div>
+            <small class="form-text text-muted text-center">Don’t have an account yet? <a role="button" data-toggle="modal" data-target=".bs-example-modal-sm2" data-dismiss="modal">Register Now</a></small>
+          </form>
+
+           </div>
+        </div><!-- Tab content ends here -->
+       </div><!-- end of modal content here -->
+    </div><!-- end of modal-vertical-center -->
+  </div><!-- end of modal-helper -->
+</div>
+
+{% endif %}   
