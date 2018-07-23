@@ -255,7 +255,7 @@ def gen_product_list_task(task=None, user=None, status=None, vendor=None, produc
                         csvfile = open(upload_path + file_name, 'w', newline='')
                     else:
                         upload_path = path + file_name
-                        GCPPrivateMediaStorage().open(upload_path, 'w')
+                        csvfile = GCPPrivateMediaStorage().open(upload_path, 'w')
                     f = True
                     csvwriter = csv.DictWriter(
                         csvfile, delimiter=',', fieldnames=header_fields)
