@@ -223,6 +223,7 @@ def gen_product_list_task(task=None, user=None, status=None, vendor=None, produc
     f = False
     try:
         up_task = Scheduler.objects.get(pk=task)
+        csvfile = None
         # excluding Variation-child product
         products_list = Product.objects.all()
         if vendor:
