@@ -239,14 +239,14 @@ def gen_product_list_task(task=None, user=None, status=None, vendor=None, produc
                 total_rows = products_list.count()
                 try:
                     user = User.objects.get(pk=user)
-                    timestr = time.strftime("%Y_%m_%d_%H_%m_%S")
+                    timestr = time.strftime("%Y_%m_%d")
                     header_fields = [
                         'ID', 'Name', 'Price', 'Visible_On_Site', 'Price',
                         'Visible_On_CRM', 'Type', 'Product_Class', 'Parent', 'Vendor',
                         'Category', 'Study', 'Duration'
                     ]
                     count = 0
-                    path = 'scheduler/product_list/'
+                    path = 'scheduler/' + timestr + '/'
                     file_name = str(up_task.pk) + '_product_list_' + timestr + ".csv"
                     if not settings.IS_GCP:
                         upload_path = os.path.join(settings.MEDIA_ROOT + path)
@@ -255,7 +255,7 @@ def gen_product_list_task(task=None, user=None, status=None, vendor=None, produc
                         csvfile = open(upload_path + file_name, 'w', newline='')
                     else:
                         upload_path = path + file_name
-                        csvfile = GCPPrivateMediaStorage().open(upload_path, 'w')
+                        csvfile = GCPPrivateMediaStorage().open(upload_path, 'wb')
                     f = True
                     csvwriter = csv.DictWriter(
                         csvfile, delimiter=',', fieldnames=header_fields)
@@ -283,6 +283,7 @@ def gen_product_list_task(task=None, user=None, status=None, vendor=None, produc
                     up_task.percent_done = 100
                     up_task.status = 2
                     up_task.completed_on = timezone.now()
+                    csvfile.close()
                     up_task.file_generated = upload_path
                     up_task.save()
 
