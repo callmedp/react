@@ -969,7 +969,7 @@ class UserMixin(object):
         return country_obj
 
 
-class User_GroupMixin(object):
+class UserGroupMixin(object):
     user_check_failure_path = '/console'  # can be path, url name or reverse_lazy
     group_name = []
 
@@ -986,4 +986,4 @@ class User_GroupMixin(object):
     def dispatch(self, request, *args, **kwargs):
         if not self.check_group(request.user,self.group_name):
             return self.user_check_failed(request, *args, **kwargs)
-        return super(User_GroupMixin, self).dispatch(request, *args, **kwargs)
+        return super(UserGroupMixin, self).dispatch(request, *args, **kwargs)

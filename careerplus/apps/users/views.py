@@ -24,7 +24,7 @@ from shine.core import ShineCandidateDetail
 from core.mixins import TokenExpiry, TokenGeneration
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCPInvoiceStorage
 from order.models import OrderItem
-from users.mixins import WriterInvoiceMixin,User_GroupMixin
+from users.mixins import WriterInvoiceMixin,UserGroupMixin
 
 from emailers.tasks import send_email_task
 
@@ -591,7 +591,7 @@ class DownloadWriterInvoiceView(View):
         return HttpResponseRedirect(reverse('console:dashboard'))
 
 
-class DownloadMonthlyWriterInvoiceView(User_GroupMixin,TemplateView):
+class DownloadMonthlyWriterInvoiceView(UserGroupMixin,TemplateView):
     template_name = "invoice/invoice_monthly_download.html"
     month = []
     path = "invoice/user/"
