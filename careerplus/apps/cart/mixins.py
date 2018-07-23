@@ -267,10 +267,7 @@ class CartMixin(object):
             if not self.request.session.get('cart_pk'):
                 self.getCartObject()
             cart_pk = self.request.session.get('cart_pk')
-        try:
-            cart_obj = Cart.objects.get(pk=cart_pk)
-        except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            cart_obj = Cart.objects.filter(pk=cart_pk).first()
         if cart_obj:
             main_products = cart_obj.lineitems.filter(parent=None)
 
