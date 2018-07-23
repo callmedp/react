@@ -1,4 +1,3 @@
-<!-- Reviews container -->
 
 <!-- Reviews container -->
 <section class="container-fluid detail-box">
@@ -78,50 +77,17 @@
               </form>
             </div>
           </div>
-          {% if prd_review_list %}
           
-{% if prd_rv_page == 1 %}
           <ul id="id_review_list">
-{% endif %}
           
-          {% for review in prd_review_list %}
-            <li class="box-panel" >
-              <span class="review-heading" >{{review.get_remarks}}</span>
-              <div class="rating-review-box" >
-                  {% for star in review.get_ratings %}
-                    {% if star == "*" %}
-                      <figure class="full-star"></figure>
-                    {% elif star == "+" %}
-                      <figure class="half-star"></figure>
-                    {% elif star == "-" %}
-                      <figure class="blank-star"></figure>
-                    {% endif %}
-                  {% endfor %}
-                  
-                  <strong><span >{{review.average_rating|floatformat:"1"}}</span>/<span >5</span></strong>
-              </div>
-              <article >{{review.content|safe}}</article>
-              <span class="editor">By <a ><span >{% if review.user_name %}{{review.user_name}}{% else %}anonymous{% endif %}</span></a>, <span >{{review.created|date:"M d, Y" }}</span></span>
-              
-            </li>
-          {% endfor %}
-          {% if prd_review_list.has_next %}
-            
-            <a style="cursor:pointer;text-decoration:none;" data-product="{{product.id}}" class="load-more review-load-more" id="loadmorereviewbtn"> Load more</a>
-          {% endif %}
-{% if prd_rv_page == 1 %}
+          {% include 'shop/partials/review_snippet.html' %}
 
-            </ul>
-            {%endif%}
-
-        {%endif%}
-          
-          
+          </ul>
         </div>
     </div>  
   </div>    
 </section>   
-{% if not is_logged_in%}
+{% if not is_logged_in %}
 <!--modals-->
 <!--login-->
 <div class="modal fade bs-example-modal-sm login-div" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="login-modal">

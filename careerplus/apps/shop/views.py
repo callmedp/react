@@ -758,6 +758,7 @@ class ProductReviewListView(ListView, ProductInformationMixin):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
+            self.template_name = 'shop/partials/review_snippet.html'
             self._page_kwarg = self.request.GET.get('pg', 1)
             try:
                 self._product = Product.objects.get(
@@ -815,6 +816,7 @@ class ProductReviewCreateView(CreateView):
                     )
                     review = request.POST.get('review', '').strip()
                     rating = int(request.POST.get('rating', 1))
+                    title = request.POST.get('title', '')
 
                     if rating and not review_obj and self.product:
                         name = ''
@@ -832,9 +834,10 @@ class ProductReviewCreateView(CreateView):
                             user_email=email,
                             user_id=self.candidate_id,
                             content=review,
-                            average_rating=rating
+                            average_rating=rating,
+                            title=title
                         )
-                        extra_content_obj = ContentType.obj.get(app_label="shop", model="product")
+                        extra_content_obj = ContentType.objects.get(app_label="shop", model="product")
 
                         review_obj.extra_content_type = extra_content_obj
                         review_obj.extra_object_id = self.oi.id if self.oi else self.product.id

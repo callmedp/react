@@ -1,0 +1,23 @@
+{% for review in prd_review_list|slice:"0:4" %}
+  <li>
+      <div class="wrap">
+      {% for star in review.get_ratings %}
+          <div class="rating inline-block ml-0 fs-12">
+              {% if star == "*" %}
+                  <sup class="fill-star"></sup>
+              {% else %}
+                  <sup class="unfill-star"></sup>
+              {% endif %}
+          </div><!-- end of star rating -->
+      {% endfor %}
+          <p>{{review.content|safe}}.</p>
+          <p class="fs-12 c9 pb-0">
+              By {% if review.user_name %} {{review.user_name}} {% else %} anonymous {% endif %}, {{review.created|date:"M d, Y"}} 
+          </p>
+      </div>
+  </li>
+{% endfor %}   
+{% if prd_review_list.has_next %}
+    
+    <a style="cursor:pointer;text-decoration:none;" data-product="{{product.id}}" class="load-more review-load-more" id="loadmorereviewbtn"> Load more</a>
+  {% endif %}

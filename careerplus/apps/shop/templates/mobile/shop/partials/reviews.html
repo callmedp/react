@@ -68,34 +68,13 @@
           </div>
         </div>
     </div>
-    {% if prd_review_list %}
     <div class="box row pb-30">
         <div class="review-container rel">
             <ul class="review-slide">
-            {% for review in prd_review_list|slice:"0:4" %}
-                <li>
-                    <div class="wrap">
-                    {% for star in review.get_ratings %}
-                        <div class="rating inline-block ml-0 fs-12">
-                            {% if star == "*" %}
-                                <sup class="fill-star"></sup>
-                            {% else %}
-                                <sup class="unfill-star"></sup>
-                            {% endif %}
-                        </div><!-- end of star rating -->
-                    {% endfor %}
-                        <p>{{review.content|safe}}.</p>
-                        <p class="fs-12 c9 pb-0">
-                            By {% if review.user_name %} {{review.user_name}} {% else %} anonymous {% endif %}, {{review.created|date:"M d, Y"}} 
-                        </p>
-                    </div>
-                </li>
-            {% endfor %}   
+              {% include 'mobile/shop/partials/review_snippet.html'%}
             </ul>
         </div><!-- end of review wrap -->
     </div><!-- end of box -->
-    {% endif %}
-
 </div><!-- end of container -->
 {% if not is_logged_in%}
 
