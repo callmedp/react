@@ -78,6 +78,29 @@
         });
 
 
+        $(document).on('click', '#load-more-art', function(event) {
+	        this.disabled = true;
+	        var formData = $("#load-te-art-form").serialize();
+	        $.ajax({
+	            url : "/talenteconomy/load-more-article/",
+	            type: "GET",
+	            data : formData,
+	            dataType: 'json',
+	            success: function(data, textStatus, jqXHR)
+	            {
+
+	                $("#talent_art_load_more").remove();
+	                $("#list-container-id").append(data.article_list);
+	            },
+	            error: function (jqXHR, textStatus, errorThrown)
+	            {
+	                alert("Can't load more");
+	            }
+	         });
+        });
+
+
+
 	}
 
 	Article.init = init;

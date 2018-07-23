@@ -3,7 +3,7 @@ from users.views import (
     DownloadBoosterResume, ForgotPasswordResetView,
     ForgotHtmlView, ForgotPasswordEmailView,
     SocialLoginView, LinkedinLoginView,
-    GenerateWriterInvoiceView, DownloadWriterInvoiceView)
+    GenerateWriterInvoiceView, DownloadWriterInvoiceView,DownloadMonthlyWriterInvoiceView)
 
 
 urlpatterns = [
@@ -27,5 +27,9 @@ urlpatterns = [
     url(r'^download-writer-invoice/$',
         DownloadWriterInvoiceView.as_view(),
         name='download-writer-invoice'),
+
+    url(r'^download-monthly-writer-invoice/$',
+        DownloadMonthlyWriterInvoiceView.as_view(),
+        name='download-monthly-writer-invoice'),
 
 ]
