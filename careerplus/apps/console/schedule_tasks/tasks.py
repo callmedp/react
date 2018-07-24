@@ -262,13 +262,13 @@ def gen_product_list_task(task=None, user=None, status=None, vendor=None, produc
                     csvwriter.writeheader()
                     for product in products_list:
                         product_row = {}
-                        product_row['Name'] = product.name
+                        product_row['Name'] = product.get_name()
                         product_row['ID'] = product.id
-                        product_row['Price'] = product.inr_price
+                        product_row['Price'] = product.get_inr_price()
                         product_row['Visible_On_CRM'] = True if product.active else False
                         product_row['Visible_On_Site'] = True if (product.is_indexable and product.active) else False
                         product_row['Type'] = product.get_type_product_display()
-                        product_row['Product_Class'] = product.product_class.slug if product.product_class else None
+                        product_row['Product_Class'] = product.product_class.slug if product.get_product_class() else None
                         product_row['Parent'] = product.get_parent().name if product.get_parent() else None
                         product_row['Vendor'] = product.get_vendor()
                         product_row['Category'] = ", ".join([cat.__str__() for cat in product.categories.all()])
