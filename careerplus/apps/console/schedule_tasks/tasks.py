@@ -262,7 +262,7 @@ def gen_product_list_task(task=None, user=None, status=None, vendor=None, produc
                     csvwriter.writeheader()
                     for product in products_list:
                         product_row = {}
-                        product_row['Name'] = product.get_name()
+                        product_row['Name'] = product.get_name
                         product_row['ID'] = product.id
                         product_row['Price'] = product.get_inr_price()
                         product_row['Visible_On_CRM'] = True if product.active else False
