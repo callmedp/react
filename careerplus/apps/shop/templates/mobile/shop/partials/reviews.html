@@ -21,7 +21,7 @@
                   <label for="rating3" title="3 stars"></label>
                   <input type="radio" id="rating2" name="rating" value="2"  {% if review_obj.average_rating == 2 %} checked {% endif %}>
                   <label for="rating2" title="2 stars"></label>
-                  <input type="radio" id="rating1" name="rating" value="1" {% if review_obj.average_rating|floatformat == 2 or not review_obj.average_rating %} checked {% endif %}  >
+                  <input type="radio" id="rating1" name="rating" value="1" {%  if review_obj.average_rating == 1 or not review_obj.average_rating %} checked {% endif %}  >
                   <label for="rating1" title="1 star"></label>
                 </fieldset>
                <strong id="selected-rating">{% if review_obj.average_rating %} {{review_obj.average_rating|floatformat }} {% else  %} 1 {% endif%}<small>/5</small></strong>

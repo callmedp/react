@@ -122,7 +122,7 @@ function reviewSocialLogin(next_url=undefined, social_id){
     }
     else if(social_id=='gplus') {
         var myParams = {
-            'clientid' : '960410196753-61mcnli7i3bfqfqljvc9qdl1vsvee890.apps.googleusercontent.com',
+            'clientid' : '653414155457-ufec3m78n4ctcvfqn34jf8skn4mv909e.apps.googleusercontent.com',
             'cookiepolicy' : 'single_host_origin',
             'callback' : 'googleLoginCallback', //callback function
             'approvalprompt':'force',
