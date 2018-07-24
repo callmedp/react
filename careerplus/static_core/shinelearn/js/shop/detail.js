@@ -38,7 +38,6 @@ $("#feedback-form").validate({
       },
       review: {
           maxlength: 1500,
-          custom_review:true,
       },
       title: {
           required: true,

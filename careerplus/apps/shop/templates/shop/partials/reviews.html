@@ -54,7 +54,7 @@
                 <div class="form-group">
                   <label for="inputPassword3" name="review" placeholder="Feedback"  class="col-sm-2 control-label" >Review</label>
                   <div class="col-sm-10">
-                    <textarea class="form-control"  id="id_review" rows="4" maxlength="1500" name="review" >{%if review_obj.content %}{{review_obj.content}}{% endif %}</textarea>
+                    <textarea class="form-control"  id="id_review" rows="4" maxlength="1500" name="review" required >{%if review_obj.content %}{{review_obj.content}}{% endif %}</textarea>
                     <small>
                     Max 1500 characters
                     <p>
