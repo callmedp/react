@@ -180,7 +180,8 @@ function submit_feedback_form(is_logged_in) {
   else {
     var flag = $('#feedback-form').valid();
     if(flag){
-      $('#login-modal').modal('show');      
+      $('.modal').hide();
+      $('.modal').fadeIn(200);       
     }
   }
 }
@@ -228,3 +229,11 @@ $('#login-button').click(function() {
 $("#write_review_btn").click(function() {
   $("#write_review_container").slideToggle();
 });
+
+function openPopup() {
+   
+}
+
+function closePopup() {
+    $('.modal').fadeOut(300);
+}
