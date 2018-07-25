@@ -38,6 +38,10 @@ class ReCaptchaMixin(object):
 class LeadManagement(View):
 
     @csrf_exempt
+    def dispatch(self,request,*args,**kwargs):
+        return super(LeadManagement,self).dispatch(request,*args,**kwargs)
+
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         created = False
         try:
@@ -115,10 +119,6 @@ class LeadManagement(View):
         response_dict = json.dumps({'status': created, })
         response = HttpResponse(response_dict)
         return response
-
-    def dispatch(self, *args, **kwargs):
-        return super(LeadManagement, self).dispatch(*args, **kwargs)
-
 
 class LeadManagementWithCaptcha(View, ReCaptchaMixin):
 
