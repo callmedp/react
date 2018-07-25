@@ -71,24 +71,24 @@ DURATION_DICT = {
 
 #
 def convert_to_month(days=0):
-#     if days:
-#         months = int(days)//30
-#         if 0 <= months <= 1:
-#             return 'D0'
-#         elif 1 < months <= 3:
-#             return 'D1'
-#         elif 3 < months <= 6:
-#             return 'D2'
-#         elif 6 < months <= 9:
-#             return 'D3'
-#         elif 9 < months <= 12:
-#             return 'D4'
-#         elif 12 < months <= 24:
-#             return 'D5'
-#         elif 24 < months <= 36:
-#             return 'D6'
-#         elif 36 < months:
-#             return 'D7'
+    if days:
+        months = int(days)//30
+        if 0 <= months <= 1:
+            return 'D0'
+        elif 1 < months <= 3:
+            return 'D1'
+        elif 3 < months <= 6:
+            return 'D2'
+        elif 6 < months <= 9:
+            return 'D3'
+        elif 9 < months <= 12:
+            return 'D4'
+        elif 12 < months <= 24:
+            return 'D5'
+        elif 24 < months <= 36:
+            return 'D6'
+        elif 36 < months:
+            return 'D7'
     return days
 #
 
