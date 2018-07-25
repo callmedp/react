@@ -7,6 +7,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from django.core.management.base import BaseCommand
+from django.contrib.contenttypes.models import ContentType
 from ...models import Product
 from review.models import Review
 
@@ -31,7 +32,8 @@ class Command(BaseCommand):
         db_user = db_settings.get('USER')
         db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
         cursor = db.cursor()
-        cursor.execute('select object_id, avg(average_rating), count(id) from review_review where content_type_id = 55 group by (object_id);',{})
+        content_type_id = ContentType.objects.get(app_label="shop", model="product").id
+        cursor.execute('select object_id, avg(average_rating), count(id) from review_review where content_type_id = '+str(content_type_id)+' group by (object_id);',{})
 
         result = cursor.fetchall()
         try:
