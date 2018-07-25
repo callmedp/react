@@ -241,7 +241,7 @@ def gen_product_list_task(task=None, user=None, status=None, vendor=None, produc
                     user = User.objects.get(pk=user)
                     timestr = time.strftime("%Y_%m_%d")
                     header_fields = [
-                        'ID', 'Name', 'Price', 'Visible_On_Site', 'Price',
+                        'ID', 'Name', 'Price', 'Visible_On_Site',
                         'Visible_On_CRM', 'Type', 'Product_Class', 'Parent', 'Vendor',
                         'Category', 'Study', 'Duration'
                     ]
@@ -249,10 +249,11 @@ def gen_product_list_task(task=None, user=None, status=None, vendor=None, produc
                     path = 'scheduler/' + timestr + '/'
                     file_name = str(up_task.pk) + '_product_list_' + timestr + ".csv"
                     if not settings.IS_GCP:
-                        upload_path = os.path.join(settings.MEDIA_ROOT + path)
+                        upload_path = os.path.join(settings.MEDIA_ROOT + '/' +path)
                         if not os.path.exists(upload_path):
                             os.makedirs(upload_path)
-                        csvfile = open(upload_path + file_name, 'w', newline='')
+                        upload_path = upload_path + file_name
+                        csvfile = open(upload_path, 'w', newline='')
                     else:
                         upload_path = path + file_name
                         csvfile = GCPPrivateMediaStorage().open(upload_path, 'wb')
