@@ -16,7 +16,7 @@
                   <div class="add-rating-feedback-box col-sm-10">
                     <div class="add-rating-feedback ">
                       <fieldset class="rate">
-                          <input type="radio" required id="rating5" name="rating" value="5"  {{rating5}}   {% if review_obj.average_rating|floatformat == 5 %} checked {% endif %}  />
+                          <input type="radio" required id="rating5" name="rating" value="5"  {{rating5}}   {% if review_obj.average_rating == 5 %} checked {% endif %}  />
                           <label for="rating5" title="5 stars" ></label>
                           <span class="error"></span>
 
