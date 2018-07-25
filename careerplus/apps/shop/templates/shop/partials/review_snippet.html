@@ -1,6 +1,6 @@
   {% for review in prd_review_list %}
     <li class="box-panel" >
-      <span class="review-heading" >{{review.get_remarks}}</span>
+      <span class="review-heading" >{% if not review.title %}{{review.get_remarks}} {% else %} {{ review.title }}{% endif %}</span>
       <div class="rating-review-box" >
           {% for star in review.get_ratings %}
             {% if star == "*" %}
