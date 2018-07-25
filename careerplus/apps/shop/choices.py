@@ -89,7 +89,7 @@ def convert_to_month(days=0):
             return 'D6'
         elif 36 < months:
             return 'D7'
-    return days
+    return "D0"
 #
 
 C_ATTR_DICT = {
