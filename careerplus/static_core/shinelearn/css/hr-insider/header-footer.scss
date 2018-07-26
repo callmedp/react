@@ -822,11 +822,13 @@ footer {
 	background-color: $white-color;
 	margin: 0 auto;
 	text-align: center;
+	cursor: pointer;
 
 	&:hover, &:focus {
 		background-color: $white-color;
 		border: 1px solid $blue-color;;
 		color: $anchor-color;
+		cursor: pointer;
 	}
 }
 

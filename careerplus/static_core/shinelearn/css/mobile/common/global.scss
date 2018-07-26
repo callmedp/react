@@ -501,6 +501,29 @@ article {
     display: none;
 }
 
+.custom-search {
+  position: relative;
+  .form-control {
+    @include border-radius (4px);
+    border: 0 none;
+  }
+
+  .search-icon-tab {
+    @include icon-inblock (40px,40px, 0 -333px);
+    @include border-radius (0 4px 4px 0);
+    cursor: pointer;
+    border: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: #ffcf00;
+  }
+
+  .tt-hint {
+    top: 8px !important;
+  }
+}
+
 /* Call us  */
 @import '../components/call-us';
 @import '../utilities/font';

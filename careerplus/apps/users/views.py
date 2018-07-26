@@ -2,28 +2,33 @@ import logging
 import mimetypes
 import json
 import urllib.parse
-
+import calendar
+from time import strptime
 from wsgiref.util import FileWrapper
+from dateutil.relativedelta import relativedelta
 
 from django.shortcuts import render
 from django.http import (
     HttpResponse,
-    HttpResponseRedirect,)
+    HttpResponseRedirect,HttpResponseForbidden)
 from django.contrib import messages
 from django.views.generic import FormView, TemplateView, View
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils import timezone
 from django.db.models import Q
+from google.cloud import storage
 
 from geolocation.models import Country
 from shine.core import ShineCandidateDetail
 from core.mixins import TokenExpiry, TokenGeneration
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCPInvoiceStorage
 from order.models import OrderItem
-from users.mixins import WriterInvoiceMixin
+from users.mixins import WriterInvoiceMixin,UserGroupMixin
 
 from emailers.tasks import send_email_task
+
+
 
 from .forms import (
     RegistrationForm,
@@ -97,6 +102,16 @@ class RegistrationApiView(FormView):
         kwargs['flavour'] = self.request.flavour
         return kwargs
 
+    def dispatch(self, request, *args, **kwargs):
+
+        if request.session.get('candidate_id'):
+            if 'next' in request.GET:
+                return HttpResponseRedirect(request.GET.get(
+                    'next', self.success_url))
+            return HttpResponseRedirect(self.success_url)
+        else:
+            return super(RegistrationApiView, self).dispatch(request, *args, **kwargs)
+
 
 class LoginApiView(FormView):
     form_class = LoginApiForm
@@ -152,7 +167,8 @@ class LoginApiView(FormView):
                         self.request.session.update(resp_status)
 
                     if remember_me:
-                        self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
+                        self.request.session.set_expiry(
+                            settings.SESSION_COOKIE_AGE)  # 1 year
                     return HttpResponseRedirect(self.success_url)
 
                 elif login_resp['response'] == 'error_pass':
@@ -571,6 +587,66 @@ class DownloadWriterInvoiceView(View):
                 response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
                 return response
         except Exception as e:
+            logging.getLogger(
+                'error_log').error(
+                'writer invoice download error - ' + str(e))
+        return HttpResponseRedirect(reverse('console:dashboard'))
+
+
+class DownloadMonthlyWriterInvoiceView(UserGroupMixin,TemplateView):
+    template_name = "invoice/invoice_monthly_download.html"
+    month = []
+    path = "invoice/user/"
+    group_name = ['WRITER']
+
+
+
+    def get(self,request,*args,**kwargs):
+        context = self.get_context_data(**kwargs)
+        try:
+            self.month = [(timezone.now() - relativedelta(months=i)).strftime('%B-%Y') for i in range(1, 13)]
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+        context['month'] = self.month
+        return self.render_to_response(context)
+
+
+    def post(self, request, *args, **kwargs):
+        file_list = []
+        d=self.request.POST.get('month',"")
+        m=d.split('-')[0]
+        y=d.split('-')[1]
+        month_number = str(strptime(m,'%B').tm_mon)
+
+        u=self.request.user.pk
+        self.path= 'invoice/user/'
+        self.path=str(self.path+ str(u)+'/'+month_number+'_'+y)
+        try:
+            bucket = storage.Client().get_bucket(settings.GCP_INVOICE_BUCKET)
+            for blob in bucket.list_blobs(prefix=self.path):
+                file_list.append(blob.name)
+            file_list.sort(reverse=True)
+            if file_list:
+                file_list = file_list[0]
+                fsock = GCPInvoiceStorage().open(file_list)
+                filename = file_list.split('/')[-1]
+                response = HttpResponse(
+                    fsock,
+                    content_type=mimetypes.guess_type(filename)[0])
+                response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
+                return response
+
+
+            else:
+                messages.add_message(
+                    self.request, messages.ERROR,
+                  "NO INVOICE FOUND CHECK WITH OTHER MONTH")
+                return HttpResponseRedirect(reverse('console:dashboard'))
+
+        except Exception as e:
+            messages.add_message(
+                self.request, messages.ERROR,
+                "writer invoice download error")
             logging.getLogger(
                 'error_log').error(
                 'writer invoice download error - ' + str(e))

@@ -513,8 +513,6 @@ class Attribute(AbstractAutoDate):
     @property
     def get_type(self):
         return self.type_attribute
-        
-
 
     def _get_value(self):
         value = getattr(self, 'value_%s' % self.attribute.type_attribute)
@@ -767,7 +765,6 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
 
     attend = RichTextField(
         verbose_name=_('Who Should Attend'), blank=True, default='')
-
 
     buy_shine = RichTextField(
         verbose_name=_('What you will get'), blank=True, default='')
@@ -1083,13 +1080,13 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_title(self):
         if self.is_course:
-            return '%s (INR %s)  - Shine Learning.' % (
-                self.name,
+            return '%s (INR %s) - Shine Learning' % (
+                self.heading,
                 str(round(self.inr_price, 0)),
             )
         elif self.is_service or self.is_writing:
             if self.category_main:
-                return '%s for %s - Online Services  - Shine Learning.' % (
+                return '%s for %s - Online Services - Shine Learning' % (
                     self.category_main.name,
                     EXP_DICT.get(self.get_exp(), ''),
                 )
@@ -1097,16 +1094,15 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_meta_desc(self):
         if self.is_course:
-            return '%s - Get Online Access, Supports from Experts, Study Materials, Course Module, Fee Structure and other details at Shine Learning.' % (
-                self.name,
+            return '%s - Get Online Access, Supports from Experts, Study Materials, Course Module, Fee Structure and other details at Shine Learning' % (
+                self.heading,
             )
         elif self.is_service or self.is_writing:
             if self.category_main:
-                return 'Online %s Services for %s. Get expert advice & tips for %s at Shine Learning.' % (
-                        self.category_main.name,
-                        EXP_DICT.get(self.get_exp(), ''),
-                        self.category_main.name,
-                    )
+                return 'Online %s Services for %s. Get expert advice & tips for %s at Shine Learning' % (
+                    self.category_main.name,
+                    EXP_DICT.get(self.get_exp(), ''),
+                    self.category_main.name,)
         return ''
 
     def get_icon_url(self, relative=False):

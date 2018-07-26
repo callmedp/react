@@ -46,7 +46,7 @@ Career & Certification Guidance Top Authors @ Shine Learning
           <div class="box-panel" >
             <div class="media">
               {% if author.image %}
-              <a href="{{request.path}}{{author.slug}}" class="media-left">
+              <a href="{{author.get_absolute_url}}" class="media-left" title="{{author.name}}">
                 <figure>
                   <img src="{{author.image.url}}" class="img-responsive" alt="{{author.image_alt}}">
                 </figure>

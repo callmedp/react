@@ -88,9 +88,11 @@
                     <form method="post" id="login_form" data-role="form">
                         {% csrf_token %}
                         {% for field in form %}
-                            <div class="form-group">
+                            <div class="form-group {% if field.errors %}error{% endif %}">
                                 {{field}}
-                                {% for error in  field.errors %}{{ error }}{% endfor %}
+                                <span class="error-txt" style="bottom:-25px">
+                                    {{ field.errors}}
+                                </span>
                             </div>
                         {% endfor %}
 
