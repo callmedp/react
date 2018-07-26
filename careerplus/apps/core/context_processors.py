@@ -1,11 +1,12 @@
 import datetime
+import logging
 
 from django.conf import settings
+from django.template.loader import render_to_string
 
 from cart.mixins import CartMixin
 from cart.models import Subscription
-import logging
-
+from marketing.data import UTM_CAMPAIGN_HTML_MAPPING
 
 def js_settings(request):
     js_vars = {}
@@ -85,3 +86,14 @@ def common_context_processor(request):
         "ggn_contact": settings.GGN_CONTACT,
     })
     return context
+
+
+def marketing_context_processor(request):
+    context_dict = {}
+    if 'utm_campaign' in request.GET:
+        utm_campaign = request.GET.get('utm_campaign')
+        template = UTM_CAMPAIGN_HTML_MAPPING.get(utm_campaign)
+        if template:
+            context_dict['marketing_popup_html'] = template
+            context_dict.update({'lead_source': 23})
+    return context_dict

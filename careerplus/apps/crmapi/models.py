@@ -17,6 +17,7 @@ LEAD_LOCATION = (
     (26, 'Email Marketing Course Leads'),
     (27, 'Email Marketing Resume Leads'),
     (22, 'CartLead'),
+    (23, 'Overlay'),
 )
 
 DEFAULT_SLUG_SOURCE = (

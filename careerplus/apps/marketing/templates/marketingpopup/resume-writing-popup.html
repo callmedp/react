@@ -1,0 +1,87 @@
+<div class="modal fade bs-example-modal-lg1 marketing-popup" tabindex="-1"  role="dialog" aria-labelledby="mySmallModalLabel" style="display: block;">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="col-sm-8 resume-writing-services">
+        <div class="discount-coupon">
+          <div class="discount-price">10% <small>DISCOUNT</small></div>
+          <div class="starting-price">Starting at <strike>1510/-</strike> <span class="price">1360/-</span></div>
+        </div>
+        <strong>Resume writing services</strong>
+        <ul>
+          <li>10% Immediate discount.</li>
+          <li>Stay on the top of recruiter search.</li>
+          <li>Increase your profile view upto 3.5x times.</li>
+          <li>Specialized resume matching your skill set.</li>
+          <li>Highlight the most important skills of your job profile.</li>
+        </ul>
+      </div>
+      <div class="resume-writing-services-form col-sm-4">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+        <form method="POST" action="{% url 'crmapi:lead-management' %}" id="overlay_lead">
+            {% csrf_token %}
+          <div class="modal-title" id="myModalLabel">Let’s get started</div>
+          <div class="form-group">
+            <input type="Name" class="form-control" id="exampleInputName" aria-describedby="nameHelp" placeholder="Name"
+              placeholder="Your Full Name" name="name" aria-describedby="nameHelp" >
+             <span class="error-txt js-error"></span>
+          </div>
+          <div class="form-group">
+            <input type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Email" type="text"
+              placeholder="Email Address" name="email">
+            <span class="error-txt js-error"></span>
+          </div>
+          <div class="form-group">
+            <div class="country-code">
+              <div class="custom-select">
+                <select class="form-control">
+                  <option>+91</option>
+                </select>
+              </div>
+              <input type="text" class="form-control modal-form-control" placeholder="Mobile" placeholder="Mobile Number" name="number">
+              <span class="error-txt js-error"></span>
+            </div>
+          </div>
+          <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+          <input type="hidden" name="prd" value="Resume Writing Service">
+          <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+          <input type="hidden" name="lsource" value="{{ lead_source }}">
+          <button type="submit" class="btn btn-primary submit" id="overlay-submit-btn" onclick="$('#overlay_lead').submit();return false;">Get a call back</button>
+        </form>
+       <!-- <form method="POST"
+                action="{% url 'crmapi:lead-management' %}"> {% csrf_token %}
+            <strong>Let’s get started</strong>
+            <div class="form-group">
+              <input type="text" class="form-control" id="exampleInputName" 
+              placeholder="Your Full Name" name="name" aria-describedby="nameHelp" placeholder="Name">
+              <label class="error-txt js-error"></label>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="email" 
+              placeholder="Email Address" name="email">
+              <label class="error-txt js-error"></label>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="mobile" placeholder="Mobile Number" name="number">
+              <label class="error-txt js-error"></label>
+            </div>
+            <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+
+            <input type="hidden" name="prd" value="Data Science Certification">
+
+            <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+            <input type="hidden" name="lsource" value="{{ lead_source }}">
+            
+            <div class="tnc">
+              By registering with us you agree to our 
+              <a href="/tnc">Terms & Conditions</a>
+            </div>
+            <button type="submit" class="btn btn-default" 
+              onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enroll Now</button>
+            <p>*Easy EMI option available</p>
+          </form> -->
+      </div>
+  </div>
+</div> 
