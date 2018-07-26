@@ -879,22 +879,19 @@ class ProductReviewEditView(View):
                 review = request.POST.get('review', '').strip()
                 rating = int(request.POST.get('rating', 1))
                 title = request.POST.get('title','').strip()
-
                 try:
                     product_obj = Product.objects.get(pk=product_pk)
                     contenttype_obj = ContentType.objects.get_for_model(product_obj)
-                    review_obj = Review.objects.filter(object_id=product_obj.id, content_type=contenttype_obj, user_id=candidate_id)
+                    review_obj = Review.objects.filter(object_id=product_obj.id, content_type=contenttype_obj, user_id=candidate_id).first()
 
                     # Setting status back to 0 for adding this review again to moderation list
-                    if review_obj[0].user_id == candidate_id:
-                        update_data = {
-                            "content": review,
-                            "average_rating": rating,
-                            "status": 0,
-                            "title": title,
-                            "created": timezone.now()
-                        }
-                        review_obj.update(**update_data)
+                    if review_obj and review_obj.user_id == candidate_id:
+                        review_obj.content = review
+                        review_obj.average_rating = rating
+                        review_obj.status = 0
+                        review_obj.title = title
+                        review_obj.created = timezone.now()
+                        review_obj.save()
                         data['success'] = True
                     else:
                         data['display_message'] = "Not Allowed"
