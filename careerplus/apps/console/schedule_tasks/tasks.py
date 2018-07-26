@@ -265,7 +265,7 @@ def gen_product_list_task(task=None, user=None, status=None, vendor=None, produc
                         product_row = {}
                         product_row['Name'] = product.get_name
                         product_row['ID'] = product.id
-                        product_row['Price'] = product.get_inr_price()
+                        product_row['Price'] = product.get_price()
                         product_row['Visible_On_CRM'] = True if product.active else False
                         product_row['Visible_On_Site'] = True if (product.is_indexable and product.active) else False
                         product_row['Type'] = product.get_type_product_display()
