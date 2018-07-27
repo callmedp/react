@@ -68,10 +68,12 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 order.candidate_id = cart_obj.owner_id
 
             order.email = cart_obj.email
+            order.alt_email=cart_obj.email
             order.first_name = cart_obj.first_name
             order.last_name = cart_obj.last_name
             order.country_code = cart_obj.country_code
             order.mobile = cart_obj.mobile
+            order.alt_mobile = cart_obj.mobile
             order.address = cart_obj.address
             order.pincode = cart_obj.pincode
             order.state = cart_obj.state

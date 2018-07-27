@@ -2,12 +2,14 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.conf import settings
 
-from order.models import OrderItem, Message
+from order.models import OrderItem, Message,Order
 from order.choices import STATUS_CHOICES
 from shop.models import DeliveryService
 # from cart.choices import DELIVERY_TYPE
 from order.choices import OI_OPS_STATUS
 from review.models import Review, STATUS_CHOICES
+from django.core.validators import validate_email,validate_integer
+from django.core.exceptions import ValidationError
 
 User = get_user_model()
 
@@ -432,3 +434,44 @@ class ReviewUpdateForm(forms.ModelForm):
         self.fields['user_email'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
         self.initial['created'] = obj.created.astimezone().strftime("%b %e %Y %I:%M %p")
         self.fields['average_rating'].widget.attrs['class'] = 'form-control col-md-7 col-xs-12'
+
+class emailupdateform(forms.ModelForm):
+        class Meta:
+            model = Order
+            fields = ('alt_email',)
+
+        def __init__(self, *args, **kwargs):
+            super(emailupdateform, self).__init__(*args, **kwargs)
+            self.fields['alt_email'].required = True
+
+        def clean(self):
+            alt_email = self.cleaned_data['alt_email']
+            if alt_email == "":
+                raise ValidationError('please Enter the email address')
+            else:
+                validate_email(alt_email)
+
+
+
+class mobileupdateform(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ('alt_mobile',)
+
+    def __init__(self, *args, **kwargs):
+        super(mobileupdateform, self).__init__(*args, **kwargs)
+        self.fields['alt_mobile'].required = True
+
+    def clean(self):
+        alt_number = self.cleaned_data['alt_mobile']
+        if alt_number == "":
+            raise ValidationError("please enter the correct mobile number")
+        else:
+            validate_integer(alt_number)
+
+
+
+
+
+
+

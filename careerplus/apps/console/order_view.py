@@ -55,7 +55,9 @@ from .order_form import (
     AssignmentActionForm,
     ReviewActionForm,
     ReviewFilterForm,
-    ReviewUpdateForm,)
+    ReviewUpdateForm,
+    emailupdateform,
+    mobileupdateform,)
 from .mixins import ActionUserMixin
 
 
@@ -73,7 +75,7 @@ class OrderListView(ListView, PaginationMixin):
         self.query = ''
         self.payment_date, self.created = '', ''
         self.status = -1
-        self.sel_opt= 'id'
+        self.sel_opt = 'id'
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
@@ -82,7 +84,6 @@ class OrderListView(ListView, PaginationMixin):
         self.created = request.GET.get('created', '')
         self.status = request.GET.get('status', -1)
         self.sel_opt = self.request.GET.get("rad_search",'id')
-
         return super(OrderListView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -94,11 +95,16 @@ class OrderListView(ListView, PaginationMixin):
         alert = messages.get_messages(self.request)
         initial = {"payment_date": self.payment_date, "created": self.created, "status": self.status}
         filter_form = OrderFilterForm(initial)
+        email_form=emailupdateform()
+        mobil_form=mobileupdateform()
         context.update({
             "messages": alert,
             "filter_form": filter_form,
             "query": self.query,
-            var: "checked"
+            var: "checked",
+            'email_form': email_form,
+            'mobil_form': mobil_form,
+
 
         })
         return context

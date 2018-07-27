@@ -86,12 +86,12 @@ def booster():
             continue
 
         token = TokenExpiry().encode(oi.order.email, oi.pk, days)
-        to_emails = [oi.order.email]
+        to_emails = [oi.order.get_email()]
         email_sets = list(oi.emailorderitemoperation_set.all().values_list(
             'email_oi_status', flat=True).distinct())
         candidate_data.update({
-            "email": oi.order.email,
-            "mobile": oi.order.mobile,
+            "email": oi.order.get_email(),
+            "mobile": oi.order.get_mobile(),
             'subject': 'Your resume has been shared with relevant consultants',
             "username": oi.order.first_name,
         })
