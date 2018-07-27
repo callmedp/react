@@ -45,7 +45,7 @@ def get_eligible_orders():
             try:
                 order = Order.objects.get(id=wallet_details.get('order_id'))
                 email = order.candidate.email
-                mobile = order.order_mobile
+                mobile = order.get_mobile()
             except Exception as e:
                 logging.getLogger('error_log').error('unable to fetch order object/object-deails %s'%str(e))
                 # user_info = wallet_tran_obj.get_user_info()

@@ -78,6 +78,12 @@ class Order(AbstractAutoDate):
         max_length=15, null=True, blank=True, verbose_name=_("Country Code"))
 
     mobile = models.CharField(max_length=15, null=True, blank=True,)
+    alt_mobile = models.CharField(max_length=15, null=True, blank=True,verbose_name=_("Alternate Mobile"))
+    alt_email = models.CharField(
+        null=True,
+        blank=True,
+        max_length=255,
+        verbose_name=_("Alternate Email"))
 
     address = models.CharField(max_length=255, null=True, blank=True)
 
@@ -170,6 +176,19 @@ class Order(AbstractAutoDate):
     def get_wc_cat(self):
         sub_dict = dict(WC_CATEGORY)
         return sub_dict.get(self.wc_cat, '')
+
+    def get_email(self):
+        if self.alt_email:
+            return self.alt_email
+        else:
+            return self.email
+
+
+    def get_mobile(self):
+        if self.alt_mobile:
+            return self.alt_mobile
+        else:
+            return self.mobile
 
     def get_wc_sub_cat(self):
         cat_dict = dict(WC_SUB_CATEGORY)
