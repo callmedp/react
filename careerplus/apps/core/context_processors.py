@@ -95,5 +95,5 @@ def marketing_context_processor(request):
         template = UTM_CAMPAIGN_HTML_MAPPING.get(utm_campaign)
         if template:
             context_dict['marketing_popup_html'] = template
-            context_dict.update({'lead_source': 23})
+            context_dict.update({'lead_source': 4})
     return context_dict
