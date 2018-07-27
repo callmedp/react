@@ -66,7 +66,7 @@
                         <div class="media">
                             <div class="img-wrap mr-20">
                                 <div class="img-content">
-                                    <a href="/media/resume/staticresume/resume-1.pdf" target="_blank" class="icon-downlod"></a>
+                                    <a href="{% static 'shinelearn/static_media/learning_sample_resume.pdf' %}"target="_blank" class="icon-downlod"></a>
                                     <div class="overlay"></div>
                                     <img src="{% static 'shinelearn/images/cms/resume-1-thumb.jpg' %}" alt="most targeted resume format" class="img-fluid">
                                 </div>
@@ -106,7 +106,7 @@
                         <div class="media">
                             <div class="img-wrap mr-20">
                                 <div class="img-content">
-                                    <a href="/media/resume/staticresume/chrono-format.docx" class="icon-downlod"></a>
+                                    <a href="{% static 'shinelearn/static_media/chrono-format.docx' %}" class="icon-downlod"></a>
                                     <div class="overlay"></div>
                                     <img src="{% static 'shinelearn/images/cms/chrono-format.jpg' %}" alt="Features of a Chronological Resume Format" class="img-fluid">
                                 </div>
@@ -134,7 +134,7 @@
                         <div class="media">
                             <div class="img-wrap mr-20">
                                 <div class="img-content">
-                                    <a href="/media/resume/staticresume/functional.docx" class="icon-downlod"></a>
+                                    <a href="{% static 'shinelearn/static_media/functional.docx' %}" class="icon-downlod"></a>
                                     <div class="overlay"></div>
                                     <img src="{% static 'shinelearn/images/cms/functional.jpg' %}"alt="Features of a Functional Resume Format" class="img-fluid">
                                 </div>
@@ -162,7 +162,7 @@
                         <div class="media">
                             <div class="img-wrap mr-20">
                                 <div class="img-content">
-                                    <a href="/media/resume/staticresume/mixed-format.docx" class="icon-downlod"></a>
+                                    <a href="{% static 'shinelearn/static_media/mixed-format.docx' %}" class="icon-downlod"></a>
                                     <div class="overlay"></div>
                                     <img src="{% static 'shinelearn/images/cms/mixed-format.jpg' %}" alt="Features of a Chronological Resume Format" class="img-fluid">
                                 </div>
@@ -409,7 +409,7 @@
                             </li><!-- /. l1 - 5 -->
                         </ul>
                     </div><!-- /. white-box -->
-
+                     <div id="snackbar"></div>
                     <div class="white-box mt-30">
                         <strong class="uppercase pb-15 mb-15 white-box-heading">Request a call</strong>
                         <form class="form-group" role="form" id="callback_form">
@@ -436,7 +436,7 @@
                         </form>
                         <button type="submit" id="id_callback" class="btn btn-primary w-100">Message</button>
                         <div class="call mt-30 text-center">
-                            <p class="number"><span class="icon-call"></span><a href="{{ggn_contact_full}}">{{ggn_contact_full}}</a></p>
+                            <p class="number"><span class="icon-call"></span><a href="tel:{{ggn_contact_full}}">{{ggn_contact_full}}</a></p>
                             <p class="fs-12 c9">9AM to 7PM IST Monday-Saturday</p>
                         </div>
                     </div>

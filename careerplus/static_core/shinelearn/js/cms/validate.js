@@ -91,18 +91,36 @@ $('#id_callback').click(function() {
     var $callbackForm = $("#callback_form");
     var flag = $callbackForm.valid();
     if (flag) {
+         if(document.getElementById('myModal' )){
+     document.getElementById('myModal' ).style.display = 'none';
+    }
         var formData = $callbackForm.serialize();
         $.ajax({
             url: "/lead/lead-management/",
             type: "POST",
             data: formData,
             success: function(data, textStatus, jqXHR) {
-                alert('Your Query Submitted Successfully.');
+            pop('Your Query Submitted Successfully.');
+
+
                 $('#callback_form')[0].reset();
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                alert('Something went wrong. Try again later.');
+                pop('Something went wrong. Try again later.');
             }
         });
     }
 });
+
+
+function pop(param) {
+    // Get the snackbar DIV
+    var x = document.getElementById("snackbar");
+    x.innerHTML=param;
+
+    // Add the "show" class to DIV
+    x.className = "show";
+
+    // After 3 seconds, remove the show class from DIV
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3500);
+}
