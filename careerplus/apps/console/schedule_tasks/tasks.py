@@ -224,12 +224,16 @@ def gen_product_list_task(task=None, user=None, status=None, vendor=None, produc
     try:
         up_task = Scheduler.objects.get(pk=task)
         csvfile = None
-        # excluding Variation-child product
         products_list = Product.objects.all()
         if vendor:
             products_list = products_list.filter(vendor__name=vendor)
         if status:
-            products_list = products_list.filter(active=status)
+            variation_parent_products = products_list.filter(type_product=1).exclude(active=status)
+            products_to_exclude = [product.id for product in variation_parent_products]
+            products_to_exclude = products_to_exclude + [
+                product.id for pr in variation_parent_products for product in pr.variation.all()
+            ]
+            products_list = products_list.filter(active=status).exclude(id__in=products_to_exclude)
         if product_class:
             products_list = products_list.filter(product_class__slug=product_class)
         if up_task:
