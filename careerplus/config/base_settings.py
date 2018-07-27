@@ -137,7 +137,8 @@ TEMPLATES = [
                 'core.context_processors.common_context_processor',
                 'django_mobile.context_processors.flavour',
                 'sekizai.context_processors.sekizai',
-                'core.context_processors.js_settings'
+                'core.context_processors.js_settings',
+                'core.context_processors.marketing_context_processor',
             ],
             'loaders': ([
                 # ('django_mobile.loader.CachedLoader', [

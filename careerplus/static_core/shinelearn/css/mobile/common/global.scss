@@ -12,6 +12,11 @@
 /* Filter menu */
 @import '../components/filter-menu';
 
+/* Main CSS Start From Here */
+@import '../components/popup';
+
+/* Line form Start From Here */
+@import '../components/line-form';
 
 .blue-link {
   color: -imp($txt-blue);
@@ -523,3 +528,74 @@ article {
 @import '../utilities/font';
 @import '../utilities/padding';
 @import '../utilities/margin';
+
+
+/*------marketing popup css------*/
+.marketing-popup {
+  border-radius: 0 !important;
+
+  .header {
+    background-image: url("../../../images/popup-bg.jpg");
+    background-size: cover;
+    display: block;
+    padding-bottom: 10px;
+
+    h2 {
+      color: $txt-white;
+      border-bottom: none;
+      font-size: $font-size+11;
+      padding: 20px 15px 0 15px;
+    }
+
+    .icon-close {
+      top: 10% !important;
+      background-position: -189px -175px;
+    }
+  }
+}
+
+.discount-coupon {
+  background-image: url("../../../images/discount-bg.png");
+  background-size: cover;
+  width: 258px;
+  height: 54px;
+  margin: 20px 0 0 -1px;
+  display: block;
+
+  .discount-price {
+    font-size: $font-size+9;
+    color: $txt-white;
+    font-weight: $font-weight+300;
+    width: 60px;
+    display: inline-block;
+    line-height: 20px;
+    margin: 9px 0 0 11px;
+
+    small {
+      font-size: $font-size - 4;
+      font-weight: $font-weight+300;
+      display: block;
+    }
+  }
+
+  .starting-price {
+    font-size: $font-size - 1;
+    color: #edfeff;
+    font-weight: $font-weight+100;
+    display: inline-block;
+    line-height: 18px;
+    margin: 20px 0 0 0;
+    vertical-align: top;
+
+    strike {
+      font-size: $font-size - 1;
+      color: #8c85e3;
+    }
+
+    .price {
+      font-size: $font-size+3;
+      font-weight: $font-weight+200;
+    }
+  }
+}
+
