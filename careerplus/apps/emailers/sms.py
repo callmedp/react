@@ -13,7 +13,7 @@ class SendSMS(object):
     def base_send_sms(self, mob, message):
         try:
             if settings.DEBUG:
-                # mob = '9654947449'
+                mob = '9654947449'
                 pass
             payload = {
                 'api_key': settings.ACCESSKEY, 'to': mob, 'message': message,
