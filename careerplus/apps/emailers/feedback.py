@@ -33,7 +33,7 @@ def feedback_emailer():
                 'emailers/candidate/feedback.html', data_dict)
             headers_dict = {'Reply-To': settings.REPLY_TO}
             send_email_for_base_task.delay(
-                subject, html, to=[oi_item.order.email],
+                subject, html, to=[oi_item.order.get_email()],
                 headers=headers_dict, oi=oi_item.pk, status=5)
         except Exception as e:
             logging.getLogger('error_log').error(
