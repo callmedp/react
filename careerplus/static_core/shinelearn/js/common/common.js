@@ -101,7 +101,7 @@ $("#overlay_lead").validate({
             required:true,
             number:true,
             minlength:10,
-            maxlength:20,
+            maxlength:10,
         },
         email:{
             email:true,
