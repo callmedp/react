@@ -4,48 +4,50 @@
          <a class="write-review pull-right" role="button" data-toggle="collapse" id="write_review_btn" href="#collapseExampleform" aria-expanded="true">Write a review</a>
     </div>
     <div class="clearfix"></div>
-    <div>
 
+    <!-- write-review starts here -->
+    <div class="rate-now-box">
         <input type="hidden" name="page" id="id_review_page" value="{{prd_rv_page}}">
         <div >
           <div class="well box-panel write-review-box" {% if prd_review_list %}style="display:none" {% endif %}  id="write_review_container">
             <form role="form" id="feedback-form">
               {% csrf_token %}
-              <div class="rating-feedback mt-10">
-                <fieldset class="rate">
-                  <input type="radio" id="rating5" name="rating" value="5" {% if review_obj.average_rating == 5 or not review_obj.average_rating %} checked {% endif %}>
-                  <label for="rating5" title="5 stars"></label>
-                  <input type="radio" id="rating4" name="rating" value="4"  {% if review_obj.average_rating == 4 %} checked {% endif %}>
-                  <label for="rating4" title="4 stars"></label>
-                  <input type="radio" id="rating3" name="rating" value="3"  {% if review_obj.average_rating == 3 %} checked {% endif %}>
-                  <label for="rating3" title="3 stars"></label>
-                  <input type="radio" id="rating2" name="rating" value="2"  {% if review_obj.average_rating == 2 %} checked {% endif %}>
-                  <label for="rating2" title="2 stars"></label>
-                  <input type="radio" id="rating1" name="rating" value="1" {%  if review_obj.average_rating == 1  %} checked {% endif %}  >
-                  <label for="rating1" title="1 star"></label>
-                </fieldset>
-               <strong id="selected-rating">{% if review_obj.average_rating %} {{review_obj.average_rating|floatformat }} {% else  %} 5 {% endif%}<small>/5</small></strong>
-                  <div><span>Click to rate on scale of 1-5</span></br></div>
+              <div class="rating-feedback mt-10 mb-20">
+                <div class="star-rate-box">
+                  <fieldset class="rate">
+                    <input type="radio" id="rating5" name="rating" value="5" {% if review_obj.average_rating == 5 or not review_obj.average_rating %} checked {% endif %}>
+                    <label for="rating5" title="5 stars"></label>
+                    <input type="radio" id="rating4" name="rating" value="4"  {% if review_obj.average_rating == 4 %} checked {% endif %}>
+                    <label for="rating4" title="4 stars"></label>
+                    <input type="radio" id="rating3" name="rating" value="3"  {% if review_obj.average_rating == 3 %} checked {% endif %}>
+                    <label for="rating3" title="3 stars"></label>
+                    <input type="radio" id="rating2" name="rating" value="2"  {% if review_obj.average_rating == 2 %} checked {% endif %}>
+                    <label for="rating2" title="2 stars"></label>
+                    <input type="radio" id="rating1" name="rating" value="1" {%  if review_obj.average_rating == 1  %} checked {% endif %}  >
+                    <label for="rating1" title="1 star"></label>
+                  </fieldset><!-- /.fieldset -->
+                  <strong id="selected-rating">{% if review_obj.average_rating %} {{review_obj.average_rating|floatformat }} {% else  %} 5 {% endif%}<small>/5</small></strong>
+                </div><!-- /. star-rate-box -->
+                <span class="inline-block fs-11 c9">Click to rate on scale of 1-5</span>
                   <span class="error" style="color:red" id="rating-error"></span>      
+              </div><!-- /. rating-feedback -->
 
-              </div>
-                <div class="form-group">
-                <label for="inputPassword3" class="col-sm-2 control-label">Title</label>
-                <div class="col-sm-10">
-                  <input class="form-control" type="text" name="title" required maxlength="100" {%if review_obj.title %}  value="{{review_obj.title}}" {% endif %} >
-                  <small>
+              <div class="form-group">
+                <label for="inputPassword3" class="bold pb-5 block">Title</label>
+                <input class="form-control" type="text" name="title" required maxlength="100" {%if review_obj.title %}  value="{{review_obj.title}}" {% endif %} >
+                  <small class="c9 fs-11">
                     Max 20 characters
                     <p> 
                       <span class="error" style="color:red" id="title-error"></span>  
                     </p>
                   </small>
-                </div>
               </div>
+
               <div class="form-group">
-                <label for="inputPassword3" name="review" placeholder="Feedback"  class="col-sm-2 control-label" >Review</label>
+                <label for="inputPassword3" name="review" placeholder="Feedback"  class="bold pb-5 block" >Review</label>
                 <div class="col-sm-10">
                   <textarea class="form-control"  id="id_review" rows="4" maxlength="1500" name="review" required>{%if review_obj.content %}{{review_obj.content}}{% endif %}</textarea>
-                  <small>
+                  <small class="c9 fs-11">
                   Max 1500 characters
                   <p>
                     <span class="error" style="color:red" id="review-error"></span>  
@@ -67,7 +69,10 @@
             </form>
           </div>
         </div>
-    </div>
+    </div><!-- /. write-review -->
+    
+    
+    
     <div class="box row pb-30">
         <div class="review-container rel">
             <ul class="review-slide">

@@ -358,3 +358,18 @@
     text-align: center;
     margin-left: 10px;
 }
+
+
+.rate-now-box {
+
+	.star-rate-box {
+		border: 1px solid #ddd;
+		padding: 10px 5px;
+		margin-right: 10px;
+		display: inline-block;
+
+		.rate {
+			padding: 0;
+		}
+	}
+}
