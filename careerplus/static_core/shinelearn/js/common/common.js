@@ -148,3 +148,7 @@ $("#overlay_lead").validate({
       $(element).siblings('.js-error').html(error.text());
     } 
 });
+
+function closeOverlayModal() {
+    $('.modal').fadeOut(300);
+}
