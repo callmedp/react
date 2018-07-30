@@ -31,7 +31,7 @@ def send_linkedin_tips():
                 html = render_to_string(
                     "emailers/candidate/linkedin_tip1.html", context_dict)
                 send_email_from_base(
-                    subject, html, to=[oi.order.email], headers=headers,
+                    subject, html, to=[oi.order.get_email()], headers=headers,
                     oi=oi.pk, status=109)
                 count1 += 1
                 logging.getLogger('info_log').info("{} tip1 mail sent".format(count1))
@@ -42,7 +42,7 @@ def send_linkedin_tips():
                     "emailers/candidate/linkedin_tip2.html", context_dict)
                 send_email_from_base(
                     subject, html,
-                    to=[oi.order.email], headers=headers,
+                    to=[oi.order.get_email()], headers=headers,
                     oi=oi.pk, status=110)
                 count2 += 1
                 logging.getLogger('info_log').info("{} tip2 mail sent".format(count2))
@@ -53,7 +53,7 @@ def send_linkedin_tips():
                     "emailers/candidate/linkedin_tip3.html", context_dict)
                 send_email_from_base(
                     subject, html,
-                    to=[oi.order.email],
+                    to=[oi.order.get_email()],
                     headers=headers, oi=oi.pk, status=111)
                 count3 += 1
                 logging.getLogger('info_log').info("{} tip3 mail sent".format(count3))
@@ -64,7 +64,7 @@ def send_linkedin_tips():
                     "emailers/candidate/linkedin_tip4.html", context_dict)
                 send_email_from_base(
                     subject, html,
-                    to=[oi.order.email],
+                    to=[oi.order.get_email()],
                     headers=headers, oi=oi.pk, status=112)
                 count4 += 1
                 logging.getLogger('info_log').info("{} tip4 mail sent".format(count4))
@@ -75,7 +75,7 @@ def send_linkedin_tips():
                     "emailers/candidate/linkedin_tip5.html", context_dict)
                 send_email_from_base(
                     subject, html,
-                    to=[oi.order.email],
+                    to=[oi.order.get_email()],
                     headers=headers, oi=oi.pk, status=113)
                 count5 += 1
                 logging.getLogger('info_log').info("{} tip5 mail sent".format(count5))
@@ -86,7 +86,7 @@ def send_linkedin_tips():
                     "emailers/candidate/linkedin_tip6.html", context_dict)
                 send_email_from_base(
                     subject, html,
-                    to=[oi.order.email],
+                    to=[oi.order.get_email()],
                     headers=headers, oi=oi.pk, status=114)
                 logging.getLogger('info_log').info("{} tip6 mail sent".format(count6))
         except Exception as e:

@@ -233,7 +233,7 @@
           <div class="col-sm-3 payment-summary-tab cls_scroller_parent">
           <div class="box-panel checkout-box cls_scroller pr">
             Amount Payable
-            <strong>Rs. <span id="total-cart-amount-id">{{total_amount}}</span>/-</strong>
+          <span id="total-cart-amount-id"><strong>Rs.{{total_amount}}/-<small style="font-size:12px; font-weight:normal; color:#999; margin-left:5px">(+taxes)</small></strong></span>
             <a href="{% url "cart:payment-login" %}">Proceed to checkout</a>
           </div>
 

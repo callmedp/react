@@ -69,7 +69,7 @@ class ActionUserMixin(object):
                 )
 
                 # mail to user about writer information
-                to_emails = [obj.order.email]
+                to_emails = [obj.order.get_email()]
                 mail_type = 'ALLOCATED_TO_WRITER'
                 email_data = {}
                 email_data.update({
@@ -148,7 +148,7 @@ class ActionUserMixin(object):
                         )
 
                         # mail to user about writer information
-                        to_emails = [oi.order.email]
+                        to_emails = [oi.order.get_email()]
                         mail_type = 'ALLOCATED_TO_WRITER'
                         email_data = {}
                         email_data.update({
@@ -191,7 +191,7 @@ class ActionUserMixin(object):
                         )
 
                         # mail to user about writer information
-                        to_emails = [oi.order.email]
+                        to_emails = [oi.order.get_email()]
                         mail_type = 'ALLOCATED_TO_WRITER'
                         email_data = {}
                         email_data.update({
@@ -234,7 +234,7 @@ class ActionUserMixin(object):
                         )
 
                         # mail to user about writer information
-                        to_emails = [oi.order.email]
+                        to_emails = [oi.order.get_email()]
                         mail_type = 'ALLOCATED_TO_WRITER'
                         email_data = {}
                         email_data.update({
@@ -358,12 +358,12 @@ class ActionUserMixin(object):
                     added_by=user)
 
                 # mail and sms to candidate
-                to_emails = [oi.order.email]
+                to_emails = [oi.order.get_email()]
                 email_dict = {}
                 email_dict.update({
                     "subject": 'Your service(s) has been initiated',
                     "name": oi.order.first_name,
-                    "mobile": oi.order.mobile,
+                    "mobile": oi.order.get_mobile(),
                     'oi': oi,
                 })
 

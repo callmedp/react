@@ -1,0 +1,83 @@
+/* current element like this */
+.smk_accordion {
+  position: relative;
+  border-bottom: 1px solid #e0e0e0;
+  margin-top:20px; 
+  /* accordion_in ends here */ }
+  .smk_accordion .accordion_in {
+    border-top: 1px solid #e0e0e0;
+    margin-bottom: 1px;
+    margin-top: -1px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    /* acc head ends here */ }
+    .smk_accordion .accordion_in .acc_head {
+      cursor: pointer;
+      display: block;
+      font-weight: bold;
+      padding: 12px 30px 12px 15px;
+      position: relative; 
+      font-size: 1rem;
+      color: #333;}
+      .smk_accordion .accordion_in .acc_head h2 {
+        color: #444;
+        margin: 0 !important;
+        text-transform: none; }
+      .smk_accordion .accordion_in .acc_head .acc_icon_expand {
+        background:url("../../../images/mobile/cms/resume_sprite.svg");
+        background-position:0px -205px;
+        width: 13px;
+        height: 9px;
+        display: block;
+        margin-top: -5px;
+        position: absolute;
+        right: 10px;
+        top: 50%; }
+    .smk_accordion .accordion_in .acc_content {
+      background: #f7f7f7;
+      color: #666;
+      padding: 15px;
+      border-top: 1px solid #eeeeee; }
+  .smk_accordion .accordion_in.acc_active .acc_head .acc_icon_expand {
+    background-position:-20px -204px; }
+  .smk_accordion .accordion_in.acc_active .acc_content {
+    display: block; }
+
+/* smk_accordion ends here */
+/* JS requires */
+.smk_accordion .accordion_in.acc_active .smk_accordion .accordion_in.acc_active .acc_head {
+  background: #fff; }
+
+/*.acc_active {
+  border-bottom: 0 none !important;
+    margin-bottom: 0 !important;
+}*/
+.accordion-wrap {
+  background-color: #f6f7f9; }
+  .accordion-wrap .acc_head  {
+    background-color: #f6f7f9 !important;
+    padding: 10px 15px;
+    margin: 0;
+    font-size: 1.250em;
+    font-weight: 600 !important; }
+
+      .accordion-wrap .acc_head h3 {
+         font-size: 1rem;
+    font-weight: 600 !important;
+      }
+  .accordion-wrap .acc_content {
+    background-color: #f6f7f9 !important;
+    border-top: 0 none !important;
+    padding-top: 0 !important;
+    color: #333; }
+
+.faq-wrap {
+  background-color: #fff; }
+  .faq-wrap h2 {
+    padding: 0 15px; }
+  .faq-wrap .acc_content {
+    background-color: #fff !important;
+    border-top: 0 none !important;
+    padding-top: 0 !important; }
+

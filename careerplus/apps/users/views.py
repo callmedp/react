@@ -24,7 +24,7 @@ from shine.core import ShineCandidateDetail
 from core.mixins import TokenExpiry, TokenGeneration
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCPInvoiceStorage
 from order.models import OrderItem
-from users.mixins import WriterInvoiceMixin
+from users.mixins import WriterInvoiceMixin,UserGroupMixin
 
 from emailers.tasks import send_email_task
 
@@ -591,31 +591,26 @@ class DownloadWriterInvoiceView(View):
         return HttpResponseRedirect(reverse('console:dashboard'))
 
 
-class DownloadMonthlyWriterInvoiceView(TemplateView):
+class DownloadMonthlyWriterInvoiceView(UserGroupMixin,TemplateView):
     template_name = "invoice/invoice_monthly_download.html"
-    month=[]
-    path="invoice/user/"
+    month = []
+    path = "invoice/user/"
+    group_name = ['WRITER']
 
 
 
     def get(self,request,*args,**kwargs):
-        if self.request.user.is_authenticated() and self.request.user.userprofile and self.request.user.userprofile.writer_type!=0:
-            pass
-        else:
-            return HttpResponseForbidden("You are not allowed to view this page")
-
-
         context = self.get_context_data(**kwargs)
         try:
-            self.month=[(timezone.now() - relativedelta(months=i)).strftime('%B-%Y') for i in range(1, 13)]
+            self.month = [(timezone.now() - relativedelta(months=i)).strftime('%B-%Y') for i in range(1, 13)]
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
-        context['month']=self.month
+        context['month'] = self.month
         return self.render_to_response(context)
 
 
     def post(self, request, *args, **kwargs):
-        file_list=[]
+        file_list = []
         d=self.request.POST.get('month',"")
         m=d.split('-')[0]
         y=d.split('-')[1]
@@ -630,7 +625,7 @@ class DownloadMonthlyWriterInvoiceView(TemplateView):
                 file_list.append(blob.name)
             file_list.sort(reverse=True)
             if file_list:
-                file_list=file_list[0]
+                file_list = file_list[0]
                 fsock = GCPInvoiceStorage().open(file_list)
                 filename = file_list.split('/')[-1]
                 response = HttpResponse(

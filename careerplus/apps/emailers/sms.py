@@ -14,6 +14,7 @@ class SendSMS(object):
         try:
             if settings.DEBUG:
                 mob = '9654947449'
+                pass
             payload = {
                 'api_key': settings.ACCESSKEY, 'to': mob, 'message': message,
                 "method": "sms", 'sender': 'SHINEM'}
