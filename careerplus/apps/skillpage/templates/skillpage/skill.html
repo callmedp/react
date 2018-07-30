@@ -30,8 +30,12 @@
                 {% for bread in breadcrumbs %}
                     {% if bread.url %}
                         <li itemprop="itemListElement" itemscope
-					      itemtype="http://schema.org/ListItem"><a href='{{bread.url}}' itemprop="name">{{bread.name}}
-                        </a></li>
+					      itemtype="http://schema.org/ListItem">
+					        <meta name="name" content="{{bread.name}}" />
+						    <a href='{{bread.url}}' itemprop="url">{{bread.name}}
+						    <meta name="position" content="{{forloop.counter}}" />
+                        </a>
+	                    </li>
                     {% else %}
                         <li class="active" itemprop="name">{{bread.name}}</li>
                     {% endif %}
