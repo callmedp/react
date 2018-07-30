@@ -1,6 +1,7 @@
 {% load static custom_filters %}
 {% for result in page.object_list %}
-    <li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/Product">
+    <li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+        <meta itemprop="position" content="{{forloop.counter}}" />
         <a itemprop="url" title="{{ result.pHd|default:result.pNm }}" href="{{ result.pURL }}" target="_blank">
         <div class="media">
             <div class="media-left">
@@ -16,8 +17,7 @@
 
             <h3 class="listing-heading" itemprop="name">{{ result.pHd|default:result.pNm }}</h3>
 
-            <div class="rating-review-box" itemprop="aggregateRating"
-              itemscope itemtype="http://schema.org/AggregateRating">
+            <div class="rating-review-box">
                 {% if result.pRC %}
                 {% for star in result.pStar %}
                 <figure {% if star == '*' %}class="full-star"{% elif star == '+'%}class="half-star"{% else %}class="blank-star"{% endif %}></figure>
@@ -26,15 +26,15 @@
                 {% else %}
                     <strong>{{ result.pBC|default:"10" }}</strong> people bought
                 {% endif %}
+                {% comment %}
                 <meta itemprop="ratingValue" content="{{ result.pARx|floatformat }}">
                 <meta itemprop="reviewCount" content="{% if result.pRC > 0 %}
                 {{result.pRC}}
                 {% else %}
                   1      
                 {% endif %}">
+                {% endcomment %}
             </div>
-
-            <!--meta itemprop="position" content="{{forloop.counter}}" / -->
 
             <div class="providers">
                Provider
