@@ -49,39 +49,11 @@
           <input type="hidden" name="lsource" value="{{ lead_source }}">
           <button type="submit" class="btn btn-primary submit" id="overlay-submit-btn" onclick="$('#overlay_lead').submit();return false;">Get a call back</button>
         </form>
-       <!-- <form method="POST"
-                action="{% url 'crmapi:lead-management' %}"> {% csrf_token %}
-            <strong>Let’s get started</strong>
-            <div class="form-group">
-              <input type="text" class="form-control" id="exampleInputName" 
-              placeholder="Your Full Name" name="name" aria-describedby="nameHelp" placeholder="Name">
-              <label class="error-txt js-error"></label>
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="email" 
-              placeholder="Email Address" name="email">
-              <label class="error-txt js-error"></label>
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="mobile" placeholder="Mobile Number" name="number">
-              <label class="error-txt js-error"></label>
-            </div>
-            <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
-
-            <input type="hidden" name="prd" value="Data Science Certification">
-
-            <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
-
-            <input type="hidden" name="lsource" value="{{ lead_source }}">
-            
-            <div class="tnc">
-              By registering with us you agree to our 
-              <a href="/tnc">Terms & Conditions</a>
-            </div>
-            <button type="submit" class="btn btn-default" 
-              onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enroll Now</button>
-            <p>*Easy EMI option available</p>
-          </form> -->
+        <div class="thankyou-popup" style="display: none">
+          <figure class="tick-icon"></figure>
+          <strong>Thank You</strong>
+          Our resume service executive will get in touch with you shortly.
+        </div>
       </div>
   </div>
 </div> 
