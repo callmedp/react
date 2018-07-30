@@ -532,6 +532,15 @@ article {
 
 /*------marketing popup css------*/
 .marketing-popup {
+  .content-box {
+    .number {
+      width: 72%;
+      margin-left: 15px;
+    }
+  }
+  .code {
+    width: 22%;
+  }
   border-radius: 0 !important;
 
   .header {
@@ -599,3 +608,27 @@ article {
   }
 }
 
+
+.thankyou-popup {
+  text-align: center;
+  font-size: $font-size;
+  color: $txt-grey-999;
+  font-weight: $font-weight+100;
+  margin: 15% 0 15% 0;
+
+  .tick-icon {
+    background-image: url("../../../images/tick.png");
+    background-size: cover;
+    width: 69px;
+    height: 64px;
+    margin: 20px auto;
+    display: block;
+  }
+
+  strong {
+    font-size: $font-size+19;
+    color: #08d0d5;
+    display: block;
+    margin: 25px 0 30px 0;
+  }
+}

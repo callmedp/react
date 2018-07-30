@@ -2094,6 +2094,15 @@ footer {
 	vertical-align: sub;
 }
 
+.tick-icon {
+	width: 69px;
+	height: 64px;
+	background: $sprite -637px -307px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+
 /*---------login signup banner page css---------*/
 
 .login-signup-box {
@@ -2969,6 +2978,21 @@ footer {
 					width: 79%;
 					display: inline-block;
 				}
+			}
+		}
+
+		.thankyou-popup {
+			text-align: center;
+			font-size: $font-size+3;
+			color: $grey-color;
+			font-weight: $font-weight+100;
+			margin-top: 45%;
+
+			strong {
+				font-size: $font-size+23;
+				color: #08d0d5;
+				display: block;
+				margin: 15px 0 30px 0;
 			}
 		}
 	}

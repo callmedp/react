@@ -91,7 +91,18 @@ $("#overlay_lead").validate({
                 var ga_code = document.createElement('div');
                 ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
                document.body.appendChild(ga_code);
-               window.location.href ='/thankyou-for-query';
+                $('#overlay_lead').css('display', 'none');
+                $('.thankyou-popup').css('display','inherit');
+                if($('.modal').modal){
+                    setTimeout(function() {
+                        $('.modal').modal('hide');
+                    }, 4000);
+                }
+                else{
+                    setTimeout(function() {
+                        $('.modal').fadeOut(300);
+                    }, 4000);
+                }
                 return false;
             }
         }, 'json');
