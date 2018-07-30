@@ -384,6 +384,7 @@ class DashboardFeedbackView(TemplateView):
                 self.oi = OrderItem.objects.select_related("order").get(pk=self.oi_pk)
                 review = request.POST.get('review', '').strip()
                 rating = int(request.POST.get('rating', 1))
+                title = request.POST.get('title', '').strip()
                 if rating and self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
                     name = ''
                     if request.session.get('first_name'):
@@ -400,7 +401,8 @@ class DashboardFeedbackView(TemplateView):
                         user_email=email,
                         user_id=self.candidate_id,
                         content=review,
-                        average_rating=rating
+                        average_rating=rating,
+                        title=title
                     )
 
                     extra_content_obj = ContentType.objects.get(app_label="order", model="OrderItem")

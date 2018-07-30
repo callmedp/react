@@ -499,6 +499,12 @@ article {
   }
 }
 
+.collapse.in {
+    display: block;
+}
+.collapse {
+    display: none;
+}
 
 .custom-search {
   position: relative;

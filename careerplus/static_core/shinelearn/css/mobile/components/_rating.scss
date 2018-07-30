@@ -43,25 +43,19 @@
 
 /* The star of the show */
 .rate > label:before {
+  content: "\2605" !important;
   display: inline-block;
-  font-size: 20px;
-  padding: 0 1px;
+  font-size: 18px;
+  padding: 0;
   margin: 0;
   cursor: pointer;
-  content: "\2605 ";
+  border: 0 !important;
   /* full star */
-}
-
-/* Zero stars rating */
-.rate > label:last-child:before {
-  content: "\2605 ";
-  /* empty star outline */
 }
 
 /* Half star trick */
 .rate .half:before {
   content: "\2605 ";
-  /* half star no outline */
   position: absolute;
   padding-right: 0;
 }
@@ -83,4 +77,15 @@
 
 .rating-feedback input:checked ~ label:hover:before {
   border: 0 none;
+}
+
+
+.rating-feedback [type="radio"]:checked + label:after, 
+.rating-feedback [type="radio"]:not(:checked) + label:after {
+  background: none;
+}
+
+.rating-feedback [type="radio"]:checked + label, 
+.rating-feedback [type="radio"]:not(:checked) + label {
+  padding-left: 22px;
 }
