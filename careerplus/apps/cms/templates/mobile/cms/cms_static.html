@@ -1,16 +1,11 @@
+{% extends "mobile/basic/base.html" %}
 {% load static compress %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
+{% block head %}
+ {% block meta_html %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0' > -->
-    <link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
-    <link href="{% static 'shinelearn/css/mobile/cms/resume.css' %}" rel="stylesheet">
-    <link href="{% static 'shinelearn/css/mobile/cms//smk-accordion.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'shinelearn/css/mobile/cms/swipebox.css' %}">
-    <link rel="shortcut icon" href="https://static1.shine.com/l/s/shinelearn/images/fav_icon.png">
     <meta name="description" content="Free Resume Format Online - Get Resume Format recommended by experts for experienced professionals or freshers. Download Resume Format samples in pdf or word doc">
     <meta name="keywords" content="E-Learning, Skills, Resume, India">
     <meta property="og:title" content="Resume Format and CV Samples - Download Online @ Shine Learning">
@@ -24,16 +19,64 @@
     <meta itemprop="dateModified" content="2018-07-20 08:52:47.536574+00:00">
     <meta itemprop="url" content="https://learning.shine.com/cms/resume-format/1/">
     <meta itemprop="description" content="Free Resume Format Online - Get Resume Format recommended by experts for experienced professionals or freshers. Download Resume Format samples in pdf or word doc">
-    <link rel="canonical" href="//learning.shine.com/cms/resume-format/1/">
+
+{% endblock meta_html %}
+    {% block django_meta %}
+    {% endblock django_meta %}
+
+{% block canonical_url %}
+<link rel="canonical" href="//learning.shine.com/cms/resume-format/1/">
+{% endblock canonical_url %}
+
+<title> {% block title %}Resume Format and CV Samples - Download Online @ Shine Learning{% endblock title %}</title>
+
+{% block css_section %}
+<link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
+ {% compress css %}
+<link href="{% static 'shinelearn/css/mobile/cms/resume.css' %}" rel="stylesheet">
+<link href="{% static 'shinelearn/css/mobile/cms//smk-accordion.css' %}" rel="stylesheet">
+ <link rel="stylesheet" href="{% static 'shinelearn/css/mobile/cms/swipebox.css' %}">
+ <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/navigation.scss' %}" rel="stylesheet">
+ <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/images.scss' %}" rel="stylesheet" >
+ <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/global.scss' %}" rel="stylesheet">
+ <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/icons.scss' %}" rel="stylesheet">
+
+{% endcompress %}
+{% endblock css_section %}
     <link rel="alternate" href="//mlearning.shine.com/cms/resume-format/1/">
     <link rel="amphtml" href="//mlearning.shine.com/cms/resume-format/1/?type=amp">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>
-    Resume Format and CV Samples - Download Online @ Shine Learning
-    </title>
 
-      </head>
-  <body>
+
+    <link rel="shortcut icon" href="https://static1.shine.com/l/s/shinelearn/images/fav_icon.png">
+
+{% endblock head %}
+
+  {% block main_container %}
+
+{% block header %}
+
+ <header class="w100fl he-auto">
+    <img src="{% static 'shinelearn/images/mobile/common/header-back-img.png' %}">
+    <!-- header menu Icon Starts here -->
+    <div class="main-menu w100fl">
+        <div class="pull-left">
+            <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button" ></a>
+            <a class=" pull-left" role="button" onclick="goBack()"></a>
+        </div><!-- / Left side Icon ends here -->
+
+        <div class="pull-right">
+            <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
+            <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+        </div>
+
+        <!-- / Right side Icon ends here -->
+    </div><!-- header menu Icon ends here -->
+        <h1 class="heading-back w100fl pb-0">Resume Format and CV Samples - Download Online @ Shine Learning</h1>
+</header>
+
+
+{% endblock header %}
+{% block container %}
     <div class="wrapper">
       <div class="body-wrapper">
 
@@ -86,7 +129,7 @@ There are three basic types of resume formats that are considered standard as pe
           <p>The chronological resume is the type of format in which information is presented in a standard timeline, preferably reverse chronological. It means that the information is presented from recent to old or vice versa, as the events happened.</p>
           <div class="img-wrap">
                                 <div class="img-content">
-                                    <a href="{% static 'shinelearn/static_media/chrono-format.docx' %}" class="icon-downlod"></a>
+                                    <a href="{% static 'shinelearn/static_media/chrono-format.docx' %}" class="jcon-downlod"></a>
                                     <div class="overlay"></div>
                                     <img src="{% static 'shinelearn/images/mobile/cms/chrono-format.jpg' %}" alt="Features of a Chronological Resume Format" class="img-fluid">
                                 </div>
@@ -111,7 +154,7 @@ There are three basic types of resume formats that are considered standard as pe
           <p>The functional resume is used to present direct points with an emphasis on factual, static, and simple information. The information does not follow a defined pattern except as defined by headings.</p>
          <div class="img-wrap">
                                 <div class="img-content">
-                                    <a href="{% static 'shinelearn/static_media/functional.docx' %}" class="icon-downlod"></a>
+                                    <a href="{% static 'shinelearn/static_media/functional.docx' %}" class="jcon-downlod"></a>
                                     <div class="overlay"></div>
                                     <img src="{% static 'shinelearn/images/mobile/cms/functional.jpg' %}" alt="Features of a Functional Resume Format" class="img-fluid">
                                 </div>
@@ -137,7 +180,7 @@ There are three basic types of resume formats that are considered standard as pe
           <p>The combination resumes are hybrid and custom resume formats. They use features of both chronological and functional resume to build custom profiles.</p>
          <div class="img-wrap">
                                 <div class="img-content">
-                                    <a href="{% static 'shinelearn/static_media/mixed-format.docx' %}" class="icon-downlod"></a>
+                                    <a href="{% static 'shinelearn/static_media/mixed-format.docx' %}" class="jcon-downlod"></a>
                                     <div class="overlay"></div>
                                     <img src="{% static 'shinelearn/images/mobile/cms/mixed-format.jpg' %}" alt="Features of a Chronological Resume Format" class="img-fluid">
                                 </div>
@@ -287,7 +330,7 @@ It is important to understand that these resumes are not accepted everywhere and
   <div class="modal-content">
     <span class="close">&times;</span>
     <strong>Request a call</strong>
-<form  method="post" id="callback_form">
+<form class="form-group" method="post" id="callback_form">
 
     <ul>
 <li>
@@ -313,18 +356,28 @@ It is important to understand that these resumes are not accepted everywhere and
 </div>
 
 
+ {% endblock container %}
 
-
-
-
+{% endblock main_container %}
+    {% block js_section %}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"> </script>
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{% static 'shinelearn/js/mobile/cms/smk-accordion.js' %}"></script>
-<script type="text/javascript" src="{% static 'shinelearn/js/cms/validate.js' %}"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 
-
+     {% compress js %}
+        <script type="text/javascript" src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.bxslider.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.simpler-sidebar.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/slick.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/cms/validate.js' %}"></script>
+{% endcompress %}
 
 <script type="text/javascript">
   jQuery(document).ready(function($){
@@ -339,30 +392,23 @@ It is important to understand that these resumes are not accepted everywhere and
 <script>
 // Get the modal
 var memodal = document.getElementById('myModal' );
-
 // Get the button that opens the modal
 var btn = document.getElementById("myBtn");
-
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
-
 // When the user clicks the button, open the modal
 btn.onclick = function() {
     //modal.style.display = "block";
     modal('myModal','block');
 }
-
-
 function modal(id,option){
   document.getElementById(id).style.display = option;
 }
-
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
      modal('myModal','none');
     <!--modal.style.display = "none";-->
 }
-
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == memodal) {
@@ -375,14 +421,15 @@ window.onclick = function(event) {
 
 <script type="text/javascript">
 ;( function( $ ) {
-
   $( '.swipebox' ).swipebox();
-
 } )( jQuery );
 </script>
 
+    {% block johukum %}
+        <script type='text/javascript' id='spd-busns-spt' async=''
+            src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
+            data-client='324ed0abb0694b0c66a6daecb178352d'>
+        </script>
+        {% endblock johukum %}
 
-
-
-      </body>
-</html>
+{% endblock js_section %}

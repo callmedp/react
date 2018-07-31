@@ -153,7 +153,7 @@ body {
     height: 217px;
 }
 
-.icon-downlod {
+.jcon-downlod {
     width: 44px;
     height: 44px;
     display: block;
@@ -362,3 +362,4 @@ font-size: 1.3rem;
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
 }
+
