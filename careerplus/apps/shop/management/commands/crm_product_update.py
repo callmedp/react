@@ -29,7 +29,9 @@ class Command(BaseCommand):
         post_url = settings.SHINECPCRM_DICT.get('base_url') + \
             settings.SHINECPCRM_DICT.get('update_products_url')
         queryset_list = Product.objects.all()
-        count = 0
+        logging.getLogger('info_log').info("CRM - Total Products to be Updated {}".format(queryset_list.count()))
+        success_count = 0
+
         for que in queryset_list:
             data_dict = CRMProductSerializer(que).data
             try:
@@ -38,12 +40,19 @@ class Command(BaseCommand):
                     data=json.dumps(data_dict),
                     headers=headers,
                     timeout=settings.SHINECPCRM_DICT.get('timeout'))
-                count += 1
-                if count % 10 == 0:
+                
+                if response.status_code == 200:
+                    success_count += 1
                     logging.getLogger('info_log').info(
-                        "{} Product Updated".format(count))
-                if response.status_code == 400:
-                    logging.getLogger('info_log').info(
-                        "{}".format(response.content))
+                        "{} Product Updated".format(que.id))
+
+                else:
+                    logging.getLogger('error_log').error(
+                        "Product Update Failed {} - {}".format(que.id,response.content))
             except Exception as e:
                 logging.getLogger('error_log').error("%s" % str(e))
+
+        logging.getLogger('info_log').info("CRM - Total Products successfully Updated {}".format(success_count))
+
+
+
