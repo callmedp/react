@@ -70,3 +70,85 @@ $('.cls_showPanel').on('click',function(e){
     
     
 });
+
+
+$.validator.addMethod("lettersonly", function (value, element){
+    return this.optional(element) || /^[a-z\s]*$/i.test(value);
+}, "Letters only please");
+
+$("#overlay_lead").validate({
+    submitHandler:function (form) {
+        var action = $(form).attr('action');
+        $('#overlay-submit-btn').attr('disabled', 'true')
+        $.post(action, $(form).serialize(), function (data) {
+            if (data && data['status']){
+                $.each($("#overlay_lead"), function (i, e) {
+                    e.reset();
+                });
+                $("#overlay_lead label").remove();
+                var conversion_id = 991709191;
+                var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                var ga_code = document.createElement('div');
+                ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+               document.body.appendChild(ga_code);
+                $('#overlay_lead').css('display', 'none');
+                $('.thankyou-popup').css('display','inherit');
+                if($('.modal').modal){
+                    setTimeout(function() {
+                        $('.modal').modal('hide');
+                    }, 4000);
+                }
+                else{
+                    setTimeout(function() {
+                        $('.modal').fadeOut(300);
+                    }, 4000);
+                }
+                return false;
+            }
+        }, 'json');
+    },
+    rules:{
+        number:{
+            required:true,
+            number:true,
+            minlength:10,
+            maxlength:10,
+        },
+        email:{
+            email:true,
+            required:true,
+
+        },
+        name:{
+            required:true,
+            lettersonly:true,
+
+        },
+    },
+    messages:{
+        number:{
+           required:"Field is required",
+           number: "Please enter valid number only"
+        },
+        email:{
+            required:"Field is required"
+        },
+        name:{
+            required:"Field is required"
+        },
+    },
+    highlight:function(element, errorClass) {
+      $(element).closest('.form-group').addClass('error');
+    },
+    unhighlight:function(element, errorClass) {
+      $(element).closest('.form-group').removeClass('error');
+      $(element).siblings('.js-error').html("");
+    },
+    errorPlacement: function(error, element){
+      $(element).siblings('.js-error').html(error.text());
+    } 
+});
+
+function closeOverlayModal() {
+    $('.modal').fadeOut(300);
+}

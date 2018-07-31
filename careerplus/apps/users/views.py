@@ -387,6 +387,8 @@ class SocialLoginView(View):
     success_url = '/'
 
     def get(self, request, *args, **kwargs):
+        if self.request.GET.get('next_url'):
+            self.success_url = self.request.GET.get('next_url')
         try:
             if request.GET.get('key') == 'fb':
                 fb_user = RegistrationLoginApi.social_login(request.GET)

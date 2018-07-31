@@ -120,7 +120,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
                         obj.save()
 
                         # mail to user about writer information
-                        to_emails = [obj.order.email]
+                        to_emails = [obj.order.get_email()]
                         mail_type = 'ALLOCATED_TO_WRITER'
                         data = {}
                         data.update({

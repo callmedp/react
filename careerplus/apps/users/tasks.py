@@ -18,7 +18,7 @@ def randompassword():
     return ''.join(random.choice(chars) for x in range(size))
 
 
-@task(name="register user on shine")
+@task(name="register user on shine" )
 def user_register(data={}, order=None):
     try:
         # data dict contains following data email, raw_password, country_code, cell_phone, vendor_id
@@ -26,9 +26,9 @@ def user_register(data={}, order=None):
         if not data:
             order = Order.objects.get(pk=order)
             data.update({
-                "email": order.email,
+                "email": order.get_email(),
                 "country_code": order.country_code,
-                "cell_phone": order.mobile,
+                "cell_phone": order.get_mobile(),
                 "name": order.first_name + ' ' + order.last_name,
             })
         data.update({

@@ -127,6 +127,12 @@
       
     {% endblock footer %}
 
+    {% block marketingpopup%}
+      {% if marketing_popup_html %}
+          {% include marketing_popup_html %}
+      {% endif %}
+    {% endblock %}
+
     {% block js_section %}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
@@ -146,7 +152,12 @@
         $('.dropdown').hover(function(){
             $('.dropdown-toggle', this).trigger('click');
           });
+      {% if marketing_popup_html %}
         
+        setTimeout(function() {
+          $('.marketing-popup').modal();
+        }, 1000);
+      {% endif %}
       
     </script>
 
@@ -158,6 +169,7 @@
         data-client='324ed0abb0694b0c66a6daecb178352d'>
     </script>
     {% endblock johukum %}
+
     {% block banner_ads_bottom %}
         <!-- /1198510/ShineLearning_1x1_desktop -->
         <div id='div-gpt-ad-1509431221932-0'>

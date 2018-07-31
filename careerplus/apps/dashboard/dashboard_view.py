@@ -384,6 +384,7 @@ class DashboardFeedbackView(TemplateView):
                 self.oi = OrderItem.objects.select_related("order").get(pk=self.oi_pk)
                 review = request.POST.get('review', '').strip()
                 rating = int(request.POST.get('rating', 1))
+                title = request.POST.get('title', '').strip()
                 if rating and self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
                     name = ''
                     if request.session.get('first_name'):
@@ -400,7 +401,8 @@ class DashboardFeedbackView(TemplateView):
                         user_email=email,
                         user_id=self.candidate_id,
                         content=review,
-                        average_rating=rating
+                        average_rating=rating,
+                        title=title
                     )
 
                     extra_content_obj = ContentType.objects.get(app_label="order", model="OrderItem")
@@ -415,7 +417,7 @@ class DashboardFeedbackView(TemplateView):
                     # send mail for coupon
                     if self.oi.user_feedback:
                         mail_type = "FEEDBACK_COUPON"
-                        to_emails = [self.oi.order.email]
+                        to_emails = [self.oi.order.get_email()]
                         email_dict.update({
                             "username": self.oi.order.first_name if self.oi.order.first_name else self.oi.order.candidate_id,
                             "subject": 'You earned a discount coupon worth Rs. <500>',
@@ -545,7 +547,7 @@ class DashboardAcceptService(View):
 
                         data['display_message'] = "You Accept draft successfully"
 
-                        to_emails = [oi.order.email]
+                        to_emails = [oi.order.get_email()]
                         email_sets = list(
                             oi.emailorderitemoperation_set.all().values_list(
                                 'email_oi_status', flat=True).distinct())
@@ -560,7 +562,7 @@ class DashboardAcceptService(View):
                             "subject": 'Closing your ' + oi.product.name + ' service',
                             "username": oi.order.first_name,
                             'draft_added': oi.draft_added_on,
-                            'mobile': oi.order.mobile,
+                            'mobile': oi.order.get_mobile(),
                             'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                                 settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                         })
