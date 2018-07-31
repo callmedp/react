@@ -31,13 +31,13 @@
                     {% if bread.url %}
                         <li itemprop="itemListElement" itemscope
 					      itemtype="http://schema.org/ListItem">
-					        <meta name="name" content="{{bread.name}}" />
-						    <a href='{{bread.url}}' itemprop="url">{{bread.name}}
-						    <meta name="position" content="{{forloop.counter}}" />
-                        </a>
+						    <a href='{{bread.url}}' itemprop="item">{{bread.name}}
+	                        </a>
+							<meta itemprop="name" content="{{bread.name}}" />
+						    <meta itemprop="position" content="{{forloop.counter}}" />
 	                    </li>
                     {% else %}
-                        <li class="active" itemprop="name">{{bread.name}}</li>
+                        <li class="active">{{bread.name}}</li>
                     {% endif %}
                 {% endfor %}
             </ol>
