@@ -30,6 +30,7 @@ from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from wallet.models import Wallet
+from core.tasks import upload_resume_to_shine
 from core.api_mixin import ShineCandidateDetail
 from core.mixins import InvoiceGenerate
 from console.decorators import Decorate, stop_browser_cache
@@ -331,8 +332,6 @@ class DashboardFeedbackView(TemplateView):
         self.rating = None
         self.sel_rat = None
 
-
-
     def get(self, request, *args, **kwargs):
         self.candidate_id = request.session.get('candidate_id', None)
         self.oi_pk = request.GET.get('oi_pk')
@@ -340,7 +339,6 @@ class DashboardFeedbackView(TemplateView):
 
         if request.is_ajax() and self.oi_pk and self.candidate_id:
             try:
-
 
                 self.oi = OrderItem.objects.select_related("order").get(pk=self.oi_pk)
                 if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3] and self.oi.oi_status == 4 and not self.oi.user_feedback:
@@ -359,7 +357,7 @@ class DashboardFeedbackView(TemplateView):
         ratings = self.rating
         if ratings:
             self.sel_rat = ratings[-1:]
-        else :
+        else:
             self.sel_rat = 0
 
         if self.oi and self.oi.order.candidate_id == self.candidate_id:
@@ -408,7 +406,6 @@ class DashboardFeedbackView(TemplateView):
                     review_obj.extra_content_type = extra_content_obj
                     review_obj.extra_object_id = self.oi.id
                     review_obj.save()
-
 
                     self.oi.user_feedback = True
                     self.oi.save()
@@ -578,6 +575,8 @@ class DashboardAcceptService(View):
                             except Exception as e:
                                 logging.getLogger('error_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
+
+                            upload_resume_to_shine(oi_pk=oi.pk)
 
                         elif oi.product.type_flow == 8 and (9 not in email_sets and 4 not in sms_sets):
                             send_email_task.delay(
@@ -778,7 +777,7 @@ class DashboardInvoiceDownload(View):
                 if invoice:
                     file_path = invoice.name
                     if not settings.IS_GCP:
-                        file_path = settings.INVOICE_DIR + invoice.name
+                        file_path = invoice.path
                         fsock = FileWrapper(open(file_path, 'rb'))
                     else:
                         fsock = GCPInvoiceStorage().open(file_path)
