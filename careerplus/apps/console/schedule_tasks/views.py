@@ -4,7 +4,7 @@ import mimetypes
 
 from wsgiref.util import FileWrapper
 
-from django.views.generic import FormView, ListView, View
+from django.views.generic import FormView, ListView, View, TemplateView
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.urls import reverse
@@ -21,8 +21,13 @@ from console.decorators import (
 from scheduler.models import Scheduler
 
 from .tasks import (
-    gen_auto_login_token_task)
+    gen_auto_login_token_task,
+    gen_product_list_task
+)
 from . import forms
+
+from shop.models import Product
+from partner.models import Vendor
 
 
 @Decorate(stop_browser_cache())
@@ -133,7 +138,7 @@ class TaskListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(TaskListView, self).get_queryset()
-        queryset = queryset.filter(task_type=1)
+        queryset = queryset.filter(task_type__in=[1, 4])
         return queryset.order_by('-modified')
 
 
@@ -189,3 +194,52 @@ class DownloadTaskView(View):
             messages.add_message(request, messages.ERROR, "Sorry, the document is currently unavailable.")
             response = HttpResponseRedirect(reverse('console:tasks:tasklist'))
             return response
+
+
+class DownloadProductListView(TemplateView, PaginationMixin):
+    model = Product
+    template_name = 'console/tasks/download_list_product.html'
+    vendor_list = []
+    vendor_select = None
+    product_class_list = []
+    product_class_select = None
+    status = None
+
+    def get(self, request, *args, **kwargs):
+        self.vendor_list = Vendor.objects.all().values_list('name', flat=True).distinct()
+        self.product_class_list = settings.COURSE_SLUG + settings.SERVICE_SLUG
+        return super(DownloadProductListView, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(DownloadProductListView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        alert = messages.get_messages(self.request)
+        context.update({
+            "messages": alert,
+            'vendor_list': self.vendor_list,
+            'vendor_select': self.vendor_select,
+            'product_class_list': self.product_class_list,
+            'product_class_select': self.product_class_select
+        })
+        return context
+
+    def post(self, request, *args, **kwargs):
+        task_type = 4
+        self.status = request.POST.get('is_active', '')
+        self.vendor_select = request.POST.get('vendor', '')
+        self.product_class_select = request.POST.get('product_class', '')
+        Task = Scheduler.objects.create(
+            task_type=task_type,
+            created_by=request.user,
+        )
+        gen_product_list_task.delay(
+            task=Task.pk,
+            user=request.user.pk,
+            status=self.status,
+            vendor=self.vendor_select,
+            product_class=self.product_class_select)
+        messages.add_message(
+            request, messages.SUCCESS,
+            'Task Created SuccessFully, Product List is generating')
+        return HttpResponseRedirect(reverse('console:tasks:tasklist'))

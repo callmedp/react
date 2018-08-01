@@ -184,9 +184,11 @@
                                 <div class="acc_content"><pre><p>{{prd_uget|striptags|safe}}</p></pre></div>
                             </section>
                         {% endif %}
-                        <section>
-                          {% include "mobile/shop/partials/delivery_flow.html" %}
-                        </section>
+                        {% if sqs.pTF == 1 or sqs.pTF == 12 or sqs.pTF == 13 or sqs.pTF == 2 or sqs.pTF == 3 or sqs.pTF == 4 or sqs.pTF == 5 or sqs.pTF == 6 or sqs.pTF == 7 or sqs.pTF == 9 or sqs.pTF == 10 %}
+                            <section>
+                              {% include "mobile/shop/partials/delivery_flow.html" %}
+                            </section>
+                        {%endif%}
                         {% if chapter and chapter_list %}
                             <section>
                                 <h4 class="acc_head">Program Structure</h4>

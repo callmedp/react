@@ -406,6 +406,7 @@ $(document).ready(function(){
         }
         if (flag && rating_flag){
             var formData = $('#feedback-form').serialize();
+            $(this).attr('disabled','true')
             $.ajax({
                 url: '/dashboard/inbox-feedback/',
                 type: 'POST',
