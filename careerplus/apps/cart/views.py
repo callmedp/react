@@ -90,9 +90,9 @@ class AddToCartView(View, CartMixin):
                     last_name = request.session.get('last_name', '')
                     email = request.session.get('email', '')
                     name = "{}{}".format(first_name, last_name)
-                    cart_drop_out_mail.apply_async(
-                        (cart_pk, email),
-                        countdown=settings.CART_DROP_OUT_EMAIL)
+                    # cart_drop_out_mail.apply_async(
+                    #     (cart_pk, email),
+                    #     countdown=settings.CART_DROP_OUT_EMAIL)
                     source_type = "cart_drop_out"
                     create_lead_on_crm.apply_async(
                         (cart_obj.pk, source_type, name),
