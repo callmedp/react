@@ -50,7 +50,7 @@ class CMSPageView(DetailView, LoadMoreMixin):
     def get_template_names(self):
         if self.request.amp:
             return ["cms/cms_page-amp.html"]
-        if self.object.id == 1:
+        if self.object.id in settings.CMS_ID:
             return ["cms/cms_static.html"]
         return ["cms/cms_page.html"]
 

@@ -47,7 +47,7 @@ $('#callback_form').validate({
         number: {
             required: true,
             number: true,
-            minlength: 4,
+            minlength: 10,
             maxlength: 15
         },
         msg: {
@@ -64,7 +64,7 @@ $('#callback_form').validate({
             required: "Mobile Number is Mandatory",
             number: "Enter only number",
             maxlength: "Please enter less than 16 digits",
-            minlength: "Please enter atleast 4 digits"
+            minlength: "Please enter atleast 10 digits"
         },
         msg: {
             required: "Message is required.",
