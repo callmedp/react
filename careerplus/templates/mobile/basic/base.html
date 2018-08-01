@@ -133,12 +133,28 @@
         <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
         {% endcompress %}
         
-        {% block johukum %}
+        <!-- {% block johukum %}
         <script type='text/javascript' id='spd-busns-spt' async=''
             src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
             data-client='324ed0abb0694b0c66a6daecb178352d'>
         </script>
-        {% endblock johukum %}
+        {% endblock johukum %} -->
+
+        {% block tawkto %}
+            <!--Start of Tawk.to Script-->
+            <script type="text/javascript">
+                var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+                (function(){
+                var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+                s1.async=true;
+                s1.src='https://embed.tawk.to/5b5ff708e21878736ba27989/default';
+                s1.charset='UTF-8';
+                s1.setAttribute('crossorigin','*');
+                s0.parentNode.insertBefore(s1,s0);
+                })();
+            </script>
+        <!--End of Tawk.to Script-->
+        {% endblock tawkto %}
         
     {% endblock js_section %}
     {% block banner_ads_bottom %}
