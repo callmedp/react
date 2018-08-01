@@ -6,9 +6,9 @@
         <!-- Bootstrap -->
         {% compress css %}
 
-        <!--<link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">-->
+        <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
         <!--<link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">-->
-        <link type="text/css"  href="{% static 'shinelearn/css/common/bootstrapv3.3.7.css' %}" rel="stylesheet" >
+        <!--<link type="text/css"  href="{% static 'shinelearn/css/common/bootstrapv3.3.7.css' %}" rel="stylesheet" >-->
         <link type="text/scss" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
         <link type="text/css"  href="{% static 'shinelearn/css/cms/global.css' %}"  rel="stylesheet">
 
@@ -19,12 +19,27 @@
 
 
         <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+
+{% block meta_html %}
  <meta charset="utf-8">
     <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0"/>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+    <meta name="description" content="Free Resume Format Online - Get Resume Format recommended by experts for experienced professionals or freshers. Download Resume Format samples in pdf or word doc">
+    <meta name="keywords" content="E-Learning, Skills, Resume, India">
+    <meta property="og:title" content="Resume Format and CV Samples - Download Online @ Shine Learning">
+    <meta property="og:url" content="https://learning.shine.com/cms/resume-format/1/">
+    <meta property="og:description" content="Free Resume Format Online - Get Resume Format recommended by experts for experienced professionals or freshers. Download Resume Format samples in pdf or word doc">
+    <meta property="og:type" content="Website">
+    <meta property="og:site_name" content="ShineLearning">
+    <meta property="article:modified_time" content="2018-07-20 08:52:47.536574+00:00">
+    <meta property="fb:profile_id" content="282244838633660">
+    <meta itemprop="name" content="Resume Format and CV Samples - Download Online @ Shine Learning">
+    <meta itemprop="dateModified" content="2018-07-20 08:52:47.536574+00:00">
+    <meta itemprop="url" content="https://learning.shine.com/cms/resume-format/1/">
+    <meta itemprop="description" content="Free Resume Format Online - Get Resume Format recommended by experts for experienced professionals or freshers. Download Resume Format samples in pdf or word doc">
 
-
+{% endblock meta_html %}
     <!-- Bootstrap CSS -->
 
     <title>{% block title %}Shine Learning{%endblock title%}</title>
@@ -350,7 +365,40 @@
                         </ul>
                     </div><!-- /. social-share -->
 
+                    <div id="snackbar"></div>
                     <div class="white-box">
+                        <h4 class="uppercase pb-15 mb-15">Request a call</h4>
+                        <form class="form-group" role="form" id="callback_form">
+                            <div class="form-group">
+                            <input type="text" class="form-control" name='name' placeholder="Name" value="{{request.session.full_name|safe}}">
+                            <span class="error-txt"></span>
+                            </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="number" id="id_mobile" placeholder="Mobile Number" value="{{request.session.mobile_no|safe}}" maxlength="15">
+                            <span class="error-txt"></span>
+                        </div>
+
+                        {% if  page_obj %}
+            <input type="hidden" name="lsource" value="7">
+            <input type="hidden" name="product" value="{{page_obj.pk}}">
+            <input type="hidden" name="prd" value="{{page_obj.heading}}">
+            <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
+          {% endif %}
+                        <div class="form-group">
+                            <textarea class="form-control" name='msg' placeholder="Message" rows="3"></textarea>
+                            <span class="error-txt"></span>
+                        </div>
+                        </form>
+                        <button type="submit" id="id_callback" class="btn btn-primary w-100">Message</button>
+
+                        <div class="call mt-30 text-center">
+                            <p class="number"><span class="icon-call"></span><a href="tel:{{ggn_contact_full}}">{{ggn_contact_full}}</a></p>
+                            <p class="fs-12 c9">9AM to 7PM IST Monday-Saturday</p>
+                        </div>
+
+                    </div><!-- /. white-box -->
+
+                    <div class="white-box mt-30">
                         <h4 class="uppercase pb-15 mb-15">Related articles</h4>
                         <ul>
                             <li class="mb-20">
@@ -420,38 +468,7 @@
                         </ul>
                     </div><!-- /. white-box -->
 
-                     <div id="snackbar"></div>
-                    <div class="white-box mt-30">
-                        <h4 class="uppercase pb-15 mb-15">Request a call</h4>
-                        <form class="form-group" role="form" id="callback_form">
-                            <div class="form-group">
-                            <input type="text" class="form-control" name='name' placeholder="Name" value="{{request.session.full_name|safe}}">
-                            <span class="error-txt"></span>
-                            </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="number" id="id_mobile" placeholder="Mobile Number" value="{{request.session.mobile_no|safe}}" maxlength="15">
-                            <span class="error-txt"></span>
-                        </div>
 
-                        {% if  page_obj %}
-            <input type="hidden" name="lsource" value="7">
-            <input type="hidden" name="product" value="{{page_obj.pk}}">
-            <input type="hidden" name="prd" value="{{page_obj.heading}}">
-            <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
-          {% endif %}
-                        <div class="form-group">
-                            <textarea class="form-control" name='msg' placeholder="Message" rows="3"></textarea>
-                            <span class="error-txt"></span>
-                        </div>
-                        </form>
-                        <button type="submit" id="id_callback" class="btn btn-primary w-100">Message</button>
-
-                        <div class="call mt-30 text-center">
-                            <p class="number"><span class="icon-call"></span><a href="tel:{{ggn_contact_full}}">{{ggn_contact_full}}</a></p>
-                            <p class="fs-12 c9">9AM to 7PM IST Monday-Saturday</p>
-                        </div>
-                    </div>
-                    </div><!-- /. white-box -->
                 </div><!-- /. Right pan -->
             </div><!-- /. col -->
         </div><!-- /. row -->
