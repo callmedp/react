@@ -22,7 +22,7 @@ def upload_resume_to_shine(oi_pk=None):
 			}
 			files = {
 				'resume_file': open(
-					settings.RESUME_DIR + oi.oi_draft.name),
+					settings.RESUME_DIR + oi.oi_draft.name, 'rb'),
 			}
 
 			flag = UploadResumeToShine().sync_candidate_resume_to_shine(
