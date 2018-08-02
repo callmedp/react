@@ -69,7 +69,7 @@ DURATION_DICT = {
     'D7': '3+ years',
 }
 
-
+#
 def convert_to_month(days=0):
     if days:
         months = int(days)//30
@@ -89,8 +89,8 @@ def convert_to_month(days=0):
             return 'D6'
         elif 36 < months:
             return 'D7'
-    return 'D0'
-
+    return "D0"
+#
 
 C_ATTR_DICT = {
     'SM': 'study_mode',

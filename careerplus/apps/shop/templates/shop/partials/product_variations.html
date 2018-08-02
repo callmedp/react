@@ -34,7 +34,11 @@
             <tr class="parent-check">
               <td><label><input class="js-check" type="radio" {% if forloop.first or vars.id in selected_products %}checked{% endif %} name="radio" data-price="{{vars.inr_price}}" data-id="{{vars.id}}" actual-price="{% if vars.fake_inr_price %} {{vars.fake_inr_price}}{% else %}{{vars.inr_price}}{% endif %}"></label></td>
               <td>{{vars.mode|get_choice_display:"STUDY_MODE"}}</td>
-              <td>{{vars.duration|get_choice_display:"DURATION_DICT"}}</td>
+              <td>{%if vars.dur_days%}
+                {{vars.dur_days}} Days
+              {%else%}
+                1 Day
+              {% endif %}</td>
               <td>{% if vars.certify %}
                 Yes {% else %}
                 No{% endif %}</td>
