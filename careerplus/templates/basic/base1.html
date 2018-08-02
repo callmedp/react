@@ -170,21 +170,11 @@
     </script>
     {% endblock johukum %} -->
 
-    {% block tawkto %}
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-        (function(){
-        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-        s1.async=true;
-        s1.src='https://embed.tawk.to/5b5ff708e21878736ba27989/default';
-        s1.charset='UTF-8';
-        s1.setAttribute('crossorigin','*');
-        s0.parentNode.insertBefore(s1,s0);
-        })();
-    </script>
-<!--End of Tawk.to Script-->
-{% endblock tawkto %}
+    {% block zendesk %}
+    <!-- Start of shinehelp Zendesk Widget script -->
+        <script>/*<![CDATA[*/window.zE||(function(e,t,s){var n=window.zE=window.zEmbed=function(){n._.push(arguments)}, a=n.s=e.createElement(t),r=e.getElementsByTagName(t)[0];n.set=function(e){ n.set._.push(e)},n._=[],n.set._=[],a.async=true,a.setAttribute("charset","utf-8"), a.src="https://static.zdassets.com/ekr/asset_composer.js?key="+s, n.t=+new Date,a.type="text/javascript",r.parentNode.insertBefore(a,r)})(document,"script","51d6a6f8-193c-4a13-8eac-ba8bf91d6556");/*]]>*/</script>
+        <!-- End of shinehelp Zendesk Widget script -->
+    {% endblock zendesk %}
 
 
     {% block banner_ads_bottom %}
