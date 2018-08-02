@@ -50,6 +50,8 @@ class CMSPageView(DetailView, LoadMoreMixin):
     def get_template_names(self):
         if self.request.amp:
             return ["cms/cms_page-amp.html"]
+        if self.object.id in settings.CMS_ID:
+            return ["cms/cms_static.html"]
         return ["cms/cms_page.html"]
 
     def redirect_if_necessary(self, current_path, article):

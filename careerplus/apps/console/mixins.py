@@ -313,14 +313,14 @@ class ActionUserMixin(object):
                 order = oi.order
                 file = oi_draft
                 filename = os.path.splitext(file.name)
-                extention = filename[len(filename)-1] if len(
+                extention = filename[len(filename) - 1] if len(
                     filename) > 1 else ''
                 file_name = 'draftupload_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(int(random()*9999)) \
                     + '_' + timezone.now().strftime('%Y%m%d') + extention
                 full_path = '%s/' % str(order.pk)
                 if not settings.IS_GCP:
                     if not os.path.exists(settings.RESUME_DIR + full_path):
-                        os.makedirs(settings.RESUME_DIR +  full_path)
+                        os.makedirs(settings.RESUME_DIR + full_path)
                     dest = open(
                         settings.RESUME_DIR + full_path + file_name, 'wb')
                     for chunk in file.chunks():

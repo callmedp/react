@@ -290,3 +290,7 @@ try:
     from .settings_local import *
 except:
     pass
+
+########### CMS STATIC PAGE RENDERING ID#########
+
+CMS_ID = [1]
