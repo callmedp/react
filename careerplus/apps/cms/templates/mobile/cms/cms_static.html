@@ -53,6 +53,7 @@
 
   {% block main_container %}
 
+
 {% block header %}
 
  <header class="w100fl he-auto">
@@ -357,6 +358,10 @@ It is important to understand that these resumes are not accepted everywhere and
 
 
  {% endblock container %}
+{% block navigation %}
+                <!-- left side menu -->
+                {% include 'basic/navigation.html' %}
+            {% endblock navigation %}
 
 {% endblock main_container %}
     {% block js_section %}
