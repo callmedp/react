@@ -73,6 +73,8 @@ class SearchBaseView(TemplateView):
 
     def get_template_names(self):
         if self.request.amp:
+            from newrelic import agent
+            agent.disable_browser_autorum()
             return ["search/search-amp.html"]
         return ["search/search.html"]
 

@@ -455,6 +455,8 @@ class TEBlogDetailView(DetailView, BlogMixin):
 
     def get_template_names(self):
         if self.request.amp:
+            from newrelic import agent
+            agent.disable_browser_autorum()
             return ["talenteconomy/article-detail-amp.html"]
         return ["talenteconomy/article-detail.html"]
 
@@ -633,6 +635,8 @@ class AuthorDetailView(DetailView):
 
     def get_template_names(self):
         if self.request.amp:
+            from newrelic import agent
+            agent.disable_browser_autorum()
             return ["talenteconomy/author-detail-amp.html"]
         return ["talenteconomy/author-detail.html"]
 
