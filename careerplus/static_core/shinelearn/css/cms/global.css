@@ -57,11 +57,19 @@ h2, .h2 {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 10px; }
-  .white-box h4 {
+
+
+    .rec-head {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 10px; }
+
+  .rhs-head {
     color: #1f3d6b;
     border-bottom: 2px solid #1f3d6b;
     font-weight: 600;
-    font-size: 1.5rem; }
+    font-size: 1.5rem; 
+  }
   .white-box hr {
     margin: 20px 0; }
   .white-box p:last-child {
@@ -96,7 +104,7 @@ h2, .h2 {
   background-color: #f6f7f9;
   padding: 1.5rem;
 }
-  .most-resume h5 {
+  .subhead {
     font-size: 1.5rem;
     font-weight: 600; }
 
@@ -278,7 +286,7 @@ h2, .h2 {
     list-style-type: none;
     font-size: 1.6rem; }
     .right-pan .white-box ul li h3 {
-      font-weight: 300;
+      font-weight: 600;
       color: #666;
       font-size: 1.4rem;
       line-height: 1.3; }
