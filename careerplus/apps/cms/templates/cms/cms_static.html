@@ -2,6 +2,11 @@
 {% load static humanize compress %}
 
 {% block head %}
+ {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+      <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{ page_obj.get_absolute_url }}?type=amp">
+    {% endblock canonical_url %}
 {% block css_section %}
         <!-- Bootstrap -->
         {% compress css %}
@@ -44,13 +49,31 @@
 
     <title>{% block title %}Resume Format and CV Samples{%endblock title%}</title>
 
+{% block GA %}
+             <!--Global site tag (gtag.js) - Google Analytics-->
+           <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries --><!-- WARNING: Respond.js doesn't work if you view the page via file:// --><!--[if lt IE]><![endif]-->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script><script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+              gtag('config', 'UA-3537905-41');
+
+          gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
+        </script>
+        <!-- Google Tag Manager --><!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':--><!--new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],--><!--j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=--><!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);--><!--})(window,document,'script','dataLayer','GTM-M323HB');</script>--><!-- End Google Tag Manager -->
+        <script type="text/javascript">window['CURRENT_FLAVOUR']="full";window['SHINE_SITE']="https://m.shine.com";window['MAIN_DOMAIN_PREFIX']="https://learning.shine.com";window['MOBILE_LOGIN_URL']="https://learning.shine.com/login/";</script>
+
+        {% endblock GA %}
+
 
 
 {% endblock css_section %}
+{% block banner_ads %}{% endblock banner_ads %}
+    {% block banner_ads_bottom %}{% endblock banner_ads_bottom %}
 
 
 {% endblock head %}
-
 
 {% block container %}
 
@@ -345,6 +368,7 @@
                             <!--<p class="fs-12">1 hr ago</p>-->
                         <!--</li>&lt;!&ndash; /. li &ndash;&gt;-->
                     <!--</ul>-->
+
                     <!--<p><a href="#" class="btn btn-light w-100 pt-15 pb-15 mt-30"><span class="icon-chat"></span> all 23 comments</a></p>-->
                 <!--</div>&lt;!&ndash; /. Write a comment &ndash;&gt;-->
             </div><!-- /. col -->
