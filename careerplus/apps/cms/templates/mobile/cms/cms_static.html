@@ -367,7 +367,11 @@ It is important to understand that these resumes are not accepted everywhere and
 {% block navigation %}
                 <!-- left side menu -->
                 {% include 'basic/navigation.html' %}
-       <div class="navbar-header" itemscope itemtype="http://schema.org/Organization" ></div>
+      <div class="navbar-header" itemscope itemtype="http://schema.org/Organization" >
+      <a class="navbar-brand" href="{% url "homepage" %}"></a>
+      <meta itemprop="name" content="Shine">
+      <meta itemprop="url" content="https://learning.shine.com"/>
+    </div>
             {% endblock navigation %}
 
 {% endblock main_container %}
