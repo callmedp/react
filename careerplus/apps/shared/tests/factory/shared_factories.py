@@ -10,6 +10,8 @@ import factory
 from geolocation.models import Country
 from shop.models import Product, ProductClass, Category, CategoryRelationship
 from order.models import Order, OrderItem
+from users.models import User
+from partner.models import Vendor
 # local imports
 
 
@@ -65,6 +67,29 @@ class ProductClassFactory(factory.django.DjangoModelFactory):
         model = ProductClass
         django_get_or_create = ('name', 'slug')
 
+    name = 'course'
+    slug = 'course'
+
+
+class UserFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = User
+        django_get_or_create = ('email',)
+
+    name = 'ritesh'
+    email = 'ritesh.bisht93@gmail.com'
+    password = factory.PostGenerationMethodCall('set_password', '12345')
+
+
+class VendorFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Vendor
+        django_get_or_create = ('name', 'cp_id', 'slug')
+
+    name = 'careerplus'
+    slug = 'careerplus'
+    cp_id = 1234
+
 
 class ProductFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -117,7 +142,7 @@ class ProductFactory(factory.django.DjangoModelFactory):
     upc = '74836'
     url = ''
     usd_price = Decimal('0.00')
-    vendor_id = 3
+    vendor = factory.SubFactory(VendorFactory)
     video_url = ''
     visibility = True
     product_class = factory.SubFactory(ProductClassFactory)
@@ -131,57 +156,103 @@ class ProductCategoryFactory(factory.django.DjangoModelFactory):
     product = factory.SubFactory(ProductFactory)
 
 
-class OrderItemFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = OrderItem
-
-
 class OrderFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Order
+        django_get_or_create = ('id', )
 
-    orderitem = factory.RelatedFactory(OrderItemFactory, 'order')
-
-    address = 'afddress'
+    address = 'address'
     alt_email = 'ritesh.bisht93@gmail.com'
     alt_mobile = '9958680578'
     archive_json = ''
     assigned_to_id = None
     candidate_id = '5ad08b049ba566523d4fa48a'
     closed_on = None
-    co_id = None
-    conv_charge = Decimal('0.00'),
+    co_id = 123
+    conv_charge = Decimal('0.00')
     country_code = '91'
-    country_id = 1,
+    country_id = 1
     created = datetime.datetime(year=2018, month=2, day=12)
     crm_lead_id = None
     crm_sales_id = None
-    currency = 0,
+    currency = 0
     date_placed = datetime.datetime(year=2018, month=2, day=12)
     email = 'ritesh.bisht93@gmail.com'
     first_name = 'ritesh'
-    id = 235709,
+    id = 235711
     invoice = ''
     last_name = 'bisht'
     midout_sent_on = None
     mobile = '9958680578'
     modified = datetime.datetime(year=2018, month=2, day=12)
     number = 'CP235709'
-    paid_by_id = 18,
+    paid_by_id = None
     payment_date = datetime.datetime(year=2018, month=2, day=12)
     pincode = '110085'
     sales_user_info = ''
-    site = 0,
+    site = 0
     state = 'Delhi'
-    status = 1,
+    status = 1
     tax_config = '{"sgst" = 9.0, "igst" = 0, "cgst" = 9.0}'
-    total_excl_tax = Decimal('6400.00'),
-    total_incl_tax = Decimal('7552.00'),
-    wc_cat = 21,
+    total_excl_tax = Decimal('6400.00')
+    total_incl_tax = Decimal('7552.00')
+    wc_cat = 21
     wc_follow_up = None
-    wc_status = 41,
-    wc_sub_cat = 41,
+    wc_status = 41
+    wc_sub_cat = 41
     welcome_call_done = True
 
 
+class OrderItemFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = OrderItem
+        django_get_or_create = ('id',)
+
+    order = factory.SubFactory(OrderFactory)
+    archive_json = ''
+    assigned_by_id = None
+    assigned_date = None
+    assigned_to_id = None
+    buy_count_updated = False
+    closed_on = None
+    coi_id = None
+    cost_price = Decimal('3000.00')
+    created = datetime.datetime(year=2018, month=2, day=12)
+    delivery_price_excl_tax = Decimal('0.00')
+    delivery_price_incl_tax = Decimal('0.00')
+    delivery_service_id = None
+    discount_amount = Decimal('0.00')
+    draft_added_on = datetime.datetime(year=2018, month=2, day=12)
+    draft_counter = 1
+    expiry_date = None
+    id = 486039
+    is_addon = False
+    is_combo = False
+    is_variation = False
+    last_oi_status = 5
+    modified = datetime.datetime(year=2018, month=2, day=12)
+    no_process = False
+    oi_draft = '235709/draftupload_235709_486039_7309_20180803.docx'
+    oi_flow_status = 0
+    oi_price_before_discounts_excl_tax = Decimal('0.00')
+    oi_price_before_discounts_incl_tax = Decimal('0.00')
+    oi_resume = ''
+    oi_status = 5
+    oio_linkedin_id = None
+    parent_id = None
+    partner_id = 1
+    partner_name = ''
+    # product = factory.SubFactory(ProductFactory)
+    quantity = 1
+    selling_price = Decimal('3540.00')
+    tat_date = None
+    tax_amount = Decimal('540.00')
+    title = 'Resume Booster'
+    upc = '235709_486038'
+    user_feedback = False
+    waiting_for_input = False
+    wc_cat = 21
+    wc_follow_up = None
+    wc_status = 41
+    wc_sub_cat = 41
 

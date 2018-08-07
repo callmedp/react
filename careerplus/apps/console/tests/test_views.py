@@ -2,8 +2,8 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from geolocation.models import Country
 from django.contrib.auth.models import Permission
-from users.models import User
-from shared.tests.factory.shared_factories import ProductFactory
+from shared.tests.factory.shared_factories import \
+    ProductFactory, OrderItemFactory, UserFactory
 
 
 class TestBoosterQueueView(TestCase):
@@ -14,14 +14,11 @@ class TestBoosterQueueView(TestCase):
         self.url = reverse('console:queue-booster')
         self.permission = Permission.objects.get(name='can show booster queue')
         Country.objects.get_or_create(phone='91', name='India')
-
-    def setUpUser(self):
-        self.user, created = User.objects.get_or_create(name='ritesh', email='ritesh.bisht93@gmail.com')
-        self.user.set_password('12345')
-        self.user.save()
+        self.product = ProductFactory(type_flow=7)
+        self.orderitem = OrderItemFactory(product=self.product, order__status=1, oi_status=5)
+        self.user = UserFactory()
 
     def setupUserAndPermission(self):
-        self.setUpUser()
         self.setUpPermission()
         self.setUpLogin()
 
@@ -36,10 +33,6 @@ class TestBoosterQueueView(TestCase):
             '/console/login/', {'username': 'ritesh.bisht93@gmail.com', 'password': '12345'}
         )
 
-    def setUpBoosterProduct(self):
-        self.resume_booster_product = ProductFactory(type_flow=7)
-        self.resume_writing_product = ProductFactory(type_flow=1)
-
     def test_redirect_for_non_logged_in_user(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 302)
@@ -50,7 +43,6 @@ class TestBoosterQueueView(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_redirect_logged_in_user_without_permission(self):
-        self.setUpUser()
         self.removePermission()
         self.setUpLogin()
         response = self.client.get(self.url)
@@ -60,3 +52,77 @@ class TestBoosterQueueView(TestCase):
         self.setupUserAndPermission()
         response = self.client.get(self.url)
         self.assertTemplateUsed(response, 'console/order/booster-list.html')
+
+    def test_unpaid_product_is_not_loaded(self):
+        self.setupUserAndPermission()
+        order = self.orderitem.order
+        order.status = 0
+        order.save()
+        response = self.client.get(self.url)
+        self.assertFalse(len(response.context['page'].object_list))
+
+    def test_paid_product_is_loaded(self):
+        self.setupUserAndPermission()
+        response = self.client.get(self.url)
+        self.assertTrue(len(response.context['page'].object_list))
+
+    def test_welcome_call_not_done_product_is_not_loaded(self):
+        self.setupUserAndPermission()
+        order = self.orderitem.order
+        order.welcome_call_done = False
+        order.save()
+        response = self.client.get(self.url)
+        self.assertFalse(len(response.context['page'].object_list))
+
+    def test_welcome_call_done_product_loaded(self):
+        self.setupUserAndPermission()
+        response = self.client.get(self.url)
+        self.assertTrue(len(response.context['page'].object_list))
+
+    def test_load_product_with_correct_ops_status(self):
+        self.setupUserAndPermission()
+        correct_oi_status = [5, 62]
+        for status in correct_oi_status:
+            orderitem = self.orderitem
+            orderitem.oi_status = status
+            orderitem.save()
+            response = self.client.get(self.url)
+            self.assertTrue(len(response.context['page'].object_list))
+
+    def test_do_not_load_product_with_incorrect_ops_status(self):
+        self.setupUserAndPermission()
+        orderitem = self.orderitem
+        orderitem.oi_status = 61
+        orderitem.save()
+        response = self.client.get(self.url)
+        self.assertFalse(len(response.context['page'].object_list))
+
+    def test_do_not_load_product_with_incorrect_product_type_flow(self):
+        self.setupUserAndPermission()
+        product = self.orderitem.product
+        product.type_flow = 8
+        product.save()
+        response = self.client.get(self.url)
+        self.assertFalse(len(response.context['page'].object_list))
+
+    def test_do_not_load_product_with_incorrect_wc_sub_category(self):
+        self.setupUserAndPermission()
+        incorrect_wc_cub_category = [64, 65]
+        for status in incorrect_wc_cub_category:
+            orderitem = self.orderitem
+            orderitem. wc_sub_cat = status
+            orderitem.save()
+            response = self.client.get(self.url)
+            self.assertFalse(len(response.context['page'].object_list))
+
+    def test_do_not_load_product_with_no_process_true(self):
+        self.setupUserAndPermission()
+        orderitem = self.orderitem
+        orderitem.no_process = True
+        orderitem.save()
+        response = self.client.get(self.url)
+        self.assertFalse(len(response.context['page'].object_list))
+
+    def tearDown(self):
+        self.orderitem.order.delete()
+        self.product.delete()
