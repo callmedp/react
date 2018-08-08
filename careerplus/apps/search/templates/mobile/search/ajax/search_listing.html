@@ -29,7 +29,15 @@
             {% with result.pCmbs|jsonify as combos %}
                 {% if combos.combo %}
                     <p class="pb-5 fs-12 c6"> Includes
-                       {% for combo in combos.combo_list %}<a class="tag-bg fs-11 ml-5">{{ combo.name }}</a>{% endfor %}
+                       {% for combo in combos.combo_list %}
+                           <a class="tag-bg fs-11 ml-5">
+                               {% if combo.heading %}
+                                {{ combo.heading }}
+                              {% else %}
+                                {{ combo.name }}
+                              {% endif %}
+                            </a>
+                       {% endfor %}
                     </p>
                 {% endif %}
             {% endwith %}
