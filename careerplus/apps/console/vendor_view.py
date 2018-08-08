@@ -544,7 +544,7 @@ class ChangeScreenProductView(DetailView):
             ProductScreen, ScreenProductSkill,
             fk_name='product',
             form=ScreenProductSkillForm,
-            can_delete=False,
+            can_delete=True,
             formset=ScreenSkillInlineFormSet, extra=1,
             max_num=15, validate_max=True)
 
@@ -842,7 +842,7 @@ class ChangeScreenProductView(DetailView):
                         ScreenProductSkillFormSet = inlineformset_factory(
                             ProductScreen, ScreenProductSkill, fk_name='product',
                             form=ScreenProductSkillForm,
-                            can_delete=False,
+                            can_delete=True,
                             formset=ScreenSkillInlineFormSet, extra=0,
                             max_num=15, validate_max=True)
                         formset = ScreenProductSkillFormSet(
