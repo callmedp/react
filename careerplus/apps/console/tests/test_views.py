@@ -89,7 +89,7 @@ class TestBoosterQueueView(TestCase):
             response = self.client.get(self.url)
             self.assertTrue(len(response.context['page'].object_list))
 
-    def test_do_not_load_product_with_incorrect_ops_status(self):
+    def test_load_product_with_incorrect_ops_status(self):
         self.setupUserAndPermission()
         orderitem = self.orderitem
         orderitem.oi_status = 61
@@ -97,7 +97,7 @@ class TestBoosterQueueView(TestCase):
         response = self.client.get(self.url)
         self.assertFalse(len(response.context['page'].object_list))
 
-    def test_do_not_load_product_with_incorrect_product_type_flow(self):
+    def test_load_product_with_incorrect_product_type_flow(self):
         self.setupUserAndPermission()
         product = self.orderitem.product
         product.type_flow = 8
@@ -105,7 +105,7 @@ class TestBoosterQueueView(TestCase):
         response = self.client.get(self.url)
         self.assertFalse(len(response.context['page'].object_list))
 
-    def test_do_not_load_product_with_incorrect_wc_sub_category(self):
+    def test_load_product_with_incorrect_wc_sub_category(self):
         self.setupUserAndPermission()
         incorrect_wc_cub_category = [64, 65]
         for status in incorrect_wc_cub_category:
@@ -115,13 +115,78 @@ class TestBoosterQueueView(TestCase):
             response = self.client.get(self.url)
             self.assertFalse(len(response.context['page'].object_list))
 
-    def test_do_not_load_product_with_no_process_true(self):
+    def test_load_product_with_no_process_true(self):
         self.setupUserAndPermission()
         orderitem = self.orderitem
         orderitem.no_process = True
         orderitem.save()
         response = self.client.get(self.url)
         self.assertFalse(len(response.context['page'].object_list))
+
+    def test_upload_draft_for_resume_booster_product(self):
+        self.setupUserAndPermission()
+        with open('/home/ritesh/projects/careerplus/careerplus/apps/shared/tests/files/resume.docx') as upload_draft:
+            response = self.client.post(
+                self.url,
+                {'oi_pk': self.orderitem.pk, 'oi_resume': upload_draft},
+                follow=True
+            )
+        message = list(response.context['messages'])[0]
+        self.assertEqual('Draft uploaded Successfully', str(message))
+
+    def test_upload_draft_with_wrong_extension(self):
+        self.setupUserAndPermission()
+        with open('/home/ritesh/projects/careerplus/careerplus/apps/shared/tests/files/resume.xls') as upload_draft:
+            response = self.client.post(
+                self.url,
+                {'oi_pk': self.orderitem.pk, 'oi_resume': upload_draft},
+                follow=True
+            )
+        message = list(response.context['messages'])[0]
+        self.assertEqual('only pdf, doc and docx formats are allowed.', str(message))
+
+    def test_upload_empty_draft(self):
+        self.setupUserAndPermission()
+        with open('/home/ritesh/projects/careerplus/careerplus/apps/shared/tests/files/empty_resume.docx') as upload_draft:
+            response = self.client.post(
+                self.url,
+                {'oi_pk': self.orderitem.pk, 'oi_resume': upload_draft},
+                follow=True
+            )
+        message = list(response.context['messages'])[0]
+        self.assertEqual('The submitted file is empty.', str(message))
+
+    def test_upload_draft_wihtout_file(self):
+        self.setupUserAndPermission()
+        response = self.client.post(
+            self.url,
+            {'oi_pk': self.orderitem.pk},
+            follow=True
+        )
+        message = list(response.context['messages'])[0]
+        self.assertEqual('This field is required.', str(message))
+
+    def test_upload_draft_with_greater_size(self):
+        self.setupUserAndPermission()
+        with open('/home/ritesh/projects/careerplus/careerplus/apps/shared/tests/files/resume_max_size.docx') as upload_draft:
+            response = self.client.post(
+                self.url,
+                {'oi_pk': self.orderitem.pk, 'oi_resume': upload_draft},
+                follow=True
+            )
+        message = list(response.context['messages'])[0]
+        self.assertEqual('resume is too large ( > 500kb ).', str(message))
+
+    def test_upload_draft_for_with_wrong_orderitem(self):
+        self.setupUserAndPermission()
+        with open('/home/ritesh/projects/careerplus/careerplus/apps/shared/tests/files/resume.docx') as upload_draft:
+            response = self.client.post(
+                self.url,
+                {'oi_pk': self.orderitem.pk + 21, 'oi_resume': upload_draft},
+                follow=True
+            )
+        message = list(response.context['messages'])[0]
+        self.assertEqual('OrderItem matching query does not exist.', str(message))
 
     def tearDown(self):
         self.orderitem.order.delete()

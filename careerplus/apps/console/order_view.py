@@ -11,7 +11,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.views.generic import (
     TemplateView, ListView, DetailView, View, UpdateView)
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, Count, Case, When, IntegerField
+
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
@@ -1794,12 +1795,12 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
         self.page = 1
         self.paginated_by = 50
         self.query = ''
-        self.sel_opt='number'
+        self.sel_opt = 'number'
         self.payment_date = ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
-        self.sel_opt=request.GET.get('rad_search','number')
+        self.sel_opt = request.GET.get('rad_search','number')
         self.query = request.GET.get('query', '').strip()
         self.payment_date = request.GET.get('payment_date', '')
         return super(BoosterQueueVeiw, self).get(request, args, **kwargs)
@@ -1807,7 +1808,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
     def get_context_data(self, **kwargs):
         context = super(BoosterQueueVeiw, self).get_context_data(**kwargs)
         paginator = Paginator(context['booster_list'], self.paginated_by)
-        var=self.sel_opt
+        var = self.sel_opt
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
         initial = {
@@ -1819,7 +1820,8 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
             "query": self.query,
             "message_form": MessageForm(),
             "filter_form": filter_form,
-             var:'checked',
+            "form": ResumeUploadForm(),
+            var: 'checked',
         })
 
         return context
@@ -1828,9 +1830,17 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
         queryset = super(BoosterQueueVeiw, self).get_queryset()
         queryset = queryset.filter(
             order__status=1, product__type_flow=7,
-            no_process=False, oi_status__in=[5, 61],
+            no_process=False, oi_status__in=[5, 61, 62, 4],
             order__welcome_call_done=True).exclude(
-            wc_sub_cat__in=[64, 65])
+            wc_sub_cat__in=[64, 65]
+        ).annotate(
+            booster_counter=Count(Case(
+                When(emailorderitemoperation__email_oi_status=92, then=1),
+                output_field=IntegerField()
+            ))
+        ).filter(
+            booster_counter__lte=2
+        )
         queryset = queryset.select_related('order', 'product', 'assigned_to', 'assigned_by')
         q1 = queryset.filter(oi_status=61)
         exclude_list = []
@@ -1895,6 +1905,27 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
             pass
 
         return queryset.order_by('-modified')
+
+    def post(self, request, *args, **kwargs):
+        form = ResumeUploadForm(request.POST, request.FILES)
+        obj_pk = request.POST.get('oi_pk', None)
+        if form.is_valid():
+            try:
+                orderitem = OrderItem.objects.get(pk=obj_pk, oi_status__in=[5, 62])
+                data = {
+                    "oi_draft": request.FILES.get('oi_resume', ''),
+                }
+                ActionUserMixin().upload_draft_orderitem(
+                    oi=orderitem, data=data, user=request.user
+                )
+                messages.add_message(request, messages.SUCCESS, 'Draft uploaded Successfully')
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+        else:
+            error_message = form.errors.get('oi_resume')
+            if error_message:
+                messages.add_message(request, messages.ERROR, error_message[0])
+        return HttpResponseRedirect(reverse("console:queue-booster"))
 
 
 class ActionOrderItemView(View):
@@ -2132,7 +2163,18 @@ class ActionOrderItemView(View):
 
         elif action == -3 and queue_name == 'booster':
             try:
-                booster_ois = OrderItem.objects.filter(id__in=selected_id, product__type_flow=7, oi_status=5).select_related('order')
+                booster_ois = OrderItem.objects.filter(
+                    id__in=selected_id,
+                    product__type_flow=7,
+                    oi_status__in=[5, 62, 4]
+                ).annotate(
+                    booster_counter=Count(Case(
+                        When(emailorderitemoperation__email_oi_status=92, then=1),
+                        output_field=IntegerField()
+                    ))
+                ).filter(
+                    booster_counter__lte=2
+                ).select_related('order')
                 days = 7
                 candidate_data = {}
                 recruiter_data = {}
@@ -2165,7 +2207,7 @@ class ActionOrderItemView(View):
                         candidate_list.append(data_dict)
                         try:
                             # send mail to candidate
-                            if 93 not in email_sets:
+                            if email_sets.count(93) <= 2:
                                 mail_type = 'BOOSTER_CANDIDATE'
                                 send_email_task.delay(
                                     to_emails, mail_type,
@@ -2175,7 +2217,8 @@ class ActionOrderItemView(View):
                                 sms_type="BOOSTER_CANDIDATE",
                                 data=candidate_data)
                             last_oi_status = oi.oi_status
-                            oi.oi_status = 62
+                            if oi.oi_status in [5, 62]:
+                                oi.oi_status = 62
                             oi.last_oi_status = last_oi_status
                             oi.save()
                             oi.orderitemoperation_set.create(

@@ -197,7 +197,8 @@
                     <th class="column-title">Candidate Doc</th>
                     <th class="column-title">Order Deatils</th>
                     <th class="column-title">Uploaded Draft</th>
-                    <th class="column-title">Opeartion Status</th>
+                    <th class="column-title">Upload Draft</th>
+                    <th class="column-title">Operation Status</th>
                     <th class="column-title">Submit Message</th>
                     <th class="column-title">Payment Date</th>
                   </tr>
@@ -247,7 +248,18 @@
                         <a href="{% url "console:queue-resume-download" %}?path={{obj.oi_draft.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Uploded Draft</button></a>
                         {% endif %}
                       </td>
-                      <td>{{obj.get_oi_status}}</td>
+                      <td>
+                       <form autocomplete="off" data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="draft-upload-form">{% csrf_token %}
+                          {{form.oi_resume}}
+                          <div style="display:none">
+                          <input type="hidden" name="oi_pk" value="{{obj.pk}}"></div>
+                          </br>
+                          <button type="submit" class="btn btn-success btn-xs">Submit</button>
+                        </form>
+                      </td>
+                      <td>{{obj.get_oi_status}}
+                      {% if obj.get_oi_status == "Resume Boosted" or obj.get_oi_status == "Closed"  %}({{ obj.booster_counter }}){% endif %}
+                      </td>
                       <td>
                           <form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
                                 <fieldset>

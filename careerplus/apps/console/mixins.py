@@ -421,6 +421,20 @@ class ActionUserMixin(object):
                         assigned_to=oi.assigned_to,
                         added_by=user)
 
+            elif oi.product.type_flow == 7:
+                oi.draft_counter += 1
+                oi.oi_draft = oi_draft
+                oi.save()
+                last_status = oi.oi_status
+                oi.orderitemoperation_set.create(
+                    oi_draft=oi.oi_draft,
+                    draft_counter=oi.draft_counter + 1,
+                    oi_status=22,
+                    last_oi_status=last_status,
+                    assigned_to=oi.assigned_to,
+                    added_by=user)
+                message_dict['display_message'] = 'Draft uploaded Successfully.'
+
             else:
                 last_status = oi.oi_status
                 oi.oi_draft = oi_draft
