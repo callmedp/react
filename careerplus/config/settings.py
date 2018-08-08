@@ -1,5 +1,17 @@
+#python imports
+
+#django imports
+
+#local imports
 from .base_settings import *  # noqa
 from .celery import *
+from .mongo.development import *
+
+#inter app imports
+
+#third party imports
+from pymongo import read_preferences
+from mongoengine import connect
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -305,6 +317,9 @@ CMS_ID=[1]
 
 # used for coupon generation for free feature product on payment realization
 FEATURE_PROFILE_PRODUCTS = [1939]
+
+for conn, attrs in MONGO_SETTINGS.items():
+    connect(attrs['DB_NAME'], conn, host=attrs['HOST'], read_preference=read_preferences.ReadPreference.PRIMARY)
 
 try:
     from .settings_local import *

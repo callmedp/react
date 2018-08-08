@@ -1,4 +1,5 @@
 from .settings import *
+from .mongo.staging import *
 
 DEBUG = True
 IS_LIVE = False
