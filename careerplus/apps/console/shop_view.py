@@ -1587,8 +1587,7 @@ class ChangeProductView(DetailView):
                             Product, Skill.skillproducts.through, fk_name='product',
                             form=ProductSkillForm,
                             can_delete=False,
-                            formset=SkillInlineFormSet, extra=0,
-                            max_num=15, validate_max=True)
+                            formset=SkillInlineFormSet, extra=0)
                         formset = ProductSkillFormSet(
                             request.POST, instance=obj,
                             form_kwargs={'object': obj},)
