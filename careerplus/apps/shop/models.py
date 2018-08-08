@@ -1632,7 +1632,6 @@ class ProductScreen(AbstractProduct):
             return False
 
 
-
 # class ProductArchive(AbstractProduct):
 #     product = models.ForeignKey(
 #         Product,
@@ -2279,11 +2278,19 @@ class Skill(AbstractAutoDate, ModelMeta):
         ordering = ("-modified", "-created")
         get_latest_by = 'created'
 
+    def __str__(self):
+        return self.name + ' - ' + str(self.id)
+
     def get_products(self):
         products = self.skillproducts.filter(
             active=True,
             productskills__active=True)
         return products
+
+    def get_active(self):
+        if self.active:
+            return 'Active'
+        return 'Inactive'
 
 
 class ProductSkill(AbstractAutoDate):
@@ -2299,6 +2306,38 @@ class ProductSkill(AbstractAutoDate):
         on_delete=models.CASCADE)
     priority = models.PositiveIntegerField(default=1)
     active = models.BooleanField(default=True)
+
+    def __str__(self):
+        name = '{} - ({}) to {} - ({})'.format(
+            self.skill.name, self.skill_id,
+            self.product.get_name, self.product_id)
+        return name
+
+    class Meta:
+        unique_together = ('product', 'skill')
+        verbose_name = _('Product Skill')
+        verbose_name_plural = _('Product Skills')
+
+
+class ScreenProductSkill(AbstractAutoDate):
+    skill = models.ForeignKey(
+        Skill,
+        verbose_name=_('Skill'),
+        related_name='screenskills',
+        on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        ProductScreen,
+        verbose_name=_('Product'),
+        related_name='screenskills',
+        on_delete=models.CASCADE)
+    priority = models.PositiveIntegerField(default=1)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        name = '{} - ({}) to {} - ({})'.format(
+            self.skill.name, self.skill_id,
+            self.product.name, self.product_id)
+        return name
 
     class Meta:
         unique_together = ('product', 'skill')

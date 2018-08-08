@@ -1,7 +1,129 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from shop.models import Category, CategoryRelationship
+from shop.models import (
+    Category, CategoryRelationship, Skill, ProductSkill)
+
+
+class ProductSkillForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        obj = kwargs.pop('object', None)
+        super(ProductSkillForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        queryset = Skill.objects.filter(active=True)
+        if self.instance.pk:
+            self.fields['skill'].queryset = queryset
+        else:
+            skills = obj.productskills.all().values_list(
+                'skill_id', flat=True)
+            queryset = queryset.exclude(pk__in=skills)
+            self.fields['skill'].queryset = queryset
+
+        self.fields['skill'].widget.attrs['class'] = form_class
+        self.fields['skill'].required = True
+
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+        self.fields['priority'].widget.attrs['class'] = form_class
+
+    class Meta:
+        model = ProductSkill
+        fields = (
+            'skill', 'active', 'priority')
+
+    def clean(self):
+        super(ProductSkillForm, self).clean()
+
+    def clean_skill(self):
+        skill = self.cleaned_data.get('skill', None)
+        if skill:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return skill
+
+
+class SkillInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(SkillInlineFormSet, self).clean()
+        # if any(self.errors):
+        #     return
+        skills = []
+        duplicates = False
+        for form in self.forms:
+            if form.cleaned_data:
+                skill = form.cleaned_data['skill']
+                if skill in skills:
+                    duplicates = True
+                skills.append(skill)
+
+                if duplicates:
+                    raise forms.ValidationError(
+                        'Skill must be unique.',
+                        code='duplicate_skill'
+                    )
+        return
+
+
+class SkillAddForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(SkillAddForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['name'].widget.attrs['class'] = form_class
+        self.fields['name'].widget.attrs['maxlength'] = 100
+        self.fields['name'].widget.attrs['placeholder'] = 'Add unique skill name'
+        self.fields['name'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['name'].widget.attrs['data-parsley-length'] = "[1, 100]"
+        self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-100 characters.'
+
+    class Meta:
+        model = Skill
+        fields = ('name', )
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name', '').strip()
+        if name:
+            if len(name) < 1 or len(name) > 100:
+                raise forms.ValidationError(
+                    "Name should be between 1-100 characters.")
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return name
+
+
+class SkillChangeForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(SkillChangeForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['name'].widget.attrs['class'] = form_class
+        self.fields['name'].widget.attrs['maxlength'] = 100
+        self.fields['name'].widget.attrs['placeholder'] = 'Add unique skill name'
+        self.fields['name'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['name'].widget.attrs['data-parsley-length'] = "[1, 100]"
+        self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-100 characters.'
+
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+
+    class Meta:
+        model = Skill
+        fields = ('name', 'active')
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name', '').strip()
+        if name:
+            if len(name) < 1 or len(name) > 100:
+                raise forms.ValidationError(
+                    "Name should be between 1-100 characters.")
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return name
 
 
 class AddCategoryForm(forms.ModelForm):
@@ -16,7 +138,6 @@ class AddCategoryForm(forms.ModelForm):
         self.fields['name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['name'].widget.attrs['data-parsley-length'] = "[2, 100]"
         self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-100 characters.'
-
 
         self.fields['type_level'].widget.attrs['class'] = form_class
         self.fields['type_level'].widget.attrs['data-parsley-notdefault'] = ''
