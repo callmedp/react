@@ -237,7 +237,6 @@ class ProductModeration(object):
                 ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
-    
     def validate_variation(self, request, product):
         test_pass = False
         try:
@@ -275,7 +274,6 @@ class ProductModeration(object):
             messages.error(request, (
                 ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
-    
 
     def validate_screenproduct(self, request, productscreen):
         test_pass = False
@@ -347,7 +345,8 @@ class ProductModeration(object):
                 
                 product.save()
                 from shop.models import (
-                    FAQProduct, VariationProduct,)
+                    FAQProduct, VariationProduct,
+                    ProductSkill)
 
                 productfaq = product.productfaqs.all()
                 screenfaq = screen.screenfaqs.all()
@@ -367,6 +366,16 @@ class ProductModeration(object):
                         question=faq)
                     fqprd.active = False
                     fqprd.save()
+
+                screen_skills = screen.screenskills.all()
+                for screenskill in screen_skills:
+                    skillprd, created = ProductSkill.objects.get_or_create(
+                    product=product,
+                    skill=screenskill.skill)
+
+                    skillprd.active = screenskill.active
+                    skillprd.priority = screenskill.priority
+                    skillprd.save()
                 
                 screenchap = screen.chapter_product.all()
                 prdchap = product.chapter_product.all()
@@ -523,7 +532,6 @@ class ProductModeration(object):
                     chap.status = False
                     chap.save()
                 
-
                 if screen.type_product == 1:
                     screenvar = screen.variation.all()
                     screenvariation = screen.mainproduct.all()
