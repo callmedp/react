@@ -22,7 +22,7 @@ def booster():
 
     booster_ois = OrderItem.objects.filter(
         order__status__in=[1, 3], product__type_flow=7, oi_status__in=[0, 5, 61, 62])
-    booster_ois = booster_ois.select_related('order')
+    booster_ois = booster_ois.select_related('order').order_by('created')
     days = 7
     candidate_data = {}
     recruiter_data = {}
