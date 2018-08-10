@@ -37,20 +37,22 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
-    'oldDB': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'shinecp',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': '',
-        'PORT': '',
-    },
+    # 'oldDB': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'shinecp',
+    #     'USER': 'root',
+    #     'PASSWORD': 'root',
+    #     'HOST': '',
+    #     'PORT': '',
+    # },
 }
 
 DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
 
 ######### Apps specific for this project go here. ###########
 DJANGO_APPS = [
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

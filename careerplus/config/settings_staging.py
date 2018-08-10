@@ -45,6 +45,8 @@ DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
 
 ####### APPS SETTIMGS #################
 DJANGO_APPS = [
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

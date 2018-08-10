@@ -91,8 +91,8 @@ class LoginMiddleware(object):
                     shine_id=candidate_id)
             if candidate_detail:
                 skills = [skill['value'] for skill in candidate_detail['skills']]
-                skills_obj = Skill.objects.filter(name__in=skills)[:10]
-                skills_ids = [s.id for s in skills_obj]
+                skills_obj = Skill.objects.filter(name__in=skills)[:15]
+                skills_ids = [str(s.id) for s in skills_obj]
                 if skills_obj:
                     request.session.update({
                         'skills': skills_ids

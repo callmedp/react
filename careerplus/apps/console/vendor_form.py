@@ -5,6 +5,9 @@ from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from django.conf import settings
+
+from dal import autocomplete
+
 from .decorators import has_group
 from shop.models import (
     ProductClass,
@@ -969,6 +972,10 @@ class ScreenProductSkillForm(forms.ModelForm):
         model = ScreenProductSkill
         fields = (
             'skill', 'active', 'priority')
+        widgets = {
+            'skill': autocomplete.ModelSelect2(
+                url='console:skill-autocomplete')
+        }
 
     def clean(self):
         super(ScreenProductSkillForm, self).clean()

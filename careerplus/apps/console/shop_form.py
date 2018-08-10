@@ -1,6 +1,8 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+from dal import autocomplete
+
 from shop.models import (
     Category, CategoryRelationship, Skill, ProductSkill)
 
@@ -31,6 +33,10 @@ class ProductSkillForm(forms.ModelForm):
         model = ProductSkill
         fields = (
             'skill', 'active', 'priority')
+        widgets = {
+            'skill': autocomplete.ModelSelect2(
+                url='console:skill-autocomplete')
+        }
 
     def clean(self):
         super(ProductSkillForm, self).clean()
