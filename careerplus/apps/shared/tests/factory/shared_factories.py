@@ -8,7 +8,10 @@ import factory
 
 # inter-app imports
 from geolocation.models import Country
-from shop.models import Product, ProductClass, Category, CategoryRelationship
+from shop.models import (
+    Product, ProductClass, Category,
+    CategoryRelationship, Skill,
+    ProductSkill)
 from order.models import Order, OrderItem
 from users.models import User
 from partner.models import Vendor
@@ -256,3 +259,11 @@ class OrderItemFactory(factory.django.DjangoModelFactory):
     wc_status = 41
     wc_sub_cat = 41
 
+
+class SkillFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Skill
+        django_get_or_create = ('name', )
+
+    name = 'Django'
+    active = True

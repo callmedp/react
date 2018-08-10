@@ -29,7 +29,6 @@ from users.mixins import WriterInvoiceMixin,UserGroupMixin
 from emailers.tasks import send_email_task
 
 
-
 from .forms import (
     RegistrationForm,
     LoginApiForm,

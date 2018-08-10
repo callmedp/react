@@ -170,14 +170,14 @@ def get_ngrams(words_list,ngram):
     while counter+ngram <= end:
         word = slugify(" ".join(words_list[counter:counter+ngram]))
         if word:
-            semantic_entity = None #redis_server.get(word)
+            semantic_entity = None # redis_server.get(word)
             if semantic_entity:
                 words_to_pop.append(word)
                 value = ast.literal_eval(semantic_entity.decode('utf-8') if isinstance(semantic_entity, bytes)
                                          else semantic_entity)
                 value.append(word)
                 ngrams.append(value)
-                counter = counter+ngram
+                counter = counter + ngram
                 continue
         counter += 1
     return words_to_pop, ngrams
