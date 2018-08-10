@@ -1439,6 +1439,15 @@ class Product(AbstractProduct, ModelMeta):
         else:
             return ''
 
+    def get_duration_in_day(self):
+        if self.is_course:
+            dd = getattr(self.attr, C_ATTR_DICT.get('DD')) \
+                if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
+                else 0
+            return dd
+        else:
+            return ''
+
     def get_duration_db(self):
         # return display value
         if self.is_course:
