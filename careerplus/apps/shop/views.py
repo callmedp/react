@@ -183,6 +183,7 @@ class ProductInformationMixin(object):
             self.request.session.get('func_area', None),
             self.request.session.get('skills', None))
         if rcourses:
+            rcourses = rcourses.exclude(id=product.id)
             rcourses = rcourses[:6]
         if rcourses:
             recommendation.update({

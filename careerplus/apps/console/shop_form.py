@@ -14,13 +14,13 @@ class ProductSkillForm(forms.ModelForm):
         super(ProductSkillForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
         queryset = Skill.objects.filter(active=True)
-        if self.instance.pk:
-            self.fields['skill'].queryset = queryset
-        else:
-            skills = obj.productskills.all().values_list(
-                'skill_id', flat=True)
-            queryset = queryset.exclude(pk__in=skills)
-            self.fields['skill'].queryset = queryset
+        # if self.instance.pk:
+        #     self.fields['skill'].queryset = queryset
+        # else:
+        #     skills = obj.productskills.all().values_list(
+        #         'skill_id', flat=True)
+        #     queryset = queryset.exclude(pk__in=skills)
+        self.fields['skill'].queryset = queryset
 
         self.fields['skill'].widget.attrs['class'] = form_class
         self.fields['skill'].required = True

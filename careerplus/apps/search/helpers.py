@@ -367,7 +367,7 @@ def get_recommendations(func_area, skills, results=None):
         if not results:
             results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only('pTt pURL pHd pARx pNJ pImA pImg pStar pNm pBC pRC')
         # results = results.narrow('id:(%s)' % ' '.join([str(pid) for pid in ids]))
-        results = results.filter(pSkill__in=skills)
+        results = results.filter(pSkill__in=skills, pPc=settings.COURSE_SLUG[0])
     else:
         results = EmptySearchQuerySet()
     return results
