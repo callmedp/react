@@ -2,6 +2,9 @@ import json
 from collections import OrderedDict
 from datetime import datetime
 import logging
+import csv
+
+from io import StringIO
 from django.views.generic import ( View,
     FormView, TemplateView, ListView, DetailView)
 from django.http import (
@@ -1747,7 +1750,7 @@ class ActionProductView(View, ProductValidation):
             action = form_data.get('action', None)
             pk_obj = form_data.get('product', None)
             allowed_action = []
-            
+
             if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
                 allowed_action = ['active', 'inactive','index', 'unindex']
             else:
@@ -1846,7 +1849,7 @@ class ActionProductView(View, ProductValidation):
 class ProductAuditHistoryView(ListView, PaginationMixin):
     model = ProductAuditHistory
     template_name = 'console/tasks/product-audit-history.html'
-    http_method_names = [u'get', ]
+    http_method_names = [u'get', 'post']
     context_object_name = 'product_audit_list'
     start_date, end_date = None, None
     product_id = None
@@ -1884,10 +1887,56 @@ class ProductAuditHistoryView(ListView, PaginationMixin):
         return context
 
     def post(self, request, *args, **kwargs):
-        self.product_id = request.GET.get('product_id', '')
-        self.start_date = request.GET.get('date_range', '')
+        self.product_id = request.POST.get('product_id', '')
+        self.date_range = request.POST.get('date_range', '')
+        if self.date_range and self.product_id:
+            queryset = self.get_queryset()
+            queryset = queryset.filter(
+                created_at__gte=self.start_date,
+                created_at__lte=self.end_date,
+                product_id=self.product_id
+            )
+            return self.download_csv_file(queryset)
+        else:
+            messages.add_message(request, messages.ERROR, 'Please select Product and Date Range')
+            return HttpResponseRedirect(reverse('console:product-audit-history'))
 
+    def download_csv_file(self, queryset):
+        product_name = 'no_log'
+        try:
+            csvfile = StringIO()
+            csv_writer = csv.writer(
+                csvfile, delimiter=',', quotechar="'",
+                quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writerow([
+                'Product Name', 'Variation Name', 'UPC',
+                'Price', 'Duration', 'Vendor Name', 'Created_at',
+            ])
 
+            for log in queryset:
+                product_name = log.product_name
+                try:
+                    csv_writer.writerow([
+                        str(log.product_name),
+                        str(log.variation_name),
+                        str(log.upc),
+                        str(log.price),
+                        str(log.duration),
+                        str(log.vendor_name),
+                        str(log.created_at),
+                    ])
+                except Exception as e:
+                    logging.getLogger('error_log').error("%s " % str(e))
+                    continue
+            response = HttpResponse(csvfile.getvalue())
+            from django.utils import timezone
+            file_name = product_name + timezone.now().date().strftime("%Y-%m-%d")
+            response["Content-Disposition"] = "attachment; filename=%s.csv" % (file_name)
+            return response
+
+        except Exception as e:
+            messages.add_message(self.request, messages.ERROR, str(e))
+        return HttpResponseRedirect(reverse('console:product-audit-history'))
 
 
 # @Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
