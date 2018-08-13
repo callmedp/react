@@ -110,7 +110,10 @@ urlpatterns += [
     url(r'^product/action/(?P<action>[\w-]+)/$',
         shop_view.ActionProductView.as_view(),
         name='product-action'),
-        
+    url(r'product-audit-history/$',
+        shop_view.ProductAuditHistoryView.as_view(),
+        name='product-audit-history'),
+
     url(r'^faq/list/$',
         shop_view.ListFaqView.as_view(),
         name='faq-list'),

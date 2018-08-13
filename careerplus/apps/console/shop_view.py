@@ -1,5 +1,6 @@
 import json
 from collections import OrderedDict
+from datetime import datetime
 import logging
 from django.views.generic import ( View,
     FormView, TemplateView, ListView, DetailView)
@@ -23,7 +24,7 @@ from blog.mixins import PaginationMixin
 from shop.models import (
     Category, Keyword,
     Attribute, AttributeOptionGroup,
-    Product,Chapter)
+    Product,Chapter, ProductAuditHistory)
 
 from .shop_form import (
     AddCategoryForm, ChangeCategoryForm,
@@ -1178,8 +1179,6 @@ class ChangeProductView(DetailView):
                         form = ProductPriceForm(request.POST, instance=obj)
                         if form.is_valid():
                             product = form.save()
-                            product.title = product.get_title()
-                            product.save()
                             messages.success(
                                 self.request,
                                 "Product Prices changed Successfully")
@@ -1201,7 +1200,7 @@ class ChangeProductView(DetailView):
                                 request.FILES,
                                 instance=obj)
                         if form.is_valid():
-                            product = form.save()
+                            form.save()
                             messages.success(
                                 self.request,
                                 "Product Attributes changed Successfully")
@@ -1842,6 +1841,54 @@ class ActionProductView(View, ProductValidation):
                 ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         data = {'error': 'True'}
         return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+class ProductAuditHistoryView(ListView, PaginationMixin):
+    model = ProductAuditHistory
+    template_name = 'console/tasks/product-audit-history.html'
+    http_method_names = [u'get', ]
+    context_object_name = 'product_audit_list'
+    start_date, end_date = None, None
+    product_id = None
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 20
+        self.query = ''
+        return super(ProductAuditHistoryView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.date_range = request.GET.get('date_range', '')
+        self.end_date = request.GET.get('end_date', '')
+        response = super(
+            ProductAuditHistoryView, self).get(request, args, **kwargs)
+        return response
+
+    def get_queryset(self):
+        queryset = self.model.objects.all().order_by('-created_at')
+        if self.product_id:
+            queryset = queryset.filter(product_id=self.product_id)
+        if self.date_range:
+            start_date, end_date = self.date_range.split(' - ')
+            self.start_date = datetime.strptime(start_date, "%m/%d/%Y")
+            self.end_date = datetime.strptime(end_date, "%m/%d/%Y")
+            queryset = queryset.filter(created_at__gte=self.start_date, created_at__lte=self.end_date)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductAuditHistoryView, self).get_context_data(**kwargs)
+        paginator = Paginator(context['product_audit_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        context['product_list'] = Product.objects.values_list('id', 'name')
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.product_id = request.GET.get('product_id', '')
+        self.start_date = request.GET.get('date_range', '')
+
+
+
 
 # @Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 # @Decorate(check_permission('shop.console_change_attribute'))

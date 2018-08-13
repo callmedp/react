@@ -11,10 +11,12 @@ from django.core.exceptions import ValidationError
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
+from django.db.models.signals import post_save
 
 from ckeditor.fields import RichTextField
 from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
+from mongoengine import Document, ListField, FloatField, StringField, IntField, DateTimeField
 
 from partner.models import Vendor
 from faq.models import (
@@ -995,6 +997,7 @@ class Product(AbstractProduct, ModelMeta):
                 for var in variations:
                     var.vendor = self.vendor
                     var.save()
+        self.title = self.get_title()
         super(Product, self).save(*args, **kwargs)
         if getattr(self, 'attr', None):
             self.attr.save()
@@ -1501,6 +1504,24 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_canonical_url(self):
         return self.get_absolute_url()
+
+    @classmethod
+    def post_save_product(cls, sender, instance, **kwargs):
+        from .tasks import add_log_in_product_audit_history
+        duration = instance.get_duration_in_day() if instance.get_duration_in_day() else -1
+        data = {
+            "product_id": instance.id,
+            "upc": instance.upc,
+            "price": float(instance.inr_price),
+            "vendor_name": instance.get_vendor(),
+            "product_name": instance.name,
+            "duration": duration,
+            "variation_name": [str(var) for var in instance.variation.all()]
+        }
+        add_log_in_product_audit_history.delay(**data)
+
+
+post_save.connect(Product.post_save_product, sender=Product)
 
 
 class ProductScreen(AbstractProduct):
@@ -2313,3 +2334,14 @@ class ProductSkill(AbstractAutoDate):
         unique_together = ('product', 'skill')
         verbose_name = _('Product Skill')
         verbose_name_plural = _('Product Skills')
+
+
+class ProductAuditHistory(Document):
+    product_id = IntField(db_field='pid')
+    product_name = StringField(db_field='pn')
+    variation_name = ListField(db_field='varn')
+    upc = StringField(db_field='upc')
+    price = FloatField(db_field='p')
+    duration = IntField(db_field='dur', default=0)
+    vendor_name = StringField(db_field='vn')
+    created_at = DateTimeField(db_field='crt', default=datetime.now)
