@@ -5,10 +5,12 @@ from django.utils.text import slugify
 
 # third party imports
 import factory
+from django.contrib.auth.models import Group
 
 # inter-app imports
 from geolocation.models import Country
-from shop.models import Product, ProductClass, Category, CategoryRelationship
+from shop.models import Product, ProductClass, Category, \
+    CategoryRelationship, ProductAuditHistory
 from order.models import Order, OrderItem
 from users.models import User
 from partner.models import Vendor
@@ -256,3 +258,15 @@ class OrderItemFactory(factory.django.DjangoModelFactory):
     wc_status = 41
     wc_sub_cat = 41
 
+
+class GroupFactory(factory.django.DjangoModelFactory):
+
+    class Meta:
+        model = Group
+        django_get_or_create = ('name',)
+
+
+class ProductAuditHistoryFactory(factory.mongoengine.MongoEngineFactory):
+
+    class Meta:
+        model = ProductAuditHistory

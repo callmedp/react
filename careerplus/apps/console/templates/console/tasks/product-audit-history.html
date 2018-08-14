@@ -53,8 +53,6 @@
 	        					<option value="">Select Product</option>
 	        					{% for prd in product_list %}
 	        						<option value={{ prd.0 }} {% ifequal prd.0|stringformat:"i" request.GET.product_id %} selected {% endifequal %} >{{ prd.1 }}</option>
-	        						{{ prd.0 }}
-	        						{{ request.GET.product_id }}
 	        					{% endfor %}
 	        				</select>
 	        				<span class="input-group-btn">
