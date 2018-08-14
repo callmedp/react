@@ -16,7 +16,8 @@ from django.db.models.signals import post_save
 from ckeditor.fields import RichTextField
 from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
-from mongoengine import Document, ListField, FloatField, StringField, IntField, DateTimeField
+from mongoengine import Document, ListField, FloatField,\
+    StringField, IntField, DateTimeField
 
 from partner.models import Vendor
 from faq.models import (
@@ -1509,6 +1510,7 @@ class Product(AbstractProduct, ModelMeta):
     def post_save_product(cls, sender, instance, **kwargs):
         from .tasks import add_log_in_product_audit_history
         duration = instance.get_duration_in_day() if instance.get_duration_in_day() else -1
+        variation_name = [str(var) for var in instance.variation.all()] if instance.variation.all() else ['N.A']
         data = {
             "product_id": instance.id,
             "upc": instance.upc,
@@ -1516,7 +1518,7 @@ class Product(AbstractProduct, ModelMeta):
             "vendor_name": instance.get_vendor(),
             "product_name": instance.name,
             "duration": duration,
-            "variation_name": [str(var) for var in instance.variation.all()]
+            "variation_name": variation_name
         }
         add_log_in_product_audit_history.delay(**data)
 
@@ -2337,11 +2339,16 @@ class ProductSkill(AbstractAutoDate):
 
 
 class ProductAuditHistory(Document):
-    product_id = IntField(db_field='pid')
-    product_name = StringField(db_field='pn')
-    variation_name = ListField(db_field='varn')
-    upc = StringField(db_field='upc')
-    price = FloatField(db_field='p')
-    duration = IntField(db_field='dur', default=0)
-    vendor_name = StringField(db_field='vn')
-    created_at = DateTimeField(db_field='crt', default=datetime.now)
+    product_id = IntField(required=True, db_field='pid')
+    product_name = StringField(required=True, db_field='pn')
+    variation_name = ListField(required=True, db_field='varn', default='N.A')
+    upc = StringField(required=True, db_field='upc')
+    price = FloatField(required=True, db_field='p')
+    duration = IntField(required=True, db_field='dur', default=0)
+    vendor_name = StringField(required=True, db_field='vn')
+    created_at = DateTimeField(required=True, db_field='crt', default=datetime.now)
+
+    meta = {
+        'collection': 'ProductAuditHistory',
+        'allow_inheritance': False
+    }

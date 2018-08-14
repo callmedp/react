@@ -14,6 +14,9 @@ from django.forms.models import inlineformset_factory
 from django.template.response import TemplateResponse
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
+from django.utils import timezone
+from dateutil.relativedelta import relativedelta
+
 from .decorators import (
     has_group,
     Decorate, check_permission,
@@ -1849,34 +1852,24 @@ class ActionProductView(View, ProductValidation):
 class ProductAuditHistoryView(ListView, PaginationMixin):
     model = ProductAuditHistory
     template_name = 'console/tasks/product-audit-history.html'
-    http_method_names = [u'get', 'post']
     context_object_name = 'product_audit_list'
-    start_date, end_date = None, None
-    product_id = None
-
-    def dispatch(self, request, *args, **kwargs):
-        self.page = 1
-        self.paginated_by = 20
-        self.query = ''
-        return super(ProductAuditHistoryView, self).dispatch(request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        self.page = request.GET.get('page', 1)
-        self.date_range = request.GET.get('date_range', '')
-        self.end_date = request.GET.get('end_date', '')
-        response = super(
-            ProductAuditHistoryView, self).get(request, args, **kwargs)
-        return response
+    page = 1
+    paginated_by = 20
+    query = ''
 
     def get_queryset(self):
+        self.page = self.request.GET.get('page', 1)
+        product_id = self.request.GET.get('product_id', '')
+        date_range = self.request.GET.get('date_range', '')
         queryset = self.model.objects.all().order_by('-created_at')
-        if self.product_id:
-            queryset = queryset.filter(product_id=self.product_id)
-        if self.date_range:
-            start_date, end_date = self.date_range.split(' - ')
-            self.start_date = datetime.strptime(start_date, "%m/%d/%Y")
-            self.end_date = datetime.strptime(end_date, "%m/%d/%Y")
-            queryset = queryset.filter(created_at__gte=self.start_date, created_at__lte=self.end_date)
+        if product_id:
+            queryset = queryset.filter(product_id=product_id)
+        if date_range:
+            start_date, end_date = date_range.split(' - ')
+            start_date = datetime.strptime(start_date, "%m/%d/%Y")
+            end_date = datetime.strptime(end_date, "%m/%d/%Y")
+            end_date = end_date + relativedelta(days=1)
+            queryset = queryset.filter(created_at__gte=start_date, created_at__lte=end_date)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -1886,16 +1879,31 @@ class ProductAuditHistoryView(ListView, PaginationMixin):
         context['product_list'] = Product.objects.values_list('id', 'name')
         return context
 
+
+class ProductHistoryLogDownloadView(View):
+    model = ProductAuditHistory
+    date_range = None
+    product_id = None
+
+    def get_queryset(self):
+        self.page = self.request.GET.get('page', 1)
+        queryset = self.model.objects.all().order_by('-created_at')
+        if self.product_id:
+            queryset = queryset.filter(product_id=self.product_id)
+        if self.date_range:
+            start_date, end_date = self.date_range.split(' - ')
+            start_date = datetime.strptime(start_date, "%m/%d/%Y")
+            end_date = datetime.strptime(end_date, "%m/%d/%Y")
+            end_date = end_date + relativedelta(days=1)
+            queryset = queryset.filter(created_at__gte=start_date, created_at__lte=end_date)
+        return queryset
+
     def post(self, request, *args, **kwargs):
-        self.product_id = request.POST.get('product_id', '')
-        self.date_range = request.POST.get('date_range', '')
+        self.product_id = self.request.POST.get('product_id', '')
+        self.date_range = self.request.POST.get('date_range', '')
+
         if self.date_range and self.product_id:
             queryset = self.get_queryset()
-            queryset = queryset.filter(
-                created_at__gte=self.start_date,
-                created_at__lte=self.end_date,
-                product_id=self.product_id
-            )
             return self.download_csv_file(queryset)
         else:
             messages.add_message(request, messages.ERROR, 'Please select Product and Date Range')
@@ -1929,7 +1937,6 @@ class ProductAuditHistoryView(ListView, PaginationMixin):
                     logging.getLogger('error_log').error("%s " % str(e))
                     continue
             response = HttpResponse(csvfile.getvalue())
-            from django.utils import timezone
             file_name = product_name + timezone.now().date().strftime("%Y-%m-%d")
             response["Content-Disposition"] = "attachment; filename=%s.csv" % (file_name)
             return response

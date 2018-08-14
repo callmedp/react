@@ -114,13 +114,17 @@ urlpatterns += [
         shop_view.ProductAuditHistoryView.as_view(),
         name='product-audit-history'),
 
+    url(r'product-audit-history/download$',
+        shop_view.ProductHistoryLogDownloadView.as_view(),
+        name='product-audit-history-download'),
+
     url(r'^faq/list/$',
         shop_view.ListFaqView.as_view(),
         name='faq-list'),
     url(r'^faq/change/(?P<pk>[\d]+)/$',
         shop_view.ChangeFaqView.as_view(),
         name='faquestion-change'),
-        
+
     url(r'^keyword/add/$',
         shop_view.AddKeywordView.as_view(),
         name='keyword-add'),
