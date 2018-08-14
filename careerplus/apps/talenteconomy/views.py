@@ -54,7 +54,7 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
         categories = Category.objects.filter(
             is_active=True, visibility=2, id__in=categories_id
         ).order_by('-name')
-        article_list = article_list[:10]
+        article_list = article_list
 
         page_obj = self.scrollPagination(
             paginated_by=self.paginated_by, page=self.page,
@@ -93,6 +93,7 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
                 top_article_list[6:9]],
             'categories': categories,
             'article_list': list_article,
+            'article_listing': article_list[: 5],
             'popular_courses': popular_courses,
             'authors': authors,
             'authors_list': list(author_list)
