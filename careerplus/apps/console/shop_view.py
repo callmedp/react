@@ -70,6 +70,7 @@ from faq.forms import (
     ChangePublicFaqForm,)
 
 from faq.models import FAQuestion
+from users.mixins import UserGroupMixin
 
 
 @Decorate(stop_browser_cache())
@@ -1849,13 +1850,14 @@ class ActionProductView(View, ProductValidation):
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-class ProductAuditHistoryView(ListView, PaginationMixin):
+class ProductAuditHistoryView(UserGroupMixin, ListView, PaginationMixin):
     model = ProductAuditHistory
     template_name = 'console/tasks/product-audit-history.html'
     context_object_name = 'product_audit_list'
     page = 1
     paginated_by = 20
     query = ''
+    group_name = ['FINANCE']
 
     def get_queryset(self):
         self.page = self.request.GET.get('page', 1)
@@ -1880,10 +1882,11 @@ class ProductAuditHistoryView(ListView, PaginationMixin):
         return context
 
 
-class ProductHistoryLogDownloadView(View):
+class ProductHistoryLogDownloadView(UserGroupMixin, View):
     model = ProductAuditHistory
     date_range = None
     product_id = None
+    group_name = ['FINANCE']
 
     def get_queryset(self):
         self.page = self.request.GET.get('page', 1)
