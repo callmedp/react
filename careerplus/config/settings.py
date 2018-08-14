@@ -319,7 +319,7 @@ CMS_ID=[1]
 FEATURE_PROFILE_PRODUCTS = [1939]
 
 for conn, attrs in MONGO_SETTINGS.items():
-    connect(attrs['DB_NAME'], conn, host=attrs['HOST'], read_preference=read_preferences.ReadPreference.PRIMARY)
+    connect(attrs['DB_NAME'], host=attrs['USERNAME'] + ":" + attrs['PASSWORD']  + "@" + attrs['HOST']+":" + str(attrs['PORT']) + '/?authSource=admin' )
 
 try:
     from .settings_local import *

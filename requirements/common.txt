@@ -41,6 +41,7 @@ pycparser==2.18
 pycrypto==2.6.1
 Pyphen==0.9.4
 pysolr==3.6.0
+pymongo==3.7.1
 python-utils==2.2.0
 redis==2.10.5
 requests==2.18.4
