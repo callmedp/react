@@ -95,12 +95,14 @@
     <!-- Talent Economy starts here -->
 
     <!-- box panel starts here -->
+       {% if article_list %}
     <div class="box-panel row " itemscope itemtype="https://schema.org/ItemList">
       <h2 class="semi-head">Recently Added</h2>
+                <div id="list-container-id">
+                    {{article_list}}
+                </div>
+			</div>
 
-      {% include './include/articles.tmpl.html' with articlelists=article_listing %}
-
-    </div>
     <!-- box panel ends here -->
     
     {% if popular_courses %}
@@ -121,6 +123,7 @@
 {% block js_section %}
     {{block.super}}
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
+     <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
     <script>
         $(function() {
             Article.init();
