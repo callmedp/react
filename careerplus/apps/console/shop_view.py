@@ -1666,7 +1666,7 @@ class ActionCategoryView(View, CategoryValidation):
             allowed_action = []
             if has_group(user=self.request.user,
                 grp_list=settings.PRODUCT_GROUP_LIST):
-                allowed_action = ['active', 'inactive','skill', 'noskill']
+                allowed_action = ['active', 'inactive','skill', 'noskill','service','noservice']
             else:
                 allowed_action = []
 
@@ -1717,6 +1717,26 @@ class ActionCategoryView(View, CategoryValidation):
                                     "Category is removed as skill!") 
                             data = {'success': 'True',
                                 'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
+                    
+                    elif action == "service":
+                        category.is_service = True
+                        category.save()    
+                        messages.success(
+                            self.request,
+                                "Category is made service!") 
+                        data = {'success': 'True',
+                            'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
+                        # else:
+                        #     data = {'error': 'True'}
+                    elif action == "noservice":
+                            category.is_service = False
+                            category.save()    
+                            messages.success(
+                                self.request,
+                                    "Category is removed as service!") 
+                            data = {'success': 'True',
+                                'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
+
                 except Exception as e:
                     logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
 

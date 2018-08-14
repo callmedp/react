@@ -32,6 +32,7 @@ from shop.views import ProductDetailView, CourseCatalogueView
 from users.views import LinkedinCallbackView
 from search.views import FuncAreaPageView
 from blog import views as blog_view
+from skillpage.views import ServiceDetailPage
 
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
@@ -96,6 +97,8 @@ urlpatterns += [
 
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
+    url(r'^services/(?P<category_slug>[-\w]+)/(?P<category_id>\d+)/$',
+        ServiceDetailPage.as_view(), name='service_page'),
     url(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='service-detail'),
     url(r'^courses/', include('skillpage.urls', namespace='skillpage')),

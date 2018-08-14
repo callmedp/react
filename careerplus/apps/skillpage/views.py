@@ -198,3 +198,28 @@ class SkillPageView(DetailView, SkillPageMixin):
         breadcrumbs.append({"url": '', "name": self.object.name})
         data = {"breadcrumbs": breadcrumbs}
         return data
+
+
+
+class ServiceDetailPage(DetailView):
+    model = Category
+    template_name = "services/detail.html"
+    slug_field = 'slug'
+    slug_url_kwarg = 'category_slug'
+    pk_url_kwarg = 'category_id'
+    context_object_name = "category_obj"
+    query_pk_and_slug = True
+
+    
+
+
+
+
+
+
+
+
+
+
+
+

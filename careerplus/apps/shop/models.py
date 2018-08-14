@@ -96,6 +96,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     is_skill = models.BooleanField(
         _('Is Skill'),
         default=False)
+    is_service = models.BooleanField(_('Show as a Service Page'),default=False)
     graph_image = models.ImageField(
         _('Graph Image'), upload_to=get_upload_path_category,
         blank=True, null=True)
