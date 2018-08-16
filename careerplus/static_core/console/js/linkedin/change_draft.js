@@ -11,7 +11,7 @@ window.Parsley.addValidator('validatedate', {
   validateString: function(value, requirement, parsleyInstance) {
     var dcd = requirement.split("_")[1]
     var form_type = requirement.split("_")[0]
-    var state_var = (form_type="work") ? "org_current" : "edu_current"
+    var state_var = (form_type=="work") ? "org_current" : "edu_current"
     var curr_state
 
     if(dcd == 'from'){
