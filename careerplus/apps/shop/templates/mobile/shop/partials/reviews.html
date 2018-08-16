@@ -34,9 +34,9 @@
 
               <div class="form-group">
                 <label for="inputPassword3" class="bold pb-5 block">Title</label>
-                <input class="form-control" type="text" name="title" required maxlength="100" {%if review_obj.title %}  value="{{review_obj.title}}" {% endif %} >
+                <input class="form-control" type="text" name="title" required maxlength="30" {%if review_obj.title %}  value="{{review_obj.title}}" {% endif %} >
                   <small class="c9 fs-11">
-                    Max 20 characters
+                    Max 30 characters
                     <p> 
                       <span class="error" style="color:red" id="title-error"></span>  
                     </p>
