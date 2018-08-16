@@ -11,7 +11,7 @@
 {% endblock canonical_url %}
 
 {% block title %}	
-	{{meta.title}}
+	{{category_obj.title}}
 {% endblock title %}
 
 {% block css_section %}
@@ -110,15 +110,16 @@
 		    </div>
 
 		    <!-- Career Outcomes -->
-		    {% if category_object.career_outcomes %}
+		    {% if category_obj.career_outcomes %}
 		    <div class="career-outcomes">
-		    	<h2>Career Outcomes</h2>
+		    	<h2>Professional Advantage</h2>
 		        <ul class="box-panel">
-		            {% for career_outcome in career_outcomes %}
+		            {% for career_outcome in category_obj.split_career_outcomes %}
 		            	<li>{{career_outcome}}</li>
 		            {% endfor %}
 		        </ul>
 		    </div>
+		    {% endif %}
 
 			<!-- Importance in Market -->
             {% if category_obj.graph_image or api_data.job_count or api_data.jFArea %}

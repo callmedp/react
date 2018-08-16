@@ -344,7 +344,7 @@ class ChangeCategorySkillForm(forms.ModelForm):
                     "Career Outcomes should be between 2-400 characters.")
         else:
             #Don't raise error for services. Return empty.
-            if self.instance and self.instance.type_level == 2: 
+            if self.instance and self.instance.is_service: 
                 return outcome
             raise forms.ValidationError(
                 "This field is required.")

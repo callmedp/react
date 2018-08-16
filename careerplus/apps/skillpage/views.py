@@ -210,6 +210,22 @@ class ServiceDetailPage(DetailView):
     context_object_name = "category_obj"
     query_pk_and_slug = True
 
+    def _get_recommended_products(self):
+        """
+        Fetch all products with category same as that of object.
+        Make sure that products are not combos/variations.
+        Also, products should have been indexed in Solr.
+        """
+        products = Product.browsable.filter(categories__in=[self.object],\
+                    type_product__in=[0,1])[:5]
+        return products
+
+
+    def get_context_data(self,**kwargs):
+        context = super(ServiceDetailPage,self).get_context_data(**kwargs)
+        context['recommended_products'] = self._get_recommended_products()
+        return context
+
     
 
 

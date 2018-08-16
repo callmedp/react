@@ -79,38 +79,33 @@
         {% endif %}
         {% if object.type_level != 1 and object.type_level != 2 %}
           
-          {% if not object.is_skill %}
+          {% if not object.is_skill and not object.is_service %}
       
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
                 <a class="btn btn-app click-modal" data-msg="skill">
                   <i class="fa fa-check-square-o"></i> Make Skill</a>
               </div>
-          {% else %}
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
+                <a class="btn btn-app click-modal" data-msg="service">
+                  <i class="fa fa-check-square-o"></i> Make Service</a>
+            </div>
+          {% elif object.is_skill %}
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
                 <a class="btn btn-app click-modal" data-msg="noskill">
                   <i class="fa fa-minus-square"></i> Remove Skill</a>
               </div>
-        
-          {% endif %}
-        {% endif %}
-        
-        {% if object.type_level == 2%}
-          
-          {% if not object.is_service %}
-      
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
-                <a class="btn btn-app click-modal" data-msg="service">
-                  <i class="fa fa-check-square-o"></i> Make Service</a>
-              </div>
+
           {% else %}
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
                 <a class="btn btn-app click-modal" data-msg="noservice">
                   <i class="fa fa-minus-square"></i> Remove Service</a>
               </div>
         
+        
           {% endif %}
         {% endif %}
-
+        
     </div>
     
     <form class="form-horizontal form-label-left" method="POST" novalidate id="approval-form">
@@ -350,7 +345,7 @@
             {% if object.type_level != 1 and object.type_level != 0 %}
               <div class="x_panel">
                   <div class="x_title">
-                        <h2><i class="fa fa-thumb-tack"></i>SkillPage</h2>
+                        <h2><i class="fa fa-thumb-tack"></i>Service/Skill Page Info</h2>
                         <ul class="nav navbar-right panel_toolbox">
                           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                           </li>
@@ -381,7 +376,7 @@
                       </div>
                       
                       <div class="item form-group {% if skill_form.career_outcomes.errors %}bad{% endif %}">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ skill_form.career_outcomes.id_for_label }}">Career Outcomes {% if object.type_level != 2 %}<span class="required">*</span>{% endif %}
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ skill_form.career_outcomes.id_for_label }}">Career Outcomes {% if not object.is_service %}<span class="required">*</span>{% endif %}
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             {{skill_form.career_outcomes}}
