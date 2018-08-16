@@ -142,8 +142,12 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             productcategories__active=True,
             active=True)
         categories_list = []
+        
         for cat in categories:
-            if cat.type_level == 4:
+            allowed_levels = [4]
+            if cat.is_service:
+                allowed_levels.append(3)
+            if cat.type_level in allowed_levels:
                 pcat = cat.get_parent()
                 for pc in pcat:
                     categories_list.append(pc)

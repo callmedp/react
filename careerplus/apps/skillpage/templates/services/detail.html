@@ -86,8 +86,8 @@
 	        	{% if category_obj.graph_image or api_data.job_count or api_data.jFArea %}
 	        		<a title="Importance in Market" class="cls_tab_child" href="#market">Importance in Market</a>
 	        	{% endif %}
-	        	{% if products %}
-	        		<a title="Courses" class="cls_tab_child" href="#programs">Courses</a>
+	        	{% if recommended_products %}
+	        		<a title="Services" class="cls_tab_child" href="#programs">Services</a>
 	        	{% endif %}
 	        	{% if page_reviews %}
 	        		<a title="Reviews" class="cls_tab_child" href="#reviews">Reviews</a>
@@ -183,11 +183,11 @@
 			{% endif %}
 
 		    <!-- certification programs listing -->
-		    {% if products %}
+		    {% if recommended_products %}
 		    <div id="programs" class="listing-box mb-40 scroll" itemscope itemtype="http://schema.org/ItemList">
-		    	<h2 itemprop="name">{{category_obj.name}} Programs</h2>
+		    	<h2 itemprop="name">{{category_obj.name}} Services</h2>
 		    	<ul class="listing1" id="product_list">
-		    		{% for product in products %}
+		    		{% for product in recommended_products %}
 				        <li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
 				        	<meta itemprop="position" content="{{forloop.counter}}" />
 				        	<a itemprop="url" title="{{product.pNm}}" 

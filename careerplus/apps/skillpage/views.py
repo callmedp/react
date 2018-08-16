@@ -210,20 +210,41 @@ class ServiceDetailPage(DetailView):
     context_object_name = "category_obj"
     query_pk_and_slug = True
 
-    def _get_recommended_products(self):
+    def _get_all_products_of_category(self):
         """
         Fetch all products with category same as that of object.
-        Make sure that products are not combos/variations.
-        Also, products should have been indexed in Solr.
         """
-        products = Product.browsable.filter(categories__in=[self.object],\
-                    type_product__in=[0,1])[:5]
+        products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=self.object.pk)
+        print(self.object.pk,products)
         return products
 
+    def _get_product_variation_combo_ids(self,products):
+        """
+        Fetch ids of all products which are variations/combos for the given category.
+        """
+        prod_id_list = []
+        
+        for prd in products:
+            if prd.pTP == 1:
+                prd_vars = json.loads(prd.pVrs)
+                [prod_id_list.append(var_lst.get('id')) for var_lst in prd_vars.get('var_list') ]
+                    
+            if prd.pTP == 3:
+                prd_cmbs = json.loads(prd.pCmbs)
+                [prod_id_list.append(combo_lst.get('pk')) for combo_lst in prd_cmbs.get('combo_list') ]
+            
+            if prd.pTP in [0, 1, 2, 3, 4, 5]:
+                prod_id_list.append(prd.id)
+
+        return prod_id_list
+
+    def get_product_reviews(self,prod_id_list):
+        pass
 
     def get_context_data(self,**kwargs):
         context = super(ServiceDetailPage,self).get_context_data(**kwargs)
-        context['recommended_products'] = self._get_recommended_products()
+        all_products = self._get_all_products_of_category()
+        context['recommended_products'] = all_products
         return context
 
     
