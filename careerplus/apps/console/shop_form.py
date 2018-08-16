@@ -60,7 +60,7 @@ class SkillInlineFormSet(forms.BaseInlineFormSet):
         duplicates = False
         for form in self.forms:
             if form.cleaned_data:
-                skill = form.cleaned_data['skill']
+                skill = form.cleaned_data.get('skill', None)
                 if skill in skills:
                     duplicates = True
                 skills.append(skill)
@@ -238,7 +238,6 @@ class ChangeCategoryForm(forms.ModelForm):
         self.fields['name'].widget.attrs['data-parsley-length'] = "[2, 100]"
         self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-100 characters.'
 
-
         self.fields['type_level'].widget.attrs['class'] = form_class
         self.fields['type_level'].widget.attrs['data-parsley-notdefault'] = ''
         
@@ -252,7 +251,6 @@ class ChangeCategoryForm(forms.ModelForm):
         self.fields['banner'].widget.attrs['data-parsley-max-file-size'] = 100
         self.fields['banner'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
 
-
         self.fields['icon'].widget.attrs['class'] = form_class 
         self.fields['icon'].widget.attrs['data-parsley-max-file-size'] = 10
         self.fields['icon'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
@@ -262,7 +260,6 @@ class ChangeCategoryForm(forms.ModelForm):
         # self.fields['active'].widget.attrs['class'] = 'js-switch'
         # self.fields['active'].widget.attrs['data-switchery'] = 'true'
         
-
     class Meta:
         model = Category
         fields = ('name', 'type_level',
@@ -369,7 +366,7 @@ class ChangeCategorySEOForm(forms.ModelForm):
         self.fields['title'].widget.attrs['placeholder'] = 'Add unique title'
         self.fields['title'].widget.attrs['data-parsley-trigger'] = 'change'
         self.fields['title'].widget.attrs['required'] = "required"
-        
+
         self.fields['title'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['title'].widget.attrs['data-parsley-length'] = "[2, 100]"
         self.fields['title'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-100 characters.'
@@ -382,7 +379,6 @@ class ChangeCategorySEOForm(forms.ModelForm):
         self.fields['heading'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['heading'].widget.attrs['data-parsley-length'] = "[2, 100]"
         self.fields['heading'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-100 characters.'
-
 
         self.fields['meta_desc'].widget.attrs['class'] = form_class
         self.fields['meta_keywords'].widget.attrs['class'] = form_class
@@ -433,7 +429,6 @@ class ChangeCategorySkillForm(forms.ModelForm):
         self.fields['graph_image'].widget.attrs['data-parsley-max-file-size'] = 500
         self.fields['graph_image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
         
-
         self.fields['career_outcomes'].widget.attrs['class'] = 'tagsinput tags form-control'
         self.fields['video_link'].widget.attrs['class'] = form_class
         self.fields['video_link'].widget.attrs['maxlength'] = 128
@@ -444,7 +439,7 @@ class ChangeCategorySkillForm(forms.ModelForm):
         # self.fields['video_link'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['video_link'].widget.attrs['data-parsley-length'] = "[2, 128]"
         self.fields['video_link'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-128 characters.'
-        
+
     class Meta:
         model = Category
         fields = (
@@ -453,7 +448,7 @@ class ChangeCategorySkillForm(forms.ModelForm):
 
     def clean(self):
         super(ChangeCategorySkillForm, self).clean()
-    
+
     def clean_description(self):
         desc = self.cleaned_data.get('description', '')
         if desc:
@@ -535,7 +530,6 @@ class CategoryRelationshipForm(forms.ModelForm):
     def clean(self):
         super(CategoryRelationshipForm, self).clean()
 
-
     def clean_related_to(self):
         related_to = self.cleaned_data.get('related_to', None)
         if related_to:
@@ -614,4 +608,3 @@ class RelationshipInlineFormSet(forms.BaseInlineFormSet):
         if any(self.errors):
             return
         return
-
