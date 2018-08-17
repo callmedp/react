@@ -11,6 +11,7 @@ class TestRecommendedProduct(TestCase):
     def setUp(self):
         self.client = Client()
         self.func_area = None
+        # user skills
         self.skills = ['244', '310', '4', '10', '320', '389', '3827', '3824']
         self.user_data = {'email': 'testroot@gamil.com', 'password': 'rootroot'}
         self.email = 'testroot@gmail.com'
