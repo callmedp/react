@@ -809,7 +809,6 @@ class ProductReviewCreateView(CreateView):
         if request.is_ajax() and self.product_pk and self.candidate_id:
             if review_form.is_valid():
                 try:
-
                     self.product = Product.objects.get(pk=self.product_pk)
                     contenttype_obj = ContentType.objects.get_for_model(self.product)
                     review_obj = Review.objects.filter(
@@ -827,7 +826,7 @@ class ProductReviewCreateView(CreateView):
                             name += request.session.get('first_name')
                         if request.session.get('last_name'):
                             name += ' ' + request.session.get('last_name')
-                        product = self.oi.product if self.oi else self.product
+                        product = self.product
                         email = request.session.get('email')
                         content_type = ContentType.objects.get(app_label="shop", model="product")
                         review_obj = Review.objects.create(
@@ -843,7 +842,7 @@ class ProductReviewCreateView(CreateView):
                         extra_content_obj = ContentType.objects.get(app_label="shop", model="product")
 
                         review_obj.extra_content_type = extra_content_obj
-                        review_obj.extra_object_id = self.oi.id if self.oi else self.product.id
+                        review_obj.extra_object_id = self.product.id
                         review_obj.save()
                         data['success'] = True
                     else:
