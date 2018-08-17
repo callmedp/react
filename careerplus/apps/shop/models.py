@@ -2350,5 +2350,9 @@ class ProductAuditHistory(Document):
 
     meta = {
         'collection': 'ProductAuditHistory',
-        'allow_inheritance': False
+        'allow_inheritance': False,
+        'indexes': [
+            'product_id',
+            'created_at'
+        ]
     }

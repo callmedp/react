@@ -1857,7 +1857,7 @@ class ProductAuditHistoryView(UserGroupMixin, ListView, PaginationMixin):
     page = 1
     paginated_by = 20
     query = ''
-    group_name = ['FINANCE']
+    group_names = ['FINANCE', 'PRODUCT']
 
     def get_queryset(self):
         self.page = self.request.GET.get('page', 1)
@@ -1886,7 +1886,7 @@ class ProductHistoryLogDownloadView(UserGroupMixin, View):
     model = ProductAuditHistory
     date_range = None
     product_id = None
-    group_name = ['FINANCE']
+    group_names = ['FINANCE', 'PRODUCT']
 
     def get_queryset(self):
         self.page = self.request.GET.get('page', 1)
