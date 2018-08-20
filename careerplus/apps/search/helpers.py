@@ -352,7 +352,8 @@ def get_recommendations(func_area, skills, results=None):
     if not func_area:
         func_area = 23
     if not skills:
-        skills = [777, 795, 2064]
+        # skills = [777, 795, 2064]
+        skills = []
 
     func_area_prods = set(ProductFA.objects.filter(fa=func_area).values_list('product', flat=True))
     skill_prods = set(ProductSkill.objects.filter(skill__in=skills).values_list('product', flat=True))
@@ -367,4 +368,3 @@ def get_recommendations(func_area, skills, results=None):
     else:
         results = EmptySearchQuerySet()
     return results
-
