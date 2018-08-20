@@ -972,6 +972,16 @@ class Product(AbstractProduct, ModelMeta):
         super(Product, self).__init__(*args, **kwargs)
         if self.product_class:
             self.attr = ProductAttributesContainer(product=self)
+        self.original_duration = self.get_duration_in_day() if self.get_duration_in_day() else -1
+        if self.id:
+            self.original_variation_name = [str(var) for var in self.variation.all()] if self.variation.all() else ['N.A']
+        else:
+            self.original_variation_name = ['N.A']
+        self.original_product_id = self.id
+        self.original_upc = self.upc
+        self.original_price = float(self.inr_price)
+        self.original_vendor_name = self.get_vendor()
+        self.original_product_name = self.name
 
     def __str__(self):
         if self.pk:
@@ -1511,16 +1521,21 @@ class Product(AbstractProduct, ModelMeta):
         from .tasks import add_log_in_product_audit_history
         duration = instance.get_duration_in_day() if instance.get_duration_in_day() else -1
         variation_name = [str(var) for var in instance.variation.all()] if instance.variation.all() else ['N.A']
-        data = {
-            "product_id": instance.id,
-            "upc": instance.upc,
-            "price": float(instance.inr_price),
-            "vendor_name": instance.get_vendor(),
-            "product_name": instance.name,
-            "duration": duration,
-            "variation_name": variation_name
-        }
-        add_log_in_product_audit_history.delay(**data)
+
+        if (instance.original_duration != duration or instance.original_variation_name != variation_name \
+                or instance.original_price != float(instance.inr_price) or instance.original_upc != instance.upc or
+                instance.original_vendor_name != instance.get_vendor() or
+                instance.original_product_name != instance.name):
+            data = {
+                "product_id": instance.id,
+                "upc": instance.upc,
+                "price": float(instance.inr_price),
+                "vendor_name": instance.get_vendor(),
+                "product_name": instance.name,
+                "duration": duration,
+                "variation_name": variation_name
+            }
+            add_log_in_product_audit_history.delay(**data)
 
 
 post_save.connect(Product.post_save_product, sender=Product)
