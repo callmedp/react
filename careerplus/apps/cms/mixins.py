@@ -63,5 +63,7 @@ class LoadMoreMixin(object):
         except EmptyPage:
             comments = paginator.page(paginator.num_pages)  # If page is out of range (e.g. 9999),
                                                             # deliver last page of results.
+        
         return render_to_string('include/load_comment.html',
-                                {'comments': comments, "page_obj": page_obj, "csrf_token": csrf_token})
+                                {'comments': comments, "page_obj": page_obj, \
+                                "csrf_token": csrf_token,"request":self.request})

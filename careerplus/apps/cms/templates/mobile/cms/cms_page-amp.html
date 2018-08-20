@@ -17,6 +17,7 @@
     <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
     <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
     <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+    <script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>
 
     <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
 
@@ -76,24 +77,14 @@
                 <div class="comment-wrap mt-20">
                     <input type='hidden' id='page_slug' value='{{page_obj.slug}}'/>
                     <input type='hidden' id='page_pk' value='{{page_obj.pk}}'/>
-                    <form role="form" id="cms_comment_form">
-                        {% csrf_token %}
-                        <textarea placeholder="Write comments" class="form-control" id="id_message" name="message"></textarea>
-                        <span class="error position-error"></span><br/>
-                        {% if request.session.candidate_id %}
-                            <input type='submit' class="submit-button btn btn-lg btn-blue btn-round mt-10" id="comment_submit" value="Submit">
-                        {% else %}
-                            <input type='button' class="submit-button js_redirect btn btn-lg btn-blue btn-round mt-10" value="Submit">
-                        {% endif %}
-                    </form>
                     <ul class="mt-20" id="page_comment">
                         {{ comment_listing|safe|default:'' }}
                     </ul>
-                </div><!-- end of Comment wrap here -->
+                </div>
 
             {% endif %}
             {{ right_widgets|safe|default:'' }}
-        </section><!-- end of section here -->
+        </section>
     </div>
 
     {% include 'basic/footer.html' %}
