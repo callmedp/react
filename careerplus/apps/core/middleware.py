@@ -68,36 +68,40 @@ class LoginMiddleware(object):
             if resp_status:
                 request.session.update(resp_status)
 
-        session_fa = request.session.get('func_area')
-        session_skills = request.session.get('skills')
+        session_fa = False
+        session_skills = False
+
+        if 'func_area' in request.session.keys():
+            session_fa = True
+        if 'skills' in request.session.keys():
+            session_skills = True
         candidate_id = request.session.get('candidate_id')
         candidate_detail = None
-        if not session_fa:
-            # Fetch from shine
-            if candidate_id:
-                candidate_detail = ShineCandidateDetail().get_candidate_public_detail(
-                    shine_id=candidate_id)
-                if candidate_detail:
-                    func_area = candidate_detail.get('jobs')[0].get("parent_sub_field", "") \
-                        if len(candidate_detail.get('jobs', [])) else ''
-                    func_area_obj = FunctionalArea.objects.filter(name__iexact=func_area)
-                    if func_area_obj:
-                        request.session.update({
-                            'func_area': func_area_obj[0].id
-                        })
+
+        if not session_fa and candidate_id:
+            candidate_detail = ShineCandidateDetail().get_candidate_public_detail(
+                shine_id=candidate_id)
+            if candidate_detail:
+                func_area = candidate_detail.get('jobs')[0].get("parent_sub_field", "") \
+                    if len(candidate_detail.get('jobs', [])) else ''
+                func_area_obj = FunctionalArea.objects.filter(name__iexact=func_area)
+                fa_id = None
+                if func_area_obj:
+                    fa_id = func_area_obj[0].id
+                request.session.update({
+                    'func_area': fa_id
+                })
         if not session_skills:
             if not candidate_detail and candidate_id:
                 candidate_detail = ShineCandidateDetail().get_candidate_public_detail(
                     shine_id=candidate_id)
             if candidate_detail:
                 skills = [skill['value'] for skill in candidate_detail['skills']]
-                skills_obj = Skill.objects.filter(name__in=skills)[:10]
-                skills_ids = [s.id for s in skills_obj]
-                if skills_obj:
-                    request.session.update({
-                        'skills': skills_ids
-                    })
-
+                skills_obj = Skill.objects.filter(name__in=skills)[:15]
+                skills_ids = [str(s.id) for s in skills_obj]
+                request.session.update({
+                    'skills': skills_ids
+                })
         response = self.get_response(request)
         return response
 

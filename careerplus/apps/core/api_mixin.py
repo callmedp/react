@@ -116,7 +116,7 @@ class ShineCandidateDetail(ShineToken):
             logging.getLogger('error_log').error('unable to get detail response %s'%str(e))
         return
 
-    def get_status_detail(self, email=None, shine_id=None):
+    def get_status_detail(self, email=None, shine_id=None, token=None):
         try:
             if shine_id:
                 headers = self.get_api_headers()

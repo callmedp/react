@@ -26,8 +26,10 @@ from .decorators import (
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.conf import settings
-from partner.models import Vendor,VendorHierarchy
 
+from dal import autocomplete
+
+from partner.models import Vendor, VendorHierarchy
 from blog.mixins import PaginationMixin
 from shop.models import (
     Category, Keyword,
@@ -75,6 +77,16 @@ from faq.forms import (
 
 from faq.models import FAQuestion
 from users.mixins import UserGroupMixin
+
+
+class SkillAutocompleteView(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated():
+            return Skill.objects.none()
+        qs = Skill.objects.filter(active=True)
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+        return qs
 
 
 @Decorate(stop_browser_cache())

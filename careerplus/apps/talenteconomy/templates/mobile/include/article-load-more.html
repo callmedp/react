@@ -1,6 +1,6 @@
 {% load thumbnail static %}
 
-{% for articlelist in articlelists %}
+{% for articlelist in page_obj %}
 <div class="media article-list" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
   <a title="{{articlelist.heading}}" href="{% url 'talent:te-articles-detail' articlelist.p_cat.slug articlelist.slug %}" itemprop="url">
     <figure class="media-left">
@@ -51,4 +51,18 @@
 
 </div>
 {% endfor %}
+
+
+{% if page_obj.has_next %}
+<div id="talent_art_load_more">
+  <div style='display:none'>
+  <form id="load-te-art-form">
+    <input type="hidden" id="te_art_page_id" name="page" value="{{page_obj.next_page_number}}">
+  </form>
+  </div>
+  <button type="button" id="load-more-art" class="btn-outline btn"><i class="icon-load mr-10"></i>Load more</button>
+</div>
+{% endif %}
+
+
 <!-- <a href="/category.html" class="blue-link fs-14 text-right block">View all articles</a> -->

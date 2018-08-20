@@ -9,8 +9,11 @@ from django.contrib.auth.models import Group
 
 # inter-app imports
 from geolocation.models import Country
-from shop.models import Product, ProductClass, Category, \
-    CategoryRelationship, ProductAuditHistory
+from shop.models import (
+    Product, ProductClass, Category,
+    CategoryRelationship, ProductAuditHistory, Skill,
+    ProductSkill)
+
 from order.models import Order, OrderItem
 from users.models import User
 from partner.models import Vendor
@@ -270,3 +273,12 @@ class ProductAuditHistoryFactory(factory.mongoengine.MongoEngineFactory):
 
     class Meta:
         model = ProductAuditHistory
+
+
+class SkillFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Skill
+        django_get_or_create = ('name', )
+
+    name = 'Django'
+    active = True

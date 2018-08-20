@@ -41,7 +41,10 @@ urlpatterns += [
 # url for skills
 urlpatterns += [
 
-    url(r'^akill/add/$',
+    url(r'^skill/autocomplete/$',
+        shop_view.SkillAutocompleteView.as_view(),
+        name='skill-autocomplete'),
+    url(r'^skill/add/$',
         shop_view.SkillAddView.as_view(),
         name='skill-add'),
     url(r'^skill/list/$',
