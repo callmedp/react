@@ -11,6 +11,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.http import urlquote
 from core.library.haystack.query import SQS
 from django.conf import settings
+from django.core.cache import cache
 
 from geolocation.models import Country
 from django.db.models import Q
@@ -212,6 +213,29 @@ class ServiceDetailPage(DetailView):
     PRODUCT_PAGE_SIZE = 5
     REVIEW_PAGE_SIZE = 5
 
+    def get_queryset(self):
+        return Category.objects.filter(is_service=True)
+
+    def _get_country_choices(self):
+        cached_country_choices = cache.get('callback_country_choices')
+        if cached_country_choices:
+            return cached_country_choices
+
+        country_choices = [(m.phone, m.name) for m in
+                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+
+        cache.set('callback_country_choices',country_choices,86400)
+        return country_choices
+
+    def _get_preselected_country(self):
+        cached_initial_country = cache.get('callback_initial_country')
+        if cached_initial_country:
+            return cached_initial_country
+
+        initial_country = Country.objects.filter(phone='91')[0].phone
+        cache.set("callback_initial_country",initial_country,86400)
+        return initial_country
+
     def _get_all_products_of_category(self):
         """
         Fetch all products with category same as that of object.
@@ -283,6 +307,8 @@ class ServiceDetailPage(DetailView):
         context['reviews'] = self._get_paginated_reviews(all_product_ids)
         context.update({"meta":self._get_page_meta_data()})
         context.update({"canonical_url":self.object.get_canonical_url()})
+        context.update({"country_choices":self._get_country_choices()})
+        context.update({"initial_country":self._get_preselected_country()})
         return context
 
     
