@@ -597,7 +597,7 @@ class DownloadMonthlyWriterInvoiceView(UserGroupMixin,TemplateView):
     template_name = "invoice/invoice_monthly_download.html"
     month = []
     path = "invoice/user/"
-    group_name = ['WRITER']
+    group_names = ['WRITER']
 
 
 

@@ -1,6 +1,10 @@
 import json
 from collections import OrderedDict
+from datetime import datetime
 import logging
+import csv
+from io import StringIO
+
 from django.views.generic import (
     View, UpdateView, FormView,
     TemplateView, ListView, DetailView)
@@ -12,6 +16,9 @@ from django.forms.models import inlineformset_factory
 from django.template.response import TemplateResponse
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
+from django.utils import timezone
+from dateutil.relativedelta import relativedelta
+
 from .decorators import (
     has_group,
     Decorate, check_permission,
@@ -25,7 +32,7 @@ from blog.mixins import PaginationMixin
 from shop.models import (
     Category, Keyword,
     Attribute, AttributeOptionGroup,
-    Product, Chapter, Skill)
+    Product, Chapter, Skill, ProductAuditHistory)
 
 from .shop_form import (
     AddCategoryForm, ChangeCategoryForm,
@@ -67,6 +74,7 @@ from faq.forms import (
     ChangePublicFaqForm,)
 
 from faq.models import FAQuestion
+from users.mixins import UserGroupMixin
 
 
 @Decorate(stop_browser_cache())
@@ -1305,8 +1313,6 @@ class ChangeProductView(DetailView):
                         form = ProductPriceForm(request.POST, instance=obj)
                         if form.is_valid():
                             product = form.save()
-                            product.title = product.get_title()
-                            product.save()
                             messages.success(
                                 self.request,
                                 "Product Prices changed Successfully")
@@ -1328,7 +1334,7 @@ class ChangeProductView(DetailView):
                                 request.FILES,
                                 instance=obj)
                         if form.is_valid():
-                            product = form.save()
+                            form.save()
                             messages.success(
                                 self.request,
                                 "Product Attributes changed Successfully")
@@ -1914,7 +1920,7 @@ class ActionProductView(View, ProductValidation):
             action = form_data.get('action', None)
             pk_obj = form_data.get('product', None)
             allowed_action = []
-            
+
             if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
                 allowed_action = ['active', 'inactive','index', 'unindex']
             else:
@@ -2008,6 +2014,106 @@ class ActionProductView(View, ProductValidation):
                 ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         data = {'error': 'True'}
         return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+class ProductAuditHistoryView(UserGroupMixin, ListView, PaginationMixin):
+    model = ProductAuditHistory
+    template_name = 'console/tasks/product-audit-history.html'
+    context_object_name = 'product_audit_list'
+    page = 1
+    paginated_by = 20
+    query = ''
+    group_names = ['FINANCE', 'PRODUCT']
+
+    def get_queryset(self):
+        self.page = self.request.GET.get('page', 1)
+        product_id = self.request.GET.get('product_id', '')
+        date_range = self.request.GET.get('date_range', '')
+        queryset = self.model.objects.all().order_by('-created_at')
+        if product_id:
+            queryset = queryset.filter(product_id=product_id)
+        if date_range:
+            start_date, end_date = date_range.split(' - ')
+            start_date = datetime.strptime(start_date, "%m/%d/%Y")
+            end_date = datetime.strptime(end_date, "%m/%d/%Y")
+            end_date = end_date + relativedelta(days=1)
+            queryset = queryset.filter(created_at__gte=start_date, created_at__lte=end_date)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductAuditHistoryView, self).get_context_data(**kwargs)
+        paginator = Paginator(context['product_audit_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        context['product_list'] = Product.objects.values_list('id', 'name')
+        return context
+
+
+class ProductHistoryLogDownloadView(UserGroupMixin, View):
+    model = ProductAuditHistory
+    date_range = None
+    product_id = None
+    group_names = ['FINANCE', 'PRODUCT']
+
+    def get_queryset(self):
+        self.page = self.request.GET.get('page', 1)
+        queryset = self.model.objects.all().order_by('-created_at')
+        if self.product_id:
+            queryset = queryset.filter(product_id=self.product_id)
+        if self.date_range:
+            start_date, end_date = self.date_range.split(' - ')
+            start_date = datetime.strptime(start_date, "%m/%d/%Y")
+            end_date = datetime.strptime(end_date, "%m/%d/%Y")
+            end_date = end_date + relativedelta(days=1)
+            queryset = queryset.filter(created_at__gte=start_date, created_at__lte=end_date)
+        return queryset
+
+    def post(self, request, *args, **kwargs):
+        self.product_id = self.request.POST.get('product_id', '')
+        self.date_range = self.request.POST.get('date_range', '')
+
+        if self.date_range and self.product_id:
+            queryset = self.get_queryset()
+            return self.download_csv_file(queryset)
+        else:
+            messages.add_message(request, messages.ERROR, 'Please select Product and Date Range')
+            return HttpResponseRedirect(reverse('console:product-audit-history'))
+
+    def download_csv_file(self, queryset):
+        product_name = 'no_log'
+        try:
+            csvfile = StringIO()
+            csv_writer = csv.writer(
+                csvfile, delimiter=',', quotechar="'",
+                quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writerow([
+                'Product Name', 'Variation Name', 'UPC',
+                'Price', 'Duration', 'Vendor Name', 'Created_at',
+            ])
+
+            for log in queryset:
+                product_name = log.product_name
+                try:
+                    csv_writer.writerow([
+                        str(log.product_name),
+                        str(log.variation_name),
+                        str(log.upc),
+                        str(log.price),
+                        str(log.duration),
+                        str(log.vendor_name),
+                        str(log.created_at),
+                    ])
+                except Exception as e:
+                    logging.getLogger('error_log').error("%s " % str(e))
+                    continue
+            response = HttpResponse(csvfile.getvalue())
+            file_name = product_name + timezone.now().date().strftime("%Y-%m-%d")
+            response["Content-Disposition"] = "attachment; filename=%s.csv" % (file_name)
+            return response
+
+        except Exception as e:
+            messages.add_message(self.request, messages.ERROR, str(e))
+        return HttpResponseRedirect(reverse('console:product-audit-history'))
+
 
 # @Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 # @Decorate(check_permission('shop.console_change_attribute'))

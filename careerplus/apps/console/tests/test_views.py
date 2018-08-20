@@ -2,8 +2,10 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from geolocation.models import Country
 from django.contrib.auth.models import Permission
+from django.utils import timezone
 from shared.tests.factory.shared_factories import \
-    ProductFactory, OrderItemFactory, UserFactory
+    ProductFactory, OrderItemFactory, UserFactory, \
+    GroupFactory, CountryFactory, ProductAuditHistoryFactory
 
 
 class TestBoosterQueueView(TestCase):
@@ -191,3 +193,162 @@ class TestBoosterQueueView(TestCase):
     def tearDown(self):
         self.orderitem.order.delete()
         self.product.delete()
+
+
+class TestProductAuditHistoryView(TestCase):
+
+    def setUp(self):
+        self.user = None
+        self.url = reverse('console:product-audit-history')
+        CountryFactory()
+        self.product = ProductFactory(type_flow=7)
+        self.group = GroupFactory(name='FINANCE')
+        self.user = UserFactory()
+        ProductAuditHistoryFactory(
+            product_id=self.product.id,
+            product_name=self.product.name,
+            variation_name=['N.A'],
+            upc=self.product.upc,
+            price=self.product.inr_price,
+            duration=self.product.get_duration_in_day(),
+            vendor_name=self.product.get_vendor()
+        )
+
+    def setUpLogin(self):
+        self.client.post(
+            '/console/login/', {'username': 'ritesh.bisht93@gmail.com', 'password': '12345'}
+        )
+
+    def setUpGroup(self):
+        self.group.user_set.add(self.user)
+
+    def setupUserAndGroup(self):
+        self.setUpGroup()
+        self.setUpLogin()
+
+    def removeFromGroup(self):
+        self.group.user_set.remove(self.user)
+
+    def test_not_allowed_for_non_logged_in_user(self):
+        self.client = Client()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_allowed_for_logged_in_user_with_permisssion(self):
+        self.setupUserAndGroup()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_not_allowed_for_logged_in_without_permission(self):
+        self.removeFromGroup()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_correct_template_loaded(self):
+        self.setupUserAndGroup()
+        response = self.client.get(self.url)
+        self.assertTemplateUsed(response, 'console/tasks/product-audit-history.html')
+
+    def test_data_is_bieng_loaded_with_correct_product_id_and_date_range(self):
+        self.setupUserAndGroup()
+        data = {
+            'product_id': self.product.id,
+            'date_range': '07/11/2018 - 09/11/2018'
+        }
+        response = self.client.get(self.url, data)
+        self.assertTrue(len(response.context['page'].object_list))
+
+    def test_data_is_not_loaded_with_incorrect_product_id_and_date_range(self):
+        self.setupUserAndGroup()
+        data = {
+            'product_id': self.product.id,
+            'date_range': '07/11/2018 - 07/13/2018'
+        }
+        response = self.client.get(self.url, data)
+        self.assertFalse(len(response.context['page'].object_list))
+
+
+class TestProductHistoryLogDownloadView(TestCase):
+
+    def setUp(self):
+        self.user = None
+        self.url = reverse('console:product-audit-history-download')
+        CountryFactory()
+        self.product = ProductFactory(type_flow=7)
+        self.group = GroupFactory(name='FINANCE')
+        self.user = UserFactory()
+        ProductAuditHistoryFactory(
+            product_id=self.product.id,
+            product_name=self.product.name,
+            variation_name=['N.A'],
+            upc=self.product.upc,
+            price=self.product.inr_price,
+            duration=self.product.get_duration_in_day(),
+            vendor_name=self.product.get_vendor()
+        )
+
+    def setUpLogin(self):
+        self.client.post(
+            '/console/login/', {'username': 'ritesh.bisht93@gmail.com', 'password': '12345'}
+        )
+
+    def setUpGroup(self):
+        self.group.user_set.add(self.user)
+
+    def setupUserAndGroup(self):
+        self.setUpGroup()
+        self.setUpLogin()
+
+    def removeFromGroup(self):
+        self.group.user_set.remove(self.user)
+
+    def test_not_allowed_for_non_logged_in_user(self):
+        self.client = Client()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_get_not_allowed_for_logged_in_user_with_permisssion(self):
+        self.setupUserAndGroup()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 405)
+
+    def test_not_allowed_for_logged_in_without_permission(self):
+        self.removeFromGroup()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_csv_file_returned_with_product_id_and_date_range_is_empty(self):
+        self.setupUserAndGroup()
+        data = {
+            'product_id': self.product.id,
+            'date_range': '05/11/2018 - 06/11/2018'
+        }
+        response = self.client.post(self.url, data, follow=True)
+        file_name = 'no_log' + timezone.now().date().strftime("%Y-%m-%d")
+        self.assertEquals(
+            response.get('Content-Disposition'),
+            "attachment; filename=" + file_name + ".csv"
+        )
+
+    def test_csv_file_returned_with_product_id_and_date_range_is_not_empty(self):
+        self.setupUserAndGroup()
+        data = {
+            'product_id': self.product.id,
+            'date_range': '07/11/2018 - 09/11/2018'
+        }
+        response = self.client.post(self.url, data, follow=True)
+        file_name = self.product.name + timezone.now().date().strftime("%Y-%m-%d")
+        self.assertEquals(
+            response.get('Content-Disposition'),
+            "attachment; filename=" + file_name + ".csv"
+        )
+
+    def test_error_occured_with_no_product_id(self):
+        self.setupUserAndGroup()
+        data = {
+            'date_range': '07/11/2018 - 09/11/2018'
+        }
+        response = self.client.post(self.url, data, follow=True)
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), 'Please select Product and Date Range')
