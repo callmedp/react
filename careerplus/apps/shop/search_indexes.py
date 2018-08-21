@@ -39,8 +39,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pFAn = indexes.MultiValueField(null=True)
     pCtg = indexes.MultiValueField(null=True)
     pCtgn = indexes.MultiValueField(null=True)
-    pCC = indexes.CharField(null=True)    
-    pAb = indexes.CharField(default='') 
+    pCC = indexes.CharField(null=True)
+    pAb = indexes.CharField(default='')
     
     # Meta and SEO #
     pURL = indexes.CharField(null=True, indexed=False)
@@ -127,7 +127,10 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pPOP = indexes.CharField(indexed=False)
     pCD = indexes.DateTimeField(model_attr='created', indexed=True)
     pMD = indexes.DateTimeField(model_attr='modified', indexed=False)
-    
+
+    # skill Field
+    pSkill = indexes.MultiValueField(null=True)
+
     def get_model(self):
         return Product
 
@@ -183,7 +186,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         if len(categories) > 0:
             p_category = [pcat for cat in categories for pcat in cat.get_parent()]
             # pp_category = [pcat for cat in p_category for pcat in cat.get_parent()]
-            parents = [p_category,]
+            parents = [p_category, ]
             return [item.pk for sublist in parents for item in sublist if sublist]
         return []
 
@@ -201,6 +204,13 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             parents = [p_category,]
             return [item.name for sublist in parents for item in sublist if sublist]
         return []
+
+    def prepare_pSkill(self, obj):
+        # if obj.is_course:
+        skill_ids = list(obj.productskills.filter(
+            skill__active=True,
+            active=True).values_list('skill', flat=True))
+        return skill_ids
 
     def prepare_pCC(self, obj):
         content = ''
