@@ -363,3 +363,10 @@ font-size: 1.3rem;
     to {bottom: 0; opacity: 0;}
 }
 
+.print-version {
+  display: block;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+}
