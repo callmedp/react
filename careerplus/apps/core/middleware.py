@@ -11,10 +11,12 @@ from django_mobile import set_flavour
 # django imports
 from django_mobile.middleware import SetFlavourMiddleware
 from django.utils.deprecation import MiddlewareMixin
-from shine.core import ShineCandidateDetail
 from django.conf import settings
 from users.mixins import UserMixin
-from core.api_mixin import AdServerShine
+from core.api_mixin import AdServerShine, ShineCandidateDetail
+
+# local imports
+from shop.models import Skill, FunctionalArea
 from .utils import set_session_country
 
 
@@ -65,6 +67,41 @@ class LoginMiddleware(object):
                 email=cookies_data[0], shine_id=None, token=None)
             if resp_status:
                 request.session.update(resp_status)
+
+        session_fa = False
+        session_skills = False
+
+        if 'func_area' in request.session.keys():
+            session_fa = True
+        if 'skills' in request.session.keys():
+            session_skills = True
+        candidate_id = request.session.get('candidate_id')
+        candidate_detail = None
+
+        if not session_fa and candidate_id:
+            candidate_detail = ShineCandidateDetail().get_candidate_public_detail(
+                shine_id=candidate_id)
+            if candidate_detail:
+                func_area = candidate_detail.get('jobs')[0].get("parent_sub_field", "") \
+                    if len(candidate_detail.get('jobs', [])) else ''
+                func_area_obj = FunctionalArea.objects.filter(name__iexact=func_area)
+                fa_id = None
+                if func_area_obj:
+                    fa_id = func_area_obj[0].id
+                request.session.update({
+                    'func_area': fa_id
+                })
+        if not session_skills:
+            if not candidate_detail and candidate_id:
+                candidate_detail = ShineCandidateDetail().get_candidate_public_detail(
+                    shine_id=candidate_id)
+            if candidate_detail:
+                skills = [skill['value'] for skill in candidate_detail['skills']]
+                skills_obj = Skill.objects.filter(name__in=skills)[:15]
+                skills_ids = [str(s.id) for s in skills_obj]
+                request.session.update({
+                    'skills': skills_ids
+                })
         response = self.get_response(request)
         return response
 

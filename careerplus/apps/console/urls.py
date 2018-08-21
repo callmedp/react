@@ -38,6 +38,23 @@ urlpatterns += [
 #         name='search-order'),
 # ]
 
+# url for skills
+urlpatterns += [
+
+    url(r'^skill/autocomplete/$',
+        shop_view.SkillAutocompleteView.as_view(),
+        name='skill-autocomplete'),
+    url(r'^skill/add/$',
+        shop_view.SkillAddView.as_view(),
+        name='skill-add'),
+    url(r'^skill/list/$',
+        shop_view.SkillListView.as_view(),
+        name='skill-list'),
+    url(r'^skill/change/(?P<pk>[\d]+)/$',
+        shop_view.SkillChangeView.as_view(),
+        name='skill-change'),
+]
+
 
 urlpatterns += [
     url(r'^screenproduct/list/$',

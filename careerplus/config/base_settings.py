@@ -38,6 +38,8 @@ TEMPLATE_DEBUG = False  # django sorl required
 
 # Application definition
 DJANGO_APPS = [
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -430,7 +432,7 @@ SEO_GROUP_LIST = ['SEO']
 WRITING_GROUP_LIST = ['WRITER', 'WRITER_HEAD']
 BLOG_WRITER_GROUP_LIST = ['BLOG_WRITER']
 
-#BLOGGER#
+# BLOGGER#
 LEARNING_BLOGGER = ['LEARNING_BLOGGER']
 TALENT_BLOGGER = ['TALENT_BLOGGER']
 HR_INSIDER = ['HR_INSIDER']
