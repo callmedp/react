@@ -53,8 +53,8 @@ class UploadInFile(object):
 
 
 class LoadMoreMixin(object):
-    def pagination_method(self, page, comment_list, page_obj):
-        paginator = Paginator(comment_list, 2)
+    def pagination_method(self, page, comment_list, page_obj,page_size=2):
+        paginator = Paginator(comment_list, page_size)
         csrf_token = get_token(self.request)
         try:
             comments = paginator.page(page)
