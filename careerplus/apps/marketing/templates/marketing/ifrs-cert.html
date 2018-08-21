@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
-<link href='{% static "shinelearn/css/marketing/gst-cert/bootstrap.css" %}' rel="stylesheet">
+<link href='{% static "shinelearn/css/common/custom_landing.css" %}' rel="stylesheet">
 <link href='{% static "shinelearn/css/marketing/gst-cert/style.css" %}' rel="stylesheet">
         <style>
             @media screen and (max-height: 1048px){
@@ -63,9 +63,7 @@
     <!-- header end -->
     <div class="clear-fix"></div>
     
-    <div class="">
-     <div class="offer"></div>
-     
+    <div class="">     
      
      <!-- banner left section start -->
       <div class="top-baner-left">
@@ -88,8 +86,8 @@
           <h2>Join the course</h2>
           
           <div class="clear-fix"></div>
-          <form id="lead" 
-          action="{% url "crmapi:lead-management-captcha" %}"  data-non_captcha_action="{% url "crmapi:lead-management" %}"
+          <form class="enquiry-form" id="lead" method="POST"
+          action="{% url 'crmapi:lead-management' %}" 
           >{% csrf_token %}
           <div>
           <input type="text" id="name" name="name" placeholder="Full Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}" maxlength="100">
@@ -111,27 +109,20 @@
          </div>
 
            <div>
-                <textarea id="message" name="msg" class="message_input" placeholder="Message" rows="1"></textarea>
+                <label style="width: 100%;background:transparent; color: #fff !important; visibility: visible;padding: 0px 0px 0px 8px;margin-bottom: 10px;border: none;font: normal 14px &quot;Open Sans&quot;;outline: 0;height: 40px;">IFRS Training – Rs. 15990/-</label>
                 <span class="error" for="message" style="color: rgb(255, 0, 0); font-size: 11px; width:100%; " ></span>
             </div>
 
-            <div style="clear:both; height:77px; overflow:hidden; display:block; position: relative;">
-                <div id="captcha1" class="input-field" style="width:45%; margin: 0px;" ></div>
-                <p style="color: rgb(255, 0, 0); display: none; font-size: 11px; margin: 0px; padding: 0px;  position: absolute; top: 58px;" id="hiddenrecaptcha"> Captcha Validation is required</p>
-            </div>
-            
-            <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+            <input type="hidden" name="product" value="1880">
+            <input type="hidden" name="msg" value="IFRS Training – Rs. 15990/-">
             <input type="hidden" name="prd" value="IFRS Certification">
             <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
             <input type="hidden" name="lsource" value="{{ lead_source }}">
 
           <input id="submit"
-            type="submit" value="Enquire Now" class="submit button" onclick="_gaq.push(['resume._trackEvent','Lead','submit']);$('#lead').submit();return false;" id="submit"
+            type="submit" value="Enquire Now" class="submit button" onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;" id="submit"
           >
           </form>
-          
-<!--		<a href="#" class="emi-butn">Easy EMI payment option</a>-->
-       <p>*Easy EMI option available</p>
         </div>
       </div><!-- banner right section start -->
       
@@ -245,6 +236,7 @@
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
         <script type="text/javascript">
+            var _gaq = _gaq || [];
             // function leadSubmit() {
             //     var form = $('#lead');
             //     var action = form.data('non_captcha_action');
@@ -267,7 +259,7 @@
                 }
               });
 
-            var _gaq = _gaq || [];
+            
             $.validator.addMethod("lettersonly", function (value, element){
                 return this.optional(element) || /^[a-z\s]*$/i.test(value);
             }, "Letters only please");
@@ -285,40 +277,22 @@
             
             $("#lead").validate({
                 submitHandler:function (form) {
-                    if(grecaptcha.getResponse(recaptcha1) == '') {
-                        $('#hiddenrecaptcha').show();
-                    } else {
-                        $('#hiddenrecaptcha').hide();
-                        var action = $(form).attr('action');
-                        $.post(action, $(form).serialize(), function (data) {
-                            if (data['recaptcha']) {
-                                if (data['status']){
-                                $.each($("#lead"), function (i, e) {
-                                    e.reset();
-                                });
-                                $("#lead label").remove();
-                                grecaptcha.reset(recaptcha1);
-                                var conversion_id = 991709191;
-                                var conversion_label = "ciw9CIetw1gQh5Dx2AM";
-                                var ga_code = document.createElement('div');
-                                ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
-                                document.body.appendChild(ga_code);
-                                window.location.href ='thankyou-for-query'
-                                return false;
-                                    
-                                } else {
-                                    alert("Error! Something went wrong. Please try again");
-                                    grecaptcha.reset(recaptcha1);
-                                    
-                                }
-                            }
-                            else{
-                                alert("Only humans are allowed to submit this form.");
-                                grecaptcha.reset(recaptcha1);
-                            }
-
-                        }, 'json');
-                    }
+                    var action = $(form).attr('action');
+                    $.post(action, $(form).serialize(), function (data){
+                      if (data && data['status']){
+                          $.each($("#lead"), function (i, e) {
+                              e.reset();
+                          });
+                          $("#lead label").remove();
+                          var conversion_id = 991709191;
+                          var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                          var ga_code = document.createElement('div');
+                          ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                         document.body.appendChild(ga_code);
+                         window.location.href ='thankyou-for-query';
+                          return false;
+                      }
+                  }, 'json');
 
                 },
                 rules:{

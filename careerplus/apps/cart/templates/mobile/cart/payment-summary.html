@@ -8,7 +8,7 @@
     <link rel="canonical" href="{{ request.build_absolute_uri }}">
 {% endblock canonical_url %}
 
-{% block title %}Summary Payment | Shinelearning{% endblock %}
+{% block title %}Summary Payment | Shine learning{% endblock %}
 
 {% block css_section %}
     {{ block.super }}
@@ -133,7 +133,7 @@
           {% if cart_coupon %}
                 <div  id="showCoupon" class="loyalty-points">
                   <div class="input-group mb-0">
-                    <input id="discount_code" type="text" value="Coupon {{cart_coupon.code}} is applied!" name="code" maxlength="15" class="form-control fs-12">
+                    <input id="discount_code" type="text" value="Coupon {{cart_coupon.code}} is applied!" name="code" maxlength="15" class="form-control fs-12" disabled>
                     <span class="input-group-btn">
                       <button class="btn btn-blue" type="button" onclick="JSRemoveDiscount();" >Remove</button>
                     </span>
@@ -143,7 +143,7 @@
              {% elif cart_wallet %}
                 <div id="shineCredit" class="loyalty-points">
                   <div class="input-group mb-0">
-                    <input id="loyalty_point" type="text" placeholder="{{wallet_point}} loyalty points redeemed!" class="form-control fs-12">
+                    <input id="loyalty_point" type="text" placeholder="{{wallet_point}} loyalty points redeemed!" class="form-control fs-12" disabled>
 
                     <span class="input-group-btn">
                       <button class="btn btn-blue" type="button" onclick="JSRemovePoint();">Remove</button>

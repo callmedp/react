@@ -70,6 +70,11 @@
     {% endblock GA %}
    </head>
     <body>
+        {% block marketingpopup%}
+          {% if marketing_popup_html %}
+              {% include marketing_popup_html %}
+          {% endif %}
+        {% endblock %}
         {% block main_container %}
         <div class="wrapper">
             {% block header %}
@@ -134,12 +139,16 @@
             data-client='324ed0abb0694b0c66a6daecb178352d'>
         </script>
         {% endblock johukum %}
+        
     {% endblock js_section %}
     {% block banner_ads_bottom %}
         <!-- /1198510/ShineLearning_1x1_mobile -->
         <div id='div-gpt-ad-1509431552856-0'>
         <script>
         googletag.cmd.push(function() { googletag.display('div-gpt-ad-1509431552856-0'); });
+        {% if marketing_popup_html %}
+            $('.marketing-popup').modal();
+        {% endif %}
         </script>
         </div>
     {% endblock banner_ads_bottom %}

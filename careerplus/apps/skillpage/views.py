@@ -48,6 +48,8 @@ class SkillPageView(DetailView, SkillPageMixin):
 
     def get_template_names(self):
         if self.request.amp:
+            from newrelic import agent
+            agent.disable_browser_autorum()
             return ["skillpage/skill-amp.html"]
         return ["skillpage/skill.html"]
         
@@ -110,7 +112,6 @@ class SkillPageView(DetailView, SkillPageMixin):
         except Exception as e:
             logging.getLogger('error_log').error(" MSG:unable to load the list   %s" %str(e))
 
-
         prd_obj = ContentType.objects.get_for_model(Product)
         all_results = products
         prod_reviews = Review.objects.filter(
@@ -149,6 +150,13 @@ class SkillPageView(DetailView, SkillPageMixin):
         meta_dict = context['meta'].__dict__
         meta_dict['description'] = meta_desc
         meta_dict['og_description'] = meta_desc
+        if products.paginator.count:
+            meta_title = '{} Courses ({} Certification Programs) - Shine Learning'.format(
+                self.object.name, products.paginator.count)
+        else:
+            meta_title = '{} Courses - Shine Learning'.format(
+                self.object.name)
+        meta_dict['title'] = meta_title
         context.update({
             "api_data": api_data,
             "career_outcomes": career_outcomes,

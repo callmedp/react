@@ -32,11 +32,12 @@
                 <p class="heading">Trending articles</p>
                 <div class="slide-container">
                     <ul class="blog-slider">
-                        {% for cat in categories %}
+                        {% for outer_cat in categories %}
+                          {% for cat in outer_cat %}
                             {% with cat.primary_category.all.first as art %}
                                {% if art %}
                                     <li>
-                                        <a href="{% url "blog:articles-deatil" art.slug art.pk %}" class="caption-bg-txt">
+                                        <a title="{{art.display_name}}" href="{% url "blog:articles-deatil" art.slug art.pk %}" class="caption-bg-txt">
                                             <span class="caption-heading">{{cat.name}}</span>
                                             <div class="bottom-text">
                                                 <p class="pb-5">{{art.display_name}}</p>
@@ -54,6 +55,7 @@
                                     
                                 {% endif %}
                             {% endwith %}
+                            {% endfor %}
                         {% endfor %}
                     </ul>
                 </div><!-- slide-container ends here -->

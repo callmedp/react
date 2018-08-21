@@ -23,6 +23,179 @@ function showMoreLess(){
 
 };
 
+
+$.validator.addMethod("custom_review",
+ function(value, element) {
+     if($('#id_review').val().trim()){
+         return true;
+     }
+     return false;
+});
+$("#feedback-form").validate({
+  rules: {
+      rating:{
+          required: true,
+      },
+      review: {
+          maxlength: 1500,
+      },
+      title: {
+          required: true,
+      }
+  },
+  messages: {
+      average_rating:{
+          required: "rating is required."
+      },
+      review: {
+          maxlength: "length should not be greater than 1500 characters.",
+      },
+      title: {
+          maxlength: "length should not be greater than 20 characters."
+      }
+  },
+  errorPlacement: function(error, element){
+      $(element).siblings('small').find('.error').html(error.text());
+  },
+  submitHandler: function(form) {                
+      return false;
+  },
+
+});
+function feedback_submit(formData){
+
+  var flag = $('#feedback-form').valid();
+  var rating_flag = false;
+  $('input[name="rating"]').each(function () {
+      if ($(this).is(':checked')){
+          rating_flag = true;
+      }
+  });
+  if (!rating_flag){
+      $('#rating-error').text('rating is mandatory');
+  }
+  if (flag && rating_flag){
+    request_to_submit_feedback(formData)
+  }
+        
+}
+
+function request_to_submit_feedback(formData){
+  $.ajax({
+      url: '/shop/reviews/product/create/',
+      type: 'POST',
+      data : formData,
+      dataType: 'json',
+      success: function(json) {
+          if (json.success){
+            alert(json.display_message);
+            window.location.reload();
+          }
+          else if(json.display_message){
+            alert(json.display_message)
+            refreshErrors(json)
+          }
+          else{
+            refreshErrors(json)
+          }
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+          alert("Something went wrong, try again later");
+      }
+  });
+}
+
+function refreshErrors(json){
+  var keys = ['review','title','rating']
+  keys.forEach(function(element) {
+    if(json[element]) {
+      $('#'+element+'-error').text(json[element]);
+    }
+    else{
+       $('#'+ element+'-error').text('');
+    }
+  });
+}
+
+function submit_feedback_form(is_logged_in) {
+  if(is_logged_in=='True'){
+    var formData = $('#feedback-form').serialize();
+    feedback_submit(formData);
+  }
+  else {
+    var flag = $('#feedback-form').valid();
+    if(flag){
+      $('#login-modal').modal('show');      
+    }
+  }
+}
+
+function update_feedback_form(product_pk) {
+  var formData = $('#feedback-form').serialize();
+  $.ajax({
+      url: '/shop/reviews/'+ product_pk + '/edit/',
+      type: 'POST',
+      data : formData,
+      dataType: 'json',
+      success: function(json) {
+          if (json.success){
+            alert(json.display_message);
+            window.location.reload();
+          }
+          else if(json.display_message){
+            alert(json.display_message)
+            refreshErrors(json)
+          }
+          else{
+            refreshErrors(json)
+          }
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+          alert("Something went wrong, try again later");
+      }
+  });
+}
+$(document).on('click', '[name="rating"]', function () {
+    var flavour = $('[name="flavour"]').val();
+    console.log(flavour);
+    if (flavour == 'mobile'){
+        var rating_val = $(this).attr('value');
+        $('#selected-rating').text(rating_val);
+    }
+    else {
+        var html = $(this).attr('value') + '<small>/5</small>';
+        $('#selected-rating').html(html);
+    }
+    $('#rating-error').text('');
+   
+});
+
+
+function submitReviewFromLocalStorage(){
+  formData = localStorage.getItem("formData");
+  if(formData){
+    request_to_submit_feedback(formData);
+    localStorage.removeItem("formData");
+  }
+  else{
+    localStorage.removeItem("formData");
+  }
+}
+
+function saveReviewFormDataToLocalStorage(){
+    var formData = $('#feedback-form').serialize();
+    if(formData) {
+        localStorage.setItem('formData', formData );        
+    }
+}
+
+function reviewLinkedInLogin() {
+ 
+  saveReviewFormDataToLocalStorage()
+  window.location.href= '/user/linkedin/code/?next=' + window.location.href
+}
+submitReviewFromLocalStorage()
+
 $(document).ready(function () {
 
   // $(window).on('load',function(){
@@ -33,6 +206,41 @@ $(document).ready(function () {
   //   $('#login-model').modal('show');
   // });
 
+
+    $('#login-button').click(function() {
+      flag = $("#login_form").valid();
+      if (flag){
+          var formData = $("#login_form").serialize();
+          $('#login-button').prop('disabled', true);
+          $.ajax({
+              url : "/article/login-to-comment/",
+              type: "POST",
+              data : formData,
+              success: function(data, textStatus, jqXHR)
+              {
+                  console.log(data);
+                  if (data.response == 'login_user'){
+                      var formData = $('#feedback-form').serialize();
+                      feedback_submit(formData)
+                      window.location.reload();
+                  }
+                  else if (data.response == 'error_pass'){
+                      var error_message = data.error_message;
+                      $('#non-field-error').text(error_message)
+                  }
+                  else if (data.response == 'form_validation_error'){
+                      $('#non-field-error').text('Please enter Valid Data')
+                  }
+                  $('#login-button').prop('disabled', false);
+              },
+              error: function (jqXHR, textStatus, errorThrown)
+              {
+                  alert('Something went wrong. Try again later.');
+                  $('#login-button').prop('disabled', false);
+              }
+          });
+      }
+    });
 
     var processing = false;
   

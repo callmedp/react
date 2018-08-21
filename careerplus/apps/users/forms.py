@@ -91,7 +91,11 @@ class RegistrationForm(forms.Form):
         self.fields['is_job_seeker'].required = False
 
         if flavour == 'mobile':
-            self.fields['cell_phone'].widget.attrs = {'class': 'form-control pull-left number'}
+            self.fields['cell_phone'].widget.attrs = {
+                'class': 'form-control pull-left number',
+                'inputmode': 'numeric', }
+
+            self.fields['email'].widget.attrs['inputmode'] = 'email'
 
 
 class ModalLoginApiForm(LoginApiForm):

@@ -29,18 +29,21 @@
                 <div class="course-caption-content">
                   <h1 itemprop="name">{{prd_H1}}</h1>
                   <div itemprop="aggregateRating"
-                itemscope itemtype="http://schema.org/AggregateRating">
-                <meta itemprop="ratingValue" content="{{prd_rating}}">
-                <meta itemprop="reviewCount" content="{% if prd_num_rating > 0 %}
-                {{prd_num_rating}}
-                {% else %}
-                  1      
-                {% endif %}">
-          </div>
+                      itemscope itemtype="http://schema.org/AggregateRating">
+                      <meta itemprop="ratingValue" content="{{prd_rating}}">
+                      <meta itemprop="reviewCount" content="{% if prd_num_rating > 0 %}
+                      {{prd_num_rating}}
+                      {% else %}
+                        1      
+                      {% endif %}">
+
+                </div>
 
                   {% include "shop/partials/packagediv.html" %}
                 </div>
+                
               </div>
+
             {% endblock product_header %}
 
             <!-- query-price-box-scroll start -->

@@ -47,6 +47,13 @@ class Review(AbstractAutoDate):
         blank=True,
     )
 
+    title = models.CharField(
+        max_length=20,
+        verbose_name=_('Title'),
+        blank=True,
+        null=True
+    )
+
     average_rating = models.FloatField(
         verbose_name=_('Average rating'),
         default=0,

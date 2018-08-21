@@ -8,15 +8,15 @@
       <ul class="contributors">
         {% for author in authors %}
         <li>
-          <a href="{% url 'talent:authors-detail' author.slug %}">
+          <a title="{{author.name}}" href="{% url 'talent:authors-detail' author.slug %}">
             {% if author.image %}
             {% thumbnail author.image "130x130" crop="center" as im %}
-             <img src="{{author.image.url}}" width="{{ im.width }}" height="{{ im.height }}">
+             <img src="{{author.image.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="{{author.image_alt}}">
             {% endthumbnail %}
             {% endif %}
 
             <p class="head pb-0 pt-5">{{author.name}}</p>
-            <p class="fs-12 pt-5"><a href="#">{{author.no_of_blog}} articles</a></p>
+            <p class="fs-12 pt-5"><a role="button">{{author.no_of_blog}} articles</a></p>
           </a>
         </li>
         {% endfor %}

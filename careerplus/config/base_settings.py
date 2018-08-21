@@ -137,7 +137,8 @@ TEMPLATES = [
                 'core.context_processors.common_context_processor',
                 'django_mobile.context_processors.flavour',
                 'sekizai.context_processors.sekizai',
-                'core.context_processors.js_settings'
+                'core.context_processors.js_settings',
+                'core.context_processors.marketing_context_processor',
             ],
             'loaders': ([
                 # ('django_mobile.loader.CachedLoader', [
@@ -474,3 +475,6 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = PROJECT_DIR + '/careerplus/config/code-learning-key.json'
+
+
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 365  # 1 year

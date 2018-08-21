@@ -19,7 +19,7 @@ from geolocation.models import Country
 from review.models import Review
 from users.mixins import RegistrationLoginApi
 from order.models import Order, OrderItem, RefundRequest
-from console.order_form import FileUploadForm, VendorFileUploadForm
+from console.order_form import FileUploadForm, VendorFileUploadForm,emailupdateform,mobileupdateform
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from core.mixins import TokenGeneration
@@ -253,14 +253,14 @@ class ApproveByAdminDraft(View):
                     obj.save()
 
                     # mail to candidate for resume critique closed
-                    to_emails = [obj.order.email]
+                    to_emails = [obj.order.get_email()]
                     token = token = AutoLogin().encode(obj.order.email, obj.order.candidate_id, days=None)
                     email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
                     email_dict = {}
                     email_dict.update({
                         "first_name": obj.order.first_name,
                         "subject": 'Your developed document has been uploaded',
-                        'mobile': obj.order.mobile,
+                        'mobile': obj.order.get_mobile(),
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token)
@@ -310,7 +310,7 @@ class ApproveByAdminDraft(View):
                     email_sets = list(
                         obj.emailorderitemoperation_set.all().values_list(
                             'email_oi_status', flat=True).distinct())
-                    to_emails = [obj.order.email]
+                    to_emails = [obj.order.get_email()]
                     token = AutoLogin().encode(
                         obj.order.email, obj.order.candidate_id, days=None)
                     mail_type = 'DRAFT_UPLOAD'
@@ -318,7 +318,7 @@ class ApproveByAdminDraft(View):
                     data.update({
                         "draft_level": obj.draft_counter,
                         "first_name": obj.order.first_name,
-                        'mobile': obj.order.mobile,
+                        'mobile': obj.order.get_mobile(),
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token),
@@ -344,14 +344,14 @@ class ApproveByAdminDraft(View):
 
                         # sync resume on shine
                         upload_resume_to_shine(oi_pk=obj.pk)
-                        to_emails = [obj.order.email]
+                        to_emails = [obj.order.get_email()]
                         mail_type = 'WRITING_SERVICE_CLOSED'
                         email_dict = {}
                         email_dict.update({
                             "subject": 'Closing your ' + obj.product.name + ' service',
                             "username": obj.order.first_name,
                             'draft_added': obj.draft_added_on,
-                            'mobile': obj.order.mobile,
+                            'mobile': obj.order.get_mobile(),
                             'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                                 settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                         })
@@ -514,7 +514,7 @@ class ApproveDraftByLinkedinAdmin(View):
                     obj.save()
 
                     # mail to candidate
-                    to_emails = [obj.order.email]
+                    to_emails = [obj.order.get_email()]
                     email_sets = list(
                         obj.emailorderitemoperation_set.all().values_list(
                             'email_oi_status', flat=True).distinct())
@@ -528,7 +528,7 @@ class ApproveDraftByLinkedinAdmin(View):
                     email_dict.update({
                         "draft_level": obj.draft_counter,
                         "first_name": obj.order.first_name,
-                        'mobile': obj.order.mobile,
+                        'mobile': obj.order.get_mobile(),
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                             token),
@@ -746,3 +746,44 @@ class GetLTVAjaxView(View):
             for order in o_list:
                 data.update({order:results.get(order,"0")})
         return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+class OrderListModal(View):
+    def post(self, request, *args, **kwargs):
+        data = {}
+        if request.is_ajax():
+                order_pk = request.POST.get('order_id', None)
+                alt_email = request.POST.get('alt_email', '').strip()
+                alt_mobil = request.POST.get('alt_mobile', '').strip()
+                action = request.POST.get('action', None)
+                try:
+                    obj = Order.objects.get(number=order_pk)
+                except Exception as e:
+                    logging.getLogger('error_log').error(str(e))
+                    return HttpResponseForbidden()
+                if action == 'emailupdate':
+                    form = emailupdateform(request.POST)
+                    if form.is_valid():
+                        obj.alt_email = alt_email
+                        obj.save()
+                        data = {"status": "success", 'object_id': obj.id, 'obj_altemail': alt_email}
+                    else:
+                        data['error'] = form.errors['__all__']
+                elif action == 'numberupdate':
+                    form = mobileupdateform(request.POST)
+                    if form.is_valid():
+                        obj.alt_mobile = alt_mobil
+                        obj.save()
+                        if obj.alt_mobile == obj.mobile:
+                            alt_mobil = ""
+                        else:
+                            alt_mobil= str(obj.country_code)+"-"+str(obj.alt_mobile)
+                        data = {"status": "success", 'object_id': obj.number, 'obj_altnum': alt_mobil,'country':obj.country_code}
+                    else:
+                        data['error'] = form.errors['__all__']
+                else:
+                    data['error'] = "Something is wrong"
+                return HttpResponse(json.dumps(data), content_type="application/json")
+
+        else:
+            return HttpResponseForbidden()

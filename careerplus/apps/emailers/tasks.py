@@ -14,7 +14,7 @@ def send_email_task(to_emails, mail_type, email_dict, status=None, oi=None):
             from order.models import OrderItem
             obj = OrderItem.objects.filter(pk=oi)
             for oi_item in obj:
-                to_email = to_emails[0] if to_emails else oi_item.order.email
+                to_email = to_emails[0] if to_emails else oi_item.order.get_email()
                 oi_item.emailorderitemoperation_set.create(
                     email_oi_status=status,
                     to_email=to_email, status=1)
@@ -30,7 +30,7 @@ def send_email_for_base_task(subject=None, body=None, to=[], headers=None, oi=No
         if oi:
             from order.models import OrderItem
             obj = OrderItem.objects.get(pk=oi)
-            to = to[0] if to else obj.order.email
+            to = to[0] if to else obj.order.get_email()
             obj.emailorderitemoperation_set.create(
                 email_oi_status=status,
                 to_email=to, status=1)

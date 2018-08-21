@@ -1,7 +1,7 @@
 {% extends "mobile/basic/base.html" %}
 {% load static %}
 
-{% block title %}Article Categories | Shinelearning{% endblock %}
+{% block title %}Article Categories | Shine learning{% endblock %}
 {% block css_section %}
     {{ block.super }}
 {% endblock css_section %}
@@ -25,7 +25,7 @@
                 <ul class="filter-item">
                     {% for cat in object_list %}
                         {% if cat.article_exists %}
-                            <li><a href="{{cat.get_absolute_url}}">{{cat.name}}</a></li>
+                            <li><a href="{{cat.get_absolute_url}}" title="{{cat.name}}">{{cat.name}}</a></li>
                         {% endif %}
                     {% endfor %}
                 </ul>

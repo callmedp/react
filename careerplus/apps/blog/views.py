@@ -54,7 +54,8 @@ class LoginToCommentView(View):
                         resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])
                         self.request.session.update(resp_status)
                         if remember_me:
-                            self.request.session.set_expiry(365 * 24 * 60 * 60)  # 1 year
+                            self.request.session.set_expiry(
+                                settings.SESSION_COOKIE_AGE)  # 1 year
 
                     elif login_resp.get('response') == 'error_pass':
                         login_resp['error_message'] = login_resp.get("non_field_errors")[0]
@@ -143,6 +144,8 @@ class BlogDetailView(DetailView, BlogMixin):
 
     def get_template_names(self):
         if self.request.amp:
+            from newrelic import agent
+            agent.disable_browser_autorum()
             return ["blog/article-detail-amp.html"]
         return ["blog/article-detail.html"]
 
@@ -455,6 +458,8 @@ class BlogLandingPageView(TemplateView, BlogMixin):
         else:
             article_list = render_to_string('include/top_article.html',
             {'page_obj': page_obj, 'article_list': article_list})
+
+        categories = [categories[count:count + 3] for count in range(0, len(categories), 3)]
         context.update({
             'categories': categories,
             'article_list': article_list
@@ -604,9 +609,8 @@ class ShowCommentBoxView(TemplateView, LoadCommentMixin):
                 self.article = Blog.objects.get(id=self.art_id)
             except Exception as e:
                 logging.getLogger('error_log').error("Unable to get blog object%s" % str(e))
-
                 return ''
-            visibility = int(request.GET.get('visibility',1))
+            visibility = int(request.GET.get('visibility', 1))
             if visibility == 2:
                 self.template_name = 'talenteconomy/include/commentBox.tmpl.html'
             elif visibility == 3:

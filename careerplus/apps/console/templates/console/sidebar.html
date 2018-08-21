@@ -78,8 +78,10 @@
             <ul class="nav child_menu">
               <li><a href="{% url 'console:tasks:generate-autologintoken' %}">Generate AutoLogin</a></li>
               <li><a href="{% url 'console:tasks:tasklist' %}">Task List</a></li>
-                <li><a href="{% url 'console:walletrewards' %}"> Wallet </a></li>
-
+              <li><a href="{% url 'console:walletrewards' %}"> Wallet </a></li>
+              {% if perms.scheduler.can_download_product_list%}
+              <li><a href="{% url 'console:tasks:download-product-list'%}">Product List</a></li>
+              {% endif %}
             </ul>
         </li>
       </ul>

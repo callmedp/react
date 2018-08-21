@@ -12,6 +12,11 @@
 /* Filter menu */
 @import '../components/filter-menu';
 
+/* Main CSS Start From Here */
+@import '../components/popup';
+
+/* Line form Start From Here */
+@import '../components/line-form';
 
 .blue-link {
   color: -imp($txt-blue);
@@ -494,9 +499,142 @@ article {
   }
 }
 
+.collapse.in {
+    display: block;
+}
+.collapse {
+    display: none;
+}
+
+.custom-search {
+  position: relative;
+  .form-control {
+    @include border-radius (4px);
+    border: 0 none;
+  }
+
+  .search-icon-tab {
+    @include icon-inblock (40px,40px, 0 -333px);
+    @include border-radius (0 4px 4px 0);
+    cursor: pointer;
+    border: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: #ffcf00;
+  }
+
+  .tt-hint {
+    top: 8px !important;
+  }
+}
 
 /* Call us  */
 @import '../components/call-us';
 @import '../utilities/font';
 @import '../utilities/padding';
 @import '../utilities/margin';
+
+
+/*------marketing popup css------*/
+.marketing-popup {
+  .content-box {
+    .number {
+      width: 72%;
+      margin-left: 15px;
+    }
+  }
+  .code {
+    width: 22%;
+  }
+  border-radius: 0 !important;
+
+  .header {
+    background-image: url("../../../images/popup-bg-1.jpg");
+    background-size: cover;
+    display: block;
+    padding-bottom: 10px;
+
+    h2 {
+      color: $txt-white;
+      border-bottom: none;
+      font-size: $font-size+11;
+      padding: 20px 15px 0 15px;
+    }
+
+    .icon-close {
+      top: 10% !important;
+      background-position: -189px -175px;
+    }
+  }
+}
+
+.discount-coupon {
+  background-image: url("../../../images/discount-bg-1.png");
+  background-size: cover;
+  width: 258px;
+  height: 54px;
+  margin: 20px 0 0 -1px;
+  display: block;
+
+  .discount-price {
+    font-size: $font-size+9;
+    color: $txt-white;
+    font-weight: $font-weight+300;
+    width: 60px;
+    display: inline-block;
+    line-height: 20px;
+    margin: 9px 0 0 11px;
+
+    small {
+      font-size: $font-size - 4;
+      font-weight: $font-weight+300;
+      display: block;
+    }
+  }
+
+  .starting-price {
+    font-size: $font-size - 1;
+    color: #edfeff;
+    font-weight: $font-weight+100;
+    display: inline-block;
+    line-height: 18px;
+    margin: 20px 0 0 0;
+    vertical-align: top;
+
+    strike {
+      font-size: $font-size - 1;
+      color: #8c85e3;
+    }
+
+    .price {
+      font-size: $font-size+3;
+      font-weight: $font-weight+200;
+    }
+  }
+}
+
+
+.thankyou-popup {
+  text-align: center;
+  font-size: $font-size;
+  color: $txt-grey-999;
+  font-weight: $font-weight+100;
+  margin: 15% 0 15% 0;
+
+  .tick-icon {
+    background-image: url("../../../images/tick.png");
+    background-size: cover;
+    width: 69px;
+    height: 64px;
+    margin: 20px auto;
+    display: block;
+  }
+
+  strong {
+    font-size: $font-size+19;
+    color: #08d0d5;
+    display: block;
+    margin: 25px 0 30px 0;
+  }
+}

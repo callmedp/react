@@ -21,7 +21,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>{% block title %}Shine Learning{%endblock title%}</title>
 
-    
+
     {% block css_section %}
         <!-- Bootstrap -->
         {% compress css %}
@@ -107,6 +107,11 @@
       <!-- footer -->
   {% include 'basic/footer.html' %}      
 {% endblock footer %}
+{% block marketingpopup%}
+  {% if marketing_popup_html %}
+      {% include marketing_popup_html %}
+  {% endif %}
+{% endblock %}
 
 
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
@@ -130,6 +135,13 @@
         $('.dropdown').hover(function(){
             $('.dropdown-toggle', this).trigger('click');
           });
+
+      {% if marketing_popup_html %}
+        
+        setTimeout(function() {
+          $('.marketing-popup').modal();
+        }, 1000);
+      {% endif %}
     </script>
 
 {% endblock js_section %}
@@ -140,6 +152,8 @@
         data-client='324ed0abb0694b0c66a6daecb178352d'>
     </script>
 {% endblock johukum %}
+
+
 {% block banner_ads_bottom %}
     <!-- /1198510/ShineLearning_1x1_desktop -->
     <div id='div-gpt-ad-1509431221932-0'>

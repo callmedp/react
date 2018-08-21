@@ -293,17 +293,20 @@ LINKEDIN_RESUME_PRODUCTS = LINKEDIN_RESUME_FREE + LINKEDIN_RESUME_COST
 
 ###### SEARCH SETTINGS #######
 EXCLUDE_SEARCH_PRODUCTS = LINKEDIN_RESUME_PRODUCTS
-try:
-    from .settings_local import *
-except:
-    pass
-
 
 ######### CONTACT NUMBERS ###################
-
 
 GGN_CONTACT_FULL = '0124-4312500/01'
 GGN_CONTACT = '0124-4312500'
 
+########### CMS STATIC PAGE RENDERING ID#########
+
+CMS_ID=[1]
+
 # used for coupon generation for free feature product on payment realization
 FEATURE_PROFILE_PRODUCTS = [1939]
+
+try:
+    from .settings_local import *
+except:
+    pass

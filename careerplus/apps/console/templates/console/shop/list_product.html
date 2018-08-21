@@ -20,12 +20,39 @@
       <form class="form-group" method="GET" action="{% url "console:product-list" %}" id="filter-tables">
           <div class="title_right">
             <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
-              <div class="input-group">
+
+                <div class="input-group">
                 <input type="text" name="query" class="form-control" {% if query %} value="{{query}}" {% endif %} placeholder="Search for...">
-                <span class="input-group-btn">
+              <span class="input-group-btn">
                   <button type="submit" class="btn btn-default" id="search_button" type="button">Go!</button>
-                </span>
+              </span>
               </div>
+
+
+            <div class="row text-center">
+                <div  class="col-md-5 com-md-offset-1 col-sm-4 col-xs-12">
+            <select id="is_active" name="is_active">
+
+                            <option value="">Choose..</option>
+                            <option value="True" {{True}}>Active</option>
+                            <option value="False" {{False}}>Inactive</option>
+                          </select>
+
+                </div>
+               <div  class="col-md-5 col-sm-4 col-xs-12">
+                <select id="vendor" name="vendor" style="width:100px">
+                            <option value="">Vendors</option>
+                    {% if vendor_select %}
+                                <option value="{{vendor_select}}" selected>{{vendor_select}}</option>
+                            {% endif %}
+                    {% for v in vendor_list %}
+                            <option value="{{v}}" >{{v}}</option>
+                    {% endfor %}
+
+                          </select>
+               </div>
+</div>
+
             </div>
           </div>
       </form>
@@ -123,6 +150,7 @@
                     <a href="{% url "console:product-opschange" obj.pk %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
                   {% endif %}
                   
+
                   </td>
                 </tr>
                 {% endfor %}

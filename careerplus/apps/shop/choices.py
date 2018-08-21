@@ -69,7 +69,7 @@ DURATION_DICT = {
     'D7': '3+ years',
 }
 
-
+#
 def convert_to_month(days=0):
     if days:
         months = int(days)//30
@@ -89,8 +89,8 @@ def convert_to_month(days=0):
             return 'D6'
         elif 36 < months:
             return 'D7'
-    return 'D0'
-
+    return "D0"
+#
 
 C_ATTR_DICT = {
     'SM': 'study_mode',
@@ -138,15 +138,15 @@ COURSE_TYPE_DICT = dict((
 
 def convert_inr(price=Decimal(0)):
     if price:
-        if Decimal(0) <= price <= Decimal(1000):
+        if Decimal(0) <= price <= Decimal(10000):
             return '1'
-        elif Decimal(1000) < price <= Decimal(5000):
+        elif Decimal(10000) < price <= Decimal(20000):
             return '2'
-        elif Decimal(5000) < price <= Decimal(10000):
+        elif Decimal(20000) < price <= Decimal(30000):
             return '3'
-        elif Decimal(10000) < price <= Decimal(25000):
+        elif Decimal(30000) < price <= Decimal(40000):
             return '4'
-        elif Decimal(25000) < price:
+        elif Decimal(40000) < price:
             return '5'
     return '0'
 

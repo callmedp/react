@@ -9,7 +9,7 @@ from django.views.generic import (
     View)
 
 from django.http import HttpResponseForbidden, Http404,\
-    HttpResponsePermanentRedirect, HttpResponse
+    HttpResponse, HttpResponseRedirect
 from django.db.models import Count
 from django.core.paginator import Paginator
 from django.urls import reverse
@@ -33,7 +33,8 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
 
     def __init__(self):
         self.page = 1
-        self.paginated_by = 1
+        self.paginated_by = 10
+
 
     def get(self, request, *args, **kwargs):
         self.page = self.request.GET.get('page', 1)
@@ -42,12 +43,30 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-        categories = Category.objects.filter(
-            is_active=True, visibility=2).order_by('-name')
 
+        # we are fetching categories from the articles instead of
+        # checking if article exists for each categories.
         article_list = Blog.objects.filter(
             status=1, visibility=2).select_related(
-            'p_cat', 'author').order_by('-publish_date')[:10]
+            'p_cat', 'author').order_by('-publish_date')
+        p_cat = [p for p in article_list.values_list('p_cat', flat=True)]
+        sec_cat = [sec for sec in article_list.values_list('sec_cat', flat=True)]
+        categories_id = set(p_cat + sec_cat)
+        categories = Category.objects.filter(
+            is_active=True, visibility=2, id__in=categories_id
+        ).order_by('-name')
+        article_list = article_list[:10]
+
+        page_obj = self.scrollPagination(
+            paginated_by=self.paginated_by, page=self.page,
+            object_list=article_list)
+
+        list_article = None
+        if article_list:
+            list_article = render_to_string('include/article-load-more.html', {
+                "page_obj": page_obj,
+                "SITEDOMAIN": settings.SITE_DOMAIN})
+
         top_article_list = Blog.objects.filter(
             status=1, visibility=2).select_related('p_cat', 'author')[:9]
 
@@ -66,10 +85,11 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
                 top_article_list[:3], top_article_list[3:6],
                 top_article_list[6:9]],
             'categories': categories,
-            'article_list': article_list,
+            'article_list': list_article,
             'popular_courses': popular_courses,
             'authors': authors,
             'authors_list': list(author_list)
+
         })
 
         context.update(self.get_breadcrumb_data())
@@ -89,6 +109,45 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
             description="Talent Economy - The best way to choose better career options. Get experts' advice & ideas for planning your future growth @ Shine Learning",
         )
         return {"meta": meta}
+
+
+
+class TalentEconomyLoadMoreView(TemplateView, BlogMixin):
+
+    model = Blog
+    template_name = 'include/article-load-more.html'
+
+    def __init__(self):
+
+        self.page = 1
+        self.paginated_by = 10
+        self.article_obj=None
+
+    def get(self, request, *args, **kwargs):
+        self.page = self.request.GET.get('page', 1)
+        context = super(self.__class__, self).get(request, args, **kwargs)
+        if request.is_ajax:
+            self.article_obj = Blog.objects.filter(
+                status=1, visibility=2).select_related(
+                'p_cat', 'author').order_by('-publish_date')
+
+            page_obj = self.scrollPagination(
+                paginated_by=self.paginated_by, page=self.page,
+                object_list=self.article_obj)
+
+            article_list = render_to_string(
+                'include/article-load-more.html', {
+                    "page_obj": page_obj,
+                    "SITEDOMAIN": settings.SITE_DOMAIN, })
+
+            data = {
+                'article_list': article_list,
+            }
+
+            return HttpResponse(
+                json.dumps(data), content_type="application/json")
+
+
 
 
 class TETagArticleView(TemplateView, BlogMixin):
@@ -240,6 +299,8 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
         self.page = request.GET.get('page', 1)
         try:
             self.cat_obj = Category.objects.get(slug=slug, is_active=True, visibility=2)
+            if not self.cat_obj.article_exists():
+                return HttpResponseRedirect(reverse('talent:talent-landing'))
         except Exception as e:
             logging.getLogger('error_log').error('unable to get category object %s' % str(e))
             raise Http404
@@ -252,8 +313,17 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
             TEBlogCategoryListView, self).get_context_data(**kwargs)
         cat_obj = self.cat_obj
 
+        # we are fetching categories from the articles instead of
+        # checking if article exists for each categories.
+        article_for_category = Blog.objects.filter(
+            status=1, visibility=2).select_related(
+            'p_cat', 'author').order_by('-publish_date')
+        p_cat = [p for p in article_for_category.values_list('p_cat', flat=True)]
+        sec_cat = [sec for sec in article_for_category.values_list('sec_cat', flat=True)]
+        categories_id = set(p_cat + sec_cat)
         categories = Category.objects.filter(
-            is_active=True, visibility=2).order_by('-name')
+            is_active=True, visibility=2, id__in=categories_id
+        ).order_by('-name')
 
         authors = Author.objects.filter(
             is_active=1, blog__visibility=2,
@@ -385,6 +455,8 @@ class TEBlogDetailView(DetailView, BlogMixin):
 
     def get_template_names(self):
         if self.request.amp:
+            from newrelic import agent
+            agent.disable_browser_autorum()
             return ["talenteconomy/article-detail-amp.html"]
         return ["talenteconomy/article-detail.html"]
 
@@ -563,6 +635,8 @@ class AuthorDetailView(DetailView):
 
     def get_template_names(self):
         if self.request.amp:
+            from newrelic import agent
+            agent.disable_browser_autorum()
             return ["talenteconomy/author-detail-amp.html"]
         return ["talenteconomy/author-detail.html"]
 

@@ -3,7 +3,7 @@
 {% load thumbnail compress %}
 
 
-{% block title %}My Wallet | Shinelearning{% endblock %}
+{% block title %}My Wallet | Shine Learning{% endblock %}
 
 {% block css_section %}
     {{ block.super }}
@@ -82,7 +82,7 @@
                                 <strong>{{obj.order.number}}</strong>
                                 {{obj.get_txn_type}}
 
-                                {% if obj.txn_type == 1 %}
+                                {% if obj.txn_type == 1 or obj.txn_type == 5%}
                                     <span>|</span>
                                     Expiry date - {{obj.added_point_expiry}}
                                 {% endif %}

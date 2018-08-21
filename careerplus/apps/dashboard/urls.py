@@ -98,6 +98,10 @@ urlpatterns += [
     url(r'^downloadquestionnaire/$',
         dashboard_view.DownloadQuestionnaireView.as_view(),
         name='dashboard-downloadquestionnaire'),
+
+    url(r'cancel-order/$',
+        dashboard_view.DashboardCancelOrderView.as_view(),
+        name='cancel-order')
 ]
 
 

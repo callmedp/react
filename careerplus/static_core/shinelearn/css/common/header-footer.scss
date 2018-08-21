@@ -2094,6 +2094,15 @@ footer {
 	vertical-align: sub;
 }
 
+.tick-icon {
+	width: 69px;
+	height: 64px;
+	background: $sprite -637px -307px;
+	display: inline-block;
+	vertical-align: sub;
+}
+
+
 /*---------login signup banner page css---------*/
 
 .login-signup-box {
@@ -2719,3 +2728,272 @@ footer {
 		margin: 20px 0 10px 0;
 		
 	}
+
+.credit-modal  {
+  .btn.approve, .btn.reject {
+	  background-color: #2f5da5;
+	  font-size: 14px;
+	  font-weight: 600;
+	  color: #fff;
+	  display: inline-block;
+	  width: 50%;
+	  line-height: 30px;
+	  margin: 20px 0 10px 0;
+  a {
+  	color: #fff;
+   }
+  }
+}
+
+/*-------Marketing popup css-------*/
+.marketing-popup {
+
+	.modal-lg {
+		width: 1000px;
+	}
+	.modal-content {
+		border-radius: 0;
+		overflow: hidden;
+		font-family: $font-family;
+
+		.resume-writing-services {
+			padding-left: 0;
+			padding-right: 0;
+			background: url(../../images/popup-bg.jpg) no-repeat 0 0 #5c99c2;
+			background-size: cover;
+
+			strong {
+				display: block;
+				font-weight: $font-weight+400;
+				font-size: $font-size+29;
+				color: $white-color;
+				text-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
+				margin-left: 60px;
+			}
+
+			ul {
+				list-style-type: none;
+				display: block;
+				margin: 20px 0 110px 25px;
+
+				li {
+					display: block;
+					font-size: $font-size+5;
+					font-weight: $font-weight+300;
+					color: $white-color;
+					padding-left: 30px;
+					position: relative;
+					margin-bottom: 10px;
+
+					&:before {
+						content: '';
+						position: absolute;
+						left: 0;
+						top: 5px;
+						background: url(../../images/sprite.png) no-repeat -64px -481px;
+						width: 16px;
+						height: 15px;
+						display: inline-block;
+					}
+				}
+			}
+		}
+
+		.discount-coupon {
+			background: url(../../images/discount-bg.png) no-repeat 0 0;
+			background-size: cover;
+			width: 303px;
+			height: 60px;
+			margin: 50px 0 80px 0;
+			display: block;
+			/*box-shadow: 0px 11px 25px 0px rgba(47, 98, 193, 0.25);*/
+
+			.discount-price {
+				font-size: $font-size+17;
+				color: $white-color;
+				font-weight: $font-weight+300;
+				width: 80px;
+				display: inline-block;
+				line-height: 24px;
+				margin: 9px 0 0 11px;
+
+				small {
+					font-size: $font-size;
+					font-weight: $font-weight+300;
+					display: block;
+				}
+			}
+
+			.starting-price {
+				font-size: $font-size+3;
+				color: #edfeff;
+				font-weight: $font-weight+100;
+				display: inline-block;
+				line-height: 18px;
+				margin: 20px 0 0 0;
+				vertical-align: top;
+
+				strike {
+					font-size: $font-size+3;
+					color: #8c85e3;
+				}
+
+				.price {
+					font-size: $font-size+9;
+					font-weight: $font-weight+300;
+				}
+			}
+		}
+
+		.resume-writing-services-form {
+			background-color: #fff;
+			padding: 20px 40px 20px 20px;
+			position: relative;
+
+			.close {
+				background: #e4e4e4;
+				padding: 0 5px;
+				position: absolute;
+				top: 10px;
+				right: 10px;
+				opacity: 9;
+				font-weight: $font-weight+100;
+				font-size: $font-size+7;
+			}
+
+			.modal-title {
+				font-size: $font-size+13;
+				display: block;
+				margin: 30% 0 20px 0;
+				color: $blue-color;
+				font-weight: $font-weight+300;
+			}
+
+			input {
+				border-top: 1px solid #fff;
+				border-right: 1px solid #fff;
+				border-bottom: 1px solid #ccc;
+				border-left: 1px solid #fff;
+				border-radius: 0;
+				font-size: 14px;
+				color: #333;
+				padding-left: 0;
+			}
+
+			.submit {
+				background-color: #2f5da5;
+				font-size: 14px;
+				font-weight: 600;
+				color: #fff;
+				display: block;
+				width: 100%;
+				line-height: 30px;
+				margin: 20px 0 10px 0;
+				border-radius: 0;
+			}
+
+			.form-control:focus {
+				border-top: 1px solid #fff;
+				border-right: 1px solid #fff;
+				border-bottom: 1px solid #5cb3fd;
+				border-left: 1px solid #fff;
+			}
+
+			a, a:hover {
+				color: #2f5da5;
+				text-decoration: none;
+			}
+
+			.form-group {
+				position: relative;
+
+				.form-control {
+					border-radius: 0;
+					box-shadow: none;
+					border-top: 1px solid $white-color;
+					border-left: 1px solid $white-color;
+					border-right: 1px solid $white-color;
+					border-bottom: 1px solid #ccc;
+					font-size: $font-size+2;
+					color: $grey-color;
+				}
+			}
+
+			.country-code {
+				display: block;
+
+				.custom-select {
+					width: 51px;
+					display: inline-block;
+					height: 40px;
+					position: relative;
+
+					&:after {
+						content: '';
+						width: 0;
+						height: 0;
+						border-left: 4px solid transparent;
+						border-right: 4px solid transparent;
+						border-top: 6px solid #7f7f7f;
+						position: absolute;
+						right: 8px;
+						top: 16px;
+						text-indent: 1px;
+						text-overflow: '';
+					}
+
+					select {
+						-webkit-appearance: none;
+						-moz-appearance: none;
+					    text-indent: 0;
+					    text-overflow: '';
+						border-radius: 0;
+						height: 35px;
+						padding: 6px 0;
+
+						&::-ms-expand {
+							display: none;
+						}
+
+						option {
+							min-width: 100px;
+						}
+					}
+				}
+
+				.form-control {
+					width: 83%;
+					display: inline-block;
+
+					@media (max-width: 1190px) {
+						width: 80%;
+					}
+
+					@media (max-width: 991px) {
+						width: 80%;
+					}
+				}
+
+				.modal-form-control {
+					width: 79%;
+					display: inline-block;
+				}
+			}
+		}
+
+		.thankyou-popup {
+			text-align: center;
+			font-size: $font-size+3;
+			color: $grey-color;
+			font-weight: $font-weight+100;
+			margin-top: 45%;
+
+			strong {
+				font-size: $font-size+23;
+				color: #08d0d5;
+				display: block;
+				margin: 15px 0 30px 0;
+			}
+		}
+	}
+}

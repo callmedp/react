@@ -5,7 +5,7 @@ import time
 import os
 import mimetypes
 from random import random
-
+from dateutil.relativedelta import relativedelta
 from wsgiref.util import FileWrapper
 
 from django.http import (
@@ -24,11 +24,13 @@ from django.core.files.base import ContentFile
 # from console.decorators import Decorate, stop_browser_cache
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage
 from order.models import Order, OrderItem
+from order.choices import CANCELLED, OI_CANCELLED
 from review.models import Review
 from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from wallet.models import Wallet
+from core.tasks import upload_resume_to_shine
 from core.api_mixin import ShineCandidateDetail
 from core.mixins import InvoiceGenerate
 from console.decorators import Decorate, stop_browser_cache
@@ -330,8 +332,6 @@ class DashboardFeedbackView(TemplateView):
         self.rating = None
         self.sel_rat = None
 
-
-
     def get(self, request, *args, **kwargs):
         self.candidate_id = request.session.get('candidate_id', None)
         self.oi_pk = request.GET.get('oi_pk')
@@ -339,7 +339,6 @@ class DashboardFeedbackView(TemplateView):
 
         if request.is_ajax() and self.oi_pk and self.candidate_id:
             try:
-
 
                 self.oi = OrderItem.objects.select_related("order").get(pk=self.oi_pk)
                 if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3] and self.oi.oi_status == 4 and not self.oi.user_feedback:
@@ -358,7 +357,7 @@ class DashboardFeedbackView(TemplateView):
         ratings = self.rating
         if ratings:
             self.sel_rat = ratings[-1:]
-        else :
+        else:
             self.sel_rat = 0
 
         if self.oi and self.oi.order.candidate_id == self.candidate_id:
@@ -383,6 +382,7 @@ class DashboardFeedbackView(TemplateView):
                 self.oi = OrderItem.objects.select_related("order").get(pk=self.oi_pk)
                 review = request.POST.get('review', '').strip()
                 rating = int(request.POST.get('rating', 1))
+                title = request.POST.get('title', '').strip()
                 if rating and self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
                     name = ''
                     if request.session.get('first_name'):
@@ -399,7 +399,8 @@ class DashboardFeedbackView(TemplateView):
                         user_email=email,
                         user_id=self.candidate_id,
                         content=review,
-                        average_rating=rating
+                        average_rating=rating,
+                        title=title
                     )
 
                     extra_content_obj = ContentType.objects.get(app_label="order", model="OrderItem")
@@ -408,13 +409,12 @@ class DashboardFeedbackView(TemplateView):
                     review_obj.extra_object_id = self.oi.id
                     review_obj.save()
 
-
                     self.oi.user_feedback = True
                     self.oi.save()
                     # send mail for coupon
                     if self.oi.user_feedback:
                         mail_type = "FEEDBACK_COUPON"
-                        to_emails = [self.oi.order.email]
+                        to_emails = [self.oi.order.get_email()]
                         email_dict.update({
                             "username": self.oi.order.first_name if self.oi.order.first_name else self.oi.order.candidate_id,
                             "subject": 'You earned a discount coupon worth Rs. <500>',
@@ -544,7 +544,7 @@ class DashboardAcceptService(View):
 
                         data['display_message'] = "You Accept draft successfully"
 
-                        to_emails = [oi.order.email]
+                        to_emails = [oi.order.get_email()]
                         email_sets = list(
                             oi.emailorderitemoperation_set.all().values_list(
                                 'email_oi_status', flat=True).distinct())
@@ -559,7 +559,7 @@ class DashboardAcceptService(View):
                             "subject": 'Closing your ' + oi.product.name + ' service',
                             "username": oi.order.first_name,
                             'draft_added': oi.draft_added_on,
-                            'mobile': oi.order.mobile,
+                            'mobile': oi.order.get_mobile(),
                             'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                                 settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
                         })
@@ -577,6 +577,8 @@ class DashboardAcceptService(View):
                             except Exception as e:
                                 logging.getLogger('error_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
+
+                            upload_resume_to_shine(oi_pk=oi.pk)
 
                         elif oi.product.type_flow == 8 and (9 not in email_sets and 4 not in sms_sets):
                             send_email_task.delay(
@@ -777,7 +779,7 @@ class DashboardInvoiceDownload(View):
                 if invoice:
                     file_path = invoice.name
                     if not settings.IS_GCP:
-                        file_path = settings.INVOICE_DIR + invoice.name
+                        file_path = invoice.path
                         fsock = FileWrapper(open(file_path, 'rb'))
                     else:
                         fsock = GCPInvoiceStorage().open(file_path)
@@ -819,3 +821,62 @@ class DashboardResumeDownload(View):
                         
         return HttpResponseRedirect(reverse('dashboard:dashboard'))
 
+
+class DashboardCancelOrderView(View):
+
+    def post(self, request, *args, **kwargs):
+        candidate_id = request.session.get('candidate_id', None)
+        email = request.session.get('email', None)
+        try:
+            order_pk = request.POST.get('order_pk', None)
+            order = Order.objects.get(pk=order_pk)
+            if candidate_id and order.status == 0 and (order.email == email or order.candidate_id == candidate_id):
+                wal_obj = Wallet.objects.get(owner=candidate_id)
+                wallet_txn = order.wallettxn.filter(txn_type=2, order=order).first()
+                if wallet_txn:
+                    total_refund = 0
+                    used_points = wallet_txn.usedpoint.all().order_by('point__pk')
+                    for pts in used_points:
+                        total_refund += pts.point_value
+                    expiry = timezone.now() + relativedelta(days=10)
+
+                    point_obj = wal_obj.point.create(
+                        original=total_refund,
+                        current=total_refund,
+                        expiry=expiry,
+                        status=1,
+                        txn=order.number
+                    )
+
+                    wallet_txn_des = "Refunded"
+                    wal_txn = wal_obj.wallettxn.create(
+                        txn_type=5,
+                        status=1,
+                        order=order,
+                        txn=order.number,
+                        point_value=total_refund,
+                        notes=wallet_txn_des
+                    )
+
+                    point_obj.wallettxn.create(
+                        transaction=wal_txn,
+                        point_value=total_refund,
+                        txn_type=5
+                    )
+
+                    current_value = wal_obj.get_current_amount()
+                    wal_txn.current_value = current_value
+                    wal_txn.save()
+
+                for orderitem in order.orderitems.all():
+                    orderitem.last_oi_status = orderitem.oi_status
+                    orderitem.oi_status = OI_CANCELLED
+                    orderitem.save()
+
+                order.status = CANCELLED
+                order.save()
+
+        except Exception as e:
+            logging.getLogger('error_log').error("%s" % str(e))
+
+        return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))

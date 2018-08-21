@@ -24,9 +24,9 @@
 
 {% block title %}
 {% if search_type == "func_area" %}
-{{func_area_title}} - Online Services – Shine Learning
+   {{meta.title}}
 {% else %}
-Search Result Page - Shine Learning
+    Search Result Page - Shine Learning
 {% endif %}
 {% endblock title %}
 
@@ -107,7 +107,7 @@ Search Result Page - Shine Learning
                     No products found. Have a look at our most popular products.{% endif %}</h2>
             </div>
 
-            <ul class="listing1 js_listing">
+            <ul class="listing1 js_listing" itemscope itemtype="http://schema.org/ItemList">
                 {% include 'search/ajax/search_listing.html' %}
             </ul>
             {% if products_found and paginator.num_pages > page.number %}

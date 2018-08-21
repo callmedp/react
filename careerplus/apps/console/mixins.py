@@ -69,7 +69,7 @@ class ActionUserMixin(object):
                 )
 
                 # mail to user about writer information
-                to_emails = [obj.order.email]
+                to_emails = [obj.order.get_email()]
                 mail_type = 'ALLOCATED_TO_WRITER'
                 email_data = {}
                 email_data.update({
@@ -148,7 +148,7 @@ class ActionUserMixin(object):
                         )
 
                         # mail to user about writer information
-                        to_emails = [oi.order.email]
+                        to_emails = [oi.order.get_email()]
                         mail_type = 'ALLOCATED_TO_WRITER'
                         email_data = {}
                         email_data.update({
@@ -191,7 +191,7 @@ class ActionUserMixin(object):
                         )
 
                         # mail to user about writer information
-                        to_emails = [oi.order.email]
+                        to_emails = [oi.order.get_email()]
                         mail_type = 'ALLOCATED_TO_WRITER'
                         email_data = {}
                         email_data.update({
@@ -234,7 +234,7 @@ class ActionUserMixin(object):
                         )
 
                         # mail to user about writer information
-                        to_emails = [oi.order.email]
+                        to_emails = [oi.order.get_email()]
                         mail_type = 'ALLOCATED_TO_WRITER'
                         email_data = {}
                         email_data.update({
@@ -313,14 +313,14 @@ class ActionUserMixin(object):
                 order = oi.order
                 file = oi_draft
                 filename = os.path.splitext(file.name)
-                extention = filename[len(filename)-1] if len(
+                extention = filename[len(filename) - 1] if len(
                     filename) > 1 else ''
                 file_name = 'draftupload_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(int(random()*9999)) \
                     + '_' + timezone.now().strftime('%Y%m%d') + extention
                 full_path = '%s/' % str(order.pk)
                 if not settings.IS_GCP:
                     if not os.path.exists(settings.RESUME_DIR + full_path):
-                        os.makedirs(settings.RESUME_DIR +  full_path)
+                        os.makedirs(settings.RESUME_DIR + full_path)
                     dest = open(
                         settings.RESUME_DIR + full_path + file_name, 'wb')
                     for chunk in file.chunks():
@@ -358,12 +358,12 @@ class ActionUserMixin(object):
                     added_by=user)
 
                 # mail and sms to candidate
-                to_emails = [oi.order.email]
+                to_emails = [oi.order.get_email()]
                 email_dict = {}
                 email_dict.update({
                     "subject": 'Your service(s) has been initiated',
                     "name": oi.order.first_name,
-                    "mobile": oi.order.mobile,
+                    "mobile": oi.order.get_mobile(),
                     'oi': oi,
                 })
 
@@ -475,6 +475,8 @@ class ActionUserMixin(object):
                     "%s-%s" % ('resume_upload', str(e)))
                 raise
             if oi_draft:
+                oi.oi_draft = oi_draft
+                oi.save()
                 oi.orderitemoperation_set.filter(
                     oi_status=4).update(
                     oi_draft=oi_draft,
