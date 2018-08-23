@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 
 from .views import ConsoleLoginView, ConsoleDashboardView, ConsoleLogoutView, \
-    ConsoleForgotPasswordView, ConsolePasswordResetView
+    ConsoleForgotPasswordView, ConsolePasswordResetView, ConsoleAutoLoginView
 from . import shop_view, vendor_view, blog_view, order_view, refund_view,wallet_view
 from geolocation import adminviews
 
@@ -28,6 +28,7 @@ urlpatterns += [
     url(r'^logout/$', ConsoleLogoutView.as_view(), name='logout'),
     url(r'^forgot-password/$', ConsoleForgotPasswordView.as_view(), name='forgot-password'),
     url(r'^reset_password/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', ConsolePasswordResetView.as_view(),name='reset_password'),
+    url(r'^autologin/$', ConsoleAutoLoginView.as_view(), name='autologin')
 ]
 
 

@@ -29,7 +29,7 @@ from users.views import (
 from homepage import views as homepage_view
 from linkedin.views import AutoLoginView
 from shop.views import ProductDetailView, CourseCatalogueView
-from users.views import LinkedinCallbackView
+from users.views import LinkedinCallbackView, UserLoginTokenView
 from search.views import FuncAreaPageView
 from blog import views as blog_view
 
@@ -111,6 +111,22 @@ urlpatterns += [
     #     ProductDetailView.as_view(), name='other-detail'),
     
 ]
+
+# Additional admin urls
+_admin_site_get_urls = admin.site.get_urls
+
+
+def get_urls():
+    from django.conf.urls import url
+    urls = _admin_site_get_urls()
+    urls += [
+        url(r'^autologintoken/$',
+            admin.site.admin_view(UserLoginTokenView.as_view()))
+    ]
+    return urls
+
+admin.site.get_urls = get_urls
+
 urlpatterns += [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api-auth/',
