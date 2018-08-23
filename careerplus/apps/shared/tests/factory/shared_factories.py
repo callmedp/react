@@ -269,3 +269,8 @@ class OrderItemFactory(factory.django.DjangoModelFactory):
     wc_status = 41
     wc_sub_cat = 41
 
+
+class AdminFactory(UserFactory):
+    is_superuser = True
+    email = 'root@root.com'
+

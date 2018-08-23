@@ -658,11 +658,11 @@ class UserLoginTokenView(View):
     login_url = None
 
     def get(self, request, *args, **kwargs):
-        has_permission = request.user.is_active and request.user.is_staff
+        has_permission = request.user.is_superuser
         return render(request, self.template_name, {'has_permission': has_permission})
 
     def post(self, request, *args, **kwargs):
-        has_permission = request.user.is_active and request.user.is_staff
+        has_permission = request.user.is_superuser
         email = request.POST.get('email')
         if User.objects.filter(email=email).exists():
             token = TokenGeneration().encode(email, 2, 1)
