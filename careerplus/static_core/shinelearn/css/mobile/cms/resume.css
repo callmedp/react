@@ -314,6 +314,33 @@ font-size: 1.3rem;
    
     z-index: 100;
 }
+
+.formats1 li {
+  list-style: none;
+  width: 100%;
+  display: inline-block;
+  margin: 2px 2% 2px 0 !important; 
+
+}
+
+
+.formats1 li img {
+  width: 98%;
+  height: 95%;
+  border: .1rem solid #3f5f94;
+  padding: .25rem;
+   position: relative;
+}
+
+  .formats1 .overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+   
+    z-index: 100;
+}
+
 .error-txt{
     color:red;
 
