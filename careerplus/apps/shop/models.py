@@ -972,6 +972,17 @@ class Product(AbstractProduct, ModelMeta):
         super(Product, self).__init__(*args, **kwargs)
         if self.product_class:
             self.attr = ProductAttributesContainer(product=self)
+        self.initialize_variables()
+
+    def __str__(self):
+        if self.pk:
+            if self.heading:
+                return self.heading + ' - (' + str(self.pk) + ')'
+            else:
+                return self.name + ' - (' + str(self.pk) + ')'
+        return self.name
+
+    def initialize_variables(self):
         self.original_duration = self.get_duration_in_day() if self.get_duration_in_day() else -1
         if self.id:
             self.original_variation_name = [str(var) for var in self.variation.all()] if self.variation.all() else ['N.A']
@@ -983,13 +994,6 @@ class Product(AbstractProduct, ModelMeta):
         self.original_vendor_name = self.get_vendor()
         self.original_product_name = self.name
 
-    def __str__(self):
-        if self.pk:
-            if self.heading:
-                return self.heading + ' - (' + str(self.pk) + ')'
-            else:
-                return self.name + ' - (' + str(self.pk) + ')'
-        return self.name
 
     def save(self, *args, **kwargs):
         if self.pk:
@@ -1526,6 +1530,7 @@ class Product(AbstractProduct, ModelMeta):
                 or instance.original_price != float(instance.inr_price) or instance.original_upc != instance.upc or
                 instance.original_vendor_name != instance.get_vendor() or
                 instance.original_product_name != instance.name):
+            instance.initialize_variables()
             data = {
                 "product_id": instance.id,
                 "upc": instance.upc,
