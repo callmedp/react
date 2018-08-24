@@ -58,7 +58,7 @@ $.validator.addMethod("custom_message",
 
 $(document).on('click', '#id_download_button', function(event) {
     event.preventDefault();
-    var pop_up = $(this).attr('pop-up');
+    var pop_up = $(this).data('popup');
     var href = $(this).attr('href');
     if (pop_up == "no") {
         // $("#id_action").val(2); // action for login -user

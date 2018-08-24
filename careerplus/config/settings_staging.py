@@ -72,6 +72,10 @@ if DEBUG:
     ]
     MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
 
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK" : lambda request: DEBUG,
+}
+
 #### CELERY SETTINGS ########
 BROKER_URL = 'redis://localhost:6379/0'
 
