@@ -150,7 +150,7 @@ class GenerateEncryptedURLSForMailer(FormView):
                 dest.write(chunk)
             dest.close()
         else:
-            GCPPrivateMediaStorage().save(path + file_name, file)
+            GCPPrivateMediaStorage().save(path + file_name, f_obj)
         scheduler_obj.file_uploaded = path + file_name
         scheduler_obj.save()
 
