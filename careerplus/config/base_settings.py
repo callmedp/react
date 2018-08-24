@@ -480,3 +480,8 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = PROJECT_DIR + '/careerplus/config
 
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 365  # 1 year
+
+CMS_STATIC_TEMP_DICT = {
+    1: 'cms_static.html',
+    3: 'static_resignation_page.html',
+    7: 'static_cover_page.html'}

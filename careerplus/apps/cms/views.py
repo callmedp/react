@@ -1,7 +1,10 @@
+#python imports
 import datetime
 import json
 import logging
-from django.views.generic import View, DetailView
+
+#django imports
+from django.views.generic import View, DetailView, TemplateView
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse,\
     HttpResponseForbidden, HttpResponsePermanentRedirect
@@ -14,14 +17,19 @@ from django.middleware.csrf import get_token
 
 from geolocation.models import Country
 
+#inter app imorts
 from users.forms import (
     ModalLoginApiForm,
     ModalRegistrationApiForm,
     PasswordResetRequestForm,
 )
+
+#local imports
 from .models import Page, Comment
 from .mixins import LoadMoreMixin
 
+
+#third party imports
 
 class CMSPageView(DetailView, LoadMoreMixin):
     model = Page
@@ -52,8 +60,9 @@ class CMSPageView(DetailView, LoadMoreMixin):
             from newrelic import agent
             agent.disable_browser_autorum()
             return ["cms/cms_page-amp.html"]
-        if self.object.id in settings.CMS_ID:
-            return ["cms/cms_static.html"]
+        if self.object.id in settings.CMS_STATIC_TEMP_DICT.keys():
+            return ["cms/" + settings.CMS_STATIC_TEMP_DICT.get(
+                self.object.id, 'cms_page.html')]
         return ["cms/cms_page.html"]
 
     def redirect_if_necessary(self, current_path, article):
@@ -199,6 +208,18 @@ class CMSPageView(DetailView, LoadMoreMixin):
 
         return context
 
+class CMSStaticView(TemplateView):
+    template_name = "resignation_static.html"
+
+    def get_template_names(self):
+        static_kwarg = self.kwargs.get("static_kwarg")
+        return ["cms/static_%s_page.html" % static_kwarg]
+
+    def get_context_data(self, **kwargs):
+        context = super(CMSStaticView, self).get_context_data(**kwargs)
+        context.update({
+            "hostname": settings.SITE_DOMAIN, })
+        return context
 
 # class LeadManagementView(View, UploadInFile):
 #     http_method_names = [u'post', ]
