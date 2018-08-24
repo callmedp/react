@@ -60,8 +60,9 @@ class CMSPageView(DetailView, LoadMoreMixin):
             from newrelic import agent
             agent.disable_browser_autorum()
             return ["cms/cms_page-amp.html"]
-        if self.object.id in settings.CMS_ID:
-            return ["cms/cms_static.html"]
+        if self.object.id in settings.CMS_STATIC_TEMP_DICT.keys():
+            return ["cms/" + settings.CMS_STATIC_TEMP_DICT.get(
+                self.object.id, 'cms_page.html')]
         return ["cms/cms_page.html"]
 
     def redirect_if_necessary(self, current_path, article):
