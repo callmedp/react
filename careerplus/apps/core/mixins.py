@@ -65,6 +65,27 @@ class TokenGeneration(object):
         dt = datetime.datetime.strptime(inp_list[3], settings.TOKEN_DT_FORMAT)
         return email, type, (dt >= datetime.datetime.now())
 
+class EncodeDecodeUserData(object):
+
+    def encode(self, email, name, contact):
+        inp_str = '{salt}|{email}|{name}|{contact}'.format(\
+                **{'salt': settings.ENCODE_SALT, 'email': email, \
+                'name': name, 'contact': contact})
+
+        ciph = XOR.new(settings.ENCODE_SALT)
+        token = base64.urlsafe_b64encode(ciph.encrypt(inp_str))
+        return token.decode()
+
+    def decode(self, token):
+        token = base64.urlsafe_b64decode(str(token))
+        ciph = XOR.new(settings.ENCODE_SALT)
+        inp_str = ciph.decrypt(token).decode()
+        inp_list = inp_str.split('|')
+        email = inp_list[1]
+        name = inp_list[2]
+        contact = inp_list[3]
+        return email, name, contact
+
 
 class InvoiceGenerate(object):
 

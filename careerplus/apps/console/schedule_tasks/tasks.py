@@ -1,19 +1,29 @@
+#python imports
 import logging
 import os
 import csv
 import codecs
 import time
 
+#django imports
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
 from django.urls import reverse
 
-from celery.decorators import task
-from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
+#local imports
+
+#inter app imports
+from shop.models import Product
 from scheduler.models import Scheduler
 from linkedin.autologin import AutoLogin
-from shop.models import Product
+from core.mixins import EncodeDecodeUserData
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
+
+#third party imports
+from celery.decorators import task
+
+#Global Constants
 User = get_user_model()
 
 
@@ -216,6 +226,51 @@ def gen_auto_login_token_task(task=None, user=None, next_url=None, exp_days=None
         logging.getLogger('error_log').error(
             "%(msg)s : %(err)s" % {'msg': 'generate auto login token task', 'err': str(e)})
     return f
+
+
+@task(name="generate_encrypted_urls_for_mailer_task")
+def generate_encrypted_urls_for_mailer_task(task_id=None,user=None):
+    scheduler_obj = Scheduler.objects.get(id=task_id)
+    upload_path = scheduler_obj.file_uploaded.name
+    gen_dir = os.path.dirname(upload_path)
+    filename_tuple = upload_path.split('.')
+    extension = filename_tuple[len(filename_tuple) - 1]
+    gen_file_name = str(task_id) + '_GENERATED' + '.' + extension
+    generated_path = gen_dir + '/' + gen_file_name
+
+    if not settings.IS_GCP:
+        generated_file = open(settings.MEDIA_ROOT + '/' + generated_path, 'w')
+        upload =  open(settings.MEDIA_ROOT + '/' + upload_path,'r', encoding='utf-8', errors='ignore')
+    else:
+        upload = GCPPrivateMediaStorage().open(upload_path)
+        generated_file = GCPPrivateMediaStorage().open(generated_path, 'wb')
+                                
+    uploader = csv.DictReader(upload, delimiter=',', quotechar='"')
+
+    fieldnames = uploader.fieldnames
+    fieldnames.append('token')
+
+    csvwriter = csv.DictWriter(generated_file, delimiter=',', fieldnames=fieldnames)
+    csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
+    count = 0
+
+    for row in uploader:
+        email = row.get('email','').strip()
+        name = row.get('name','').strip()
+        contact = row.get('contact','').strip()
+        row['token'] = EncodeDecodeUserData().encode(email,name,contact) 
+        csvwriter.writerow(row)
+
+        count = count + 1
+        
+    scheduler_obj.file_generated = generated_path
+    scheduler_obj.percent_done = 100
+    scheduler_obj.status = 2
+    scheduler_obj.completed_on = timezone.now()
+    scheduler_obj.save()
+    upload.close()
+    generated_file.close()
+
 
 
 @task(name="generate_product_list")
