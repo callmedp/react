@@ -212,7 +212,13 @@ class CMSStaticView(TemplateView):
 
     def get_template_names(self):
         static_kwarg = self.kwargs.get("static_kwarg")
-        return ["cms/static_%s_page.html" %static_kwarg]
+        return ["cms/static_%s_page.html" % static_kwarg]
+
+    def get_context_data(self, **kwargs):
+        context = super(CMSStaticView, self).get_context_data(**kwargs)
+        context.update({
+            "hostname": settings.SITE_DOMAIN, })
+        return context
 
 # class LeadManagementView(View, UploadInFile):
 #     http_method_names = [u'post', ]
