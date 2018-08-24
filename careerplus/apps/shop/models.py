@@ -2407,6 +2407,5 @@ class ProductAuditHistory(Document):
         'allow_inheritance': False,
         'indexes': [
             'product_id',
-            'created_at'
         ]
     }
