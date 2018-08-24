@@ -1,7 +1,10 @@
+#python imports
 import datetime
 import json
 import logging
-from django.views.generic import View, DetailView
+
+#django imports
+from django.views.generic import View, DetailView, TemplateView
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse,\
     HttpResponseForbidden, HttpResponsePermanentRedirect
@@ -14,14 +17,19 @@ from django.middleware.csrf import get_token
 
 from geolocation.models import Country
 
+#inter app imorts
 from users.forms import (
     ModalLoginApiForm,
     ModalRegistrationApiForm,
     PasswordResetRequestForm,
 )
+
+#local imports
 from .models import Page, Comment
 from .mixins import LoadMoreMixin
 
+
+#third party imports
 
 class CMSPageView(DetailView, LoadMoreMixin):
     model = Page
@@ -201,6 +209,12 @@ class CMSPageView(DetailView, LoadMoreMixin):
 
         return context
 
+class CMSStaticView(TemplateView):
+    template_name = "resignation_static.html"
+
+    def get_template_names(self):
+        static_kwarg = self.kwargs.get("static_kwarg")
+        return ["cms/static_%s_page.html" %static_kwarg]
 
 # class LeadManagementView(View, UploadInFile):
 #     http_method_names = [u'post', ]

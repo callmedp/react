@@ -322,7 +322,7 @@ textarea.form-control {
   margin-bottom: 30px; }
 
 .mt-15 {
-  margin-top: 15px; }
+  margin-top: 15px !important;}
 
 .mt-30 {
   margin-top: 30px; }
@@ -404,6 +404,12 @@ textarea.form-control {
 
 .modal-header .close {
     margin-top: -20px;
+}
+
+.print-version {
+  display: block;
+  font-size: 12px;
+  margin-top: 10px;
 }
 
 
