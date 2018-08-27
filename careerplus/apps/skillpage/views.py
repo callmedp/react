@@ -48,6 +48,8 @@ class SkillPageView(DetailView, SkillPageMixin):
 
     def get_template_names(self):
         if self.request.amp:
+            from newrelic import agent
+            agent.disable_browser_autorum()
             return ["skillpage/skill-amp.html"]
         return ["skillpage/skill.html"]
         

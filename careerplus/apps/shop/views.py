@@ -461,6 +461,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
     def get_template_names(self):
         if self.request.amp:
+            from newrelic import agent
+            agent.disable_browser_autorum()
             return ['shop/detail-amp.html']
         return ['shop/detail1.html']
 

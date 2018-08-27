@@ -1,6 +1,5 @@
 function clicked() {
   $('.rmv-required').removeAttr('required')
-  debugger
   var check = confirm('Do you wish to Save the changes made - Y/N ?')
   if (check) {
     $("#linkedin-draft-form").submit();
@@ -11,15 +10,25 @@ function clicked() {
 window.Parsley.addValidator('validatedate', {
   validateString: function(value, requirement, parsleyInstance) {
     var dcd = requirement.split("_")[1]
+    var form_type = requirement.split("_")[0]
+    var state_var = (form_type=="work") ? "org_current" : "edu_current"
+    var curr_state
+
     if(dcd == 'from'){
       to_date = new Date(value)
       from = parsleyInstance.$element[0].id.replace(requirement.replace('from', 'to'),requirement)
+      curr_state = $("#" + from.replace(form_type+"_"+dcd,state_var))[0].checked
       from_date = new Date($("#" + from).val())
     }
     else {
       from_date = new Date(value)
       to = parsleyInstance.$element[0].id.replace(requirement.replace('to', 'from'),requirement)
+      curr_state = $("#" + to.replace(form_type+"_"+dcd,state_var))[0].checked
       to_date =  new Date($("#" + to).val())
+    }
+
+    if(curr_state == true){
+      return true
     }
     return (from_date<to_date) ? true : false
   },
