@@ -1,5 +1,17 @@
+#python imports
+
+#django imports
+
+#local imports
 from .base_settings import *  # noqa
 from .celery import *
+from .mongo.development import *
+
+#inter app imports
+
+#third party imports
+from pymongo import read_preferences
+from mongoengine import connect
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,20 +49,22 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
-    'oldDB': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'shinecp',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': '',
-        'PORT': '',
-    },
+    # 'oldDB': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'shinecp',
+    #     'USER': 'root',
+    #     'PASSWORD': 'root',
+    #     'HOST': '',
+    #     'PORT': '',
+    # },
 }
 
 DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
 
 ######### Apps specific for this project go here. ###########
 DJANGO_APPS = [
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -293,17 +307,23 @@ LINKEDIN_RESUME_PRODUCTS = LINKEDIN_RESUME_FREE + LINKEDIN_RESUME_COST
 
 ###### SEARCH SETTINGS #######
 EXCLUDE_SEARCH_PRODUCTS = LINKEDIN_RESUME_PRODUCTS
-try:
-    from .settings_local import *
-except:
-    pass
-
 
 ######### CONTACT NUMBERS ###################
-
 
 GGN_CONTACT_FULL = '0124-4312500/01'
 GGN_CONTACT = '0124-4312500'
 
+########### CMS STATIC PAGE RENDERING ID#########
+
+CMS_ID = [1]
+
 # used for coupon generation for free feature product on payment realization
 FEATURE_PROFILE_PRODUCTS = [1939]
+
+for conn, attrs in MONGO_SETTINGS.items():
+    connect(attrs['DB_NAME'], host=attrs['USERNAME'] + ":" + attrs['PASSWORD']  + "@" + attrs['HOST']+":" + str(attrs['PORT']) + '/?authSource=admin' )
+
+try:
+    from .settings_local import *
+except:
+    pass

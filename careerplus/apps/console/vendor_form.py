@@ -5,13 +5,17 @@ from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from django.conf import settings
+
+from dal import autocomplete
+
 from .decorators import has_group
 from shop.models import (
     ProductClass,
-    ProductScreen, 
+    ProductScreen,
     FAQProductScreen,
     VariationProductScreen,
-    ScreenChapter)
+    ScreenChapter,
+    Skill, ScreenProductSkill)
 from faq.models import ScreenFAQ
 from partner.models import Vendor
 from geolocation.models import Country
@@ -925,7 +929,6 @@ class ScreenProductChapterForm(forms.ModelForm):
     def clean(self):
         super(ScreenProductChapterForm, self).clean()
 
-
     def clean_heading(self):
         heading = self.cleaned_data.get('heading', None)
         if heading:
@@ -935,9 +938,74 @@ class ScreenProductChapterForm(forms.ModelForm):
                 "This field is required.")
         return heading
 
+
 class ScreenChapterInlineFormSet(forms.BaseInlineFormSet):
     def clean(self):
         super(ScreenChapterInlineFormSet, self).clean()
         if any(self.errors):
             return
-        
+
+
+class ScreenProductSkillForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        obj = kwargs.pop('object', None)
+        super(ScreenProductSkillForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        queryset = Skill.objects.filter(active=True)
+        # if self.instance.pk:
+        #     self.fields['skill'].queryset = queryset
+        # else:
+        #     skills = obj.screenskills.all().values_list(
+        #         'skill_id', flat=True)
+        #     queryset = queryset.exclude(pk__in=skills)
+        self.fields['skill'].queryset = queryset
+        self.fields['skill'].widget.attrs['class'] = form_class
+        self.fields['skill'].required = True
+
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+        self.fields['priority'].widget.attrs['class'] = form_class
+
+    class Meta:
+        model = ScreenProductSkill
+        fields = (
+            'skill', 'active', 'priority')
+        widgets = {
+            'skill': autocomplete.ModelSelect2(
+                url='console:skill-autocomplete')
+        }
+
+    def clean(self):
+        super(ScreenProductSkillForm, self).clean()
+
+    def clean_skill(self):
+        skill = self.cleaned_data.get('skill', None)
+        if skill:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return skill
+
+
+class ScreenSkillInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(ScreenSkillInlineFormSet, self).clean()
+        # if any(self.errors):
+        #     return
+        skills = []
+        duplicates = False
+        for form in self.forms:
+            if form.cleaned_data:
+                skill = form.cleaned_data['skill']
+                if skill in skills:
+                    duplicates = True
+                skills.append(skill)
+
+                if duplicates:
+                    raise forms.ValidationError(
+                        'Skill must be unique.',
+                        code='duplicate_skill'
+                    )
+        return

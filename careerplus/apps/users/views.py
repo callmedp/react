@@ -29,7 +29,6 @@ from users.mixins import WriterInvoiceMixin,UserGroupMixin
 from emailers.tasks import send_email_task
 
 
-
 from .forms import (
     RegistrationForm,
     LoginApiForm,
@@ -597,7 +596,7 @@ class DownloadMonthlyWriterInvoiceView(UserGroupMixin,TemplateView):
     template_name = "invoice/invoice_monthly_download.html"
     month = []
     path = "invoice/user/"
-    group_name = ['WRITER']
+    group_names = ['WRITER']
 
 
 

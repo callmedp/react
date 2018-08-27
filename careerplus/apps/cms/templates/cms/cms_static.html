@@ -1,0 +1,534 @@
+{% extends "basic/base.html" %}
+{% load static humanize compress %}
+
+{% block head %}
+ {% block canonical_url %}
+      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+      <link rel="amphtml" href="//{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}?type=amp">
+    {% endblock canonical_url %}
+{% block css_section %}
+        <!-- Bootstrap -->
+        {% compress css %}
+
+        <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
+        <!--<link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">-->
+        <!--<link type="text/css"  href="{% static 'shinelearn/css/common/bootstrapv3.3.7.css' %}" rel="stylesheet" >-->
+        <link type="text/scss" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
+        <link type="text/css"  href="{% static 'shinelearn/css/cms/global.css' %}"  rel="stylesheet">
+
+        {% endcompress %}
+         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE]>
+
+
+        <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+
+{% block meta_html %}
+ <meta charset="utf-8">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0"/>
+    <meta name="description" content="Free Resume Format Online - Get Resume Format recommended by experts for experienced professionals or freshers. Download Resume Format samples in pdf or word doc">
+    <meta name="keywords" content="E-Learning, Skills, Resume, India">
+    <meta property="og:title" content="Resume Format and CV Samples - Download Online @ Shine Learning">
+    <meta property="og:url" content="https://learning.shine.com/cms/resume-format/1/">
+    <meta property="og:description" content="Free Resume Format Online - Get Resume Format recommended by experts for experienced professionals or freshers. Download Resume Format samples in pdf or word doc">
+    <meta property="og:type" content="Website">
+    <meta property="og:site_name" content="ShineLearning">
+    <meta property="article:modified_time" content="2018-07-20 08:52:47.536574+00:00">
+    <meta property="fb:profile_id" content="282244838633660">
+    <meta property="og:image" content="https://static1.shine.com/l/s/shinelearn/images/cms/creative-1.jpg">
+    <meta itemprop="name" content="Resume Format and CV Samples - Download Online @ Shine Learning">
+    <meta itemprop="dateModified" content="2018-08-07 08:52:47.536574+00:00">
+    <meta itemprop="url" content="https://learning.shine.com/cms/resume-format/1/">
+    <meta itemprop="description" content="Free Resume Format Online - Get Resume Format recommended by experts for experienced professionals or freshers. Download Resume Format samples in pdf or word doc">
+
+{% endblock meta_html %}
+    <!-- Bootstrap CSS -->
+
+    <title>{% block title %}Resume Format and CV Samples - Download Online @ Shine Learning {%endblock title%}</title>
+
+{% block GA %}
+             <!--Global site tag (gtag.js) - Google Analytics-->
+           <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries --><!-- WARNING: Respond.js doesn't work if you view the page via file:// --><!--[if lt IE]><![endif]-->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script><script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+              gtag('config', 'UA-3537905-41');
+
+          gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
+        </script>
+        <!-- Google Tag Manager --><!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':--><!--new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],--><!--j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=--><!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);--><!--})(window,document,'script','dataLayer','GTM-M323HB');</script>--><!-- End Google Tag Manager -->
+        <script type="text/javascript">window['CURRENT_FLAVOUR']="full";window['SHINE_SITE']="https://m.shine.com";window['MAIN_DOMAIN_PREFIX']="https://learning.shine.com";window['MOBILE_LOGIN_URL']="https://learning.shine.com/login/";</script>
+
+        {% endblock GA %}
+
+
+
+{% endblock css_section %}
+{% block banner_ads %}{% endblock banner_ads %}
+    {% block banner_ads_bottom %}{% endblock banner_ads_bottom %}
+
+
+{% endblock head %}
+
+{% block container %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 d-resume fs-12 mt-15">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item">Resume Format</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-md-8">
+                <h1 class="mb-30">Resume Format and CV Samples</h1>
+                <!-- white box -->
+                <div class="white-box">
+                    <p>The resume is one of those documents that represent your professional information, mostly to depict one's professional growth and expertise. It is usually submitted to and accessed by professionals like hiring managers, recruiters, organizational heads, etc. To standardize either of the processes, resume formats are introduced for different needs and specifications like academic, job search (industry specific), freshers resume format and so on. It makes the presentation of information streamlined and simple, giving an edge to both sides in hiring and other forms of decision making.</p>
+                    <div class="most-resume mt-25">
+                        <div class="media">
+                            <div class="media-left">
+                                <div class="img-wrap mr-20">
+                                    <div class="img-content">
+                                        <a href="{% static 'shinelearn/static_media/learning_sample_resume.pdf' %}"target="_blank" class="icon-downlod"></a>
+                                        <div class="overlay"></div>
+<img src="{% static 'shinelearn/images/cms/resume-1-thumb.jpg' %}" alt="most targeted resume format" />
+</div>
+                                </div>
+                            </div>
+                            <div class="media-body mt-15">
+                                <p class="mt-0 subhead">Select the most targeted resume format:</p>
+                                <ul class="mt-15">
+                                    <li>
+                                    <a title="Resume Format for Fresher" href="https://learning.shine.com/cms/resume-format/freshers-2/2/" target="_blank">Resume Format for Fresher</a>
+                                    </li>
+
+                                    <li><a title="Resume Format for Experienced" href="https://learning.shine.com/cms/resume-format/experienced-professionals/6/" target="_blank">Resume Format for Experienced</a></li>
+
+                                    <li><a title="Resume Format for Banking Fresher" href="https://learning.shine.com/cms/resume-format/banking-freshers/4/" target="_blank">Resume Format for Banking Fresher</a></li>
+
+                                    <li><a title="Resume Format for IT Fresher" href="https://learning.shine.com/cms/resume-format/it-fresher/27/" target="_blank">Resume Format for IT Fresher</a></li>
+
+                                    <li><a title="Resume Format for Teachers" href="https://learning.shine.com/cms/resume-format/teachers/41/" target="_blank">Resume Format for Teachers</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!-- /. most-resume -->
+                </div><!--/. White box -->
+
+                <!-- white box -->
+                <div class="white-box mt-30">
+                    <h2 class="mb-15">Importance of Resume Formats</h2>
+                    <p>A well-formatted resume is a must to provide relevant and correct information to the recruiters and also, make it attractive. A competitive edge can be gained by using the right resume formats and content. Also, with digital scanning and screening of resumes, it is even more important to have the right format in order for software to read and shortlist your resume for the next step.</p>
+                    <p>Our Resume Writers hold 5-10 years of organizational experience and bring their expertise in delivering value to the customers. Through the correct selection of format and keyword rich content, they are known to make resumes that pass all tests.</p>
+                </div><!--/. White box -->
+
+                <!-- white box -->
+                <div class="white-box mt-30">
+                    <h2 class="mb-15">Types of Resume formats and their use</h2>
+                    <p>There are three basic types of resume formats that are considered standard as per industry norms. These resume formats are devised to simplify the application process by standardizing the important information and presenting in an easy-to-access manner. Apart from these, there is another class of resume formats called creative resume format or visual resume format. Every format has unique features that make them useful in different cases. Here's how:</p>
+
+                    <div class="most-resume mt-25">
+                        <h3 class="uppercase">CHRONOLOGICAL RESUME FORMATS</h3>
+                        <p>The chronological resume is the type of format in which information is presented in a standard timeline, preferably reverse chronological. It means that the information is presented from recent to old or vice versa, as the events happened.</p>
+                        <hr />
+                        <div class="media">
+                            <div class="media-left">
+                                <div class="img-wrap mr-20">
+                                    <div class="img-content">
+                                    <a href="{% static 'shinelearn/static_media/chronological-resume-format.docx' %}" class="icon-downlod"></a>
+                                    <div class="overlay"></div>
+                                    <img src="{% static 'shinelearn/images/cms/chrono-format.jpg' %}" alt="Chronological Resume Format">
+                                </div>
+                                </div><!-- /. img-wrap -->
+                            </div>
+                            <div class="media-body mt-15">
+                                <p class="mt-0 subhead">Features of a Chronological Resume Format:</p>
+                                <ul class="mt-15">
+                                    <li>The chronological resume is a simple resume, easy to go through, and detailed in nature.</li>
+                                    <li>This type of resume is used to highlight work history from recent to oldest.</li>
+                                    <li>It enhances the way experience and achievements are presented in the resume.</li>
+                                    <li>It is the best resume format to convert into a detailed CV.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <hr />
+
+                        <p class="rec-head">Recommended for:</p>
+                        <p>Experienced professionals (2+ years of experience), professionals applying for a similar profile as current, and graduates or above applying for higher education.</p>
+                    </div><!-- /. most-resume -->
+
+                    <div class="most-resume mt-25">
+                        <h3 class="uppercase">FUNCTIONAL RESUME FORMATS</h3>
+                        <p>The functional resume is used to present direct points with an emphasis on factual, static, and simple information. The information does not follow a defined pattern except as defined by headings.</p>
+                        <hr />
+                        <div class="media">
+                            <div class="media-left">
+                                <div class="img-wrap mr-20">
+                                    <div class="img-content">
+                                    <a href="{% static 'shinelearn/static_media/functional-resume-format.docx' %}" class="icon-downlod"></a>
+                                    <div class="overlay"></div>
+                                    <img src="{% static 'shinelearn/images/cms/functional.jpg' %}"alt="Functional Resume Format">
+                                </div>
+                            </div>
+                            </div>
+                            <div class="media-body mt-15">
+                                <p class="mt-0 subhead">Features of a Functional Resume Format:</p>
+                                <ul class="mt-15">
+                                    <li>The functional resume is a simple format with direct and factual information.</li>
+                                    <li>This type of resume is used to highlight skills, academic achievements, co-curricular achievements, etc.</li>
+                                    <li>It is very versatile and can be made with tables, bullet points, or any other similar formatting.</li>
+                                    <li>It is easiest to go through and doesn’t contain narrative details.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <hr />
+
+                        <p class="rec-head">Recommended for:</p>
+                        <p>Freshers with very less to no experience, undergraduate students applying for internships, college, etc, back/front office job applications, part-time job applications.</p>
+                    </div><!-- /. most-resume -->
+
+                    <div class="most-resume mt-25">
+                        <h3 class="uppercase">COMBINATION RESUME FORMATS</h3>
+                        <p>The combination resumes are hybrid and custom resume formats. They use features of both chronological and functional resume to build custom profiles.</p>
+                        <hr />
+                        <div class="media">
+                            <div class="media-left">
+                                <div class="img-wrap mr-20">
+                                    <div class="img-content">
+                                    <a href="{% static 'shinelearn/static_media/combination-resume-format.docx' %}" class="icon-downlod"></a>
+                                    <div class="overlay"></div>
+                                    <img src="{% static 'shinelearn/images/cms/mixed-format.jpg' %}" alt="Combination resumes Format">
+                                </div>
+                                </div>
+                            </div>
+                            <div class="media-body mt-15">
+                                <p class="mt-0 subhead">Features of a combination resumes Format</p>
+                                <ul class="mt-15">
+                                    <li>The combination resume is a custom format following chronology but not directly and including other information comprehensively.</li>
+                                    <li>This type of resume is used to highlight experience, learning, and achievements with an analytical/storytelling/detailed approach.</li>
+                                    <li>It is versatile with the customization that can be made but follows a list-based content approach. It is a very influential format if prepared correctly.</li>
+                                    <li>It is difficult to make and read as well. It is best used customized for every job application.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <hr />
+
+                        <p class="rec-head">Recommended for:</p>
+                        <p>Experienced professionals with a variety of experience, freelancers with a variety of results to show, professionals changing industry/profiles, freshers with extensive extra-curricular activities and results, and anyone who can combine different information (experience, learning, skills, results) together.</p>
+                    </div><!-- /. most-resume -->
+                </div><!--/. White box -->
+
+                <!-- white box -->
+                <div class="white-box mt-30">
+                    <h2 class="mb-15">Creative and visual resume formats</h2>
+                    <p>When it comes to creative resumes, there are no specific formats. The resume itself is used as a work sample, depiction, or presentation of skills apart from the information provided. Young professionals in creative profiles have started the trend of using visual resumes, especially graphic designers and writers. On similar lines, developers have used HTML based resumes, animators and filmmakers have used video scripts, UI/UEx developers have used interactive flash files, and so on. Here are a few samples to take inspiration from.</p>
+
+                    <div class="most-resume mt-25">
+                        <div class="resume-format">
+                            <div class="img-wrap pull-left mr-15">
+                                <div class="img-content">
+                                    <div class="overlay">
+                                        <a href="#" data-toggle="modal" data-target="#resume-1" class="icon-zoom"></a>
+                                    </div>
+<img src="{% static 'shinelearn/images/cms/creative-1-thumb.jpg' %}" alt="Creative and visual resume formats" class="img-responsive" /></div>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="resume-1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <p class="modal-title">Creative and visual resume formats</p>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <img src="{% static 'shinelearn/images/cms/creative-1.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- /. modal -->
+                            </div><!-- /. img-wrap -->
+                            <div class="img-wrap pull-left mr-15">
+                                <div class="img-content">
+                                    <div class="overlay">
+                                        <a href="#" data-toggle="modal" data-target="#resume-2" class="icon-zoom"></a>
+                                    </div>
+                                    <img src="{% static 'shinelearn/images/cms/creative-2-thumb.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
+                                </div>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="resume-2" tabindex="-2" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <p class="modal-title">Creative and visual resume formats</p>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <img src=" {% static 'shinelearn/images/cms/creative-2.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- /. modal -->
+                            </div><!-- /. img-wrap -->
+                            <div class="img-wrap pull-left mr-15">
+                                <div class="img-content">
+                                    <div class="overlay">
+                                            <a href="#" data-toggle="modal" data-target="#resume-3" class="icon-zoom"></a>
+                                    </div>
+                                       <img src="{% static 'shinelearn/images/cms/creative-3-thumb.jpg' %}"  alt="Creative and visual resume formats" class="img-responsive">
+                                </div>
+                                <!-- Modal -->
+                                <div class="modal fade" id="resume-3" tabindex="-3" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <p class="modal-title">Creative and visual resume formats</p>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                            <div class="modal-body">
+                                               <img src="{% static 'shinelearn/images/cms/creative-3.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- /. modal -->
+                            </div><!-- /. img-wrap -->
+                            <div class="clearfix"></div>
+                            <hr />
+                            <h3>Note:</h3>
+                            <p>It is important to understand that these resumes are not accepted everywhere and should be used with care. Also, they are difficult or impossible to run through application tracking software.</p>
+                        </div>
+                    <div class="clearfix"></div>
+                    </div><!-- /. most-resume -->
+                </div><!--/. White box -->
+
+                <!-- White box -->
+                <div class="white-box mt-30">
+                    <h2 class="mb-15">Resume formatting and layout tips</h2>
+                    <p>A professionally formatted resume always catches the right eyes. These simple rules can help you make your resume better:</p>
+                    <ul class="list">
+                        <li>Use left margin justification i.e. keep all text in the main body left-aligned.</li>
+                        <li>Use single line spacing between the lines.</li>
+                        <li>Use straight lines to break sections and also to give an outline to the resume, if you wish to.</li>
+                        <li>Simple bullet points under each category head give a neat format.</li>
+                        <li>For a hard copy, print on plain white or cream paper.</li>
+                        <li>A resume should ideally be two pages in length and a cover letter strictly between half to one page.</li>
+                    </ul>
+                </div><!--/. White box -->
+
+                <!-- White box -->
+                <div class="white-box mt-30">
+                    <h2 class="mb-15">Resume content tips</h2>
+                    <p>A good resume is defined by the format used and content layout. Here are some things to keep in mind while writing your resume:</p>
+                    <ul class="list">
+                        <li>Based on the job and application type along with your profile and experience, you can select any one of the three types of resumes.</li>
+                        <li>Content should be crisp, clear, and targeted towards the application and job requirements.</li>
+                        <li>Content should clearly present the skills, their relevance to the job, and their previous application if any.</li>
+                        <li>Use relevant keywords and key phrases for digital and targeted information.</li>
+                    </ul>
+
+                    <p>Once done, get it reviewed by someone experienced and others and make it even better. </p>
+                    <p>Our best wishes for your job search!</p>
+                </div><!--/. White box -->
+
+                <!--&lt;!&ndash; Write a comment &ndash;&gt;-->
+                <!--<div class="write-comment mt-40">-->
+                    <!--<h2>Write a comment</h2>-->
+
+                    <!--<ul class="comment-box mt-15">-->
+                        <!--<li>-->
+                            <!--<span><img src="images/user.jpg" alt="user" class="img-responsive"></span>-->
+                            <!--<div class="textare-wrap">-->
+                                <!--<textarea class="form-control" rows="5">sd</textarea>-->
+                            <!--</div>-->
+                            <!--<div class="float-right mt-15">-->
+                                <!--<button class="btn btn-primary">Submit</button>-->
+                            <!--</div>-->
+                            <!--<div class="clearfix"></div>-->
+                        <!--</li>&lt;!&ndash; /. li &ndash;&gt;-->
+
+                        <!--<li>-->
+                            <!--<span><img src="images/user.jpg" alt="user" class="img-responsive"></span>-->
+                            <!--<p>Mix is a tech writer based in Amsterdam that loves cinema and probably hates the movies that you like. Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.</p>-->
+                            <!--<p class="fs-12">1 hr ago</p>-->
+                        <!--</li>&lt;!&ndash; /. li &ndash;&gt;-->
+
+                        <!--<li>-->
+                            <!--<span><img src="images/user.jpg" alt="user" class="img-responsive"></span>-->
+                            <!--<p>Tell him everything you despise about his work on Twitter or pitch him your terrible ideas via email.</p>-->
+                            <!--<p class="fs-12">1 hr ago</p>-->
+                        <!--</li>&lt;!&ndash; /. li &ndash;&gt;-->
+                    <!--</ul>-->
+
+                    <!--<p><a href="#" class="btn btn-light w-100 pt-15 pb-15 mt-30"><span class="icon-chat"></span> all 23 comments</a></p>-->
+                <!--</div>&lt;!&ndash; /. Write a comment &ndash;&gt;-->
+            </div><!-- /. col -->
+            <div class="col-md-4">
+                <div class="right-pan">
+                    <div class="social-share">
+                        <ul>
+                            <li>Share on</li>
+                            <li class="facebook">
+                                <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{hostname}}{{page_obj.get_absolute_url}}" page-id="{{page_obj.id}}" class="icon-fb"></a>
+                            </li>
+                            <li class="twitter">
+                                  <a href="https://twitter.com/home?status=https://{{SITE_DOMAIN}}{{page_obj.get_absolute_url}}" target="_blank" class="icon-tw"></a>
+
+                            </li>
+                            <li class="gPlus">
+                               <a target="_blank" href="https://plus.google.com/share?url={{hostname}}{{page_obj.get_absolute_url}}" class="icon-gPlus"></a>
+                            </li>
+                        </ul>
+                    </div><!-- /. social-share -->
+
+                    <div id="snackbar"></div>
+                    <div class="white-box">
+                        <p class="pb-15 mb-15 rhs-head uppercase">Request a call</p>
+                        <form class="form-group" role="form" id="callback_form">
+                            <div class="form-group">
+                            <input type="text" class="form-control" name='name' placeholder="Name" value="{{request.session.full_name|safe}}">
+                            <span class="error-txt"></span>
+                            </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="number" id="id_mobile" placeholder="Mobile Number" value="{{request.session.mobile_no|safe}}" maxlength="15">
+                            <span class="error-txt"></span>
+                        </div>
+
+                        {% if  page_obj %}
+            <input type="hidden" name="lsource" value="7">
+            <input type="hidden" name="product" value="{{page_obj.pk}}">
+            <input type="hidden" name="prd" value="{{page_obj.heading}}">
+            <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
+          {% endif %}
+                        <div class="form-group">
+                            <textarea class="form-control" name='msg' placeholder="Message" rows="3"></textarea>
+                            <span class="error-txt"></span>
+                        </div>
+                        </form>
+                        <button type="submit" id="id_callback" class="btn btn-primary w-100">Submit</button>
+
+                        <div class="call mt-30 text-center">
+                            <p class="number"><span class="icon-call"></span><a href="tel:{{ggn_contact_full}}">{{ggn_contact_full}}</a></p>
+                            <p class="fs-12 c9">9AM to 7PM IST Monday-Saturday</p>
+                        </div>
+
+                    </div><!-- /. white-box -->
+
+                    <div class="white-box mt-30">
+                        <p class="uppercase pb-15 mb-15 rhs-head">Related articles</p>
+                        <ul>
+                            <li class="mb-20">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <a href="https://learning.shine.com/article/6-things-to-be-removed-from-your-resume/14/" target="_blank">
+                                        <img class="mr-3" src="{% static 'shinelearn/images/cms/related-1.jpg' %}" alt="6 Things to be removed from Your Resume"></a>
+                                    </div>
+
+                                    <div class="media-body ml-15 fs-16">
+                                        <h3><a href="https://learning.shine.com/article/6-things-to-be-removed-from-your-resume/14/" target="_blank">6 Things to be removed from Your Resume</a></h3>
+                                    </div>
+                                </div>
+                            </li><!-- /. l1 - 1 -->
+
+                            <li class="mb-20">
+                                <div class="media">
+                                        <div class="media-left">
+                                        <a href="https://learning.shine.com/article/should-i-write-ctc-in-my-resume/3/" target="_blank">
+                                            <img class="mr-3" src= "{% static 'shinelearn/images/cms/related-2.jpg' %}"  alt="Should I write CTC in my Resume">
+                                        </a>
+                                        </div>
+                                    <div class="media-body ml-15 fs-16">
+                                        <h3><a href="https://learning.shine.com/article/should-i-write-ctc-in-my-resume/3/" target="_blank">Should I write CTC in my Resume</a></h3>
+                                    </div>
+                                </div>
+                            </li><!-- /. l1 - 2 -->
+
+                            <li class="mb-20">
+                                <div class="media">
+                                        <div class="media-left">
+                                        <a href="https://learning.shine.com/talenteconomy/career-help/3-ways-to-self-evaluate-your-resume-format-and-content/" target="_blank">
+                                            <img class="mr-3" src= "{% static 'shinelearn/images/cms/related-3.jpg' %}"  alt="3 Ways To Self Evaluate Your Resume Format And Content">
+                                        </a>
+                                        </div>
+                                    <div class="media-body ml-15 fs-16">
+                                        <h3><a href="https://learning.shine.com/talenteconomy/career-help/3-ways-to-self-evaluate-your-resume-format-and-content/" target="_blank">3 Ways To Self Evaluate Your Resume Format And Content </a></h3>
+                                    </div>
+                                </div>
+                            </li><!-- /. l1 - 3 -->
+
+                            <li class="mb-20">
+                                <div class="media">
+                                        <div class="media-left">
+                                        <a href="https://learning.shine.com/talenteconomy/career-help/7-quick-strategic-changes-in-your-resume-format-you-can-do-right-away/" target="_blank">
+                                           <img class="mr-3" src="{% static 'shinelearn/images/cms/related-4.jpg' %}" alt="7 Quick Strategic Changes In Your Resume Format You Can Do Right Away!">
+                                        </a>
+                                        </div>
+                                    <div class="media-body ml-15 fs-16">
+                                        <h3><a href="https://learning.shine.com/talenteconomy/career-help/7-quick-strategic-changes-in-your-resume-format-you-can-do-right-away/" target="_blank">7 Quick Strategic Changes In Your Resume Format You Can Do Right Away! </a></h3>
+                                    </div>
+                                </div>
+                            </li><!-- /. l1 - 4 -->
+
+                            <li>
+                                <div class="media">
+                                        <div class="media-left">
+                                        <a href="https://learning.shine.com/talenteconomy/career-help/9-words-to-replace-in-your-resume-and-other-professional-communications/" target="_blank">
+                                            <img class="mr-3" src="{% static 'shinelearn/images/cms/related-5.jpg' %}"alt="9 Words To Replace In Your Resume And Other Professional Communications!">
+                                        </a>
+                                        </div>
+                                    <div class="media-body ml-15 fs-16">
+                                        <h3><a href="https://learning.shine.com/talenteconomy/career-help/9-words-to-replace-in-your-resume-and-other-professional-communications/" target="_blank">9 Words To Replace In Your Resume And Other Professional Communications! </a></h3>
+                                    </div>
+                                </div>
+                            </li><!-- /. l1 - 5 -->
+                        </ul>
+                    </div><!-- /. white-box -->
+
+
+                </div><!-- /. Right pan -->
+            </div><!-- /. col -->
+        </div><!-- /. row -->
+    </div><!-- /. container -->
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+{% endblock container %}
+
+{% block js_section %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"> </script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    {% compress js %}
+
+    <script type="text/javascript" src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+    <script type="text/javascript" src="{% static 'shinelearn/js/cms/validate.js' %}"></script>
+    <script type="text/javascript" src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"> </script>
+
+    {% endcompress %}
+  <script>
+        $('.nav-tabs > li > a').hover(function() {
+            $(this).tab('show');
+          });
+        $('.dropdown').hover(function(){
+            $('.dropdown-toggle', this).trigger('click');
+          });
+    </script>
+ {% endblock js_section %}

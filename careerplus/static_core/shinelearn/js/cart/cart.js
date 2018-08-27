@@ -47,7 +47,8 @@ function deliveryOptionUpdate(line_id){
                     else{
                         $('#delivery-charge' + line_id).text('');
                     }
-                    $('#total-cart-amount-id').text(data.total_cart_amount);
+                    $('#total-cart-amount-id').html(
+ '<strong>Rs.' +  data.total_cart_amount + ' /-<small style="font-size:12px; font-weight:normal; color:#999; margin-left:5px">+(taxes)</small></strong>');
                 }
             },
             failure: function(response){

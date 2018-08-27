@@ -39,8 +39,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pFAn = indexes.MultiValueField(null=True)
     pCtg = indexes.MultiValueField(null=True)
     pCtgn = indexes.MultiValueField(null=True)
-    pCC = indexes.CharField(null=True)    
-    pAb = indexes.CharField(default='') 
+    pCC = indexes.CharField(null=True)
+    pAb = indexes.CharField(default='')
     
     # Meta and SEO #
     pURL = indexes.CharField(null=True, indexed=False)
@@ -127,7 +127,10 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pPOP = indexes.CharField(indexed=False)
     pCD = indexes.DateTimeField(model_attr='created', indexed=True)
     pMD = indexes.DateTimeField(model_attr='modified', indexed=False)
-    
+
+    # skill Field
+    pSkill = indexes.MultiValueField(null=True)
+
     def get_model(self):
         return Product
 
@@ -179,7 +182,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         if len(categories) > 0:
             p_category = [pcat for cat in categories for pcat in cat.get_parent()]
             # pp_category = [pcat for cat in p_category for pcat in cat.get_parent()]
-            parents = [p_category,]
+            parents = [p_category, ]
             return [item.pk for sublist in parents for item in sublist if sublist]
         return []
 
@@ -197,6 +200,13 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             parents = [p_category,]
             return [item.name for sublist in parents for item in sublist if sublist]
         return []
+
+    def prepare_pSkill(self, obj):
+        # if obj.is_course:
+        skill_ids = list(obj.productskills.filter(
+            skill__active=True,
+            active=True).values_list('skill', flat=True))
+        return skill_ids
 
     def prepare_pCC(self, obj):
         content = ''
@@ -611,6 +621,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     'label': obj.name,
                     'mode': obj.get_studymode(),
                     'duration': obj.get_duration(),
+                    'dur_days': obj.get_duration_in_day(),
                     'type': obj.get_coursetype(),
                     'level': obj.get_courselevel(),
                     'certify': obj.get_cert(),
@@ -645,6 +656,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'label': pv.name,
                         'mode': pv.get_studymode(),
                         'duration': pv.get_duration(),
+                        'dur_days': obj.get_duration_in_day(),
                         'type': pv.get_coursetype(),
                         'level': pv.get_courselevel(),
                         'certify': pv.get_cert(),

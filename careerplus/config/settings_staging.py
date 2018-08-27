@@ -1,4 +1,5 @@
 from .settings import *
+from .mongo.staging import *
 
 DEBUG = True
 IS_LIVE = False
@@ -45,6 +46,8 @@ DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
 
 ####### APPS SETTIMGS #################
 DJANGO_APPS = [
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -68,6 +71,10 @@ if DEBUG:
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     ]
     MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
+
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK" : lambda request: DEBUG,
+}
 
 #### CELERY SETTINGS ########
 BROKER_URL = 'redis://localhost:6379/0'
@@ -290,3 +297,7 @@ try:
     from .settings_local import *
 except:
     pass
+
+########### CMS STATIC PAGE RENDERING ID#########
+
+CMS_ID = [1]

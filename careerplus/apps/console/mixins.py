@@ -313,14 +313,14 @@ class ActionUserMixin(object):
                 order = oi.order
                 file = oi_draft
                 filename = os.path.splitext(file.name)
-                extention = filename[len(filename)-1] if len(
+                extention = filename[len(filename) - 1] if len(
                     filename) > 1 else ''
                 file_name = 'draftupload_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(int(random()*9999)) \
                     + '_' + timezone.now().strftime('%Y%m%d') + extention
                 full_path = '%s/' % str(order.pk)
                 if not settings.IS_GCP:
                     if not os.path.exists(settings.RESUME_DIR + full_path):
-                        os.makedirs(settings.RESUME_DIR +  full_path)
+                        os.makedirs(settings.RESUME_DIR + full_path)
                     dest = open(
                         settings.RESUME_DIR + full_path + file_name, 'wb')
                     for chunk in file.chunks():
@@ -420,6 +420,20 @@ class ActionUserMixin(object):
                         last_oi_status=oi.last_oi_status,
                         assigned_to=oi.assigned_to,
                         added_by=user)
+
+            elif oi.product.type_flow == 7:
+                oi.draft_counter += 1
+                oi.oi_draft = oi_draft
+                oi.save()
+                last_status = oi.oi_status
+                oi.orderitemoperation_set.create(
+                    oi_draft=oi.oi_draft,
+                    draft_counter=oi.draft_counter + 1,
+                    oi_status=22,
+                    last_oi_status=last_status,
+                    assigned_to=oi.assigned_to,
+                    added_by=user)
+                message_dict['display_message'] = 'Draft uploaded Successfully.'
 
             else:
                 last_status = oi.oi_status
