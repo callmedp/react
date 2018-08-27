@@ -25,7 +25,7 @@
         margin: 0 !important;
         text-transform: none; }
       .smk_accordion .accordion_in .acc_head .acc_icon_expand {
-        background:url("../../../images/mobile/cms/resume_sprite.svg");
+        background:url("../../../images/mobile/cms/resume_sprite.svg") !important;
         background-position:0px -205px;
         width: 13px;
         height: 9px;

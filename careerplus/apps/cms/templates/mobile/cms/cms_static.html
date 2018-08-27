@@ -51,7 +51,7 @@
 {% endblock head %}
 
   {% block main_container %}
-
+  <div class="wrapper">
 
 {% block header %}
 
@@ -362,6 +362,12 @@ It is important to understand that these resumes are not accepted everywhere and
 
 
  {% endblock container %}
+
+ {% block footer %}
+    <!-- footer -->
+    {% include 'basic/footer.html' %}
+ {% endblock footer %}
+
 {% block navigation %}
                 <!-- left side menu -->
                 {% include 'basic/navigation.html' %}
@@ -371,6 +377,8 @@ It is important to understand that these resumes are not accepted everywhere and
       <meta itemprop="url" content="https://learning.shine.com"/>
     </div>
             {% endblock navigation %}
+
+</div>
 
 {% endblock main_container %}
     {% block js_section %}
@@ -439,11 +447,8 @@ window.onclick = function(event) {
 } )( jQuery );
 </script>
 
-    {% block johukum %}
-        <script type='text/javascript' id='spd-busns-spt' async=''
-            src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
-            data-client='324ed0abb0694b0c66a6daecb178352d'>
-        </script>
-        {% endblock johukum %}
 
 {% endblock js_section %}
+{% block johukum %}
+
+{% endblock johukum %}

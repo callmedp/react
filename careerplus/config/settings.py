@@ -301,7 +301,7 @@ GGN_CONTACT = '0124-4312500'
 
 ########### CMS STATIC PAGE RENDERING ID#########
 
-CMS_ID=[1]
+CMS_ID = [1]
 
 # used for coupon generation for free feature product on payment realization
 FEATURE_PROFILE_PRODUCTS = [1939]
