@@ -78,7 +78,7 @@ gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
   {% endblock head %}
 
   {% block main_container %}
-
+  <div class="wrapper">
 
 {% block header %}
 
@@ -359,18 +359,28 @@ gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
 
 
  {% endblock container %}
+
+ {% block footer %}
+    <!-- footer -->
+    {% include 'basic/footer.html' %}
+ {% endblock footer %}
+
+
 {% block navigation %}
                 <!-- left side menu -->
-                {% include 'basic/navigation.html' %}
+      {% include 'basic/navigation.html' %}
       <div class="navbar-header" itemscope itemtype="http://schema.org/Organization" >
       <a class="navbar-brand" href="{% url "homepage" %}"></a>
       <meta itemprop="name" content="Shine">
       <meta itemprop="url" content="https://learning.shine.com"/>
     </div>
-            {% endblock navigation %}
+  {% endblock navigation %}
+
+</div>
 
 {% endblock main_container %}
-    {% block js_section %}
+
+  {% block js_section %}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"> </script>

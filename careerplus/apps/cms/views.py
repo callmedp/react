@@ -60,8 +60,9 @@ class CMSPageView(DetailView, LoadMoreMixin):
             from newrelic import agent
             agent.disable_browser_autorum()
             return ["cms/cms_page-amp.html"]
-        if self.object.id in settings.CMS_ID:
-            return ["cms/cms_static.html"]
+        if self.object.id in settings.CMS_STATIC_TEMP_DICT.keys():
+            return ["cms/" + settings.CMS_STATIC_TEMP_DICT.get(
+                self.object.id, 'cms_page.html')]
         return ["cms/cms_page.html"]
 
     def redirect_if_necessary(self, current_path, article):
@@ -212,7 +213,13 @@ class CMSStaticView(TemplateView):
 
     def get_template_names(self):
         static_kwarg = self.kwargs.get("static_kwarg")
-        return ["cms/static_%s_page.html" %static_kwarg]
+        return ["cms/static_%s_page.html" % static_kwarg]
+
+    def get_context_data(self, **kwargs):
+        context = super(CMSStaticView, self).get_context_data(**kwargs)
+        context.update({
+            "hostname": settings.SITE_DOMAIN, })
+        return context
 
 # class LeadManagementView(View, UploadInFile):
 #     http_method_names = [u'post', ]
