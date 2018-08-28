@@ -241,12 +241,12 @@ def generate_encrypted_urls_for_mailer_task(task_id=None,user=None):
     if not settings.IS_GCP:
         generated_file = open(settings.MEDIA_ROOT + '/' + generated_path, 'w')
         upload =  open(settings.MEDIA_ROOT + '/' + upload_path,'r', encoding='utf-8', errors='ignore')
+        uploader = csv.DictReader(upload, delimiter=',', quotechar='"')
     else:
         upload = GCPPrivateMediaStorage().open(upload_path)
         generated_file = GCPPrivateMediaStorage().open(generated_path, 'wb')
+        uploader = csv.DictReader(codecs.iterdecode(upload, 'utf-8'), delimiter=',', quotechar='"')
                                 
-    uploader = csv.DictReader(upload, delimiter=',', quotechar='"')
-
     fieldnames = uploader.fieldnames
     fieldnames.append('token')
 
