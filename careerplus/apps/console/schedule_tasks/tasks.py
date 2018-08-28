@@ -254,6 +254,8 @@ def generate_encrypted_urls_for_mailer_task(task_id=None,user=None):
     csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
     count = 0
 
+    total_records = len(list(uploader))
+
     for row in uploader:
         email = row.get('email','').strip()
         name = row.get('name','').strip()
@@ -262,6 +264,9 @@ def generate_encrypted_urls_for_mailer_task(task_id=None,user=None):
         csvwriter.writerow(row)
 
         count = count + 1
+        if count % 20 == 0:
+            scheduler_obj.percent_done = round((count / float(total_records))*100, 2)
+            scheduler_obj.save()
         
     scheduler_obj.file_generated = generated_path
     scheduler_obj.percent_done = 100
@@ -270,7 +275,6 @@ def generate_encrypted_urls_for_mailer_task(task_id=None,user=None):
     scheduler_obj.save()
     upload.close()
     generated_file.close()
-
 
 
 @task(name="generate_product_list")
