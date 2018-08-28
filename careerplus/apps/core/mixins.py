@@ -77,10 +77,19 @@ class EncodeDecodeUserData(object):
         return token.decode()
 
     def decode(self, token):
-        token = base64.urlsafe_b64decode(str(token))
-        ciph = XOR.new(settings.ENCODE_SALT)
-        inp_str = ciph.decrypt(token).decode()
+        try:
+            token = base64.urlsafe_b64decode(str(token))
+            ciph = XOR.new(settings.ENCODE_SALT)
+            inp_str = ciph.decrypt(token).decode()
+        
+        except Exception as e:
+            logging.getLogger('error_log').error("%(msg)s : %(err)s" % \
+                    {'msg': 'Invalid Token for Decryption', 'err': e})
+            return None
+        
         inp_list = inp_str.split('|')
+        if len(inp_list) < 3:
+            return None 
         email = inp_list[1]
         name = inp_list[2]
         contact = inp_list[3]

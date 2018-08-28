@@ -66,9 +66,9 @@
                 <h2>Register Now</h2>
                 <form class="cert-form"  id="lead2" action="{% url "crmapi:lead-management" %}" method="POST" class="STYLE-NAME">    {% csrf_token %}
 
-                    <input id="name" type="text" name="name" placeholder="Your Full Name" maxlength="50" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}"/>
+                    <input id="name" type="text" name="name" placeholder="Your Full Name" maxlength="50" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %}/>
 
-                    <input id="email" type="email" name="email" placeholder="Valid Email Address" maxlength="50" value="{{request.session.email}}" />
+                    <input id="email" type="email" name="email" placeholder="Valid Email Address" maxlength="50" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %} />
 
                     
                     <div style="display:inline-block!important;">
@@ -77,7 +77,7 @@
                                         <option {% if country.phone == "91"%} selected="selected"{%endif%} value="{{country.phone}}">{{country.code2}}&nbsp;&nbsp; ({{country.phone}}) -- {{country.name}}</option>
                                     {% endfor %}
                     </select> 
-                    <input id="mobile" type="text" style="width:80%!important;float:right!important;" name="number" placeholder="Enter mobile number" maxlength="15" value="{{request.session.mobile_no}}">
+                    <input id="mobile" type="text" style="width:80%!important;float:right!important;" name="number" placeholder="Enter mobile number" maxlength="15" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
                     </div>
 
                     <!--<textarea class="message_input" placeholder="Message" name="msg" maxlength="600" rows="3"></textarea>-->
