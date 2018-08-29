@@ -1,5 +1,6 @@
 from .settings import *
 from .mongo.staging import *
+from pymongo.read_preferences import ReadPreference
 
 DEBUG = True
 IS_LIVE = False
@@ -292,6 +293,23 @@ EXCLUDE_SEARCH_PRODUCTS = LINKEDIN_RESUME_PRODUCTS
 
 # used for coupon generation for free feature product on payment realization
 FEATURE_PROFILE_PRODUCTS = [1939]
+
+
+for conn, attrs in MONGO_SETTINGS.items():
+    try:
+        if attrs.get('REPSET'):
+            connect(attrs['DB_NAME'], host=attrs['USERNAME'] + ":" + attrs['PASSWORD']  + "@" + attrs['HOST']+":" + str(attrs['PORT']) + '/?authSource=admin' ,
+                    maxPoolSize=attrs['MAX_POOL_SIZE'],
+                    read_preference=ReadPreference.SECONDARY_PREFERRED,
+                    replicaSet=attrs['REPSET'],
+                    )
+        else:
+            connect(attrs['DB_NAME'], host=attrs['USERNAME'] + ":" + attrs['PASSWORD']  + "@" + attrs['HOST']+":" + str(attrs['PORT']) + '/?authSource=admin' ,
+                    maxPoolSize=attrs['MAX_POOL_SIZE']
+                    )    
+    except:
+        logging.getLogger('error_log').error(" unable to connect to mongo")
+
 
 try:
     from .settings_local import *
