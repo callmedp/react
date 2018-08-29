@@ -5,7 +5,6 @@
 #local imports
 from .base_settings import *  # noqa
 from .celery import *
-from .mongo.development import *
 
 #inter app imports
 
@@ -319,9 +318,6 @@ CMS_ID = [1]
 
 # used for coupon generation for free feature product on payment realization
 FEATURE_PROFILE_PRODUCTS = [1939]
-
-for conn, attrs in MONGO_SETTINGS.items():
-    connect(attrs['DB_NAME'], host=attrs['USERNAME'] + ":" + attrs['PASSWORD']  + "@" + attrs['HOST']+":" + str(attrs['PORT']) + '/?authSource=admin' )
 
 try:
     from .settings_local import *
