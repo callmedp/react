@@ -1,3 +1,6 @@
+# inbuilt  imports
+
+# third party imports
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.conf import settings
@@ -12,6 +15,7 @@ from shared.tests.factory.shared_factories import \
     ProductFactory, OrderItemFactory, UserFactory, \
     GroupFactory, CountryFactory, ProductAuditHistoryFactory, \
     SkillFactory
+from core.mixins import TokenGeneration
 
 
 class TestBoosterQueueView(TestCase):
@@ -431,3 +435,27 @@ class TestSkillAddAndListView(TestCase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, 200)
         self.assertTrue(len(resp.context['skill_list']))
+
+
+class TestConsoleAutoLoginView(TestCase):
+
+    url = reverse('console:autologin')
+    user = UserFactory()
+
+    def setUp(self):
+        self.user = UserFactory()
+        self.data = {
+            'token': TokenGeneration().encode(self.user.email, 2, 1)
+        }
+
+    def test_invalid_token_message_for_incorrect_token(self):
+        self.data['token'] = 'Invalid token'
+        response = self.client.get(self.url, self.data, follow=True)
+        message = list(response.context['messages'])[0]
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual('Token has been expired. Login with Username/Password ', str(message))
+
+    def test_login_with_valid_token(self):
+        response = self.client.get(self.url, self.data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['user'].email, self.user.email)
