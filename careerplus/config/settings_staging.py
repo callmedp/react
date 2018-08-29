@@ -176,7 +176,7 @@ SYSLOG_ADDRESS = '/dev/log'
 # Following is to make sure logging works with mac machines 2
 if sys.platform == "darwin":
     SYSLOG_ADDRESS = "/var/run/syslog"
-LOGGING['handlers']['syslog']['address'] = SYSLOG_ADDRESS
+# LOGGING['handlers']['syslog']['address'] = SYSLOG_ADDRESS
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
@@ -298,17 +298,20 @@ FEATURE_PROFILE_PRODUCTS = [1939]
 for conn, attrs in MONGO_SETTINGS.items():
     try:
         if attrs.get('REPSET'):
-            connect(attrs['DB_NAME'], host=attrs['USERNAME'] + ":" + attrs['PASSWORD']  + "@" + attrs['HOST']+":" + str(attrs['PORT']) + '/?authSource=admin' ,
+            connect(attrs['DB_NAME'], 
+                    host="mongodb://" + attrs['USERNAME'] + ":" + attrs['PASSWORD']  + "@" + attrs['HOST'],
                     maxPoolSize=attrs['MAX_POOL_SIZE'],
                     read_preference=ReadPreference.SECONDARY_PREFERRED,
                     replicaSet=attrs['REPSET'],
                     )
         else:
-            connect(attrs['DB_NAME'], host=attrs['USERNAME'] + ":" + attrs['PASSWORD']  + "@" + attrs['HOST']+":" + str(attrs['PORT']) + '/?authSource=admin' ,
+            connect(attrs['DB_NAME'], 
+                    host="mongodb://" + attrs['USERNAME'] + ":" + attrs['PASSWORD']  + "@" + attrs['HOST'] + "/?authSource=admin",
                     maxPoolSize=attrs['MAX_POOL_SIZE']
                     )    
-    except:
-        logging.getLogger('error_log').error(" unable to connect to mongo")
+    except Exception as e:
+        logging.getLogger('error_log').error(" unable to connect to mongo %s" %repr(e))
+        continue
 
 
 try:

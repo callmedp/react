@@ -485,3 +485,7 @@ CMS_STATIC_TEMP_DICT = {
     1: 'cms_static.html',
     3: 'static_resignation_page.html',
     7: 'static_cover_page.html'}
+
+
+
+    
