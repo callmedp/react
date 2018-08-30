@@ -89,6 +89,9 @@ DEV_MIDDLEWARE = [
 ]
 MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
 
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK" : lambda request: DEBUG and not request.GET.get('nodebug'),
+}
 
 #### CELERY SETTINGS ########
 BROKER_URL = 'redis://localhost:6379/0'

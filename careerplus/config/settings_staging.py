@@ -74,7 +74,7 @@ if DEBUG:
     MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
 
 DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK" : lambda request: DEBUG,
+    "SHOW_TOOLBAR_CALLBACK" : lambda request: DEBUG and not request.GET.get('nodebug'),
 }
 
 #### CELERY SETTINGS ########
