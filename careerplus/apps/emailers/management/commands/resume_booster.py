@@ -22,11 +22,12 @@ def booster():
 
     booster_ois = OrderItem.objects.filter(
         order__status__in=[1, 3], product__type_flow=7, oi_status__in=[0, 5, 61, 62])
-    booster_ois = booster_ois.select_related('order')
+    booster_ois = booster_ois.select_related('order').order_by('created')
     days = 7
     candidate_data = {}
     recruiter_data = {}
     candidate_list = []
+    item_emailoperation = []
 
     for oi in booster_ois:
         if oi.oi_status == 61:
@@ -54,11 +55,6 @@ def booster():
             oi.last_oi_status = 6
             oi.closed_on = timezone.now()
             oi.save()
-            oi.orderitemoperation_set.create(
-                oi_status=62,
-                last_oi_status=last_oi_status,
-                assigned_to=oi.assigned_to,
-            )
 
             oi.orderitemoperation_set.create(
                 oi_status=6,
@@ -85,6 +81,7 @@ def booster():
             )
             continue
 
+        item_emailoperation.append(oi)
         token = TokenExpiry().encode(oi.order.email, oi.pk, days)
         to_emails = [oi.order.get_email()]
         email_sets = list(oi.emailorderitemoperation_set.all().values_list(
@@ -154,7 +151,7 @@ def booster():
         recruiter_data.update({"data": candidate_list})
         if candidate_list != []:
             send_email_task.delay(recruiters, mail_type, recruiter_data)
-            for oi in booster_ois:
+            for oi in item_emailoperation:
                 oi.emailorderitemoperation_set.create(email_oi_status=92)
     except Exception as e:
         logging.getLogger('error_log').error("%s" % (str(e)))

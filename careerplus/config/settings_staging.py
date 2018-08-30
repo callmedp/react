@@ -1,4 +1,6 @@
 from .settings import *
+from .mongo.staging import *
+from pymongo.read_preferences import ReadPreference
 
 DEBUG = True
 IS_LIVE = False
@@ -45,6 +47,8 @@ DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
 
 ####### APPS SETTIMGS #################
 DJANGO_APPS = [
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -68,6 +72,10 @@ if DEBUG:
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     ]
     MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
+
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK" : lambda request: DEBUG and not request.GET.get('nodebug'),
+}
 
 #### CELERY SETTINGS ########
 BROKER_URL = 'redis://localhost:6379/0'
@@ -168,7 +176,7 @@ SYSLOG_ADDRESS = '/dev/log'
 # Following is to make sure logging works with mac machines 2
 if sys.platform == "darwin":
     SYSLOG_ADDRESS = "/var/run/syslog"
-LOGGING['handlers']['syslog']['address'] = SYSLOG_ADDRESS
+# LOGGING['handlers']['syslog']['address'] = SYSLOG_ADDRESS
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
@@ -285,6 +293,26 @@ EXCLUDE_SEARCH_PRODUCTS = LINKEDIN_RESUME_PRODUCTS
 
 # used for coupon generation for free feature product on payment realization
 FEATURE_PROFILE_PRODUCTS = [1939]
+
+
+for conn, attrs in MONGO_SETTINGS.items():
+    try:
+        if attrs.get('REPSET'):
+            connect(attrs['DB_NAME'], 
+                    host="mongodb://" + attrs['USERNAME'] + ":" + attrs['PASSWORD']  + "@" + attrs['HOST'],
+                    maxPoolSize=attrs['MAX_POOL_SIZE'],
+                    read_preference=ReadPreference.SECONDARY_PREFERRED,
+                    replicaSet=attrs['REPSET'],
+                    )
+        else:
+            connect(attrs['DB_NAME'], 
+                    host="mongodb://" + attrs['USERNAME'] + ":" + attrs['PASSWORD']  + "@" + attrs['HOST'] + "/?authSource=admin",
+                    maxPoolSize=attrs['MAX_POOL_SIZE']
+                    )    
+    except Exception as e:
+        logging.getLogger('error_log').error(" unable to connect to mongo %s" %repr(e))
+        continue
+
 
 try:
     from .settings_local import *

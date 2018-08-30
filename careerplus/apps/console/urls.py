@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 
 from .views import ConsoleLoginView, ConsoleDashboardView, ConsoleLogoutView, \
-    ConsoleForgotPasswordView, ConsolePasswordResetView
+    ConsoleForgotPasswordView, ConsolePasswordResetView, ConsoleAutoLoginView
 from . import shop_view, vendor_view, blog_view, order_view, refund_view,wallet_view
 from geolocation import adminviews
 
@@ -28,6 +28,7 @@ urlpatterns += [
     url(r'^logout/$', ConsoleLogoutView.as_view(), name='logout'),
     url(r'^forgot-password/$', ConsoleForgotPasswordView.as_view(), name='forgot-password'),
     url(r'^reset_password/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', ConsolePasswordResetView.as_view(),name='reset_password'),
+    url(r'^autologin/$', ConsoleAutoLoginView.as_view(), name='autologin')
 ]
 
 
@@ -37,6 +38,23 @@ urlpatterns += [
 #         order_view.SearchOrderView.as_view(),
 #         name='search-order'),
 # ]
+
+# url for skills
+urlpatterns += [
+
+    url(r'^skill/autocomplete/$',
+        shop_view.SkillAutocompleteView.as_view(),
+        name='skill-autocomplete'),
+    url(r'^skill/add/$',
+        shop_view.SkillAddView.as_view(),
+        name='skill-add'),
+    url(r'^skill/list/$',
+        shop_view.SkillListView.as_view(),
+        name='skill-list'),
+    url(r'^skill/change/(?P<pk>[\d]+)/$',
+        shop_view.SkillChangeView.as_view(),
+        name='skill-change'),
+]
 
 
 urlpatterns += [
@@ -110,14 +128,21 @@ urlpatterns += [
     url(r'^product/action/(?P<action>[\w-]+)/$',
         shop_view.ActionProductView.as_view(),
         name='product-action'),
-        
+    url(r'product-audit-history/$',
+        shop_view.ProductAuditHistoryView.as_view(),
+        name='product-audit-history'),
+
+    url(r'product-audit-history/download$',
+        shop_view.ProductHistoryLogDownloadView.as_view(),
+        name='product-audit-history-download'),
+
     url(r'^faq/list/$',
         shop_view.ListFaqView.as_view(),
         name='faq-list'),
     url(r'^faq/change/(?P<pk>[\d]+)/$',
         shop_view.ChangeFaqView.as_view(),
         name='faquestion-change'),
-        
+
     url(r'^keyword/add/$',
         shop_view.AddKeywordView.as_view(),
         name='keyword-add'),

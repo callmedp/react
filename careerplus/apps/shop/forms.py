@@ -743,7 +743,7 @@ class ProductCategoryForm(forms.ModelForm):
             self.fields['category'].queryset = queryset
 
         self.fields['category'].widget.attrs['class'] = form_class
-        self.fields['category'].required=True        
+        self.fields['category'].required = True
         self.fields['prd_order'].widget.attrs['class'] = form_class
         self.fields['cat_order'].widget.attrs['class'] = form_class
         self.fields['active'].widget.attrs['class'] = 'js-switch'

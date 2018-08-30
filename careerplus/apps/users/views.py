@@ -25,9 +25,8 @@ from core.mixins import TokenExpiry, TokenGeneration
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCPInvoiceStorage
 from order.models import OrderItem
 from users.mixins import WriterInvoiceMixin,UserGroupMixin
-
+from users.models import User
 from emailers.tasks import send_email_task
-
 
 
 from .forms import (
@@ -597,7 +596,7 @@ class DownloadMonthlyWriterInvoiceView(UserGroupMixin,TemplateView):
     template_name = "invoice/invoice_monthly_download.html"
     month = []
     path = "invoice/user/"
-    group_name = ['WRITER']
+    group_names = ['WRITER']
 
 
 
@@ -651,3 +650,29 @@ class DownloadMonthlyWriterInvoiceView(UserGroupMixin,TemplateView):
                 'error_log').error(
                 'writer invoice download error - ' + str(e))
         return HttpResponseRedirect(reverse('console:dashboard'))
+
+
+class UserLoginTokenView(View):
+    template_name = 'admin/users/autologin.html'
+    login_url = None
+
+    def get(self, request, *args, **kwargs):
+        has_permission = request.user.is_superuser
+        return render(request, self.template_name, {'has_permission': has_permission})
+
+    def post(self, request, *args, **kwargs):
+        has_permission = request.user.is_superuser
+        email = request.POST.get('email')
+        if User.objects.filter(email=email).exists():
+            token = TokenGeneration().encode(email, 2, 1)
+            self.login_url = 'http://' + settings.SITE_DOMAIN + reverse('console:autologin') + '?token=' + token
+
+        else:
+            messages.add_message(
+                self.request, messages.ERROR,
+                "Provided Email Does Not Exist"
+            )
+        return render(
+            request, self.template_name,
+            {'has_permission': has_permission, 'login_url': self.login_url}
+        )

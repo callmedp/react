@@ -108,7 +108,11 @@ $(document).ready(function() {
 	$(".article-slider").slick({
 		autoplay:false,
 		arrows: false,
-		dots: true
+		dots: false,
+		variableWidth: true,
+		slidesToShow: 2,
+		slidesToScroll: 1,
+		infinite: true
 	});
 
 	$(".contributors").slick({

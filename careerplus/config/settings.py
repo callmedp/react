@@ -1,5 +1,16 @@
+#python imports
+
+#django imports
+
+#local imports
 from .base_settings import *  # noqa
 from .celery import *
+
+#inter app imports
+
+#third party imports
+from pymongo import read_preferences
+from mongoengine import connect
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,20 +48,22 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
-    'oldDB': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'shinecp',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': '',
-        'PORT': '',
-    },
+    # 'oldDB': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'shinecp',
+    #     'USER': 'root',
+    #     'PASSWORD': 'root',
+    #     'HOST': '',
+    #     'PORT': '',
+    # },
 }
 
 DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
 
 ######### Apps specific for this project go here. ###########
 DJANGO_APPS = [
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -76,6 +89,9 @@ DEV_MIDDLEWARE = [
 ]
 MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
 
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK" : lambda request: DEBUG and not request.GET.get('nodebug'),
+}
 
 #### CELERY SETTINGS ########
 BROKER_URL = 'redis://localhost:6379/0'

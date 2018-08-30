@@ -449,6 +449,50 @@
 		  	
 	  };
 
+
+	   function init_skill_add() {
+	  	if($('#add-skill-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+		  	$('#add-skill-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};	  
+	  	
+	  };
+
+	  function init_skill_change() {
+
+	  	if($('#change-skill-form').length > 0){
+	  		var parsleyConfig = {
+		        errorsContainer: function(parsleyField) {
+		            var $errfield = parsleyField.$element.parent().siblings('.alert');
+		            return $errfield;
+		        },
+		    };
+			
+	  		$('#change-skill-form').parsley(parsleyConfig).on('field:validated', function() {
+				if (this.validationResult === true) {
+			      this.$element.closest('.item').removeClass('bad');
+
+			    } else {
+			      this.$element.closest('.item').addClass('bad');
+			    }
+			});
+		};	  
+	  	
+	  };
+
 	  function init_category_add() {
 	  	if($('#add-category-form').length > 0){
 	  		var parsleyConfig = {
@@ -886,6 +930,9 @@
 		init_category_seo_change();
 		init_category_relation_change();
 		init_category_skill_change();
+
+		init_skill_add();
+		init_skill_change();
 		
 		init_tree_cat();
 		init_faq_add();
