@@ -18,6 +18,7 @@
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/skill/skill.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/shop/course-detail.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 {% block header %}
@@ -210,6 +211,7 @@
     {{block.super}}
     {% compress js %}
     <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}
 

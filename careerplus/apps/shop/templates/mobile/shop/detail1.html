@@ -8,12 +8,16 @@
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/shop/course-detail.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/smk-accordion.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     {% endcompress css %}
         <style>
             a[disabled], a[disabled]:hover {
                pointer-events: none;
                color: #e1e1e1;
             }
+            /*div[data-test-id="ChatWidgetMobileButton"]{
+                display: none !important;
+            }*/
         </style>
 {% endblock css_section %}
 {% block title %}
@@ -330,6 +334,7 @@
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/shop/detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     {% endcompress %}
     <script type="text/javascript">
         $(document).ready(function(){
@@ -342,9 +347,19 @@
         })
         
     </script>
+  <!--script tyep="text/javascript">
+   $(document).ready(function(){ 
+        $(document).on( "click", '.ui-block-c', function(e){
+            $zopim.livechat.window.show();
+        })
+    });
+  </script-->
 {% endblock js_section %}
+
 
 {% if sqs.id in linkedin_resume_services %}
   {% block johukum %}
   {% endblock johukum %}
 {% endif %}
+
+
