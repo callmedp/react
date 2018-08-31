@@ -11,10 +11,13 @@ from django.core.exceptions import ValidationError
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
+from django.db.models.signals import post_save
 
 from ckeditor.fields import RichTextField
 from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
+from mongoengine import Document, ListField, FloatField,\
+    StringField, IntField, DateTimeField
 
 from partner.models import Vendor
 from faq.models import (
@@ -969,6 +972,7 @@ class Product(AbstractProduct, ModelMeta):
         super(Product, self).__init__(*args, **kwargs)
         if self.product_class:
             self.attr = ProductAttributesContainer(product=self)
+        self.initialize_variables()
 
     def __str__(self):
         if self.pk:
@@ -977,6 +981,19 @@ class Product(AbstractProduct, ModelMeta):
             else:
                 return self.name + ' - (' + str(self.pk) + ')'
         return self.name
+
+    def initialize_variables(self):
+        self.original_duration = self.get_duration_in_day() if self.get_duration_in_day() else -1
+        if self.id:
+            self.original_variation_name = [str(var) for var in self.variation.all()] if self.variation.all() else ['N.A']
+        else:
+            self.original_variation_name = ['N.A']
+        self.original_product_id = self.id
+        self.original_upc = self.upc
+        self.original_price = float(self.inr_price)
+        self.original_vendor_name = self.get_vendor()
+        self.original_product_name = self.name
+
 
     def save(self, *args, **kwargs):
         if self.pk:
@@ -995,6 +1012,7 @@ class Product(AbstractProduct, ModelMeta):
                 for var in variations:
                     var.vendor = self.vendor
                     var.save()
+        self.title = self.get_title()
         super(Product, self).save(*args, **kwargs)
         if getattr(self, 'attr', None):
             self.attr.save()
@@ -1502,6 +1520,31 @@ class Product(AbstractProduct, ModelMeta):
     def get_canonical_url(self):
         return self.get_absolute_url()
 
+    @classmethod
+    def post_save_product(cls, sender, instance, **kwargs):
+        from .tasks import add_log_in_product_audit_history
+        duration = instance.get_duration_in_day() if instance.get_duration_in_day() else -1
+        variation_name = [str(var) for var in instance.variation.all()] if instance.variation.all() else ['N.A']
+
+        if (instance.original_duration != duration or instance.original_variation_name != variation_name \
+                or instance.original_price != float(instance.inr_price) or instance.original_upc != instance.upc or
+                instance.original_vendor_name != instance.get_vendor() or
+                instance.original_product_name != instance.name):
+            instance.initialize_variables()
+            data = {
+                "product_id": instance.id,
+                "upc": instance.upc,
+                "price": float(instance.inr_price),
+                "vendor_name": instance.get_vendor(),
+                "product_name": instance.name,
+                "duration": duration,
+                "variation_name": variation_name
+            }
+            add_log_in_product_audit_history.delay(**data)
+
+
+post_save.connect(Product.post_save_product, sender=Product)
+
 
 class ProductScreen(AbstractProduct):
     product_class = models.ForeignKey(
@@ -1639,7 +1682,6 @@ class ProductScreen(AbstractProduct):
             return True
         else:
             return False
-
 
 
 # class ProductArchive(AbstractProduct):
@@ -2288,11 +2330,19 @@ class Skill(AbstractAutoDate, ModelMeta):
         ordering = ("-modified", "-created")
         get_latest_by = 'created'
 
+    def __str__(self):
+        return self.name + ' - ' + str(self.id)
+
     def get_products(self):
         products = self.skillproducts.filter(
             active=True,
             productskills__active=True)
         return products
+
+    def get_active(self):
+        if self.active:
+            return 'Active'
+        return 'Inactive'
 
 
 class ProductSkill(AbstractAutoDate):
@@ -2309,7 +2359,58 @@ class ProductSkill(AbstractAutoDate):
     priority = models.PositiveIntegerField(default=1)
     active = models.BooleanField(default=True)
 
+    def __str__(self):
+        name = '{} - ({}) to {} - ({})'.format(
+            self.skill.name, self.skill_id,
+            self.product.get_name, self.product_id)
+        return name
+
     class Meta:
         unique_together = ('product', 'skill')
         verbose_name = _('Product Skill')
         verbose_name_plural = _('Product Skills')
+
+
+class ScreenProductSkill(AbstractAutoDate):
+    skill = models.ForeignKey(
+        Skill,
+        verbose_name=_('Skill'),
+        related_name='screenskills',
+        on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        ProductScreen,
+        verbose_name=_('Product'),
+        related_name='screenskills',
+        on_delete=models.CASCADE)
+    priority = models.PositiveIntegerField(default=1)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        name = '{} - ({}) to {} - ({})'.format(
+            self.skill.name, self.skill_id,
+            self.product.name, self.product_id)
+        return name
+
+    class Meta:
+        unique_together = ('product', 'skill')
+        verbose_name = _('Product Skill')
+        verbose_name_plural = _('Product Skills')
+
+
+class ProductAuditHistory(Document):
+    product_id = IntField(required=True, db_field='pid')
+    product_name = StringField(required=True, db_field='pn')
+    variation_name = ListField(required=True, db_field='varn', default='N.A')
+    upc = StringField(required=True, db_field='upc')
+    price = FloatField(required=True, db_field='p')
+    duration = IntField(required=True, db_field='dur', default=0)
+    vendor_name = StringField(required=True, db_field='vn')
+    created_at = DateTimeField(required=True, db_field='crt', default=datetime.now)
+
+    meta = {
+        'collection': 'ProductAuditHistory',
+        'allow_inheritance': False,
+        'indexes': [
+            'product_id',
+        ]
+    }

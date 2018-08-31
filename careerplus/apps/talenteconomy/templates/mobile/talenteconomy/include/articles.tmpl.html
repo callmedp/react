@@ -6,12 +6,12 @@
     <figure class="media-left">
       {% thumbnail articlelist.image "96x73" crop="center" as im %}
       {% if amp %}
-      <amp-img 
-        class="media-object" 
-        width="{{ im.width }}" 
-        height="{{ im.height }}" 
-        src="{{articlelist.image.url}}" 
-        alt="{{articlelist.image_alt}}" 
+      <amp-img
+        class="media-object"
+        width="{{ im.width }}"
+        height="{{ im.height }}"
+        src="{{articlelist.image.url}}"
+        alt="{{articlelist.image_alt}}"
         itemprop="image">
       </amp-img>
       {% else %}
@@ -41,14 +41,14 @@
   <meta itemprop="headline" content="{{articlelist.heading}}">
   <meta itemprop="dateModified" content="{{articlelist.publish_date.date}}">
   <meta itemprop="mainEntityOfPage" content="{% url 'talent:talent-landing' %}">
-  
+
   <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" >
     <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
       <meta itemprop="url" content="{% static 'shinelearn/images/logo.png' %}">
     </div>
     <meta itemprop="name" content="Shine">
   </div>
-  
+
 </div>
 {% endfor %}
 <!-- <a href="/category.html" class="blue-link fs-14 text-right block">View all articles</a> -->

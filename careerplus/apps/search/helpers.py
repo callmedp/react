@@ -170,14 +170,14 @@ def get_ngrams(words_list,ngram):
     while counter+ngram <= end:
         word = slugify(" ".join(words_list[counter:counter+ngram]))
         if word:
-            semantic_entity = None #redis_server.get(word)
+            semantic_entity = None # redis_server.get(word)
             if semantic_entity:
                 words_to_pop.append(word)
                 value = ast.literal_eval(semantic_entity.decode('utf-8') if isinstance(semantic_entity, bytes)
                                          else semantic_entity)
                 value.append(word)
                 ngrams.append(value)
-                counter = counter+ngram
+                counter = counter + ngram
                 continue
         counter += 1
     return words_to_pop, ngrams
@@ -352,19 +352,22 @@ def get_recommendations(func_area, skills, results=None):
     if not func_area:
         func_area = 23
     if not skills:
-        skills = [777, 795, 2064]
+        # skills = [777, 795, 2064]
+        skills = []
 
-    func_area_prods = set(ProductFA.objects.filter(fa=func_area).values_list('product', flat=True))
-    skill_prods = set(ProductSkill.objects.filter(skill__in=skills).values_list('product', flat=True))
-    products_fa_and_skill = func_area_prods.intersection(skill_prods)
-    ids = list(products_fa_and_skill)
-    ids += list(skill_prods.difference(products_fa_and_skill))
-    ids += list(func_area_prods.difference(products_fa_and_skill))
-    if ids:
+    # func_area_prods = set(ProductFA.objects.filter(fa=func_area).values_list('product', flat=True))
+    # skill_prods = set(ProductSkill.objects.filter(skill__in=skills).values_list('product', flat=True))
+    # products_fa_and_skill = func_area_prods.intersection(skill_prods)
+    # ids = list(products_fa_and_skill)
+    # ids += list(skill_prods.difference(products_fa_and_skill))
+    # ids += list(func_area_prods.difference(products_fa_and_skill))
+
+    # skills = ['244', '310', '4', '10', '320', '389', '3827', '3824']
+    if skills:
         if not results:
             results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only('pTt pURL pHd pARx pNJ pImA pImg pStar pNm pBC pRC')
-        results = results.narrow('id:(%s)' % ' '.join([str(pid) for pid in ids]))
+        # results = results.narrow('id:(%s)' % ' '.join([str(pid) for pid in ids]))
+        results = results.filter(pSkill__in=skills, pPc=settings.COURSE_SLUG[0])
     else:
         results = EmptySearchQuerySet()
     return results
-

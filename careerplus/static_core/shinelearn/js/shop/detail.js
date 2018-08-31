@@ -67,7 +67,7 @@ function feedback_submit(formData){
   var flag = $('#feedback-form').valid();
   var rating_flag = false;
   $('input[name="rating"]').each(function () {
-      if ($(this).is(':checked')){
+      if ($(this).prop('checked')==true){
           rating_flag = true;
       }
   });

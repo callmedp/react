@@ -2,6 +2,7 @@
 
 #django imports
 from django.views.generic import TemplateView
+from django.http.response import HttpResponsePermanentRedirect
 
 #local imports
 
@@ -24,6 +25,20 @@ class MarketingPages(TemplateView):
         return {"alt_email":decoded_tuple[0],
                 "alt_name":decoded_tuple[1],
                 "alt_contact":decoded_tuple[2]}
+
+    def get(self, request, *args, **kwargs):
+        redirect_mapping = {
+                            "/digital-marketing":"/online-marketing",
+                            "/gst-cert":"/gst-certification",
+                            "/pmp-cert":"/pmp-certification",
+                            "/data-science-certification":"/data-science-cert",
+                            "/resume-writing":"/resume-writing-services"
+                            }
+
+        redirect_path = redirect_mapping.get(self.request.path)
+        if redirect_path:
+            return HttpResponsePermanentRedirect(redirect_path)
+        return super(MarketingPages, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(MarketingPages, self).get_context_data(**kwargs)

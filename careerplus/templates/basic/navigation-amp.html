@@ -1,6 +1,11 @@
 {% load static %}
 <amp-sidebar id="sidebar-left" layout="nodisplay" side="left">
       <div class="login_wrap non_login w100fl">
+          <div class="navbar-header" itemscope itemtype="http://schema.org/Organization" >
+            <a class="navbar-brand" href="{% url "homepage" %}"></a>
+            <meta itemprop="name" content="Shine">
+            <meta itemprop="url" content="https://learning.shine.com"/>
+          </div>
           <div class="login_content">
               <div class="user_details">
                   <div class="media">
