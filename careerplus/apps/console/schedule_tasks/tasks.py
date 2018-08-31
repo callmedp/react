@@ -230,6 +230,8 @@ def gen_auto_login_token_task(task=None, user=None, next_url=None, exp_days=None
 
 @task(name="generate_encrypted_urls_for_mailer_task")
 def generate_encrypted_urls_for_mailer_task(task_id=None,user=None):
+    time.sleep(5) # Wait for DB changes to reflect
+
     scheduler_obj = Scheduler.objects.get(id=task_id)
     upload_path = scheduler_obj.file_uploaded.name
     gen_dir = os.path.dirname(upload_path)
