@@ -28,6 +28,7 @@
     {% compress css %}
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/blog/blog.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 
@@ -117,6 +118,10 @@
     </div>
 </div>
 
+{% block call_us %}
+  {% include "shop/partials/call_us.html" %}
+{% endblock call_us %}
+
 {% endblock container %}
 
 
@@ -126,6 +131,7 @@
     <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     {% endcompress %}
     {% compress js inline %}
         <script>

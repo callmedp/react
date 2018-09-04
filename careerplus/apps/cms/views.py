@@ -199,6 +199,7 @@ class CMSPageView(DetailView, LoadMoreMixin):
             'country_choices': country_choices,
             'initial_country': initial_country,
         })
+        context['show_chat'] = True
         context.update({
             "loginform": ModalLoginApiForm(),
             "registerform": ModalRegistrationApiForm(),
