@@ -45,3 +45,30 @@ class LoginTokenGenerateForm(forms.Form):
                 raise forms.ValidationError(
                     "file is too large ( > 5mb ).")
         return file
+
+
+class EncryptedURLSGenerateForm(forms.Form):
+    file = forms.FileField(
+        label=("File"),
+        max_length=200, required=True,
+        widget=forms.FileInput(attrs={
+            'class': 'form-control'}))
+
+    def clean_file(self):
+        file = self.files.get('file', '')
+        if not file:
+            raise forms.ValidationError(
+                "file is required.")
+        elif file:
+            name = file.name
+            extn = name.split('.')[-1]
+            if extn not in ['csv', ]:
+                raise forms.ValidationError(
+                    "only csv formats are allowed.")
+            elif file.size > 5 * 1024 * 1024:
+                raise forms.ValidationError(
+                    "file is too large ( > 5mb ).")
+        return file
+
+
+

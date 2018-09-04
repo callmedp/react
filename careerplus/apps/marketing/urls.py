@@ -1,12 +1,29 @@
-from django.conf.urls import url
+#python imports]
 
+#django imports
+from django.conf.urls import url
+from django.views.generic import RedirectView
+from django.core.urlresolvers import reverse_lazy
+
+#local imports
 from . import views as marketing_views
 
+#inter app imports
+
+#third party imports
+
+redirect_url_mapping = {
+                        "digital-marketing":"digital-marketing",
+                        "gst-cert":"gst-certification",
+                        "pmp-cert":"pmp-cert",
+                        "data-science-certification":"data-science-certification",
+                        "resume-writing":"resume-writing"
+                        }
 
 urlpatterns = [
 
     #  marketing urls
-    url(r'^gst-cert$',
+    url(r'^gst-certification$',
         marketing_views.MarketingPages.as_view(),
         name='gst-cert'),
 
@@ -18,7 +35,7 @@ urlpatterns = [
         marketing_views.MarketingPages.as_view(),
         name='six-sigma-cert'),
 
-    url(r'^pmp-cert$',
+    url(r'^pmp-certification$',
         marketing_views.MarketingPages.as_view(),
         name='pmp-cert'),
 
@@ -30,7 +47,7 @@ urlpatterns = [
         marketing_views.MarketingPages.as_view(),
         name='digital-marketing-certification'),
 
-    url(r'^data-science-certification$',
+    url(r'^data-science-cert$',
         marketing_views.MarketingPages.as_view(),
         name='data-science-certification'),
 
@@ -42,11 +59,11 @@ urlpatterns = [
         marketing_views.MarketingPages.as_view(),
         name='six-sigma-green-belt'),
 
-    url(r'^resume-writing$',
+    url(r'^resume-writing-services$',
         marketing_views.MarketingPages.as_view(),
         name='resume-writing'),
 
-    url(r'^digital-marketing$',
+    url(r'^online-marketing$',
         marketing_views.MarketingPages.as_view(),
         name='digital-marketing'),
 
@@ -61,4 +78,7 @@ urlpatterns = [
     url(r'^data-science',
         marketing_views.MarketingPages.as_view(),
         name='data-science'),
-]
+] + [url(r'^%s$' %key, marketing_views.MarketingPages.as_view()) \
+        for key,value in redirect_url_mapping.items()]
+
+

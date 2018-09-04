@@ -12,6 +12,7 @@ TASK_TYPE = (
     (2, 'Upload Certificate'),
     (3, 'Upload Candidate Certificate'),
     (4, 'Generate Product  List'),
+    (5, 'Encrypted URLs for Mailer')
 )
 
 TASK_STATUS = (

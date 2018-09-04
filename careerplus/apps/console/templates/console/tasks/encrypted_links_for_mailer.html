@@ -1,0 +1,129 @@
+{% extends "console/base_console.html" %}
+{% load static compress %}
+{% load humanize %}
+
+{% block title %}
+  <title>Encrypted URLs Generation Task</title>
+{% endblock title %}
+
+
+{% block css_block %}
+    {{block.super}} 
+{% endblock css_block %}
+
+
+
+{% block pagecontent %}
+        <!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>&nbsp;</h3>
+
+        
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        {% if messages %}
+            {% for message in messages %}
+
+              <div{% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+              {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+      </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Add Encrypted URLs Task<small></small></h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            {% if form %}
+            <form class="form-horizontal form-label-left" novalidate data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="id-token-gen-form">{% csrf_token %}
+              {{form.media}}
+              <fieldset>
+                    {% for field in form %}
+                        {% if field.errors %}
+                            <div class="form-group error">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}</label> 
+                                <div class="col-md-6 col-sm-6 col-xs-12">{{ field }}
+                                    <p class="text-danger">
+                                        {% for error in  field.errors %}{{ error }}{% endfor %}
+                                    </p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}</label> 
+
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                        <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <br/>
+                    {% endfor %}
+                </fieldset>
+              
+              <div class="form-group">
+                <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                  <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+              </div>
+              
+            </form>
+            {% endif %}
+            <hr>
+            <div class="table-responsive">
+                csv file's column contains:
+                <table class="table table-striped">
+                  <thead>
+                    <tr class="headings">
+                      <th class="column-title">email</th>
+                      <th class="column-title">name</th>
+                      <th class="column-title">contact</th>
+                    </tr>
+                  </thead>
+                </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        <!-- /page content -->
+{% endblock pagecontent %}
+
+        
+{% block js_block %}
+  {{ block.super }}
+
+  {% compress js %}
+  <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static "packages/parsleyjs/parsley.min.js" %}"></script>
+
+  <script type="text/javascript" src="{% static "console/js/tasks/auto-login-token.js" %}"></script>
+
+  {% endcompress %}
+
+{% endblock js_block %}

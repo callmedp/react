@@ -1,12 +1,12 @@
 {% extends "mobile/basic/base.html" %}
 {% load static compress %}
-{% load thumbnail compress %}
+{% load thumbnail %}
 
 {% block django_meta %}
     {% include 'meta/meta.html' %}
 {%  endblock django_meta %}
 {% block canonical_url %}
-  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
 {% endblock canonical_url %}
 
 {% block title %}
@@ -96,12 +96,15 @@
     <!-- Talent Economy starts here -->
 
     <!-- box panel starts here -->
+       {% if article_list %}
     <div class="box-panel row " itemscope itemtype="https://schema.org/ItemList">
       <h2 class="semi-head">Recently Added</h2>
+                <div id="list-container-id">
+                    {{article_list}}
+                </div>
 
-      {% include './include/articles.tmpl.html' with articlelists=article_list %}
+         {% endif %}
 
-    </div>
     <!-- box panel ends here -->
     
     {% if popular_courses %}
@@ -127,6 +130,7 @@
 {% block js_section %}
     {{block.super}}
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
+    <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     <script>
         $(function() {

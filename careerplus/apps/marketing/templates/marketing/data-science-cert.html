@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>PMP Certification - Shine Learning</title>
+    <title>Courses Landing Page - Shine Learning</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
     <!-- Bootstrap -->
     <link href="{% static 'shinelearn/css/marketing/custom_bootstrap.css' %}" rel="stylesheet" type="text/css" />
@@ -27,10 +27,11 @@
       ga('create', 'UA-3537905-41', 'auto');
       ga('send', 'pageview');
     </script>
+    
   </head>
   <body>
     <!-- header -->
-    <header class="container-fluid pmp-bg">
+    <header class="container-fluid ds-bg">
       <div class="row">
         <div class="container">
           <div class="row">
@@ -46,22 +47,20 @@
             </div>
 
             <!-- content & punchline -->
-            <div class="col-xs-12 col-sm-7 col-md-5 col-lg-6 header-content header-content-pmp">
-              <h1><strong>Don’t let appraisals bog you down<br></strong><br> Get promotion ready with PMP Certification</h1>
-
+            <div class="col-xs-12 col-sm-7 col-md-5 col-lg-6 header-content">
+              <h1><strong>Become a</strong> Data Scientist Master</h1>
               <div class="hidden-xs header-txt">
                 <ul>
-                  <li>Achieve 35 PDUs offered.</li>
-                  <li>35+ hours of instructor led online training.</li>
-                  <li>29 hours of high quality e-learning content by industry experts </li>
+                  <li>Industry Recommended Learning path to succeed in the field of Analytics</li>
+                  <li>350+ Hours of Online & Instructor Led Training</li>
                 </ul>
-                <div class="punch-line">Your Journey to become Project Management Certified begins today!</div>
+                <div class="punch-line">Your Journey to become a successful Data Scientist begins today !</div>
               </div>
             </div>
 
             <!-- girl -->
             <div class="hidden-xs hidden-sm col-md-3 men-pic">
-              <img src="{% static 'shinelearn/images/marketing/pmp-g.png' %}" alt="Shinelearning" class="img-responsive">
+              <img src="{% static 'shinelearn/images/marketing/men.png' %}" alt="Shinelearning" class="img-responsive">
             </div>
 
             <!-- enquiry form -->
@@ -71,21 +70,21 @@
                 <strong>Let’s get started</strong>
                 <div class="form-group">
                   <input type="text" class="form-control" id="name" 
-                  placeholder="Your Full Name" name="name">
+                  placeholder="Your Full Name" name="name" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %}>
                   <label class="error-txt js-error"></label>
                 </div>
                 <div class="form-group">
                   <input type="text" class="form-control" id="email" 
-                  placeholder="Email Address" name="email">
+                  placeholder="Email Address" name="email" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %}>
                   <label class="error-txt js-error"></label>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" id="mobile" placeholder="Mobile Number" name="number">
+                  <input type="text" class="form-control" id="mobile" placeholder="Mobile Number" name="number" value={% if alt_contact %} "{{alt_contact}}" {% endif %}>
                   <label class="error-txt js-error"></label>
                 </div>
                 <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
 
-                <input type="hidden" name="prd" value="PMP Certification">
+                <input type="hidden" name="prd" value="Data Science Certification">
 
                 <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 
@@ -102,13 +101,11 @@
             </div>
 
             <!-- content repeat for mobile device -->
-            <div class="col-xs-12 col-sm-6 visible-xs mt-20 mb-30 header-txt">
+            <div class="col-xs-12 col-sm-6 visible-xs mt-20 mb-30 header-txt">Your Journey to become a successful Data Scientist begins today !
               <ul>
-                  <li>Achieve 35 PDUs offered.</li>
-                  <li>35+ hours of instructor led online training.</li>
-                  <li>29 hours of high quality e-learning content by industry experts </li>
+                <li>Industry Recommended Learning path to succeed in the field of Analytics</li>
+                <li>350+ Hours of Online & Instructor Led Training</li>
               </ul>
-              <div class="punch-line">Your Journey to become Project Management Certified begins today!</div>
             </div>
 
           </div>
@@ -127,22 +124,29 @@
             <h2>Course Highlights</h2>
             <ul>
               <li>
-                <strong>8 industry case studies, 20 industry-based scenarios</strong>
-                Acquire hands-on knowledge and expertise!</li>
-              <li>
-                <strong>6 hands-on projects, 7 simulation test papers</strong>
-                Gain confidence to ace the certification exams!
+                <strong>150+ Hours of Live Instructor Led Online Classes by Industry Expert.</strong>
               </li>
               <li>
-                <strong>Achieve 35 PDUs offered </strong>
-                Get PDUs which will help in maintaining your credentials &amp; take PMP certification exam.</li>
-              <li>
-                <strong>Expert Trainers</strong>
-                Get trained by PMP certified trainers with 15+ years of experience</li>
-              <li>
-                <strong>100% Money Back Guarantee</strong>
+                <strong>Execute 17+ Real Life Projects on CloudLab. </strong>
               </li>
-             
+              <li>
+                <strong>Hands on learning on 50+ tools including R, Python, SAS, Excel, Hadoop, HBase, Apache Spark, Scala, Pig, Hive, etc.</strong>
+              </li>
+              <li>
+                <strong>Work on industry based projects on different domains like Retail, Banking, Insurance, Stock Market, Healthcare, Engineering, etc.</strong>
+              </li>
+              <li>
+                <strong>Industry-relevant course curriculum, with applications in multiple domains taught by highly experienced Subject Matter Experts (SMEs)</strong>
+              </li>
+              <li>
+                <strong>Differentiate yourself with an Industry recognized Masters Certificate</strong>
+              </li>
+              <li>
+                <strong>GTA Technical, Project, Programming support by industry experts</strong>
+              </li>
+              <li>
+                <strong>Course Advisor – Ronald van Loon </strong>
+              </li>
             </ul>
           </div>
 
@@ -151,18 +155,19 @@
             <h2>Who should attend?</h2>
             <ul>
               <li>
-               Project Managers
-              </li>
-              <li>Associate/Assistant Project Managers
+                Any professional from Business Analytics/ Business Intelligence background.
               </li>
               <li>
-             Team Leads/Team Managers
+                Engineering or Non-Engineering aspirants wanting to become a Data Scientist.
               </li>
               <li>
-               Project Executives/Project Engineers
+                Managers from Analytical background and those who are leading a team of Analysts.
               </li>
               <li>
-                Software Developers
+                Any Data Analyst or Software Developer aspiring to be a Data Scientist.
+              </li>
+              <li>
+                Professionals wanting to build machine learning models, using distributed storage and distributed processing.
               </li>
             </ul>
           </div>
@@ -173,126 +178,184 @@
           <h2>Course Preview</h2>
           <div class="panel-group course-preview" id="accordion" role="tablist" aria-multiselectable="true">
             <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingOne">
+              <div class="panel-heading" role="tab" id="headingOne">
                 <h4 class="panel-title">
-                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                    Professional and Social Responsibility</a>
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Data Science with SAS Training
+                  </a>
                 </h4>
               </div>
-
+              <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                  <ul>
+                    <li>Course Introduction</li>
+                    <li>Analytics Overview</li>
+                    <li>Introduction to SAS</li>
+                    <li>Combining and Modifying Datasets</li>
+                    <li>PROC SQL</li>
+                    <li>SAS Macros</li>
+                    <li>Basics of Statistics</li>
+                    <li>Statistical Procedures</li>
+                    <li>Data Exploration</li>
+                    <li>Advanced Statistics</li>
+                    <li>Working with Time Series Data</li>
+                    <li>Designing Optimization Models</li>
+                  </ul>
+                </div>
+              </div>
             </div>
             <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingTwo">
+              <div class="panel-heading" role="tab" id="headingTwo">
                 <h4 class="panel-title">
                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    Project Management Framework</a>
+                    Data Science Certification Training – R Programming
+                  </a>
                 </h4>
               </div>
-              
+              <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body">
+                  <ul>
+                    <li>Introduction to Business Analytics  </li>
+                    <li>Introduction to R </li>
+                    <li>R Programming </li>
+                    <li>R Data Structure  </li>
+                    <li>Apply Functions </li>
+                    <li>Data Visualization  </li>
+                    <li>Introduction to Statistics  </li>
+                    <li>Hypothesis Testing I  </li>
+                    <li>Hypothesis Testing II </li>
+                    <li>Regression Analysis </li>
+                    <li>Classification  </li>
+                    <li>Clustering  </li>
+                    <li>Association </li>
+                  </ul>
+                </div>
+              </div>
             </div>
             <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingThree">
+              <div class="panel-heading" role="tab" id="headingThree">
                 <h4 class="panel-title">
                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    Project Management Processes</a>
+                    Big Data Hadoop and Spark Developer
+                  </a>
                 </h4>
               </div>
-              
+              <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                <div class="panel-body">
+                  <ul>
+                    <li>Course Introduction </li>
+                    <li>Introduction to Big data and Hadoop Ecosystem </li>
+                    <li>HDFS and YARN </li>
+                    <li>MapReduce and Sqoop </li>
+                    <li>Basics of Hive and Impala </li>
+                    <li>Working with Hive and Impala  </li>
+                    <li>Types of Data Formats </li>
+                    <li>Advanced Hive Concept and Data File   </li>
+                    <li>Apache Flume and HBase  </li>
+                    <li>Pig </li>
+                    <li>Basics of Apache Spark  </li>
+                    <li>RDDs in Spark </li>
+                    <li>Implementation of Spark Applications  </li>
+                    <li>Spark Parallel Processing </li>
+                    <li>Spark RDD Optimization Techniques </li>
+                    <li>Spark Algorithm </li>
+                    <li>Spark SQL </li>
+                    <li>Simulation Test Paper Instructions  </li>
+                  </ul>
+                </div>
+              </div>
             </div>
             <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingFour">
+              <div class="panel-heading" role="tab" id="headingFour">
                 <h4 class="panel-title">
                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                    Project Integration Management</a>
+                    Data Science with Python
+                  </a>
                 </h4>
-              </div>              
+              </div>
+              <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                <div class="panel-body">
+                  <ul>
+                    <li>Course Overview </li>
+                    <li>Data Science Overview </li>
+                    <li>Data Analytics Overview </li>
+                    <li>Statistical Analysis and Business Applications  </li>
+                    <li>Python Environment Setup and Essentials </li>
+                    <li>Mathematical Computing with Python  </li>
+                    <li>Scientific computing with Python (Scipy)  </li>
+                    <li>Data Manipulation with Pandas </li>
+                    <li>Machine Learning with Scikit–Learn  </li>
+                    <li>Natural Language Processing with Scikit </li>
+                    <li>Data Visualization in Python  </li>
+                    <li>Web Scraping with BeautifulSoup </li>
+                    <li>Python integration with Hadoop  </li>
+                  </ul>
+                </div>
+              </div>
             </div>
-        
-        <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingFive">
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingFive">
                 <h4 class="panel-title">
                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                   Project Scope Management</a>
+                    Business Analytics with Excel
+                  </a>
                 </h4>
-              </div>              
+              </div>
+              <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+                <div class="panel-body">
+                  <ul>
+                    <li>Introduction  </li>
+                    <li>Introduction to Business Analytics  </li>
+                    <li>Formatting Conditional Formatting and Logical Functions </li>
+                    <li>Analyzing Data with Pivot Tables  </li>
+                    <li>Dashboarding  </li>
+                    <li>Business Analytics With Excel </li>
+                    <li>Data Analysis Using Statistics  </li>
+                    <li>Power BI  </li>
+                  </ul>
+                </div>
+              </div>
             </div>
-        
-        
-        <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingSix">
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingSix">
                 <h4 class="panel-title">
                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                   Project Schedule Management</a>
+                    Apache Kafka
+                  </a>
                 </h4>
-              </div>              
+              </div>
+              <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+                <div class="panel-body">
+                  <ul>
+                    <li>Course introduction </li>
+                    <li>Big Data Overview </li>
+                    <li>Introduction to Zookeeper </li>
+                    <li>Introduction to Kafka </li>
+                    <li>Installation and Configuration  </li>
+                    <li>Kafka Interfaces  </li>
+                  </ul>
+                </div>
+              </div>
             </div>
-        
-        
-        <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingSeven">
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingSeven">
                 <h4 class="panel-title">
                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
-                   Project Cost Management </a>
+                    Electives(Optional)
+                  </a>
                 </h4>
-              </div>              
+              </div>
+              <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+                <div class="panel-body">
+                  <ul>
+                    <li>Certified SAS Base Programmer</li>
+                    <li>Introduction to Big Data and Hadoop</li>
+                    <li>Python Basics</li>
+                    <li>Java essentials for hadoop training</li>
+                  </ul>
+                </div>
+              </div>
             </div>
-        
-        <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingEight">
-                <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
-                    Project Quality Management </a>
-                </h4>
-              </div>              
-            </div>
-        
-         <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingNine">
-                <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
-                   Project Resource Management</a>
-                </h4>
-              </div>              
-            </div>
-        
-         <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingTen">
-                <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
-                    Project Communications Management</a>
-                </h4>
-              </div>              
-            </div>
-        
-        
-         <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingEleven">
-                <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
-                    Project Risk Management </a>
-                </h4>
-              </div>              
-            </div>
-        
-         <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingTwelve">
-                <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">
-                    Project Procurement Management </a>
-                </h4>
-              </div>              
-            </div>
-        
-         <div class="panel panel-default">
-              <div class="panel-heading arrow-end" role="tab" id="headingThirteen">
-                <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThirteen" aria-expanded="false" aria-controls="collapseThirteen">
-                    Project Stakeholder Management</a>
-                </h4>
-              </div>              
-            </div>
-        
-           
           </div>
         </div>
 
@@ -305,7 +368,7 @@
       <div class="row">
         <div class="container">
           <div class="row">
-            <h2 class="white-color mt-50 ml-15 mb-30">Shine Learning Advantage</h2>
+            <h2 class="white-color mt-50 ml-15 mb-30">Why buy from Shine Learning?</h2>
             <div class="col-xs-12 col-sm-4">
               <div class="why-buy">
                 <strong>Free featured profile</strong>
@@ -320,8 +383,9 @@
             </div>
             <div class="col-xs-12 col-sm-4">
               <div class="why-buy">
-                <strong>Top Global Education Providers </strong>
-                Choose from a list of global providers as per your requirement</div>
+                <strong>Top Global Providers</strong>
+                Choose from a list of global providers as per your requirement
+              </div>
             </div>
             <div class="col-xs-12 col-sm-4">
               <div class="why-buy">
@@ -351,12 +415,15 @@
     <div class="container mt-50">
       <div class="row">
         <h2 class="ml-15 mb-30">Outcomes of the training</h2>
-        <div class="course-attend col-xs-12 col-sm-7">
+        <div class="outcomes-training col-xs-12 col-sm-7">
           <ul>
-            <li>Learn modern project management tools such as work breakdown structure, resource allocation, Gant charts, mathematical project scheduling models, project cost estimating, cost management and engineering economics</li>
-            <li>Learn to develop a broad and flexible toolkit of techniques and adapting your approach to the context and constraints of projects</li>
-            <li>Learn how to cultivate the people skills, trust and leadership necessary to meet project requirements</li>
-            <li>Learn how to deliver projects on scope, on time and on budget</li>
+            <li>Understand the meaning of business analytics and its importance in the industry.</li>
+            <li>Grasp fundamentals of excel analytics functions and conditional formatting.</li>
+            <li>Learn how to analyze with complex datasets using pivot tables and slicers.</li>
+            <li>Solve stochastic and deterministic analytical problems using tools like scenario manager, solver and goal seek.</li>
+            <li>Apply statistical tools and concepts like moving average, hypothesis testing, ANOVA and regression to data sets using Excel.</li>
+            <li>Represent your findings using charts and dashboards.</li>
+            <li>Get introduced to the latest Microsoft analytic and visualization tools i.e. Power B.</li>
           </ul>
         </div>
         <div class="col-sm-5 hidden-xs">

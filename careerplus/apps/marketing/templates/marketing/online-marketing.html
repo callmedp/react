@@ -27,11 +27,10 @@
       ga('create', 'UA-3537905-41', 'auto');
       ga('send', 'pageview');
     </script>
-    
   </head>
   <body>
     <!-- header -->
-    <header class="container-fluid ds-bg">
+    <header class="container-fluid dm-bg">
       <div class="row">
         <div class="container">
           <div class="row">
@@ -47,20 +46,21 @@
             </div>
 
             <!-- content & punchline -->
-            <div class="col-xs-12 col-sm-7 col-md-5 col-lg-6 header-content">
-              <h1><strong>Become a</strong> Data Scientist Master</h1>
+            <div class="col-xs-12 col-sm-7 col-md-5 col-lg-6 header-content header-content-pmp">
+              <h1><strong>Change yourself to a Digital Marketing Powerhouse</strong>Become Digital Marketing Certified Associate</h1>
+
               <div class="hidden-xs header-txt">
                 <ul>
-                  <li>Industry Recommended Learning path to succeed in the field of Analytics</li>
-                  <li>350+ Hours of Online & Instructor Led Training</li>
+                  <li>48 hours of instructor-led online training</li>
+                  <li>24 hours of high quality e-learning content by industry experts </li>
                 </ul>
-                <div class="punch-line">Your Journey to become a successful Data Scientist begins today !</div>
+                <div class="punch-line">Your Journey to become Digital Marketing Certified Associate begins today!</div>
               </div>
             </div>
 
             <!-- girl -->
             <div class="hidden-xs hidden-sm col-md-3 men-pic">
-              <img src="{% static 'shinelearn/images/marketing/men.png' %}" alt="Shinelearning" class="img-responsive">
+              <img src="{% static 'shinelearn/images/marketing/dm-men.png' %}" alt="Shinelearning" class="img-responsive">
             </div>
 
             <!-- enquiry form -->
@@ -70,21 +70,26 @@
                 <strong>Let’s get started</strong>
                 <div class="form-group">
                   <input type="text" class="form-control" id="name" 
-                  placeholder="Your Full Name" name="name">
+                  placeholder="Your Full Name" name="name" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %}>
                   <label class="error-txt js-error"></label>
                 </div>
                 <div class="form-group">
                   <input type="text" class="form-control" id="email" 
-                  placeholder="Email Address" name="email">
+                  placeholder="Email Address" name="email" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %}>
                   <label class="error-txt js-error"></label>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" id="mobile" placeholder="Mobile Number" name="number">
+                  <input type="text" class="form-control" id="mobile" placeholder="Mobile Number" name="number" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
                   <label class="error-txt js-error"></label>
                 </div>
-                <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+                <div class="form-group arrow">
+                  <select id="selection" name="selection" class="form-control">
+                    <option selected="selected" value="3126">Digital Marketing-Rs.20999/-</option>
+                  </select>
+                </div>
+                <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3126{% endif %}">
 
-                <input type="hidden" name="prd" value="Data Science Certification">
+                <input type="hidden" name="prd" value="Digital Marketing Certified Associate">
 
                 <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 
@@ -101,11 +106,12 @@
             </div>
 
             <!-- content repeat for mobile device -->
-            <div class="col-xs-12 col-sm-6 visible-xs mt-20 mb-30 header-txt">Your Journey to become a successful Data Scientist begins today !
+            <div class="col-xs-12 col-sm-6 visible-xs mt-20 mb-30 header-txt">
               <ul>
-                <li>Industry Recommended Learning path to succeed in the field of Analytics</li>
-                <li>350+ Hours of Online & Instructor Led Training</li>
-              </ul>
+                  <li>48 hours of instructor-led online training</li>
+                  <li>24 hours of high quality e-learning content by industry experts </li>
+                </ul>
+              <div class="punch-line">Your Journey to become Digital Marketing Certified Associate begins today!</div>
             </div>
 
           </div>
@@ -124,29 +130,23 @@
             <h2>Course Highlights</h2>
             <ul>
               <li>
-                <strong>150+ Hours of Live Instructor Led Online Classes by Industry Expert.</strong>
+                <strong>Execute 4 real life projects</strong>
+                Acquire hands-on knowledge and expertise!</li>
+              <li>
+                <strong>Hands-on training on 5+ tools</strong>
+                Learn various tools which includes Google AdWords, Google Analytics, Facebook, etc.
               </li>
               <li>
-                <strong>Execute 17+ Real Life Projects on CloudLab. </strong>
-              </li>
+                <strong>10 simulation test papers</strong>
+                Gain confidence to ace the certification exams!</li>
               <li>
-                <strong>Hands on learning on 50+ tools including R, Python, SAS, Excel, Hadoop, HBase, Apache Spark, Scala, Pig, Hive, etc.</strong>
-              </li>
+                <strong>Training by industry experts</strong>
+                Get trained by “Dream Team” of Silicon Valley authors for Digital marketing role.</li>
               <li>
-                <strong>Work on industry based projects on different domains like Retail, Banking, Insurance, Stock Market, Healthcare, Engineering, etc.</strong>
+                <strong>Comprehensive Course Curriculum</strong>
+                Go through in-depth knowledge on 8 topics and 11 domains which covers solid foundation learning for all digital marketing aspects.
               </li>
-              <li>
-                <strong>Industry-relevant course curriculum, with applications in multiple domains taught by highly experienced Subject Matter Experts (SMEs)</strong>
-              </li>
-              <li>
-                <strong>Differentiate yourself with an Industry recognized Masters Certificate</strong>
-              </li>
-              <li>
-                <strong>GTA Technical, Project, Programming support by industry experts</strong>
-              </li>
-              <li>
-                <strong>Course Advisor – Ronald van Loon </strong>
-              </li>
+             
             </ul>
           </div>
 
@@ -155,19 +155,19 @@
             <h2>Who should attend?</h2>
             <ul>
               <li>
-                Any professional from Business Analytics/ Business Intelligence background.
+               Sales or business professional who are looking to accelerate their career.
               </li>
               <li>
-                Engineering or Non-Engineering aspirants wanting to become a Data Scientist.
+                A student looking to build a career in one of the most sought-after domains today.
               </li>
               <li>
-                Managers from Analytical background and those who are leading a team of Analysts.
+                Entrepreneur interested in leveraging digital marketing to improve the ROI for your company.
               </li>
               <li>
-                Any Data Analyst or Software Developer aspiring to be a Data Scientist.
+               Traditional marketer striving to enhance your knowledge and skills in digital marketing.
               </li>
               <li>
-                Professionals wanting to build machine learning models, using distributed storage and distributed processing.
+                Digital marketer hoping to broaden your skillsets and accelerate your career to the next level
               </li>
             </ul>
           </div>
@@ -178,184 +178,117 @@
           <h2>Course Preview</h2>
           <div class="panel-group course-preview" id="accordion" role="tablist" aria-multiselectable="true">
             <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="headingOne">
+              <div class="panel-heading arrow-end" role="tab" id="headingOne">
                 <h4 class="panel-title">
-                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    Data Science with SAS Training
-                  </a>
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    Search Engine Optimization</a>
                 </h4>
               </div>
-              <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                <div class="panel-body">
-                  <ul>
-                    <li>Course Introduction</li>
-                    <li>Analytics Overview</li>
-                    <li>Introduction to SAS</li>
-                    <li>Combining and Modifying Datasets</li>
-                    <li>PROC SQL</li>
-                    <li>SAS Macros</li>
-                    <li>Basics of Statistics</li>
-                    <li>Statistical Procedures</li>
-                    <li>Data Exploration</li>
-                    <li>Advanced Statistics</li>
-                    <li>Working with Time Series Data</li>
-                    <li>Designing Optimization Models</li>
-                  </ul>
-                </div>
-              </div>
+
             </div>
             <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="headingTwo">
+              <div class="panel-heading arrow-end" role="tab" id="headingTwo">
                 <h4 class="panel-title">
                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    Data Science Certification Training – R Programming
-                  </a>
+                    Social Media</a>
                 </h4>
               </div>
-              <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                <div class="panel-body">
-                  <ul>
-                    <li>Introduction to Business Analytics  </li>
-                    <li>Introduction to R </li>
-                    <li>R Programming </li>
-                    <li>R Data Structure  </li>
-                    <li>Apply Functions </li>
-                    <li>Data Visualization  </li>
-                    <li>Introduction to Statistics  </li>
-                    <li>Hypothesis Testing I  </li>
-                    <li>Hypothesis Testing II </li>
-                    <li>Regression Analysis </li>
-                    <li>Classification  </li>
-                    <li>Clustering  </li>
-                    <li>Association </li>
-                  </ul>
-                </div>
-              </div>
+              
             </div>
             <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="headingThree">
+              <div class="panel-heading arrow-end" role="tab" id="headingThree">
                 <h4 class="panel-title">
                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    Big Data Hadoop and Spark Developer
-                  </a>
+                    Content Writing</a>
                 </h4>
               </div>
-              <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                <div class="panel-body">
-                  <ul>
-                    <li>Course Introduction </li>
-                    <li>Introduction to Big data and Hadoop Ecosystem </li>
-                    <li>HDFS and YARN </li>
-                    <li>MapReduce and Sqoop </li>
-                    <li>Basics of Hive and Impala </li>
-                    <li>Working with Hive and Impala  </li>
-                    <li>Types of Data Formats </li>
-                    <li>Advanced Hive Concept and Data File   </li>
-                    <li>Apache Flume and HBase  </li>
-                    <li>Pig </li>
-                    <li>Basics of Apache Spark  </li>
-                    <li>RDDs in Spark </li>
-                    <li>Implementation of Spark Applications  </li>
-                    <li>Spark Parallel Processing </li>
-                    <li>Spark RDD Optimization Techniques </li>
-                    <li>Spark Algorithm </li>
-                    <li>Spark SQL </li>
-                    <li>Simulation Test Paper Instructions  </li>
-                  </ul>
-                </div>
-              </div>
+              
             </div>
             <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="headingFour">
+              <div class="panel-heading arrow-end" role="tab" id="headingFour">
                 <h4 class="panel-title">
                   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                    Data Science with Python
-                  </a>
+                    Email Marketing</a>
                 </h4>
-              </div>
-              <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-                <div class="panel-body">
-                  <ul>
-                    <li>Course Overview </li>
-                    <li>Data Science Overview </li>
-                    <li>Data Analytics Overview </li>
-                    <li>Statistical Analysis and Business Applications  </li>
-                    <li>Python Environment Setup and Essentials </li>
-                    <li>Mathematical Computing with Python  </li>
-                    <li>Scientific computing with Python (Scipy)  </li>
-                    <li>Data Manipulation with Pandas </li>
-                    <li>Machine Learning with Scikit–Learn  </li>
-                    <li>Natural Language Processing with Scikit </li>
-                    <li>Data Visualization in Python  </li>
-                    <li>Web Scraping with BeautifulSoup </li>
-                    <li>Python integration with Hadoop  </li>
-                  </ul>
-                </div>
-              </div>
+              </div>              
             </div>
-            <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="headingFive">
+        
+        <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingFive">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                    Business Analytics with Excel
-                  </a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFive">
+                   Mobile Marketing </a>
                 </h4>
-              </div>
-              <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
-                <div class="panel-body">
-                  <ul>
-                    <li>Introduction  </li>
-                    <li>Introduction to Business Analytics  </li>
-                    <li>Formatting Conditional Formatting and Logical Functions </li>
-                    <li>Analyzing Data with Pivot Tables  </li>
-                    <li>Dashboarding  </li>
-                    <li>Business Analytics With Excel </li>
-                    <li>Data Analysis Using Statistics  </li>
-                    <li>Power BI  </li>
-                  </ul>
-                </div>
-              </div>
+              </div>              
             </div>
-            <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="headingSix">
+        
+        
+        <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingSix">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                    Apache Kafka
-                  </a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseSix">
+                   Pay-Per-Click</a>
                 </h4>
-              </div>
-              <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
-                <div class="panel-body">
-                  <ul>
-                    <li>Course introduction </li>
-                    <li>Big Data Overview </li>
-                    <li>Introduction to Zookeeper </li>
-                    <li>Introduction to Kafka </li>
-                    <li>Installation and Configuration  </li>
-                    <li>Kafka Interfaces  </li>
-                  </ul>
-                </div>
-              </div>
+              </div>              
             </div>
-            <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="headingSeven">
+        
+        
+        <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingSeven">
                 <h4 class="panel-title">
-                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
-                    Electives(Optional)
-                  </a>
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseSeven">
+                   Website Conversion Optimization</a>
                 </h4>
-              </div>
-              <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
-                <div class="panel-body">
-                  <ul>
-                    <li>Certified SAS Base Programmer</li>
-                    <li>Introduction to Big Data and Hadoop</li>
-                    <li>Python Basics</li>
-                    <li>Java essentials for hadoop training</li>
-                  </ul>
-                </div>
-              </div>
+              </div>              
             </div>
+        
+        <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingEight">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseEight">
+                    Digital Analytics </a>
+                </h4>
+              </div>              
+            </div>
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingNine">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseNine">
+                   Marketing Automation</a>
+                </h4>
+              </div>              
+            </div>
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingTen">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseTen">
+                    Programmatic Buying</a>
+                </h4>
+              </div>              
+            </div>
+        
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingEleven">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseEleven">
+                    Digital Marketing Strategy </a>
+                </h4>
+              </div>              
+            </div>
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingTwelve">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseTwelve">
+                    Twitter Advertising</a>
+                </h4>
+              </div>              
+            </div>
+        
+           
           </div>
         </div>
 
@@ -368,7 +301,7 @@
       <div class="row">
         <div class="container">
           <div class="row">
-            <h2 class="white-color mt-50 ml-15 mb-30">Why buy from Shine Learning?</h2>
+            <h2 class="white-color mt-50 ml-15 mb-30">Shine Learning Advantage</h2>
             <div class="col-xs-12 col-sm-4">
               <div class="why-buy">
                 <strong>Free featured profile</strong>
@@ -383,9 +316,8 @@
             </div>
             <div class="col-xs-12 col-sm-4">
               <div class="why-buy">
-                <strong>Top Global Providers</strong>
-                Choose from a list of global providers as per your requirement
-              </div>
+                <strong>Top Global Education Providers </strong>
+                Choose from a list of global providers as per your requirement</div>
             </div>
             <div class="col-xs-12 col-sm-4">
               <div class="why-buy">
@@ -415,15 +347,12 @@
     <div class="container mt-50">
       <div class="row">
         <h2 class="ml-15 mb-30">Outcomes of the training</h2>
-        <div class="outcomes-training col-xs-12 col-sm-7">
+        <div class="course-attend col-xs-12 col-sm-7">
           <ul>
-            <li>Understand the meaning of business analytics and its importance in the industry.</li>
-            <li>Grasp fundamentals of excel analytics functions and conditional formatting.</li>
-            <li>Learn how to analyze with complex datasets using pivot tables and slicers.</li>
-            <li>Solve stochastic and deterministic analytical problems using tools like scenario manager, solver and goal seek.</li>
-            <li>Apply statistical tools and concepts like moving average, hypothesis testing, ANOVA and regression to data sets using Excel.</li>
-            <li>Represent your findings using charts and dashboards.</li>
-            <li>Get introduced to the latest Microsoft analytic and visualization tools i.e. Power B.</li>
+            <li>The DMCA course will prepare you to become a complete digital marketer and make you industry ready on day one. </li>
+            <li>Become a virtual digital marketing manager for an e-commerce company with Mimic Pro simulations included in our course. Practice SEO, SEM, Website Conversion Rate Optimization, email marketing and more.</li>
+            <li>Learn how to formulate, plan, and execute effective digital marketing strategies with the right channel mix for your digital marketing strategy.</li>
+            <li>Learn how to optimize marketing strategy with the right kind of insights gained from execution of different campaigns.</li>
           </ul>
         </div>
         <div class="col-sm-5 hidden-xs">

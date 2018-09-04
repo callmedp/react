@@ -8,6 +8,10 @@ urlpatterns = [
         views.GenerateAutoLoginTask.as_view(),
         name='generate-autologintoken'),
 
+    url(r'^generate-encrypted-urls-for-mailer/$',
+        views.GenerateEncryptedURLSForMailer.as_view(),
+        name='generate-encrypted-urls'),
+
     url(r'^tasklist/$',
         views.TaskListView.as_view(),
         name='tasklist'),

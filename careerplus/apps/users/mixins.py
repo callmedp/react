@@ -971,19 +971,29 @@ class UserMixin(object):
 
 class UserGroupMixin(object):
     user_check_failure_path = '/console'  # can be path, url name or reverse_lazy
-    group_name = []
+    group_names = []    # use group_names if any one out of list is enough
+    group_list = []     # use group_list if all elements of list is required
 
-    def check_group(self, user,group_name):
-        group_list = list(user.groups.all().values_list('name',flat=True))
-        for gname in group_name:
-            if gname not in group_list:
-                return False
-        return True
+    def check_group(self, user):
+        if user.is_superuser:
+            return True
+        user_groups = list(user.groups.all().values_list('name', flat=True))
+        if self.group_names:
+            for gname in user_groups:
+                if gname in self.group_names:
+                    return True
+            return False
+        elif self.group_list:
+            for gname in self.group_list:
+                if gname not in user_groups:
+                    return False
+            return True
+        return False
 
     def user_check_failed(self, request, *args, **kwargs):
         return HttpResponseRedirect(self.user_check_failure_path)
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.check_group(request.user,self.group_name):
+        if not self.check_group(request.user):
             return self.user_check_failed(request, *args, **kwargs)
         return super(UserGroupMixin, self).dispatch(request, *args, **kwargs)

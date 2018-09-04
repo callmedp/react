@@ -372,14 +372,15 @@ It is important to understand that these resumes are not accepted everywhere and
  {% endblock footer %}
 
 {% block navigation %}
-                <!-- left side menu -->
-                {% include 'basic/navigation.html' %}
-      <div class="navbar-header" itemscope itemtype="http://schema.org/Organization" >
-      <a class="navbar-brand" href="{% url "homepage" %}"></a>
-      <meta itemprop="name" content="Shine">
-      <meta itemprop="url" content="https://learning.shine.com"/>
+    <!-- left side menu -->
+    {% include 'basic/navigation.html' %}
+    <div class="navbar-header" itemscope itemtype="http://schema.org/Organization" >
+    <a class="navbar-brand" href="{% url "homepage" %}"></a>
+    <meta itemprop="name" content="Shine">
+    <meta itemprop="url" content="https://learning.shine.com"/>
+
+{% endblock navigation %}
     </div>
-            {% endblock navigation %}
 
 </div>
 
@@ -453,6 +454,7 @@ window.onclick = function(event) {
 
 
 {% endblock js_section %}
-{% block johukum %}
 
+{% block johukum %}
+   
 {% endblock johukum %}
