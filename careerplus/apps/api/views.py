@@ -1,7 +1,7 @@
 import logging
 import datetime
 from decimal import Decimal
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -18,7 +18,6 @@ from shop.views import ProductInformationMixin
 from shop.models import Product
 from coupon.models import Coupon, CouponUser
 from core.api_mixin import ShineCandidateDetail
-from .serializers import OrderListHistorySerializer
 from payment.tasks import add_reward_point_in_wallet
 from order.functions import update_initiat_orderitem_sataus
 from geolocation.models import Country
@@ -27,6 +26,11 @@ from order.tasks import (
     process_mailer,
     invoice_generation_order
 )
+from shop.models import Skill
+
+from .serializers import (
+    OrderListHistorySerializer,
+    RecommendedProductSerializer)
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -583,3 +587,29 @@ class RemoveCouponApiView(APIView):
             "status": "FAIL",
             "msg": 'Coupon code is not found!.'},
             status=status.HTTP_400_BAD_REQUEST)
+
+
+class RecommendedProductsApiView(ListAPIView):
+    authentication_classes = []
+    permission_classes = []
+    serializer_class = RecommendedProductSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        skills = self.request.GET.get('skills', [])
+        if skills:
+            skills = skills.split(',')
+        if skills:
+            skills = Skill.objects.filter(
+                active=True,
+                name__in=skills
+            )
+            products = Product.objects.prefetch_related(
+                'productskills').filter(
+                    active=True,
+                    type_product__in=[0, 1, 3, 5],
+                    productskills__active=True,
+                    productskills__skill__in=skills
+                ).annotate(skill_count=Count('skill')).order_by(
+                '-skill_count')
+            return products
+        return Product.objects.none()

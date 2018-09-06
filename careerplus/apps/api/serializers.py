@@ -3,6 +3,7 @@ from rest_framework.serializers import (
     SerializerMethodField
 )
 from order.models import Order, OrderItem
+from shop.models import Product
 from payment.models import PaymentTxn
 
 import logging
@@ -243,3 +244,31 @@ class OrderListHistorySerializer(ModelSerializer):
         payment_obj = obj.ordertxns.all()
         if payment_obj:
             return PaymentSerializer(payment_obj, many=True).data
+
+
+class RecommendedProductSerializer(ModelSerializer):
+    display_name = SerializerMethodField()
+    pUrl = SerializerMethodField()
+    pImg = SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = [
+            'id',
+            'display_name',
+            'pUrl',
+            'avg_rating',
+            'no_review',
+            'buy_count',
+            'num_jobs',
+            'pImg',
+        ]
+
+    def get_display_name(self, obj):
+        return obj.get_name
+
+    def get_pUrl(self, obj):
+        return obj.get_url(relative=False) if obj.get_url(relative=False) else ''
+
+    def get_pImg(self, obj):
+        return obj.get_image_url(relative=False)
