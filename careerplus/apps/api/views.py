@@ -3,6 +3,7 @@ import datetime
 from decimal import Decimal
 from django.db.models import Sum, Count
 from django.utils import timezone
+from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -606,9 +607,10 @@ class RecommendedProductsApiView(ListAPIView):
             products = Product.objects.prefetch_related(
                 'productskills').filter(
                     active=True,
+                    product_class__slug=settings.COURSE_SLUG[0],
                     type_product__in=[0, 1, 3, 5],
                     productskills__active=True,
-                    productskills__skill__in=skills
+                    productskills__skill__in=skills,
                 ).annotate(skill_count=Count('skill')).order_by(
                 '-skill_count')
             return products
