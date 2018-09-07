@@ -130,6 +130,11 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     # skill Field
     pSkill = indexes.MultiValueField(null=True)
+    pSkilln = indexes.MultiValueField(null=True)
+
+    # skill category
+    pCtgs = indexes.MultiValueField(null=True)
+    pCtgsD = indexes.CharField(indexed=False)
 
     def get_model(self):
         return Product
@@ -208,10 +213,54 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             active=True).values_list('skill', flat=True))
         return skill_ids
 
+    def prepare_pSkilln(self, obj):
+        # if obj.is_course:
+        skill_names = list(obj.productskills.filter(
+            skill__active=True,
+            active=True).values_list('skill__name', flat=True))
+        return skill_names
+
+    def prepare_pCtgs(self, obj):
+        categories = obj.categories.filter(
+            productcategories__active=True,
+            active=True)
+        categories_list = list(categories.filter(
+            type_level=4, is_skill=True))
+        for cat in categories:
+            if cat.type_level == 4 and not cat.is_skill:
+                pcat = cat.get_parent()
+                for pc in pcat:
+                    if pc.type_level == 3 and pc.is_skill:
+                        categories_list.append(pc)
+        categories_list = list(set(categories_list))
+        return [cat.pk for cat in categories_list]
+
+    def prepare_pCtgsD(self, obj):
+        categories = obj.categories.filter(
+            productcategories__active=True,
+            active=True)
+        data = {}
+        categories_list = list(categories.filter(
+            type_level=4, is_skill=True))
+        for cat in categories:
+            if cat.type_level == 4 and not cat.is_skill:
+                pcat = cat.get_parent()
+                for pc in pcat:
+                    if pc.type_level == 3 and pc.is_skill:
+                        categories_list.append(pc)
+        categories_list = list(set(categories_list))
+        for cat in categories_list:
+            data_dict = {
+                'name': cat.heading if cat.heading else cat.name,
+                'url': cat.get_full_url()}
+            data.update({
+                cat.id: data_dict, })
+        return json.dumps(data)
+
     def prepare_pCC(self, obj):
         content = ''
         chapters = obj.chapter_product.filter(status=True)\
-                .order_by('ordering')
+            .order_by('ordering')
         chapter_list = []
         if chapters:
             for pch in chapters:
