@@ -1519,6 +1519,10 @@ class Product(AbstractProduct, ModelMeta):
         return convert_gbp(price)
 
     def get_canonical_url(self):
+        if self.category_main and self.category_main.is_service and \
+                self.category_main.type_level == 3:
+            return self.category_main.get_absolute_url()
+
         return self.get_absolute_url()
 
     @classmethod
