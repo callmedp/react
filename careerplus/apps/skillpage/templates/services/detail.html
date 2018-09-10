@@ -27,19 +27,22 @@
 		<div class="container">
 		<!-- breadcrums -->
 			<ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
-                {% for bread in breadcrumbs %}
-                    {% if bread.url %}
-                        <li itemprop="itemListElement" itemscope
-					      itemtype="http://schema.org/ListItem">
-						    <a href='{{bread.url}}' itemprop="item">{{bread.name}}
-	                        </a>
-							<meta itemprop="name" content="{{bread.name}}" />
-						    <meta itemprop="position" content="{{forloop.counter}}" />
-	                    </li>
-                    {% else %}
-                        <li class="active">{{bread.name}}</li>
-                    {% endif %}
-                {% endfor %}
+                
+                <li itemprop="itemListElement" itemscope
+			      itemtype="http://schema.org/ListItem">
+				    <a href='/' itemprop="item">Home
+                    </a>
+					<meta itemprop="name" content="Home" />
+				    <meta itemprop="position" content="1" />
+                </li>
+
+                <li itemprop="itemListElement" itemscope
+			      itemtype="http://schema.org/ListItem">
+				    {{category_obj.name|title}}
+					<meta itemprop="name" content="{{category_obj.name}}" />
+				    <meta itemprop="position" content="2" />
+                </li>
+                    
             </ol>
 			<div class="skill-caption">
 				<h1>{{category_obj.name|title}}</h1>
