@@ -1,11 +1,14 @@
 from django.conf.urls import url, include
 
-from .views import CMSPageView
+from .views import CMSPageView, CMSStaticView
 
 
 urlpatterns = [
     # url(r'^download-pdf/(?P<pk>\d+)/$',
     #     DownloadPdfView.as_view(), name='download-pdf'),
+
+    # url(r'^(?P<static_kwarg>[-\w]+)/$',
+    #     CMSStaticView.as_view(), name='static-page'),
 
     url(r'^(?P<slug>[-\w]+)/(?P<pk>\d+)/$',
         CMSPageView.as_view(), name='page'),

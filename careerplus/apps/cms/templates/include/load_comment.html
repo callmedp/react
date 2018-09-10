@@ -19,7 +19,7 @@
 
 {% if comments.has_next %}
 <div id="load_more">
-<form role="form" id="loadform">
+<form role="form" id="loadform" action="">
     <div style='display:none'>
         <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
     </div>

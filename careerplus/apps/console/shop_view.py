@@ -3,6 +3,7 @@ from collections import OrderedDict
 from datetime import datetime
 import logging
 import csv
+import bson
 from io import StringIO
 
 from django.views.generic import (
@@ -2069,7 +2070,9 @@ class ProductAuditHistoryView(UserGroupMixin, ListView, PaginationMixin):
             start_date = datetime.strptime(start_date, "%m/%d/%Y")
             end_date = datetime.strptime(end_date, "%m/%d/%Y")
             end_date = end_date + relativedelta(days=1)
-            queryset = queryset.filter(created_at__gte=start_date, created_at__lte=end_date)
+            start_id = bson.ObjectId.from_datetime(start_date)
+            end_id = bson.ObjectId.from_datetime(end_date)
+            queryset = queryset.filter(id__gte=start_id, id__lte=end_id)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -2096,7 +2099,9 @@ class ProductHistoryLogDownloadView(UserGroupMixin, View):
             start_date = datetime.strptime(start_date, "%m/%d/%Y")
             end_date = datetime.strptime(end_date, "%m/%d/%Y")
             end_date = end_date + relativedelta(days=1)
-            queryset = queryset.filter(created_at__gte=start_date, created_at__lte=end_date)
+            start_id = bson.ObjectId.from_datetime(start_date)
+            end_id = bson.ObjectId.from_datetime(end_date)
+            queryset = queryset.filter(id__gte=start_id, id__lte=end_id)
         return queryset
 
     def post(self, request, *args, **kwargs):

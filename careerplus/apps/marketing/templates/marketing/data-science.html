@@ -73,15 +73,15 @@
                 action="{% url 'crmapi:lead-management' %}">{% csrf_token %}
                   <ul class="mt-2 mb-2">
                     <li class="form-group">
-                       <input id="name" name="name" type="text" class="form-control" placeholder="Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}">
+                       <input id="name" name="name" type="text" class="form-control" placeholder="Name" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %}>
                        <p class="js-error"></p>
                     </li>
                     <li class="form-group">
-                       <input id="email" name="email" type="text" class="form-control" value="{{request.session.email}}" placeholder="Email">
+                       <input id="email" name="email" type="text" class="form-control" value="{{request.session.email}}" placeholder="Email" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %}>
                        <p class="js-error"></p>
                     </li>
                     <li class="form-group">
-                       <input id="mobile" name="number" maxlength="10" minlength="10" type="text" class="form-control" placeholder="Mobile" value="{{request.session.mobile_no}}">
+                       <input id="mobile" name="number" maxlength="10" minlength="10" type="text" class="form-control" placeholder="Mobile" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
                        <p class="js-error"></p>
                     </li>
                     

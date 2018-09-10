@@ -23,6 +23,7 @@ from partner.models import Vendor
 class CategoryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Category
+        django_get_or_create = ('name',)
 
     name = factory.LazyAttributeSequence(lambda o, n: "test_category_level_%d" % o.type_level)
 
@@ -49,12 +50,18 @@ class CategoryFactory(factory.django.DjangoModelFactory):
     )
 
 
-class CategoryRelationshipFactory(factory.django.DjangoModelFactory):
+class CategoryRelationShipFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = CategoryRelationship
+        django_get_or_create = ('related_from',)
 
     related_from = factory.SubFactory(CategoryFactory)
     related_to = factory.SubFactory(CategoryFactory)
+    active = True
+
+
+class CategoryRelationShipWithCategoryLevel1Factory(CategoryFactory):
+    relation_bewteen_category = factory.RelatedFactory(CategoryRelationShipFactory,  'related_from', related_to__type_level=1, related_to__active=True)
 
 
 class CountryFactory(factory.django.DjangoModelFactory):
@@ -155,10 +162,15 @@ class ProductFactory(factory.django.DjangoModelFactory):
 
 class ProductCategoryFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = Category
+        model = ProductCategory
+        django_get_or_create = ('product',)
 
-    category = factory.SubFactory(CategoryFactory)
+    category = factory.SubFactory(CategoryFactory, type_level=2)
     product = factory.SubFactory(ProductFactory)
+
+
+class ProductWithCategoryLevel2Factory(ProductFactory):
+    relation = factory.RelatedFactory(ProductCategoryFactory, 'product', category__type_level=2)
 
 
 class OrderFactory(factory.django.DjangoModelFactory):
@@ -282,3 +294,8 @@ class SkillFactory(factory.django.DjangoModelFactory):
 
     name = 'Django'
     active = True
+
+
+class AdminFactory(UserFactory):
+    is_superuser = True
+    email = 'root@root.com'

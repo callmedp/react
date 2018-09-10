@@ -6,6 +6,8 @@ from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 import logging
 from .forms import PasswordResetRequestForm, SetConfirmPasswordForm
+from core.mixins import TokenGeneration
+from users.models import User
 
 
 class ConsoleDashboardView(TemplateView):
@@ -133,3 +135,27 @@ class ConsolePasswordResetView(FormView):
         else:
             messages.error(request, 'The reset password link is no longer valid.')
             return self.form_invalid(form)
+
+
+class ConsoleAutoLoginView(View):
+
+    def get(self, request, *args, **kwargs):
+        valid = False
+        email = None
+        try:
+            email, enc_type, valid = TokenGeneration().decode(
+                request.GET.get("token")
+            )
+        except Exception as e:
+            pass
+        user = User.objects.filter(email=email).first()
+
+        if valid and user and enc_type == 2:
+            login(request, user)
+            return HttpResponseRedirect(reverse_lazy('console:dashboard'))
+        else:
+            messages.add_message(
+                self.request, messages.ERROR,
+                "Token has been expired. Login with Username/Password "
+            )
+        return HttpResponseRedirect(reverse_lazy('console:login'))

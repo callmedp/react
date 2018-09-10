@@ -975,6 +975,8 @@ class UserGroupMixin(object):
     group_list = []     # use group_list if all elements of list is required
 
     def check_group(self, user):
+        if user.is_superuser:
+            return True
         user_groups = list(user.groups.all().values_list('name', flat=True))
         if self.group_names:
             for gname in user_groups:

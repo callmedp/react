@@ -73,12 +73,12 @@
           action="{% url "crmapi:lead-management-captcha" %}"  data-non_captcha_action="{% url "crmapi:lead-management" %}"
           >    {% csrf_token %}
               <div>
-          <input type="text" id="name" name="name" placeholder="Full Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}" maxlength="100">
+          <input type="text" id="name" name="name" placeholder="Full Name" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %} maxlength="100">
           <span class="error" for="name" style="color: rgb(255, 0, 0);font-size: 11px;width:100%; " ></span>
          </div>
 
         <div>
-          <input type="email" id="email" name="email" placeholder="Email Address" value="{{request.session.email}}" maxlength="100">
+          <input type="email" id="email" name="email" placeholder="Email Address" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %} maxlength="100">
           <span class="error" for="email" style="color: rgb(255, 0, 0);font-size: 11px;width:100%; "></span>
 
         </div>
@@ -86,7 +86,7 @@
             <input type="hidden" id="country" name="country" aria-invalid="false" value="91">
 
             <input id="mobile" type="text" name="number"
-            placeholder="Mobile Number" maxlength="10" aria-required="true" class="pull-right" value="{{request.session.mobile_no}}">
+            placeholder="Mobile Number" maxlength="10" aria-required="true" class="pull-right" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
 
             <span class="error" for="mobile" style="color: rgb(255, 0, 0);font-size: 11px;width:100%;" ></span>
          </div>
