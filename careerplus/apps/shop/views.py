@@ -83,7 +83,7 @@ class ProductInformationMixin(object):
                             'url': parent[0].get_absolute_url(),
                             'active': True}))
 
-            elif product.is_service or product.is_writing:
+            if product.is_service or product.is_writing:
                 if category.is_service and category.type_level == 3:
                     breadcrumbs.append(
                         OrderedDict({
