@@ -1,15 +1,22 @@
 import logging
 import datetime
+import requests
 from decimal import Decimal
+
 from django.db.models import Sum, Count
 from django.utils import timezone
 from django.conf import settings
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser, )
+from haystack import connections
+from haystack.query import SearchQuerySet
+from core.library.haystack.query import SQS
+
 from rest_framework.generics import ListAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 
@@ -615,3 +622,29 @@ class RecommendedProductsApiView(ListAPIView):
                 '-skill_count')
             return products
         return Product.objects.none()
+
+
+class RecommendedProductsCategoryView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, *args, **kwargs):
+        skills = self.request.GET.get('skills', '')
+        # if skills:
+        #     skills = skills.split(',')
+        res = {}
+        haystack_conns = settings.HAYSTACK_CONNECTIONS.get(
+            'default', {})
+
+        solr_url = haystack_conns.get(
+            'URL', 'http://10.136.2.25:8989/solr/prdt')
+
+        url = '{}/select?indent=on&\
+        q=pSkilln:{}&wt=json&group=true&group.field=pCtgs&\
+        group.limit=3&rows=3&fq=pCtgs:[*%20TO%20*]&\
+        fl=id,%20pHd,%20pBC,%20pImg,%20pURL,%20pSkilln,%20pCtgsD,%20pCtgs'.format(
+            solr_url, skills)
+        res = requests.get(url)
+        return Response(
+            res.json(),
+            status=status.HTTP_200_OK)

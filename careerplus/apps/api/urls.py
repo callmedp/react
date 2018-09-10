@@ -19,4 +19,8 @@ urlpatterns = [
     url(r'^v1/recommended-products/$',
         views.RecommendedProductsApiView.as_view(),
         name='api-recommended-products'),
+
+    url(r'^v1/recommended-products-by-category/$',
+        views.RecommendedProductsCategoryView.as_view(),
+        name='api-recommended-products-category'),
 ]
