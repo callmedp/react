@@ -100,6 +100,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class UserProfile(models.Model):
+    """
+    Currently there is no relation between the user and userprofile in the
+    sql database , it will only return the user_ids of user model.
+
+    """
     user = models.OneToOneField(User)
     writer_type = models.PositiveIntegerField(
         choices=WRITER_TYPE,
