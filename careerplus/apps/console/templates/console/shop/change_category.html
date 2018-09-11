@@ -376,7 +376,7 @@
                       </div>
                       
                       <div class="item form-group {% if skill_form.career_outcomes.errors %}bad{% endif %}">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ skill_form.career_outcomes.id_for_label }}">Career Outcomes {% if not object.is_service %}<span class="required">*</span>{% endif %}
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ skill_form.career_outcomes.id_for_label }}">{% if object.is_service %}Professional Advantages{% else %}Career Outcomes {% endif %} {% if not object.is_service %}<span class="required">*</span>{% endif %}
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             {{skill_form.career_outcomes}}
