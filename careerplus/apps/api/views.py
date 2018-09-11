@@ -642,7 +642,8 @@ class RecommendedProductsCategoryView(APIView):
         url = '{}/select?indent=on&\
         q=pSkilln:{}&wt=json&group=true&group.field=pCtgs&\
         group.limit=5&rows=10&fq=pCtgs:[*%20TO%20*]&\
-        fl=id,%20pHd,%20pBC,%20pImg,%20pURL,%20pSkilln,%20pCtgsD,%20pCtgs'.format(
+        fl=id,%20pHd,%20pBC,%20pImg,%20pURL,\
+        %20pURLD,%20pNJ,%20pRC,%20pARx,%20pSkilln,%20pCtgsD,%20pCtgs'.format(
             solr_url, skills)
         res = requests.get(url)
         return Response(
