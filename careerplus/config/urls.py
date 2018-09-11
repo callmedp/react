@@ -76,7 +76,6 @@ talent_sitemap = {
 urlpatterns = [url(r'^services/%s/%s/$' %(cat_slug,cat_id),
         ServiceDetailPage.as_view())  for cat_id,cat_slug in settings.SERVICE_PAGE_ID_SLUG_MAPPING.items()]
 
-print(urlpatterns)
 # Product Detail URLs
 urlpatterns += [
     url(r'^robots.txt$', TemplateView.as_view(
