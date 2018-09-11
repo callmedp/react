@@ -73,8 +73,10 @@ talent_sitemap = {
 }
 
 
-urlpatterns = []
+urlpatterns = [url(r'^services/%s/%s/$' %(cat_slug,cat_id),
+        ServiceDetailPage.as_view())  for cat_id,cat_slug in settings.SERVICE_PAGE_ID_SLUG_MAPPING.items()]
 
+print(urlpatterns)
 # Product Detail URLs
 urlpatterns += [
     url(r'^robots.txt$', TemplateView.as_view(
@@ -97,8 +99,7 @@ urlpatterns += [
 
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
-    url(r'^services/(?P<category_slug>[-\w]+)/(?P<category_id>\d+)/$',
-        ServiceDetailPage.as_view(), name='service_page'),
+    
     url(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='service-detail'),
     url(r'^courses/', include('skillpage.urls', namespace='skillpage')),

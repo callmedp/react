@@ -322,6 +322,8 @@ CMS_ID = [1]
 # used for coupon generation for free feature product on payment realization
 FEATURE_PROFILE_PRODUCTS = [1939]
 
+SERVICE_PAGE_ID_SLUG_MAPPING = {"45":"resume-writing"}
+
 try:
     from .settings_local import *
 except:

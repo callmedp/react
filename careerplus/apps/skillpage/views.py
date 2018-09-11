@@ -216,6 +216,18 @@ class ServiceDetailPage(DetailView):
     def get_queryset(self):
         return Category.objects.filter(is_service=True)
 
+    def get_object(self, queryset=None):
+        cat_slug = self.request.path.split("/")[-3]
+        cat_id = self.request.path.split("/")[-2]
+
+        if not cat_id.isdigit() or not settings.SERVICE_PAGE_ID_SLUG_MAPPING.get(cat_id):
+            raise Http404()
+
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        return queryset.get(id=int(cat_id),slug=cat_slug)
+
     def _get_country_choices(self):
         cached_country_choices = cache.get('callback_country_choices')
         if cached_country_choices:

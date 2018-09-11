@@ -322,3 +322,7 @@ except:
 ########### CMS STATIC PAGE RENDERING ID#########
 
 CMS_ID = [1]
+
+
+SERVICE_PAGE_ID_SLUG_MAPPING = {"45":"resume-writing"}
+
