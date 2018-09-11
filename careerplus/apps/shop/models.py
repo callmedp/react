@@ -200,6 +200,10 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
                 parent = self.get_parent()[0].slug if self.get_parent() else None
                 return reverse('skillpage:skill-page-listing',
                     kwargs={'fa_slug': parent,'skill_slug': self.slug, 'pk': self.pk})
+            elif self.is_service:
+                return reverse('service_page',
+                    kwargs={'category_slug': self.slug, 'category_id': self.pk})
+
             elif self.type_level == 3:
                 return reverse('skillpage:func_area_results',
                     kwargs={'fa_slug': self.slug, 'pk': self.pk})    
