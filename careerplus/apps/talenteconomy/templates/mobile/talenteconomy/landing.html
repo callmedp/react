@@ -18,12 +18,13 @@
     {% compress css %}
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/blog/blog.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 
 {% block header %}
 
-<header class="w100fl">
+<header class="w100fl he-auto">
     <div class="main-menu w100fl">
         <div class="pull-left">
             <a id="sidebar-main-trigger" class="icon-bar pull-left"  href="#" ></a> 
@@ -40,7 +41,7 @@
 {% endblock header %}
 
 {% block container %}
-<div class="body-wrapper">
+<div class="body-wrapper" style="padding-bottom: 125px;">
   <div class="talent-gr">
     <div class="article-category">
         <div class="content rel-imp pb-0">
@@ -76,7 +77,7 @@
         </div>
         </div>
     </div>
-</div><!-- gradient ends widget ends here -->
+  </div><!-- gradient ends widget ends here -->
 {% endif %}
 <!-- Trending articles Ends here -->
 <!-- Starts of talent-economy list -->
@@ -118,13 +119,19 @@
 
   </section>
 </div>
+
+{% block call_us %}
+  {% include "shop/partials/call_us.html" %}
+{% endblock call_us %}
+
 {% endblock container %}
 
 
 {% block js_section %}
     {{block.super}}
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
-     <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
+    <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     <script>
         $(function() {
             Article.init();

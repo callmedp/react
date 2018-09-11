@@ -96,8 +96,8 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
             'article_listing': article_list[: 5],
             'popular_courses': popular_courses,
             'authors': authors,
-            'authors_list': list(author_list)
-
+            'authors_list': list(author_list),
+            'show_chat': True
         })
 
         context.update(self.get_breadcrumb_data())
@@ -229,6 +229,7 @@ class TETagArticleView(TemplateView, BlogMixin):
             "tag": tag_obj,
             "categories": categories,
             "popular_courses": popular_courses,
+            "show_chat": True
         })
         context.update(self.get_breadcrumb_data())
         context['meta'] = tag_obj.as_meta(self.request)
@@ -381,6 +382,7 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
             "category": cat_obj,
             "categories": categories,
             "popular_courses": popular_courses,
+            'show_chat': True,
         })
         context.update(self.get_breadcrumb_data())
         context['meta'] = cat_obj.as_meta(self.request)
@@ -572,6 +574,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
             p_cat.slug, skills)
         context.update({
             "popular_courses": popular_courses,
+            "show_chat": True
         })
 
         context.update(self.get_meta_details())
@@ -641,6 +644,7 @@ class AuthorListingView(TemplateView):
             'authors_list': list(author_list),
             'categories': categories,
             'popular_courses': popular_courses,
+            'show_chat': True
         })
 
         context.update(self.get_breadcrumb_data())
@@ -737,7 +741,8 @@ class AuthorDetailView(DetailView):
             'authors_list': list(author_list),
             "article_list": article_list,
             "popular_courses": popular_courses,
-            "amp": self.request.amp
+            "amp": self.request.amp,
+            "show_chat": True
         })
 
         context.update(self.get_meta_details())

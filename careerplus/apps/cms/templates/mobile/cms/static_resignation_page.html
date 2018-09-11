@@ -45,6 +45,7 @@
  <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/images.scss' %}" rel="stylesheet" >
  <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/global.scss' %}" rel="stylesheet">
  <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/icons.scss' %}" rel="stylesheet">
+ <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
 
 {% endcompress %}
 {% endblock css_section %}
@@ -313,7 +314,10 @@ gtag('config', 'UA-3537905-1',{'group':'mainProfile'}); </script><!-- Google Tag
   </div>
 
 </div>
-
+ 
+ {% block call_us %}
+    {% include "shop/partials/call_us.html" %}
+ {% endblock call_us %}
 
  {% endblock container %}
 
@@ -353,6 +357,7 @@ gtag('config', 'UA-3537905-1',{'group':'mainProfile'}); </script><!-- Google Tag
         <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/cms/validate.js' %}"></script>
+        <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
 {% endcompress %}
 
 <script type="text/javascript">
