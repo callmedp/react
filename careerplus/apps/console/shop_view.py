@@ -2126,7 +2126,7 @@ class ProductHistoryLogDownloadView(UserGroupMixin, View):
                 quoting=csv.QUOTE_MINIMAL)
             csv_writer.writerow([
                 'Product Id','Product Name', 'Variation Name', 'UPC',
-                'Price', 'Duration', 'Vendor Name', 'Created_at',
+                'Price', 'Duration', 'Vendor Name', 'Date', 'Time'
             ])
 
             for log in queryset:
@@ -2140,7 +2140,8 @@ class ProductHistoryLogDownloadView(UserGroupMixin, View):
                         str(log.price),
                         str(log.duration),
                         str(log.vendor_name),
-                        str(log.created_at),
+                        str(log.created_at.strftime('%d-%b-%Y')),
+                        str(log.created_at.strftime('%H:%M:%S'))
                     ])
                 except Exception as e:
                     logging.getLogger('error_log').error("%s " % str(e))
