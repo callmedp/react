@@ -38,7 +38,8 @@ from shop.models import Skill
 
 from .serializers import (
     OrderListHistorySerializer,
-    RecommendedProductSerializer)
+    RecommendedProductSerializer,
+    RecommendedProductSerializerSolr)
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -600,28 +601,31 @@ class RemoveCouponApiView(APIView):
 class RecommendedProductsApiView(ListAPIView):
     authentication_classes = []
     permission_classes = []
-    serializer_class = RecommendedProductSerializer
+    serializer_class = RecommendedProductSerializerSolr
+    PAGE_SIZE = 10
 
     def get_queryset(self, *args, **kwargs):
         skills = self.request.GET.get('skills', [])
         if skills:
             skills = skills.split(',')
-        if skills:
-            skills = Skill.objects.filter(
-                active=True,
-                name__in=skills
-            )
-            products = Product.objects.prefetch_related(
-                'productskills').filter(
-                    active=True,
-                    product_class__slug=settings.COURSE_SLUG[0],
-                    type_product__in=[0, 1, 3, 5],
-                    productskills__active=True,
-                    productskills__skill__in=skills,
-                ).annotate(skill_count=Count('skill')).order_by(
-                '-skill_count')
-            return products
-        return Product.objects.none()
+        products = SearchQuerySet().filter(
+            pSkilln__in=skills,
+            pPc=settings.COURSE_SLUG[0])
+        return products
+        # skills = Skill.objects.filter(
+        #     active=True,
+        #     name__in=skills
+        # )
+        # products = Product.objects.prefetch_related(
+        #     'productskills').filter(
+        #         active=True,
+        #         product_class__slug=settings.COURSE_SLUG[0],
+        #         type_product__in=[0, 1, 3, 5],
+        #         productskills__active=True,
+        #         productskills__skill__in=skills,
+        #     ).annotate(skill_count=Count('skill')).order_by(
+        #     '-skill_count')
+        # return products
 
 
 class RecommendedProductsCategoryView(APIView):

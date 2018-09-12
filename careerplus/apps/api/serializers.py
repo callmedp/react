@@ -1,7 +1,10 @@
 from rest_framework.serializers import (
     ModelSerializer,
-    SerializerMethodField
+    SerializerMethodField,
+    Serializer
 )
+from rest_framework import serializers
+
 from order.models import Order, OrderItem
 from shop.models import Product
 from payment.models import PaymentTxn
@@ -272,3 +275,19 @@ class RecommendedProductSerializer(ModelSerializer):
 
     def get_pImg(self, obj):
         return obj.get_image_url(relative=False)
+
+
+class RecommendedProductSerializerSolr(Serializer):
+    id = serializers.CharField()
+    display_name = serializers.CharField(source='pHd')
+    display_url = serializers.CharField(source='pURLD')
+    buy_count = serializers.IntegerField(source='pBC')
+    pImg = serializers.CharField()
+    pURL = serializers.CharField()
+    no_jobs = serializers.IntegerField(source='pNJ')
+    review_count = serializers.IntegerField(source='pRC')
+    avg_rating = serializers.DecimalField(
+        source='pARx',
+        max_digits=8, decimal_places=2)
+    # pSkilln = serializers.ListField(
+    #     child=serializers.CharField())
