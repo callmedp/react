@@ -2063,23 +2063,25 @@ class ProductAuditHistoryView(UserGroupMixin, ListView, PaginationMixin):
         product_id = self.request.GET.get('product_id', '')
         date_range = self.request.GET.get('date_range', '')
         queryset = self.model.objects.all().order_by('-created_at')
+        filter_kwargs = {}
         if product_id:
-            queryset = queryset.filter(product_id=product_id)
+            filter_kwargs['product_id'] = product_id
         if date_range:
             start_date, end_date = date_range.split(' - ')
             start_date = datetime.strptime(start_date, "%m/%d/%Y")
-            end_date = datetime.strptime(end_date, "%m/%d/%Y")
-            end_date = end_date + relativedelta(days=1)
+            end_date = datetime.strptime(end_date, "%m/%d/%Y") + relativedelta(days=1)
             start_id = bson.ObjectId.from_datetime(start_date)
             end_id = bson.ObjectId.from_datetime(end_date)
-            queryset = queryset.filter(id__gte=start_id, id__lte=end_id)
-        return queryset
+            filter_kwargs['id__gte'] = start_id
+            filter_kwargs['id__lte'] = end_id
+
+        return queryset.filter(**filter_kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(ProductAuditHistoryView, self).get_context_data(**kwargs)
         paginator = Paginator(context['product_audit_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
-        context['product_list'] = Product.objects.values_list('id', 'name')
+        context['vendor_list'] = Vendor.objects.values_list('id', 'name')
         return context
 
 
@@ -2123,7 +2125,7 @@ class ProductHistoryLogDownloadView(UserGroupMixin, View):
                 csvfile, delimiter=',', quotechar="'",
                 quoting=csv.QUOTE_MINIMAL)
             csv_writer.writerow([
-                'Product Name', 'Variation Name', 'UPC',
+                'Product Id','Product Name', 'Variation Name', 'UPC',
                 'Price', 'Duration', 'Vendor Name', 'Created_at',
             ])
 
@@ -2131,6 +2133,7 @@ class ProductHistoryLogDownloadView(UserGroupMixin, View):
                 product_name = log.product_name
                 try:
                     csv_writer.writerow([
+                        str(log.product_id),
                         str(log.product_name),
                         str(log.variation_name),
                         str(log.upc),

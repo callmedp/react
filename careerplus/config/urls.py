@@ -164,6 +164,7 @@ urlpatterns += [
         LinkedinCallbackView.as_view(), name='linkedin-login'),
 
     url(r'^api/', include('api.urls', namespace='api')),
+    url(r'api/v1/', include('shop.api.v1.urls', namespace='shop-api')),
     url(r'^lead/', include('crmapi.urls', namespace='crmapi')),
 
     url(r'^', include('marketing.urls', namespace='marketing')),

@@ -46,14 +46,25 @@
             </ul>
             <form autocomplete="off" method="GET" role="form" id="audit_history_form" action=".">
             {% csrf_token %}
+             <div class="col-sm-3 col-md-3">
+                <div class="form-group">
+                  <label>Vendors</label>
+                  <div class="input-group">
+                  <select class="form-control col-md-7 col-xs-12" id="vendor_select" name="vendor_id" required="">
+                    <option value="">Select Vendor</option>
+                    {% for prd in vendor_list %}
+                      <option value={{ prd.0 }} {% ifequal prd.0|stringformat:"i" request.GET.vendor_id %} selected {% endifequal %} >{{ prd.1 }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                </div>
+              </div>
 	        		<div class="col-sm-3 col-md-3">
 	        			<label>Product</label>
 	        			<div class="input-group">
-	        				<select class="form-control col-md-7 col-xs-12" id="id_action" name="product_id" required="">
-	        					<option value="">Select Product</option>
-	        					{% for prd in product_list %}
-	        						<option value={{ prd.0 }} {% ifequal prd.0|stringformat:"i" request.GET.product_id %} selected {% endifequal %} >{{ prd.1 }}</option>
-	        					{% endfor %}
+	        				<select class="form-control col-md-7 col-xs-12" id="product_select" name="product_id" required="" {% if not request.GET.product_id %}disabled{% endif %} disabled>
+                  <option value="">Select Product</option>
+          
 	        				</select>
 	        			</div>
 	        		</div>
@@ -65,16 +76,17 @@
 	                </div>
 	             	</div>
              	</div>
-              <div class="col-sm-3 col-md-3" style="margin-left:-39px">
-                <label><br></label>
+              <div class="col-sm-3 col-md-3" style="margin-left:-15px">
+                <div class="form-group">
                   <span class="input-group-btn">
-                    <button type="button" class="btn btn-primary" id="action_button_go" style="border-radius:10px;">Go!</button>
+                    <button type="button" class="btn btn-primary" id="action_button_go" style="border-radius:10px;top:-7px;">Go!</button>
                   </span>
+                </div>
               </div>
              	<div class="col-sm-3 col-md-3 text-left">
 	             	<div class="form-group">
 		        			<div>
-										<span><a id="download_csv"> Download Logs as CSV</a></span>
+										<span><a id="download_csv" style="cursor:pointer;"> Download Logs as CSV</a></span>
 		                </div>
 	                </div>
 	             	</div>
@@ -89,6 +101,7 @@
               <table class="table table-striped jambo_table bulk_action">
                 <thead>
                   <tr class="headings">
+                    <th class="column-title">Product Id</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Vendor</th>
                     <th class="column-title">Variation</th>
@@ -101,6 +114,9 @@
                 <tbody>
                 {% for obj in page %}
                 <tr>
+                <td>
+                  {{ obj.product_id }}
+                </td>
                 <td>
                 	{{ obj.product_name }}
                 </td>
@@ -233,10 +249,47 @@
     		.attr('action', '{%url "console:product-audit-history-download" %}')
     		.submit()
     });
+
     $("#action_button_go").click(function(){
+      $("input[name='csrfmiddlewaretoken']").remove()
     	$("#audit_history_form").attr('method', 'get').attr('action', '.').submit()
     });
-    
+
+    $("#vendor_select").change(function(){
+      var vendor = $('#vendor_select').val()
+      $("#product_select").attr('disabled', 'true')
+      $("#product_select").html('<option value="">Select Product</option>')
+      get_product_using_vendor(vendor)
+    });
+
+    {% if request.GET.product_id %}
+        var selected_product = {{ request.GET.product_id }}
+    {% else %}
+        var selected_product = ''
+    {% endif %}
+
+    function determine_if_product_selected(product_id){
+      if(selected_product==product_id){
+        return ' selected'
+      }
+      return ''
+    }
+
+    function get_product_using_vendor(vendor) {
+      $.get('/api/v1/products/?vendor='+vendor+'&fl=id,name,vendor', function(data){
+        products = data.results
+        html = '<option value="">Select Product</option>'
+        products.forEach(function(product){
+          html += '<option value='+product.id +determine_if_product_selected(product.id)+' >'+ product.name+'</option>'
+        })
+        $("#product_select").html(html)
+        $("#product_select").removeAttr('disabled')
+      })
+    }
+
+    {% if request.GET.vendor_id %}
+      get_product_using_vendor({{request.GET.vendor_id}})
+    {% endif %}
 
   </script>
   <!-- Parsley Validate Scripts -->
