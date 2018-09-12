@@ -10,7 +10,7 @@ from django.contrib.auth.models import Group
 # inter-app imports
 from geolocation.models import Country
 from shop.models import (
-    Product, ProductClass, Category,
+    Product, ProductClass, Category, ProductCategory,
     CategoryRelationship, ProductAuditHistory, Skill,
     ProductSkill)
 
