@@ -1016,7 +1016,7 @@ class Product(AbstractProduct, ModelMeta):
                 for var in variations:
                     var.vendor = self.vendor
                     var.save()
-        self.title = self.get_title()
+            self.title = self.get_title()
         super(Product, self).save(*args, **kwargs)
         if getattr(self, 'attr', None):
             self.attr.save()
