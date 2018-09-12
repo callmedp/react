@@ -12,7 +12,7 @@ from geolocation.models import Country
 from shop.models import (
     Product, ProductClass, Category,
     CategoryRelationship, ProductAuditHistory, Skill,
-    ProductSkill)
+    ProductSkill, ProductCategory)
 
 from order.models import Order, OrderItem
 from users.models import User
@@ -294,6 +294,31 @@ class SkillFactory(factory.django.DjangoModelFactory):
 
     name = 'Django'
     active = True
+
+
+class ProductSkillFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ProductSkill
+        django_get_or_create = ('skill', 'product')
+
+    skill = factory.SubFactory(SkillFactory)
+    product = factory.SubFactory(ProductFactory)
+    priority = 1
+    active = True
+
+class ProductWithSkillFactory(ProductFactory):
+    membership = factory.RelatedFactory(
+        ProductSkillFactory, 'product')
+
+class ProductWith4SkillsFactory(ProductFactory):
+    membership1 = factory.RelatedFactory(
+        ProductSkillFactory, 'product', skill__name='Python')
+    membership2 = factory.RelatedFactory(
+        ProductSkillFactory, 'product', skill__name='Django')
+    membership3 = factory.RelatedFactory(
+        ProductSkillFactory, 'product', skill__name='Html')
+    membership4 = factory.RelatedFactory(
+        ProductSkillFactory, 'product', skill__name='Css')
 
 
 class AdminFactory(UserFactory):

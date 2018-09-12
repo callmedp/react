@@ -630,8 +630,6 @@ class RecommendedProductsCategoryView(APIView):
 
     def get(self, *args, **kwargs):
         skills = self.request.GET.get('skills', '')
-        # if skills:
-        #     skills = skills.split(',')
         res = {}
         haystack_conns = settings.HAYSTACK_CONNECTIONS.get(
             'default', {})
@@ -639,8 +637,8 @@ class RecommendedProductsCategoryView(APIView):
         solr_url = haystack_conns.get(
             'URL', 'http://10.136.2.25:8989/solr/prdt')
 
-        url = '{}/select?indent=on&\
-        q=pSkilln:{}&wt=json&group=true&group.field=pCtgs&\
+        url = '{}/select?defType=edismax&indent=on&\
+        q={}&wt=json&qf=pHd^2%20pSkilln&group=true&group.field=pCtgs&\
         group.limit=5&rows=10&fq=pCtgs:[*%20TO%20*]&\
         fl=id,%20pHd,%20pBC,%20pImg,%20pURL,\
         %20pURLD,%20pNJ,%20pRC,%20pARx,%20pSkilln,%20pCtgsD,%20pCtgs'.format(
