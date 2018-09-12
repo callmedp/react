@@ -1096,10 +1096,14 @@ class ChangeProductView(DetailView):
         return super(ChangeProductView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        product = self.get_object()
-        if product.type_product == 2:
+        self.object = self.get_object()
+        if self.object.type_product == 2:
             raise Http404
         return super(ChangeProductView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ChangeProductView, self).get_queryset()
+        return queryset.select_related('product_class', 'vendor')
 
     def get_object(self, queryset=None):
         if hasattr(self, 'object'):
@@ -1179,7 +1183,7 @@ class ChangeProductView(DetailView):
                 instance=self.get_object(),
                 form_kwargs={'object': self.get_object()},)
             context.update({'prdchapter_formset': prdchapter_formset})
-        
+
         if self.object.type_product == 1:
             ProductVariationFormSet = inlineformset_factory(
                 Product, Product.variation.through, fk_name='main',
@@ -1228,7 +1232,7 @@ class ChangeProductView(DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
-        
+
         if self.request.POST or self.request.FILES:
             try:
                 obj = int(self.kwargs.get('pk', None))

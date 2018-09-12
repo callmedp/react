@@ -976,7 +976,6 @@ class Product(AbstractProduct, ModelMeta):
         super(Product, self).__init__(*args, **kwargs)
         if self.product_class:
             self.attr = ProductAttributesContainer(product=self)
-        self.initialize_variables()
 
     def __str__(self):
         if self.pk:
@@ -986,17 +985,6 @@ class Product(AbstractProduct, ModelMeta):
                 return self.name + ' - (' + str(self.pk) + ')'
         return self.name
 
-    def initialize_variables(self):
-        self.original_duration = self.get_duration_in_day() if self.get_duration_in_day() else -1
-        if self.id:
-            self.original_variation_name = [str(var) for var in self.variation.all()] if self.variation.all() else ['N.A']
-        else:
-            self.original_variation_name = ['N.A']
-        self.original_product_id = self.id
-        self.original_upc = self.upc
-        self.original_price = float(self.inr_price)
-        self.original_vendor_name = self.get_vendor()
-        self.original_product_name = self.name
 
 
     def save(self, *args, **kwargs):
@@ -1017,6 +1005,11 @@ class Product(AbstractProduct, ModelMeta):
                     var.vendor = self.vendor
                     var.save()
         self.title = self.get_title()
+        self.first_save = True
+        if self.id:
+            original_product = Product.objects.get(id=self.id)
+            self.initialize_variables(original_product)
+            self.first_save = False
         super(Product, self).save(*args, **kwargs)
         if getattr(self, 'attr', None):
             self.attr.save()
@@ -1144,7 +1137,8 @@ class Product(AbstractProduct, ModelMeta):
         if not cat_slug:
             cat_slug = self.category_main
             if cat_slug:
-                cat_slug = cat_slug.get_parent()[0] if cat_slug.get_parent() else None
+                cat_slug1 = cat_slug.get_parent()
+                cat_slug = cat_slug1[0] if cat_slug1 else None
         cat_slug = cat_slug.slug if cat_slug else None
         if cat_slug:
             if self.is_course:
@@ -1159,6 +1153,19 @@ class Product(AbstractProduct, ModelMeta):
         #     return reverse('job-assist-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
         # else:
         #     return reverse('other-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+
+    def initialize_variables(self, original_product):
+        self.original_duration = original_product.get_duration_in_day() if original_product.get_duration_in_day() else -1
+        if self.id:
+            self.original_variation_name = [str(var) for var in original_product.variation.all()] if original_product.variation.all() else ['N.A']
+        else:
+            self.original_variation_name = ['N.A']
+        self.original_product_id = original_product.id
+        self.original_upc = original_product.upc
+        self.original_price = float(original_product.inr_price)
+        self.original_vendor_name = original_product.get_vendor()
+        self.original_product_name = original_product.name
+
 
     def get_ratings(self):
         pure_rating = int(self.avg_rating)
@@ -1533,22 +1540,22 @@ class Product(AbstractProduct, ModelMeta):
         from .tasks import add_log_in_product_audit_history
         duration = instance.get_duration_in_day() if instance.get_duration_in_day() else -1
         variation_name = [str(var) for var in instance.variation.all()] if instance.variation.all() else ['N.A']
-
-        if (instance.original_duration != duration or instance.original_variation_name != variation_name \
-                or instance.original_price != float(instance.inr_price) or instance.original_upc != instance.upc or
-                instance.original_vendor_name != instance.get_vendor() or
-                instance.original_product_name != instance.name):
-            instance.initialize_variables()
-            data = {
-                "product_id": instance.id,
-                "upc": instance.upc,
-                "price": float(instance.inr_price),
-                "vendor_name": instance.get_vendor(),
-                "product_name": instance.name,
-                "duration": duration,
-                "variation_name": variation_name
-            }
-            add_log_in_product_audit_history.delay(**data)
+        if not instance.first_save:
+            if (instance.original_duration != duration or instance.original_variation_name != variation_name \
+                    or instance.original_price != float(instance.inr_price) or instance.original_upc != instance.upc or
+                    instance.original_vendor_name != instance.get_vendor() or
+                    instance.original_product_name != instance.name):
+                instance.initialize_variables(instance)
+                data = {
+                    "product_id": instance.id,
+                    "upc": instance.upc,
+                    "price": float(instance.inr_price),
+                    "vendor_name": instance.get_vendor(),
+                    "product_name": instance.name,
+                    "duration": duration,
+                    "variation_name": variation_name
+                }
+                add_log_in_product_audit_history.delay(**data)
 
 
 post_save.connect(Product.post_save_product, sender=Product)
