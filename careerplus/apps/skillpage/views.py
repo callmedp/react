@@ -308,7 +308,9 @@ class ServiceDetailPage(DetailView):
         meta_dict['description'] = self.object.get_description()
         meta_dict['og_description'] = self.object.get_description()
         meta_dict["_url"] = self.object.get_canonical_url()
-        meta_dict['title'] = '{} Services - Shine Learning'.format(self.object.name)
+        meta_dict['title'] = self.object.title if self.object.title else \
+                '{} Services - Shine Learning'.format(self.object.name) 
+        meta_dict['heading'] = self.object.heading
         return meta_dict
 
     def get_context_data(self,**kwargs):

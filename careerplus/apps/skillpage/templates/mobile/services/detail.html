@@ -10,7 +10,7 @@
 {% endblock canonical_url %}
 
 {% block title %} 
-    {{category_obj.name|title}} Certification ({{ products.paginator.count }} Professional Services) - Shine Learning
+    {{meta.title}}
 {% endblock title %}
 {% block css_section %}
 {{ block.super }}
@@ -42,7 +42,15 @@
             </div><!-- / Right side Icon ends here -->
             
         </div><!-- header menu Icon ends here -->
-        <h1 class="heading-back w100fl pb-0">{{category_obj.name}} Programs</h1>
+        
+        <h1 class="heading-back w100fl pb-0">
+            {% if meta.heading %}
+                {{ meta.heading | title }}
+            {% else %}
+                {{category_obj.name|title}} Programs
+            {% endif %}
+        </h1>
+        
         <ul class="header-taging mt-10 w100fl">
             {% if top_3_prod.0 %}
             <li><a href="{{top_3_prod.0.pURL}}">{{top_3_prod.0.pNm}}</a></li>

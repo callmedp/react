@@ -45,7 +45,13 @@
                     
             </ol>
 			<div class="skill-caption">
-				<h1>{{category_obj.name|title}}</h1>
+				<h1>
+				{% if meta.heading %}
+					{{ meta.heading | title }}
+				{% else %}
+					{{category_obj.name|title}}
+				{% endif %}
+				</h1>
 					<strong>
 					{% if top_3_prod.0 %}
 					    <a href="{{top_3_prod.0.pURL}}">{{top_3_prod.0.pNm}}</a> 
