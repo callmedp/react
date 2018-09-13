@@ -60,8 +60,18 @@
                       <tbody>
                         <tr>
                           <td>{{order.number}}</td>
-                          <td>{{order.email}}</td>
-                          <td>{{order.country_code}} {{order.mobile}}</td>
+                            <td><div >{{order.email}}</div><div style=" white-space: nowrap;">
+                              {% if order.alt_email %}<b>  Alt
+                                -</b>{{order.alt_email}}{%endif%}
+                            </div></td>
+                          <td><div>{{order.country_code}} {{order.mobile}}
+                          </div><div
+                                  style=" white-space: nowrap;">
+                              {% if order.alt_mobile %}<b>Alt
+                                  -</b>{{order.country_code}}
+                              {{order.alt_mobile}}
+                              {% endif %}
+                          </div></td>
                           <td>{{order.first_name}} {{order.last_name}}</td>
                           <td>{{order.get_status}}</td>
                           <td>{{order.payment_date}}</td>
