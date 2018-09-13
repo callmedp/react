@@ -1,14 +1,22 @@
 import logging
 import datetime
+import requests
 from decimal import Decimal
-from django.db.models import Sum
+
+from django.db.models import Sum, Count
 from django.utils import timezone
+from django.conf import settings
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser, )
+from haystack import connections
+from haystack.query import SearchQuerySet
+from core.library.haystack.query import SQS
+
 from rest_framework.generics import ListAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 
@@ -18,7 +26,6 @@ from shop.views import ProductInformationMixin
 from shop.models import Product
 from coupon.models import Coupon, CouponUser
 from core.api_mixin import ShineCandidateDetail
-from .serializers import OrderListHistorySerializer
 from payment.tasks import add_reward_point_in_wallet
 from order.functions import update_initiat_orderitem_sataus
 from geolocation.models import Country
@@ -27,6 +34,12 @@ from order.tasks import (
     process_mailer,
     invoice_generation_order
 )
+from shop.models import Skill
+
+from .serializers import (
+    OrderListHistorySerializer,
+    RecommendedProductSerializer,
+    RecommendedProductSerializerSolr)
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -583,3 +596,58 @@ class RemoveCouponApiView(APIView):
             "status": "FAIL",
             "msg": 'Coupon code is not found!.'},
             status=status.HTTP_400_BAD_REQUEST)
+
+
+class RecommendedProductsApiView(ListAPIView):
+    authentication_classes = []
+    permission_classes = []
+    serializer_class = RecommendedProductSerializerSolr
+    PAGE_SIZE = 10
+
+    def get_queryset(self, *args, **kwargs):
+        skills = self.request.GET.get('skills', [])
+        if skills:
+            skills = skills.split(',')
+        products = SearchQuerySet().filter(
+            pSkilln__in=skills,
+            pPc=settings.COURSE_SLUG[0])
+        return products
+        # skills = Skill.objects.filter(
+        #     active=True,
+        #     name__in=skills
+        # )
+        # products = Product.objects.prefetch_related(
+        #     'productskills').filter(
+        #         active=True,
+        #         product_class__slug=settings.COURSE_SLUG[0],
+        #         type_product__in=[0, 1, 3, 5],
+        #         productskills__active=True,
+        #         productskills__skill__in=skills,
+        #     ).annotate(skill_count=Count('skill')).order_by(
+        #     '-skill_count')
+        # return products
+
+
+class RecommendedProductsCategoryView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, *args, **kwargs):
+        skills = self.request.GET.get('skills', '')
+        res = {}
+        haystack_conns = settings.HAYSTACK_CONNECTIONS.get(
+            'default', {})
+
+        solr_url = haystack_conns.get(
+            'URL', 'http://10.136.2.25:8989/solr/prdt')
+
+        url = '{}/select?defType=edismax&indent=on&\
+        q={}&wt=json&qf=pHd^2%20pSkilln&group=true&group.field=pCtgs&\
+        group.limit=5&rows=10&fq=pCtgs:[*%20TO%20*]&\
+        fl=id,%20pHd,%20pBC,%20pImg,%20pURL,\
+        %20pURLD,%20pNJ,%20pRC,%20pARx,%20pSkilln,%20pCtgsD,%20pCtgs'.format(
+            solr_url, skills)
+        res = requests.get(url)
+        return Response(
+            res.json(),
+            status=status.HTTP_200_OK)
