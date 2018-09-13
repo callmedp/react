@@ -27,7 +27,7 @@ from celery.decorators import task
 User = get_user_model()
 
 
-@task(name="gen_auto_login_token_task")
+# @task(name="gen_auto_login_token_task")
 def gen_auto_login_token_task(task=None, user=None, next_url=None, exp_days=None):
     f = False
     try:
@@ -277,90 +277,83 @@ def generate_encrypted_urls_for_mailer_task(task_id=None,user=None):
 @task(name="generate_product_list")
 def gen_product_list_task(task=None, user=None, status=None, vendor=None, product_class=None):
     f = False
+    up_task = None
     try:
         up_task = Scheduler.objects.get(pk=task)
+        filter_kwargs = {}
         csvfile = None
-        products_list = Product.objects.all()
-        if vendor:
-            products_list = products_list.filter(vendor__name=vendor)
         if status:
-            variation_parent_products = products_list.filter(type_product=1).exclude(active=status)
-            products_to_exclude = [product.id for product in variation_parent_products]
-            products_to_exclude = products_to_exclude + [
-                product.id for pr in variation_parent_products for product in pr.variation.all()
-            ]
-            products_list = products_list.filter(active=status).exclude(id__in=products_to_exclude)
+            filter_kwargs.update({"active": status})
+
+        if vendor:
+            filter_kwargs.update({"vendor__name": vendor})
         if product_class:
-            products_list = products_list.filter(product_class__slug=product_class)
+            filter_kwargs.update({"product_class__slug": product_class})
+        products_list = list(Product.objects.filter(
+            **filter_kwargs).prefetch_related('variation'))
         if up_task:
-            try:
-                up_task.status = 3
-                up_task.save()
-                total_rows = products_list.count()
-                try:
-                    user = User.objects.get(pk=user)
-                    timestr = time.strftime("%Y_%m_%d")
-                    header_fields = [
-                        'ID', 'Name', 'Price', 'Visible_On_Site',
-                        'Visible_On_CRM', 'Type', 'Product_Class', 'Parent', 'Vendor',
-                        'Category', 'Study', 'Duration'
-                    ]
-                    count = 0
-                    path = 'scheduler/' + timestr + '/'
-                    file_name = str(up_task.pk) + '_product_list_' + timestr + ".csv"
-                    if not settings.IS_GCP:
-                        upload_path = os.path.join(settings.MEDIA_ROOT + '/' +path)
-                        if not os.path.exists(upload_path):
-                            os.makedirs(upload_path)
-                        upload_path = upload_path + file_name
-                        csvfile = open(upload_path, 'w', newline='')
-                    else:
-                        upload_path = path + file_name
-                        csvfile = GCPPrivateMediaStorage().open(upload_path, 'wb')
-                    f = True
-                    csvwriter = csv.DictWriter(
-                        csvfile, delimiter=',', fieldnames=header_fields)
-                    csvwriter.writeheader()
-                    for product in products_list:
-                        product_row = {}
-                        product_row['Name'] = product.get_name
-                        product_row['ID'] = product.id
-                        product_row['Price'] = product.get_price()
-                        product_row['Visible_On_CRM'] = True if product.active else False
-                        product_row['Visible_On_Site'] = True if (product.is_indexable and product.active) else False
-                        product_row['Type'] = product.get_type_product_display()
-                        product_row['Product_Class'] = product.product_class.slug if product.get_product_class() else None
-                        product_row['Parent'] = product.get_parent().name if product.get_parent() else None
-                        product_row['Vendor'] = product.get_vendor()
-                        product_row['Category'] = ", ".join([cat.__str__() for cat in product.categories.all()])
-                        product_row['Study'] = product.get_studymode_db()
-                        product_row['Duration'] = product.get_duration_db()
-                        csvwriter.writerow(product_row)
-                        count = count + 1
-                        if count % 20 == 0:
-                            up_task.percent_done = round((count / float(total_rows))*100, 2)
-                            up_task.save()
-
-                    up_task.percent_done = 100
-                    up_task.status = 2
-                    up_task.completed_on = timezone.now()
-                    csvfile.close()
-                    up_task.file_generated = upload_path
+            up_task.status = 3
+            up_task.save()
+            total_rows = len(products_list)
+            timestr = time.strftime("%Y_%m_%d")
+            header_fields = [
+                'ID', 'Name', 'Price', 'Visible_On_Site',
+                'Visible_On_CRM', 'Type', 'Product_Class', 'Parent',
+                'Vendor',
+                'Category', 'Study', 'Duration'
+            ]
+            count = 0
+            path = 'scheduler/' + timestr + '/'
+            file_name = str(
+                up_task.pk) + '_product_list_' + timestr + ".csv"
+            if not settings.IS_GCP:
+                upload_path = os.path.join(
+                    settings.MEDIA_ROOT + '/' + path)
+                if not os.path.exists(upload_path):
+                    os.makedirs(upload_path)
+                upload_path = upload_path + file_name
+                csvfile = open(upload_path, 'w', newline='')
+            else:
+                upload_path = path + file_name
+                csvfile = GCPPrivateMediaStorage().open(upload_path,
+                                                        'wb')
+            f = True
+            csvwriter = csv.DictWriter(
+                csvfile, delimiter=',', fieldnames=header_fields)
+            csvwriter.writeheader()
+            for product in products_list:
+                if status == 'True':
+                    if product.get_parent() and product.get_parent().active == False:
+                        continue
+                product_row = {}
+                product_row['Name'] = product.get_name
+                product_row['ID'] = product.id
+                product_row['Price'] = product.get_price()
+                product_row['Visible_On_CRM'] = True if product.active else False
+                product_row['Visible_On_Site'] = True if (
+                product.is_indexable and product.active) else False
+                product_row['Type'] = product.get_type_product_display()
+                product_row['Product_Class'] = product.product_class.slug if \
+                    product.get_product_class() else None
+                product_row['Parent'] = product.get_parent().name if \
+                    product.get_parent() else None
+                product_row['Vendor'] = product.get_vendor()
+                product_row['Category'] = ", ".join(
+                    [cat.__str__() for cat in product.categories.all()])
+                product_row['Study'] = product.get_studymode_db()
+                product_row['Duration'] = product.get_duration_db()
+                csvwriter.writerow(product_row)
+                count = count + 1
+                if count % 20 == 0:
+                    up_task.percent_done = round(
+                        (count / float(total_rows)) * 100, 2)
                     up_task.save()
-
-                except Exception as e:
-                    logging.getLogger('error_log').error(
-                        "%(msg)s : %(err)s" % {'msg': 'genrate product list task', 'err': str(e)}
-                    )
-                    up_task.status = 1
-                    up_task.save()
-            except Exception as e:
-                    logging.getLogger('error_log').error(
-                        "%(msg)s : %(err)s" % {'msg': 'genrate product list task', 'err': str(e)}
-                    )
-                    up_task.status = 1
-                    up_task.save()
-
+            up_task.percent_done = 100
+            up_task.status = 2
+            up_task.completed_on = timezone.now()
+            csvfile.close()
+            up_task.file_generated = upload_path
+            up_task.save()
     except Exception as e:
         up_task.status = 1
         up_task.save()
