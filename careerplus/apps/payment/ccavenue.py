@@ -215,14 +215,14 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
                     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
                 </head>
                 <body>
-                <form id="nonseamless" method="post" name="redirect" action="https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction"/>
+                <form id="nonseamless" method="post" name="redirect" action="{}"/>
                         <input type="hidden" id="encRequest" name="encRequest" value=$encReq>
                         <input type="hidden" name="access_code" id="access_code" value=$xscode>
                         <script language='javascript'>document.redirect.submit();</script>
                 </form>
                 </body>
                 </html>
-                '''
+                '''.format(settings.CCAVENUE_URL)
             fin = Template(html).safe_substitute(context)
             return HttpResponse(fin)
         return HttpResponse({}, status=400)
