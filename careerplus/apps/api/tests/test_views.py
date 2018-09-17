@@ -18,13 +18,19 @@ class RecommendedApiView(TestCase):
             type_flow=2, type_product=0)
 
     def test_recommended_product_by_category_api(self):
-        url = '/api/v1/recommended-products-by-category/?skills' \
+        url = '/api/v1/recommended-products-by-category/?skills=' \
         + self.skills
         res = self.client.get(url)
         self.assertEqual(res.status_code, 200)
 
     def test_recommended_product_api(self):
-        import ipdb; ipdb.set_trace()
-        url = 'api/v1/recommended-products/?skills' + self.skills
+        url = '/api/v1/recommended-products/?skills=' + self.skills
         res = self.client.get(url)
         self.assertEqual(res.status_code, 200)
+        self.assertTrue(len(res.json().get('results', [])))
+
+    def test_recommended_product_api_with_blank_skills(self):
+        url = '/api/v1/recommended-products/'
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, 200)
+        self.assertFalse(len(res.json().get('results', [])))
