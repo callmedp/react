@@ -271,6 +271,8 @@ MEDIA_URL = 'https://{}.storage.googleapis.com/l/m/'.format(GS_BUCKET_NAME)
 VISUAL_RESUME_PRODUCT_LIST = [305, 306, 307, 308, 309]
 COVER_LETTER_PRODUCT_LIST = [83, ]
 SECOND_REGULAR_RESUME_PRODUCT_LIST = [126, 127, 128, 129, 130]
+# new flow product
+PORTFOLIO_PRODUCT_LIST = [2632, ]
 
 # product list for linkedin resume services
 LINKEDIN_RESUME_FREE = [2684, 2685]
