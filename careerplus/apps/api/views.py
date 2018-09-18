@@ -602,7 +602,6 @@ class RecommendedProductsApiView(ListAPIView):
     authentication_classes = []
     permission_classes = []
     serializer_class = RecommendedProductSerializerSolr
-    PAGE_SIZE = 10
 
     def get_queryset(self, *args, **kwargs):
         skills = self.request.GET.get('skills', [])
@@ -645,7 +644,7 @@ class RecommendedProductsCategoryView(APIView):
         q={}&wt=json&qf=pHd^2%20pSkilln&group=true&group.field=pCtgs&\
         group.limit=5&rows=10&fq=pCtgs:[*%20TO%20*]&\
         fl=id,%20pHd,%20pBC,%20pImg,%20pURL,\
-        %20pURLD,%20pNJ,%20pRC,%20pARx,%20pSkilln,%20pCtgsD,%20pCtgs'.format(
+        %20pNJ,%20pRC,%20pARx,%20pSkilln,%20pCtgsD,%20pCtgs'.format(
             solr_url, skills)
         res = requests.get(url)
         return Response(
