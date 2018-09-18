@@ -280,7 +280,6 @@ class RecommendedProductSerializer(ModelSerializer):
 class RecommendedProductSerializerSolr(Serializer):
     id = serializers.CharField()
     display_name = serializers.CharField(source='pHd')
-    display_url = serializers.CharField(source='pURLD')
     buy_count = serializers.IntegerField(source='pBC')
     pImg = serializers.CharField()
     pURL = serializers.CharField()

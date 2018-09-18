@@ -48,7 +48,6 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     
     # Meta and SEO #
     pURL = indexes.CharField(null=True, indexed=False)
-    pURLD = indexes.CharField(null=True, indexed=False)  # display url
     pTt = indexes.CharField(model_attr='title', null=True, indexed=False)
     pMtD = indexes.CharField(model_attr='meta_desc', null=True, indexed=False) 
     pMK = indexes.CharField(model_attr='meta_keywords', null=True, indexed=False) 
@@ -566,9 +565,6 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_pURL(self, obj):
         return obj.get_url(relative=True) if obj.get_url(relative=True) else ''
-
-    def prepare_pURLD(self, obj):
-        return obj.get_url(relative=False) if obj.get_url(relative=False) else ''
 
     def prepare_pPc(self, obj):
         return obj.product_class.slug if obj.product_class else ''
