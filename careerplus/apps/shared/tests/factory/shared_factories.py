@@ -6,16 +6,16 @@ from django.utils.text import slugify
 # third party imports
 import factory
 from django.contrib.auth.models import Group
+from django.db.models.signals import post_save
 
 # inter-app imports
 from geolocation.models import Country
 from shop.models import (
     Product, ProductClass, Category,
     CategoryRelationship, ProductAuditHistory, Skill,
-    ProductSkill)
-
+    ProductSkill, ProductCategory)
 from order.models import Order, OrderItem
-from users.models import User
+from users.models import User, UserProfile
 from partner.models import Vendor
 # local imports
 
@@ -299,3 +299,30 @@ class SkillFactory(factory.django.DjangoModelFactory):
 class AdminFactory(UserFactory):
     is_superuser = True
     email = 'root@root.com'
+
+
+@factory.django.mute_signals(post_save)
+class UserProfileFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = UserProfile
+        django_get_or_create = ('user', )
+
+    user = factory.SubFactory(
+        'shared.tests.factory.shared_factories.WriterFactory',
+        userprofile=None)
+    writer_type = 1
+    pan_no = "pan_no"
+    gstin = "gstin"
+    address = "Gurgaon"
+    po_number = "98765"
+    valid_from = datetime.datetime.today() - datetime.timedelta(
+        days=100)
+    valid_to = datetime.datetime.today() + datetime.timedelta(
+        days=100)
+
+
+@factory.django.mute_signals(post_save)
+class WriterFactory(UserFactory):
+    email = 'writer1@gmail.com'
+    userprofile = factory.RelatedFactory(
+        UserProfileFactory, 'user')
