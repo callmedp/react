@@ -32,12 +32,12 @@ class ResumeUploadForm(forms.ModelForm):
         elif resume:
             name = resume.name
             extn = name.split('.')[-1]
-            if extn not in ['pdf', 'doc', 'docx']:
+            if extn not in ['pdf', 'doc', 'docx','ppt','pptx']:
                 raise forms.ValidationError(
-                    "only pdf, doc and docx formats are allowed.")
-            elif resume.size > 500 * 1024:
+                    "only pdf, doc,docx, ppt and pptx formats are allowed.")
+            elif resume.size > 5 * 1024 * 10000:
                 raise forms.ValidationError(
-                    "resume is too large ( > 500kb ).")
+                    "resume is too large ( > 5 MB ).")
         return resume
 
 
@@ -74,12 +74,12 @@ class FileUploadForm(forms.Form):
         elif file:
             name = file.name
             extn = name.split('.')[-1]
-            if extn not in ['pdf', 'doc', 'docx']:
+            if extn not in ['pdf', 'doc', 'docx','ppt','pptx']:
                 raise forms.ValidationError(
-                    "only pdf, doc and docx formats are allowed.")
-            elif file.size > 500 * 1024:
+                    "only pdf, doc, docx, ppt and pptx formats are allowed.")
+            elif file.size > 5 * 1024 * 10000:
                 raise forms.ValidationError(
-                    "file is too large ( > 500kb ).")
+                    "file is too large ( > 5 MB ).")
         return file
 
 
