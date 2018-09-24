@@ -262,11 +262,7 @@
       get_product_using_vendor(vendor);
     });
 
-    {% if request.GET.product_id %}
-        var selected_product = {{ request.GET.product_id }};
-    {% else %}
-        var selected_product = '';
-    {% endif %}
+   
 
     function determine_if_product_selected(product_id){
       if(selected_product==product_id){
@@ -297,6 +293,11 @@
 <script type="text/javascript">
     {% if request.GET.vendor_id %}
       get_product_using_vendor({{request.GET.vendor_id}});
+    {% endif %}
+    {% if request.GET.product_id %}
+        var selected_product = {{ request.GET.product_id }};
+    {% else %}
+        var selected_product = '';
     {% endif %}
 </script>
 
