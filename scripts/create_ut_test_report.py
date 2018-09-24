@@ -21,7 +21,12 @@ from django.core.mail import EmailMessage
 
 #Global Constants
 TEAM_EMAILS = [
-    "Amarnath Kumar<amar.kumar@hindustantimes.com>", ]
+    "Animesh Sharma<animesh.sharma@hindustantimes.com>",
+    "Amarnath Kumar<amar.kumar@hindustantimes.com>",
+    "Amardeep Vishwakarma<amardeep.vishwakarma@hindustantimes.com>",
+    "Shubham Dwivedi<shubham.dwivedi@hindustanimes.com>",
+    "Ritesh Bisht<ritesh.bisht@hindustantimes.com>"]
+
 
 
 def send_email_to_team_members():
@@ -53,7 +58,7 @@ def create_index_template(app_names):
 
 if __name__=="__main__":
     local_apps = settings.LOCAL_APPS
-    app_names = local_apps = ['users', 'shop']
+    app_names = local_apps
 
     for app_name in app_names:
         #Run command to generate coverage for each app.
