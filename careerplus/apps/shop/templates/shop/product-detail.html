@@ -323,7 +323,7 @@
 
     {% if sqs.id not in linkedin_resume_services %}
       {% block prdrecommended %}
-      {% include "shop/partials/recommended_product.html" %}
+     <div id="recommended_product"><img id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" > </div>
       {% endblock prdrecommended %}
     {% endif %}
 

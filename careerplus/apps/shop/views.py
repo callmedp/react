@@ -49,6 +49,7 @@ from users.forms import (
     ModalLoginApiForm
 )
 from review.forms import ReviewForm
+from .models import Skill
 
 
 class ProductInformationMixin(object):
@@ -343,7 +344,6 @@ class ProductInformationMixin(object):
         if product.is_course:
             ctx.update(self.solar_program_structure(sqs))
         ctx.update(self.solar_faq(sqs))
-        ctx.update(self.get_recommendation(product))
         ctx.update(self.get_reviews(product, 1))
         country_choices = [(m.phone, m.name) for m in
                            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
@@ -477,6 +477,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
     def get_context_data(self, **kwargs):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
+        skill = self.request.session.get('skills', None)
+        ctx.update({'skill': 'Python'})
         product_data = self.get_product_detail_context(
             self.product_obj, self.sqs,
             self.product_obj, self.sqs)
@@ -484,7 +486,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         product_detail_content = render_to_string(
             'shop/product-detail.html', product_data,
             request=self.request)
-
         ctx.update({
             'product_detail': product_detail_content,
             "ggn_contact_full": settings.GGN_CONTACT_FULL,
