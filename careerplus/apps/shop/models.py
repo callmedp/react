@@ -35,7 +35,8 @@ from .functions import (
     get_upload_path_product_banner,
     get_upload_path_product_icon,
     get_upload_path_product_image,
-    get_upload_path_product_file,)
+    get_upload_path_product_file,
+    get_upload_path_for_sample_certicate)
 from .choices import (
     SERVICE_CHOICES,
     CATEGORY_CHOICES,
@@ -1612,6 +1613,7 @@ class ProductScreen(AbstractProduct):
         through='ProductAttributeScreen',
         through_fields=('product', 'attribute'),
         blank=True)
+    
 
     class Meta:
         verbose_name = _('Product Screen')
@@ -2422,3 +2424,55 @@ class ProductAuditHistory(Document):
             'product_id',
         ]
     }
+
+
+class UniversityCourseDetailScreen(models.Model):
+    batch_launch_date = models.DateTimeField(
+        help_text=_('This university course launch date'),
+        default=timezone.now
+    )
+    apply_last_date = models.DateTimeField(
+        help_text=_('Last date to apply for this univeristy course'),
+        default=timezone.now
+    )
+    sample_certificate = models.FileField(
+        upload_to=get_upload_path_for_sample_certicate, max_length=255,
+        default=''
+    )
+    our_importance = RichTextField(
+        verbose_name=_('Why us'),
+        help_text=_('Description of why shine learning?'),
+        default=''
+    )
+    assesment = RichTextField(
+        verbose_name=_('assesment'),
+        help_text=_('Description of Assesment and Evaluation'),
+        default=''
+    )
+    productscreen = models.OneToOneField(
+        ProductScreen,
+        help_text=_('Product related to these details'),
+        related_name='university_course_detail',
+    )
+
+
+class UniversityCoursesPaymentScreen(models.Model):
+    installment_fee = models.DecimalField(
+        _('INR Program Fee'),
+        max_digits=12, decimal_places=2
+    )
+    last_date_of_payment = models.DateTimeField(
+        _('Last date of payemnt')
+    )
+    productscreen = models.ForeignKey(
+        ProductScreen,
+        related_name='university_course_payment'
+    )
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        payment = '{} -  for {} - ({})'.format(
+            self.installment_fee,
+            self.university_course.name, self.university_course.id
+        )
+        return payment

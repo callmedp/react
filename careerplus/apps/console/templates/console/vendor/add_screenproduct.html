@@ -122,6 +122,16 @@
                 </div>
                 <div class="alert">{{form.type_product.errors}}</div>
               </div>
+              {% if request.user|has_group:PRODUCT_GROUP_LIST %}
+              <div class="item form-group {% if form.type_flow.errors %}bad{% endif %}">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.flow.id_for_label }}">Flow <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.type_flow}}
+                </div>
+                <div class="alert">{{form.type_flow.errors}}</div>
+              </div>
+              {% endif %}
 
               <div class="item form-group {% if form.upc.errors %}bad{% endif %}">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.upc.id_for_label }}">UPC <span class="required">*</span>

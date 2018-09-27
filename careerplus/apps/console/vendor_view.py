@@ -23,7 +23,8 @@ from shop.choices import PRODUCT_VENDOR_CHOICES
 from blog.mixins import PaginationMixin
 from shop.models import (
     Product, ProductScreen, ScreenChapter,
-    Skill, ScreenProductSkill)
+    Skill, ScreenProductSkill,
+    UniversityCoursesPaymentScreen)
 from faq.models import (
     ScreenFAQ, FAQuestion)
 from shop.utils import ProductModeration
@@ -43,7 +44,10 @@ from .vendor_form import (
     ScreenProductVariationForm,
     ScreenVariationInlineFormSet,
     ScreenProductSkillForm,
-    ScreenSkillInlineFormSet)
+    ScreenSkillInlineFormSet,
+    ScreenUniversityCourseForm,
+    ScreenUniversityCoursePaymentForm,
+    UniversityCoursesPaymentInlineFormset)
 
 
 @Decorate(stop_browser_cache())
@@ -570,7 +574,7 @@ class ChangeScreenProductView(DetailView):
             ScreenProductVariationFormSet = inlineformset_factory(
                 ProductScreen, ProductScreen.variation.through, fk_name='main',
                 form=ScreenProductVariationForm,
-                can_delete=False,
+                can_delete=True,
                 formset=ScreenVariationInlineFormSet, extra=0,
                 max_num=50, validate_max=True)
             if self.object:
@@ -578,7 +582,21 @@ class ChangeScreenProductView(DetailView):
                     instance=self.get_object(),
                     form_kwargs={'object': self.get_object()})
                 context.update({'prdvars_formset': prdvar_formset})
-            
+        if self.object.type_flow == 14:
+            context.update({'prd_university_form': ScreenUniversityCourseForm(
+                instance=self.object.university_course_detail)})
+            UniversityCoursesPaymentFormset = inlineformset_factory(
+                ProductScreen, UniversityCoursesPaymentScreen,
+                fk_name='productscreen',
+                form=ScreenUniversityCoursePaymentForm,
+                can_delete=True,
+                formset=UniversityCoursesPaymentInlineFormset, extra=1,
+                max_num=15, validate_max=True
+            )
+ 
+            university_payment_formset = UniversityCoursesPaymentFormset(instance=self.object)
+            context.update({'prd_university_payment_formset': university_payment_formset })
+
         context.update({
             'messages': alert,
             'form': main_change_form,
@@ -878,7 +896,68 @@ class ChangeScreenProductView(DetailView):
                                 request, [
                                     "console/vendor/change_screenproduct.html"
                                 ], context)
-                    
+                    elif slug == 'university':
+                        form = ScreenUniversityCourseForm(request.POST, request.FILES, instance=obj.university_course_detail)
+                        if form.is_valid():
+                            form.save()
+                            if not obj.status == 2:
+                                obj.status = 1
+                                obj.save()
+                            messages.success(
+                                self.request,
+                                "University course details changed Successfully")
+                            return HttpResponseRedirect(reverse('console:screenproduct-change',kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'prd_university_form': form})
+                            messages.error(
+                                self.request,
+                                "University course details Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/vendor/change_screenproduct.html"
+                                ], context)
+
+                    elif slug == 'university_payment':
+                        UniversityCoursesPaymentFormset = inlineformset_factory(
+                            ProductScreen, UniversityCoursesPaymentScreen,
+                            form=ScreenUniversityCoursePaymentForm,
+                            can_delete=True,
+                            extra=2,
+                            max_num=15, validate_max=True
+                        )
+                        formset = UniversityCoursesPaymentFormset(
+                            request.POST, instance=obj)
+                        from django.db import transaction
+                        if formset.is_valid():
+                            with transaction.atomic():
+                                formset.save(commit=False)
+                                saved_formset = formset.save(commit=False)
+                                for ins in formset.deleted_objects:
+                                    ins.delete()
+
+                                for form in saved_formset:
+                                    form.save()
+                            messages.success(
+                                self.request,
+                                "University course Changed Successfully")
+                            return HttpResponseRedirect(
+                                reverse(
+                                    'console:screenproduct-change',
+                                    kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if formset:
+                                context.update({'prd_university_payment_formset': formset})
+                            messages.error(
+                                self.request,
+                                "University Course Change Failed, \
+                                Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/vendor/change_screenproduct.html"
+                                ], context)
                 messages.error(
                     self.request,
                     "Object Does Not Exists")

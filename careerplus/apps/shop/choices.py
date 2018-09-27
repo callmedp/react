@@ -45,6 +45,7 @@ FLOW_CHOICES = (
     (11, 'TSSC'),  # flow 11
     (12, 'Country Specific Resume'),  # flow 12
     (13, 'Executive Bio,Portfolio,Visual Resume,Cover Letter,Second Regular Resume'),  # flow 13
+    (14, 'University Courses')
 )
 
 BG_COLOR = {0: "#c8b98d", 1: "#cfbabd", 2: "#75dac2", 3: "#d2db86",

@@ -1,4 +1,22 @@
 $(document).ready(function() {
+    var d = new Date();
+    var todayDate = '' + (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
+
+    function dateclass(el) {
+      el.daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        minDate:todayDate,
+        autoUpdateInput: false,
+      }, function(chosen_date) {
+        el.val(chosen_date.format('YYYY-MM-DD'));
+      });
+    }
+
+
+    $('.batch_launch_date, .apply_last_date, .last_date_of_payment').each(function(){
+      dateclass($(this));
+    });
   $('.click-modal').click(function(){
     let msg = $(this).data("msg");
     $("#alertModalOk").data("action", msg);
