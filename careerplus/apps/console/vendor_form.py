@@ -17,7 +17,7 @@ from shop.models import (
     ScreenChapter,
     Skill, ScreenProductSkill,
     UniversityCourseDetailScreen,
-    UniversityCoursesPaymentScreen)
+    UniversityCoursePaymentScreen)
 from faq.models import ScreenFAQ
 from partner.models import Vendor
 from geolocation.models import Country
@@ -1017,7 +1017,7 @@ class ScreenSkillInlineFormSet(forms.BaseInlineFormSet):
         return
 
 
-class UniversityCoursesPaymentInlineFormset(forms.BaseInlineFormSet):
+class ScreenUniversityCoursesPaymentInlineFormset(forms.BaseInlineFormSet):
     def clean(self):
         super(UniversityCoursesPaymentInlineFormset, self).clean()
         if any(self.errors):
@@ -1103,7 +1103,7 @@ class ScreenUniversityCoursePaymentForm(forms.ModelForm):
         self.fields['active'].widget.attrs['data-switchery'] = 'true'
 
     class Meta:
-        model = UniversityCoursesPaymentScreen
+        model = UniversityCoursePaymentScreen
         fields = (
             'installment_fee',
             'last_date_of_payment',
@@ -1126,5 +1126,3 @@ class ScreenUniversityCoursePaymentForm(forms.ModelForm):
             raise forms.ValidationError(
                 "This value is requred.")
         return last_date_of_payment
-
-

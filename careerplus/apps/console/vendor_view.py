@@ -24,7 +24,7 @@ from blog.mixins import PaginationMixin
 from shop.models import (
     Product, ProductScreen, ScreenChapter,
     Skill, ScreenProductSkill,
-    UniversityCoursesPaymentScreen)
+    UniversityCoursePaymentScreen)
 from faq.models import (
     ScreenFAQ, FAQuestion)
 from shop.utils import ProductModeration
@@ -47,7 +47,7 @@ from .vendor_form import (
     ScreenSkillInlineFormSet,
     ScreenUniversityCourseForm,
     ScreenUniversityCoursePaymentForm,
-    UniversityCoursesPaymentInlineFormset)
+    ScreenUniversityCoursesPaymentInlineFormset)
 
 
 @Decorate(stop_browser_cache())
@@ -584,13 +584,13 @@ class ChangeScreenProductView(DetailView):
                 context.update({'prdvars_formset': prdvar_formset})
         if self.object.type_flow == 14:
             context.update({'prd_university_form': ScreenUniversityCourseForm(
-                instance=self.object.university_course_detail)})
+                instance=self.object.screen_university_course_detail)})
             UniversityCoursesPaymentFormset = inlineformset_factory(
-                ProductScreen, UniversityCoursesPaymentScreen,
+                ProductScreen, UniversityCoursePaymentScreen,
                 fk_name='productscreen',
                 form=ScreenUniversityCoursePaymentForm,
                 can_delete=True,
-                formset=UniversityCoursesPaymentInlineFormset, extra=1,
+                formset=ScreenUniversityCoursesPaymentInlineFormset, extra=1,
                 max_num=15, validate_max=True
             )
  
@@ -921,7 +921,7 @@ class ChangeScreenProductView(DetailView):
 
                     elif slug == 'university_payment':
                         UniversityCoursesPaymentFormset = inlineformset_factory(
-                            ProductScreen, UniversityCoursesPaymentScreen,
+                            ProductScreen, UniversityCoursePaymentScreen,
                             form=ScreenUniversityCoursePaymentForm,
                             can_delete=True,
                             extra=2,

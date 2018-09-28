@@ -35,8 +35,7 @@ from blog.mixins import PaginationMixin
 from shop.models import (
     Category, Keyword,
     Attribute, AttributeOptionGroup,
-    Product, Chapter, Skill, ProductAuditHistory)
-
+    Product, Chapter, Skill, ProductAuditHistory, UniversityCoursePayment)
 from .shop_form import (
     AddCategoryForm, ChangeCategoryForm,
     ChangeCategorySEOForm,
@@ -44,7 +43,10 @@ from .shop_form import (
     RelationshipInlineFormSet,
     ChangeCategorySkillForm, SkillAddForm,
     SkillChangeForm,
-    ProductSkillForm, SkillInlineFormSet)
+    ProductSkillForm, SkillInlineFormSet,
+    UniversityCourseForm,
+    UniversityCoursePaymentForm,
+    UniversityCoursesPaymentInlineFormset)
 
 from shop.forms import (
     AddKeywordForm,
@@ -1216,6 +1218,19 @@ class ChangeProductView(DetailView):
                     instance=self.get_object(),
                     form_kwargs={'object': self.get_object()})
                 context.update({'prdrelated_formset': prdrelated_formset})
+        if self.object.type_flow == 14:
+            context.update({'prd_university_form': UniversityCourseForm(
+                instance=self.object.university_course_detail)})
+            UniversityCoursesPaymentFormset = inlineformset_factory(
+                Product, UniversityCoursePayment,
+                fk_name='product',
+                form=UniversityCoursePaymentForm,
+                can_delete=True,
+                formset=UniversityCoursesPaymentInlineFormset, extra=1,
+                max_num=15, validate_max=True
+            )
+            university_payment_formset = UniversityCoursesPaymentFormset(instance=self.object)
+            context.update({'prd_university_payment_formset': university_payment_formset })
 
         context.update({
             'messages': alert,

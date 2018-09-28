@@ -346,7 +346,7 @@ class ProductModeration(object):
                 product.save()
                 from shop.models import (
                     FAQProduct, VariationProduct,
-                    ProductSkill)
+                    ProductSkill, UniversityCoursePayment)
 
                 productfaq = product.productfaqs.all()
                 screenfaq = screen.screenfaqs.all()
@@ -447,9 +447,24 @@ class ProductModeration(object):
                         value = getattr(screen.attr, attribute.name)
                         
                         attribute.save_value(product, value)
+                if screen.type_flow == 14:
+                    attributes = ['batch_launch_date', 'apply_last_date', 'sample_certificate', 'our_importance', 'assesment']
+                    for attr in attributes:
+                        setattr(product.university_course_detail, attr, getattr(screen.screen_university_course_detail, attr))
+                    product.university_course_detail.save()
+
+                    product.type_flow = screen.type_flow
+                    for university_payment in screen.screen_university_course_payment.all():
+                        UniversityCoursePayment.objects.create(
+                            product=product,
+                            installment_fee=university_payment.installment_fee,
+                            last_date_of_payment=university_payment.last_date_of_payment,
+                            active=university_payment.last_date_of_payment
+                        )
                 product.save()
                 
                 copy = True
+
                 return (product, screen, copy)
         except IntegrityError:
             copy = False

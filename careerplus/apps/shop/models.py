@@ -1649,6 +1649,8 @@ class ProductScreen(AbstractProduct):
                     upc=self.upc,
                     vendor=self.vendor,
                     inr_price=self.inr_price)
+                if self.type_flow == 14:
+                    UniversityCourseDetail.objects.get_or_create(product=product)
                 self.product = product
                 self.save()
         return self.product
@@ -2452,11 +2454,63 @@ class UniversityCourseDetailScreen(models.Model):
     productscreen = models.OneToOneField(
         ProductScreen,
         help_text=_('Product related to these details'),
+        related_name='screen_university_course_detail',
+    )
+
+
+class UniversityCoursePaymentScreen(models.Model):
+    installment_fee = models.DecimalField(
+        _('INR Program Fee'),
+        max_digits=12, decimal_places=2
+    )
+    last_date_of_payment = models.DateTimeField(
+        _('Last date of payment')
+    )
+    productscreen = models.ForeignKey(
+        ProductScreen,
+        related_name='screen_university_course_payment'
+    )
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        payment = '{} -  for {} - ({})'.format(
+            self.installment_fee,
+            self.productscreen.name, self.productscreen.id
+        )
+        return payment
+
+
+class UniversityCourseDetail(models.Model):
+    batch_launch_date = models.DateTimeField(
+        help_text=_('This university course launch date'),
+        default=timezone.now
+    )
+    apply_last_date = models.DateTimeField(
+        help_text=_('Last date to apply for this univeristy course'),
+        default=timezone.now
+    )
+    sample_certificate = models.FileField(
+        upload_to=get_upload_path_for_sample_certicate, max_length=255,
+        default=''
+    )
+    our_importance = RichTextField(
+        verbose_name=_('Why us'),
+        help_text=_('Description of why shine learning?'),
+        default=''
+    )
+    assesment = RichTextField(
+        verbose_name=_('assesment'),
+        help_text=_('Description of Assesment and Evaluation'),
+        default=''
+    )
+    product = models.OneToOneField(
+        Product,
+        help_text=_('Product related to these details'),
         related_name='university_course_detail',
     )
 
 
-class UniversityCoursesPaymentScreen(models.Model):
+class UniversityCoursePayment(models.Model):
     installment_fee = models.DecimalField(
         _('INR Program Fee'),
         max_digits=12, decimal_places=2
@@ -2464,8 +2518,8 @@ class UniversityCoursesPaymentScreen(models.Model):
     last_date_of_payment = models.DateTimeField(
         _('Last date of payemnt')
     )
-    productscreen = models.ForeignKey(
-        ProductScreen,
+    product = models.ForeignKey(
+        Product,
         related_name='university_course_payment'
     )
     active = models.BooleanField(default=True)
@@ -2473,6 +2527,6 @@ class UniversityCoursesPaymentScreen(models.Model):
     def __str__(self):
         payment = '{} -  for {} - ({})'.format(
             self.installment_fee,
-            self.university_course.name, self.university_course.id
+            self.product.name, self.product.id
         )
         return payment
