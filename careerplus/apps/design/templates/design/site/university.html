@@ -18,7 +18,7 @@
     {{block.super}}
     {% compress css %}
     <link type="text/scss" href="{% static 'shinelearn/css/product/detail.scss' %}" rel="stylesheet">
-    <link type="text/css" href="{% static 'shinelearn/css/skill/extra.css' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-detail.scss' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 
@@ -31,8 +31,208 @@
 {% block main_container %}
     
     <div id="id-detail-body">
-      {{product_detail|safe}}
-   </div>
+
+      <header>
+        <div class="exe-header-txt container">
+          <!-- breadcrums -->
+          <ol class="breadcrumb mt-30">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">XLRI Courses</a></li>
+            <li class="active">Digital Marketing</li>
+          </ol>
+          <!-- course heading -->
+          <h1>Digital Marketing</h1>
+          <div class="row">
+            <div class="exe-course-box col-sm-11">
+              <!-- course image -->
+              <div class="exe-course-img">
+                <figure>
+                  <img src="{% static 'shinelearn/images/executive/xlri-logo.jpg' %}" alt="Logo" class="img-responsive">
+                </figure>
+              </div>
+              <div class="exe-course-sep"></div>
+
+              <div class="row">
+                <!-- course detail -->
+                <div class="exe-course-detail">
+                  <div class="col-sm-9">
+                    <figure class="col-sm-4">
+                      <div class="media">
+                        <span class="media-left">
+                          <i class="icon-exe-apply"></i>
+                        </span>
+                        <figcaption class="media-body">
+                          Apply before:
+                          <strong>29 Dec 2018</strong>
+                        </figcaption>
+                      </div>
+                    </figure>
+                    <figure class="col-sm-4">
+                      <div class="media">
+                        <span class="media-left">
+                          <i class="icon-exe-batch"></i>
+                        </span>
+                        <figcaption class="media-body">
+                          Batch starts:
+                          <strong>05 Jan 2019</strong>
+                        </figcaption>
+                      </div>
+                    </figure>
+                    <figure class="col-sm-4">
+                      <div class="media">
+                        <span class="media-left">
+                          <i class="icon-exe-duration"></i>
+                        </span>
+                        <figcaption class="media-body">
+                          Duration:
+                          <strong>4 months</strong>
+                        </figcaption>
+                      </div>
+                    </figure>
+                    <div class="col-sm-12 weekend-txt">
+                      Weekend Batch: Saturday  9 to 11am & Sunday 10am to 12pm
+                    </div>
+                  </div>
+
+                  <div class="col-sm-3 exe-enrol-now">
+                    <strike>Rs.799</strike>
+                    <strong>Rs.799</strong>
+                    <a class="exe-button-enrol mt-10" href="#">Enroll Now</a>
+                  </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+      </header>
+
+
+      <!-- main parent1 section start -->
+      <section class="cls_sticky_scroller_p pr">
+
+          <!-- sticky sub header 1 -->
+          <div class="cls_sticky_scroller" >
+            <div class="container">
+
+              <!-- new content -->
+              <div class="cls_samples_enquiry samples_enquiry">
+                Query form
+              </div>
+
+            </div>
+          </div>
+      </section>
+      <!-- main parent1 section end -->
+
+      <!-- main parent2 section start -->
+      <section class="container-fluid cls_scroller_parent pr">
+        <div class="row">
+
+             <!-- About course container -->
+            <section id="about-course" class="container-fluid">
+              <div class="row detail-course-links cls_scroller pr">
+              <!-- sticky sub header 2 -->
+                <div class="container">
+                  <div class="col-sm-12 about-tab cls_scroll_tab">
+
+                    <a title="About Course" class="active cls_tab_child" href="#about-course">About Course</a>
+
+                    <a title="Key Benefits" class=" cls_tab_child" href="#key-benefits">Key Benefits</a>
+
+                    <a title="Who Should Attend" class=" cls_tab_child" href="#who-should-attend">Who Should Attend</a>
+
+                    <a title="Faculty Profile" class=" cls_tab_child" href="#faculty-profile">Faculty Profile</a>
+
+                    <a title="Program Structure" class="cls_tab_child" href="#program-structure">Program Structure</a>
+
+                    <a title="Fees & Payments Modes" class="cls_tab_child" href="#fees-payments">Fees & Payments Modes</a>
+
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- About Course -->
+              <section class="container-fluid detail-box">
+                <div class="container">
+                  <div class="row">
+                    <div id="about-course" class="col-sm-12 col-md-8 scroll">
+                      <h2>About Course</h2>
+                      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Key Benefits -->
+              <section class="container-fluid detail-box">
+                <div class="container">
+                  <div class="row">
+                    <div id="key-benefits" class="col-sm-12 col-md-8 scroll">
+                      <h2>Key Benefits</h2>
+                      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Who Should Attend -->
+              <section class="container-fluid detail-box">
+                <div class="container">
+                  <div class="row">
+                    <div id="who-should-attend" class="col-sm-12 col-md-8 scroll">
+                      <h2>Who Should Attend</h2>
+                      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Faculty Profile -->
+              <section class="container-fluid detail-box">
+                <div class="container">
+                  <div class="row">
+                    <div id="faculty-profile" class="col-sm-12 col-md-8 scroll">
+                      <h2>Faculty Profile</h2>
+                      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Program Structure -->
+              <section class="container-fluid detail-box">
+                <div class="container">
+                  <div class="row">
+                    <div id="program-structure" class="col-sm-12 col-md-8 scroll">
+                      <h2>Program Structure</h2>
+                      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Fees & Payments Modes -->
+              <section class="container-fluid detail-box">
+                <div class="container">
+                  <div class="row">
+                    <div id="fees-payments" class="col-sm-12 col-md-8 scroll">
+                      <h2>Fees & Payments Modes</h2>
+                      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+      </div>
+      </section>
+      <!-- main parent2 section end -->   
+
+
+
+    </div>
 {% endblock main_container %}
 
 
@@ -42,7 +242,7 @@
     <script src="{% static 'shinelearn/js/common/plugin.activeOnScroll.js' %}"></script>
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/shop/detail.js' %}"></script>
-    <script src="{% static 'shinelearn/js/common/scroller.js' %}" type="text/javascript"></script>
+    <script src="{% static 'shinelearn/js/common/scroller-executive.js' %}" type="text/javascript"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}
