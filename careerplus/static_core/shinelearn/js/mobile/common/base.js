@@ -136,6 +136,22 @@ $(document).ready(function() {
   		slidesToScroll: 1
 	});
 
+
+	// Executive course Function starts here 
+	$(".faculty-profile").slick({
+		autoplay:false,
+		arrows: true,
+		dots: false,
+		// variableWidth: true,
+		slidesToShow: 1,
+		slidesToScroll: 1,
+		infinite: true
+	});
+	
+
+
+
+
 });// Document ready function ends here
 
 function goBack() {

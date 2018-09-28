@@ -16,7 +16,11 @@
 @import '../components/popup';
 
 /* Line form Start From Here */
+@import '../components/buttons';
+
+/* Button  Start From Here */
 @import '../components/line-form';
+
 
 .blue-link {
   color: -imp($txt-blue);
@@ -117,36 +121,6 @@
 .semi-bold {
   font-weight: 600;
 }
-
-// buttons
-
-.btn {
-  @extend %button;
-
-  @media (max-width: 320px) { 
-    padding: 10px 5px;
-    font-size: 14px;
-  }
-}
-
-.btn-sm {
-  @extend %button;
-  padding: 2px 10px;
-  font-size: 14px;
-}
-
-.btn-slg {
-  padding: 10px 40px;
-}
-
-.btn-lg {
-  padding: 6px 20px;
-}
-
-.btn-round {
-  border-radius: $global-radius;
-}
-
 .wrapper {
   display: block;
   min-height: 100%;
@@ -415,6 +389,10 @@ article {
   display: none;
 }
 
+
+.line-height-sm {
+  line-height: 1.2rem;
+}
 .sidebar-filter {
   z-index: 999999999999 !important;
 }
@@ -637,4 +615,15 @@ article {
     display: block;
     margin: 25px 0 30px 0;
   }
+}
+
+
+.btn-grOrange {
+  color: $txt-white;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#efa859+0,e39344+100 */
+background: #efa859; /* Old browsers */
+background: -moz-linear-gradient(left, #efa859 0%, #e39344 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(left, #efa859 0%,#e39344 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to right, #efa859 0%,#e39344 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efa859', endColorstr='#e39344',GradientType=1 ); /* IE6-9 */
 }

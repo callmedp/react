@@ -21,3 +21,28 @@
 .search-icon-tab, .icon-loc, .mail-iconStrock {
 	background-image: url($image-path);
 }
+
+
+[class^="execIcon-"] {
+	background-image: url($executive-sprite);
+	background-repeat: no-repeat;
+}
+
+.apply-execIcon::before,
+.batch-execIcon::before,
+.duration-execIcon::before,
+.price-execIcon::before,
+.manager::before,
+.senior-managers::before,
+.department-heads::before,
+.line-manager::before,
+.free::before,
+.emi::before,
+.credits::before,
+.free-services::before,
+.global::before,
+.refernEarn::before,
+.content .accordion-wrap .acc_head .acc_icon_expand {
+	background-image: url($executive-sprite);
+	background-repeat: no-repeat;
+}
