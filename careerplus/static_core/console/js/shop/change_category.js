@@ -26,8 +26,18 @@ $(document).ready(function() {
       let message = 'Do you want to make remove service page of this category?';
       $("#alertModal").modal('show').find('#alertModalBody').html(message);
     }
+
+    else if(msg == "university"){
+      let message = 'Do you want to make university page of this category?';
+      $("#alertModal").modal('show').find('#alertModalBody').html(message);
+    }
+    else if(msg == "nouniversity"){
+      let message = 'Do you want to remove university page of this category?';
+      $("#alertModal").modal('show').find('#alertModalBody').html(message);
+    }
      
   });
+
   var processing = true;
   $('#alertModalOk').click(function(){
     let msg = $(this).data("action");

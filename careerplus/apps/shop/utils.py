@@ -594,6 +594,32 @@ class ProductModeration(object):
 
 class CategoryValidation(object):
 
+    def validate_before_university(self, request, category):
+        test_pass = False
+        try:
+            if request and category:
+                if not self.validate_fields(
+                    request=request, category=category):
+                    return test_pass
+                if category.type_level in [2, 3, 4]:
+                    if not self.validate_parent(
+                        request=request, category=category):
+                        return test_pass
+                if not self.validate_universitypage(
+                    request=request, category=category):
+                    return test_pass
+                test_pass = True
+                return test_pass
+            else:
+                messages.error(request, "Object Do not Exists")
+                return test_pass
+        except Exception as e:
+            test_pass = False
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
+        return test_pass
+
+
     def validate_before_active(self, request, category):
         test_pass = False
         try:
@@ -765,6 +791,37 @@ class CategoryValidation(object):
                     return test_pass
             else:
                 return test_pass         
+        except Exception as e:
+            test_pass = False
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
+        return test_pass
+
+    def validate_universitypage(self, request, category):
+        test_pass = False
+        try:
+            if request:
+                if category:
+                    if category.type_level in [1, 2]:
+                        messages.error(
+                            request,
+                            "Level 1 and 2 Can't be made University")
+                        return test_pass
+                    if not category.description:
+                        messages.error(
+                            request,
+                            "University Description is required")
+                        return test_pass
+                    if not category.check_products():
+                        messages.error(request, "University Products is required")
+                        return test_pass
+                    test_pass = True
+                    return test_pass
+                else:
+                    messages.error(request, "Object Do not Exists")
+                    return test_pass
+            else:
+                return test_pass
         except Exception as e:
             test_pass = False
             messages.error(request, (

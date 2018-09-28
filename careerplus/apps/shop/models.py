@@ -31,6 +31,7 @@ from .managers import (
 from .utils import ProductAttributesContainer
 from . import choices
 from .functions import (
+    get_upload_path_faculty,
     get_upload_path_category,
     get_upload_path_product_banner,
     get_upload_path_product_icon,
@@ -100,6 +101,9 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         _('Is Skill'),
         default=False)
     is_service = models.BooleanField(_('Show as a Service Page'),default=False)
+    is_university = models.BooleanField(
+        _('Show as a University Page'),
+        default=False)
     graph_image = models.ImageField(
         _('Graph Image'), upload_to=get_upload_path_category,
         blank=True, null=True)
@@ -124,7 +128,6 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     active = models.BooleanField(default=False)
     display_order = models.IntegerField(default=1)
 
-    
     _metadata_default = ModelMeta._metadata_default.copy()
     
     _metadata = {
@@ -375,6 +378,26 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
 
     def get_canonical_url(self):
         return self.get_absolute_url()
+
+
+class SubHeaderCategory(AbstractAutoDate):
+    heading = models.CharField(
+        max_length=100,
+        blank=False, null=False)
+    description = RichTextField(
+        verbose_name=_('Description'),
+        blank=True, default='')
+    active = models.BooleanField(default=False)
+    display_order = models.PositiveIntegerField(
+        default=1)
+    category = models.ForeignKey(
+        'shop.Category',
+        verbose_name=_('University'),
+        related_name='subheaders')
+
+    def __str__(self):
+        return '{} - for University - {}'.format(
+            self.heading, self.category.heading)
 
 
 class CategoryRelationship(AbstractAutoDate):
@@ -2422,3 +2445,78 @@ class ProductAuditHistory(Document):
             'product_id',
         ]
     }
+
+
+class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
+    name = models.CharField(
+        _('Name'), max_length=200,
+        help_text=_('Faculty Name decides slug'))
+    slug = models.CharField(
+        _('Slug'), unique=True,
+        max_length=200, help_text=_('Unique slug'))
+    image = models.ImageField(
+        _('Image'), upload_to=get_upload_path_faculty,
+        blank=True, null=True)
+    designation = models.CharField(
+        _('Designation'), max_length=200)
+    description = models.TextField(
+        verbose_name=_('Description'),
+        blank=True, default='')
+    short_desc = models.TextField(
+        verbose_name=_('Short Description'),
+        blank=True, default='')
+    faculty_speak = models.TextField(
+        verbose_name=_('Faculty Speak'),
+        blank=True, default='')
+    institute = models.ForeignKey(
+        'shop.Category',
+        blank=True,
+        null=True)
+    products = models.ManyToManyField(
+        'shop.Product',
+        verbose_name=_('Faculty Products'),
+        through='FacultyProduct',
+        through_fields=('faculty', 'product'),
+        blank=True)
+    active = models.BooleanField(
+        default=False)
+
+    def __str__(self):
+        return '{} - {}'.format(self.name, self.id)
+
+    def save(self, *args, **kwargs):
+        if self.pk and self.name:
+            if not self.heading:
+                self.heading = self.name
+            if not self.title:
+                self.title = self.name
+            if not self.image_alt:
+                self.image_alt = self.name
+            if not self.meta_desc:
+                self.meta_desc = self.get_meta_desc()
+        super(Faculty, self).save(*args, **kwargs)
+
+    def get_active(self):
+        if self.active:
+            return 'Active'
+        return 'In-Active'
+
+    def get_meta_desc(self):
+        return '%s - Unitversity Faculty at Shine Learning' % (
+            self.heading,)
+
+
+
+class FacultyProduct(AbstractAutoDate):
+    faculty = models.ForeignKey(
+        'shop.Faculty',
+        verbose_name=_('Faculty'),
+        related_name='facultyproducts',
+        on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        'shop.Product',
+        verbose_name=_('Product'),
+        related_name='facultyproducts',
+        on_delete=models.CASCADE)
+    active = models.BooleanField(default=False)
+    display_order = models.PositiveIntegerField(default=1)

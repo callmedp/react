@@ -2,7 +2,9 @@ from django.conf.urls import url, include
 
 from .views import ConsoleLoginView, ConsoleDashboardView, ConsoleLogoutView, \
     ConsoleForgotPasswordView, ConsolePasswordResetView, ConsoleAutoLoginView
-from . import shop_view, vendor_view, blog_view, order_view, refund_view,wallet_view
+from . import (
+    shop_view, vendor_view, blog_view, order_view,
+    refund_view, wallet_view, university_view)
 from geolocation import adminviews
 
 
@@ -38,6 +40,20 @@ urlpatterns += [
 #         order_view.SearchOrderView.as_view(),
 #         name='search-order'),
 # ]
+
+# url for skills
+urlpatterns += [
+
+    url(r'^university/faculty/list/$',
+        university_view.FacultyListView.as_view(),
+        name='faculty-list'),
+    url(r'^university/faculty/add/$',
+        university_view.FacultyAddView.as_view(),
+        name='faculty-add'),
+    url(r'^university/faculty/change/(?P<pk>[\d]+)/$',
+        university_view.FacultyChangeView.as_view(),
+        name='faculty-change'),
+]
 
 # url for skills
 urlpatterns += [

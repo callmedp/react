@@ -79,7 +79,7 @@
         {% endif %}
         {% if object.type_level != 1 and object.type_level != 2 %}
           
-          {% if not object.is_skill and not object.is_service %}
+          {% if not object.is_skill and not object.is_service and not object.is_university %}
       
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
                 <a class="btn btn-app click-modal" data-msg="skill">
@@ -90,20 +90,31 @@
                 <a class="btn btn-app click-modal" data-msg="service">
                   <i class="fa fa-check-square-o"></i> Make Service</a>
             </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
+              <a class="btn btn-app click-modal" data-msg="university">
+                <i class="fa fa-check-square-o"></i> Make University</a>
+            </div>
+
           {% elif object.is_skill %}
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
                 <a class="btn btn-app click-modal" data-msg="noskill">
                   <i class="fa fa-minus-square"></i> Remove Skill</a>
               </div>
 
+          {% elif object.is_university %}
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
+              <a class="btn btn-app click-modal" data-msg="nouniversity">
+                <i class="fa fa-minus-square"></i> Remove University</a>
+            </div>
+
           {% else %}
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12" >
-                <a class="btn btn-app click-modal" data-msg="noservice">
-                  <i class="fa fa-minus-square"></i> Remove Service</a>
-              </div>
-        
-        
+              <a class="btn btn-app click-modal" data-msg="noservice">
+                <i class="fa fa-minus-square"></i> Remove Service</a>
+            </div>
           {% endif %}
+
         {% endif %}
         
     </div>
@@ -124,8 +135,7 @@
             </button>
             <h4 class="modal-title" id="alertModalTitle">Alert!</h4>
           </div>
-          <div class="modal-body" id="alertModalBody">
-            
+          <div class="modal-body" id="alertModalBody"> 
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -536,6 +546,280 @@
         </div>
       {% endif %}
       {% endif %}
+
+      {% if sub_heading_formset %}
+      <div class="x_panel">
+          <div class="x_title">
+            <h2><i class="fa fa-thumb-tack"></i> Add/Change Sub Heading</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <div class="accordion" id="accordion2" role="tablist" aria-multiselectable="true">
+              <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-subheader-form">
+                    {% csrf_token %}
+                    {{ sub_heading_formset.management_form }}
+                {% if sub_heading_formset.non_form_errors %}
+                  <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                    </button>
+                    {{ sub_heading_formset.non_form_errors }}
+                  </div>
+                {% endif %}
+              <div class="inter-related-parent-div">    
+              {% for inline_admin_form in sub_heading_formset.forms %}
+              <div class="panel {% if forloop.last %} {% endif %}">
+                <a class="panel-heading collapsed" role="tab" id="heading{{forloop.counter}}" data-toggle="collapse" data-parent="#accordion2" href="#collapse{{forloop.counter}}2" aria-expanded="false" aria-controls="collapse{{forloop.counter}}2">
+                  {% if  inline_admin_form.instance and inline_admin_form.instance.id %}
+                  <h4 class="panel-title">Sub Heading:&nbsp;{{inline_admin_form|get_instance}}</h4>
+
+                  {% else %}
+                  <h4 class="panel-title">Sub Header: Add New
+                  </h4>{% endif %}
+
+                    
+                </a>
+                <div id="collapse{{forloop.counter}}2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;">
+                  <div class="panel-body">
+                      {% if  inline_admin_form.DELETE %}
+                        <div class="pull-left">
+                          {{inline_admin_form.DELETE}}<label for="{{ inline_admin_form.DELETE.id_for_label }}" style="color:#d9534f !important;">&nbsp;&nbsp;Delete
+                          </label>
+                          
+                        </div>
+                        </br>
+                          <div class="clearfix"></div>
+                      {% endif %}
+
+                      {% for hidden in inline_admin_form.hidden_fields %}
+                          {{ hidden }}
+                      {% endfor %}
+                  
+                    <div class="item form-group {% if inline_admin_form.heading.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.heading.id_for_label }}">{{inline_admin_form.heading.label}} <span class="required" style="color:red">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.heading}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.heading.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if inline_admin_form.description.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.description.id_for_label }}">{{inline_admin_form.description.label}} <span class="required" style="color:red;">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.description}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.description.errors}}</div>
+                    </div>
+                    
+                    <div class="item form-group {% if inline_admin_form.display_order.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.sort_order.id_for_label }}">{{inline_admin_form.display_order.label}} <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.display_order}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.display_order.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if inline_admin_form.active.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.active.id_for_label }}">{{inline_admin_form.active.label}} <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.active}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.active.errors}}</div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              </div>
+             
+
+              <input type="hidden" name="category" value="{{object.pk}}">
+                <input type="hidden" name="slug" value="subheading">
+                <div class="ln_solid"></div>
+                <div class="form-group">
+                  <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                  </div>
+                </div>
+              
+              </form>
+            </div>  
+
+          </div>
+        </div>
+
+        {% endif %}
+
+
+
+      {% if testimonial_formset %}
+      <div class="x_panel">
+          <div class="x_title">
+            <h2><i class="fa fa-thumb-tack"></i> Add/Change Testimonial</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <div class="accordion" id="accordion3" role="tablist" aria-multiselectable="true">
+              <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-testimonial-form">
+                    {% csrf_token %}
+                    {{ testimonial_formset.management_form }}
+                {% if testimonial_formset.non_form_errors %}
+                  <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                    </button>
+                    {{ testimonial_formset.non_form_errors }}
+                  </div>
+                {% endif %}
+              <div class="inter-related-parent-div">    
+              {% for inline_admin_form in testimonial_formset.forms %}
+              <div class="panel {% if forloop.last %} {% endif %}">
+                <a class="panel-heading collapsed" role="tab" id="heading{{forloop.counter}}" data-toggle="collapse" data-parent="#accordion3" href="#collapse{{forloop.counter}}3" aria-expanded="false" aria-controls="collapse{{forloop.counter}}3">
+                  {% if  inline_admin_form.instance and inline_admin_form.instance.id %}
+                  <h4 class="panel-title">Testimonial:&nbsp;{{inline_admin_form|get_instance}}</h4>
+
+                  {% else %}
+                  <h4 class="panel-title">Testimonial: Add New
+                  </h4>{% endif %}
+
+                    
+                </a>
+                <div id="collapse{{forloop.counter}}3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false" style="height: 0px;">
+                  <div class="panel-body">
+                      {% if  inline_admin_form.DELETE %}
+                        <div class="pull-left">
+                          {{inline_admin_form.DELETE}}<label for="{{ inline_admin_form.DELETE.id_for_label }}" style="color:#d9534f !important;">&nbsp;&nbsp;Delete
+                          </label>
+                          
+                        </div>
+                        </br>
+                          <div class="clearfix"></div>
+                      {% endif %}
+
+                      {% for hidden in inline_admin_form.hidden_fields %}
+                          {{ hidden }}
+                      {% endfor %}
+                  
+                    <div class="item form-group {% if inline_admin_form.page.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.heading.id_for_label }}">{{inline_admin_form.page.label}} <span class="required" style="color:red">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.page}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.page.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if inline_admin_form.user_name.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.user_name.id_for_label }}">{{inline_admin_form.user_name.label}} <span class="required" style="color:red">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.user_name}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.user_name.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if inline_admin_form.image.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.image.id_for_label }}">{{inline_admin_form.image.label}} <span class="required" style="color:red"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.image}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.image.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if inline_admin_form.designation.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.designation.id_for_label }}">{{inline_admin_form.designation.label}} <span class="required" style="color:red">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.designation}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.designation.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if inline_admin_form.company.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.company.id_for_label }}">{{inline_admin_form.company.label}} <span class="required" style="color:red">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.company}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.company.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if inline_admin_form.title.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.title.id_for_label }}">{{inline_admin_form.title.label}} <span class="required" style="color:red"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.title}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.title.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if inline_admin_form.review.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.review.id_for_label }}">{{inline_admin_form.review.label}} <span class="required" style="color:red">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.review}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.review.errors}}</div>
+                    </div>
+
+
+                    
+                    <div class="item form-group {% if inline_admin_form.priority.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.priority.id_for_label }}">{{inline_admin_form.priority.label}} <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.priority}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.priority.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if inline_admin_form.is_active.errors %}bad{% endif %}">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.is_active.id_for_label }}">{{inline_admin_form.is_active.label}} <span class="required"></span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{inline_admin_form.is_active}}
+                      </div>
+                      <div class="alert">{{inline_admin_form.is_active.errors}}</div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              </div>
+             
+
+              <input type="hidden" name="category" value="{{object.pk}}">
+                <input type="hidden" name="slug" value="testimonial">
+                <div class="ln_solid"></div>
+                <div class="form-group">
+                  <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                  </div>
+                </div>
+              
+              </form>
+            </div>  
+
+          </div>
+        </div>
+        {% endif %}
+
+
+
+
       {% if childrens %}
         
       <div class="x_panel">

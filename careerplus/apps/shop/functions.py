@@ -15,6 +15,11 @@ def get_file_name(f_obj):
     return file_name
 
 
+def get_upload_path_faculty(instance, filename):
+    return "faculty/{faculty_id}/{filename}".format(
+        faculty_id=instance.id, filename=get_file_name(filename))
+
+
 def get_upload_path_category(instance, filename):
     return "category/{cat_id}/{filename}".format(
         cat_id=instance.id, filename=get_file_name(filename))
