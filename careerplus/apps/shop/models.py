@@ -2439,7 +2439,7 @@ class UniversityCourseDetailScreen(models.Model):
     )
     sample_certificate = models.FileField(
         upload_to=get_upload_path_for_sample_certicate, max_length=255,
-        default=''
+        null=True, blank=True
     )
     our_importance = RichTextField(
         verbose_name=_('Why us'),
@@ -2491,7 +2491,7 @@ class UniversityCourseDetail(models.Model):
     )
     sample_certificate = models.FileField(
         upload_to=get_upload_path_for_sample_certicate, max_length=255,
-        default=''
+        null=True, blank=True
     )
     our_importance = RichTextField(
         verbose_name=_('Why us'),

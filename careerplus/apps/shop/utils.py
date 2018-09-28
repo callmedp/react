@@ -224,6 +224,13 @@ class ProductModeration(object):
                     if not product.countries.all().exists():
                         messages.error(request, "Available Country is required")
                         return test_pass
+
+                    if product.type_flow == 14:
+                        attributes = ['batch_launch_date', 'apply_last_date', 'our_importance', 'assesment']
+                        for attr in attributes:
+                            if not getattr(product.screen_university_course_detail, attr):
+                                messages.error(request, "Univeristy Course details are required")
+                                return test_pass
                     test_pass = True
                     return test_pass
                 else:
@@ -459,7 +466,7 @@ class ProductModeration(object):
                             product=product,
                             installment_fee=university_payment.installment_fee,
                             last_date_of_payment=university_payment.last_date_of_payment,
-                            active=university_payment.last_date_of_payment
+                            active=university_payment.active
                         )
                 product.save()
                 

@@ -897,7 +897,7 @@ class ChangeScreenProductView(DetailView):
                                     "console/vendor/change_screenproduct.html"
                                 ], context)
                     elif slug == 'university':
-                        form = ScreenUniversityCourseForm(request.POST, request.FILES, instance=obj.university_course_detail)
+                        form = ScreenUniversityCourseForm(request.POST, request.FILES, instance=obj.screen_university_course_detail)
                         if form.is_valid():
                             form.save()
                             if not obj.status == 2:
@@ -939,6 +939,9 @@ class ChangeScreenProductView(DetailView):
 
                                 for form in saved_formset:
                                     form.save()
+                                if not obj.status == 2:
+                                    obj.status = 1
+                                    obj.save()
                             messages.success(
                                 self.request,
                                 "University course Changed Successfully")

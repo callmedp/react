@@ -1243,7 +1243,7 @@ class ChangeProductView(DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
-        
+        import ipdb; ipdb.set_trace();
         if self.request.POST or self.request.FILES:
             try:
                 obj = int(self.kwargs.get('pk', None))
@@ -1654,6 +1654,66 @@ class ChangeProductView(DetailView):
                             return TemplateResponse(
                                 request, [
                                     "console/shop/change_product.html"
+                                ], context)
+
+                    elif slug == 'university':
+                        form = UniversityCourseForm(request.POST, request.FILES, instance=obj.university_course_detail)
+                        if form.is_valid():
+                            form.save()
+                            messages.success(
+                                self.request,
+                                "University course details changed Successfully")
+                            return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'prd_university_form': form})
+                            messages.error(
+                                self.request,
+                                "University course details Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/vendor/change_product.html"
+                                ], context)
+
+                    elif slug == 'university_payment':
+                        UniversityCoursesPaymentFormset = inlineformset_factory(
+                            Product, UniversityCoursePayment,
+                            form=UniversityCoursePaymentForm,
+                            can_delete=True,
+                            extra=2,
+                            max_num=15, validate_max=True
+                        )
+                        formset = UniversityCoursesPaymentFormset(
+                            request.POST, instance=obj)
+                        from django.db import transaction
+                        if formset.is_valid():
+                            with transaction.atomic():
+                                formset.save(commit=False)
+                                saved_formset = formset.save(commit=False)
+                                for ins in formset.deleted_objects:
+                                    ins.delete()
+
+                                for form in saved_formset:
+                                    form.save()
+                            messages.success(
+                                self.request,
+                                "University course Changed Successfully")
+                            return HttpResponseRedirect(
+                                reverse(
+                                    'console:screenproduct-change',
+                                    kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if formset:
+                                context.update({'prd_university_payment_formset': formset})
+                            messages.error(
+                                self.request,
+                                "University Course Change Failed, \
+                                Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/vendor/change_screenproduct.html"
                                 ], context)
                 messages.error(
                     self.request,

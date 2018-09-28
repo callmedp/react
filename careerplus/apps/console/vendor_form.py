@@ -147,6 +147,7 @@ class AddScreenProductForm(forms.ModelForm):
         self.fields['product_class'].empty_label = 'Select Product Class'
         self.fields['product_class'].required = True
         self.fields['type_product'].widget.attrs['class'] = form_class
+        self.fields['type_flow'].widget.attrs['class'] = form_class
         if has_group(user=self.user, grp_list=settings.PRODUCT_GROUP_LIST):
             self.fields['type_product'].choices = PRODUCT_VENDOR_CHOICES + ((3, 'Combo'),
                 (4, 'No-Direct-Sell/Virtual'),
@@ -155,8 +156,11 @@ class AddScreenProductForm(forms.ModelForm):
 
         else:
             self.fields['type_product'].choices = PRODUCT_VENDOR_CHOICES
-            self.fields.pop('type_flow')
-        
+            self.fields['type_flow'].choices = (
+                (0, 'Default'), (14, 'University Courses')
+            )
+
+
         if not vendor:
             if has_group(user=self.user, grp_list=settings.PRODUCT_GROUP_LIST):
                 pass
