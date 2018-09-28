@@ -537,7 +537,6 @@
 	  	
 	  };
 	  
-	  
 	  function init_category_seo_change() {
 	  	if($('#change-category-seo-form').length > 0){
 	  		var parsleyConfig = {

@@ -54,7 +54,8 @@ class TrendingProduct(AbstractAutoDate):
 
 
 class Testimonial(AbstractAutoDate):
-    page = models.PositiveIntegerField(default=1, choices=PAGECHOICES)
+    page = models.PositiveIntegerField(
+        default=0, choices=PAGECHOICES)
     user_id = models.CharField(
         max_length=100,
         verbose_name=_("User ID"),)
@@ -75,8 +76,19 @@ class Testimonial(AbstractAutoDate):
 
     is_active = models.BooleanField(default=False)
 
+    # for university skill page
+    category = models.ForeignKey(
+        'shop.Category',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        verbose_name=_('University-Category'),
+        related_name="testimonials",
+        help_text='Testimonial for skill pages')
+
+
     def __str__(self):
-        return str(self.id)
+        return str(self.user_name) + ' - ' + str(self.id)
 
     class Meta:
         ordering = ['priority']

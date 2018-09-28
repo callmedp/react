@@ -314,6 +314,24 @@ for conn, attrs in MONGO_SETTINGS.items():
         continue
 
 
+# test settings
+class DisableMigrations(object):
+
+    def __contains__(self, item):
+        return True
+
+    def __getitem__(self, item):
+        return None
+
+
+TESTS_IN_PROGRESS = False
+if 'test' in sys.argv[1:]:
+    DEBUG = False
+    TEMPLATE_DEBUG = False
+    TESTS_IN_PROGRESS = True
+    MIGRATION_MODULES = DisableMigrations()
+
+
 try:
     from .settings_local import *
 except:

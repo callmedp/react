@@ -35,7 +35,10 @@ from blog.mixins import PaginationMixin
 from shop.models import (
     Category, Keyword,
     Attribute, AttributeOptionGroup,
-    Product, Chapter, Skill, ProductAuditHistory, UniversityCoursePayment)
+    Product, Chapter, Skill, ProductAuditHistory, UniversityCoursePayment,
+    SubHeaderCategory
+)
+from homepage.models import Testimonial
 from .shop_form import (
     AddCategoryForm, ChangeCategoryForm,
     ChangeCategorySEOForm,
@@ -46,31 +49,22 @@ from .shop_form import (
     ProductSkillForm, SkillInlineFormSet,
     UniversityCourseForm,
     UniversityCoursePaymentForm,
-    UniversityCoursesPaymentInlineFormset)
+    UniversityCoursesPaymentInlineFormset,
+    SubHeaderCategoryForm, SubHeaderInlineFormSet,
+    TestimonialCategoryForm, TestimonialInlineFormSet
+)
 
 from shop.forms import (
-    AddKeywordForm,
-    AddAttributeOptionForm,
-    AddAttributeForm,
-    ChangeProductForm,
-    ChangeProductSEOForm,
-    ChangeProductOperationForm,
-    ProductCategoryForm,
-    CategoryInlineFormSet,
-    ProductPriceForm,
-    ProductCountryForm,
-    ProductAttributeForm,
-    FAQInlineFormSet,
-    ProductFAQForm,
-    ProductVariationForm,
-    VariationInlineFormSet,
-    ProductChildForm,
-    ChildInlineFormSet,
-    ProductRelatedForm,
-    RelatedInlineFormSet,
-    ChangeProductVariantForm,
-    ChapterInlineFormSet,
-    ProductChapterForm)
+    AddKeywordForm, AddAttributeOptionForm, AddAttributeForm,
+    ChangeProductForm, ChangeProductSEOForm,
+    ChangeProductOperationForm, ProductCategoryForm,
+    CategoryInlineFormSet, ProductPriceForm,
+    ProductCountryForm, ProductAttributeForm,
+    FAQInlineFormSet, ProductFAQForm, ProductVariationForm,
+    VariationInlineFormSet, ProductChildForm,
+    ChildInlineFormSet, ProductRelatedForm,
+    RelatedInlineFormSet, ChangeProductVariantForm,
+    ChapterInlineFormSet, ProductChapterForm)
 
 from shop.utils import CategoryValidation, ProductValidation
 from faq.forms import (
@@ -271,6 +265,22 @@ class ChangeCategoryView(DetailView):
             formset=RelationshipInlineFormSet, extra=1,
             max_num=20, validate_max=True)
 
+        SubHeaderFormSet = inlineformset_factory(
+            Category, SubHeaderCategory,
+            fk_name='category',
+            form=SubHeaderCategoryForm,
+            can_delete=False,
+            formset=SubHeaderInlineFormSet, extra=1,
+            max_num=3, validate_max=True)
+
+        TestimonialFormSet = inlineformset_factory(
+            Category, Testimonial,
+            fk_name='category',
+            form=TestimonialCategoryForm,
+            can_delete=False,
+            formset=TestimonialInlineFormSet, extra=1,
+            max_num=5, validate_max=True)
+
         alert = messages.get_messages(self.request)
         main_change_form = ChangeCategoryForm(
             instance=self.get_object())
@@ -286,6 +296,15 @@ class ChangeCategoryView(DetailView):
                 instance=self.get_object(),
                 form_kwargs={'object': self.get_object()})
             context.update({'relationship_formset': relationship_formset})
+
+        if self.object.type_level in [3, 4]:
+            sub_heading_formset = SubHeaderFormSet(instance=self.get_object())
+            context.update({'sub_heading_formset': sub_heading_formset})
+
+        if self.object.type_level in [3, 4]:
+            testimonial_formset = TestimonialFormSet(instance=self.get_object())
+            context.update({'testimonial_formset': testimonial_formset})
+
         childrens = self.object.category_set.filter(
             from_category__related_to=self.object)
         products = self.object.check_products()
@@ -413,6 +432,96 @@ class ChangeCategoryView(DetailView):
                             messages.error(
                                 self.request,
                                 "You cannot add parent for level1")
+                            return HttpResponseRedirect(
+                                reverse('console:category-change', kwargs={'pk': cat}))
+                    elif slug == 'subheading':
+                        SubHeaderFormSet = inlineformset_factory(
+                            Category, SubHeaderCategory,
+                            fk_name='category',
+                            form=SubHeaderCategoryForm,
+                            can_delete=False,
+                            formset=SubHeaderInlineFormSet, extra=1,
+                            max_num=3, validate_max=True)
+
+                        if self.object.type_level in [3, 4]:
+                            formset = SubHeaderFormSet(request.POST, instance=obj)
+                            from django.db import transaction
+                            if formset.is_valid():
+                                with transaction.atomic():
+                                    formset.save(commit=False)
+                                    saved_formset = formset.save(commit=False)
+                                    for ins in formset.deleted_objects:
+                                        ins.delete()
+
+                                    for form in saved_formset:
+                                        form.save()
+                                    formset.save_m2m()
+
+                                messages.success(
+                                    self.request,
+                                    "Category Sub header changed Successfully")
+                                return HttpResponseRedirect(reverse('console:category-change',kwargs={'pk': obj.pk}))
+                            else:
+                                context = self.get_context_data()
+                                if formset:
+                                    context.update({'sub_heading_formset': formset})
+                                messages.error(
+                                    self.request,
+                                    "Category Sub Header Change Failed, Changes not Saved")
+                                return TemplateResponse(
+                                    request, [
+                                        "console/shop/change_category.html"
+                                    ], context)
+                        else:
+                            messages.error(
+                                self.request,
+                                "You cannot add Sub Header for level1 and Level2")
+                            return HttpResponseRedirect(
+                                reverse('console:category-change', kwargs={'pk': cat}))
+
+                    elif slug == 'testimonial':
+                        TestimonialFormSet = inlineformset_factory(
+                            Category, Testimonial,
+                            fk_name='category',
+                            form=TestimonialCategoryForm,
+                            can_delete=False,
+                            formset=TestimonialInlineFormSet, extra=1,
+                            max_num=5, validate_max=True)
+
+                        if self.object.type_level in [3, 4]:
+                            formset = TestimonialFormSet(
+                                request.POST, instance=obj)
+                            from django.db import transaction
+                            if formset.is_valid():
+                                with transaction.atomic():
+                                    formset.save(commit=False)
+                                    saved_formset = formset.save(commit=False)
+                                    for ins in formset.deleted_objects:
+                                        ins.delete()
+
+                                    for form in saved_formset:
+                                        form.save()
+                                    formset.save_m2m()
+
+                                messages.success(
+                                    self.request,
+                                    "Category Testimonial changed Successfully")
+                                return HttpResponseRedirect(reverse('console:category-change',kwargs={'pk': obj.pk}))
+                            else:
+                                context = self.get_context_data()
+                                if formset:
+                                    context.update({'testimonial_formset': formset})
+                                messages.error(
+                                    self.request,
+                                    "Category Testimonial Change Failed, Changes not Saved")
+                                return TemplateResponse(
+                                    request, [
+                                        "console/shop/change_category.html"
+                                    ], context)
+                        else:
+                            messages.error(
+                                self.request,
+                                "You cannot add Testimonial for level1 and Level2")
                             return HttpResponseRedirect(
                                 reverse('console:category-change', kwargs={'pk': cat}))
                 messages.error(
@@ -1926,7 +2035,9 @@ class ActionCategoryView(View, CategoryValidation):
             allowed_action = []
             if has_group(user=self.request.user,
                 grp_list=settings.PRODUCT_GROUP_LIST):
-                allowed_action = ['active', 'inactive','skill', 'noskill','service','noservice']
+                allowed_action = ['active', 'inactive', 'skill',
+                'noskill', 'service', 'noservice',
+                'university', 'nouniversity']
             else:
                 allowed_action = []
 
@@ -1935,7 +2046,7 @@ class ActionCategoryView(View, CategoryValidation):
                     category = Category.objects.get(pk=pk_obj)
                     if action == "active":
                         if self.validate_before_active(
-                            request=self.request,category=category):    
+                            request=self.request, category=category):    
                             category.active = True
                             category.save()
                             messages.success(
@@ -1996,6 +2107,27 @@ class ActionCategoryView(View, CategoryValidation):
                                     "Category is removed as service!") 
                             data = {'success': 'True',
                                 'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
+
+                    elif action == "university":
+                        if self.validate_before_university(
+                            request=self.request, category=category):
+                            category.is_university = True
+                            category.save()
+                            messages.success(
+                                self.request,
+                                    "Category is made university!")
+                            data = {'success': 'True',
+                                'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
+                        else:
+                            data = {'error': 'True'}
+                    elif action == "noservice":
+                        category.is_university = False
+                        category.save()
+                        messages.success(
+                            self.request,
+                                "Category is removed as university!")
+                        data = {'success': 'True',
+                            'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
 
                 except Exception as e:
                     logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
