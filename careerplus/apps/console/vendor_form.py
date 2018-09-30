@@ -5,7 +5,7 @@ from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from django.conf import settings
-
+from django.forms.fields import MultipleChoiceField
 from dal import autocomplete
 
 from .decorators import has_group
@@ -24,7 +24,7 @@ from geolocation.models import Country
 from shop.utils import ProductAttributesContainer
 from faq.models import ScreenFAQ, FAQuestion
 from shop.utils import ProductAttributesContainer
-
+from shop.choices import APPLICATION_PROCESS_CHOICES, APPLICATION_PROCESS
 from shop.choices import (
     BG_CHOICES,
     PRODUCT_VENDOR_CHOICES)
@@ -1046,12 +1046,22 @@ class ScreenUniversityCourseForm(forms.ModelForm):
             }, format='%m/%d/%Y'
         )
     )
+    application_process_choices = MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=APPLICATION_PROCESS_CHOICES
+    )
+    selected_process_choices = MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=APPLICATION_PROCESS_CHOICES
+    )
 
     class Meta:
         model = UniversityCourseDetailScreen
         fields = [
             'batch_launch_date', 'apply_last_date',
-            'sample_certificate', 'our_importance', 'assesment'
+            'sample_certificate', 'application_process', 'assesment'
         ]
 
     def __init__(self, *args, **kwargs):
@@ -1060,11 +1070,16 @@ class ScreenUniversityCourseForm(forms.ModelForm):
         self.fields['batch_launch_date'].widget.attrs['required'] = True
         self.fields['apply_last_date'].widget.attrs['required'] = True
         self.fields['sample_certificate'].widget.attrs['required'] = True
-        self.fields['our_importance'].widget.attrs['required'] = True
         self.fields['assesment'].widget.attrs['required'] = True
-        self.fields['sample_certificate'].widget.attrs['class'] = form_class
-        self.fields['our_importance'].widget.attrs['class'] = form_class
         self.fields['assesment'].widget.attrs['class'] = form_class
+        self.fields['sample_certificate'].widget.attrs['class'] = form_class
+        if eval(self.instance.application_process):
+            self.fields['application_process_choices'].initial = [int(k) for k in eval(self.instance.application_process) if k.isdigit()]
+            self.fields['selected_process_choices'].choices = [(int(k), APPLICATION_PROCESS.get(k)[1]) for k in eval(self.instance.application_process) if k.isdigit()]
+
+        self.fields['application_process_choices'].widget.attrs['class'] = form_class
+        self.fields['application_process_choices'].widget.attrs['required'] = True
+        self.fields['application_process_choices'].widget.attrs['class'] = form_class + ' process_item'
 
     def clean_batch_launch_date(self):
         batch_launch_date = self.cleaned_data.get('batch_launch_date', '')

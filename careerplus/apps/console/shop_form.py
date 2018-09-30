@@ -1163,7 +1163,7 @@ class UniversityCourseForm(forms.ModelForm):
         model = UniversityCourseDetail
         fields = [
             'batch_launch_date', 'apply_last_date',
-            'sample_certificate', 'our_importance', 'assesment'
+            'sample_certificate', 'benefits', 'assesment'
         ]
 
     def __init__(self, *args, **kwargs):
@@ -1172,10 +1172,10 @@ class UniversityCourseForm(forms.ModelForm):
         self.fields['batch_launch_date'].widget.attrs['required'] = True
         self.fields['apply_last_date'].widget.attrs['required'] = True
         self.fields['sample_certificate'].widget.attrs['required'] = True
-        self.fields['our_importance'].widget.attrs['required'] = True
+        self.fields['benefits'].widget.attrs['required'] = True
         self.fields['assesment'].widget.attrs['required'] = True
         self.fields['sample_certificate'].widget.attrs['class'] = form_class
-        self.fields['our_importance'].widget.attrs['class'] = form_class
+        self.fields['benefits'].widget.attrs['class'] = form_class
         self.fields['assesment'].widget.attrs['class'] = form_class
 
     def clean_batch_launch_date(self):

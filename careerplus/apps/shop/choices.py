@@ -195,3 +195,25 @@ def convert_gbp(price=Decimal(0)):
         elif Decimal(360) < price:
             return '5'
     return '0'
+
+BENEFITS = {
+    '1': ['Place Order', 'https://i.vimeocdn.com/portrait/6462071_300x300'],
+    '2': ['Recieve Online Access Material', 'https://www.admiralins.com/wp-content/uploads/2018/01/ApplicationIcon.jpg'],
+    '3': ['Access the Material and start Learning', 'https://mounthopehousing.org/wp-content/uploads/2016/02/edit1.png'],
+    '4': ['Submit Application', 'https://mdhs.unimelb.edu.au/__data/assets/image/0009/2745306/application-image.jpg'],
+    '5': ['Submit Application', 'https://mdhs.unimelb.edu.au/__data/assets/image/0009/2745306/application-image.jpg'],
+    '6': ['Submit Application', 'https://mdhs.unimelb.edu.au/__data/assets/image/0009/2745306/application-image.jpg'],
+
+}
+
+APPLICATION_PROCESS = {
+    '1': ['Place Order', 'https://i.vimeocdn.com/portrait/6462071_300x300'],
+    '2': ['Recieve Online Access Material', 'https://www.admiralins.com/wp-content/uploads/2018/01/ApplicationIcon.jpg'],
+    '3': ['Access the Material and start Learning', 'https://mounthopehousing.org/wp-content/uploads/2016/02/edit1.png'],
+    '4': ['Submit Application', 'https://mdhs.unimelb.edu.au/__data/assets/image/0009/2745306/application-image.jpg'],
+    '5': ['Submit Application', 'https://mdhs.unimelb.edu.au/__data/assets/image/0009/2745306/application-image.jpg'],
+    '6': ['Submit Application', 'https://mdhs.unimelb.edu.au/__data/assets/image/0009/2745306/application-image.jpg'],
+
+}
+
+APPLICATION_PROCESS_CHOICES = [(int(key), val[1])for key, val in list(APPLICATION_PROCESS.items())]

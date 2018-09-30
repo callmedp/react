@@ -2464,11 +2464,8 @@ class UniversityCourseDetailScreen(models.Model):
         upload_to=get_upload_path_for_sample_certicate, max_length=255,
         null=True, blank=True
     )
-    our_importance = RichTextField(
-        verbose_name=_('Why us'),
-        help_text=_('Description of why shine learning?'),
-        default=''
-    )
+    benefits = models.CharField(max_length=1024, default='')
+    application_process = models.CharField(max_length=1024, default='')
     assesment = RichTextField(
         verbose_name=_('assesment'),
         help_text=_('Description of Assesment and Evaluation'),
@@ -2516,11 +2513,8 @@ class UniversityCourseDetail(models.Model):
         upload_to=get_upload_path_for_sample_certicate, max_length=255,
         null=True, blank=True
     )
-    our_importance = RichTextField(
-        verbose_name=_('Why us'),
-        help_text=_('Description of why shine learning?'),
-        default=''
-    )
+    benefits = models.CharField(max_length=1024, default='')
+    application_process = models.CharField(max_length=1024, default='')
     assesment = RichTextField(
         verbose_name=_('assesment'),
         help_text=_('Description of Assesment and Evaluation'),
@@ -2612,7 +2606,6 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
     def get_meta_desc(self):
         return '%s - Unitversity Faculty at Shine Learning' % (
             self.heading,)
-
 
 
 class FacultyProduct(AbstractAutoDate):
