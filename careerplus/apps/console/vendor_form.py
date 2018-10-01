@@ -1073,10 +1073,11 @@ class ScreenUniversityCourseForm(forms.ModelForm):
         self.fields['assesment'].widget.attrs['required'] = True
         self.fields['assesment'].widget.attrs['class'] = form_class
         self.fields['sample_certificate'].widget.attrs['class'] = form_class
-        if eval(self.instance.application_process):
+        if self.instance.application_process and eval(self.instance.application_process):
             self.fields['application_process_choices'].initial = [int(k) for k in eval(self.instance.application_process) if k.isdigit()]
             self.fields['selected_process_choices'].choices = [(int(k), APPLICATION_PROCESS.get(k)[1]) for k in eval(self.instance.application_process) if k.isdigit()]
-
+        else:
+            self.fields['selected_process_choices'].choices = [];
         self.fields['application_process_choices'].widget.attrs['class'] = form_class
         self.fields['application_process_choices'].widget.attrs['required'] = True
         self.fields['application_process_choices'].widget.attrs['class'] = form_class + ' process_item'

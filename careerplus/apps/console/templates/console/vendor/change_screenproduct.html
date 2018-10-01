@@ -934,7 +934,7 @@
                       </div>
                       <div class="alert">{{prd_university_form.sample_certificate.errors}}</div>
                     </div>
-                    <div class="item form-group {% if prd_university_form.our_importance.errors %}bad{% endif %}">
+                    <div class="item form-group {% if prd_university_form.application_process.errors %}bad{% endif %}">
                       <label class="control-label col-md-2 col-sm-2 col-xs-12" >
                         Application Process<span class="required">*</span>
                       </label>
@@ -1137,6 +1137,7 @@
     k = {{x}}
     application_process_order.push(k.toString())
   {% endfor %}
+  $("#application_process_priority").val(application_process_order.join(','))
  if(application_process_order.length>=4){
     $("input.process_checkbox:checkbox:not(:checked)").attr('disabled','true')
   }
@@ -1159,12 +1160,12 @@
           $("#application_processes").html(curr_html)
           application_process_order.push($(this).val())
         }
-        console.log(application_process_order)
       }
     else {
       curr_html = curr_html.replace(new_html,"");
       $("#application_processes").html(curr_html)
-      application_process_order.pop($(this).val())
+      application_process_order.splice(application_process_order.indexOf($(this).val()), 1)
+      console.log("this" + application_process_order)
     }   
     if(application_process_order.length==0){
        $("#application_processes").text('No Application Process Selected')
@@ -1176,6 +1177,7 @@
      $("input.process_checkbox:checkbox:not(:checked)").removeAttr('disabled','true') 
     }
    
+    console.log(application_process_order)
     $("#application_process_priority").val(application_process_order.join(','))
 });
   </script>

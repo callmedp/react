@@ -899,8 +899,9 @@ class ChangeScreenProductView(DetailView):
                                 ], context)
                     elif slug == 'university':
                         form = ScreenUniversityCourseForm(request.POST, request.FILES, instance=obj.screen_university_course_detail)
-                        application_process_priority = form.data['application_process_priority'].split(',')
-                        form.data['application_process'] = str(application_process_priority)
+                        application_process_priority = [k for k in form.data['application_process_priority'].split(',') if k]
+                        if application_process_priority:
+                            form.data['application_process'] = str(application_process_priority)
                         if form.is_valid():
                             form.save()
                             if not obj.status == 2:
