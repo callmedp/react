@@ -224,7 +224,7 @@ h4 {
 .register-bx-sec {
 	width: 281px;
 	border-radius: 5px;
-    padding:9px 15px 0px 15px;
+    padding:9px 15px 15px 15px;
     text-align: left;
     background: #1f3c6b;
 }
@@ -331,6 +331,7 @@ h4 {
 	background-size:cover;
 	min-height:312px;
 	padding-bottom: 2px;
+    margin-top: 40px;
 }
 
 .course-high h2 {
@@ -567,4 +568,39 @@ h3 {
 }
 
 
+.certification {
+    color: #777;
+    font-size: 14px;
+    text-align: center;
 
+
+}
+
+.certification strong {
+    display: block;
+    font-size: 18px;
+    color: #333;
+    padding:10px 0 ;
+    margin: 10px 0 0 0;
+}
+.certification span {
+    background: #fff;
+    width:  74px;
+    height: 74px;
+    display: block;
+    box-shadow: 1px 1px 32px 24px rgba(245, 245, 245, 0.5);
+    margin:20px auto 0; 
+    background:  url(icons.png) no-repeat;
+}
+
+.certification span.focused {background-position:-169PX 1PX;}
+.certification span.Strategic1 {background-position:-256PX 1PX;}
+.certification span.releva { background-position:-84PX 1PX; }
+.certification span.Competency {background-position:1PX -89PX;}
+
+.fees {
+    font-size: 18px;
+    color: #fff;
+    font-weight: bold;
+    margin: 10px 0 25px 0;
+}

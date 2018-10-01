@@ -91,15 +91,20 @@
             <span class="error" for="mobile" style="color: rgb(255, 0, 0);font-size: 11px;width:100%;" ></span>
          </div>
 
-           <div>
+           <!-- <div>
                 <textarea id="message" name="msg" class="message_input" placeholder="Message" rows="1"></textarea>
                 <span class="error" for="message" style="color: rgb(255, 0, 0); font-size: 11px; width:100%; " ></span>
-            </div>
+            </div> -->
    
-              <div style="clear:both; height:77px; overflow:hidden; display:block; position: relative;">
+              <!-- <div style="clear:both; height:77px; overflow:hidden; display:block; position: relative;">
                 <div id="captcha1" class="input-field" style="width:45%; margin: 0px;" ></div>
                 <p style="color: rgb(255, 0, 0); display: none; font-size: 11px; margin: 0px; padding: 0px;  position: absolute; top: 58px;" id="hiddenrecaptcha"> Captcha Validation is required</p>
-            </div>
+            </div> -->
+
+            <div>
+          <input type="text" id="name" name="name" value="Fees : Rs.15,255" placeholder="" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %} maxlength="100">
+          <span class="error" for="name" style="color: rgb(255, 0, 0);font-size: 11px;width:100%; " ></span>
+         </div>
             
               <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
               <input type="hidden" name="prd" value="shrm certification">
@@ -133,17 +138,31 @@
 </div>
 <div class="clear-fix"></div>
 <div class="container"> 
-  <!--white box first section start here -->
+  
+<!--white box first section start here -->
   <div class="main-bx box-padding">
     <h4>Why should one take SHRM certification?</h4>
     <div class="clear-fix"></div>
-    <p>Earning your SHRM-CP credential from shinelearning makes you a recognized expert and leader in the HR field—and a valuable asset to your organization, keeping you and your organization more competitive in today's economy. This professional distinction sets you apart from your colleagues, proving your high level of knowledge and skills.<br>
-      <br>
-    </p>
-    <p>The certification is competency based and teaches you how you effectively implement that knowledge in the workplace each and every day. SHRM certifications directly link to on-the-job scenarios and realistic work situations, making them the most relevant certifications available for HR professionals. SHRM certification is universally applicable across industries, geographic borders, job responsibilities and career levels. The SHRM-CP is based on the current HR landscape, focusing on the competencies and knowledge HR professionals need to lead in today’s business community. Based on in-depth research focused on—and backed by—global employers and business leaders, the SHRM-CP and SHRM-SCP credentials reflect what HR practitioners need to know to be leaders in their organizations and in the profession.</p>        
-  
+    <div class="row certification">
+<div class="col-md-4 col-sm-4 col-xs-12 col-lg-4 "><span class="Competency"></span><strong>Competency</strong> Based Effectively implement the knowledge in the workplace</div>
+<div class="col-md-4 col-sm-4 col-xs-12 col-lg-4 "><span class="Universally"></span><strong>Universally Applicable</strong> Certification is applicable across industries, geographic borders, job responsibilities and career levels</div>
+<div class="col-md-4 col-sm-4 col-xs-12 col-lg-4 "><span class="focused"></span><strong>Focused on Advancement</strong>More than 5000 employers are seeking SHRM credential-holder every month</div>
+<div class="clear-fix"></div>
+<div class="col-md-1 col-sm-1 col-xs-hidden col-lg-2 "></div>
+<div class="col-md-5 col-sm-5 col-xs-12 col-lg-4 "><span class="Strategic1"></span><strong>Strategic Planning </strong>SHRM credentials reflects what HR practitioners need to know to be leaders in the organization and in the profession</div>
+<div class="col-md-5 col-sm-5 col-xs-12 col-lg-4 "><span class="releva"></span><strong>Relevant</strong>SHRM Certification directly link to  on-the-job scenarios and realistic work situations</div>
+
+<div class="col-md-1 col-sm-1 col-xs-hidden col-lg-2 "></div>
+
+
+</div>
+
   </div>
   <!-- white box first section end here -->
+
+
+
+
   <div class="clear-fix"></div>
 </div>
 <div class="clear-fix"></div>
