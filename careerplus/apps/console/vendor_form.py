@@ -15,7 +15,9 @@ from shop.models import (
     FAQProductScreen,
     VariationProductScreen,
     ScreenChapter,
-    Skill, ScreenProductSkill)
+    Skill, ScreenProductSkill,
+    UniversityCourseDetailScreen,
+    UniversityCoursePaymentScreen)
 from faq.models import ScreenFAQ
 from partner.models import Vendor
 from geolocation.models import Country
@@ -134,8 +136,7 @@ class AddScreenProductForm(forms.ModelForm):
         model = ProductScreen
         fields = [
             'name', 'product_class',
-            'type_product', 'upc', 'inr_price']
-
+            'type_product', 'upc', 'inr_price', 'type_flow']
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
@@ -146,13 +147,20 @@ class AddScreenProductForm(forms.ModelForm):
         self.fields['product_class'].empty_label = 'Select Product Class'
         self.fields['product_class'].required = True
         self.fields['type_product'].widget.attrs['class'] = form_class
+        self.fields['type_flow'].widget.attrs['class'] = form_class
         if has_group(user=self.user, grp_list=settings.PRODUCT_GROUP_LIST):
             self.fields['type_product'].choices = PRODUCT_VENDOR_CHOICES + ((3, 'Combo'),
                 (4, 'No-Direct-Sell/Virtual'),
                 (5, 'Downloadable'),)
+            self.fields['type_flow'].widget.attrs['class'] = form_class
+
         else:
             self.fields['type_product'].choices = PRODUCT_VENDOR_CHOICES
-        
+            self.fields['type_flow'].choices = (
+                (0, 'Default'), (14, 'University Courses')
+            )
+
+
         if not vendor:
             if has_group(user=self.user, grp_list=settings.PRODUCT_GROUP_LIST):
                 pass
@@ -231,6 +239,8 @@ class AddScreenProductForm(forms.ModelForm):
     def save(self, commit=True, *args, **kwargs):
         productscreen = super(AddScreenProductForm, self).save(
             commit=True, *args, **kwargs)
+        if productscreen.type_flow == 14:
+            UniversityCourseDetailScreen.objects.create(productscreen=productscreen)
         return productscreen
 
 
@@ -1009,3 +1019,114 @@ class ScreenSkillInlineFormSet(forms.BaseInlineFormSet):
                         code='duplicate_skill'
                     )
         return
+
+
+class ScreenUniversityCoursesPaymentInlineFormset(forms.BaseInlineFormSet):
+    def clean(self):
+        super(UniversityCoursesPaymentInlineFormset, self).clean()
+        if any(self.errors):
+            return
+
+
+class ScreenUniversityCourseForm(forms.ModelForm):
+
+    batch_launch_date = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                'class': 'form-control batch_launch_date',
+                "readonly": True,
+            }, format='%m/%d/%Y'
+        )
+    )
+    apply_last_date = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                'class': 'form-control apply_last_date',
+                "readonly": True,
+            }, format='%m/%d/%Y'
+        )
+    )
+
+    class Meta:
+        model = UniversityCourseDetailScreen
+        fields = [
+            'batch_launch_date', 'apply_last_date',
+            'sample_certificate', 'our_importance', 'assesment'
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super(ScreenUniversityCourseForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['batch_launch_date'].widget.attrs['required'] = True
+        self.fields['apply_last_date'].widget.attrs['required'] = True
+        self.fields['sample_certificate'].widget.attrs['required'] = True
+        self.fields['our_importance'].widget.attrs['required'] = True
+        self.fields['assesment'].widget.attrs['required'] = True
+        self.fields['sample_certificate'].widget.attrs['class'] = form_class
+        self.fields['our_importance'].widget.attrs['class'] = form_class
+        self.fields['assesment'].widget.attrs['class'] = form_class
+
+    def clean_batch_launch_date(self):
+        batch_launch_date = self.cleaned_data.get('batch_launch_date', '')
+        if batch_launch_date is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        return batch_launch_date
+
+    def clean_apply_last_date(self):
+        apply_last_date = self.cleaned_data.get('apply_last_date', '')
+        if apply_last_date is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        return apply_last_date
+
+
+class ScreenUniversityCoursePaymentForm(forms.ModelForm):
+
+    last_date_of_payment = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                'class': 'form-control col-md-7 col-xs-12 last_date_of_payment',
+                "readonly": True,
+            }, format='%m/%d/%Y'
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(ScreenUniversityCoursePaymentForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+
+        self.fields['installment_fee'].widget.attrs['class'] = form_class
+        self.fields['installment_fee'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['installment_fee'].widget.attrs['required'] = True
+        self.fields['installment_fee'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['last_date_of_payment'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['last_date_of_payment'].widget.attrs['required'] = True
+
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+
+    class Meta:
+        model = UniversityCoursePaymentScreen
+        fields = (
+            'installment_fee',
+            'last_date_of_payment',
+            'active'
+        )
+
+    def clean(self):
+        super(ScreenUniversityCoursePaymentForm, self).clean()
+
+    def clean_installment_fee(self):
+        installment_fee = self.cleaned_data.get('installment_fee', '')
+        if installment_fee is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        return installment_fee
+
+    def clean_last_date_of_payment(self):
+        last_date_of_payment = self.cleaned_data.get('last_date_of_payment', '')
+        if last_date_of_payment is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        return last_date_of_payment

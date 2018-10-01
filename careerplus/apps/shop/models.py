@@ -4,7 +4,7 @@ import logging
 from decimal import Decimal
 from django.db import models
 from django.utils.html import strip_tags
-from django.utils import six        
+from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
@@ -36,9 +36,10 @@ from .functions import (
     get_upload_path_product_banner,
     get_upload_path_product_icon,
     get_upload_path_product_image,
-    get_upload_path_product_file,)
+    get_upload_path_product_file,
+    get_upload_path_for_sample_certicate)
 from .choices import (
-    SERVICE_CHOICES,
+    SERVICE_CHOICES, FACULTY_CHOICES,
     CATEGORY_CHOICES,
     PRODUCT_CHOICES,
     FLOW_CHOICES,
@@ -999,7 +1000,7 @@ class Product(AbstractProduct, ModelMeta):
         super(Product, self).__init__(*args, **kwargs)
         if self.product_class:
             self.attr = ProductAttributesContainer(product=self)
-        #self.initialize_variables()
+        # self.initialize_variables()
 
     def __str__(self):
         if self.pk:
@@ -1635,6 +1636,7 @@ class ProductScreen(AbstractProduct):
         through='ProductAttributeScreen',
         through_fields=('product', 'attribute'),
         blank=True)
+    
 
     class Meta:
         verbose_name = _('Product Screen')
@@ -1670,6 +1672,8 @@ class ProductScreen(AbstractProduct):
                     upc=self.upc,
                     vendor=self.vendor,
                     inr_price=self.inr_price)
+                if self.type_flow == 14:
+                    UniversityCourseDetail.objects.get_or_create(product=product)
                 self.product = product
                 self.save()
         return self.product
@@ -2447,6 +2451,110 @@ class ProductAuditHistory(Document):
     }
 
 
+class UniversityCourseDetailScreen(models.Model):
+    batch_launch_date = models.DateTimeField(
+        help_text=_('This university course launch date'),
+        default=timezone.now
+    )
+    apply_last_date = models.DateTimeField(
+        help_text=_('Last date to apply for this univeristy course'),
+        default=timezone.now
+    )
+    sample_certificate = models.FileField(
+        upload_to=get_upload_path_for_sample_certicate, max_length=255,
+        null=True, blank=True
+    )
+    our_importance = RichTextField(
+        verbose_name=_('Why us'),
+        help_text=_('Description of why shine learning?'),
+        default=''
+    )
+    assesment = RichTextField(
+        verbose_name=_('assesment'),
+        help_text=_('Description of Assesment and Evaluation'),
+        default=''
+    )
+    productscreen = models.OneToOneField(
+        ProductScreen,
+        help_text=_('Product related to these details'),
+        related_name='screen_university_course_detail',
+    )
+
+
+class UniversityCoursePaymentScreen(models.Model):
+    installment_fee = models.DecimalField(
+        _('INR Program Fee'),
+        max_digits=12, decimal_places=2
+    )
+    last_date_of_payment = models.DateTimeField(
+        _('Last date of payment')
+    )
+    productscreen = models.ForeignKey(
+        ProductScreen,
+        related_name='screen_university_course_payment'
+    )
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        payment = '{} -  for {} - ({})'.format(
+            self.installment_fee,
+            self.productscreen.name, self.productscreen.id
+        )
+        return payment
+
+
+class UniversityCourseDetail(models.Model):
+    batch_launch_date = models.DateTimeField(
+        help_text=_('This university course launch date'),
+        default=timezone.now
+    )
+    apply_last_date = models.DateTimeField(
+        help_text=_('Last date to apply for this univeristy course'),
+        default=timezone.now
+    )
+    sample_certificate = models.FileField(
+        upload_to=get_upload_path_for_sample_certicate, max_length=255,
+        null=True, blank=True
+    )
+    our_importance = RichTextField(
+        verbose_name=_('Why us'),
+        help_text=_('Description of why shine learning?'),
+        default=''
+    )
+    assesment = RichTextField(
+        verbose_name=_('assesment'),
+        help_text=_('Description of Assesment and Evaluation'),
+        default=''
+    )
+    product = models.OneToOneField(
+        Product,
+        help_text=_('Product related to these details'),
+        related_name='university_course_detail',
+    )
+
+
+class UniversityCoursePayment(models.Model):
+    installment_fee = models.DecimalField(
+        _('INR Program Fee'),
+        max_digits=12, decimal_places=2
+    )
+    last_date_of_payment = models.DateTimeField(
+        _('Last date of payemnt')
+    )
+    product = models.ForeignKey(
+        Product,
+        related_name='university_course_payment'
+    )
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        payment = '{} -  for {} - ({})'.format(
+            self.installment_fee,
+            self.product.name, self.product.id
+        )
+        return payment
+
+
 class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
     name = models.CharField(
         _('Name'), max_length=200,
@@ -2454,6 +2562,8 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
     slug = models.CharField(
         _('Slug'), unique=True,
         max_length=200, help_text=_('Unique slug'))
+    role = models.IntegerField(
+        default=0, choices=FACULTY_CHOICES)
     image = models.ImageField(
         _('Image'), upload_to=get_upload_path_faculty,
         blank=True, null=True)
@@ -2496,7 +2606,7 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
         return '{} - {}'.format(self.name, self.id)
 
     def save(self, *args, **kwargs):
-        if self.pk and self.name:
+        if self.name:
             if not self.heading:
                 self.heading = self.name
             if not self.title:

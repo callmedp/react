@@ -1,5 +1,15 @@
 from decimal import Decimal
 
+FACULTY_DEFAULT = 0
+FACULTY_TEACHER = 1
+FACULTY_PRINCIPAL = 2
+
+FACULTY_CHOICES = (
+    (FACULTY_DEFAULT, '--Select Role--'),
+    (FACULTY_TEACHER, 'Teacher'),
+    (FACULTY_PRINCIPAL, 'Principal'),
+)
+
 RELATION_CHOICES = (
     (0, 'Default'),
     (1, 'UpSell'),
@@ -45,6 +55,7 @@ FLOW_CHOICES = (
     (11, 'TSSC'),  # flow 11
     (12, 'Country Specific Resume'),  # flow 12
     (13, 'Executive Bio,Portfolio,Visual Resume,Cover Letter,Second Regular Resume'),  # flow 13
+    (14, 'University Courses')
 )
 
 BG_COLOR = {0: "#c8b98d", 1: "#cfbabd", 2: "#75dac2", 3: "#d2db86",

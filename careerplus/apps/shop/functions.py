@@ -102,3 +102,6 @@ def upload_Skill(filename):
             print('Failed. Product not found @ {}'.format(d['Product name']))
 
 
+def get_upload_path_for_sample_certicate(instance, filename):
+    return "university_courses/sample_certificates/{pr_id}/{filename}".format(
+        pr_id=instance.id, filename=get_file_name(filename))

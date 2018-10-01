@@ -224,6 +224,13 @@ class ProductModeration(object):
                     if not product.countries.all().exists():
                         messages.error(request, "Available Country is required")
                         return test_pass
+
+                    if product.type_flow == 14:
+                        attributes = ['batch_launch_date', 'apply_last_date', 'our_importance', 'assesment']
+                        for attr in attributes:
+                            if not getattr(product.screen_university_course_detail, attr):
+                                messages.error(request, "Univeristy Course details are required")
+                                return test_pass
                     test_pass = True
                     return test_pass
                 else:
@@ -346,7 +353,7 @@ class ProductModeration(object):
                 product.save()
                 from shop.models import (
                     FAQProduct, VariationProduct,
-                    ProductSkill)
+                    ProductSkill, UniversityCoursePayment)
 
                 productfaq = product.productfaqs.all()
                 screenfaq = screen.screenfaqs.all()
@@ -447,9 +454,24 @@ class ProductModeration(object):
                         value = getattr(screen.attr, attribute.name)
                         
                         attribute.save_value(product, value)
+                if screen.type_flow == 14:
+                    attributes = ['batch_launch_date', 'apply_last_date', 'sample_certificate', 'our_importance', 'assesment']
+                    for attr in attributes:
+                        setattr(product.university_course_detail, attr, getattr(screen.screen_university_course_detail, attr))
+                    product.university_course_detail.save()
+
+                    product.type_flow = screen.type_flow
+                    for university_payment in screen.screen_university_course_payment.all():
+                        UniversityCoursePayment.objects.create(
+                            product=product,
+                            installment_fee=university_payment.installment_fee,
+                            last_date_of_payment=university_payment.last_date_of_payment,
+                            active=university_payment.active
+                        )
                 product.save()
                 
                 copy = True
+
                 return (product, screen, copy)
         except IntegrityError:
             copy = False
@@ -812,9 +834,9 @@ class CategoryValidation(object):
                             request,
                             "University Description is required")
                         return test_pass
-                    if not category.check_products():
-                        messages.error(request, "University Products is required")
-                        return test_pass
+                    # if not category.check_products():
+                    #     messages.error(request, "University Products is required")
+                    #     return test_pass
                     test_pass = True
                     return test_pass
                 else:

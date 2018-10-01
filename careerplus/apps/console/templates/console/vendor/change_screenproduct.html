@@ -13,7 +13,8 @@
   <!-- Switchery -->
   <link href="{% static 'packages/switchery/dist/switchery.min.css' %}" rel="stylesheet" type="text/css">
   <link type="text/css" href="{% static 'console/css/myadmin/django-admin-widgets.css' %}" rel="stylesheet">
-  
+  <link href="{% static 'packages/bootstrap-daterangepicker/daterangepicker.css' %}"
+  rel="stylesheet" type="text/css">
   <!-- ColorSelector -->
   <link href="{% static 'packages/bootstrap-colorselector/dist/bootstrap-colorselector.min.css' %}" rel="stylesheet" type="text/css">
   {% endcompress %}
@@ -860,7 +861,184 @@
               </div>    
           </div>
         </div>
+        {% if prd_university_form %}
+          <div class="x_panel">
+            <div class="x_title">
+              <h2><i class="fa fa-thumb-tack"></i> University Course Detail</h2>
+              <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+              </ul>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+               <div class="accordion" id="accordion50" role="tablist" aria-multiselectable="true">
+                  <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-product-university-course-form">
+                        {% csrf_token %}
+                    <div class="item form-group {% if prd_university_form.batch_launch_date.errors %}bad{% endif %}">
+                      <label class="control-label col-md-2 col-sm-2 col-xs-12" >
+                        Batch Launch Date<span class="required">*</span>
+                      </label>
+                      <div class="col-md-7 col-sm-7 col-xs-12">
+                        {{prd_university_form.batch_launch_date}}
+                      </div>
+                      <div class="alert">{{prd_university_form.batch_launch_date.errors}}</div>
+                    </div>
+                    <div class="item form-group {% if prd_university_form.apply_last_date.errors %}bad{% endif %}">
+                      <label class="control-label col-md-2 col-sm-2 col-xs-12" >
+                        Apply Last Date<span class="required">*</span>
+                      </label>
+                      <div class="col-md-7 col-sm-7 col-xs-12">
+                        {{prd_university_form.apply_last_date}}
+                      </div>
+                      <div class="alert">{{prd_university_form.apply_last_date.errors}}</div>
+                    </div>
+                    <div class="item form-group {% if prd_university_form.sample_certificate.errors %}bad{% endif %}">
+                      <label class="control-label col-md-2 col-sm-2 col-xs-12" >
+                        Sample Certificate<span class="required">*</span>
+                      </label>
+                      <div class="col-md-7 col-sm-7 col-xs-12">
+                        {{prd_university_form.sample_certificate}}
+                      </div>
+                      <div class="alert">{{prd_university_form.sample_certificate.errors}}</div>
+                    </div>
+                    <div class="item form-group {% if prd_university_form.our_importance.errors %}bad{% endif %}">
+                      <label class="control-label col-md-2 col-sm-2 col-xs-12" >
+                        Why Shine Learning?<span class="required">*</span>
+                      </label>
+                      <div class="col-md-7 col-sm-7 col-xs-12">
+                        {{prd_university_form.our_importance}}
+                      </div>
+                      <div class="alert">{{prd_university_form.our_importance.errors}}</div>
+                    </div>
+                      <div class="item form-group {% if prd_university_form.assesment.errors %}bad{% endif %}">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12" >
+                          Assesment and Evaluation.<span class="required">*</span>
+                        </label>
+                        <div class="col-md-7 col-sm-7 col-xs-12">
+                          {{prd_university_form.assesment}}
+                        </div>
+                      <div class="alert">{{prd_university_form.assesment.errors}}</div>
+                    </div>
+                  <input type="hidden" name="product" value="{{object.pk}}">
+                    <input type="hidden" name="slug" value="university">
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                      <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
+                        <button type="submit" class="btn btn-success save_scroll">Submit</button>
+                      </div>
+                    </div>
+                  
+                  </form>
+                </div>   
+            </div>
+          </div>
+        {% endif %}
 
+        {% if prd_university_payment_formset %}
+        <div class="x_panel">
+          <div class="x_title">
+            <h2><i class="fa fa-thumb-tack"></i> University Course Payment</h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+              <div class="accordion" id="accordion51" role="tablist" aria-multiselectable="true">
+                <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-product-university-payment-form">
+                      {% csrf_token %}
+                      {{ prd_university_payment_formset.management_form }}
+                  {% if prd_university_payment_formset.non_form_errors %}
+                    <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                      </button>
+                      {{ prd_university_payment_formset.non_form_errors }}
+                    </div>
+                  {% endif %}
+                <div class="inter-related-parent-div">    
+                {% for inline_admin_form in prd_university_payment_formset.forms %}
+                {% if forloop.counter < 4 %}
+                <div class="panel {% if forloop.last %} {% endif %}">
+                  <a class="panel-heading {% if not inline_admin_form.errors %}collapsed{% endif %}" role="tab" id="heading2{{forloop.counter}}60" data-toggle="collapse" data-parent="#accordion60" href="#collapse21{{forloop.counter}}60" {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false"{% endif %} aria-controls="collapse21{{forloop.counter}}60">
+                    {% if  inline_admin_form.instance.id %}
+                    <h4 class="panel-title">University Course Payment:&nbsp;{{inline_admin_form|get_instance}}</h4>
+
+                    {% else %}
+                    
+                    <h4 class="panel-title">University Course Payment: Add New</h4>
+                    
+                    {% endif %}
+
+                      
+                  </a>
+                  <div id="collapse21{{forloop.counter}}60" class="panel-collapse collapse
+                      {% if inline_admin_form.errors %}in{% endif %}" 
+                      {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false" style="height: 0px;"{% endif %}
+                       role="tabpanel" aria-labelledby="heading2{{forloop.counter}}60">
+                    <div class="panel-body">
+                        {% if  inline_admin_form.DELETE %}
+                          <div class="pull-left">
+                            {{inline_admin_form.DELETE}}<label for="{{ inline_admin_form.DELETE.id_for_label }}" style="color:#d9534f !important;">&nbsp;&nbsp;Delete
+                            </label>
+                            
+                          </div>
+                          </br>
+                            <div class="clearfix"></div>
+                        {% endif %}
+
+                        {% for hidden in inline_admin_form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                    
+                        <div class="item form-group {% if inline_admin_form.installment_fee.errors %}bad{% endif %}">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.installment_fee.id_for_label }}">INR Program Fee <span class="required">*</span>
+                        </label>
+                        <div class="col-md-7 col-sm-7 col-xs-12">
+                          {{inline_admin_form.installment_fee}}
+                        </div>
+                        <div class="alert">{{inline_admin_form.installment_fee.errors}}</div>
+                      </div>
+                      
+                      <div class="item form-group {% if inline_admin_form.last_date_of_payment.errors %}bad{% endif %}">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.last_date_of_payment.id_for_label }}">Last Date of Payment <span class="required"></span>
+                        </label>
+                        <div class="col-md-7 col-sm-7 col-xs-12">
+                          {{inline_admin_form.last_date_of_payment}}
+                        </div>
+                        <div class="alert">{{inline_admin_form.last_date_of_payment.errors}}</div>
+                      </div>
+
+                      <div class="item form-group {% if inline_admin_form.active.errors %}bad{% endif %}">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.active.id_for_label }}">Last Date of Payment <span class="required"></span>
+                        </label>
+                        <div class="col-md-7 col-sm-7 col-xs-12">
+                          {{inline_admin_form.active}}
+                        </div>
+                        <div class="alert">{{inline_admin_form.active.errors}}</div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                </div>
+                <input type="hidden" name="product" value="{{object.pk}}">
+                  <input type="hidden" name="slug" value="university_payment">
+                  <div class="ln_solid"></div>
+                  <div class="form-group">
+                    <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
+                      <button type="submit" class="btn btn-success save_scroll">Submit</button>
+                    </div>
+                  </div>
+                
+                </form>
+              </div>  
+          </div>
+        </div>
+        {% endif %}
 
         
       </div>
@@ -879,6 +1057,9 @@
 
   {% compress js %}
   <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" 
+    src="{% static 'packages/bootstrap-daterangepicker/daterangepicker.js' %}">
+  </script>
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
   <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
   <script src="{% static 'console/js/myadmin/django-admin-multiselect-media.js' %}"></script> 
