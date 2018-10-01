@@ -97,7 +97,7 @@ datalist {
 	min-height: 54px;
 
 	@media (max-width: 1190px) {
-		margin-left: 17px;
+		margin-left: 10px;
 	}
 }
 
@@ -2679,6 +2679,10 @@ footer {
 	margin-top: -20px !important;
 }
 
+.mt-30less {
+	margin-top: -30px;
+}
+
 .no-pad {
 	padding: 0;
 }
@@ -3055,17 +3059,18 @@ footer {
 	display: inline-block;
 }
 
-.exe-button-enrol {
-	background-color: #efa859;
-	border-radius: 20px;
-	padding: 8px 25px;
+.exe-icon-batch-sm {
+	width: 15px;
+	height: 15px;
+	background: $sprite-exe -96px -91px;
 	display: inline-block;
-	text-transform: uppercase;
-	color: $white-color;
+}
 
-	&:hover, &:focus {
-		color: $white-color;
-	}
+.exe-icon-duration-sm {
+	width: 13px;
+	height: 15px;
+	background: $sprite-exe -97px -112px;
+	display: inline-block;
 }
 
 .exe-icon-about-program {
@@ -3201,6 +3206,76 @@ footer {
 	display: inline-block;
 }
 
+.exe-icon-fee-payments {
+	width: 21px;
+	height: 26px;
+	background: $sprite-exe -406px 0;
+	display: inline-block;
+}
+
+.exe-icon-faq {
+	width: 25px;
+	height: 25px;
+	background: $sprite-exe -433px 0;
+	display: inline-block;
+}
+
+.exe-icon-brochure {
+	width: 16px;
+	height: 18px;
+	background: $sprite-exe -484px 0;
+	display: inline-block;
+}
+
+.exe-icon-request-call {
+	width: 18px;
+	height: 20px;
+	background: $sprite-exe -462px 0;
+	display: inline-block;
+}
+
+.exe-icon-place-order {
+	width: 37px;
+	height: 40px;
+	background: $sprite-exe -119px -91px;
+	display: inline-block;
+}
+
+.exe-icon-study-material {
+	width: 39px;
+	height: 39px;
+	background: $sprite-exe -167px -91px;
+	display: inline-block;
+}
+
+.exe-icon-start-learning {
+	width: 37px;
+	height: 42px;
+	background: $sprite-exe -216px -91px;
+	display: inline-block;
+}
+
+.exe-icon-get-certified {
+	width: 39px;
+	height: 30px;
+	background: $sprite-exe -266px -91px;
+	display: inline-block;
+}
+
+.exe-button-enrol {
+	background-color: #efa859;
+	border-radius: 20px;
+	padding: 8px 14%;
+	display: inline-block;
+	text-transform: uppercase;
+	color: $white-color;
+	box-shadow: 0px 0px 25px 0px rgba(227, 147, 69, 0.2);
+
+	&:hover, &:focus {
+		color: $white-color;
+	}
+}
+
 .exe-button-view-sample {
 	border: 1px solid $e-anchor-color;
 	background-color: transparent;
@@ -3222,6 +3297,21 @@ footer {
 	color: $white-color;
 	border-radius: 20px;
 	opacity: 0.8;
+
+	&:hover, &:focus {
+		color: $white-color;
+	}
+}
+
+.exe-button-submit {
+	background-color: $anchor-color;
+	border-radius: 20px;
+	padding: 10px 25px;
+	display: inline-block;
+	text-transform: uppercase;
+	color: $white-color;
+	border: none;
+	box-shadow: 0px 0px 15px 0px rgba(39, 68, 117, 0.2);
 
 	&:hover, &:focus {
 		color: $white-color;

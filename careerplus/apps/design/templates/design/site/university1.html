@@ -19,6 +19,7 @@
     {% compress css %}
     <!-- <link type="text/scss" href="{% static 'shinelearn/css/product/detail.scss' %}" rel="stylesheet"> -->
     <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-detail.scss' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/skill/extra.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 
@@ -36,6 +37,7 @@
       <!-- header -->
       <header>
         <div class="exe-header-txt container pr">
+          <div class="row">
           <!-- breadcrums -->
           <ol class="breadcrumb mt-30">
             <li><a href="#">Home</a></li>
@@ -108,14 +110,9 @@
           </div>
         </div>
 
-        <!-- query-price-box-scroll start -->
-            <div class="query-price-box-scroll">
-              <!-- check free sample start -->
-              <div class="cls_samples_enquiry samples_enquiry">
-              </div>
-            </div>
-            <!-- query-price-box-scroll end -->
-      </div>
+
+          </div>
+        </div>
       </header>
 
     {% endblock page_heading %}
@@ -127,7 +124,6 @@
       <section class="cls_sticky_scroller_p pr">
             <!-- sticky sub header 1 -->
             <div class="cls_sticky_scroller" >
-              
             </div>
       </section>
       <!-- main parent1 section end -->
@@ -137,17 +133,17 @@
     {% block section2 %}
       
       <!-- main parent2 section start -->
-      <section class="container cls_scroller_parent pr">
+      <section class="container cls_scroller_parent pr mt-30less">
         <div class="row">
             
               <!-- About course container -->
               <section id="about-course" class="container-fluid">
-                <div class="row detail-course-links cls_scroller pr">
+                <div class="row exe-detail-course-links cls_scroller pr">
                 <!-- sticky sub header 2 -->
-                  <div class="container">
+                  <div class="container no-pad">
                     <div class="col-sm-12 about-tab cls_scroll_tab">
 
-                      <a title="About Course" class="cls_tab_child" href="#about-course">About Course</a>                      
+                      <a title="About Course" class="active cls_tab_child" href="#about-course">About Course</a>                      
                       <a title="Who Should Attend" class=" cls_tab_child" href="#who-should-attend">Who Should Attend</a>
 
                       <a title="Faculty Profile" class=" cls_tab_child" href="#faculty-profile">Faculty Profile</a>
@@ -162,6 +158,8 @@
                   </div>
                 </div>
               </section>
+
+            <div class="row mt-30">
 
               <!-- inner left container -->
               <div class="col-sm-9">
@@ -215,7 +213,7 @@
                     </div>
                     <article class="col-sm-12 pad-25">
 
-                      <div class="row who-attend">
+                      <div class="row exe-who-attend">
 
                         <div class="media col-sm-6">
                           <div class="media-left">
@@ -269,7 +267,7 @@
                     <h2 class="heading-primary-exe">Eligibility criteria</h2>
                   </div>
                   <article class="col-sm-12 pad-25">
-                    <ul class="criteria-list">
+                    <ul class="exe-criteria-list">
                       <li>Any graduates with minimum 50% marks in graduation.</li>
                       <li>Proficiency in English, spoken & written is mandatory.</li>
                       <li>Working knowledge of Excel.</li>
@@ -288,16 +286,16 @@
                       <h2 class="heading-primary-exe">Faculty Profile</h2>
                     </div>
                     <article class="col-sm-12 pad-25">
-                      <div id="carousel-example-generic" class="carousel slide faculty-carousel" data-ride="carousel">
+                      <div id="carousel-example-generic" class="carousel slide exe-faculty-carousel" data-ride="carousel">
 
                         <!-- Wrapper for slides -->
                         <div class="carousel-inner" role="listbox">
                           <div class="item col-sm-12 active">
                             <div class="col-sm-6 text-center">
                               <figure>
-                                <img src="{% static 'shinelearn/images/executive/faculty-pic1.jpg' %}" alt="Faculty Profile">
+                                <a href="#"><img src="{% static 'shinelearn/images/executive/faculty-pic1.jpg' %}" alt="Faculty Profile"></a>
                                 <figcaption>
-                                  <strong>Dr Ajay Garg</strong>
+                                  <strong><a href="#">Dr Ajay Garg</a></strong>
                                   <div class="exe-designation">Associate Professor – 
                                     <span>Marketing XLRI Jamshedpur</span>
                                   </div>
@@ -308,9 +306,9 @@
 
                             <div class="col-sm-6 text-center">
                               <figure>
-                                <img src="{% static 'shinelearn/images/executive/faculty-pic2.jpg' %}" alt="Faculty Profile">
+                                <a href="#"><img src="{% static 'shinelearn/images/executive/faculty-pic2.jpg' %}" alt="Faculty Profile"></a>
                                 <figcaption>
-                                  <strong>Dr. Soumyakanti Chakraborty</strong>
+                                  <strong><a href="#">Dr. Soumyakanti Chakraborty</a></strong>
                                   <div class="exe-designation">Fellow (IIM Calcutta), B.Tech (Calcutta University) – 
                                     <span>Marketing XLRI Jamshedpur</span>
                                   </div>
@@ -323,9 +321,9 @@
                           <div class="item col-sm-12">
                             <div class="col-sm-6 text-center">
                               <figure>
-                                <img src="{% static 'shinelearn/images/executive/faculty-pic1.jpg' %}" alt="Faculty Profile">
+                                <a href="#"><img src="{% static 'shinelearn/images/executive/faculty-pic1.jpg' %}" alt="Faculty Profile"></a>
                                 <figcaption>
-                                  <strong>Dr Ajay Garg</strong>
+                                  <strong><a href="#">Dr Ajay Garg</a></strong>
                                   <div class="exe-designation">Associate Professor – 
                                     <span>Marketing XLRI Jamshedpur</span>
                                   </div>
@@ -336,9 +334,9 @@
 
                             <div class="col-sm-6 text-center">
                               <figure>
-                                <img src="{% static 'shinelearn/images/executive/faculty-pic2.jpg' %}" alt="Faculty Profile">
+                                <a href="#"><img src="{% static 'shinelearn/images/executive/faculty-pic2.jpg' %}" alt="Faculty Profile"></a>
                                 <figcaption>
-                                  <strong>Dr. Soumyakanti Chakraborty</strong>
+                                  <strong><a href="#">Dr. Soumyakanti Chakraborty</a></strong>
                                   <div class="exe-designation">Fellow (IIM Calcutta), B.Tech (Calcutta University) – 
                                     <span>Marketing XLRI Jamshedpur</span>
                                   </div>
@@ -364,7 +362,7 @@
 
                  <!-- Exclusive Benefits -->
                 <section class="exe-box mb-30">
-                  <div id="exclusive-benefits" class="scroll">
+                  <div id="execlusive-benefits" class="scroll">
                     <div class="e-btm-bdr">
                       <figure class="pr">
                         <i class="exe-icon-benefit"></i>
@@ -372,7 +370,7 @@
                       <h2 class="heading-primary-exe">Exclusive Benefits</h2>
                     </div>
                     <article class="col-sm-12 pad-25">
-                      <div class="row exclusive-benefits">
+                      <div class="row exe-exclusive-benefits">
                         <h3 class="col-sm-12 mb-20">Exclusive Benefits</h2>
 
                         <div class="col-sm-4">
@@ -441,7 +439,7 @@
                   </div>
                 </section>
 
-                <!-- Program Structure -->
+                <!-- Program Structure 1 -->
                 <section class="exe-box mb-30">
                   <div id="program-structure" class="scroll">
                     <div class="e-btm-bdr">
@@ -451,7 +449,7 @@
                       <h2 class="heading-primary-exe">Program Structure</h2>
                     </div>
                     <article class="col-sm-12 pad-25">
-                      <ul class="e-structure-list">
+                      <ul class="exe-structure-list1">
                         <li><h3>Search Engine Optimization</h3></li>
                         <li><h3>Social Media</h3></li>
                         <li><h3>Content Writing</h3></li>
@@ -469,6 +467,132 @@
                   </div>
                 </section>
 
+                <!-- Program Structure 2 -->
+                <section class="exe-box mb-30">
+                  <div class="scroll">
+                    <div class="e-btm-bdr">
+                      <figure class="pr">
+                        <i class="exe-icon-program-structure"></i>
+                      </figure>
+                      <h2 class="heading-primary-exe">Program Structure</h2>
+                    </div>
+                    <article class="col-sm-12 pad-25 exe-accordian exe-structure-list2">
+                      <ul class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <li class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingOne">
+                            <h3 class="panel-title">
+                              <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOneExe" aria-expanded="true" aria-controls="collapseOneExe">
+                                Module 1: Basic Concepts & Applications of Project Management
+                              </a>
+                            </h3>
+                          </div>
+                          <div id="collapseOneExe" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                              <ul>
+                                <li><h3>Project Management Simulation Exercise – Scope, Resources & Scheduling</h3></li>
+                                <li><h3>An Introduction to MS-Project</h3></li>
+                                <li><h3>Interpreting the output of an MS-Project Report</h3></li>
+                                <li><h3>Applications to Technical Scheduling and Resource Scheduling</h3></li>
+                                <li><h3>Resource Levelling</h3></li>
+                                <li><h3>Tracking and Monitoring Project Progress</h3></li>
+                                <li><h3>Modern tools for Project Management (TILOS, Bentley, SD BIM Modeling, RIB2)</h3></li>
+                              </ul>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingTwo">
+                            <h3 class="panel-title">
+                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwoExe" aria-expanded="false" aria-controls="collapseTwoExe">
+                                Module 2: Project Modelling and Management with Applications in MS-Project
+                              </a>
+                            </h3>
+                          </div>
+                          <div id="collapseTwoExe" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body">
+                              <ul>
+                                <li><h3>Project Management Simulation Exercise – Scope, Resources & Scheduling</h3></li>
+                                <li><h3>An Introduction to MS-Project</h3></li>
+                                <li><h3>Interpreting the output of an MS-Project Report</h3></li>
+                                <li><h3>Applications to Technical Scheduling and Resource Scheduling</h3></li>
+                                <li><h3>Resource Levelling</h3></li>
+                                <li><h3>Tracking and Monitoring Project Progress</h3></li>
+                                <li><h3>Modern tools for Project Management (TILOS, Bentley, SD BIM Modeling, RIB2)</h3></li>
+                              </ul>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingThree">
+                            <h3 class="panel-title">
+                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThreeExe" aria-expanded="false" aria-controls="collapseThreeExe">
+                                Module 3: Financial & Risk Aspects of Projects
+                              </a>
+                            </h3>
+                          </div>
+                          <div id="collapseThreeExe" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="panel-body">
+                              <ul>
+                                <li><h3>Project Management Simulation Exercise – Scope, Resources & Scheduling</h3></li>
+                                <li><h3>An Introduction to MS-Project</h3></li>
+                                <li><h3>Interpreting the output of an MS-Project Report</h3></li>
+                                <li><h3>Applications to Technical Scheduling and Resource Scheduling</h3></li>
+                                <li><h3>Resource Levelling</h3></li>
+                                <li><h3>Tracking and Monitoring Project Progress</h3></li>
+                                <li><h3>Modern tools for Project Management (TILOS, Bentley, SD BIM Modeling, RIB2)</h3></li>
+                              </ul>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingFour">
+                            <h3 class="panel-title">
+                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFourExe" aria-expanded="false" aria-controls="collapseFourExe">
+                                Module 4: Workshop on Risk Assessment & Management in Projects
+                              </a>
+                            </h3>
+                          </div>
+                          <div id="collapseFourExe" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                            <div class="panel-body">
+                              <ul>
+                                <li><h3>Project Management Simulation Exercise – Scope, Resources & Scheduling</h3></li>
+                                <li><h3>An Introduction to MS-Project</h3></li>
+                                <li><h3>Interpreting the output of an MS-Project Report</h3></li>
+                                <li><h3>Applications to Technical Scheduling and Resource Scheduling</h3></li>
+                                <li><h3>Resource Levelling</h3></li>
+                                <li><h3>Tracking and Monitoring Project Progress</h3></li>
+                                <li><h3>Modern tools for Project Management (TILOS, Bentley, SD BIM Modeling, RIB2)</h3></li>
+                              </ul>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingFive">
+                            <h3 class="panel-title">
+                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFiveExe" aria-expanded="false" aria-controls="collapseFiveExe">
+                                Module 5: People Management in Projects
+                              </a>
+                            </h3>
+                          </div>
+                          <div id="collapseFiveExe" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+                            <div class="panel-body">
+                              <ul>
+                                <li><h3>Project Management Simulation Exercise – Scope, Resources & Scheduling</h3></li>
+                                <li><h3>An Introduction to MS-Project</h3></li>
+                                <li><h3>Interpreting the output of an MS-Project Report</h3></li>
+                                <li><h3>Applications to Technical Scheduling and Resource Scheduling</h3></li>
+                                <li><h3>Resource Levelling</h3></li>
+                                <li><h3>Tracking and Monitoring Project Progress</h3></li>
+                                <li><h3>Modern tools for Project Management (TILOS, Bentley, SD BIM Modeling, RIB2)</h3></li>
+                              </ul>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </article>
+                  </div>
+                </section>
+
                 <!-- Assessment & Evaluation -->
                 <section class="exe-box mb-30">
                   <div class="scroll">
@@ -479,7 +603,7 @@
                       <h2 class="heading-primary-exe">Assessment & Evaluation</h2>
                     </div>
                     <article class="col-sm-12 pad-25">
-                      <ul class="e-structure-list">
+                      <ul class="exe-structure-list1">
                         <li><p>
                           A minimum of 70% attendance to the LIVE lectures is a prerequisite for the successful completion of thiscourse. There are periodic evaluations built in throughout the duration of the course. 
                         </p></li>
@@ -508,7 +632,7 @@
                       </figure>
                       <h2 class="heading-primary-exe">Institute</h2>
                     </div>
-                    <article class="col-sm-12 pad-25 institute">
+                    <article class="col-sm-12 pad-25 exe-institute">
                       <figure>
                         <span class="institute-txt">
                           <h3>XLRI Jamshedpur</h3>
@@ -533,13 +657,13 @@
                       </figure>
                       <h2 class="heading-primary-exe">Testimonials</h2>
                     </div>
-                    <article class="col-sm-12 pad-25">
-                      <div id="carousel-example-generic1" class="carousel slide testimonial-carousel" data-ride="carousel">
+                    <article class="col-sm-12">
+                      <div id="carousel-example-generic1" class="carousel slide exe-testimonial-carousel" data-ride="carousel">
 
                         <!-- Wrapper for slides -->
                         <div class="carousel-inner" role="listbox">
                           <div class="item col-sm-12 active">
-                            <p class="mb-20">One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry.</p>
+                            <p class="mb-20 mt-20">One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry.</p>
                             <figure>
                               <img src="{% static 'shinelearn/images/executive/testimonial-pic.jpg' %}" alt="Faculty Profile">
                               <figcaption>
@@ -552,7 +676,7 @@
                           </div>
 
                           <div class="item col-sm-12">
-                            <p>One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry.</p>
+                            <p class="mb-20 mt-20">One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry.</p>
                             <figure>
                               <img src="{% static 'shinelearn/images/executive/testimonial-pic.jpg' %}" alt="Faculty Profile">
                               <figcaption>
@@ -579,25 +703,242 @@
                 </section>
 
                 <!-- Fees & Payments Modes -->
-                <section class="container-fluid detail-box">
-                  <div class="container">
-                    <div class="row">
-                      <div id="fees-payments" class="col-sm-12 col-md-8 scroll">
-                        <h2>Fees & Payments Modes</h2>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                      </div>
+                <section class="exe-box mb-30">
+                  <div id="fees-payments" class="scroll">
+                    <div class="e-btm-bdr">
+                      <figure class="pr">
+                        <i class="exe-icon-fee-payments"></i>
+                      </figure>
+                      <h2 class="heading-primary-exe">Fee and Payment Modes</h2>
                     </div>
+                    <article class="col-sm-12 pad-25 exe-accordian exe-fee-payments-box">
+                      <ul class="panel-group" id="accordion1" role="tablist" aria-multiselectable="true">
+                        <li class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingOne">
+                            <h3 class="panel-title">
+                              <a role="button" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneExe1" aria-expanded="true" aria-controls="collapseOneExe1">
+                                Program Fee
+                              </a>
+                            </h3>
+                          </div>
+                          <div id="collapseOneExe1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body exe-program-fee">
+                              <div class="payment-deadline pull-right">
+                                Payment Deadline                                  
+                                <strong>21/09/2018</strong> 
+                              </div> 
+                              <div class="overall-fees">
+                                Overall fees                                  
+                                <strong>Rs. 90,000</strong> 
+                              </div> 
+                              <span class="e-blue-bdr mt-15"></span>
+                              <div class="installment text-center">
+                                <span class="text-uppercase col-sm-12 mb-15">Installment Available</span>
+                                <div class="col-sm-4 installment-available">
+                                  1st Instalment
+                                  <strong>Rs. 30000</strong>
+                                  <span>Payment Deadline: <b>27/12/2018</b></span>
+                                </div>
+                                <div class="col-sm-4 installment-available">
+                                  2nd Instalment
+                                  <strong>Rs. 35000</strong>
+                                  <span>Payment Deadline: <b>27/01/2019</b></span>
+                                </div>
+                                <div class="col-sm-4 installment-available">
+                                  3rd Instalment
+                                  <strong>Rs. 25000</strong>
+                                  <span>Payment Deadline: <b>27/03/2019</b></span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingTwo">
+                            <h3 class="panel-title">
+                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwoExe1" aria-expanded="false" aria-controls="collapseTwoExe1">
+                                Application Process
+                              </a>
+                            </h3>
+                          </div>
+                          <div id="collapseTwoExe1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body exe-application-process">
+                              <figure class="col-sm-3 process-box">
+                                <span class="circle"><i class="exe-icon-place-order"></i></span>
+                                <figcaption>Place Order</figcaption>
+                              </figure>
+                              <figure class="col-sm-3 process-box">
+                                <span class="exe-arrow"></span>
+                                <span class="circle"><i class="exe-icon-study-material"></i></span>
+                                <figcaption>Receive online access/study material</figcaption>
+                              </figure>
+                              <figure class="col-sm-3 process-box">
+                                <span class="exe-arrow"></span>
+                                <span class="circle"><i class="exe-icon-start-learning"></i></span>
+                                <figcaption>Access the material and start learning</figcaption>
+                              </figure>
+                              <figure class="col-sm-3 process-box">
+                                <span class="exe-arrow"></span>
+                                <span class="circle"><i class="exe-icon-get-certified"></i></span>
+                                <figcaption>Appear for exam – Get Certified</figcaption>
+                              </figure>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingThree">
+                            <h3 class="panel-title">
+                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion1" href="#collapseThreeExe1" aria-expanded="false" aria-controls="collapseThreeExe1">
+                                Late Fee
+                              </a>
+                            </h3>
+                          </div>
+                          <div id="collapseThreeExe1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="panel-body exe-late-fee">
+                              <p>Requests for refund of fees on account of cancellation of enrolment shall be considered only if such requests are received prior to closure of registration or 21 days before date of course commencement    whichever is earlier.</p>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </article>
                   </div>
                 </section>
+
+                <!-- Frequenty Asked Questions -->
+                <section class="exe-box mb-30">
+                  <div id="fees-payments" class="scroll">
+                    <div class="e-btm-bdr">
+                      <figure class="pr">
+                        <i class="exe-icon-faq"></i>
+                      </figure>
+                      <h2 class="heading-primary-exe">Frequenty Asked Questions</h2>
+                    </div>
+                    <article class="col-sm-12 pad-25 exe-accordian">
+                      <ul class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+                        <li class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingOne">
+                            <h3 class="panel-title">
+                              <a role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseOneExe2" aria-expanded="true" aria-controls="collapseOneExe2">
+                                What is the cancellation policy?
+                              </a>
+                            </h3>
+                          </div>
+                          <div id="collapseOneExe2" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                              <ol type="I">
+                                <li>Requests for refund of fees on account of cancellation of enrolment shall be considered only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</li>
+                                <li>In event that such valid requests for refund of fees are received, the application money shall be refunded after deducting a penalty of Rs.5000 and applicable taxes for Indian participants & USD 125 for foreign participants.</li>
+                                <li>In all other cases, no refund shall be made.</li>
+                              </ol>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingTwo">
+                            <h3 class="panel-title">
+                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoExe2" aria-expanded="false" aria-controls="collapseTwoExe2">
+                                Can I  join next batch after paying for this batch?
+                              </a>
+                            </h3>
+                          </div>
+                          <div id="collapseTwoExe2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body">
+                              <ol type="I">
+                                <li>Requests for refund of fees on account of cancellation of enrolment shall be considered only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</li>
+                                <li>In event that such valid requests for refund of fees are received, the application money shall be refunded after deducting a penalty of Rs.5000 and applicable taxes for Indian participants & USD 125 for foreign participants.</li>
+                                <li>In all other cases, no refund shall be made.</li>
+                              </ol>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingThree">
+                            <h3 class="panel-title">
+                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseThreeExe2" aria-expanded="false" aria-controls="collapseThreeExe2">
+                                Do we get placement opportunity with this course?
+                              </a>
+                            </h3>
+                          </div>
+                          <div id="collapseThreeExe2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="panel-body">
+                              <ol type="I">
+                                <li>Requests for refund of fees on account of cancellation of enrolment shall be considered only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</li>
+                                <li>In event that such valid requests for refund of fees are received, the application money shall be refunded after deducting a penalty of Rs.5000 and applicable taxes for Indian participants & USD 125 for foreign participants.</li>
+                                <li>In all other cases, no refund shall be made.</li>
+                              </ol>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </article>
+                  </div>
+                </section>
+
               </div>
               <!-- inner left container end -->
 
               <!-- inner right container -->
-              <div class="col-sm-3" style="margin-top: 80px">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+              <div class="col-sm-3 pr">
+
+              <!-- box-scroll start -->
+              <div class="query-price-box-scroll">
+                <div class="cls_samples_enquiry samples_enquiry">
+                  <div class="col-sm-12 no-pad">
+                    <!-- Enrol Now -->
+                    <section class="exe-box mb-30 exe-show-enrol-now">
+                      <article class="pad-25">
+                        <figure>
+                          <i class="exe-icon-batch-sm"></i>
+                          <figcaption>
+                            Batch starts: <strong>05 Jan 2019</strong>
+                          </figcaption>
+                        </figure>
+                        <figure>
+                          <i class="exe-icon-duration-sm"></i>
+                          <figcaption>
+                            Duration: <strong>4 month</strong>
+                          </figcaption>
+                          <a class="exe-button-enrol mt-15" href="#">Enroll Now</a>
+                        </figure>
+                      </article>
+                    </section>
+
+                    <!-- Download Brochure -->
+                    <section class="exe-box mb-30">
+                        <a href="#" class="exe-download-brochure"><figure class="exe-icon-brochure"></figure>Download Brochure</a>
+                    </section>
+
+                    <!-- Request a call -->
+                    <section class="exe-box mb-30">
+                      <div class="e-btm-bdr">
+                        <figure class="pr">
+                          <i class="exe-icon-request-call"></i>
+                        </figure>
+                        <h2 class="heading-primary-exe">Request a call</h2>
+                      </div>
+                      <article class="col-sm-12 pad-25 exe-request-call">
+                        <form>
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="exampleInputName" placeholder="Name">
+                          </div>
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="exampleInputEmail" placeholder="Email">
+                          </div>
+                          <div class="form-group">
+                            <input type="text" class="form-control" id="exampleInputPhone" placeholder="Phone Number">
+                          </div>
+                          
+                          <button type="submit" class="exe-button-submit mt-10">Submit</button>
+                        </form>
+                      </article>
+                    </section>
+                  </div>
+                  </div>
+                </div>
+
               </div>
               <!-- inner right container end -->
-
+            </div>
       </div>
       </section>
       <!-- main parent2 section end -->      
@@ -606,60 +947,49 @@
       {% block prdrecommended %}
       <!-- recommended product -->
 
-<section class="container-fluid detail-box recomend-product-bg cls_hide_sticky_panel">
+      <section class="container-fluid detail-box you-may-like-carousel cls_hide_sticky_panel">
+        <div class="scroll">
+          <h2 class="heading-primary-exe mt-30 mb-10 text-center">You may also like</h2>
+          <article class="col-sm-12">
+            <div id="carousel-example-generic2" class="carousel slide" data-ride="carousel">
 
-<div class="container">
-  <div class="row">
-    <div class="col-sm-12 mt-40">
-      <h2 class="detail-heading">Recommended products</h2>
-
-      <div class="row">
-
-        <ul class="listing">
-          {% for prd in recommended_products %}
-          <li class="col-sm-6 col-md-4">
-            <a title="{{ prd.pHd|default:prd.pNm|truncatechars:40 }}" class="box-panel" href="{{prd.pURL}}">
-              <div class="media">
-                <div class="media-body">
-                  <h3 class="listing-heading">{{ prd.pHd|default:prd.pNm|truncatechars:40 }}</h3>
-                  <div class="rating-review-box">
-                        {% if prd.pRC %}
-                        {% for star in prd.pStar %}
-                              {% if star == '*' %}
-                                <figure class="full-star"></figure>
-                              {% elif star == '+' %}
-                                <figure class="half-star"></figure>
-                              {% else %}
-                                <figure class="blank-star"></figure>
-                              {% endif %}
-                        {% endfor %}
-
-                        <strong>{{prd.pARx|floatformat}}<small>/5</small></strong>
-                        {% else %}
-                            <strong>{{ prd.pBC|default:"10" }}</strong> people bought
-                        {% endif %}
-                        <span class="jobs-available"><strong>{{prd.pNJ}}</strong> jobs available</span>
-                    </div>
+              <!-- Wrapper for slides -->
+              <div class="carousel-inner" role="listbox">
+                <div class="item col-sm-12 active">
+                  <ul class="listing">
+                    <li class="col-sm-4"><a title="CSS Designer" class="box-panel" href="/course/it-information-technology/css-designer/pd-276"><div class="media"><div class="media-body"><h3 class="listing-heading">CSS Designer</h3><div class="rating-review-box"><strong>10</strong> people bought
+                    <span class="jobs-available"><strong>5950</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/276/1509558215_9064.png" alt="CSS Designer"></figure></div></div></a></li>
+                    <li class="col-sm-4"><a title="HTML Designer" class="box-panel" href="/course/it-information-technology/html-designer/pd-275"><div class="media"><div class="media-body"><h3 class="listing-heading">HTML Designer</h3><div class="rating-review-box"><strong>1</strong> people bought
+                    <span class="jobs-available"><strong>6143</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/275/1508147934_5947.png" alt="Certified HTML Designer"></figure></div></div></a></li>
+                    <li class="col-sm-4"><a title="User Experience (UX) Design Training ..." class="box-panel" href="/course/it-information-technology/user-experience-ux-design-training-course/pd-1733"><div class="media"><div class="media-body"><h3 class="listing-heading">User Experience (UX) Design Training ...</h3><div class="rating-review-box"><strong>7</strong> people bought
+                    <span class="jobs-available"><strong>680</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/1733/1509351518_2408.png" alt="User Experience (UX) Design Training Course"></figure></div></div></a></li>
+                  </ul>
                 </div>
-                <div class="media-left">
-                    <figure>
-                        <img class="img-responsive" src="{{prd.pImg}}" alt="{{prd.pImA}}">
-                    </figure>
+
+                <div class="item col-sm-12">
+                  <ul class="listing">
+                    <li class="col-sm-4"><a title="CSS Designer" class="box-panel" href="/course/it-information-technology/css-designer/pd-276"><div class="media"><div class="media-body"><h3 class="listing-heading">CSS Designer</h3><div class="rating-review-box"><strong>10</strong> people bought
+                    <span class="jobs-available"><strong>5950</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/276/1509558215_9064.png" alt="CSS Designer"></figure></div></div></a></li>
+                    <li class="col-sm-4"><a title="HTML Designer" class="box-panel" href="/course/it-information-technology/html-designer/pd-275"><div class="media"><div class="media-body"><h3 class="listing-heading">HTML Designer</h3><div class="rating-review-box"><strong>1</strong> people bought
+                    <span class="jobs-available"><strong>6143</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/275/1508147934_5947.png" alt="Certified HTML Designer"></figure></div></div></a></li>
+                    <li class="col-sm-4"><a title="User Experience (UX) Design Training ..." class="box-panel" href="/course/it-information-technology/user-experience-ux-design-training-course/pd-1733"><div class="media"><div class="media-body"><h3 class="listing-heading">User Experience (UX) Design Training ...</h3><div class="rating-review-box"><strong>7</strong> people bought
+                    <span class="jobs-available"><strong>680</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/1733/1509351518_2408.png" alt="User Experience (UX) Design Training Course"></figure></div></div></a></li>
+                  </ul>
                 </div>
+                
               </div>
-            </a>
-          </li>
-          {% endfor %}
 
-        </ul>
-
-      </div>
-
-    </div>
-  </div>
-</div>
-
-</section>
+              <!-- Controls -->
+              <a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev">
+                <span class="exe-icon-chevron-left mt-10" aria-hidden="true"></span>
+              </a>
+              <a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next">
+                <span class="exe-icon-chevron-right mt-10" aria-hidden="true"></span>
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
 
       <!-- end recommended product -->
       {% endblock prdrecommended %}
