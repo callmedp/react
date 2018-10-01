@@ -335,122 +335,124 @@ class ProductInformationMixin(object):
     def get_product_detail_context(self, product, sqs, product_main, sqs_main):
         pk = product.pk
         ctx = {}
-        key = str(pk) +"-"+ product.slug
-        if cache.get(key):
-            ctx =cache.get(key)
-            return ctx
-
-        ctx['product'] = product
-        ctx['num_jobs_url'] = self.get_jobs_url(product)
-        if product:
-            ctx.update(self.get_breadcrumbs(product, product.category_main))
-        ctx.update(self.solar_info(sqs))
-        if product.is_course:
-            ctx.update(self.solar_program_structure(sqs))
-        ctx.update(self.solar_faq(sqs))
-        ctx.update(self.get_reviews(product, 1))
-        country_choices = [(m.phone, m.name) for m in
-                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-        initial_country = Country.objects.filter(phone='91')[0].phone
-        ctx.update({
-            'country_choices': country_choices,
-            'initial_country': initial_country,
-        })
-        if sqs.pPc == 'course':
-            ctx.update(json.loads(sqs_main.pPOP))
-            pvrs_data = json.loads(sqs.pVrs)
-            try:
-                selected_var = pvrs_data['var_list'][0]
-            except Exception as e:
-                selected_var = None
-            ctx.update({'selected_var': selected_var})
-            ctx.update(pvrs_data)
-            ctx['canonical_url'] = product.get_canonical_url()
-        else:
-            if ctx.get('prd_exp', None) in ['EP', 'FP']:
-                pPOP = json.loads(sqs_main.pPOP)
-                pid = None
-                for pop in pPOP.get('pop_list'):
-                    if pop.get('experience', '') == 'FR' and ctx.get('prd_exp', None) == 'FP':
-                        pid = pop.get('id')
-                        break
-                    elif pop.get('experience', '') == 'SP' and ctx.get('prd_exp', None) == 'EP':
-                        pid = pop.get('id')
-                        break
+        key = str(pk)+'-' + 'get_prod_detail'
+        dict = {}
+        cach = cache.get(key, '')
+        if cach:
+            return cach.get('solr_data','')
+        if not cach:
+            ctx['product'] = product
+            ctx['num_jobs_url'] = self.get_jobs_url(product)
+            if product:
+                ctx.update(self.get_breadcrumbs(product, product.category_main))
+            ctx.update(self.solar_info(sqs))
+            if product.is_course:
+                ctx.update(self.solar_program_structure(sqs))
+            ctx.update(self.solar_faq(sqs))
+            ctx.update(self.get_reviews(product, 1))
+            country_choices = [(m.phone, m.name) for m in
+                               Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+            initial_country = Country.objects.filter(phone='91')[0].phone
+            ctx.update({
+                'country_choices': country_choices,
+                'initial_country': initial_country,
+            })
+            if sqs.pPc == 'course':
+                ctx.update(json.loads(sqs_main.pPOP))
+                pvrs_data = json.loads(sqs.pVrs)
                 try:
-                    if pid:
-                        pid = Product.objects.get(pk=pid)
-                        ctx['canonical_url'] = pid.get_canonical_url()
-                    else:
-                        ctx['canonical_url'] = product.get_canonical_url()
+                    selected_var = pvrs_data['var_list'][0]
                 except Exception as e:
-                    ctx['canonical_url'] = product.get_canonical_url()
-                    logging.getLogger('error_log').error(
-                        "%(msg)s : %(err)s" % {'msg': 'Canonical Url ERROR', 'err': e})
-            else:
+                    selected_var = None
+                ctx.update({'selected_var': selected_var})
+                ctx.update(pvrs_data)
                 ctx['canonical_url'] = product.get_canonical_url()
-            ctx.update(json.loads(sqs_main.pPOP))
-            pvrs_data = json.loads(sqs.pVrs)
-            ctx.update(pvrs_data)
-        if self.is_combos(sqs):
-            ctx.update(json.loads(sqs.pCmbs))
-
-        ctx.update(json.loads(sqs.pFBT))
-        get_fakeprice = self.get_solar_fakeprice(
-            sqs.pPinb, sqs.pPfinb)
-
-        ctx.update(self.getSelectedProduct_solr(sqs))
-        # ctx.update(self.getSelectedProductPrice_solr(self.sqs))
-
-        try:
-            widget_obj = DetailPageWidget.objects.get(
-                content_type__model='Product', listid__contains=pk)
-            widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
-                column=1)
-        except DetailPageWidget.DoesNotExist:
-            widget_objs = None
-            widget_obj = None
-        ctx['domain_name'] = '{}//{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
-        ctx.update({'sqs': sqs})
-        ctx.update({'get_fakeprice': get_fakeprice})
-        ctx['meta'] = product.as_meta(self.request)
-        ctx['meta']._url = ctx.get('canonical_url', '')
-        ctx['show_chat'] = True
-        ctx['amp'] = self.request.amp
-        ctx['widget_objs'] = widget_objs
-        ctx['widget_obj'] = widget_obj
-        ctx['product_main'] = product_main,
-        ctx['sqs_main'] = sqs_main
-        ctx['is_logged_in'] = True if self.request.session.get('candidate_id') else False
-        ctx["loginform"] = ModalLoginApiForm()
-        ctx['linkedin_resume_services'] = settings.LINKEDIN_RESUME_PRODUCTS
-        if self.request.session.get('candidate_id'):
-            candidate_id = self.request.session.get('candidate_id')
-            contenttype_obj = ContentType.objects.get_for_model(product)
-            review_obj = Review.objects.filter(
-                object_id=product.id, content_type=contenttype_obj, user_id=candidate_id
-            )
-            if review_obj.count() > 0:
-                ctx['review_obj'] = review_obj[0]
             else:
-                ctx['review_obj'] = None
-            # user_reviews depicts if user already has a review for this product or not
-            product_type = ContentType.objects.get(
-                app_label='shop', model='product')
-            candidate_id = self.request.session.get('candidate_id', None)
-            user_reviews = Review.objects.filter(
-                content_type=product_type,
-                object_id=pk, status__in=[0, 1],
-                user_id=candidate_id
-            ).count()
+                if ctx.get('prd_exp', None) in ['EP', 'FP']:
+                    pPOP = json.loads(sqs_main.pPOP)
+                    pid = None
+                    for pop in pPOP.get('pop_list'):
+                        if pop.get('experience', '') == 'FR' and ctx.get('prd_exp', None) == 'FP':
+                            pid = pop.get('id')
+                            break
+                        elif pop.get('experience', '') == 'SP' and ctx.get('prd_exp', None) == 'EP':
+                            pid = pop.get('id')
+                            break
+                    try:
+                        if pid:
+                            pid = Product.objects.get(pk=pid)
+                            ctx['canonical_url'] = pid.get_canonical_url()
+                        else:
+                            ctx['canonical_url'] = product.get_canonical_url()
+                    except Exception as e:
+                        ctx['canonical_url'] = product.get_canonical_url()
+                        logging.getLogger('error_log').error(
+                            "%(msg)s : %(err)s" % {'msg': 'Canonical Url ERROR', 'err': e})
+                else:
+                    ctx['canonical_url'] = product.get_canonical_url()
+                ctx.update(json.loads(sqs_main.pPOP))
+                pvrs_data = json.loads(sqs.pVrs)
+                ctx.update(pvrs_data)
+            if self.is_combos(sqs):
+                ctx.update(json.loads(sqs.pCmbs))
 
-            ctx['user_reviews'] = True if user_reviews else False
-        navigation = True
-        if sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
-            navigation = False
-        ctx['navigation'] = navigation
-        cache.set(key,ctx,60*60*4)
-        return ctx
+            ctx.update(json.loads(sqs.pFBT))
+            get_fakeprice = self.get_solar_fakeprice(
+                sqs.pPinb, sqs.pPfinb)
+
+            ctx.update(self.getSelectedProduct_solr(sqs))
+            # ctx.update(self.getSelectedProductPrice_solr(self.sqs))
+
+            try:
+                widget_obj = DetailPageWidget.objects.get(
+                    content_type__model='Product', listid__contains=pk)
+                widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
+                    column=1)
+            except DetailPageWidget.DoesNotExist:
+                widget_objs = None
+                widget_obj = None
+            ctx['domain_name'] = '{}//{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
+            ctx.update({'sqs': sqs})
+            ctx.update({'get_fakeprice': get_fakeprice})
+            ctx['meta'] = product.as_meta(self.request)
+            ctx['meta']._url = ctx.get('canonical_url', '')
+            ctx['show_chat'] = True
+            ctx['amp'] = self.request.amp
+            ctx['widget_objs'] = widget_objs
+            ctx['widget_obj'] = widget_obj
+            ctx['product_main'] = product_main,
+            ctx['sqs_main'] = sqs_main
+            ctx['is_logged_in'] = True if self.request.session.get('candidate_id') else False
+            ctx["loginform"] = ModalLoginApiForm()
+            ctx['linkedin_resume_services'] = settings.LINKEDIN_RESUME_PRODUCTS
+            if self.request.session.get('candidate_id'):
+                candidate_id = self.request.session.get('candidate_id')
+                contenttype_obj = ContentType.objects.get_for_model(product)
+                review_obj = Review.objects.filter(
+                    object_id=product.id, content_type=contenttype_obj, user_id=candidate_id
+                )
+                if review_obj.count() > 0:
+                    ctx['review_obj'] = review_obj[0]
+                else:
+                    ctx['review_obj'] = None
+                # user_reviews depicts if user already has a review for this product or not
+                product_type = ContentType.objects.get(
+                    app_label='shop', model='product')
+                candidate_id = self.request.session.get('candidate_id', None)
+                user_reviews = Review.objects.filter(
+                    content_type=product_type,
+                    object_id=pk, status__in=[0, 1],
+                    user_id=candidate_id
+                ).count()
+
+                ctx['user_reviews'] = True if user_reviews else False
+            navigation = True
+            if sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
+                navigation = False
+            ctx['navigation'] = navigation
+            dict.update({'solr_data': ctx})
+            cache.set(key, dict,60*60*4)
+            return ctx
 
 
 @Decorate(stop_browser_cache())
@@ -470,6 +472,9 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         self._enforce_parent = True
         self.sqs = None
         self.skill=False
+        self.dict = {}
+        self.key=None
+
 
         super(ProductDetailView, self).__init__(*args, **kwargs)
 
@@ -488,9 +493,13 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 .values_list('skill__name',flat=True)[:3]
         self.skill = ",".join(self.skill)
         ctx.update({'skill': self.skill})
-        product_data = self.get_product_detail_context(
-            self.product_obj, self.sqs,
-            self.product_obj, self.sqs)
+        product_data = cache.get(self.key+'-'+'get_prod_detail','')
+        if product_data:
+            product_data = product_data.get('solr_data', '')
+        if not product_data:
+            product_data = self.get_product_detail_context(
+                self.product_obj, self.sqs,
+                self.product_obj, self.sqs)
 
         product_detail_content = render_to_string(
             'shop/product-detail.html', product_data,
@@ -611,43 +620,51 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
     def get(self, request, **kwargs):
         pk = self.kwargs.get('pk')
-        try:
-            self.product_obj = Product.browsable.get(pk=pk)
-        except Exception as e:
-            logging.getLogger('error_log').error("404 on product detail.ID:{}".format(pk))
-            raise Http404
-
-        try:
-            sqs = SearchQuerySet().filter(id=pk)
-            self.sqs = sqs[0]
-            if not self.sqs:
+        self.key = pk
+        cache_key= cache.get(self.key)
+        if cache_key:
+            self.product_obj = cache_key.get('product_obj','')
+            self.sqs = cache_key.get('sqs','')
+            self.category = cache_key.get('category','')
+        else:
+            self.product_obj = Product.browsable.filter(pk=pk).first()
+            if not self.product_obj:
                 raise Http404
+            self.dict.update({'product_obj': self.product_obj})
+            sqs = SearchQuerySet().filter(id=pk)
+            if sqs:
+                self.sqs = sqs[0]
+            else:
+                raise Http404
+            self.dict.update({'sqs': self.sqs})
 
-            if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
-                linkedin_cid = settings.LINKEDIN_DICT.get('CLIENT_ID', None)
-                token = request.GET.get('token', '')
-                login_url = reverse('login') + '?next=' + request.get_full_path() + '&linkedin=true'
-                if token and request.session.get('email'):
-                    validate = LinkedinSeriviceMixin().validate_encrypted_key(
-                        token=token,
-                        email=request.session.get('email'),
-                        prd=self.sqs.id)
-                    if validate and linkedin_cid == request.session.get('linkedin_client_id', ''):
-                        services = OrderItem.objects.filter(
-                            order__status__in=[1, 3],
-                            order__candidate_id=request.session.get('candidate_id'),
-                            product__id__in=settings.LINKEDIN_RESUME_PRODUCTS)
-                        if services.exists():
-                            return HttpResponseRedirect(reverse('dashboard:dashboard'))
-                    elif not validate and linkedin_cid == request.session.get('linkedin_client_id', ''):
-                        request.session['linkedin_modal'] = 1
-                        return HttpResponseRedirect('/')
-                    elif validate and linkedin_cid != request.session.get('linkedin_client_id', ''):
-                        request.session.flush()
-                        return HttpResponseRedirect(login_url)
-                    elif not validate:
-                        request.session.flush()
-                        return HttpResponseRedirect(login_url)
+            cache.set(pk, self.dict, 60*60*4)
+
+        if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
+            linkedin_cid = settings.LINKEDIN_DICT.get('CLIENT_ID', None)
+            token = request.GET.get('token', '')
+            login_url = reverse('login') + '?next=' + request.get_full_path() + '&linkedin=true'
+            if token and request.session.get('email'):
+                validate = LinkedinSeriviceMixin().validate_encrypted_key(
+                    token=token,
+                    email=request.session.get('email'),
+                    prd=self.sqs.id)
+                if validate and linkedin_cid == request.session.get('linkedin_client_id', ''):
+                    services = OrderItem.objects.filter(
+                        order__status__in=[1, 3],
+                        order__candidate_id=request.session.get('candidate_id'),
+                        product__id__in=settings.LINKEDIN_RESUME_PRODUCTS)
+                    if services.exists():
+                        return HttpResponseRedirect(reverse('dashboard:dashboard'))
+                elif not validate and linkedin_cid == request.session.get('linkedin_client_id', ''):
+                    request.session['linkedin_modal'] = 1
+                    return HttpResponseRedirect('/')
+                elif validate and linkedin_cid != request.session.get('linkedin_client_id', ''):
+                    request.session.flush()
+                    return HttpResponseRedirect(login_url)
+                elif not validate:
+                    request.session.flush()
+                    return HttpResponseRedirect(login_url)
 
                 elif token:
                     request.session.flush()
@@ -655,14 +672,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 else:
                     request.session['linkedin_modal'] = 1
                     return HttpResponseRedirect('/')
-
-        except Exception as e:
-            logging.getLogger('error_log').error("SQS query error on product detail.ID:{}".format(pk))
-            raise Http404
-
-        if self.product_obj:
-            self.category = self.product_obj.category_main
-
         redirection = self.redirect_if_necessary(request.path, self.sqs)
         if redirection is not None:
             return redirection
@@ -976,37 +985,20 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
         if request.is_ajax():
             self.main_pk = self.request.GET.get('main_pk', None)
             self.obj_pk = self.request.GET.get('obj_pk', None)
-
-            try:
-                self.product_obj = Product.browsable.get(pk=self.obj_pk)
-            except:
-                logging.getLogger('error_log').error(
-                    "Product is not browsable:product-id {}".format(
-                        self.obj_pk))
-
-            try:
-                self.product_main = Product.browsable.get(pk=self.main_pk)
-            except:
-                logging.getLogger('error_log').error(
-                    "Main Product is not browsable:product-id {}".format(
-                        self.main_pk))
-
-            try:
-                sqs = SearchQuerySet().filter(id=self.obj_pk)
-                self.sqs_obj = sqs[0]
-            except:
-                logging.getLogger('error_log').error(
-                    "SQS query error on product detail.ID :{}".format(
-                        self.obj_pk))
-
-            try:
-                sqs = SearchQuerySet().filter(id=self.main_pk)
-                self.sqs_main = sqs[0]
-            except:
-                logging.getLogger('error_log').error(
-                    "SQS query error on product detail.ID :{}".format(
-                        self.main_pk))
-
+            self.product_obj = Product.browsable.filter(pk=self.obj_pk).first()
+            if not self.product_obj:
+                raise 404
+            self.product_main = Product.browsable.get(pk=self.main_pk)
+            if not self.product_main:
+                raise 404
+            sqs = SearchQuerySet().filter(id=self.obj_pk)
+            self.sqs_obj = sqs[0]
+            if not self.sqs_obj:
+                raise 404
+            sqs = SearchQuerySet().filter(id=self.main_pk)
+            self.sqs_main = sqs[0]
+            if not self.sqs_main:
+                raise 404
             if self.sqs_obj and self.sqs_main and self.product_obj and self.product_main:
                 product_data = self.get_product_detail_context(
                     self.product_obj, self.sqs_obj,
