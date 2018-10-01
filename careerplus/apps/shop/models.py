@@ -999,7 +999,7 @@ class Product(AbstractProduct, ModelMeta):
         super(Product, self).__init__(*args, **kwargs)
         if self.product_class:
             self.attr = ProductAttributesContainer(product=self)
-        self.initialize_variables()
+        #self.initialize_variables()
 
     def __str__(self):
         if self.pk:
@@ -2481,6 +2481,17 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
     active = models.BooleanField(
         default=False)
 
+    class Meta:
+        verbose_name = _('Faculty')
+        verbose_name_plural = _('Faculty')
+        ordering = ("-modified", "-created")
+        get_latest_by = 'created'
+        permissions = (
+            ("console_add_faculty", "Can Add Faculty From Console"),
+            ("console_change_faculty", "Can Change Faculty From Console"),
+            ("console_view_faculty", "Can View Faculty From Console"),
+        )
+
     def __str__(self):
         return '{} - {}'.format(self.name, self.id)
 
@@ -2496,6 +2507,9 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
                 self.meta_desc = self.get_meta_desc()
         super(Faculty, self).save(*args, **kwargs)
 
+    def get_full_url(self):
+        return ''
+
     def get_active(self):
         if self.active:
             return 'Active'
@@ -2504,7 +2518,6 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
     def get_meta_desc(self):
         return '%s - Unitversity Faculty at Shine Learning' % (
             self.heading,)
-
 
 
 class FacultyProduct(AbstractAutoDate):
@@ -2520,3 +2533,8 @@ class FacultyProduct(AbstractAutoDate):
         on_delete=models.CASCADE)
     active = models.BooleanField(default=False)
     display_order = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return '{} - {} ---- {}'.format(
+            self.product.heading, self.product_id,
+            self.faculty.name)

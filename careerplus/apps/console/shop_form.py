@@ -5,11 +5,70 @@ from dal import autocomplete
 
 from shop.models import (
     Category, CategoryRelationship, Skill, ProductSkill,
-    Faculty, Category, SubHeaderCategory
+    Faculty, Category, SubHeaderCategory, FacultyProduct,
+    Product
     )
 from homepage.models import Testimonial
 from homepage.config import (
     PAGECHOICES, university_page)
+
+
+class FacultyCourseForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        obj = kwargs.pop('object', None)
+        super(FacultyCourseForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        # for university product add filter type_flow university product
+        queryset = Product.browsable.all()
+        excludes = obj.facultyproducts.all()
+        if self.instance and self.instance.pk:
+            excludes = excludes.exclude(pk=self.instance.pk)
+        courses = list(excludes.values_list(
+            'product_id', flat=True))
+        queryset = queryset.exclude(pk__in=courses)
+
+        self.fields['product'].queryset = queryset
+        self.fields['product'].label = 'Course'
+        self.fields['product'].widget.attrs['class'] = form_class
+        self.fields['product'].required = True
+
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+
+        self.fields['display_order'].widget.attrs['class'] = form_class
+
+    class Meta:
+        model = FacultyProduct
+        fields = ('product', 'display_order', 'active')
+
+    def clean_product(self):
+        product = self.cleaned_data.get('product', None)
+        if not product:
+            raise forms.ValidationError(
+                "This field is required.")
+        return product
+
+
+class FacultyCourseInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(FacultyCourseInlineFormSet, self).clean()
+        if any(self.errors):
+            return
+        products = []
+        duplicates = False
+        for form in self.forms:
+            if form.cleaned_data:
+                product = form.cleaned_data.get('product', None)
+                if product in products:
+                    duplicates = True
+                products.append(product)
+
+                if duplicates:
+                    raise forms.ValidationError(
+                        'Product must be unique.',
+                        code='duplicate_product'
+                    )
+        return
 
 
 class TestimonialCategoryForm(forms.ModelForm):
@@ -19,6 +78,7 @@ class TestimonialCategoryForm(forms.ModelForm):
         form_class = 'form-control col-md-7 col-xs-12'
         choice_dict = dict(PAGECHOICES)
         choices = [
+            (0, '---Select Page---'),
             (university_page, choice_dict.get(
             university_page, 'University Page'))]
         self.fields['page'].widget.attrs['class'] = form_class

@@ -672,7 +672,7 @@
           </div>
           <div class="x_content">
             <div class="accordion" id="accordion3" role="tablist" aria-multiselectable="true">
-              <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-category-testimonial-form">
+              <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-testimonial-form">
                     {% csrf_token %}
                     {{ testimonial_formset.management_form }}
                 {% if testimonial_formset.non_form_errors %}
