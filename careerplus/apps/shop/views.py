@@ -465,6 +465,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         # # Whether to redirect child products to their parent's URL
         self._enforce_parent = True
         self.sqs = None
+        self.skill=False
 
         super(ProductDetailView, self).__init__(*args, **kwargs)
 
@@ -477,8 +478,12 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
     def get_context_data(self, **kwargs):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
-        skill = self.request.session.get('skills', None)
-        ctx.update({'skill': 'Python'})
+        self.skill = self.request.session.get('skills_name', [])
+        if not self.skill and self.product_obj.type_flow == 2:
+            self.skill = self.product_obj.productskills.filter(skill__active=True)\
+                .values_list('skill__name',flat=True)[:3]
+        self.skill = ",".join(self.skill)
+        ctx.update({'skill': self.skill})
         product_data = self.get_product_detail_context(
             self.product_obj, self.sqs,
             self.product_obj, self.sqs)

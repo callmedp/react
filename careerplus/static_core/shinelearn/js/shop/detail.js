@@ -316,12 +316,15 @@ $(document).ready(function () {
             $('.cls_scroller').scrollerdiv();
             $('.cls_sticky_scroller').productdetailAnimations();
             activeOnScroll.init({ className:'.cls_scroll_tab'});
+                ajax_call(authen);
           }
         },
         failure: function(response){
+          ajax_call(authen);
           console.log("failure");
         }
       });
+
 
     });
 
@@ -477,23 +480,23 @@ $(document).ready(function () {
 
   });
 
-$(document).ready(function(){
-var x =document.getElementById("skill").value;
-
-
-$.ajax({ url: "/api/v1/recommended-products/?skills=" +x,
+function ajax_call(authen){
+if(skill != false) {
+$.ajax({ url: "/api/v1/recommended-products/?skills=" +skill,
         type: "GET",
           success: function(data, textStatus, jqXHR){
           var count=((data.results).length);
           var i;
-
     if (count){
-          var recom= '<section class="container-fluid detail-box recomend-product-bg cls_hide_sticky_panel">'+
-                     '<div class="container">'+
-                     '<div class="row">'+
-                     '<div class="col-sm-12 mt-40">'+
-                     '<h2 class="detail-heading">Recommended products</h2>'+
-                     '<div class="row">'+
+        document.getElementById('heads').style.display="block";
+          var recom= "";
+                    if (authen) {
+                     recom+='<h2 class="detail-heading">Recommended products</h2>';
+                     }
+                     else{
+                     recom+='<h2 class="detail-heading">Related products</h2>';
+                     }
+                    recom+='<div class="row">'+
                      '<ul class="listing">';
 
          for(i=0;i<count;i++) {
@@ -506,7 +509,6 @@ $.ajax({ url: "/api/v1/recommended-products/?skills=" +x,
               + data.results[i].display_name+ '</h3>'
               +'<div class="rating-review-box">';
                 if (data.results[i].review_count){
-                    console.log(data.results[i].pStar);
 
                          for (star in data.results[i].pStar){
 
@@ -552,4 +554,9 @@ $.ajax({ url: "/api/v1/recommended-products/?skills=" +x,
          }
      }
         });
-});
+        }
+        else{
+           document.getElementById('recommended_product').innerHTML= "" ;
+
+        }
+};

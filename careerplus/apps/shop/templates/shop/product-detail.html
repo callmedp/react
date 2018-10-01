@@ -323,8 +323,14 @@
 
     {% if sqs.id not in linkedin_resume_services %}
       {% block prdrecommended %}
-     <div id="recommended_product"><img id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" > </div>
-      {% endblock prdrecommended %}
+<div id="heads"><section class="container-fluid detail-box recomend-product-bg cls_hide_sticky_panel">
+                     <div class="container">
+                     <div class="row">
+                     <div class="col-sm-12 mt-40">
+                     </div>
+<div id="recommended_product" style="display:block"><img id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" > </div>
+                     </div>
+                         {% endblock prdrecommended %}
     {% endif %}
 
 
