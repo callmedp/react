@@ -482,7 +482,7 @@
 
 .execIcon-exclusive  {
   @include icon-block (30px, 20px, -245px 0);
-  margin: -11px 0 0 -13px;
+  margin: -12px 0 0 -14px;
 }
 
 .execIcon-eligibility {
@@ -492,32 +492,32 @@
 
 .execIcon-program {
   @include icon-block (28px, 22px, -280px -2px);
-  margin: -10px 0 0 -15px;
+  margin: -11px 0 0 -15px;
 }
 
 .execIcon-assessment {
   @include icon-block (20px, 25px, -510px 0);
-  margin: -10px 0 0 -15px;
+  margin: -14px 0 0 -11px;
 }
 
 .execIcon-institute {
   @include icon-block (22px, 22px, -316px 0);
-  margin: -10px 0 0 -15px;
+  margin: -12px 0 0 -11px;
 }
 
 .execIcon-testimonials {
   @include icon-block (25px, 25px, -345px 0);
-  margin: -10px 0 0 -15px;
+  margin: -12px 0 0 -14px;
 }
 
 .execIcon-paymentModes {
   @include icon-block (21px, 26px, -376px 0);
-  margin: -10px 0 0 -15px;
+  margin: -14px 0 0 -12px;
 }
 
 .execIcon-faq {
-  @include icon-block (25px, 25px, -402px 0);
-  margin: -10px 0 0 -15px;
+  @include icon-block (26px, 26px, -402px 0);
+  margin: -13px 0 0 -14px;
 }
 
 
@@ -526,7 +526,7 @@
 }
 
 .department-heads::before  {
-  @include icon-block (40px, 40px, -83px -36px);
+  @include icon-inblock (40px, 40px, -83px -36px);
 }
 
 .line-manager::before  {
@@ -557,5 +557,24 @@
   @include icon-block (45px, 40px, -405px -36px);
 }
 
+// Application process Icons
+.execIcon-placeOrder {
+  background-position: -85px -89px;
+}
 
+.execIcon-receiveOnline {
+  background-position: -119px -89px;
+}
 
+.execIcon-startLearn {
+  background-position: -154px -89px;
+}
+
+.execIcon-getCertified {
+  background-position: -190px -89px;
+}
+
+.execIcon-down-arrow-big {
+  @include icon-inblock (26px, 26px, -225px -88px);
+  margin: 10px 0;
+}
