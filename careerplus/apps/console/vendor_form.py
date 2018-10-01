@@ -24,7 +24,10 @@ from geolocation.models import Country
 from shop.utils import ProductAttributesContainer
 from faq.models import ScreenFAQ, FAQuestion
 from shop.utils import ProductAttributesContainer
-from shop.choices import APPLICATION_PROCESS_CHOICES, APPLICATION_PROCESS
+from shop.choices import (
+    APPLICATION_PROCESS_CHOICES, APPLICATION_PROCESS,
+    BENEFITS_CHOICES, BENEFITS
+)
 from shop.choices import (
     BG_CHOICES,
     PRODUCT_VENDOR_CHOICES)
@@ -1056,12 +1059,23 @@ class ScreenUniversityCourseForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple,
         choices=[]
     )
+    benefits_choices = MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=APPLICATION_PROCESS_CHOICES
+    )
+    selected_benefits_choices = MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=[]
+    )
 
     class Meta:
         model = UniversityCourseDetailScreen
         fields = [
             'batch_launch_date', 'apply_last_date',
-            'sample_certificate', 'application_process', 'assesment'
+            'sample_certificate', 'application_process', 'assesment',
+            'benefits'
         ]
 
     def __init__(self, *args, **kwargs):
@@ -1084,6 +1098,18 @@ class ScreenUniversityCourseForm(forms.ModelForm):
         self.fields['application_process_choices'].widget.attrs['class'] = form_class
         self.fields['application_process_choices'].widget.attrs['required'] = True
         self.fields['application_process_choices'].widget.attrs['class'] = form_class + ' process_item'
+
+        if self.instance.benefits:
+            self.fields['benefits_choices'].initial = [
+                int(k) for k in self.instance.get_benefits
+            ]
+            self.fields['selected_benefits_choices'].choices = [
+                (int(k), BENEFITS.get(k)[1], BENEFITS.get(k)[0]) for k in self.instance.get_benefits
+            ]
+
+        self.fields['benefits_choices'].widget.attrs['class'] = form_class
+        self.fields['benefits_choices'].widget.attrs['required'] = True
+        self.fields['benefits_choices'].widget.attrs['class'] = form_class + ' benefit_item'
 
     def clean_batch_launch_date(self):
         batch_launch_date = self.cleaned_data.get('batch_launch_date', '')
