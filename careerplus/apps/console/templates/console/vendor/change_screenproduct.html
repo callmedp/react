@@ -34,20 +34,23 @@
     .empty-form{
       display: none;
     }
-    #application_process > ul > li {
-      width: 20%;
-      margin: 0px;
-      display: inline-block;
+     #application_process{
+      height: 310px;
+      overflow-y: scroll;
+      border: 1px solid #d7cdcd;
     }
     #application_process > ul > li {
-      width: 33%;
-      margin: 0px;
+      width: 32%;
+      margin: 0px 1px;
       display: inline-block;
     }
     #id_application_process > li > label > img{
       width: 60px;
       height: 60px;
 
+    }
+    #application_processes {
+      text-align: center;
     }
     #application_processes > span > img{
       width: 60px;
@@ -56,9 +59,15 @@
     #application_processes > span {
         margin: 0 40px;
     }
-    #application_process > ul > li >label >input {
-      width: 10px;
+    #id_application_process {
+      margin-top: 10px;
     }
+    #application_process > ul > li >label > div >input {
+      width: 15px;
+    }
+     #application_process > ul > li >label {
+      text-align: center;
+     }
     .selected_process_img{
        width: 60px;
       height: 60px;
@@ -66,7 +75,7 @@
     .selected_process_img_container::after{
        content: " - Remember this";
     }
-    
+      </style>
   </style>
   {% endcompress %}
                 
@@ -940,10 +949,14 @@
                       </label>
                       <div class="col-md-7 col-sm-7 col-xs-12" id="application_process">
                         <ul id="id_application_process">
-                          {% for x,y in prd_university_form.fields.application_process_choices.choices %}
+                           {% for x,y,z in prd_university_form.fields.application_process_choices.choices %}
                             <li>
                               <label for="id_application_process_{{forloop.counter}}">
-                              <input class="form-control col-md-7 col-xs-12 process_item process_checkbox" id="id_application_process_{{forloop.counter}}" name="application_process" type="checkbox" value="{{ x }}" required="" {%if x  in prd_university_form.fields.application_process_choices.initial %} checked {% endif %}> <img src="{{ y }}">
+                                <img src="{{ y }}">
+                              <div>
+                                <input class="form-control col-md-7 col-xs-12 process_item process_checkbox" id="id_application_process_{{forloop.counter}}" name="application_process" type="checkbox" value="{{ x }}" required="" {%if x  in prd_university_form.fields.application_process_choices.initial %} checked {% endif %}>
+                              </div>
+                              <div style="float:left;" id="process_detail_{{x}}">{{z}}</div>
                               </label>
                             </li>
                           {% endfor %}
@@ -957,13 +970,14 @@
                         Selected Application Process(Sorted)<span class="required">*</span>
                       </label>
                       <div class="col-md-7 col-sm-7 col-xs-12">
-                        <div class="row"  id="application_processes">
+                       <div class="row"  id="application_processes">
                           {% if prd_university_form.fields.selected_process_choices.choices %}
-                            {% for x , y in prd_university_form.fields.selected_process_choices.choices %}
+                            {% for x , y, z in prd_university_form.fields.selected_process_choices.choices %}
                               <div class="col-md-3">
                                 <div class="col-md-12 text-center" id="selected_process_{{x}}">
                                   <img src="{{y}}" class="selected_process_img">
                                 </div>
+                                <div>{{ z }}</div>
                               </div>
                             {% endfor %}
                           {% else %}
@@ -1024,7 +1038,7 @@
                 {% if forloop.counter < 5 %}
                 <div class="panel {% if forloop.last %} {% endif %}">
                   {% if forloop.counter == 4 %}
-                    
+
                   {% else%}
                   <a class="panel-heading {% if not inline_admin_form.errors %}collapsed{% endif %}" role="tab" id="heading2{{forloop.counter}}60" data-toggle="collapse" data-parent="#accordion60" href="#collapse21{{forloop.counter}}60" {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false"{% endif %} aria-controls="collapse21{{forloop.counter}}60">
                     {% if  inline_admin_form.instance.id %}
@@ -1135,12 +1149,13 @@
   <!-- Custom Theme Scripts -->
   <script type="text/javascript" src="{% static 'console/js/shop/console_shop.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/shop/change_screenproduct.js' %}"></script>
-  <script type="text/javascript">
+    <script type="text/javascript">
   application_process_order =[]
-   {% for x , y in prd_university_form.fields.selected_process_choices.choices %}
+  {% for x , y, z in prd_university_form.fields.selected_process_choices.choices %}
     k = {{x}}
     application_process_order.push(k.toString())
   {% endfor %}
+
   $("#application_process_priority").val(application_process_order.join(','))
  if(application_process_order.length>=4){
     $("input.process_checkbox:checkbox:not(:checked)").attr('disabled','true')
@@ -1148,13 +1163,14 @@
   $('.process_item').change(function() {
       var curr_html_text = $("#application_processes").text().trim()
       var curr_html = $("#application_processes").html()
-      var html_template = '<div class="col-md-3"><div class="col-md-12 text-center" id="selected_process_counter"><img src="img_src" class="selected_process_img"></div></div>';
+      var html_template = '<div class="col-md-3"><div class="col-md-12 text-center" id="selected_process_counter"><img src="img_src" class="selected_process_img"></div><div>detail_name</div></div>';
       var label = $(this).prop('labels')
       var src= $(label).find('img').attr('src')
       var val = $(this).val()
       new_html = html_template.replace('counter', val)
       new_html = new_html.replace('img_src', src)
-     if($(this).is(":checked")){
+      new_html = new_html.replace('detail_name', $("#process_detail_"+val).text() )
+      if($(this).is(":checked")){
         if(curr_html_text=='No Application Process Selected'){
           $("#application_processes").html(new_html)
           application_process_order.push($(this).val())
@@ -1179,7 +1195,6 @@
     else{
      $("input.process_checkbox:checkbox:not(:checked)").removeAttr('disabled','true') 
     }
-   
     $("#application_process_priority").val(application_process_order.join(','))
 });
   </script>

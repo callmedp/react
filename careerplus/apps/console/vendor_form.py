@@ -1078,7 +1078,7 @@ class ScreenUniversityCourseForm(forms.ModelForm):
                 int(k) for k in self.instance.get_application_process
             ]
             self.fields['selected_process_choices'].choices = [
-                (int(k), APPLICATION_PROCESS.get(k)[1]) for k in self.instance.get_application_process
+                (int(k), APPLICATION_PROCESS.get(k)[1], APPLICATION_PROCESS.get(k)[0]) for k in self.instance.get_application_process
             ]
 
         self.fields['application_process_choices'].widget.attrs['class'] = form_class
