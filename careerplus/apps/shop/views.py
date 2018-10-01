@@ -335,6 +335,10 @@ class ProductInformationMixin(object):
     def get_product_detail_context(self, product, sqs, product_main, sqs_main):
         pk = product.pk
         ctx = {}
+        key = str(pk) +"-"+ product.slug
+        if cache.get(key):
+            ctx =cache.get(key)
+            return ctx
 
         ctx['product'] = product
         ctx['num_jobs_url'] = self.get_jobs_url(product)
@@ -445,7 +449,7 @@ class ProductInformationMixin(object):
         if sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
             navigation = False
         ctx['navigation'] = navigation
-
+        cache.set(key,ctx,60*60*4)
         return ctx
 
 
