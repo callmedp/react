@@ -26,6 +26,12 @@ $(document).ready(function() {
 		} else {
 			$('#hide-second').removeClass('remove-second');
 		}
+
+		if (scroll >= 900) {
+			$('#enrollNow').addClass('stick-enroll');
+		} else {
+			$('#enrollNow').removeClass('stick-enroll');
+		}
 	});
 
 	$("#search-inupt").click(function() {
@@ -135,6 +141,32 @@ $(document).ready(function() {
   		slidesToShow: 3,
   		slidesToScroll: 1
 	});
+
+	// Executive course Function starts here 
+	$(".faculty-profile").slick({
+		autoplay:false,
+		arrows: true,
+		dots: false,
+		// variableWidth: true,
+		slidesToShow: 1,
+		slidesToScroll: 1,
+		infinite: false
+	});
+
+
+	$(".youMayLike-slider").slick({
+		autoplay:false,
+		arrows: false,
+		dots: true,
+		infinite: true,
+		variableWidth: true,
+  		slidesToShow: 2,
+  		slidesToScroll: 1
+	});
+	
+
+
+
 
 });// Document ready function ends here
 

@@ -1,0 +1,43 @@
+.popular-courses, .you-may-like {
+    overflow: hidden;
+    padding: 20px 0 20px 0;
+    h2 {
+      text-align: left;
+      margin-left: 15px;
+    }
+    li {
+      padding-left: 15px;
+      .media {
+        background-color: #fff;
+        height: 121px;
+        -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        height: 121px;
+      }
+      .media-body {
+        text-align: left;
+        padding: 10px 10px 0px 10px;
+      }
+      .media-left {
+        padding-right: 0;
+      }
+      p {
+        padding-bottom: 0;
+      }
+      strong {
+        font-weight: 600;
+      }
+    }
+    .slick-initialized .slick-slide {
+      width: 300px;
+      margin: 15px 0;
+    }
+  }
+  
+  @media (max-width: 320px) {
+    .popular-courses .slick-initialized .slick-slide {
+      width: 280px;
+    }
+  }
+  

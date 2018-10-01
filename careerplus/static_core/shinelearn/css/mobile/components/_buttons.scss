@@ -3,15 +3,32 @@
 
   @media (max-width: 320px) { 
     padding: 6px 10px;
-    font-size: $font-size-base;
+    font-size: $font-size;
   }
 }
 
 .btn-sm {
   @extend %button;
   padding: 2px 10px;
-  font-size: $font-size-base;
+  font-size: $font-size;
 }
+
+.btn-lg {
+  padding: 6px 20px;
+}
+
+.btn-slg {
+  padding: 10px 40px;
+}
+
+.btn-lg2 {
+  padding: 5px 40px;
+}
+
+.btn-shadow {
+  box-shadow:0 0 10px rgba(0,0,0, .15);
+}
+
 
 .btn-round {
   border-radius: $global-radius;
@@ -28,7 +45,7 @@
 
 .btn-white {
   background-color: $bg-white;
-  color: $text-blue;
+  color: $txt-blue;
   box-shadow: $box-shadow;
 }
 
