@@ -1021,8 +1021,11 @@
                   {% endif %}
                 <div class="inter-related-parent-div">    
                 {% for inline_admin_form in prd_university_payment_formset.forms %}
-                {% if forloop.counter < 4 %}
+                {% if forloop.counter < 5 %}
                 <div class="panel {% if forloop.last %} {% endif %}">
+                  {% if forloop.counter == 4 %}
+                    
+                  {% else%}
                   <a class="panel-heading {% if not inline_admin_form.errors %}collapsed{% endif %}" role="tab" id="heading2{{forloop.counter}}60" data-toggle="collapse" data-parent="#accordion60" href="#collapse21{{forloop.counter}}60" {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false"{% endif %} aria-controls="collapse21{{forloop.counter}}60">
                     {% if  inline_admin_form.instance.id %}
                     <h4 class="panel-title">University Course Payment:&nbsp;{{inline_admin_form|get_instance}}</h4>
@@ -1035,6 +1038,7 @@
 
                       
                   </a>
+                  {% endif %}
                   <div id="collapse21{{forloop.counter}}60" class="panel-collapse collapse
                       {% if inline_admin_form.errors %}in{% endif %}" 
                       {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false" style="height: 0px;"{% endif %}
@@ -1073,7 +1077,7 @@
                       </div>
 
                       <div class="item form-group {% if inline_admin_form.active.errors %}bad{% endif %}">
-                        <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.active.id_for_label }}">Last Date of Payment <span class="required"></span>
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ inline_admin_form.active.id_for_label }}">Active <span class="required"></span>
                         </label>
                         <div class="col-md-7 col-sm-7 col-xs-12">
                           {{inline_admin_form.active}}
@@ -1165,7 +1169,6 @@
       curr_html = curr_html.replace(new_html,"");
       $("#application_processes").html(curr_html)
       application_process_order.splice(application_process_order.indexOf($(this).val()), 1)
-      console.log("this" + application_process_order)
     }   
     if(application_process_order.length==0){
        $("#application_processes").text('No Application Process Selected')
@@ -1177,7 +1180,6 @@
      $("input.process_checkbox:checkbox:not(:checked)").removeAttr('disabled','true') 
     }
    
-    console.log(application_process_order)
     $("#application_process_priority").val(application_process_order.join(','))
 });
   </script>

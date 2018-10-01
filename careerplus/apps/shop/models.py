@@ -2477,6 +2477,13 @@ class UniversityCourseDetailScreen(models.Model):
         related_name='screen_university_course_detail',
     )
 
+    @property
+    def get_application_process(self):
+        if self.application_process:
+            return eval(self.application_process)
+        else:
+            return ''
+
 
 class UniversityCoursePaymentScreen(models.Model):
     installment_fee = models.DecimalField(
@@ -2525,6 +2532,12 @@ class UniversityCourseDetail(models.Model):
         help_text=_('Product related to these details'),
         related_name='university_course_detail',
     )
+    @property
+    def get_application_process(self):
+        if self.application_process:
+            return eval(self.application_process)
+        else:
+            return ''
 
 
 class UniversityCoursePayment(models.Model):

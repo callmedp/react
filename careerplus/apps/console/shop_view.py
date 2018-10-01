@@ -1813,7 +1813,7 @@ class ChangeProductView(DetailView):
                                 "University course Changed Successfully")
                             return HttpResponseRedirect(
                                 reverse(
-                                    'console:screenproduct-change',
+                                    'console:product-change',
                                     kwargs={'pk': obj.pk}))
                         else:
                             context = self.get_context_data()
@@ -1825,7 +1825,7 @@ class ChangeProductView(DetailView):
                                 Changes not Saved")
                             return TemplateResponse(
                                 request, [
-                                    "console/vendor/change_screenproduct.html"
+                                    "console/shop/change_product.html"
                                 ], context)
                 messages.error(
                     self.request,

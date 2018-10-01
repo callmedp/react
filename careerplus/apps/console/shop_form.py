@@ -1170,7 +1170,7 @@ class UniversityCourseForm(forms.ModelForm):
     selected_process_choices = MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple,
-        choices=APPLICATION_PROCESS_CHOICES
+        choices=[]
     )
 
     class Meta:
@@ -1189,11 +1189,13 @@ class UniversityCourseForm(forms.ModelForm):
         self.fields['assesment'].widget.attrs['required'] = True
         self.fields['assesment'].widget.attrs['class'] = form_class
         self.fields['sample_certificate'].widget.attrs['class'] = form_class
-        if self.instance.application_process and eval(self.instance.application_process):
-            self.fields['application_process_choices'].initial = [int(k) for k in eval(self.instance.application_process) if k.isdigit()]
-            self.fields['selected_process_choices'].choices = [(int(k), APPLICATION_PROCESS.get(k)[1]) for k in eval(self.instance.application_process) if k.isdigit()]
-        else:
-            self.fields['selected_process_choices'].choices = [];
+        if self.instance.get_application_process:
+            self.fields['application_process_choices'].initial = [
+                int(k) for k in self.instance.get_application_process
+            ]
+            self.fields['selected_process_choices'].choices = [
+                (int(k), APPLICATION_PROCESS.get(k)[1]) for k in self.instance.get_application_process
+            ]
         self.fields['application_process_choices'].widget.attrs['class'] = form_class
         self.fields['application_process_choices'].widget.attrs['required'] = True
         self.fields['application_process_choices'].widget.attrs['class'] = form_class + ' process_item'
