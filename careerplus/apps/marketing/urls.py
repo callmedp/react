@@ -78,6 +78,10 @@ urlpatterns = [
     url(r'^data-science',
         marketing_views.MarketingPages.as_view(),
         name='data-science'),
+
+    url(r'^international-resume-writing',
+        marketing_views.MarketingPages.as_view(),
+        name='international-resume-writing'),
 ] + [url(r'^%s$' %key, marketing_views.MarketingPages.as_view()) \
         for key,value in redirect_url_mapping.items()]
 
