@@ -2759,13 +2759,13 @@ margin:5px 0 10px 0;
 }
 
 .bg {
-  background: url(../../../images/marketing/international-resume-writing/bg.jpg) #fafafa 0 0;
+  background: url(/l/s/shinelearn/images/marketing/international-resume-writing/bg.jpg) #fafafa 0 0;
   background-size: cover;
   display: block;
 }
 
 .ds-bg {
-  background: url(../../../images/marketing/international-resume-writing/ds-bg.jpg) #e9f1fd 0 0;
+  background: url(/l/s/shinelearn/images/marketing/international-resume-writing/ds-bg.jpg) #e9f1fd 0 0;
   background-size: cover;
   display: block;
   position: relative;
@@ -2826,7 +2826,7 @@ margin:5px 0 10px 0;
 .punch-line:before {
   width: 44px;
   height: 59px;
-  background:url('../../../images/marketing/international-resume-writing/ResumeLP.png') no-repeat;
+  background:url(/l/s/shinelearn/images/marketing/international-resume-writing/ResumeLP.png) no-repeat;
   content: "";
   float: left;
   margin-right: 10px;
@@ -3061,7 +3061,7 @@ height: 5px;
   top: 20px;
   width: 15px;
   height: 9px;
-  background: url(../../../images/marketing/international-resume-writing/up-arrow.png);
+  background: url(/l/s/shinelearn/images/marketing/international-resume-writing/up-arrow.png);
 }
 
 .course-preview .panel-heading a.collapsed:after {
@@ -3071,7 +3071,7 @@ height: 5px;
   top: 20px;
   width: 15px;
   height: 9px;
-  background: url(../../../images/marketing/international-resume-writing/down-arrow.png);
+  background: url(/l/s/shinelearn/images/marketing/international-resume-writing/down-arrow.png);
 }
 
 .course-preview .panel-heading a, .course-preview .panel-heading a:hover{
@@ -3106,7 +3106,7 @@ height: 5px;
   position: absolute;
   width: 17px;
   height: 17px;
-  background: url(../../../images/marketing/international-resume-writing/tick-icon.png);
+  background: url(/l/s/shinelearn/images/marketing/international-resume-writing/tick-icon.png);
   display: block;
   left: -39px;
   top: 2px;
@@ -3250,7 +3250,7 @@ font-size: 14px;}
   }
   .Recommendation li {
     padding:10px 0; 
-      list-style-image: url(../../../images/marketing/international-resume-writing/arrow.png);
+      list-style-image: url(/l/s/shinelearn/images/marketing/international-resume-writing/arrow.png);
   }
 .Recommendation li strong {
     font-size: 18px;
@@ -3262,7 +3262,7 @@ font-size: 14px;}
     padding: 100px 0;
     height: 570px;
 
-background: url(../../../images/marketing/international-resume-writing/ResumeLP.jpg ) 500px 0px  no-repeat;
+background: url(/l/s/shinelearn/images/marketing/international-resume-writing/ResumeLP.jpg ) 500px 0px  no-repeat;
   }
 .outcome h2, .outcome h3 {
   text-align: left;
@@ -3278,7 +3278,7 @@ background: url(../../../images/marketing/international-resume-writing/ResumeLP.
 }
 .outcome li {
 list-style: none;
-  background: url(../../../images/marketing/international-resume-writing/tick.png) no-repeat left 6px;
+  background: url(/l/s/shinelearn/images/marketing/international-resume-writing/tick.png) no-repeat left 6px;
   padding:10px 0 10px 30px; 
   margin: 0;
 } 
@@ -3339,7 +3339,7 @@ text-decoration:none;
   padding-top: 18px;line-height: 23px;
 }
 .outcome {
-  background: url(../../../images/marketing/international-resume-writing/ResumeLP.jpg ) 350px 0px no-repeat;
+  background: url(/l/s/shinelearn/images/marketing/international-resume-writing/ResumeLP.jpg ) 350px 0px no-repeat;
 }
 
 }
@@ -3378,7 +3378,7 @@ text-decoration:none;
 
 @media (max-width: 767px) {
 
-  .ds-bg { background: url(../../../images/marketing/international-resume-writing/mobile-banner.jpg) #12191f 0 0 no-repeat; }
+  .ds-bg { background: url(/l/s/shinelearn/images/marketing/international-resume-writing/mobile-banner.jpg) #12191f 0 0 no-repeat; }
   .spec {
   margin-bottom:30px; 
 }
