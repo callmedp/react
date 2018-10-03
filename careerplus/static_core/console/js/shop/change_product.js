@@ -9,7 +9,7 @@ $(document).ready(function() {
         minDate:todayDate,
         autoUpdateInput: false,
       }, function(chosen_date) {
-        el.val(chosen_date.format('YYYY-MM-DD'));
+        el.val(chosen_date.format('DD-MM-YYYY'));
       });
     }
 

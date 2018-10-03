@@ -2452,11 +2452,11 @@ class ProductAuditHistory(Document):
 
 
 class UniversityCourseDetailScreen(models.Model):
-    batch_launch_date = models.DateTimeField(
+    batch_launch_date = models.DateField(
         help_text=_('This university course launch date'),
         default=timezone.now
     )
-    apply_last_date = models.DateTimeField(
+    apply_last_date = models.DateField(
         help_text=_('Last date to apply for this univeristy course'),
         default=timezone.now
     )
@@ -2497,7 +2497,7 @@ class UniversityCoursePaymentScreen(models.Model):
         _('INR Program Fee'),
         max_digits=12, decimal_places=2
     )
-    last_date_of_payment = models.DateTimeField(
+    last_date_of_payment = models.DateField(
         _('Last date of payment')
     )
     productscreen = models.ForeignKey(
@@ -2515,11 +2515,11 @@ class UniversityCoursePaymentScreen(models.Model):
 
 
 class UniversityCourseDetail(models.Model):
-    batch_launch_date = models.DateTimeField(
+    batch_launch_date = models.DateField(
         help_text=_('This university course launch date'),
         default=timezone.now
     )
-    apply_last_date = models.DateTimeField(
+    apply_last_date = models.DateField(
         help_text=_('Last date to apply for this univeristy course'),
         default=timezone.now
     )
@@ -2560,7 +2560,7 @@ class UniversityCoursePayment(models.Model):
         _('INR Program Fee'),
         max_digits=12, decimal_places=2
     )
-    last_date_of_payment = models.DateTimeField(
+    last_date_of_payment = models.DateField(
         _('Last date of payemnt')
     )
     product = models.ForeignKey(

@@ -1152,16 +1152,18 @@ class UniversityCourseForm(forms.ModelForm):
             attrs={
                 'class': 'form-control batch_launch_date',
                 "readonly": True,
-            }, format='%m/%d/%Y'
-        )
+            }, format='%d-%m-%Y'
+        ),
+        input_formats=['%d-%m-%Y']
     )
     apply_last_date = forms.DateField(
         widget=forms.DateInput(
             attrs={
                 'class': 'form-control apply_last_date',
                 "readonly": True,
-            }, format='%m/%d/%Y'
-        )
+            }, format='%d-%m-%Y'
+        ),
+        input_formats=['%d-%m-%Y']
     )
 
     application_process_choices = MultipleChoiceField(
@@ -1249,7 +1251,9 @@ class UniversityCoursePaymentForm(forms.ModelForm):
                 'class': 'form-control col-md-7 col-xs-12 last_date_of_payment',
                 "readonly": True,
             }, format='%m/%d/%Y'
-        )
+        ),
+        input_formats=['%d-%m-%Y']
+
     )
 
     def __init__(self, *args, **kwargs):
