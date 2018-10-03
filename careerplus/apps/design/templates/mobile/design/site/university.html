@@ -1,0 +1,688 @@
+{% extends "mobile/basic/base.html" %}
+{% load static compress %}
+{% load humanize search_tags compress %}
+{% block css_section %}
+{{ block.super }}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/shop/course-detail.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/smk-accordion.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/executive-course/exec-detail.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
+    {% endcompress css %}
+        <style>
+            a[disabled], a[disabled]:hover {
+               pointer-events: none;
+               color: #e1e1e1;
+            }
+            /*div[data-test-id="ChatWidgetMobileButton"]{
+                display: none !important;
+            }*/
+        </style>
+{% endblock css_section %}
+{% block title %}
+  {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
+{% endblock title %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{request.get_full_path}}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}?type=amp">
+{% endblock canonical_url %}
+
+        {% block django_meta %}
+            {% include 'meta/meta.html' %}
+        {% endblock django_meta %}
+
+{% block main_container %}
+        <div class="wrapper executive-bg">
+            {% block header %}
+            <!-- header menu Icon Starts here -->
+                <div class="exec-header">
+                    <div class="header-content">
+                        <h1 class="semi-bold">Search Engine Optimisation Master Training Course</h1>
+                        <div class="university-logo">
+                            <img 
+                                src="{% static 'shinelearn/images/mobile/executive-course/university-logo.jpg' %}"/>
+                        </div>
+                    </div><!-- /. header content -->
+                    
+                    <!-- header menu Icon Starts here -->
+                    <div class="main-menu w100fl">
+                        <div class="pull-left">
+                            <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button" ></a>  
+                        </div><!-- / Left side Icon ends here -->
+                        
+                        <div class="pull-right">
+                            <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                        </div><!-- / Right side Icon ends here -->
+                    </div><!-- header menu Icon ends here -->
+                    <div class="overlay"></div>
+                    <img src="{% static 'shinelearn/images/mobile/executive-course/exec-landing-img.jpg' %}">
+                {% block header_title %}{% endblock header_title %}
+                </div><!-- header ends here -->
+            {% endblock header %}
+
+            {% block container %}
+            <div class="content-box">
+                <div class="university-info">
+                    <ul>
+                        <li>
+                            <span class="apply-execIcon">Apply before: <strong class="text-upper">29 Dec 2018</strong></span> 
+                        </li>
+                        <li>
+                            <span class="batch-execIcon">Batch starts: <strong class="text-upper">05 Jan 2019</strong></span> 
+                        </li>
+                        <li>
+                            <span class="duration-execIcon">Duration: <strong class="text-upper">4 Months</strong></span> 
+                        </li>
+                        <li>
+                            <span class="price-execIcon">Price: <sup class="strike-through">&#8377; 7999</sup> <strong class="fs-24"> &#8377; 799</strong></span> 
+                        </li>
+                    </ul>
+
+                    <a href="#" class="btn btn-round-30 btn-lg btn-shadow btn-grOrange">Enroll Now</a>
+                    <p class="fs-12 pb-0 mt-15 weeked-batch">Weekend Batch: Saturday  9 to 11am & Sunday 10am to 12pm</p>
+
+                </div><!-- ./ university-info -->
+
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-program"></i></span>About program</h2>
+                        <div class="content">
+                            <p>The objective of the course is to develop knowledge of various analytical techniques in order to help better decision making in sales and marketing. CMOs and Marketing Managers usually depend on data analysts in their firms to crunch data. This course will help them communicate their marketing objectives in a focused manner to data analysts and help them critically evaluate the results of data analysis better. Participants will understand the underlying principles of statistical and analytical techniques. Participants will also develop a working familiarity of implementing these techniques on data sets.</p>
+
+                            <ul class="pointers mt-15">
+                                <li>
+                                    <h3 class="pb-0 fs-16">Execute 4 real life projects</h3>
+                                    <p class="pb-0">Acquire hands-on knowledge and expertise!</p>
+                                </li>
+                                
+                                <li>
+                                    <h3  class="pb-0 fs-16">Hands-on training on 5+ tools</h3>
+                                    <p class="pb-0">Learn various tools which includes Google AdWords, Google Analytics, Facebook, etc</p>
+                                </li>
+                                
+                                <li>
+                                    <h3 class="pb-0 fs-16">10 simulation test papers</h3>
+                                    <p class="pb-0">Gain confidence to ace the certification exams!</p>
+                                </li>
+                                
+                                <li>
+                                    <h3 class="pb-0 fs-16">Training by industry experts</h3>
+                                    <p class="pb-0">Get trained by “Dream Team” of Silicon Valley authors for Digital marketing role.</p>
+                                </li>
+                                
+                                <li>
+                                    <h3 class="pb-0 fs-16">Comprehensive Course Curriculum</h3>
+                                    <p class="pb-0">Go through in-depth knowledge on 8 topics and 11 domains which covers solid foundation learning for all digital marketing aspects.</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ About program -->
+                
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-who"></i></span>Who should attend?</h2>
+                        <div class="content">
+                            <ul class="who-attend">
+                                <li class="manager">
+                                    <div>
+                                        <h3>Managers, Decision makers</h3>
+                                    </div>
+                                </li>
+                                
+                                <li class="senior-managers">
+                                    <div>
+                                        <h3>Mid to Senior Level Managers</h3>
+                                        <p class="pb-0">who drive marketing strategies.</p>
+                                    </div>
+                                </li>
+                                
+                                <li class="department-heads">
+                                    <div>
+                                        <h3>Division / Department Heads</h3>
+                                        <p class="pb-0">Sales & Marketing heads who wants to market products of service.</p>
+                                    </div>
+
+                                </li>
+                                
+                                <li class="line-manager">
+                                    <div>
+                                        <h3>Line Managers</h3>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ Who should attend? -->
+
+                <div class="container eligibility">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-eligibility"></i></span>Eligibility criteria</h2>
+                        <div class="content">
+                            <ul>
+                                <li>Any graduates with minimum 50% marks in graduation.</li>
+                                <li>Proficiency in English, spoken & written is mandatory.</li>
+                                <li>Working knowledge of Excel.</li>
+                                <li>For Indian Participants – Graduates (10+2+3) from a recognized university (UGC/AICTE/DEC/AIU/State Government) in any discipline.</li>
+                            </ul>
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ Eligibility criteria -->
+                
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-faculty"></i></span>Faculty profile</h2>
+                        <div class="content pl-40 pr-40">
+                            <ul class="faculty-profile text-center" id="executive-slide">
+                                <li>
+                                    <span class="faculty-image">
+                                        <img 
+                                        src="{% static 'shinelearn/images/mobile/executive-course/Regular_Faculty_1.jpg' %}"/>
+                                    </span>
+                                    <h3><a href="#">A Kanagaraj</a></h3>
+                                    <p class="desigation mt-15">Associate Professor – Finance XLRI Jamshedpur
+                                        <span></span>
+                                    </p>
+                                    <p>Dr. Ajay Garg is a full-time professor of Information Management.  Professor Garg’s primary expertise and interest is in the area of business... <a href="#">read more</a></p>
+                                </li>
+                                <li>
+                                    <span class="faculty-image">
+                                        <img 
+                                        src="{% static 'shinelearn/images/mobile/executive-course/Regular_Faculty_2.gif' %}"/>
+                                    </span>
+                                    <h3><a href="#">Abhishek Chakraborty</a></h3>
+                                    <p class="desigation mt-15">Production, Operations & Decision Sciences, XLRI Jamshedpur
+                                        <span></span>
+                                    </p>
+                                    <p>Dr. Ajay Garg is a full-time professor of Information Management.  Professor Garg’s primary expertise and interest is in the area of business... <a href="#">read more</a></p>
+                                </li>
+                                
+                                <li>
+                                    <span class="faculty-image">
+                                        <img 
+                                        src="{% static 'shinelearn/images/mobile/executive-course/Regular_Faculty_3.gif' %}"/>
+                                    </span>
+                                    <h3><a href="#">Ajith Kumar J</a></h3>
+                                    <p class="desigation mt-15">Production, Operations & Decision Sciences, XLRI Jamshedpur
+                                        <span></span>
+                                    </p>
+                                    <p>Dr. Ajay Garg is a full-time professor of Information Management.  Professor Garg’s primary expertise and interest is in the area of business... <a href="#">read more</a></p>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ Faculty profile -->
+
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-exclusive"></i></span>Exclusive benefits</h2>
+                        <div class="content">
+                            <p class="subhead mb-15"><strong>Key Benefits</strong></p>
+                            <ul class="who-attend">
+                                <li class="free">
+                                    <div>
+                                        <h3>Free featured profile</h3>
+                                        <p>FREE featured profile worth Rs. 1440 for 1 month on Shine.com</p>
+                                    </div>
+                                </li>
+                                
+                                <li class="emi">
+                                    <div>
+                                        <h3>0% EMI</h3>
+                                        <p class="pb-0">Easy EMI payment option.</p>
+                                    </div>
+                                </li>
+                                
+                                <li class="credits">
+                                    <div>
+                                        <h3>Shine credits</h3>
+                                        <p class="pb-0">10% Shine credits redeemable on next purchase*</p>
+                                    </div>
+                                </li>
+                            </ul>
+                            <hr />
+                            <p class="subhead mb-15"><strong>Why Shine Learning?</strong></p>
+
+                            <ul class="who-attend">
+                                <li class="free-services">
+                                    <div>
+                                        <h3>Free Services</h3>
+                                        <p>Free Resume, Cover Letter Formats and Career Guidance Services.</p>
+                                    </div>
+                                </li>
+                                
+                                <li class="global">
+                                    <div>
+                                        <h3>0% EMI</h3>
+                                        <p class="pb-0">Choose from a list of global providers as per your requirement.</p>
+                                    </div>
+                                </li>
+                                
+                                <li class="refernEarn">
+                                    <div>
+                                        <h3>Shine credits</h3>
+                                        <p class="pb-0">Refer your friend and get an Amazon Voucher worth Rs. 2000*</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ Exclusive benefits -->
+
+                <div class="container">
+                    <div class="white-box program-structure">
+                        <h2><span><i class="execIcon-program"></i></span>Program Structure</h2>
+                        <div class="content">
+                            <!-- Accordion begin -->
+                            <div class="accordion_example1 accordion-wrap">
+                                <!-- Section 1 -->  
+                                <div class="accordion_in">
+                                    <div class="acc_head">Module 1: Basic Concepts & Applications of Project Management</div>
+                                    <div class="acc_content">
+                                        <p>Coming soon...</p>
+                                    </div>
+                                </div><!--/. Accordion 1 -->
+
+                                <div class="accordion_in acc_active">
+                                    <div class="acc_head">Module 2: Project Modelling and Managetment with Applications in MS-Project</div>
+                                    <div class="acc_content">
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+
+                                        <ol>
+                                            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+                                            <li>Curabitur convallis lacus sit amet urna tincidunt condimentum.</li>
+                                        </ol>
+                                        <ul>
+                                            <li>Project Management Simulation Exercise – Scope, Resources & Scheduling</li>
+                                            <li>An Introduction to MS-Project</li>
+                                            <li>Interpreting the output of an MS-Project Report</li>
+                                            <li>Applications to Technical Scheduling and Resource Scheduling</li>
+                                            <li>Resource Levelling</li>
+                                            <li>Tracking and Monitoring Project Progress</li>
+                                            <li>Modern tools for Project Management (TILOS, Bentley, SD BIM Modeling, RIB2)</li>
+                                        </ul>
+                                    </div>
+                                </div><!--/. Accordion 2 -->
+                                    
+                                <div class="accordion_in">
+                                    <div class="acc_head">Module 3: Financial & Risk Aspects of Projects</div>
+                                    <div class="acc_content">
+                                        <p>Coming soon...</p>
+                                    </div>
+                                </div><!--/. Accordion 3 -->
+                                
+                                <div class="accordion_in">
+                                    <div class="acc_head">Module 4: Workshop on Risk Assessment &  Management in Projects</div>
+                                    <div class="acc_content">
+                                        <p>Coming soon...</p>
+                                    </div>
+                                </div><!--/. Accordion 4 -->
+                                
+                                <div class="accordion_in">
+                                    <div class="acc_head">Module 5: People Management in Projects</div>
+                                    <div class="acc_content">
+                                        <p>Coming soon...</p>
+                                    </div>
+                                </div><!--/. Accordion 4 -->
+                            </div><!-- /. accordion-wrap -->
+
+                            <p class="mt-15 text-center"><a href="#" class="btn btn-outline btn-round-30 btn-slg">View all programs</a></p>
+
+                        </div><!-- /. content -->
+                    </div><!-- /. white box-->
+                </div><!-- ./ Program Structure -->
+
+
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-assessment"></i></span>Assessment & Evaluation</h2>
+                        <div class="content">
+                            <ul class="arrow-bullets">
+                                <li>A minimum of 70% attendance to the LIVE lectures is a prerequisite for the successful completion of this course. There are periodic evaluations built in throughout the duration of the course. </li>
+                                <li>These maybe in the form of a quiz, assignment, case studies or other objective/subjective assessments. The evaluations are designed ensure continuous student engagement with the course and encourage learning. Students who successfully clear the same along with the requisite attendance criteria will be awarded a Certificate from SPJIMR as appropriate.</li>
+                            </ul>
+
+                            <div class="sample-certificate mt-20">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <img class="media-object" src="{% static 'shinelearn/images/mobile/executive-course/certificate.jpg'%}" alt="...">
+                                    </div>
+                                    <div class="media-body">
+                                        <p class="subhead">Sample certificate</p>
+                                        <a href="#" class="btn btn-outline btn-round-30 fs-11">View certificate</a>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ Assessment & Evaluation -->
+                
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-institute"></i></span>Institute</h2>
+                        <div class="content">
+                            <div class="instutite-image gr_instutite mb-10">
+                                <h3>XLRI Jamshedpur</h3>
+                                <img src="{% static 'shinelearn/images/mobile/executive-course/institute.jpg'%}" class="img-responsive"/>
+                            </div>
+
+                            <p>XLRI is one of India’s leading management school based in Jamshedpur, Jharkhand, India. Established in 1949 as the Xavier Labor Relations Institute, by Fr. Quinn Enright, XLRI is acknowledged as India’s oldest business management school.</p>
+
+                            <p>XLRI with its single vision of Magis, i.e., pursuit of excellence, focuses on three areas: academic excellence, personal values and social concern. XLRI spares no effort to make its curriculum world-class and deliver it in the most effective manner. It constantly scans the developments in business and in society and tries to pro-act to meet the challenges. Its world-class faculty with its commitment and deep sense of service delivers the curriculum very effectively... <a href="#">read more</a></p>
+
+                            <p class="mt-15 text-center"><a href="#" class="btn btn-outline btn-round-30 btn-slg">View all courses</a></p>
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ Institute -->
+                
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-testimonials"></i></span>Testimonials</h2>
+                        <div class="content pl-40 pr-40">
+                            <ul class="testimonials faculty-profile testi-slide">
+                                <li>
+                                    <p class="mb-15">Overall: enjoyed the course; gained nice experience with TE, MICA, faculty, and batch mates; learned few good and useful things during this 1 year tenure, which will definitely add some value to my career and personal growth. </p>
+
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <span class="testimonial-image">
+                                             <img class="media-object" src="{% static 'shinelearn/images/mobile/executive-course/bhaskar.jpg'%}" alt="...">
+                                            </span>
+                                        </div>
+                                        <div class="media-body">
+                                            <p class="pb-0 text-upper fs-14 c-333">Bhaskar</p>
+                                            <p class="pb-0 line-height-sm c-999">Project Leader,  Amnet Systems Pvt. Ltd.</p>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <p class="mb-15">Overall: enjoyed the course; gained nice experience with TE, MICA, faculty, and batch mates; learned few good and useful things during this 1 year tenure, which will definitely add some value to my career and personal growth. </p>
+
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <span class="testimonial-image">
+                                                <img class="media-object" src="{% static 'shinelearn/images/mobile/executive-course/bhaskar.jpg'%}" alt="...">
+                                            </span>
+                                        </div>
+                                        <div class="media-body">
+                                            <p class="pb-0 text-upper fs-14 c-333">Bhaskar</p>
+                                            <p class="pb-0 line-height-sm c-999">Project Leader,  Amnet Systems Pvt. Ltd.</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ Testimonials -->
+                
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-paymentModes"></i></span>Fee and Payment Modes</h2>
+                        <div class="content payment-mode">
+                            <!-- Accordion begin -->
+                            <div class="accordion_example1 accordion-wrap">
+                                <!-- Section 1 -->  
+                                <div class="accordion_in acc_active">
+                                    <div class="acc_head fs-16">Program Fee</div>
+                                    <div class="acc_content">
+                                        <div class="overall-fees ">
+                                            <div class="">
+                                                <p class="title pb-0">Overall fees</p>
+                                                <p class="fee pb-0">Rs. 90,000</p>
+                                            </div>
+                                            <div class="payment-deadline pull-right">
+                                                <span class="fs-11">Payment Deadline</span>
+                                                <span class="fs-14 c-333 semi-bold">21/09/2018</span>
+                                            </div>
+                                        </div><!-- /. Overall fees -->
+                                        <div class="clearfix"></div>
+                                        <hr class="row blueborder"/>
+                                        <p class="text-upper text-center c-333">Installment Available</p>
+                                        <ul class="text-center payment-instament">
+                                            <li>
+                                                <p>1st Instalment</p>
+                                                <p class="price">Rs. 30000</p>
+                                                <p>Payment Deadline: <strong>27/12/2018</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>2nd Instalment</p>
+                                                <p class="price">Rs. 30000</p>
+                                                <p>Payment Deadline: <strong>27/12/2018</strong></p>
+                                            </li>
+                                            <li>
+                                                <p>3rd Instalment</p>
+                                                <p class="price">Rs. 30000</p>
+                                                <p>Payment Deadline: <strong>27/12/2018</strong></p>
+                                            </li>
+                                        </ul>
+
+
+                                    </div>
+                                </div><!--/. Accordion 1 -->
+
+                                <div class="accordion_in">
+                                    <div class="acc_head fs-16">Application Process</div>
+                                    <div class="acc_content">
+                                        <ul class="application-process mt-15">
+                                            <li class="text-center">
+                                                <span class="white-circle">
+                                                    <i class="execIcon-placeOrder"></i>
+                                                </span>
+                                                <p class="c-999 mt-5">Place Order</p>
+                                                <span class="execIcon-down-arrow-big"></span>
+                                            </li>
+                                            <li class="text-center">
+                                                <span class="white-circle">
+                                                    <i class="execIcon-placeOrder"></i>
+                                                </span>
+                                                <p class="c-999 mt-5">Receive online <br />access/study material from course provider</p>
+                                                <span class="execIcon-down-arrow-big"></span>
+                                            </li>
+                                            <li class="text-center">
+                                                <span class="white-circle">
+                                                    <i class="execIcon-startLearn"></i>
+                                                </span>
+                                                <p class="c-999 mt-5">Access the material and <br/>start learning</p>
+                                                <span class="execIcon-down-arrow-big"></span>
+                                            </li>
+                                            <li class="text-center">
+                                                <span class="white-circle">
+                                                    <i class="execIcon-getCertified"></i>
+                                                </span>
+                                                <p class="c-999 mt-5">Appear for exam – Get <br />Certified</p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div><!--/. Accordion 2 -->
+                                    
+                                <div class="accordion_in">
+                                    <div class="acc_head fs-16">Late Fee</div>
+                                    <div class="acc_content">
+                                        <p>Coming soon...</p>
+                                    </div>
+                                </div><!--/. Accordion 3 -->
+                            </div><!-- /. accordion-wrap -->
+                        </div><!-- /. content -->
+                    </div><!-- /. white box-->
+                </div><!-- ./ Fee and Payment Modes -->
+                
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-faq"></i></span>FAQ</h2>
+                        <div class="content">
+                            <!-- Accordion begin -->
+                            <div class="accordion_example1 accordion-wrap">
+                                <!-- Section 1 -->  
+                                <div class="accordion_in acc_active">
+                                    <div class="acc_head fs-16">What is the cancellation policy?</div>
+                                    <div class="acc_content">
+                                        <ol class="romain-list">
+                                            <li>Requests for refund of fees on account of cancellation of enrolment shall be considered only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</li>
+
+                                            <li>In event that such valid requests for refund of fees are received, the application money shall be refunded after deducting a penalty of Rs.5000 and applicable taxes for Indian participants & USD 125 for foreign participants.</li>
+                                            <li>In all other cases, no refund shall be made.</li>
+                                        </ol>
+                                    </div>
+                                </div><!--/. Accordion 1 -->
+
+                                <div class="accordion_in">
+                                    <div class="acc_head fs-16">Can I join next batch after paying for this batch</div>
+                                    <div class="acc_content">
+                                        <p>Coming soon...</p>
+                                    </div>
+                                </div><!--/. Accordion 2 -->
+                                    
+                                <div class="accordion_in">
+                                    <div class="acc_head fs-16">Do we get placement opportunity with this course?</div>
+                                    <div class="acc_content">
+                                        <p>Coming soon...</p>
+                                    </div>
+                                </div><!--/. Accordion 3 -->
+                            </div><!-- /. accordion-wrap -->
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ FAQ -->
+            </div><!-- /. content-box --> 
+
+            <div class="you-may-like">
+                <div class="container">
+                    <h2 class="pt-5">You may also like</h2>
+                    
+                    <div class="slide-container">
+                        <ul class="login-slider">
+                            <li>
+                                <div class="media"> 
+                                    <div class="media-body">
+                                        <p class="fs-15 bold"><a title="Lean Six Sigma Green Belt" href="#">Lean Six Sigma Green Belt</a></p>
+                                        
+                                        <div class="rating block ml-0 fs-12 pb-10">
+                                            <sup class="fill-star"></sup>
+                                            <strong>3.3</strong>/5
+                                        </div><!-- end of star rating -->
+                                        <p class="fs-12 c6"><strong>233</strong> Jobs available</p>
+                                        
+                                    </div>
+                                    <div class="media-left">
+                                        <a title="Lean Six Sigma Green Belt" href="#" class="home-banner-img">
+                                            <img src="{% static 'shinelearn/images/mobile/common/course-logo1.png' %}" alt="...">
+                                        </a>
+                                    </div><!-- end of media body -->
+                                    </div><!-- end of media -->
+                            </li>
+                            <li>
+                                <div class="media"> 
+                                    <div class="media-body">
+                                        <p class="fs-15 bold"><a title="Lean Six Sigma Green Belt" href="#">Lean Six Sigma Green Belt</a></p>
+                                        
+                                        <div class="rating block ml-0 fs-12 pb-10">
+                                            <sup class="fill-star"></sup>
+                                            <strong>3.3</strong>/5
+                                        </div><!-- end of star rating -->
+                                        <p class="fs-12 c6"><strong>233</strong> Jobs available</p>
+                                        
+                                    </div>
+                                    <div class="media-left">
+                                        <a title="Lean Six Sigma Green Belt" href="#" class="home-banner-img">
+                                            <img src="{% static 'shinelearn/images/mobile/common/course-logo2.png' %}" alt="...">
+                                        </a>
+                                    </div><!-- end of media body -->
+                                    </div><!-- end of media -->
+                            </li>
+                            <li>
+                                <div class="media"> 
+                                    <div class="media-body">
+                                        <p class="fs-15 bold"><a title="Lean Six Sigma Green Belt" href="#">Lean Six Sigma Green Belt</a></p>
+                                        
+                                        <div class="rating block ml-0 fs-12 pb-10">
+                                            <sup class="fill-star"></sup>
+                                            <strong>3.3</strong>/5
+                                        </div><!-- end of star rating -->
+                                        <p class="fs-12 c6"><strong>233</strong> Jobs available</p>
+                                        
+                                    </div>
+                                    <div class="media-left">
+                                        <a title="Lean Six Sigma Green Belt" href="#" class="home-banner-img">
+                                            <img src="{% static 'shinelearn/images/mobile/common/course-logo3.png' %}" alt="...">
+                                        </a>
+                                    </div><!-- end of media body -->
+                                    </div><!-- end of media -->
+                            </li>
+                        </ul>
+                    </div><!-- end of slide-container -->
+                </div><!-- end of content box -->
+            </div><!-- you may like -->  
+
+            <div class="topSticky-enrollNow" id="enrollNow">
+                <div class="content-box">
+                    <div class="pr-15">Search Engine Optimisation Master...</div>
+                    <div><a href="#" class="btn btn-round-30 btn-lg btn-shadow btn-grOrange">Enroll Now</a></div>
+                </div>
+                <img src="{% static 'shinelearn/images/mobile/executive-course/enroll-now.jpg' %}" class="img-responsive"/>
+            </div>
+
+        {% block call_us %}
+              {% include "shop/partials/call_us.html" %}
+          {% endblock call_us %}
+
+
+
+            {% endblock container %}
+
+            {% block footer %}
+                <!-- footer -->
+                {% include 'basic/footer.html' %}
+            {% endblock footer %}
+
+            {% block navigation %}
+                <!-- left side menu -->
+                {% include 'basic/navigation.html' %}
+            {% endblock navigation %}
+        </div>
+{% endblock main_container %}
+
+
+
+
+
+{% block js_section %}
+    {{block.super}}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/shop/detail.js' %}"></script>
+    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
+    {% endcompress %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+           if(commonJs.getParameterByName('type') == 'autoEnrol'){
+               $('#enrol-now-button').trigger('click'); 
+            }
+            if(commonJs.getParameterByName('type') == 'autoCart'){
+               $('#add-to-cart').trigger('click');
+            } 
+        })
+        
+    </script>
+  <script tyep="text/javascript">
+   $(document).ready(function(){ 
+        $(document).on( "click", '.ui-block-c', function(e){
+            $zopim.livechat.window.show();
+        })
+    });
+  </script>
+{% endblock js_section %}
+
+
+{% if sqs.id in linkedin_resume_services %}
+  {% block zendesk %}
+  {% endblock zendesk %}
+{% endif %}
+
+
+

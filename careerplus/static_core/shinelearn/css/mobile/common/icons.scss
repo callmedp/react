@@ -442,3 +442,139 @@
   @include icon-inblock (19px, 19px, -181px -347px);
   vertical-align: sub;
 }
+
+//Executive Course Icons
+
+.apply-execIcon::before {
+  @include icon-inblock (26px, 26px, 0 0);
+}
+
+.batch-execIcon::before  {
+  @include icon-inblock (26px, 26px, -29px 0);
+}
+
+.duration-execIcon::before  {
+  @include icon-inblock (26px, 26px, -57px 0);
+}
+
+.price-execIcon::before  {
+  @include icon-inblock (26px, 26px, -84px 0);
+}
+
+.execIcon-program {
+  @include icon-block (24px, 21px, -113px 0);
+  margin: -11px 0 0 -12px;
+}
+
+.execIcon-who {
+  @include icon-block (29px, 21px, -142px 0);
+  margin: -11px 0 0 -15px;
+}
+
+.manager::before  {
+  @include icon-block (40px, 40px, 0 -35px);
+}
+
+.execIcon-faculty  {
+  @include icon-block (37px, 22px, -201px 0);
+  margin: -10px 0 0 -19px;
+}
+
+.execIcon-exclusive  {
+  @include icon-block (30px, 20px, -245px 0);
+  margin: -12px 0 0 -14px;
+}
+
+.execIcon-eligibility {
+  @include icon-block (21px, 21px, -176px 0);
+  margin: -10px 0 0 -10px;
+}
+
+.execIcon-program {
+  @include icon-block (28px, 22px, -280px -2px);
+  margin: -11px 0 0 -15px;
+}
+
+.execIcon-assessment {
+  @include icon-block (20px, 25px, -510px 0);
+  margin: -14px 0 0 -11px;
+}
+
+.execIcon-institute {
+  @include icon-block (22px, 22px, -316px 0);
+  margin: -12px 0 0 -11px;
+}
+
+.execIcon-testimonials {
+  @include icon-block (25px, 25px, -345px 0);
+  margin: -12px 0 0 -14px;
+}
+
+.execIcon-paymentModes {
+  @include icon-block (21px, 26px, -376px 0);
+  margin: -14px 0 0 -12px;
+}
+
+.execIcon-faq {
+  @include icon-block (26px, 26px, -402px 0);
+  margin: -13px 0 0 -14px;
+}
+
+
+.senior-managers::before  {
+  @include icon-block (40px, 40px, -41px -36px);
+}
+
+.department-heads::before  {
+  @include icon-inblock (40px, 40px, -83px -36px);
+}
+
+.line-manager::before  {
+  @include icon-block (40px, 40px, -124px -36px);
+}
+
+.free::before  {
+  @include icon-block (45px, 40px, -168px -36px);
+}
+
+.emi::before  {
+  @include icon-block (45px, 40px, -215px -36px);
+}
+
+.credits::before  {
+  @include icon-block (45px, 40px, -263px -36px);
+}
+
+.free-services::before  {
+  @include icon-block (45px, 40px, -311px -36px);
+}
+
+.global::before  {
+  @include icon-block (45px, 40px, -358px -36px);
+}
+
+.refernEarn::before  {
+  @include icon-block (45px, 40px, -405px -36px);
+}
+
+// Application process Icons
+.execIcon-placeOrder {
+  background-position: -85px -89px;
+}
+
+.execIcon-receiveOnline {
+  background-position: -119px -89px;
+}
+
+.execIcon-startLearn {
+  background-position: -154px -89px;
+}
+
+.execIcon-getCertified {
+  background-position: -190px -89px;
+}
+
+.execIcon-down-arrow-big {
+  @include icon-inblock (26px, 26px, -225px -88px);
+  margin: 10px 0;
+}
