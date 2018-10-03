@@ -69,9 +69,8 @@
         <div class="register-bx-sec pull-right">
           <h2>Know more</h2>
           <div class="clear-fix"></div>
-          <form id="lead" 
-          action="{% url "crmapi:lead-management-captcha" %}"  data-non_captcha_action="{% url "crmapi:lead-management" %}"
-          >    {% csrf_token %}
+          <form id="lead" method="post"  action="{% url 'crmapi:lead-management' %}" >
+            {% csrf_token %}
               <div>
           <input type="text" id="name" name="name" placeholder="Full Name" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %} maxlength="100">
           <span class="error" for="name" style="color: rgb(255, 0, 0);font-size: 11px;width:100%; " ></span>
@@ -102,7 +101,7 @@
             </div> -->
 
             <div>
-          <input type="text" id="name" name="name" value="Fees : Rs.15,255" placeholder="" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %} maxlength="100">
+          <input type="text" id="value" readonly name="name" value="Fees : Rs.15,255" placeholder="" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %} maxlength="100">
           <span class="error" for="name" style="color: rgb(255, 0, 0);font-size: 11px;width:100%; " ></span>
          </div>
             
@@ -345,6 +344,61 @@
             });
             
         </script>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            $('#submit').click(function(e) {
+                e.preventDefault();
+                createLead();
+            });
+        });
+
+        function createLead() {
+            var url = "{% url 'crmapi:lead-management' %}";
+            var leadData = $('form').serialize();
+
+            $.ajax({
+                async: true,
+                url: url,
+                type: "POST",
+                data: leadData,
+                headers: {
+                  "X-CSRFToken":"{{csrf_token}}"
+                },
+                success: function(result) {
+                    $(':input','#lead')
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .prop('checked', false)
+                        .prop('selected', false);
+
+                    var conversion_id = 991709191;
+                    var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                    var ga_code = document.createElement('div');
+                    ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                    document.body.appendChild(ga_code);
+
+                    window.location.href ='thankyou-for-query'
+
+                    setTimeout(function(){
+                        $('a.no-click').click(function(e) {
+                          e.preventDefault()
+                        });
+                        },0);
+                },
+                error: function(result) {
+                  alert("Something went wrong!");
+                }
+                });
+        }
+
+    </script>
+
+
+
+
 
         <!-- Facebook Pixel Code -->
 
