@@ -4,7 +4,7 @@ import logging
 from decimal import Decimal
 from django.db import models
 from django.utils.html import strip_tags
-from django.utils import six        
+from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
@@ -39,7 +39,7 @@ from .functions import (
     get_upload_path_product_file,
     get_upload_path_for_sample_certicate)
 from .choices import (
-    SERVICE_CHOICES,
+    SERVICE_CHOICES, FACULTY_CHOICES,
     CATEGORY_CHOICES,
     PRODUCT_CHOICES,
     FLOW_CHOICES,
@@ -206,7 +206,10 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
                     kwargs={'fa_slug': parent,'skill_slug': self.slug, 'pk': self.pk})
             elif self.is_service:
                 return "/services/{}/{}/".format(self.slug,self.pk)
-
+            elif self.is_university:
+                parent = self.get_parent()[0].slug if self.get_parent() else None
+                return reverse('university-page',
+                    kwargs={'fa_slug': parent, 'university_slug': self.slug, 'pk': self.pk})
             elif self.type_level == 3:
                 return reverse('skillpage:func_area_results',
                     kwargs={'fa_slug': self.slug, 'pk': self.pk})    
@@ -2584,6 +2587,8 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
     slug = models.CharField(
         _('Slug'), unique=True,
         max_length=200, help_text=_('Unique slug'))
+    role = models.IntegerField(
+        default=0, choices=FACULTY_CHOICES)
     image = models.ImageField(
         _('Image'), upload_to=get_upload_path_faculty,
         blank=True, null=True)
@@ -2611,11 +2616,24 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
     active = models.BooleanField(
         default=False)
 
+    class Meta:
+        verbose_name = _('Faculty')
+        verbose_name_plural = _('Faculty')
+        ordering = ("-modified", "-created")
+        get_latest_by = 'created'
+        permissions = (
+            ("console_add_faculty", "Can Add Faculty From Console"),
+            ("console_change_faculty", "Can Change Faculty From Console"),
+            ("console_view_faculty", "Can View Faculty From Console"),
+        )
+
     def __str__(self):
         return '{} - {}'.format(self.name, self.id)
 
     def save(self, *args, **kwargs):
-        if self.pk and self.name:
+        if self.pk:
+            self.url = self.get_full_url()
+        if self.name:
             if not self.heading:
                 self.heading = self.name
             if not self.title:
@@ -2626,15 +2644,26 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
                 self.meta_desc = self.get_meta_desc()
         super(Faculty, self).save(*args, **kwargs)
 
+    def get_full_url(self):
+        return self.get_absolute_url()
+
+    def get_absolute_url(self):
+        return reverse('university-faculty',
+            kwargs={'faculty_slug': self.slug, 'pk': self.pk})
+
     def get_active(self):
         if self.active:
             return 'Active'
         return 'In-Active'
 
     def get_meta_desc(self):
-        return '%s - Unitversity Faculty at Shine Learning' % (
-            self.heading,)
+        return self.description
 
+    def get_description(self):
+        return self.meta_desc
+
+    def get_canonical_url(self):
+        return self.get_absolute_url()
 
 class FacultyProduct(AbstractAutoDate):
     faculty = models.ForeignKey(
@@ -2649,3 +2678,8 @@ class FacultyProduct(AbstractAutoDate):
         on_delete=models.CASCADE)
     active = models.BooleanField(default=False)
     display_order = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return '{} - {} ---- {}'.format(
+            self.product.heading, self.product_id,
+            self.faculty.name)

@@ -29,12 +29,14 @@
           </div>
       </form>
     </div>
+    {% if perms.shop.console_add_faculty %}
       <div class="row top_tiles">
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
           <a class="btn btn-app" href="{% url "console:faculty-add" %}">
             <i class="fa fa-edit"></i> Add New Faculty</a>
         </div>
       </div>
+    {% endif %}
     
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">

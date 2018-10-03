@@ -277,7 +277,7 @@ class ChangeCategoryView(DetailView):
             Category, Testimonial,
             fk_name='category',
             form=TestimonialCategoryForm,
-            can_delete=False,
+            can_delete=True,
             formset=TestimonialInlineFormSet, extra=1,
             max_num=5, validate_max=True)
 
@@ -394,7 +394,7 @@ class ChangeCategoryView(DetailView):
                         CategoryRelationshipFormSet = inlineformset_factory(
                             Category, Category.related_to.through,
                             fk_name='related_from',
-                            can_delete = False,
+                            can_delete=False,
                             form=CategoryRelationshipForm,
                             formset=RelationshipInlineFormSet, extra=1,
                             max_num=20, validate_max=True)
@@ -484,7 +484,7 @@ class ChangeCategoryView(DetailView):
                             Category, Testimonial,
                             fk_name='category',
                             form=TestimonialCategoryForm,
-                            can_delete=False,
+                            can_delete=True,
                             formset=TestimonialInlineFormSet, extra=1,
                             max_num=5, validate_max=True)
 

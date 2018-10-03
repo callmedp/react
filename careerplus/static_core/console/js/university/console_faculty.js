@@ -20,7 +20,7 @@ function init_faculty_add() {
 
 function init_faculty_change() {
 
-	if($('#change-skill-form').length > 0){
+	if($('#change-faculty-form').length > 0){
 		var parsleyConfig = {
 	        errorsContainer: function(parsleyField) {
 	            var $errfield = parsleyField.$element.parent().siblings('.alert');
@@ -28,7 +28,7 @@ function init_faculty_change() {
 	        },
 	    };
 	
-		$('#change-skill-form').parsley(parsleyConfig).on('field:validated', function() {
+		$('#change-faculty-form').parsley(parsleyConfig).on('field:validated', function() {
 			if (this.validationResult === true) {
 		      this.$element.closest('.item').removeClass('bad');
 

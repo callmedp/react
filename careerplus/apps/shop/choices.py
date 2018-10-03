@@ -1,5 +1,15 @@
 from decimal import Decimal
 
+FACULTY_DEFAULT = 0
+FACULTY_TEACHER = 1
+FACULTY_PRINCIPAL = 2
+
+FACULTY_CHOICES = (
+    (FACULTY_DEFAULT, '--Select Role--'),
+    (FACULTY_TEACHER, 'Teacher'),
+    (FACULTY_PRINCIPAL, 'Principal'),
+)
+
 RELATION_CHOICES = (
     (0, 'Default'),
     (1, 'UpSell'),

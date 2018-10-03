@@ -82,6 +82,7 @@
                     <th class="column-title">Name</th>
                     <th class="column-title">Active</th>
                     <th class="column-title">Is SkillPage?</th>
+                    <th class="column-title">Is University?</th>
                     <th class="column-title">Level</th>
                     <th class="column-title">#Edit</th>
                     </tr>
@@ -102,6 +103,13 @@
                   </td>
                   <td>
                       <button type="button" class="btn btn-success btn-xs">{{obj.get_skillpage}}</button>  
+                  </td>
+                  <td>
+                    {% if obj.is_university %}
+                    <button type="button" class="btn btn-success btn-xs">Yes</button>  
+                    {% else %}
+                      <button type="button" class="btn btn-danger btn-xs">No</button>
+                    {% endif %}
                   </td>
                   <td>
                     <button type="button" class="btn btn-success btn-xs">{{obj.get_level}}</button>

@@ -6,16 +6,77 @@ from dal import autocomplete
 
 from shop.models import (
     Category, CategoryRelationship, Skill, ProductSkill,
-    UniversityCourseDetail, UniversityCoursePayment,
-    Faculty, Category, SubHeaderCategory
-)
+    Faculty, SubHeaderCategory, FacultyProduct,
+    Product, UniversityCourseDetail,
+    UniversityCoursePayment)
+
 from shop.choices import (
     APPLICATION_PROCESS_CHOICES, APPLICATION_PROCESS,
     BENEFITS_CHOICES, BENEFITS
 )
+
 from homepage.models import Testimonial
 from homepage.config import (
     PAGECHOICES, university_page)
+
+
+class FacultyCourseForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        obj = kwargs.pop('object', None)
+        super(FacultyCourseForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        # for university product add filter type_flow university product
+        queryset = Product.browsable.filter(
+            type_flow=14)
+        excludes = obj.facultyproducts.all()
+        if self.instance and self.instance.pk:
+            excludes = excludes.exclude(pk=self.instance.pk)
+        courses = list(excludes.values_list(
+            'product_id', flat=True))
+        queryset = queryset.exclude(pk__in=courses)
+
+        self.fields['product'].queryset = queryset
+        self.fields['product'].label = 'Course'
+        self.fields['product'].widget.attrs['class'] = form_class
+        self.fields['product'].required = True
+
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+
+        self.fields['display_order'].widget.attrs['class'] = form_class
+
+    class Meta:
+        model = FacultyProduct
+        fields = ('product', 'display_order', 'active')
+
+    def clean_product(self):
+        product = self.cleaned_data.get('product', None)
+        if not product:
+            raise forms.ValidationError(
+                "This field is required.")
+        return product
+
+
+class FacultyCourseInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(FacultyCourseInlineFormSet, self).clean()
+        if any(self.errors):
+            return
+        products = []
+        duplicates = False
+        for form in self.forms:
+            if form.cleaned_data:
+                product = form.cleaned_data.get('product', None)
+                if product in products:
+                    duplicates = True
+                products.append(product)
+
+                if duplicates:
+                    raise forms.ValidationError(
+                        'Product must be unique.',
+                        code='duplicate_product'
+                    )
+        return
 
 
 class TestimonialCategoryForm(forms.ModelForm):
@@ -25,8 +86,10 @@ class TestimonialCategoryForm(forms.ModelForm):
         form_class = 'form-control col-md-7 col-xs-12'
         choice_dict = dict(PAGECHOICES)
         choices = [
+            (0, '---Select Page---'),
             (university_page, choice_dict.get(
-            university_page, 'University Page'))]
+                university_page, 'University Page'))]
+
         self.fields['page'].widget.attrs['class'] = form_class
         self.fields['page'].label = "Page type"
         self.fields['page'].choices = choices
@@ -95,13 +158,14 @@ class TestimonialCategoryForm(forms.ModelForm):
 
     def clean_user_name(self):
         user_name = self.cleaned_data.get('user_name', '').strip()
-        if user_name:
-            if len(user_name) < 1 or len(user_name) > 40:
-                raise forms.ValidationError(
-                    "Name should be between 1-40 characters.")
-        else:
+        if not user_name:
             raise forms.ValidationError(
                 "This field is required.")
+
+        if len(user_name) < 1 or len(user_name) > 40:
+            raise forms.ValidationError(
+                "Name should be between 1-40 characters.")
+
         return user_name
 
     def clean_image(self):
@@ -113,49 +177,43 @@ class TestimonialCategoryForm(forms.ModelForm):
             if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
                 raise forms.ValidationError(
                     "Unsupported image type. Please upload svg, bmp, png or jpeg")
-        else:
-            pass
         return file
 
     def clean_designation(self):
         designation = self.cleaned_data.get('designation', '').strip()
-        if designation:
-            if len(designation) < 1 or len(designation) > 30:
-                raise forms.ValidationError(
-                    "Designation should be between 1-30 characters.")
-        else:
+        if not designation:
             raise forms.ValidationError(
                 "This field is required.")
+        if len(designation) < 1 or len(designation) > 30:
+            raise forms.ValidationError(
+                "Designation should be between 1-30 characters.")
         return designation
 
     def clean_company(self):
         company = self.cleaned_data.get('company', '').strip()
-        if company:
-            if len(company) < 1 or len(company) > 30:
-                raise forms.ValidationError(
-                    "Company should be between 1-30 characters.")
-        else:
+        if not company:
             raise forms.ValidationError(
                 "This field is required.")
+        if len(company) < 1 or len(company) > 30:
+            raise forms.ValidationError(
+                "Company should be between 1-30 characters.")
         return company
 
     def clean_title(self):
         title = self.cleaned_data.get('title', '').strip()
-        if title:
-            if len(title) < 1 or len(title) > 50:
-                raise forms.ValidationError(
-                    "Title should be between 1-50 characters.")
+        if len(title) > 50:
+            raise forms.ValidationError(
+                "Title should be between 1-50 characters.")
         return title
 
     def clean_review(self):
         review = self.cleaned_data.get('review', '').strip()
-        if review:
-            if len(review) < 1 or len(review) > 500:
-                raise forms.ValidationError(
-                    "Review should be between 1-500 characters.")
-        else:
+        if not review:
             raise forms.ValidationError(
                 "This field is required.")
+        if len(review) < 1 or len(review) > 500:
+            raise forms.ValidationError(
+                "Review should be between 1-500 characters.")
         return review
 
 
@@ -197,15 +255,24 @@ class SubHeaderCategoryForm(forms.ModelForm):
         fields = (
             'heading', 'description', 'active', 'display_order')
 
-    def clean_description(self):
-        description = self.cleaned_data.get('description', '').strip()
-        if description:
-            if len(description) < 1 or len(description) > 100:
-                raise forms.ValidationError(
-                    "Description should be between 1-100 characters.")
-        else:
+    def clean_heading(self):
+        heading = self.cleaned_data.get('heading', '').strip()
+        if not heading:
             raise forms.ValidationError(
                 "This field is required.")
+        if len(heading) < 1 or len(heading) > 100:
+            raise forms.ValidationError(
+                "Description should be between 1-100 characters.")
+        return heading
+
+    def clean_description(self):
+        description = self.cleaned_data.get('description', '').strip()
+        if not description:
+            raise forms.ValidationError(
+                "This field is required.")
+        if len(description) < 1 or len(description) > 100:
+            raise forms.ValidationError(
+                "Description should be between 1-100 characters.")
         return description
 
 
@@ -221,7 +288,7 @@ class ChangeFacultyForm(forms.ModelForm):
         model = Faculty
         fields = ('name', 'active', 'image',
             'designation', 'description', 'short_desc',
-            'faculty_speak', 'institute', 'url', 'heading',
+            'faculty_speak', 'institute', 'role', 'url', 'heading',
             'title', 'slug', 'meta_desc', 'meta_keywords',)
 
     def __init__(self, *args, **kwargs):
@@ -277,10 +344,16 @@ class ChangeFacultyForm(forms.ModelForm):
         self.fields['faculty_speak'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-600 characters.'
 
         queryset = Category.objects.filter(
-            active=True, is_skill=True)
+            active=True, is_university=True)
         self.fields['institute'].widget.attrs['class'] = form_class
         self.fields['institute'].required = True
         self.fields['institute'].queryset = queryset
+
+        self.fields['role'].widget.attrs['class'] = form_class
+        self.fields['role'].required = True
+        self.fields['role'].widget.attrs['data-parsley-min'] = '1'
+        self.fields['role'].widget.attrs['data-parsley-min-message'] = 'This field is required.'
+        self.fields['role'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
 
         self.fields['url'].widget.attrs['class'] = form_class
         self.fields['url'].widget.attrs['readonly'] = True
@@ -298,67 +371,59 @@ class ChangeFacultyForm(forms.ModelForm):
 
     def clean_name(self):
         name = self.cleaned_data.get('name', '').strip()
-        if name:
-            if len(name) < 1 or len(name) > 40:
-                raise forms.ValidationError(
-                    "Name should be between 1-40 characters.")
-        else:
+        if not name:
             raise forms.ValidationError(
                 "This field is required.")
+        if len(name) < 1 or len(name) > 40:
+            raise forms.ValidationError(
+                "Name should be between 1-40 characters.")
         return name
 
     def clean_image(self):
         file = self.files.get('image', '')
-        if file:
-            if file._size > 30 * 1024:
-                raise forms.ValidationError(
-                    "Image file is too large ( > 30kb ).")
-            if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
-                raise forms.ValidationError(
-                    "Unsupported image type. Please upload svg, bmp, png or jpeg")
-        else:
-            pass
+        if file and file._size > 30 * 1024:
+            raise forms.ValidationError(
+                "Image file is too large ( > 30kb ).")
+        if file and file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
+            raise forms.ValidationError(
+                "Unsupported image type. Please upload svg, bmp, png or jpeg")
         return file
 
     def clean_designation(self):
         designation = self.cleaned_data.get('designation', '').strip()
-        if designation:
-            if len(designation) < 1 or len(designation) > 30:
-                raise forms.ValidationError(
-                    "Designation should be between 1-30 characters.")
-        else:
+        if not designation:
             raise forms.ValidationError(
                 "This field is required.")
+        if len(designation) < 1 or len(designation) > 30:
+            raise forms.ValidationError(
+                "Designation should be between 1-30 characters.")
         return designation
 
     def clean_description(self):
         description = self.cleaned_data.get('description', '').strip()
-        if description:
-            if len(description) < 1 or len(description) > 600:
-                raise forms.ValidationError(
-                    "Description should be between 1-600 characters.")
-        else:
+        if not description:
             raise forms.ValidationError(
                 "This field is required.")
+        if len(description) < 1 or len(description) > 600:
+            raise forms.ValidationError(
+                "Description should be between 1-600 characters.")
         return description
 
     def clean_short_desc(self):
         short_desc = self.cleaned_data.get('short_desc', '').strip()
-        if short_desc:
-            if len(short_desc) < 1 or len(short_desc) > 200:
-                raise forms.ValidationError(
-                    "Short Description should be between 1-200 characters.")
+        if short_desc and len(short_desc) < 1 or len(short_desc) > 200:
+            raise forms.ValidationError(
+                "Short Description should be between 1-200 characters.")
         return short_desc
 
     def clean_faculty_speak(self):
         faculty_speak = self.cleaned_data.get('faculty_speak', '').strip()
-        if faculty_speak:
-            if len(faculty_speak) < 1 or len(faculty_speak) > 600:
-                raise forms.ValidationError(
-                    "Faculty Speak should be between 1-600 characters.")
-        else:
+        if not faculty_speak:
             raise forms.ValidationError(
                 "This field is required.")
+        if len(faculty_speak) < 1 or len(faculty_speak) > 600:
+            raise forms.ValidationError(
+                "Faculty Speak should be between 1-600 characters.")
         return faculty_speak
 
     def clean_institute(self):
@@ -368,6 +433,21 @@ class ChangeFacultyForm(forms.ModelForm):
                 "This field is required.")
         return institute
 
+    def clean_role(self):
+        role = int(self.cleaned_data.get('role', '0'))
+        if not role:
+            raise forms.ValidationError(
+                "This field is required.")
+        elif role == FACULTY_PRINCIPAL:
+            principals = Faculty.objects.filter(
+                role=FACULTY_PRINCIPAL,
+                institute=self.clean_institute())
+            principals = principals.exclude(pk=self.instance.pk)
+            if principals.exists():
+                raise forms.ValidationError(
+                    "This University has already one principal.")
+        return role
+
     def clean_url(self):
         url = self.cleaned_data.get('url', None)
         instance = getattr(self, 'instance', None)
@@ -376,24 +456,22 @@ class ChangeFacultyForm(forms.ModelForm):
 
     def clean_heading(self):
         heading = self.cleaned_data.get('heading', '').strip()
-        if heading:
-            if len(heading) < 1 or len(heading) > 40:
-                raise forms.ValidationError(
-                    "Heading should be between 1-40 characters.")
-        else:
+        if not heading:
             raise forms.ValidationError(
                 "This field is required.")
+        if len(heading) < 1 or len(heading) > 40:
+            raise forms.ValidationError(
+                "Heading should be between 1-40 characters.")
         return heading
 
     def clean_title(self):
         title = self.cleaned_data.get('title', '').strip()
-        if title:
-            if len(title) < 1 or len(title) > 100:
-                raise forms.ValidationError(
-                    "Title should be between 1-100 characters.")
-        else:
+        if not title:
             raise forms.ValidationError(
                 "This field is required.")
+        if len(title) < 1 or len(title) > 100:
+            raise forms.ValidationError(
+                "Title should be between 1-100 characters.")
         return title
 
 
@@ -403,7 +481,7 @@ class AddFacultyForm(forms.ModelForm):
         model = Faculty
         fields = ('name', 'image',
             'designation', 'description', 'short_desc',
-            'faculty_speak', 'institute')
+            'faculty_speak', 'institute', 'role')
 
     def __init__(self, *args, **kwargs):
         super(AddFacultyForm, self).__init__(*args, **kwargs)
@@ -453,61 +531,62 @@ class AddFacultyForm(forms.ModelForm):
         self.fields['faculty_speak'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-600 characters.'
 
         queryset = Category.objects.filter(
-            active=True, is_skill=True)
+            active=True, is_university=True)
         self.fields['institute'].widget.attrs['class'] = form_class
         self.fields['institute'].required = True
         self.fields['institute'].queryset = queryset
 
+        self.fields['role'].widget.attrs['class'] = form_class
+        self.fields['role'].required = True
+        self.fields['role'].widget.attrs['data-parsley-min'] = '1'
+        self.fields['role'].widget.attrs['data-parsley-min-message'] = 'This field is required.'
+        self.fields['role'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+
     def clean_name(self):
         name = self.cleaned_data.get('name', '').strip()
-        if name:
-            if len(name) < 1 or len(name) > 40:
-                raise forms.ValidationError(
-                    "Name should be between 1-40 characters.")
-        else:
+        if not name:
             raise forms.ValidationError(
                 "This field is required.")
+        if len(name) < 1 or len(name) > 40:
+            raise forms.ValidationError(
+                "Name should be between 1-40 characters.")
         return name
 
     def clean_designation(self):
         designation = self.cleaned_data.get('designation', '').strip()
-        if designation:
-            if len(designation) < 1 or len(designation) > 30:
-                raise forms.ValidationError(
-                    "Designation should be between 1-30 characters.")
-        else:
+        if not designation:
             raise forms.ValidationError(
                 "This field is required.")
+        if len(designation) < 1 or len(designation) > 30:
+            raise forms.ValidationError(
+                "Designation should be between 1-30 characters.")
         return designation
 
     def clean_description(self):
         description = self.cleaned_data.get('description', '').strip()
-        if description:
-            if len(description) < 1 or len(description) > 600:
-                raise forms.ValidationError(
-                    "Description should be between 1-600 characters.")
-        else:
+        if not description:
             raise forms.ValidationError(
                 "This field is required.")
+        if len(description) < 1 or len(description) > 600:
+            raise forms.ValidationError(
+                "Description should be between 1-600 characters.")
         return description
 
     def clean_short_desc(self):
         short_desc = self.cleaned_data.get('short_desc', '').strip()
-        if short_desc:
-            if len(short_desc) < 1 or len(short_desc) > 200:
-                raise forms.ValidationError(
-                    "Short Description should be between 1-200 characters.")
+        if short_desc and len(short_desc) < 1 or len(short_desc) > 200:
+            raise forms.ValidationError(
+                "Short Description should be between 1-200 characters.")
         return short_desc
 
     def clean_faculty_speak(self):
         faculty_speak = self.cleaned_data.get('faculty_speak', '').strip()
-        if faculty_speak:
-            if len(faculty_speak) < 1 or len(faculty_speak) > 600:
-                raise forms.ValidationError(
-                    "Faculty Speak should be between 1-600 characters.")
-        else:
+        if not faculty_speak:
             raise forms.ValidationError(
                 "This field is required.")
+        if len(faculty_speak) < 1 or len(faculty_speak) > 600:
+            raise forms.ValidationError(
+                "Faculty Speak should be between 1-600 characters.")
         return faculty_speak
 
     def clean_institute(self):
@@ -517,18 +596,27 @@ class AddFacultyForm(forms.ModelForm):
                 "This field is required.")
         return institute
 
+    def clean_role(self):
+        role = int(self.cleaned_data.get('role', '0'))
+        if not role:
+            raise forms.ValidationError(
+                "This field is required.")
+        elif role == FACULTY_PRINCIPAL:
+            principals = Faculty.objects.filter(
+                role=FACULTY_PRINCIPAL,
+                institute=self.clean_institute())
+            if principals.exists():
+                raise forms.ValidationError(
+                    "This University has already one principal.")
+        return role
+
     def clean_image(self):
         file = self.files.get('image', '')
-        if file:
-            if file._size > 30 * 1024:
-                raise forms.ValidationError(
-                    "Image file is too large ( > 30kb ).")
-            if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
-                raise forms.ValidationError("Unsupported image type. Please upload svg, bmp, png or jpeg")
-            if file.image.height > 125 and file.image.height != file.image.width:
-                raise forms.ValidationError("Image not valid. Please upload 125px X 125 px")
-        else:
-            pass
+        if file and file._size > 30 * 1024:
+            raise forms.ValidationError(
+                "Image file is too large ( > 30kb ).")
+        if file and file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
+            raise forms.ValidationError("Unsupported image type. Please upload svg, bmp, png or jpeg")
         return file
 
 

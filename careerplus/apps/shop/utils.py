@@ -834,9 +834,9 @@ class CategoryValidation(object):
                             request,
                             "University Description is required")
                         return test_pass
-                    if not category.check_products():
-                        messages.error(request, "University Products is required")
-                        return test_pass
+                    # if not category.check_products():
+                    #     messages.error(request, "University Products is required")
+                    #     return test_pass
                     test_pass = True
                     return test_pass
                 else:
