@@ -26,8 +26,9 @@ class FacultyCourseForm(forms.ModelForm):
         super(FacultyCourseForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
         # for university product add filter type_flow university product
-        queryset = Product.browsable.filter(
-            type_flow=14)
+        queryset = Product.objects.filter(
+            type_flow=14, active=True,
+            type_product__in=[0, 1, 3, 5])
         excludes = obj.facultyproducts.all()
         if self.instance and self.instance.pk:
             excludes = excludes.exclude(pk=self.instance.pk)

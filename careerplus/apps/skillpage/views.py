@@ -518,7 +518,7 @@ class UniversityFacultyView(DetailView):
             products = self.object.facultyproducts.filter(
                 is_indexable=True, active=True,
                 type_product__in=[0, 1, 3, 5],
-                type_flow=14)
+                type_flow=14).order_by('display_order')
         prod_page = Paginator(products, self.PRODUCT_PAGE_SIZE)
 
         products = prod_page.page(page)
