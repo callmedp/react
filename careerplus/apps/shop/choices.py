@@ -205,3 +205,34 @@ def convert_gbp(price=Decimal(0)):
         elif Decimal(360) < price:
             return '5'
     return '0'
+
+BENEFITS = {
+    '1': ['Place Order', 'https://i.vimeocdn.com/portrait/6462071_300x300'],
+    '2': ['Receive online access/study material from course material', 'https://www.admiralins.com/wp-content/uploads/2018/01/ApplicationIcon.jpg'],
+    '3': ['Access the material and start learning', 'https://mounthopehousing.org/wp-content/uploads/2016/02/edit1.png'],
+    '4': ['Appear for exam – Get Certified', 'https://mdhs.unimelb.edu.au/__data/assets/image/0009/2745306/application-image.jpg'],
+    '5': ['Fill Online Application Form', 'https://i1.wp.com/phonewasp.com/wp-content/uploads/2018/07/246x0w.jpg?fit=246%2C246'],
+    '6': ['Get Access to online learning management system', 'https://rukminim1.flixcart.com/image/832/832/tattoo/5/g/h/snd-t1663-smilendeal-t1663-removeable-temp-body-tattoo-superman-original-imaead4bp59kywmg.jpeg?q=70'],
+    # '7': ['Check eligibility before filling online application',''],
+    # '8': ['Complete online application form', ],
+    # '9': ['Make Course Fee Payment', ''],
+    # '10': ['Start your course', '']
+}
+
+APPLICATION_PROCESS = {
+    '1': ['Place Order', 'https://i.vimeocdn.com/portrait/6462071_300x300'],
+    '2': ['Receive online access/study material from course material', 'https://www.admiralins.com/wp-content/uploads/2018/01/ApplicationIcon.jpg'],
+    '3': ['Access the material and start learning', 'https://mounthopehousing.org/wp-content/uploads/2016/02/edit1.png'],
+    '4': ['Appear for exam – Get Certified', 'https://mdhs.unimelb.edu.au/__data/assets/image/0009/2745306/application-image.jpg'],
+    '5': ['Fill Online Application Form', 'https://i1.wp.com/phonewasp.com/wp-content/uploads/2018/07/246x0w.jpg?fit=246%2C246'],
+    '6': ['Get Access to online learning management system', 'https://rukminim1.flixcart.com/image/832/832/tattoo/5/g/h/snd-t1663-smilendeal-t1663-removeable-temp-body-tattoo-superman-original-imaead4bp59kywmg.jpeg?q=70'],
+    # '7': ['Check eligibility before filling online application',''],
+    # '8': ['Complete online application form', ],
+    # '9': ['Make Course Fee Payment', ''],
+    # '10': ['Start your course', '']
+
+}
+
+APPLICATION_PROCESS_CHOICES = [(int(key), val[1], val[0])for key, val in list(APPLICATION_PROCESS.items())]
+
+BENEFITS_CHOICES = [(int(key), val[1], val[0])for key, val in list(BENEFITS.items())]

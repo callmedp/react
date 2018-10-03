@@ -9,7 +9,7 @@ $(document).ready(function() {
         minDate:todayDate,
         autoUpdateInput: false,
       }, function(chosen_date) {
-        el.val(chosen_date.format('YYYY-MM-DD'));
+        el.val(chosen_date.format('DD-MM-YYYY'));
       });
     }
 
@@ -27,7 +27,7 @@ $(document).ready(function() {
     else if(msg == "revert"){
       let message = 'Do you want to revert all changes?';
       $("#alertModal").modal('show').find('#alertModalBody').html(message);
-    }
+  }
     else if(msg == "live"){
       let message = 'Do you want to copy data to live?';
       $("#alertModal").modal('show').find('#alertModalBody').html(message);

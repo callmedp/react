@@ -1,5 +1,6 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from django.forms.fields import MultipleChoiceField
 
 from dal import autocomplete
 
@@ -9,7 +10,10 @@ from shop.models import (
     Product, UniversityCourseDetail,
     UniversityCoursePayment)
 
-from shop.choices import FACULTY_PRINCIPAL
+from shop.choices import (
+    APPLICATION_PROCESS_CHOICES, APPLICATION_PROCESS,
+    BENEFITS_CHOICES, BENEFITS
+)
 
 from homepage.models import Testimonial
 from homepage.config import (
@@ -1237,36 +1241,81 @@ class UniversityCourseForm(forms.ModelForm):
             attrs={
                 'class': 'form-control batch_launch_date',
                 "readonly": True,
-            }, format='%m/%d/%Y'
-        )
+            }, format='%d-%m-%Y'
+        ),
+        input_formats=['%d-%m-%Y']
     )
     apply_last_date = forms.DateField(
         widget=forms.DateInput(
             attrs={
                 'class': 'form-control apply_last_date',
                 "readonly": True,
-            }, format='%m/%d/%Y'
-        )
+            }, format='%d-%m-%Y'
+        ),
+        input_formats=['%d-%m-%Y']
     )
+
+    application_process_choices = MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=APPLICATION_PROCESS_CHOICES
+    )
+    selected_process_choices = MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=[]
+    )
+    benefits_choices = MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=APPLICATION_PROCESS_CHOICES
+    )
+    selected_benefits_choices = MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=[]
+    )
+
 
     class Meta:
         model = UniversityCourseDetail
         fields = [
             'batch_launch_date', 'apply_last_date',
-            'sample_certificate', 'our_importance', 'assesment'
+            'sample_certificate', 'application_process', 'assesment',
+            'benefits'
         ]
-
     def __init__(self, *args, **kwargs):
         super(UniversityCourseForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
         self.fields['batch_launch_date'].widget.attrs['required'] = True
         self.fields['apply_last_date'].widget.attrs['required'] = True
         self.fields['sample_certificate'].widget.attrs['required'] = True
-        self.fields['our_importance'].widget.attrs['required'] = True
         self.fields['assesment'].widget.attrs['required'] = True
-        self.fields['sample_certificate'].widget.attrs['class'] = form_class
-        self.fields['our_importance'].widget.attrs['class'] = form_class
         self.fields['assesment'].widget.attrs['class'] = form_class
+        self.fields['sample_certificate'].widget.attrs['class'] = form_class
+        if self.instance.get_application_process:
+            self.fields['application_process_choices'].initial = [
+                int(k) for k in self.instance.get_application_process
+            ]
+            self.fields['selected_process_choices'].choices = [
+                (int(k), APPLICATION_PROCESS.get(k)[1], APPLICATION_PROCESS.get(k)[0]) for k in self.instance.get_application_process
+            ]
+
+        self.fields['application_process_choices'].widget.attrs['class'] = form_class
+        self.fields['application_process_choices'].widget.attrs['required'] = True
+        self.fields['application_process_choices'].widget.attrs['class'] = form_class + ' process_item'
+
+        if self.instance.benefits:
+            self.fields['benefits_choices'].initial = [
+                int(k) for k in self.instance.get_benefits
+            ]
+            self.fields['selected_benefits_choices'].choices = [
+                (int(k), BENEFITS.get(k)[1], BENEFITS.get(k)[0]) for k in self.instance.get_benefits
+            ]
+
+        self.fields['benefits_choices'].widget.attrs['class'] = form_class
+        self.fields['benefits_choices'].widget.attrs['required'] = True
+        self.fields['benefits_choices'].widget.attrs['class'] = form_class + ' benefit_item'
 
     def clean_batch_launch_date(self):
         batch_launch_date = self.cleaned_data.get('batch_launch_date', '')
@@ -1282,6 +1331,17 @@ class UniversityCourseForm(forms.ModelForm):
                 "This value is requred.")
         return apply_last_date
 
+    def clean_sample_certificate(self):
+        file = self.cleaned_data.get('sample_certificate')
+        if file:
+            filename = file.name
+            if not (filename.endswith('.mp3') or filename.endswith('.jpg') or
+                    filename.endswith('.jpeg') or filename.endswith('.pdf') or
+                    filename.endswith('.png')):
+                raise forms.ValidationError("File is not supported. Please upload jpg, png or pdf file only,")
+
+        return file
+
 
 class UniversityCoursePaymentForm(forms.ModelForm):
 
@@ -1291,7 +1351,9 @@ class UniversityCoursePaymentForm(forms.ModelForm):
                 'class': 'form-control col-md-7 col-xs-12 last_date_of_payment',
                 "readonly": True,
             }, format='%m/%d/%Y'
-        )
+        ),
+        input_formats=['%d-%m-%Y']
+
     )
 
     def __init__(self, *args, **kwargs):

@@ -2455,11 +2455,11 @@ class ProductAuditHistory(Document):
 
 
 class UniversityCourseDetailScreen(models.Model):
-    batch_launch_date = models.DateTimeField(
+    batch_launch_date = models.DateField(
         help_text=_('This university course launch date'),
         default=timezone.now
     )
-    apply_last_date = models.DateTimeField(
+    apply_last_date = models.DateField(
         help_text=_('Last date to apply for this univeristy course'),
         default=timezone.now
     )
@@ -2467,11 +2467,8 @@ class UniversityCourseDetailScreen(models.Model):
         upload_to=get_upload_path_for_sample_certicate, max_length=255,
         null=True, blank=True
     )
-    our_importance = RichTextField(
-        verbose_name=_('Why us'),
-        help_text=_('Description of why shine learning?'),
-        default=''
-    )
+    benefits = models.CharField(max_length=1024, default='')
+    application_process = models.CharField(max_length=1024, default='')
     assesment = RichTextField(
         verbose_name=_('assesment'),
         help_text=_('Description of Assesment and Evaluation'),
@@ -2483,13 +2480,27 @@ class UniversityCourseDetailScreen(models.Model):
         related_name='screen_university_course_detail',
     )
 
+    @property
+    def get_application_process(self):
+        if self.application_process:
+            return eval(self.application_process)
+        else:
+            return ''
+
+    @property
+    def get_benefits(self):
+        if self.benefits:
+            return eval(self.benefits)
+        else:
+            return ''
+
 
 class UniversityCoursePaymentScreen(models.Model):
     installment_fee = models.DecimalField(
         _('INR Program Fee'),
         max_digits=12, decimal_places=2
     )
-    last_date_of_payment = models.DateTimeField(
+    last_date_of_payment = models.DateField(
         _('Last date of payment')
     )
     productscreen = models.ForeignKey(
@@ -2507,11 +2518,11 @@ class UniversityCoursePaymentScreen(models.Model):
 
 
 class UniversityCourseDetail(models.Model):
-    batch_launch_date = models.DateTimeField(
+    batch_launch_date = models.DateField(
         help_text=_('This university course launch date'),
         default=timezone.now
     )
-    apply_last_date = models.DateTimeField(
+    apply_last_date = models.DateField(
         help_text=_('Last date to apply for this univeristy course'),
         default=timezone.now
     )
@@ -2519,11 +2530,8 @@ class UniversityCourseDetail(models.Model):
         upload_to=get_upload_path_for_sample_certicate, max_length=255,
         null=True, blank=True
     )
-    our_importance = RichTextField(
-        verbose_name=_('Why us'),
-        help_text=_('Description of why shine learning?'),
-        default=''
-    )
+    benefits = models.CharField(max_length=1024, default='')
+    application_process = models.CharField(max_length=1024, default='')
     assesment = RichTextField(
         verbose_name=_('assesment'),
         help_text=_('Description of Assesment and Evaluation'),
@@ -2535,13 +2543,27 @@ class UniversityCourseDetail(models.Model):
         related_name='university_course_detail',
     )
 
+    @property
+    def get_application_process(self):
+        if self.application_process:
+            return eval(self.application_process)
+        else:
+            return ''
+
+    @property
+    def get_benefits(self):
+        if self.benefits:
+            return eval(self.benefits)
+        else:
+            return ''
+
 
 class UniversityCoursePayment(models.Model):
     installment_fee = models.DecimalField(
         _('INR Program Fee'),
         max_digits=12, decimal_places=2
     )
-    last_date_of_payment = models.DateTimeField(
+    last_date_of_payment = models.DateField(
         _('Last date of payemnt')
     )
     product = models.ForeignKey(
@@ -2642,7 +2664,6 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
 
     def get_canonical_url(self):
         return self.get_absolute_url()
-
 
 class FacultyProduct(AbstractAutoDate):
     faculty = models.ForeignKey(

@@ -1,0 +1,70 @@
+.btn {
+  @extend %button;
+
+  @media (max-width: 320px) { 
+    padding: 6px 10px;
+    font-size: $font-size;
+  }
+}
+
+.btn-sm {
+  @extend %button;
+  padding: 2px 10px;
+  font-size: $font-size;
+}
+
+.btn-lg {
+  padding: 6px 20px;
+}
+
+.btn-slg {
+  padding: 10px 40px;
+}
+
+.btn-lg2 {
+  padding: 5px 40px;
+}
+
+.btn-shadow {
+  box-shadow:0 0 10px rgba(0,0,0, .15);
+}
+
+
+.btn-round {
+  border-radius: $global-radius;
+}
+
+.btn-round-30 {
+  border-radius: 30px;
+}
+
+.btn-blue {
+  background-color: $blue;
+  color: $txt-white;
+}
+
+.btn-white {
+  background-color: $bg-white;
+  color: $txt-blue;
+  box-shadow: $box-shadow;
+}
+
+.btn-grey {
+  background-color: $bg-grey-f1;
+  color: $txt-grey-333;
+}
+
+.btn-yellow {
+  background-color: #ffcf26;
+  color: $txt-grey-333;
+}
+
+.btn-orange {
+  background-color: #ff5d00;
+  color: $txt-white;
+}
+
+.btn-outline {
+  border: 1px solid $blue;
+  color: $txt-blue;
+}

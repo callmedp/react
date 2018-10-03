@@ -1766,6 +1766,12 @@ class ChangeProductView(DetailView):
 
                     elif slug == 'university':
                         form = UniversityCourseForm(request.POST, request.FILES, instance=obj.university_course_detail)
+                        application_process_priority = [k for k in form.data['application_process_priority'].split(',') if k]
+                        if application_process_priority:
+                            form.data['application_process'] = str(application_process_priority)
+                        benefits_priority = [k for k in form.data['benefits_priority'].split(',') if k]
+                        if benefits_priority:
+                            form.data['benefits'] = str(benefits_priority)
                         if form.is_valid():
                             form.save()
                             messages.success(
@@ -1781,7 +1787,7 @@ class ChangeProductView(DetailView):
                                 "University course details Change Failed, Changes not Saved")
                             return TemplateResponse(
                                 request, [
-                                    "console/vendor/change_product.html"
+                                    "console/shop/change_product.html"
                                 ], context)
 
                     elif slug == 'university_payment':
@@ -1809,7 +1815,7 @@ class ChangeProductView(DetailView):
                                 "University course Changed Successfully")
                             return HttpResponseRedirect(
                                 reverse(
-                                    'console:screenproduct-change',
+                                    'console:product-change',
                                     kwargs={'pk': obj.pk}))
                         else:
                             context = self.get_context_data()
@@ -1821,7 +1827,7 @@ class ChangeProductView(DetailView):
                                 Changes not Saved")
                             return TemplateResponse(
                                 request, [
-                                    "console/vendor/change_screenproduct.html"
+                                    "console/shop/change_product.html"
                                 ], context)
                 messages.error(
                     self.request,

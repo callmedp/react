@@ -19,7 +19,7 @@ from .decorators import (
     stop_browser_cache, has_group)
 from django.core.paginator import Paginator
 from django.db.models import Q
-from shop.choices import PRODUCT_VENDOR_CHOICES
+from shop.choices import PRODUCT_VENDOR_CHOICES, APPLICATION_PROCESS
 from blog.mixins import PaginationMixin
 from shop.models import (
     Product, ProductScreen, ScreenChapter,
@@ -585,6 +585,7 @@ class ChangeScreenProductView(DetailView):
         if self.object.type_flow == 14:
             context.update({'prd_university_form': ScreenUniversityCourseForm(
                 instance=self.object.screen_university_course_detail)})
+
             UniversityCoursesPaymentFormset = inlineformset_factory(
                 ProductScreen, UniversityCoursePaymentScreen,
                 fk_name='productscreen',
@@ -898,6 +899,12 @@ class ChangeScreenProductView(DetailView):
                                 ], context)
                     elif slug == 'university':
                         form = ScreenUniversityCourseForm(request.POST, request.FILES, instance=obj.screen_university_course_detail)
+                        application_process_priority = [k for k in form.data['application_process_priority'].split(',') if k]
+                        if application_process_priority:
+                            form.data['application_process'] = str(application_process_priority)
+                        benefits_priority = [k for k in form.data['benefits_priority'].split(',') if k]
+                        if benefits_priority:
+                            form.data['benefits'] = str(benefits_priority)
                         if form.is_valid():
                             form.save()
                             if not obj.status == 2:

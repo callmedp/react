@@ -34,6 +34,10 @@
   height: $navbar-height;
   position: relative;
 
+  @media (max-width: 1190px) {
+    width: 215px;
+  }
+
   @media (min-width: $grid-float-breakpoint) {
     float: left;
   }
@@ -49,6 +53,12 @@
       top: -10px;
       left: 0;
       z-index: 99;
+
+      @media (max-width: 1190px) {
+        width: 215px;
+        background :$logo-sm;
+        background-position: 0 -10px;
+      }
     } 
 }
 
@@ -187,6 +197,11 @@
   &:hover,
   &:focus {
     text-decoration: none;
+
+  @media (max-width: 1190px) { 
+    width: 235px;
+  }
+
   }
 
   > img {
