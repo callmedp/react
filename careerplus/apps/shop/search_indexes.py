@@ -140,6 +140,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pCtgs = indexes.MultiValueField(null=True)
     pCtgsD = indexes.CharField(indexed=False)
 
+    # university_courses_detail
+    pUncdl = indexes.MultiValueField(null=True, indexed=False)
+
     def get_model(self):
         return Product
 
@@ -888,5 +891,22 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     'pop_list': pop_list
                 })
         return json.dumps(pop_dict)
-    
 
+    def prepare_pUncdl(self, obj):
+        detail = {}
+        if obj.type_flow == 14:
+            detail['launchdate'] = obj.university_course_detail.batch_launch_date.strftime('%d %b %Y').upper()
+            detail['applydate'] = obj.university_course_detail.apply_last_date.strftime('%d %b %Y').upper()
+            detail['benefits'] = obj.university_course_detail.get_benefits
+            detail['app_process'] = obj.university_course_detail.get_application_process
+            detail['assesment'] = obj.university_course_detail.assesment
+            payment_list = []
+            for payment in obj.university_course_payment.all():
+                data = {}
+                data['installment_fee'] = data.installment_fee
+                data['ldpayment'] = data.last_date_of_payment.strftime('%d/%m/%Y')
+
+                payment_list.append(data)
+            detail['payment'] = payment_list
+            return detail
+        return ''
