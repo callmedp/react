@@ -1769,7 +1769,9 @@ class ChangeProductView(DetailView):
                         application_process_priority = [k for k in form.data['application_process_priority'].split(',') if k]
                         if application_process_priority:
                             form.data['application_process'] = str(application_process_priority)
-
+                        benefits_priority = [k for k in form.data['benefits_priority'].split(',') if k]
+                        if benefits_priority:
+                            form.data['benefits'] = str(benefits_priority)
                         if form.is_valid():
                             form.save()
                             messages.success(

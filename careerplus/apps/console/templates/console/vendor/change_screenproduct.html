@@ -1245,6 +1245,7 @@
   {% endfor %}
 
   $("#application_process_priority").val(application_process_order.join(','))
+  $("#benefits_priority").val(benefits_order.join(','))
  if(application_process_order.length>=4){
     $("input.process_checkbox:checkbox:not(:checked)").attr('disabled','true')
   }
@@ -1311,7 +1312,7 @@
     else {
       curr_html = curr_html.replace(new_html,"");
       $("#selected_benefits").html(curr_html)
-      benefits_order.splice(application_process_order.indexOf($(this).val()), 1)
+      benefits_order.splice(benefits_order.indexOf($(this).val()), 1)
     }   
     if(benefits_order.length==0){
        $("#selected_benefits").text('No Benefit Selected')
@@ -1322,7 +1323,7 @@
     else{
      $("input.benefit_checkbox:checkbox:not(:checked)").removeAttr('disabled','true') 
     }
-    $("#benefits_priority").val(application_process_order.join(','))
+    $("#benefits_priority").val(benefits_order.join(','))
 });
   </script>
   {% endcompress %}

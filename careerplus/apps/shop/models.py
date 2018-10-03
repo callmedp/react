@@ -2487,9 +2487,10 @@ class UniversityCourseDetailScreen(models.Model):
     @property
     def get_benefits(self):
         if self.benefits:
-            return eval(self.application_process)
+            return eval(self.benefits)
         else:
             return ''
+
 
 class UniversityCoursePaymentScreen(models.Model):
     installment_fee = models.DecimalField(
@@ -2549,7 +2550,7 @@ class UniversityCourseDetail(models.Model):
     @property
     def get_benefits(self):
         if self.benefits:
-            return eval(self.application_process)
+            return eval(self.benefits)
         else:
             return ''
 
