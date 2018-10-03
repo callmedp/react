@@ -206,7 +206,10 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
                     kwargs={'fa_slug': parent,'skill_slug': self.slug, 'pk': self.pk})
             elif self.is_service:
                 return "/services/{}/{}/".format(self.slug,self.pk)
-
+            elif self.is_university:
+                parent = self.get_parent()[0].slug if self.get_parent() else None
+                return reverse('university-page',
+                    kwargs={'fa_slug': parent, 'university_slug': self.slug, 'pk': self.pk})
             elif self.type_level == 3:
                 return reverse('skillpage:func_area_results',
                     kwargs={'fa_slug': self.slug, 'pk': self.pk})    
@@ -1000,7 +1003,7 @@ class Product(AbstractProduct, ModelMeta):
         super(Product, self).__init__(*args, **kwargs)
         if self.product_class:
             self.attr = ProductAttributesContainer(product=self)
-        # self.initialize_variables()
+        self.initialize_variables()
 
     def __str__(self):
         if self.pk:
@@ -2606,6 +2609,8 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
         return '{} - {}'.format(self.name, self.id)
 
     def save(self, *args, **kwargs):
+        if self.pk:
+            self.url = self.get_full_url()
         if self.name:
             if not self.heading:
                 self.heading = self.name
@@ -2618,7 +2623,11 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
         super(Faculty, self).save(*args, **kwargs)
 
     def get_full_url(self):
-        return ''
+        return self.get_absolute_url()
+
+    def get_absolute_url(self):
+        return reverse('university-faculty',
+            kwargs={'faculty_slug': self.slug, 'pk': self.pk})
 
     def get_active(self):
         if self.active:
@@ -2626,8 +2635,13 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
         return 'In-Active'
 
     def get_meta_desc(self):
-        return '%s - Unitversity Faculty at Shine Learning' % (
-            self.heading,)
+        return self.description
+
+    def get_description(self):
+        return self.meta_desc
+
+    def get_canonical_url(self):
+        return self.get_absolute_url()
 
 
 class FacultyProduct(AbstractAutoDate):

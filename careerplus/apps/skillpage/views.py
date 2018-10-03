@@ -15,11 +15,11 @@ from django.core.cache import cache
 
 from geolocation.models import Country
 from django.db.models import Q
-from shop.models import Category
+from shop.models import (
+    Category, Faculty, Product)
 from cms.mixins import UploadInFile
 from partner.models import Vendor
 from review.models import Review
-from shop.models import Product
 from .mixins import SkillPageMixin
 from review.models import DetailPageWidget
 
@@ -256,7 +256,7 @@ class ServiceDetailPage(DetailView):
                 filter(pCtg=self.object.pk)
         return products
 
-    def _get_product_variation_combo_ids(self,products):
+    def _get_product_variation_combo_ids(self, products):
         """
         Fetch ids of all products which are variations/combos for the given category.
         """
@@ -276,7 +276,7 @@ class ServiceDetailPage(DetailView):
 
         return prod_id_list
 
-    def _get_paginated_products(self,products,page=1):
+    def _get_paginated_products(self, products, page=1):
         """
         Return the first 5 results of products list.
         In compliance with Ajax views for Product Load More.
@@ -290,7 +290,7 @@ class ServiceDetailPage(DetailView):
 
         return products
         
-    def _get_paginated_reviews(self,prod_id_list,page=1):
+    def _get_paginated_reviews(self, prod_id_list, page=1):
         """
         Return the first 5 results of reviews list.
         In compliance with Ajax views for Review Load More.
@@ -319,22 +319,230 @@ class ServiceDetailPage(DetailView):
         all_product_ids = self._get_product_variation_combo_ids(standalone_products)
         context['products'] = self._get_paginated_products(standalone_products)
         context['reviews'] = self._get_paginated_reviews(all_product_ids)
-        context.update({"meta":self._get_page_meta_data()})
-        context.update({"canonical_url":self.object.get_canonical_url()})
-        context.update({"country_choices":self._get_country_choices()})
-        context.update({"initial_country":self._get_preselected_country()})
+        context.update({"meta": self._get_page_meta_data()})
+        context.update({"canonical_url": self.object.get_canonical_url()})
+        context.update({"country_choices": self._get_country_choices()})
+        context.update({"initial_country": self._get_preselected_country()})
         return context
 
-    
+
+class UniversityPageView(DetailView):
+    model = Category
+    template_name = "university/university.html"
+    context_object_name = "category_obj"
+
+    PRODUCT_PAGE_SIZE = 5
+    REVIEW_PAGE_SIZE = 5
+
+    def get_queryset(self):
+        return Category.objects.filter(
+            is_university=True, active=True)
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get('pk')
+        slug = self.kwargs.get('university_slug')
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        if pk is not None:
+            queryset = queryset.filter(
+                pk=pk, active=True, is_university=True,
+                type_level__in=[3, 4])
+        elif slug is not None:
+            queryset = queryset.filter(
+                slug=slug, active=True, is_university=True,
+                type_level__in=[3, 4])
+
+        if queryset.exists():
+            return queryset.first()
+        else:
+            raise Http404
+
+    def _get_country_choices(self):
+        cached_country_choices = cache.get('callback_country_choices')
+        if cached_country_choices:
+            return cached_country_choices
+
+        country_choices = [(m.phone, m.name) for m in
+                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+
+        cache.set('callback_country_choices', country_choices, 86400)
+        return country_choices
+
+    def _get_preselected_country(self):
+        cached_initial_country = cache.get('callback_initial_country')
+        if cached_initial_country:
+            return cached_initial_country
+
+        initial_country = Country.objects.filter(
+            phone='91')[0].phone
+        cache.set(
+            "callback_initial_country", initial_country, 86400)
+        return initial_country
+
+    def _get_all_products_of_category(self):
+        """
+        Fetch all products with category same as that of object.
+        """
+        products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).\
+                filter(pCtg=self.object.pk)
+        return products
+
+    def _get_product_variation_combo_ids(self, products):
+        """
+        Fetch ids of all products which are variations/combos for the given category.
+        """
+        prod_id_list = []
+
+        for prd in products:
+            if prd.pTP == 1:
+                prd_vars = json.loads(prd.pVrs)
+                [prod_id_list.append(var_lst.get('id')) for var_lst in prd_vars.get('var_list') ]
+
+            if prd.pTP == 3:
+                prd_cmbs = json.loads(prd.pCmbs)
+                [prod_id_list.append(combo_lst.get('pk')) for combo_lst in prd_cmbs.get('combo_list') ]
+
+            if prd.pTP in [0, 1, 2, 3, 4, 5]:
+                prod_id_list.append(prd.id)
+
+        return prod_id_list
+
+    def _get_paginated_products(self, products, page=1):
+        """
+        Return the first 5 results of products list.
+        In compliance with Ajax views for Product Load More.
+        """
+        prod_page = Paginator(products, self.PRODUCT_PAGE_SIZE)
+
+        products = prod_page.page(page)
+        for product in products:
+            if not float(product.pPfin): continue
+            product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
+
+        return products
+        
+    def _get_paginated_reviews(self, prod_id_list, page=1):
+        """
+        Return the first 5 results of reviews list.
+        In compliance with Ajax views for Review Load More.
+        """
+        content_obj = ContentType.objects.get_for_model(Product)
+        prod_reviews = Review.objects.filter(
+            object_id__in=prod_id_list,
+            content_type=content_obj, status=1)
+
+        review_page = Paginator(prod_reviews, self.REVIEW_PAGE_SIZE)
+        reviews = review_page.page(page)
+        return reviews
+
+    def _get_subheaders_category(self):
+        subheaders = self.object.subheaders.filter(
+            active=True).order_by('display_order')
+        return subheaders
+
+    def _get_university_faculty(self):
+        faculty = self.object.faculty_set.filter(
+            active=True)
+        return faculty
+
+    def _get_testimonials_category(self):
+        testimonials = self.object.testimonials(
+            is_active=True).order_by('priority')
+        return testimonials
+
+    def _get_page_meta_data(self):
+        meta_dict = self.object.as_meta(self.request).__dict__
+        meta_dict['description'] = self.object.get_description()
+        meta_dict['og_description'] = self.object.get_description()
+        meta_dict["_url"] = self.object.get_canonical_url()
+        meta_dict['title'] = self.object.title if self.object.title else \
+            '{} University - Shine Learning'.format(self.object.name)
+        meta_dict['heading'] = self.object.heading
+        return meta_dict
+
+    def get_context_data(self, **kwargs):
+        context = super(UniversityPageView, self).get_context_data(**kwargs)
+        standalone_products = self._get_all_products_of_category()
+        all_product_ids = self._get_product_variation_combo_ids(
+            standalone_products)
+        context['products'] = self._get_paginated_products(
+            standalone_products)
+        context['reviews'] = self._get_paginated_reviews(
+            all_product_ids)
+        context.update({"meta": self._get_page_meta_data()})
+        context.update(
+            {"canonical_url": self.object.get_canonical_url()})
+        context.update(
+            {"country_choices": self._get_country_choices()})
+        context.update(
+            {"initial_country": self._get_preselected_country()})
+        return context
 
 
+class UniversityFacultyView(DetailView):
+    model = Faculty
+    template_name = "university/detail_faculty.html"
+    context_object_name = "faculty_obj"
 
+    PRODUCT_PAGE_SIZE = 6
 
+    def get_queryset(self):
+        return Faculty.objects.filter(
+            active=True)
 
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get('pk')
+        slug = self.kwargs.get('faculty_slug')
+        if queryset is None:
+            queryset = self.get_queryset()
 
+        if pk is not None:
+            queryset = queryset.filter(
+                pk=pk, active=True)
+        elif slug is not None:
+            queryset = queryset.filter(
+                slug=slug, active=True)
 
+        if queryset.exists():
+            return queryset.first()
+        else:
+            raise Http404
 
+    def _get_paginated_products(self, products=[], page=1):
+        """
+        Return the first 5 results of products list.
+        In compliance with Ajax views for Product Load More.
+        """
+        if not products:
+            products = self.object.facultyproducts.filter(
+                is_indexable=True, active=True,
+                type_product__in=[0, 1, 3, 5],
+                type_flow=14)
+        prod_page = Paginator(products, self.PRODUCT_PAGE_SIZE)
 
+        products = prod_page.page(page)
+        for product in products:
+            if not float(product.pPfin): continue
+            product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
+        return products
 
+    def _get_page_meta_data(self):
+        meta_dict = self.object.as_meta(self.request).__dict__
+        meta_dict['description'] = self.object.get_description()
+        meta_dict['og_description'] = self.object.get_description()
+        meta_dict["_url"] = self.object.get_canonical_url()
+        meta_dict['title'] = self.object.title if self.object.title else \
+            '{} University - Shine Learning'.format(self.object.name)
+        meta_dict['heading'] = self.object.heading
+        return meta_dict
 
-
+    def get_context_data(self, **kwargs):
+        context = super(UniversityFacultyView, self).get_context_data(**kwargs)
+       
+        context['products'] = self._get_paginated_products(
+            standalone_products)
+        context.update({"meta": self._get_page_meta_data()})
+        context.update(
+            {"canonical_url": self.object.get_canonical_url()})
+        return context
