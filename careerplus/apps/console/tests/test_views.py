@@ -459,3 +459,63 @@ class TestConsoleAutoLoginView(TestCase):
         response = self.client.get(self.url, self.data, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].email, self.user.email)
+
+
+class TestFacultyConsoleView(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.add_url = reverse('console:faculty-add')
+        self.list_url = reverse('console:faculty-list')
+        # self.change_url = reverse('console:faculty-change', kwargs)
+        self.user = UserFactory(
+            name="root", email='testroot@gmail.com',
+            password="rootroot")
+        self.add_perm = Permission.objects.get(
+            name='Can Add Faculty From Console')
+        self.change_perm = Permission.objects.get(
+            name='Can Change Faculty From Console')
+        self.view_perm = Permission.objects.get(
+            name='Can View Faculty From Console')
+        Country.objects.get_or_create(
+            phone='91', name='India')
+
+    def setUpLogin(self):
+        self.client.post(
+            '/console/login/', {
+                'username': 'testroot@gmail.com',
+                'password': 'rootroot'}
+        )
+
+    def setUpPermission(self):
+        self.user.user_permissions.add(self.add_perm)
+        self.user.user_permissions.add(self.change_perm)
+        self.user.user_permissions.add(self.view_perm)
+
+    def removePermission(self):
+        self.user.user_permissions.remove(self.add_perm)
+        self.user.user_permissions.remove(self.change_perm)
+        self.user.user_permissions.remove(self.view_perm)
+
+    def test_add_faculty_with_permission(self):
+        self.setUpLogin()
+        self.setUpPermission()
+        res = self.client.get(self.add_url)
+        self.assertEqual(res.status_code, 200)
+
+    def test_add_faculty_without_permission(self):
+        self.setUpLogin()
+        self.removePermission()
+        res = self.client.get(self.add_url)
+        self.assertEqual(res.status_code, 403)
+
+    def test_list_faculty_with_permission(self):
+        self.setUpLogin()
+        self.setUpPermission()
+        res = self.client.get(self.list_url)
+        self.assertEqual(res.status_code, 200)
+
+    def test_list_faculty_without_permission(self):
+        self.setUpLogin()
+        self.removePermission()
+        res = self.client.get(self.list_url)
+        self.assertEqual(res.status_code, 403)
