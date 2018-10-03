@@ -1128,6 +1128,17 @@ class ScreenUniversityCourseForm(forms.ModelForm):
                 "This value is requred.")
         return apply_last_date
 
+    def clean_sample_certificate(self):
+        file = self.cleaned_data.get('sample_certificate')
+        if file:
+            filename = file.name
+            if not (filename.endswith('.mp3') or filename.endswith('.jpg') or
+                    filename.endswith('.jpeg') or filename.endswith('.pdf') or
+                    filename.endswith('.png')):
+                raise forms.ValidationError("File is not supported. Please upload jpg, png or pdf file only,")
+
+        return file
+
 
 class ScreenUniversityCoursePaymentForm(forms.ModelForm):
 
