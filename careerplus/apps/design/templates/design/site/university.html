@@ -17,9 +17,8 @@
 {% block css_section %}
     {{block.super}}
     {% compress css %}
-    <!-- <link type="text/scss" href="{% static 'shinelearn/css/product/detail.scss' %}" rel="stylesheet"> -->
+    <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-common.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-detail.scss' %}" rel="stylesheet">
-    <link type="text/css" href="{% static 'shinelearn/css/skill/extra.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 
@@ -35,7 +34,7 @@
       {% block page_heading %}
 
       <!-- header -->
-      <header>
+      <header class="exe-header-detail">
         <div class="exe-header-txt container pr">
           <div class="row">
           <!-- breadcrums -->
