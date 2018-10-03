@@ -760,13 +760,13 @@ header {
 }
 
 .exe-testimonial-carousel {
+	margin-bottom: 20px;
 
 	.item {
 		padding: 0 12%;
 	}
 
 	.carousel-inner {
-		padding: 0 25px 25px 25px;
 		&:before {
 			content: '';
 			width: 86px;
@@ -843,7 +843,7 @@ header {
 	font-weight: $font-weight+300;
 
 	&:hover, &:focus {
-		color: $e-blue-color;
+		color: $e-anchor-color;
 	}
 
 	figure {
