@@ -903,8 +903,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             payment_list = []
             for payment in obj.university_course_payment.all():
                 data = {}
-                data['installment_fee'] = data.installment_fee
-                data['ldpayment'] = data.last_date_of_payment.strftime('%d/%m/%Y')
+                data['installment_fee'] = payment.installment_fee
+                data['ldpayment'] = payment.last_date_of_payment.strftime('%d/%m/%Y')
 
                 payment_list.append(data)
             detail['payment'] = payment_list
