@@ -903,7 +903,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             detail['eligibility_criteria'] = obj.university_course_detail.eligibility_criteria
             detail['attendees_criteria'] = obj.university_course_detail.attendees_criteria
             payment_list = []
-            for payment in obj.university_course_payment.all():
+            for payment in obj.university_course_payment.filter(active=True):
                 data = {}
                 data['installment_fee'] = payment.installment_fee
                 data['ldpayment'] = payment.last_date_of_payment.strftime('%d/%m/%Y')

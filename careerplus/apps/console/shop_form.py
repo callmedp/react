@@ -1396,7 +1396,7 @@ class UniversityCoursePaymentForm(forms.ModelForm):
             attrs={
                 'class': 'form-control col-md-7 col-xs-12 last_date_of_payment',
                 "readonly": True,
-            }, format='%m/%d/%Y'
+            }, format='%d-%m-%Y'
         ),
         input_formats=['%d-%m-%Y']
 
