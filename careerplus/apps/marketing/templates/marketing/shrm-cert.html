@@ -350,7 +350,23 @@
 
         $(document).ready(function() {
             $('#submit').click(function(e) {
-                e.preventDefault();
+              e.preventDefault();
+                var formEmail = $('#lead').find('input[name="email"]').val();
+                var formName = $('#lead').find('input[name="name"]').val();
+                var formMobile = $('#lead').find('input[name="number"]').val();
+
+                var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                var isValidEmail = regex.test(formEmail);
+
+                if (formMobile.length < 10 ){
+                    alert("Please enter a valid mobile number.");
+                    return;
+                }
+
+                if (!isValidEmail){
+                   alert("Please enter a valid email address.");
+                   return; 
+                }
                 createLead();
             });
         });
