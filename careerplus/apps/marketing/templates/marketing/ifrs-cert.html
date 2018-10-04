@@ -102,7 +102,7 @@
         <div>
             <input type="hidden" id="country" name="country" aria-invalid="false" value="91">
 
-            <input id="mobile" type="text" name="number"
+            <input id="mobile" type="number" name="number"
             placeholder="Mobile Number" maxlength="10" aria-required="true" class="pull-right" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
 
             <span class="error" for="mobile" style="color: rgb(255, 0, 0);font-size: 11px;width:100%;" ></span>
