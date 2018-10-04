@@ -226,7 +226,8 @@ class ProductModeration(object):
                         return test_pass
 
                     if product.type_flow == 14:
-                        attributes = ['batch_launch_date', 'apply_last_date', 'application_process', 'assesment', "benefits"]
+                        attributes = ['batch_launch_date', 'apply_last_date', 'application_process', 'assesment', "benefits",
+                                      'eligibility_criteria', 'attendees_criteria']
                         for attr in attributes:
                             if not getattr(product.screen_university_course_detail, attr):
                                 messages.error(request, "Univeristy Course details are required")
@@ -455,7 +456,9 @@ class ProductModeration(object):
                         
                         attribute.save_value(product, value)
                 if screen.type_flow == 14:
-                    attributes = ['batch_launch_date', 'apply_last_date', 'sample_certificate', 'application_process', 'assesment', "benefits"]
+                    attributes = ['batch_launch_date', 'apply_last_date', 'sample_certificate', 
+                                  'application_process', 'assesment', "benefits", 'eligibility_criteria',
+                                  'attendees_criteria']
                     for attr in attributes:
                         setattr(product.university_course_detail, attr, getattr(screen.screen_university_course_detail, attr))
                     product.university_course_detail.save()
