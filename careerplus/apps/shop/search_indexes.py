@@ -900,6 +900,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             detail['benefits'] = obj.university_course_detail.get_benefits
             detail['app_process'] = obj.university_course_detail.get_application_process
             detail['assesment'] = obj.university_course_detail.assesment
+            detail['eligibility_criteria'] = obj.university_course_detail.eligibility_criteria
+            detail['attendees_criteria'] = obj.university_course_detail.attendees_criteria
             payment_list = []
             for payment in obj.university_course_payment.all():
                 data = {}
