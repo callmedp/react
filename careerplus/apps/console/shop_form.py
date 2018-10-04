@@ -12,7 +12,7 @@ from shop.models import (
 
 from shop.choices import (
     APPLICATION_PROCESS_CHOICES, APPLICATION_PROCESS,
-    BENEFITS_CHOICES, BENEFITS
+    BENEFITS_CHOICES, BENEFITS, FACULTY_PRINCIPAL
 )
 
 from homepage.models import Testimonial
