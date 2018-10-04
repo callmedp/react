@@ -2131,7 +2131,7 @@ class ActionCategoryView(View, CategoryValidation):
                                 'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
                         else:
                             data = {'error': 'True'}
-                    elif action == "noservice":
+                    elif action == "nouniversity":
                         category.is_university = False
                         category.save()
                         messages.success(

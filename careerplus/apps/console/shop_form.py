@@ -157,6 +157,13 @@ class TestimonialCategoryForm(forms.ModelForm):
             'designation', 'company', 'title', 'review',
             'priority', 'is_active')
 
+    def clean_page(self):
+        page = int(self.cleaned_data.get('page', '0'))
+        if not page:
+            raise forms.ValidationError(
+                "This field is required.")
+        return page
+
     def clean_user_name(self):
         user_name = self.cleaned_data.get('user_name', '').strip()
         if not user_name:

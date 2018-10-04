@@ -1,4 +1,5 @@
 # inbuilt  imports
+import time
 
 # third party imports
 from django.test import TestCase, Client
@@ -11,10 +12,10 @@ from shop.models import Skill
 
 from django.contrib.auth.models import Permission
 from django.utils import timezone
-from shared.tests.factory.shared_factories import \
-    ProductFactory, OrderItemFactory, UserFactory, \
-    GroupFactory, CountryFactory, ProductAuditHistoryFactory, \
-    SkillFactory
+from shared.tests.factory.shared_factories import (
+    ProductFactory, OrderItemFactory, UserFactory,
+    GroupFactory, CountryFactory, ProductAuditHistoryFactory,
+    SkillFactory, FacultyFactory)
 from core.mixins import TokenGeneration
 
 
@@ -464,9 +465,14 @@ class TestConsoleAutoLoginView(TestCase):
 class TestFacultyConsoleView(TestCase):
     def setUp(self):
         self.client = Client()
+        Country.objects.get_or_create(
+            phone='91', name='India')
+        self.faculty = FacultyFactory(name="Faculty")
         self.add_url = reverse('console:faculty-add')
         self.list_url = reverse('console:faculty-list')
-        # self.change_url = reverse('console:faculty-change', kwargs)
+        self.change_url = reverse(
+            'console:faculty-change',
+            kwargs={'pk': self.faculty.pk})
         self.user = UserFactory(
             name="root", email='testroot@gmail.com',
             password="rootroot")
@@ -476,10 +482,9 @@ class TestFacultyConsoleView(TestCase):
             name='Can Change Faculty From Console')
         self.view_perm = Permission.objects.get(
             name='Can View Faculty From Console')
-        Country.objects.get_or_create(
-            phone='91', name='India')
 
     def setUpLogin(self):
+        time.sleep(2)
         self.client.post(
             '/console/login/', {
                 'username': 'testroot@gmail.com',
@@ -518,4 +523,16 @@ class TestFacultyConsoleView(TestCase):
         self.setUpLogin()
         self.removePermission()
         res = self.client.get(self.list_url)
+        self.assertEqual(res.status_code, 403)
+
+    def test_change_faculty_with_permission(self):
+        self.setUpLogin()
+        self.setUpPermission()
+        res = self.client.get(self.change_url)
+        self.assertEqual(res.status_code, 200)
+
+    def test_change_faculty_without_permission(self):
+        self.setUpLogin()
+        self.removePermission()
+        res = self.client.get(self.change_url)
         self.assertEqual(res.status_code, 403)
