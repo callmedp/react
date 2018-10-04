@@ -1217,6 +1217,19 @@
 {% block js_block %}
   {{ block.super }}
 
+<script type="text/javascript">
+ application_process_order =[]
+  benefits_order = []
+  {% for x , y, z in prd_university_form.fields.selected_process_choices.choices %}
+    k = {{x}}
+    application_process_order.push(k.toString())
+  {% endfor %}
+
+  {% for x , y, z in prd_university_form.fields.selected_benefits_choices.choices %}
+    m = {{x}}
+    benefits_order.push(m.toString())
+  {% endfor %}
+</script>
   {% compress js %}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" 
@@ -1232,18 +1245,7 @@
   <script type="text/javascript" src="{% static 'console/js/shop/console_shop.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/shop/change_screenproduct.js' %}"></script>
     <script type="text/javascript">
-  application_process_order =[]
-  benefits_order = []
-  {% for x , y, z in prd_university_form.fields.selected_process_choices.choices %}
-    k = {{x}}
-    application_process_order.push(k.toString())
-  {% endfor %}
-
-  {% for x , y, z in prd_university_form.fields.selected_benefits_choices.choices %}
-    m = {{x}}
-    benefits_order.push(m.toString())
-  {% endfor %}
-
+ 
   $("#application_process_priority").val(application_process_order.join(','))
   $("#benefits_priority").val(benefits_order.join(','))
  if(application_process_order.length>=4){
