@@ -362,6 +362,10 @@ class ProductInformationMixin(object):
             ctx.update({'selected_var': selected_var})
             ctx.update(pvrs_data)
             ctx['canonical_url'] = product.get_canonical_url()
+            if self.product_obj.type_flow == 14:
+                ctx['university_detail'] = json.loads(sqs.pUncdl[0])
+                faculty = [f.faculty for f in self.product_obj.facultyproducts.all().select_related('faculty','faculty__institute')]
+                ctx['faculty'] = [faculty[i:i + 1]for i in range(len(faculty))]
         else:
             if ctx.get('prd_exp', None) in ['EP', 'FP']:
                 pPOP = json.loads(sqs_main.pPOP)
@@ -469,6 +473,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         super(ProductDetailView, self).__init__(*args, **kwargs)
 
     def get_template_names(self):
+        if self.product_obj.type_flow==14:
+            return['shop/university.html']
         if self.request.amp:
             from newrelic import agent
             agent.disable_browser_autorum()

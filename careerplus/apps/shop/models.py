@@ -2491,6 +2491,10 @@ class UniversityCourseDetailScreen(models.Model):
         blank=True,
         help_text='who shoule attend this course'
     )
+    payment_deadline = models.DateField(
+        _('Payment Deadline'),
+        default=timezone.now
+    )
 
     @property
     def get_application_process(self):
@@ -2571,6 +2575,10 @@ class UniversityCourseDetail(models.Model):
         null=True,
         blank=True,
         help_text='who shoule attend this course'
+    )
+    payment_deadline = models.DateField(
+        _('Payment Deadline'),
+        default=timezone.now
     )
 
     @property
