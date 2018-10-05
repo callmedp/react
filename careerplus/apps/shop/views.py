@@ -334,6 +334,12 @@ class ProductInformationMixin(object):
                 'prd_rv_page': page
             }
 
+    def get_countries(self):
+        country_choices = [(m.phone, m.name) for m in
+            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        initial_country = Country.objects.filter(phone='91')[0].phone
+        return country_choices,initial_country
+
     def get_product_information(self, product, sqs, product_main, sqs_main):
         pk = product.pk
         ctx = {}
@@ -346,9 +352,7 @@ class ProductInformationMixin(object):
             ctx.update(self.solar_program_structure(sqs))
         ctx.update(self.solar_faq(sqs))
         ctx.update(self.get_reviews(product, 1))
-        country_choices = [(m.phone, m.name) for m in
-            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
-        initial_country = Country.objects.filter(phone='91')[0].phone
+        country_choices, initial_country = self.get_countries()
         ctx.update({'country_choices': country_choices, 'initial_country': initial_country, })
         if sqs.pPc == 'course':
             ctx.update(json.loads(sqs_main.pPOP))
