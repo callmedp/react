@@ -1652,6 +1652,15 @@
                       </div>
                       <div class="alert">{{prd_university_form.apply_last_date.errors}}</div>
                     </div>
+                    <div class="item form-group {% if prd_university_form.payment_deadline.errors %}bad{% endif %}">
+                      <label class="control-label col-md-2 col-sm-2 col-xs-12" >
+                        Payment Deadline<span class="required">*</span>
+                      </label>
+                      <div class="col-md-7 col-sm-7 col-xs-12">
+                        {{prd_university_form.payment_deadline}}
+                      </div>
+                      <div class="alert">{{prd_university_form.payment_deadline.errors}}</div>
+                    </div>
                     <div class="item form-group {% if prd_university_form.sample_certificate.errors %}bad{% endif %}">
                       <label class="control-label col-md-2 col-sm-2 col-xs-12" >
                         Sample Certificate<span class="required">*</span>

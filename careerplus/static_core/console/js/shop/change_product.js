@@ -8,13 +8,16 @@ $(document).ready(function() {
         showDropdowns: true,
         minDate:todayDate,
         autoUpdateInput: false,
+        locale: {
+          format: 'DD-MM-YYYY'
+        }
       }, function(chosen_date) {
         el.val(chosen_date.format('DD-MM-YYYY'));
       });
     }
 
 
-    $('.batch_launch_date, .apply_last_date, .last_date_of_payment').each(function(){
+    $('.batch_launch_date, .apply_last_date, .last_date_of_payment, .payment_deadline').each(function(){
       dateclass($(this));
     });
   $('.click-modal').click(function(){

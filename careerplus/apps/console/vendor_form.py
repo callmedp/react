@@ -1052,6 +1052,15 @@ class ScreenUniversityCourseForm(forms.ModelForm):
         ),
         input_formats=['%d-%m-%Y']
     )
+    payment_deadline = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                'class': 'form-control payment_deadline',
+                "readonly": True,
+            }, format='%d-%m-%Y'
+        ),
+        input_formats=['%d-%m-%Y']
+    )
     application_process_choices = MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple,
@@ -1090,7 +1099,8 @@ class ScreenUniversityCourseForm(forms.ModelForm):
         fields = [
             'batch_launch_date', 'apply_last_date',
             'sample_certificate', 'application_process', 'assesment',
-            'benefits', 'eligibility_criteria', 'attendees_criteria'
+            'benefits', 'eligibility_criteria', 'attendees_criteria',
+            'payment_deadline'
         ]
 
     def __init__(self, *args, **kwargs):
