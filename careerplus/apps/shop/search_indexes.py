@@ -897,6 +897,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         if obj.type_flow == 14:
             detail['launchdate'] = obj.university_course_detail.batch_launch_date.strftime('%d %b %Y').upper()
             detail['applydate'] = obj.university_course_detail.apply_last_date.strftime('%d %b %Y').upper()
+            detail['payment_deadline'] = obj.university_course_detail.payment_deadline.strftime('%d/%m/%Y')
             detail['benefits'] = obj.university_course_detail.get_benefits
             detail['app_process'] = obj.university_course_detail.get_application_process
             detail['assesment'] = obj.university_course_detail.assesment
