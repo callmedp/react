@@ -1,0 +1,1213 @@
+@charset "UTF-8";
+/* CSS Document */
+
+
+
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+
+
+body{
+	
+	font-family: 'Roboto', sans-serif;
+}
+
+
+
+.sprite{
+	display: inline-block;
+	background:url("../../../images/marketing/linkedin/sprite.png") 0 0 no-repeat;
+}
+
+
+
+.banner{
+	display: block;
+	background: url("../../../images/marketing/linkedin/header_banner.jpg") left top no-repeat;
+	background-size: cover;
+	height: auto;
+}
+
+
+
+header{
+	width: 100%;
+	display: block;
+	clear: both;
+}
+
+
+
+/********* logo css start here ****************/
+
+
+.lerninglogo{
+	background-position: 0 0;
+	width: 278px;
+	height: 77px;
+}
+
+
+/********* logo css start end ****************/
+
+
+
+
+/********* Content css start here ****************/
+
+.create{
+	width: 82%;
+	display: block;
+	text-align: left;
+	vertical-align: top;
+	clear: both;
+	margin-left: 18%;
+}
+
+
+.create h1{
+	font-size: 42px;
+	text-align: left;
+	color: #fff;
+	text-shadow: 0 0 10px rgba(0, 0, 0, .4);
+	text-transform: uppercase;
+	font-weight: 700;
+	margin: 0;
+	padding: 70px 0 0 0;
+	font-family: 'Roboto Condensed', sans-serif;
+	line-height: 50px;
+}
+
+
+.create span{
+	font-size: 42px;
+	text-align: left;
+	color: #ffd567;
+	text-shadow: 0 0 10px rgba(0, 0, 0, .4);
+	text-transform: uppercase;
+	font-weight: 700;
+	margin: 0;
+	padding: 0;
+}
+
+
+.create strong{
+	font-size: 34px;
+	text-align: left;
+	color: #ffd567;
+	text-shadow: 0 0 10px rgba(0, 0, 0, .4);
+	display: block;
+	font-weight: 400;
+	font-family: 'Roboto Condensed', sans-serif;
+	margin: 0;
+	padding: 0 0 15px 0;
+}
+
+.create ul{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	vertical-align: top;
+}
+
+.create ul li{
+	color: #fff;
+	font-size: 20px;
+	display: block;
+	text-align: left;
+	position: relative;
+	font-weight: 200;
+	padding-left: 28px;
+	padding-bottom: 30px;
+	padding-top: 20px;
+}
+
+
+.create ul li:before{
+	content: "";
+	position: absolute;
+	background: url("../../../images/marketing/linkedin/sprite.png")  -295px -22px no-repeat;
+	width: 16px;
+	height: 13px;
+	left: 0;
+	top: 27px;
+}
+
+
+
+
+/********* Content css end here ****************/
+
+
+/********* Form css start here ****************/
+
+
+.form{
+	width: 100%;
+	display: block;
+	background-color: #d1d5ff;
+	border-radius: 4px;
+	padding: 25px 10% 10px 10%;
+	position: relative;
+}
+
+.form strong{
+	color: #2835c3;
+	font-size: 24px;
+	text-align: left;
+	display: block;
+	padding: 0px 0 20px 0;
+	margin: 0;
+	font-weight: 500;
+	font-family: 'Roboto Condensed', sans-serif;
+	text-transform: uppercase;
+}
+
+
+.form-control {
+	width: 100%;
+	display: block;
+	border: solid 1px #636fe6; 
+	border-radius: 20px;
+	background-color: #d1d5ff;
+	color: #3d4bd7 !important;
+	font-size: 12px;
+	font-weight: 100;
+	padding: 10px 12px;
+	height: 42px;
+
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+
+
+
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #3d4bd7 !important;
+  padding: 10px 12px;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #3d4bd7 !important;
+  padding: 10px 12px;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: #3d4bd7 !important;
+  padding: 10px 12px;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: #3d4bd7 !important;
+  padding: 10px 12px;
+}
+
+
+
+
+.newbtn{
+	width: 100%;
+	background-color: #e0a408;
+	color: #fff;
+	text-align: center;
+	display: block;
+	font-size: 16px;
+	border-radius: 20px;
+	padding: 8px 0;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-family: 'Roboto', sans-serif;
+	background: -moz-linear-gradient(0deg, rgba(237,179,23,1) 0%, rgba(215,156,0,1) 100%); /* ff3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(237,179,23,1)), 
+	color-stop(100%, rgba(215,156,0,1))); /* safari4+,chrome */
+	background: -webkit-linear-gradient(0deg, rgba(237,179,23,1) 0%, rgba(215,156,0,1) 100%); /* safari5.1+,chrome10+ */
+	background: -o-linear-gradient(0deg, rgba(237,179,23,1) 0%, rgba(215,156,0,1) 100%); /* opera 11.10+ */
+	background: -ms-linear-gradient(0deg, rgba(237,179,23,1) 0%, rgba(215,156,0,1) 100%); /* ie10+ */
+	background: linear-gradient(90deg, rgba(237,179,23,1) 0%, rgba(215,156,0,1) 100%); /* w3c */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#edb317', endColorstr='#d79c00',GradientType=1 ); /* ie6-9 */  
+}
+
+a:hover, a:focus {
+    color: #fff;
+    text-decoration: none;
+}
+
+
+
+.easy{
+	color: #5c68df;
+	font-size: 13px; 
+	text-align: center;
+	padding: 13px 0 0px 0;
+	margin: 0;
+}
+
+
+
+.pb10{
+	padding-bottom: 70px;
+}
+
+.arrow{
+	background-position: -375px -48px;
+	width: 9px;
+	height: 8px;
+	position: absolute;
+	right: 13px;
+	top: 17px;
+	pointer-events: none;
+}
+
+.pr{
+	position: relative;
+	cursor: pointer; 
+	overflow: hidden;
+}
+
+
+.error{
+	position: relative;
+}
+
+.error input {
+	border: 1px solid #ff0000;
+	color: #ff0000;
+}
+.error-txt{
+	position:absolute;
+	left:10px;
+	bottom: -15px;
+	color: #ff0000;
+	font-size: 11px;
+}
+
+
+.error ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #ff0000 !important;
+  padding: 10px 12px;
+}
+.error ::-moz-placeholder { /* Firefox 19+ */
+  color: #ff0000 !important;
+  padding: 10px 12px;
+}
+.error ::-ms-input-placeholder { /* IE 10+ */
+  color: #ff0000 !important;
+  padding: 10px 12px;
+}
+.error ::-moz-placeholder { /* Firefox 18- */
+  color: #ff0000 !important;
+  padding: 10px 12px;
+}
+
+
+
+/********* Form css end here ****************/
+
+
+
+
+/********* Hero band css start here ****************/
+
+section{
+	width: 100%;
+	display: block;
+}
+
+
+.hero_band{
+	width: 95%;
+	display: block;
+	background-color: #fff;
+	box-shadow: 0px 0px 30px 0px rgba(86, 97, 214, 0.25);
+	-moz-box-shadow: 0px 0px 30px 0px rgba(86, 97, 214, 0.25);
+	-webkit-box-shadow: 0px 0px 30px 0px rgba(86, 97, 214, 0.25);
+	padding: 20px 15px;
+	margin: -55px auto 0 auto;
+}
+
+select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      }
+
+
+.contron-box{
+	width: 100%;
+	display: block;
+}
+
+
+.ch{
+	border-right: solid 1px #f3f3f3;
+}
+
+
+
+
+.man{
+	background-position: -10px -120px;
+	width: 60px;
+	height: 60px;
+	display: inline-block;
+}
+
+
+.network{
+	background-position: -101px -122px;
+	width: 66px;
+	height: 53px;
+	display: inline-block;
+}
+
+
+.tools{
+	background-position: -213px -116px;
+	width: 61px;
+	height: 61px;
+	display: inline-block;
+}
+
+
+.mh{
+	color: #333;
+	font-size: 13px;
+	display: block;
+	text-align: left;
+	font-weight: 400;
+	padding: 8px 5px 0 5px;
+	line-height: 17px;
+}
+
+
+.mh1{
+	color: #333;
+	font-size: 13px;
+	display: block;
+	text-align: left;
+	font-weight: 400;
+	padding: 8px 20px 0 0px;
+	line-height: 17px;
+}
+
+
+/********* Hero band css end here ****************/
+
+
+
+/********* Key Highlights css start here ****************/
+
+
+.kye-highlights{
+	width: 100%;
+	display: block;
+	padding: 40px 0 20px 0; 
+}
+
+
+
+.kye-highlights-image{
+	width: 100%;
+	display: block;
+	text-align: left;
+	padding: 0px 0;
+	vertical-align: bottom; 
+}
+
+
+.kye-highlights-list{
+	width: 100%;
+	display: block;
+	text-align: left;
+	padding: 0px 0; 
+}
+
+
+.kye-highlights-list h2{
+	color: #333333;
+	font-size: 30px;
+	text-align: left;
+	padding-bottom: 20px;
+	display: block;
+	font-weight: 700;
+	padding-top: 40px;
+	font-family: 'Roboto Condensed', sans-serif;
+}
+
+
+.kye-highlights-list ul{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+
+.kye-highlights-list ul li{
+	text-align: left;
+	color: #777777;
+	font-size: 14px;
+	padding: 10px;
+	font-weight: 400;
+	list-style-image: url(../../../images/marketing/linkedin/arrow.png);
+	margin-left: 22px;
+
+}
+
+
+
+
+/********* Key Highlights css end here ****************/
+
+
+
+
+/********* Salient features css start here ****************/
+
+.salient-features{
+	width: 100%;
+	display: block;
+	background-color: #fff;
+	-moz-box-shadow: 0px 0px 30px 0px rgba(86, 97, 214, 0.15);
+	-webkit-box-shadow: 0px 0px 30px 0px rgba(86, 97, 214, 0.15);
+	box-shadow: 0px 0px 30px 0px rgba(86, 97, 214, 0.15);
+
+	padding: 0px 0px;
+	margin-top: 20px;
+	vertical-align: bottom;
+	background: url("../../../images/marketing/linkedin/section_banner.jpg") right bottom no-repeat;
+}
+
+
+.salient-features-list{
+	display: block;
+	text-align: left;
+	padding-left: 60px;
+	margin-bottom: 35px;
+}
+
+
+.features{
+	color: #333333;
+	font-size: 30px;
+	text-align: left;
+	padding-bottom: 20px;
+	display: block;
+	font-weight: bold;
+	font-family: 'Roboto Condensed', sans-serif;
+	padding-top: 25px;
+}
+
+
+
+.digital{
+	font-size: 18px;
+	color: #333333;
+	text-align: left;
+	font-weight: 600;
+	line-height: 18px;
+}
+
+
+ .research{
+ 	color: #777;
+ 	font-size: 14px;
+ 	font-weight: normal;
+ 	text-align: left;
+ 	display: block;
+ 	padding-bottom: 16px;
+ 	line-height: 18px;
+	padding-top: 4px;
+ }
+
+
+
+ .rich{
+ 	background-position: -8px -348px;
+	width: 40px;
+	height: 40px;
+	display: inline-block;
+ }
+
+
+ .leave{
+ 	background-position: -91px -348px;
+	width: 42px;
+	height: 40px;
+	display: inline-block;
+ }
+
+
+ .increased{
+ 	background-position: -178px -348px;
+	width: 41px;
+	height: 40px;
+	display: inline-block;
+ } 
+
+
+ .build {
+ 	background-position: -266px -348px;
+	width: 41px;
+	height: 40px;
+	display: inline-block;
+ }
+
+
+ .find {
+ 	background-position: -352px -348px;
+	width: 41px;
+	height: 40px;
+	display: inline-block;
+ }
+
+
+
+.salient-features-image{
+	width: 100%;
+	display: block;
+	vertical-align: bottom;
+}
+
+
+
+
+/********* Salient features css end here ****************/
+
+
+
+
+
+/********* Extra competitive css start here ****************/
+
+.competitive{
+	width: 100%;
+	display: block;
+	text-align: center;
+	padding: 60px 0;
+}
+
+
+.competitive h4{
+	color: #333333;
+	font-size: 30px;
+	text-align: center;
+	display: block;
+	font-weight: bold;
+	font-family: 'Roboto Condensed', sans-serif;
+}
+
+
+.extra{
+	width:100%;
+	display: block;
+	text-align: center;
+	padding-top: 45px;
+}
+
+
+.extra strong{
+	color: #333333;
+	font-size: 18px;
+	text-align: center;
+	display: block;
+	padding: 20px 0 7px 0;
+}
+
+
+.extra p{
+	color: #777777;
+	font-size: 14px;
+	text-align: center;
+	padding: 0px 35px;
+}
+
+.box{
+	width: 70px;
+	height: 70px;
+	margin: 0 auto;
+	background-color: #ffffff;
+	-moz-box-shadow:0px 0px 15px 3px #eaecfa; 
+	-webkit-box-shadow:0px 0px 15px 3px #eaecfa; 
+	box-shadow:0px 0px 15px 3px #eaecfa;
+	border-radius: 4px;
+}
+
+
+.resume{
+	background-position: -20px -232px;
+	width: 40px;
+	height: 40px;
+	display: inline-block;
+	text-align: center;
+	margin: 15px 18px;
+}
+
+
+.letter{
+	background-position:  -94px -232px;
+	width: 41px;
+	height: 39px;
+	display: inline-block;
+	text-align: center;
+	margin: 15px 18px;
+}
+
+
+.visual{
+	background-position:  -172px -232px;
+	width: 40px;
+	height: 40px;
+	display: inline-block;
+	text-align: center;
+	margin: 15px 18px;
+}
+
+
+.pt3{
+	padding-top: 30px;
+}
+
+
+
+.second{
+	background-position:  -252px -232px;
+	width: 39px;
+	height: 40px;
+	display: inline-block;
+	text-align: center;
+	margin: 15px 18px;
+}
+
+
+
+.booster{
+	background-position:  -328px -232px;
+	width: 34px;
+	height: 44px;
+	display: inline-block;
+	text-align: center;
+	margin: 15px 18px;
+}
+
+
+
+
+/********* Extra competitive css end here ****************/
+
+
+
+
+
+/********* Expertly written css start here ****************/
+
+
+.expertly{
+	width: 100%;
+	display: block;
+	text-align: left;
+	padding: 25px 0 20px 0; 
+	background-color: #f9f9f9;
+}
+
+
+.profile{
+	width: 100%;
+	display: block;
+	text-align: left;
+}
+
+
+
+.profile h5{
+	color: #333333;
+	font-size: 30px;
+	text-align: left;
+	display: block;
+	font-weight: bold;
+	font-family: 'Roboto Condensed', sans-serif;
+	padding-bottom: 5px;
+}
+
+
+.profile ul{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+
+.profile ul li{
+	text-align: left;
+	color: #777;
+	font-size: 15px;
+	padding: 10px;
+	margin-left: 28px;
+	list-style-image: url(../../../images/marketing/linkedin/arrow1.png);
+}
+
+
+
+.bottom-btn{
+	width: 20%;
+	background-color: #e0a408;
+	color: #fff;
+	text-align: center;
+	display: block;
+	font-size: 16px;
+	border-radius: 20px;
+	padding: 8px 0;
+	text-decoration: none;
+	text-transform: uppercase;
+	margin: 20px auto 0 auto;
+	background: -moz-linear-gradient(0deg, rgba(237,179,23,1) 0%, rgba(215,156,0,1) 100%); /* ff3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(237,179,23,1)), 
+		color-stop(100%, rgba(215,156,0,1))); /* safari4+,chrome */
+	background: -webkit-linear-gradient(0deg, rgba(237,179,23,1) 0%, rgba(215,156,0,1) 100%); /* safari5.1+,chrome10+ */
+	background: -o-linear-gradient(0deg, rgba(237,179,23,1) 0%, rgba(215,156,0,1) 100%); /* opera 11.10+ */
+	background: -ms-linear-gradient(0deg, rgba(237,179,23,1) 0%, rgba(215,156,0,1) 100%); /* ie10+ */
+	background: linear-gradient(90deg, rgba(237,179,23,1) 0%, rgba(215,156,0,1) 100%); /* w3c */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#edb317', endColorstr='#d79c00',GradientType=1 ); /* ie6-9 */
+}
+
+
+.error-txt {
+    position: absolute;
+    font-size: 11px;
+    color: #f74343;
+    bottom: -20px;
+    left: 20px;
+    font-weight: 400;
+}
+
+
+
+
+
+/********* Expertly written css end here ****************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/********* Media css start here ****************/
+
+
+
+@media(max-width:1024px) {
+
+	.row{
+		margin-right: 0;
+		margin-left: 0;
+	}
+
+	.create{
+		width: 100%;
+		margin-left: 0;
+	}
+
+}
+
+
+@media(max-width:768px) {
+
+	.row{
+		margin-right: 0;
+		margin-left: 0;
+	}
+
+
+	.form{
+		width: 100%;
+	}
+
+	.kye-highlights-image {
+    	margin: 0px auto;
+    	display: block;
+    	vertical-align: bottom;
+	}
+
+	.pr0{
+		padding-right: 0px;
+	}
+
+	.salient-features-list{
+		width: 90%;
+		padding-left: 5%;
+	}
+
+	.research{
+		padding-bottom: 5px;
+	}
+
+	.salient-features-image{
+		margin: 0px auto;
+		vertical-align: bottom;
+	}
+
+	
+	.extra p{
+		padding: 0 10px;
+	}
+
+	.create{
+		width: 100%;
+		margin-left: 0;
+	}
+	
+}
+
+
+/*@media(max-width:767px) {
+
+	.row{
+		margin-right: 0;
+		margin-left: 0;
+	}
+
+
+	 .bottom-btn{
+	 	display: none;
+	 }
+
+}*/
+
+
+@media(max-width:767px) {
+
+	.row{
+		margin-right: 0;
+		margin-left: 0;
+	}
+
+	.container{
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+
+	.create{
+		width: 100%;
+		margin-left: 0;
+	}
+
+
+	.create h1{
+		font-size: 18px;
+		padding: 10px 0 0 0;
+		line-height: 26px;
+		font-weight: 500;
+}
+
+
+	.create span{
+		font-size: 18px;
+		font-weight: 500;
+	}
+
+
+	.create strong{
+		font-size: 16px;
+		padding: 0 0 15px 0;
+	}
+
+
+	.create ul{
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		vertical-align: top;
+	}
+
+
+	.create ul li{
+		font-size: 13px;
+		position: relative;
+		font-weight: 200;
+		padding-left: 25px;
+		padding-bottom: 30px;
+	}
+
+
+	.create ul li:before{
+		top: 23px;
+
+	}
+
+
+	.form strong{
+		font-size: 22px;
+		padding: 10px 0 20px 0;
+    }
+
+
+    .hero_band{
+		width: 100%;
+		padding: 20px 0px;
+		margin: 20px auto; 
+    }
+
+
+	.contron-box{
+		width: 100%;
+		display: block;
+		padding: 15px 0;
+	}
+
+
+	.ch{
+		border-bottom: solid 1px #f3f3f3;
+		border-right: none;
+    }
+
+    .kye-highlights{
+    	padding: 0px 0 20px 0;
+    }
+
+
+    .kye-highlights-list ul li:before{
+		top: 18px;
+	}
+
+
+	.salient-features-list{
+		width: 100%;
+		padding-left: 0%;
+	}
+
+	.salient-features{
+		background: none;
+	}
+
+
+	.features{
+		font-size: 24px;
+		padding-bottom: 10px;
+		padding-top: 0px;
+	}
+
+
+
+	.digital{
+		font-size: 17px;
+		font-weight: bold;
+		font-weight: 600;
+	}
+
+
+	 .research{
+	 	font-size: 14px;
+	 	padding-bottom: 0px;
+	 }
+
+
+	 .bottom-btn{
+	 	display: none;
+	 }
+
+	 .kye-highlights-list h2{
+	 	font-size: 24px;
+	 	padding-top: 0px;
+		padding-bottom: 0px;
+	 }
+
+
+	 .kye-highlights-list ul li{
+	 	padding: 8px;
+	 }
+
+	 .competitive{
+	 	padding: 25px 0;
+	 }
+
+	 .competitive h4{
+	 	font-size: 24px;
+	 	text-align: left;
+	 }
+
+
+	 .profile{
+	 	padding: 0 4%;
+	 }
+
+	 .profile h5{
+	 	font-size: 24px;
+	 }
+
+
+	 .extra{
+	 	padding-top: 25px;
+	 }
+
+	 .pb10 {
+       padding-bottom: 25px;
+    }
+
+    .pt3 {
+    	padding-top: 0px;
+	}
+	
+	.profile ul{
+		padding-top: 10px;
+		
+	}
+
+    .profile ul li{
+    	padding: 0px 8px 12px 8px;
+    }
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/********* Media css end here ****************/
