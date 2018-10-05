@@ -76,17 +76,25 @@ home country</strong>
                 <div class="form-group">
                   <input type="email" class="form-control" name="email" id="email" placeholder="Email Address" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %} maxlength="60">
                 </div>
-                <div class="form-group">
-                    <input type="hidden" id="country" name="country" aria-invalid="false" value="91">
+                <div class="form-group" >
+                    <div class="country-code">
+                        <div class ="custom-select">
+                    <select class="form-control" id="country" name="country">
+                        <option selected value = "91" >91</option>
+                        {% for country in countries%}
+                        <option value ="{{country.phone}}">{{country.phone}}</option>
+                        {%endfor%}
+                    </select>
+                            </div>
                     <input type="number" class="form-control" name="number" id="mobile" placeholder="Mobile Number" value={% if alt_contact %} "{{alt_contact}}" {% else %} "" {% endif %}>
-                    <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}1884{% endif %}">
+                </div>
+                </div>
+                 <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}1884{% endif %}">
                     <input type="hidden" name="prd" value="International Resume Writing">
                     <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
                     <input type="hidden" name="lsource" value="{{ lead_source }}">
                     <input type="hidden" name="path" value="{{request.path}}">
 
-                </div>
-                
                 <button type="submit" id="post-button" class="btn btn-default">ENROLL NOW</button>
                 <div class="tnc">
                   By registering with us you agree to our 
