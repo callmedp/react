@@ -20,6 +20,150 @@ from homepage.config import (
     PAGECHOICES, university_page)
 
 
+class TestimonialModelForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(TestimonialModelForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        # choice_dict = dict(PAGECHOICES)
+        # choices = [
+        #     (0, '---Select Page---'),
+        #     (university_page, choice_dict.get(
+        #         university_page, 'University Page'))]
+
+        # self.fields['page'].widget.attrs['class'] = form_class
+        # self.fields['page'].label = "Page type"
+        # self.fields['page'].choices = choices
+        # self.fields['page'].widget.attrs['required'] = True
+        # self.fields['page'].widget.attrs['maxlength'] = 30
+        # self.fields['page'].widget.attrs['data-parsley-trigger'] = 'change'
+        # self.fields['page'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+
+        self.fields['user_name'].widget.attrs['class'] = form_class
+        self.fields['user_name'].widget.attrs['required'] = True
+        self.fields['user_name'].widget.attrs['maxlength'] = 40
+        self.fields['user_name'].label = "Name"
+        self.fields['user_name'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['user_name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['user_name'].widget.attrs['data-parsley-length'] = "[1, 40]"
+        self.fields['user_name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-40 characters.'
+
+        self.fields['image'].widget.attrs['class'] = form_class
+        self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 30
+        self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
+
+        self.fields['designation'].widget.attrs['class'] = form_class
+        self.fields['designation'].widget.attrs['required'] = True
+        self.fields['designation'].widget.attrs['maxlength'] = 30
+        self.fields['designation'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['designation'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['designation'].widget.attrs['data-parsley-length'] = "[1, 30]"
+        self.fields['designation'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-30 characters.'
+
+        self.fields['company'].widget.attrs['class'] = form_class
+        self.fields['company'].widget.attrs['required'] = True
+        self.fields['company'].widget.attrs['maxlength'] = 30
+        self.fields['company'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['company'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['company'].widget.attrs['data-parsley-length'] = "[1, 30]"
+        self.fields['company'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-30 characters.'
+
+        self.fields['title'].widget.attrs['class'] = form_class
+        self.fields['title'].label = "Review Title"
+        self.fields['title'].widget.attrs['maxlength'] = 50
+        self.fields['title'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['title'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['title'].widget.attrs['data-parsley-length'] = "[1, 50]"
+        self.fields['title'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-50 characters.'
+
+        self.fields['review'].widget.attrs['class'] = form_class
+        self.fields['review'].widget.attrs['required'] = True
+        self.fields['review'].widget.attrs['maxlength'] = 500
+        self.fields['review'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['review'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['review'].widget.attrs['data-parsley-length'] = "[1, 500]"
+        self.fields['review'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-500 characters.'
+
+        self.fields['is_active'].widget.attrs['class'] = 'js-switch'
+        self.fields['is_active'].widget.attrs['data-switchery'] = 'true'
+        self.fields['is_active'].label = 'Active'
+        self.fields['priority'].widget.attrs['class'] = form_class
+
+    class Meta:
+        model = Testimonial
+        fields = (
+            'user_name', 'image',
+            'designation', 'company', 'title', 'review',
+            'priority', 'is_active')
+
+    # def clean_page(self):
+    #     page = int(self.cleaned_data.get('page', '0'))
+    #     if not page:
+    #         raise forms.ValidationError(
+    #             "This field is required.")
+    #     return page
+
+    def clean_user_name(self):
+        user_name = self.cleaned_data.get('user_name', '').strip()
+        if not user_name:
+            raise forms.ValidationError(
+                "This field is required.")
+
+        if len(user_name) < 1 or len(user_name) > 40:
+            raise forms.ValidationError(
+                "Name should be between 1-40 characters.")
+
+        return user_name
+
+    def clean_image(self):
+        file = self.cleaned_data.get('image', '')
+        if file:
+            if file.size > 30 * 1024:
+                raise forms.ValidationError(
+                    "Image file is too large ( > 30kb ).")
+            if file.name.split('.')[-1].upper() not in ('BMP', 'PNG', 'JPEG', 'JPG', 'SVG'):
+                raise forms.ValidationError(
+                    "Unsupported image type. Please upload svg, bmp, png or jpeg")
+        return file
+
+    def clean_designation(self):
+        designation = self.cleaned_data.get('designation', '').strip()
+        if not designation:
+            raise forms.ValidationError(
+                "This field is required.")
+        if len(designation) < 1 or len(designation) > 30:
+            raise forms.ValidationError(
+                "Designation should be between 1-30 characters.")
+        return designation
+
+    def clean_company(self):
+        company = self.cleaned_data.get('company', '').strip()
+        if not company:
+            raise forms.ValidationError(
+                "This field is required.")
+        if len(company) < 1 or len(company) > 30:
+            raise forms.ValidationError(
+                "Company should be between 1-30 characters.")
+        return company
+
+    def clean_title(self):
+        title = self.cleaned_data.get('title', '').strip()
+        if len(title) > 50:
+            raise forms.ValidationError(
+                "Title should be between 1-50 characters.")
+        return title
+
+    def clean_review(self):
+        review = self.cleaned_data.get('review', '').strip()
+        if not review:
+            raise forms.ValidationError(
+                "This field is required.")
+        if len(review) < 1 or len(review) > 500:
+            raise forms.ValidationError(
+                "Review should be between 1-500 characters.")
+        return review
+
+
+
 class FacultyCourseForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         obj = kwargs.pop('object', None)
@@ -78,156 +222,6 @@ class FacultyCourseInlineFormSet(forms.BaseInlineFormSet):
                         code='duplicate_product'
                     )
         return
-
-
-class TestimonialCategoryForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        super(TestimonialCategoryForm, self).__init__(*args, **kwargs)
-        form_class = 'form-control col-md-7 col-xs-12'
-        choice_dict = dict(PAGECHOICES)
-        choices = [
-            (0, '---Select Page---'),
-            (university_page, choice_dict.get(
-                university_page, 'University Page'))]
-
-        self.fields['page'].widget.attrs['class'] = form_class
-        self.fields['page'].label = "Page type"
-        self.fields['page'].choices = choices
-        self.fields['page'].widget.attrs['required'] = True
-        self.fields['page'].widget.attrs['maxlength'] = 30
-        self.fields['page'].widget.attrs['data-parsley-trigger'] = 'change'
-        self.fields['page'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-
-        self.fields['user_name'].widget.attrs['class'] = form_class
-        self.fields['user_name'].widget.attrs['required'] = True
-        self.fields['user_name'].widget.attrs['maxlength'] = 40
-        self.fields['user_name'].label = "Name"
-        self.fields['user_name'].widget.attrs['data-parsley-trigger'] = 'change'
-        self.fields['user_name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['user_name'].widget.attrs['data-parsley-length'] = "[1, 40]"
-        self.fields['user_name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-40 characters.'
-
-        self.fields['image'].widget.attrs['class'] = form_class
-        self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 30
-        self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
-
-        self.fields['designation'].widget.attrs['class'] = form_class
-        self.fields['designation'].widget.attrs['required'] = True
-        self.fields['designation'].widget.attrs['maxlength'] = 30
-        self.fields['designation'].widget.attrs['data-parsley-trigger'] = 'change'
-        self.fields['designation'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['designation'].widget.attrs['data-parsley-length'] = "[1, 30]"
-        self.fields['designation'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-30 characters.'
-
-        self.fields['company'].widget.attrs['class'] = form_class
-        self.fields['company'].widget.attrs['required'] = True
-        self.fields['company'].widget.attrs['maxlength'] = 30
-        self.fields['company'].widget.attrs['data-parsley-trigger'] = 'change'
-        self.fields['company'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['company'].widget.attrs['data-parsley-length'] = "[1, 30]"
-        self.fields['company'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-30 characters.'
-
-        self.fields['title'].widget.attrs['class'] = form_class
-        self.fields['title'].label = "Review Title"
-        self.fields['title'].widget.attrs['maxlength'] = 50
-        self.fields['title'].widget.attrs['data-parsley-trigger'] = 'change'
-        self.fields['title'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['title'].widget.attrs['data-parsley-length'] = "[1, 50]"
-        self.fields['title'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-50 characters.'
-
-        self.fields['review'].widget.attrs['class'] = form_class
-        self.fields['review'].widget.attrs['required'] = True
-        self.fields['review'].widget.attrs['maxlength'] = 500
-        self.fields['review'].widget.attrs['data-parsley-trigger'] = 'change'
-        self.fields['review'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['review'].widget.attrs['data-parsley-length'] = "[1, 500]"
-        self.fields['review'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-500 characters.'
-
-        self.fields['is_active'].widget.attrs['class'] = 'js-switch'
-        self.fields['is_active'].widget.attrs['data-switchery'] = 'true'
-        self.fields['is_active'].label = 'Active'
-        self.fields['priority'].widget.attrs['class'] = form_class
-
-
-    class Meta:
-        model = Testimonial
-        fields = (
-            'page', 'user_name', 'image',
-            'designation', 'company', 'title', 'review',
-            'priority', 'is_active')
-
-    def clean_page(self):
-        page = int(self.cleaned_data.get('page', '0'))
-        if not page:
-            raise forms.ValidationError(
-                "This field is required.")
-        return page
-
-    def clean_user_name(self):
-        user_name = self.cleaned_data.get('user_name', '').strip()
-        if not user_name:
-            raise forms.ValidationError(
-                "This field is required.")
-
-        if len(user_name) < 1 or len(user_name) > 40:
-            raise forms.ValidationError(
-                "Name should be between 1-40 characters.")
-
-        return user_name
-
-    def clean_image(self):
-        file = self.files.get('image', '')
-        if file:
-            if file._size > 30 * 1024:
-                raise forms.ValidationError(
-                    "Image file is too large ( > 30kb ).")
-            if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
-                raise forms.ValidationError(
-                    "Unsupported image type. Please upload svg, bmp, png or jpeg")
-        return file
-
-    def clean_designation(self):
-        designation = self.cleaned_data.get('designation', '').strip()
-        if not designation:
-            raise forms.ValidationError(
-                "This field is required.")
-        if len(designation) < 1 or len(designation) > 30:
-            raise forms.ValidationError(
-                "Designation should be between 1-30 characters.")
-        return designation
-
-    def clean_company(self):
-        company = self.cleaned_data.get('company', '').strip()
-        if not company:
-            raise forms.ValidationError(
-                "This field is required.")
-        if len(company) < 1 or len(company) > 30:
-            raise forms.ValidationError(
-                "Company should be between 1-30 characters.")
-        return company
-
-    def clean_title(self):
-        title = self.cleaned_data.get('title', '').strip()
-        if len(title) > 50:
-            raise forms.ValidationError(
-                "Title should be between 1-50 characters.")
-        return title
-
-    def clean_review(self):
-        review = self.cleaned_data.get('review', '').strip()
-        if not review:
-            raise forms.ValidationError(
-                "This field is required.")
-        if len(review) < 1 or len(review) > 500:
-            raise forms.ValidationError(
-                "Review should be between 1-500 characters.")
-        return review
-
-
-class TestimonialInlineFormSet(forms.BaseInlineFormSet):
-    def clean(self):
-        super(TestimonialInlineFormSet, self).clean()
 
 
 class SubHeaderCategoryForm(forms.ModelForm):

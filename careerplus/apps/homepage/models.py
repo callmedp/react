@@ -76,16 +76,9 @@ class Testimonial(AbstractAutoDate):
 
     is_active = models.BooleanField(default=False)
 
-    # for university skill page
-    category = models.ForeignKey(
-        'shop.Category',
-        null=True,
-        blank=True,
-        on_delete=models.CASCADE,
-        verbose_name=_('University-Category'),
-        related_name="testimonials",
-        help_text='Testimonial for skill pages')
-
+    # for university/Course skill page
+    object_id = models.PositiveIntegerField(
+        null=True, blank=True)
 
     def __str__(self):
         return str(self.user_name) + ' - ' + str(self.id)
