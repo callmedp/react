@@ -18,6 +18,7 @@ from django.template.response import TemplateResponse
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.utils import timezone
+from django.forms.models import modelformset_factory
 from dateutil.relativedelta import relativedelta
 
 from .decorators import (
@@ -51,7 +52,7 @@ from .shop_form import (
     UniversityCoursePaymentForm,
     UniversityCoursesPaymentInlineFormset,
     SubHeaderCategoryForm, SubHeaderInlineFormSet,
-    TestimonialCategoryForm, TestimonialInlineFormSet
+    TestimonialModelForm
 )
 
 from shop.forms import (
@@ -71,6 +72,8 @@ from faq.forms import (
     AddFaqForm,
     ChangeFaqForm,
     ChangePublicFaqForm,)
+from homepage.config import (
+    university_page)
 
 from faq.models import FAQuestion
 from users.mixins import UserGroupMixin
@@ -273,14 +276,10 @@ class ChangeCategoryView(DetailView):
             formset=SubHeaderInlineFormSet, extra=1,
             max_num=3, validate_max=True)
 
-        TestimonialFormSet = inlineformset_factory(
-            Category, Testimonial,
-            fk_name='category',
-            form=TestimonialCategoryForm,
-            can_delete=True,
-            formset=TestimonialInlineFormSet, extra=1,
-            max_num=5, validate_max=True)
-
+        TestimonialModelFormset = modelformset_factory(
+            Testimonial, form=TestimonialModelForm,
+            can_delete=True, extra=1, max_num=5,
+            validate_max=True)
         alert = messages.get_messages(self.request)
         main_change_form = ChangeCategoryForm(
             instance=self.get_object())
@@ -302,8 +301,12 @@ class ChangeCategoryView(DetailView):
             context.update({'sub_heading_formset': sub_heading_formset})
 
         if self.object.type_level in [3, 4]:
-            testimonial_formset = TestimonialFormSet(instance=self.get_object())
-            context.update({'testimonial_formset': testimonial_formset})
+            testimonial_model_formset = TestimonialModelFormset(
+                data=None,
+                queryset=Testimonial.objects.filter(
+                    page=university_page,
+                    object_id=self.object.pk))
+            context.update({'testimonial_model_formset': testimonial_model_formset})
 
         childrens = self.object.category_set.filter(
             from_category__related_to=self.object)
@@ -479,18 +482,19 @@ class ChangeCategoryView(DetailView):
                             return HttpResponseRedirect(
                                 reverse('console:category-change', kwargs={'pk': cat}))
 
-                    elif slug == 'testimonial':
-                        TestimonialFormSet = inlineformset_factory(
-                            Category, Testimonial,
-                            fk_name='category',
-                            form=TestimonialCategoryForm,
+                    elif slug == 'testimonial_model':
+                        TestimonialModelFormset = modelformset_factory(
+                            Testimonial,
+                            form=TestimonialModelForm,
                             can_delete=True,
-                            formset=TestimonialInlineFormSet, extra=1,
+                            extra=1,
                             max_num=5, validate_max=True)
 
                         if self.object.type_level in [3, 4]:
-                            formset = TestimonialFormSet(
-                                request.POST, instance=obj)
+                            formset = TestimonialModelFormset(
+                                request.POST, request.FILES,
+                                queryset=Testimonial.objects.filter(
+                                    page=university_page, object_id=obj.pk))
                             from django.db import transaction
                             if formset.is_valid():
                                 with transaction.atomic():
@@ -500,6 +504,8 @@ class ChangeCategoryView(DetailView):
                                         ins.delete()
 
                                     for form in saved_formset:
+                                        form.page = university_page
+                                        form.object_id = obj.pk
                                         form.save()
                                     formset.save_m2m()
 
@@ -510,7 +516,7 @@ class ChangeCategoryView(DetailView):
                             else:
                                 context = self.get_context_data()
                                 if formset:
-                                    context.update({'testimonial_formset': formset})
+                                    context.update({'testimonial_model_formset': formset})
                                 messages.error(
                                     self.request,
                                     "Category Testimonial Change Failed, Changes not Saved")
@@ -524,6 +530,7 @@ class ChangeCategoryView(DetailView):
                                 "You cannot add Testimonial for level1 and Level2")
                             return HttpResponseRedirect(
                                 reverse('console:category-change', kwargs={'pk': cat}))
+
                 messages.error(
                     self.request,
                     "Object Does Not Exists")

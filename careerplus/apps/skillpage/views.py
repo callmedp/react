@@ -539,9 +539,6 @@ class UniversityFacultyView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UniversityFacultyView, self).get_context_data(**kwargs)
-       
-        context['products'] = self._get_paginated_products(
-            standalone_products)
         context.update({"meta": self._get_page_meta_data()})
         context.update(
             {"canonical_url": self.object.get_canonical_url()})

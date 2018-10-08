@@ -355,7 +355,7 @@
             {% if object.type_level != 1 and object.type_level != 0 %}
               <div class="x_panel">
                   <div class="x_title">
-                        <h2><i class="fa fa-thumb-tack"></i>Service/Skill Page Info</h2>
+                        <h2><i class="fa fa-thumb-tack"></i>Service/Skill/University Page Info</h2>
                         <ul class="nav navbar-right panel_toolbox">
                           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                           </li>
@@ -660,7 +660,7 @@
 
 
 
-      {% if testimonial_formset %}
+        {% if testimonial_model_formset %}
       <div class="x_panel">
           <div class="x_title">
             <h2><i class="fa fa-thumb-tack"></i> Add/Change Testimonial</h2>
@@ -674,16 +674,16 @@
             <div class="accordion" id="accordion3" role="tablist" aria-multiselectable="true">
               <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-testimonial-form">
                     {% csrf_token %}
-                    {{ testimonial_formset.management_form }}
-                {% if testimonial_formset.non_form_errors %}
+                    {{ testimonial_model_formset.management_form }}
+                {% if testimonial_model_formset.non_form_errors %}
                   <div class="alert alert-danger alert-dismissible fade in" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
                     </button>
-                    {{ testimonial_formset.non_form_errors }}
+                    {{ testimonial_model_formset.non_form_errors }}
                   </div>
                 {% endif %}
               <div class="inter-related-parent-div">    
-              {% for inline_admin_form in testimonial_formset.forms %}
+              {% for inline_admin_form in testimonial_model_formset.forms %}
               <div class="panel {% if forloop.last %} {% endif %}">
                 <a class="panel-heading collapsed" role="tab" id="heading{{forloop.counter}}" data-toggle="collapse" data-parent="#accordion3" href="#collapse{{forloop.counter}}3" aria-expanded="false" aria-controls="collapse{{forloop.counter}}3">
                   {% if  inline_admin_form.instance and inline_admin_form.instance.id %}
@@ -710,15 +710,6 @@
                       {% for hidden in inline_admin_form.hidden_fields %}
                           {{ hidden }}
                       {% endfor %}
-                  
-                    <div class="item form-group {% if inline_admin_form.page.errors %}bad{% endif %}">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.heading.id_for_label }}">{{inline_admin_form.page.label}} <span class="required" style="color:red">*</span>
-                      </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
-                        {{inline_admin_form.page}}
-                      </div>
-                      <div class="alert">{{inline_admin_form.page.errors}}</div>
-                    </div>
 
                     <div class="item form-group {% if inline_admin_form.user_name.errors %}bad{% endif %}">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.user_name.id_for_label }}">{{inline_admin_form.user_name.label}} <span class="required" style="color:red">*</span>
@@ -802,7 +793,7 @@
              
 
               <input type="hidden" name="category" value="{{object.pk}}">
-                <input type="hidden" name="slug" value="testimonial">
+                <input type="hidden" name="slug" value="testimonial_model">
                 <div class="ln_solid"></div>
                 <div class="form-group">
                   <div class="col-md-9 col-sm-9 col-xs-9 col-md-offset-3">
