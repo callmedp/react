@@ -1,5 +1,6 @@
 {% extends "basic/base1.html" %}
 {% load static meta compress %}
+{% load shop_tags %}
 
 {% block title %}
   {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
@@ -17,9 +18,8 @@
 {% block css_section %}
     {{block.super}}
     {% compress css %}
-    <!-- <link type="text/scss" href="{% static 'shinelearn/css/product/detail.scss' %}" rel="stylesheet"> -->
+    <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-common.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-detail.scss' %}" rel="stylesheet">
-    <link type="text/css" href="{% static 'shinelearn/css/skill/extra.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 
@@ -35,7 +35,7 @@
       {% block page_heading %}
 
       <!-- header -->
-      <header>
+      <header class="exe-header-detail">
         <div class="exe-header-txt container pr">
           <div class="row">
           <!-- breadcrums -->
@@ -198,6 +198,10 @@
                           Go through in-depth knowledge on 8 topics and 11 domains which covers solid foundation learning for all digital marketing aspects.
                         </li>
                       </ul>
+                        <span class="e-program-list mt-20">
+                        <b>New</b>
+                      {{prd_desc|safe}}
+                      </span>  
                     </article>
                   </div>
                 </section>
@@ -255,6 +259,27 @@
 
                       </div>
                     </article>
+                    <b>New</b>
+                     <article class="col-sm-12 pad-25">
+
+                      <div class="row exe-who-attend">
+                      {%with university_detail.attendees_criteria|get_eval_value  as attendees_list %}
+                      {% for attendees in attendees_list %}
+                        <div class="media col-sm-6">
+                          <div class="media-left">
+                            <figure class="exe-icon-manager"></figure>
+                          </div>
+                          <div class="media-body media-middle">
+                            <h3 class="media-heading">{{attendees.0}}</h3>
+                            {{attendees.1}}
+                          </div>
+                        </div>
+                        {% endfor %}
+                        {% endwith %}
+
+                      
+                      </div>
+                    </article>
                   </div>
                 </section>
 
@@ -274,6 +299,16 @@
                       <li>For Indian Participants – Graduates (10+2+3) from a recognized university (UGC/AICTE/DEC/AIU/State Government) in any discipline.</li>
                     </ul>
                   </article>
+                  New 
+                   <article class="col-sm-12 pad-25">
+                    <ul class="exe-criteria-list">
+                    {% with university_detail.eligibility_criteria|split:";" as eligibilities %}
+                    {% for eligibility in  eligibilities %}
+                      <li>{{eligibility}}</li>
+                    {% endfor %}
+                    {% endwith %}
+                    </ul>
+                  </article>
                 </section>
 
                 <!-- Faculty Profile -->
@@ -290,61 +325,26 @@
 
                         <!-- Wrapper for slides -->
                         <div class="carousel-inner" role="listbox">
-                          <div class="item col-sm-12 active">
+                          {% for innner_fac in faculty %}
+                           <div class="item col-sm-12 {% if forloop.counter == 1%}active {% endif %}">
+                           {% for fac in innner_fac %}
                             <div class="col-sm-6 text-center">
                               <figure>
-                                <a href="#"><img src="{% static 'shinelearn/images/executive/faculty-pic1.jpg' %}" alt="Faculty Profile"></a>
+                                <a class="faculty-thumb" href="#"><img src="{% static 'shinelearn/images/executive/faculty-pic1.jpg' %}" alt="Faculty Profile"></a>
                                 <figcaption>
-                                  <strong><a href="#">Dr Ajay Garg</a></strong>
-                                  <div class="exe-designation">Associate Professor – 
-                                    <span>Marketing XLRI Jamshedpur</span>
+                                  <strong><a href="#">{{ fac.name }}</a></strong>
+                                  <div class="exe-designation">{{ fac.designation }} – 
+                                    <span>{{ fac.institute.name }}</span>
                                   </div>
-                                  <p>Dr. Ajay Garg is a full-time professor of Information Management.  Professor Garg’s primary expertise and interest is in the area of business...   <a class="e-anchor-color" href="#">read more</a></p>
+                                  <p>{{fac.description|truncatechars:"120"}}...   <a class="e-anchor-color" href="#">read more</a>
+                                  </p>
                                 </figcaption>
                               </figure>
                             </div>
-
-                            <div class="col-sm-6 text-center">
-                              <figure>
-                                <a href="#"><img src="{% static 'shinelearn/images/executive/faculty-pic2.jpg' %}" alt="Faculty Profile"></a>
-                                <figcaption>
-                                  <strong><a href="#">Dr. Soumyakanti Chakraborty</a></strong>
-                                  <div class="exe-designation">Fellow (IIM Calcutta), B.Tech (Calcutta University) – 
-                                    <span>Marketing XLRI Jamshedpur</span>
-                                  </div>
-                                  <p>Dr. Soumyakanti Chakraborty joined XLRI Information Systems Area in 2009. His primary teaching interests include Strategies...   <a class="e-anchor-color" href="#">read more</a></p>
-                                </figcaption>
-                              </figure>
-                            </div>
+                            {% endfor %}
+                         
                           </div>
-
-                          <div class="item col-sm-12">
-                            <div class="col-sm-6 text-center">
-                              <figure>
-                                <a href="#"><img src="{% static 'shinelearn/images/executive/faculty-pic1.jpg' %}" alt="Faculty Profile"></a>
-                                <figcaption>
-                                  <strong><a href="#">Dr Ajay Garg</a></strong>
-                                  <div class="exe-designation">Associate Professor – 
-                                    <span>Marketing XLRI Jamshedpur</span>
-                                  </div>
-                                  <p>Dr. Ajay Garg is a full-time professor of Information Management.  Professor Garg’s primary expertise and interest is in the area of business...   <a class="e-anchor-color" href="#">read more</a></p>
-                                </figcaption>
-                              </figure>
-                            </div>
-
-                            <div class="col-sm-6 text-center">
-                              <figure>
-                                <a href="#"><img src="{% static 'shinelearn/images/executive/faculty-pic2.jpg' %}" alt="Faculty Profile"></a>
-                                <figcaption>
-                                  <strong><a href="#">Dr. Soumyakanti Chakraborty</a></strong>
-                                  <div class="exe-designation">Fellow (IIM Calcutta), B.Tech (Calcutta University) – 
-                                    <span>Marketing XLRI Jamshedpur</span>
-                                  </div>
-                                  <p>Dr. Soumyakanti Chakraborty joined XLRI Information Systems Area in 2009. His primary teaching interests include Strategies...   <a class="e-anchor-color" href="#">read more</a></p>
-                                </figcaption>
-                              </figure>
-                            </div>
-                          </div>
+                          {% endfor %}
                           
                         </div>
 
@@ -435,34 +435,6 @@
                           </figure>
                         </div>
                       </div>
-                    </article>
-                  </div>
-                </section>
-
-                <!-- Program Structure 1 -->
-                <section class="exe-box mb-30">
-                  <div id="program-structure" class="scroll">
-                    <div class="e-btm-bdr">
-                      <figure class="pr">
-                        <i class="exe-icon-program-structure"></i>
-                      </figure>
-                      <h2 class="heading-primary-exe">Program Structure</h2>
-                    </div>
-                    <article class="col-sm-12 pad-25">
-                      <ul class="exe-structure-list1">
-                        <li><h3>Search Engine Optimization</h3></li>
-                        <li><h3>Social Media</h3></li>
-                        <li><h3>Content Writing</h3></li>
-                        <li><h3>Email Marketing</h3></li>
-                        <li><h3>Mobile Marketing</h3></li>
-                        <li><h3>Pay-Per-Click</h3></li>
-                        <li><h3>Website Conversion Optimization</h3></li>
-                        <li><h3>Digital Analytics</h3></li>
-                        <li><h3>Marketing Automation</h3></li>
-                        <li><h3>Programmatic Buying</h3></li>
-                        <li><h3>Digital Marketing Strategy</h3></li>
-                        <li><h3>Twitter Advertising</h3></li>
-                      </ul>
                     </article>
                   </div>
                 </section>
@@ -590,6 +562,27 @@
                         </li>
                       </ul>
                     </article>
+                    NEW
+                 <article class="col-sm-12 pad-25 exe-accordian exe-structure-list2">
+                      <ul class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                      {% for chapter in chapter_list %}
+                        <li class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="heading_{{forloop.counter}}">
+                            <h3 class="panel-title">
+                              <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOneExe_{{forloop.counter}}" {%if forloop.counter != 1%} class="collapsed" aria-expanded="false" {%else %} aria-expanded="true" {% endif %}  aria-controls="collapseOneExe_{{forloop.counter}}">
+                                {{ chapter.heading }}
+                              </a>
+                            </h3>
+                          </div>
+                          <div id="collapseOneExe_{{forloop.counter}}" class="panel-collapse collapse {% if forloop.counter == 1 %} in {% endif %}" role="tabpanel" aria-labelledby="heading_{{forloop.counter}}">
+                            <div class="panel-body">
+                             {{chapter.content|safe }}
+                            </div>
+                          </div>
+                        </li>
+                      {% endfor %}
+                        </ul>
+                    </article>
                   </div>
                 </section>
 
@@ -611,17 +604,36 @@
                           These maybe in the form of a quiz, assignment, case studies or other objective/subjective assessments. The evaluations are designed ensure continuous student engagement with the course and encourage learning. Students who successfully clear the same along with the requisite attendance criteria will be awarded a Certificate from SPJIMR as appropriate.
                         </p></li>
                       </ul>
+                      <b>New</b>
+                      <span class="exe-structure-list1">
+                        {{university_detail.assesment|safe}}
+                      </span>
 
                       <div class="exe-sample-certificate mt-20">
                         <figure>
                           <img class="img-responsive" src="{% static 'shinelearn/images/executive/sample-certificate.jpg' %}" alt="Sample certificate">
                         </figure>
                         <h3 class="mt-30 ml-40">Sample Certificate</h3>
-                        <a class="exe-button-view-sample pull-right mt-20 mr-20" href="#">View sample certificate</a>
+                        <a class="exe-button-view-sample pull-right mt-20 mr-20" href="#" type="button" data-toggle="modal" data-target=".bs-example-modal-lg">View sample certificate</a>
                       </div>
                     </article>
                   </div>
                 </section>
+
+                <!-- sample certificate modal -->
+                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h3 class="heading-primary-exe" id="myModalLabel">Sample Certificate</h3>
+                      </div>
+                      <div class="modal-body exe-sample-certificate-modal">
+                        <img class="img-responsive text-center" src="{% static 'shinelearn/images/executive/xlri-cert.png' %}" alt="Sample certificate">
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 <!-- Institute -->
                 <section class="exe-box mb-30">
@@ -635,7 +647,7 @@
                     <article class="col-sm-12 pad-25 exe-institute">
                       <figure>
                         <span class="institute-txt">
-                          <h3>XLRI Jamshedpur</h3>
+                          <h3>{XLRI Jamshedpur}</h3>
                           <a class="exe-button-view-course pull-right" href="#">View all courses</a>
                         </span>
                       </figure>
@@ -818,12 +830,12 @@
                         <li class="panel panel-default">
                           <div class="panel-heading" role="tab" id="headingOne">
                             <h3 class="panel-title">
-                              <a role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseOneExe2" aria-expanded="true" aria-controls="collapseOneExe2">
+                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseOneExe2" aria-expanded="true" aria-controls="collapseOneExe2">
                                 What is the cancellation policy?
                               </a>
                             </h3>
                           </div>
-                          <div id="collapseOneExe2" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                          <div id="collapseOneExe2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                             <div class="panel-body">
                               <ol type="I">
                                 <li>Requests for refund of fees on account of cancellation of enrolment shall be considered only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</li>
@@ -997,10 +1009,11 @@
 {% endblock main_container %}
 
 
+
 {% block js_section %}
     {{block.super}}
     {% compress js %}
-    <script src="{% static 'shinelearn/js/common/plugin.activeOnScroll.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/plugin.activeOnScroll-executive.js' %}"></script>
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/shop/detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/scroller-executive.js' %}" type="text/javascript"></script>

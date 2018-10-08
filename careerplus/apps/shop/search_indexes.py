@@ -897,16 +897,19 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         if obj.type_flow == 14:
             detail['launchdate'] = obj.university_course_detail.batch_launch_date.strftime('%d %b %Y').upper()
             detail['applydate'] = obj.university_course_detail.apply_last_date.strftime('%d %b %Y').upper()
+            detail['payment_deadline'] = obj.university_course_detail.payment_deadline.strftime('%d/%m/%Y')
             detail['benefits'] = obj.university_course_detail.get_benefits
             detail['app_process'] = obj.university_course_detail.get_application_process
             detail['assesment'] = obj.university_course_detail.assesment
+            detail['eligibility_criteria'] = obj.university_course_detail.eligibility_criteria
+            detail['attendees_criteria'] = obj.university_course_detail.attendees_criteria
             payment_list = []
-            for payment in obj.university_course_payment.all():
+            for payment in obj.university_course_payment.filter(active=True):
                 data = {}
-                data['installment_fee'] = payment.installment_fee
+                data['installment_fee'] = str(payment.installment_fee)
                 data['ldpayment'] = payment.last_date_of_payment.strftime('%d/%m/%Y')
 
                 payment_list.append(data)
             detail['payment'] = payment_list
-            return detail
+            return json.dumps(detail) 
         return ''

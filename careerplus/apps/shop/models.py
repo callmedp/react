@@ -2479,6 +2479,22 @@ class UniversityCourseDetailScreen(models.Model):
         help_text=_('Product related to these details'),
         related_name='screen_university_course_detail',
     )
+    eligibility_criteria = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True,
+        help_text='semi-colon(;) separated designations, e.g. Managers, Decision makers; Line Managers; ...')
+
+    attendees_criteria = models.CharField(
+        max_length=1024,
+        null=True,
+        blank=True,
+        help_text='who shoule attend this course'
+    )
+    payment_deadline = models.DateField(
+        _('Payment Deadline'),
+        default=timezone.now
+    )
 
     @property
     def get_application_process(self):
@@ -2491,6 +2507,13 @@ class UniversityCourseDetailScreen(models.Model):
     def get_benefits(self):
         if self.benefits:
             return eval(self.benefits)
+        else:
+            return ''
+
+    @property
+    def get_attendees_criteria(self):
+        if self.attendees_criteria:
+            return eval(self.attendees_criteria)
         else:
             return ''
 
@@ -2542,6 +2565,21 @@ class UniversityCourseDetail(models.Model):
         help_text=_('Product related to these details'),
         related_name='university_course_detail',
     )
+    eligibility_criteria = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True,
+        help_text='semi-colon(;) separated designations, e.g. Managers, Decision makers; Line Managers; ...')
+    attendees_criteria = models.CharField(
+        max_length=1024,
+        null=True,
+        blank=True,
+        help_text='who shoule attend this course'
+    )
+    payment_deadline = models.DateField(
+        _('Payment Deadline'),
+        default=timezone.now
+    )
 
     @property
     def get_application_process(self):
@@ -2554,6 +2592,13 @@ class UniversityCourseDetail(models.Model):
     def get_benefits(self):
         if self.benefits:
             return eval(self.benefits)
+        else:
+            return ''
+
+    @property
+    def get_attendees_criteria(self):
+        if self.attendees_criteria:
+            return eval(self.attendees_criteria)
         else:
             return ''
 

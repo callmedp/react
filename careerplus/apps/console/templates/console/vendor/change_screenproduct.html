@@ -970,6 +970,15 @@
                       </div>
                       <div class="alert">{{prd_university_form.apply_last_date.errors}}</div>
                     </div>
+                    <div class="item form-group {% if prd_university_form.payment_deadline.errors %}bad{% endif %}">
+                      <label class="control-label col-md-2 col-sm-2 col-xs-12" >
+                        Payment Deadline<span class="required">*</span>
+                      </label>
+                      <div class="col-md-7 col-sm-7 col-xs-12">
+                        {{prd_university_form.payment_deadline}}
+                      </div>
+                      <div class="alert">{{prd_university_form.payment_deadline.errors}}</div>
+                    </div>
                     <div class="item form-group {% if prd_university_form.sample_certificate.errors %}bad{% endif %}">
                       <label class="control-label col-md-2 col-sm-2 col-xs-12" >
                         Sample Certificate<span class="required">*</span>
@@ -1064,6 +1073,38 @@
                           {% endif %}                         
                         </div>
                       </div>
+                    </div>
+                    <div class="item form-group {% if prd_university_form.eligibility_criteria.errors %}bad{% endif %}">
+                       <label class="control-label col-md-2 col-sm-2 col-xs-12" >
+                          Eligibility Criteria.<span class="required">*</span>
+                        </label>
+                        </label>
+                        <div class="col-md-7 col-sm-7 col-xs-12">
+                            {{prd_university_form.eligibility_criteria}}
+                            <div id="suggestions-container" style="position: relative; float: left; width: 250px; margin: 10px;"></div>
+                        </div>
+                        <div class="alert">{{prd_university_form.eligibility_criteria.errors}}</div>
+                    </div>
+
+                    <div class="item form-group {% if prd_university_form.attendees_criteria.errors %}bad{% endif %}">
+                        <label class="control-label col-md-2 col-sm-2 col-xs-12" >
+                          Who Should Attend?<span class="required">*</span>
+                        </label>
+                        <div class="col-md-7 col-sm-7 col-xs-12">
+                        {% for heading, subheading in prd_university_form.fields.attendees_criteria_choices.choices%}
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            <label>Heading - {{ forloop.counter }} </label><input type="text" class="form-control" value="{{heading}}" name="heading_{{forloop.counter0}}">
+                          </div>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            <label>Sub Heading - {{ forloop.counter }}</label><input type="text"  class="form-control"  value="{{subheading}}" name="subheading_{{forloop.counter0}}">
+                          </div>
+                          <div class="col-md-12">
+                            <hr>
+                          </div>
+                        {% endfor %}
+
+                        </div>
+                      <div class="alert">{{prd_university_form.attendees_criteria.errors}}</div>
                     </div>
 
                     <div class="item form-group {% if prd_university_form.assesment.errors %}bad{% endif %}">
@@ -1235,6 +1276,7 @@
   <script type="text/javascript" 
     src="{% static 'packages/bootstrap-daterangepicker/daterangepicker.js' %}">
   </script>
+  <script type="text/javascript" src="{% static 'packages/jquery.tagsinput/src/jquery.tagsinput.js' %}"></script>
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
   <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
   <script src="{% static 'console/js/myadmin/django-admin-multiselect-media.js' %}"></script> 

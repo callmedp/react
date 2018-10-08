@@ -1256,6 +1256,16 @@ class UniversityCourseForm(forms.ModelForm):
         input_formats=['%d-%m-%Y']
     )
 
+    payment_deadline = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                'class': 'form-control payment_deadline',
+                "readonly": True,
+            }, format='%d-%m-%Y'
+        ),
+        input_formats=['%d-%m-%Y']
+    )
+
     application_process_choices = MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple,
@@ -1276,15 +1286,28 @@ class UniversityCourseForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple,
         choices=[]
     )
-
+    eligibility_criteria = forms.CharField(
+        label=("Eligibility Criteria"),
+        help_text='semi-colon(;) separated criteria, e.g. Line Managers; Decision Maker; ...', 
+        max_length=500,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control col-md-7 col-xs-12'})
+    )
+    attendees_criteria_choices = MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=[]
+    )
 
     class Meta:
         model = UniversityCourseDetail
         fields = [
             'batch_launch_date', 'apply_last_date',
             'sample_certificate', 'application_process', 'assesment',
-            'benefits'
+            'benefits', 'eligibility_criteria', 'attendees_criteria',
+            "payment_deadline"
         ]
+
     def __init__(self, *args, **kwargs):
         super(UniversityCourseForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
@@ -1294,6 +1317,8 @@ class UniversityCourseForm(forms.ModelForm):
         self.fields['assesment'].widget.attrs['required'] = True
         self.fields['assesment'].widget.attrs['class'] = form_class
         self.fields['sample_certificate'].widget.attrs['class'] = form_class
+        self.fields['eligibility_criteria'].widget.attrs['class'] = form_class + ' tagsinput tags form-control'
+
         if self.instance.get_application_process:
             self.fields['application_process_choices'].initial = [
                 int(k) for k in self.instance.get_application_process
@@ -1302,6 +1327,16 @@ class UniversityCourseForm(forms.ModelForm):
                 (int(k), APPLICATION_PROCESS.get(k)[1], APPLICATION_PROCESS.get(k)[0]) for k in self.instance.get_application_process
             ]
 
+        attendees_criteria = self.instance.get_attendees_criteria
+        if attendees_criteria and len(attendees_criteria) < 4:
+            extra_form = 4 - len(attendees_criteria)
+            attendees_criteria.extend([('', '')] * extra_form)
+        elif attendees_criteria and len(attendees_criteria) >= 4:
+            attendees_criteria.extend([('', '')])
+        else:
+            attendees_criteria = [('', '')] * 4
+
+        self.fields['attendees_criteria_choices'].choices = attendees_criteria
         self.fields['application_process_choices'].widget.attrs['class'] = form_class
         self.fields['application_process_choices'].widget.attrs['required'] = True
         self.fields['application_process_choices'].widget.attrs['class'] = form_class + ' process_item'
@@ -1343,6 +1378,21 @@ class UniversityCourseForm(forms.ModelForm):
 
         return file
 
+    def clean_eligibility_criteria(self):
+        eligibility_criteria = self.cleaned_data.get('eligibility_criteria', '')
+        if eligibility_criteria is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        return eligibility_criteria
+
+    def clean_attendees_criteria(self):
+        attendees_criteria = self.cleaned_data.get('attendees_criteria', '')
+
+        if not eval(attendees_criteria):
+            raise forms.ValidationError(
+                "Provide atleast one 'Who should attend?'.")
+        return attendees_criteria
+
 
 class UniversityCoursePaymentForm(forms.ModelForm):
 
@@ -1351,7 +1401,7 @@ class UniversityCoursePaymentForm(forms.ModelForm):
             attrs={
                 'class': 'form-control col-md-7 col-xs-12 last_date_of_payment',
                 "readonly": True,
-            }, format='%m/%d/%Y'
+            }, format='%d-%m-%Y'
         ),
         input_formats=['%d-%m-%Y']
 

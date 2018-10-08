@@ -1,0 +1,286 @@
+@import "../path";
+@import "../common/bootstrap/variables";
+@import "../common/bootstrap/mixins";
+
+body {
+	color: $e-txt-color;
+	font-size: $font-size+2;
+}
+
+h1, h2, h3, h4 {
+	margin: 0;
+}
+
+a {
+	color: $e-anchor-color;
+
+	&:hover, &:focus {
+		color: $e-anchor-color;
+	}
+}
+
+.goTop {
+	position: fixed;
+    top: 70px;
+    height: 55px;
+    z-index: 1;
+}
+
+.heading-primary-exe {
+	font-size: $font-size+11;
+	color: $primary-color;
+	font-weight: $font-weight+300;
+
+	@media (max-width: 1190px) {
+		font-size: $font-size+9;
+	}
+}
+
+.exe-box {
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.10);
+  -moz-box-shadow: 0 0 40px rgba(0, 0, 0, 0.10);
+  -webkit-box-shadow: 0 0 40px rgba(0, 0, 0, 0.10);
+  -ms-box-shadow: 0 0 40px rgba(0, 0, 0, 0.10);
+  background-color: #fff;
+  border-radius: 5px;
+  clear: both;
+  overflow: hidden;
+
+  	.e-btm-bdr {
+		display: table;
+		vertical-align: top;
+		width: 100%;
+
+		figure {
+	  		background-color: $e-blue-color;
+	  		display: table-cell;
+	  		width: 55px;
+	  		height: 55px;
+	  		border-top-left-radius: 5px;
+
+	  		i {
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				margin: auto;
+			}
+	  	}
+
+	  	h2 {
+	  		display: table-cell;
+	  		margin-bottom: 0;
+	  		vertical-align: middle;
+	  		padding-left: 22px;
+	  	}
+	}	
+
+	h3 {
+		font-size: $font-size+5;
+		color: $e-secondary-color;
+		font-weight: $font-weight+300;
+	}
+}
+
+.e-btm-bdr {
+	border-bottom: 1px solid $e-border-color;
+	clear: both;
+}
+
+.e-blue-bdr {
+	border-bottom: 4px solid $e-blue-color;
+	display: block;
+}
+
+.e-program-list {
+	padding: 0;
+	clear: both;
+	margin-left: 7px;
+	ul{
+		padding: 10px;
+	}
+	li {
+		display: block;
+		border-left: 1px dashed #93c6f1;
+		padding: 0 0 20px 20px;
+		margin: 0;
+		position: relative;
+
+		&:last-child {
+			padding-bottom: 0;
+		}
+
+		&:before {
+			content: '';
+			border-radius: 100%;
+			width: 12px;
+			height: 12px;
+			border: 3px solid #93c6f1;
+			position: absolute;
+			left: -7px;
+			top: 0;
+			background-color: $white-color;
+		}
+
+		h3 {
+			display: block;
+			line-height: 16px;
+			margin-bottom: 5px;
+		}
+	}
+}
+
+.exe-accordian {
+
+	.panel-group {
+		padding-left: 0;
+		list-style-type: none;
+	}
+
+	.panel-body {
+		strong, b {
+			font-weight: $font-weight+300;
+		}
+
+		p {
+			margin-bottom: 0;
+		}
+	}
+
+	.panel, .panel-default {
+		box-shadow: none;
+		border: 1px solid $e-blue-bdr;
+		border-radius: 5px;
+		background-color: $white-color;
+		padding: 0 20px;
+		margin-bottom: 15px;
+
+		strong, b {
+			font-weight: $font-weight+300;
+		}
+
+		ul {
+			padding: 0;
+			clear: both;
+			margin-left: 7px;
+			list-style-type: none;
+
+			li {
+				display: block;
+				padding: 0 0 15px 15px;
+				margin: 0;
+				position: relative;
+				font-size: $font-size+3;
+
+				&:last-child {
+					padding-bottom: 0;
+				}
+
+				&:before {
+					content: '';
+					width: 4px;
+					height: 8px;
+					position: absolute;
+					left: -7px;
+					top: 5px;
+					background: $sprite-exe -450px -64px;
+					display: inline-block;
+				}
+
+				a {
+					color: $anchor-color;
+				}
+
+				em {
+					font-style: italic;
+				}
+
+				p {
+					margin: 0;
+					padding: 0;
+				}
+
+				strong, b {
+					font-weight: $font-weight+300;
+				}
+			}
+		}
+
+		ol {
+			padding: 0;
+			clear: both;
+			margin-left: 10px;
+			direction: ltr;
+
+			li {
+				padding: 0 0 15px 15px;
+				margin: 0;
+				font-size: $font-size+3;
+			}
+		}
+	}
+
+	.panel-heading {
+		border: none;
+		background-color: transparent;
+		border-radius: 0;
+		padding: 15px 0;
+	}
+
+	.panel-title {
+		font-size: $font-size+4;
+		font-weight: $font-weight+300;
+	}
+
+	.panel-group .panel-heading + .panel-collapse > .panel-body, .panel-group .panel-heading + .panel-collapse > .list-group {
+		border-top: none;
+		padding: 15px 0 25px 0;
+	}
+
+	.panel-title > a {
+		display: block;
+		position: relative;
+		color: $primary-color;
+		line-height: 20px;
+		font-size: $font-size+5;
+	}
+
+	.panel-title > a.collapsed {
+		color: $e-txt-color;
+	}
+
+	.panel-title > a:after {
+	    content:"";
+	    position: absolute;
+	    top: 7px;
+	    right: 0;  
+	    font-size: $font-size+29;
+	    color: #707070;  
+	    font-weight: $font-weight+100;
+	    background: $sprite-exe -480px -64px; 
+	    width: 18px;
+	    height: 4px;
+	}
+
+	.panel-title > a.collapsed:after {
+	    content:"";
+	    position: absolute;
+	    top: 0;
+	    right: 0;
+	    font-size: $font-size+29;
+	    color: #707070;
+	    font-weight: $font-weight+100;
+	    background: $sprite-exe -459px -64px; 
+	    width: 18px;
+	    height: 18px;
+	}
+}
+
+.listing li {
+	margin-top: 25px;
+}
+
+footer {
+	margin-top: 0;
+}
