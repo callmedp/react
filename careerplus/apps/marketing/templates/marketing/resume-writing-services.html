@@ -76,7 +76,7 @@
                   <label class="error-txt js-error"></label>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" id="mobile" placeholder="Mobile Number" name="number" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
+                  <input type="text" class="form-control" maxlength="10" id="mobile" placeholder="Mobile Number" name="number" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
                   <label class="error-txt js-error"></label>
                 </div>
                 <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
@@ -347,7 +347,6 @@
 
                 },
                 name:{
-                   // required:true,
                     lettersonly:true,
 
                 },

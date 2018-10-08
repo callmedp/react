@@ -3470,6 +3470,7 @@ text-decoration:none;
     }
 
 }
+<<<<<<< HEAD
 input[type='number'] {
     -moz-appearance:textfield;
 }
@@ -3478,3 +3479,70 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
+=======
+
+
+
+
+
+
+
+ .country-code {
+    display: block; }
+
+ .country-code .custom-select {
+      width: 52px;
+      display: inline-block;
+      height: 40px;
+      position: relative; }
+
+   .country-code .custom-select select{
+    background:#fff;
+    border-radius: 5px !important;
+    width: 52px;
+   }
+
+  .country-code .custom-select:after {
+        content: '';
+        width: 0;
+        height: 0;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 6px solid #7f7f7f;
+        position: absolute;
+        right: 5px;
+        top: 16px;
+        text-indent: 1px;
+        text-overflow: ''; }
+
+   .country-code .custom-select select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        text-indent: 0;
+        text-overflow: '';
+        border-radius: 0;
+        height: 33px;
+        padding: 5px }
+
+   .country-code .custom-select select::-ms-expand {
+          display: none; }
+        .inter-call .country-code .custom-select select option {
+          min-width: 100px; }
+   .country-code .form-control {
+      width: 78%;
+      display: inline-block; }
+
+      @media (max-width: 1190px) {
+        .inter-call .country-code .form-control {
+          width: 77%; } }
+      @media (max-width: 991px) {
+        .inter-call .country-code .form-control {
+          width: 91%; } }
+
+
+
+
+
+
+
+>>>>>>> linkedin_marketing

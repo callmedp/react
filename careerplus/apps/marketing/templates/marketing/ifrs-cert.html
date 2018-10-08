@@ -102,7 +102,7 @@
         <div>
             <input type="hidden" id="country" name="country" aria-invalid="false" value="91">
 
-            <input id="mobile" type="number" name="number"
+            <input id="mobile" type="text" name="number"
             placeholder="Mobile Number" maxlength="10" aria-required="true" class="pull-right" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
 
             <span class="error" for="mobile" style="color: rgb(255, 0, 0);font-size: 11px;width:100%;" ></span>
@@ -272,7 +272,12 @@
 
             $.validator.addMethod("custommobile",
                 function(value, element) {
-                    return value.length == 10 ;
+                    if (value.length<10 || value.length>16){
+                            return false;
+                            }
+                    else{
+                    return true ;
+                    }
                 }
             );
 
@@ -311,6 +316,7 @@
                     name:{
                         lettersonly:true
 
+
                     },
                     msg:{
                         maxlength:500
@@ -320,7 +326,7 @@
                     number:{
                        required:"Field is required",
                        number:"Enter only number",
-                       custommobile: "Please enter 10 digits mobile number",
+                       custommobile: "Please enter atleast 10 digits mobile number",
                     },
                     email:{
                         required:"Field is required"

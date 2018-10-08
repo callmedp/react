@@ -84,7 +84,7 @@
         <div>
             <input type="hidden" id="country" name="country" aria-invalid="false" value="91">
 
-            <input id="mobile" type="number" name="number"
+            <input id="mobile" type="text" name="number"
             placeholder="Mobile Number" maxlength="10" aria-required="true" class="pull-right" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
 
             <span class="error" for="mobile" style="color: rgb(255, 0, 0);font-size: 11px;width:100%;" ></span>
@@ -245,9 +245,9 @@
               });
 
             var _gaq = _gaq || [];
-            $.validator.addMethod("lettersonly", function (value, element){
-                return this.optional(element) || /^[a-z\s]*$/i.test(value);
-            }, "Letters only please");
+        //    $.validator.addMethod("lettersonly", function (value, element){
+         //       return this.optional(element) || /^[a-z\s]*$/i.test(value);
+          //  }, "Letters only please");
 
             $.validator.addMethod("defaultInvalid", function (value, element) {
                 return !(element.value == element.defaultValue);
@@ -255,7 +255,13 @@
 
             $.validator.addMethod("custommobile",
                 function(value, element) {
-                    return value.length == 10 ;
+
+                   if (value.length < 10 || value.length>16){
+                            return false;
+                            }
+                    else{
+                    return true ;
+                    }
                 }
             );
 
@@ -321,13 +327,16 @@
                     number:{
                        required:"Field is required",
                        number:"Enter only number",
-                       custommobile: "Please enter 10 digits mobile number",
+                       custommobile: "Please enter atleast 10 digits mobile number"
                     },
                     email:{
                         required:"Field is required"
                     },
                     msg:{
                         maxlength:"No more than 500 characters."
+                    },
+                    name:{
+                        lettersonly : "please enter your name in alphabets only"
                     }
                 },
                 highlight:function(element, errorClass) {
@@ -358,7 +367,7 @@
                 var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
                 var isValidEmail = regex.test(formEmail);
 
-                if (formMobile.length != 10 ){
+                if (formMobile.length < 10 || formMobile.length >16 ){
                     alert("Please enter a valid mobile number.");
                     return;
                 }
