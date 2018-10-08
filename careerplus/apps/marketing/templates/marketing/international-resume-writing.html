@@ -80,13 +80,13 @@ home country</strong>
                     <div class="country-code">
                         <div class ="custom-select">
                     <select class="form-control" id="country" name="country">
-                        <option selected value = "91" >91</option>
+                        <option selected value = "971" >+971</option>
                         {% for country in countries%}
-                        <option value ="{{country.phone}}">{{country.phone}}</option>
+                        <option value ="{{country}}">+{{country}}</option>
                         {%endfor%}
                     </select>
                             </div>
-                    <input type="text" class="form-control" name="number" id="mobile" placeholder="Mobile Number" value={% if alt_contact %} "{{alt_contact}}" {% else %} "" {% endif %}>
+                    <input type="text" class="form-control" maxlength="10" name="number" id="mobile" placeholder="Mobile Number" value={% if alt_contact %} "{{alt_contact}}" {% else %} "" {% endif %}>
                 </div>
                 </div>
                  <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}1884{% endif %}">
@@ -283,8 +283,8 @@ over other candidates</li>
                 var isValidEmail = regex.test(formEmail);
 
 
-                if (formMobile.length > 16 || formMobile.length < 10 ){
-                    alert("Please enter a valid mobile number.");
+                if (formMobile.length < 5 ){
+                    alert("Please enter atleast 5 digit  number.");
                     return;
                 }
 
