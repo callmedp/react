@@ -82,7 +82,7 @@
             <input type="hidden" id="country" name="country" aria-invalid="false" value="91">
                             
             <input id="mobile" type="text" name="number"
-            placeholder="Mobile Number" value={% if alt_contact %} "{{alt_contact}}" {% else %} "" {% endif %} maxlength="10" class="pull-right">          
+            placeholder="Mobile Number" value={% if alt_contact %} "{{alt_contact}}" {% else %} "" {% endif %} maxlength="15" class="pull-right">
             
             <span class="error" for="mobile" style="color: rgb(255, 0, 0);font-size: 11px;width:100%;" ></span>
          </div>
@@ -247,7 +247,11 @@
 
             $.validator.addMethod("custommobile",
                 function(value, element) {
-                    return value.length == 10 ;
+                       if (value.length<10 || value.length>16)
+                       {
+                         return false;
+                       }
+                    return true ;
                 }
             );
 
@@ -288,7 +292,7 @@
                     },
                     name:{
                         lettersonly:true,
-                        required:true,
+                     //   required:true,
                     },
                     msg:{
                         maxlength:500
@@ -298,7 +302,7 @@
                     number:{
                        required:"Field is required",
                        number:"Enter only number",
-                       custommobile: "Please enter 10 digits mobile number",
+                       custommobile: "Please enter atleast 10 digits mobile number",
                     },
                     email:{
                         required:"Field is required"
@@ -311,10 +315,13 @@
                     }
                 },
                 highlight:function(element, errorClass) {
-                    $(element).siblings('.error').removeClass('noerror');
+                    $(element).siblings('.error').addClass('noerror');
+
                 },
                 unhighlight:function(element, errorClass) {
-                    $(element).siblings('.error').addClass('noerror');    
+                    $(element).siblings('.error').removeClass('noerror');
+                    $(element).siblings('.error').text('');
+
                 },
                 errorPlacement: function(error, element){
                     element.siblings('.error').text(error.text());

@@ -81,7 +81,7 @@
                        <p class="js-error"></p>
                     </li>
                     <li class="form-group">
-                       <input id="mobile" name="number" maxlength="10" minlength="10" type="text" class="form-control" placeholder="Mobile" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
+                       <input id="mobile" name="number" maxlength="15" minlength="10" type="text" class="form-control" placeholder="Mobile" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
                        <p class="js-error"></p>
                     </li>
                     
@@ -795,7 +795,7 @@
 
                 },
                 name:{
-                    required:true,
+                //    required:true,
                     lettersonly:true,
 
                 },
