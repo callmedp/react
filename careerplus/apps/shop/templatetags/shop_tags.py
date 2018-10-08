@@ -16,3 +16,8 @@ def get_eval_value(val):
 @register.filter(name='split')
 def split(value, arg):
     return value.split(arg)
+
+
+@register.filter
+def ordinal_number(val):
+    return "%d%s" % (val,"tsnrhtdd"[(val/10%10!=1)*(val%10<4)*val%10::4])

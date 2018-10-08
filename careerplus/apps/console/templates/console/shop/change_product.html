@@ -17,7 +17,10 @@
 
   <!-- ColorSelector -->
   <link href="{% static 'packages/bootstrap-colorselector/dist/bootstrap-colorselector.min.css' %}" rel="stylesheet" type="text/css">
+  <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-common.scss' %}" rel="stylesheet">
+  <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-detail.scss' %}" rel="stylesheet">
   {% endcompress %}
+
 
   {% compress css inline %}
   <style type="text/css">
@@ -1675,17 +1678,19 @@
                         Application Process<span class="required">*</span>
                       </label>
                       <div class="col-md-7 col-sm-7 col-xs-12" id="application_process">
-                        <ul id="id_application_process">
+                        <ul id="id_application_process" class="exe-application-process">
                           {% for x,y,z in prd_university_form.fields.application_process_choices.choices %}
                             <li>
                               <label for="id_application_process_{{forloop.counter}}">
-                                <img src="{{ y }}">
-                              <div>
-                                <input class="form-control col-md-7 col-xs-12 process_item process_checkbox" id="id_application_process_{{forloop.counter}}" name="application_process" type="checkbox" value="{{ x }}" required="" {%if x  in prd_university_form.fields.application_process_choices.initial %} checked {% endif %}>
-                              </div>
-                              <div style="float:left;" id="process_detail_{{x}}">{{z}}</div>
-
+                                <div>
+                                  <input class="form-control col-md-7 col-xs-12 process_item process_checkbox" id="id_application_process_{{forloop.counter}}" name="application_process" type="checkbox" value="{{ x }}" required="" {%if x  in prd_university_form.fields.application_process_choices.initial %} checked {% endif %}>
+                                </div>  
+                                <figure class="col-sm-3 process-box" style="width:100%">
+                                  <span class="circle"><i class="{{y}}"></i></span>
+                                  <figcaption>{{z}}</figcaption>
+                                </figure>                          
                               </label>
+                            
                             </li>
                           {% endfor %}
                         </ul>
@@ -1701,11 +1706,11 @@
                         <div class="row"  id="application_processes">
                           {% if prd_university_form.fields.selected_process_choices.choices %}
                             {% for x , y, z in prd_university_form.fields.selected_process_choices.choices %}
-                              <div class="col-md-3">
-                                <div class="col-md-12 text-center" id="selected_process_{{x}}">
-                                  <img src="{{y}}" class="selected_process_img">
-                                </div>
-                                <div>{{ z }}</div>
+                              <div class="col-md-3  exe-application-process" id="selected_process_{{x}}">
+                                 <figure class="col-sm-12 process-box" style="width:100%">
+                                  <span class="circle"><i class="{{y}}"></i></span>
+                                  <figcaption>{{z}}</figcaption>
+                                </figure>     
                               </div>
                             {% endfor %}
                           {% else %}
@@ -1719,16 +1724,17 @@
                         Benefits<span class="required">*</span>
                       </label>
                       <div class="col-md-7 col-sm-7 col-xs-12" id="benefits">
-                        <ul id="id_benefits">
+                        <ul id="id_benefits"  class="exe-application-process">
                            {% for x,y,z in prd_university_form.fields.benefits_choices.choices %}
                             <li>
                               <label for="id_benefits_{{forloop.counter}}">
-                                <img src="{{ y }}">
                               <div>
                                 <input class="form-control col-md-7 col-xs-12 benefit_item benefit_checkbox" id="id_benefits_{{forloop.counter}}" name="benefits" type="checkbox" value="{{ x }}" required="" {%if x  in prd_university_form.fields.benefits_choices.initial %} checked {% endif %}>
                               </div>
-                              <div style="float:left;" id="benefit_detail_{{x}}">{{z}}</div>
-                              </label>
+                                <figure class="col-sm-4 process-box" style="width:100%">
+                                  <span class="circle"><i class="{{y}}"></i></span>
+                                  <figcaption>{{z}}</figcaption>
+                                </figure>  
                             </li>
                           {% endfor %}
                         </ul>
@@ -1744,11 +1750,11 @@
                        <div class="row"  id="selected_benefits">
                           {% if prd_university_form.fields.selected_benefits_choices.choices %}
                             {% for x , y, z in prd_university_form.fields.selected_benefits_choices.choices %}
-                              <div class="col-md-3">
-                                <div class="col-md-12 text-center" id="selected_benefit_{{x}}">
-                                  <img src="{{y}}" class="selected_benefit_img">
-                                </div>
-                                <div>{{ z }}</div>
+                              <div class="col-md-3  exe-application-process" id="selected_benefit_{{x}}">
+                                 <figure class="col-sm-12 process-box" style="width:100%">
+                                  <span class="circle"><i class="{{y}}"></i></span>
+                                  <figcaption>{{z}}</figcaption>
+                                </figure>     
                               </div>
                             {% endfor %}
                           {% else %}
@@ -1978,13 +1984,14 @@
   $('.process_item').change(function() {
       var curr_html_text = $("#application_processes").text().trim()
       var curr_html = $("#application_processes").html()
-      var html_template = '<div class="col-md-3"><div class="col-md-12 text-center" id="selected_process_counter"><img src="img_src" class="selected_process_img"></div><div>detail_name</div></div>';
+      var html_template = '<div class="col-md-3  exe-application-process" id="selected_process_counter"><figure class="col-sm-12 process-box" style="width:100%"><span class="circle"><i class="img_src"></i></span><figcaption>detail_name</figcaption></figure></div>';
       var label = $(this).prop('labels')
-      var src= $(label).find('img').attr('src')
+      var src= $(label).find('figure > span > i').attr('class')
+      var detail = $(label).find('figcaption').text()
       var val = $(this).val()
       new_html = html_template.replace('counter', val)
       new_html = new_html.replace('img_src', src)
-      new_html = new_html.replace('detail_name', $("#process_detail_"+val).text() )
+      new_html = new_html.replace('detail_name', detail)
       if($(this).is(":checked")){
         if(curr_html_text=='No Application Process Selected'){
           $("#application_processes").html(new_html)
@@ -2017,13 +2024,14 @@
   $('.benefit_item').change(function() {
       var curr_html_text = $("#selected_benefits").text().trim()
       var curr_html = $("#selected_benefits").html()
-      var html_template = '<div class="col-md-3"><div class="col-md-12 text-center" id="selected_benefit_counter"><img src="img_src" class="selected_benefit_img"></div><div>detail_name</div></div>';
+      var html_template = '<div class="col-md-3  exe-application-process" id="selected_benefit_counter"><figure class="col-sm-12 process-box" style="width:100%"><span class="circle"><i class="img_src"></i></span><figcaption>detail_name</figcaption></figure></div>';
       var label = $(this).prop('labels')
-      var src= $(label).find('img').attr('src')
+      var src= $(label).find('figure > span > i').attr('class')
+      var detail = $(label).find('figcaption').text()
       var val = $(this).val()
       new_html = html_template.replace('counter', val)
       new_html = new_html.replace('img_src', src)
-      new_html = new_html.replace('detail_name', $("#benefit_detail_"+val).text() )
+      new_html = new_html.replace('detail_name', detail)
       if($(this).is(":checked")){
         if(curr_html_text=='No Benefit Selected'){
           $("#selected_benefits").html(new_html)

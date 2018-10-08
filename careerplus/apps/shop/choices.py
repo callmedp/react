@@ -207,25 +207,24 @@ def convert_gbp(price=Decimal(0)):
     return '0'
 
 BENEFITS = {
-    '1': ['Place Order', 'https://i.vimeocdn.com/portrait/6462071_300x300'],
-    '2': ['Receive online access/study material from course material', 'https://www.admiralins.com/wp-content/uploads/2018/01/ApplicationIcon.jpg'],
-    '3': ['Access the material and start learning', 'https://mounthopehousing.org/wp-content/uploads/2016/02/edit1.png'],
-    '4': ['Appear for exam – Get Certified', 'https://mdhs.unimelb.edu.au/__data/assets/image/0009/2745306/application-image.jpg'],
-    '5': ['Fill Online Application Form', 'https://i1.wp.com/phonewasp.com/wp-content/uploads/2018/07/246x0w.jpg?fit=246%2C246'],
-    '6': ['Get Access to online learning management system', 'https://rukminim1.flixcart.com/image/832/832/tattoo/5/g/h/snd-t1663-smilendeal-t1663-removeable-temp-body-tattoo-superman-original-imaead4bp59kywmg.jpeg?q=70'],
-    # '7': ['Check eligibility before filling online application',''],
+    '1': ['Free featured profile', 'exe-icon-feat-profile', 'FREE featured profile worth Rs. 1440 for 1 month on Shine.com'],
+    '2': ['Shine credits', 'exe-icon-shine-credit', '10% Shine credits redeemable on next purchase*'],
+    '3': ['Global Education Providers', 'exe-icon-education-provider', 'Choose from a list of global providers as per your requirement.'],
+    '4': ['Appear for exam – Get Certified', ''],
+    '5': ['Fill Online Application Form', ''],
+    '6': ['Get Access to online learning management system', ''], # '7': ['Check eligibility before filling online application',''],
     # '8': ['Complete online application form', ],
     # '9': ['Make Course Fee Payment', ''],
     # '10': ['Start your course', '']
 }
 
 APPLICATION_PROCESS = {
-    '1': ['Place Order', 'https://i.vimeocdn.com/portrait/6462071_300x300'],
-    '2': ['Receive online access/study material from course material', 'https://www.admiralins.com/wp-content/uploads/2018/01/ApplicationIcon.jpg'],
-    '3': ['Access the material and start learning', 'https://mounthopehousing.org/wp-content/uploads/2016/02/edit1.png'],
-    '4': ['Appear for exam – Get Certified', 'https://mdhs.unimelb.edu.au/__data/assets/image/0009/2745306/application-image.jpg'],
-    '5': ['Fill Online Application Form', 'https://i1.wp.com/phonewasp.com/wp-content/uploads/2018/07/246x0w.jpg?fit=246%2C246'],
-    '6': ['Get Access to online learning management system', 'https://rukminim1.flixcart.com/image/832/832/tattoo/5/g/h/snd-t1663-smilendeal-t1663-removeable-temp-body-tattoo-superman-original-imaead4bp59kywmg.jpeg?q=70'],
+    '1': ['Place Order', 'exe-icon-place-order'],
+    '2': ['Receive online access/study material from course material', 'exe-icon-study-material'],
+    '3': ['Access the material and start learning', 'exe-icon-start-learning'],
+    '4': ['Appear for exam – Get Certified', 'exe-icon-get-certified'],
+    '5': ['Fill Online Application Form', ''],
+    '6': ['Get Access to online learning management system', ''],
     # '7': ['Check eligibility before filling online application',''],
     # '8': ['Complete online application form', ],
     # '9': ['Make Course Fee Payment', ''],

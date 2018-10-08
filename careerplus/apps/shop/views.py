@@ -48,6 +48,7 @@ from .mixins import CourseCatalogueMixin, LinkedinSeriviceMixin
 from users.forms import (
     ModalLoginApiForm
 )
+from shop.choices import APPLICATION_PROCESS, BENEFITS
 from review.forms import ReviewForm
 
 
@@ -366,6 +367,11 @@ class ProductInformationMixin(object):
                 ctx['university_detail'] = json.loads(sqs.pUncdl[0])
                 faculty = [f.faculty for f in self.product_obj.facultyproducts.all().select_related('faculty','faculty__institute')]
                 ctx['faculty'] = [faculty[i:i + 1]for i in range(len(faculty))]
+                ctx['institute'] = self.product_obj.category_main
+                app_process = ctx['university_detail']['app_process']
+                ctx['university_detail']['app_process'] = [APPLICATION_PROCESS.get(proc) for proc in app_process]
+                app_process = ctx['university_detail']['benefits']
+                ctx['university_detail']['benefits'] = [BENEFITS.get(proc) for proc in app_process]
         else:
             if ctx.get('prd_exp', None) in ['EP', 'FP']:
                 pPOP = json.loads(sqs_main.pPOP)

@@ -1285,7 +1285,7 @@ class UniversityCourseForm(forms.ModelForm):
     benefits_choices = MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple,
-        choices=APPLICATION_PROCESS_CHOICES
+        choices=BENEFITS_CHOICES
     )
     selected_benefits_choices = MultipleChoiceField(
         required=False,

@@ -1,7 +1,7 @@
 {% extends "basic/base1.html" %}
 {% load static meta compress %}
 {% load shop_tags %}
-
+{% load humanize %}
 {% block title %}
   {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
 {% endblock title %}
@@ -175,31 +175,7 @@
                     </div>
                     <article class="col-sm-12 pad-25">
                       The objective of the course is to develop knowledge of various analytical techniques in order to help better decision making in sales and marketing. CMOs and Marketing Managers usually depend on data analysts in their firms to crunch data. This course will help them communicate their marketing objectives in a focused manner to data analysts and help them critically evaluate the results of data analysis better. Participants will understand the underlying principles of statistical and analytical techniques. Participants will also develop a working familiarity of implementing these techniques on data sets.
-
-                      <ul class="e-program-list mt-20">
-                        <li>
-                          <h3>Execute 4 real life projects</h3>
-                          Acquire hands-on knowledge and expertise!
-                        </li>
-                        <li>
-                          <h3>Hands-on training on 5+ tools</h3>
-                          Learn various tools which includes Google AdWords, Google Analytics, Facebook, etc
-                        </li>
-                        <li>
-                          <h3>10 simulation test papers</h3>
-                          Gain confidence to ace the certification exams!
-                        </li>
-                        <li>
-                          <h3>Training by industry experts</h3>
-                          Get trained by “Dream Team” of Silicon Valley authors for Digital marketing role.
-                        </li>
-                        <li>
-                          <h3>Comprehensive Course Curriculum </h3>
-                          Go through in-depth knowledge on 8 topics and 11 domains which covers solid foundation learning for all digital marketing aspects.
-                        </li>
-                      </ul>
-                        <span class="e-program-list mt-20">
-                        <b>New</b>
+                      <span class="e-program-list mt-20">
                       {{prd_desc|safe}}
                       </span>  
                     </article>
@@ -216,52 +192,6 @@
                       <h2 class="heading-primary-exe">Who Should Attend</h2>
                     </div>
                     <article class="col-sm-12 pad-25">
-
-                      <div class="row exe-who-attend">
-
-                        <div class="media col-sm-6">
-                          <div class="media-left">
-                            <figure class="exe-icon-manager"></figure>
-                          </div>
-                          <div class="media-body media-middle">
-                            <h3 class="media-heading">Managers, Decision makers</h3>
-                          </div>
-                        </div>
-
-                        <div class="media col-sm-6">
-                          <div class="media-left">
-                            <figure class="exe-icon-manager"></figure>
-                          </div>
-                          <div class="media-body media-middle">
-                            <h3 class="media-heading">Division / Department Heads</h3>
-                            Sales & Marketing heads who wants to market products of service.
-                          </div>
-                        </div>
-
-                        <div class="media col-sm-6">
-                          <div class="media-left">
-                            <figure class="exe-icon-manager"></figure>
-                          </div>
-                          <div class="media-body media-middle">
-                            <h3 class="media-heading">Mid to Senior Level Managers </h3>
-                            who drive marketing strategies.
-                          </div>
-                        </div>
-
-                        <div class="media col-sm-6">
-                          <div class="media-left">
-                            <figure class="exe-icon-manager"></figure>
-                          </div>
-                          <div class="media-body media-middle">
-                            <h3 class="media-heading">Line Managers</h3>
-                          </div>
-                        </div>
-
-                      </div>
-                    </article>
-                    <b>New</b>
-                     <article class="col-sm-12 pad-25">
-
                       <div class="row exe-who-attend">
                       {%with university_detail.attendees_criteria|get_eval_value  as attendees_list %}
                       {% for attendees in attendees_list %}
@@ -276,8 +206,6 @@
                         </div>
                         {% endfor %}
                         {% endwith %}
-
-                      
                       </div>
                     </article>
                   </div>
@@ -291,15 +219,6 @@
                     </figure>
                     <h2 class="heading-primary-exe">Eligibility criteria</h2>
                   </div>
-                  <article class="col-sm-12 pad-25">
-                    <ul class="exe-criteria-list">
-                      <li>Any graduates with minimum 50% marks in graduation.</li>
-                      <li>Proficiency in English, spoken & written is mandatory.</li>
-                      <li>Working knowledge of Excel.</li>
-                      <li>For Indian Participants – Graduates (10+2+3) from a recognized university (UGC/AICTE/DEC/AIU/State Government) in any discipline.</li>
-                    </ul>
-                  </article>
-                  New 
                    <article class="col-sm-12 pad-25">
                     <ul class="exe-criteria-list">
                     {% with university_detail.eligibility_criteria|split:";" as eligibilities %}
@@ -373,34 +292,17 @@
                       <div class="row exe-exclusive-benefits">
                         <h3 class="col-sm-12 mb-20">Exclusive Benefits</h2>
 
+                        {% for benefit in university_detail.benefits %}
                         <div class="col-sm-4">
                           <figure class="thumbnail">
-                            <i class="exe-icon-feat-profile"></i>
+                            <i class="{{benefit.1}}"></i>
                             <figcaption class="caption">
-                              <h3>Free featured profile</h3>
-                              <p>FREE featured profile worth Rs. 1440 for 1 month on Shine.com</p>
+                              <h3>{{ benefit.0 }}</h3>
+                              <p>{{ benefit.2 }}</p>
                             </figcaption>
                           </figure>
                         </div>
-
-                        <div class="col-sm-4">
-                          <figure class="thumbnail">
-                            <i class="exe-icon-shine-credit"></i>
-                            <figcaption class="caption">
-                              <h3>Shine credits </h3>
-                              <p>10% Shine credits redeemable on next purchase*</p>
-                            </figcaption>
-                          </figure>
-                        </div>
-                        <div class="col-sm-4">
-                          <figure class="thumbnail">
-                            <i class="exe-icon-education-provider"></i>
-                            <figcaption class="caption">
-                              <h3>Global Education Providers </h3>
-                              <p>Choose from a list of global providers as per your requirement.</p>
-                            </figcaption>
-                          </figure>
-                        </div>
+                        {% endfor %}
 
                         <div class="clearfix e-btm-bdr mb-30 mt-10 col-sm-12"></div>
 
@@ -449,140 +351,25 @@
                       <h2 class="heading-primary-exe">Program Structure</h2>
                     </div>
                     <article class="col-sm-12 pad-25 exe-accordian exe-structure-list2">
-                      <ul class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                        <li class="panel panel-default">
-                          <div class="panel-heading" role="tab" id="headingOne">
-                            <h3 class="panel-title">
-                              <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOneExe" aria-expanded="true" aria-controls="collapseOneExe">
-                                Module 1: Basic Concepts & Applications of Project Management
-                              </a>
-                            </h3>
-                          </div>
-                          <div id="collapseOneExe" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                            <div class="panel-body">
-                              <ul>
-                                <li><h3>Project Management Simulation Exercise – Scope, Resources & Scheduling</h3></li>
-                                <li><h3>An Introduction to MS-Project</h3></li>
-                                <li><h3>Interpreting the output of an MS-Project Report</h3></li>
-                                <li><h3>Applications to Technical Scheduling and Resource Scheduling</h3></li>
-                                <li><h3>Resource Levelling</h3></li>
-                                <li><h3>Tracking and Monitoring Project Progress</h3></li>
-                                <li><h3>Modern tools for Project Management (TILOS, Bentley, SD BIM Modeling, RIB2)</h3></li>
-                              </ul>
+                        <ul class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        {% for chapter in chapter_list %}
+                          <li class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="heading_{{forloop.counter}}">
+                              <h3 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOneExe_{{forloop.counter}}" {%if forloop.counter != 1%} class="collapsed" aria-expanded="false" {%else %} aria-expanded="true" {% endif %}  aria-controls="collapseOneExe_{{forloop.counter}}">
+                                  {{ chapter.heading }}
+                                </a>
+                              </h3>
                             </div>
-                          </div>
-                        </li>
-                        <li class="panel panel-default">
-                          <div class="panel-heading" role="tab" id="headingTwo">
-                            <h3 class="panel-title">
-                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwoExe" aria-expanded="false" aria-controls="collapseTwoExe">
-                                Module 2: Project Modelling and Management with Applications in MS-Project
-                              </a>
-                            </h3>
-                          </div>
-                          <div id="collapseTwoExe" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                            <div class="panel-body">
-                              <ul>
-                                <li><h3>Project Management Simulation Exercise – Scope, Resources & Scheduling</h3></li>
-                                <li><h3>An Introduction to MS-Project</h3></li>
-                                <li><h3>Interpreting the output of an MS-Project Report</h3></li>
-                                <li><h3>Applications to Technical Scheduling and Resource Scheduling</h3></li>
-                                <li><h3>Resource Levelling</h3></li>
-                                <li><h3>Tracking and Monitoring Project Progress</h3></li>
-                                <li><h3>Modern tools for Project Management (TILOS, Bentley, SD BIM Modeling, RIB2)</h3></li>
-                              </ul>
+                            <div id="collapseOneExe_{{forloop.counter}}" class="panel-collapse collapse {% if forloop.counter == 1 %} in {% endif %}" role="tabpanel" aria-labelledby="heading_{{forloop.counter}}">
+                              <div class="panel-body">
+                               {{chapter.content|safe }}
+                              </div>
                             </div>
-                          </div>
-                        </li>
-                        <li class="panel panel-default">
-                          <div class="panel-heading" role="tab" id="headingThree">
-                            <h3 class="panel-title">
-                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThreeExe" aria-expanded="false" aria-controls="collapseThreeExe">
-                                Module 3: Financial & Risk Aspects of Projects
-                              </a>
-                            </h3>
-                          </div>
-                          <div id="collapseThreeExe" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                            <div class="panel-body">
-                              <ul>
-                                <li><h3>Project Management Simulation Exercise – Scope, Resources & Scheduling</h3></li>
-                                <li><h3>An Introduction to MS-Project</h3></li>
-                                <li><h3>Interpreting the output of an MS-Project Report</h3></li>
-                                <li><h3>Applications to Technical Scheduling and Resource Scheduling</h3></li>
-                                <li><h3>Resource Levelling</h3></li>
-                                <li><h3>Tracking and Monitoring Project Progress</h3></li>
-                                <li><h3>Modern tools for Project Management (TILOS, Bentley, SD BIM Modeling, RIB2)</h3></li>
-                              </ul>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="panel panel-default">
-                          <div class="panel-heading" role="tab" id="headingFour">
-                            <h3 class="panel-title">
-                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFourExe" aria-expanded="false" aria-controls="collapseFourExe">
-                                Module 4: Workshop on Risk Assessment & Management in Projects
-                              </a>
-                            </h3>
-                          </div>
-                          <div id="collapseFourExe" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-                            <div class="panel-body">
-                              <ul>
-                                <li><h3>Project Management Simulation Exercise – Scope, Resources & Scheduling</h3></li>
-                                <li><h3>An Introduction to MS-Project</h3></li>
-                                <li><h3>Interpreting the output of an MS-Project Report</h3></li>
-                                <li><h3>Applications to Technical Scheduling and Resource Scheduling</h3></li>
-                                <li><h3>Resource Levelling</h3></li>
-                                <li><h3>Tracking and Monitoring Project Progress</h3></li>
-                                <li><h3>Modern tools for Project Management (TILOS, Bentley, SD BIM Modeling, RIB2)</h3></li>
-                              </ul>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="panel panel-default">
-                          <div class="panel-heading" role="tab" id="headingFive">
-                            <h3 class="panel-title">
-                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFiveExe" aria-expanded="false" aria-controls="collapseFiveExe">
-                                Module 5: People Management in Projects
-                              </a>
-                            </h3>
-                          </div>
-                          <div id="collapseFiveExe" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
-                            <div class="panel-body">
-                              <ul>
-                                <li><h3>Project Management Simulation Exercise – Scope, Resources & Scheduling</h3></li>
-                                <li><h3>An Introduction to MS-Project</h3></li>
-                                <li><h3>Interpreting the output of an MS-Project Report</h3></li>
-                                <li><h3>Applications to Technical Scheduling and Resource Scheduling</h3></li>
-                                <li><h3>Resource Levelling</h3></li>
-                                <li><h3>Tracking and Monitoring Project Progress</h3></li>
-                                <li><h3>Modern tools for Project Management (TILOS, Bentley, SD BIM Modeling, RIB2)</h3></li>
-                              </ul>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                    </article>
-                    NEW
-                 <article class="col-sm-12 pad-25 exe-accordian exe-structure-list2">
-                      <ul class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                      {% for chapter in chapter_list %}
-                        <li class="panel panel-default">
-                          <div class="panel-heading" role="tab" id="heading_{{forloop.counter}}">
-                            <h3 class="panel-title">
-                              <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOneExe_{{forloop.counter}}" {%if forloop.counter != 1%} class="collapsed" aria-expanded="false" {%else %} aria-expanded="true" {% endif %}  aria-controls="collapseOneExe_{{forloop.counter}}">
-                                {{ chapter.heading }}
-                              </a>
-                            </h3>
-                          </div>
-                          <div id="collapseOneExe_{{forloop.counter}}" class="panel-collapse collapse {% if forloop.counter == 1 %} in {% endif %}" role="tabpanel" aria-labelledby="heading_{{forloop.counter}}">
-                            <div class="panel-body">
-                             {{chapter.content|safe }}
-                            </div>
-                          </div>
-                        </li>
-                      {% endfor %}
-                        </ul>
-                    </article>
+                          </li>
+                        {% endfor %}
+                          </ul>
+                      </article>
                   </div>
                 </section>
 
@@ -596,22 +383,13 @@
                       <h2 class="heading-primary-exe">Assessment & Evaluation</h2>
                     </div>
                     <article class="col-sm-12 pad-25">
-                      <ul class="exe-structure-list1">
-                        <li><p>
-                          A minimum of 70% attendance to the LIVE lectures is a prerequisite for the successful completion of thiscourse. There are periodic evaluations built in throughout the duration of the course. 
-                        </p></li>
-                        <li><p>
-                          These maybe in the form of a quiz, assignment, case studies or other objective/subjective assessments. The evaluations are designed ensure continuous student engagement with the course and encourage learning. Students who successfully clear the same along with the requisite attendance criteria will be awarded a Certificate from SPJIMR as appropriate.
-                        </p></li>
-                      </ul>
-                      <b>New</b>
                       <span class="exe-structure-list1">
                         {{university_detail.assesment|safe}}
                       </span>
 
                       <div class="exe-sample-certificate mt-20">
                         <figure>
-                          <img class="img-responsive" src="{% static 'shinelearn/images/executive/sample-certificate.jpg' %}" alt="Sample certificate">
+                          <img class="img-responsive" src="{{university_detail.sample_certificate}}" alt="Sample certificate">
                         </figure>
                         <h3 class="mt-30 ml-40">Sample Certificate</h3>
                         <a class="exe-button-view-sample pull-right mt-20 mr-20" href="#" type="button" data-toggle="modal" data-target=".bs-example-modal-lg">View sample certificate</a>
@@ -629,7 +407,7 @@
                         <h3 class="heading-primary-exe" id="myModalLabel">Sample Certificate</h3>
                       </div>
                       <div class="modal-body exe-sample-certificate-modal">
-                        <img class="img-responsive text-center" src="{% static 'shinelearn/images/executive/xlri-cert.png' %}" alt="Sample certificate">
+                        <img class="img-responsive text-center" src="{{university_detail.sample_certificate}}"  alt="Sample certificate">
                       </div>
                     </div>
                   </div>
@@ -647,14 +425,12 @@
                     <article class="col-sm-12 pad-25 exe-institute">
                       <figure>
                         <span class="institute-txt">
-                          <h3>{XLRI Jamshedpur}</h3>
+                          <h3>{{ institute.name }}</h3>
                           <a class="exe-button-view-course pull-right" href="#">View all courses</a>
                         </span>
                       </figure>
                       <p class="mt-20">
-                        XLRI is one of India’s leading management school based in Jamshedpur, Jharkhand, India. Established in 1949 as the Xavier Labor Relations Institute, by Fr. Quinn Enright, XLRI is acknowledged as India’s oldest business management school.
-                        <br><br>
-                        XLRI with its single vision of Magis, i.e., pursuit of excellence, focuses on three areas: academic excellence, personal values and social concern. XLRI spares no effort to make its curriculum world-class and deliver it in the most effective manner. It constantly scans the developments in business and in society and tries to pro-act to meet the challenges. Its world-class faculty with its commitment and deep sense of service delivers the curriculum very effectively...   <a href="#">read more</a>
+                         {{ institute.description|safe|truncatechars:"150"}}
                       </p>
                     </article>
                   </div>
@@ -716,7 +492,7 @@
 
                 <!-- Fees & Payments Modes -->
                 <section class="exe-box mb-30">
-                  <div id="fees-payments" class="scroll">
+                   <div id="fees-payments" class="scroll">
                     <div class="e-btm-bdr">
                       <figure class="pr">
                         <i class="exe-icon-fee-payments"></i>
@@ -741,26 +517,18 @@
                               </div> 
                               <div class="overall-fees">
                                 Overall fees                                  
-                                <strong>Rs. 90,000</strong> 
+                                <strong>Rs. {{start_price|floatformat|intcomma}}</strong> 
                               </div> 
                               <span class="e-blue-bdr mt-15"></span>
                               <div class="installment text-center">
                                 <span class="text-uppercase col-sm-12 mb-15">Installment Available</span>
+                                 {% for payment in university_detail.payment %}
                                 <div class="col-sm-4 installment-available">
-                                  1st Instalment
-                                  <strong>Rs. 30000</strong>
-                                  <span>Payment Deadline: <b>27/12/2018</b></span>
+                                  {{forloop.counter|ordinal_number }} Instalment
+                                  <strong>Rs. {{ payment.installment_fee }} </strong>
+                                  <span>Payment Deadline: <b>{{ payment.ldpayment }}</b></span>
                                 </div>
-                                <div class="col-sm-4 installment-available">
-                                  2nd Instalment
-                                  <strong>Rs. 35000</strong>
-                                  <span>Payment Deadline: <b>27/01/2019</b></span>
-                                </div>
-                                <div class="col-sm-4 installment-available">
-                                  3rd Instalment
-                                  <strong>Rs. 25000</strong>
-                                  <span>Payment Deadline: <b>27/03/2019</b></span>
-                                </div>
+                                {% endfor %}
                               </div>
                             </div>
                           </div>
@@ -775,25 +543,12 @@
                           </div>
                           <div id="collapseTwoExe1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                             <div class="panel-body exe-application-process">
+                              {% for proc in university_detail.app_process%}
                               <figure class="col-sm-3 process-box">
-                                <span class="circle"><i class="exe-icon-place-order"></i></span>
-                                <figcaption>Place Order</figcaption>
+                                <span class="circle"><i class="{{proc.1}}"></i></span>
+                                <figcaption>{{proc.0}}</figcaption>
                               </figure>
-                              <figure class="col-sm-3 process-box">
-                                <span class="exe-arrow"></span>
-                                <span class="circle"><i class="exe-icon-study-material"></i></span>
-                                <figcaption>Receive online access/study material</figcaption>
-                              </figure>
-                              <figure class="col-sm-3 process-box">
-                                <span class="exe-arrow"></span>
-                                <span class="circle"><i class="exe-icon-start-learning"></i></span>
-                                <figcaption>Access the material and start learning</figcaption>
-                              </figure>
-                              <figure class="col-sm-3 process-box">
-                                <span class="exe-arrow"></span>
-                                <span class="circle"><i class="exe-icon-get-certified"></i></span>
-                                <figcaption>Appear for exam – Get Certified</figcaption>
-                              </figure>
+                              {% endfor %}
                             </div>
                           </div>
                         </li>
@@ -827,60 +582,23 @@
                     </div>
                     <article class="col-sm-12 pad-25 exe-accordian">
                       <ul class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+                      {% for ques in faq_list %}
                         <li class="panel panel-default">
-                          <div class="panel-heading" role="tab" id="headingOne">
+                          <div class="panel-heading" role="tab" id="headingExe{{forloop.counter}}">
                             <h3 class="panel-title">
-                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseOneExe2" aria-expanded="true" aria-controls="collapseOneExe2">
-                                What is the cancellation policy?
+                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne{{forloop.counter}}" aria-expanded="true" aria-controls="collapseOne{{forloop.counter}}">
+                                {{ques.question}}
                               </a>
                             </h3>
                           </div>
-                          <div id="collapseOneExe2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                          <div id="collapseOne{{forloop.counter}}" class="panel-collapse collapse {% if forloop.counter == 1 %}
+                  in {% endif %}" role="tabpanel" aria-labelledby="headingExe{{forloop.counter}}">
                             <div class="panel-body">
-                              <ol type="I">
-                                <li>Requests for refund of fees on account of cancellation of enrolment shall be considered only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</li>
-                                <li>In event that such valid requests for refund of fees are received, the application money shall be refunded after deducting a penalty of Rs.5000 and applicable taxes for Indian participants & USD 125 for foreign participants.</li>
-                                <li>In all other cases, no refund shall be made.</li>
-                              </ol>
+                              {{ques.answer|safe}}
                             </div>
                           </div>
                         </li>
-                        <li class="panel panel-default">
-                          <div class="panel-heading" role="tab" id="headingTwo">
-                            <h3 class="panel-title">
-                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwoExe2" aria-expanded="false" aria-controls="collapseTwoExe2">
-                                Can I  join next batch after paying for this batch?
-                              </a>
-                            </h3>
-                          </div>
-                          <div id="collapseTwoExe2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                            <div class="panel-body">
-                              <ol type="I">
-                                <li>Requests for refund of fees on account of cancellation of enrolment shall be considered only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</li>
-                                <li>In event that such valid requests for refund of fees are received, the application money shall be refunded after deducting a penalty of Rs.5000 and applicable taxes for Indian participants & USD 125 for foreign participants.</li>
-                                <li>In all other cases, no refund shall be made.</li>
-                              </ol>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="panel panel-default">
-                          <div class="panel-heading" role="tab" id="headingThree">
-                            <h3 class="panel-title">
-                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseThreeExe2" aria-expanded="false" aria-controls="collapseThreeExe2">
-                                Do we get placement opportunity with this course?
-                              </a>
-                            </h3>
-                          </div>
-                          <div id="collapseThreeExe2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                            <div class="panel-body">
-                              <ol type="I">
-                                <li>Requests for refund of fees on account of cancellation of enrolment shall be considered only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</li>
-                                <li>In event that such valid requests for refund of fees are received, the application money shall be refunded after deducting a penalty of Rs.5000 and applicable taxes for Indian participants & USD 125 for foreign participants.</li>
-                                <li>In all other cases, no refund shall be made.</li>
-                              </ol>
-                            </div>
-                          </div>
-                        </li>
+                      {% endfor %} 
                       </ul>
                     </article>
                   </div>

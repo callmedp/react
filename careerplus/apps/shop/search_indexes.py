@@ -903,6 +903,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             detail['assesment'] = obj.university_course_detail.assesment
             detail['eligibility_criteria'] = obj.university_course_detail.eligibility_criteria
             detail['attendees_criteria'] = obj.university_course_detail.attendees_criteria
+            detail['sample_certificate'] = obj.university_course_detail.sample_certificate.url
             payment_list = []
             for payment in obj.university_course_payment.filter(active=True):
                 data = {}
@@ -911,5 +912,5 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
                 payment_list.append(data)
             detail['payment'] = payment_list
-            return json.dumps(detail) 
+            return json.dumps(detail)
         return ''

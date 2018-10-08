@@ -1,0 +1,227 @@
+@import "../../shinelearn/css/path";
+
+$sprite-exe: url($path + 'images/executive/sprite-executive.png') no-repeat;
+
+.exe-icon-apply {
+	width: 27px;
+	height: 30px;
+	background: $sprite-exe 0 0;
+	display: inline-block;
+}
+
+.exe-icon-batch {
+	width: 26px;
+	height: 26px;
+	background: $sprite-exe -37px 0;
+	display: inline-block;
+}
+
+.exe-icon-duration {
+	width: 30px;
+	height: 35px;
+	background: $sprite-exe -75px 0;
+	display: inline-block;
+}
+
+.exe-icon-batch-sm {
+	width: 15px;
+	height: 15px;
+	background: $sprite-exe -96px -91px;
+	display: inline-block;
+}
+
+.exe-icon-duration-sm {
+	width: 13px;
+	height: 15px;
+	background: $sprite-exe -97px -112px;
+	display: inline-block;
+}
+
+.exe-icon-about-program {
+	width: 24px;
+	height: 20px;
+	background: $sprite-exe -114px 0;
+	display: inline-block;
+}
+
+.exe-icon-who-attend {
+	width: 29px;
+	height: 20px;
+	background: $sprite-exe -147px 0;
+	display: inline-block;
+}
+
+.exe-icon-manager {
+	width: 37px;
+	height: 40px;
+	background: $sprite-exe 0 -40px;
+	display: inline-block;
+}
+
+.exe-icon-criteria {
+	width: 20px;
+	height: 20px;
+	background: $sprite-exe -181px 0;
+	display: inline-block;
+}
+
+.exe-icon-faculty {
+	width: 37px;
+	height: 22px;
+	background: $sprite-exe -207px 0;
+	display: inline-block;
+}
+
+.exe-icon-chevron-left {
+	width: 11px;
+	height: 19px;
+	background: $sprite-exe -485px -40px;
+	display: inline-block;
+}
+
+.exe-icon-chevron-right {
+	width: 11px;
+	height: 19px;
+	background: $sprite-exe -471px -40px;
+	display: inline-block;
+}
+
+.exe-icon-benefit {
+	width: 29px;
+	height: 20px;
+	background: $sprite-exe -248px 0;
+	display: inline-block;
+}
+
+.exe-icon-feat-profile {
+	width: 44px;
+	height: 40px;
+	background: $sprite-exe -158px -40px;
+	display: inline-block;
+}
+
+.exe-icon-feat-profile {
+	width: 44px;
+	height: 40px;
+	background: $sprite-exe -158px -40px;
+	display: inline-block;
+}
+
+.exe-icon-shine-credit {
+	width: 42px;
+	height: 36px;
+	background: $sprite-exe -211px -40px;
+	display: inline-block;
+}
+
+.exe-icon-education-provider {
+	width: 40px;
+	height: 40px;
+	background: $sprite-exe -259px -40px;
+	display: inline-block;
+}
+
+.exe-icon-0-emi {
+	width: 39px;
+	height: 40px;
+	background: $sprite-exe -305px -40px;
+	display: inline-block;
+}
+
+.exe-icon-free-service {
+	width: 43px;
+	height: 41px;
+	background: $sprite-exe -350px -40px;
+	display: inline-block;
+}
+
+.exe-icon-refer-earn {
+	width: 41px;
+	height: 45px;
+	background: $sprite-exe -400px -40px;
+	display: inline-block;
+}
+
+.exe-icon-program-structure {
+	width: 28px;
+	height: 22px;
+	background: $sprite-exe -284px 0;
+	display: inline-block;
+}
+
+.exe-icon-assesment {
+	width: 20px;
+	height: 25px;
+	background: $sprite-exe -319px 0;
+	display: inline-block;
+}
+
+.exe-icon-institute {
+	width: 22px;
+	height: 22px;
+	background: $sprite-exe -344px 0;
+	display: inline-block;
+}
+
+.exe-icon-testimonials {
+	width: 25px;
+	height: 25px;
+	background: $sprite-exe -373px 0;
+	display: inline-block;
+}
+
+.exe-icon-fee-payments {
+	width: 21px;
+	height: 26px;
+	background: $sprite-exe -406px 0;
+	display: inline-block;
+}
+
+.exe-icon-faq {
+	width: 25px;
+	height: 25px;
+	background: $sprite-exe -433px 0;
+	display: inline-block;
+}
+
+.exe-icon-brochure {
+	width: 16px;
+	height: 18px;
+	background: $sprite-exe -484px 0;
+	display: inline-block;
+}
+
+.exe-icon-request-call {
+	width: 18px;
+	height: 20px;
+	background: $sprite-exe -462px 0;
+	display: inline-block;
+}
+
+.exe-icon-place-order {
+	width: 37px;
+	height: 40px;
+	background: $sprite-exe -119px -91px;
+	display: inline-block;
+}
+
+.exe-icon-study-material {
+	width: 39px;
+	height: 39px;
+	background: $sprite-exe -167px -91px;
+	display: inline-block;
+}
+
+.exe-icon-start-learning {
+	width: 37px;
+	height: 42px;
+	background: $sprite-exe -216px -91px;
+	display: inline-block;
+}
+
+.exe-icon-get-certified {
+	width: 39px;
+	height: 30px;
+	background: $sprite-exe -266px -91px;
+	display: inline-block;
+}
