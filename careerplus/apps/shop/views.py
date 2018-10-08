@@ -50,6 +50,7 @@ from users.forms import (
 )
 from shop.choices import APPLICATION_PROCESS, BENEFITS
 from review.forms import ReviewForm
+from homepage.config import UNIVERSITY_COURSE
 
 
 class ProductInformationMixin(object):
@@ -372,6 +373,9 @@ class ProductInformationMixin(object):
                 ctx['university_detail']['app_process'] = [APPLICATION_PROCESS.get(proc) for proc in app_process]
                 app_process = ctx['university_detail']['benefits']
                 ctx['university_detail']['benefits'] = [BENEFITS.get(proc) for proc in app_process]
+                ctx['university_testimonial'] = Testimonial.objects.filter(
+                    page=UNIVERSITY_COURSE, object_id=self.product_obj.pk
+                )
         else:
             if ctx.get('prd_exp', None) in ['EP', 'FP']:
                 pPOP = json.loads(sqs_main.pPOP)

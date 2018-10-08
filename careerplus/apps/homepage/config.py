@@ -1,10 +1,11 @@
 # Constant Value For University Page
 university_page = 4
-
+UNIVERSITY_COURSE = 5
 PAGECHOICES = (
 	(0, '--Select Page--'),
 	(1, 'Homepage'),
 	(2, 'Roundone'),
 	(3, 'Course Catalogue'),
 	(university_page, 'University Page'),
+	(UNIVERSITY_COURSE, 'University Course')
 )

@@ -73,7 +73,7 @@ from faq.forms import (
     ChangeFaqForm,
     ChangePublicFaqForm,)
 from homepage.config import (
-    university_page)
+    university_page, UNIVERSITY_COURSE)
 
 from faq.models import FAQuestion
 from users.mixins import UserGroupMixin
@@ -1337,6 +1337,16 @@ class ChangeProductView(DetailView):
         if self.object.type_flow == 14:
             context.update({'prd_university_form': UniversityCourseForm(
                 instance=self.object.university_course_detail)})
+            TestimonialModelFormset = modelformset_factory(
+                Testimonial, form=TestimonialModelForm,
+                can_delete=True, extra=1, max_num=5,
+                validate_max=True)
+            testimonial_model_formset = TestimonialModelFormset(
+                data=None,
+                queryset=Testimonial.objects.filter(
+                    page=UNIVERSITY_COURSE,
+                    object_id=self.object.pk))
+            context.update({'testimonial_model_formset': testimonial_model_formset})
             UniversityCoursesPaymentFormset = inlineformset_factory(
                 Product, UniversityCoursePayment,
                 fk_name='product',
@@ -1830,6 +1840,51 @@ class ChangeProductView(DetailView):
                                 reverse(
                                     'console:product-change',
                                     kwargs={'pk': obj.pk}))
+                    elif slug == 'testimonial_model':
+                        TestimonialModelFormset = modelformset_factory(
+                            Testimonial,
+                            form=TestimonialModelForm,
+                            can_delete=True,
+                            extra=1,
+                            max_num=5, validate_max=True)
+
+                        if self.object.type_flow == 14:
+                            formset = TestimonialModelFormset(
+                                request.POST, request.FILES,
+                                queryset=Testimonial.objects.filter(
+                                    page=UNIVERSITY_COURSE, object_id=obj.pk))
+                            from django.db import transaction
+                            if formset.is_valid():
+                                with transaction.atomic():
+                                    formset.save(commit=False)
+                                    saved_formset = formset.save(commit=False)
+                                    for ins in formset.deleted_objects:
+                                        ins.delete()
+
+                                    for form in saved_formset:
+                                        form.page = UNIVERSITY_COURSE
+                                        form.object_id = obj.pk
+                                        form.save()
+                                    formset.save_m2m()
+
+                                messages.success(
+                                    self.request,
+                                    "University Course Testimonial changed Successfully")
+                                return HttpResponseRedirect(
+                                    reverse(
+                                        'console:product-change',
+                                        kwargs={'pk': obj.pk}))
+                            else:
+                                context = self.get_context_data()
+                                if formset:
+                                    context.update({'testimonial_model_formset': formset})
+                                messages.error(
+                                    self.request,
+                                    "University Course Testimonial Change Failed, Changes not Saved")
+                                return TemplateResponse(
+                                    request, [
+                                        "console/shop/change_product.html"
+                                    ], context)
                         else:
                             context = self.get_context_data()
                             if formset:

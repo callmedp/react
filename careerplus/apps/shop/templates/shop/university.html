@@ -449,31 +449,21 @@
 
                         <!-- Wrapper for slides -->
                         <div class="carousel-inner" role="listbox">
-                          <div class="item col-sm-12 active">
-                            <p class="mb-20 mt-20">One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry.</p>
+                        {%for testimonial in university_testimonial %}
+                          <div class="item col-sm-12 {% if forloop.counter == 1%} active {% endif %}">
+                            <p class="mb-20 mt-20">{{ testimonial.reviews }}</p>
                             <figure>
-                              <img src="{% static 'shinelearn/images/executive/testimonial-pic.jpg' %}" alt="Faculty Profile">
+                              <img src="{{ testimonial.image.url }}" alt="Faculty Profile">
                               <figcaption>
-                                <strong>Bhaskar</strong>
+                                <strong>{{testimonial.user_name }}</strong>
                                 <div class="exe-designation">
-                                  Project Leader, Amnet Systems Pvt. Ltd.
+                                 {{ testimonial.designation }}, {{ testimonial.company }}
                                 </div>
                               </figcaption>
                             </figure>
                           </div>
+                          {% endfor %}
 
-                          <div class="item col-sm-12">
-                            <p class="mb-20 mt-20">One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry.</p>
-                            <figure>
-                              <img src="{% static 'shinelearn/images/executive/testimonial-pic.jpg' %}" alt="Faculty Profile">
-                              <figcaption>
-                                <strong>Bhaskar</strong>
-                                <div class="exe-designation">
-                                  Project Leader, Amnet Systems Pvt. Ltd.
-                                </div>
-                              </figcaption>
-                            </figure>
-                          </div>
                           
                         </div>
 
