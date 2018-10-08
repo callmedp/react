@@ -78,7 +78,7 @@
                 </div>
                 <div class="form-group">
                   <input type="text" class="form-control" id="email" 
-                  placeholder="Email Address" name="email" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %}
+                  placeholder="Email Address" name="email" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %}>
                   <label class="error-txt js-error"></label>
                 </div>
                 <div class="form-group">
@@ -436,7 +436,6 @@
 
                 },
                 name:{
-                    required:true,
                     lettersonly:true,
 
                 },
@@ -450,11 +449,9 @@
                    required:"Field is required"
                 },
                 email:{
-                    required:"Field is required"
+                    required: "Field is required"
                 },
-                name:{
-                    required:"Field is required"
-                },
+
                 // msg:{
                 //     required:"Field is required",
                 //     maxlength:"No more than 500 characters."
