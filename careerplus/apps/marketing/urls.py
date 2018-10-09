@@ -85,6 +85,17 @@ urlpatterns = [
     url(r'^linkedin',
         marketing_views.MarketingPages.as_view(),
         name='linkedin'),
+    url(r'^linkedin-1',
+        marketing_views.MarketingPages.as_view(),
+        name='linkedin'),
+
+    url(r'^international-resume-writing-1', marketing_views.MarketingPages.as_view(),
+      name='international-resume-writing'),
+
+
+
+
+
 ] + [url(r'^%s$' %key, marketing_views.MarketingPages.as_view()) \
         for key,value in redirect_url_mapping.items()]
 

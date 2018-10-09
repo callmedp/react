@@ -56,7 +56,7 @@ class MarketingPages(TemplateView):
         context.update({'source': source, 'lead_source': 4})
         count_obj = cache.get("countri", "")
         if count_obj:
-            context['countries'] = cache.get('countri')
+            context['countries'] = count_obj
             return context
         else:
             countreey = list(Country.objects.filter(active=True)\
