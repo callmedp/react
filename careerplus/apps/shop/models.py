@@ -1904,7 +1904,7 @@ class ProductAttribute(AbstractAutoDate):
     active = models.BooleanField(default=True)
 
     def _get_value(self):
-        value = getattr(self, 'value_%s' % self.attribute.type_attribute)
+        value = getattr(self, 'value_%s' % self.attribute.type_attribute).select_related('attribute')
         if hasattr(value, 'all'):
             value = value.all()
         return value

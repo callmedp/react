@@ -1092,7 +1092,6 @@ class CourseCatalogueView(TemplateView, MetadataMixin, CourseCatalogueMixin):
 class ProductDetailContent(View, ProductInformationMixin, CartMixin):
 
     def __init__(self):
-        
         self.sqs_obj = None
         self.sqs_main = None
         self.product_obj = None
