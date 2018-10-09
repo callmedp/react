@@ -39,11 +39,15 @@
         <div class="exe-header-txt container pr">
           <div class="row">
           <!-- breadcrums -->
-          <ol class="breadcrumb mt-30">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">XLRI Courses</a></li>
-            <li class="active">Digital Marketing</li>
-          </ol>
+          {% block breadcrumbs %}
+              {% if sqs.id in linkedin_resume_services %}
+                <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
+                    <li class="active" ></li>
+                </ol>
+              {% else %}
+                {% include "shop/partials/breadcrumb.html" %}
+              {% endif %}
+          {% endblock breadcrumbs %}
           <!-- course heading -->
           <h1>Digital Marketing</h1>
           <div class="row">
@@ -51,7 +55,7 @@
               <!-- course image -->
               <div class="exe-course-img">
                 <figure>
-                  <img src="{% static 'shinelearn/images/executive/xlri-logo.jpg' %}" alt="Logo" class="img-responsive">
+                  <img src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive">
                 </figure>
               </div>
               <div class="exe-course-sep"></div>
@@ -248,7 +252,7 @@
                            {% for fac in innner_fac %}
                             <div class="col-sm-6 text-center">
                               <figure>
-                                <a class="faculty-thumb" href="#"><img src="{% static 'shinelearn/images/executive/faculty-pic1.jpg' %}" alt="Faculty Profile"></a>
+                                <a class="faculty-thumb" href="{{fac.get_absolute_url}}"><img src="{% static 'shinelearn/images/executive/faculty-pic1.jpg' %}" alt="Faculty Profile"></a>
                                 <figcaption>
                                   <strong><a href="#">{{ fac.name }}</a></strong>
                                   <div class="exe-designation">{{ fac.designation }} – 
@@ -425,7 +429,7 @@
                       <figure>
                         <span class="institute-txt">
                           <h3>{{ institute.name }}</h3>
-                          <a class="exe-button-view-course pull-right" href="#">View all courses</a>
+                          <a class="exe-button-view-course pull-right" href="{{ institute.get_absolute_url }}">View all courses</a>
                         </span>
                       </figure>
                       <p class="mt-20">

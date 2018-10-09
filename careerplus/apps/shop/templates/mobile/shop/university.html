@@ -10,6 +10,8 @@
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/smk-accordion.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/executive-course/exec-detail.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
+     <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-common.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-detail.scss' %}" rel="stylesheet">
     {% endcompress css %}
         <style>
             a[disabled], a[disabled]:hover {
@@ -345,37 +347,23 @@
                         <h2><span><i class="execIcon-testimonials"></i></span>Testimonials</h2>
                         <div class="content pl-40 pr-40">
                             <ul class="testimonials faculty-profile testi-slide">
+                                {%for testimonial in university_testimonial %}
                                 <li>
-                                    <p class="mb-15">Overall: enjoyed the course; gained nice experience with TE, MICA, faculty, and batch mates; learned few good and useful things during this 1 year tenure, which will definitely add some value to my career and personal growth. </p>
+                                    <p class="mb-15">{{ testimonial.reviews }}</p>
 
                                     <div class="media">
                                         <div class="media-left">
                                             <span class="testimonial-image">
-                                             <img class="media-object" src="{% static 'shinelearn/images/mobile/executive-course/bhaskar.jpg'%}" alt="...">
+                                             <img class="media-object" src="{{ testimonial.image.url }}" alt="...">
                                             </span>
                                         </div>
                                         <div class="media-body">
-                                            <p class="pb-0 text-upper fs-14 c-333">Bhaskar</p>
-                                            <p class="pb-0 line-height-sm c-999">Project Leader,  Amnet Systems Pvt. Ltd.</p>
+                                            <p class="pb-0 text-upper fs-14 c-333">{{testimonial.user_name }}</p>
+                                            <p class="pb-0 line-height-sm c-999">{{ testimonial.designation }}, {{ testimonial.company }}</p>
                                         </div>
                                     </div>
                                 </li>
-
-                                <li>
-                                    <p class="mb-15">Overall: enjoyed the course; gained nice experience with TE, MICA, faculty, and batch mates; learned few good and useful things during this 1 year tenure, which will definitely add some value to my career and personal growth. </p>
-
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <span class="testimonial-image">
-                                                <img class="media-object" src="{% static 'shinelearn/images/mobile/executive-course/bhaskar.jpg'%}" alt="...">
-                                            </span>
-                                        </div>
-                                        <div class="media-body">
-                                            <p class="pb-0 text-upper fs-14 c-333">Bhaskar</p>
-                                            <p class="pb-0 line-height-sm c-999">Project Leader,  Amnet Systems Pvt. Ltd.</p>
-                                        </div>
-                                    </div>
-                                </li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div><!-- /. white box-->

@@ -904,6 +904,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             detail['eligibility_criteria'] = obj.university_course_detail.eligibility_criteria
             detail['attendees_criteria'] = obj.university_course_detail.attendees_criteria
             detail['sample_certificate'] = obj.university_course_detail.sample_certificate.url
+            brochure_attr = self.product_obj.attributes.filter(name='Brochure')
+            detail['brochure'] = brochure_attr[0].productattributes.first().value_file.url if brochure_attr else ''
             payment_list = []
             for payment in obj.university_course_payment.filter(active=True):
                 data = {}

@@ -411,6 +411,12 @@
         font-size: $font-size-base;
         padding: 5px 4px 0px;
     }
+    .media-left {
+        img {
+            width: 100px;
+            height: 74px;
+        }
+    }
 
     .subhead {
         

@@ -76,7 +76,7 @@ class ProductInformationMixin(object):
             if category.type_level == 4:
                 category = category.get_parent()[0] if category.get_parent() else None
         if category:
-            if product.is_course:
+            if product.is_course and product.type_flow != 14:
                 parent = category.get_parent()
                 if parent:
                     breadcrumbs.append(
