@@ -2559,7 +2559,10 @@ footer {
 	}
 }
 
-
+/*---------font size css---------*/
+.fs-14 {
+	font-size: $font-size+3;
+}
 
 /*---------margin padding css---------*/
 
@@ -2625,6 +2628,10 @@ footer {
 
 .mb-40 {
 	margin-bottom: 40px;
+}
+
+.mb-50 {
+	margin-bottom: 50px;
 }
 
 .mb-100 {
@@ -2693,6 +2700,10 @@ footer {
 
 .pad-25 {
 	padding: 25px;
+}
+
+.pad-45 {
+	padding: 45px;
 }
 
 .db {
@@ -3036,7 +3047,7 @@ footer {
 	}
 }
 
-/*--- executive page css ---*/
+/*--- executive courses css ---*/
 
 .exe-icon-apply {
 	width: 27px;
@@ -3049,6 +3060,13 @@ footer {
 	width: 26px;
 	height: 26px;
 	background: $sprite-exe -37px 0;
+	display: inline-block;
+}
+
+.exe-icon-batch-grey {
+	width: 21px;
+	height: 22px;
+	background: $sprite-exe -391px -91px;
 	display: inline-block;
 }
 
@@ -3277,15 +3295,15 @@ footer {
 }
 
 .exe-button-view-sample {
-	border: 1px solid $e-anchor-color;
+	border: 1px solid $anchor-color;
 	background-color: transparent;
 	padding: 7px 15px;
 	font-size: $font-size+2;
-	color: $e-anchor-color;
+	color: $anchor-color;
 	border-radius: 20px;
 
 	&:hover, &:focus {
-		color: $e-anchor-color;
+		color: $anchor-color;
 	}
 }
 
@@ -3315,5 +3333,34 @@ footer {
 
 	&:hover, &:focus {
 		color: $white-color;
+	}
+}
+
+.exe-button-callback {
+	background-color: $e-oragne-color;
+	border-radius: 20px;
+	padding: 12px 20px;
+	display: block;
+	text-transform: uppercase;
+	color: $white-color;
+	border: none;
+	box-shadow: 0px 0px 15px 0px rgba(39, 68, 117, 0.2);
+	margin: 0 auto;
+
+	&:hover, &:focus {
+		color: $white-color;
+	}
+}
+
+.exe-button-view-more {
+	border: 1px solid $anchor-color;
+	background-color: transparent;
+	padding: 10px 20px;
+	font-size: $font-size+2;
+	color: $anchor-color;
+	border-radius: 20px;
+
+	&:hover, &:focus {
+		color: $anchor-color;
 	}
 }

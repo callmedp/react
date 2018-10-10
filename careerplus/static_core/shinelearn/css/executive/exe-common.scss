@@ -11,14 +11,6 @@ h1, h2, h3, h4 {
 	margin: 0;
 }
 
-a {
-	color: $e-anchor-color;
-
-	&:hover, &:focus {
-		color: $e-anchor-color;
-	}
-}
-
 .goTop {
 	position: fixed;
     top: 70px;
@@ -33,6 +25,16 @@ a {
 
 	@media (max-width: 1190px) {
 		font-size: $font-size+9;
+	}
+}
+
+.heading-primary-exe1 {
+	font-size: $font-size+15;
+	color: $primary-color;
+	font-weight: $font-weight+300;
+
+	@media (max-width: 1190px) {
+		font-size: $font-size+13;
 	}
 }
 
@@ -283,4 +285,146 @@ a {
 
 footer {
 	margin-top: 0;
+}
+
+.exe-faculty-carousel {
+
+	.carousel-control {
+		top: 35%;
+
+		&.left {
+			background-color: $white-color;
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+			background-image: none;
+			box-shadow: 0px 7px 25px 0px rgba(149, 149, 149, 0.2);
+		}
+
+		&.right {
+			background-color: $white-color;
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+			background-image: none;
+			box-shadow: 0px 7px 25px 0px rgba(149, 149, 149, 0.2);
+		}
+	}
+
+	figure {
+		
+		img {
+			width: 98px;
+			height: 98px;
+			border-radius: 50%;
+			box-shadow: 0px 7px 25px 0px rgba(149, 149, 149, 0.2);
+			margin: 5px auto 25px auto;
+		}
+
+		figcaption {
+			strong {
+				font-size: $font-size+5;
+				font-weight: $font-weight+300;
+				display: block;
+			}
+
+			.exe-designation {
+				display: block;
+				color: $grey-color;
+				padding: 5px 0 0 0;
+				margin-bottom: 10px;
+				position: relative;
+
+				&:after {
+					content: '';
+					border-top: 1px solid rgba(212, 212, 212, 0.5);
+					width: auto;
+					display: block;
+					margin: 0 45% 0 47%;
+				}
+
+				span {
+					display: block;
+					margin-bottom: 10px;
+				}
+			}
+		}
+	}
+}
+
+.exe-testimonial-carousel {
+	margin-bottom: 20px;
+
+	.item {
+		padding: 0 12%;
+	}
+
+	.carousel-inner {
+		&:before {
+			content: '';
+			width: 86px;
+			height: 73px;
+			position: absolute;
+			left: 60px;
+			top: 10px;
+			background: $sprite-exe 0 -91px;
+			display: inline-block; 
+		}
+	}
+
+	.carousel-control {
+		top: 35%;
+
+		&.left {
+			background-color: $white-color;
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+			background-image: none;
+			box-shadow: 0px 7px 25px 0px rgba(149, 149, 149, 0.2);
+		}
+
+		&.right {
+			background-color: $white-color;
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+			background-image: none;
+			box-shadow: 0px 7px 25px 0px rgba(149, 149, 149, 0.2);
+		}
+	}
+
+	figure {
+		display: block;
+		margin-bottom: 10px;
+
+		img {
+			width: 60px;
+			height: 60px;
+			border-radius: 5px;
+			margin: 0 auto 5px auto;
+			display: table-cell;
+			vertical-align: top;
+			display: block;
+		}
+
+		figcaption {
+			display: block;
+			vertical-align: middle;
+
+			strong {
+				font-size: $font-size+5;
+				font-weight: $font-weight+300;
+				display: block;
+				text-transform: uppercase;
+				color: $primary-color;
+			}
+
+			.exe-designation {
+				display: block;
+				color: $grey-color;
+				padding: 0;
+			}
+		}
+	}
 }
