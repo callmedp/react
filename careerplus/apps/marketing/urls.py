@@ -92,6 +92,9 @@ urlpatterns = [
     url(r'^international-resume-writing-1', marketing_views.MarketingPages.as_view(),
       name='international-resume-writing'),
 
+    url(r'^resume-writing-services-1$', marketing_views.MarketingPages.as_view(),
+       name='resume-writing'),
+
 
 
 

@@ -313,13 +313,12 @@ $(document).ready(function(){
 				var cart= "express";
 			}
 
-			google_aanalyt();
+			google_analyts();
 
 			var prod=$('#product_id').find("option:selected").val();
 			data = {
                 "prod_id": prod,
-                "addons": '',
-                "cart_type": cart,
+                "cart_type": 'cart',
                 "cv_id": '',
                 "req_options": [],
                 }
@@ -361,7 +360,7 @@ $(document).ready(function(){
 
      });
 
-		function google_aanalyt(){
+		function google_analyts(){
 	     var _gaq = _gaq || [];
 	_gaq.push(['resume._trackEvent','Lead','submit']);
 		var conversion_id = 991709191;
