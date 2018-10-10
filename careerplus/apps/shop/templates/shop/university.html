@@ -49,7 +49,7 @@
               {% endif %}
           {% endblock breadcrumbs %}
           <!-- course heading -->
-          <h1>Digital Marketing</h1>
+          <h1>{{prd_H1}}</h1>
           <div class="row">
             <div class="exe-course-box col-sm-11">
               <!-- course image -->
@@ -71,7 +71,7 @@
                         </span>
                         <figcaption class="media-body">
                           Apply before:
-                          <strong>29 Dec 2018</strong>
+                          <strong>{{ university_detail.applydate }}</strong>
                         </figcaption>
                       </div>
                     </figure>
@@ -93,7 +93,7 @@
                         </span>
                         <figcaption class="media-body">
                           Duration:
-                          <strong>4 months</strong>
+                          <strong>{{ selected_var.dur_days|convert_to_month }} months</strong>
                         </figcaption>
                       </div>
                     </figure>
@@ -103,8 +103,8 @@
                   </div>
 
                   <div class="col-sm-3 exe-enrol-now">
-                    <strike>Rs.799</strike>
-                    <strong>Rs.799</strong>
+                    <strike>Rs.{{ selected_var.fake_inr_price|floatformat }}</strike>
+                    <strong>Rs.{{ sqs.pPinb|floatformat }}</strong>
                     <a class="exe-button-enrol mt-10" href="#">Enroll Now</a>
                   </div>
               </div>
@@ -252,7 +252,7 @@
                            {% for fac in innner_fac %}
                             <div class="col-sm-6 text-center">
                               <figure>
-                                <a class="faculty-thumb" href="{{fac.get_absolute_url}}"><img src="{% static 'shinelearn/images/executive/faculty-pic1.jpg' %}" alt="Faculty Profile"></a>
+                                <a class="faculty-thumb" href="{{fac.get_absolute_url}}"><img src="{{ fac.image.url }}" alt="Faculty Profile"></a>
                                 <figcaption>
                                   <strong><a href="#">{{ fac.name }}</a></strong>
                                   <div class="exe-designation">{{ fac.designation }} – 
@@ -517,7 +517,7 @@
                                 <span class="text-uppercase col-sm-12 mb-15">Installment Available</span>
                                  {% for payment in university_detail.payment %}
                                 <div class="col-sm-4 installment-available">
-                                  {{forloop.counter|ordinal_number }} Instalment
+                                  {{forloop.counter|ordinal }} Instalment
                                   <strong>Rs. {{ payment.installment_fee|floatformat|intcomma }} </strong>
                                   <span>Payment Deadline: <b>{{ payment.ldpayment }}</b></span>
                                 </div>
@@ -619,7 +619,7 @@
                         <figure>
                           <i class="exe-icon-duration-sm"></i>
                           <figcaption>
-                            Duration: <strong>4 month</strong>
+                            Duration: <strong>{{ selected_var.dur_days|convert_to_month }} month</strong>
                           </figcaption>
                           <a class="exe-button-enrol mt-15" href="#">Enroll Now</a>
                         </figure>
@@ -628,7 +628,7 @@
 
                     <!-- Download Brochure -->
                     <section class="exe-box mb-30">
-                        <a href="#" class="exe-download-brochure"><figure class="exe-icon-brochure"></figure>Download Brochure</a>
+                        <a href="{{ university_detail.brochure }}" class="exe-download-brochure" download><figure class="exe-icon-brochure"></figure>Download Brochure</a>
                     </section>
 
                     <!-- Request a call -->

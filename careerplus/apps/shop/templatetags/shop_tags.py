@@ -1,5 +1,5 @@
 from django import template                                                                      
-
+import math
 register = template.Library()
 
 
@@ -19,5 +19,5 @@ def split(value, arg):
 
 
 @register.filter
-def ordinal_number(val):
-    return "%d%s" % (val,"tsnrhtdd"[(val/10%10!=1)*(val%10<4)*val%10::4])
+def convert_to_month(val):
+    return math.ceil(val / 30.0)
