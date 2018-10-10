@@ -45,8 +45,7 @@
 						</div>
 					</div>
 					<div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-						<form class="form pull-right" id="lead" method="POST" action="{% url 'crmapi:lead-management' %}">
-							{% csrf_token %}
+						<div class="form pull-right" >
 							<strong class="formheading">I am Interested</strong>
 						  <div class="form-group">
 						    <input type="text" class="form-control" name="name" id="name" placeholder="Your Full Name" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %}>
@@ -57,22 +56,22 @@
 						  	<label class="error-txt js-error"></label>
 						  </div>
 						  <div class="form-group">
-						    <input type="text" class="form-control" maxlength="10" name="number" id="mobile" placeholder="Mobile Number" value={% if alt_contact %} "{{alt_contact}}" {% endif %}>
+						    <input type="text" class="form-control" maxlength="10" name="number" id="mobile" placeholder="Mobile Number" value={% if alt_contact %} "{{alt_contact}}"{%else%}"{{request.session.mobile_no}}" {% endif %}>
 						 	<label class="error-txt js-error"></label>
 						   </div>
 						  <div class="form-group pr">
 							<i class="sprite arrow"></i>
-						    <select class="form-control">
-							  <option selected="selected" value="3133" >LinkedIn - Rs. 2,200 onwards</option>
+						    <select class="form-control" id="product_id">
+							 <option value="8" >LinkedIn - Rs. 2,200 onwards</option>
+							 <option selected="selected"  value="1" >LinkedIn - Rs. 2,100 onwards</option>
+							 <option value="10" >LinkedIn - Rs. 2,000 onwards</option>
 							</select>
 						  </div>
-							<button type="submit" class="btn btn-default newbtn" onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enquire Now</button>
-						  <p class="easy">*Easy EMI option available</p>
-							<input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3133{% endif %}">
-							<input type="hidden" name="prd" value="Linkedin">
-							<input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
-							<input type="hidden" name="lsource" value="{{ lead_source }}">
-						</form>
+						<input type="hidden" id="candidate_id" value="{{request.session.candidate_id}}" >
+							<button type="button" id="addcart" class="btn btn-default newbtn" >Enroll Now</button>
+
+						   <p class="easy">*Easy EMI option available</p>
+						</div>
 				   </div>
 			   </div>
 		   </div>
@@ -302,77 +301,79 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{% static 'shinelearn/js/marketing/bootstrap.min.js' %}"></script>
    <script type="text/javascript">
-    var _gaq = _gaq || [];
 
-    $.validator.addMethod("lettersonly", function (value, element){
-        return this.optional(element) || /^[a-z\s]*$/i.test(value);
-    }, "Letters only please");
 
-    $.validator.addMethod("defaultInvalid", function (value, element) {
-        return !(element.value == element.defaultValue);
-    }, "This field is required.");
-        $("#lead").validate({
-            submitHandler:function (form) {
-                var action = $(form).attr('action');
-                $.post(action, $(form).serialize(), function (data) {
-                    if (data && data['status']){
-                        $.each($("#lead"), function (i, e) {
-                            e.reset();
-                        });
-                        $("#lead label").remove();
-                        var conversion_id = 991709191;
-                        var conversion_label = "ciw9CIetw1gQh5Dx2AM";
-                        var ga_code = document.createElement('div');
-                        ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
-                       document.body.appendChild(ga_code);
-                       window.location.href ='thankyou-for-query';
-                        return false;
+$(document).ready(function(){
+      var candid_id =$('#candidate_id').val();
+		 $('#addcart').click(function(e){
+		e.preventDefault();
+			if (candid_id){
+				var cart = "cart";
+			}else{
+				var cart= "express";
+			}
+
+			google_aanalyt();
+
+			var prod=$('#product_id').find("option:selected").val();
+			data = {
+                "prod_id": prod,
+                "addons": '',
+                "cart_type": cart,
+                "cv_id": '',
+                "req_options": [],
+                }
+
+			$.ajax({
+
+                url: '/cart/add-to-cart/',
+                type: 'POST',
+                data: data,
+                dataType: 'json',
+                success: function(json) {
+                    if (json.status == 1){
+                        var info = 'Added to cart. You have '+ json.cart_count + ' products in cart.'
+                        // $('#id-cart-message').text(info);
+                        $('#cart-counter-id').addClass('cart-counter');
+                        $('#cart-counter-id').text(json.cart_count);
+                        // if (window.CURRENT_FLAVOUR == 'mobile'){
+                        //     alert("Product added successfully in cart.");
+                        // }
+                        window.location.href = json.cart_url
                     }
-                }, 'json');
-            },
-            rules:{
-                number:{
-                    required:true,
-                    minlength:10,
-                    maxlength:15,
-                    number:true,
-                },
-                email:{
-                    email:true,
-                    required:true,
+                    else if (json.status == -1){
+                        alert("Something went wrong, Please try again.");
+                    }
+                    $('#add-to-cart').attr('disabled', false);
 
                 },
-                name:{
-
-                    lettersonly:true,
-
+                failure: function(response){
+                    alert("Something went wrong, Please try again");
+                    $('#add-to-cart').attr('disabled', false);
                 },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert("Something went wrong, Please try again");
+                    $('#add-to-cart').attr('disabled', false);
+                }
+            });
 
-            },
-            messages:{
-                number:{
-                   required:"Field is required"
-                },
-                email:{
-                    required:"Field is required"
-                },
-                name:{
-                    required:"Field is required"
-                },
 
-            },
-            highlight:function(element, errorClass) {
-              $(element).closest('.form-group').addClass('error');
-            },
-            unhighlight:function(element, errorClass) {
-              $(element).closest('.form-group').removeClass('error');
-              $(element).siblings('.js-error').html("");
-            },
-            errorPlacement: function(error, element){
-              $(element).siblings('.js-error').html(error.text());
-            }
-          });
-        </script>
+
+     });
+
+		function google_aanalyt(){
+	     var _gaq = _gaq || [];
+	_gaq.push(['resume._trackEvent','Lead','submit']);
+		var conversion_id = 991709191;
+		var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+		var ga_code = document.createElement('div');
+		ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="https://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+		document.body.appendChild(ga_code);
+		return false;
+
+}
+});
+    </script>
       {% block zendesk %}
     <!--Start of Zendesk Chat Script-->
       <script type="text/javascript">

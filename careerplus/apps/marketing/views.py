@@ -9,10 +9,13 @@ from django.core.cache import cache
 
 #inter app imports
 from core.mixins import EncodeDecodeUserData
+from linkedin.autologin import AutoLogin
+from shine.core import ShineCandidateDetail
 
 #third party imports
 from urllib.parse import parse_qs
 from geolocation.models import Country
+from users.models import User
 
 class MarketingPages(TemplateView):
     template_name = 'marketing/'
@@ -24,7 +27,19 @@ class MarketingPages(TemplateView):
         return {"alt_email":decoded_tuple[0],
                 "alt_name":decoded_tuple[1],
                 "alt_contact":decoded_tuple[2]}
+
     def get(self, request, *args, **kwargs):
+        valid=False
+        email=None
+        candidateid=None
+        try:
+            email, candidateid, valid = AutoLogin().decode(request.GET.get("token",""))
+        except Exception as e:
+            pass
+
+        if valid and email and candidateid:
+            resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=candidateid)
+            request.session.update(resp_status)
         redirect_mapping = {
                             "/digital-marketing":"/online-marketing",
                             "/gst-cert":"/gst-certification",
