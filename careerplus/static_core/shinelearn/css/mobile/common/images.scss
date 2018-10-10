@@ -42,7 +42,8 @@
 .free-services::before,
 .global::before,
 .refernEarn::before,
-.content .accordion-wrap .acc_head .acc_icon_expand {
+.content .accordion-wrap .acc_head .acc_icon_expand,
+.date-icon::before {
 	background-image: url($executive-sprite);
 	background-repeat: no-repeat;
 }
