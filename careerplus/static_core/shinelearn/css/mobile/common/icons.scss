@@ -578,3 +578,8 @@
   @include icon-inblock (26px, 26px, -225px -88px);
   margin: 10px 0;
 }
+
+
+.date-icon::before  {
+  @include icon-block (21px, 21px, -260px -86px);
+}

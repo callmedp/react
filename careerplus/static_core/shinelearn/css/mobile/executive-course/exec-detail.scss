@@ -76,7 +76,7 @@
 .exec-header {
     background-color: transparent;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     padding: 0;
     position: relative;
 
@@ -104,26 +104,27 @@
         left: 15px;
         right: 15px;
         z-index: 2;
+        bottom: 20px;
 
         h1 {
-            line-height: 32px;
+            line-height: 30px;
         }
     }
+}
 
-    .university-logo {
-        @include border-radius(4px);
-        border-bottom: 3px solid $yellow;
-        background-color: $bg-white;
-        width: 45%;
-        padding: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+.university-logo {
+    @include border-radius(4px);
+    border-bottom: 3px solid $yellow;
+    background-color: $bg-white;
+    width: 45%;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        img {
-            @include size (auto);
-            display: inline-block;
-        }
+    img {
+        @include size (auto);
+        display: inline-block;
     }
 }
 
@@ -228,16 +229,15 @@
 }
 
 .pointers {
-    padding-left: 20px;
-    border-left: 1px dashed lighten($blue, 15%);
     margin-left: 7px;
 
     li {
+        border-left: 1px dashed lighten($blue, 15%);
         position: relative;
-        margin-bottom: 20px;
+        padding: 0 0 20px 20px;
 
         &:last-child {
-            margin-bottom: 0;
+            padding-bottom: 0;
         }
 
         h3 {
@@ -257,7 +257,7 @@
             border: 3px solid lighten($blue, 15%);
             position: absolute;
             top: 0;
-            left: -28px;
+            left: -8px;
         }
     }
 }
@@ -626,4 +626,224 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#295986', end
 
 .weeked-batch {
     opacity: .7;
+}
+
+.university-detail,
+.faculty-detail {
+
+    .request-callback {
+        border-bottom: 5px solid $blue;
+    }
+
+    .university-logo {
+        border-bottom-color: $blue;
+    }
+    
+    .university-logo img {
+        width: 80%;
+    }
+
+    .banner-image {
+        @include size(100%, 360px);
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    
+    .banner-list {
+        padding-left: 15px;
+
+        color: $txt-white;
+        li {
+            list-style-type: disc;
+            margin-bottom: 10px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .want-help {
+        h2 {
+            @include border-radius(4px 4px 0 0);
+            background-color: $blue;
+            justify-content: center;
+            color: $txt-white;
+            padding: 0 15px;
+        }
+    }
+
+    // faculty Profile css
+    .heading-override {
+        h2 {
+            border-bottom: 0;
+            padding-top: 15px;
+            padding-bottom: 5px;
+            padding-left: 15px;
+            height: auto;
+
+            span {
+                display: none;
+            }
+        }
+    }
+}
+
+.courses-offered {
+    .white-box {
+        margin-bottom: 20px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+    
+    .university-logo {
+        width: 20%;
+        padding: 10px 5px 8px 5px;
+        box-shadow: $box-shadow;
+    }
+
+    .course-logo {
+        @include size (100px, 65px);
+        display: block;
+    }
+
+    .date-icon {
+        color: $txt-grey-999;
+
+        &::before {
+            content: '';
+            display: inline-block;
+            position: relative;
+            top: 4px;
+            margin-right: 8px;
+        }
+    }
+}
+
+.spacer {
+    color: $txt-grey-999;
+    padding: 0 5px;
+}
+
+
+.offer-tag {
+    color: $txt-white;
+    height: 21px;
+    position: relative;
+    background: $orange;
+    position: absolute;
+    right: 0;
+    font-size: $font-size-xs;
+    text-align: right;
+    padding-right: 10px;
+    padding-left: 20px;
+
+    &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 0;
+        border-left: 8px solid white;
+        border-top: 10px solid transparent;
+        border-bottom: 11px solid transparent;
+    }
+  }
+
+
+.college-image-about {
+    position: relative;
+    padding-top: 20px;
+
+    .image-wrap {
+        @include border-radius (0 0 4px 4px);
+        position: relative;
+        bottom: 0;
+        overflow: hidden;
+
+        img {
+            display: block;
+        }
+    }
+
+    .university-logo {
+        position: absolute;
+        top: -8px;
+        left: 15px;
+        z-index: 1;
+        box-shadow: $box-shadow;
+        padding: 30px 15px 25px;
+    }
+}
+
+
+.principal-image-wrap {
+    @include size(200px);
+    position: relative;
+    margin: 25px auto 30px;
+
+    .university-logo {
+        padding: 15px 10px;
+        position: absolute;
+        z-index: 1;
+        right: -35px;
+        width: 35%;
+        top: 25px;
+        box-shadow: $box-shadow;
+    }
+
+    .principle-image {
+        @include size (100%);
+        @include border-radius(4px);
+        position: relative;
+        overflow: hidden;
+    }
+}
+
+.principal-detail {
+    .principal-name {
+        text-transform: uppercase;
+        display: block;
+        font-size: $font-size-md;
+        color: $txt-grey-333;
+        font-weight: $font-weight-medium;
+    }
+
+    .principal-location {
+        color: $txt-grey-999;
+        padding-top: 3px;
+        display: block;
+    }
+}
+
+.faculty-detail {
+    .banner-image {
+        height: 222px;;
+    }
+
+    .principal-image-wrap {
+        position: absolute;
+        margin: 0;
+        z-index: 1;
+        bottom: -75px;
+        left: 15px;   
+        box-shadow: $box-shadow-2; 
+    }
+}
+
+.white-container {
+    background-color: $bg-white;
+    padding: 15px;
+    box-shadow: $box-shadow-2;
+
+    h1 {
+        font-weight: $font-weight-bold;
+        font-size: $font-size-lg * 1.7;
+        color: $txt-grey-333;
+        margin: 0 0 5px;
+        line-height: 1.3;
+    }
 }

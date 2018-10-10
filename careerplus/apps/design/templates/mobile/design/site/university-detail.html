@@ -1,0 +1,377 @@
+{% extends "mobile/basic/base.html" %}
+{% load static compress %}
+{% load humanize search_tags compress %}
+{% block css_section %}
+{{ block.super }}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/shop/course-detail.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/smk-accordion.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/executive-course/exec-detail.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
+    {% endcompress css %}
+        <style>
+            a[disabled], a[disabled]:hover {
+               pointer-events: none;
+               color: #e1e1e1;
+            }
+            /*div[data-test-id="ChatWidgetMobileButton"]{
+                display: none !important;
+            }*/
+        </style>
+{% endblock css_section %}
+{% block title %}
+  {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
+{% endblock title %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{request.get_full_path}}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}?type=amp">
+{% endblock canonical_url %}
+
+        {% block django_meta %}
+            {% include 'meta/meta.html' %}
+        {% endblock django_meta %}
+
+{% block main_container %}
+        <div class="wrapper executive-bg university-detail">
+            {% block header %}
+            <!-- header menu Icon Starts here -->
+                <div class="exec-header">
+                    <div class="header-content">
+                        <div class="university-logo">
+                            <img 
+                                src="{% static 'shinelearn/images/mobile/executive-course/university-logo.jpg' %}"
+                            />
+                        </div>
+                        <h1 class="semi-bold">Delhi Institute of Pharmaceutical Sciences and Research</h1>
+                        <ul class="banner-list">
+                            <li>Ranked 3rd amongst the management institutes in India</li>
+                            <li>Top Management college in india - India Today</li>
+                        </ul>
+                    </div><!-- /. header content -->
+                    
+                    <!-- header menu Icon Starts here -->
+                    <div class="main-menu w100fl">
+                        <div class="pull-left">
+                            <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button" ></a>  
+                        </div><!-- / Left side Icon ends here -->
+                        
+                        <div class="pull-right">
+                            <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                        </div><!-- / Right side Icon ends here -->
+                    </div><!-- header menu Icon ends here -->
+                    <div class="overlay"></div>
+                    <div class="banner-image" 
+                        style="background-image:url({% static 'shinelearn/images/mobile/executive-course/college-image.jpg' %})">
+                    </div>
+                {% block header_title %}{% endblock header_title %}
+                </div><!-- header ends here -->
+            {% endblock header %}
+
+            {% block container %}
+            <div class="content-box">
+
+                <!-- Want help Form Start Here -->
+                <div class="want-help container">
+                    <div class="white-box request-callback">
+                        <h2>Want help with courses?</h2>
+                        <div class="line-form-wrap">
+                        <ul class="p-15">
+                            <li class="field">
+                                <input type="text" name="name" id="name" placeholder="Enter your name">
+                                <label for="name">Name</label>
+                            </li>
+                            
+                            <li class="field">
+                            <input type="text" name="mNumber" id="mNumber" placeholder="Enter mobile No.">
+                            <label for="mNumber">Mobile</label>
+                            </li>
+                            
+                            <li class="field">
+                            <input type="text" name="email" id="email" placeholder="Enter email ">
+                            <label for="email">Email</label>
+                            </li>
+
+                            <li>
+                                <select class="form-control">
+                                <option>Select Course</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                </select>
+                            </li>
+        
+                            <li class="mt-20 mb-5 text-center">
+                                <button class="btn btn-round-30 btn-lg btn-shadow btn-grOrange text-upper">Request Callback</button>
+                            </li>
+                          </ul>
+                        </div><!-- line form ends here -->
+                    </div><!-- white box ends here -->
+                </div><!-- Want help Form Ends Here -->
+
+
+                <!-- Courses offered Start Here -->
+                <div class="courses-offered container mt-15">
+                    <h2>Courses offered</h2>
+                        <div class="white-box p-15 pr-0">
+                            <div class="offer-tag">Admission open</div>
+                            <div class="university-logo">
+                                <img
+                                    src="{% static 'shinelearn/images/mobile/executive-course/university-logo.jpg' %}"/>
+                            </div>
+                            <div class="media mt-15">
+                                <div class="media-body pb-0">
+                                    <h3 class="mb-5"><a href="#">Material Management Professional </a></h3>
+                                    <div><span class="date-icon">Starts</span>  Dec 2018 <span class="spacer">|</span> 6 months</div>
+                                </div>
+                                
+                                <div class="media-left pr-0">
+                                    <a href="#" class="course-logo">
+                                        <img    
+                                            src="{% static 'shinelearn/images/mobile/common/course-logo1.png'%}" 
+                                            class="img-responsive" alt="..."
+                                        />
+                                    </a>
+                                </div><!-- end of media body --></div>
+                        </div><!-- white box ends here -->
+
+                        <div class="white-box p-15 pr-0">
+                            <div class="university-logo">
+                                <img
+                                    src="{% static 'shinelearn/images/mobile/executive-course/university-logo.jpg' %}"/>
+                            </div>
+                            <div class="media mt-15">
+                                <div class="media-body pb-0">
+                                    <h3 class="mb-5"><a href="#">Management Fundamentals</a></h3>
+                                    <div><span class="date-icon">Starts</span>  Dec 2018 <span class="spacer">|</span> 6 months</div>
+                                </div>
+                                
+                                <div class="media-left pr-0">
+                                    <a href="#" class="course-logo">
+                                        <img    
+                                            src="{% static 'shinelearn/images/mobile/common/course-logo2.png'%}" 
+                                            class="img-responsive" alt="..."
+                                        />
+                                    </a>
+                                </div><!-- end of media body --></div>
+                        </div><!-- white box ends here -->
+
+                        <div class="white-box p-15 pr-0">
+                            <div class="university-logo">
+                                <img
+                                    src="{% static 'shinelearn/images/mobile/executive-course/university-logo.jpg' %}"/>
+                            </div>
+                            <div class="media mt-15">
+                                <div class="media-body pb-0">
+                                    <h3 class="mb-5"><a href="#">Talent Management Essentials</a></h3>
+                                    <div><span class="date-icon">Starts</span>  Dec 2018 <span class="spacer">|</span> 6 months</div>
+                                </div>
+                                
+                                <div class="media-left pr-0">
+                                    <a href="#" class="course-logo">
+                                        <img    
+                                            src="{% static 'shinelearn/images/mobile/common/course-logo3.png'%}" 
+                                            class="img-responsive" alt="..."
+                                        />
+                                    </a>
+                                </div><!-- end of media body --></div>
+                        </div><!-- white box ends here -->
+
+                        <p class="text-center"><a href="#" class="btn btn-outline btn-round-30 btn-lg">View more</a></p>
+                    </div><!-- Courses offered Ends Here -->
+
+                    <div class="container heading-override">
+                        <div class="white-box">
+                            <h2><span><i class="execIcon-faculty"></i></span>Faculty profile</h2>
+                            <p class="pl-15 pr-15">Learn from skilled instructors with professional  experience in the field.</p>
+                            <div class="content pl-40 pr-40">
+                                <ul class="faculty-profile text-center" id="executive-slide">
+                                    <li>
+                                        <span class="faculty-image">
+                                            <img 
+                                            src="{% static 'shinelearn/images/mobile/executive-course/Regular_Faculty_1.jpg' %}"/>
+                                        </span>
+                                        <h3><a href="#">A Kanagaraj</a></h3>
+                                        <p class="desigation mt-15">Associate Professor – Finance XLRI Jamshedpur
+                                            <span></span>
+                                        </p>
+                                        <p>Dr. Ajay Garg is a full-time professor of Information Management.  Professor Garg’s primary expertise and interest is in the area of business... <a href="#">read more</a></p>
+                                    </li>
+                                    <li>
+                                        <span class="faculty-image">
+                                            <img 
+                                            src="{% static 'shinelearn/images/mobile/executive-course/Regular_Faculty_2.gif' %}"/>
+                                        </span>
+                                        <h3><a href="#">Abhishek Chakraborty</a></h3>
+                                        <p class="desigation mt-15">Production, Operations & Decision Sciences, XLRI Jamshedpur
+                                            <span></span>
+                                        </p>
+                                        <p>Dr. Ajay Garg is a full-time professor of Information Management.  Professor Garg’s primary expertise and interest is in the area of business... <a href="#">read more</a></p>
+                                    </li>
+                                    
+                                    <li>
+                                        <span class="faculty-image">
+                                            <img 
+                                            src="{% static 'shinelearn/images/mobile/executive-course/Regular_Faculty_3.gif' %}"/>
+                                        </span>
+                                        <h3><a href="#">Ajith Kumar J</a></h3>
+                                        <p class="desigation mt-15">Production, Operations & Decision Sciences, XLRI Jamshedpur
+                                            <span></span>
+                                        </p>
+                                        <p>Dr. Ajay Garg is a full-time professor of Information Management.  Professor Garg’s primary expertise and interest is in the area of business... <a href="#">read more</a></p>
+                                    </li>
+                                    
+                                </ul>
+                            </div>
+                        </div><!-- /. white box-->
+                    </div><!-- ./ Faculty profile -->
+
+                <div class="container heading-override">
+                    <div class="white-box pb-0">
+                        <h2><span><i class="execIcon-program"></i></span>About institute</h2>
+                        <div class="content pt-0">
+                            <p>XLRI is one of India’s leading management school based in Jamshedpur, Jharkhand, India. Established in 1949 as the Xavier Labor Relations Institute, by Fr. Quinn Enright, XLRI is acknowledged as India’s oldest business management schoo</p>
+
+                            <p>XLRI with its single vision of Magis, i.e., pursuit of excellence, focuses on three areas: academic excellence, personal values and social concern. XLRI spares no effort to make its curriculum world-class and deliver it in the most effective manner. It constantly scans the developments in business and in society and tries to pro-act to meet the challenges. Its world-class faculty with its commitment and deep sense of service delivers the curriculum very effectively.</p>
+
+                            <p>Consistently being acknowledged as the Best “HR Course” in Asia–Pacific, it has also been recognized for its research acumen by the London Business School and is ranked among top 5 research schools in India cutting across management and technical institutes. For more details, visit <a href="#">www.xlri.ac.in</a></p>
+                        </div>
+
+                        <div class="college-image-about">
+                            <div class="university-logo"><img           
+                                src="{% static 'shinelearn/images/mobile/executive-course/university-logo.jpg' %}"/>
+                            </div>
+
+                            <div class="image-wrap">
+                                <img 
+                                src="{% static 'shinelearn/images/mobile/executive-course/college-image.jpg' %}"
+                                />
+                            </div>
+                        </div><!-- /. college image about-->
+                    </div><!-- /. white box-->
+                </div><!-- ./ About institute -->
+                
+                <div class="container heading-override">
+                    <div class="white-box pb-0">
+                        <h2><span><i class="execIcon-program"></i></span>Principal speak</h2>
+                        <div class="content pt-0">
+                            <div class="principal-image-wrap">
+                                <div class="university-logo">
+                                    <img src="{% static 'shinelearn/images/mobile/executive-course/university-logo.jpg' %}"/></div>
+                                <div class="principle-image">
+                                    <img 
+                                        src="{% static 'shinelearn/images/mobile/executive-course/principal.jpg' %}" class="img-responsive" 
+                                    />
+                                </div>
+                            </div><!-- /. principal-image-wrap -->
+
+                            <p>One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning.</p>
+
+                            <div class="principal-detail mt-20">
+                                <span class="principal-name">Mr. T. V. Narendran</span>
+                                <span class="principal-location">Principal, XLRI- Ahmedabad</span>
+                            </div><!-- /. principal-detail -->
+                        </div><!-- /. content -->
+                    </div><!-- /. white box-->
+                </div><!-- ./ Principal speak -->
+                
+                
+                <div class="container heading-override">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-testimonials"></i></span>Testimonials</h2>
+                        <div class="content pl-40 pr-40">
+                            <ul class="testimonials faculty-profile testi-slide">
+                                <li>
+                                    <p class="mb-15">Overall: enjoyed the course; gained nice experience with TE, MICA, faculty, and batch mates; learned few good and useful things during this 1 year tenure, which will definitely add some value to my career and personal growth. </p>
+
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <span class="testimonial-image">
+                                             <img class="media-object" src="{% static 'shinelearn/images/mobile/executive-course/bhaskar.jpg'%}" alt="...">
+                                            </span>
+                                        </div>
+                                        <div class="media-body">
+                                            <p class="pb-0 text-upper fs-14 c-333">Bhaskar</p>
+                                            <p class="pb-0 line-height-sm c-999">Project Leader,  Amnet Systems Pvt. Ltd.</p>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <p class="mb-15">Overall: enjoyed the course; gained nice experience with TE, MICA, faculty, and batch mates; learned few good and useful things during this 1 year tenure, which will definitely add some value to my career and personal growth. </p>
+
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <span class="testimonial-image">
+                                                <img class="media-object" src="{% static 'shinelearn/images/mobile/executive-course/bhaskar.jpg'%}" alt="...">
+                                            </span>
+                                        </div>
+                                        <div class="media-body">
+                                            <p class="pb-0 text-upper fs-14 c-333">Bhaskar</p>
+                                            <p class="pb-0 line-height-sm c-999">Project Leader,  Amnet Systems Pvt. Ltd.</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ Testimonials -->
+            </div><!-- /. content-box --> 
+
+            {% endblock container %}
+
+            {% block footer %}
+                <!-- footer -->
+                {% include 'basic/footer.html' %}
+            {% endblock footer %}
+
+            {% block navigation %}
+                <!-- left side menu -->
+                {% include 'basic/navigation.html' %}
+            {% endblock navigation %}
+        </div>
+{% endblock main_container %}
+
+
+
+
+
+{% block js_section %}
+    {{block.super}}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/shop/detail.js' %}"></script>
+    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
+    {% endcompress %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+           if(commonJs.getParameterByName('type') == 'autoEnrol'){
+               $('#enrol-now-button').trigger('click'); 
+            }
+            if(commonJs.getParameterByName('type') == 'autoCart'){
+               $('#add-to-cart').trigger('click');
+            } 
+        })
+        
+    </script>
+  <script tyep="text/javascript">
+   $(document).ready(function(){ 
+        $(document).on( "click", '.ui-block-c', function(e){
+            $zopim.livechat.window.show();
+        })
+    });
+  </script>
+{% endblock js_section %}
+
+
+{% if sqs.id in linkedin_resume_services %}
+  {% block zendesk %}
+  {% endblock zendesk %}
+{% endif %}
+
+
+
