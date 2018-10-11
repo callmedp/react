@@ -1784,17 +1784,21 @@ class ChangeProductView(DetailView):
                     elif slug == 'university':
                         form = UniversityCourseForm(request.POST, request.FILES, instance=obj.university_course_detail)
                         application_process_priority = [k for k in form.data['application_process_priority'].split(',') if k]
+
                         if application_process_priority:
                             form.data['application_process'] = str(application_process_priority)
+
                         benefits_priority = [k for k in form.data['benefits_priority'].split(',') if k]
-                        if benefits_priority:
-                            form.data['benefits'] = str(benefits_priority)
+                        form.data['benefits'] = str(benefits_priority) if benefits_priority else ''
                         headings = [key for key in form.data.keys() if key.startswith('heading')]
                         attendees_criteria = []
+
                         for heading in sorted(headings):
                             if form.data[heading] or form.data['sub' + heading]:
                                 attendees_criteria.append((form.data[heading], form.data['sub'+heading]))
+
                         form.data['attendees_criteria'] = str(attendees_criteria)
+
                         if form.is_valid():
                             form.save()
                             messages.success(

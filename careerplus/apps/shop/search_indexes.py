@@ -903,7 +903,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             detail['assesment'] = obj.university_course_detail.assesment
             detail['eligibility_criteria'] = obj.university_course_detail.eligibility_criteria
             detail['attendees_criteria'] = obj.university_course_detail.attendees_criteria
-            detail['sample_certificate'] = obj.university_course_detail.sample_certificate.url
+            sample_certificate = obj.university_course_detail.sample_certificate
+            detail['sample_certificate'] = sample_certificate.url if sample_certificate else ''
             brochure_attr = obj.attributes.filter(name='Brochure')
             detail['brochure'] = brochure_attr[0].productattributes.first().value_file.url if brochure_attr else ''
             payment_list = []

@@ -179,7 +179,7 @@
                     </div>
                     <article class="col-sm-12 pad-25">
                       <span class="e-program-list mt-20">
-                      {{prd_desc|safe}}
+                      {{sqs.pAbx|safe}}
                       </span>  
                     </article>
                   </div>
@@ -215,6 +215,7 @@
                 </section>
 
                 <!-- Eligibility criteria -->
+                {% if university_detail.eligibility_criteria %}
                 <section class="exe-box mb-30">
                   <div class="e-btm-bdr">
                     <figure class="pr">
@@ -232,7 +233,8 @@
                     </ul>
                   </article>
                 </section>
-
+                {% endif %}
+                {% if faculty %}
                 <!-- Faculty Profile -->
                 <section class="exe-box mb-30">
                   <div id="faculty-profile" class="scroll">
@@ -247,18 +249,18 @@
 
                         <!-- Wrapper for slides -->
                         <div class="carousel-inner" role="listbox">
-                          {% for innner_fac in faculty %}
+                          {% for inner_fac in faculty %}
                            <div class="item col-sm-12 {% if forloop.counter == 1%}active {% endif %}">
-                           {% for fac in innner_fac %}
+                           {% for fac in inner_fac %}
                             <div class="col-sm-6 text-center">
                               <figure>
-                                <a class="faculty-thumb" href="{{fac.get_absolute_url}}"><img src="{{ fac.image.url }}" alt="Faculty Profile"></a>
+                                <a class="faculty-thumb" href="{{fac.get_absolute_url}}"  target='_blank'><img src="{{ fac.get_image_url }}" alt="Faculty Profile"></a>
                                 <figcaption>
-                                  <strong><a href="#">{{ fac.name }}</a></strong>
+                                  <strong><a href="{{fac.get_absolute_url}}" target='_blank'>{{ fac.name }}</a></strong>
                                   <div class="exe-designation">{{ fac.designation }} – 
                                     <span>{{ fac.institute.name }}</span>
                                   </div>
-                                  <p>{{fac.description|truncatechars:"120"}}...   <a class="e-anchor-color" href="#">read more</a>
+                                  <p>{{fac.description|truncatechars:"120"}}...   <a class="e-anchor-color" href="{{fac.get_absolute_url}}" target='_blank'>read more</a>
                                   </p>
                                 </figcaption>
                               </figure>
@@ -281,8 +283,9 @@
                     </article>
                   </div>
                 </section>
-
+                {% endif %}
                  <!-- Exclusive Benefits -->
+
                 <section class="exe-box mb-30">
                   <div id="execlusive-benefits" class="scroll">
                     <div class="e-btm-bdr">
@@ -293,6 +296,8 @@
                     </div>
                     <article class="col-sm-12 pad-25">
                       <div class="row exe-exclusive-benefits">
+                        {% if university_detail.benefits%}
+
                         <h3 class="col-sm-12 mb-20">Exclusive Benefits</h2>
 
                         {% for benefit in university_detail.benefits %}
@@ -306,8 +311,8 @@
                           </figure>
                         </div>
                         {% endfor %}
-
                         <div class="clearfix e-btm-bdr mb-30 mt-10 col-sm-12"></div>
+                        {% endif %}
 
                         <h3 class="col-sm-12 mb-20">Why Shine Learning?</h2>
                         <div class="col-sm-4">
@@ -343,10 +348,9 @@
                     </article>
                   </div>
                 </section>
-
                 <!-- Program Structure 2 -->
                 <section class="exe-box mb-30">
-                  <div class="scroll">
+                  <div id="program-structure" class="scroll">
                     <div class="e-btm-bdr">
                       <figure class="pr">
                         <i class="exe-icon-program-structure"></i>
@@ -377,6 +381,7 @@
                 </section>
 
                 <!-- Assessment & Evaluation -->
+                {% if university_detail.assesment %}
                 <section class="exe-box mb-30">
                   <div class="scroll">
                     <div class="e-btm-bdr">
@@ -389,7 +394,7 @@
                       <span class="exe-structure-list1">
                         {{university_detail.assesment|safe}}
                       </span>
-
+                      {% if university_detail.sample_certificate %}
                       <div class="exe-sample-certificate mt-20">
                         <figure>
                           <img class="img-responsive" src="{{university_detail.sample_certificate}}" alt="Sample certificate">
@@ -397,10 +402,12 @@
                         <h3 class="mt-30 ml-40">Sample Certificate</h3>
                         <a class="exe-button-view-sample pull-right mt-20 mr-20" href="#" type="button" data-toggle="modal" data-target=".bs-example-modal-lg">View sample certificate</a>
                       </div>
+                      {% endif %}
                     </article>
                   </div>
                 </section>
-
+                {% endif %}
+                {% if university_detail.sample_certificate %}
                 <!-- sample certificate modal -->
                 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
                   <div class="modal-dialog modal-lg" role="document">
@@ -415,6 +422,7 @@
                     </div>
                   </div>
                 </div>
+                {% endif %}
 
                 <!-- Institute -->
                 <section class="exe-box mb-30">
@@ -438,7 +446,7 @@
                     </article>
                   </div>
                 </section>
-
+                {% if university_testimonial %}
                 <!-- Testimonials -->
                 <section class="exe-box mb-30">
                   <div class="scroll">
@@ -482,6 +490,7 @@
                     </article>
                   </div>
                 </section>
+                {% endif %}
 
                 <!-- Fees & Payments Modes -->
                 <section class="exe-box mb-30">
@@ -513,6 +522,7 @@
                                 <strong>Rs. {{start_price|floatformat|intcomma}}</strong> 
                               </div> 
                               <span class="e-blue-bdr mt-15"></span>
+                              {% if  university_detail.payment %}
                               <div class="installment text-center">
                                 <span class="text-uppercase col-sm-12 mb-15">Installment Available</span>
                                  {% for payment in university_detail.payment %}
@@ -523,6 +533,7 @@
                                 </div>
                                 {% endfor %}
                               </div>
+                              {% endif %}
                             </div>
                           </div>
                         </li>
@@ -563,7 +574,7 @@
                     </article>
                   </div>
                 </section>
-
+                {% if faq_list %}
                 <!-- Frequenty Asked Questions -->
                 <section class="exe-box mb-30">
                   <div id="fees-payments" class="scroll">
@@ -596,6 +607,7 @@
                     </article>
                   </div>
                 </section>
+                {% endif %}
 
               </div>
               <!-- inner left container end -->
