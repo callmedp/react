@@ -17,7 +17,7 @@ from shop.choices import (
 
 from homepage.models import Testimonial
 from homepage.config import (
-    PAGECHOICES, university_page)
+    PAGECHOICES, UNIVERSITY_PAGE)
 
 
 class TestimonialModelForm(forms.ModelForm):
@@ -27,8 +27,8 @@ class TestimonialModelForm(forms.ModelForm):
         # choice_dict = dict(PAGECHOICES)
         # choices = [
         #     (0, '---Select Page---'),
-        #     (university_page, choice_dict.get(
-        #         university_page, 'University Page'))]
+        #     (UNIVERSITY_PAGE, choice_dict.get(
+        #         UNIVERSITY_PAGE, 'University Page'))]
 
         # self.fields['page'].widget.attrs['class'] = form_class
         # self.fields['page'].label = "Page type"
@@ -232,18 +232,16 @@ class SubHeaderCategoryForm(forms.ModelForm):
 
         self.fields['heading'].widget.attrs['class'] = form_class
         self.fields['heading'].widget.attrs['required'] = True
-        self.fields['heading'].widget.attrs['maxlength'] = 30
+        self.fields['heading'].widget.attrs['maxlength'] = 100
         self.fields['heading'].widget.attrs['placeholder'] = 'Add Sub header'
         self.fields['heading'].widget.attrs['data-parsley-trigger'] = 'change'
         self.fields['heading'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['heading'].widget.attrs['data-parsley-length'] = "[1, 30]"
+        self.fields['heading'].widget.attrs['data-parsley-length'] = "[1, 100]"
         self.fields['heading'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-30 characters.'
 
         self.fields['description'].widget.attrs['class'] = form_class
-        self.fields['description'].widget.attrs['required'] = True
         self.fields['description'].widget.attrs['maxlength'] = 100
         self.fields['description'].widget.attrs['data-parsley-trigger'] = 'change'
-        self.fields['description'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['description'].widget.attrs['data-parsley-length'] = "[1, 100]"
         self.fields['description'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-100 characters.'
 
@@ -267,15 +265,15 @@ class SubHeaderCategoryForm(forms.ModelForm):
                 "Description should be between 1-100 characters.")
         return heading
 
-    def clean_description(self):
-        description = self.cleaned_data.get('description', '').strip()
-        if not description:
-            raise forms.ValidationError(
-                "This field is required.")
-        if len(description) < 1 or len(description) > 100:
-            raise forms.ValidationError(
-                "Description should be between 1-100 characters.")
-        return description
+    # def clean_description(self):
+    #     description = self.cleaned_data.get('description', '').strip()
+    #     if not description:
+    #         raise forms.ValidationError(
+    #             "This field is required.")
+    #     if len(description) < 1 or len(description) > 100:
+    #         raise forms.ValidationError(
+    #             "Description should be between 1-100 characters.")
+    #     return description
 
 
 
@@ -339,10 +337,8 @@ class ChangeFacultyForm(forms.ModelForm):
 
         self.fields['faculty_speak'].widget.attrs['class'] = form_class
         self.fields['faculty_speak'].label = "Faculty Speak"
-        self.fields['faculty_speak'].required = True
         self.fields['faculty_speak'].widget.attrs['maxlength'] = 600
         self.fields['faculty_speak'].widget.attrs['data-parsley-trigger'] = 'change'
-        self.fields['faculty_speak'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['faculty_speak'].widget.attrs['data-parsley-length'] = "[1, 600]"
         self.fields['faculty_speak'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-600 characters.'
 
@@ -387,9 +383,11 @@ class ChangeFacultyForm(forms.ModelForm):
         if file and file._size > 30 * 1024:
             raise forms.ValidationError(
                 "Image file is too large ( > 30kb ).")
-        if file and file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
+        elif file and file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
             raise forms.ValidationError(
                 "Unsupported image type. Please upload svg, bmp, png or jpeg")
+        elif not file:
+            file = self.cleaned_data.get('image')
         return file
 
     def clean_designation(self):
@@ -421,10 +419,7 @@ class ChangeFacultyForm(forms.ModelForm):
 
     def clean_faculty_speak(self):
         faculty_speak = self.cleaned_data.get('faculty_speak', '').strip()
-        if not faculty_speak:
-            raise forms.ValidationError(
-                "This field is required.")
-        if len(faculty_speak) < 1 or len(faculty_speak) > 600:
+        if faculty_speak and len(faculty_speak) < 1 or len(faculty_speak) > 600:
             raise forms.ValidationError(
                 "Faculty Speak should be between 1-600 characters.")
         return faculty_speak
@@ -527,10 +522,8 @@ class AddFacultyForm(forms.ModelForm):
 
         self.fields['faculty_speak'].widget.attrs['class'] = form_class
         self.fields['faculty_speak'].label = "Faculty Speak"
-        self.fields['faculty_speak'].required = True
         self.fields['faculty_speak'].widget.attrs['maxlength'] = 600
         self.fields['faculty_speak'].widget.attrs['data-parsley-trigger'] = 'change'
-        self.fields['faculty_speak'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['faculty_speak'].widget.attrs['data-parsley-length'] = "[1, 600]"
         self.fields['faculty_speak'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-600 characters.'
 
@@ -585,10 +578,7 @@ class AddFacultyForm(forms.ModelForm):
 
     def clean_faculty_speak(self):
         faculty_speak = self.cleaned_data.get('faculty_speak', '').strip()
-        if not faculty_speak:
-            raise forms.ValidationError(
-                "This field is required.")
-        if len(faculty_speak) < 1 or len(faculty_speak) > 600:
+        if faculty_speak and len(faculty_speak) < 1 or len(faculty_speak) > 600:
             raise forms.ValidationError(
                 "Faculty Speak should be between 1-600 characters.")
         return faculty_speak
@@ -766,11 +756,11 @@ class AddCategoryForm(forms.ModelForm):
         self.fields['type_level'].widget.attrs['data-parsley-notdefault'] = ''
         
         self.fields['image'].widget.attrs['class'] = form_class
-        self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 30
+        self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 500
         self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
         
         self.fields['banner'].widget.attrs['class'] = form_class
-        self.fields['banner'].widget.attrs['data-parsley-max-file-size'] = 100
+        self.fields['banner'].widget.attrs['data-parsley-max-file-size'] = 500
         self.fields['banner'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
 
     class Meta:
@@ -812,9 +802,9 @@ class AddCategoryForm(forms.ModelForm):
     def clean_banner(self):
         file = self.files.get('banner', '')
         if file:
-            if file._size > 100 * 1024:
+            if file._size > 500 * 1024:
                 raise forms.ValidationError(
-                    "Image file is too large ( > 100kb ).")
+                    "Image file is too large ( > 500kb ).")
             if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
                 raise forms.ValidationError("Unsupported image type. Please upload svg, bmp, png or jpeg")
         else:
@@ -824,15 +814,11 @@ class AddCategoryForm(forms.ModelForm):
     def clean_image(self):
         file = self.files.get('image', '')
         if file:
-            if file._size > 30 * 1024:
+            if file._size > 500 * 1024:
                 raise forms.ValidationError(
-                    "Image file is too large ( > 30kb ).")
+                    "Image file is too large ( > 500kb ).")
             if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
                 raise forms.ValidationError("Unsupported image type. Please upload svg, bmp, png or jpeg")
-            if file.image.height > 125 and file.image.height != file.image.width:
-                raise forms.ValidationError("Image not valid. Please upload 125px X 125 px")
-        else:
-            pass
         return file
 
     def save(self, commit=True, *args, **kwargs):
@@ -861,15 +847,15 @@ class ChangeCategoryForm(forms.ModelForm):
         # self.fields['description'].widget.attrs['class'] = form_class
 
         self.fields['image'].widget.attrs['class'] = form_class 
-        self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 30
+        self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 500
         self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
         
         self.fields['banner'].widget.attrs['class'] = form_class 
-        self.fields['banner'].widget.attrs['data-parsley-max-file-size'] = 100
+        self.fields['banner'].widget.attrs['data-parsley-max-file-size'] = 500
         self.fields['banner'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
 
         self.fields['icon'].widget.attrs['class'] = form_class 
-        self.fields['icon'].widget.attrs['data-parsley-max-file-size'] = 10
+        self.fields['icon'].widget.attrs['data-parsley-max-file-size'] = 30
         self.fields['icon'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
     
         self.fields['display_order'].widget.attrs['class'] = form_class
@@ -917,13 +903,11 @@ class ChangeCategoryForm(forms.ModelForm):
     def clean_image(self):
         file = self.files.get('image', '')
         if file:
-            if file._size > 30 * 1024:
+            if file._size > 500 * 1024:
                 raise forms.ValidationError(
-                    "Image file is too large ( > 30kb ).")
+                    "Image file is too large ( > 500kb ).")
             if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
                 raise forms.ValidationError("Unsupported image type. Please upload svg, bmp, png or jpeg")
-            if file.image.height > 125 and file.image.height != file.image.width:
-                raise forms.ValidationError("Image not valid. Please upload 125px X 125 px")
         else:
             file = self.cleaned_data.get('image')
         return file
@@ -931,13 +915,11 @@ class ChangeCategoryForm(forms.ModelForm):
     def clean_banner(self):
         file = self.files.get('banner')
         if file:
-            if file._size > 100 * 1024:
+            if file._size > 500 * 1024:
                 raise forms.ValidationError(
-                    "Image file is too large ( > 100kb ).")
+                    "Image file is too large ( > 500kb ).")
             if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
                 raise forms.ValidationError("Unsupported image type. Please upload svg, bmp, png or jpeg")
-            if file.image.height > 125 and file.image.height != file.image.width:
-                raise forms.ValidationError("Image not valid. Please upload 125px X 125 px")
         else:
             file = self.cleaned_data.get('banner')
         return file
@@ -945,13 +927,11 @@ class ChangeCategoryForm(forms.ModelForm):
     def clean_icon(self):
         file = self.files.get('icon')
         if file:
-            if file._size > 10 * 1024:
+            if file._size > 30 * 1024:
                 raise forms.ValidationError(
-                    "Image file is too large ( > 10kb ).")
+                    "Image file is too large ( > 30kb ).")
             if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
                 raise forms.ValidationError("Unsupported image type. Please upload svg, bmp, png or jpeg")
-            if file.image.height > 125 and file.image.height != file.image.width:
-                raise forms.ValidationError("Image not valid. Please upload 125px X 125 px")
         else:
             file = self.cleaned_data.get('icon')
         return file

@@ -1,6 +1,9 @@
+
 from django.db import models
 from seo.models import AbstractAutoDate
 from geolocation.models import Country
+
+UNIVERSITY_LEAD_SOURCE = 28
 
 
 LEAD_LOCATION = (
@@ -14,9 +17,10 @@ LEAD_LOCATION = (
     (8, 'Resume Detail Page'),
     (20, 'Miss Call Lead'),
     (21, 'AdServerLead'),
+    (22, 'CartLead'),
     (26, 'Email Marketing Course Leads'),
     (27, 'Email Marketing Resume Leads'),
-    (22, 'CartLead'),
+    (UNIVERSITY_LEAD_SOURCE, 'University Course Leads'),
 )
 
 DEFAULT_SLUG_SOURCE = (
@@ -29,10 +33,11 @@ DEFAULT_SLUG_SOURCE = (
     (7, 'cmsonline'),
     (8, 'resumeonline'),
     (21, 'adserverdefault'),
+    (22, 'cartleads'),
     (20, 'missedcalldefault'),
     (26, 'coursemailerdefault'),
     (27, 'resmdefault'),  # resume mailer default
-    (22, 'cartleads'),
+    (UNIVERSITY_LEAD_SOURCE, 'courseonline')
 )
 
 

@@ -73,7 +73,7 @@ from faq.forms import (
     ChangeFaqForm,
     ChangePublicFaqForm,)
 from homepage.config import (
-    university_page, UNIVERSITY_COURSE)
+    UNIVERSITY_PAGE, UNIVERSITY_COURSE)
 
 from faq.models import FAQuestion
 from users.mixins import UserGroupMixin
@@ -274,7 +274,7 @@ class ChangeCategoryView(DetailView):
             form=SubHeaderCategoryForm,
             can_delete=False,
             formset=SubHeaderInlineFormSet, extra=1,
-            max_num=3, validate_max=True)
+            max_num=5, validate_max=True)
 
         TestimonialModelFormset = modelformset_factory(
             Testimonial, form=TestimonialModelForm,
@@ -304,7 +304,7 @@ class ChangeCategoryView(DetailView):
             testimonial_model_formset = TestimonialModelFormset(
                 data=None,
                 queryset=Testimonial.objects.filter(
-                    page=university_page,
+                    page=UNIVERSITY_PAGE,
                     object_id=self.object.pk))
             context.update({'testimonial_model_formset': testimonial_model_formset})
 
@@ -444,7 +444,7 @@ class ChangeCategoryView(DetailView):
                             form=SubHeaderCategoryForm,
                             can_delete=False,
                             formset=SubHeaderInlineFormSet, extra=1,
-                            max_num=3, validate_max=True)
+                            max_num=5, validate_max=True)
 
                         if self.object.type_level in [3, 4]:
                             formset = SubHeaderFormSet(request.POST, instance=obj)
@@ -494,7 +494,7 @@ class ChangeCategoryView(DetailView):
                             formset = TestimonialModelFormset(
                                 request.POST, request.FILES,
                                 queryset=Testimonial.objects.filter(
-                                    page=university_page, object_id=obj.pk))
+                                    page=UNIVERSITY_PAGE, object_id=obj.pk))
                             from django.db import transaction
                             if formset.is_valid():
                                 with transaction.atomic():
@@ -504,7 +504,7 @@ class ChangeCategoryView(DetailView):
                                         ins.delete()
 
                                     for form in saved_formset:
-                                        form.page = university_page
+                                        form.page = UNIVERSITY_PAGE
                                         form.object_id = obj.pk
                                         form.save()
                                     formset.save_m2m()

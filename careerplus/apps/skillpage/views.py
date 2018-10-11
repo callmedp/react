@@ -1,5 +1,7 @@
 import json
 import logging
+from itertools import zip_longest
+
 from django.http import (
     Http404, HttpResponse,
     HttpResponseRedirect,
@@ -17,9 +19,14 @@ from geolocation.models import Country
 from django.db.models import Q
 from shop.models import (
     Category, Faculty, Product)
+from shop.choices import (
+    FACULTY_TEACHER, FACULTY_PRINCIPAL)
+from homepage.config import UNIVERSITY_PAGE
 from cms.mixins import UploadInFile
 from partner.models import Vendor
+from homepage.models import Testimonial
 from review.models import Review
+from crmapi.models import UNIVERSITY_LEAD_SOURCE
 from .mixins import SkillPageMixin
 from review.models import DetailPageWidget
 
@@ -234,9 +241,9 @@ class ServiceDetailPage(DetailView):
             return cached_country_choices
 
         country_choices = [(m.phone, m.name) for m in
-                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
 
-        cache.set('callback_country_choices',country_choices,86400)
+        cache.set('callback_country_choices', country_choices, 86400)
         return country_choices
 
     def _get_preselected_country(self):
@@ -245,7 +252,7 @@ class ServiceDetailPage(DetailView):
             return cached_initial_country
 
         initial_country = Country.objects.filter(phone='91')[0].phone
-        cache.set("callback_initial_country",initial_country,86400)
+        cache.set("callback_initial_country", initial_country, 86400)
         return initial_country
 
     def _get_all_products_of_category(self):
@@ -253,7 +260,7 @@ class ServiceDetailPage(DetailView):
         Fetch all products with category same as that of object.
         """
         products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).\
-                filter(pCtg=self.object.pk)
+            filter(pCtg=self.object.pk)
         return products
 
     def _get_product_variation_combo_ids(self, products):
@@ -331,8 +338,7 @@ class UniversityPageView(DetailView):
     template_name = "university/university.html"
     context_object_name = "category_obj"
 
-    PRODUCT_PAGE_SIZE = 5
-    REVIEW_PAGE_SIZE = 5
+    PRODUCT_PAGE_SIZE = 9
 
     def get_queryset(self):
         return Category.objects.filter(
@@ -364,7 +370,7 @@ class UniversityPageView(DetailView):
             return cached_country_choices
 
         country_choices = [(m.phone, m.name) for m in
-                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
 
         cache.set('callback_country_choices', country_choices, 86400)
         return country_choices
@@ -385,28 +391,11 @@ class UniversityPageView(DetailView):
         Fetch all products with category same as that of object.
         """
         products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).\
-                filter(pCtg=self.object.pk)
+            filter(pCtg=self.object.pk)
+
+        products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).\
+            filter(pPc='course')[: 13]
         return products
-
-    def _get_product_variation_combo_ids(self, products):
-        """
-        Fetch ids of all products which are variations/combos for the given category.
-        """
-        prod_id_list = []
-
-        for prd in products:
-            if prd.pTP == 1:
-                prd_vars = json.loads(prd.pVrs)
-                [prod_id_list.append(var_lst.get('id')) for var_lst in prd_vars.get('var_list') ]
-
-            if prd.pTP == 3:
-                prd_cmbs = json.loads(prd.pCmbs)
-                [prod_id_list.append(combo_lst.get('pk')) for combo_lst in prd_cmbs.get('combo_list') ]
-
-            if prd.pTP in [0, 1, 2, 3, 4, 5]:
-                prod_id_list.append(prd.id)
-
-        return prod_id_list
 
     def _get_paginated_products(self, products, page=1):
         """
@@ -414,40 +403,47 @@ class UniversityPageView(DetailView):
         In compliance with Ajax views for Product Load More.
         """
         prod_page = Paginator(products, self.PRODUCT_PAGE_SIZE)
-
         products = prod_page.page(page)
         for product in products:
+            if product.pVrs:
+                product.pVrs = json.loads(product.pVrs)
+            if product.pUncdl:
+                product.pUncdl = json.loads(product.pUncdl)
             if not float(product.pPfin): continue
             product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
 
         return products
         
-    def _get_paginated_reviews(self, prod_id_list, page=1):
-        """
-        Return the first 5 results of reviews list.
-        In compliance with Ajax views for Review Load More.
-        """
-        content_obj = ContentType.objects.get_for_model(Product)
-        prod_reviews = Review.objects.filter(
-            object_id__in=prod_id_list,
-            content_type=content_obj, status=1)
-
-        review_page = Paginator(prod_reviews, self.REVIEW_PAGE_SIZE)
-        reviews = review_page.page(page)
-        return reviews
-
     def _get_subheaders_category(self):
+        """
+        return the first 5 subheading according to display order
+        """
         subheaders = self.object.subheaders.filter(
             active=True).order_by('display_order')
-        return subheaders
+        return subheaders[: 5]
 
     def _get_university_faculty(self):
+        """
+        return all faculty of university
+        """
         faculty = self.object.faculty_set.filter(
-            active=True)
+            active=True, role=FACULTY_TEACHER)
+        faculty = zip_longest(*[iter(faculty)] * 2, fillvalue=None)
         return faculty
 
+    def _get_faculty_principal(self):
+        """
+        return university principal speak
+        """
+        principals = self.object.faculty_set.filter(
+            role=FACULTY_PRINCIPAL,
+            active=True,
+        )
+        return principals.first()
+
     def _get_testimonials_category(self):
-        testimonials = self.object.testimonials(
+        testimonials = Testimonial.objects.filter(
+            page=UNIVERSITY_PAGE, object_id=self.object.pk,
             is_active=True).order_by('priority')
         return testimonials
 
@@ -464,19 +460,19 @@ class UniversityPageView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(UniversityPageView, self).get_context_data(**kwargs)
         standalone_products = self._get_all_products_of_category()
-        all_product_ids = self._get_product_variation_combo_ids(
-            standalone_products)
         context['products'] = self._get_paginated_products(
             standalone_products)
-        context['reviews'] = self._get_paginated_reviews(
-            all_product_ids)
+        context['subheaders'] = self._get_subheaders_category()
+        context['faculty'] = self._get_university_faculty()
+        context['testimonials'] = self._get_testimonials_category()
+        context['principal'] = self._get_faculty_principal()
+
         context.update({"meta": self._get_page_meta_data()})
         context.update(
             {"canonical_url": self.object.get_canonical_url()})
-        context.update(
-            {"country_choices": self._get_country_choices()})
-        context.update(
-            {"initial_country": self._get_preselected_country()})
+        context.update({
+            "PRODUCT_PAGE_SIZE": self.PRODUCT_PAGE_SIZE,
+            "UNIVERSITY_LEAD_SOURCE": UNIVERSITY_LEAD_SOURCE})
         return context
 
 
