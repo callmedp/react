@@ -4,6 +4,8 @@ from datetime import datetime
 import logging
 import csv
 import bson
+import mimetypes
+
 from io import StringIO
 
 from django.views.generic import (
@@ -2150,8 +2152,8 @@ class ProductHistoryLogDownloadView(UserGroupMixin, View):
                 except Exception as e:
                     logging.getLogger('error_log').error("%s " % str(e))
                     continue
-            response = HttpResponse(csvfile.getvalue())
             file_name = product_name + timezone.now().date().strftime("%Y-%m-%d")
+            response = HttpResponse(csvfile.getvalue(), content_type=mimetypes.guess_type('%s.csv' % file_name))
             response["Content-Disposition"] = "attachment; filename=%s.csv" % (file_name)
             return response
 
