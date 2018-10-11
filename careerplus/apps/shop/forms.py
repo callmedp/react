@@ -402,6 +402,9 @@ class ChangeProductSEOForm(forms.ModelForm):
 
         self.fields['meta_desc'].widget.attrs['class'] = form_class
         self.fields['meta_keywords'].widget.attrs['class'] = form_class
+        if self.instance.type_flow == 14:
+            for val in ['description', 'buy_shine', 'attend']:
+                self.fields.pop(val)
 
     class Meta:
         model = Product

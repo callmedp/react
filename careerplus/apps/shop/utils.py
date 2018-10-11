@@ -226,8 +226,9 @@ class ProductModeration(object):
                         return test_pass
 
                     if product.type_flow == 14:
-                        attributes = ['batch_launch_date', 'apply_last_date', 'application_process', 'assesment', "benefits",
-                                      'eligibility_criteria', 'attendees_criteria',"payment_deadline"]
+                        attributes = ['batch_launch_date', 'apply_last_date',
+                                      'application_process',
+                                      'attendees_criteria', "payment_deadline"]
                         for attr in attributes:
                             if not getattr(product.screen_university_course_detail, attr):
                                 messages.error(request, "Univeristy Course details are required")

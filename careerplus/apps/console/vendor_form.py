@@ -277,7 +277,9 @@ class ChangeScreenProductForm(forms.ModelForm):
         self.fields['upc'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['upc'].widget.attrs['data-parsley-length'] = "[2, 100]"
         self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-100 characters.'
-    
+        if self.instance.type_flow == 14:
+            for val in ['description', 'buy_shine']:
+                self.fields.pop(val)
 
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
@@ -1085,8 +1087,12 @@ class ScreenUniversityCourseForm(forms.ModelForm):
         label=("Eligibility Criteria"),
         help_text='semi-colon(;) separated criteria, e.g. Line Managers; Decision Maker; ...', 
         max_length=500,
+        required=False,
         widget=forms.TextInput(
             attrs={'class': 'form-control col-md-7 col-xs-12'})
+    )
+    benefits = forms.CharField(
+        required=False
     )
     attendees_criteria_choices = MultipleChoiceField(
         required=False,
@@ -1144,7 +1150,6 @@ class ScreenUniversityCourseForm(forms.ModelForm):
             ]
 
         self.fields['benefits_choices'].widget.attrs['class'] = form_class
-        self.fields['benefits_choices'].widget.attrs['required'] = True
         self.fields['benefits_choices'].widget.attrs['class'] = form_class + ' benefit_item'
 
     def clean_batch_launch_date(self):
@@ -1171,13 +1176,6 @@ class ScreenUniversityCourseForm(forms.ModelForm):
                 raise forms.ValidationError("File is not supported. Please upload jpg, png or pdf file only,")
 
         return file
-
-    def clean_eligibility_criteria(self):
-        eligibility_criteria = self.cleaned_data.get('eligibility_criteria', '')
-        if eligibility_criteria is None:
-            raise forms.ValidationError(
-                "This value is requred.")
-        return eligibility_criteria
 
     def clean_attendees_criteria(self):
         attendees_criteria = self.cleaned_data.get('attendees_criteria', '')

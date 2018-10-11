@@ -299,7 +299,7 @@
                       </div>
                       <div class="alert">{{form.about.errors}}</div>
                     </div>
-
+                    {% if form.description %}
                     <div class="item form-group {% if form.description.errors %}bad{% endif %}">
                       <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.description.id_for_label }}">Description <span class="required">*</span>
                       </label>
@@ -308,7 +308,8 @@
                       </div>
                       <div class="alert">{{form.description.errors}}</div>
                     </div>
-
+                    {% endif %}
+                    {% if form.buy_shine %}
                     <div class="item form-group {% if form.buy_shine.errors %}bad{% endif %}">
                       <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.buy_shine.id_for_label }}">What u'll get <span class="required">*</span>
                       </label>
@@ -317,6 +318,7 @@
                       </div>
                       <div class="alert">{{form.buy_shine.errors}}</div>
                     </div>
+                    {% endif %}
 
                     <input type="hidden" name="product" value="{{object.pk}}">
                     <input type="hidden" name="slug" value="main">
@@ -981,7 +983,7 @@
                     </div>
                     <div class="item form-group {% if prd_university_form.sample_certificate.errors %}bad{% endif %}">
                       <label class="control-label col-md-2 col-sm-2 col-xs-12" >
-                        Sample Certificate<span class="required">*</span>
+                        Sample Certificate
                       </label>
                       <div class="col-md-7 col-sm-7 col-xs-12">
                         {{prd_university_form.sample_certificate}}
@@ -1037,7 +1039,7 @@
                 
                     <div class="item form-group {% if prd_university_form.benefits_choices.errors %}bad{% endif %}">
                       <label class="control-label col-md-2 col-sm-2 col-xs-12" >
-                        Benefits<span class="required">*</span>
+                        Benefits
                       </label>
                       <div class="col-md-7 col-sm-7 col-xs-12" id="benefits">
                         <ul id="id_benefits"  class="exe-application-process">
@@ -1060,7 +1062,7 @@
                     </div>
                     <div class="row item form-group " id="selected_process" >
                       <label class="control-label col-md-2 col-sm-2 col-xs-12" >               
-                        Selected Benefits(Sorted)<span class="required">*</span>
+                        Selected Benefits(Sorted)
                       </label>
                       <div class="col-md-7 col-sm-7 col-xs-12">
                        <div class="row"  id="selected_benefits">
@@ -1114,7 +1116,7 @@
 
                     <div class="item form-group {% if prd_university_form.assesment.errors %}bad{% endif %}">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12" >
-                          Assesment and Evaluation.<span class="required">*</span>
+                          Assesment and Evaluation.
                         </label>
                         <div class="col-md-7 col-sm-7 col-xs-12">
                           {{prd_university_form.assesment}}
@@ -1170,7 +1172,7 @@
                   {% else%}
                   <a class="panel-heading {% if not inline_admin_form.errors %}collapsed{% endif %}" role="tab" id="heading2{{forloop.counter}}60" data-toggle="collapse" data-parent="#accordion60" href="#collapse21{{forloop.counter}}60" {% if inline_admin_form.errors %}aria-expanded="true"{% else %}aria-expanded="false"{% endif %} aria-controls="collapse21{{forloop.counter}}60">
                     {% if  inline_admin_form.instance.id %}
-                    <h4 class="panel-title">University Course Payment:&nbsp;{{inline_admin_form|get_instance}}</h4>
+                    <h4 class="panel-title">University Course Payment:&nbsp;{{forloop.counter|ordinal}} Installment -   {{inline_admin_form|get_instance}}</h4>
 
                     {% else %}
                     

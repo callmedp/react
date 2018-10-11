@@ -653,7 +653,7 @@
                     </div>
                     <div class="alert">{{seo_form.about.errors}}</div>
                   </div>
-
+                  {% if seo_form.description %}
                   <div class="item form-group {% if seo_form.description.errors %}bad{% endif %}">
                     <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ seo_form.description.id_for_label }}">Description <span class="required">*</span>
                     </label>
@@ -662,6 +662,7 @@
                     </div>
                     <div class="alert">{{seo_form.description.errors}}</div>
                   </div>
+                  {% endif %}
                 <div class="item form-group {% if seo_form.description.errors %}bad{% endif %}">
                     <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ seo_form.visibility.id_for_label }}">Description visibility <span class="required">*</span>
                     </label>
@@ -670,7 +671,7 @@
                     </div>
                     <div class="alert">{{seo_form.visibility.errors}}</div>
                   </div>
-
+                   {% if seo_form.buy_shine %}
                   <div class="item form-group {% if seo_form.buy_shine.errors %}bad{% endif %}">
                     <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ seo_form.buy_shine.id_for_label }}">What u'll get <span class="required">*</span>
                     </label>
@@ -679,6 +680,8 @@
                     </div>
                     <div class="alert">{{seo_form.buy_shine.errors}}</div>
                   </div>
+                  {% endif %}
+                  {% if seo_form.attend %}
 
                   <div class="item form-group {% if seo_form.attend.errors %}bad{% endif %}">
                     <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ seo_form.attend.id_for_label }}">Who can Attend <span class="required"></span>
@@ -689,7 +692,7 @@
                     </div>
                     <div class="alert">{{seo_form.attend.errors}}</div>
                   </div>
-
+                  {% endif %}
                   
                   <input type="hidden" name="product" value="{{object.pk}}">
                   <input type="hidden" name="slug" value="seo">
@@ -1958,7 +1961,7 @@
               <div class="panel {% if forloop.last %} {% endif %}">
                 <a class="panel-heading collapsed" role="tab" id="heading{{forloop.counter}}" data-toggle="collapse" data-parent="#accordion3" href="#collapse{{forloop.counter}}3" aria-expanded="false" aria-controls="collapse{{forloop.counter}}3">
                   {% if  inline_admin_form.instance and inline_admin_form.instance.id %}
-                  <h4 class="panel-title">Testimonial:&nbsp;{{inline_admin_form|get_instance}}</h4>
+                  <h4 class="panel-title">Testimonial:&nbsp;{{forloop.counter|ordinal}} Installment -   {{inline_admin_form|get_instance}}</h4>
 
                   {% else %}
                   <h4 class="panel-title">Testimonial: Add New

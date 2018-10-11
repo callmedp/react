@@ -313,6 +313,7 @@ class ChangeFacultyForm(forms.ModelForm):
         self.fields['image'].widget.attrs['class'] = form_class
         self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 30
         self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
+        self.fields['image'].widget.attrs['data-parsley-imagedimension'] = '209x209'
 
         self.fields['designation'].widget.attrs['class'] = form_class
         self.fields['designation'].widget.attrs['maxlength'] = 30
@@ -500,6 +501,7 @@ class AddFacultyForm(forms.ModelForm):
         self.fields['image'].widget.attrs['class'] = form_class
         self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 30
         self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
+        self.fields['image'].widget.attrs['data-parsley-imagedimension'] = '209x209'
 
         self.fields['designation'].widget.attrs['class'] = form_class
         self.fields['designation'].widget.attrs['maxlength'] = 30
@@ -1281,6 +1283,9 @@ class UniversityCourseForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple,
         choices=BENEFITS_CHOICES
     )
+    benefits = forms.CharField(
+        required=False
+    )
     selected_benefits_choices = MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple,
@@ -1290,6 +1295,7 @@ class UniversityCourseForm(forms.ModelForm):
         label=("Eligibility Criteria"),
         help_text='semi-colon(;) separated criteria, e.g. Line Managers; Decision Maker; ...', 
         max_length=500,
+        required=False,
         widget=forms.TextInput(
             attrs={'class': 'form-control col-md-7 col-xs-12'})
     )

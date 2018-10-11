@@ -2472,7 +2472,7 @@ class UniversityCourseDetailScreen(models.Model):
     assesment = RichTextField(
         verbose_name=_('assesment'),
         help_text=_('Description of Assesment and Evaluation'),
-        default=''
+        blank=True
     )
     productscreen = models.OneToOneField(
         ProductScreen,
@@ -2558,7 +2558,7 @@ class UniversityCourseDetail(models.Model):
     assesment = RichTextField(
         verbose_name=_('assesment'),
         help_text=_('Description of Assesment and Evaluation'),
-        default=''
+        blank=True
     )
     product = models.OneToOneField(
         Product,
@@ -2709,6 +2709,12 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
 
     def get_canonical_url(self):
         return self.get_absolute_url()
+
+    def get_image_url(self):
+        if self.image:
+            return self.image.url
+        return settings.MEDIA_URL + 'static/shinelearn/images/executive/principal-pic.jpg'
+
 
 class FacultyProduct(AbstractAutoDate):
     faculty = models.ForeignKey(
