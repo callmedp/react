@@ -1555,6 +1555,11 @@ class Product(AbstractProduct, ModelMeta):
 
         return self.get_absolute_url()
 
+    def get_batch_launch_date(self):
+        if self.university_course_detail:
+            return self.university_course_detail.batch_launch_date
+        return ''
+
     @classmethod
     def post_save_product(cls, sender, instance, **kwargs):
         from .tasks import add_log_in_product_audit_history

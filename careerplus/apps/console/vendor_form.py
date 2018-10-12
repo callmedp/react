@@ -278,7 +278,7 @@ class ChangeScreenProductForm(forms.ModelForm):
         self.fields['upc'].widget.attrs['data-parsley-length'] = "[2, 100]"
         self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-100 characters.'
         if self.instance.type_flow == 14:
-            for val in ['description', 'buy_shine']:
+            for val in ['about', 'buy_shine']:
                 self.fields.pop(val)
 
     def clean_name(self):

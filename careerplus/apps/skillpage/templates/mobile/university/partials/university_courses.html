@@ -1,0 +1,40 @@
+{% load static %}
+{% load shop_tags %}
+
+{% for prd in products %}
+<div class="white-box p-15 pr-0">
+    <div class="offer-tag">Admission open</div>
+    <div class="university-logo">
+        <img
+            src="{{category_obj.icon.url}}"/>
+    </div>
+    <div class="media mt-15">
+        <div class="media-body pb-0">
+            <h3 class="mb-5"><a href="{{prd.pURL}}">{{prd.pHd}}</a></h3>
+            <div><span class="date-icon">{% if prd.pUncdl %}Starts</span> {{prd.pUncdl.launchdate}} {% endif %}{% if prd.pVrs.var_list %}<span class="spacer">|</span> {{prd.pVrs.var_list.0.dur_days|convert_to_month}} months{% endif %}</div>
+        </div>
+        
+        <div class="media-left pr-0">
+            <a href="{{prd.pURL}}" class="course-logo">
+                <img    
+                    src="{{prd.pIc}}" 
+                    class="img-responsive" alt="{{prd.pImA}}"
+                />
+            </a>
+        </div><!-- end of media body --></div>
+</div><!-- white box ends here -->
+{% endfor %}
+
+{% if products.has_next %}
+<div id="id_load_more_course">
+  <form id="form-load-more-university-course">
+    <input type="hidden" name="page" 
+      value="{{products.next_page_number}}">
+    <input type="hidden" name="category_pk" value="{{category_obj.pk}}" 
+    >
+    <input type="hidden" name="page_size" value="{{PRODUCT_PAGE_SIZE}}" 
+    >
+    <p class="text-center"><button type="button" class="btn btn-outline btn-round-30 btn-lg" id="load-more-button-id">View more</a></p>
+  </form>
+</div>
+{% endif %}

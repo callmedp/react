@@ -37,7 +37,7 @@ DEFAULT_SLUG_SOURCE = (
     (20, 'missedcalldefault'),
     (26, 'coursemailerdefault'),
     (27, 'resmdefault'),  # resume mailer default
-    (UNIVERSITY_LEAD_SOURCE, 'courseonline')
+    (UNIVERSITY_LEAD_SOURCE, 'university-campaign')
 )
 
 

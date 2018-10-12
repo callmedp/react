@@ -1,7 +1,7 @@
 $(function(){
 
 	$.validator.addMethod("indiaMobile", function(value, element) {
-	    var country_code = $("input[name=country]").val(); //$('#call_back_country_code-id').val();
+	    var country_code = $("select[name=country]").val(); //$('#call_back_country_code-id').val();
 	    if (country_code == '91') {
 	        return value.length == 10;
 	    }
@@ -22,7 +22,7 @@ $(function(){
             number: {
                 required: true,
                 number: true,
-                // indiaMobile: true,
+                indiaMobile: true,
                 minlength: 4,
                 maxlength: 15
             }
@@ -40,7 +40,7 @@ $(function(){
             number: {
                 required: "Mobile Number is Mandatory",
                 number: "Enter only number",
-                // indiaMobile: "Please enter 10 digits only",
+                indiaMobile: "Please enter 10 digits only",
                 maxlength: "Please enter atmost 15 digits",
                 minlength: "Please enter atleast 4 digits"
             }

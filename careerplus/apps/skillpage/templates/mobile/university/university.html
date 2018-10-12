@@ -1,173 +1,259 @@
 {% extends "mobile/basic/base.html" %}
 {% load static compress %}
-{% block django_meta %}
-    {% include 'meta/meta.html' %}
+{% load humanize shop_tags %}
 
-{%  endblock django_meta %}
-{% block canonical_url %}
-    <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
-    <link rel="amphtml" href="https://{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}?type=amp">
-{% endblock canonical_url %}
-
-{% block title %} 
-    {{meta.title}}
-{% endblock title %}
 {% block css_section %}
 {{ block.super }}
     {% compress css %}
-    <link type="text/scss" href="{% static 'shinelearn/css/mobile/skill/skill.scss' %}" rel="stylesheet">
-    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/shop/course-detail.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/executive-course/exec-detail.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
-    {% endcompress %}
+    {% endcompress css %}
 {% endblock css_section %}
-{% block header %}
-    <header class="w100fl he-auto">
-        <img src="{% static 'shinelearn/images/mobile/skill/header-back-img-2.png' %}">
-        
-        <!-- header menu Icon Starts here -->
-        <div class="main-menu w100fl">
-            <div class="pull-left">
-                
-                <a class=" pull-left" id="sidebar-main-trigger" href="#"></a> 
+{% block title %}
+  {% if meta.title %}{{ meta.title }}{% else %}{{category_obj.heading}}{% endif %}
+{% endblock title %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{request.get_full_path}}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}?type=amp">
+{% endblock canonical_url %}
 
-                
-                <a class="icon-back pull-left"  href="/"></a> 
-            </div><!-- / Left side Icon ends here -->
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{% endblock django_meta %}
 
-            <div class="pull-right">
-                
-                <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
-                <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
-            </div><!-- / Right side Icon ends here -->
-            
-        </div><!-- header menu Icon ends here -->
-        
-        <h1 class="heading-back w100fl pb-0">
-            {% if meta.heading %}
-                {{ meta.heading | title }}
-            {% else %}
-                {{category_obj.name|title}} Programs
-            {% endif %}
-        </h1>
-        
-        <ul class="header-taging mt-10 w100fl">
-            {% if top_3_prod.0 %}
-            <li><a href="{{top_3_prod.0.pURL}}">{{top_3_prod.0.pNm}}</a></li>
-            {% endif %}
-            {% if top_3_prod.1 %}
-            <li><a href="{{top_3_prod.1.pURL}}">{{top_3_prod.1.pNm}}</a></li>
-            {% endif %}
-            {% if top_3_prod.2 %}
-            <li><a href="{{top_3_prod.2.pURL}}">{{top_3_prod.2.pNm}}</a></li>
-            {% endif %}
-        </ul>
-    </header><!-- header ends here -->    
-{% endblock header %}
-
-{% block container %}
-    <div class="body-wrapper">
-        <section class="content-box">
-            <div class="skill-box">
-                <div class="container pt-0 pb-5">
-                {% if top_4_vendors %}
-                    <h2 class="mb-0">Providers</h2>
-                    <div class="slide-container">
-                        <ul class="skill-provider">
-                        {% for top_4_vendor in top_4_vendors %}
-                            {% if top_4_vendor.icon or top_4_vendor.image %}
-                            <li>
-                                <a href="#" class="box">
-                                    <img src="{% if top_4_vendor.icon %}
-                                        {{top_4_vendor.icon.url}}
-                                    {% elif top_4_vendor.image %}{{top_4_vendor.image.url}}{% endif %}" class="img-responsive">
-                                </a>
-                            </li>
-                            {% endif %}
-                        {% endfor %}
+{% block main_container %}
+        <div class="wrapper executive-bg university-detail">
+            {% block header %}
+            <!-- header menu Icon Starts here -->
+                <div class="exec-header">
+                    <div class="header-content">
+                        <div class="university-logo">
+                            <img src="{{category_obj.icon.url}}" />
+                        </div>
+                        <h1 class="semi-bold">{{category_obj.heading}}</h1>
+                        <ul class="banner-list">
+                            {% for subheading in subheaders|slice:'2' %}
+                            <li>{{subheading.heading}}</li>
+                            {% endfor %}
                         </ul>
-                    </div> <!-- end of slide-container -->
-                {% endif %}
-                </div><!-- end of provider slider -->
-                <div class="container">
-                    <h2>About</h2>
-                    <p class="pb-0">
-                        {{category_obj.description | safe}}
-                    </p>
-                </div><!-- end of Six Sigma -->
+                    </div><!-- /. header content -->
+                    
+                    <!-- header menu Icon Starts here -->
+                    <div class="main-menu w100fl">
+                        <div class="pull-left">
+                            <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button" ></a>  
+                        </div><!-- / Left side Icon ends here -->
+                        
+                        <div class="pull-right">
+                            <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                        </div><!-- / Right side Icon ends here -->
+                    </div><!-- header menu Icon ends here -->
+                    <div class="overlay"></div>
+                    <div class="banner-image" 
+                        style="background-image:url({{category_obj.banner.url}})">
+                    </div>
+                {% block header_title %}{% endblock header_title %}
+                </div><!-- header ends here -->
+            {% endblock header %}
 
-                {% if category_obj.career_outcomes %}
-                <div class="container">
-                    <h2>Professional Advantage</h2>
-                    <div class="box row">
-                        <ul class="recommd-list">
-                        {% for career_outcome in category_obj.split_career_outcomes %}
-                            <li>
-                                <sup class="icon-tick"></sup>{{career_outcome}}
+            {% block container %}
+            <div class="content-box">
+
+                <!-- Want help Form Start Here -->
+                <div class="want-help container">
+                    <div class="white-box request-callback">
+                        <h2>Want help with courses?</h2>
+                        <div class="line-form-wrap">
+                        <ul class="p-15">
+                            <li class=" field error">
+                                <input type="text" name="name" id="name" placeholder="Enter your name">
+                                <label for="name">Name</label>
+                                <span class="error-txt">lskdal;d</span>
                             </li>
-                        {% endfor %} 
-                        </ul>
-                        <div class="clearfix"></div>  
-                    </div>
-                </div>
-                {% endif %}
+                            
+                            <li class="field">
+                            <input type="text" name="mNumber" id="mNumber" placeholder="Enter mobile No.">
+                            <label for="mNumber">Mobile</label>
+                            </li>
+                            
+                            <li class="field">
+                            <input type="text" name="email" id="email" placeholder="Enter email ">
+                            <label for="email">Email</label>
+                            </li>
+
+                            <li>
+                                <select class="form-control">
+                                <option>Select Course</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                </select>
+                            </li>
+        
+                            <li class="mt-20 mb-5 text-center">
+                                <button class="btn btn-round-30 btn-lg btn-shadow btn-grOrange text-upper">Request Callback</button>
+                            </li>
+                          </ul>
+                        </div><!-- line form ends here -->
+                    </div><!-- white box ends here -->
+                </div><!-- Want help Form Ends Here -->
 
 
-                <div class="container" id="product_list">
-                    <h2>{{category_obj.name}} Services</h2>
-                    {% include 'mobile/include/load_product.html' %}
-                </div><!-- end of container -->
+                <!-- Courses offered Start Here -->
+                <div class="courses-offered container mt-15" id="id-university-course-list">
+                    <h2>Courses offered</h2>
+                    {% include "university/partials/university_courses.html" %}
 
-                <!-- Revew Slide widget -->
-                <div class="container">
-                {% if reviews %}
-                    <div class="w100fl">
-                        <h2 class="pull-left">Reviews</h2>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="box row pb-30">
-                        <div class="review-container rel">
-                            <ul class="review-slide" id="review_list">
-                            {% for review in reviews %}
-                                <li>
-                                    <div class="wrap">
-                                        {% for rating in review.get_ratings %}
-                                        <div class="rating inline-block ml-0 fs-12">
-                                            {% if rating == "*" %}
-                                            <sup class="fill-star"></sup>
+                </div><!-- Courses offered Ends Here -->
+
+                    {% if faculty %}
+                    <div class="container heading-override">
+                        <div class="white-box">
+                            <h2><span><i class="execIcon-faculty"></i></span>Faculty profile</h2>
+                            <p class="pl-15 pr-15">Learn from skilled instructors with professional  experience in the field.</p>
+                            <div class="content pl-40 pr-40">
+                                <ul class="faculty-profile text-center" id="executive-slide">
+                                    {% for fslide in faculty %}
+                                    {% for fac in fslide %}
+                                    {% if fac %}
+                                    <li>
+                                        <span class="faculty-image">
+                                            {% if fac.image %}
+                                            <img 
+                                            src="{{fac.image.url}}" alt="{{fac.image_alt}}"/>
                                             {% else %}
-                                            <sup class="unfill-star"></sup>
                                             {% endif %}
-                                        </div><!-- end of star rating -->
-                                        {% endfor %}
-                                        <p>{{review.content | safe}}</p>
-                                        <p class="fs-12 c9 pb-0">
-                                            {{review.user_name}} 
-                                            {{review.created|timesince}} ago
+                                        </span>
+                                        <h3><a href="{{fac.get_absolute_url}}">{{fac.name}}</a></h3>
+                                        <p class="desigation mt-15">{{fac.designation}} – {{fac.company}}
+                                            <span></span>
                                         </p>
+                                        <p>{{fac.description|truncatechars:100}}...<a href="{{fac.get_absolute_url}}">read more</a></p>
+                                    </li>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endfor %}
+                                    
+                                </ul>
+                            </div>
+                        </div><!-- /. white box-->
+                    </div><!-- ./ Faculty profile -->
+                    {% endif %}
+
+                <div class="container heading-override">
+                    <div class="white-box pb-0">
+                        <h2><span><i class="execIcon-program"></i></span>About institute</h2>
+                        <div class="content pt-0">
+                            {{category_obj.description|safe}}
+                        </div>
+
+                        <div class="college-image-about">
+                            <div class="university-logo">
+                                {% if category_obj.icon %}
+                                <img           
+                                src="{{category_obj.icon.url}}" alt="logo"/>
+                                {% endif %}
+                            </div>
+
+                            <div class="image-wrap">
+                                <img 
+                                src="{{category_obj.image.url}}" alt="university.jpg"
+                                />
+                            </div>
+                        </div><!-- /. college image about-->
+                    </div><!-- /. white box-->
+                </div><!-- ./ About institute -->
+
+                {% if principal and principal.faculty_speak %}
+                <div class="container heading-override">
+                    <div class="white-box pb-0">
+                        <h2><span><i class="execIcon-program"></i></span>Principal speak</h2>
+                        <div class="content pt-0">
+                            <div class="principal-image-wrap">
+                                <div class="university-logo">
+                                    <img src="{{category_obj.icon.url}}"/></div>
+                                <div class="principle-image">
+                                    <img 
+                                        src="{{principal.image.url}}" alt="{{principal.image_alt}}" class="img-responsive" 
+                                    />
+                                </div>
+                            </div><!-- /. principal-image-wrap -->
+
+                            <p>{{principal.faculty_speak}}</p>
+
+                            <div class="principal-detail mt-20">
+                                <span class="principal-name">{{principal.name}}</span>
+                                <span class="principal-location">Principal, {{category_obj.heading}}</span>
+                            </div><!-- /. principal-detail -->
+                        </div><!-- /. content -->
+                    </div><!-- /. white box-->
+                </div><!-- ./ Principal speak -->
+                {% endif %}
+                
+                {% if testimonials %}
+                <div class="container heading-override">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-testimonials"></i></span>Testimonials</h2>
+                        <div class="content pl-40 pr-40">
+                            <ul class="testimonials faculty-profile testi-slide">
+                                {% for testimonial in testimonials %}
+                                <li>
+                                    <p class="mb-15">{{testimonial.review}}</p>
+
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <span class="testimonial-image">
+                                             <img class="media-object" src="{{testimonial.image.url}}" alt="{{testimonial.user_name}}">
+                                            </span>
+                                        </div>
+                                        <div class="media-body">
+                                            <p class="pb-0 text-upper fs-14 c-333">{{testimonial.user_name}}</p>
+                                            <p class="pb-0 line-height-sm c-999">{{testimonial.designation}},  {{testimonial.company}}</p>
+                                        </div>
                                     </div>
                                 </li>
-                            {% endfor %}
+                                {% endfor %}
                             </ul>
-                        </div><!-- end of review wrap -->
-                    </div><!-- end of box -->
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ Testimonials -->
                 {% endif %}
-                </div><!-- end of container -->
-            
-            </div><!-- end of skill box -->
-        </section><!-- end of section here -->
-    </div><!-- body wrapper ends here -->
-    {% block call_us %}
-        {% include "shop/partials/call_us.html" %}
-    {% endblock call_us %}
-    
-{% endblock container %}
+            </div><!-- /. content-box --> 
+
+            {% block call_us %}
+                {% include "shop/partials/call_us.html" %}
+            {% endblock call_us %}
+
+            {% endblock container %}
+
+            {% block footer %}
+                <!-- footer -->
+                {% include 'basic/footer.html' %}
+            {% endblock footer %}
+
+            {% block navigation %}
+                <!-- left side menu -->
+                {% include 'basic/navigation.html' %}
+            {% endblock navigation %}
+        </div>
+{% endblock main_container %}
+
+
+
+
 
 {% block js_section %}
     {{block.super}}
     {% compress js %}
-    <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
+    <script src="{% static 'console/js/jquery.validate.js' %}"></script>
+    <script src="{% static 'shinelearn/js/skill/university.js' %}"></script>
+    <script src="{% static 'shinelearn/js/skill/callback-validate.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     {% endcompress %}
+    
 {% endblock js_section %}
+
 

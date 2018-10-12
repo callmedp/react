@@ -3,7 +3,7 @@
 {% load shop_tags %}
 
 {% block title %}
-  {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
+  {% if meta.title %}{{ meta.title }}{% else %}{{category_obj.heading}}{% endif %}
 {% endblock title %}
 {% block canonical_url %}
   <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
@@ -34,7 +34,7 @@
   {% block page_heading %}
 
   <!-- header -->
-  <header class="exe-header-university" style="background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url({% static 'shinelearn/images/executive/university-pic.jpg' %}) no-repeat center top;">
+  <header class="exe-header-university" style="background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url({{category_obj.banner.url}}) no-repeat center top;">
     <div class="exe-header-txt container pr">
       <div class="row">
 
@@ -81,9 +81,22 @@
                 <span class="error-txt"></span>
               </div>
               <div class="form-group">
+                <div class="country-code">
+                  <div class="custom-select">
+                    <select class="form-control" name="country" >
+                      {% for country_choice in country_choices %}
+                      <option value="{{country_choice.0}}" {% if country_choice.0 == initial_country %}selected {% endif %}>{{country_choice.0}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <input type="text" class="form-control" name="number" placeholder="Phone Number" maxlength="15" value="{{request.session.mobile_no|safe}}">
+                  <span class="error-txt" style="padding-left: 50px;"></span>
+                </div>
+              </div>
+              <!--div class="form-group">
                 <input type="text" class="form-control" name="number" placeholder="Phone Number" maxlength="15" value="{{request.session.mobile_no|safe}}">
                 <span class="error-txt"></span>
-              </div>
+              </div-->
               <div class="form-group pr">
                 <span class="down-arrow"></span>
                 <select class="form-control" name="product">
@@ -220,7 +233,7 @@
                           <div class="media-body speak">
                             {{principal.faculty_speak}}
                             <strong class="mt-40">{{principal.name}}</strong>
-                            <span>Principal, {{category_obj.name}}</span>
+                            <span>Principal, {{category_obj.heading}}</span>
                           </div>
                         </div>
                       </div>

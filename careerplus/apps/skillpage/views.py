@@ -338,7 +338,7 @@ class UniversityPageView(DetailView):
     template_name = "university/university.html"
     context_object_name = "category_obj"
 
-    PRODUCT_PAGE_SIZE = 9
+    PRODUCT_PAGE_SIZE = 6
 
     def get_queryset(self):
         return Category.objects.filter(
@@ -445,7 +445,7 @@ class UniversityPageView(DetailView):
         testimonials = Testimonial.objects.filter(
             page=UNIVERSITY_PAGE, object_id=self.object.pk,
             is_active=True).order_by('priority')
-        return testimonials
+        return testimonials[: 3]
 
     def _get_page_meta_data(self):
         meta_dict = self.object.as_meta(self.request).__dict__
@@ -453,7 +453,7 @@ class UniversityPageView(DetailView):
         meta_dict['og_description'] = self.object.get_description()
         meta_dict["_url"] = self.object.get_canonical_url()
         meta_dict['title'] = self.object.title if self.object.title else \
-            '{} University - Shine Learning'.format(self.object.name)
+            '{} - Shine Learning'.format(self.object.heading)
         meta_dict['heading'] = self.object.heading
         return meta_dict
 
@@ -466,6 +466,8 @@ class UniversityPageView(DetailView):
         context['faculty'] = self._get_university_faculty()
         context['testimonials'] = self._get_testimonials_category()
         context['principal'] = self._get_faculty_principal()
+        context.update({"country_choices": self._get_country_choices()})
+        context.update({"initial_country": self._get_preselected_country()})
 
         context.update({"meta": self._get_page_meta_data()})
         context.update(
@@ -481,7 +483,7 @@ class UniversityFacultyView(DetailView):
     template_name = "university/detail_faculty.html"
     context_object_name = "faculty_obj"
 
-    PRODUCT_PAGE_SIZE = 6
+    # PRODUCT_PAGE_SIZE = 6
 
     def get_queryset(self):
         return Faculty.objects.filter(
@@ -507,21 +509,20 @@ class UniversityFacultyView(DetailView):
 
     def _get_paginated_products(self, products=[], page=1):
         """
-        Return the first 5 results of products list.
+        Return the first 9 results of products list.
         In compliance with Ajax views for Product Load More.
         """
         if not products:
             products = self.object.facultyproducts.filter(
-                is_indexable=True, active=True,
-                type_product__in=[0, 1, 3, 5],
-                type_flow=14).order_by('display_order')
-        prod_page = Paginator(products, self.PRODUCT_PAGE_SIZE)
+                product__is_indexable=True, product__active=True,
+                active=True,
+                product__type_product__in=[0, 1, 3, 5],
+                product__type_flow=14).order_by('display_order')
+            products = products.select_related('product')
+        # prod_page = Paginator(products, self.PRODUCT_PAGE_SIZE)
 
-        products = prod_page.page(page)
-        for product in products:
-            if not float(product.pPfin): continue
-            product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
-        return products
+        # products = prod_page.page(page)
+        return products[: 9]
 
     def _get_page_meta_data(self):
         meta_dict = self.object.as_meta(self.request).__dict__
@@ -529,13 +530,16 @@ class UniversityFacultyView(DetailView):
         meta_dict['og_description'] = self.object.get_description()
         meta_dict["_url"] = self.object.get_canonical_url()
         meta_dict['title'] = self.object.title if self.object.title else \
-            '{} University - Shine Learning'.format(self.object.name)
+            '{} - Shine Learning'.format(self.object.name)
         meta_dict['heading'] = self.object.heading
         return meta_dict
 
     def get_context_data(self, **kwargs):
         context = super(UniversityFacultyView, self).get_context_data(**kwargs)
         context.update({"meta": self._get_page_meta_data()})
+        context.update({
+            "products": self._get_paginated_products(),
+            "university": self.object.institute})
         context.update(
             {"canonical_url": self.object.get_canonical_url()})
         return context
