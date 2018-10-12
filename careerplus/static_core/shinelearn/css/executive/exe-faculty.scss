@@ -85,7 +85,7 @@
 }
 
 .exe-courses-taken-box {
-	background: #f6f6f6;
+	background: url(#{$imagePath}images/executive/courses-offered-bg.jpg) #f6f6f6 no-repeat center top;
 	background-size: cover;
 	overflow: hidden;
 	padding-bottom: 2%;
