@@ -316,7 +316,51 @@ $(document).ready(function(){
                 "cart_type": 'cart',
                 "cv_id": '',
                 "req_options": [],
-                }
+                };
+
+      var url = "{% url 'crmapi:lead-management' %}";
+      var formEmail = $("#email").val();
+      var formName = $("#name").val();
+      var formNumber = $("#mobile").val();
+
+      var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      var isValidEmail = regex.test(formEmail);
+      if (formNumber.length < 5 ){
+          alert("Please enter atleast 5 digit  number.");
+          return;
+      }
+
+      if (!isValidEmail){
+         alert("Please enter a valid email address.");
+         return; 
+      }
+      var leadData = {"name":formName,"email":formEmail,"number":formNumber,"lsource":4};
+
+      $.ajax({
+          async: true,
+          url: url,
+          type: "POST",
+          data: leadData,
+          headers: {
+            "X-CSRFToken":"{{csrf_token}}"
+          },
+          success: function(result) {
+            $(':input','form')
+                  .not(':button, :submit, :reset, :hidden')
+                  .val('')
+                  .prop('checked', false)
+                  .prop('selected', false);
+
+            setTimeout(function(){
+                  $('a.no-click').click(function(e) {
+                    e.preventDefault()
+                  });
+                  },0);
+          },
+          error: function(result) {
+            alert("Something went wrong!");
+          }
+      });
 
 			$.ajax({
 
@@ -351,9 +395,6 @@ $(document).ready(function(){
                     $('#add-to-cart').attr('disabled', false);
                 }
             });
-
-
-
      });
 
 		function google_analyts(){
