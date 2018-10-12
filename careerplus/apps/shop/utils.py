@@ -131,7 +131,10 @@ FIELD_FACTORIES = {
 
 PRODUCT_TYPE_FLOW_FIELD_ATTRS = {
     'file': {
-        14: {'data-parsley-max-file-size': 4096},
+        14: {
+            'data-parsley-max-file-size': 4096,
+            'data-parsley-filemimetypes': 'application/pdf'
+        },
         -1: {'data-parsley-max-file-size': 250}
     },
     'boolean': {

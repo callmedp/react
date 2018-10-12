@@ -431,7 +431,7 @@
 
 	            },
 	            messages: {
-	                en: 'Only .jpeg/.png/.svg is allowed'
+	                en: 'Only %s is allowed'
 	            }
 	        });
 
