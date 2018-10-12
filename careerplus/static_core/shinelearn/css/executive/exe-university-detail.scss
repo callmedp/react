@@ -7,6 +7,7 @@
 	background-size: cover !important;
 	display: block;
 	position: relative;
+	min-height: 340px;
 
 	.exe-header-txt {
 	  color: #fff;
@@ -99,11 +100,11 @@
 	}
 
 	form {
-		padding: 20px 30px;
+		padding: 10px 30px 20px 30px;
 		background-color: $white-color;
 
 		.form-group {
-			margin-bottom: 15px;
+			margin-bottom: 10px;
 
 			.form-control {
 				border-bottom: 1px solid $e-border-color;
@@ -147,55 +148,6 @@
 
 		.exe-button-callback {
 			margin-top: 20px;
-		}
-	}
-}
-
-.exe-detail-course-links {
-	font-size: $font-size+3;
-	color: $primary-color;
-	border: 1px solid $e-border-color;
-	display: block;
-	font-weight: $font-weight+300;
-	background-color: $white-color;
-	position: relative;
-	z-index: 777;
-	padding-bottom: 6px;
-
-
-	a {
-		color: $e-secondary-color;
-		margin-left: 1.5%;
-		padding: 15px 2% 5px 2%;
-		display: inline-block;
-		line-height: 40px;
-		border-bottom: 3px transparent $anchor-color !important;
-
-		@media (max-width: 1190px) {
-			margin-left: 1%;
-			padding: 15px 1% 5px 1%;
-		}
-
-		&.active {
-			padding: 9px 2% 8px 2%;	
-			position: relative;
-
-			&:after {
-				content:"";
-				height: 4px;
-				display: block;
-				position: absolute;
-				bottom: 0;
-				left: 0;
-				right: 0;
-				background: rgba(119,78,234,1);
-				background: -moz-linear-gradient(left, rgba(119,78,234,1) 0%, rgba(83,139,223,1) 100%);
-				background: -webkit-gradient(left top, right top, color-stop(0%, rgba(119,78,234,1)), color-stop(100%, rgba(83,139,223,1)));
-				background: -webkit-linear-gradient(left, rgba(119,78,234,1) 0%, rgba(83,139,223,1) 100%);
-				background: -o-linear-gradient(left, rgba(119,78,234,1) 0%, rgba(83,139,223,1) 100%);
-				background: -ms-linear-gradient(left, rgba(119,78,234,1) 0%, rgba(83,139,223,1) 100%);
-				background: linear-gradient(to right, rgba(119,78,234,1) 0%, rgba(83,139,223,1) 100%);
-			}		
 		}
 	}
 }
@@ -279,10 +231,11 @@
 }
 
 .exe-courses-offered-box {
-	background: url(#{$imagePath}images/executive/courses-offered-bg.jpg) no-repeat center top;;
+	background: url(#{$imagePath}images/executive/courses-offered-bg.jpg) #f6f6f6 no-repeat center top;;
 	background-size: cover;
 	overflow: hidden;
 	padding-bottom: 2%;
+	min-height: 340px;
 
 	.exe-button-view-more {
 		margin:  25px auto 20px auto;
@@ -363,15 +316,21 @@
 		font-size: $font-size+2;
 		color: $grey-color;
 		font-weight: $font-weight+100;
+		display: table;
+
+		i {
+			display: table-cell;
+			border-right: 28px solid transparent;
+		}
 
 		strong {
 			font-weight: $font-weight+100;
 			color: $e-secondary-color;
+			display: inline-block;
 		}
 
 		.exe-icon-batch-grey {
 			vertical-align: sub;
-			margin-right: 7px;
 		}
 	}
 }
@@ -382,4 +341,45 @@
 
 .exe-testimonial-carousel {
 	margin-bottom: 45px;
+}
+
+
+.faculty {
+
+	h1 {
+		color: $white-color;
+		font-weight: $font-weight+400;
+	}
+
+	.media-left {
+		margin-left: -20px;
+	}
+
+	figure {
+		width: 210px;
+		height: 210px;
+		position: relative;
+		margin: 20px;
+		box-shadow: 0px 4px 24px 0px rgba(0, 0, 0, 0.31);
+		border-radius: 5px;
+
+
+		img {
+			border-radius: 5px;
+		}
+
+		i {
+			position: absolute;
+			right: 20px;
+			bottom: -25px;
+			width: 72px;
+			height: 62px;
+			border-bottom: 5px solid $blue-color;
+			display: inline-block;
+			background-color: $white-color;
+			box-shadow: -1px 0px 33px 0px rgba(0, 0, 0, 0.13);
+			border-radius: 10px;
+			padding: 10px 10px 0 10px;
+		}
+	}
 }

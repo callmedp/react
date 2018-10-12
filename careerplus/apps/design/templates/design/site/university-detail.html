@@ -34,7 +34,7 @@
       {% block page_heading %}
 
       <!-- header -->
-      <header class="exe-header-university" style="background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url({% static 'shinelearn/images/executive/university-pic.jpg' %}) no-repeat center top;">
+      <header class="exe-header-university" style="background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) ), url({% static 'shinelearn/images/executive/university-pic.jpg' %}) no-repeat center top;">
         <div class="exe-header-txt container pr">
           <div class="row">
           <!-- breadcrums -->
@@ -73,7 +73,15 @@
                     <input type="text" class="form-control" id="exampleInputEmail" placeholder="Email">
                   </div>
                   <div class="form-group">
-                    <input type="text" class="form-control" id="exampleInputPhone" placeholder="Phone Number">
+                    <div class="country-code">
+                      <div class="custom-select">
+                        <select class="form-control" name="country_code">
+                          <option>+91</option>
+                          <option>+911</option>
+                        </select>
+                      </div>
+                      <input type="text" class="form-control" id="exampleInputPhone" placeholder="Phone Number">
+                    </div>
                   </div>
                   <div class="form-group pr">
                     <span class="down-arrow"></span>
