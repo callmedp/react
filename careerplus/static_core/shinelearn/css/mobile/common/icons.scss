@@ -558,27 +558,50 @@
 }
 
 // Application process Icons
-.execIcon-placeOrder {
+.exe-icon-place-order {
   background-position: -85px -89px;
 }
 
-.execIcon-receiveOnline {
+.exe-icon-study-material {
   background-position: -119px -89px;
 }
 
-.execIcon-startLearn {
+.exe-icon-start-learning {
   background-position: -154px -89px;
 }
 
-.execIcon-getCertified {
+.exe-icon-get-certified {
   background-position: -190px -89px;
+}
+
+.exe-icon-get-online-application {
+  background-position: -287px -88px;
+}
+
+.exe-icon-get-fee-payment {
+  background-position: -321px -88px;
+}
+
+.exe-icon-get-access-online {
+  background-position: -355px -88px;
+}
+
+.exe-icon-get-start-course {
+  background-position: -389px -88px;
+}
+
+.exe-icon-get-check-eligible {
+  background-position: -423px -88px;
+}
+
+.exe-icon-get-complete-application {
+  background-position: -457px -88px;
 }
 
 .execIcon-down-arrow-big {
   @include icon-inblock (26px, 26px, -225px -88px);
   margin: 10px 0;
 }
-
 
 .date-icon::before  {
   @include icon-block (21px, 21px, -260px -86px);

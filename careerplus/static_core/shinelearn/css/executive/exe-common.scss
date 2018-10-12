@@ -531,8 +531,124 @@ footer {
 			display: inline-block;
 
 			@media (max-width: 1190px) {
-				width: 70%;
+				width: 78%;
 			}
 		}
+	}
+}
+
+.exe-modal-form {
+	font-size: $font-size+2;
+	color: $e-txt-color;
+
+	h2 {
+		font-size: $font-size+9;
+		color: $primary-color;
+	}
+
+	strong {
+		font-size: $font-size+3;
+		color: $secondary-color;
+		display: block;
+		font-weight: $font-weight+100;
+	}
+
+	.modal-header {
+		padding: 12px 12px 0 0;
+	}
+
+	.modal-body {
+		padding: 0 20px 30px 20px;
+	}
+
+	form {
+		margin-top: 10px;
+		background-color: $white-color;
+
+		.form-group {
+			margin-bottom: 10px;
+
+			.form-control {
+				border-bottom: 1px solid $e-border-color;
+				border-left: none;
+				border-top: none;
+				border-right: none;
+				border-radius: 0;
+				box-shadow: none;
+				font-size: $font-size+2;
+				padding-left: 0;
+				font-weight: $font-weight+100;
+			}
+
+			select {
+				color: $grey-color;
+				padding-left: 0;
+				margin-left: 0;
+				-webkit-appearance: none;
+			    -moz-appearance: none;
+			    appearance: none;
+			    position: relative;
+			    cursor: pointer;
+			    overflow: hidden;
+			}
+		}
+
+		.country-code {
+			display: block;
+
+			.custom-select {
+				width: 51px;
+				display: inline-block;
+				height: 40px;
+				position: relative;
+
+				&:after {
+					content: '';
+					width: 0;
+					height: 0;
+					border-left: 4px solid transparent;
+					border-right: 4px solid transparent;
+					border-top: 6px solid $e-border-color;
+					position: absolute;
+					right: 8px;
+					top: 16px;
+					text-indent: 1px;
+					text-overflow: '';
+				}
+
+				select {
+					-webkit-appearance: none;
+					-moz-appearance: none;
+				    text-indent: 0;
+				    text-overflow: '';
+					border-radius: 0;
+					height: 35px;
+					padding: 6px 0;
+
+					&::-ms-expand {
+						display: none;
+					}
+
+					option {
+						min-width: 100px;
+					}
+				}
+			}
+
+			.form-control {
+				width: 79%;
+				display: inline-block;
+			}
+		}
+	}
+
+	.modal-header {
+		border-bottom: none;
+	}
+
+	.exe-button-callback {
+		margin-left: 0;
+		background-color: $anchor-color;
+		text-transform: none;
 	}
 }

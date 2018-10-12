@@ -9,6 +9,7 @@
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/smk-accordion.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/executive-course/exec-detail.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/users/login.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     {% endcompress css %}
         <style>
@@ -71,42 +72,47 @@
 
             {% block container %}
             <div class="content-box">
-
                 <!-- Want help Form Start Here -->
                 <div class="want-help container">
                     <div class="white-box request-callback">
                         <h2>Want help with courses?</h2>
-                        <div class="line-form-wrap">
-                        <ul class="p-15">
-                            <li class="field">
-                                <input type="text" name="name" id="name" placeholder="Enter your name">
-                                <label for="name">Name</label>
-                            </li>
-                            
-                            <li class="field">
-                            <input type="text" name="mNumber" id="mNumber" placeholder="Enter mobile No.">
-                            <label for="mNumber">Mobile</label>
-                            </li>
-                            
-                            <li class="field">
-                            <input type="text" name="email" id="email" placeholder="Enter email ">
-                            <label for="email">Email</label>
-                            </li>
 
-                            <li>
+                        <div class="content-box mt-20 login-form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="name" id="name" placeholder="Name">
+                                <span class="error-txt">Error messge goes here</span>
+                            </div>
+                            
+                            <div class="form-group ">
+                                <div class="pull-left code">
+                                    <select class="form-control" id="id_country_code" name="country_code"   required="" aria-required="true">
+                                        <option value="93">93</option>
+                                    </select>
+                                </div>
+                                <input class="form-control pull-left number" id="id_cell_phone" inputmode="numeric" name="cell_phone" type="text" required="" aria-required="true" placeholder="Mobile">
+                                <span class="error-txt" style="bottom:-25px; margin-left:70px"></span>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="name" id="name" placeholder="Email">
+                                <span class="error-txt">Error messge goes here</span>
+                            </div>
+                            
+                            <div class="form-group">
                                 <select class="form-control">
-                                <option>Select Course</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
+                                    <option>Select Course</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
                                 </select>
-                            </li>
-        
-                            <li class="mt-20 mb-5 text-center">
+                                <span class="error-txt">Error messge goes here</span>
+                            </div>
+
+                            <div class="mt-20 mb-5 text-center">
                                 <button class="btn btn-round-30 btn-lg btn-shadow btn-grOrange text-upper">Request Callback</button>
-                            </li>
-                          </ul>
+                            </div>
                         </div><!-- line form ends here -->
                     </div><!-- white box ends here -->
                 </div><!-- Want help Form Ends Here -->

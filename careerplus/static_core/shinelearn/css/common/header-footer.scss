@@ -53,12 +53,11 @@ datalist {
 }
 
 .navbar-default {
-	background: rgb(48,20,107); /* Old browsers */
-	background: rgb(48,20,107); /* Old browsers */
-	background: -moz-linear-gradient(left, rgba(48,20,107,1) 0%, rgba(17,83,110,1) 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(left, rgba(48,20,107,1) 0%,rgba(17,83,110,1) 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(to right, rgba(48,20,107,1) 0%,rgba(17,83,110,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#30146b', endColorstr='#11536e',GradientType=1 ); /* IE6-9 */
+	background: rgb(18,70,144); /* Old browsers */
+	background: -moz-linear-gradient(left, rgba(18,70,144,1) 0%, rgba(55,112,186,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(left, rgba(18,70,144,1) 0%,rgba(55,112,186,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right, rgba(18,70,144,1) 0%,rgba(55,112,186,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#124690', endColorstr='#3770ba',GradientType=1 ); /* IE6-9 */
 	margin-bottom: 0;
 }
 
@@ -3282,6 +3281,48 @@ footer {
 	width: 39px;
 	height: 30px;
 	background: $sprite-exe -266px -91px;
+	display: inline-block;
+}
+
+.exe-icon-online-application {
+	width: 50px;
+	height: 36px;
+	background: $sprite-exe -92px -137px;
+	display: inline-block;
+}
+
+.exe-icon-fee-payment {
+	width: 49px;
+	height: 31px;
+	background: $sprite-exe -153px -137px;
+	display: inline-block;
+}
+
+.exe-icon-access-online {
+	width: 40px;
+	height: 40px;
+	background: $sprite-exe -217px -137px;
+	display: inline-block;
+}
+
+.exe-icon-start-course {
+	width: 35px;
+	height: 38px;
+	background: $sprite-exe -269px -137px;
+	display: inline-block;
+}
+
+.exe-icon-check-eligible {
+	width: 30px;
+	height: 38px;
+	background: $sprite-exe -315px -137px;
+	display: inline-block;
+}
+
+.exe-icon-complete-application {
+	width: 35px;
+	height: 38px;
+	background: $sprite-exe -356px -137px;
 	display: inline-block;
 }
 
