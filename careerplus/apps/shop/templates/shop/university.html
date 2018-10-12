@@ -179,7 +179,7 @@
                     </div>
                     <article class="col-sm-12 pad-25">
                       <span class="e-program-list mt-20">
-                      {{prd_desc|safe}}
+                      {{sqs.pAbx|safe}}
                       </span>  
                     </article>
                   </div>
@@ -215,6 +215,7 @@
                 </section>
 
                 <!-- Eligibility criteria -->
+                {% if university_detail.eligibility_criteria %}
                 <section class="exe-box mb-30">
                   <div class="e-btm-bdr">
                     <figure class="pr">
@@ -232,7 +233,8 @@
                     </ul>
                   </article>
                 </section>
-
+                {% endif %}
+                {% if faculty %}
                 <!-- Faculty Profile -->
                 <section class="exe-box mb-30">
                   <div id="faculty-profile" class="scroll">
@@ -247,18 +249,18 @@
 
                         <!-- Wrapper for slides -->
                         <div class="carousel-inner" role="listbox">
-                          {% for innner_fac in faculty %}
+                          {% for inner_fac in faculty %}
                            <div class="item col-sm-12 {% if forloop.counter == 1%}active {% endif %}">
-                           {% for fac in innner_fac %}
+                           {% for fac in inner_fac %}
                             <div class="col-sm-6 text-center">
                               <figure>
-                                <a class="faculty-thumb" href="{{fac.get_absolute_url}}"><img src="{{ fac.image.url }}" alt="Faculty Profile"></a>
+                                <a class="faculty-thumb" href="{{fac.get_absolute_url}}"  target='_blank'><img src="{{ fac.get_image_url }}" alt="Faculty Profile"></a>
                                 <figcaption>
-                                  <strong><a href="#">{{ fac.name }}</a></strong>
+                                  <strong><a href="{{fac.get_absolute_url}}" target='_blank'>{{ fac.name }}</a></strong>
                                   <div class="exe-designation">{{ fac.designation }} – 
                                     <span>{{ fac.institute.name }}</span>
                                   </div>
-                                  <p>{{fac.description|truncatechars:"120"}}...   <a class="e-anchor-color" href="#">read more</a>
+                                  <p>{{fac.description|truncatechars:"120"}}...   <a class="e-anchor-color" href="{{fac.get_absolute_url}}" target='_blank'>read more</a>
                                   </p>
                                 </figcaption>
                               </figure>
@@ -281,8 +283,9 @@
                     </article>
                   </div>
                 </section>
-
+                {% endif %}
                  <!-- Exclusive Benefits -->
+
                 <section class="exe-box mb-30">
                   <div id="execlusive-benefits" class="scroll">
                     <div class="e-btm-bdr">
@@ -293,6 +296,8 @@
                     </div>
                     <article class="col-sm-12 pad-25">
                       <div class="row exe-exclusive-benefits">
+                        {% if university_detail.benefits%}
+
                         <h3 class="col-sm-12 mb-20">Exclusive Benefits</h2>
 
                         {% for benefit in university_detail.benefits %}
@@ -306,8 +311,8 @@
                           </figure>
                         </div>
                         {% endfor %}
-
                         <div class="clearfix e-btm-bdr mb-30 mt-10 col-sm-12"></div>
+                        {% endif %}
 
                         <h3 class="col-sm-12 mb-20">Why Shine Learning?</h2>
                         <div class="col-sm-4">
@@ -343,10 +348,9 @@
                     </article>
                   </div>
                 </section>
-
                 <!-- Program Structure 2 -->
                 <section class="exe-box mb-30">
-                  <div class="scroll">
+                  <div id="program-structure" class="scroll">
                     <div class="e-btm-bdr">
                       <figure class="pr">
                         <i class="exe-icon-program-structure"></i>
@@ -377,6 +381,7 @@
                 </section>
 
                 <!-- Assessment & Evaluation -->
+                {% if university_detail.assesment or university_detail.sample_certificate %}
                 <section class="exe-box mb-30">
                   <div class="scroll">
                     <div class="e-btm-bdr">
@@ -386,10 +391,12 @@
                       <h2 class="heading-primary-exe">Assessment & Evaluation</h2>
                     </div>
                     <article class="col-sm-12 pad-25">
+                     {% if university_detail.assesment %}
                       <span class="exe-structure-list1">
                         {{university_detail.assesment|safe}}
                       </span>
-
+                      {% endif %}
+                      {% if university_detail.sample_certificate %}
                       <div class="exe-sample-certificate mt-20">
                         <figure>
                           <img class="img-responsive" src="{{university_detail.sample_certificate}}" alt="Sample certificate">
@@ -397,10 +404,12 @@
                         <h3 class="mt-30 ml-40">Sample Certificate</h3>
                         <a class="exe-button-view-sample pull-right mt-20 mr-20" href="#" type="button" data-toggle="modal" data-target=".bs-example-modal-lg">View sample certificate</a>
                       </div>
+                      {% endif %}
                     </article>
                   </div>
                 </section>
-
+                {% endif %}
+                {% if university_detail.sample_certificate %}
                 <!-- sample certificate modal -->
                 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
                   <div class="modal-dialog modal-lg" role="document">
@@ -415,6 +424,7 @@
                     </div>
                   </div>
                 </div>
+                {% endif %}
 
                 <!-- Institute -->
                 <section class="exe-box mb-30">
@@ -429,7 +439,7 @@
                       <figure>
                         <span class="institute-txt">
                           <h3>{{ institute.name }}</h3>
-                          <a class="exe-button-view-course pull-right" href="{{ institute.get_absolute_url }}">View all courses</a>
+                          <a class="exe-button-view-course pull-right" href="{{ institute.get_absolute_url }}" target='_blank'>View all courses</a>
                         </span>
                       </figure>
                       <p class="mt-20">
@@ -438,7 +448,7 @@
                     </article>
                   </div>
                 </section>
-
+                {% if university_testimonial %}
                 <!-- Testimonials -->
                 <section class="exe-box mb-30">
                   <div class="scroll">
@@ -482,6 +492,7 @@
                     </article>
                   </div>
                 </section>
+                {% endif %}
 
                 <!-- Fees & Payments Modes -->
                 <section class="exe-box mb-30">
@@ -513,6 +524,7 @@
                                 <strong>Rs. {{start_price|floatformat|intcomma}}</strong> 
                               </div> 
                               <span class="e-blue-bdr mt-15"></span>
+                              {% if  university_detail.payment %}
                               <div class="installment text-center">
                                 <span class="text-uppercase col-sm-12 mb-15">Installment Available</span>
                                  {% for payment in university_detail.payment %}
@@ -523,6 +535,7 @@
                                 </div>
                                 {% endfor %}
                               </div>
+                              {% endif %}
                             </div>
                           </div>
                         </li>
@@ -563,7 +576,7 @@
                     </article>
                   </div>
                 </section>
-
+                {% if faq_list %}
                 <!-- Frequenty Asked Questions -->
                 <section class="exe-box mb-30">
                   <div id="fees-payments" class="scroll">
@@ -596,6 +609,7 @@
                     </article>
                   </div>
                 </section>
+                {% endif %}
 
               </div>
               <!-- inner left container end -->
@@ -640,9 +654,9 @@
                         <h2 class="heading-primary-exe">Request a call</h2>
                       </div>
                       <article class="col-sm-12 pad-25 exe-request-call">
-                        <form  id="lead" method="POST"
-                action="{% url 'crmapi:lead-management' %}">
-                {% csrf_token %}
+                      <input type="hidden" id="skilllist" value="{{sqs.pSkilln|join:""}}">
+                        <form  id="lead" method="POST" action="{% url 'crmapi:lead-management' %}">
+                          {% csrf_token %}
                           <div class="form-group">
                             <input name="name" type="text" class="form-control" placeholder="Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}" >
                           </div>
@@ -654,7 +668,7 @@
                           </div>
                             <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
 
-                            <input type="hidden" name="prd" value="Data Scientist - Rs. 44999/-">
+                            <input type="hidden" name="prd" value="{{ prd_H1 }}">
 
                             <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 
@@ -677,50 +691,8 @@
 
       {% block prdrecommended %}
       <!-- recommended product -->
-
-      <section class="container-fluid detail-box you-may-like-carousel cls_hide_sticky_panel">
-        <div class="scroll">
-          <h2 class="heading-primary-exe mt-30 mb-10 text-center">You may also like</h2>
-          <article class="col-sm-12">
-            <div id="carousel-example-generic2" class="carousel slide" data-ride="carousel">
-
-              <!-- Wrapper for slides -->
-              <div class="carousel-inner" role="listbox">
-                <div class="item col-sm-12 active">
-                  <ul class="listing">
-                    <li class="col-sm-4"><a title="CSS Designer" class="box-panel" href="/course/it-information-technology/css-designer/pd-276"><div class="media"><div class="media-body"><h3 class="listing-heading">CSS Designer</h3><div class="rating-review-box"><strong>10</strong> people bought
-                    <span class="jobs-available"><strong>5950</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/276/1509558215_9064.png" alt="CSS Designer"></figure></div></div></a></li>
-                    <li class="col-sm-4"><a title="HTML Designer" class="box-panel" href="/course/it-information-technology/html-designer/pd-275"><div class="media"><div class="media-body"><h3 class="listing-heading">HTML Designer</h3><div class="rating-review-box"><strong>1</strong> people bought
-                    <span class="jobs-available"><strong>6143</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/275/1508147934_5947.png" alt="Certified HTML Designer"></figure></div></div></a></li>
-                    <li class="col-sm-4"><a title="User Experience (UX) Design Training ..." class="box-panel" href="/course/it-information-technology/user-experience-ux-design-training-course/pd-1733"><div class="media"><div class="media-body"><h3 class="listing-heading">User Experience (UX) Design Training ...</h3><div class="rating-review-box"><strong>7</strong> people bought
-                    <span class="jobs-available"><strong>680</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/1733/1509351518_2408.png" alt="User Experience (UX) Design Training Course"></figure></div></div></a></li>
-                  </ul>
-                </div>
-
-                <div class="item col-sm-12">
-                  <ul class="listing">
-                    <li class="col-sm-4"><a title="CSS Designer" class="box-panel" href="/course/it-information-technology/css-designer/pd-276"><div class="media"><div class="media-body"><h3 class="listing-heading">CSS Designer</h3><div class="rating-review-box"><strong>10</strong> people bought
-                    <span class="jobs-available"><strong>5950</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/276/1509558215_9064.png" alt="CSS Designer"></figure></div></div></a></li>
-                    <li class="col-sm-4"><a title="HTML Designer" class="box-panel" href="/course/it-information-technology/html-designer/pd-275"><div class="media"><div class="media-body"><h3 class="listing-heading">HTML Designer</h3><div class="rating-review-box"><strong>1</strong> people bought
-                    <span class="jobs-available"><strong>6143</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/275/1508147934_5947.png" alt="Certified HTML Designer"></figure></div></div></a></li>
-                    <li class="col-sm-4"><a title="User Experience (UX) Design Training ..." class="box-panel" href="/course/it-information-technology/user-experience-ux-design-training-course/pd-1733"><div class="media"><div class="media-body"><h3 class="listing-heading">User Experience (UX) Design Training ...</h3><div class="rating-review-box"><strong>7</strong> people bought
-                    <span class="jobs-available"><strong>680</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/1733/1509351518_2408.png" alt="User Experience (UX) Design Training Course"></figure></div></div></a></li>
-                  </ul>
-                </div>
-                
-              </div>
-
-              <!-- Controls -->
-              <a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev">
-                <span class="exe-icon-chevron-left mt-10" aria-hidden="true"></span>
-              </a>
-              <a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next">
-                <span class="exe-icon-chevron-right mt-10" aria-hidden="true"></span>
-              </a>
-            </div>
-          </article>
-        </div>
-      </section>
+      <div id="skill_list_box">
+      </div>
 
       <!-- end recommended product -->
       {% endblock prdrecommended %}
@@ -736,6 +708,40 @@
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/shop/detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/scroller-executive.js' %}" type="text/javascript"></script>
+    <script type="text/javascript">
+    var recommended_product_url = '/api/v1/recommended-products/?skills='+$('#skilllist').val()+'&product={{sqs.id}}&uc=1'
+    
+    var product_html = ' <li class="col-sm-4"><a title="product_name" class="box-panel" href="/course/it-information-technology/css-designer/pd-276"><div class="media"><div class="media-body"><h3 class="listing-heading">product_name</h3><div class="rating-review-box"><strong>product_bought</strong> people bought<span class="jobs-available"><strong>jobs_available</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="product_image" alt="CSS Designer"></figure></div></div></a></li>'
+    var start_html ='<section class="container-fluid detail-box you-may-like-carousel cls_hide_sticky_panel"><div class="scroll"><h2 class="heading-primary-exe mt-30 mb-10 text-center">You may also like</h2><article class="col-sm-12"><div id="carousel-example-generic2" class="carousel slide" data-ride="carousel"><div class="carousel-inner" role="listbox" id="skill_list_box">'
+
+
+
+    var end_html ='</div><a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev"><span class="exe-icon-chevron-left mt-10" aria-hidden="true"></span></a><a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next"><span class="exe-icon-chevron-right mt-10" aria-hidden="true"></span></a></div></article></div></section>'
+
+    final_html = ''
+    $.get(recommended_product_url, function(data){
+      var num_of_element = 3
+      if(data.count){
+        for(i=0; i< data.results.length;i++) {
+          if(i % num_of_element == 0 && i == 0){
+            final_html += '<div class="item col-sm-12 active"><ul class="listing">'
+          }
+          else if(i % num_of_element == 0) {
+            final_html += '<div class="item col-sm-12"><ul class="listing">'
+          }
+          final_html += product_html.replace(/product_name/g, data.results[i].display_name)
+          .replace('product_bought', data.results[i].buy_count)
+          .replace('jobs_available', data.results[i].no_jobs)
+          .replace('product_image', data.results[i].pImg)
+
+          if(num_of_element - (i % num_of_element) == 1 ){
+            final_html += '</ul></div>'
+          }
+        $("#skill_list_box").html(start_html + final_html + end_html)
+        }
+      }
+    })
+    </script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
        <script type="text/javascript">
     var _gaq = _gaq || [];

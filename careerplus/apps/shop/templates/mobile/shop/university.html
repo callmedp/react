@@ -10,8 +10,7 @@
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/smk-accordion.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/executive-course/exec-detail.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
-     <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-common.scss' %}" rel="stylesheet">
-    <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-detail.scss' %}" rel="stylesheet">
+
     {% endcompress css %}
         <style>
             a[disabled], a[disabled]:hover {
@@ -91,40 +90,9 @@
                     <div class="white-box">
                         <h2><span><i class="execIcon-program"></i></span>About program</h2>
                         <div class="content">
-                            <p>The objective of the course is to develop knowledge of various analytical techniques in order to help better decision making in sales and marketing. CMOs and Marketing Managers usually depend on data analysts in their firms to crunch data. This course will help them communicate their marketing objectives in a focused manner to data analysts and help them critically evaluate the results of data analysis better. Participants will understand the underlying principles of statistical and analytical techniques. Participants will also develop a working familiarity of implementing these techniques on data sets.</p>
-
-                            <ul class="pointers mt-15">
-                                <li>
-                                    <h3 class="pb-0 fs-16">Execute 4 real life projects</h3>
-                                    <p class="pb-0">Acquire hands-on knowledge and expertise!</p>
-                                </li>
-                                
-                                <li>
-                                    <h3  class="pb-0 fs-16">Hands-on training on 5+ tools</h3>
-                                    <p class="pb-0">Learn various tools which includes Google AdWords, Google Analytics, Facebook, etc</p>
-                                </li>
-                                
-                                <li>
-                                    <h3 class="pb-0 fs-16">10 simulation test papers</h3>
-                                    <p class="pb-0">Gain confidence to ace the certification exams!</p>
-                                </li>
-                                
-                                <li>
-                                    <h3 class="pb-0 fs-16">Training by industry experts</h3>
-                                    <p class="pb-0">Get trained by “Dream Team” of Silicon Valley authors for Digital marketing role.</p>
-                                </li>
-                                
-                                <li>
-                                    <h3 class="pb-0 fs-16">Comprehensive Course Curriculum</h3>
-                                    <p class="pb-0">Go through in-depth knowledge on 8 topics and 11 domains which covers solid foundation learning for all digital marketing aspects.</p>
-                                </li>
-                            </ul>
-
-                            <b>NEW</b>
                             <div class="pointers mt-15">
-                            {{prd_desc|safe}}
+                            {{sqs.pAbx|safe}}
                             </div>
-
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ About program -->
@@ -132,38 +100,6 @@
                 <div class="container">
                     <div class="white-box">
                         <h2><span><i class="execIcon-who"></i></span>Who should attend?</h2>
-                        <div class="content">
-                            <ul class="who-attend">
-                                <li class="manager">
-                                    <div>
-                                        <h3>Managers, Decision makers</h3>
-                                    </div>
-                                </li>
-                                
-                                <li class="senior-managers">
-                                    <div>
-                                        <h3>Mid to Senior Level Managers</h3>
-                                        <p class="pb-0">who drive marketing strategies.</p>
-                                    </div>
-                                </li>
-                                
-                                <li class="department-heads">
-                                    <div>
-                                        <h3>Division / Department Heads</h3>
-                                        <p class="pb-0">Sales & Marketing heads who wants to market products of service.</p>
-                                    </div>
-
-                                </li>
-                                
-                                <li class="line-manager">
-                                    <div>
-                                        <h3>Line Managers</h3>
-                                    </div>
-                                </li>
-                            </ul>
-                            <ul>
-                        </div>
-                        <b>NEW</b>
                          <div class="content">
                             <ul class="who-attend">
                                 {%with university_detail.attendees_criteria|get_eval_value  as attendees_list %}
@@ -181,20 +117,10 @@
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ Who should attend? -->
-
+                {% if university_detail.eligibility_criteria %}
                 <div class="container eligibility">
                     <div class="white-box">
                         <h2><span><i class="execIcon-eligibility"></i></span>Eligibility criteria</h2>
-                        <div class="content">
-                            <ul>
-                                <li>Any graduates with minimum 50% marks in graduation.</li>
-                                <li>Proficiency in English, spoken & written is mandatory.</li>
-                                <li>Working knowledge of Excel.</li>
-                                <li>For Indian Participants – Graduates (10+2+3) from a recognized university (UGC/AICTE/DEC/AIU/State Government) in any discipline.</li>
-                            </ul>
-                        </div>
-
-                        <b>NEW</b>
                          <div class="content">
                             <ul>
                                 {% with university_detail.eligibility_criteria|split:";" as eligibilities %}
@@ -207,7 +133,7 @@
                         
                     </div><!-- /. white box-->
                 </div><!-- ./ Eligibility criteria -->
-                
+                {% endif %}
                 <div class="container">
                     <div class="white-box">
                         <h2><span><i class="execIcon-faculty"></i></span>Faculty profile</h2>
@@ -239,6 +165,7 @@
                     <div class="white-box">
                         <h2><span><i class="execIcon-exclusive"></i></span>Exclusive benefits</h2>
                         <div class="content">
+                                                {% if university_detail.benefits%}
                             <p class="subhead mb-15"><strong>Key Benefits</strong></p>
                             <ul class="who-attend">
                                
@@ -252,6 +179,7 @@
                             {% endfor %}
                             </ul>
                             <hr />
+                            {% endif %}
                             <p class="subhead mb-15"><strong>Why Shine Learning?</strong></p>
 
                             <ul class="who-attend">
@@ -304,13 +232,16 @@
                     </div><!-- /. white box-->
                 </div><!-- ./ Program Structure -->
 
+                {% if university_detail.assesment or university_detail.sample_certificate %}
 
                 <div class="container">
                     <div class="white-box">
                         <h2><span><i class="execIcon-assessment"></i></span>Assessment & Evaluation</h2>
                         <div class="content">
-                            {{university_detail.assesment|safe}}
-
+                            {% if university_detail.assesment %}
+                                {{university_detail.assesment|safe}}
+                            {% endif %}
+                            {% if university_detail.sample_certificate %}
                             <div class="sample-certificate mt-20">
                                 <div class="media">
                                     <div class="media-left">
@@ -323,9 +254,11 @@
                                 </div>
                                 
                             </div>
+                            {% endif %}
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ Assessment & Evaluation -->
+                {% endif %}
                 
                 <div class="container">
                     <div class="white-box">
@@ -341,7 +274,7 @@
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ Institute -->
-                
+                {% if university_testimonial %}
                 <div class="container">
                     <div class="white-box">
                         <h2><span><i class="execIcon-testimonials"></i></span>Testimonials</h2>
@@ -368,6 +301,7 @@
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ Testimonials -->
+                {% endif %}
                 
                 <div class="container">
                     <div class="white-box">
@@ -390,18 +324,19 @@
                                             </div>
                                         </div><!-- /. Overall fees -->
                                         <div class="clearfix"></div>
+                                        {% if  university_detail.payment %}
                                         <hr class="row blueborder"/>
                                         <p class="text-upper text-center c-333">Installment Available</p>
                                         <ul class="text-center payment-instament">
                                           {% for payment in university_detail.payment %}
                                             <li>
-                                                <p>{{forloop.counter|ordinal_number }} Instalment</p>
+                                                <p>{{forloop.counter|ordinal }} Instalment</p>
                                                 <p class="price">Rs. {{ payment.installment_fee|floatformat|intcomma }}</p>
                                                 <p>Payment Deadline: <strong>{{ payment.ldpayment }}</strong></p>
                                             </li>
                                           {% endfor %}
-                                        </ul>
-
+                                        </ul
+                                        {% endif %}
 
                                     </div>
                                 </div><!--/. Accordion 1 -->
@@ -435,6 +370,7 @@
                     </div><!-- /. white box-->
                 </div><!-- ./ Fee and Payment Modes -->
                 
+                {% if faq_list %}
                 <div class="container">
                     <div class="white-box">
                         <h2><span><i class="execIcon-faq"></i></span>FAQ</h2>
@@ -456,75 +392,14 @@
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ FAQ -->
+                {% endif %}
+            <input type="hidden" id="skilllist" value="{{sqs.pSkilln|join:""}}">
             </div><!-- /. content-box --> 
-
-            <div class="you-may-like">
-                <div class="container">
-                    <h2 class="pt-5">You may also like</h2>
-                    
-                    <div class="slide-container">
-                        <ul class="login-slider">
-                            <li>
-                                <div class="media"> 
-                                    <div class="media-body">
-                                        <p class="fs-15 bold"><a title="Lean Six Sigma Green Belt" href="#">Lean Six Sigma Green Belt</a></p>
-                                        
-                                        <div class="rating block ml-0 fs-12 pb-10">
-                                            <sup class="fill-star"></sup>
-                                            <strong>3.3</strong>/5
-                                        </div><!-- end of star rating -->
-                                        <p class="fs-12 c6"><strong>233</strong> Jobs available</p>
-                                        
-                                    </div>
-                                    <div class="media-left">
-                                        <a title="Lean Six Sigma Green Belt" href="#" class="home-banner-img">
-                                            <img src="{% static 'shinelearn/images/mobile/common/course-logo1.png' %}" alt="...">
-                                        </a>
-                                    </div><!-- end of media body -->
-                                    </div><!-- end of media -->
-                            </li>
-                            <li>
-                                <div class="media"> 
-                                    <div class="media-body">
-                                        <p class="fs-15 bold"><a title="Lean Six Sigma Green Belt" href="#">Lean Six Sigma Green Belt</a></p>
-                                        
-                                        <div class="rating block ml-0 fs-12 pb-10">
-                                            <sup class="fill-star"></sup>
-                                            <strong>3.3</strong>/5
-                                        </div><!-- end of star rating -->
-                                        <p class="fs-12 c6"><strong>233</strong> Jobs available</p>
-                                        
-                                    </div>
-                                    <div class="media-left">
-                                        <a title="Lean Six Sigma Green Belt" href="#" class="home-banner-img">
-                                            <img src="{% static 'shinelearn/images/mobile/common/course-logo2.png' %}" alt="...">
-                                        </a>
-                                    </div><!-- end of media body -->
-                                    </div><!-- end of media -->
-                            </li>
-                            <li>
-                                <div class="media"> 
-                                    <div class="media-body">
-                                        <p class="fs-15 bold"><a title="Lean Six Sigma Green Belt" href="#">Lean Six Sigma Green Belt</a></p>
-                                        
-                                        <div class="rating block ml-0 fs-12 pb-10">
-                                            <sup class="fill-star"></sup>
-                                            <strong>3.3</strong>/5
-                                        </div><!-- end of star rating -->
-                                        <p class="fs-12 c6"><strong>233</strong> Jobs available</p>
-                                        
-                                    </div>
-                                    <div class="media-left">
-                                        <a title="Lean Six Sigma Green Belt" href="#" class="home-banner-img">
-                                            <img src="{% static 'shinelearn/images/mobile/common/course-logo3.png' %}" alt="...">
-                                        </a>
-                                    </div><!-- end of media body -->
-                                    </div><!-- end of media -->
-                            </li>
-                        </ul>
-                    </div><!-- end of slide-container -->
-                </div><!-- end of content box -->
-            </div><!-- you may like -->  
+            <!-- recommended product -->
+            <div id="skill_list_box">
+            </div>
+            <!-- end recommended product -->
+ 
 
             <div class="topSticky-enrollNow" id="enrollNow">
                 <div class="content-box">
@@ -566,7 +441,7 @@
     <script src="{% static 'shinelearn/js/mobile/shop/detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
-    {% endcompress %}
+    {% endcompress %}  
     <script type="text/javascript">
         $(document).ready(function(){
            if(commonJs.getParameterByName('type') == 'autoEnrol'){
@@ -575,6 +450,33 @@
             if(commonJs.getParameterByName('type') == 'autoCart'){
                $('#add-to-cart').trigger('click');
             } 
+            var recommended_product_url = '/api/v1/recommended-products/?skills='+$('#skilllist').val()+'&product={{sqs.id}}&uc=1'
+            start_html = '<div class="you-may-like"><div class="container"><h2 class="pt-5">You may also like</h2><div class="slide-container"><ul class="login-slider">'
+            end_html = '</ul></div></div></div>'
+            final_html = ''
+            product_html = ' <li><div class="media"><div class="media-body"><p class="fs-15 bold"><a title="product_name" href="#">product_name</a></p><div class="rating block ml-0 fs-12 pb-10"><sup class="fill-star"></sup> <strong>product_rating</strong>/5</div><p class="fs-12 c6"><strong>jobs_available</strong> Jobs available</p></div><div class="media-left"><a title="Lean Six Sigma Green Belt" href="#" class="home-banner-img"><img src="product_image" alt="..."></a></div></div></li>'
+            $.get(recommended_product_url, function(data){
+              if(data.count){
+                for(i=0; i< data.results.length;i++) {
+                 
+                  final_html += product_html.replace(/product_name/g, data.results[i].display_name,)
+                  .replace('product_rating', data.results[i].avg_rating)
+                  .replace('jobs_available', data.results[i].no_jobs)
+                  .replace('product_image', data.results[i].pImg)
+                }
+                $("#skill_list_box").html(start_html + final_html + end_html)
+              }
+              $(".login-slider").slick({
+                autoplay:false,
+                autoplaySpeed:3000,
+                dots: false,
+                arrows: false,
+                variableWidth: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                infinite: false
+            });
+            });
         })
         
     </script>

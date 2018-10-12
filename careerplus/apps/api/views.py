@@ -605,26 +605,19 @@ class RecommendedProductsApiView(ListAPIView):
 
     def get_queryset(self, *args, **kwargs):
         skills = self.request.GET.get('skills', [])
+        university_course = self.request.GET.get('uc', 0)
+        prd_id = self.request.GET.get('product', None)
         if skills:
             skills = skills.split(',')
         products = SearchQuerySet().filter(
             pSkilln__in=skills,
             pPc=settings.COURSE_SLUG[0])
+        if prd_id and prd_id.isdigit():
+            products = products.exclude(id=int(prd_id))
+
+        if university_course:
+            products = products.filter(pTF=14)
         return products
-        # skills = Skill.objects.filter(
-        #     active=True,
-        #     name__in=skills
-        # )
-        # products = Product.objects.prefetch_related(
-        #     'productskills').filter(
-        #         active=True,
-        #         product_class__slug=settings.COURSE_SLUG[0],
-        #         type_product__in=[0, 1, 3, 5],
-        #         productskills__active=True,
-        #         productskills__skill__in=skills,
-        #     ).annotate(skill_count=Count('skill')).order_by(
-        #     '-skill_count')
-        # return products
 
 
 class RecommendedProductsCategoryView(APIView):
