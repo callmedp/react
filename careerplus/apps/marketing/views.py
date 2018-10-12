@@ -29,9 +29,10 @@ class MarketingPages(TemplateView):
                 "alt_contact":decoded_tuple[2]}
 
     def get(self, request, *args, **kwargs):
-        valid=False
-        email=None
-        candidateid=None
+        valid = False
+        email = None
+        candidateid = None
+        
         try:
             email, candidateid, valid = AutoLogin().decode(request.GET.get("token",""))
         except Exception as e:
@@ -39,7 +40,9 @@ class MarketingPages(TemplateView):
 
         if valid and email and candidateid:
             resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=candidateid)
-            request.session.update(resp_status)
+            if resp_status:
+                request.session.update(resp_status)
+        
         redirect_mapping = {
                             "/digital-marketing":"/online-marketing",
                             "/gst-cert":"/gst-certification",
@@ -51,6 +54,7 @@ class MarketingPages(TemplateView):
         if redirect_path:
             return HttpResponsePermanentRedirect(redirect_path)
         return super(MarketingPages, self).get(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
         context = super(MarketingPages, self).get_context_data(**kwargs)
         alt = self.request.GET.get('alt')
