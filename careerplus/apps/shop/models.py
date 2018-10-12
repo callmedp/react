@@ -967,7 +967,7 @@ class Product(AbstractProduct, ModelMeta):
         _('CP Page View'), default=0)
     active = models.BooleanField(default=False)
     is_indexable = models.BooleanField(default=False)
-
+    is_indexed = models.BooleanField(default=False)
     objects = ProductManager()
     indexable = IndexableProductManager()
     saleable = SaleableProductManager()

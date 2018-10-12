@@ -16,7 +16,7 @@ from shop.models import (
 from partner.models import Vendor
 from geolocation.models import Country
 from shop.choices import BG_CHOICES
-from shop.utils import FIELD_FACTORIES
+from shop.utils import FIELD_FACTORIES, PRODUCT_TYPE_FLOW_FIELD_ATTRS
 from faq.models import FAQuestion
 
 
@@ -670,7 +670,7 @@ class ChangeProductOperationForm(forms.ModelForm):
 
 class ProductAttributeForm(forms.ModelForm):
     FIELD_FACTORIES = FIELD_FACTORIES
-
+    PRODUCT_TYPE_FLOW_FIELD_ATTRS = PRODUCT_TYPE_FLOW_FIELD_ATTRS
     def __init__(self, *args, **kwargs):
         super(ScreenProductAttributeForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
@@ -716,8 +716,11 @@ class ProductAttributeForm(forms.ModelForm):
                 self.fields['attribute_%s' % attribute.name] = field
                 
     def get_attribute_field(self, attribute):
-        
-        return self.FIELD_FACTORIES[attribute.type_attribute](attribute)
+        type_flow_present_in_mapping = self.instance.type_flow \
+            if self.instance.type_flow in PRODUCT_TYPE_FLOW_FIELD_ATTRS.get(attribute.type_attribute, {}).keys()\
+            else -1
+        attrs = self.PRODUCT_TYPE_FLOW_FIELD_ATTRS.get(attribute.type_attribute, {}).get(type_flow_present_in_mapping, {})
+        return self.FIELD_FACTORIES[attribute.type_attribute](attribute, attrs)
 
     def save(self, commit=True, *args, **kwargs):
         self.instance.attr.initiate_attributes()

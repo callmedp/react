@@ -14,87 +14,105 @@ from django.contrib import messages
 from shop.choices import PRODUCT_VENDOR_CHOICES
 
 
-def _attribute_text_field(attribute):
+def _attribute_text_field(attribute, attrs):
+    attr = {'class': 'form-control col-md-7 col-xs-12'}
+    attr.update(attrs)
     return forms.CharField(
         label=attribute.display_name,
         required=attribute.required,
         widget=forms.TextInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs=attr))
 
-def _attribute_textarea_field(attribute):
+def _attribute_textarea_field(attribute, attrs):
+    attr = {'class': 'form-control col-md-7 col-xs-12'}
+    attr.update(attrs)
     return forms.CharField(
         label=attribute.display_name,
         required=attribute.required,
         widget=forms.Textarea(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs=attr))
 
-def _attribute_integer_field(attribute):
+def _attribute_integer_field(attribute, attrs):
+    attr = {'class': 'form-control col-md-7 col-xs-12'}
+    attr.update(attrs)
     return forms.IntegerField(
         label=attribute.display_name,
         required=attribute.required,
         widget=forms.NumberInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}),)
+            attrs=attr),)
 
-def _attribute_boolean_field(attribute):
+def _attribute_boolean_field(attribute, attrs):
+    attr = {'class': 'js-switch'}
+    attr.update(attrs)
     return forms.BooleanField(
         label=attribute.display_name,
         required=False,
         widget=forms.CheckboxInput(
-            attrs={'class': 'js-switch', 'data-switchery': True}),)
+            attrs=attr),)
 
-def _attribute_float_field(attribute):
+def _attribute_float_field(attribute, attrs):
+    attr = {'class': 'form-control col-md-7 col-xs-12'}
+    attr.update(attrs)
     return forms.FloatField(
         label=attribute.display_name,
         required=attribute.required,
         widget=forms.NumberInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}),)
+            attrs=attr),)
 
-def _attribute_date_field(attribute):
+def _attribute_date_field(attribute, attrs):
+    attr = {'class': 'form-control col-md-7 col-xs-12'}
+    attr.update(attrs)
     return forms.DateField(label=attribute.display_name,
         required=attribute.required,
         widget=forms.widgets.DateInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}),)
+            attrs=attr),)
 
-def _attribute_option_field(attribute):
+def _attribute_option_field(attribute, attrs):
+    attr = {'class': 'form-control col-md-7 col-xs-12'}
+    attr.update(attrs)
     return forms.ModelChoiceField(
         label=attribute.display_name,
         required=attribute.required,
         queryset=attribute.option_group.options.all(),
         empty_label = 'Select',
         widget=forms.widgets.Select(
-            attrs={'class': 'form-control col-md-7 col-xs-12',
-                'data-parsley-notdefault': ''}),)
+            attrs=attr),)
 
 
-def _attribute_multi_option_field(attribute):
+def _attribute_multi_option_field(attribute, attrs):
+    attr = {'class': 'js-switch'}
+    attr.update(attrs)
     return forms.ModelMultipleChoiceField(
         label=attribute.display_name,
         required=attribute.required,
         queryset=attribute.option_group.options.all(),
         widget=forms.widgets.SelectMultiple(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}),)
+            attrs=attr),)
 
-def _attribute_numeric_field(attribute):
+def _attribute_numeric_field(attribute, attrs):
     return forms.FloatField(label=attribute.display_name,
         required=attribute.required)
 
-def _attribute_file_field(attribute):
+
+def _attribute_file_field(attribute, attrs):
+    attr = {'class': 'form-control col-md-7 col-xs-12 clearimg'}
+    attr.update(attrs)
     return forms.FileField(
         label=attribute.display_name,
         required=attribute.required,
         widget=forms.widgets.ClearableFileInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12 clearimg',
-                'data-parsley-max-file-size': 250}),)
+            attrs=attr)
+        )
 
 
-def _attribute_image_field(attribute):
+def _attribute_image_field(attribute, attrs):
+    attr = {'class': 'form-control col-md-7 col-xs-12 clearimg'}
+    attr.update(attrs)
     return forms.ImageField(
         label=attribute.display_name,
         required=attribute.required,
         widget=forms.widgets.ClearableFileInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12 clearimg',
-                'data-parsley-max-file-size': 250,
-                'data-parsley-filemimetypes': 'image/jpeg, image/png, image/jpg, image/svg'}),)
+            attrs=attr),)
 
 
 FIELD_FACTORIES = {
@@ -110,6 +128,26 @@ FIELD_FACTORIES = {
         "file": _attribute_file_field,
         "image": _attribute_image_field,
     }
+
+PRODUCT_TYPE_FLOW_FIELD_ATTRS = {
+    'file': {
+        14: {'data-parsley-max-file-size': 4096},
+        -1: {'data-parsley-max-file-size': 250}
+    },
+    'boolean': {
+        -1: {'data-switchery': True}
+    },
+    'option': {
+        -1: {'data-parsley-notdefault': ''}
+    },
+    'image': {
+        -1: {
+            'data-parsley-max-file-size': 250,
+            'data-parsley-filemimetypes': 'image/jpeg, image/png, image/jpg, image/svg'
+        }
+    }
+}
+
 
 class ProductAttributesContainer(object):
 
@@ -157,6 +195,7 @@ class ProductAttributesContainer(object):
             return self.product.screenattributes.all()
         elif isinstance(self.product, Product):
             return self.product.productattributes.all()
+
     def get_value_by_attribute(self, attribute):
         return self.get_values().get(attribute=attribute)
 
@@ -165,6 +204,7 @@ class ProductAttributesContainer(object):
             if self.product.product_class:
                 return self.product.product_class.attributes.filter(active=True)  
         return self.objects.none()
+
     def get_attribute_by_name(self, name):
         return self.get_all_attributes().get(name=name)
 

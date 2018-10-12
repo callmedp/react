@@ -381,7 +381,7 @@
                 </section>
 
                 <!-- Assessment & Evaluation -->
-                {% if university_detail.assesment %}
+                {% if university_detail.assesment or university_detail.sample_certificate %}
                 <section class="exe-box mb-30">
                   <div class="scroll">
                     <div class="e-btm-bdr">
@@ -391,9 +391,11 @@
                       <h2 class="heading-primary-exe">Assessment & Evaluation</h2>
                     </div>
                     <article class="col-sm-12 pad-25">
+                     {% if university_detail.assesment %}
                       <span class="exe-structure-list1">
                         {{university_detail.assesment|safe}}
                       </span>
+                      {% endif %}
                       {% if university_detail.sample_certificate %}
                       <div class="exe-sample-certificate mt-20">
                         <figure>
@@ -437,7 +439,7 @@
                       <figure>
                         <span class="institute-txt">
                           <h3>{{ institute.name }}</h3>
-                          <a class="exe-button-view-course pull-right" href="{{ institute.get_absolute_url }}">View all courses</a>
+                          <a class="exe-button-view-course pull-right" href="{{ institute.get_absolute_url }}" target='_blank'>View all courses</a>
                         </span>
                       </figure>
                       <p class="mt-20">
@@ -652,9 +654,9 @@
                         <h2 class="heading-primary-exe">Request a call</h2>
                       </div>
                       <article class="col-sm-12 pad-25 exe-request-call">
-                        <form  id="lead" method="POST"
-                action="{% url 'crmapi:lead-management' %}">
-                {% csrf_token %}
+                      <input type="hidden" id="skilllist" value="{{sqs.pSkilln|join:""}}">
+                        <form  id="lead" method="POST" action="{% url 'crmapi:lead-management' %}">
+                          {% csrf_token %}
                           <div class="form-group">
                             <input name="name" type="text" class="form-control" placeholder="Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}" >
                           </div>
@@ -666,7 +668,7 @@
                           </div>
                             <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
 
-                            <input type="hidden" name="prd" value="Data Scientist - Rs. 44999/-">
+                            <input type="hidden" name="prd" value="{{ prd_H1 }}">
 
                             <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 
@@ -689,50 +691,8 @@
 
       {% block prdrecommended %}
       <!-- recommended product -->
-
-      <section class="container-fluid detail-box you-may-like-carousel cls_hide_sticky_panel">
-        <div class="scroll">
-          <h2 class="heading-primary-exe mt-30 mb-10 text-center">You may also like</h2>
-          <article class="col-sm-12">
-            <div id="carousel-example-generic2" class="carousel slide" data-ride="carousel">
-
-              <!-- Wrapper for slides -->
-              <div class="carousel-inner" role="listbox">
-                <div class="item col-sm-12 active">
-                  <ul class="listing">
-                    <li class="col-sm-4"><a title="CSS Designer" class="box-panel" href="/course/it-information-technology/css-designer/pd-276"><div class="media"><div class="media-body"><h3 class="listing-heading">CSS Designer</h3><div class="rating-review-box"><strong>10</strong> people bought
-                    <span class="jobs-available"><strong>5950</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/276/1509558215_9064.png" alt="CSS Designer"></figure></div></div></a></li>
-                    <li class="col-sm-4"><a title="HTML Designer" class="box-panel" href="/course/it-information-technology/html-designer/pd-275"><div class="media"><div class="media-body"><h3 class="listing-heading">HTML Designer</h3><div class="rating-review-box"><strong>1</strong> people bought
-                    <span class="jobs-available"><strong>6143</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/275/1508147934_5947.png" alt="Certified HTML Designer"></figure></div></div></a></li>
-                    <li class="col-sm-4"><a title="User Experience (UX) Design Training ..." class="box-panel" href="/course/it-information-technology/user-experience-ux-design-training-course/pd-1733"><div class="media"><div class="media-body"><h3 class="listing-heading">User Experience (UX) Design Training ...</h3><div class="rating-review-box"><strong>7</strong> people bought
-                    <span class="jobs-available"><strong>680</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/1733/1509351518_2408.png" alt="User Experience (UX) Design Training Course"></figure></div></div></a></li>
-                  </ul>
-                </div>
-
-                <div class="item col-sm-12">
-                  <ul class="listing">
-                    <li class="col-sm-4"><a title="CSS Designer" class="box-panel" href="/course/it-information-technology/css-designer/pd-276"><div class="media"><div class="media-body"><h3 class="listing-heading">CSS Designer</h3><div class="rating-review-box"><strong>10</strong> people bought
-                    <span class="jobs-available"><strong>5950</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/276/1509558215_9064.png" alt="CSS Designer"></figure></div></div></a></li>
-                    <li class="col-sm-4"><a title="HTML Designer" class="box-panel" href="/course/it-information-technology/html-designer/pd-275"><div class="media"><div class="media-body"><h3 class="listing-heading">HTML Designer</h3><div class="rating-review-box"><strong>1</strong> people bought
-                    <span class="jobs-available"><strong>6143</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/275/1508147934_5947.png" alt="Certified HTML Designer"></figure></div></div></a></li>
-                    <li class="col-sm-4"><a title="User Experience (UX) Design Training ..." class="box-panel" href="/course/it-information-technology/user-experience-ux-design-training-course/pd-1733"><div class="media"><div class="media-body"><h3 class="listing-heading">User Experience (UX) Design Training ...</h3><div class="rating-review-box"><strong>7</strong> people bought
-                    <span class="jobs-available"><strong>680</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/1733/1509351518_2408.png" alt="User Experience (UX) Design Training Course"></figure></div></div></a></li>
-                  </ul>
-                </div>
-                
-              </div>
-
-              <!-- Controls -->
-              <a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev">
-                <span class="exe-icon-chevron-left mt-10" aria-hidden="true"></span>
-              </a>
-              <a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next">
-                <span class="exe-icon-chevron-right mt-10" aria-hidden="true"></span>
-              </a>
-            </div>
-          </article>
-        </div>
-      </section>
+      <div id="skill_list_box">
+      </div>
 
       <!-- end recommended product -->
       {% endblock prdrecommended %}
@@ -748,6 +708,40 @@
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/shop/detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/scroller-executive.js' %}" type="text/javascript"></script>
+    <script type="text/javascript">
+    var recommended_product_url = '/api/v1/recommended-products/?skills='+$('#skilllist').val()+'&product={{sqs.id}}&uc=1'
+    
+    var product_html = ' <li class="col-sm-4"><a title="product_name" class="box-panel" href="/course/it-information-technology/css-designer/pd-276"><div class="media"><div class="media-body"><h3 class="listing-heading">product_name</h3><div class="rating-review-box"><strong>product_bought</strong> people bought<span class="jobs-available"><strong>jobs_available</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="product_image" alt="CSS Designer"></figure></div></div></a></li>'
+    var start_html ='<section class="container-fluid detail-box you-may-like-carousel cls_hide_sticky_panel"><div class="scroll"><h2 class="heading-primary-exe mt-30 mb-10 text-center">You may also like</h2><article class="col-sm-12"><div id="carousel-example-generic2" class="carousel slide" data-ride="carousel"><div class="carousel-inner" role="listbox" id="skill_list_box">'
+
+
+
+    var end_html ='</div><a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev"><span class="exe-icon-chevron-left mt-10" aria-hidden="true"></span></a><a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next"><span class="exe-icon-chevron-right mt-10" aria-hidden="true"></span></a></div></article></div></section>'
+
+    final_html = ''
+    $.get(recommended_product_url, function(data){
+      var num_of_element = 3
+      if(data.count){
+        for(i=0; i< data.results.length;i++) {
+          if(i % num_of_element == 0 && i == 0){
+            final_html += '<div class="item col-sm-12 active"><ul class="listing">'
+          }
+          else if(i % num_of_element == 0) {
+            final_html += '<div class="item col-sm-12"><ul class="listing">'
+          }
+          final_html += product_html.replace(/product_name/g, data.results[i].display_name)
+          .replace('product_bought', data.results[i].buy_count)
+          .replace('jobs_available', data.results[i].no_jobs)
+          .replace('product_image', data.results[i].pImg)
+
+          if(num_of_element - (i % num_of_element) == 1 ){
+            final_html += '</ul></div>'
+          }
+        $("#skill_list_box").html(start_html + final_html + end_html)
+        }
+      }
+    })
+    </script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
        <script type="text/javascript">
     var _gaq = _gaq || [];
