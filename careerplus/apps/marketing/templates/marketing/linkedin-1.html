@@ -309,12 +309,6 @@ $(document).ready(function(){
       var candid_id =$('#candidate_id').val();
 		 $('#addcart').click(function(e){
 		e.preventDefault();
-			if (candid_id){
-				var cart = "cart";
-			}else{
-				var cart= "express";
-			}
-
 			google_analyts();
 
 			var prod=$('#product_id').find("option:selected").val();
