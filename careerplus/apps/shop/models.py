@@ -2500,6 +2500,11 @@ class UniversityCourseDetailScreen(models.Model):
         _('Payment Deadline'),
         default=timezone.now
     )
+    highlighted_benefits = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True,
+        help_text='semi-colon(;) separated designations, e.g. Managers, Decision makers; Line Managers; ...')
 
     @property
     def get_application_process(self):
@@ -2585,6 +2590,11 @@ class UniversityCourseDetail(models.Model):
         _('Payment Deadline'),
         default=timezone.now
     )
+    highlighted_benefits = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True,
+        help_text='semi-colon(;) separated designations, e.g. Managers, Decision makers; Line Managers; ...')
 
     @property
     def get_application_process(self):

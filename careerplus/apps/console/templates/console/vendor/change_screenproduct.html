@@ -1092,6 +1092,17 @@
                         </div>
                         <div class="alert">{{prd_university_form.eligibility_criteria.errors}}</div>
                     </div>
+                    <div class="item form-group {% if prd_university_form.highlighted_benefits.errors %}bad{% endif %}">
+                       <label class="control-label col-md-2 col-sm-2 col-xs-12" >
+                          Highlighted Benefits<span class="required">*</span>
+                        </label>
+                        </label>
+                        <div class="col-md-7 col-sm-7 col-xs-12">
+                            {{prd_university_form.highlighted_benefits}}
+                            <div id="suggestions-container" style="position: relative; float: left; width: 250px; margin: 10px;"></div>
+                        </div>
+                        <div class="alert">{{prd_university_form.highlighted_benefits.errors}}</div>
+                    </div>
 
                     <div class="item form-group {% if prd_university_form.attendees_criteria.errors %}bad{% endif %}">
                         <label class="control-label col-md-2 col-sm-2 col-xs-12" >

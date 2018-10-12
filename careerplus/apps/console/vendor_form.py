@@ -31,7 +31,7 @@ from shop.choices import (
 from shop.choices import (
     BG_CHOICES,
     PRODUCT_VENDOR_CHOICES)
-from shop.utils import FIELD_FACTORIES
+from shop.utils import FIELD_FACTORIES, PRODUCT_TYPE_FLOW_FIELD_ATTRS
 
 
 class AddScreenFaqForm(forms.ModelForm):
@@ -538,6 +538,7 @@ class ScreenProductCountryForm(forms.ModelForm):
 
 class ScreenProductAttributeForm(forms.ModelForm):
     FIELD_FACTORIES = FIELD_FACTORIES
+    PRODUCT_TYPE_FLOW_FIELD_ATTRS = PRODUCT_TYPE_FLOW_FIELD_ATTRS
 
     def __init__(self, *args, **kwargs):
         super(ScreenProductAttributeForm, self).__init__(*args, **kwargs)
@@ -575,13 +576,19 @@ class ScreenProductAttributeForm(forms.ModelForm):
     def add_attribute_fields(self, product_class):
         
         for attribute in product_class.attributes.filter(active=True):
+            if self.instance.type_flow != 14 and attribute.name == 'Brochure':
+                continue
             field = self.get_attribute_field(attribute)
             if field:
                 self.fields['attribute_%s' % attribute.name] = field
                 
     def get_attribute_field(self, attribute):
-        
-        return self.FIELD_FACTORIES[attribute.type_attribute](attribute)
+
+        type_flow_present_in_mapping = self.instance.type_flow \
+            if self.instance.type_flow in PRODUCT_TYPE_FLOW_FIELD_ATTRS.get(attribute.type_attribute, {}).keys()\
+            else -1
+        attrs = self.PRODUCT_TYPE_FLOW_FIELD_ATTRS.get(attribute.type_attribute, {}).get(type_flow_present_in_mapping, {})
+        return self.FIELD_FACTORIES[attribute.type_attribute](attribute, attrs)
 
     def save(self, commit=True, *args, **kwargs):
         self.instance.attr.initiate_attributes()
@@ -663,7 +670,7 @@ class ScreenFAQInlineFormSet(forms.BaseInlineFormSet):
 
 class AddScreenProductVariantForm(forms.ModelForm):
     FIELD_FACTORIES = FIELD_FACTORIES
-    
+    PRODUCT_TYPE_FLOW_FIELD_ATTRS = PRODUCT_TYPE_FLOW_FIELD_ATTRS
     class Meta:
         model = ProductScreen
         fields = [
@@ -862,12 +869,18 @@ class AddScreenProductVariantForm(forms.ModelForm):
 
     def add_attribute_fields(self, product_class):
         for attribute in product_class.attributes.filter(active=True):
+            if self.instance.type_flow != 14 and attribute.name == 'Brochure':
+                continue
             field = self.get_attribute_field(attribute)
             if field:
                 self.fields['attribute_%s' % attribute.name] = field
                 
     def get_attribute_field(self, attribute):
-        return self.FIELD_FACTORIES[attribute.type_attribute](attribute)
+        type_flow_present_in_mapping = self.instance.type_flow \
+            if self.instance.type_flow in PRODUCT_TYPE_FLOW_FIELD_ATTRS.get(attribute.type_attribute, {}).keys()\
+            else -1
+        attrs = self.PRODUCT_TYPE_FLOW_FIELD_ATTRS.get(attribute.type_attribute, {}).get(type_flow_present_in_mapping, {})
+        return self.FIELD_FACTORIES[attribute.type_attribute](attribute, attrs)
 
     def set_initial(self, product_class, kwargs):
         if 'initial' not in kwargs:
@@ -1106,7 +1119,7 @@ class ScreenUniversityCourseForm(forms.ModelForm):
             'batch_launch_date', 'apply_last_date',
             'sample_certificate', 'application_process', 'assesment',
             'benefits', 'eligibility_criteria', 'attendees_criteria',
-            'payment_deadline'
+            'payment_deadline', 'highlighted_benefits'
         ]
 
     def __init__(self, *args, **kwargs):
@@ -1119,6 +1132,8 @@ class ScreenUniversityCourseForm(forms.ModelForm):
         self.fields['assesment'].widget.attrs['class'] = form_class
         self.fields['sample_certificate'].widget.attrs['class'] = form_class
         self.fields['eligibility_criteria'].widget.attrs['class'] = form_class + ' tagsinput tags form-control'
+        self.fields['highlighted_benefits'].widget.attrs['required'] = True
+        self.fields['highlighted_benefits'].widget.attrs['class'] = form_class +  ' tagsinput tags form-control'
 
         if self.instance.get_application_process:
             self.fields['application_process_choices'].initial = [
@@ -1183,6 +1198,13 @@ class ScreenUniversityCourseForm(forms.ModelForm):
             raise forms.ValidationError(
                 "Provide atleast one 'Who should attend?'.")
         return attendees_criteria
+
+    def clean_highlighted_benefits(self):
+        highlighted_benefits = self.cleaned_data.get('highlighted_benefits', '')
+        if not highlighted_benefits:
+            raise forms.ValidationError(
+                "Provide Highlighted benefits.")
+        return highlighted_benefits
 
 
 class ScreenUniversityCoursePaymentForm(forms.ModelForm):

@@ -711,6 +711,8 @@ class ProductAttributeForm(forms.ModelForm):
     def add_attribute_fields(self, product_class):
         
         for attribute in product_class.attributes.filter(active=True):
+            if self.instance.type_flow != 14 and attribute.name == 'Brochure':
+                continue
             field = self.get_attribute_field(attribute)
             if field:
                 self.fields['attribute_%s' % attribute.name] = field
@@ -1058,7 +1060,7 @@ class VariationInlineFormSet(forms.BaseInlineFormSet):
 
 class ChangeProductVariantForm(forms.ModelForm):
     FIELD_FACTORIES = FIELD_FACTORIES
-    
+    PRODUCT_TYPE_FLOW_FIELD_ATTRS = PRODUCT_TYPE_FLOW_FIELD_ATTRS
     class Meta:
         model = Product
         fields = [
@@ -1266,12 +1268,18 @@ class ChangeProductVariantForm(forms.ModelForm):
 
     def add_attribute_fields(self, product_class):
         for attribute in product_class.attributes.filter(active=True):
+            if self.instance.type_flow != 14 and attribute.name == 'Brochure':
+                continue
             field = self.get_attribute_field(attribute)
             if field:
                 self.fields['attribute_%s' % attribute.name] = field
                 
     def get_attribute_field(self, attribute):
-        return self.FIELD_FACTORIES[attribute.type_attribute](attribute)
+        type_flow_present_in_mapping = self.instance.type_flow \
+            if self.instance.type_flow in PRODUCT_TYPE_FLOW_FIELD_ATTRS.get(attribute.type_attribute, {}).keys()\
+            else -1
+        attrs = self.PRODUCT_TYPE_FLOW_FIELD_ATTRS.get(attribute.type_attribute, {}).get(type_flow_present_in_mapping, {})
+        return self.FIELD_FACTORIES[attribute.type_attribute](attribute, attrs)
 
     def set_initial(self, product_class, kwargs):
         if 'initial' not in kwargs:

@@ -1291,7 +1291,7 @@ class UniversityCourseForm(forms.ModelForm):
             'batch_launch_date', 'apply_last_date',
             'sample_certificate', 'application_process', 'assesment',
             'benefits', 'eligibility_criteria', 'attendees_criteria',
-            "payment_deadline"
+            "payment_deadline", "highlighted_benefits"
         ]
 
     def __init__(self, *args, **kwargs):
@@ -1304,7 +1304,9 @@ class UniversityCourseForm(forms.ModelForm):
         self.fields['assesment'].widget.attrs['class'] = form_class
         self.fields['sample_certificate'].widget.attrs['class'] = form_class
         self.fields['eligibility_criteria'].widget.attrs['class'] = form_class + ' tagsinput tags form-control'
-
+        self.fields['highlighted_benefits'].widget.attrs['required'] = True
+        self.fields['highlighted_benefits'].widget.attrs['class'] = form_class +  ' tagsinput tags form-control'
+      
         if self.instance.get_application_process:
             self.fields['application_process_choices'].initial = [
                 int(k) for k in self.instance.get_application_process
@@ -1378,6 +1380,13 @@ class UniversityCourseForm(forms.ModelForm):
             raise forms.ValidationError(
                 "Provide atleast one 'Who should attend?'.")
         return attendees_criteria
+
+    def clean_highlighted_benefits(self):
+        highlighted_benefits = self.cleaned_data.get('highlighted_benefits', '')
+        if not highlighted_benefits:
+            raise forms.ValidationError(
+                "Provide Highlighted benefits.")
+        return highlighted_benefits
 
 
 class UniversityCoursePaymentForm(forms.ModelForm):

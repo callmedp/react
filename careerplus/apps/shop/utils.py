@@ -14,7 +14,7 @@ from django.contrib import messages
 from shop.choices import PRODUCT_VENDOR_CHOICES
 
 
-def _attribute_text_field(attribute, attrs):
+def _attribute_text_field(attribute, attrs={}):
     attr = {'class': 'form-control col-md-7 col-xs-12'}
     attr.update(attrs)
     return forms.CharField(
@@ -23,7 +23,7 @@ def _attribute_text_field(attribute, attrs):
         widget=forms.TextInput(
             attrs=attr))
 
-def _attribute_textarea_field(attribute, attrs):
+def _attribute_textarea_field(attribute, attrs={}):
     attr = {'class': 'form-control col-md-7 col-xs-12'}
     attr.update(attrs)
     return forms.CharField(
@@ -32,7 +32,7 @@ def _attribute_textarea_field(attribute, attrs):
         widget=forms.Textarea(
             attrs=attr))
 
-def _attribute_integer_field(attribute, attrs):
+def _attribute_integer_field(attribute, attrs={}):
     attr = {'class': 'form-control col-md-7 col-xs-12'}
     attr.update(attrs)
     return forms.IntegerField(
@@ -41,7 +41,7 @@ def _attribute_integer_field(attribute, attrs):
         widget=forms.NumberInput(
             attrs=attr),)
 
-def _attribute_boolean_field(attribute, attrs):
+def _attribute_boolean_field(attribute, attrs={}):
     attr = {'class': 'js-switch'}
     attr.update(attrs)
     return forms.BooleanField(
@@ -50,7 +50,7 @@ def _attribute_boolean_field(attribute, attrs):
         widget=forms.CheckboxInput(
             attrs=attr),)
 
-def _attribute_float_field(attribute, attrs):
+def _attribute_float_field(attribute, attrs={}):
     attr = {'class': 'form-control col-md-7 col-xs-12'}
     attr.update(attrs)
     return forms.FloatField(
@@ -59,7 +59,7 @@ def _attribute_float_field(attribute, attrs):
         widget=forms.NumberInput(
             attrs=attr),)
 
-def _attribute_date_field(attribute, attrs):
+def _attribute_date_field(attribute, attrs={}):
     attr = {'class': 'form-control col-md-7 col-xs-12'}
     attr.update(attrs)
     return forms.DateField(label=attribute.display_name,
@@ -67,7 +67,7 @@ def _attribute_date_field(attribute, attrs):
         widget=forms.widgets.DateInput(
             attrs=attr),)
 
-def _attribute_option_field(attribute, attrs):
+def _attribute_option_field(attribute, attrs={}):
     attr = {'class': 'form-control col-md-7 col-xs-12'}
     attr.update(attrs)
     return forms.ModelChoiceField(
@@ -79,7 +79,7 @@ def _attribute_option_field(attribute, attrs):
             attrs=attr),)
 
 
-def _attribute_multi_option_field(attribute, attrs):
+def _attribute_multi_option_field(attribute, attrs={}):
     attr = {'class': 'js-switch'}
     attr.update(attrs)
     return forms.ModelMultipleChoiceField(
@@ -89,12 +89,12 @@ def _attribute_multi_option_field(attribute, attrs):
         widget=forms.widgets.SelectMultiple(
             attrs=attr),)
 
-def _attribute_numeric_field(attribute, attrs):
+def _attribute_numeric_field(attribute, attrs={}):
     return forms.FloatField(label=attribute.display_name,
         required=attribute.required)
 
 
-def _attribute_file_field(attribute, attrs):
+def _attribute_file_field(attribute, attrs={}):
     attr = {'class': 'form-control col-md-7 col-xs-12 clearimg'}
     attr.update(attrs)
     return forms.FileField(
@@ -502,7 +502,7 @@ class ProductModeration(object):
                 if screen.type_flow == 14:
                     attributes = ['batch_launch_date', 'apply_last_date', 'sample_certificate', 
                                   'application_process', 'assesment', "benefits", 'eligibility_criteria',
-                                  'attendees_criteria',"payment_deadline"]
+                                  'attendees_criteria',"payment_deadline", "highlighted_benefits"]
                     for attr in attributes:
                         setattr(product.university_course_detail, attr, getattr(screen.screen_university_course_detail, attr))
                     product.university_course_detail.save()

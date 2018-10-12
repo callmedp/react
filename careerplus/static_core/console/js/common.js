@@ -366,7 +366,11 @@ if (typeof NProgress != 'undefined') {
               width: 'auto',
               'delimiter': [';'],   // Or a string with a single delimiter. Ex: ';'
             });
-			
+
+			$('#id_highlighted_benefits').tagsInput({
+              width: 'auto',
+              'delimiter': [';'],   // Or a string with a single delimiter. Ex: ';'
+            });
 			}
 			
 	    };
