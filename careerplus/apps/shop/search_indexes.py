@@ -160,7 +160,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         
         for cat in categories:
             allowed_levels = [4]
-            if cat.is_service:
+            if cat.is_service or cat.is_university or cat.is_skill:
                 allowed_levels.append(3)
             if cat.type_level in allowed_levels:
                 pcat = cat.get_parent()

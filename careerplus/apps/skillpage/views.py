@@ -513,13 +513,30 @@ class UniversityFacultyView(DetailView):
         In compliance with Ajax views for Product Load More.
         """
         if not products:
-            products = self.object.facultyproducts.filter(
-                product__is_indexable=True, product__active=True,
-                active=True,
-                product__type_product__in=[0, 1, 3, 5],
-                product__type_flow=14,).order_by('display_order')
+            # products = self.object.facultyproducts.filter(
+            #     product__is_indexable=True, product__active=True,
+            #     active=True,
+            #     product__type_product__in=[0, 1, 3, 5],
+            #     product__type_flow=14,).order_by('display_order')
+            # import ipdb; ipdb.set_trace()
+            # products = Product.objects.prefetch_related('facultyproducts').filter(
+            #     type_product__in=[0, 1, 3, 5],
+            #     type_flow=14, is_indexable=True,
+            #     active=True,
+            #     facultyproducts__active=True,
+            #     facultyproducts__faculty=self.object).order_by(
+            #     'facultyproducts__display_order')
+
+            products = self.object.products.prefetch_related('facultyproducts').filter(
+                type_product__in=[0, 1, 3, 5],
+                type_flow=14, is_indexable=True,
+                active=True, is_indexed=True,
+                facultyproducts__active=True,
+                facultyproducts__faculty=self.object).order_by(
+                'facultyproducts__display_order')
+
             #product__is_indexed=True
-            products = products.select_related('product')
+            # products = products.select_related('product')
         # prod_page = Paginator(products, self.PRODUCT_PAGE_SIZE)
 
         # products = prod_page.page(page)

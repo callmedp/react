@@ -103,19 +103,19 @@
                         <figure>
                           <i class="exe-university-small-img"><img src="{{university.icon.url}}" alt="{{university.heading}}" class="img-responsive"></i>
                           <figcaption>
-                            <a href="{{prd.product.get_absolute_url}}">
-                            <h3>{{prd.product.heading}}</h3>
+                            <a href="{{prd.get_absolute_url}}">
+                            <h3>{{prd.heading}}</h3>
                             </a>
                             <p> <i class="exe-icon-batch-grey"></i> Starts  <strong>
-                            {{prd.product.get_batch_launch_date|date:"M Y"}}</strong>  |  <strong>{{prd.product.get_duration_in_day|convert_to_month}} months</strong></p>
+                            {{prd.get_batch_launch_date|date:"M Y"}}</strong>  |  <strong>{{prd.get_duration_in_day|convert_to_month}} months</strong></p>
                           </figcaption>
                         </figure>
                       </div>
                       <div class="media-right">
                         <span class="admission-open">Admission open</span>
-                        <a href="{{prd.product.get_absolute_url}}">
+                        <a href="{{prd.get_absolute_url}}">
                         <figure>
-                          <img src="{{prd.product.icon.url}}" alt="{{prd.product.name}}">
+                          <img src="{{prd.icon.url}}" alt="{{prd.name}}">
                         </figure></a>
                       </div>
                     </div>

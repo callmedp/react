@@ -1577,8 +1577,15 @@ class Product(AbstractProduct, ModelMeta):
         return self.get_absolute_url()
 
     def get_batch_launch_date(self):
+        unique_key = 'prd_batch_launch_date_' + str(self.pk)
+        launch_date = cache.get(unique_key)
+        if launch_date:
+            return launch_date
+
+        launch_date = ''
         if self.university_course_detail:
-            return self.university_course_detail.batch_launch_date
+            launch_date  = self.university_course_detail.batch_launch_date
+            cache.set(unique_key, launch_date, 86400)
         return ''
 
     @classmethod
