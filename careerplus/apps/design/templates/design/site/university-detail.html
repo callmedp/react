@@ -248,12 +248,46 @@
                   </div>
                 </div>
                 <div class="clearfix mt-20"></div>
-                <a href="#" class="exe-button-view-more">View more</a>
+                <a href="#" class="exe-button-view-more" type="button" data-toggle="modal" data-target=".bs-example-modal-sm">View more</a>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      <!-- Modal - Want help with this course? -->
+      <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content exe-modal-form">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body"><h2 class="modal-title">Want help with this course?</h2>
+              <strong>Let our learning specialists guide you</strong>
+              <form>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="exampleInputName" placeholder="Name">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="exampleInputEmail" placeholder="Email">
+                </div>
+                <div class="form-group">
+                  <div class="country-code">
+                    <div class="custom-select">
+                      <select class="form-control" name="country_code">
+                        <option>+91</option>
+                        <option>+911</option>
+                      </select>
+                    </div>
+                    <input type="text" class="form-control" id="exampleInputPhone" placeholder="Phone Number">
+                  </div>
+                </div>
+                <button type="submit" class="exe-button-callback">Request callback</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
       
       <!-- main parent section start -->
       <section class="container-fluid">
