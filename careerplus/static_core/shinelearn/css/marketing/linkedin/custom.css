@@ -177,8 +177,8 @@ header{
 	color: #3d4bd7 !important;
 	font-size: 12px;
 	font-weight: 100;
-	padding: 10px 12px;
-	height: 42px;
+	padding: 10px 12px 10px 12px;
+	height:40px;
 
 }
 
@@ -192,19 +192,19 @@ header{
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: #3d4bd7 !important;
-  padding: 10px 12px;
+  padding: 0px 12px 20px 12px;
 }
 ::-moz-placeholder { /* Firefox 19+ */
   color: #3d4bd7 !important;
-  padding: 10px 12px;
+  padding: 0px 12px 20px 12px;
 }
 :-ms-input-placeholder { /* IE 10+ */
   color: #3d4bd7 !important;
-  padding: 10px 12px;
+  padding: 0px 12px 20px 12px;
 }
 :-moz-placeholder { /* Firefox 18- */
   color: #3d4bd7 !important;
-  padding: 10px 12px;
+  padding: 0px 12px 20px 12px;
 }
 
 
