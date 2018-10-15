@@ -657,6 +657,7 @@
                     <div class="alert">{{seo_form.image_alt.errors}}</div>
                   </div>
 
+                  {% if seo_form.about %}
                     <div class="item form-group {% if seo_form.about.errors %}bad{% endif %}">
                     <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ seo_form.about.id_for_label }}">About <span class="required">*</span>
                     </label>
@@ -665,7 +666,7 @@
                     </div>
                     <div class="alert">{{seo_form.about.errors}}</div>
                   </div>
-                  {% if seo_form.description %}
+                  {% endif %}
                   <div class="item form-group {% if seo_form.description.errors %}bad{% endif %}">
                     <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ seo_form.description.id_for_label }}">Description <span class="required">*</span>
                     </label>
@@ -674,7 +675,6 @@
                     </div>
                     <div class="alert">{{seo_form.description.errors}}</div>
                   </div>
-                  {% endif %}
                 <div class="item form-group {% if seo_form.description.errors %}bad{% endif %}">
                     <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ seo_form.visibility.id_for_label }}">Description visibility <span class="required">*</span>
                     </label>

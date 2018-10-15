@@ -12,7 +12,8 @@ from shop.models import (
     Keyword, AttributeOptionGroup, AttributeOption,
     Attribute, Product, Category, ProductCategory,
     FAQProduct, Chapter,
-    ChildProduct, VariationProduct, RelatedProduct)
+    ChildProduct, VariationProduct, RelatedProduct,
+    UniversityCourseDetail)
 from partner.models import Vendor
 from geolocation.models import Country
 from shop.choices import BG_CHOICES
@@ -217,7 +218,6 @@ class DataColorChoiceField(forms.ChoiceField):
         super(DataColorChoiceField, self).__init__(*args, **kwargs)
 
 
-
 class ChangeProductForm(forms.ModelForm):
 
     image_bg = DataColorChoiceField(choices=BG_CHOICES)
@@ -364,7 +364,9 @@ class ChangeProductForm(forms.ModelForm):
                 if pv.type_flow != product.type_flow:
                     pv.type_flow = product.type_flow
                     pv.save()
-        
+        if product.type_flow == 14:
+            UniversityCourseDetail.objects.get_or_create(product=product)
+
         return product
 
 
@@ -403,7 +405,7 @@ class ChangeProductSEOForm(forms.ModelForm):
         self.fields['meta_desc'].widget.attrs['class'] = form_class
         self.fields['meta_keywords'].widget.attrs['class'] = form_class
         if self.instance.type_flow == 14:
-            for val in ['description', 'buy_shine', 'attend']:
+            for val in ['about', 'buy_shine', 'attend']:
                 self.fields.pop(val)
 
     class Meta:
@@ -714,6 +716,8 @@ class ProductAttributeForm(forms.ModelForm):
             if self.instance.type_flow != 14 and attribute.name == 'Brochure':
                 continue
             field = self.get_attribute_field(attribute)
+            if self.instance.type_flow == 14 and attribute.name in ['course_type', 'study_mode', 'course_level']:
+                field.required = False
             if field:
                 self.fields['attribute_%s' % attribute.name] = field
                 
