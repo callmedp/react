@@ -39,7 +39,7 @@
             <!-- header menu Icon Starts here -->
                 <div class="exec-header">
                     <div class="header-content">
-                        <h1 class="semi-bold">Executive daevelopment program in leadership</h1>
+                        <h1 class="semi-bold">{{ prd_H1 }}</h1>
                         <div class="university-logo">
                             <img 
                                 src="{% static 'shinelearn/images/mobile/executive-course/university-logo.jpg' %}"/>
@@ -117,34 +117,6 @@
                     <div class="white-box">
                         <h2><span><i class="execIcon-program"></i></span>About program</h2>
                         <div class="content">
-                           <!--  <p>The objective of the course is to develop knowledge of various analytical techniques in order to help better decision making in sales and marketing. CMOs and Marketing Managers usually depend on data analysts in their firms to crunch data. This course will help them communicate their marketing objectives in a focused manner to data analysts and help them critically evaluate the results of data analysis better. Participants will understand the underlying principles of statistical and analytical techniques. Participants will also develop a working familiarity of implementing these techniques on data sets.</p>
-
-                            <ul class="pointers mt-15">
-                                <li>
-                                    <h3 class="pb-0 fs-16">Execute 4 real life projects</h3>
-                                    <p class="pb-0">Acquire hands-on knowledge and expertise!</p>
-                                </li>
-                                
-                                <li>
-                                    <h3  class="pb-0 fs-16">Hands-on training on 5+ tools</h3>
-                                    <p class="pb-0">Learn various tools which includes Google AdWords, Google Analytics, Facebook, etc</p>
-                                </li>
-                                
-                                <li>
-                                    <h3 class="pb-0 fs-16">10 simulation test papers</h3>
-                                    <p class="pb-0">Gain confidence to ace the certification exams!</p>
-                                </li>
-                                
-                                <li>
-                                    <h3 class="pb-0 fs-16">Training by industry experts</h3>
-                                    <p class="pb-0">Get trained by “Dream Team” of Silicon Valley authors for Digital marketing role.</p>
-                                </li>
-                                
-                                <li>
-                                    <h3 class="pb-0 fs-16">Comprehensive Course Curriculum</h3>
-                                    <p class="pb-0">Go through in-depth knowledge on 8 topics and 11 domains which covers solid foundation learning for all digital marketing aspects.</p>
-                                </li>
-                            </ul> -->
                              <span class="pointers mt-15">
                               {{sqs.pAbx|safe}}
                               </span> 
@@ -196,22 +168,22 @@
                         <h2><span><i class="execIcon-faculty"></i></span>Faculty profile</h2>
                         <div class="content pl-40 pr-40">
                             <ul class="faculty-profile text-center" id="executive-slide">
-                            {% for inner_fac in faculty %}
+                                {% for inner_fac in faculty %}
 
-                            {% for fac in inner_fac %}
+                                {% for fac in inner_fac %}
 
-                                <li>
-                                    <span class="faculty-image">
-                                        <img src="{{ fac.get_image_url }}"/>
-                                    </span>
-                                    <h3><a href="{{fac.get_absolute_url}}">{{ fac.name }}</a></h3>
-                                    <p class="desigation mt-15">{{ fac.designation }} – 
-                                    <span>{{ fac.institute.name }}</span>
-                                    </p>
-                                    <p>{{fac.description|truncatechars:"120"}}... <a  href="{{fac.get_absolute_url}}">read more</a></p>
-                                </li>
-                            {% endfor %}
-                            {% endfor %}
+                                    <li>
+                                        <span class="faculty-image">
+                                            <img src="{{ fac.get_image_url }}"/>
+                                        </span>
+                                        <h3><a href="{{fac.get_absolute_url}}">{{ fac.name }}</a></h3>
+                                        <p class="desigation mt-15">{{ fac.designation }} – 
+                                        <span>{{ fac.institute.name }}</span>
+                                        </p>
+                                        <p>{{fac.description|truncatechars:"120"}}... <a  href="{{fac.get_absolute_url}}">read more</a></p>
+                                    </li>
+                                {% endfor %}
+                                {% endfor %}
 
                             </ul>
                         </div>
@@ -231,7 +203,7 @@
                                         <p>{{ benefit.2 }}</p>
                                     </div>
                                 </li>
-                            {% endfor %}
+                                {% endfor %}
                             </ul>
                             <hr />
                             <p class="subhead mb-15"><strong>Other Benefits</strong></p>
@@ -331,6 +303,7 @@
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ Institute -->
+
                 {% if university_testimonial %}
                 <div class="container">
                     <div class="white-box">
@@ -382,17 +355,17 @@
                                         </div><!-- /. Overall fees -->
                                         <div class="clearfix"></div>
                                         {% if  university_detail.payment %}
-                                        <hr class="row blueborder"/>
-                                        <p class="text-upper text-center c-333">Installment Available</p>
-                                        <ul class="text-center payment-instament">
-                                          {% for payment in university_detail.payment %}
-                                            <li>
-                                                <p>{{forloop.counter|ordinal }} Instalment</p>
-                                                <p class="price">Rs. {{ payment.installment_fee|floatformat|intcomma }}</p>
-                                                <p>Payment Deadline: <strong>{{ payment.ldpayment }}</strong></p>
-                                            </li>
-                                          {% endfor %}
-                                        </ul
+                                            <hr class="row blueborder"/>
+                                            <p class="text-upper text-center c-333">Installment Available</p>
+                                            <ul class="text-center payment-instament">
+                                              {% for payment in university_detail.payment %}
+                                                <li>
+                                                    <p>{{forloop.counter|ordinal }} Instalment</p>
+                                                    <p class="price">Rs. {{ payment.installment_fee|floatformat|intcomma }}</p>
+                                                    <p>Payment Deadline: <strong>{{ payment.ldpayment }}</strong></p>
+                                                </li>
+                                              {% endfor %}
+                                            </ul>
                                         {% endif %}
 
                                     </div>
@@ -438,13 +411,9 @@
                                 {% for ques in faq_list %}
                                 <div class="accordion_in {% if forloop.counter == 1 %} acc_active {% endif %}">
                                     <div class="acc_head fs-16">{{ ques.question }}</div>
-                                    <div class="acc_content">
-                                        {{ques.answer|safe}}
-                                    </div>
+                                    <div class="acc_content">{{ques.answer|safe}}</div>
                                 </div><!--/. Accordion 1 -->
                                 {% endfor %}
-
-
                             </div><!-- /. accordion-wrap -->
                         </div>
                     </div><!-- /. white box-->
