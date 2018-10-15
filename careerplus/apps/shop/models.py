@@ -2756,7 +2756,7 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
     def get_image_url(self):
         if self.image:
             return self.image.url
-        return settings.MEDIA_URL + 'static/shinelearn/images/executive/principal-pic.jpg'
+        return settings.STATIC_URL + 'shinelearn/images/executive/default-user-pic.jpg'
 
 
 class FacultyProduct(AbstractAutoDate):
