@@ -51,7 +51,7 @@ from users.forms import (
 from shop.choices import APPLICATION_PROCESS, BENEFITS
 from review.forms import ReviewForm
 from homepage.config import UNIVERSITY_COURSE
-
+from crmapi.models import UNIVERSITY_LEAD_SOURCE
 
 class ProductInformationMixin(object):
 
@@ -376,6 +376,7 @@ class ProductInformationMixin(object):
                 ctx['university_testimonial'] = Testimonial.objects.filter(
                     page=UNIVERSITY_COURSE, object_id=self.product_obj.pk
                 )
+                ctx['lead_source'] = UNIVERSITY_LEAD_SOURCE
         else:
             if ctx.get('prd_exp', None) in ['EP', 'FP']:
                 pPOP = json.loads(sqs_main.pPOP)

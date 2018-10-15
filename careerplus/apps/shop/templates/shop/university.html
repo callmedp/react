@@ -801,14 +801,6 @@
         return this.optional(element) || /^[a-z\s]*$/i.test(value);
     }, "Letters only please");
 
-$("#download_broucher").click(function(){
-  var href = $('#download_broucher').attr('href');
-  $("#download_broucher").attr('download',href)
-  {% if not request.session.university_course  %}
-  $("#lead1").submit();
-  {% endif %}
-});
-
 $("#lead1, #lead2, #lead3").each(function() {
         $(this).validate({
           submitHandler:function (form) {
@@ -930,8 +922,17 @@ $("#lead1, #lead2, #lead3").each(function() {
         $("#skill_list_box").html(start_html + final_html + end_html)
         }
       }
-    })
+    });
+
+    $("#download_broucher").click(function(){
+        var href = $('#download_broucher').attr('href');
+        $("#download_broucher").attr('download',href)
+      {% if request.session.candidate_id and not request.session.university_course  %}
+        $("#lead1").submit();
+      {% endif %}
+    });
     </script>
+
 {% endblock js_section %}
 
   {% block zendesk %}
