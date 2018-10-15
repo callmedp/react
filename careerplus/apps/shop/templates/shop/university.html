@@ -705,31 +705,23 @@
               <form  id="lead2" method="POST" action="{% url 'crmapi:lead-management' %}">
                           {% csrf_token %}
                 <div class="form-group">
-                  <input type="text" class="form-control" id="exampleInputName2"  name="name" placeholder="Name">
+                  <input type="text" class="form-control" name="name" id="exampleInputName2"  name="name" placeholder="Name">
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" id="exampleInputEmail2" name='email' placeholder="Email">
+                  <input type="text" class="form-control"  name="email" id="exampleInputEmail2" name='email' placeholder="Email">
                 </div>
                 <div class="form-group">
-                  <div class="country-code">
-                    <div class="custom-select">
-                      <select class="form-control" name="country_code">
-                        <option>+91</option>
-                        <option>+911</option>
-                      </select>
-                    </div>
-                    <input type="text" class="form-control" id="exampleInputPhone2" placeholder="Phone Number">
-                      <input type="hidden" name="product" value="{{ sqs.id }}">
-
-                      <input type="hidden" name="prd" value="{{ prd_H1 }}">
-
-                      <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
-
-                      <input type="hidden" name="lsource" value="{{ lead_source }}">
-
-                      <input type="hidden" name="uc" value="1">
-                  </div>
+                    <input type="text" class="form-control" name="number" maxlength="10" minlength="10" type="text" id="exampleInputPhone2" placeholder="Phone Number">
                 </div>
+                <input type="hidden" name="product" value="{{ sqs.id }}">
+
+                <input type="hidden" name="prd" value="{{ prd_H1 }}">
+
+                <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+                <input type="hidden" name="lsource" value="{{ lead_source }}">
+
+                <input type="hidden" name="uc" value="1">
                 <button type="submit" class="exe-button-callback">Enroll Now</button>
               </form>
             </div>
@@ -752,25 +744,17 @@
                 <div class="form-group">
                   <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Email" name="email">
                 </div>
-                <div class="form-group">
-                  <div class="country-code">
-                    <div class="custom-select">
-                      <select class="form-control" name="country_code">
-                        <option>+91</option>
-                        <option>+911</option>
-                      </select>
-                    </div>
-                    <input type="text" class="form-control" id="exampleInputPhone" placeholder="Phone Number">
-                      <input type="hidden" name="product" value="{{ sqs.id }}">
-
-                      <input type="hidden" name="prd" value="{{ prd_H1 }}">
-
-                      <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
-
-                      <input type="hidden" name="lsource" value="{{ lead_source }}">
-                      <input type="hidden" name="uc" value="1">
-                  </div>
+                <div class="form-group">                    
+                      <input type="text" class="form-control" name="number" maxlength="10" minlength="10" type="text" id="exampleInputPhone" placeholder="Phone Number">
                 </div>
+                <input type="hidden" name="product" value="{{ sqs.id }}">
+
+                <input type="hidden" name="prd" value="{{ prd_H1 }}">
+
+                <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+                <input type="hidden" name="lsource" value="{{ lead_source }}">
+                <input type="hidden" name="uc" value="1">
                 <button type="submit" class="exe-button-callback">Download Broucher</button>
               </form>
             </div>
