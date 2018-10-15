@@ -65,38 +65,49 @@
                 <div class="want-help container">
                     <div class="white-box request-callback">
                         <h2>Want help with courses?</h2>
-                        <div class="line-form-wrap">
-                        <ul class="p-15">
-                            <li class=" field error">
-                                <input type="text" name="name" id="name" placeholder="Enter your name">
-                                <label for="name">Name</label>
-                                <span class="error-txt">lskdal;d</span>
-                            </li>
+                        <div class="content-box mt-20 login-form">
+                        <form id="id-request-callback-form" role="form">{% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="name" placeholder="Name" value="{{request.session.full_name|safe}}">
+                                <span class="error-txt"></span>
+                            </div>
                             
-                            <li class="field">
-                            <input type="text" name="mNumber" id="mNumber" placeholder="Enter mobile No.">
-                            <label for="mNumber">Mobile</label>
-                            </li>
-                            
-                            <li class="field">
-                            <input type="text" name="email" id="email" placeholder="Enter email ">
-                            <label for="email">Email</label>
-                            </li>
+                            <div class="form-group ">
+                                <div class="pull-left code">
+                                    <select class="form-control" name="country">
+                                    {% for country_choice in country_choices %}
+                                      <option value="{{country_choice.0}}" {% if country_choice.0 == initial_country %}selected {% endif %}>{{country_choice.0}}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                                <input class="form-control pull-left number" name="number" type="text" placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no|safe}}">
+                                <span class="error-txt" style="bottom:-25px; margin-left:70px"></span>
+                                <div class="clearfix"></div>
+                            </div>
 
-                            <li>
-                                <select class="form-control">
-                                <option>Select Course</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="email" placeholder="Email">
+                                <span class="error-txt"></span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <select class="form-control" name="product">
+                                    <option value="">Select course</option>
+                                    {% for prd in products %}
+                                      <option value="{{prd.id}}">{{prd.pHd}}</option>
+                                    {% endfor %}
                                 </select>
-                            </li>
-        
-                            <li class="mt-20 mb-5 text-center">
-                                <button class="btn btn-round-30 btn-lg btn-shadow btn-grOrange text-upper">Request Callback</button>
-                            </li>
-                          </ul>
+                                <span class="error-txt"></span>
+                            </div>
+
+                            <input type="hidden" name="lsource" value="{{UNIVERSITY_LEAD_SOURCE}}">
+                            <input type="hidden" name="prd" value="">
+                            <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
+
+                            <div class="mt-20 mb-5 text-center">
+                                <button type="button" class="btn btn-round-30 btn-lg btn-shadow btn-grOrange text-upper" id="request-callback-button">Request Callback</button>
+                            </div>
+                        </form>
                         </div><!-- line form ends here -->
                     </div><!-- white box ends here -->
                 </div><!-- Want help Form Ends Here -->

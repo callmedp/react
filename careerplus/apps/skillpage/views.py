@@ -391,7 +391,7 @@ class UniversityPageView(DetailView):
         Fetch all products with category same as that of object.
         """
         products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).\
-            filter(pCtg=self.object.pk)
+            filter(pCtg=self.object.pk, pTF=14)
 
         products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).\
             filter(pPc='course')[: 13]
@@ -518,7 +518,7 @@ class UniversityFacultyView(DetailView):
                 active=True,
                 product__type_product__in=[0, 1, 3, 5],
                 product__type_flow=14).order_by('display_order')
-            products = products.select_related('product')
+            # products = products.select_related('product')
         # prod_page = Paginator(products, self.PRODUCT_PAGE_SIZE)
 
         # products = prod_page.page(page)
