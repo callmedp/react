@@ -1,6 +1,5 @@
 @import "../../shinelearn/css/path";
-
-$sprite-exe: url($path + 'images/executive/sprite-executive.png') no-repeat;
+@import "../../shinelearn/css/common/bootstrap/variables";
 
 .exe-icon-apply {
 	width: 27px;

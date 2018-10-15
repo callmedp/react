@@ -62,11 +62,13 @@
     #id_application_process {
       margin-top: 10px;
     }
-    #application_process > ul > li >label > div >input {
+    #application_process > ul > li >label  >input {
       width: 15px;
     }
      #application_process > ul > li >label {
       text-align: center;
+      vertical-align: middle;
+      margin: 12px 0px;
      }
     .selected_process_img{
        width: 60px;
@@ -74,7 +76,7 @@
     }
 
     #application_process{
-      height: 310px;
+      height: 203px;
       overflow-y: scroll;
       border: 1px solid #d7cdcd;
     }
@@ -101,17 +103,29 @@
     #id_benefits {
       margin-top: 10px;
     }
-    #benefits > ul > li >label > div >input {
+    #benefits > ul > li >label  >input {
       width: 15px;
     }
      #benefits > ul > li >label {
       text-align: center;
+      vertical-align: middle;
+      margin: 12px 0px;
      }
     .selected_benefit_img{
        width: 60px;
       height: 60px;
     }
-      </style>
+    #application_processes > .exe-application-process {
+      border: 1px solid #d7cdcd;
+      padding: 10px 10px;
+      min-height: 122px;
+    }
+    #selected_benefits > .exe-application-process {
+      border: 1px solid #d7cdcd;
+      padding: 10px 10px;
+      min-height: 122px;
+    }
+    
   </style>
   {% endcompress %}
                 
@@ -291,6 +305,7 @@
                     </div>
 
                     
+                    {% if form.about %}
                     <div class="item form-group {% if form.about.errors %}bad{% endif %}">
                       <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.about.id_for_label }}">About <span class="required">*</span>
                       </label>
@@ -299,7 +314,7 @@
                       </div>
                       <div class="alert">{{form.about.errors}}</div>
                     </div>
-                    {% if form.description %}
+                    {% endif  %}
                     <div class="item form-group {% if form.description.errors %}bad{% endif %}">
                       <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.description.id_for_label }}">Description <span class="required">*</span>
                       </label>
@@ -308,7 +323,7 @@
                       </div>
                       <div class="alert">{{form.description.errors}}</div>
                     </div>
-                    {% endif %}
+
                     {% if form.buy_shine %}
                     <div class="item form-group {% if form.buy_shine.errors %}bad{% endif %}">
                       <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.buy_shine.id_for_label }}">What u'll get <span class="required">*</span>
@@ -999,10 +1014,8 @@
                           {% for x,y,z in prd_university_form.fields.application_process_choices.choices %}
                             <li>
                               <label for="id_application_process_{{forloop.counter}}">
-                                <div>
                                   <input class="form-control col-md-7 col-xs-12 process_item process_checkbox" id="id_application_process_{{forloop.counter}}" name="application_process" type="checkbox" value="{{ x }}" required="" {%if x  in prd_university_form.fields.application_process_choices.initial %} checked {% endif %}>
-                                </div>  
-                                <figure class="col-sm-3 process-box" style="width:100%">
+                                <figure class="col-sm-3 process-box" style="width:80%; display:inline-flex">
                                   <span class="circle"><i class="{{y}}"></i></span>
                                   <figcaption>{{z}}</figcaption>
                                 </figure>                          
@@ -1046,10 +1059,8 @@
                            {% for x,y,z in prd_university_form.fields.benefits_choices.choices %}
                             <li>
                               <label for="id_benefits_{{forloop.counter}}">
-                              <div>
                                 <input class="form-control col-md-7 col-xs-12 benefit_item benefit_checkbox" id="id_benefits_{{forloop.counter}}" name="benefits" type="checkbox" value="{{ x }}" required="" {%if x  in prd_university_form.fields.benefits_choices.initial %} checked {% endif %}>
-                              </div>
-                                <figure class="col-sm-4 process-box" style="width:100%">
+                                <figure class="col-sm-4 process-box" style="width:80%">
                                   <span class="circle"><i class="{{y}}"></i></span>
                                   <figcaption>{{z}}</figcaption>
                                 </figure>  

@@ -2490,11 +2490,11 @@ class ProductAuditHistory(Document):
 class UniversityCourseDetailScreen(models.Model):
     batch_launch_date = models.DateField(
         help_text=_('This university course launch date'),
-        default=timezone.now
+        null=True, blank=True
     )
     apply_last_date = models.DateField(
         help_text=_('Last date to apply for this univeristy course'),
-        default=timezone.now
+        null=True, blank=True
     )
     sample_certificate = models.FileField(
         upload_to=get_upload_path_for_sample_certicate, max_length=255,
@@ -2526,7 +2526,7 @@ class UniversityCourseDetailScreen(models.Model):
     )
     payment_deadline = models.DateField(
         _('Payment Deadline'),
-        default=timezone.now
+        null=True, blank=True
     )
     highlighted_benefits = models.CharField(
         max_length=500,
@@ -2581,11 +2581,11 @@ class UniversityCoursePaymentScreen(models.Model):
 class UniversityCourseDetail(models.Model):
     batch_launch_date = models.DateField(
         help_text=_('This university course launch date'),
-        default=timezone.now
+        null=True, blank=True
     )
     apply_last_date = models.DateField(
         help_text=_('Last date to apply for this univeristy course'),
-        default=timezone.now
+        null=True, blank=True
     )
     sample_certificate = models.FileField(
         upload_to=get_upload_path_for_sample_certicate, max_length=255,
@@ -2616,7 +2616,7 @@ class UniversityCourseDetail(models.Model):
     )
     payment_deadline = models.DateField(
         _('Payment Deadline'),
-        default=timezone.now
+        null=True, blank=True
     )
     highlighted_benefits = models.CharField(
         max_length=500,
@@ -2756,7 +2756,7 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
     def get_image_url(self):
         if self.image:
             return self.image.url
-        return settings.MEDIA_URL + 'static/shinelearn/images/executive/principal-pic.jpg'
+        return settings.STATIC_URL + 'shinelearn/images/executive/default-user-pic.jpg'
 
 
 class FacultyProduct(AbstractAutoDate):

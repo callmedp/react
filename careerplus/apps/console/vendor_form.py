@@ -579,6 +579,8 @@ class ScreenProductAttributeForm(forms.ModelForm):
             if self.instance.type_flow != 14 and attribute.name == 'Brochure':
                 continue
             field = self.get_attribute_field(attribute)
+            if self.instance.type_flow == 14 and attribute.name in ['course_type', 'study_mode', 'course_level']:
+                field.required = False
             if field:
                 self.fields['attribute_%s' % attribute.name] = field
                 

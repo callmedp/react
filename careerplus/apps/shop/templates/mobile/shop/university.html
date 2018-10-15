@@ -10,7 +10,6 @@
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/smk-accordion.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/executive-course/exec-detail.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
-
     {% endcompress css %}
         <style>
             a[disabled], a[disabled]:hover {
@@ -40,13 +39,27 @@
             <!-- header menu Icon Starts here -->
                 <div class="exec-header">
                     <div class="header-content">
-                        <h1 class="semi-bold">Search Engine Optimisation Master Training Course</h1>
+                        <h1 class="semi-bold">{{ prd_H1 }}</h1>
                         <div class="university-logo">
                             <img 
                                 src="{% static 'shinelearn/images/mobile/executive-course/university-logo.jpg' %}"/>
                         </div>
+                        <!-- Banner info band -->
+                        <div class="info-band">
+                            <span class="exe-icon-round-arrow"></span>
+                            <div class="slide-container">
+                                <ul class="info-slider">
+                                {% with university_detail.highlighted_benefits|split:";" as benefits %}
+                                    {% for benefit in benefits %}
+                                            <li>{{ benefit }}</li>
+                                    {% endfor %}
+                                {% endwith %}
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Banner info band -->
                     </div><!-- /. header content -->
-                    
+
                     <!-- header menu Icon Starts here -->
                     <div class="main-menu w100fl">
                         <div class="pull-left">
@@ -64,25 +77,39 @@
             {% endblock header %}
 
             {% block container %}
-            <div class="content-box">
-                <div class="university-info">
+            <div class="content-box pt-0">
+                <div class="university-info row">
                     <ul>
                         <li>
-                            <span class="apply-execIcon">Apply before: <strong class="text-upper">29 Dec 2018</strong></span> 
+                            <span class="batch-execIcon">
+                                <span>starts:</span>  
+                                <strong class="text-upper">{{ university_detail.launchdate }}</strong>
+                            </span> 
                         </li>
                         <li>
-                            <span class="batch-execIcon">Batch starts: <strong class="text-upper">{{ university_detail.launchdate }}</strong></span> 
+                            <span class="duration-execIcon">
+                                <span>Duration:</span> 
+                                <strong class="text-upper">{{ selected_var.dur_days|convert_to_month }} months</strong>
+                            </span> 
                         </li>
                         <li>
-                            <span class="duration-execIcon">Duration: <strong class="text-upper">4 Months</strong></span> 
-                        </li>
-                        <li>
-                            <span class="price-execIcon">Price: <sup class="strike-through">&#8377; 7999</sup> <strong class="fs-24"> &#8377; 799</strong></span> 
+                            <span class="price-execIcon">
+                                <span>Price:</span>
+                                <strong class="fs-24 price">Rs.{{ sqs.pPinb|floatformat }}</strong>
+                            </span> 
                         </li>
                     </ul>
+                    <div class="text-center text-upper">
+                     {% if not request.session.candidate_id and not request.session.university_course %}
+                        <a class="btn btn-round-30 btn-slg btn-shadow btn-grOrange" id="enroll_now"  data-toggle="modal" data-target=".bs-example-modal-sm" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll Now</a>
+                    {% else %}
+                        <a role="button" class="btn btn-round-30 btn-slg btn-shadow btn-grOrange" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                    {% endif %}
+                    </div>
 
-                    <a href="#" class="btn btn-round-30 btn-lg btn-shadow btn-grOrange">Enroll Now</a>
-                    <p class="fs-12 pb-0 mt-15 weeked-batch">Weekend Batch: Saturday  9 to 11am & Sunday 10am to 12pm</p>
+                    <div class="download-brochure text-center mt-15">
+                        <a href="#"><i class="exe-icon-download"></i><strong>Download Brochure</strong></a>
+                    </div>
 
                 </div><!-- ./ university-info -->
 
@@ -90,9 +117,9 @@
                     <div class="white-box">
                         <h2><span><i class="execIcon-program"></i></span>About program</h2>
                         <div class="content">
-                            <div class="pointers mt-15">
-                            {{sqs.pAbx|safe}}
-                            </div>
+                             <span class="pointers mt-15">
+                              {{sqs.pAbx|safe}}
+                              </span> 
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ About program -->
@@ -100,62 +127,64 @@
                 <div class="container">
                     <div class="white-box">
                         <h2><span><i class="execIcon-who"></i></span>Who should attend?</h2>
-                         <div class="content">
+                        <div class="content">
                             <ul class="who-attend">
-                                {%with university_detail.attendees_criteria|get_eval_value  as attendees_list %}
-                              {% for attendees in attendees_list %}
-                                 <li class="{% if forloop.counter == 1%}manager{%elif forloop.counter == 2%}senior-managers {% elif forloop.counter == 3%} department-heads {%else%} line-manager {% endif%}">
+                            {% with university_detail.attendees_criteria|get_eval_value  as attendees_list %}
+                            {% for attendees in attendees_list %}
+                                <li class="{% if forloop.counter == 1 %}manager{% elif forloop.counter == 2 %} senior-managers {% elif forloop.counter == 3 %} department-heads {%else%} line-manager {% endif %}">
                                     <div>
                                         <h3>{{attendees.0}}</h3>
-                                         <p class="pb-0">{{attendees.1}}</p>
+                                        <p class="pb-0">{{attendees.1}}</p>
                                     </div>
                                 </li>
-                                {% endfor %}
-                                {% endwith %}
+                            {% endfor %}
+                            {% endwith %}
                             </ul>
-                            <ul>
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ Who should attend? -->
-                {% if university_detail.eligibility_criteria %}
+
                 <div class="container eligibility">
                     <div class="white-box">
                         <h2><span><i class="execIcon-eligibility"></i></span>Eligibility criteria</h2>
-                         <div class="content">
-                            <ul>
-                                {% with university_detail.eligibility_criteria|split:";" as eligibilities %}
+                        <div class="content">
+                            <ul class="tick-list">
+                                  {% with university_detail.eligibility_criteria|split:";" as eligibilities %}
                                     {% for eligibility in  eligibilities %}
                                       <li>{{eligibility}}</li>
                                     {% endfor %}
-                                {% endwith %}
+                                    {% endwith %}
                             </ul>
                         </div>
-                        
                     </div><!-- /. white box-->
                 </div><!-- ./ Eligibility criteria -->
-                {% endif %}
+
+                <input type="hidden" id="skilllist" value="{{sqs.pSkilln|join:""}}">
+                <div id="skill_list_box">
+                </div>
+
                 <div class="container">
                     <div class="white-box">
                         <h2><span><i class="execIcon-faculty"></i></span>Faculty profile</h2>
                         <div class="content pl-40 pr-40">
                             <ul class="faculty-profile text-center" id="executive-slide">
-                                {% for innner_fac in faculty %}
+                                {% for inner_fac in faculty %}
 
-                                {% for fac in innner_fac %}
+                                {% for fac in inner_fac %}
 
-                                <li>
-                                    <span class="faculty-image">
-                                        <img 
-                                        src="{% static 'shinelearn/images/mobile/executive-course/Regular_Faculty_1.jpg' %}"/>
-                                    </span>
-                                    <h3><a href="#">{{ fac.name }}</a></h3>
-                                    <p class="desigation mt-15">{{ fac.designation }} – {{ fac.institute.name }}
-                                        <span></span>
-                                    </p>
-                                    <p>{{fac.description|truncatechars:"120"}}...  <a href="#">read more</a></p>
-                                </li>
-                             {% endfor %}
-                             {% endfor %}
+                                    <li>
+                                        <span class="faculty-image">
+                                            <img src="{{ fac.get_image_url }}"/>
+                                        </span>
+                                        <h3><a href="{{fac.get_absolute_url}}">{{ fac.name }}</a></h3>
+                                        <p class="desigation mt-15">{{ fac.designation }} – 
+                                        <span>{{ fac.institute.name }}</span>
+                                        </p>
+                                        <p>{{fac.description|truncatechars:"120"}}... <a  href="{{fac.get_absolute_url}}">read more</a></p>
+                                    </li>
+                                {% endfor %}
+                                {% endfor %}
+
                             </ul>
                         </div>
                     </div><!-- /. white box-->
@@ -165,41 +194,38 @@
                     <div class="white-box">
                         <h2><span><i class="execIcon-exclusive"></i></span>Exclusive benefits</h2>
                         <div class="content">
-                                                {% if university_detail.benefits%}
                             <p class="subhead mb-15"><strong>Key Benefits</strong></p>
                             <ul class="who-attend">
-                               
-                            {% for benefit in university_detail.benefits %}
-                               <li class="{{benefit.1}}">
+                                {% for benefit in university_detail.benefits %}
+                                <li class="{{benefit.1}}">
                                     <div>
                                         <h3>{{ benefit.0 }}</h3>
                                         <p>{{ benefit.2 }}</p>
                                     </div>
                                 </li>
-                            {% endfor %}
+                                {% endfor %}
                             </ul>
                             <hr />
-                            {% endif %}
-                            <p class="subhead mb-15"><strong>Why Shine Learning?</strong></p>
+                            <p class="subhead mb-15"><strong>Other Benefits</strong></p>
 
-                            <ul class="who-attend">
-                                <li class="free-services">
+                            <ul class="tick-list">
+                                <li>
                                     <div>
                                         <h3>Free Services</h3>
                                         <p>Free Resume, Cover Letter Formats and Career Guidance Services.</p>
                                     </div>
                                 </li>
                                 
-                                <li class="global">
+                                <li>
                                     <div>
-                                        <h3>0% EMI</h3>
+                                        <h3>Global Education Providers</h3>
                                         <p class="pb-0">Choose from a list of global providers as per your requirement.</p>
                                     </div>
                                 </li>
                                 
-                                <li class="refernEarn">
+                                <li>
                                     <div>
-                                        <h3>Shine credits</h3>
+                                        <h3>Refer and Earn</h3>
                                         <p class="pb-0">Refer your friend and get an Amazon Voucher worth Rs. 2000*</p>
                                     </div>
                                 </li>
@@ -208,6 +234,7 @@
                     </div><!-- /. white box-->
                 </div><!-- ./ Exclusive benefits -->
 
+                
                 <div class="container">
                     <div class="white-box program-structure">
                         <h2><span><i class="execIcon-program"></i></span>Program Structure</h2>
@@ -232,7 +259,7 @@
                     </div><!-- /. white box-->
                 </div><!-- ./ Program Structure -->
 
-                {% if university_detail.assesment or university_detail.sample_certificate %}
+               {% if university_detail.assesment or university_detail.sample_certificate %}
 
                 <div class="container">
                     <div class="white-box">
@@ -260,6 +287,8 @@
                 </div><!-- ./ Assessment & Evaluation -->
                 {% endif %}
                 
+                
+                              
                 <div class="container">
                     <div class="white-box">
                         <h2><span><i class="execIcon-institute"></i></span>Institute</h2>
@@ -274,6 +303,7 @@
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ Institute -->
+
                 {% if university_testimonial %}
                 <div class="container">
                     <div class="white-box">
@@ -325,17 +355,17 @@
                                         </div><!-- /. Overall fees -->
                                         <div class="clearfix"></div>
                                         {% if  university_detail.payment %}
-                                        <hr class="row blueborder"/>
-                                        <p class="text-upper text-center c-333">Installment Available</p>
-                                        <ul class="text-center payment-instament">
-                                          {% for payment in university_detail.payment %}
-                                            <li>
-                                                <p>{{forloop.counter|ordinal }} Instalment</p>
-                                                <p class="price">Rs. {{ payment.installment_fee|floatformat|intcomma }}</p>
-                                                <p>Payment Deadline: <strong>{{ payment.ldpayment }}</strong></p>
-                                            </li>
-                                          {% endfor %}
-                                        </ul
+                                            <hr class="row blueborder"/>
+                                            <p class="text-upper text-center c-333">Installment Available</p>
+                                            <ul class="text-center payment-instament">
+                                              {% for payment in university_detail.payment %}
+                                                <li>
+                                                    <p>{{forloop.counter|ordinal }} Instalment</p>
+                                                    <p class="price">Rs. {{ payment.installment_fee|floatformat|intcomma }}</p>
+                                                    <p>Payment Deadline: <strong>{{ payment.ldpayment }}</strong></p>
+                                                </li>
+                                              {% endfor %}
+                                            </ul>
                                         {% endif %}
 
                                     </div>
@@ -381,26 +411,14 @@
                                 {% for ques in faq_list %}
                                 <div class="accordion_in {% if forloop.counter == 1 %} acc_active {% endif %}">
                                     <div class="acc_head fs-16">{{ ques.question }}</div>
-                                    <div class="acc_content">
-                                        {{ques.answer|safe}}
-                                    </div>
+                                    <div class="acc_content">{{ques.answer|safe}}</div>
                                 </div><!--/. Accordion 1 -->
                                 {% endfor %}
-
-
                             </div><!-- /. accordion-wrap -->
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ FAQ -->
                 {% endif %}
-            <input type="hidden" id="skilllist" value="{{sqs.pSkilln|join:""}}">
-            </div><!-- /. content-box --> 
-            <!-- recommended product -->
-            <div id="skill_list_box">
-            </div>
-            <!-- end recommended product -->
- 
-
             <div class="topSticky-enrollNow" id="enrollNow">
                 <div class="content-box">
                     <div class="pr-15">Search Engine Optimisation Master...</div>
@@ -441,7 +459,8 @@
     <script src="{% static 'shinelearn/js/mobile/shop/detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
-    {% endcompress %}  
+    {% endcompress %}
+
     <script type="text/javascript">
         $(document).ready(function(){
            if(commonJs.getParameterByName('type') == 'autoEnrol'){
@@ -454,7 +473,7 @@
             start_html = '<div class="you-may-like"><div class="container"><h2 class="pt-5">You may also like</h2><div class="slide-container"><ul class="login-slider">'
             end_html = '</ul></div></div></div>'
             final_html = ''
-            product_html = ' <li><div class="media"><div class="media-body"><p class="fs-15 bold"><a title="product_name" href="#">product_name</a></p><div class="rating block ml-0 fs-12 pb-10"><sup class="fill-star"></sup> <strong>product_rating</strong>/5</div><p class="fs-12 c6"><strong>jobs_available</strong> Jobs available</p></div><div class="media-left"><a title="Lean Six Sigma Green Belt" href="#" class="home-banner-img"><img src="product_image" alt="..."></a></div></div></li>'
+            product_html = '<li><div class="media"><div class="media-body"> <p class="fs-15 bold"><a title="product_name" href="#">product_name</a></p><div class="rating block ml-0 fs-12 pb-10"><sup class="fill-star"></sup><strong>3.3</strong>/5</div><p class="fs-12 c6"><strong>jobs_available</strong> Jobs available</p></div><div class="media-left"><a title="Lean Six Sigma Green Belt" href="#" class="home-banner-img"><img src="product_image" alt="..."></a></div></div></li>'
             $.get(recommended_product_url, function(data){
               if(data.count){
                 for(i=0; i< data.results.length;i++) {
@@ -480,6 +499,17 @@
         })
         
     </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+           if(commonJs.getParameterByName('type') == 'autoEnrol'){
+               $('#enrol-now-button').trigger('click'); 
+            }
+            if(commonJs.getParameterByName('type') == 'autoCart'){
+               $('#add-to-cart').trigger('click');
+            } 
+        })
+        
+    </script>
   <script tyep="text/javascript">
    $(document).ready(function(){ 
         $(document).on( "click", '.ui-block-c', function(e){
@@ -494,6 +524,8 @@
   {% block zendesk %}
   {% endblock zendesk %}
 {% endif %}
+
+
 
 
 
