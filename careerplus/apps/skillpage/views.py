@@ -408,7 +408,7 @@ class UniversityPageView(DetailView):
             if product.pVrs:
                 product.pVrs = json.loads(product.pVrs)
             if product.pUncdl:
-                product.pUncdl = json.loads(product.pUncdl)
+                product.pUncdl = json.loads(product.pUncdl[0])
             if not float(product.pPfin): continue
             product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
 
