@@ -39,13 +39,25 @@
             <!-- header menu Icon Starts here -->
                 <div class="exec-header">
                     <div class="header-content">
-                        <h1 class="semi-bold">Search Engine Optimisation Master Training Course</h1>
+                        <h1 class="semi-bold">Executive daevelopment program in leadership</h1>
                         <div class="university-logo">
                             <img 
                                 src="{% static 'shinelearn/images/mobile/executive-course/university-logo.jpg' %}"/>
                         </div>
+                        <!-- Banner info band -->
+                        <div class="info-band">
+                            <span class="exe-icon-round-arrow"></span>
+                            <div class="slide-container">
+                                <ul class="info-slider">
+                                        <li>40% Projected Growth in global data generated each year.</li>
+                                        <li>92 % Fortune 500 companies will need to exploit Big Data by 2020.</li>
+                                        <li>2.5 Lac Projected Demand of Data Scientist in India by 2018.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Banner info band -->
                     </div><!-- /. header content -->
-                    
+
                     <!-- header menu Icon Starts here -->
                     <div class="main-menu w100fl">
                         <div class="pull-left">
@@ -63,25 +75,35 @@
             {% endblock header %}
 
             {% block container %}
-            <div class="content-box">
-                <div class="university-info">
+            <div class="content-box pt-0">
+                <div class="university-info row">
                     <ul>
                         <li>
-                            <span class="apply-execIcon">Apply before: <strong class="text-upper">29 Dec 2018</strong></span> 
+                            <span class="batch-execIcon">
+                                <span>starts:</span>  
+                                <strong class="text-upper">05 Jan 2019</strong>
+                            </span> 
                         </li>
                         <li>
-                            <span class="batch-execIcon">Batch starts: <strong class="text-upper">05 Jan 2019</strong></span> 
+                            <span class="duration-execIcon">
+                                <span>Duration:</span> 
+                                <strong class="text-upper">4 Months</strong>
+                            </span> 
                         </li>
                         <li>
-                            <span class="duration-execIcon">Duration: <strong class="text-upper">4 Months</strong></span> 
-                        </li>
-                        <li>
-                            <span class="price-execIcon">Price: <sup class="strike-through">&#8377; 7999</sup> <strong class="fs-24"> &#8377; 799</strong></span> 
+                            <span class="price-execIcon">
+                                <span>Price:</span>
+                                <strong class="fs-24 price">Rs. 90,000</strong>
+                            </span> 
                         </li>
                     </ul>
+                    <div class="text-center text-upper">
+                        <a href="#" class="btn btn-round-30 btn-slg btn-shadow btn-grOrange">Enroll Now</a>
+                    </div>
 
-                    <a href="#" class="btn btn-round-30 btn-lg btn-shadow btn-grOrange">Enroll Now</a>
-                    <p class="fs-12 pb-0 mt-15 weeked-batch">Weekend Batch: Saturday  9 to 11am & Sunday 10am to 12pm</p>
+                    <div class="download-brochure text-center mt-15">
+                        <a href="#"><i class="exe-icon-download"></i><strong>Download Brochure</strong></a>
+                    </div>
 
                 </div><!-- ./ university-info -->
 
@@ -161,7 +183,7 @@
                     <div class="white-box">
                         <h2><span><i class="execIcon-eligibility"></i></span>Eligibility criteria</h2>
                         <div class="content">
-                            <ul>
+                            <ul class="tick-list">
                                 <li>Any graduates with minimum 50% marks in graduation.</li>
                                 <li>Proficiency in English, spoken & written is mandatory.</li>
                                 <li>Working knowledge of Excel.</li>
@@ -171,6 +193,74 @@
                     </div><!-- /. white box-->
                 </div><!-- ./ Eligibility criteria -->
                 
+                <div class="you-may-like">
+                    <div class="container">
+                        <h2 class="pt-5">You may also like</h2>
+                        
+                        <div class="slide-container">
+                            <ul class="login-slider">
+                                <li>
+                                    <div class="media"> 
+                                        <div class="media-body">
+                                            <p class="fs-15 bold"><a title="Lean Six Sigma Green Belt" href="#">Lean Six Sigma Green Belt</a></p>
+                                            
+                                            <div class="rating block ml-0 fs-12 pb-10">
+                                                <sup class="fill-star"></sup>
+                                                <strong>3.3</strong>/5
+                                            </div><!-- end of star rating -->
+                                            <p class="fs-12 c6"><strong>233</strong> Jobs available</p>
+                                            
+                                        </div>
+                                        <div class="media-left">
+                                            <a title="Lean Six Sigma Green Belt" href="#" class="home-banner-img">
+                                                <img src="{% static 'shinelearn/images/mobile/common/course-logo1.png' %}" alt="...">
+                                            </a>
+                                        </div><!-- end of media body -->
+                                        </div><!-- end of media -->
+                                </li>
+                                <li>
+                                    <div class="media"> 
+                                        <div class="media-body">
+                                            <p class="fs-15 bold"><a title="Lean Six Sigma Green Belt" href="#">Lean Six Sigma Green Belt</a></p>
+                                            
+                                            <div class="rating block ml-0 fs-12 pb-10">
+                                                <sup class="fill-star"></sup>
+                                                <strong>3.3</strong>/5
+                                            </div><!-- end of star rating -->
+                                            <p class="fs-12 c6"><strong>233</strong> Jobs available</p>
+                                            
+                                        </div>
+                                        <div class="media-left">
+                                            <a title="Lean Six Sigma Green Belt" href="#" class="home-banner-img">
+                                                <img src="{% static 'shinelearn/images/mobile/common/course-logo2.png' %}" alt="...">
+                                            </a>
+                                        </div><!-- end of media body -->
+                                        </div><!-- end of media -->
+                                </li>
+                                <li>
+                                    <div class="media"> 
+                                        <div class="media-body">
+                                            <p class="fs-15 bold"><a title="Lean Six Sigma Green Belt" href="#">Lean Six Sigma Green Belt</a></p>
+                                            
+                                            <div class="rating block ml-0 fs-12 pb-10">
+                                                <sup class="fill-star"></sup>
+                                                <strong>3.3</strong>/5
+                                            </div><!-- end of star rating -->
+                                            <p class="fs-12 c6"><strong>233</strong> Jobs available</p>
+                                            
+                                        </div>
+                                        <div class="media-left">
+                                            <a title="Lean Six Sigma Green Belt" href="#" class="home-banner-img">
+                                                <img src="{% static 'shinelearn/images/mobile/common/course-logo3.png' %}" alt="...">
+                                            </a>
+                                        </div><!-- end of media body -->
+                                        </div><!-- end of media -->
+                                </li>
+                            </ul>
+                        </div><!-- end of slide-container -->
+                    </div><!-- end of content box -->
+                </div><!-- you may like --> 
+
                 <div class="container">
                     <div class="white-box">
                         <h2><span><i class="execIcon-faculty"></i></span>Faculty profile</h2>
@@ -244,26 +334,26 @@
                                 </li>
                             </ul>
                             <hr />
-                            <p class="subhead mb-15"><strong>Why Shine Learning?</strong></p>
+                            <p class="subhead mb-15"><strong>Other Benefits</strong></p>
 
-                            <ul class="who-attend">
-                                <li class="free-services">
+                            <ul class="tick-list">
+                                <li>
                                     <div>
                                         <h3>Free Services</h3>
                                         <p>Free Resume, Cover Letter Formats and Career Guidance Services.</p>
                                     </div>
                                 </li>
                                 
-                                <li class="global">
+                                <li>
                                     <div>
-                                        <h3>0% EMI</h3>
+                                        <h3>Global Education Providers</h3>
                                         <p class="pb-0">Choose from a list of global providers as per your requirement.</p>
                                     </div>
                                 </li>
                                 
-                                <li class="refernEarn">
+                                <li>
                                     <div>
-                                        <h3>Shine credits</h3>
+                                        <h3>Refer and Earn</h3>
                                         <p class="pb-0">Refer your friend and get an Amazon Voucher worth Rs. 2000*</p>
                                     </div>
                                 </li>
@@ -340,12 +430,14 @@
                     <div class="white-box">
                         <h2><span><i class="execIcon-assessment"></i></span>Assessment & Evaluation</h2>
                         <div class="content">
-                            <ul class="arrow-bullets">
+                            <ul class="arrow-tick">
                                 <li>A minimum of 70% attendance to the LIVE lectures is a prerequisite for the successful completion of this course. There are periodic evaluations built in throughout the duration of the course. </li>
                                 <li>These maybe in the form of a quiz, assignment, case studies or other objective/subjective assessments. The evaluations are designed ensure continuous student engagement with the course and encourage learning. Students who successfully clear the same along with the requisite attendance criteria will be awarded a Certificate from SPJIMR as appropriate.</li>
                             </ul>
 
-                            <div class="sample-certificate mt-20">
+                            <p class="mt-15"><a href="#" class="btn btn-outline btn-round-30 btn-slg">View sample certificate</a></p>
+
+                            <!-- <div class="sample-certificate mt-20">
                                 <div class="media">
                                     <div class="media-left">
                                         <img class="media-object" src="{% static 'shinelearn/images/mobile/executive-course/certificate.jpg'%}" alt="...">
@@ -355,8 +447,7 @@
                                         <a href="#" class="btn btn-outline btn-round-30 fs-11">View certificate</a>
                                     </div>
                                 </div>
-                                
-                            </div>
+                            </div> -->
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ Assessment & Evaluation -->
@@ -370,9 +461,7 @@
                                 <img src="{% static 'shinelearn/images/mobile/executive-course/institute.jpg'%}" class="img-responsive"/>
                             </div>
 
-                            <p>XLRI is one of India’s leading management school based in Jamshedpur, Jharkhand, India. Established in 1949 as the Xavier Labor Relations Institute, by Fr. Quinn Enright, XLRI is acknowledged as India’s oldest business management school.</p>
-
-                            <p>XLRI with its single vision of Magis, i.e., pursuit of excellence, focuses on three areas: academic excellence, personal values and social concern. XLRI spares no effort to make its curriculum world-class and deliver it in the most effective manner. It constantly scans the developments in business and in society and tries to pro-act to meet the challenges. Its world-class faculty with its commitment and deep sense of service delivers the curriculum very effectively... <a href="#">read more</a></p>
+                            <p>XLRI is one of India’s leading management school based in Jamshedpur, Jharkhand, India. Established in 1949 as the Xavier Labor Relations Institute, by Fr. Quinn Enright, XLRI is acknowledged as India’s oldest business management school. <a href="#">read more</a></p>
 
                             <p class="mt-15 text-center"><a href="#" class="btn btn-outline btn-round-30 btn-slg">View all courses</a></p>
                         </div>
@@ -547,75 +636,7 @@
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ FAQ -->
-            </div><!-- /. content-box --> 
-
-            <div class="you-may-like">
-                <div class="container">
-                    <h2 class="pt-5">You may also like</h2>
-                    
-                    <div class="slide-container">
-                        <ul class="login-slider">
-                            <li>
-                                <div class="media"> 
-                                    <div class="media-body">
-                                        <p class="fs-15 bold"><a title="Lean Six Sigma Green Belt" href="#">Lean Six Sigma Green Belt</a></p>
-                                        
-                                        <div class="rating block ml-0 fs-12 pb-10">
-                                            <sup class="fill-star"></sup>
-                                            <strong>3.3</strong>/5
-                                        </div><!-- end of star rating -->
-                                        <p class="fs-12 c6"><strong>233</strong> Jobs available</p>
-                                        
-                                    </div>
-                                    <div class="media-left">
-                                        <a title="Lean Six Sigma Green Belt" href="#" class="home-banner-img">
-                                            <img src="{% static 'shinelearn/images/mobile/common/course-logo1.png' %}" alt="...">
-                                        </a>
-                                    </div><!-- end of media body -->
-                                    </div><!-- end of media -->
-                            </li>
-                            <li>
-                                <div class="media"> 
-                                    <div class="media-body">
-                                        <p class="fs-15 bold"><a title="Lean Six Sigma Green Belt" href="#">Lean Six Sigma Green Belt</a></p>
-                                        
-                                        <div class="rating block ml-0 fs-12 pb-10">
-                                            <sup class="fill-star"></sup>
-                                            <strong>3.3</strong>/5
-                                        </div><!-- end of star rating -->
-                                        <p class="fs-12 c6"><strong>233</strong> Jobs available</p>
-                                        
-                                    </div>
-                                    <div class="media-left">
-                                        <a title="Lean Six Sigma Green Belt" href="#" class="home-banner-img">
-                                            <img src="{% static 'shinelearn/images/mobile/common/course-logo2.png' %}" alt="...">
-                                        </a>
-                                    </div><!-- end of media body -->
-                                    </div><!-- end of media -->
-                            </li>
-                            <li>
-                                <div class="media"> 
-                                    <div class="media-body">
-                                        <p class="fs-15 bold"><a title="Lean Six Sigma Green Belt" href="#">Lean Six Sigma Green Belt</a></p>
-                                        
-                                        <div class="rating block ml-0 fs-12 pb-10">
-                                            <sup class="fill-star"></sup>
-                                            <strong>3.3</strong>/5
-                                        </div><!-- end of star rating -->
-                                        <p class="fs-12 c6"><strong>233</strong> Jobs available</p>
-                                        
-                                    </div>
-                                    <div class="media-left">
-                                        <a title="Lean Six Sigma Green Belt" href="#" class="home-banner-img">
-                                            <img src="{% static 'shinelearn/images/mobile/common/course-logo3.png' %}" alt="...">
-                                        </a>
-                                    </div><!-- end of media body -->
-                                    </div><!-- end of media -->
-                            </li>
-                        </ul>
-                    </div><!-- end of slide-container -->
-                </div><!-- end of content box -->
-            </div><!-- you may like -->  
+            </div><!-- /. content-box -->  
 
             <div class="topSticky-enrollNow" id="enrollNow">
                 <div class="content-box">

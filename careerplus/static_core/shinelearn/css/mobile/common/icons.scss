@@ -606,3 +606,13 @@
 .date-icon::before  {
   @include icon-block (21px, 21px, -260px -86px);
 }
+
+.exe-icon-round-arrow {
+  @include icon-block (35px, 35px, -461px -37px);
+}
+
+.exe-icon-download {
+  @include icon-inblock (16px, 18px, -535px 0);
+  vertical-align: middle;
+  margin-right: 10px;
+}
