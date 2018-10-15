@@ -167,7 +167,7 @@ class DashboardInfo(object):
             request = self.request
         if candidate_id and not request.session.get('resume_id', None):
             res = ShineCandidateDetail().get_candidate_detail(email=None, shine_id=candidate_id)
-            resumes = res['resumes']
+            resumes = res.get('resumes', [])
             default_resumes = [resume for resume in resumes if resume['is_default']]
             if default_resumes:
                 request.session.update({

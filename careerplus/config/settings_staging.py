@@ -271,6 +271,8 @@ MEDIA_URL = 'https://{}.storage.googleapis.com/l/m/'.format(GS_BUCKET_NAME)
 VISUAL_RESUME_PRODUCT_LIST = [305, 306, 307, 308, 309]
 COVER_LETTER_PRODUCT_LIST = [83, ]
 SECOND_REGULAR_RESUME_PRODUCT_LIST = [126, 127, 128, 129, 130]
+# new flow product
+PORTFOLIO_PRODUCT_LIST = [2632, ]
 
 # product list for linkedin resume services
 LINKEDIN_RESUME_FREE = [2684, 2685]
@@ -312,6 +314,24 @@ for conn, attrs in MONGO_SETTINGS.items():
     except Exception as e:
         logging.getLogger('error_log').error(" unable to connect to mongo %s" %repr(e))
         continue
+
+
+# test settings
+class DisableMigrations(object):
+
+    def __contains__(self, item):
+        return True
+
+    def __getitem__(self, item):
+        return None
+
+
+TESTS_IN_PROGRESS = False
+if 'test' in sys.argv[1:]:
+    DEBUG = False
+    TEMPLATE_DEBUG = False
+    TESTS_IN_PROGRESS = True
+    MIGRATION_MODULES = DisableMigrations()
 
 
 try:
