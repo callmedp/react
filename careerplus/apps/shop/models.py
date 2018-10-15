@@ -11,6 +11,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
+from django.core.cache import cache
 from django.db.models.signals import post_save
 
 from ckeditor.fields import RichTextField
@@ -175,6 +176,9 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
             if self.description:
                 if not self.meta_desc:
                     self.meta_desc = self.get_meta_desc(self.description.strip())
+
+            unique_key = 'cat_absolute_url_' + str(self.pk)
+            cache.delete(unique_key)
                 
         super(Category, self).save(*args, **kwargs)
 
@@ -199,25 +203,33 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return self.get_absolute_url()
 
     def get_absolute_url(self):
+        unique_key = 'cat_absolute_url_' + str(self.pk)
+        cat_url = cache.get(unique_key)
+        if cat_url:
+            return cat_url
+        cat_url = ''
         if self.type_level in [3, 4]:
             if self.is_skill:
                 parent = self.get_parent()[0].slug if self.get_parent() else None
-                return reverse('skillpage:skill-page-listing',
+                cat_url = reverse('skillpage:skill-page-listing',
                     kwargs={'fa_slug': parent,'skill_slug': self.slug, 'pk': self.pk})
             elif self.is_service:
-                return "/services/{}/{}/".format(self.slug,self.pk)
+                cat_url = "/services/{}/{}/".format(self.slug,self.pk)
             elif self.is_university:
                 parent = self.get_parent()[0].slug if self.get_parent() else None
-                return reverse('university-page',
+                cat_url = reverse('university-page',
                     kwargs={'fa_slug': parent, 'university_slug': self.slug, 'pk': self.pk})
             elif self.type_level == 3:
-                return reverse('skillpage:func_area_results',
-                    kwargs={'fa_slug': self.slug, 'pk': self.pk})    
-            return ''
+                cat_url = reverse('skillpage:func_area_results',
+                    kwargs={'fa_slug': self.slug, 'pk': self.pk})
         elif self.type_level == 2:
-            return reverse('skillpage:func_area_results',
+            cat_url = reverse('skillpage:func_area_results',
                 kwargs={'fa_slug': self.slug, 'pk': self.pk})
-        return ''
+        if cat_url:
+            cache.set(
+                unique_key, cat_url, 86400)
+
+        return cat_url
 
     def add_relationship(self, category):
         relationship, created = CategoryRelationship.objects.get_or_create(
@@ -1044,6 +1056,8 @@ class Product(AbstractProduct, ModelMeta):
                     var.vendor = self.vendor
                     var.save()
             self.title = self.get_title()
+            unique_key = 'prd_absolute_url_' + str(self.pk)
+            cache.delete(unique_key)
         super(Product, self).save(*args, **kwargs)
         if getattr(self, 'attr', None):
             self.attr.save()
@@ -1168,6 +1182,11 @@ class Product(AbstractProduct, ModelMeta):
         return self.get_full_url(self.get_absolute_url()) if not relative else self.get_absolute_url()
 
     def get_absolute_url(self, prd_slug=None, cat_slug=None):
+        unique_key = 'prd_absolute_url_' + str(self.pk)
+        prd_url = cache.get(unique_key)
+        if prd_url:
+            return prd_url
+
         if not cat_slug:
             cat_slug = self.category_main
             if cat_slug:
@@ -1175,11 +1194,13 @@ class Product(AbstractProduct, ModelMeta):
         cat_slug = cat_slug.slug if cat_slug else None
         if cat_slug:
             if self.is_course:
-                return reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+                prd_url = reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
             else:
-                return reverse('service-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+                prd_url = reverse('service-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
         else:
-            return reverse('homepage')
+            prd_url = reverse('homepage')
+        cache.set(unique_key, prd_url, 86400)
+        return prd_url
         # else self.is_writing:
         #     return reverse('resume-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
         # elif self.is_service:

@@ -24,19 +24,6 @@ class TestimonialModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TestimonialModelForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
-        # choice_dict = dict(PAGECHOICES)
-        # choices = [
-        #     (0, '---Select Page---'),
-        #     (UNIVERSITY_PAGE, choice_dict.get(
-        #         UNIVERSITY_PAGE, 'University Page'))]
-
-        # self.fields['page'].widget.attrs['class'] = form_class
-        # self.fields['page'].label = "Page type"
-        # self.fields['page'].choices = choices
-        # self.fields['page'].widget.attrs['required'] = True
-        # self.fields['page'].widget.attrs['maxlength'] = 30
-        # self.fields['page'].widget.attrs['data-parsley-trigger'] = 'change'
-        # self.fields['page'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
 
         self.fields['user_name'].widget.attrs['class'] = form_class
         self.fields['user_name'].widget.attrs['required'] = True
@@ -95,12 +82,6 @@ class TestimonialModelForm(forms.ModelForm):
             'designation', 'company', 'title', 'review',
             'priority', 'is_active')
 
-    # def clean_page(self):
-    #     page = int(self.cleaned_data.get('page', '0'))
-    #     if not page:
-    #         raise forms.ValidationError(
-    #             "This field is required.")
-    #     return page
 
     def clean_user_name(self):
         user_name = self.cleaned_data.get('user_name', '').strip()

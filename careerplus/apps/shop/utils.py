@@ -881,6 +881,18 @@ class CategoryValidation(object):
                             request,
                             "University Description is required")
                         return test_pass
+                    if not category.image:
+                        messages.error(
+                            request,
+                            "University Image is required")
+                        return test_pass
+
+                    if not category.icon:
+                        messages.error(
+                            request,
+                            "University Icon is required")
+                        return test_pass
+
                     # if not category.check_products():
                     #     messages.error(request, "University Products is required")
                     #     return test_pass

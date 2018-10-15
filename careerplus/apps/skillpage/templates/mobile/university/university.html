@@ -52,7 +52,7 @@
                     </div><!-- header menu Icon ends here -->
                     <div class="overlay"></div>
                     <div class="banner-image" 
-                        style="background-image:url({{category_obj.banner.url}})">
+                        style="background-image:url({% if category_obj.banner %}{{category_obj.banner.url}}{% else %}{% static 'shinelearn/images/executive/university-pic.jpg' %}{% endif %})">
                     </div>
                 {% block header_title %}{% endblock header_title %}
                 </div><!-- header ends here -->
@@ -68,7 +68,12 @@
                         <div class="content-box mt-20 login-form">
                         <form id="id-request-callback-form" role="form">{% csrf_token %}
                             <div class="form-group">
-                                <input type="text" class="form-control" name="name" placeholder="Name" value="{{request.session.full_name|safe}}">
+                                <input type="text" class="form-control" name="name" placeholder="Name*" value="{{request.session.full_name|safe}}">
+                                <span class="error-txt"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="email" placeholder="Email*">
                                 <span class="error-txt"></span>
                             </div>
                             
@@ -80,15 +85,12 @@
                                     {% endfor %}
                                     </select>
                                 </div>
-                                <input class="form-control pull-left number" name="number" type="text" placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no|safe}}">
+                                <input class="form-control pull-left number" name="number" type="text" placeholder="Mobile*" maxlength="15" value="{{request.session.mobile_no|safe}}">
                                 <span class="error-txt" style="bottom:-25px; margin-left:70px"></span>
                                 <div class="clearfix"></div>
                             </div>
 
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="email" placeholder="Email">
-                                <span class="error-txt"></span>
-                            </div>
+                            
                             
                             <div class="form-group">
                                 <select class="form-control" name="product">
@@ -134,11 +136,8 @@
                                     {% if fac %}
                                     <li>
                                         <span class="faculty-image">
-                                            {% if fac.image %}
                                             <img 
-                                            src="{{fac.image.url}}" alt="{{fac.image_alt}}"/>
-                                            {% else %}
-                                            {% endif %}
+                                            src="{% if fac.image %}{{fac.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" alt="{{fac.image_alt}}"/>
                                         </span>
                                         <h3><a href="{{fac.get_absolute_url}}">{{fac.name}}</a></h3>
                                         <p class="desigation mt-15">{{fac.designation}} – {{fac.company}}
@@ -165,10 +164,8 @@
 
                         <div class="college-image-about">
                             <div class="university-logo">
-                                {% if category_obj.icon %}
                                 <img           
                                 src="{{category_obj.icon.url}}" alt="logo"/>
-                                {% endif %}
                             </div>
 
                             <div class="image-wrap">
@@ -190,7 +187,7 @@
                                     <img src="{{category_obj.icon.url}}"/></div>
                                 <div class="principle-image">
                                     <img 
-                                        src="{{principal.image.url}}" alt="{{principal.image_alt}}" class="img-responsive" 
+                                        src="{% if principal.image %}{{principal.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" alt="{{principal.image_alt}}" class="img-responsive" 
                                     />
                                 </div>
                             </div><!-- /. principal-image-wrap -->
@@ -219,7 +216,7 @@
                                     <div class="media">
                                         <div class="media-left">
                                             <span class="testimonial-image">
-                                             <img class="media-object" src="{{testimonial.image.url}}" alt="{{testimonial.user_name}}">
+                                             <img class="media-object" src="{% if testimonial.image %}{{testimonial.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" alt="{{testimonial.user_name}}">
                                             </span>
                                         </div>
                                         <div class="media-body">
