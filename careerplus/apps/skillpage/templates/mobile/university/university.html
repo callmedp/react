@@ -114,11 +114,13 @@
 
 
                 <!-- Courses offered Start Here -->
+                {% if products %}
                 <div class="courses-offered container mt-15" id="id-university-course-list">
                     <h2>Courses offered</h2>
                     {% include "university/partials/university_courses.html" %}
 
                 </div><!-- Courses offered Ends Here -->
+                {% endif %}
 
                     {% if faculty %}
                     <div class="container heading-override">

@@ -835,10 +835,10 @@ class UniversityCourseLoadMoreView(TemplateView):
 
         standalone_products = SQS().exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(
-            pCtg=self.cat_obj.pk)
-        standalone_products = SQS().exclude(
-            id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(
-            pPc='course')[: 13]
+            pCtg=self.cat_obj.pk, pTF=14)
+        # standalone_products = SQS().exclude(
+        #     id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(
+        #     pPc='course')[: 13]
         context['products'] = self._get_paginated_products(
             standalone_products, self.page)
         context.update({
