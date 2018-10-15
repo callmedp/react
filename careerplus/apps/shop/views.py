@@ -737,11 +737,12 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     def get(self, request, **kwargs):
         pk = self.kwargs.get('pk')
         self.key = 'detail_product_'+pk
-        cache_key = cache.get(self.key)
-        if cache_key:
-            self.product_obj = cache_key.get('product_obj','')
-            self.sqs = cache_key.get('sqs','')
-            self.category = cache_key.get('category','')
+        cache_data_maping = cache.get(self.key)
+
+        if cache_data_maping:
+            self.product_obj = cache_data_maping.get('product_obj','')
+            self.sqs = cache_data_maping.get('sqs','')
+            self.category = cache_data_maping.get('category','')
         else:
             self.product_obj = Product.browsable.filter(pk=pk).first()
             if not self.product_obj:
