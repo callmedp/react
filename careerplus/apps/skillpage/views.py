@@ -393,8 +393,8 @@ class UniversityPageView(DetailView):
         products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).\
             filter(pCtg=self.object.pk, pTF=14)
 
-        products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).\
-            filter(pPc='course')[: 13]
+        # products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).\
+        #     filter(pPc='course')[: 13]
         return products
 
     def _get_paginated_products(self, products, page=1):
@@ -517,7 +517,7 @@ class UniversityFacultyView(DetailView):
                 product__is_indexable=True, product__active=True,
                 active=True,
                 product__type_product__in=[0, 1, 3, 5],
-                product__type_flow=14).order_by('display_order')
+                product__type_flow=14, product__is_indexed=True).order_by('display_order')
             # products = products.select_related('product')
         # prod_page = Paginator(products, self.PRODUCT_PAGE_SIZE)
 
