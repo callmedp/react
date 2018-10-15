@@ -48,6 +48,8 @@ $(document).ready(function() {
 		infinite: false
 	});
 
+
+
 	$(".blog-slider").slick({
 		autoplay:false,
 		autoplaySpeed:3000,
@@ -87,6 +89,7 @@ $(document).ready(function() {
 		slidesToScroll: 1,
 		infinite: false
 	});
+
 
 	$(".trending-slide").slick({
 		autoplay:false,
@@ -164,6 +167,12 @@ $(document).ready(function() {
   		slidesToScroll: 1
 	});
 	
+	$(".info-slider").slick({
+		autoplay:true,
+		arrows: false,
+		dots: false,
+		infinite: true
+	});
 
 
 
