@@ -105,7 +105,13 @@
                   <div class="col-sm-3 exe-enrol-now">
                     <strike>Rs.{{ selected_var.fake_inr_price|floatformat }}</strike>
                     <strong>Rs.{{ sqs.pPinb|floatformat }}</strong>
-                    <a class="exe-button-enrol mt-10" href="#">Enroll Now</a>
+
+                     {% if not request.session.candidate_id and not request.session.university_course %}
+                        <a class="exe-button-enrol mt-10" id="enroll_now"  data-toggle="modal" data-target=".bs-example-modal-sm" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll Now</a>
+                    {% else %}
+                        <a role="button" class="exe-button-enrol mt-10" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                    {% endif %}
+
                   </div>
               </div>
 
@@ -642,7 +648,13 @@
 
                     <!-- Download Brochure -->
                     <section class="exe-box mb-30">
-                        <a href="{{ university_detail.brochure }}" class="exe-download-brochure" download><figure class="exe-icon-brochure"></figure>Download Brochure</a>
+                    {% if not request.session.candidate_id and not request.session.university_course %}
+                       <a href="{{ university_detail.brochure }}" class="exe-download-brochure" id="download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><figure class="exe-icon-brochure"></figure>Download Brochure</a>
+                    {% else %}
+                     <a href="{{ university_detail.brochure }}" class="exe-download-brochure" id="download_broucher"><figure class="exe-icon-brochure"></figure>Download Brochure</a>
+                    {% endif %}
+
+              
                     </section>
 
                     <!-- Request a call -->
@@ -655,23 +667,23 @@
                       </div>
                       <article class="col-sm-12 pad-25 exe-request-call">
                       <input type="hidden" id="skilllist" value="{{sqs.pSkilln|join:""}}">
-                        <form  id="lead" method="POST" action="{% url 'crmapi:lead-management' %}">
+                        <form  id="lead1" method="POST" action="{% url 'crmapi:lead-management' %}">
                           {% csrf_token %}
                           <div class="form-group">
-                            <input name="name" type="text" class="form-control" placeholder="Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}" >
+                            <input name="name" id="name1" type="text" class="form-control" placeholder="Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}" >
                           </div>
                           <div class="form-group">
-                            <input id="email" name="email" type="text" class="form-control" value="{{request.session.email}}" placeholder="Email">
+                            <input id="email1" name="email" type="text" class="form-control" value="{{request.session.email}}" placeholder="Email">
                           </div>
                           <div class="form-group">
-                            <input id="mobile" name="number" maxlength="10" minlength="10" type="text" class="form-control" placeholder="Mobile" value="{{request.session.mobile_no}}">
+                            <input id="mobile1" name="number" maxlength="10" minlength="10" type="text" class="form-control" placeholder="Mobile" value="{{request.session.mobile_no}}">
                           </div>
-                            <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+                            <input type="hidden" name="product" value="{{ sqs.id }}">
 
                             <input type="hidden" name="prd" value="{{ prd_H1 }}">
 
                             <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
-
+                            <input type="hidden" name="uc" value="1">
                             <input type="hidden" name="lsource" value="{{ lead_source }}">
                           <button type="submit" class="exe-button-submit mt-10">Submit</button>
                         </form>
@@ -686,6 +698,91 @@
             </div>
       </div>
       </section>
+
+      <!-- Modal - Want help with this course? -->
+      <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content exe-modal-form">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body"><h2 class="modal-title">Want help with this course?</h2>
+              <strong>Let our learning specialists guide you</strong>
+              <form  id="lead2" method="POST" action="{% url 'crmapi:lead-management' %}">
+                          {% csrf_token %}
+                <div class="form-group">
+                  <input type="text" class="form-control" id="exampleInputName2"  name="name" placeholder="Name">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="exampleInputEmail2" name='email' placeholder="Email">
+                </div>
+                <div class="form-group">
+                  <div class="country-code">
+                    <div class="custom-select">
+                      <select class="form-control" name="country_code">
+                        <option>+91</option>
+                        <option>+911</option>
+                      </select>
+                    </div>
+                    <input type="text" class="form-control" id="exampleInputPhone2" placeholder="Phone Number">
+                      <input type="hidden" name="product" value="{{ sqs.id }}">
+
+                      <input type="hidden" name="prd" value="{{ prd_H1 }}">
+
+                      <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+                      <input type="hidden" name="lsource" value="{{ lead_source }}">
+
+                      <input type="hidden" name="uc" value="1">
+                  </div>
+                </div>
+                <button type="submit" class="exe-button-callback">Enroll Now</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="modal fade bs-example-modal-sm-download" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content exe-modal-form">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body"><h2 class="modal-title">Want help with this course?</h2>
+              <strong>Let our learning specialists guide you</strong>
+              <form  id="lead3" method="POST" action="{% url 'crmapi:lead-management' %}">
+                          {% csrf_token %}
+                <div class="form-group">
+                  <input type="text" class="form-control" id="exampleInputName3" placeholder="Name" name="name">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Email" name="email">
+                </div>
+                <div class="form-group">
+                  <div class="country-code">
+                    <div class="custom-select">
+                      <select class="form-control" name="country_code">
+                        <option>+91</option>
+                        <option>+911</option>
+                      </select>
+                    </div>
+                    <input type="text" class="form-control" id="exampleInputPhone" placeholder="Phone Number">
+                      <input type="hidden" name="product" value="{{ sqs.id }}">
+
+                      <input type="hidden" name="prd" value="{{ prd_H1 }}">
+
+                      <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+                      <input type="hidden" name="lsource" value="{{ lead_source }}">
+                      <input type="hidden" name="uc" value="1">
+                  </div>
+                </div>
+                <button type="submit" class="exe-button-callback">Download Broucher</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- main parent2 section end -->      
     {% endblock section2 %}
 
@@ -750,130 +847,100 @@
         return this.optional(element) || /^[a-z\s]*$/i.test(value);
     }, "Letters only please");
 
-    $.validator.addMethod("defaultInvalid", function (value, element) {
-        return !(element.value == element.defaultValue);
-    }, "This field is required.");
-        $("#lead").validate({
-            submitHandler:function (form) {
-                var action = $(form).attr('action');
-                $.post(action, $(form).serialize(), function (data) {
-                    if (data && data['status']){
-                       window.location.href ='/thankyou-for-query';
+$("#download_broucher").click(function(){
+  var href = $('#download_broucher').attr('href');
+  $("#download_broucher").attr('download',href)
+  {% if not request.session.university_course  %}
+  $("#lead1").submit();
+  {% endif %}
+});
+
+$("#lead1, #lead2, #lead3").each(function() {
+        $(this).validate({
+          submitHandler:function (form) {
+              var action = $(form).attr('action');
+              $.post(action, $(form).serialize(), function (data) {
+                  if (data && data['status']){
+                    form_id = $(form).attr('id')
+                    // lead2 form for enroll now , add id to add-to-cart and trigger click
+                    // lead3 form for download broucher, remove modal on  lcick from enroll now
+                    // and download broucher button.
+                    // lead1 form for form on detail page.
+                     if(form_id == 'lead2'){
+                      $("#enroll_now").attr('id','add-to-cart')
+                      $("#add-to-cart").trigger('click')
+                      }
+                      else if (form_id == 'lead3')
+                      {
+
+                        $(".bs-example-modal-sm-download").modal('hide')
+                        $("#download_broucher").removeAttr('data-toggle').removeAttr('data-target')
+                        var href = $('#download_broucher').attr('href');
+                        $("#download_broucher").attr('download',href)
+                        document.getElementById('download_broucher').click();
+                        $("#enroll_now").attr('id','add-to-cart')
+                        $("#add-to-cart").removeAttr('data-toggle').removeAttr('data-target')
                         return false;
-                    }
-                }, 'json');
-            },
-            rules:{
-                number:{
-                    required:true,
-                    number:true,
-                    minlength:10,
-                    maxlength:20,
-                },
-                email:{
-                    email:true,
-                    required:true,
-
-                },
-                name:{
-                    required:true,
-                    lettersonly:true,
-
-                },
-                // msg:{
-                //     required:true,
-                //     maxlength:500
-                // }
-            },
-            messages:{
-                number:{
-                   required:"Field is required",
-                   number: "Please enter valid number only"
-                },
-                email:{
-                    required:"Field is required"
-                },
-                name:{
-                    required:"Field is required"
-                },
-                // msg:{
-                //     required:"Field is required",
-                //     maxlength:"No more than 500 characters."
-
-                // }
-            },
-            highlight:function(element, errorClass) {
-              $(element).closest('.form-group').addClass('error');
-            },
-            unhighlight:function(element, errorClass) {
-              $(element).closest('.form-group').removeClass('error');
-              $(element).siblings('.js-error').html("");
-            },
-            errorPlacement: function(error, element){
-              $(element).siblings('.js-error').html(error.text());
-            } 
-          });
-
-          $("#lead_mobile").validate({
-            submitHandler:function (form) {
-                var action = $(form).attr('action');
-                $.post(action, $(form).serialize(), function (data) {
-                    if (data && data['status']){
-                       window.location.href ='/thankyou-for-query';
+                      }
+                      else {
+                        alert('Your Query Submitted Successfully.');
+                        window.location.reload();
                         return false;
-                    }
-                }, 'json');
-            },
-            rules:{
-                number:{
-                    required:true,
-                    number:true,
-                    minlength:10,
-                    maxlength:20,
-                },
-                email:{
-                    email:true,
-                    required:true,
+                      }
+                  }
+              }, 'json');
+          },
+          rules:{
+              number:{
+                  required:true,
+                  number:true,
+                  minlength:10,
+                  maxlength:20,
+              },
+              email:{
+                  email:true,
+                  required:true,
 
-                },
-                name:{
-                    required:true,
-                    lettersonly:true,
+              },
+              name:{
+                  required:true,
+                  lettersonly:true,
 
-                },
-                // msg:{
-                //     required:true,
-                //     maxlength:500
-                // }
-            },
-            messages:{
-                number:{
-                   required:"Field is required",
-                   number: "Please enter valid number only"
-                },
-                email:{
-                    required:"Field is required"
-                },
-                name:{
-                    required:"Field is required"
-                },
-                // msg:{
-                //     required:"Field is required",
-                //     maxlength:"No more than 500 characters."
+              },
+              // msg:{
+              //     required:true,
+              //     maxlength:500
+              // }
+          },
+          messages:{
+              number:{
+                 required:"Field is required",
+                 number: "Please enter valid number only"
+              },
+              email:{
+                  required:"Field is required"
+              },
+              name:{
+                  required:"Field is required"
+              },
+              // msg:{
+              //     required:"Field is required",
+              //     maxlength:"No more than 500 characters."
 
-                // }
-            },
-            highlight:function(element, errorClass) {
-              $(element).closest('.form-group').addClass('error');
-            },
-            unhighlight:function(element, errorClass) {
-              $(element).closest('.form-group').removeClass('error');
-              $(element).siblings('.js-error').html("");
-            },
-            errorPlacement: function(error, element){
-              $(element).siblings('.js-error').html(error.text());
-            } 
-          });
+              // }
+          },
+          highlight:function(element, errorClass) {
+            $(element).closest('.form-group').addClass('error');
+          },
+          unhighlight:function(element, errorClass) {
+            $(element).closest('.form-group').removeClass('error');
+            $(element).siblings('.js-error').html("");
+          },
+          errorPlacement: function(error, element){
+            $(element).siblings('.js-error').html(error.text());
+          } 
+        });
+      });
 
         </script>
     {% endcompress %}
