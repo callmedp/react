@@ -48,6 +48,7 @@ class LeadManagement(View):
         created = False
         try:
             email = request.POST.get('email', '')
+            university_course = request.POST.get('uc', 0)
             mobile = request.POST.get('number', '')
             name = request.POST.get('name', '')
             msg = request.POST.get('msg', '')
@@ -95,6 +96,9 @@ class LeadManagement(View):
             if not campaign_slug:
                 slug_source = dict(DEFAULT_SLUG_SOURCE)
                 campaign_slug = slug_source.get(int(lead_source))
+
+            if university_course:
+                request.session['university_course'] = True
 
             lead = UserQuries.objects.create(
                 name=name,

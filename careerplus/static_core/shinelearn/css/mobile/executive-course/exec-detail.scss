@@ -40,25 +40,6 @@
     }
 
     .acc_content {
-        ul {
-            li {
-                position: relative;
-                padding-left: 15px;
-                margin-bottom: 15px;
-                list-style: none;
-        
-                &::before {
-                    content: '';
-                    @include icon-block (5px, 7px, -437px -9px);
-                    background-image: url($executive-sprite);
-                    background-repeat: no-repeat;
-                    position: absolute;
-                    left: 0;
-                    top: 7px;
-                }
-            }
-        }
-
         ol {
             padding-left: 15px;
             margin: 15px 0;
@@ -69,9 +50,29 @@
                 list-style-type: decimal;
             }
         }
+    }
 
+    .arrow-tick {
+        li {
+            position: relative;
+            padding-left: 15px;
+            margin-bottom: 15px;
+            list-style: none;
+    
+            &::before {
+                content: '';
+                @include icon-block (5px, 7px, -437px -9px);
+                background-image: url($executive-sprite);
+                background-repeat: no-repeat;
+                position: absolute;
+                left: 0;
+                top: 7px;
+            }
+        }
     }
 }
+
+
 
 .exec-header {
     background-color: transparent;
@@ -87,15 +88,6 @@
         top: 0;
     }
 
-    .overlay {
-        z-index: 1;;
-        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.39+0,0.8+100 */
-        background: -moz-linear-gradient(top, rgba(0,0,0,0.39) 0%, rgba(0,0,0,0.8) 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top, rgba(0,0,0,0.39) 0%,rgba(0,0,0,0.8) 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom, rgba(0,0,0,0.39) 0%,rgba(0,0,0,0.8) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#63000000', endColorstr='#cc000000',GradientType=0 ); /* IE6-9 */
-    }
-
     img {
         width: 100%;
         height: auto;
@@ -105,23 +97,55 @@
 
     .header-content {
         position: absolute;
-        left: 15px;
-        right: 15px;
+        width: 100%;
+        left: 0;
         z-index: 2;
-        bottom: 20px;
 
         h1 {
             line-height: 30px;
+            font-size: $font-size-lg + .25;
+            padding-left: 15px;
         }
+    }
+
+    .info-band {
+        background-color: rgba(0, 0, 0, 0.6);
+        height: 65px;
+        margin-top: 30px;
+        position: relative;
+        padding-left: 65px;
+        color: $txt-white;
+
+        .slide-container {
+            height: 100%;
+        }
+
+        span {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+        }
+
+        ul {
+            li {
+                display: flex;
+                align-items: center;
+                height: 65px;
+                padding-right: 15px;
+            }
+        }
+
+
     }
 }
 
 .university-logo {
     @include border-radius(4px);
-    border-bottom: 3px solid $yellow;
+    border-bottom: 3px solid $blue;
     background-color: $bg-white;
     width: 45%;
     padding: 15px;
+    margin-left: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -133,14 +157,14 @@
 }
 
 .university-info {
-    @include border-radius(4px);
-    background-color: $blue;
+    background-color: lighten($blue, 33.3%);
     color: $txt-white;
     padding: 20px;
-    margin-bottom: 10px;
 
     ul {
         margin-bottom: 20px;
+        border-bottom: 1px solid $border-grey-c1;
+        padding-bottom: 20px;
     }
 
     li {
@@ -151,12 +175,17 @@
         }
 
         span {
-            color: lighten($blue, 20%);
+            color: $bg-grey-777;
             font-size: $font-size - 1;
             &::before {
                 vertical-align: middle;
                 content: '';
-                margin-right: 10px;
+                margin-right: 5px;
+            }
+
+            span {
+                width: 85px;
+                display: inline-block;
             }
 
             sup {
@@ -165,9 +194,13 @@
             }
     
             strong {
-                color: $txt-white;
+                color: $txt-grey-333;
                 font-size: $font-size + 2;
                 vertical-align: middle;
+
+                &.price {
+                    color: $blue;
+                }
             }
         }
     }   
@@ -300,32 +333,28 @@
     }
 }
 
-.eligibility {
-    ul {
-        li {
-            font-size: 0.875rem;
-            position: relative;
-            padding-left: 25px;
-            margin-bottom: 15px;
-    
-            &:last-child {
-                margin-bottom: 0;
-            }
-    
-            &::before {
-                content: '';
-                @include icon-block (17px, 17px, -488px -4px);
-                background-image: url($executive-sprite);
-                background-repeat: no-repeat;
-                position: absolute;
-                left: 0;
-                top: 3px;
-            }
+.tick-list {
+    li {
+        font-size: 0.875rem;
+        position: relative;
+        padding-left: 25px;
+        margin-bottom: 15px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        &::before {
+            content: '';
+            @include icon-block (17px, 17px, -488px -4px);
+            background-image: url($executive-sprite);
+            background-repeat: no-repeat;
+            position: absolute;
+            left: 0;
+            top: 3px;
         }
     }
 }
-
-
 
 .faculty-profile {
     h3.name {
@@ -554,6 +583,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#295986', end
 .you-may-like {
     padding: 0;
     background-color: #e8edf0;
+    margin: 10px 0;
 
     .home-banner-img {
         @include size(100px);
@@ -634,6 +664,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#295986', end
 
 .university-detail,
 .faculty-detail {
+
+    .overlay {
+        z-index: 1;;
+        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.39+0,0.8+100 */
+        background: -moz-linear-gradient(top, rgba(0,0,0,0.39) 0%, rgba(0,0,0,0.8) 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, rgba(0,0,0,0.39) 0%,rgba(0,0,0,0.8) 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, rgba(0,0,0,0.39) 0%,rgba(0,0,0,0.8) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#63000000', endColorstr='#cc000000',GradientType=0 ); /* IE6-9 */
+    }
 
     .request-callback {
         border-bottom: 5px solid $blue;
