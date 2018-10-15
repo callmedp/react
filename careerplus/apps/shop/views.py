@@ -351,7 +351,7 @@ class ProductInformationMixin(object):
         if product.is_course:
             ctx.update(self.solar_program_structure(sqs))
         ctx.update(self.solar_faq(sqs))
-        ctx.update(self.get_reviews(product, 1))
+
         country_choices, initial_country = self.get_countries()
         ctx.update({'country_choices': country_choices, 'initial_country': initial_country, })
         if sqs.pPc == 'course':
@@ -409,6 +409,7 @@ class ProductInformationMixin(object):
         ctx = {}
         pk = product.pk
         ctx.update(self.getSelectedProduct_solr(sqs))
+        ctx.update(self.get_reviews(product, 1))
         try:
             widget_obj = DetailPageWidget.objects.get(content_type__model='Product', listid__contains=pk)
             widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(column=1)
@@ -425,19 +426,16 @@ class ProductInformationMixin(object):
         if self.request.session.get('candidate_id'):
             candidate_id = self.request.session.get('candidate_id')
             contenttype_obj = ContentType.objects.get_for_model(product)
-            review_obj = Review.objects.filter(object_id=product.id, content_type=contenttype_obj, user_id=candidate_id)
-            if review_obj.count() > 0:
-                ctx['review_obj'] = review_obj[0]
-            else:
-                ctx['review_obj'] = None
+            ctx['review_obj'] = Review.objects.filter(object_id=product.id, content_type=contenttype_obj, user_id=candidate_id).first()
             # user_reviews depicts if user already has a review for this product or not
-            product_type = ContentType.objects.get(app_label='shop', model='product')
+            # product_type = ContentType.objects.get(app_label='shop', model='product')
             candidate_id = self.request.session.get('candidate_id', None)
-            user_reviews = Review.objects.filter(content_type=product_type, object_id=pk, status__in=[0, 1],
+            user_reviews = Review.objects.filter(content_type=contenttype_obj, object_id=pk, status__in=[0, 1],
                 user_id=candidate_id).count()
 
             ctx['user_reviews'] = True if user_reviews else False
         navigation = True
+
         if sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
             navigation = False
         ctx['navigation'] = navigation
@@ -449,7 +447,7 @@ class ProductInformationMixin(object):
 
     def get_product_detail_context(self, product, sqs, product_main, sqs_main):
         main_ctx={}
-        key="product_detail-"+str(product.pk)
+        key="context_product_detail_"+str(product.pk)
         if cache.get(key):
             main_ctx.update(cache.get(key))
         else:
@@ -738,7 +736,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
     def get(self, request, **kwargs):
         pk = self.kwargs.get('pk')
-        self.key = 'detail_product'+"-"+pk
+        self.key = 'detail_product_'+pk
         cache_key = cache.get(self.key)
         if cache_key:
             self.product_obj = cache_key.get('product_obj','')
