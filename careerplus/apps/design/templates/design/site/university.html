@@ -43,72 +43,71 @@
             <li><a href="#">XLRI Courses</a></li>
             <li class="active">Digital Marketing</li>
           </ol>
-          <!-- course heading -->
-          <h1>Digital Marketing</h1>
+          
           <div class="row">
-            <div class="exe-course-box col-sm-11">
+            <div class="exe-course-box col-md-8 col-lg-9">
+              <!-- course heading -->
+              <h1>Executive development <br>program in leadership</h1>
+
               <!-- course image -->
-              <div class="exe-course-img">
+              <div class="exe-course-img mt-30">
                 <figure>
                   <img src="{% static 'shinelearn/images/executive/xlri-logo.jpg' %}" alt="Logo" class="img-responsive">
                 </figure>
               </div>
               <div class="exe-course-sep"></div>
-
-              <div class="row">
-                <!-- course detail -->
-                <div class="exe-course-detail">
-                  <div class="col-sm-9">
-                    <figure class="col-sm-4">
-                      <div class="media">
-                        <span class="media-left">
-                          <i class="exe-icon-apply"></i>
-                        </span>
-                        <figcaption class="media-body">
-                          Apply before:
-                          <strong>29 Dec 2018</strong>
-                        </figcaption>
-                      </div>
-                    </figure>
-                    <figure class="col-sm-4">
-                      <div class="media">
-                        <span class="media-left">
-                          <i class="exe-icon-batch"></i>
-                        </span>
-                        <figcaption class="media-body">
-                          Batch starts:
-                          <strong>05 Jan 2019</strong>
-                        </figcaption>
-                      </div>
-                    </figure>
-                    <figure class="col-sm-4">
-                      <div class="media">
-                        <span class="media-left">
-                          <i class="exe-icon-duration"></i>
-                        </span>
-                        <figcaption class="media-body">
-                          Duration:
-                          <strong>4 months</strong>
-                        </figcaption>
-                      </div>
-                    </figure>
-                    <div class="col-sm-12 weekend-txt">
-                      Weekend Batch: Saturday  9 to 11am & Sunday 10am to 12pm
-                    </div>
-                  </div>
-
-                  <div class="col-sm-3 exe-enrol-now">
-                    <strong>Rs.799</strong>
-                    <a class="exe-button-enrol mt-10" href="#">Enroll Now</a>
-                  </div>
-              </div>
-
             </div>
+            <!-- course detail -->
+            <div class="exe-enrol-now col-md-4 col-lg-3">
+              <div class="exe-box">
+                <figure>
+                  <i class="exe-icon-batch-blk"></i>
+                  <figcaption>
+                    Batch starts:
+                    <strong>05 Jan 2019</strong>
+                    <span>Duration: <strong>4 months</strong></span>
+                    <div class="sep mt-10 mb-10"></div>
+                    Fees
+                    <div class="exe-price">
+                      Rs.90,000
+                    </div>
+                    <a class="exe-button-enrol mt-10" href="#">Enroll Now</a>
+                    <a href="#" class="exe-download-brochure">
+                      <i class="exe-icon-brochure"></i>
+                      Download Brochure
+                    </a>
+                  </figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+
 
           </div>
         </div>
-
-
+        <!-- course highligts -->
+        <div class="exe-course-highlights container-fluid">
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="exe-course-highlights-box">
+                  <i class="exe-icon-highilights"></i>
+                  <span><strong>40%</strong> Projected Growth in global data generated each year.</span>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="exe-course-highlights-box left-bdr">
+                  <i class="exe-icon-highilights"></i>
+                  <span><strong>92%</strong> Fortune 500 companies will need to exploit Big Data by 2020.</span>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="exe-course-highlights-box left-bdr">
+                  <i class="exe-icon-highilights"></i>
+                  <span><strong>2.5 Lac</strong> 2.5 Lac Projected Demand of Data Scientist in India by 2018.</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </header>
@@ -131,7 +130,7 @@
     {% block section2 %}
       
       <!-- main parent2 section start -->
-      <section class="container cls_scroller_parent pr mt-30less">
+      <section class="container cls_scroller_parent pr mt-30">
         <div class="row">
             
               <!-- About course container -->
@@ -224,7 +223,7 @@
 
                         <div class="media col-sm-6">
                           <div class="media-left">
-                            <figure class="exe-icon-manager"></figure>
+                            <figure class="exe-icon-division"></figure>
                           </div>
                           <div class="media-body media-middle">
                             <h3 class="media-heading">Division / Department Heads</h3>
@@ -234,7 +233,7 @@
 
                         <div class="media col-sm-6">
                           <div class="media-left">
-                            <figure class="exe-icon-manager"></figure>
+                            <figure class="exe-icon-srmanager"></figure>
                           </div>
                           <div class="media-body media-middle">
                             <h3 class="media-heading">Mid to Senior Level Managers </h3>
@@ -244,7 +243,7 @@
 
                         <div class="media col-sm-6">
                           <div class="media-left">
-                            <figure class="exe-icon-manager"></figure>
+                            <figure class="exe-icon-lnmanager"></figure>
                           </div>
                           <div class="media-body media-middle">
                             <h3 class="media-heading">Line Managers</h3>
@@ -273,6 +272,51 @@
                     </ul>
                   </article>
                 </section>
+
+                {% block prdrecommended %}
+                <!-- recommended product -->
+                <section class="container-fluid detail-box you-may-like-carousel mb-30">
+                  <div class="scroll">
+                    <h2 class="heading-primary-exe mt-30 mb-10 text-center">You may also like</h2>
+                    <article class="col-sm-12">
+                      <div id="carousel-example-generic2" class="carousel slide" data-ride="carousel">
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner" role="listbox">
+                          <div class="item col-sm-12 active">
+                            <ul class="listing">
+                              <li class="col-sm-6"><a title="CSS Designer" class="box-panel" href="/course/it-information-technology/css-designer/pd-276"><div class="media"><div class="media-body"><h3 class="listing-heading">CSS Designer</h3><div class="rating-review-box"><strong>10</strong> people bought
+                              <span class="jobs-available"><strong>5950</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/276/1509558215_9064.png" alt="CSS Designer"></figure></div></div></a></li>
+                              <li class="col-sm-6"><a title="HTML Designer" class="box-panel" href="/course/it-information-technology/html-designer/pd-275"><div class="media"><div class="media-body"><h3 class="listing-heading">HTML Designer</h3><div class="rating-review-box"><strong>1</strong> people bought
+                              <span class="jobs-available"><strong>6143</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/275/1508147934_5947.png" alt="Certified HTML Designer"></figure></div></div></a></li>
+                            </ul>
+                          </div>
+
+                          <div class="item col-sm-12">
+                            <ul class="listing">
+                              <li class="col-sm-6"><a title="CSS Designer" class="box-panel" href="/course/it-information-technology/css-designer/pd-276"><div class="media"><div class="media-body"><h3 class="listing-heading">CSS Designer</h3><div class="rating-review-box"><strong>10</strong> people bought
+                              <span class="jobs-available"><strong>5950</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/276/1509558215_9064.png" alt="CSS Designer"></figure></div></div></a></li>
+                              <li class="col-sm-6"><a title="HTML Designer" class="box-panel" href="/course/it-information-technology/html-designer/pd-275"><div class="media"><div class="media-body"><h3 class="listing-heading">HTML Designer</h3><div class="rating-review-box"><strong>1</strong> people bought
+                              <span class="jobs-available"><strong>6143</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/275/1508147934_5947.png" alt="Certified HTML Designer"></figure></div></div></a></li>
+                            </ul>
+                          </div>
+                          
+                        </div>
+
+                        <!-- Controls -->
+                        <a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev">
+                          <span class="exe-icon-chevron-left mt-10" aria-hidden="true"></span>
+                        </a>
+                        <a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next">
+                          <span class="exe-icon-chevron-right mt-10" aria-hidden="true"></span>
+                        </a>
+                      </div>
+                    </article>
+                  </div>
+                </section>
+
+                <!-- end recommended product -->
+                {% endblock prdrecommended %}
 
                 <!-- Faculty Profile -->
                 <section class="exe-box mb-30">
@@ -403,35 +447,34 @@
                         <div class="clearfix e-btm-bdr mb-30 mt-10 col-sm-12"></div>
 
                         <h3 class="col-sm-12 mb-20">Why Shine Learning?</h2>
-                        <div class="col-sm-4">
-                          <figure class="thumbnail">
-                            <i class="exe-icon-0-emi"></i>
-                            <figcaption class="caption">
-                              <h3>0% EMI</h3>
-                              <p>Easy EMI payment option.</p>
-                            </figcaption>
-                          </figure>
-                        </div>
+                        <ul class="exe-why-shine-learning">
+                          <li class="col-sm-4">
+                            <figure class="thumbnail">
+                              <figcaption class="caption">
+                                <h3>0% EMI</h3>
+                                <p>Easy EMI payment option.</p>
+                              </figcaption>
+                            </figure>
+                          </li>
 
-                        <div class="col-sm-4">
-                          <figure class="thumbnail">
-                            <i class="exe-icon-free-service"></i>
-                            <figcaption class="caption">
-                              <h3>Free Services</h3>
-                              <p>Free Resume, Cover Letter Formats and Career Guidance Services.</p>
-                            </figcaption>
-                          </figure>
-                        </div>
+                          <li class="col-sm-4">
+                            <figure class="thumbnail">
+                              <figcaption class="caption">
+                                <h3>Free Services</h3>
+                                <p>Free Resume, Cover Letter Formats and Career Guidance Services.</p>
+                              </figcaption>
+                            </figure>
+                          </li>
 
-                        <div class="col-sm-4">
-                          <figure class="thumbnail">
-                            <i class="exe-icon-refer-earn"></i>
-                            <figcaption class="caption">
-                              <h3>Refer and Earn</h3>
-                              <p>Refer your friend and get an Amazon Voucher worth Rs. 2000*</p>
-                            </figcaption>
-                          </figure>
-                        </div>
+                          <li class="col-sm-4">
+                            <figure class="thumbnail">
+                              <figcaption class="caption">
+                                <h3>Refer and Earn</h3>
+                                <p>Refer your friend and get an Amazon Voucher worth Rs. 2000*</p>
+                              </figcaption>
+                            </figure>
+                          </li>
+                        </ul>
                       </div>
                     </article>
                   </div>
@@ -899,38 +942,32 @@
                   <div class="col-sm-12 no-pad">
                     <!-- Enrol Now -->
                     <section class="exe-box mb-30 exe-show-enrol-now">
-                      <article class="pad-25">
-                        <figure>
-                          <i class="exe-icon-batch-sm"></i>
-                          <figcaption>
-                            Batch starts: <strong>05 Jan 2019</strong>
-                          </figcaption>
-                        </figure>
-                        <figure>
-                          <i class="exe-icon-duration-sm"></i>
-                          <figcaption>
-                            Duration: <strong>4 month</strong>
-                          </figcaption>
-                          <a class="exe-button-enrol mt-15" href="#">Enroll Now</a>
-                        </figure>
-                      </article>
-                    </section>
-
-                    <!-- Download Brochure -->
-                    <section class="exe-box mb-30">
-                        <a href="#" class="exe-download-brochure"><figure class="exe-icon-brochure"></figure>Download Brochure</a>
+                      <figure>
+                        <i></i>
+                        <figcaption>
+                          Batch starts:
+                          <strong>05 Jan 2019</strong>
+                          <span>Duration: <strong>4 months</strong></span>
+                          <div class="sep mt-10 mb-10"></div>
+                          Fees
+                          <div class="exe-price">
+                            Rs.90,000
+                          </div>
+                          <a class="exe-button-enrol mt-10" href="#">Enroll Now</a>
+                          <a href="#" class="exe-download-brochure">
+                            <i class="exe-icon-brochure"></i>
+                            Download Brochure
+                          </a>
+                        </figcaption>
+                      </figure>
                     </section>
 
                     <!-- Request a call -->
-                    <section class="exe-box mb-30">
-                      <div class="e-btm-bdr">
-                        <figure class="pr">
-                          <i class="exe-icon-request-call"></i>
-                        </figure>
-                        <h2 class="heading-primary-exe">Request a call</h2>
-                      </div>
-                      <article class="col-sm-12 pad-25 exe-request-call">
-                        <form>
+                    <section class="exe-box mb-30 exe-request-call-form">
+                      <h2>Want help with this course?</h2>
+                      <strong>Let our learning specialists guide you</strong>
+                      <article class="col-sm-12 exe-box mt-15">
+                        <form class="mt-10">
                           <div class="form-group">
                             <input type="text" class="form-control" id="exampleInputName" placeholder="Name">
                           </div>
@@ -949,7 +986,7 @@
                             </div>
                           </div>
                           
-                          <button type="submit" class="exe-button-submit mt-10">Submit</button>
+                          <button type="submit" class="exe-button-submit mb-15">Request callback</button>
                         </form>
                       </article>
                     </section>
@@ -965,56 +1002,9 @@
       <!-- main parent2 section end -->      
     {% endblock section2 %}
 
-      {% block prdrecommended %}
-      <!-- recommended product -->
-
-      <section class="container-fluid detail-box you-may-like-carousel cls_hide_sticky_panel">
-        <div class="scroll">
-          <h2 class="heading-primary-exe mt-30 mb-10 text-center">You may also like</h2>
-          <article class="col-sm-12">
-            <div id="carousel-example-generic2" class="carousel slide" data-ride="carousel">
-
-              <!-- Wrapper for slides -->
-              <div class="carousel-inner" role="listbox">
-                <div class="item col-sm-12 active">
-                  <ul class="listing">
-                    <li class="col-sm-4"><a title="CSS Designer" class="box-panel" href="/course/it-information-technology/css-designer/pd-276"><div class="media"><div class="media-body"><h3 class="listing-heading">CSS Designer</h3><div class="rating-review-box"><strong>10</strong> people bought
-                    <span class="jobs-available"><strong>5950</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/276/1509558215_9064.png" alt="CSS Designer"></figure></div></div></a></li>
-                    <li class="col-sm-4"><a title="HTML Designer" class="box-panel" href="/course/it-information-technology/html-designer/pd-275"><div class="media"><div class="media-body"><h3 class="listing-heading">HTML Designer</h3><div class="rating-review-box"><strong>1</strong> people bought
-                    <span class="jobs-available"><strong>6143</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/275/1508147934_5947.png" alt="Certified HTML Designer"></figure></div></div></a></li>
-                    <li class="col-sm-4"><a title="User Experience (UX) Design Training ..." class="box-panel" href="/course/it-information-technology/user-experience-ux-design-training-course/pd-1733"><div class="media"><div class="media-body"><h3 class="listing-heading">User Experience (UX) Design Training ...</h3><div class="rating-review-box"><strong>7</strong> people bought
-                    <span class="jobs-available"><strong>680</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/1733/1509351518_2408.png" alt="User Experience (UX) Design Training Course"></figure></div></div></a></li>
-                  </ul>
-                </div>
-
-                <div class="item col-sm-12">
-                  <ul class="listing">
-                    <li class="col-sm-4"><a title="CSS Designer" class="box-panel" href="/course/it-information-technology/css-designer/pd-276"><div class="media"><div class="media-body"><h3 class="listing-heading">CSS Designer</h3><div class="rating-review-box"><strong>10</strong> people bought
-                    <span class="jobs-available"><strong>5950</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/276/1509558215_9064.png" alt="CSS Designer"></figure></div></div></a></li>
-                    <li class="col-sm-4"><a title="HTML Designer" class="box-panel" href="/course/it-information-technology/html-designer/pd-275"><div class="media"><div class="media-body"><h3 class="listing-heading">HTML Designer</h3><div class="rating-review-box"><strong>1</strong> people bought
-                    <span class="jobs-available"><strong>6143</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/275/1508147934_5947.png" alt="Certified HTML Designer"></figure></div></div></a></li>
-                    <li class="col-sm-4"><a title="User Experience (UX) Design Training ..." class="box-panel" href="/course/it-information-technology/user-experience-ux-design-training-course/pd-1733"><div class="media"><div class="media-body"><h3 class="listing-heading">User Experience (UX) Design Training ...</h3><div class="rating-review-box"><strong>7</strong> people bought
-                    <span class="jobs-available"><strong>680</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="https://static1.shine.com/l/m/product_image/1733/1509351518_2408.png" alt="User Experience (UX) Design Training Course"></figure></div></div></a></li>
-                  </ul>
-                </div>
-                
-              </div>
-
-              <!-- Controls -->
-              <a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev">
-                <span class="exe-icon-chevron-left mt-10" aria-hidden="true"></span>
-              </a>
-              <a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next">
-                <span class="exe-icon-chevron-right mt-10" aria-hidden="true"></span>
-              </a>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <!-- end recommended product -->
-      {% endblock prdrecommended %}
+      
    </div>
+   <div class="cls_hide_sticky_panel"></div>
 {% endblock main_container %}
 
 

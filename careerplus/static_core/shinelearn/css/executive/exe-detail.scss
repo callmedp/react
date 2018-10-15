@@ -4,19 +4,17 @@
 
 
 .exe-header-detail {
-	background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(#{$imagePath}images/executive/exe-header.jpg) no-repeat center top;
+	background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url(#{$imagePath}images/executive/exe-header.jpg) no-repeat #000 center top;
 	background-size: cover;
 	display: block;
 	position: relative;
 
 	.exe-header-txt {
 	  color: #fff;
-	  padding-bottom: 2%;
 
 	  h1 {
-	  	font-size: $font-size+39;
+	  	font-size: $font-size+33;
 	  	color: $white-color;
-	  	text-transform: uppercase;
 	  	font-weight: $font-weight+300;
 	  }
 	}
@@ -29,21 +27,20 @@
 .exe-course-box {
 	display: table;
 	vertical-align: top;
-	margin: 10px 0 4% 0;
+	margin: 10px 0;
 
 	.exe-course-img {
-		width: 220px;
-		height: 129px;
-		border-bottom: 4px solid $e-yellow-color;
+		width: 180px;
+		height: 94px;
+		border-bottom: 4px solid $blue-color;
 		background-color: $white-color;
-		display: table-cell;
 		border-radius: 5px;
 		vertical-align: top;
 
 		figure {
 			width: 180px;
 			height: 129px;
-			padding: 20px;
+			padding: 0;
 			display: block;
 			text-align: center;
 			vertical-align: middle;
@@ -56,80 +53,140 @@
 				vertical-align: middle;
 				display: block;
 				border: 0;
+				margin: auto;
 			}
-		}
-	}
-
-	.exe-course-sep {
-		width: 30px;
-		display: table-cell;
-	}
-
-	.exe-course-detail {
-		background: rgba(0, 0, 0, 0.5);
-		border-radius: 5px;
-		height: 133px;
-		padding: 20px 0 15px 0;
-
-		figure {
-			
-			span {
-				
-			}
-
-			figcaption {
-				
-				font-size: $font-size+2;
-				color: $e-light-color;
-
-				strong {
-					display: block;
-					font-size: $font-size+7;
-					font-weight: $font-weight+300;
-					color: $white-color;
-					text-transform: uppercase;
-
-					@media (max-width: 1190px) {
-						font-size: $font-size+4;
-					}
-				}
-			}
-		}
-
-		.weekend-txt {
-			text-align: center;
-			font-size: $font-size+1;
-			color: $e-light-color;
-			font-weight: $font-weight;
-
-			&:before {
-				content: '';
-				border-top: 1px solid rgba(212, 212, 212, 0.5);
-				width: auto;
-				display: block;
-				margin: 20px 45% 0 47%;
-				padding-top: 15px;
-			}
-		}
-	}
-
-	.exe-enrol-now {
-		border-left: 1px solid rgba(212, 212, 212, 0.3);
-		padding-left: 5%;
-		padding-bottom: 5px;
-
-		strike {
-			color: $e-light-color;
-		}
-
-		strong {
-			font-size: $font-size+20;
-			line-height: 30px;
-			display: block;
-			color: $white-color;
 		}
 	}
 }
+
+.exe-enrol-now {
+	text-align: center;
+	margin-top: -40px;
+	overflow: hidden;
+
+	figure {
+		display: block;
+		padding: 20px 0 5px 0;
+
+		figcaption {
+			font-size: $font-size+4;
+			color: $black-color;
+
+			strong {
+				display: block;
+				font-size: $font-size+9;
+				font-weight: $font-weight+300;
+			}
+
+			span {
+				strong {
+					font-size: $font-size+3;
+					display: inline-block;
+				}
+			}
+
+			.exe-price {
+				color: #2e70d8;
+				font-size: $font-size+21;
+				font-weight: $font-weight+300;
+			}
+		}
+
+		.sep {
+			margin-left: 10%;
+			margin-right: 10%; 
+		}
+	}
+
+	.exe-download-brochure {
+		padding-bottom: 10px;
+	}	
+}
+
+.exe-show-enrol-now {
+	display: none;
+	text-align: center;
+	margin-top: 0;
+	overflow: hidden;
+
+	figure {
+		display: block;
+		padding: 10px 0 10px 0;
+
+		figcaption {
+			font-size: $font-size+4;
+			color: $black-color;
+
+			strong {
+				display: block;
+				font-size: $font-size+9;
+				font-weight: $font-weight+300;
+			}
+
+			span {
+				strong {
+					font-size: $font-size+3;
+					display: inline-block;
+				}
+			}
+
+			.exe-price {
+				color: #2e70d8;
+				font-size: $font-size+21;
+				font-weight: $font-weight+300;
+			}
+		}
+
+		.sep {
+			margin-left: 10%;
+			margin-right: 10%; 
+		}
+	}
+}
+
+.exe-course-highlights {
+	background: rgba(0, 0, 0, 0.5);
+	padding: 15px 15px;
+	margin-top: 20px;
+
+	.exe-course-highlights-box {
+		color: $white-color;
+		padding: 10px 20px;
+		display: table;
+
+		i {
+			display: table-cell;
+		}
+		span {
+			display: table-cell;
+			padding-left: 30px;
+			vertical-align: middle;
+		}
+
+		&.left-bdr {
+			border-left: 1px solid #9d9da3;
+		}
+	}
+}
+
+.sep {
+	border-bottom: 1px solid $e-border-color;
+	display: block;
+}
+
+.exe-download-brochure {
+	padding: 10px 0 0 0;
+	display: block;
+	text-align: center;
+	color: $anchor-color;
+	font-weight: $font-weight+300;
+	font-size: $font-size+2;
+
+	&:hover, &:focus {
+		color: $anchor-color;
+	}
+}
+
 
 .exe-detail-course-links {
 	font-size: $font-size+3;
@@ -180,36 +237,6 @@
 	}
 }
 
-.exe-show-enrol-now {
-	display: none;
-
-	figure {
-		font-size: $font-size+3;
-		display: block;
-		margin-bottom: 3px;
-
-		@media (max-width: 1190px) {
-			font-size: $font-size+2;
-		}
-
-		i {
-			vertical-align: sub;
-			margin-right: 7px;
-		}
-		
-		figcaption {
-			color: #9f9f9f;
-			font-weight: $font-weight+100;
-			display: inline-block;
-
-			strong {
-				color: $e-secondary-color;
-			}
-		}
-	}
-
-}
-
 .query-price-box-scroll {
 	width: 90%;
 	position: absolute;
@@ -228,7 +255,7 @@
 		position: fixed;
 		/*width: 21%;*/
 		max-width: 270px;
-		top:153px;
+		top:135px;
 
 		@media (max-width: 1190px) {
 			width: 22%;
@@ -306,6 +333,36 @@
 	.e-btm-bdr {
 		width: 97.5%;
 		margin-left: 12px;
+	}
+}
+
+.exe-why-shine-learning {
+	padding: 0;
+	clear: both;
+	margin-left: 20px;
+	list-style-type: none;;
+
+	li {
+		display: block;
+		padding: 0 0 15px 20px;
+		margin: 0;
+		position: relative;
+		font-size: $font-size+3;
+
+		&:last-child {
+			padding-bottom: 0;
+		}
+
+		&:before {
+			content: '';
+			width: 16px;
+			height: 16px;
+			position: absolute;
+			left: -7px;
+			top: 10px;
+			background: $sprite-exe -447px -40px;
+			display: inline-block;
+		}
 	}
 }
 
@@ -405,28 +462,29 @@
 	}
 }
 
-.exe-download-brochure {
-	padding: 18px 15px;
+
+.exe-request-call-form {
+	background: url(#{$imagePath}images/executive/exe-request-call-bg.jpg) no-repeat #fff center top;
+	background-size: cover;
 	display: block;
-	text-align: center;
-	color: $anchor-color;
-	font-weight: $font-weight+300;
+	padding: 15px;
 
-	&:hover, &:focus {
-		color: $anchor-color;
+	h2 {
+		font-size: $font-size+7;
+		display: block;
+		color: $primary-color;
+		font-weight: $font-weight+300;
 	}
 
-	figure {
-		vertical-align: middle;
-		margin-right: 10px;
+	strong {
+		font-size: $font-size+2;
+		color: $secondary-color;
+		display: block;
+		font-weight: $font-weight+300;
 	}
-}
-
-.exe-request-call {
-	padding-top: 20px;
 
 	.form-group {
-		margin-bottom: 15px;
+		margin-bottom: 10px;
 
 		.form-control {
 			border-bottom: 1px solid $e-border-color;
@@ -440,6 +498,62 @@
 			font-weight: $font-weight+100;
 		}
 	}	
+	
+	.country-code {
+		display: block;
+
+		.custom-select {
+			width: 51px;
+			display: inline-block;
+			height: 40px;
+			position: relative;
+
+			&:after {
+				content: '';
+				width: 0;
+				height: 0;
+				border-left: 4px solid transparent;
+				border-right: 4px solid transparent;
+				border-top: 6px solid $e-border-color;
+				position: absolute;
+				right: 8px;
+				top: 16px;
+				text-indent: 1px;
+				text-overflow: '';
+			}
+
+			select {
+				-webkit-appearance: none;
+				-moz-appearance: none;
+			    text-indent: 0;
+			    text-overflow: '';
+				border-radius: 0;
+				height: 35px;
+				padding: 6px 0;
+
+				&::-ms-expand {
+					display: none;
+				}
+
+				option {
+					min-width: 100px;
+				}
+			}
+		}
+
+		.form-control {
+			width: 75%;
+			display: inline-block;
+
+			@media (max-width: 1190px) {
+				width: 69%;
+			}
+		}
+	}
+
+	.exe-button-submit {
+		text-transform: none;
+	}
 }
 
 .exe-fee-payments-box {
@@ -571,8 +685,8 @@
 	padding-bottom: 30px;
 
 	.carousel-inner {
-		width: 94%;
-    	margin-left: 3%;
+		width: 90%;
+    	margin-left: 5%;
 
 		&:before {
 			content: '';
