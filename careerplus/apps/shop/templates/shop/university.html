@@ -39,88 +39,74 @@
         <div class="exe-header-txt container pr">
           <div class="row">
           <!-- breadcrums -->
-          {% block breadcrumbs %}
-              {% if sqs.id in linkedin_resume_services %}
-                <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
-                    <li class="active" ></li>
-                </ol>
-              {% else %}
+         {% block breadcrumbs %}
                 {% include "shop/partials/breadcrumb.html" %}
-              {% endif %}
           {% endblock breadcrumbs %}
-          <!-- course heading -->
-          <h1>{{prd_H1}}</h1>
+          
           <div class="row">
-            <div class="exe-course-box col-sm-11">
+            <div class="exe-course-box col-md-8 col-lg-9">
+              <!-- course heading -->
+              <h1>{{prd_H1}}</h1>
+
               <!-- course image -->
-              <div class="exe-course-img">
+              <div class="exe-course-img mt-30">
                 <figure>
                   <img src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive">
                 </figure>
               </div>
               <div class="exe-course-sep"></div>
-
-              <div class="row">
-                <!-- course detail -->
-                <div class="exe-course-detail">
-                  <div class="col-sm-9">
-                    <figure class="col-sm-4">
-                      <div class="media">
-                        <span class="media-left">
-                          <i class="exe-icon-apply"></i>
-                        </span>
-                        <figcaption class="media-body">
-                          Apply before:
-                          <strong>{{ university_detail.applydate }}</strong>
-                        </figcaption>
-                      </div>
-                    </figure>
-                    <figure class="col-sm-4">
-                      <div class="media">
-                        <span class="media-left">
-                          <i class="exe-icon-batch"></i>
-                        </span>
-                        <figcaption class="media-body">
-                          Batch starts:
-                          <strong>{{ university_detail.launchdate }}</strong>
-                        </figcaption>
-                      </div>
-                    </figure>
-                    <figure class="col-sm-4">
-                      <div class="media">
-                        <span class="media-left">
-                          <i class="exe-icon-duration"></i>
-                        </span>
-                        <figcaption class="media-body">
-                          Duration:
-                          <strong>{{ selected_var.dur_days|convert_to_month }} months</strong>
-                        </figcaption>
-                      </div>
-                    </figure>
-                    <div class="col-sm-12 weekend-txt">
-                      Weekend Batch: Saturday  9 to 11am & Sunday 10am to 12pm
+            </div>
+            <!-- course detail -->
+            <div class="exe-enrol-now col-md-4 col-lg-3">
+              <div class="exe-box">
+                <figure>
+                  <i class="exe-icon-batch-blk"></i>
+                  <figcaption>
+                    Batch starts:
+                    <strong>{{ university_detail.launchdate }}</strong>
+                    <span>Duration: <strong>{{ selected_var.dur_days|convert_to_month }} months</strong></span>
+                    <div class="sep mt-10 mb-10"></div>
+                    Fees
+                    <div class="exe-price">
+                      Rs.{{ sqs.pPinb|floatformat|intcomma }}
                     </div>
-                  </div>
-
-                  <div class="col-sm-3 exe-enrol-now">
-                    <strike>Rs.{{ selected_var.fake_inr_price|floatformat }}</strike>
-                    <strong>Rs.{{ sqs.pPinb|floatformat }}</strong>
-
-                     {% if not request.session.candidate_id and not request.session.university_course %}
+                    {% if not request.session.candidate_id and not request.session.university_course %}
                         <a class="exe-button-enrol mt-10" id="enroll_now"  data-toggle="modal" data-target=".bs-example-modal-sm" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll Now</a>
                     {% else %}
                         <a role="button" class="exe-button-enrol mt-10" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
                     {% endif %}
-
-                  </div>
+                     {% if not request.session.candidate_id and not request.session.university_course %}
+                      <a href="{{ university_detail.brochure }}" class="exe-download-brochure" id="download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><i class="exe-icon-brochure"></i>
+                            Download Brochure
+                      </a>
+                    {% else %}
+                     <a href="{{ university_detail.brochure }}" class="exe-download-brochure" id="download_broucher"><i class="exe-icon-brochure"></i>
+                            Download Brochure
+                      </a>
+                    {% endif %}
+                  </figcaption>
+                </figure>
               </div>
-
             </div>
+          </div>
+
 
           </div>
         </div>
-
-
+        <!-- course highligts -->
+        <div class="exe-course-highlights container-fluid">
+          <div class="col-sm-12">
+            <div class="row">
+             {% with university_detail.highlighted_benefits|split:";" as benefits %}
+                {% for benefit in benefits %}
+                  <div class="col-sm-4">
+                    <div class="exe-course-highlights-box">
+                      <i class="exe-icon-highilights"></i>
+                      <span>{{ benefit }}</span>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% endwith %}
           </div>
         </div>
       </header>
@@ -143,7 +129,7 @@
     {% block section2 %}
       
       <!-- main parent2 section start -->
-      <section class="container cls_scroller_parent pr mt-30less">
+      <section class="container cls_scroller_parent pr mt-30">
         <div class="row">
             
               <!-- About course container -->
@@ -185,7 +171,7 @@
                     </div>
                     <article class="col-sm-12 pad-25">
                       <span class="e-program-list mt-20">
-                      {{sqs.pAbx|safe}}
+                      {{prd_desc|safe}}
                       </span>  
                     </article>
                   </div>
@@ -206,7 +192,7 @@
                       {% for attendees in attendees_list %}
                         <div class="media col-sm-6">
                           <div class="media-left">
-                            <figure class="exe-icon-manager"></figure>
+                            <figure class="{% if forloop.counter == 1 %}exe-icon-manager {% elif forloop.counter == 2%} exe-icon-division {% elif forloop.counter == 3 %} exe-icon-srmanager  {% else %} exe-icon-lnmanager {% endif %}"></figure>
                           </div>
                           <div class="media-body media-middle">
                             <h3 class="media-heading">{{attendees.0}}</h3>
@@ -240,57 +226,63 @@
                   </article>
                 </section>
                 {% endif %}
-                {% if faculty %}
-                <!-- Faculty Profile -->
-                <section class="exe-box mb-30">
-                  <div id="faculty-profile" class="scroll">
-                    <div class="e-btm-bdr">
-                      <figure class="pr">
-                        <i class="exe-icon-faculty"></i>
-                      </figure>
-                      <h2 class="heading-primary-exe">Faculty Profile</h2>
-                    </div>
-                    <article class="col-sm-12 pad-25">
-                      <div id="carousel-example-generic" class="carousel slide exe-faculty-carousel" data-ride="carousel">
+                <input type="hidden" id="skilllist" value="{{sqs.pSkilln|join:""}}">
+                
+                {% block prdrecommended %}
+                  <div id="skill_list_box">
+                  </div>
+                {% endblock prdrecommended %}
 
-                        <!-- Wrapper for slides -->
-                        <div class="carousel-inner" role="listbox">
-                          {% for inner_fac in faculty %}
-                           <div class="item col-sm-12 {% if forloop.counter == 1%}active {% endif %}">
-                           {% for fac in inner_fac %}
-                            <div class="col-sm-6 text-center">
-                              <figure>
-                                <a class="faculty-thumb" href="{{fac.get_absolute_url}}"  target='_blank'><img src="{{ fac.get_image_url }}" alt="Faculty Profile"></a>
-                                <figcaption>
-                                  <strong><a href="{{fac.get_absolute_url}}" target='_blank'>{{ fac.name }}</a></strong>
-                                  <div class="exe-designation">{{ fac.designation }} – 
-                                    <span>{{ fac.institute.name }}</span>
-                                  </div>
-                                  <p>{{fac.description|truncatechars:"120"}}...   <a class="e-anchor-color" href="{{fac.get_absolute_url}}" target='_blank'>read more</a>
-                                  </p>
-                                </figcaption>
-                              </figure>
+                {% if faculty %}
+                  <!-- Faculty Profile -->
+                  <section class="exe-box mb-30">
+                    <div id="faculty-profile" class="scroll">
+                      <div class="e-btm-bdr">
+                        <figure class="pr">
+                          <i class="exe-icon-faculty"></i>
+                        </figure>
+                        <h2 class="heading-primary-exe">Faculty Profile</h2>
+                      </div>
+                      <article class="col-sm-12 pad-25">
+                        <div id="carousel-example-generic" class="carousel slide exe-faculty-carousel" data-ride="carousel">
+
+                          <!-- Wrapper for slides -->
+                          <div class="carousel-inner" role="listbox">
+                            {% for inner_fac in faculty %}
+                             <div class="item col-sm-12 {% if forloop.counter == 1%}active {% endif %}">
+                             {% for fac in inner_fac %}
+                              <div class="col-sm-6 text-center">
+                                <figure>
+                                  <a class="faculty-thumb" href="{{fac.get_absolute_url}}"  target='_blank'><img src="{{ fac.get_image_url }}" alt="Faculty Profile"></a>
+                                  <figcaption>
+                                    <strong><a href="{{fac.get_absolute_url}}" target='_blank'>{{ fac.name }}</a></strong>
+                                    <div class="exe-designation">{{ fac.designation }} – 
+                                      <span>{{ fac.institute.name }}</span>
+                                    </div>
+                                    <p>{{fac.description|truncatechars:"120"}}...   <a class="e-anchor-color" href="{{fac.get_absolute_url}}" target='_blank'>read more</a>
+                                    </p>
+                                  </figcaption>
+                                </figure>
+                              </div>
+                              {% endfor %}
+                           
                             </div>
                             {% endfor %}
-                         
+                            
                           </div>
-                          {% endfor %}
-                          
-                        </div>
 
-                        <!-- Controls -->
-                        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-                          <span class="exe-icon-chevron-left mt-20" aria-hidden="true"></span>
-                        </a>
-                        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-                          <span class="exe-icon-chevron-right mt-20" aria-hidden="true"></span>
-                        </a>
-                      </div>
-                    </article>
-                  </div>
-                </section>
+                          <!-- Controls -->
+                          <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                            <span class="exe-icon-chevron-left mt-20" aria-hidden="true"></span>
+                          </a>
+                          <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                            <span class="exe-icon-chevron-right mt-20" aria-hidden="true"></span>
+                          </a>
+                        </div>
+                      </article>
+                    </div>
+                  </section>
                 {% endif %}
-                 <!-- Exclusive Benefits -->
 
                 <section class="exe-box mb-30">
                   <div id="execlusive-benefits" class="scroll">
@@ -374,11 +366,13 @@
                                 </a>
                               </h3>
                             </div>
+                            {% if chapter.content %}
                             <div id="collapseOneExe_{{forloop.counter}}" class="panel-collapse collapse {% if forloop.counter == 1 %} in {% endif %}" role="tabpanel" aria-labelledby="heading_{{forloop.counter}}">
                               <div class="panel-body">
                                {{chapter.content|safe }}
                               </div>
                             </div>
+                            {% endif %}
                           </li>
                         {% endfor %}
                           </ul>
@@ -386,7 +380,7 @@
                   </div>
                 </section>
 
-                <!-- Assessment & Evaluation -->
+               <!-- Assessment & Evaluation -->
                 {% if university_detail.assesment or university_detail.sample_certificate %}
                 <section class="exe-box mb-30">
                   <div class="scroll">
@@ -414,8 +408,8 @@
                     </article>
                   </div>
                 </section>
-                {% endif %}
-                {% if university_detail.sample_certificate %}
+                {% endif%}
+               {% if university_detail.sample_certificate %}
                 <!-- sample certificate modal -->
                 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
                   <div class="modal-dialog modal-lg" role="document">
@@ -500,7 +494,8 @@
                 </section>
                 {% endif %}
 
-                <!-- Fees & Payments Modes -->
+
+                   <!-- Fees & Payments Modes -->
                 <section class="exe-box mb-30">
                    <div id="fees-payments" class="scroll">
                     <div class="e-btm-bdr">
@@ -582,6 +577,7 @@
                     </article>
                   </div>
                 </section>
+
                 {% if faq_list %}
                 <!-- Frequenty Asked Questions -->
                 <section class="exe-box mb-30">
@@ -629,47 +625,45 @@
                   <div class="col-sm-12 no-pad">
                     <!-- Enrol Now -->
                     <section class="exe-box mb-30 exe-show-enrol-now">
-                      <article class="pad-25">
-                        <figure>
-                          <i class="exe-icon-batch-sm"></i>
-                          <figcaption>
-                            Batch starts: <strong>{{ university_detail.launchdate }} </strong>
-                          </figcaption>
-                        </figure>
-                        <figure>
-                          <i class="exe-icon-duration-sm"></i>
-                          <figcaption>
-                            Duration: <strong>{{ selected_var.dur_days|convert_to_month }} month</strong>
-                          </figcaption>
-                          <a class="exe-button-enrol mt-15" href="#">Enroll Now</a>
-                        </figure>
-                      </article>
-                    </section>
+                      <figure>
+                        <i></i>
+                        <figcaption>
+                          Batch starts:
+                          <strong>{{ university_detail.launchdate }}</strong>
+                          <span>Duration: <strong>{{ selected_var.dur_days|convert_to_month }} month</strong></span>
+                          <div class="sep mt-10 mb-10"></div>
+                          Fees
+                          <div class="exe-price">
+                          Rs.{{ sqs.pPinb|floatformat|intcomma }}
+                          </div>
+                           {% if not request.session.candidate_id and not request.session.university_course %}
+                                <a class="exe-button-enrol mt-10" id="enroll_now"  data-toggle="modal" data-target=".bs-example-modal-sm" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll Now</a>
 
-                    <!-- Download Brochure -->
-                    <section class="exe-box mb-30">
-                    {% if not request.session.candidate_id and not request.session.university_course %}
-                       <a href="{{ university_detail.brochure }}" class="exe-download-brochure" id="download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><figure class="exe-icon-brochure"></figure>Download Brochure</a>
-                    {% else %}
-                     <a href="{{ university_detail.brochure }}" class="exe-download-brochure" id="download_broucher"><figure class="exe-icon-brochure"></figure>Download Brochure</a>
-                    {% endif %}
-
-              
+                            {% else %}
+                                <a role="button" class="exe-button-enrol mt-10" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                            {% endif %}
+                            {% if not request.session.candidate_id and not request.session.university_course %}
+                              <a href="{{ university_detail.brochure }}" class="exe-download-brochure" id="download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><i class="exe-icon-brochure"></i>
+                                    Download Brochure
+                              </a>
+                            {% else %}
+                             <a href="{{ university_detail.brochure }}" class="exe-download-brochure" id="download_broucher"><i class="exe-icon-brochure"></i>
+                                    Download Brochure
+                              </a>
+                            {% endif %}
+                        </figcaption>
+                      </figure>
                     </section>
 
                     <!-- Request a call -->
-                    <section class="exe-box mb-30">
-                      <div class="e-btm-bdr">
-                        <figure class="pr">
-                          <i class="exe-icon-request-call"></i>
-                        </figure>
-                        <h2 class="heading-primary-exe">Request a call</h2>
-                      </div>
-                      <article class="col-sm-12 pad-25 exe-request-call">
-                      <input type="hidden" id="skilllist" value="{{sqs.pSkilln|join:""}}">
+                    <section class="exe-box mb-30 exe-request-call-form">
+                      <h2>Want help with this course?</h2>
+                      <strong>Let our learning specialists guide you</strong>
+                      <article class="col-sm-12 exe-box mt-15">
+                       <input type="hidden" id="skilllist" value="{{sqs.pSkilln|join:""}}">
                         <form  id="lead1" method="POST" action="{% url 'crmapi:lead-management' %}">
                           {% csrf_token %}
-                          <div class="form-group">
+                        <div class="form-group">
                             <input name="name" id="name1" type="text" class="form-control" placeholder="Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}" >
                           </div>
                           <div class="form-group">
@@ -684,8 +678,8 @@
 
                             <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
                             <input type="hidden" name="uc" value="1">
-                            <input type="hidden" name="lsource" value="{{ lead_source }}">
-                          <button type="submit" class="exe-button-submit mt-10">Submit</button>
+                            <input type="hidden" name="lsource" value="{{ lead_source }}">                          
+                          <button type="submit" class="exe-button-submit mb-15">Request callback</button>
                         </form>
                       </article>
                     </section>
@@ -698,8 +692,8 @@
             </div>
       </div>
       </section>
-
-      <!-- Modal - Want help with this course? -->
+      <!-- main parent2 section end --> 
+        <!-- Modal - Want help with this course? -->
       <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
         <div class="modal-dialog modal-sm" role="document">
           <div class="modal-content exe-modal-form">
@@ -742,7 +736,7 @@
           </div>
         </div>
       </div>
-        <div class="modal fade bs-example-modal-sm-download" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+      <div class="modal fade bs-example-modal-sm-download" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
         <div class="modal-dialog modal-sm" role="document">
           <div class="modal-content exe-modal-form">
             <div class="modal-header">
@@ -782,18 +776,12 @@
             </div>
           </div>
         </div>
-      </div>
-      <!-- main parent2 section end -->      
+      </div>     
     {% endblock section2 %}
 
-      {% block prdrecommended %}
-      <!-- recommended product -->
-      <div id="skill_list_box">
-      </div>
-
-      <!-- end recommended product -->
-      {% endblock prdrecommended %}
+      
    </div>
+   <div class="cls_hide_sticky_panel"></div>
 {% endblock main_container %}
 
 
@@ -912,17 +900,17 @@ $("#lead1, #lead2, #lead3").each(function() {
     {% endcompress %}
     <script type="text/javascript">
     var recommended_product_url = '/api/v1/recommended-products/?skills='+$('#skilllist').val()+'&product={{sqs.id}}&uc=1'
-    
-    var product_html = ' <li class="col-sm-4"><a title="product_name" class="box-panel" href="/course/it-information-technology/css-designer/pd-276"><div class="media"><div class="media-body"><h3 class="listing-heading">product_name</h3><div class="rating-review-box"><strong>product_bought</strong> people bought<span class="jobs-available"><strong>jobs_available</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="product_image" alt="CSS Designer"></figure></div></div></a></li>'
-    var start_html ='<section class="container-fluid detail-box you-may-like-carousel cls_hide_sticky_panel"><div class="scroll"><h2 class="heading-primary-exe mt-30 mb-10 text-center">You may also like</h2><article class="col-sm-12"><div id="carousel-example-generic2" class="carousel slide" data-ride="carousel"><div class="carousel-inner" role="listbox" id="skill_list_box">'
+ 
+    var product_html = '<li class="col-sm-6"><a title="product_name" class="box-panel" href="/course/it-information-technology/css-designer/pd-276"><div class="media"><div class="media-body"><h3 class="listing-heading">product_name</h3><div class="rating-review-box"><strong>product_bought</strong> people bought<span class="jobs-available"><strong>product_bought</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="product_image" alt="CSS Designer"></figure></div></div></a></li>';
 
 
+    var start_html = '<section class="container-fluid detail-box you-may-like-carousel mb-30"><div class="scroll"><h2 class="heading-primary-exe mt-30 mb-10 text-center">You may also like</h2><article class="col-sm-12"><div id="carousel-example-generic2" class="carousel slide" data-ride="carousel"><div class="carousel-inner" role="listbox" id="skill_list_box">';
 
-    var end_html ='</div><a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev"><span class="exe-icon-chevron-left mt-10" aria-hidden="true"></span></a><a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next"><span class="exe-icon-chevron-right mt-10" aria-hidden="true"></span></a></div></article></div></section>'
+    var end_html ='</div><a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev"><span class="exe-icon-chevron-left mt-10" aria-hidden="true"></span></a><a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next"><span class="exe-icon-chevron-right mt-10" aria-hidden="true"></span></a></div></article></div></section>';
 
     final_html = ''
     $.get(recommended_product_url, function(data){
-      var num_of_element = 3
+      var num_of_element = 2
       if(data.count){
         for(i=0; i< data.results.length;i++) {
           if(i % num_of_element == 0 && i == 0){

@@ -367,7 +367,7 @@ class ProductInformationMixin(object):
             if self.product_obj.type_flow == 14:
                 ctx['university_detail'] = json.loads(sqs.pUncdl[0])
                 faculty = [f.faculty for f in self.product_obj.facultyproducts.all().select_related('faculty','faculty__institute')]
-                ctx['faculty'] = [faculty[i:i + 1]for i in range(len(faculty))]
+                ctx['faculty'] = [faculty[i:i + 2]for i in range(0, len(faculty),2)]
                 ctx['institute'] = self.product_obj.category_main
                 app_process = ctx['university_detail']['app_process']
                 ctx['university_detail']['app_process'] = [APPLICATION_PROCESS.get(proc) for proc in app_process]
