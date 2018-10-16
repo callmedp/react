@@ -431,6 +431,12 @@
                 top: 50%;
             }
         }
+
+        .no-content {
+            .acc_icon_expand {
+                background: none !important;
+            }
+        }
     }  
 }
 

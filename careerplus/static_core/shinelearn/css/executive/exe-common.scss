@@ -652,3 +652,15 @@ footer {
 		text-transform: none;
 	}
 }
+
+
+
+.no-content {
+	a.collapsed:after,
+	.panel-title a::after {
+		content: none;
+		background: none !important;
+	}
+}
+
+
