@@ -2,14 +2,15 @@
 {% load shop_tags %}
 
 {% for prd in products %}
-  <div class="col-sm-4">
+  <div class="col-sm-4" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+    <meta itemprop="position" content="{{forloop.counter}}" />
     <div class="exe-box exe-courses-offered pr">
       <div class="media">
         <div class="media-body">
           <figure>
             <i class="exe-university-small-img"><img src="{{category_obj.icon.url}}" alt="{{category_obj.name}}.png" class="img-responsive"></i>
             <figcaption>
-              <a href="{{prd.pURL}}"><h3>{{prd.pHd}}</h3></a>
+              <a href="{{prd.pURL}}"><h3 itemprop="name">{{prd.pHd}}</h3></a>
               <p> <i class="exe-icon-batch-grey"></i>{% if prd.pUncdl %} Starts  <strong>{{prd.pUncdl.launchdate}}</strong>  |  {% endif %}<strong>{% if prd.pVrs.var_list %}{{prd.pVrs.var_list.0.dur_days|convert_to_month}} months{% endif %}</strong></p>
             </figcaption>
           </figure>
@@ -18,7 +19,7 @@
           {% if prd.pUncdl.applydate >= today_date %}
           <span class="admission-open">Admission open</span>
           {% endif %}
-          <a href="{{prd.pURL}}">
+          <a href="{{prd.pURL}}" itemprop="url">
           <figure>
             <img src="{{prd.pIc}}" alt="{{prd.pImA}}">
           </figure>
