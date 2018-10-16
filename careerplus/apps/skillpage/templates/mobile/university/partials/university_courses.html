@@ -1,9 +1,11 @@
-{% load static %}
+{% load static humanize %}
 {% load shop_tags %}
 
 {% for prd in products %}
 <div class="white-box p-15 pr-0">
+    {% if prd.pUncdl.applydate >= today_date %}
     <div class="offer-tag">Admission open</div>
+    {% endif %}
     <div class="university-logo">
         <img
             src="{{category_obj.icon.url}}"/>

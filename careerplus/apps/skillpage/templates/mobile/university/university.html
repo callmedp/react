@@ -221,7 +221,8 @@
                                         </div>
                                         <div class="media-body">
                                             <p class="pb-0 text-upper fs-14 c-333">{{testimonial.user_name}}</p>
-                                            <p class="pb-0 line-height-sm c-999">{{testimonial.designation}},  {{testimonial.company}}</p>
+                                            <p class="pb-0 line-height-sm c-999">
+                                            {{testimonial.designation}}{% if testimonial.designation and testimonial.company %},  {% endif %}{{testimonial.company}}</p>
                                         </div>
                                     </div>
                                 </li>

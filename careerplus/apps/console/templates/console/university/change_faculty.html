@@ -93,6 +93,7 @@
                     <div class="x_content">
                   
                   <form class="form-horizontal form-label-left" method="POST" action="." novalidate enctype="multipart/form-data" id="change-faculty-form">
+                    {{form.media}}
                     {% csrf_token %}
                     {% if form.non_field_errors %}
                       <div class="alert alert-danger alert-dismissible fade in" role="alert">

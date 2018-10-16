@@ -1056,8 +1056,9 @@ class Product(AbstractProduct, ModelMeta):
                     var.vendor = self.vendor
                     var.save()
             self.title = self.get_title()
-            unique_key = 'prd_absolute_url_' + str(self.pk)
-            cache.delete(unique_key)
+            delete_keys = cache.keys('prd_*_' + str(self.product.pk))
+            for uk in delete_keys:
+                cache.delete(uk)
         super(Product, self).save(*args, **kwargs)
         if getattr(self, 'attr', None):
             self.attr.save()
@@ -1584,9 +1585,23 @@ class Product(AbstractProduct, ModelMeta):
 
         launch_date = ''
         if self.university_course_detail:
-            launch_date  = self.university_course_detail.batch_launch_date
+            launch_date = self.university_course_detail.batch_launch_date
             cache.set(unique_key, launch_date, 86400)
         return ''
+
+    def is_admission_open(self):
+        unique_key = 'prd_is_admission_open_' + str(self.pk)
+        apply_date = cache.get(unique_key)
+        if apply_date:
+            return apply_date
+        apply_date = False
+        if self.university_course_detail:
+            apply_date = self.university_course_detail.apply_last_date
+        apply_date = apply_date >= timezone.now().date()
+        cache.set(unique_key, apply_date, 86400)
+        return apply_date
+
+
 
     @classmethod
     def post_save_product(cls, sender, instance, **kwargs):
@@ -2624,6 +2639,13 @@ class UniversityCourseDetail(models.Model):
         blank=True,
         help_text='semi-colon(;) separated designations, e.g. Managers, Decision makers; Line Managers; ...')
 
+    def save(self, *args, **kwargs):
+        if self.pk:
+            delete_keys = cache.keys('prd_*_' + str(self.product.pk))
+            for uk in delete_keys:
+                cache.delete(uk)
+        super(UniversityCourseDetail, self).save(*args, **kwargs)
+
     @property
     def get_application_process(self):
         if self.application_process:
@@ -2682,9 +2704,8 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
         blank=True, null=True)
     designation = models.CharField(
         _('Designation'), max_length=200)
-    description = models.TextField(
-        verbose_name=_('Description'),
-        blank=True, default='')
+    description = RichTextField(
+        verbose_name=_('Description'), blank=True, default='')
     short_desc = models.TextField(
         verbose_name=_('Short Description'),
         blank=True, default='')

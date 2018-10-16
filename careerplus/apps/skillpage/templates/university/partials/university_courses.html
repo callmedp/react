@@ -1,4 +1,4 @@
-{% load static %}
+{% load static humanize %}
 {% load shop_tags %}
 
 {% for prd in products %}
@@ -15,7 +15,9 @@
           </figure>
         </div>
         <div class="media-right">
+          {% if prd.pUncdl.applydate >= today_date %}
           <span class="admission-open">Admission open</span>
+          {% endif %}
           <a href="{{prd.pURL}}">
           <figure>
             <img src="{{prd.pIc}}" alt="{{prd.pImA}}">

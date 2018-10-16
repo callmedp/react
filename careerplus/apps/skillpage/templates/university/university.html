@@ -262,7 +262,7 @@
                               <figcaption>
                                 <strong>{{testimonial.user_name}}</strong>
                                 <div class="exe-designation">
-                                  {{testimonial.designation}}, {{testimonial.company}}
+                                  {{testimonial.designation}}{% if testimonial.designation and testimonial.company %}, {% endif %}{{testimonial.company}}
                                 </div>
                               </figcaption>
                             </figure>
