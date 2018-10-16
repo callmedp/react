@@ -83,11 +83,9 @@
                  <div class="form-group">
                    <i class="sprite arrow1"></i>
 						    <select class="form-control form-control-new " id="product_id">
-							 <option  selected="selected" value="1921" > Experience : 0-1 years </option>
-							 <option  value="1922" > Experience : 1-4 years</option>
-							 <option  value="1923" > Experience : 4-8 years</option>
-                              <option  value="1924" > Experience : 8-15 years</option>
-                              <option  value="32" >Experience : 15+ years</option>
+                              {%for prd in products_lists %}
+							 <option {% if prd.pk== select %} select="selected" {% endif %} value={{prd.pk}} >Experience : {{prd.get_exp_db}} </option>
+                              {%endfor%}
 							</select>
 						  </div>
 

@@ -5,17 +5,21 @@ from django.views.generic import TemplateView
 from django.http.response import HttpResponsePermanentRedirect
 from django.core.cache import cache
 
+
 #local imports
 
 #inter app imports
 from core.mixins import EncodeDecodeUserData
 from linkedin.autologin import AutoLogin
 from shine.core import ShineCandidateDetail
+from .data import *
+from shop.models import Product
 
 #third party imports
 from urllib.parse import parse_qs
 from geolocation.models import Country
 from users.models import User
+from haystack.query import SearchQuerySet
 
 class MarketingPages(TemplateView):
     template_name = 'marketing/'
@@ -65,6 +69,21 @@ class MarketingPages(TemplateView):
         tpl_path = path[0]
         if '.html' not in path[0]:
             tpl_path = tpl_path + '.html'
+        prod_keys,select = URL_MAPPING_TO_PRODUCT.get(tpl_path,"")
+        if prod_keys:
+            prod_obj = []
+            for pk in prod_keys:
+                cache_map_prod = cache.get('detail_solr_product_' + str(pk))
+                if cache_map_prod:
+                    prod_obj.append(cache_map_prod)
+                else:
+                    prd = SearchQuerySet().filter(id=pk)
+                    if prd:
+                        prd = prd[0]
+                        cache.set('detail_solr_product_' + str(pk), prd, 60*60*4)
+                        prod_obj.append(prd)
+            context.update({'products_lists': prod_obj})
+            context.update({'select':select})
         self.template_name = self.template_name + tpl_path
         params_dict = parse_qs(full_path)
         allowed_keys = ['cmp', 'keyword', 'placement']

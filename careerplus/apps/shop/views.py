@@ -446,12 +446,12 @@ class ProductInformationMixin(object):
 
 
     def get_product_detail_context(self, product, sqs, product_main, sqs_main):
-        main_ctx={}
-        key="context_product_detail_"+str(product.pk)
+        main_ctx = {}
+        key = "context_product_detail_"+ str(product.pk)
         if cache.get(key):
             main_ctx.update(cache.get(key))
         else:
-            data=self.get_product_information(product, sqs, product_main, sqs_main)
+            data = self.get_product_information(product, sqs, product_main, sqs_main)
             main_ctx.update(data)
             cache.set(key,data,60*60*4)
         main_ctx.update(self.get_other_detail(product, sqs))
@@ -736,27 +736,30 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
     def get(self, request, **kwargs):
         pk = self.kwargs.get('pk')
-        self.key = 'detail_product_'+pk
-        cache_data_maping = cache.get(self.key)
-
-        if cache_data_maping:
-            self.product_obj = cache_data_maping.get('product_obj','')
-            self.sqs = cache_data_maping.get('sqs','')
-            self.category = cache_data_maping.get('category','')
+        self.prd_key = 'detail_db_product_'+pk
+        self.prd_solr_key = 'detail_solr_product_'+pk
+        cache_dbprd_maping=cache.get(self.prd_key, "")
+       #setting cache if product is not in dbcache
+        if cache_dbprd_maping:
+            self.product_obj = cache_dbprd_maping
         else:
             self.product_obj = Product.browsable.filter(pk=pk).first()
+            cache.set(self.prd_key, self.product_obj, 60 * 60 * 4)
             if not self.product_obj:
                 raise Http404
-            self.cache_dict.update({'product_obj': self.product_obj})
+        cache_slrprd_maping = cache.get(self.prd_solr_key, "")
+
+        # setting cache if product is not in solrcache
+
+        if cache_slrprd_maping:
+            self.sqs = cache_slrprd_maping
+        else:
             sqs = SearchQuerySet().filter(id=pk)
             if sqs:
                 self.sqs = sqs[0]
+                cache.set(self.prd_solr_key, self.sqs, 60 * 60 * 4)
             else:
                 raise Http404
-            self.cache_dict.update({'sqs': self.sqs})
-
-            cache.set(self.key, self.cache_dict, 60*60*4)
-
         if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
             linkedin_cid = settings.LINKEDIN_DICT.get('CLIENT_ID', None)
             token = request.GET.get('token', '')
@@ -1101,18 +1104,51 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
         if request.is_ajax():
             self.main_pk = self.request.GET.get('main_pk', None)
             self.obj_pk = self.request.GET.get('obj_pk', None)
-            self.product_obj = Product.browsable.filter(pk=self.obj_pk).first()
+
+            db_key = 'detail_db_product_' + str(self.obj_pk)
+            cached_db_item = cache.get(db_key, "")
+
+            if not cached_db_item:
+                self.product_obj = Product.browsable.filter(pk=self.obj_pk).first()
+                cache.set(db_key, self.product_obj, 60*60*4)
+
+            else:
+                self.product_obj = cached_db_item
+
             if not self.product_obj:
                 raise 404
-            self.product_main = Product.browsable.get(pk=self.main_pk)
+
+            db_key = 'detail_db_product_' + str(self.main_pk)
+            cached_db_item = cache.get(db_key, "")
+            #setting cache if product is not in dbcache
+            if not cached_db_item:
+                self.product_main = Product.browsable.get(pk=self.main_pk)
+                cache.set(db_key, self.product_main, 60*60*4)
+            else:
+                self.product_main = cached_db_item
+
             if not self.product_main:
                 raise 404
-            sqs = SearchQuerySet().filter(id=self.obj_pk)
-            self.sqs_obj = sqs[0]
+
+            slr_key = 'detail_solr_product_' + str(self.obj_pk)
+            cached_slr_item = cache.get('slr_key', "")
+            # setting cache if product is not in solrcache
+            if not cached_slr_item:
+                sqs = SearchQuerySet().filter(id=self.obj_pk)
+                self.sqs_obj = sqs[0]
+                cache.set(slr_key, self.sqs_obj, 60*60*4)
+            else:
+                self.sqs_obj = cached_slr_item
             if not self.sqs_obj:
                 raise 404
-            sqs = SearchQuerySet().filter(id=self.main_pk)
-            self.sqs_main = sqs[0]
+            slr_key = 'detail_solr_product_' + str(self.main_pk)
+            cached_slr_item = cache.get('slr_key', "")
+            if not cached_slr_item:
+                sqs = SearchQuerySet().filter(id=self.main_pk)
+                self.sqs_main = sqs[0]
+                cache.set(slr_key, self.sqs_main, 60*60*4)
+            else:
+                self.sqs_main = cached_slr_item
             if not self.sqs_main:
                 raise 404
             if self.sqs_obj and self.sqs_main and self.product_obj and self.product_main:
