@@ -195,14 +195,16 @@
                         <h2><span><i class="execIcon-exclusive"></i></span>Exclusive benefits</h2>
                         <div class="content">
                             <p class="subhead mb-15"><strong>Key Benefits</strong></p>
-                            <ul class="who-attend">
+                            <ul class="key-benefits">
                                 {% for benefit in university_detail.benefits %}
-                                <li class="{{benefit.1}}">
+                                <li>
+                                    <i class="{{benefit.1}}"></i>
                                     <div>
                                         <h3>{{ benefit.0 }}</h3>
-                                        <p>{{ benefit.2 }}</p>
+                                        <p class="pb-0">{{ benefit.2 }}</p>
                                     </div>
                                 </li>
+
                                 {% endfor %}
                             </ul>
                             <hr />
