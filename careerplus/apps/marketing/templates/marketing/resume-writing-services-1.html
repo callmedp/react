@@ -1,4 +1,6 @@
 {% load static %}
+{% load humanize search_tags %}
+
 <!DOCTYPE html>
 <!-- saved from url=(0095)file:///C:/Users/ft0734/Documents/Six%20Sigma%20Green%20Belt%20Page%20-%20Shine%20Learning.html -->
 <html lang="en" class="gr__learning_shine_com"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -84,7 +86,7 @@
                    <i class="sprite arrow1"></i>
 						    <select class="form-control form-control-new " id="product_id">
                               {%for prd in products_lists %}
-							 <option {% if prd.pk== select %} select="selected" {% endif %} value={{prd.pk}} >Experience : {{prd.get_exp_db}} </option>
+							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >Experience : {{prd.pEX|get_choice_display:"EXP_DICT"}} </option>
                               {%endfor%}
 							</select>
 						  </div>

@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize search_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -63,7 +64,7 @@
 							<i class="sprite arrow"></i>
 						     <select class="form-control" id="product_id">
                               {%for prd in products_lists %}
-							 <option {% if prd.pk== select %} select="selected" {% endif %} value={{prd.pk}} >Experience : {{prd.get_exp_db}} </option>
+							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >Experience : {{prd.pEX|get_choice_display:"EXP_DICT"}} </option>
                               {%endfor%}
 							</select>
 						  </div>
