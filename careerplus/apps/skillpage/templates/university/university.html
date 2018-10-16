@@ -174,7 +174,7 @@
                                     <div class="exe-designation">{{fac.designation}} – 
                                       <span>{{category_obj.name}}</span>
                                     </div>
-                                    <p>{{fac.description}}</p>
+                                    <p>{{fac.description|safe|truncatechars:500}}</p>
                                   </figcaption>
                                 </figure>
                               </div>

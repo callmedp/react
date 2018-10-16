@@ -2725,6 +2725,18 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
     active = models.BooleanField(
         default=False)
 
+    _metadata_default = ModelMeta._metadata_default.copy()
+    
+    _metadata = {
+        'title': 'title',
+        'description': 'get_description',
+        'og_description': 'get_description',
+        'keywords': 'get_keywords',
+        'published_time': 'created',
+        'modified_time': 'modified',
+        'url': 'get_absolute_url',
+    }
+
     class Meta:
         verbose_name = _('Faculty')
         verbose_name_plural = _('Faculty')
@@ -2756,6 +2768,20 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
     def get_full_url(self):
         return self.get_absolute_url()
 
+    def get_meta_desc(self, description=''):
+        try:
+            from bs4 import BeautifulSoup
+            soup = BeautifulSoup(self.description, 'html.parser')
+            cleantext = soup.get_text()
+            cleantext = cleantext.strip()
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+            cleantext = ''
+        return cleantext
+
+    def get_keywords(self):
+        return self.meta_keywords.strip().split(",")
+
     def get_absolute_url(self):
         return reverse('university-faculty',
             kwargs={'faculty_slug': self.slug, 'pk': self.pk})
@@ -2764,9 +2790,6 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
         if self.active:
             return 'Active'
         return 'In-Active'
-
-    def get_meta_desc(self):
-        return self.description
 
     def get_description(self):
         return self.meta_desc

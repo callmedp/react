@@ -143,7 +143,7 @@
                                         <p class="desigation mt-15">{{fac.designation}} – {{fac.company}}
                                             <span></span>
                                         </p>
-                                        <p>{{fac.description|truncatechars:100}}...<a href="{{fac.get_absolute_url}}">read more</a></p>
+                                        <p>{{fac.description|safe|truncatechars:100}}...<a href="{{fac.get_absolute_url}}">read more</a></p>
                                     </li>
                                     {% endif %}
                                     {% endfor %}

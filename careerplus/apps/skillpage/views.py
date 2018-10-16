@@ -429,7 +429,8 @@ class UniversityPageView(DetailView):
         """
         faculty = self.object.faculty_set.filter(
             active=True, role=FACULTY_TEACHER)
-        faculty = zip_longest(*[iter(faculty)] * 2, fillvalue=None)
+        step = 2
+        faculty = [faculty[x: x + step] for x in range(0, len(faculty), step)]
         return faculty
 
     def _get_faculty_principal(self):
