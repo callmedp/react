@@ -1056,7 +1056,7 @@ class Product(AbstractProduct, ModelMeta):
                     var.vendor = self.vendor
                     var.save()
             self.title = self.get_title()
-            delete_keys = cache.keys('prd_*_' + str(self.product.pk))
+            delete_keys = cache.keys('prd_*_' + str(self.pk))
             for uk in delete_keys:
                 cache.delete(uk)
         super(Product, self).save(*args, **kwargs)
