@@ -533,17 +533,6 @@
   @include icon-block (40px, 40px, -124px -36px);
 }
 
-.free::before  {
-  @include icon-block (45px, 40px, -168px -36px);
-}
-
-.emi::before  {
-  @include icon-block (45px, 40px, -215px -36px);
-}
-
-.credits::before  {
-  @include icon-block (45px, 40px, -263px -36px);
-}
 
 .free-services::before  {
   @include icon-block (45px, 40px, -311px -36px);
@@ -596,6 +585,18 @@
 
 .exe-icon-get-complete-application {
   background-position: -457px -88px;
+}
+
+.exe-icon-feat-profile {
+  @include icon-block (60px, 38px, -169px -38px);
+}
+
+.exe-icon-shine-credit {
+  @include icon-block (42px, 37px, -265px -37px);
+}
+
+.exe-icon-education-provider {
+  @include icon-block (45px, 40px, -360px -37px);
 }
 
 .execIcon-down-arrow-big {
