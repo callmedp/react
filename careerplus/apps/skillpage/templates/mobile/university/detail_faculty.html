@@ -1,6 +1,5 @@
 {% extends "mobile/basic/base.html" %}
-{% load static compress %}
-{% load humanize search_tags shop_tags %}
+{% load static meta compress humanize shop_tags %}
 {% block css_section %}
 {{ block.super }}
     {% compress css %}
@@ -60,7 +59,7 @@
                 <h1>{{faculty_obj.name}}</h1>
                 <p class="c-999">{{faculty_obj.designation}} – {{university.heading}}</p>
 
-                <p class="pt-30">{{faculty_obj.description}}</p>
+                <p class="pt-30">{{faculty_obj.description|safe}}</p>
             </div><!-- /. white container -->
             <div class="content-box">
                 <!-- Courses offered Start Here -->
@@ -68,22 +67,24 @@
                     <h2>Courses taken by {{faculty_obj.name}}</h2>
                         {% for prd in products %}
                         <div class="white-box p-15 pr-0">
+                            {% if prd.is_admission_open %}
                             <div class="offer-tag">Admission open</div>
+                            {% endif %}
                             <div class="university-logo">
                                 <img
                                     src="{{university.icon.url}}" alt="{{university.name}}" />
                             </div>
                             <div class="media mt-15">
                                 <div class="media-body pb-0">
-                                    <h3 class="mb-5"><a href="{{prd.product.get_absolute_url}}">{{prd.product.heading}}</a></h3>
-                                    <div><span class="date-icon">Starts</span>  {{prd.product.get_batch_launch_date|date:"M Y"}} <span class="spacer">|</span> {{prd.product.get_duration_in_day|convert_to_month}} months</div>
+                                    <h3 class="mb-5"><a href="{{prd.get_absolute_url}}">{{prd.heading}}</a></h3>
+                                    <div><span class="date-icon">Starts</span>  {{prd.get_batch_launch_date|date:"M Y"}} <span class="spacer">|</span> {{prd.get_duration_in_day|convert_to_month}} months</div>
                                 </div>
                                 
                                 <div class="media-left pr-0">
-                                    <a href="{{prd.product.get_absolute_url}}" class="course-logo">
+                                    <a href="{{prd.get_absolute_url}}" class="course-logo">
                                         <img    
-                                            src="{{prd.product.icon.url}}" 
-                                            class="img-responsive" alt="{{prd.product.image_alt}}"
+                                            src="{{prd.icon.url}}" 
+                                            class="img-responsive" alt="{{prd.image_alt}}"
                                         />
                                     </a>
                                 </div><!-- end of media body --></div>

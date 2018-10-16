@@ -39,18 +39,15 @@ class TestimonialModelForm(forms.ModelForm):
         self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
 
         self.fields['designation'].widget.attrs['class'] = form_class
-        self.fields['designation'].widget.attrs['required'] = True
         self.fields['designation'].widget.attrs['maxlength'] = 30
+        self.fields['designation'].required = False
         self.fields['designation'].widget.attrs['data-parsley-trigger'] = 'change'
-        self.fields['designation'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['designation'].widget.attrs['data-parsley-length'] = "[1, 30]"
         self.fields['designation'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-30 characters.'
 
         self.fields['company'].widget.attrs['class'] = form_class
-        self.fields['company'].widget.attrs['required'] = True
         self.fields['company'].widget.attrs['maxlength'] = 30
         self.fields['company'].widget.attrs['data-parsley-trigger'] = 'change'
-        self.fields['company'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['company'].widget.attrs['data-parsley-length'] = "[1, 30]"
         self.fields['company'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-30 characters.'
 
@@ -108,20 +105,14 @@ class TestimonialModelForm(forms.ModelForm):
 
     def clean_designation(self):
         designation = self.cleaned_data.get('designation', '').strip()
-        if not designation:
-            raise forms.ValidationError(
-                "This field is required.")
-        if len(designation) < 1 or len(designation) > 30:
+        if designation and (len(designation) < 1 or len(designation) > 30):
             raise forms.ValidationError(
                 "Designation should be between 1-30 characters.")
         return designation
 
     def clean_company(self):
         company = self.cleaned_data.get('company', '').strip()
-        if not company:
-            raise forms.ValidationError(
-                "This field is required.")
-        if len(company) < 1 or len(company) > 30:
+        if company and (len(company) < 1 or len(company) > 30):
             raise forms.ValidationError(
                 "Company should be between 1-30 characters.")
         return company

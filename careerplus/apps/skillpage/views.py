@@ -14,6 +14,7 @@ from django.utils.http import urlquote
 from core.library.haystack.query import SQS
 from django.conf import settings
 from django.core.cache import cache
+from django.utils import timezone
 
 from geolocation.models import Country
 from django.db.models import Q
@@ -391,7 +392,7 @@ class UniversityPageView(DetailView):
         Fetch all products with category same as that of object.
         """
         products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).\
-            filter(pCtg=self.object.pk, pTF=14)
+            filter(pTF=14) #  pTF=14, pCtg=self.object.pk
 
         # products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).\
         #     filter(pPc='course')[: 13]
@@ -428,7 +429,8 @@ class UniversityPageView(DetailView):
         """
         faculty = self.object.faculty_set.filter(
             active=True, role=FACULTY_TEACHER)
-        faculty = zip_longest(*[iter(faculty)] * 2, fillvalue=None)
+        step = 2
+        faculty = [faculty[x: x + step] for x in range(0, len(faculty), step)]
         return faculty
 
     def _get_faculty_principal(self):
@@ -474,7 +476,9 @@ class UniversityPageView(DetailView):
             {"canonical_url": self.object.get_canonical_url()})
         context.update({
             "PRODUCT_PAGE_SIZE": self.PRODUCT_PAGE_SIZE,
-            "UNIVERSITY_LEAD_SOURCE": UNIVERSITY_LEAD_SOURCE})
+            "UNIVERSITY_LEAD_SOURCE": UNIVERSITY_LEAD_SOURCE,
+            "today_date": timezone.now()\
+            .date().strftime('%d %b %Y').upper()})
         return context
 
 
@@ -513,30 +517,17 @@ class UniversityFacultyView(DetailView):
         In compliance with Ajax views for Product Load More.
         """
         if not products:
-            # products = self.object.facultyproducts.filter(
-            #     product__is_indexable=True, product__active=True,
-            #     active=True,
-            #     product__type_product__in=[0, 1, 3, 5],
-            #     product__type_flow=14,).order_by('display_order')
-            # import ipdb; ipdb.set_trace()
-            # products = Product.objects.prefetch_related('facultyproducts').filter(
-            #     type_product__in=[0, 1, 3, 5],
-            #     type_flow=14, is_indexable=True,
-            #     active=True,
-            #     facultyproducts__active=True,
-            #     facultyproducts__faculty=self.object).order_by(
-            #     'facultyproducts__display_order')
 
-            products = self.object.products.prefetch_related('facultyproducts').filter(
+            products = self.object.products.prefetch_related(
+                'facultyproducts').filter(
                 type_product__in=[0, 1, 3, 5],
                 type_flow=14, is_indexable=True,
-                active=True, is_indexed=True,
+                active=True,
                 facultyproducts__active=True,
                 facultyproducts__faculty=self.object).order_by(
                 'facultyproducts__display_order')
 
-            #product__is_indexed=True
-            # products = products.select_related('product')
+            #is_indexed=True
         # prod_page = Paginator(products, self.PRODUCT_PAGE_SIZE)
 
         # products = prod_page.page(page)
@@ -557,7 +548,8 @@ class UniversityFacultyView(DetailView):
         context.update({"meta": self._get_page_meta_data()})
         context.update({
             "products": self._get_paginated_products(),
-            "university": self.object.institute})
+            "university": self.object.institute,
+            "today_date": timezone.now().date()})
         context.update(
             {"canonical_url": self.object.get_canonical_url()})
         return context

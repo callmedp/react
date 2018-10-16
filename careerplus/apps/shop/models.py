@@ -1056,8 +1056,9 @@ class Product(AbstractProduct, ModelMeta):
                     var.vendor = self.vendor
                     var.save()
             self.title = self.get_title()
-            unique_key = 'prd_absolute_url_' + str(self.pk)
-            cache.delete(unique_key)
+            delete_keys = cache.keys('prd_*_' + str(self.pk))
+            for uk in delete_keys:
+                cache.delete(uk)
         super(Product, self).save(*args, **kwargs)
         if getattr(self, 'attr', None):
             self.attr.save()
@@ -1584,9 +1585,23 @@ class Product(AbstractProduct, ModelMeta):
 
         launch_date = ''
         if self.university_course_detail:
-            launch_date  = self.university_course_detail.batch_launch_date
+            launch_date = self.university_course_detail.batch_launch_date
             cache.set(unique_key, launch_date, 86400)
         return ''
+
+    def is_admission_open(self):
+        unique_key = 'prd_is_admission_open_' + str(self.pk)
+        apply_date = cache.get(unique_key)
+        if apply_date:
+            return apply_date
+        apply_date = False
+        if self.university_course_detail:
+            apply_date = self.university_course_detail.apply_last_date
+        apply_date = apply_date >= timezone.now().date()
+        cache.set(unique_key, apply_date, 86400)
+        return apply_date
+
+
 
     @classmethod
     def post_save_product(cls, sender, instance, **kwargs):
@@ -2624,6 +2639,13 @@ class UniversityCourseDetail(models.Model):
         blank=True,
         help_text='semi-colon(;) separated designations, e.g. Managers, Decision makers; Line Managers; ...')
 
+    def save(self, *args, **kwargs):
+        if self.pk:
+            delete_keys = cache.keys('prd_*_' + str(self.product.pk))
+            for uk in delete_keys:
+                cache.delete(uk)
+        super(UniversityCourseDetail, self).save(*args, **kwargs)
+
     @property
     def get_application_process(self):
         if self.application_process:
@@ -2682,9 +2704,8 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
         blank=True, null=True)
     designation = models.CharField(
         _('Designation'), max_length=200)
-    description = models.TextField(
-        verbose_name=_('Description'),
-        blank=True, default='')
+    description = RichTextField(
+        verbose_name=_('Description'), blank=True, default='')
     short_desc = models.TextField(
         verbose_name=_('Short Description'),
         blank=True, default='')
@@ -2703,6 +2724,18 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
         blank=True)
     active = models.BooleanField(
         default=False)
+
+    _metadata_default = ModelMeta._metadata_default.copy()
+    
+    _metadata = {
+        'title': 'title',
+        'description': 'get_description',
+        'og_description': 'get_description',
+        'keywords': 'get_keywords',
+        'published_time': 'created',
+        'modified_time': 'modified',
+        'url': 'get_absolute_url',
+    }
 
     class Meta:
         verbose_name = _('Faculty')
@@ -2735,6 +2768,20 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
     def get_full_url(self):
         return self.get_absolute_url()
 
+    def get_meta_desc(self, description=''):
+        try:
+            from bs4 import BeautifulSoup
+            soup = BeautifulSoup(self.description, 'html.parser')
+            cleantext = soup.get_text()
+            cleantext = cleantext.strip()
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+            cleantext = ''
+        return cleantext
+
+    def get_keywords(self):
+        return self.meta_keywords.strip().split(",")
+
     def get_absolute_url(self):
         return reverse('university-faculty',
             kwargs={'faculty_slug': self.slug, 'pk': self.pk})
@@ -2743,9 +2790,6 @@ class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
         if self.active:
             return 'Active'
         return 'In-Active'
-
-    def get_meta_desc(self):
-        return self.description
 
     def get_description(self):
         return self.meta_desc
