@@ -358,7 +358,7 @@
                     <article class="col-sm-12 pad-25 exe-accordian exe-structure-list2">
                         <ul class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                         {% for chapter in chapter_list %}
-                          <li class="panel panel-default">
+                          <li class="panel panel-default {% if not chapter.content %} no-content {% endif %}">
                             <div class="panel-heading" role="tab" id="heading_{{forloop.counter}}">
                               <h3 class="panel-title">
                                 <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOneExe_{{forloop.counter}}" {%if forloop.counter != 1%} class="collapsed" aria-expanded="false" {%else %} aria-expanded="true" {% endif %}  aria-controls="collapseOneExe_{{forloop.counter}}">
