@@ -333,6 +333,17 @@
     }
 }
 
+.key-benefits {
+    li {
+        display: flex;
+        margin-bottom: 15px;
+
+        i {
+            margin-right: 10px;
+        }
+    }
+}
+
 .tick-list {
     li {
         font-size: 0.875rem;
@@ -429,6 +440,12 @@
                 position: absolute;
                 right: 10px;
                 top: 50%;
+            }
+        }
+
+        .no-content {
+            .acc_icon_expand {
+                background: none !important;
             }
         }
     }  
@@ -665,6 +682,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#295986', end
 .university-detail,
 .faculty-detail {
 
+
     .overlay {
         z-index: 1;;
         /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.39+0,0.8+100 */
@@ -694,8 +712,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#295986', end
     
     .banner-list {
         padding-left: 15px;
-
         color: $txt-white;
+        padding-bottom: 15px;
+        width: 100%;
+        
         li {
             list-style-type: disc;
             margin-bottom: 10px;

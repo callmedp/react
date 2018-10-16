@@ -1,7 +1,7 @@
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 9; /* Sit on top */
     left: 0;
     top: 0;
     bottom: 0;
@@ -26,14 +26,15 @@
     .modal-content {
         @include border-radius(5px);
         background-color: $bg-white;
-        width: 95%;
-        margin: auto;
+        width: 90%;
+        margin: 4em auto;
         position: relative;
         overflow: hidden;
 
         h2 {
           padding: 10px 15px;
           border-bottom: 1px solid $border-grey-f5;
+          font-size: $font-size-lg
         }
 
         .header {
@@ -41,9 +42,9 @@
 
           .icon-close {
             position: absolute;
-            top: 50%;
+            top: 15px;
             right: 10px;
-            margin-top: -10px;
+            z-index: 2;
           }
         }
     }

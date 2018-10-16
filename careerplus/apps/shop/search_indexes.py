@@ -895,9 +895,12 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_pUncdl(self, obj):
         detail = {}
         if obj.type_flow == 14:
-            detail['launchdate'] = obj.university_course_detail.batch_launch_date.strftime('%d %b %Y').upper()
-            detail['applydate'] = obj.university_course_detail.apply_last_date.strftime('%d %b %Y').upper()
-            detail['payment_deadline'] = obj.university_course_detail.payment_deadline.strftime('%d/%m/%Y')
+            detail['launchdate'] = obj.university_course_detail.batch_launch_date.strftime('%d %b %Y').upper() \
+                if obj.university_course_detail.batch_launch_date else ''
+            detail['applydate'] = obj.university_course_detail.apply_last_date.strftime('%d %b %Y').upper() \
+                if obj.university_course_detail.apply_last_date else ''
+            detail['payment_deadline'] = obj.university_course_detail.payment_deadline.strftime('%d/%m/%Y') \
+                if obj.university_course_detail.payment_deadline else ''
             detail['benefits'] = obj.university_course_detail.get_benefits
             detail['app_process'] = obj.university_course_detail.get_application_process
             detail['assesment'] = obj.university_course_detail.assesment

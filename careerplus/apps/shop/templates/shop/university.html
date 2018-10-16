@@ -9,6 +9,19 @@
   <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
   <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}">
   <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}?type=amp">
+  <style rel="stylesheet" type="text/css">
+    .error {
+      font-size: 11px;
+      color: #f74343 !important;
+      font-weight: 400;
+    }
+
+    .error p {
+      margin-top: 5px;
+      margin-bottom: 0;
+    }
+   
+  </style>
 {% endblock canonical_url %}
 
         {% block django_meta %}
@@ -358,7 +371,7 @@
                     <article class="col-sm-12 pad-25 exe-accordian exe-structure-list2">
                         <ul class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                         {% for chapter in chapter_list %}
-                          <li class="panel panel-default">
+                          <li class="panel panel-default {% if not chapter.content %} no-content {% endif %}">
                             <div class="panel-heading" role="tab" id="heading_{{forloop.counter}}">
                               <h3 class="panel-title">
                                 <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOneExe_{{forloop.counter}}" {%if forloop.counter != 1%} class="collapsed" aria-expanded="false" {%else %} aria-expanded="true" {% endif %}  aria-controls="collapseOneExe_{{forloop.counter}}">
@@ -665,12 +678,15 @@
                           {% csrf_token %}
                         <div class="form-group">
                             <input name="name" id="name1" type="text" class="form-control" placeholder="Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}" >
+                            <p class="js-error"></p>
                           </div>
                           <div class="form-group">
                             <input id="email1" name="email" type="text" class="form-control" value="{{request.session.email}}" placeholder="Email">
+                            <p class="js-error"></p>
                           </div>
                           <div class="form-group">
                             <input id="mobile1" name="number" maxlength="10" minlength="10" type="text" class="form-control" placeholder="Mobile" value="{{request.session.mobile_no}}">
+                            <p class="js-error"></p>
                           </div>
                             <input type="hidden" name="product" value="{{ sqs.id }}">
 
@@ -706,12 +722,15 @@
                           {% csrf_token %}
                 <div class="form-group">
                   <input type="text" class="form-control" name="name" id="exampleInputName2"  name="name" placeholder="Name">
+                  <p class="js-error"></p>
                 </div>
                 <div class="form-group">
                   <input type="text" class="form-control"  name="email" id="exampleInputEmail2" name='email' placeholder="Email">
+                  <p class="js-error"></p>
                 </div>
                 <div class="form-group">
                     <input type="text" class="form-control" name="number" maxlength="10" minlength="10" type="text" id="exampleInputPhone2" placeholder="Phone Number">
+                     <p class="js-error"></p>
                 </div>
                 <input type="hidden" name="product" value="{{ sqs.id }}">
 
@@ -740,12 +759,15 @@
                           {% csrf_token %}
                 <div class="form-group">
                   <input type="text" class="form-control" id="exampleInputName3" placeholder="Name" name="name">
+                  <p class="js-error"></p>
                 </div>
                 <div class="form-group">
                   <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Email" name="email">
+                  <p class="js-error"></p>
                 </div>
                 <div class="form-group">                    
-                      <input type="text" class="form-control" name="number" maxlength="10" minlength="10" type="text" id="exampleInputPhone" placeholder="Phone Number">
+                    <input type="text" class="form-control" name="number" maxlength="10" minlength="10" type="text" id="exampleInputPhone" placeholder="Phone Number">
+                    <p class="js-error"></p>
                 </div>
                 <input type="hidden" name="product" value="{{ sqs.id }}">
 
