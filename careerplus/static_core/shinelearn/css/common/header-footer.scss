@@ -3088,6 +3088,13 @@ footer {
 	display: inline-block;
 }
 
+.exe-icon-batch-blk {
+	width: 20px;
+	height: 20px;
+	background: $sprite-exe -479px -92px;
+	display: inline-block;
+}
+
 .exe-icon-duration-sm {
 	width: 13px;
 	height: 15px;
@@ -3113,6 +3120,27 @@ footer {
 	width: 37px;
 	height: 40px;
 	background: $sprite-exe 0 -40px;
+	display: inline-block;
+}
+
+.exe-icon-division {
+	width: 29px;
+	height: 40px;
+	background: $sprite-exe -42px -40px;
+	display: inline-block;
+}
+
+.exe-icon-srmanager {
+	width: 33px;
+	height: 40px;
+	background: $sprite-exe -76px -40px;
+	display: inline-block;
+}
+
+.exe-icon-lnmanager {
+	width: 35px;
+	height: 39px;
+	background: $sprite-exe -115px -40px;
 	display: inline-block;
 }
 
@@ -3324,6 +3352,13 @@ footer {
 	height: 38px;
 	background: $sprite-exe -356px -137px;
 	display: inline-block;
+}
+
+.exe-icon-highilights {
+	width: 34px;
+	height: 34px;
+	display: inline-block;
+	background: $sprite-exe -439px -91px;
 }
 
 .exe-button-enrol {
