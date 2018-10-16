@@ -204,3 +204,4 @@ document.ontouchmove = function ( event ) {
 $("#uploadBtn").onchange = function () {
     $("#uploadFile").value = this.value;
 };
+

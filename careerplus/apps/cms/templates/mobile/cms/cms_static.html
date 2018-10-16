@@ -334,29 +334,36 @@ It is important to understand that these resumes are not accepted everywhere and
 
   <!-- Modal content -->
   <div class="modal-content">
-    <span class="close">&times;</span>
-    <strong>Request a call</strong>
-<form class="form-group" method="post" id="callback_form">
+      <div class="header">
+        <span class="icon-close close">&times;</span>
+        <h2>Request a call</h2>
+      </div>
+    <div class="content-box">
+        <form method="post" id="callback_form">
+            <ul>
+                <li class="form-group">
+                    <input class="form-control" placeholder="Name" type="text" name="name" value="{{request.session.full_name|safe}}">
+                    <span class="error-txt"></span>
+                </li>
 
-    <ul>
-<li>
-
-    <input class="form-control" placeholder="Name" type="text" name="name" value="{{request.session.full_name|safe}}">
-    <span class="error-txt"></span></li>
-    <li><input class="form-control" placeholder="Mobile Number" name="number" id="id_mobile"type="text" value="{{request.session.mobile_no|safe}}">
-        <span class="error-txt"></span>
-        </li>
-        {% if  page_obj %}
-            <input type="hidden" name="lsource" value="7">
-            <input type="hidden" name="product" value="{{page_obj.pk}}">
-            <input type="hidden" name="prd" value="{{page_obj.heading}}">
-            <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
-          {% endif %}
-    <li><textarea class="form-control" placeholder="Message" name='msg' rows="4"></textarea>
-    <span class="error-txt"></span>
-<li><button type="button" id="id_callback" class="request">Submit</button></li>
-    </ul>
-</form>
+                <li class="form-group">
+                    <input class="form-control" placeholder="Mobile Number" name="number" id="id_mobile"type="text" value="{{request.session.mobile_no|safe}}">
+                    <span class="error-txt"></span>
+                </li>
+                        {% if  page_obj %}
+                            <input type="hidden" name="lsource" value="7">
+                            <input type="hidden" name="product" value="{{page_obj.pk}}">
+                            <input type="hidden" name="prd" value="{{page_obj.heading}}">
+                            <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
+                        {% endif %}
+                <li class="form-group">
+                    <textarea class="form-control" placeholder="Message" name='msg' rows="4"></textarea>
+                    <span class="error-txt"></span>
+                </li>
+                <li class="form-group"><button type="button" id="id_callback" class="request">Submit</button></li>
+            </ul>
+        </form>
+    </div><!-- /. login-form -->
   </div>
 
 </div>
@@ -434,7 +441,7 @@ function modal(id,option){
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
      modal('myModal','none');
-    <!--modal.style.display = "none";-->
+    // modal.style.display = "none";
 }
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
