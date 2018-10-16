@@ -333,6 +333,17 @@
     }
 }
 
+.key-benefits {
+    li {
+        display: flex;
+        margin-bottom: 15px;
+
+        i {
+            margin-right: 10px;
+        }
+    }
+}
+
 .tick-list {
     li {
         font-size: 0.875rem;
