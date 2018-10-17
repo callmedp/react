@@ -493,12 +493,14 @@
                         </div>
 
                         <!-- Controls -->
-                        <a class="left carousel-control" href="#carousel-example-generic1" role="button" data-slide="prev">
-                          <span class="exe-icon-chevron-left mt-20" aria-hidden="true"></span>
-                        </a>
-                        <a class="right carousel-control" href="#carousel-example-generic1" role="button" data-slide="next">
-                          <span class="exe-icon-chevron-right mt-20" aria-hidden="true"></span>
-                        </a>
+                        {% if university_testimonial|length > 1%}
+                          <a class="left carousel-control" href="#carousel-example-generic1" role="button" data-slide="prev">
+                            <span class="exe-icon-chevron-left mt-20" aria-hidden="true"></span>
+                          </a>
+                          <a class="right carousel-control" href="#carousel-example-generic1" role="button" data-slide="next">
+                            <span class="exe-icon-chevron-right mt-20" aria-hidden="true"></span>
+                          </a>
+                        {% endif %}
                       </div>
                     </article>
                   </div>
@@ -907,12 +909,18 @@ $("#lead1, #lead2, #lead3").each(function() {
 
     var start_html = '<section class="container-fluid detail-box you-may-like-carousel mb-30"><div class="scroll"><h2 class="heading-primary-exe mt-30 mb-10 text-center">You may also like</h2><article class="col-sm-12"><div id="carousel-example-generic2" class="carousel slide" data-ride="carousel"><div class="carousel-inner" role="listbox" id="skill_list_box">';
 
-    var end_html ='</div><a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev"><span class="exe-icon-chevron-left mt-10" aria-hidden="true"></span></a><a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next"><span class="exe-icon-chevron-right mt-10" aria-hidden="true"></span></a></div></article></div></section>';
-
+    var end_html ='</div>carousel_arrow_html</div></article></div></section>';
+    var carousel_arrow_html =  '<a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev"><span class="exe-icon-chevron-left mt-10" aria-hidden="true"></span></a><a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next"><span class="exe-icon-chevron-right mt-10" aria-hidden="true"></span></a> '
     final_html = ''
     $.get(recommended_product_url, function(data){
       var num_of_element = 2
       if(data.count){
+        if(data.count > 2) {
+          end_html = end_html.replace('carousel_arrow_html', carousel_arrow_html)
+        }
+        else{
+           end_html = end_html.replace('carousel_arrow_html', '')
+        }
         for(i=0; i< data.results.length;i++) {
           if(i % num_of_element == 0 && i == 0){
             final_html += '<div class="item col-sm-12 active"><ul class="listing">'
