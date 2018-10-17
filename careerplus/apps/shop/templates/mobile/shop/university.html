@@ -78,7 +78,7 @@
 
             {% block container %}
             <div class="content-box pt-0">
-                <div class="university-info row">
+                <div class="university-info row mb-15">
                     <ul>
                         <li>
                             <span class="batch-execIcon">
@@ -132,9 +132,9 @@
                     <div class="white-box">
                         <h2><span><i class="execIcon-program"></i></span>About program</h2>
                         <div class="content">
-                             <span class="pointers mt-15">
+                             <div class="pointers mt-15">
                               {{ prd_desc|safe }}
-                              </span> 
+                             </div> 
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ About program -->
@@ -192,8 +192,8 @@
                                             <img src="{{ fac.get_image_url }}"/>
                                         </span>
                                         <h3><a href="{{fac.get_absolute_url}}">{{ fac.name }}</a></h3>
-                                        <p class="desigation mt-15">{{ fac.designation }} – 
-                                        <span>{{ fac.institute.name }}</span>
+                                        <p class="desigation mt-15">{{ fac.designation }} – {{ fac.institute.name }}
+                                        <span></span>
                                         </p>
                                         <p>{{fac.description|truncatechars:"120"}}... <a  href="{{fac.get_absolute_url}}">read more</a></p>
                                     </li>
@@ -289,33 +289,21 @@
                                 {{university_detail.assesment|safe}}
                             {% endif %}
                             {% if university_detail.sample_certificate %}
-                            <div class="sample-certificate mt-20">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <img class="media-object" src="{{university_detail.sample_certificate}}" alt="...">
-                                    </div>
-                                    <div class="media-body">
-                                        <p class="subhead">Sample certificate</p>
-                                        <p class="mt-15"><a  class="btn btn-outline btn-round-30 btn-slg" id="sample-certificate-btn">View sample certificate</a></p>
+                            <p class="mt-15 text-center"><a  class="btn btn-outline btn-round-30 btn-slg" id="sample-certificate-btn">View sample certificate</a></p>
+                            <div id="myModal" class="modal">
+                                <!-- Modal content -->`
+                                <div class="modal-content">
+                                    <div class="header">
+                                        <span class="icon-close close" id="close-modal">&times;</span>
+                                        <h2>Sample Certificate</h2>
+                                    </div><!-- /. header -->
 
-                                        <div id="myModal" class="modal">
-                                            <!-- Modal content -->`
-                                            <div class="modal-content">
-                                                <div class="header">
-                                                    <span class="icon-close close" id="close-modal">&times;</span>
-                                                    <h2>Sample Certificate</h2>
-                                                </div><!-- /. header -->
-
-                                                <div class="modal-body">
-                                                    <img src="{{ university_detail.sample_certificate }}" class="img-responsive"/>
-                                                </div>
-                                            </div><!-- /. modal-content-->
-                                                
-                                        </div><!-- /. modal -->
+                                    <div class="modal-body">
+                                        <img src="{{ university_detail.sample_certificate }}" class="img-responsive"/>
                                     </div>
-                                </div>
-                                
-                            </div>
+                                </div><!-- /. modal-content-->
+                                    
+                            </div><!-- /. modal -->
                             {% endif %}
                         </div>
                     </div><!-- /. white box-->
