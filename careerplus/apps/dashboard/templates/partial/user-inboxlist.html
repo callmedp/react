@@ -100,7 +100,7 @@
                 
                 {% endif %}
 
-            {% elif obj.product.type_flow == 2 %}
+            {% elif obj.product.type_flow == 2 or obj.product.type_flow == 14 %}
                 {% if obj.oi_status == 5 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 

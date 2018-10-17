@@ -22,7 +22,7 @@ def update_initiat_orderitem_sataus(order=None):
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
 
-            elif oi.product.type_flow == 2:
+            elif oi.product.type_flow in [2, 14]:
                 last_oi_status = oi.oi_status
                 oi.oi_status = 5
                 oi.last_oi_status = last_oi_status

@@ -331,7 +331,7 @@
                             <ul class="testimonials faculty-profile testi-slide">
                                 {%for testimonial in university_testimonial %}
                                 <li>
-                                    <p class="mb-15">{{ testimonial.reviews }}</p>
+                                    <p class="mb-15">{{ testimonial.review }}</p>
 
                                     <div class="media">
                                         <div class="media-left">
@@ -364,7 +364,7 @@
                                     <div class="acc_content">
                                         <div class="overall-fees ">
                                             <div class="">
-                                                <p class="title pb-0">Overall fees</p>
+                                                <p class="title pb-0">Overall fee</p>
                                                 <p class="fee pb-0">Rs. {{start_price|floatformat|intcomma}}</p>
                                             </div>
                                             <div class="payment-deadline pull-right">
@@ -379,7 +379,7 @@
                                             <ul class="text-center payment-instament">
                                               {% for payment in university_detail.payment %}
                                                 <li>
-                                                    <p>{{forloop.counter|ordinal }} Instalment</p>
+                                                    <p>{{forloop.counter|ordinal }} Installment</p>
                                                     <p class="price">Rs. {{ payment.installment_fee|floatformat|intcomma }}</p>
                                                     <p>Payment Deadline: <strong>{{ payment.ldpayment }}</strong></p>
                                                 </li>
@@ -411,7 +411,7 @@
                                 <div class="accordion_in">
                                     <div class="acc_head fs-16">Late Fee</div>
                                     <div class="acc_content">
-                                        <p>Requests for refund of fees on account of cancellation of enrolment shall be considered only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</p>
+                                        <p>Requests for refund of fee on account of cancellation of enrolment shall be considered only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</p>
                                     </div>
                                 </div><!--/. Accordion 3 -->
                             </div><!-- /. accordion-wrap -->

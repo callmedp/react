@@ -33,7 +33,7 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
-        self.sel_opt=request.GET.get('rad_search','number')
+        self.sel_opt = request.GET.get('rad_search', 'number')
         self.payment_date = request.GET.get('payment_date', '')
         self.modified = request.GET.get('modified', '')
         return super(PartnerInboxQueueView, self).get(request, args, **kwargs)
@@ -43,7 +43,7 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
         paginator = Paginator(context['inbox_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
         alert = messages.get_messages(self.request)
-        var=self.sel_opt
+        var = self.sel_opt
         initial = {"modified": self.modified, "payment_date": self.payment_date}
         filter_form = OIFilterForm(initial)
         context.update({
@@ -53,7 +53,7 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
             "query": self.query,
             "draft_form": VendorFileUploadForm(),
             "action_form": OIActionForm(queue_name="partnerinbox"),
-            var:'checked',
+            var: 'checked',
         })
         return context
 
@@ -61,7 +61,7 @@ class PartnerInboxQueueView(ListView, PaginationMixin):
         queryset = super(PartnerInboxQueueView, self).get_queryset()
         queryset = queryset.filter(
             order__status=1, no_process=False,
-            product__type_flow__in=[2, 6, 9, 10],
+            product__type_flow__in=[2, 6, 9, 10, 14],
             order__welcome_call_done=True).exclude(
             wc_sub_cat__in=[64, 65]).exclude(
             oi_status__in=[4, 10, 81, 161, 162, 163])

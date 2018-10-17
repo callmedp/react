@@ -79,7 +79,7 @@
                     <strong>{{ university_detail.launchdate }}</strong>
                     <span>Duration: <strong>{{ selected_var.dur_days|convert_to_month }} months</strong></span>
                     <div class="sep mt-10 mb-10"></div>
-                    Fees
+                    Fee
                     <div class="exe-price">
                       Rs.{{ sqs.pPinb|floatformat|intcomma }}
                     </div>
@@ -152,7 +152,7 @@
                   <div class="container no-pad">
                     <div class="col-sm-12 about-tab cls_scroll_tab">
 
-                      <a title="About Course" class="active cls_tab_child" href="#about-course">About Course</a>                      
+                      <a title="About Course" class="active cls_tab_child" href="#about-course">About Program</a>                      
                       <a title="Who Should Attend" class=" cls_tab_child" href="#who-should-attend">Who Should Attend</a>
 
                       <a title="Faculty Profile" class=" cls_tab_child" href="#faculty-profile">Faculty Profile</a>
@@ -161,7 +161,7 @@
 
                       <a title="Program Structure" class="cls_tab_child" href="#program-structure">Program Structure</a>
 
-                      <a title="Fees & Payments Modes" class="cls_tab_child" href="#fees-payments">Fees & Payments Modes</a>
+                      <a title="Fees & Payments Modes" class="cls_tab_child" href="#fees-payments">Fee & Payment Modes</a>
 
                     </div>
                   </div>
@@ -180,7 +180,7 @@
                       <figure class="pr">
                         <i class="exe-icon-about-program"></i>
                       </figure>
-                      <h2 class="heading-primary-exe">About Course</h2>
+                      <h2 class="heading-primary-exe">About Program</h2>
                     </div>
                     <article class="col-sm-12 pad-25">
                       <span class="e-program-list mt-20">
@@ -478,7 +478,7 @@
                         <div class="carousel-inner" role="listbox">
                         {%for testimonial in university_testimonial %}
                           <div class="item col-sm-12 {% if forloop.counter == 1%} active {% endif %}">
-                            <p class="mb-20 mt-20">{{ testimonial.reviews }}</p>
+                            <p class="mb-20 mt-20">{{ testimonial.review|safe }}</p>
                             <figure>
                               <img src="{{ testimonial.image.url }}" alt="Faculty Profile">
                               <figcaption>
@@ -534,7 +534,7 @@
                                 <strong>{{university_detail.payment_deadline}}</strong> 
                               </div> 
                               <div class="overall-fees">
-                                Overall fees                                  
+                                Overall fee                                  
                                 <strong>Rs. {{start_price|floatformat|intcomma}}</strong> 
                               </div> 
                               <span class="e-blue-bdr mt-15"></span>
@@ -543,7 +543,7 @@
                                 <span class="text-uppercase col-sm-12 mb-15">Installment Available</span>
                                  {% for payment in university_detail.payment %}
                                 <div class="col-sm-4 installment-available">
-                                  {{forloop.counter|ordinal }} Instalment
+                                  {{forloop.counter|ordinal }} Installment
                                   <strong>Rs. {{ payment.installment_fee|floatformat|intcomma }} </strong>
                                   <span>Payment Deadline: <b>{{ payment.ldpayment }}</b></span>
                                 </div>
@@ -582,7 +582,7 @@
                           </div>
                           <div id="collapseThreeExe1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                             <div class="panel-body exe-late-fee">
-                              <p>Requests for refund of fees on account of cancellation of enrolment shall be considered only if such requests are received prior to closure of registration or 21 days before date of course commencement    whichever is earlier.</p>
+                              <p>Requests for refund of fee on account of cancellation of enrolment shall be considered only if such requests are received prior to closure of registration or 21 days before date of course commencement    whichever is earlier.</p>
                             </div>
                           </div>
                         </li>
@@ -645,7 +645,7 @@
                           <strong>{{ university_detail.launchdate }}</strong>
                           <span>Duration: <strong>{{ selected_var.dur_days|convert_to_month }} month</strong></span>
                           <div class="sep mt-10 mb-10"></div>
-                          Fees
+                          Fee
                           <div class="exe-price">
                           Rs.{{ sqs.pPinb|floatformat|intcomma }}
                           </div>
