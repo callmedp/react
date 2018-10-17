@@ -476,7 +476,7 @@
                         <div class="carousel-inner" role="listbox">
                         {%for testimonial in university_testimonial %}
                           <div class="item col-sm-12 {% if forloop.counter == 1%} active {% endif %}">
-                            <p class="mb-20 mt-20">{{ testimonial.reviews }}</p>
+                            <p class="mb-20 mt-20">{{ testimonial.review }}</p>
                             <figure>
                               <img src="{{ testimonial.image.url }}" alt="Faculty Profile">
                               <figcaption>

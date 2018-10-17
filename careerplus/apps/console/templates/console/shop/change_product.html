@@ -1804,10 +1804,10 @@
                         <div class="col-md-7 col-sm-7 col-xs-12">
                         {% for heading, subheading in prd_university_form.fields.attendees_criteria_choices.choices%}
                           <div class="col-md-6 col-sm-6 col-xs-12">
-                            <label>Heading - {{ forloop.counter }} </label><input type="text" class="form-control" value="{{heading}}" name="heading_{{forloop.counter0}}">
+                            <label>Heading - {{ forloop.counter }} </label><input type="text" class="form-control" value="{{heading}}" name="heading_{{forloop.counter0}}" maxlength="100">
                           </div>
                           <div class="col-md-6 col-sm-6 col-xs-12">
-                            <label>Sub Heading - {{ forloop.counter }}</label><input type="text"  class="form-control"  value="{{subheading}}" name="subheading_{{forloop.counter0}}">
+                            <label>Sub Heading - {{ forloop.counter }}</label><input type="text"  class="form-control"  value="{{subheading}}" name="subheading_{{forloop.counter0}}" maxlength="100">
                           </div>
                           <div class="col-md-12">
                             <hr>

@@ -1844,6 +1844,17 @@ class ChangeProductView(DetailView):
                                 reverse(
                                     'console:product-change',
                                     kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if formset:
+                                context.update({'prd_university_payment_formset': formset})
+                            messages.error(
+                                self.request,
+                                "University course payment Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_product.html"
+                                ], context)
                     elif slug == 'testimonial_model':
                         TestimonialModelFormset = modelformset_factory(
                             Testimonial,
