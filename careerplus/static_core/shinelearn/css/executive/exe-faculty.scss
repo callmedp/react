@@ -63,7 +63,7 @@
 		width: 78%;
 		vertical-align: top;
 		font-size: $font-size+3;
-		position: sticky;
+		position: relative;
 
 		@media (max-width: 1190px) {
 			width: 75%;
