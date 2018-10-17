@@ -38,9 +38,17 @@
         <div class="exe-header-txt container pr">
           <div class="row">
           <!-- breadcrums -->
-            <ol class="breadcrumb mt-30">
-              <li><a href="/">Home</a></li>
-              <li><a href="{{university.get_absolute_url}}">{{university.heading}}</a></li>
+            <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
+              <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                <a href="/" itemprop="item">Home</a>
+                <meta itemprop="name" content="Home" />
+                <meta itemprop="position" content="1" />
+              </li>
+              <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                <a href="{{university.get_absolute_url}}" itemprop="item">{{university.heading}}</a>
+                <meta itemprop="name" content="{{university.heading}}" />
+                <meta itemprop="position" content="2" />
+              </li>
               <li class="active">{{faculty_obj.name}}</li>
             </ol>
           </div>
@@ -88,15 +96,17 @@
       <!-- main parent section end -->   
 
       <!-- Courses taken -->
+      {% if products %}
       <section class="exe-courses-taken-box container-fluid">
         <div class="row">
           <h2 class="heading-primary-exe1 text-center mt-40 mb-20">Courses taken by {{ faculty_obj.name }}</h2>
           <div class="container">
             <div class="row">
-              <div class="row">
+              <div class="row" itemscope itemtype="http://schema.org/ItemList">
 
                 {% for prd in products %}
-                <div class="col-sm-4">
+                <div class="col-sm-4" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                  <meta itemprop="position" content="{{forloop.counter}}" />
                   <div class="exe-box exe-courses-offered pr">
                     <div class="media">
                       <div class="media-body">
@@ -104,7 +114,7 @@
                           <i class="exe-university-small-img"><img src="{{university.icon.url}}" alt="{{university.heading}}" class="img-responsive"></i>
                           <figcaption>
                             <a href="{{prd.get_absolute_url}}">
-                            <h3>{{prd.heading}}</h3>
+                            <h3 itemprop="name">{{prd.heading}}</h3>
                             </a>
                             <p> <i class="exe-icon-batch-grey"></i> Starts  <strong>
                             {{prd.get_batch_launch_date|date:"M Y"}}</strong>  |  <strong>{{prd.get_duration_in_day|convert_to_month}} months</strong></p>
@@ -115,7 +125,7 @@
                         {% if prd.is_admission_open %}
                         <span class="admission-open">Admission open</span>
                         {% endif %}
-                        <a href="{{prd.get_absolute_url}}">
+                        <a href="{{prd.get_absolute_url}}" itemprop="url">
                         <figure>
                           <img src="{{prd.icon.url}}" alt="{{prd.name}}">
                         </figure></a>
@@ -131,6 +141,7 @@
           </div>
         </div>
       </section>
+      {% endif %}
     {% endblock section2 %}
 
       

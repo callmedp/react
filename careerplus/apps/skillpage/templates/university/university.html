@@ -42,6 +42,7 @@
       <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
         <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
           <a href="/" itemprop="item">Home</a>
+          <meta itemprop="name" content="Home" />
           <meta itemprop="position" content="1" />
         </li>
         <li class="active">{{category_obj.heading}}</li>
@@ -133,7 +134,7 @@
           <h2 class="heading-primary-exe1 text-center mt-40 mb-20">Courses offered</h2>
           <div class="container">
             <div class="row">
-              <div class="row" id="id-university-course-list">
+              <div class="row" id="id-university-course-list" itemscope itemtype="http://schema.org/ItemList">
                 {% include "university/partials/university_courses.html" %}
               </div>
             </div>

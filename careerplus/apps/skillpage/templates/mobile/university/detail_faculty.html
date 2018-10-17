@@ -63,10 +63,12 @@
             </div><!-- /. white container -->
             <div class="content-box">
                 <!-- Courses offered Start Here -->
-                <div class="courses-offered container mt-15">
+                {% if products %}
+                <div class="courses-offered container mt-15" itemscope itemtype="http://schema.org/ItemList">
                     <h2>Courses taken by {{faculty_obj.name}}</h2>
                         {% for prd in products %}
-                        <div class="white-box p-15 pr-0">
+                        <div class="white-box p-15 pr-0" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                            <meta itemprop="position" content="{{forloop.counter}}" />
                             {% if prd.is_admission_open %}
                             <div class="offer-tag">Admission open</div>
                             {% endif %}
@@ -76,12 +78,12 @@
                             </div>
                             <div class="media mt-15">
                                 <div class="media-body pb-0">
-                                    <h3 class="mb-5"><a href="{{prd.get_absolute_url}}">{{prd.heading}}</a></h3>
+                                    <a href="{{prd.get_absolute_url}}"><h3 class="mb-5" itemprop="name">{{prd.heading}}</h3></a>
                                     <div><span class="date-icon">Starts</span>  {{prd.get_batch_launch_date|date:"M Y"}} <span class="spacer">|</span> {{prd.get_duration_in_day|convert_to_month}} months</div>
                                 </div>
                                 
                                 <div class="media-left pr-0">
-                                    <a href="{{prd.get_absolute_url}}" class="course-logo">
+                                    <a href="{{prd.get_absolute_url}}" class="course-logo" itemprop="url">
                                         <img    
                                             src="{{prd.icon.url}}" 
                                             class="img-responsive" alt="{{prd.image_alt}}"
@@ -92,6 +94,7 @@
                         {% endfor %}
 
                 </div><!-- Courses offered Ends Here -->
+                {% endif %}
             </div><!-- /. content-box --> 
 
              {% block call_us %}
