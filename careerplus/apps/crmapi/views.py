@@ -99,6 +99,8 @@ class LeadManagement(View):
 
             if university_course:
                 request.session['university_course'] = True
+                request.session['lead_email'] = email
+                request.session['lead_mobile'] = mobile
 
             lead = UserQuries.objects.create(
                 name=name,

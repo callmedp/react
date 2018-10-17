@@ -601,7 +601,7 @@
             start_html = '<div class="you-may-like"><div class="container"><h2 class="pt-5">You may also like</h2><div class="slide-container"><ul class="login-slider">'
             end_html = '</ul></div></div></div>'
             final_html = ''
-            product_html = '<li><div class="media"><div class="media-body"> <p class="fs-15 bold"><a title="product_name" href="#">product_name</a></p><div class="rating block ml-0 fs-12 pb-10"><sup class="fill-star"></sup><strong>3.3</strong>/5</div><p class="fs-12 c6"><strong>jobs_available</strong> Jobs available</p></div><div class="media-left"><a title="Lean Six Sigma Green Belt" href="#" class="home-banner-img"><img src="product_image" alt="..."></a></div></div></li>'
+            product_html = '<li><div class="media"><div class="media-body"> <p class="fs-15 bold"><a title="product_name" href="product_url">product_name</a></p><div class="rating block ml-0 fs-12 pb-10"><sup class="fill-star"></sup><strong>3.3</strong>/5</div><p class="fs-12 c6"><strong>jobs_available</strong> Jobs available</p></div><div class="media-left"><a title="Lean Six Sigma Green Belt" href="product_url" class="home-banner-img"><img src="product_image" alt="..."></a></div></div></li>'
             $.get(recommended_product_url, function(data){
               if(data.count){
                 for(i=0; i< data.results.length;i++) {
@@ -610,6 +610,7 @@
                   .replace('product_rating', data.results[i].avg_rating)
                   .replace('jobs_available', data.results[i].no_jobs)
                   .replace('product_image', data.results[i].pImg)
+                  .replace(/product_url/g, data.results[i].pURL)
                 }
                 $("#skill_list_box").html(start_html + final_html + end_html)
               }
