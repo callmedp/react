@@ -202,6 +202,18 @@ label:hover ~ label {
 }
 
 
+.college-logos {
+  background-color: $bg-white;
+  box-shadow: $box-shadow-2;
+  padding: 15px;
+  position: relative;
+
+  li {
+    margin: 0 30px;
+  }
+}
+
+
 .logged-in {
   overflow: hidden;
   li {

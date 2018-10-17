@@ -173,6 +173,16 @@ $(document).ready(function() {
 		dots: false,
 		infinite: true
 	});
+	
+	$(".college-logo-slider").slick({
+		autoplay:false,
+		arrows: false,
+		dots: true,
+		infinite: true,
+		variableWidth: true,
+  		slidesToShow: 2,
+  		slidesToScroll: 1
+	});
 
 
 
