@@ -333,6 +333,10 @@ class PaymentShippingView(UpdateView, CartMixin):
                 form.initial.update({
                     'mobile': self.request.session.get('mobile_no')})
 
+        if not form.initial.get('mobile'):
+            form.initial.update({
+                'mobile': self.request.session.get('lead_mobile')})
+
         if not form.initial.get('country_code'):
             form.initial.update({
                 'country_code': '91'})

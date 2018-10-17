@@ -239,7 +239,7 @@
                   </article>
                 </section>
                 {% endif %}
-                <input type="hidden" id="skilllist" value="{{sqs.pSkilln|join:""}}">
+                <input type="hidden" id="skilllist" value="{% if sqs.pSkilln %} {{sqs.pSkilln|join:""}}{% endif %}">
                 
                 {% block prdrecommended %}
                   <div id="skill_list_box">
@@ -674,7 +674,7 @@
                       <h2>Want help with this course?</h2>
                       <strong>Let our learning specialists guide you</strong>
                       <article class="col-sm-12 exe-box mt-15">
-                       <input type="hidden" id="skilllist" value="{{sqs.pSkilln|join:""}}">
+                       <input type="hidden" id="skilllist" value="{% if sqs.pSkilln %} {{sqs.pSkilln|join:""}}{% endif %}">
                         <form  id="lead1" method="POST" action="{% url 'crmapi:lead-management' %}">
                           {% csrf_token %}
                         <div class="form-group">
