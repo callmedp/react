@@ -89,11 +89,11 @@
                         <a role="button" class="exe-button-enrol mt-10" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
                     {% endif %}
                      {% if not request.session.candidate_id and not request.session.university_course %}
-                      <a href="{{ university_detail.brochure }}" class="exe-download-brochure" id="download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><i class="exe-icon-brochure"></i>
+                      <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><i class="exe-icon-brochure"></i>
                             Download Brochure
                       </a>
                     {% else %}
-                     <a href="{{ university_detail.brochure }}" class="exe-download-brochure" id="download_broucher"><i class="exe-icon-brochure"></i>
+                     <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" {% if request.session.university_course%} download={{ university_detail.brochure }}{% endif%}><i class="exe-icon-brochure"></i>
                             Download Brochure
                       </a>
                     {% endif %}
@@ -655,15 +655,15 @@
                             {% else %}
                                 <a role="button" class="exe-button-enrol mt-10" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
                             {% endif %}
-                            {% if not request.session.candidate_id and not request.session.university_course %}
-                              <a href="{{ university_detail.brochure }}" class="exe-download-brochure" id="download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><i class="exe-icon-brochure"></i>
-                                    Download Brochure
-                              </a>
-                            {% else %}
-                             <a href="{{ university_detail.brochure }}" class="exe-download-brochure" id="download_broucher"><i class="exe-icon-brochure"></i>
-                                    Download Brochure
-                              </a>
-                            {% endif %}
+                             {% if not request.session.candidate_id and not request.session.university_course %}
+                                <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><i class="exe-icon-brochure"></i>
+                                      Download Brochure
+                                </a>
+                              {% else %}
+                               <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher"><i class="exe-icon-brochure"></i>
+                                      Download Brochure
+                                </a>
+                              {% endif %}
                         </figcaption>
                       </figure>
                     </section>
@@ -721,15 +721,15 @@
               <form  id="lead2" method="POST" action="{% url 'crmapi:lead-management' %}">
                           {% csrf_token %}
                 <div class="form-group">
-                  <input type="text" class="form-control" name="name" id="exampleInputName2"  name="name" placeholder="Name">
+                  <input type="text" class="form-control" name="name" id="exampleInputName2"  name="name" placeholder="Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}">
                   <p class="js-error"></p>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control"  name="email" id="exampleInputEmail2" name='email' placeholder="Email">
+                  <input type="text" class="form-control"  name="email" id="exampleInputEmail2" name='email' placeholder="Email" value="{{request.session.email}}">
                   <p class="js-error"></p>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" name="number" maxlength="10" minlength="10" type="text" id="exampleInputPhone2" placeholder="Phone Number">
+                    <input type="text" class="form-control" name="number" maxlength="10" minlength="10" type="text" id="exampleInputPhone2" placeholder="Phone Number"  value="{{request.session.mobile_no}}">
                      <p class="js-error"></p>
                 </div>
                 <input type="hidden" name="product" value="{{ sqs.id }}">
@@ -758,15 +758,15 @@
               <form  id="lead3" method="POST" action="{% url 'crmapi:lead-management' %}">
                           {% csrf_token %}
                 <div class="form-group">
-                  <input type="text" class="form-control" id="exampleInputName3" placeholder="Name" name="name">
+                  <input type="text" class="form-control" id="exampleInputName3" placeholder="Name" name="name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}">
                   <p class="js-error"></p>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Email" name="email">
+                  <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Email" name="email"  value="{{request.session.email}}">
                   <p class="js-error"></p>
                 </div>
                 <div class="form-group">                    
-                    <input type="text" class="form-control" name="number" maxlength="10" minlength="10" type="text" id="exampleInputPhone" placeholder="Phone Number">
+                    <input type="text" class="form-control" name="number" maxlength="10" minlength="10" type="text" id="exampleInputPhone" placeholder="Phone Number" value="{{request.session.mobile_no}}">
                     <p class="js-error"></p>
                 </div>
                 <input type="hidden" name="product" value="{{ sqs.id }}">
@@ -819,17 +819,22 @@ $("#lead1, #lead2, #lead3").each(function() {
                     // and download broucher button.
                     // lead1 form for form on detail page.
                      if(form_id == 'lead2'){
+                      var href = $('#download_broucher').attr('href');
+                      $(".download_broucher")[0].setAttribute("download", href);
+                      $(".download_broucher")[1].setAttribute("download", href);
+                      $(".download_broucher").unbind( "click" );
                       $("#enroll_now").attr('id','add-to-cart')
                       $("#add-to-cart").trigger('click')
                       }
                       else if (form_id == 'lead3')
                       {
-
                         $(".bs-example-modal-sm-download").modal('hide')
-                        $("#download_broucher").removeAttr('data-toggle').removeAttr('data-target')
+                        $(".download_broucher").removeAttr('data-toggle').removeAttr('data-target')
                         var href = $('#download_broucher').attr('href');
-                        $("#download_broucher").attr('download',href)
-                        document.getElementById('download_broucher').click();
+                        $(".download_broucher")[0].setAttribute("download", href);
+                        $(".download_broucher")[1].setAttribute("download", href);
+                        $(".download_broucher").unbind( "click" );
+                        $('.download_broucher')[0].click();
                         $("#enroll_now").attr('id','add-to-cart')
                         $("#add-to-cart").removeAttr('data-toggle').removeAttr('data-target')
                         return false;
@@ -930,11 +935,24 @@ $("#lead1, #lead2, #lead3").each(function() {
       }
     });
 
-    $("#download_broucher").click(function(){
-        var href = $('#download_broucher').attr('href');
-        $("#download_broucher").attr('download',href)
+    $(".download_broucher").click(function(event){
       {% if request.session.candidate_id and not request.session.university_course  %}
-        $("#lead1").submit();
+        // when Information is not present in session open pop up else submit form
+        event.preventDefault();
+        if(!$("#lead3 input[name=name]").val() || !$("#lead3 input[name=email]").val()  || !$("#lead3 input[name=number]").val()) 
+          {
+            $(".bs-example-modal-sm-download").modal('show')
+          }
+         else{
+          $('#lead3').submit();
+          $(".download_broucher")[0].click();
+         }
+      {% else %}
+        event.preventDefault();
+        var href = $('.download_broucher').attr('href');
+        $(".download_broucher").attr('download',href)
+        $(".download_broucher").unbind('click')
+        $(".download_broucher")[0].click();
       {% endif %}
     });
     </script>

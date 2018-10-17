@@ -101,16 +101,31 @@
                     </ul>
                     <div class="text-center text-upper">
                      {% if not request.session.candidate_id and not request.session.university_course %}
-                        <a class="btn btn-round-30 btn-slg btn-shadow btn-grOrange" id="enroll_now"  data-toggle="modal" data-target=".bs-example-modal-sm" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll Now</a>
+                        <a class="btn btn-round-30 btn-slg btn-shadow btn-grOrange" id="enroll_now" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll Now</a>
                     {% else %}
                         <a role="button" class="btn btn-round-30 btn-slg btn-shadow btn-grOrange" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
                     {% endif %}
                     </div>
+                    {% if not request.session.candidate_id and not request.session.university_course %}
+                      <div class="download-brochure text-center mt-15">
+                        <a href="{{ university_detail.brochure }}" id="download_broucher" ><i class="exe-icon-download"></i>
+                        <strong> Download Brochure {{request.session.university_course}}</strong>
+                        </a>
+                      </div>
+                    {% else %}
+                      <div class="download-brochure text-center mt-15">
+                        <a href="{{ university_detail.brochure }}" id="download_broucher"><i class="exe-icon-download"></i>
+                        <strong> Download Brochure {{request.session.university_course}}</strong>
+                        </a>
+                      </div>
+                    {% endif %}
 
+                    
+<!-- 
                     <div class="download-brochure text-center mt-15">
                         <a href="#"><i class="exe-icon-download"></i><strong>Download Brochure</strong></a>
-                    </div>
-
+                    </div> -->
+                   
                 </div><!-- ./ university-info -->
 
                 <div class="container">
@@ -445,6 +460,111 @@
                 </div>
                 <img src="{% static 'shinelearn/images/mobile/executive-course/enroll-now.jpg' %}" class="img-responsive"/>
             </div>
+            <div id="popup-modal1" class="modal" style="display: none;z-index:99999;">
+                  <div class="modal-helper">
+                    <div class="modal-vertical-center">
+                       <!-- Modal content -->
+                        <div class="modal-content university-marketing-popup">
+                          <div class="header">
+                            <a class="icon-close" data-dismiss="modal" onclick="closeOverlayModal()">X</a>
+                            <h3 class="text-center">
+                            <br>
+                            Want help with this course?<br>
+                            Let our learning specialists guide you
+                            <br>
+                            </h3>
+                          </div><!-- end of header -->
+                          <div class="content-box pt-0">
+                            <form method="POST" action="{% url 'crmapi:lead-management' %}" id="lead2">
+                              {% csrf_token %}
+                              <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Name" type="Name" class="form-control" id="exampleInputName" name="name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}">
+                                <span class="error-txt js-error"></span>
+                              </div>
+                              <div class="form-group">
+                                <input type="email" class="form-control" placeholder="Email" value="{{request.session.email}}" type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" name="email">
+                                <span class="error-txt js-error"></span>
+                              </div>
+                              <div class="form-group">
+                                <div class="pull-left code">
+                                  <select>
+                                    <option>+91</option>
+                                  </select>
+                                </div>
+                                <input type="text" class="form-control pull-left number" placeholder="Mobile" placeholder="Mobile Number" maxlength="10"  name="number"  value="{{request.session.mobile_no}}">
+                                <span class="error-txt js-error"></span>
+                                <div class="clearfix"></div>
+                              </div>
+                              <div class="form-group">
+                                <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+                                <input type="hidden" name="prd" value="Resume Writing Service">
+                                <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+                                <input type="hidden" name="uc" value="1">
+                                <input type="hidden" name="lsource" value="{{ lead_source }}">
+                              </div>
+                              <div class="form-group text-center tabs mt-30">
+                                <button type="submit" id="overlay-submit-btn" class="btn btn-blue w100fl btn-round mb-20">Enroll Now</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                    </div><!-- end of modal-vertical-center -->
+                  </div><!-- end of modal-helper -->
+            </div>
+
+            <div id="popup-modal2" class="modal" style="display: none;z-index:99999;">
+              <div class="modal-helper">
+                <div class="modal-vertical-center">
+                   <!-- Modal content -->
+                    <div class="modal-content university-marketing-popup">
+                      <div class="header">
+                        <a class="icon-close" data-dismiss="modal" onclick="closeOverlayModal()">X</a>
+                        <h3 class="text-center">
+                        <br>
+                        Want help with this course?<br>
+                        Let our learning specialists guide you
+                        <br>
+                        </h3>
+                     
+                      </div><!-- end of header -->
+
+                      <div class="content-box pt-0">
+                        <form method="POST" action="{% url 'crmapi:lead-management' %}" id="lead3">
+                          {% csrf_token %}
+                          <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Name" type="Name" class="form-control" id="exampleInputName" name="name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}">
+                            <span class="error-txt js-error"></span>
+                          </div>
+                          <div class="form-group">
+                            <input type="email" class="form-control" placeholder="Email" type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" name="email" value="{{request.session.email}}">
+                            <span class="error-txt js-error"></span>
+                          </div>
+                          <div class="form-group">
+                            <div class="pull-left code">
+                              <select>
+                                <option>+91</option>
+                              </select>
+                            </div>
+                            <input type="text" class="form-control pull-left number" placeholder="Mobile" placeholder="Mobile Number" maxlength="10"  name="number"  value="{{request.session.mobile_no}}">
+                            <span class="error-txt js-error"></span>
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="form-group">
+                            <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+                            <input type="hidden" name="prd" value="Resume Writing Service">
+                            <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+                            <input type="hidden" name="lsource" value="{{ lead_source }}">
+                            <input type="hidden" name="uc" value="1">
+                          </div>
+                          <div class="form-group text-center tabs mt-30">
+                            <button type="submit" id="overlay-submit-btn" class="btn btn-blue w100fl btn-round mb-20">Download Broucher</button>
+                          </div>
+                        </form>
+                      </div><!-- Tab content ends here -->
+                    </div><!-- end of modal content here -->
+                </div><!-- end of modal-vertical-center -->
+              </div><!-- end of modal-helper -->
+            </div>
 
         {% block call_us %}
               {% include "shop/partials/call_us.html" %}
@@ -482,12 +602,6 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
-           if(commonJs.getParameterByName('type') == 'autoEnrol'){
-               $('#enrol-now-button').trigger('click'); 
-            }
-            if(commonJs.getParameterByName('type') == 'autoCart'){
-               $('#add-to-cart').trigger('click');
-            } 
             var recommended_product_url = '/api/v1/recommended-products/?skills='+$('#skilllist').val()+'&product={{sqs.id}}&uc=1'
             start_html = '<div class="you-may-like"><div class="container"><h2 class="pt-5">You may also like</h2><div class="slide-container"><ul class="login-slider">'
             end_html = '</ul></div></div></div>'
@@ -539,6 +653,45 @@
            modal('myModal','none');
           // modal.style.display = "none";
       }
+      if (document.getElementById('enroll_now')) {
+        document.getElementById('enroll_now').onclick = function() {
+            modal('popup-modal1','block');
+        }
+      }
+      // Js when user is logged in but not submitted query for university course 
+      {% if request.session.candidate_id and not request.session.university_course  %}
+        document.getElementById('download_broucher').onclick = function(event) {
+          event.preventDefault();
+          // when Information is not present in session open pop up else submit form
+          if(!$("#lead3 input[name=name]").val() || !$("#lead3 input[name=email]").val()  || !$("#lead3 input[name=number]").val()) 
+            {
+              modal('popup-modal2','block');
+            }
+           else {
+             $('#lead3').submit();
+           }
+        }
+      // When user is logged in
+      {% else %}
+
+        document.getElementById('download_broucher').onclick = function(event) {
+          // When user has not submitted query for university course
+          {% if not request.session.university_course %}
+            event.preventDefault();
+            modal('popup-modal2','block');
+          // When usr has submitted query for university course
+          {% else %}
+            event.preventDefault();
+            var href = $('#download_broucher').attr('href');
+            $("#download_broucher").attr('download',href);
+            document.getElementById('download_broucher').onclick = null;
+            document.getElementById('download_broucher').click();
+          {% endif%}
+
+        }
+
+      {% endif %}
+      
       // When the user clicks anywhere outside of the modal, close it
       window.onclick = function(event) {
           if (event.target == memodal) {
@@ -564,6 +717,108 @@
         })
     });
   </script>
+        <script type="text/javascript">
+    var _gaq = _gaq || [];
+
+    $.validator.addMethod("lettersonly", function (value, element){
+        return this.optional(element) || /^[a-z\s]*$/i.test(value);
+    }, "Letters only please");
+
+    $("#lead1, #lead2, #lead3").each(function() {
+        $(this).validate({
+          submitHandler:function (form) {
+              var action = $(form).attr('action');
+              $.post(action, $(form).serialize(), function (data) {
+                  if (data && data['status']){
+                    form_id = $(form).attr('id')
+                    // lead2 form for enroll now , add id to add-to-cart and trigger click
+                    // lead3 form for download broucher, remove modal on  lcick from enroll now
+                    // and download broucher button.
+                    // lead1 form for form on detail page.
+                     if(form_id == 'lead2'){
+                      if( document.getElementById('enroll_now')){
+                        document.getElementById('enroll_now').onclick = null;
+                      }
+                      document.getElementById('download_broucher').onclick = null;
+                      var href = $('#download_broucher').attr('href');
+                      $("#download_broucher").attr('download',href)
+                      $("#enroll_now").attr('id','add-to-cart')
+                      $("#add-to-cart").trigger('click')
+                      }
+                      else if (form_id == 'lead3')
+                      {
+                        modal('popup-modal2', 'none');
+                        document.getElementById('download_broucher').onclick = null;
+                        if( document.getElementById('enroll_now')){
+                          document.getElementById('enroll_now').onclick = null;
+                          $("#enroll_now").attr('id','add-to-cart')
+                        }
+                        var href = $('#download_broucher').attr('href');
+                        $("#download_broucher").attr('download',href)
+                        document.getElementById('download_broucher').click();
+                        return false;
+                      }
+                      else {
+                        alert('Your Query Submitted Successfully.');
+                        window.location.reload();
+                        return false;
+                      }
+                  }
+              }, 'json');
+          },
+          rules:{
+              number:{
+                  required:true,
+                  number:true,
+                  minlength:10,
+                  maxlength:20,
+              },
+              email:{
+                  email:true,
+                  required:true,
+
+              },
+              name:{
+                  required:true,
+                  lettersonly:true,
+
+              },
+              // msg:{
+              //     required:true,
+              //     maxlength:500
+              // }
+          },
+          messages:{
+              number:{
+                 required:"Field is required",
+                 number: "Please enter valid number only"
+              },
+              email:{
+                  required:"Field is required"
+              },
+              name:{
+                  required:"Field is required"
+              },
+              // msg:{
+              //     required:"Field is required",
+              //     maxlength:"No more than 500 characters."
+
+              // }
+          },
+          highlight:function(element, errorClass) {
+            $(element).closest('.form-group').addClass('error');
+          },
+          unhighlight:function(element, errorClass) {
+            $(element).closest('.form-group').removeClass('error');
+            $(element).siblings('.js-error').html("");
+          },
+          errorPlacement: function(error, element){
+            $(element).siblings('.js-error').html(error.text());
+          } 
+        });
+    });
+
+        </script>
 {% endblock js_section %}
 
 

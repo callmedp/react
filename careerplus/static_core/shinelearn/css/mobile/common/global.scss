@@ -636,3 +636,35 @@ background: -webkit-linear-gradient(left, #efa859 0%,#e39344 100%); /* Chrome10-
 background: linear-gradient(to right, #efa859 0%,#e39344 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efa859', endColorstr='#e39344',GradientType=1 ); /* IE6-9 */
 }
+
+.university-marketing-popup {
+  .content-box {
+    .number {
+      width: 72%;
+      margin-left: 15px;
+    }
+  }
+  .code {
+    width: 22%;
+  }
+  border-radius:13px;
+
+  .header {
+    background-image: url("../../../images/popup-bg-1.jpg");
+    background-size: cover;
+    display: block;
+    padding-bottom: 10px;
+
+    h2 {
+      color: $txt-white;
+      border-bottom: none;
+      font-size: $font-size+11;
+      padding: 20px 15px 0 15px;
+    }
+
+    .icon-close {
+      top: 10% !important;
+      background-position: -189px -175px;
+    }
+  }
+}
