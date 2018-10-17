@@ -1,8 +1,10 @@
 .popular-courses, .you-may-like {
     overflow: hidden;
     padding: 20px 0 20px 0;
+    background-color: $bg-white;
+
     h2 {
-      text-align: left;
+      text-align: center;
       margin-left: 15px;
     }
     li {
