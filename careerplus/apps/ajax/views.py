@@ -797,7 +797,7 @@ class UniversityCourseLoadMoreView(TemplateView):
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
             cat_pk = request.GET.get('category_pk', None)
-            self.PRODUCT_PAGE_SIZE = int(request.GET.get('page_size', '9'))
+            self.PRODUCT_PAGE_SIZE = int(request.GET.get('page_size', '6'))
             self.page = int(request.GET.get('page'))
             cat_objs = Category.objects.filter(
                 pk=cat_pk, active=True)
@@ -819,7 +819,7 @@ class UniversityCourseLoadMoreView(TemplateView):
             if product.pVrs:
                 product.pVrs = json.loads(product.pVrs)
             if product.pUncdl:
-                product.pUncdl = json.loads(product.pUncdl)
+                product.pUncdl = json.loads(product.pUncdl[0])
             if not float(product.pPfin): continue
             product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
 
@@ -835,10 +835,8 @@ class UniversityCourseLoadMoreView(TemplateView):
 
         standalone_products = SQS().exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(
-            pCtg=self.cat_obj.pk, pTF=14)
-        # standalone_products = SQS().exclude(
-        #     id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(
-        #     pPc='course')[: 13]
+            pTF=14, pCtg=self.object.pk)
+    
         context['products'] = self._get_paginated_products(
             standalone_products, self.page)
         context.update({

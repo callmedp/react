@@ -392,10 +392,7 @@ class UniversityPageView(DetailView):
         Fetch all products with category same as that of object.
         """
         products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).\
-            filter(pTF=14) #  pTF=14, pCtg=self.object.pk
-
-        # products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).\
-        #     filter(pPc='course')[: 13]
+            filter(pTF=14, pCtg=self.object.pk)  # pTF=14, pCtg=self.object.pk
         return products
 
     def _get_paginated_products(self, products, page=1):
