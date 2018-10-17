@@ -76,11 +76,11 @@
 
             {% block container %}
             <div class="content-box pt-0">
-                <div class="university-info row">
+                <div class="university-info row mb-15">
                     <ul>
                         <li>
                             <span class="batch-execIcon">
-                                <span>starts:</span>  
+                                <span>Batch starts:</span>  
                                 <strong class="text-upper">05 Jan 2019</strong>
                             </span> 
                         </li>
@@ -311,22 +311,25 @@
                         <h2><span><i class="execIcon-exclusive"></i></span>Exclusive benefits</h2>
                         <div class="content">
                             <p class="subhead mb-15"><strong>Key Benefits</strong></p>
-                            <ul class="who-attend">
-                                <li class="free">
+                            <ul class="key-benefits">
+                                <li>
+                                    <i class="exe-icon-feat-profile"></i>
                                     <div>
                                         <h3>Free featured profile</h3>
-                                        <p>FREE featured profile worth Rs. 1440 for 1 month on Shine.com</p>
+                                        <p class="pb-0">FREE featured profile worth Rs. 1440 for 1 month on Shine.com</p>
                                     </div>
                                 </li>
                                 
-                                <li class="emi">
+                                <li>
+                                    <i class="exe-icon-shine-credit"></i>
                                     <div>
                                         <h3>0% EMI</h3>
                                         <p class="pb-0">Easy EMI payment option.</p>
                                     </div>
                                 </li>
                                 
-                                <li class="credits">
+                                <li>
+                                    <i class="exe-icon-education-provider"></i>
                                     <div>
                                         <h3>Shine credits</h3>
                                         <p class="pb-0">10% Shine credits redeemable on next purchase*</p>
@@ -369,7 +372,7 @@
                             <!-- Accordion begin -->
                             <div class="accordion_example1 accordion-wrap">
                                 <!-- Section 1 -->  
-                                <div class="accordion_in">
+                                <div class="accordion_in no-content">
                                     <div class="acc_head">Module 1: Basic Concepts & Applications of Project Management</div>
                                     <div class="acc_content">
                                         <p>Coming soon...</p>
@@ -435,20 +438,23 @@
                                 <li>These maybe in the form of a quiz, assignment, case studies or other objective/subjective assessments. The evaluations are designed ensure continuous student engagement with the course and encourage learning. Students who successfully clear the same along with the requisite attendance criteria will be awarded a Certificate from SPJIMR as appropriate.</li>
                             </ul>
 
-                            <p class="mt-15"><a href="#" class="btn btn-outline btn-round-30 btn-slg">View sample certificate</a></p>
+                            <p class="mt-15"><a href="#" class="btn btn-outline btn-round-30 btn-slg" id="myBtn">View sample certificate</a></p>
 
-                            <!-- <div class="sample-certificate mt-20">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <img class="media-object" src="{% static 'shinelearn/images/mobile/executive-course/certificate.jpg'%}" alt="...">
+                            <div id="myModal" class="modal">
+                                <!-- Modal content -->`
+                                <div class="modal-content">
+                                    <div class="header">
+                                        <span class="icon-close close">&times;</span>
+                                        <h2>Sample Certificate</h2>
+                                    </div><!-- /. header -->
+
+                                    <div class="modal-body">
+                                        <img src="{% static 'shinelearn/images/mobile/executive-course/sample-certificate.jpg'%}" class="img-responsive"/>
                                     </div>
-                                    <div class="media-body">
-                                        <p class="subhead">Sample certificate</p>
-                                        <a href="#" class="btn btn-outline btn-round-30 fs-11">View certificate</a>
-                                    </div>
-                                </div>
-                            </div> -->
-                        </div>
+                                </div><!-- /. modal-content-->
+                                    
+                            </div><!-- /. modal -->
+                        </div><!-- /. content -->
                     </div><!-- /. white box-->
                 </div><!-- ./ Assessment & Evaluation -->
                 
@@ -679,6 +685,45 @@
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     {% endcompress %}
+
+    <script type="text/javascript">
+        jQuery(document).ready(function($){
+          $(".accordion_example1").smk_Accordion({
+            showIcon: true, //boolean
+            animation: true, //boolean
+            closeAble: false, //boolean
+            slideSpeed: 200 //integer, miliseconds
+          });
+        });
+      </script>
+      <script>
+      // Get the modal
+      var memodal = document.getElementById('myModal' );
+      // Get the button that opens the modal
+      var btn = document.getElementById("myBtn");
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+      // When the user clicks the button, open the modal
+      btn.onclick = function() {
+          //modal.style.display = "block";
+          modal('myModal','block');
+      }
+      function modal(id,option){
+        document.getElementById(id).style.display = option;
+      }
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+           modal('myModal','none');
+          // modal.style.display = "none";
+      }
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+          if (event.target == memodal) {
+              modal('myModal','none');
+          }
+      }
+      </script>
+
     <script type="text/javascript">
         $(document).ready(function(){
            if(commonJs.getParameterByName('type') == 'autoEnrol'){
