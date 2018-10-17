@@ -174,7 +174,7 @@
                     </div><!-- /. white box-->
                 </div><!-- ./ Eligibility criteria -->
 
-                <input type="hidden" id="skilllist" value="{{sqs.pSkilln|join:""}}">
+                <input type="hidden" id="skilllist" value="{% if sqs.pSkilln %} {{sqs.pSkilln|join:''}}{% endif %}">
                 <div id="skill_list_box">
                 </div>
 
@@ -271,8 +271,9 @@
 
                                 {% endfor %}
                             </div><!-- /. accordion-wrap -->
-
+                            {% if chapter_list|length > 5 %}
                             <p class="mt-15 text-center"><a href="#" class="btn btn-outline btn-round-30 btn-slg">View all programs</a></p>
+                            {% endif %}
 
                         </div><!-- /. content -->
                     </div><!-- /. white box-->
@@ -456,7 +457,13 @@
             <div class="topSticky-enrollNow" id="enrollNow">
                 <div class="content-box">
                     <div class="pr-15">Search Engine Optimisation Master...</div>
-                    <div><a href="#" class="btn btn-round-30 btn-lg btn-shadow btn-grOrange">Enroll Now</a></div>
+                    <div>  
+                    {% if not request.session.candidate_id and not request.session.university_course %}
+                        <a class="btn btn-round-30 btn-slg btn-shadow btn-grOrange" id="enroll_now_bg" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Enroll Now</a>
+                    {% else %}
+                        <a role="button" class="btn btn-round-30 btn-slg btn-shadow btn-grOrange" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Enroll now</a>
+                    {% endif %}
+                    </div>
                 </div>
                 <img src="{% static 'shinelearn/images/mobile/executive-course/enroll-now.jpg' %}" class="img-responsive"/>
             </div>
@@ -658,6 +665,12 @@
             modal('popup-modal1','block');
         }
       }
+      if (document.getElementById('enroll_now_bg')) {
+        document.getElementById('enroll_now_bg').onclick = function() {
+            modal('popup-modal1','block');
+        }
+      }
+      
       // Js when user is logged in but not submitted query for university course 
       {% if request.session.candidate_id and not request.session.university_course  %}
         document.getElementById('download_broucher').onclick = function(event) {
@@ -738,11 +751,13 @@
                      if(form_id == 'lead2'){
                       if( document.getElementById('enroll_now')){
                         document.getElementById('enroll_now').onclick = null;
+                        document.getElementById('enroll_now_bg').onclick = null;
                       }
                       document.getElementById('download_broucher').onclick = null;
                       var href = $('#download_broucher').attr('href');
                       $("#download_broucher").attr('download',href)
                       $("#enroll_now").attr('id','add-to-cart')
+                      $('#enroll_now_bg').attr('id', 'add-to-cart')
                       $("#add-to-cart").trigger('click')
                       }
                       else if (form_id == 'lead3')
