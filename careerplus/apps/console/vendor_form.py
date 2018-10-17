@@ -1247,7 +1247,20 @@ class ScreenUniversityCoursePaymentForm(forms.ModelForm):
         super(ScreenUniversityCoursePaymentForm, self).clean()
 
     def clean_installment_fee(self):
+        from django.db.models import Sum
         installment_fee = self.cleaned_data.get('installment_fee', '')
+        sum_already_present = 0
+        if getattr(self.instance.productscreen, 'screen_university_course_payment', None):
+            sum_already_present = self.instance.productscreen.screen_university_course_payment.all().aggregate(Sum('installment_fee'))['installment_fee__sum']
+        sum_already_present = sum_already_present if sum_already_present else 0
+        if not self.instance.id and (installment_fee + sum_already_present > self.instance.productscreen.inr_price):
+            raise forms.ValidationError(
+                "Total installment cannot be greater than product price.")
+        elif self.instance.id:
+            if installment_fee + (sum_already_present - self.instance.installment_fee) > self.instance.productscreen.inr_price:
+                raise forms.ValidationError(
+                    "Total installment cannot be greater than product price.")
+
         if installment_fee is None:
             raise forms.ValidationError(
                 "This value is requred.")

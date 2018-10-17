@@ -303,7 +303,6 @@
     li {
         position: relative;
         display: flex;
-        align-items: center;
         margin-bottom: 20px;
         padding-left: 50px;
         min-height: 40px;
@@ -770,6 +769,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#295986', end
     .course-logo {
         @include size (100px, 65px);
         display: block;
+        overflow: hidden;
     }
 
     .date-icon {

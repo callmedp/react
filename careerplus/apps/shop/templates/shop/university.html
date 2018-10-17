@@ -89,11 +89,11 @@
                         <a role="button" class="exe-button-enrol mt-10" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
                     {% endif %}
                      {% if not request.session.candidate_id and not request.session.university_course %}
-                      <a href="{{ university_detail.brochure }}" class="exe-download-brochure" id="download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><i class="exe-icon-brochure"></i>
+                      <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><i class="exe-icon-brochure"></i>
                             Download Brochure
                       </a>
                     {% else %}
-                     <a href="{{ university_detail.brochure }}" class="exe-download-brochure" id="download_broucher"><i class="exe-icon-brochure"></i>
+                     <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" {% if request.session.university_course%} download={{ university_detail.brochure }}{% endif%}><i class="exe-icon-brochure"></i>
                             Download Brochure
                       </a>
                     {% endif %}
@@ -309,7 +309,7 @@
                       <div class="row exe-exclusive-benefits">
                         {% if university_detail.benefits%}
 
-                        <h3 class="col-sm-12 mb-20">Exclusive Benefits</h2>
+                        <h3 class="col-sm-12 mb-20">Key Benefits</h2>
 
                         {% for benefit in university_detail.benefits %}
                         <div class="col-sm-4">
@@ -325,40 +325,38 @@
                         <div class="clearfix e-btm-bdr mb-30 mt-10 col-sm-12"></div>
                         {% endif %}
 
-                        <h3 class="col-sm-12 mb-20">Why Shine Learning?</h2>
-                        <div class="col-sm-4">
-                          <figure class="thumbnail">
-                            <i class="exe-icon-0-emi"></i>
-                            <figcaption class="caption">
-                              <h3>0% EMI</h3>
-                              <p>Easy EMI payment option.</p>
-                            </figcaption>
-                          </figure>
-                        </div>
-
-                        <div class="col-sm-4">
-                          <figure class="thumbnail">
-                            <i class="exe-icon-free-service"></i>
-                            <figcaption class="caption">
-                              <h3>Free Services</h3>
-                              <p>Free Resume, Cover Letter Formats and Career Guidance Services.</p>
-                            </figcaption>
-                          </figure>
-                        </div>
-
-                        <div class="col-sm-4">
-                          <figure class="thumbnail">
-                            <i class="exe-icon-refer-earn"></i>
-                            <figcaption class="caption">
-                              <h3>Refer and Earn</h3>
-                              <p>Refer your friend and get an Amazon Voucher worth Rs. 2000*</p>
-                            </figcaption>
-                          </figure>
-                        </div>
+                        <h3 class="col-sm-12 mb-20">Other Benefits</h2>
+                          <ul class="exe-why-shine-learning">
+                            <li class="col-sm-4">
+                              <figure class="thumbnail">
+                                <figcaption class="caption">
+                                  <h3>0% EMI</h3>
+                                  <p>Easy EMI payment option.</p>
+                                </figcaption>
+                              </figure>
+                            </li>
+                            <li class="col-sm-4">
+                              <figure class="thumbnail">
+                                <figcaption class="caption">
+                                  <h3>Free Services</h3>
+                                  <p>Free Resume, Cover Letter Formats and Career Guidance Services.</p>
+                                </figcaption>
+                              </figure>
+                            </li>
+                            <li class="col-sm-4">
+                              <figure class="thumbnail">
+                                <figcaption class="caption">
+                                  <h3>Refer and Earn</h3>
+                                  <p>Refer your friend and get an Amazon Voucher worth Rs. 2000*</p>
+                                </figcaption>
+                              </figure>
+                            </li>
+                          </ul>
                       </div>
                     </article>
                   </div>
                 </section>
+
                 <!-- Program Structure 2 -->
                 <section class="exe-box mb-30">
                   <div id="program-structure" class="scroll">
@@ -478,7 +476,8 @@
                         <div class="carousel-inner" role="listbox">
                         {%for testimonial in university_testimonial %}
                           <div class="item col-sm-12 {% if forloop.counter == 1%} active {% endif %}">
-                            <p class="mb-20 mt-20">{{ testimonial.review|safe }}</p>
+
+                            <p class="mb-20 mt-20">{{ testimonial.review }}</p>
                             <figure>
                               <img src="{{ testimonial.image.url }}" alt="Faculty Profile">
                               <figcaption>
@@ -495,12 +494,14 @@
                         </div>
 
                         <!-- Controls -->
-                        <a class="left carousel-control" href="#carousel-example-generic1" role="button" data-slide="prev">
-                          <span class="exe-icon-chevron-left mt-20" aria-hidden="true"></span>
-                        </a>
-                        <a class="right carousel-control" href="#carousel-example-generic1" role="button" data-slide="next">
-                          <span class="exe-icon-chevron-right mt-20" aria-hidden="true"></span>
-                        </a>
+                        {% if university_testimonial|length > 1%}
+                          <a class="left carousel-control" href="#carousel-example-generic1" role="button" data-slide="prev">
+                            <span class="exe-icon-chevron-left mt-20" aria-hidden="true"></span>
+                          </a>
+                          <a class="right carousel-control" href="#carousel-example-generic1" role="button" data-slide="next">
+                            <span class="exe-icon-chevron-right mt-20" aria-hidden="true"></span>
+                          </a>
+                        {% endif %}
                       </div>
                     </article>
                   </div>
@@ -655,15 +656,15 @@
                             {% else %}
                                 <a role="button" class="exe-button-enrol mt-10" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
                             {% endif %}
-                            {% if not request.session.candidate_id and not request.session.university_course %}
-                              <a href="{{ university_detail.brochure }}" class="exe-download-brochure" id="download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><i class="exe-icon-brochure"></i>
-                                    Download Brochure
-                              </a>
-                            {% else %}
-                             <a href="{{ university_detail.brochure }}" class="exe-download-brochure" id="download_broucher"><i class="exe-icon-brochure"></i>
-                                    Download Brochure
-                              </a>
-                            {% endif %}
+                             {% if not request.session.candidate_id and not request.session.university_course %}
+                                <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><i class="exe-icon-brochure"></i>
+                                      Download Brochure
+                                </a>
+                              {% else %}
+                               <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher"><i class="exe-icon-brochure"></i>
+                                      Download Brochure
+                                </a>
+                              {% endif %}
                         </figcaption>
                       </figure>
                     </section>
@@ -721,15 +722,15 @@
               <form  id="lead2" method="POST" action="{% url 'crmapi:lead-management' %}">
                           {% csrf_token %}
                 <div class="form-group">
-                  <input type="text" class="form-control" name="name" id="exampleInputName2"  name="name" placeholder="Name">
+                  <input type="text" class="form-control" name="name" id="exampleInputName2"  name="name" placeholder="Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}">
                   <p class="js-error"></p>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control"  name="email" id="exampleInputEmail2" name='email' placeholder="Email">
+                  <input type="text" class="form-control"  name="email" id="exampleInputEmail2" name='email' placeholder="Email" value="{{request.session.email}}">
                   <p class="js-error"></p>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" name="number" maxlength="10" minlength="10" type="text" id="exampleInputPhone2" placeholder="Phone Number">
+                    <input type="text" class="form-control" name="number" maxlength="10" minlength="10" type="text" id="exampleInputPhone2" placeholder="Phone Number"  value="{{request.session.mobile_no}}">
                      <p class="js-error"></p>
                 </div>
                 <input type="hidden" name="product" value="{{ sqs.id }}">
@@ -758,15 +759,15 @@
               <form  id="lead3" method="POST" action="{% url 'crmapi:lead-management' %}">
                           {% csrf_token %}
                 <div class="form-group">
-                  <input type="text" class="form-control" id="exampleInputName3" placeholder="Name" name="name">
+                  <input type="text" class="form-control" id="exampleInputName3" placeholder="Name" name="name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}">
                   <p class="js-error"></p>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Email" name="email">
+                  <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Email" name="email"  value="{{request.session.email}}">
                   <p class="js-error"></p>
                 </div>
                 <div class="form-group">                    
-                    <input type="text" class="form-control" name="number" maxlength="10" minlength="10" type="text" id="exampleInputPhone" placeholder="Phone Number">
+                    <input type="text" class="form-control" name="number" maxlength="10" minlength="10" type="text" id="exampleInputPhone" placeholder="Phone Number" value="{{request.session.mobile_no}}">
                     <p class="js-error"></p>
                 </div>
                 <input type="hidden" name="product" value="{{ sqs.id }}">
@@ -819,17 +820,22 @@ $("#lead1, #lead2, #lead3").each(function() {
                     // and download broucher button.
                     // lead1 form for form on detail page.
                      if(form_id == 'lead2'){
+                      var href = $('#download_broucher').attr('href');
+                      $(".download_broucher")[0].setAttribute("download", href);
+                      $(".download_broucher")[1].setAttribute("download", href);
+                      $(".download_broucher").unbind( "click" );
                       $("#enroll_now").attr('id','add-to-cart')
                       $("#add-to-cart").trigger('click')
                       }
                       else if (form_id == 'lead3')
                       {
-
                         $(".bs-example-modal-sm-download").modal('hide')
-                        $("#download_broucher").removeAttr('data-toggle').removeAttr('data-target')
+                        $(".download_broucher").removeAttr('data-toggle').removeAttr('data-target')
                         var href = $('#download_broucher').attr('href');
-                        $("#download_broucher").attr('download',href)
-                        document.getElementById('download_broucher').click();
+                        $(".download_broucher")[0].setAttribute("download", href);
+                        $(".download_broucher")[1].setAttribute("download", href);
+                        $(".download_broucher").unbind( "click" );
+                        $('.download_broucher')[0].click();
                         $("#enroll_now").attr('id','add-to-cart')
                         $("#add-to-cart").removeAttr('data-toggle').removeAttr('data-target')
                         return false;
@@ -904,12 +910,18 @@ $("#lead1, #lead2, #lead3").each(function() {
 
     var start_html = '<section class="container-fluid detail-box you-may-like-carousel mb-30"><div class="scroll"><h2 class="heading-primary-exe mt-30 mb-10 text-center">You may also like</h2><article class="col-sm-12"><div id="carousel-example-generic2" class="carousel slide" data-ride="carousel"><div class="carousel-inner" role="listbox" id="skill_list_box">';
 
-    var end_html ='</div><a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev"><span class="exe-icon-chevron-left mt-10" aria-hidden="true"></span></a><a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next"><span class="exe-icon-chevron-right mt-10" aria-hidden="true"></span></a></div></article></div></section>';
-
+    var end_html ='</div>carousel_arrow_html</div></article></div></section>';
+    var carousel_arrow_html =  '<a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev"><span class="exe-icon-chevron-left mt-10" aria-hidden="true"></span></a><a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next"><span class="exe-icon-chevron-right mt-10" aria-hidden="true"></span></a> '
     final_html = ''
     $.get(recommended_product_url, function(data){
       var num_of_element = 2
       if(data.count){
+        if(data.count > 2) {
+          end_html = end_html.replace('carousel_arrow_html', carousel_arrow_html)
+        }
+        else{
+           end_html = end_html.replace('carousel_arrow_html', '')
+        }
         for(i=0; i< data.results.length;i++) {
           if(i % num_of_element == 0 && i == 0){
             final_html += '<div class="item col-sm-12 active"><ul class="listing">'
@@ -930,11 +942,24 @@ $("#lead1, #lead2, #lead3").each(function() {
       }
     });
 
-    $("#download_broucher").click(function(){
-        var href = $('#download_broucher').attr('href');
-        $("#download_broucher").attr('download',href)
+    $(".download_broucher").click(function(event){
       {% if request.session.candidate_id and not request.session.university_course  %}
-        $("#lead1").submit();
+        // when Information is not present in session open pop up else submit form
+        event.preventDefault();
+        if(!$("#lead3 input[name=name]").val() || !$("#lead3 input[name=email]").val()  || !$("#lead3 input[name=number]").val()) 
+          {
+            $(".bs-example-modal-sm-download").modal('show')
+          }
+         else{
+          $('#lead3').submit();
+          $(".download_broucher")[0].click();
+         }
+      {% else %}
+        event.preventDefault();
+        var href = $('.download_broucher').attr('href');
+        $(".download_broucher").attr('download',href)
+        $(".download_broucher").unbind('click')
+        $(".download_broucher")[0].click();
       {% endif %}
     });
     </script>
