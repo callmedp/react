@@ -88,14 +88,18 @@
                     {% else %}
                         <a role="button" class="exe-button-enrol mt-10" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
                     {% endif %}
-                     {% if not request.session.candidate_id and not request.session.university_course %}
-                      <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><i class="exe-icon-brochure"></i>
-                            Download Brochure
-                      </a>
-                    {% else %}
-                     <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" {% if request.session.university_course%} download={{ university_detail.brochure }}{% endif%}><i class="exe-icon-brochure"></i>
-                            Download Brochure
-                      </a>
+                    
+                    
+                    {% if  university_detail.brochure %}
+                      {% if not request.session.candidate_id and not request.session.university_course %}
+                        <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><i class="exe-icon-brochure"></i>
+                              Download Brochure
+                        </a>
+                      {% else %}
+                       <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" {% if request.session.university_course%} download={{ university_detail.brochure }}{% endif%}><i class="exe-icon-brochure"></i>
+                              Download Brochure
+                        </a>
+                      {% endif %}
                     {% endif %}
                   </figcaption>
                 </figure>
@@ -656,6 +660,7 @@
                             {% else %}
                                 <a role="button" class="exe-button-enrol mt-10" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
                             {% endif %}
+                            {% if  university_detail.brochure %}
                              {% if not request.session.candidate_id and not request.session.university_course %}
                                 <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><i class="exe-icon-brochure"></i>
                                       Download Brochure
@@ -665,6 +670,7 @@
                                       Download Brochure
                                 </a>
                               {% endif %}
+                            {% endif %}
                         </figcaption>
                       </figure>
                     </section>
