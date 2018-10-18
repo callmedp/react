@@ -187,12 +187,14 @@
                           </div>
 
                           <!-- Controls -->
+                          {% if faculty|length > 1 %}
                           <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
                             <span class="exe-icon-chevron-left mt-20" aria-hidden="true"></span>
                           </a>
                           <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
                             <span class="exe-icon-chevron-right mt-20" aria-hidden="true"></span>
                           </a>
+                          {% endif %}
                         </div>
                       </article>
                     </div>
@@ -272,6 +274,7 @@
                           
                         </div>
 
+                        {% if testimonials.count > 1 %}
                         <!-- Controls -->
                         <a class="left carousel-control" href="#carousel-example-generic1" role="button" data-slide="prev">
                           <span class="exe-icon-chevron-left mt-20" aria-hidden="true"></span>
@@ -279,6 +282,7 @@
                         <a class="right carousel-control" href="#carousel-example-generic1" role="button" data-slide="next">
                           <span class="exe-icon-chevron-right mt-20" aria-hidden="true"></span>
                         </a>
+                        {% endif %}
                       </div>
                     </article>
                   </div>

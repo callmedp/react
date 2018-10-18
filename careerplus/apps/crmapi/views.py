@@ -101,6 +101,14 @@ class LeadManagement(View):
                 request.session['university_course'] = True
                 request.session['lead_email'] = email
                 request.session['lead_mobile'] = mobile
+                if " " in name:
+                    first_name = name.split(" ")[0]
+                    last_name = " ".join(name.split(" ")[1:len(name)])
+                else:
+                    first_name = name
+                    last_name = ""
+                request.session['lead_first_name'] = first_name
+                request.session['lead_last_name'] = last_name
 
             lead = UserQuries.objects.create(
                 name=name,
