@@ -167,7 +167,7 @@
                             <div class="item col-sm-12 {% if forloop.first %}active{% endif %}">
                               {% for fac in fslide %}
                               {% if fac %}
-                              <div class="col-sm-6 text-center">
+                              <div class="{% if fslide|length == 1 %}col-sm-12{%else %}col-sm-6{% endif %} text-center">
                                 <figure>
                                   <a class="faculty-thumb" target="_blank" href="{{fac.get_absolute_url}}"><img src="{% if fac.image %}{{fac.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" alt="{{fac.alt_name}}.jpg"></a>
                                   <figcaption>

@@ -268,7 +268,7 @@
                             {% for inner_fac in faculty %}
                              <div class="item col-sm-12 {% if forloop.counter == 1%}active {% endif %}">
                              {% for fac in inner_fac %}
-                              <div class="col-sm-6 text-center">
+                              <div class="{% if inner_fac|length == 1 %}col-sm-12{% else %}col-sm-6{% endif %} text-center">
                                 <figure>
                                   <a class="faculty-thumb" href="{{fac.get_absolute_url}}"  target='_blank'><img src="{{ fac.get_image_url }}" alt="Faculty Profile"></a>
                                   <figcaption>
