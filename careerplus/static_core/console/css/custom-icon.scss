@@ -15,6 +15,13 @@
 	display: inline-block;
 }
 
+.exe-icon-batch-grey {
+	width: 21px;
+	height: 22px;
+	background: $sprite-exe -391px -91px;
+	display: inline-block;
+}
+
 .exe-icon-duration {
 	width: 30px;
 	height: 35px;
@@ -26,6 +33,13 @@
 	width: 15px;
 	height: 15px;
 	background: $sprite-exe -96px -91px;
+	display: inline-block;
+}
+
+.exe-icon-batch-blk {
+	width: 20px;
+	height: 20px;
+	background: $sprite-exe -479px -92px;
 	display: inline-block;
 }
 
@@ -54,6 +68,27 @@
 	width: 37px;
 	height: 40px;
 	background: $sprite-exe 0 -40px;
+	display: inline-block;
+}
+
+.exe-icon-division {
+	width: 29px;
+	height: 40px;
+	background: $sprite-exe -42px -40px;
+	display: inline-block;
+}
+
+.exe-icon-srmanager {
+	width: 33px;
+	height: 40px;
+	background: $sprite-exe -76px -40px;
+	display: inline-block;
+}
+
+.exe-icon-lnmanager {
+	width: 35px;
+	height: 39px;
+	background: $sprite-exe -115px -40px;
 	display: inline-block;
 }
 
@@ -223,4 +258,53 @@
 	height: 30px;
 	background: $sprite-exe -266px -91px;
 	display: inline-block;
+}
+
+.exe-icon-online-application {
+	width: 50px;
+	height: 36px;
+	background: $sprite-exe -92px -137px;
+	display: inline-block;
+}
+
+.exe-icon-fee-payment {
+	width: 49px;
+	height: 31px;
+	background: $sprite-exe -153px -137px;
+	display: inline-block;
+}
+
+.exe-icon-access-online {
+	width: 40px;
+	height: 40px;
+	background: $sprite-exe -217px -137px;
+	display: inline-block;
+}
+
+.exe-icon-start-course {
+	width: 35px;
+	height: 38px;
+	background: $sprite-exe -269px -137px;
+	display: inline-block;
+}
+
+.exe-icon-check-eligible {
+	width: 30px;
+	height: 38px;
+	background: $sprite-exe -315px -137px;
+	display: inline-block;
+}
+
+.exe-icon-complete-application {
+	width: 35px;
+	height: 38px;
+	background: $sprite-exe -356px -137px;
+	display: inline-block;
+}
+
+.exe-icon-highilights {
+	width: 34px;
+	height: 34px;
+	display: inline-block;
+	background: $sprite-exe -439px -91px;
 }
