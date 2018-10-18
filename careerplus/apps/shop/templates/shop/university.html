@@ -905,7 +905,7 @@ $("#lead1, #lead2, #lead3").each(function() {
     <script type="text/javascript">
     var recommended_product_url = '/api/v1/recommended-products/?skills='+$('#skilllist').val()+'&product={{sqs.id}}&uc=1'
  
-    var product_html = '<li class="col-sm-6"><a title="product_name" class="box-panel" href="/course/it-information-technology/css-designer/pd-276"><div class="media"><div class="media-body"><h3 class="listing-heading">product_name</h3><div class="rating-review-box"><strong>product_bought</strong> people bought<span class="jobs-available"><strong>product_bought</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="product_image" alt="CSS Designer"></figure></div></div></a></li>';
+    var product_html = '<li class="col-sm-6"><a title="product_name" class="box-panel" href="product_url"><div class="media"><div class="media-body"><h3 class="listing-heading">product_name</h3><div class="rating-review-box"><strong>product_bought</strong> people bought<span class="jobs-available"><strong>product_bought</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="product_image" alt="CSS Designer"></figure></div></div></a></li>';
 
 
     var start_html = '<section class="container-fluid detail-box you-may-like-carousel mb-30"><div class="scroll"><h2 class="heading-primary-exe mt-30 mb-10 text-center">You may also like</h2><article class="col-sm-12"><div id="carousel-example-generic2" class="carousel slide" data-ride="carousel"><div class="carousel-inner" role="listbox" id="skill_list_box">';
@@ -933,7 +933,7 @@ $("#lead1, #lead2, #lead3").each(function() {
           .replace('product_bought', data.results[i].buy_count)
           .replace('jobs_available', data.results[i].no_jobs)
           .replace('product_image', data.results[i].pImg)
-
+          .replace(/product_url/g, data.results[i].pURL)
           if(num_of_element - (i % num_of_element) == 1 ){
             final_html += '</ul></div>'
           }
