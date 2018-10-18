@@ -81,7 +81,7 @@
                     <div class="sep mt-10 mb-10"></div>
                     Fee
                     <div class="exe-price">
-                      Rs.{{ sqs.pPinb|floatformat|intcomma }}
+                      Rs. {{ sqs.pPinb|floatformat|intcomma }}
                     </div>
                     {% if not request.session.candidate_id and not request.session.university_course %}
                         <a class="exe-button-enrol mt-10" id="enroll_now"  data-toggle="modal" data-target=".bs-example-modal-sm" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll Now</a>
@@ -653,7 +653,7 @@
                           <div class="sep mt-10 mb-10"></div>
                           Fee
                           <div class="exe-price">
-                          Rs.{{ sqs.pPinb|floatformat|intcomma }}
+                          Rs. {{ sqs.pPinb|floatformat|intcomma }}
                           </div>
                            {% if not request.session.candidate_id and not request.session.university_course %}
                                 <a class="exe-button-enrol mt-10" id="enroll_now"  data-toggle="modal" data-target=".bs-example-modal-sm" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll Now</a>
