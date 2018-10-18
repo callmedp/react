@@ -20,4 +20,16 @@ def split(value, arg):
 
 @register.filter
 def convert_to_month(val):
-    return math.ceil(val / 30.0)
+    month = val / 30.0
+    if month < 1:
+        month = math.ceil(month)
+        return str(month) + ' month'
+    else:
+        month = round(month)
+    if month > 12:
+        year = round(month / 12)
+        if year == 1:
+            return str(year) + ' year'
+        else:
+            return str(year) + ' years'
+    return str(month) + ' months'
