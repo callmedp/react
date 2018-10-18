@@ -1,6 +1,6 @@
 $(document).ready(function() {
     var d = new Date();
-    var todayDate = '' + (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
+    var todayDate = '' + d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear();
 
     function dateclass(el) {
       el.daterangepicker({
