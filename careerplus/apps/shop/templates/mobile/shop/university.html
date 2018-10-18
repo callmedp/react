@@ -82,7 +82,7 @@
                     <ul>
                         <li>
                             <span class="batch-execIcon">
-                                <span>starts:</span>  
+                                <span>Starts:</span>  
                                 <strong class="text-upper">{{ university_detail.launchdate }}</strong>
                             </span> 
                         </li>
@@ -106,18 +106,20 @@
                         <a role="button" class="btn btn-round-30 btn-slg btn-shadow btn-grOrange" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
                     {% endif %}
                     </div>
-                    {% if not request.session.candidate_id and not request.session.university_course %}
-                      <div class="download-brochure text-center mt-15">
-                        <a href="{{ university_detail.brochure }}" id="download_broucher" ><i class="exe-icon-download"></i>
-                        <strong> Download Brochure {{request.session.university_course}}</strong>
-                        </a>
-                      </div>
-                    {% else %}
-                      <div class="download-brochure text-center mt-15">
-                        <a href="{{ university_detail.brochure }}" id="download_broucher"><i class="exe-icon-download"></i>
-                        <strong> Download Brochure {{request.session.university_course}}</strong>
-                        </a>
-                      </div>
+                    {% if  university_detail.brochure %}
+                      {% if not request.session.candidate_id and not request.session.university_course %}
+                        <div class="download-brochure text-center mt-15">
+                          <a href="{{ university_detail.brochure }}" id="download_broucher" ><i class="exe-icon-download"></i>
+                          <strong> Download Brochure</strong>
+                          </a>
+                        </div>
+                      {% else %}
+                        <div class="download-brochure text-center mt-15">
+                          <a href="{{ university_detail.brochure }}" id="download_broucher"><i class="exe-icon-download"></i>
+                          <strong> Download Brochure</strong>
+                          </a>
+                        </div>
+                      {% endif %}
                     {% endif %}
 
                     
