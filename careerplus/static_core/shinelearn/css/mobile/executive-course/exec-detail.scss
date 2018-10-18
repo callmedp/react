@@ -4,21 +4,6 @@
 
 @import '../library/mixin';
 
-/* Share Button Start From Here */
-@import '../components/share';
-
-/* Tabbing Start From Here */
-@import '../components/tabbing';
-
-/* Form items Start From Here */
-@import '../components/form-items';
-
-/* Related articles Start From Here */
-@import '../components/related-articles';
-
-/* Breadcrumb Start From Here */
-@import '../components/breadcrumb';
-
 /* Color Start From Here */
 @import '../components/color';
 
@@ -909,4 +894,20 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#295986', end
         margin: 0 0 5px;
         line-height: 1.3;
     }
+}
+
+
+.program-structure {
+    .modal-content{
+        height: 80%;
+        overflow: scroll;
+        top: 3%;
+    }
+}
+
+.stop-bodyScroll {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }

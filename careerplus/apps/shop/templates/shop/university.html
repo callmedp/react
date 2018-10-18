@@ -117,7 +117,7 @@
              {% with university_detail.highlighted_benefits|split:";" as benefits %}
                 {% for benefit in benefits %}
                   <div class="col-sm-4">
-                    <div class="exe-course-highlights-box">
+                    <div class="exe-course-highlights-box {% if forloop.counter > 1 %}left-bdr{% endif %}">
                       <i class="exe-icon-highilights"></i>
                       <span>{{ benefit }}</span>
                     </div>
@@ -268,7 +268,7 @@
                             {% for inner_fac in faculty %}
                              <div class="item col-sm-12 {% if forloop.counter == 1%}active {% endif %}">
                              {% for fac in inner_fac %}
-                              <div class="col-sm-6 text-center">
+                              <div class="{% if inner_fac|length == 1 %}col-sm-12{% else %}col-sm-6{% endif %} text-center">
                                 <figure>
                                   <a class="faculty-thumb" href="{{fac.get_absolute_url}}"  target='_blank'><img src="{{ fac.get_image_url }}" alt="Faculty Profile"></a>
                                   <figcaption>
@@ -477,7 +477,7 @@
                       <div id="carousel-example-generic1" class="carousel slide exe-testimonial-carousel" data-ride="carousel">
 
                         <!-- Wrapper for slides -->
-                        <div class="carousel-inner" role="listbox">
+                        <div class="carousel-inner text-center" role="listbox">
                         {%for testimonial in university_testimonial %}
                           <div class="item col-sm-12 {% if forloop.counter == 1%} active {% endif %}">
 

@@ -215,3 +215,19 @@ $("#uploadBtn").onchange = function () {
     $("#uploadFile").value = this.value;
 };
 
+
+
+$('.btn-openPopup, .modal').each(function (idx) {
+	var winnerId = "popup-" + idx;
+	this.id = winnerId;
+	var btn = $("#popup-" + idx);
+	var closeBtn = $(".close-popup");
+	var popId = $('#win-'+ idx);
+	btn.click(function(e) {
+		e.preventDefault();
+		$(popId).addClass('block');
+	}); 
+	closeBtn.click(function() {
+		$(popId).removeClass('block');
+	});
+});
