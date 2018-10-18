@@ -261,7 +261,7 @@
                             <!-- Accordion begin -->
                             <div class="accordion_example1 accordion-wrap">
                                 <!-- Section 1 -->  
-                                {% for chapter in chapter_list %}
+                                {% for chapter in chapter_list|slice:"5" %}
                                 <div class="accordion_in {% if forloop.counter == 1 %} acc_active {% endif %} {% if not chapter.content %} no-content {% endif %}">
                                     <div class="acc_head">{{ chapter.heading }}</div>
                                     {% if chapter.content %}
