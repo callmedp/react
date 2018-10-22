@@ -210,12 +210,13 @@ BENEFITS = {
     '1': ['Free featured profile', 'exe-icon-feat-profile', 'FREE featured profile worth Rs. 1440 for 1 month on Shine.com'],
     '2': ['Shine credits', 'exe-icon-shine-credit', '10% Shine credits redeemable on next purchase*'],
     '3': ['Global Education Providers', 'exe-icon-education-provider', 'Choose from a list of global providers as per your requirement.'],
-    '4': ['Appear for exam – Get Certified', ''],
-    '5': ['Fill Online Application Form', ''],
-    '6': ['Get Access to online learning management system', ''], # '7': ['Check eligibility before filling online application',''],
-    # '8': ['Complete online application form', ],
-    # '9': ['Make Course Fee Payment', ''],
-    # '10': ['Start your course', '']
+    '4': ['Appear for exam – Get Certified', 'exe-icon-get-certified'],
+    '5': ['Fill Online Application Form', 'exe-icon-online-application'],
+    '6': ['Get Access to online learning management system', 'exe-icon-access-online'], 
+    # '7': ['Check eligibility before filling online application','exe-icon-check-eligible'],
+    # '8': ['Complete online application form', 'exe-icon-complete-application'],
+    # '9': ['Make Course Fee Payment', 'exe-icon-fee-payment'],
+    # '10': ['Start your course', 'exe-icon-start-course']
 }
 
 APPLICATION_PROCESS = {
@@ -223,12 +224,12 @@ APPLICATION_PROCESS = {
     '2': ['Receive online access/study material from course material', 'exe-icon-study-material'],
     '3': ['Access the material and start learning', 'exe-icon-start-learning'],
     '4': ['Appear for exam – Get Certified', 'exe-icon-get-certified'],
-    '5': ['Fill Online Application Form', ''],
-    '6': ['Get Access to online learning management system', ''],
-    # '7': ['Check eligibility before filling online application',''],
-    # '8': ['Complete online application form', ],
-    # '9': ['Make Course Fee Payment', ''],
-    # '10': ['Start your course', '']
+    '5': ['Fill Online Application Form', 'exe-icon-online-application'],
+    '6': ['Get Access to online learning management system', 'exe-icon-access-online'],
+    # '7': ['Check eligibility before filling online application','exe-icon-check-eligible'],
+    # '8': ['Complete online application form', 'exe-icon-complete-application'],
+    # '9': ['Make Course Fee Payment', 'exe-icon-fee-payment'],
+    # '10': ['Start your course', 'exe-icon-start-course']
 
 }
 

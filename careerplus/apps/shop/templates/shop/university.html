@@ -77,11 +77,11 @@
                   <figcaption>
                     Batch starts:
                     <strong>{{ university_detail.launchdate }}</strong>
-                    <span>Duration: <strong>{{ selected_var.dur_days|convert_to_month }} months</strong></span>
+                    <span>Duration: <strong>{{ selected_var.dur_days|convert_to_month }}</strong></span>
                     <div class="sep mt-10 mb-10"></div>
                     Fee
                     <div class="exe-price">
-                      Rs.{{ sqs.pPinb|floatformat|intcomma }}
+                      Rs. {{ sqs.pPinb|floatformat|intcomma }}
                     </div>
                     {% if not request.session.candidate_id and not request.session.university_course %}
                         <a class="exe-button-enrol mt-10" id="enroll_now"  data-toggle="modal" data-target=".bs-example-modal-sm" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll Now</a>
@@ -117,7 +117,7 @@
              {% with university_detail.highlighted_benefits|split:";" as benefits %}
                 {% for benefit in benefits %}
                   <div class="col-sm-4">
-                    <div class="exe-course-highlights-box">
+                    <div class="exe-course-highlights-box {% if forloop.counter > 1 %}left-bdr{% endif %}">
                       <i class="exe-icon-highilights"></i>
                       <span>{{ benefit }}</span>
                     </div>
@@ -287,7 +287,7 @@
                             {% endfor %}
                             
                           </div>
-
+                          {% if faculty|length > 1%}
                           <!-- Controls -->
                           <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
                             <span class="exe-icon-chevron-left mt-20" aria-hidden="true"></span>
@@ -295,6 +295,7 @@
                           <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
                             <span class="exe-icon-chevron-right mt-20" aria-hidden="true"></span>
                           </a>
+                          {% endif %}
                         </div>
                       </article>
                     </div>
@@ -477,7 +478,7 @@
                       <div id="carousel-example-generic1" class="carousel slide exe-testimonial-carousel" data-ride="carousel">
 
                         <!-- Wrapper for slides -->
-                        <div class="carousel-inner" role="listbox">
+                        <div class="carousel-inner text-center" role="listbox">
                         {%for testimonial in university_testimonial %}
                           <div class="item col-sm-12 {% if forloop.counter == 1%} active {% endif %}">
 
@@ -648,11 +649,11 @@
                         <figcaption>
                           Batch starts:
                           <strong>{{ university_detail.launchdate }}</strong>
-                          <span>Duration: <strong>{{ selected_var.dur_days|convert_to_month }} month</strong></span>
+                          <span>Duration: <strong>{{ selected_var.dur_days|convert_to_month }}</strong></span>
                           <div class="sep mt-10 mb-10"></div>
                           Fee
                           <div class="exe-price">
-                          Rs.{{ sqs.pPinb|floatformat|intcomma }}
+                          Rs. {{ sqs.pPinb|floatformat|intcomma }}
                           </div>
                            {% if not request.session.candidate_id and not request.session.university_course %}
                                 <a class="exe-button-enrol mt-10" id="enroll_now"  data-toggle="modal" data-target=".bs-example-modal-sm" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll Now</a>

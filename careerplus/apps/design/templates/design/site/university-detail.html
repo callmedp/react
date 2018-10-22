@@ -494,6 +494,13 @@
     <script src="{% static 'shinelearn/js/shop/detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/scroller-executive.js' %}" type="text/javascript"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+    <script type="text/javascript">
+      $('.carousel-inner').each(function() {
+
+          if ($(this).children('div').length === 1) $(this).siblings('.carousel-control, .carousel-indicators').hide();
+
+      });
+    </script>
     {% endcompress %}
 {% endblock js_section %}
 

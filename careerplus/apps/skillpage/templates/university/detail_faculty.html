@@ -76,7 +76,7 @@
                       {% if faculty_obj.image %}
                       <img src="{{ faculty_obj.get_image_url }}" height="209px" width="209px" class="img-responsive" alt="{{faculty_obj.name}}">
                       {% else %}
-                      <img src="{% static 'shinelearn/images/executive/default-user-pic.jpg' %}" height="209px" width="209px" class="img-responsive" alt="{{faculty_obj.name}}">
+                      <img src="{% static 'shinelearn/images/executive/default-user-pic.jpg' %}" alt="{{faculty_obj.name}}">
                       {% endif %}
                       <i><img src="{{university.icon.url}}" alt="{{university.name}}" class="img-responsive"></i>
                     </figure>

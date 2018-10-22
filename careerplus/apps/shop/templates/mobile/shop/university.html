@@ -89,7 +89,7 @@
                         <li>
                             <span class="duration-execIcon">
                                 <span>Duration:</span> 
-                                <strong class="text-upper">{{ selected_var.dur_days|convert_to_month }} months</strong>
+                                <strong class="text-upper">{{ selected_var.dur_days|convert_to_month }}</strong>
                             </span> 
                         </li>
                         <li>
@@ -261,7 +261,7 @@
                             <!-- Accordion begin -->
                             <div class="accordion_example1 accordion-wrap">
                                 <!-- Section 1 -->  
-                                {% for chapter in chapter_list %}
+                                {% for chapter in chapter_list|slice:"5" %}
                                 <div class="accordion_in {% if forloop.counter == 1 %} acc_active {% endif %} {% if not chapter.content %} no-content {% endif %}">
                                     <div class="acc_head">{{ chapter.heading }}</div>
                                     {% if chapter.content %}
@@ -352,7 +352,7 @@
                             </div>
 
                             {{ institute.description|safe }}
-                            <p class="mt-15 text-center"><a href="#" class="btn btn-outline btn-round-30 btn-slg">View all courses</a></p>
+                            <p class="mt-15 text-center"><a href="{{ institute.get_absolute_url }}" class="btn btn-outline btn-round-30 btn-slg">View all courses</a></p>
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ Institute -->
