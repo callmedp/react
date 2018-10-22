@@ -915,7 +915,7 @@ $("#lead1, #lead2, #lead3").each(function() {
     var product_html = '<li class="col-sm-6"><a title="product_name" class="box-panel" href="product_url"><div class="media"><div class="media-body"><h3 class="listing-heading">product_name</h3><div class="rating-review-box"><strong>product_bought</strong> people bought<span class="jobs-available"><strong>product_bought</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="product_image" alt="CSS Designer"></figure></div></div></a></li>';
 
 
-    var start_html = '<section class="container-fluid detail-box you-may-like-carousel mb-30"><div class="scroll"><h2 class="heading-primary-exe mt-30 mb-10 text-center">You may also like</h2><article class="col-sm-12"><div id="carousel-example-generic2" class="carousel slide" data-ride="carousel"><div class="carousel-inner" role="listbox" id="skill_list_box">';
+    var start_html = '<section class="container-fluid detail-box you-may-like-carousel mb-30"><div class="scroll"><h2 class="heading-primary-exe mt-30 mb-10 text-center">You may also like</h2><article class="col-sm-12"><div id="carousel-example-generic2" class="carousel slide" data-ride="carousel"><div class="carousel-inner " role="listbox" id="skill_list_box">';
 
     var end_html ='</div>carousel_arrow_html</div></article></div></section>';
     var carousel_arrow_html =  '<a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev"><span class="exe-icon-chevron-left mt-10" aria-hidden="true"></span></a><a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next"><span class="exe-icon-chevron-right mt-10" aria-hidden="true"></span></a> '
@@ -931,7 +931,7 @@ $("#lead1, #lead2, #lead3").each(function() {
         }
         for(i=0; i< data.results.length;i++) {
           if(i % num_of_element == 0 && i == 0){
-            final_html += '<div class="item col-sm-12 active"><ul class="listing">'
+            final_html += '<div class="item col-sm-12 d-flex justify-content-center active"><ul class="listing d-flex justify-content-center">'
           }
           else if(i % num_of_element == 0) {
             final_html += '<div class="item col-sm-12"><ul class="listing">'
