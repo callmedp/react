@@ -458,7 +458,7 @@
 }
 
 .price-execIcon::before  {
-  @include icon-inblock (26px, 26px, -84px 0);
+  @include icon-inblock (26px, 26px, -84px -2px);
 }
 
 .execIcon-program {
@@ -486,8 +486,8 @@
 }
 
 .execIcon-eligibility {
-  @include icon-block (21px, 21px, -176px 0);
-  margin: -10px 0 0 -10px;
+  @include icon-block (28px, 21px, -494px -96px);
+  margin: -10px 0 0 -15px;
 }
 
 .execIcon-program {
@@ -588,15 +588,15 @@
 }
 
 .exe-icon-feat-profile {
-  @include icon-block (60px, 38px, -169px -38px);
+  @include icon-block (42px, 38px, -169px -38px);
 }
 
 .exe-icon-shine-credit {
-  @include icon-block (48px, 37px, -265px -37px);
+  @include icon-block (42px, 37px, -265px -37px);
 }
 
 .exe-icon-education-provider {
-  @include icon-block (60px, 40px, -360px -37px);
+  @include icon-block (42px, 40px, -360px -37px);
 }
 
 .execIcon-down-arrow-big {

@@ -65,7 +65,7 @@
                 <!-- Courses offered Start Here -->
                 {% if products %}
                 <div class="courses-offered container mt-15" itemscope itemtype="http://schema.org/ItemList">
-                    <h2>Courses taken by {{faculty_obj.name}}</h2>
+                    <h2 class="mb-20">Courses taken by {{faculty_obj.name}}</h2>
                         {% for prd in products %}
                         <div class="white-box p-15 pr-0" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
                             <meta itemprop="position" content="{{forloop.counter}}" />

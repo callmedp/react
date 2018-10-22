@@ -5,7 +5,6 @@
 {% block css_section %}
 {{ block.super }}
     {% compress css %}
-    <link type="text/scss" href="{% static 'shinelearn/css/mobile/shop/course-detail.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/executive-course/exec-detail.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
@@ -65,7 +64,7 @@
                 <div class="want-help container">
                     <div class="white-box request-callback">
                         <h2>Want help with courses?</h2>
-                        <div class="content-box mt-20 login-form">
+                        <div class="content-box login-form">
                         <form id="id-request-callback-form" role="form">{% csrf_token %}
                             <div class="form-group">
                                 <input type="text" class="form-control" name="name" placeholder="Name*" value="{{request.session.full_name|safe}}">
@@ -107,7 +106,7 @@
                             <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
 
                             <div class="mt-20 mb-5 text-center">
-                                <button type="button" class="btn btn-round-30 btn-lg btn-shadow btn-grOrange text-upper" id="request-callback-button">Request Callback</button>
+                                <button type="button" class="btn btn-round-30 btn-slg btn-shadow btn-grOrange text-upper" id="request-callback-button">Request Callback</button>
                             </div>
                         </form>
                         </div><!-- line form ends here -->
