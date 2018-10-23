@@ -355,7 +355,7 @@ margin-left: 50px;
 }
 .courses-wrap .tab-content {
     flex: 1;
-background:url('../../../marketing/ds/data_science_skill.jpg') top right no-repeat;
+background:url('../../../images/marketing/ds/data_science_skill.jpg') top right no-repeat;
 padding-top:10%; 
 }
 
@@ -982,6 +982,13 @@ padding:0 10px 10px 10px;
     display:inline-block;
 }
 
+.error-txt{
+    color:red;
+}
+.js-error{
+margin-bottom:0px;
+ color:red;
+}
 
 
  

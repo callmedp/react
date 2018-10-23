@@ -48,7 +48,8 @@ class MarketingPages(TemplateView):
                             "/gst-cert":"/gst-certification",
                             "/pmp-cert":"/pmp-certification",
                             "/data-science-certification":"/data-science-cert",
-                            "/resume-writing":"/resume-writing-services"
+                            "/resume-writing":"/resume-writing-services",
+                            "/data-science" : "/data-science-new"
                             }
         redirect_path = redirect_mapping.get(self.request.path)
         if redirect_path:

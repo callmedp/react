@@ -8,14 +8,14 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/ds/bootstrap-grid.css' %}">
-    <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/ds/bootstrap-reboot.css' %}">
+    <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/data-science/bootstrap-grid.css' %}">
+    <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/data-science/bootstrap-reboot.css' %}">
     <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/ds/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/ds/global.css' %}">
 
     
 
-    <title>Shine landing page</title>
+    <title>Data Science Prodegree</title>
   </head>
   <body>
    <div class="container-fluid banner-bg">
@@ -42,16 +42,20 @@ Prodegree</h1>
               <div class="main-form mt-4 d-block d-sm-none">
                 <h2>Let’s get started</h2>
  
-                <form>
+                <form id="lead_mobile" method="POST" action="{% url 'crmapi:lead-management' %}">
+                    {% csrf_token %}
                   <ul class="mt-2 mb-2">
                     <li class="form-group">
-                       <input type="text" class="form-control" placeholder="Name">
+                       <input type="text" id="name" name="name" class="form-control" placeholder="Name" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %} >
+                        <p class="js-error"></p>
                     </li>
                     <li class="form-group">
-                       <input type="text" class="form-control" placeholder="Email">
+                       <input type="text" id="email" name="email" class="form-control" placeholder="Email" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %} >
+                        <p class="js-error"></p>
                     </li>
                     <li class="form-group">
-                       <input type="text" class="form-control" placeholder="Mobile">
+                       <input type="text" id="mobile" name="number" class="form-control" placeholder="Mobile" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %} >
+                        <p class="js-error"></p>
                     </li>
                     
                     <li class="form-group">
@@ -63,9 +67,18 @@ Prodegree</h1>
                            <option>5</option>
                          </select>
                     </li>
+
                   </ul>
- 
-                 <button type="submit" class="btn btn-primary w-100 scrollTop">Enroll Now</button>
+
+                  <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
+
+                <input type="hidden" name="prd" value="Data Scientist - Rs. 44999/-">
+
+                <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+                <input type="hidden" name="lsource" value="{{ lead_source }}">
+
+                 <button type="submit" class="btn btn-primary w-100 scrollTop" onclick="$('#lead_mobile').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;" >Enroll Now</button>
                  <p class="tnc mt-2 mb-2">By registering with us you agree to our <br><a href="#">Terms & Conditions</a></p>
                 
                </form>
@@ -84,18 +97,22 @@ Prodegree</h1>
              <div class="main-form">
                <h2>Let’s get started</h2>
 
-               <form>
-                 <ul class="mt-2 mb-2">
+               <form id="lead" method="POST" action="{% url 'crmapi:lead-management' %}">
+                    {% csrf_token %}
+                   <ul class="mt-2 mb-2">
                    <li class="form-group">
-                      <input type="text" class="form-control" placeholder="Name">
+                      <input type="text" id="name" name="name" class="form-control" placeholder="Name"  value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %}>
+                       <p class="error-txt js-error"></p>
                    </li>
                    <li class="form-group">
-                      <input type="text" class="form-control" placeholder="Email">
+                      <input type="text" id="email" name="email" class="form-control" placeholder="Email" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %}>
+                       <p class="error-txt js-error"></p>
                    </li>
                    <li class="form-group">
-                      <input type="text" class="form-control" placeholder="Mobile">
+                      <input type="text" id="mobile" name="number" class="form-control" placeholder="Mobile" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
+                       <p class="error-txt js-error"></p>
                    </li>
-                   
+
                    <li class="form-group">
                       <select class="form-control" id="exampleFormControlSelect1">
                           <option>1</option>
@@ -107,8 +124,16 @@ Prodegree</h1>
                    </li>
                  </ul>
 
-                <button type="submit" class="btn btn-primary w-100">Enroll Now</button>
-                <p class="tnc mt-2 mb-2">By registering with us you agree to our <br><a href="#">Terms & Conditions</a></p>
+                  <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
+
+                <input type="hidden" name="prd" value="Data Scientist - Rs. 44999/-">
+
+                <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+                <input type="hidden" name="lsource" value="{{ lead_source }}">
+
+                <button type="submit" class="btn btn-primary w-100" onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enroll Now</button>
+                <p class="tnc mt-2 mb-2">By registering with us you agree to our <br><a href="/tnc">Terms & Conditions</a></p>
                
               </form>
              </div><!-- /. main-form -->
@@ -139,7 +164,7 @@ Prodegree</h1>
               <a class="nav-link js-scroll-trigger" href="#who-attend">Who should attend?</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#jobrole">jobrole</a>
+              <a class="nav-link js-scroll-trigger" href="#jobrole">Job role</a>
             </li>
             <li class="nav-item">
               <a class="nav-link js-scroll-trigger" href="#why-buy">Benefits</a>
@@ -148,7 +173,6 @@ Prodegree</h1>
         </div>
       </div>
     </nav>
-
    </div>
    <!-- /. Main Menu -->
 
@@ -371,16 +395,11 @@ Managers from Analytical background and those who are leading a team of Analysts
    <section class="" id="jobrole">
      <div class="container">
       <div class="courses-wrap ">
-        
-        
         <div class="tab-content jobrole">
           <h2>Diverse Job Role</h2>
-
-
          <div class="tag-container col-md-12 col-lg-8 col-12">
               <div class="w-100 tag-wrap">
                 <span class="tags">Data Science Specialist
-
 </span>
                 <span class="tags">Web & Social Media Analyst
 </span>
@@ -468,5 +487,154 @@ Guidance Services</p>
     <script src="{% static 'shinelearn/js/marketing/data-science/base.js' %}"></script>
     <script src="{% static 'shinelearn/js/marketing/data-science/jquery.easing.js' %}"></script>
     <script src="{% static 'shinelearn/js/marketing/data-science/scrolling-nav.js' %}"></script>
+
+   <script type="text/javascript">
+    var _gaq = _gaq || [];
+
+    $.validator.addMethod("lettersonly", function (value, element){
+        return this.optional(element) || /^[a-z\s]*$/i.test(value);
+    }, "Letters only please");
+
+    $.validator.addMethod("defaultInvalid", function (value, element) {
+        return !(element.value == element.defaultValue);
+    }, "This field is required.");
+
+        $("#lead").validate({
+            submitHandler:function (form) {
+                var action = $(form).attr('action');
+                $.post(action, $(form).serialize(), function (data) {
+                    if (data && data['status']){
+                        $.each($("#lead"), function (i, e) {
+                            e.reset();
+                        });
+                        $("#lead label").remove();
+                        var conversion_id = 991709191;
+                        var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                        var ga_code = document.createElement('div');
+                        ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                       document.body.appendChild(ga_code);
+                       window.location.href ='thankyou-for-query';
+                        return false;
+                    }
+                }, 'json');
+            },
+            rules:{
+                number:{
+                    required:true,
+                    minlength:10,
+                    maxlength:15,
+                    number:true,
+                },
+                email:{
+                    email:true,
+                    required:true,
+
+                },
+                name:{
+
+                    lettersonly:true,
+
+                },
+
+            },
+            messages:{
+                number:{
+                   required:"Field is required"
+                },
+                email:{
+                    required:"Field is required"
+                },
+                name:{
+                    required:"Field is required"
+                },
+
+            },
+            highlight:function(element, errorClass) {
+              $(element).closest('.form-group').addClass('error');
+            },
+            unhighlight:function(element, errorClass) {
+              $(element).closest('.form-group').removeClass('error');
+              $(element).siblings('.js-error').html("");
+            },
+            errorPlacement: function(error, element){
+              $(element).siblings('.js-error').html(error.text());
+            }
+          });
+
+
+ $("#lead_mobile").validate({
+            submitHandler:function (form) {
+                var action = $(form).attr('action');
+                $.post(action, $(form).serialize(), function (data) {
+                    if (data && data['status']){
+                        $.each($("#lead"), function (i, e) {
+                            e.reset();
+                        });
+                        $("#lead label").remove();
+                        var conversion_id = 991709191;
+                        var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                        var ga_code = document.createElement('div');
+                        ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                       document.body.appendChild(ga_code);
+                       window.location.href ='thankyou-for-query';
+                        return false;
+                    }
+                }, 'json');
+            },
+            rules:{
+                number:{
+                    required:true,
+                    number:true,
+                    minlength:10,
+                    maxlength:20,
+                },
+                email:{
+                    email:true,
+                    required:true,
+
+                },
+                name:{
+                    lettersonly:true,
+
+                },
+                // msg:{
+                //     required:true,
+                //     maxlength:500
+                // }
+            },
+            messages:{
+                number:{
+                   required:"Field is required",
+                   number: "Please enter valid number only"
+                },
+                email:{
+                    required:"Field is required"
+                },
+                name:{
+                    required:"Field is required"
+                },
+                // msg:{
+                //     required:"Field is required",
+                //     maxlength:"No more than 500 characters."
+
+                // }
+            },
+            highlight:function(element, errorClass) {
+              $(element).closest('.form-group').addClass('error');
+            },
+            unhighlight:function(element, errorClass) {
+              $(element).closest('.form-group').removeClass('error');
+              $(element).siblings('.js-error').html("");
+            },
+            errorPlacement: function(error, element){
+              $(element).siblings('.js-error').html(error.text());
+            }
+          });
+
+
+ </script>
+
+
+
   </body>
 </html>
