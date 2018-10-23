@@ -277,7 +277,7 @@
                                 {% endfor %}
                             </div><!-- /. accordion-wrap -->
                             {% if chapter_list|length > 5 %}
-                            <p class="mt-15 text-center"><span class="btn btn-outline btn-round-30 btn-slg btn-openPopup">View all programs</span></p>
+                            <p class="mt-15 text-center"><span class="btn btn-outline btn-round-30 btn-lg btn-openPopup">View all programs</span></p>
 
                             <div class="modal" id="win-0">
                                 <!-- Modal content -->
@@ -323,7 +323,7 @@
                                 {{university_detail.assesment|safe}}
                             {% endif %}
                             {% if university_detail.sample_certificate %}
-                            <p class="mt-15 text-center"><a  class="btn btn-outline btn-round-30 btn-slg btn-openPopup">View sample certificate</a></p>
+                            <p class="mt-15 text-center"><a  class="btn btn-outline btn-round-30 btn-lg btn-openPopup">View sample certificate</a></p>
                             <div class="modal" id="win-2">
                                 <!-- Modal content -->
                                 <div class="modal-content">
@@ -355,7 +355,7 @@
                             </div>
 
                             {{ institute.description|safe }}
-                            <p class="mt-15 text-center"><a href="{{ institute.get_absolute_url }}" class="btn btn-outline btn-round-30 btn-slg">View all courses</a></p>
+                            <p class="mt-15 text-center"><a href="{{ institute.get_absolute_url }}" class="btn btn-outline btn-round-30 btn-lg">View all courses</a></p>
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ Institute -->
