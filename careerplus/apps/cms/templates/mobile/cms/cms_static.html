@@ -42,6 +42,7 @@
  <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/images.scss' %}" rel="stylesheet" >
  <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/global.scss' %}" rel="stylesheet">
  <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/icons.scss' %}" rel="stylesheet">
+ <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
 
 {% endcompress %}
 {% endblock css_section %}
@@ -51,7 +52,7 @@
 {% endblock head %}
 
   {% block main_container %}
-
+  <div class="wrapper">
 
 {% block header %}
 
@@ -359,18 +360,29 @@ It is important to understand that these resumes are not accepted everywhere and
   </div>
 
 </div>
-
+ {% block call_us %}
+    {% include "shop/partials/call_us.html" %}
+ {% endblock call_us %}
 
  {% endblock container %}
+
+ {% block footer %}
+    <!-- footer -->
+    {% include 'basic/footer.html' %}
+ {% endblock footer %}
+
 {% block navigation %}
-                <!-- left side menu -->
-                {% include 'basic/navigation.html' %}
-      <div class="navbar-header" itemscope itemtype="http://schema.org/Organization" >
-      <a class="navbar-brand" href="{% url "homepage" %}"></a>
-      <meta itemprop="name" content="Shine">
-      <meta itemprop="url" content="https://learning.shine.com"/>
+    <!-- left side menu -->
+    {% include 'basic/navigation.html' %}
+    <div class="navbar-header" itemscope itemtype="http://schema.org/Organization" >
+    <a class="navbar-brand" href="{% url "homepage" %}"></a>
+    <meta itemprop="name" content="Shine">
+    <meta itemprop="url" content="https://learning.shine.com"/>
+
+{% endblock navigation %}
     </div>
-            {% endblock navigation %}
+
+</div>
 
 {% endblock main_container %}
     {% block js_section %}
@@ -391,6 +403,7 @@ It is important to understand that these resumes are not accepted everywhere and
         <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/cms/validate.js' %}"></script>
+        <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
 {% endcompress %}
 
 <script type="text/javascript">
@@ -439,11 +452,9 @@ window.onclick = function(event) {
 } )( jQuery );
 </script>
 
-    {% block johukum %}
-        <script type='text/javascript' id='spd-busns-spt' async=''
-            src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
-            data-client='324ed0abb0694b0c66a6daecb178352d'>
-        </script>
-        {% endblock johukum %}
 
 {% endblock js_section %}
+
+{% block johukum %}
+   
+{% endblock johukum %}

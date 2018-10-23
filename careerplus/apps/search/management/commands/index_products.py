@@ -46,5 +46,5 @@ class Command(BaseCommand):
         logging.getLogger('info_log').info(
             "Enabled Replication on master. Response: {} {}".format(
                 response, response.__dict__))
-        # response = requests.get('http://172.22.65.36:8983/solr/prdt/replication?command=fetchIndex')
-        # print("Fetched indexes on slave. Response:", response, response.__dict__)
+        response = requests.get('http://172.22.65.36:8983/solr/prdt/replication?command=fetchIndex')
+        print("Fetched indexes on slave. Response:", response, response.__dict__)

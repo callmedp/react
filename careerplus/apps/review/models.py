@@ -48,7 +48,7 @@ class Review(AbstractAutoDate):
     )
 
     title = models.CharField(
-        max_length=20,
+        max_length=200,
         verbose_name=_('Title'),
         blank=True,
         null=True

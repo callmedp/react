@@ -133,14 +133,26 @@
         <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
         {% endcompress %}
         
-        {% block johukum %}
+        <!-- {% block johukum %}
         <script type='text/javascript' id='spd-busns-spt' async=''
             src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
             data-client='324ed0abb0694b0c66a6daecb178352d'>
         </script>
-        {% endblock johukum %}
+        {% endblock johukum %} -->
         
     {% endblock js_section %}
+
+    {% block zendesk %}
+        <!--Start of Zendesk Chat Script-->
+        <script type="text/javascript">
+          window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+          d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+          _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+          $.src="https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";z.t=+new Date;$.
+          type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+        </script>  
+        <!--End of Zendesk Chat Script-->
+    {% endblock zendesk %}
     {% block banner_ads_bottom %}
         <!-- /1198510/ShineLearning_1x1_mobile -->
         <div id='div-gpt-ad-1509431552856-0'>

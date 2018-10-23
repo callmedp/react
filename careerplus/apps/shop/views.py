@@ -82,14 +82,22 @@ class ProductInformationMixin(object):
                             'label': parent[0].name,
                             'url': parent[0].get_absolute_url(),
                             'active': True}))
+
             if product.is_service or product.is_writing:
-                parent = category.get_parent()
-                if parent:
+                if category.is_service and category.type_level == 3:
                     breadcrumbs.append(
                         OrderedDict({
-                            'label': parent[0].name,
-                            'url': reverse('func_area_results', kwargs={'fa_slug':parent[0].slug, 'pk': parent[0].id}),
-                        'active': True}))
+                            'label': category.name,
+                            'url': category.get_absolute_url(),
+                            'active': True}))
+                else:
+                    parent = category.get_parent()
+                    if parent:
+                        breadcrumbs.append(
+                            OrderedDict({
+                                'label': parent[0].name,
+                                'url': reverse('func_area_results', kwargs={'fa_slug':parent[0].slug, 'pk': parent[0].id}),
+                            'active': True}))
             else:
                 breadcrumbs.append(
                     OrderedDict({
@@ -183,6 +191,7 @@ class ProductInformationMixin(object):
             self.request.session.get('func_area', None),
             self.request.session.get('skills', None))
         if rcourses:
+            rcourses = rcourses.exclude(id=product.id)
             rcourses = rcourses[:6]
         if rcourses:
             recommendation.update({
@@ -808,7 +817,6 @@ class ProductReviewCreateView(CreateView):
         if request.is_ajax() and self.product_pk and self.candidate_id:
             if review_form.is_valid():
                 try:
-
                     self.product = Product.objects.get(pk=self.product_pk)
                     contenttype_obj = ContentType.objects.get_for_model(self.product)
                     review_obj = Review.objects.filter(
@@ -826,7 +834,7 @@ class ProductReviewCreateView(CreateView):
                             name += request.session.get('first_name')
                         if request.session.get('last_name'):
                             name += ' ' + request.session.get('last_name')
-                        product = self.oi.product if self.oi else self.product
+                        product = self.product
                         email = request.session.get('email')
                         content_type = ContentType.objects.get(app_label="shop", model="product")
                         review_obj = Review.objects.create(
@@ -842,7 +850,7 @@ class ProductReviewCreateView(CreateView):
                         extra_content_obj = ContentType.objects.get(app_label="shop", model="product")
 
                         review_obj.extra_content_type = extra_content_obj
-                        review_obj.extra_object_id = self.oi.id if self.oi else self.product.id
+                        review_obj.extra_object_id = self.product.id
                         review_obj.save()
                         data['success'] = True
                     else:

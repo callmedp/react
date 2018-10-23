@@ -22,6 +22,7 @@
     <link type="text/css" href="{% static 'shinelearn/css/mobile/common/smk-accordion.css' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/users/login.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/cms/extra.css' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 <!-- {% block back_icon %}<img src="{% static 'shinelearn/images/mobile/common/header-back-img.png' %}">{% endblock back_icon %} -->
@@ -82,6 +83,11 @@
             {{ right_widgets|safe|default:'' }}
         </section><!-- end of section here -->
     </div>
+
+    {% block call_us %}
+        {% include "shop/partials/call_us.html" %}
+    {% endblock call_us %}
+    
 {% endblock container %}
 
 {% block js_section %}
@@ -90,6 +96,7 @@
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"></script>
     <script type="text/javascript" src="{% static 'shinelearn/js/cms/cms.js' %}"></script>
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/cms/cms.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     <script type="text/javascript">
       jQuery(document).ready(function($){ 
         $(".accordion_example1").smk_Accordion({
@@ -105,5 +112,8 @@
 
 {% block johukum %}
 {% endblock johukum %}
+
+{% block zendesk %}
+{% endblock zendesk %}
 
 

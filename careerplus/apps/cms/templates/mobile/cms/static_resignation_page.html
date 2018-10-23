@@ -16,7 +16,7 @@
 	<meta property="og:type" content="Website">
 	<meta property="og:site_name" content="ShineLearning">
 	<meta property="og:image" content="https://static1.shine.com/l/m/images/blog/Prominent_People_And_Their_Resignation_Letter_Format.jpeg">
-	<meta property="article:modified_time" content="2018-08-27 06:28:31.001117+00:00">
+	<meta property="article:modified_time" content="2018-08-28 06:28:31.001117+00:00">
 	<meta property="fb:profile_id" content="282244838633660"> 
 
 	<meta itemprop="name" content="Resignation Letter Format &Samples - Resignation Email @ Shine Learning">
@@ -45,6 +45,7 @@
  <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/images.scss' %}" rel="stylesheet" >
  <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/global.scss' %}" rel="stylesheet">
  <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/icons.scss' %}" rel="stylesheet">
+ <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
 
 {% endcompress %}
 {% endblock css_section %}
@@ -313,7 +314,10 @@ gtag('config', 'UA-3537905-1',{'group':'mainProfile'}); </script><!-- Google Tag
   </div>
 
 </div>
-
+ 
+ {% block call_us %}
+    {% include "shop/partials/call_us.html" %}
+ {% endblock call_us %}
 
  {% endblock container %}
 
@@ -353,6 +357,7 @@ gtag('config', 'UA-3537905-1',{'group':'mainProfile'}); </script><!-- Google Tag
         <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/cms/validate.js' %}"></script>
+        <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
 {% endcompress %}
 
 <script type="text/javascript">
@@ -401,11 +406,15 @@ window.onclick = function(event) {
 } )( jQuery );
 </script>
 
-    {% block johukum %}
-        <script type='text/javascript' id='spd-busns-spt' async=''
-            src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
-            data-client='324ed0abb0694b0c66a6daecb178352d'>
-        </script>
-        {% endblock johukum %}
-
 {% endblock js_section %}
+
+{% block johukum %}
+  <!--script type='text/javascript' id='spd-busns-spt' async=''
+      src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
+      data-client='324ed0abb0694b0c66a6daecb178352d'>
+  </script-->
+{% endblock johukum %}
+
+{% block zendesk %}
+{% endblock zendesk %}
+

@@ -1,0 +1,455 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Courses Landing Page - Shine Learning</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="{% static 'shinelearn/css/marketing/custom_bootstrap.css' %}" rel="stylesheet" type="text/css" />
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-3537905-1', 'auto', {'name': 'a'});
+      ga('a.send', 'pageview');
+      ga('create', 'UA-3537905-41', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+  <body>
+    <!-- header -->
+    <header class="container-fluid dm-bg">
+      <div class="row">
+        <div class="container">
+          <div class="row">
+            <!-- logo -->
+            <div class="col-xs-12">
+              <a class="shinelearning-logo" href="#">
+                <img src="{% static 'shinelearn/images/marketing/shine-learning-logo.png' %}" alt="Shinelearning">
+              </a>
+
+              <a class="ht-logo" href="#">
+                <img src="{% static 'shinelearn/images/marketing/ht-media-logo.png' %}" alt="Shinelearning">
+              </a>
+            </div>
+
+            <!-- content & punchline -->
+            <div class="col-xs-12 col-sm-7 col-md-5 col-lg-6 header-content header-content-pmp">
+              <h1><strong>Change yourself to a Digital Marketing Powerhouse</strong>Become Digital Marketing Certified Associate</h1>
+
+              <div class="hidden-xs header-txt">
+                <ul>
+                  <li>48 hours of instructor-led online training</li>
+                  <li>24 hours of high quality e-learning content by industry experts </li>
+                </ul>
+                <div class="punch-line">Your Journey to become Digital Marketing Certified Associate begins today!</div>
+              </div>
+            </div>
+
+            <!-- girl -->
+            <div class="hidden-xs hidden-sm col-md-3 men-pic">
+              <img src="{% static 'shinelearn/images/marketing/dm-men.png' %}" alt="Shinelearning" class="img-responsive">
+            </div>
+
+            <!-- enquiry form -->
+            <div class="col-xs-12 col-sm-5 col-md-4 col-lg-3">
+              <form class="enquiry-form" id="lead" method="POST"
+                action="{% url 'crmapi:lead-management' %}"> {% csrf_token %}
+                <strong>Let’s get started</strong>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="name" 
+                  placeholder="Your Full Name" name="name" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %}>
+                  <label class="error-txt js-error"></label>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="email" 
+                  placeholder="Email Address" name="email" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %}>
+                  <label class="error-txt js-error"></label>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" maxlength="10" id="mobile" placeholder="Mobile Number" name="number" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
+                  <label class="error-txt js-error"></label>
+                </div>
+                <div class="form-group arrow">
+                  <select id="selection" name="selection" class="form-control">
+                    <option selected="selected" value="3126">Digital Marketing-Rs.20999/-</option>
+                  </select>
+                </div>
+                <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3126{% endif %}">
+
+                <input type="hidden" name="prd" value="Digital Marketing Certified Associate">
+
+                <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+                <input type="hidden" name="lsource" value="{{ lead_source }}">
+                
+                <div class="tnc">
+                  By registering with us you agree to our 
+                  <a href="/tnc">Terms & Conditions</a>
+                </div>
+                <button type="submit" class="btn btn-default" 
+                  onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enroll Now</button>
+                <p>*Easy EMI option available</p>
+              </form>
+            </div>
+
+            <!-- content repeat for mobile device -->
+            <div class="col-xs-12 col-sm-6 visible-xs mt-20 mb-30 header-txt">
+              <ul>
+                  <li>48 hours of instructor-led online training</li>
+                  <li>24 hours of high quality e-learning content by industry experts </li>
+                </ul>
+              <div class="punch-line">Your Journey to become Digital Marketing Certified Associate begins today!</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- header end -->
+
+    <!-- Courses Box -->
+    <div class="container mt-50">
+      <div class="row">
+        <!-- Courses -->
+        <div class="col-xs-12 col-sm-7">
+          <!-- Course Highlights -->
+          <div class="course-highlight">
+            <h2>Course Highlights</h2>
+            <ul>
+              <li>
+                <strong>Execute 4 real life projects</strong>
+                Acquire hands-on knowledge and expertise!</li>
+              <li>
+                <strong>Hands-on training on 5+ tools</strong>
+                Learn various tools which includes Google AdWords, Google Analytics, Facebook, etc.
+              </li>
+              <li>
+                <strong>10 simulation test papers</strong>
+                Gain confidence to ace the certification exams!</li>
+              <li>
+                <strong>Training by industry experts</strong>
+                Get trained by “Dream Team” of Silicon Valley authors for Digital marketing role.</li>
+              <li>
+                <strong>Comprehensive Course Curriculum</strong>
+                Go through in-depth knowledge on 8 topics and 11 domains which covers solid foundation learning for all digital marketing aspects.
+              </li>
+             
+            </ul>
+          </div>
+
+          <!-- Who should attend? -->
+          <div class="course-attend mt-50">
+            <h2>Who should attend?</h2>
+            <ul>
+              <li>
+               Sales or business professional who are looking to accelerate their career.
+              </li>
+              <li>
+                A student looking to build a career in one of the most sought-after domains today.
+              </li>
+              <li>
+                Entrepreneur interested in leveraging digital marketing to improve the ROI for your company.
+              </li>
+              <li>
+               Traditional marketer striving to enhance your knowledge and skills in digital marketing.
+              </li>
+              <li>
+                Digital marketer hoping to broaden your skillsets and accelerate your career to the next level
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Course Preview -->
+        <div class="col-xs-12 col-sm-5">
+          <h2>Course Preview</h2>
+          <div class="panel-group course-preview" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    Search Engine Optimization</a>
+                </h4>
+              </div>
+
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingTwo">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Social Media</a>
+                </h4>
+              </div>
+              
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingThree">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Content Writing</a>
+                </h4>
+              </div>
+              
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingFour">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Email Marketing</a>
+                </h4>
+              </div>              
+            </div>
+        
+        <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingFive">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFive">
+                   Mobile Marketing </a>
+                </h4>
+              </div>              
+            </div>
+        
+        
+        <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingSix">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseSix">
+                   Pay-Per-Click</a>
+                </h4>
+              </div>              
+            </div>
+        
+        
+        <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingSeven">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseSeven">
+                   Website Conversion Optimization</a>
+                </h4>
+              </div>              
+            </div>
+        
+        <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingEight">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseEight">
+                    Digital Analytics </a>
+                </h4>
+              </div>              
+            </div>
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingNine">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseNine">
+                   Marketing Automation</a>
+                </h4>
+              </div>              
+            </div>
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingTen">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseTen">
+                    Programmatic Buying</a>
+                </h4>
+              </div>              
+            </div>
+        
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingEleven">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseEleven">
+                    Digital Marketing Strategy </a>
+                </h4>
+              </div>              
+            </div>
+        
+         <div class="panel panel-default">
+              <div class="panel-heading arrow-end" role="tab" id="headingTwelve">
+                <h4 class="panel-title">
+                  <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseTwelve">
+                    Twitter Advertising</a>
+                </h4>
+              </div>              
+            </div>
+        
+           
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- Courses Box end -->
+
+    <!-- Why buy from Shine Learning? -->
+    <div class="container-fluid blue-bg mt-50">
+      <div class="row">
+        <div class="container">
+          <div class="row">
+            <h2 class="white-color mt-50 ml-15 mb-30">Shine Learning Advantage</h2>
+            <div class="col-xs-12 col-sm-4">
+              <div class="why-buy">
+                <strong>Free featured profile</strong>
+                FREE featured profile worth Rs. 1440 for 1 month on Shine.com
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+              <div class="why-buy">
+                <strong>Shine credits</strong>
+                10% Shine credits redeemable on next purchase*
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+              <div class="why-buy">
+                <strong>Top Global Education Providers </strong>
+                Choose from a list of global providers as per your requirement</div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+              <div class="why-buy">
+                <strong>0% EMI</strong>
+                Easy EMI payment option
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+              <div class="why-buy">
+                <strong>Free Services</strong>
+                Free Resume, Cover Letter Formats and Career Guidance Services
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+              <div class="why-buy">
+                <strong>Refer and Earn</strong>
+                Refer your friend and get an Amazon Voucher worth Rs. 2000*
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Why buy from Shine Learning? end -->
+
+    <!-- Outcomes of the training -->
+    <div class="container mt-50">
+      <div class="row">
+        <h2 class="ml-15 mb-30">Outcomes of the training</h2>
+        <div class="course-attend col-xs-12 col-sm-7">
+          <ul>
+            <li>The DMCA course will prepare you to become a complete digital marketer and make you industry ready on day one. </li>
+            <li>Become a virtual digital marketing manager for an e-commerce company with Mimic Pro simulations included in our course. Practice SEO, SEM, Website Conversion Rate Optimization, email marketing and more.</li>
+            <li>Learn how to formulate, plan, and execute effective digital marketing strategies with the right channel mix for your digital marketing strategy.</li>
+            <li>Learn how to optimize marketing strategy with the right kind of insights gained from execution of different campaigns.</li>
+          </ul>
+        </div>
+        <div class="col-sm-5 hidden-xs">
+          <img src="{% static 'shinelearn/images/marketing/outcomes-training.jpg' %}" alt="Shinelearning" class="img-responsive">
+        </div>
+      </div>
+    </div>
+    <!-- Outcomes of the training end -->
+
+    <!-- footer -->
+    <footer>
+      Copyright © 2018 HT Media Limited.
+    </footer>
+    <!-- footer end -->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'shinelearn/js/marketing/bootstrap.min.js' %}"></script>
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+
+    $.validator.addMethod("lettersonly", function (value, element){
+        return this.optional(element) || /^[a-z\s]*$/i.test(value);
+    }, "Letters only please");
+
+    $.validator.addMethod("defaultInvalid", function (value, element) {
+        return !(element.value == element.defaultValue);
+    }, "This field is required.");
+        $("#lead").validate({
+            submitHandler:function (form) {
+                var action = $(form).attr('action');
+                $.post(action, $(form).serialize(), function (data) {
+                    if (data && data['status']){
+                        $.each($("#lead"), function (i, e) {
+                            e.reset();
+                        });
+                        $("#lead label").remove();
+                        var conversion_id = 991709191;
+                        var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                        var ga_code = document.createElement('div');
+                        ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                       document.body.appendChild(ga_code);
+                       window.location.href ='thankyou-for-query';
+                        return false;
+                    }
+                }, 'json');
+            },
+            rules:{
+                number:{
+                    required:true,
+                    minlength:10,
+                    maxlength:15,
+                    number:true,
+                },
+                email:{
+                    email:true,
+                    required:true,
+
+                },
+                name:{
+                    lettersonly:true,
+
+                },
+                // msg:{
+                //     required:true,
+                //     maxlength:500
+                // }
+            },
+            messages:{
+                number:{
+                   required:"Field is required"
+                },
+                email:{
+                    required:"Field is required"
+                },
+                name:{
+                    required:"Field is required"
+                },
+                // msg:{
+                //     required:"Field is required",
+                //     maxlength:"No more than 500 characters."
+
+                // }
+            },
+            highlight:function(element, errorClass) {
+              $(element).closest('.form-group').addClass('error');
+            },
+            unhighlight:function(element, errorClass) {
+              $(element).closest('.form-group').removeClass('error');
+              $(element).siblings('.js-error').html("");
+            },
+            errorPlacement: function(error, element){
+              $(element).siblings('.js-error').html(error.text());
+            } 
+          });
+        </script>
+  </body>
+</html>

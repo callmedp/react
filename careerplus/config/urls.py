@@ -29,9 +29,10 @@ from users.views import (
 from homepage import views as homepage_view
 from linkedin.views import AutoLoginView
 from shop.views import ProductDetailView, CourseCatalogueView
-from users.views import LinkedinCallbackView
+from users.views import LinkedinCallbackView, UserLoginTokenView
 from search.views import FuncAreaPageView
 from blog import views as blog_view
+from skillpage.views import ServiceDetailPage
 
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
@@ -72,7 +73,8 @@ talent_sitemap = {
 }
 
 
-urlpatterns = []
+urlpatterns = [url(r'^services/%s/%s/$' %(cat_slug,cat_id),
+        ServiceDetailPage.as_view())  for cat_id,cat_slug in settings.SERVICE_PAGE_ID_SLUG_MAPPING.items()]
 
 # Product Detail URLs
 urlpatterns += [
@@ -96,6 +98,7 @@ urlpatterns += [
 
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
+    
     url(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='service-detail'),
     url(r'^courses/', include('skillpage.urls', namespace='skillpage')),
@@ -111,6 +114,22 @@ urlpatterns += [
     #     ProductDetailView.as_view(), name='other-detail'),
     
 ]
+
+# Additional admin urls
+_admin_site_get_urls = admin.site.get_urls
+
+
+def get_urls():
+    from django.conf.urls import url
+    urls = _admin_site_get_urls()
+    urls += [
+        url(r'^autologintoken/$',
+            admin.site.admin_view(UserLoginTokenView.as_view()))
+    ]
+    return urls
+
+admin.site.get_urls = get_urls
+
 urlpatterns += [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api-auth/',

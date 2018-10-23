@@ -1,4 +1,6 @@
 from .settings import *
+from .mongo.staging import *
+from pymongo.read_preferences import ReadPreference
 
 DEBUG = True
 IS_LIVE = False
@@ -45,6 +47,8 @@ DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
 
 ####### APPS SETTIMGS #################
 DJANGO_APPS = [
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -68,6 +72,10 @@ if DEBUG:
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     ]
     MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
+
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK" : lambda request: DEBUG and not request.GET.get('nodebug'),
+}
 
 #### CELERY SETTINGS ########
 BROKER_URL = 'redis://localhost:6379/0'
@@ -124,7 +132,7 @@ CCAVENUE_ACCESS_CODE = 'AVEX73EI34CC49XECC'
 CCAVENUE_WORKING_KEY = 'DE002F3C615C11E7FB7D333050103230'
 CCAVENUE_MOBILE_ACCESS_CODE = 'AVYX74EK04AB50XYBA'
 CCAVENUE_MOBILE_WORKING_KEY = 'A081DDE3B5B50F269F8980EB2ADEC9F3'
-CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
+CCAVENUE_URL = 'https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
 
 ###### CACHE SETTINGS #################
 SITEMAP_CACHING_TIME = 86400
@@ -168,7 +176,7 @@ SYSLOG_ADDRESS = '/dev/log'
 # Following is to make sure logging works with mac machines 2
 if sys.platform == "darwin":
     SYSLOG_ADDRESS = "/var/run/syslog"
-LOGGING['handlers']['syslog']['address'] = SYSLOG_ADDRESS
+# LOGGING['handlers']['syslog']['address'] = SYSLOG_ADDRESS
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
@@ -263,6 +271,8 @@ MEDIA_URL = 'https://{}.storage.googleapis.com/l/m/'.format(GS_BUCKET_NAME)
 VISUAL_RESUME_PRODUCT_LIST = [305, 306, 307, 308, 309]
 COVER_LETTER_PRODUCT_LIST = [83, ]
 SECOND_REGULAR_RESUME_PRODUCT_LIST = [126, 127, 128, 129, 130]
+# new flow product
+PORTFOLIO_PRODUCT_LIST = [2632, ]
 
 # product list for linkedin resume services
 LINKEDIN_RESUME_FREE = [2684, 2685]
@@ -286,6 +296,44 @@ EXCLUDE_SEARCH_PRODUCTS = LINKEDIN_RESUME_PRODUCTS
 # used for coupon generation for free feature product on payment realization
 FEATURE_PROFILE_PRODUCTS = [1939]
 
+
+for conn, attrs in MONGO_SETTINGS.items():
+    try:
+        if attrs.get('REPSET'):
+            connect(attrs['DB_NAME'], 
+                    host="mongodb://" + attrs['USERNAME'] + ":" + attrs['PASSWORD']  + "@" + attrs['HOST'],
+                    maxPoolSize=attrs['MAX_POOL_SIZE'],
+                    read_preference=ReadPreference.SECONDARY_PREFERRED,
+                    replicaSet=attrs['REPSET'],
+                    )
+        else:
+            connect(attrs['DB_NAME'], 
+                    host="mongodb://" + attrs['USERNAME'] + ":" + attrs['PASSWORD']  + "@" + attrs['HOST'] + "/?authSource=admin",
+                    maxPoolSize=attrs['MAX_POOL_SIZE']
+                    )    
+    except Exception as e:
+        logging.getLogger('error_log').error(" unable to connect to mongo %s" %repr(e))
+        continue
+
+
+# test settings
+class DisableMigrations(object):
+
+    def __contains__(self, item):
+        return True
+
+    def __getitem__(self, item):
+        return None
+
+
+TESTS_IN_PROGRESS = False
+if 'test' in sys.argv[1:]:
+    DEBUG = False
+    TEMPLATE_DEBUG = False
+    TESTS_IN_PROGRESS = True
+    MIGRATION_MODULES = DisableMigrations()
+
+
 try:
     from .settings_local import *
 except:
@@ -294,3 +342,7 @@ except:
 ########### CMS STATIC PAGE RENDERING ID#########
 
 CMS_ID = [1]
+
+
+SERVICE_PAGE_ID_SLUG_MAPPING = {"45":"resume-writing"}
+

@@ -19,7 +19,7 @@
     <meta property="fb:profile_id" content="282244838633660">
 
     <meta itemprop="name" content="Cover Letter Format & Sample - Download Online @ Shine Learning">
-    <meta itemprop="dateModified" content="2018-08-27 08:52:47.536574+00:00">
+    <meta itemprop="dateModified" content="2018-08-28 08:52:47.536574+00:00">
     <meta itemprop="url" content="https://learning.shine.com/cms/cover-letter-format/7/">
     <meta itemprop="description" content="Free Cover Letter Format Online - Get Cover Letter Format recommended by experts for experienced professionals or freshers. Download Cover Letter Format samples in pdf or word doc"> 
 
@@ -44,7 +44,7 @@
  <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/images.scss' %}" rel="stylesheet" >
  <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/global.scss' %}" rel="stylesheet">
  <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/icons.scss' %}" rel="stylesheet">
-
+ <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
 {% endcompress %}
 {% endblock css_section %}
     <link rel="shortcut icon" href="https://static1.shine.com/l/s/shinelearn/images/fav_icon.png">
@@ -356,7 +356,10 @@ gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
   </div>
 
 </div>
-
+ 
+  {% block call_us %}
+      {% include "shop/partials/call_us.html" %}
+  {% endblock call_us %}
 
  {% endblock container %}
 
@@ -398,6 +401,7 @@ gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
         <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/cms/validate.js' %}"></script>
+        <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
 {% endcompress %}
 
 <script type="text/javascript">
@@ -446,11 +450,14 @@ window.onclick = function(event) {
 } )( jQuery );
 </script>
 
-    {% block johukum %}
-        <script type='text/javascript' id='spd-busns-spt' async=''
-            src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
-            data-client='324ed0abb0694b0c66a6daecb178352d'>
-        </script>
-        {% endblock johukum %}
-
 {% endblock js_section %}
+
+{% block johukum %}
+  <!--script type='text/javascript' id='spd-busns-spt' async=''
+      src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
+      data-client='324ed0abb0694b0c66a6daecb178352d'>
+  </script-->
+{% endblock johukum %}
+
+{% block zendesk %}
+{% endblock zendesk %}

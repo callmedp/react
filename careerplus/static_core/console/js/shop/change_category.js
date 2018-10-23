@@ -18,6 +18,14 @@ $(document).ready(function() {
       let message = 'Do you want to make remove skillpage of this category?';
       $("#alertModal").modal('show').find('#alertModalBody').html(message);
     }
+    else if(msg == "service"){
+      let message = 'Do you want to make service page of this category?';
+      $("#alertModal").modal('show').find('#alertModalBody').html(message);
+    }
+    else if(msg == "noservice"){
+      let message = 'Do you want to make remove service page of this category?';
+      $("#alertModal").modal('show').find('#alertModalBody').html(message);
+    }
      
   });
   var processing = true;

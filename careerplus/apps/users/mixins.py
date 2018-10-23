@@ -25,12 +25,13 @@ from .choices import (
     SECOND_REGULAR_RESUME, DISCOUNT_ALLOCATION_DAYS,
     COMBO_DISCOUNT, REGULAR_SLA, EXPRESS_SLA, SUPER_EXPRESS_SLA,
     PASS_PERCENTAGE, INCENTIVE_PASS_PERCENTAGE,
-    PENALTY_PERCENTAGE, INCENTIVE_PERCENTAGE
+    PENALTY_PERCENTAGE, INCENTIVE_PERCENTAGE, PORTFOLIO_PRICE
 )
 
 VISUAL_RESUME_PRODUCT_LIST = settings.VISUAL_RESUME_PRODUCT_LIST
 SECOND_REGULAR_RESUME_PRODUCT_LIST = settings.SECOND_REGULAR_RESUME_PRODUCT_LIST
 COVER_LETTER_PRODUCT_LIST = settings.COVER_LETTER_PRODUCT_LIST
+PORTFOLIO_PRODUCT_LIST = settings.PORTFOLIO_PRODUCT_LIST
 
 
 class WriterInvoiceMixin(object):
@@ -410,6 +411,9 @@ class WriterInvoiceMixin(object):
                             user_type=user_type)
                         total_combo_discount += combo_discount
                         process = True
+                    elif product_pk in PORTFOLIO_PRODUCT_LIST:
+                        amount = PORTFOLIO_PRICE
+                        process = True
                     
                     if process:
                         oi_dict.update({
@@ -447,6 +451,8 @@ class WriterInvoiceMixin(object):
                             oi=oi, invoice_date=invoice_date,
                             user_type=user_type)
                         total_combo_discount += combo_discount
+                    elif product_pk in PORTFOLIO_PRODUCT_LIST:
+                        amount = PORTFOLIO_PRICE
                     else:
                         exp_code = oi.product.get_exp()
                         if not exp_code:
@@ -539,6 +545,8 @@ class WriterInvoiceMixin(object):
                             oi=oi, invoice_date=invoice_date,
                             user_type=user_type)
                         total_combo_discount += combo_discount
+                    elif product_pk in PORTFOLIO_PRODUCT_LIST:
+                        amount = PORTFOLIO_PRICE
                     else:
                         exp_code = oi.product.get_exp()
                         if not exp_code:
@@ -693,16 +701,11 @@ class WriterInvoiceMixin(object):
                 pdf_file = SimpleUploadedFile(
                     file_name, pdf_file,
                     content_type='application/pdf')
-
                 if not settings.IS_GCP:
-
-                    if not os.path.exists(settings.INVOICE_DIR + path):
-                        os.makedirs(settings.INVOICE_DIR + path)
+                    if not os.path.exists(settings.MEDIA_ROOT + '/' + path):
+                        os.makedirs(settings.MEDIA_ROOT + '/' + path)
                     dest = open(
-                        settings.INVOICE_DIR + path + file_name, 'wb')
-                    pdf_file = SimpleUploadedFile(
-                        file_name, pdf_file,
-                        content_type='application/pdf')
+                        settings.MEDIA_ROOT + '/' + path + file_name, 'wb')
                     for chunk in pdf_file.chunks():
                         dest.write(chunk)
                     dest.close()
@@ -971,19 +974,29 @@ class UserMixin(object):
 
 class UserGroupMixin(object):
     user_check_failure_path = '/console'  # can be path, url name or reverse_lazy
-    group_name = []
+    group_names = []    # use group_names if any one out of list is enough
+    group_list = []     # use group_list if all elements of list is required
 
-    def check_group(self, user,group_name):
-        group_list = list(user.groups.all().values_list('name',flat=True))
-        for gname in group_name:
-            if gname not in group_list:
-                return False
-        return True
+    def check_group(self, user):
+        if user.is_superuser:
+            return True
+        user_groups = list(user.groups.all().values_list('name', flat=True))
+        if self.group_names:
+            for gname in user_groups:
+                if gname in self.group_names:
+                    return True
+            return False
+        elif self.group_list:
+            for gname in self.group_list:
+                if gname not in user_groups:
+                    return False
+            return True
+        return False
 
     def user_check_failed(self, request, *args, **kwargs):
         return HttpResponseRedirect(self.user_check_failure_path)
 
     def dispatch(self, request, *args, **kwargs):
-        if not self.check_group(request.user,self.group_name):
+        if not self.check_group(request.user):
             return self.user_check_failed(request, *args, **kwargs)
         return super(UserGroupMixin, self).dispatch(request, *args, **kwargs)

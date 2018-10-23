@@ -191,14 +191,17 @@ class CMSPageView(DetailView, LoadMoreMixin):
             context['right_widgets'] += render_to_string('include/' + right.widget.get_template(), widget_context)
 
         comments = page_obj.comment_set.filter(is_published=True, is_removed=False)
-        context['comment_listing'] = self.pagination_method(
-            page=self.page, comment_list=comments, page_obj=page_obj)
+        if self.request.amp:
+            context['comment_listing'] =self.pagination_method(page=self.page, comment_list=comments, page_obj=page_obj,page_size=5)
+        else:
+            context['comment_listing'] =self.pagination_method(page=self.page, comment_list=comments, page_obj=page_obj)
         context['total_comment'] = comments.count()
         context.update({
             "hostname": settings.SITE_DOMAIN,
             'country_choices': country_choices,
             'initial_country': initial_country,
         })
+        context['show_chat'] = True
         context.update({
             "loginform": ModalLoginApiForm(),
             "registerform": ModalRegistrationApiForm(),

@@ -35,7 +35,6 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
         self.page = 1
         self.paginated_by = 10
 
-
     def get(self, request, *args, **kwargs):
         self.page = self.request.GET.get('page', 1)
         context = super(self.__class__, self).get(request, args, **kwargs)
@@ -55,7 +54,7 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
         categories = Category.objects.filter(
             is_active=True, visibility=2, id__in=categories_id
         ).order_by('-name')
-        article_list = article_list[:10]
+        article_list = article_list
 
         page_obj = self.scrollPagination(
             paginated_by=self.paginated_by, page=self.page,
@@ -78,7 +77,15 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
 
         top_3_cats = [article.p_cat.slug for article in top_article_list][:3]
         top_cats = '+'.join(top_3_cats)
-        popular_courses = self.get_product(top_cats)
+
+        # popular courses..
+        top_blog_ids = [b.id for b in article_list[: 5]]
+        skills = Tag.objects.prefetch_related('blog_set').filter(
+            blog__id__in=top_blog_ids, is_active=True).distinct()
+
+        skills = [sk.name for sk in skills]
+
+        popular_courses = self.get_product(top_cats, skills)
 
         context.update({
             'top_article_list': [
@@ -86,10 +93,11 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
                 top_article_list[6:9]],
             'categories': categories,
             'article_list': list_article,
+            'article_listing': article_list[: 5],
             'popular_courses': popular_courses,
             'authors': authors,
-            'authors_list': list(author_list)
-
+            'authors_list': list(author_list),
+            'show_chat': True
         })
 
         context.update(self.get_breadcrumb_data())
@@ -109,7 +117,6 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
             description="Talent Economy - The best way to choose better career options. Get experts' advice & ideas for planning your future growth @ Shine Learning",
         )
         return {"meta": meta}
-
 
 
 class TalentEconomyLoadMoreView(TemplateView, BlogMixin):
@@ -146,8 +153,6 @@ class TalentEconomyLoadMoreView(TemplateView, BlogMixin):
 
             return HttpResponse(
                 json.dumps(data), content_type="application/json")
-
-
 
 
 class TETagArticleView(TemplateView, BlogMixin):
@@ -195,7 +200,16 @@ class TETagArticleView(TemplateView, BlogMixin):
         # paginator = Paginator(main_articles, self.paginated_by)
         # page_data = self.pagination(paginator, self.page)
 
-        popular_courses = BlogMixin().get_product(tag_obj.slug)
+        # popular courses..
+        top_blog_ids = [b.id for b in main_articles[: 5]]
+        skills = Tag.objects.prefetch_related('blog_set').filter(
+            blog__id__in=top_blog_ids, is_active=True).distinct()
+
+        skills = [sk.name for sk in skills]
+
+        popular_courses = BlogMixin().get_product(
+            tag_obj.slug, skills)
+
         detail_article = None
         if recent_articles:
             detail_article = render_to_string('include/talent_page.html', {
@@ -215,6 +229,7 @@ class TETagArticleView(TemplateView, BlogMixin):
             "tag": tag_obj,
             "categories": categories,
             "popular_courses": popular_courses,
+            "show_chat": True
         })
         context.update(self.get_breadcrumb_data())
         context['meta'] = tag_obj.as_meta(self.request)
@@ -342,7 +357,16 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
             paginated_by=self.paginated_by, page=self.page,
             object_list=main_articles)
 
-        popular_courses = BlogMixin().get_product(cat_obj.slug)
+        # popular courses..
+        top_blog_ids = [b.id for b in main_articles[: 5]]
+        skills = Tag.objects.prefetch_related('blog_set').filter(
+            blog__id__in=top_blog_ids, is_active=True).distinct()
+
+        skills = [sk.name for sk in skills]
+
+        popular_courses = BlogMixin().get_product(
+            cat_obj.slug, skills)
+
         article_list = None
         if recent_articles:
             article_list = render_to_string(
@@ -358,6 +382,7 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
             "category": cat_obj,
             "categories": categories,
             "popular_courses": popular_courses,
+            'show_chat': True,
         })
         context.update(self.get_breadcrumb_data())
         context['meta'] = cat_obj.as_meta(self.request)
@@ -540,9 +565,16 @@ class TEBlogDetailView(DetailView, BlogMixin):
             "amp": self.request.amp
         })
 
-        popular_courses = self.get_product(p_cat.slug)
+        # popular courses..
+        skills = blog.tags.filter(is_active=True)
+
+        skills = [sk.name for sk in skills]
+
+        popular_courses = self.get_product(
+            p_cat.slug, skills)
         context.update({
             "popular_courses": popular_courses,
+            "show_chat": True
         })
 
         context.update(self.get_meta_details())
@@ -596,13 +628,23 @@ class AuthorListingView(TemplateView):
             status=1, visibility=2).select_related('p_cat')[:9]
         top_3_cats = [article.p_cat.slug for article in top_article_list][:3]
         top_cats = '+'.join(top_3_cats)
-        popular_courses = BlogMixin().get_product(top_cats)
+
+        # popular courses..
+        top_blog_ids = [b.id for b in top_article_list[: 5]]
+        skills = Tag.objects.prefetch_related('blog_set').filter(
+            blog__id__in=top_blog_ids, is_active=True).distinct()
+
+        skills = [sk.name for sk in skills]
+
+        popular_courses = BlogMixin().get_product(
+            top_cats, skills)
 
         context.update({
             'authors': authors,
             'authors_list': list(author_list),
             'categories': categories,
             'popular_courses': popular_courses,
+            'show_chat': True
         })
 
         context.update(self.get_breadcrumb_data())
@@ -677,7 +719,14 @@ class AuthorDetailView(DetailView):
             status=1, visibility=2, author=author).order_by('-publish_date')
         most_recent_cat = article_list[0].p_cat.slug if article_list else ''
 
-        popular_courses = BlogMixin().get_product(most_recent_cat)
+        # popular courses..
+        top_blog_ids = [b.id for b in article_list[: 5]]
+        skills = Tag.objects.prefetch_related('blog_set').filter(
+            blog__id__in=top_blog_ids, is_active=True).distinct()
+        skills = [sk.name for sk in skills]
+
+        popular_courses = BlogMixin().get_product(
+            most_recent_cat, skills)
 
         authors = Author.objects.filter(
             is_active=1,
@@ -692,7 +741,8 @@ class AuthorDetailView(DetailView):
             'authors_list': list(author_list),
             "article_list": article_list,
             "popular_courses": popular_courses,
-            "amp": self.request.amp
+            "amp": self.request.amp,
+            "show_chat": True
         })
 
         context.update(self.get_meta_details())
