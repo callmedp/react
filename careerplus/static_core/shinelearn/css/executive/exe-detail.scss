@@ -63,6 +63,9 @@
 	text-align: center;
 	margin-top: -40px;
 	overflow: hidden;
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s 2s, opacity 2s linear;
 
 	figure {
 		display: block;
@@ -244,6 +247,7 @@
 	top: 0;
 	z-index: 99;
 	display: block;
+	opacity: 1 !important;
 }
 
 .samples_enquiry{
@@ -256,6 +260,10 @@
 		/*width: 21%;*/
 		max-width: 270px;
 		top:135px;
+		visibility: visible;
+		opacity: 1;
+		transition: opacity 2s linear;
+		
 
 		@media (max-width: 1190px) {
 			width: 22%;
@@ -263,6 +271,9 @@
 
 		.exe-show-enrol-now{
 			display: block;
+			visibility: visible;
+			opacity: 1;
+			transition: opacity 2s linear;
 		}
 	}
 }

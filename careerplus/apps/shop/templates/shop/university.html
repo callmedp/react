@@ -546,7 +546,8 @@
                               <span class="e-blue-bdr mt-15"></span>
                               {% if  university_detail.payment %}
                               <div class="installment text-center">
-                                <span class="text-uppercase col-sm-12 mb-15">Installment Available</span>
+                                <span class="text-uppercase">Installment Available</span>
+                                <div class="d-flex justify-content-center mt-15">
                                  {% for payment in university_detail.payment %}
                                 <div class="col-sm-4 installment-available">
                                   {{forloop.counter|ordinal }} Installment
@@ -554,6 +555,7 @@
                                   <span>Payment Deadline: <b>{{ payment.ldpayment }}</b></span>
                                 </div>
                                 {% endfor %}
+                              </div>
                               </div>
                               {% endif %}
                             </div>
@@ -613,7 +615,7 @@
                         <li class="panel panel-default">
                           <div class="panel-heading" role="tab" id="headingExe{{forloop.counter}}">
                             <h3 class="panel-title">
-                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne{{forloop.counter}}" aria-expanded="true" aria-controls="collapseOne{{forloop.counter}}">
+                              <a class="" role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne{{forloop.counter}}" aria-expanded="true" aria-controls="collapseOne{{forloop.counter}}">
                                 {{ques.question}}
                               </a>
                             </h3>
