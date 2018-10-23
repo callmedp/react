@@ -234,7 +234,6 @@
 
     h3 {
         font-size: $font-size-md;
-        color: $txt-grey-555;
         font-weight: $font-weight-medium;
     }
 
@@ -376,7 +375,6 @@
         img {
             max-width: 100%;
             position: relative;
-            top: -10px;
         }
     }
 }
@@ -485,6 +483,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#295986', end
 
 .testimonials {
     background: url($executive-images + 'testimonial-bg.jpg') no-repeat center top;
+    padding-bottom: 10px;
 
     .testimonial-image {
         @include size(60px);
@@ -905,9 +904,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#295986', end
 
 .program-structure {
     .modal-content{
-        height: 80%;
+        height: 90%;
         overflow: scroll;
-        top: 3%;
+        margin-top: 2rem;
     }
 }
 
