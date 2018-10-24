@@ -13,7 +13,9 @@
     </div>
     <div class="media mt-15">
         <div class="media-body pb-0">
-            <a href="{{prd.pURL}}" title="{{prd.pHd}}"><h3 class="mb-5" itemprop="name">{{prd.pHd}}</h3></a>
+            <a href="{{prd.pURL}}" title="{{prd.pHd}}">
+                <h3 class="mb-5" itemprop="name">{{prd.pHd}}</h3>
+            </a>
             <div><span class="date-icon">{% if prd.pUncdl %}Starts</span> {{prd.pUncdl.launchdate}} {% endif %}{% if prd.pVrs.var_list %}<span class="spacer">|</span> {{prd.pVrs.var_list.0.dur_days|convert_to_month}} months{% endif %}</div>
         </div>
         
@@ -37,7 +39,9 @@
     >
     <input type="hidden" name="page_size" value="{{PRODUCT_PAGE_SIZE}}" 
     >
-    <p class="text-center"><button type="button" class="btn btn-outline btn-round-30 btn-lg" id="load-more-button-id">View more</a></p>
+    <p class="text-center">
+        <button type="button" class="btn btn-outline btn-round-30 btn-lg" id="load-more-button-id">View more</button>
+    </p>
   </form>
 </div>
 {% endif %}

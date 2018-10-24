@@ -59,6 +59,11 @@ datalist {
 	background: linear-gradient(to right, rgba(18,70,144,1) 0%,rgba(55,112,186,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#124690', endColorstr='#3770ba',GradientType=1 ); /* IE6-9 */
 	margin-bottom: 0;
+	-webkit-transform: translate3d(0,0,0);
+}
+
+.exe-detail-course-links {
+	-webkit-transform: translate3d(0,0,0);
 }
 
 .navbar-nav {
