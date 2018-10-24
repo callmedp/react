@@ -599,7 +599,7 @@ class ScreenProductAttributeForm(forms.ModelForm):
             if field_name in self.cleaned_data:
                 value = self.cleaned_data[field_name]
                 setattr(self.instance.attr, attribute.name, value)
-        productscreen = super(ScreenProductAttributeForm, self).save(commit=True, *args, **kwargs)
+        productscreen = super(ScreenProductAttributeForm, self).save(commit=False, *args, **kwargs)
         return productscreen
 
 class ScreenProductFAQForm(forms.ModelForm):

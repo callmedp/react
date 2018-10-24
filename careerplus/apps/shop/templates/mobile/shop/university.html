@@ -278,8 +278,8 @@
                             </div><!-- /. accordion-wrap -->
                             {% if chapter_list|length > 5 %}
                             <p class="mt-15 text-center"><span class="btn btn-outline btn-round-30 btn-lg btn-openPopup">View all programs</span></p>
-
-                            <div class="modal" id="win-0">
+ 
+                            <div class="modal custom-modal" id="win-0">
                                 <!-- Modal content -->
                                 <div class="modal-content">
                                     <div class="header">
@@ -323,8 +323,8 @@
                                 {{university_detail.assesment|safe}}
                             {% endif %}
                             {% if university_detail.sample_certificate %}
-                            <p class="mt-15 text-center"><a  class="btn btn-outline btn-round-30 btn-lg btn-openPopup">View sample certificate</a></p>
-                            <div class="modal" id="win-2">
+                            <p class="mt-15 text-center"><a  class="btn btn-outline btn-round-30 btn-lg btn-openPopup" >View sample certificate</a></p>
+                            <div class="modal custom-modal" id="win-2">
                                 <!-- Modal content -->
                                 <div class="modal-content">
                                     <div class="header">
@@ -585,7 +585,7 @@
                             <input type="hidden" name="uc" value="1">
                           </div>
                           <div class="form-group text-center tabs mt-30">
-                            <button type="submit" id="overlay-submit-btn" class="btn btn-blue w100fl btn-round mb-20">Download Broucher</button>
+                            <button type="submit" id="overlay-submit-btn" class="btn btn-blue w100fl btn-round mb-20">Download Brochure</button>
                           </div>
                         </form>
                       </div><!-- Tab content ends here -->
@@ -680,24 +680,13 @@
       var btn = document.getElementById("myBtn");
       // Get the <span> element that closes the modal
       var span = document.getElementsByClassName("close")[0];
-      
-      // When the user clicks the button, open the modal
-      document.getElementById('sample-certificate-btn').onclick = function() {
-          //modal.style.display = "block";
-          modal('myModal','block');
-      }
-      
+
       
 
       function modal(id,option){
         document.getElementById(id).style.display = option;
       }
-      // When the user clicks on <span> (x), close the modal
-      document.getElementById('close-modal').onclick = function() {
-           modal('myModal','none');
-          // modal.style.display = "none";
-      }
-      
+
 
       if (document.getElementById('enroll_now')) {
         document.getElementById('enroll_now').onclick = function() {

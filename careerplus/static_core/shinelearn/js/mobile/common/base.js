@@ -217,7 +217,7 @@ $("#uploadBtn").onchange = function () {
 
 
 
-$('.btn-openPopup, .modal').each(function (idx) {
+$('.btn-openPopup, .custom-modal').each(function (idx) {
 	var winnerId = "popup-" + idx;
 	this.id = winnerId;
 	var btn = $("#popup-" + idx);
