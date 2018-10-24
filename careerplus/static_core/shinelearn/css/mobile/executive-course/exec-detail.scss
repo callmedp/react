@@ -125,18 +125,21 @@
 }
 
 .university-logo {
+    @include size (144px, 70px);
     @include border-radius(4px);
     border-bottom: 3px solid $blue;
     background-color: $bg-white;
-    width: 45%;
     padding: 10px 15px;
     margin-left: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 
     img {
-        @include size (auto);
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
         display: inline-block;
     }
 }
@@ -257,13 +260,19 @@
         position: relative;
         padding: 0 0 20px 20px;
 
+        p {
+            padding-bottom: 0;
+        }
+
         &:last-child {
             padding-bottom: 0;
         }
 
-        h3 {
+        h3,
+        strong {
             font-size: $font-size-base;
             line-height: 1.2;
+            display: block;
             
             strong {
                 font-weight: $font-weight-medium;
