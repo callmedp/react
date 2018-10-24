@@ -714,7 +714,7 @@ class ChangeScreenProductView(DetailView):
                             productscreen = form.save()
                             if not productscreen.status == 2:    
                                 productscreen.status = 1
-                                productscreen.save()        
+                            productscreen.save()        
                             messages.success(
                                 self.request,
                                 "Product Attributes changed Successfully")

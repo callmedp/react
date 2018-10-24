@@ -125,10 +125,13 @@ h1, h2, h3, h4 {
 			background-color: $white-color;
 		}
 
-		h3 {
+		strong {
 			display: block;
 			line-height: 16px;
 			margin-bottom: 5px;
+			font-size: $font-size+5;
+			font-weight: $font-weight+300;
+			color: #555;
 		}
 	}
 }
@@ -668,6 +671,10 @@ footer {
 
 .d-flex {
 	display: flex !important;
+}
+
+.flex-wrap {
+	flex-wrap: wrap !important;
 }
 
 .justify-content-center {
