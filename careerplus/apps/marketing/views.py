@@ -29,6 +29,7 @@ class MarketingPages(TemplateView):
                 "alt_contact":decoded_tuple[2]}
 
     def get(self, request, *args, **kwargs):
+
         valid = False
         email = None
         candidateid = None
@@ -44,12 +45,11 @@ class MarketingPages(TemplateView):
                 request.session.update(resp_status)
         
         redirect_mapping = {
-                            "/digital-marketing":"/online-marketing",
-                            "/gst-cert":"/gst-certification",
-                            "/pmp-cert":"/pmp-certification",
-                            "/data-science-certification":"/data-science-cert",
-                            "/resume-writing":"/resume-writing-services",
-                            "/data-science" : "/data-science-new"
+                            "/digital-marketing": "/online-marketing",
+                            "/gst-cert": "/gst-certification",
+                            "/pmp-cert": "/pmp-certification",
+                            "/data-science-certification": "/data-science-cert",
+                            "/resume-writing": "/resume-writing-services",
                             }
         redirect_path = redirect_mapping.get(self.request.path)
         if redirect_path:
