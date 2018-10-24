@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 from seo.models import AbstractAutoDate
 
@@ -85,3 +86,8 @@ class Testimonial(AbstractAutoDate):
 
     class Meta:
         ordering = ['priority']
+
+    def get_image_url(self):
+        if self.image:
+            return self.image.url
+        return settings.STATIC_URL + 'shinelearn/images/executive/default-user-pic.jpg'
