@@ -804,10 +804,10 @@
 
 {% block js_section %}
     {{block.super}}
-    {% compress js %}
     <script type="text/javascript">
-    $("#id_nav").css('position', 'absolute')
+        $("#id_nav").css('position', 'absolute')
     </script>
+    {% compress js %}
     <script src="{% static 'shinelearn/js/common/plugin.activeOnScroll-executive.js' %}"></script>
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/shop/detail.js' %}"></script>
