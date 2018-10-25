@@ -134,8 +134,8 @@
                     <div class="white-box">
                         <h2><span><i class="execIcon-program"></i></span>About program</h2>
                         <div class="content">
-                             <div class="pointers mt-15">
-                              {{ prd_desc|safe }}
+                             <div class="pointers mt-15 more1">
+                                  {{ prd_desc|safe}}
                              </div> 
                         </div>
                     </div><!-- /. white box-->
@@ -358,8 +358,9 @@
                                 <h3>{{ institute.name }}</h3>
                                 <img src="{% static 'shinelearn/images/mobile/executive-course/institute.jpg'%}" class="img-responsive"/>
                             </div>
-
+                            <div class="more1">
                             {{ institute.description|safe }}
+                            </div>
                             <p class="mt-15 text-center"><a href="{{ institute.get_absolute_url }}" class="btn btn-outline btn-round-30 btn-lg">View all courses</a></p>
                         </div>
                     </div><!-- /. white box-->
