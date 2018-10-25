@@ -4,6 +4,8 @@ from datetime import datetime
 import logging
 import csv
 import bson
+import mimetypes
+
 from io import StringIO
 
 from django.views.generic import (
@@ -1096,10 +1098,14 @@ class ChangeProductView(DetailView):
         return super(ChangeProductView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        product = self.get_object()
-        if product.type_product == 2:
+        self.object = self.get_object()
+        if self.object.type_product == 2:
             raise Http404
         return super(ChangeProductView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ChangeProductView, self).get_queryset()
+        return queryset.select_related('product_class', 'vendor')
 
     def get_object(self, queryset=None):
         if hasattr(self, 'object'):
@@ -1179,7 +1185,7 @@ class ChangeProductView(DetailView):
                 instance=self.get_object(),
                 form_kwargs={'object': self.get_object()},)
             context.update({'prdchapter_formset': prdchapter_formset})
-        
+
         if self.object.type_product == 1:
             ProductVariationFormSet = inlineformset_factory(
                 Product, Product.variation.through, fk_name='main',
@@ -1228,7 +1234,7 @@ class ChangeProductView(DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
-        
+
         if self.request.POST or self.request.FILES:
             try:
                 obj = int(self.kwargs.get('pk', None))
@@ -2063,23 +2069,25 @@ class ProductAuditHistoryView(UserGroupMixin, ListView, PaginationMixin):
         product_id = self.request.GET.get('product_id', '')
         date_range = self.request.GET.get('date_range', '')
         queryset = self.model.objects.all().order_by('-created_at')
+        filter_kwargs = {}
         if product_id:
-            queryset = queryset.filter(product_id=product_id)
+            filter_kwargs['product_id'] = product_id
         if date_range:
             start_date, end_date = date_range.split(' - ')
             start_date = datetime.strptime(start_date, "%m/%d/%Y")
-            end_date = datetime.strptime(end_date, "%m/%d/%Y")
-            end_date = end_date + relativedelta(days=1)
+            end_date = datetime.strptime(end_date, "%m/%d/%Y") + relativedelta(days=1)
             start_id = bson.ObjectId.from_datetime(start_date)
             end_id = bson.ObjectId.from_datetime(end_date)
-            queryset = queryset.filter(id__gte=start_id, id__lte=end_id)
-        return queryset
+            filter_kwargs['id__gte'] = start_id
+            filter_kwargs['id__lte'] = end_id
+
+        return queryset.filter(**filter_kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(ProductAuditHistoryView, self).get_context_data(**kwargs)
         paginator = Paginator(context['product_audit_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
-        context['product_list'] = Product.objects.values_list('id', 'name')
+        context['vendor_list'] = Vendor.objects.values_list('id', 'name')
         return context
 
 
@@ -2123,27 +2131,29 @@ class ProductHistoryLogDownloadView(UserGroupMixin, View):
                 csvfile, delimiter=',', quotechar="'",
                 quoting=csv.QUOTE_MINIMAL)
             csv_writer.writerow([
-                'Product Name', 'Variation Name', 'UPC',
-                'Price', 'Duration', 'Vendor Name', 'Created_at',
+                'Product Id','Product Name', 'Variation Name', 'UPC',
+                'Price', 'Duration', 'Vendor Name', 'Date', 'Time'
             ])
 
             for log in queryset:
                 product_name = log.product_name
                 try:
                     csv_writer.writerow([
+                        str(log.product_id),
                         str(log.product_name),
                         str(log.variation_name),
                         str(log.upc),
                         str(log.price),
                         str(log.duration),
                         str(log.vendor_name),
-                        str(log.created_at),
+                        str(log.created_at.strftime('%d-%b-%Y')),
+                        str(log.created_at.strftime('%H:%M:%S'))
                     ])
                 except Exception as e:
                     logging.getLogger('error_log').error("%s " % str(e))
                     continue
-            response = HttpResponse(csvfile.getvalue())
             file_name = product_name + timezone.now().date().strftime("%Y-%m-%d")
+            response = HttpResponse(csvfile.getvalue(), content_type=mimetypes.guess_type('%s.csv' % file_name))
             response["Content-Disposition"] = "attachment; filename=%s.csv" % (file_name)
             return response
 
