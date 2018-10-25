@@ -484,7 +484,7 @@
 
                             <p class="mb-20 mt-20">{{ testimonial.review }}</p>
                             <figure>
-                              <img src="{{ testimonial.image.url }}" alt="Faculty Profile">
+                              <img src="{{ testimonial.get_image_url }}" alt="Faculty Profile">
                               <figcaption>
                                 <strong>{{testimonial.user_name }}</strong>
                                 <div class="exe-designation">
@@ -807,6 +807,9 @@
 
 {% block js_section %}
     {{block.super}}
+    <script type="text/javascript">
+        $("#id_nav").css('position', 'absolute')
+    </script>
     {% compress js %}
     <script src="{% static 'shinelearn/js/common/plugin.activeOnScroll-executive.js' %}"></script>
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
