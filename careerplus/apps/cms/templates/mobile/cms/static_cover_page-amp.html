@@ -1,6 +1,6 @@
 {% load static compress %}
 <!doctype html>
-<html amp lang="en" itemscope itemtype="http://www.schema.org/WebPage">
+<html ⚡ lang="en" itemscope itemtype="http://www.schema.org/WebPage">
   <head>
     <meta charset="utf-8">
     <title>{{page_obj.get_title}}</title>
@@ -8,22 +8,23 @@
     {% include 'meta/meta.html' %}
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
-
-    <meta name="amp-google-client-id-api" content="googleanalytics">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
+	<meta name="amp-google-client-id-api" content="googleanalytics">
+	
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" > 
 
     <script async src="https://cdn.ampproject.org/v0.js"></script>
     <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
     <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
     <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
     <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
-    <script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>
+	<script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>
+	<script async custom-element="amp-lightbox" src="https://cdn.ampproject.org/v0/amp-lightbox-0.1.js"></script>
 
     <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
 
     <style amp-custom>
 
-    body,
+body,
 html {
 	height: 100%
 }
@@ -259,6 +260,10 @@ header {
 	background-image:url("{% static 'shinelearn/images/mobile/common/sprites.svg'%}")
 }
 
+.sprite-resume {
+	background-image:url("{% static 'shinelearn/images/mobile/cms/resume_sprite.svg'%}")
+}
+
 .btn-blue {
 	color: #fff
 }
@@ -396,12 +401,18 @@ footer {
 	padding: 15px 0
 }
 
-amp-accordion {
-	border-top: 1px solid #e0e0e0
+
+amp-accordion > section>* {
+	color: #333;
 }
 
-amp-accordion>section {
-	border-bottom: 1px solid #e0e0e0
+
+amp-accordion > section > div {
+	padding: 15px;
+}
+
+amp-accordion > section > h3 {
+	padding: 10px;
 }
 
 footer {
@@ -885,14 +896,166 @@ article ul li {
     box-shadow: 0 0 20px 10px rgba(250, 250, 250, 0.9);
 }
 
+.white_box_resume ul {
+    margin-top: 10px;
+}
+
+.white_box_resume li {
+    list-style: circle;
+    margin: 2px 0 2px 15px;
+}
+
 .white_box_resume p:last-child {
 	padding-bottom: 0;
 }
 
-    /* Navigation ends here */
+.request {
+    display: block;
+    width: 80%;
+    margin: 10px auto 20px;
+    background: #3e7fea;
+    color: #fff;
+    text-align: center;
+    padding: 8px 0;
+    font-size: 1.1rem;
+    border: none;
+}
+
+.white-box-heading {
+    color: #1f3d6b;
+    border-bottom: 2px solid #1f3d6b;
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.formats1 li {
+    list-style: none;
+    width: 100%;
+    display: inline-block;
+    margin: 2px 2% 2px 0 ;
+}
+
+.formats1 li amp-img {
+    width: 98%;
+    height: 95%;
+    border: .1rem solid #3f5f94;
+    padding: .25rem;
+    position: relative;
+}
+
+.img-wrap {
+    position: relative;
+    height: 238px;
+    width: 183px;
+    border: .1rem solid #3f5f94;
+    padding: .5rem;
+    margin: 10px auto;
+}
+
+.jcon-downlod {
+    width: 44px;
+    height: 44px;
+    display: block;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+	z-index: 100;
+	background-position: 1px -48px;
+}
+
+.img-wrap .img-content .overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 92%;
+    height: 94%;
+    position: absolute;
+}
+
+.img-fluid {
+    width: 164px;
+    height: 217px;
+}
+
+.print-version {
+    display: block;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+amp-accordion > section > h3 {
+	background-color: transparent;
+}
+
+amp-accordion > section > div ul {
+	padding-left: 18px;
+	padding-top: 20px;
+	color: #666;
+}
+
+amp-accordion > section > div ul {
+    list-style-type: disc;
+    margin-bottom: 10px;
+    min-height: auto;
+}
+
+amp-lightbox {
+	background-color: rgba(0, 0, 0, 0.6);
+}
+
+
+amp-lightbox .lightbox {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.white-box-heading {
+    color: #1f3d6b;
+    border-bottom: 2px solid #1f3d6b;
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.white_box_resume ul {
+    margin-top: 10px;
+}
+
+.media {
+    display: flex;
+    align-items: flex-start;
+}
+
+.related-article-widgets li {
+	list-style: none;
+	margin: 0;
+}
+
+.related-article-widgets li:not(:last-child){
+	margin-bottom: 15px;
+}
+
+.related-article-widgets li a {
+	font-size: 0.813rem;
+	color: #666;
+	font-weight: 500;
+	vertical-align: middle;
+}
+
+.ml-15 {
+	margin-left: 15px;
+}
 
 </style>
-    <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+	<style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+	
 
   </head>
 <body>
@@ -968,6 +1131,241 @@ article ul li {
 			<h2>Types of Cover Letter Formats</h2>
 			<p>Essentially, cover letters do not have different formats. But with technology and its effects, there are certain approaches one can use to grab attention and deliver necessary information. These approaches are dependent on the method of submission of a cover letter and also, on the requirements of the profile and the job. Here are the three main content types of cover letters:</p>
 		</div><!--/. white_box_resume -->
+
+		<amp-accordion disable-session-states>
+			<section expanded>
+				<h3>Paragraphic Cover Letter Format</h3>
+				<div>
+					<p>The most common and conventional format for cover letters, paragraphic refers to the delivery style of cover letter content in a simple descriptive format. The content can be divided into several paragraphs and delivered as per the information and can be molded for impact.</p>
+					<p>Content in section 1.</p>
+
+					<div class="img-wrap">
+						<div class="img-content">
+							<a title="Paragraphic Cover Letter Format" href="{% static 'shinelearn/static_media/Paragraphic-Non-Print.doc' %}" class="jcon-downlod sprite-resume"></a>
+							<div class="overlay"></div>
+							<amp-img 
+								src="{% static 'shinelearn/images/mobile/cms/cover-letter1.jpg' %}" alt="Paragraphic Cover Letter Format" 
+								class="img-fluid"
+								width="164"
+								height="217">
+							</amp-img>
+						</div>
+					</div><!-- /. img-wrap -->
+
+					<a title="Paragraphic Cover Letter Format" class="print-version" href="{% static 'shinelearn/static_media/Paragraphic-Print.doc' %}">Download Print Version Here</a>
+					<strong>Features of Paragraphic Cover Letter Format:</strong>
+					<ul>
+					<li>The paragraphic format is simple, descriptive, and open to styling, composition, structure, etc. </li>
+					<li>The content can be planned and delivered as per the needs of the job application. </li>
+					<li>It is easier to skim through, familiar, and can be very impactful. </li>
+					<li>The format is followed almost everywhere as a standard. </li>
+					</ul>
+
+					<strong>Recommended for:</strong>
+					<p>Experienced professionals and professionals with a diverse portfolio. </p>
+				</div><!-- /. content-->
+			</section><!-- /. section-->
+
+			<section>
+				<h3>List-Based Cover Letter Format</h3>
+				<div>
+					<p>It is one of the simplest formats for a cover letter and can be impactful in several specific cases. The delivery style is more direct and factual and relies on the value and influence of the information itself. The content is delivered in a bullet list or a numeric list with short, crisp, and to the point expressions. </p>
+					<div class="img-wrap">
+						<div class="img-content">
+							<a title="List-Based Cover Letter Format" href="{% static 'shinelearn/static_media/List-Based-Non-Print.docx' %}" class="jcon-downlod"></a>
+							<div class="overlay"></div>
+							<amp-img 
+								src="{% static 'shinelearn/images/mobile/cms/cover-letter2.jpg' %}" alt="List-Based Cover Letter Format" 
+								class="img-fluid"
+								width="164"
+								height="217">
+							</amp-img>
+						</div>
+					</div><!-- /. img-wrap -->
+					<a title="List-Based Cover Letter Format" class="print-version" href="{% static 'shinelearn/static_media/List-Based-Print.docx' %}">Download Print Version Here</a>
+					<strong>Features of List-Based Cover Letter Format: </strong>
+					<ul>
+						<li>The list-based cover letter is a direct approach format with factual and direct information. </li>
+						<li>The content is readily available and needs very less customization for different job applications. </li>
+						<li>It can easily highlight achievements, awards, results, skills, etc and can create an impactful impression on readers. </li>
+						<li>It is not standard practice but is accepted almost everywhere due to its ease of reading. </li>
+					</ul>
+				
+					<strong>Recommended for:</strong>
+					<p>Freshers with a variety of co-curricular work and/or skills, Professionals in Sales, Business Development, Accounting and other result driven fields, Freelancers and Highly experienced professionals with a variety of work experience. </p>
+				</div><!-- content -->
+			</section><!--/. List-Based Cover Letter Format -->
+
+			<section>
+				<h3>Combination Cover Letter Format </h3>
+				<div>
+					<p>While the above two have their own targeted approaches, a combination cover letter incorporates both into a single structure for a better delivery. It is basically a custom format and the content, layout and other aspects can vary based on the individual needs. Apart from the above, it is often known to incorporate other elements like (info)graphics, tables, etc. which can have strategic advantages too.</p>
+
+						<div class="img-wrap">
+							<div class="img-content">
+								<a title="Combination Cover Letter Format" href="{% static 'shinelearn/static_media/Combination-Non-Print.docx' %}" class="jcon-downlod"></a>
+								<div class="overlay"></div>
+
+								<amp-img 
+									src="{% static 'shinelearn/images/mobile/cms/cover-letter3.jpg' %}" alt="Combination Cover Letter Format" 
+									class="img-fluid"
+									width="164"
+									height="217">
+								</amp-img>
+							</div>
+						</div>
+						<a title="Combination Cover Letter Format" class="print-version" href="{% static 'shinelearn/static_media/Combination-Print.docx' %}">Download Print Version Here</a>
+						<strong>Features of a Combination Cover Letter Format: </strong>
+						<ul>
+							<li>A combination cover letter is descriptive as well as factual or simply, more comprehensive than the others.  </li>
+							<li>The content can be planned to highlight parts, increase readability and attractiveness and is highly customizable. </li>
+							<li>It is easier to grab attention with a combination format since the content can look neat, compelling, and sorted. </li>
+							<li>The combination approach isn't a standard practice but it is welcomed everywhere. </li>
+						</ul>
+					
+						<strong>Recommended for:</strong>
+						<p>Freshers and professionals with experience alike, this format is for everyone. </p>
+				</div><!-- /. content -->
+			</section><!--/. Combination Cover Letter Format -->
+		</amp-accordion><!--/. amp-accordion -->
+
+		<div class="white_box_resume">
+			<h2>How To Write A Cover Letter?</h2>	
+			<p>The objective should be very clear in the cover letter. A professionally sound cover letter has the following features: </p>
+				
+			<ul>
+				<li>Be very concise; put only relevant information. A single page cover letter is recommended. </li>
+				<li>Customize it as per the requirement of the employer and the job profile. A cover letter format is generally divided into three parts: Salutation and opening, introduction and brief, conclusion and closing. 
+					<ul>
+						<li>Salutation and opening address the person and the purpose of communication, which is ‘job application’ here.</li>
+						<li>Introduction and brief is a short summary that brings forward relevant information regarding professional life. It explains your eligibility and competence towards the job prospect.</li>
+						<li>Conclusion and closing is the final note that projects the resolve and courtesy and provides contact information for further communication.</li>
+					</ul>
+
+					<ul class="formats1">
+						<li>
+								<button class="ampstart-btn caps m2"
+								on="tap:my-lightbox"
+								role="button"
+								tabindex="0">
+								<amp-img
+									src="{% static 'shinelearn/images/mobile/cms/Infographic_1.jpg' %}"
+									alt="How To Write A Cover Letter"
+									width="269"
+									height="148">
+								</amp-img>
+							</button>
+		
+							<amp-lightbox id="my-lightbox"
+								layout="nodisplay">
+								<div class="lightbox"
+								on="tap:my-lightbox.close"
+								role="button"
+								tabindex="0">
+								<amp-img
+									src="{% static 'shinelearn/images/mobile/cms/Infographic_1.jpg' %}"
+									alt="How To Write A Cover Letter"
+									width="269"
+									height="148">
+								</amp-img>
+								</div>
+							</amp-lightbox>
+						</li>
+					</ul>
+				</li>
+				<li>Make sure you do not repeat content from your resume. Put forward unique points with references to content from the resume.</li>
+				<li>Conclude with an optimistic outlook. </li>
+				<li>Give a call to action by clearly providing your email address and contact information with a positive closing note. </li>
+			</ul>
+				<p class="mt-15">A well-formatted cover letter with sensible content projects a lot of positive vibes towards the job application. Choosing the right cover letter format saves a lot of time and effort and also lays a basic guideline to customize your job application to its specific needs. Creating a good impression in the first contact makes the further steps easier. So give your cover letter a little time and effort and start preparing for that interview! </p>
+		</div><!--/. How To Write A Cover Letter? -->
+
+		<div class="white_box_resume related-article-widgets">
+			<strong class="white-box-heading">Related articles</strong>
+			<ul>
+				<li>
+					<div class="media">
+						<a title="Everything You Need To Know About A Cover Letter" href="https://learning.shine.com/talenteconomy/career-help/everything-you-need-to-know-about-a-cover-letter/" target="_blank">
+
+						<amp-img
+							src="{% static 'shinelearn/images/mobile/cms/pexels-photo-905868.jpg' %}"
+							alt="Everything You Need To Know About A Cover Letter"
+							width="98"
+							height="64">
+						</amp-img>
+						</a>
+						<div class="media-body ml-15">
+							<h3><a title="Everything You Need To Know About A Cover Letter" href="https://learning.shine.com/talenteconomy/career-help/everything-you-need-to-know-about-a-cover-letter/" target="_blank">Everything You Need To Know About A Cover Letter</a></h3>
+						</div>
+					</div>
+				</li><!-- /. l1 - 1 -->
+
+				<li>
+					<div class="media">
+							<a title="5 Quick Tips To Format Your Cover Letter" href="https://learning.shine.com/talenteconomy/career-help/5-quick-tips-to-format-your-cover-letter/" target="_blank">
+								<amp-img
+									src="{% static 'shinelearn/images/mobile/cms/5_Quick_Tips_To_Format_Your_Cover_Letter.jpeg' %}"
+									alt="5 Quick Tips To Format Your Cover Letter"
+									width="98"
+									height="64">
+								</amp-img>
+							</a>
+						<div class="media-body ml-15">
+							<h3><a title="5 Quick Tips To Format Your Cover Letter" href="https://learning.shine.com/talenteconomy/career-help/5-quick-tips-to-format-your-cover-letter/" target="_blank">5 Quick Tips To Format Your Cover Letter</a></h3>
+						</div>
+					</div>
+				</li><!-- /. l1 - 2 -->
+
+				<li>
+					<div class="media">
+							<a title="A Brief Summary Of LinkedIn Summary And Cover Letters!" href="https://learning.shine.com/talenteconomy/career-help/a-brief-summary-of-linkedin-summary-and-cover-letters/" target="_blank">
+								<amp-img 
+									src="{% static 'shinelearn/images/mobile/cms/A_Brief_Summary_Of_LinkedIn_Summary_And_Cover_Letters.jpg' %}" 
+									alt="A Brief Summary Of LinkedIn Summary And Cover Letters!"
+									width="98"
+									height="64">
+								</amp-img>
+							</a>
+						<div class="media-body ml-15">
+							<h3><a title="A Brief Summary Of LinkedIn Summary And Cover Letters!" href="https://learning.shine.com/talenteconomy/career-help/a-brief-summary-of-linkedin-summary-and-cover-letters/" target="_blank">A Brief Summary Of LinkedIn Summary And Cover Letters!</a></h3>
+						</div>
+					</div>
+				</li><!-- /. l1 - 3 -->
+
+				<li>
+					<div class="media">
+							<a title="Answers To Your Questions On A Cover Letter" href="https://learning.shine.com/talenteconomy/career-help/answers-to-your-questions-on-a-cover-letter/" target="_blank">
+								<amp-img 
+									src="{% static 'shinelearn/images/mobile/cms/pexels-photo-261599.jpeg' %} " 
+									alt="Answers To Your Questions On A Cover Letter"
+									width="98"
+									height="64">
+								</amp-img>
+							</a>
+						<div class="media-body ml-15">
+							<h3><a title="Answers To Your Questions On A Cover Letter" href="https://learning.shine.com/talenteconomy/career-help/answers-to-your-questions-on-a-cover-letter/" target="_blank">Answers To Your Questions On A Cover Letter</a></h3>
+						</div>
+					</div>
+				</li><!-- /. l1 - 4 -->
+
+				<li>
+					<div class="media">
+							<a title="7 More Frequently Asked Interview Questions And Impactful Answers!" href="https://learning.shine.com/talenteconomy/career-help/7-more-frequently-asked-interview-questions-and-impactful-answers/" target="_blank">
+								<amp-img 
+									src="{% static 'shinelearn/images/mobile/cms/7_More_Frequently_Asked_Interview_Questions_And_Impactful_Answers.jpg' %}" 
+									alt="7 More Frequently Asked Interview Questions And Impactful Answers!"
+									width="98"
+									height="64">
+								</amp-img>
+							</a>
+						<div class="media-body ml-15">
+							<h3><a title="7 More Frequently Asked Interview Questions And Impactful Answers!" href="https://learning.shine.com/talenteconomy/career-help/7-more-frequently-asked-interview-questions-and-impactful-answers/" target="_blank">7 More Frequently Asked Interview Questions And Impactful Answers!</a></h3>
+						</div>
+					</div>
+				</li><!-- /. l1 - 5 -->
+			</ul>
+		</div><!--/. white_box_resume -->
+
 
     </div><!--/. body wrapper -->
     
