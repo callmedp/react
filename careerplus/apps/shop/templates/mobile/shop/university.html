@@ -140,7 +140,7 @@
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ About program -->
-                
+                {% if university_detail.attendees_criteria %}
                 <div class="container">
                     <div class="white-box">
                         <h2><span><i class="execIcon-who"></i></span>Who should attend?</h2>
@@ -160,7 +160,7 @@
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ Who should attend? -->
-
+                {% endif %}
                 <div class="container eligibility">
                     <div class="white-box">
                         <h2><span><i class="execIcon-eligibility"></i></span>Eligibility criteria</h2>
@@ -179,7 +179,8 @@
                 <input type="hidden" id="skilllist" value="{% if sqs.pSkilln %} {{sqs.pSkilln|join:''}}{% endif %}">
                 <div id="skill_list_box">
                 </div>
-
+                
+                {% if faculty %}
                 <div class="container">
                     <div class="white-box">
                         <h2><span><i class="execIcon-faculty"></i></span>Faculty profile</h2>
@@ -206,7 +207,10 @@
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ Faculty profile -->
+                {% endif %}
 
+
+                {% if university_detail.benefits %}
                 <div class="container">
                     <div class="white-box">
                         <h2><span><i class="execIcon-exclusive"></i></span>Exclusive benefits</h2>
@@ -256,7 +260,9 @@
                     </div><!-- /. white box-->
                 </div><!-- ./ Exclusive benefits -->
 
-                
+                {% endif %}
+    
+                {% if chapter_list %}
                 <div class="container">
                     <div class="white-box program-structure">
                         <h2><span><i class="execIcon-program"></i></span>Program Structure</h2>
@@ -312,9 +318,9 @@
                         
                     </div><!-- /. white box-->
                 </div><!-- ./ Program Structure -->
+                {% endif %}
 
-               {% if university_detail.assesment or university_detail.sample_certificate %}
-
+                {% if university_detail.assesment or university_detail.sample_certificate %}
                 <div class="container">
                     <div class="white-box">
                         <h2><span><i class="execIcon-assessment"></i></span>Assessment & Evaluation</h2>
@@ -342,9 +348,8 @@
                     </div><!-- /. white box-->
                 </div><!-- ./ Assessment & Evaluation -->
                 {% endif %}
-                
-                
-                              
+                      
+                {% if institute %}    
                 <div class="container">
                     <div class="white-box">
                         <h2><span><i class="execIcon-institute"></i></span>Institute</h2>
@@ -359,7 +364,7 @@
                         </div>
                     </div><!-- /. white box-->
                 </div><!-- ./ Institute -->
-
+                {% endif %}
                 {% if university_testimonial %}
                 <div class="container">
                     <div class="white-box">
@@ -368,7 +373,7 @@
                             <ul class="testimonials faculty-profile testi-slide">
                                 {%for testimonial in university_testimonial %}
                                 <li>
-                                    <p class="mb-15">{{ testimonial.review }}</p>
+                                    <p class="mb-15">{{ testimonial.review|safe }}</p>
 
                                     <div class="media">
                                         <div class="media-left">

@@ -158,9 +158,10 @@
 
                       <a title="About Course" class="active cls_tab_child" href="#about-course">About Program</a>                      
                       <a title="Who Should Attend" class=" cls_tab_child" href="#who-should-attend">Who Should Attend</a>
+                      {% if faculty %}
 
                       <a title="Faculty Profile" class=" cls_tab_child" href="#faculty-profile">Faculty Profile</a>
-
+                      {% endif %}
                       <a title="Exclusive Benefits" class=" cls_tab_child" href="#execlusive-benefits">Exclusive Benefits</a>
 
                       <a title="Program Structure" class="cls_tab_child" href="#program-structure">Program Structure</a>
@@ -482,7 +483,7 @@
                         {%for testimonial in university_testimonial %}
                           <div class="item col-sm-12 {% if forloop.counter == 1%} active {% endif %}">
 
-                            <p class="mb-20 mt-20">{{ testimonial.review }}</p>
+                            <p class="mb-20 mt-20">{{ testimonial.review|safe }}</p>
                             <figure>
                               <img src="{{ testimonial.get_image_url }}" alt="Faculty Profile">
                               <figcaption>
