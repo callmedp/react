@@ -54,7 +54,7 @@
 				display: block;
 				border: 0;
 				margin: auto;
-				padding: 5px 0 3px 0;
+				padding: 5px 5px 3px 5px;
 			}
 		}
 	}
@@ -103,46 +103,49 @@
 
 	.exe-download-brochure {
 		padding-bottom: 10px;
+		vertical-align: middle;
+		margin-right: 5px;
 	}	
 }
 
 .exe-show-enrol-now {
 	display: none;
-	text-align: center;
 	margin-top: 0;
 	overflow: hidden;
+	padding: 10px 20px;
 
 	figure {
 		display: block;
-		padding: 10px 0 10px 0;
+		padding: 5px 0;
 
 		figcaption {
 			font-size: $font-size+4;
-			color: $black-color;
+			color: $primary-color;
 
 			strong {
-				display: block;
-				font-size: $font-size+9;
+				font-size: $font-size+4;
+				display: inline-block;
 				font-weight: $font-weight+300;
-			}
+				text-transform: none;
 
-			span {
-				strong {
-					font-size: $font-size+3;
+				span {
+					font-size: $font-size+2;
 					display: inline-block;
+					width: 85px;
+					color: $e-txt-color;
+					font-weight: $font-weight+100;
 				}
 			}
 
-			.exe-price {
-				color: #2e70d8;
-				font-size: $font-size+21;
-				font-weight: $font-weight+300;
+			.exe-download-brochure {
+				text-align: left;
+				vertical-align: middle;
+				margin-right: 5px;
 			}
-		}
 
-		.sep {
-			margin-left: 10%;
-			margin-right: 10%; 
+			.exe-button-enrol {
+				text-transform: none;
+			}
 		}
 	}
 }
