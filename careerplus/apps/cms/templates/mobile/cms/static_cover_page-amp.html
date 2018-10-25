@@ -1,0 +1,978 @@
+{% load static compress %}
+<!doctype html>
+<html amp lang="en" itemscope itemtype="http://www.schema.org/WebPage">
+  <head>
+    <meta charset="utf-8">
+    <title>{{page_obj.get_title}}</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    {% include 'meta/meta.html' %}
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+
+    <meta name="amp-google-client-id-api" content="googleanalytics">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
+
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
+    <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
+    <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+    <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+    <script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>
+
+    <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
+
+    <style amp-custom>
+
+    body,
+html {
+	height: 100%
+}
+
+h1,
+h4,
+h5 {
+	color: #fff
+}
+
+.form-control,
+body {
+	font-family: "Open Sans", sans-serif
+}
+
+.w100fl,
+header {
+	width: 100%
+}
+
+.pull-left,
+.pull-left,
+.w100fl {
+	float: left
+}
+
+.sprite,
+[class^=icon-] {
+	text-indent: 200%;
+	overflow: hidden;
+	white-space: nowrap
+}
+
+*,
+:after,
+:before {
+	box-sizing: border-box
+}
+
+body {
+	color: #333;
+	display: block;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 20px;
+	margin: 0;
+	padding: 0
+}
+
+li,
+ol,
+ul {
+	list-style: none
+}
+
+h1 {
+	font-size: 2em
+}
+
+h4,
+h5 {
+	margin-top: 20px
+}
+
+h5 {
+	font-size: .875em
+}
+
+em,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+i,
+li,
+p,
+table,
+td,
+th,
+tr,
+ul {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: 400;
+	text-shadow: none;
+	text-decoration: none
+}
+
+figure {
+	margin: 0
+}
+
+a {
+	color: #2f5ea6;
+	text-decoration: none
+}
+
+pre {
+	overflow-x: hidden;
+	padding: 0;
+	white-space: pre-wrap;
+	line-height: 23px;
+	width: 98%;
+	margin: 10px 0 0;
+	color: #333;
+	font-family: "Open Sans", sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 24px
+}
+
+.pull-right {
+	float: right
+}
+
+..pull-left,
+.pull-left,
+.w100fl,
+pre {
+	float: left
+}
+
+.he-auto {
+	height: auto
+}
+
+.clearfix {
+	clear: both
+}
+
+.detail-wrap .provided-by,
+.detail-wrap .select-provider,
+.input-group .form-control,
+.input-group-addon,
+.input-group-btn {
+	display: table-cell
+}
+
+.mb-10 {
+	margin-bottom: 10px
+}
+
+.c6 {
+	color: #666
+}
+
+.row {
+	margin-left: -15px;
+	margin-right: -15px
+}
+
+.pb-0 {
+	padding-bottom: 0
+}
+
+.fs-10 {
+	font-size: 10px;
+	line-height: 1
+}
+
+.fs-15 {
+	font-size: 15px;
+	line-height: 1.2
+}
+
+.fs-16 {
+	font-size: 16px;
+	line-height: 1.5
+}
+
+.mt-15 {
+	margin-top: 15px
+}
+
+.mt-20 {
+	margin-top: 20px
+}
+
+.form-control {
+	display: block;
+	height: 40px;
+	width: 100%;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background-color: #fff;
+	border: 1px solid #c1c1c1;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	color: #555;
+	font-size: 14px;
+	line-height: 1.42857;
+	padding: 6px 12px
+}
+
+.form-control::-moz-placeholder {
+	color: #999;
+	opacity: 1
+}
+
+.btn,
+.btn-sm {
+	background-color: transparent;
+	background-image: none;
+	border: 1px solid transparent;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 1em;
+	font-weight: 400;
+	line-height: 1.6;
+	margin-bottom: 0;
+	padding: 10px 12px;
+	text-align: center;
+	touch-action: manipulation;
+	user-select: none;
+	vertical-align: middle;
+	white-space: nowrap
+}
+
+.btn-blue,
+header {
+	background-color: #2f5ea6
+}
+
+.acc_head::after,
+.sprite,
+[class^=icon-] {
+	background-image:url("{% static 'shinelearn/images/mobile/common/sprites.svg'%}")
+}
+
+.btn-blue {
+	color: #fff
+}
+
+.btn-round {
+	border-radius: 3px
+}
+
+.btn-lg {
+	padding: 6px 20px
+}
+
+.main-heading,
+h2 {
+	font-size: 1.125rem;
+	font-weight: 600;
+	line-height: 25px;
+	margin-bottom: 10px
+}
+
+hr {
+	border: 0;
+	border-top: 1px solid #ddd;
+	margin: 10px 0 15px
+}
+
+header {
+	height: 50px;
+	position: relative;
+	z-index: 9;
+	padding: 15px
+}
+
+header amp-img {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: auto;
+	height: 100%;
+	opacity: .15
+}
+
+.main-menu {
+	position: relative;
+	z-index: 1
+}
+
+.table {
+	display: table;
+	width: 100%
+}
+
+.table-cell {
+	display: table-cell;
+	vertical-align: middle
+}
+
+[class^=icon-] {
+	display: block
+}
+
+.icon-search {
+	background-position: 0 -22px;
+	width: 21px;
+	height: 21px;
+	display: block
+}
+
+.sprite {
+	display: block
+}
+
+.icon-cart {
+	background-position: -3px -46px;
+	width: 18px;
+	height: 18px;
+	display: block;
+	margin-left: 25px;
+	position: relative;
+	overflow: visible;
+	text-indent: -1000px
+}
+
+.icon-cart span,
+footer {
+	position: absolute;
+	text-align: center
+}
+
+.icon-cart span {
+	display: block;
+	height: 15px;
+	width: 15px;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-ms-border-radius: 50%;
+	border-radius: 50%;
+	background-color: #fecd2f;
+	color: #000;
+	line-height: 15px;
+	left: -7px;
+	top: -10px;
+	text-indent: 0;
+	font-size: 9px;
+	font-weight: 600;
+	letter-spacing: -1px
+}
+
+.heading-back {
+	font-size: 1.25em;
+	color: #fff;
+	font-weight: 600;
+	margin: 15px 0 0;
+	line-height: 26px
+}
+
+.media-body,
+.media-left,
+.media-right {
+	display: table-cell;
+	vertical-align: top
+}
+
+.body-wrapper {
+	width: 100%;
+	padding: 0 0 65px;
+	clear: both
+}
+
+.content-box {
+	padding: 15px
+}
+
+.container {
+	padding: 15px 0
+}
+
+amp-accordion {
+	border-top: 1px solid #e0e0e0
+}
+
+amp-accordion>section {
+	border-bottom: 1px solid #e0e0e0
+}
+
+footer {
+	background-color: #ebebeb;
+	bottom: 0;
+	font-size: 80%;
+	left: 0;
+	width: 100%;
+	color: #666
+}
+
+.pb-60 {
+	padding-bottom: 60px
+}
+
+.box {
+	background-color: #fff;
+	padding: 15px
+}
+
+.media-left {
+	padding-right: 15px
+}
+
+h3 {
+	font-size: 115%;
+	font-weight: 600
+}
+
+.user {
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+	display: block;
+	height: 50px;
+	width: 50px
+}
+
+.download-wrap {
+	background-color: #fcfcfc
+}
+
+.download-wrap .download-pdf {
+	background-color: #000;
+	position: relative
+}
+
+.download-wrap .download-pdf .wrap {
+	height: 100%;
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	color: #fff;
+	z-index: 9
+}
+
+.download-wrap .download-pdf .wrap .table {
+	height: 100%
+}
+
+.download-wrap .download-pdf .table-cell {
+	width: 1000px;
+	height: 100%;
+	display: table-cell;
+	vertical-align: middle
+}
+
+.download-wrap .download-pdf img {
+	width: 100%;
+	display: block;
+	opacity: .4
+}
+
+.download-wrap .download-pdf .table-cell span {
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	display: inline-block;
+	height: 45px;
+	width: 45px;
+	background-color: #2f5ea6;
+	position: relative;
+	z-index: 1
+}
+
+.download-wrap .download-pdf .table-cell span .icon-download {
+	background-position: -247px 0;
+	background-image:url("{% static 'shinelearn/images/mobile/common/sprites.svg'%}");
+	width: 22px;
+	height: 22px;
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -11px 0 0 -11px
+}
+
+.bullet li {
+	list-style-type: circle;
+	list-style-position: inside;
+	padding-bottom: 10px;
+	margin-left: 2%;
+	width: 98%
+}
+
+textarea.form-control {
+	height: auto
+}
+
+.comment-wrap ul {
+	border-bottom: 1px solid #f2f2f2;
+	margin-bottom: 15px
+}
+
+.comment-wrap ul li {
+	padding-left: 50px;
+	font-size: 100%;
+	margin-bottom: 20px
+}
+
+.comment-wrap ul li sup {
+	height: 40px;
+	width: 40px;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+	background-color: #ebebeb;
+	position: absolute;
+	left: 15px
+}
+
+.comment-wrap ul li sup img {
+	height: 40px;
+	width: 40px;
+	-webkit-border-radius: 50%;
+	border-radius: 50%
+}
+
+.editor {
+	font-size: .75rem;
+	color: #999
+}
+
+.text-center {
+	text-align: center
+}
+
+.bold {
+	font-weight: 700
+}
+
+.related-article {
+	background-color: #ebebeb;
+	padding: 15px
+}
+
+.acc_content,
+.acc_head {
+	background-color: #f6f7f9
+}
+
+.related-article h2 {
+	color: #1f3d6e;
+	font-weight: 600
+}
+
+.acc_head {
+	cursor: pointer;
+	border: 0;
+	padding: 10px 15px;
+	font-size: 1rem;
+	color: #333;
+	font-weight: 700;
+	position: relative
+}
+
+.acc_head::after {
+	content: '';
+	background-position: -38px -201px;
+	width: 13px;
+	height: 7px;
+	display: block;
+	margin-top: -4px;
+	position: absolute;
+	right: 10px;
+	top: 50%
+}
+
+.acc_content {
+	padding: 0 15px 15px
+}
+
+p {
+	padding-bottom: 15px;
+	line-height: 1.5
+}
+
+
+/* Navigation Starts here */
+
+.media-body,
+.media-left,
+.media-right {
+	display: table-cell;
+	vertical-align: top
+}
+
+.media-left {
+	padding-right: 15px;
+}
+
+.icon-bar {
+	background-position: 0 0;
+	width: 20px;
+	height: 20px
+}
+
+.sb-menu li a,
+.sb-menu li a span {
+	display: inline-block;
+	position: relative
+}
+
+.login_wrap,
+.sb-menu li a,
+nav {
+	position: relative
+}
+
+amp-sidebar {
+	background-color: #fff;
+	width: 290px
+}
+
+nav {
+	border-bottom: 1px solid #f2f2f2
+}
+
+.sb-menu:last-child,
+nav:last-child {
+	border-bottom: 0 none
+}
+
+.sb-menu {
+	font-size: 14px;
+	font-weight: 400;
+	list-style-type: none;
+	margin: 0;
+	padding: 15px 0 0;
+	clear: left
+}
+
+.sb-menu li {
+	width: 100%;
+	padding: 0;
+	margin: 0
+}
+
+.cms-right ul,
+.dashboard,
+.right-navbar ul {
+	margin-top: 10px
+}
+
+.sb-menu li a {
+	width: 100%;
+	color: #666;
+	padding: 10px 15px
+}
+
+.sb-menu li a span {
+	height: 21px;
+	width: 21px;
+	margin-right: 12px;
+	top: 4px
+}
+
+.sb-menu>li:first-child {
+	border-top: none
+}
+
+.sb-menu>li:last-child {
+	border-bottom: none
+}
+
+.sb-menu li a:hover {
+	text-decoration: none;
+	background-color: rgba(255, 255, 255, .05)
+}
+
+.login_wrap {
+	background-color: #1564b2;
+	background-repeat: no-repeat;
+	color: #fff;
+	height: 90px
+}
+
+.login_wrap>img {
+	opacity: .05;
+	width: 100%;
+	height: 100%
+}
+
+.login_wrap span img {
+	-webkit-border-radius: 100%;
+	border-radius: 100%;
+	width: 100%
+}
+
+.login_wrap p a {
+	color: #fff
+}
+
+.login_content {
+	position: absolute;
+	top: 0;
+	display: 100%;
+	height: 100%;
+	width: 100%;
+	font-size: .875em
+}
+
+.user_details {
+	display: table-cell;
+	height: 90px;
+	width: 1000px;
+	padding: 0 15px;
+	vertical-align: middle
+}
+
+.user_details a img,
+.user_details span {
+	display: block;
+	height: 50px;
+	width: 50px
+}
+
+.user_details a img {
+	-webkit-border-radius: 50%;
+	border-radius: 50%
+}
+
+.user_details .btn {
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	margin-right: 8px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	font-size: 14px;
+	border-color: #fff;
+	color: #fff
+}
+
+.icon-home {
+	background-position: -44px -150px
+}
+
+.icon-home-search {
+	background-position: -66px -150px
+}
+
+.icon-rec-course {
+	background-position: -87px -150px
+}
+
+.icon-dashboard {
+	background-position: -108px -150px
+}
+
+.icon-career {
+	background-position: -129px -150px
+}
+
+.icon-all-courses {
+	background-position: -150px -150px
+}
+
+.icon-job {
+	background-position: -171px -150px
+}
+
+.icon-sample {
+	background-position: -192px -150px
+}
+
+.icon-talentEco {
+	background-position: -143px -346px
+}
+
+.dashboard {
+	border-top: 1px solid #f2f2f2;
+	border-bottom: 1px solid #f2f2f2;
+	padding-bottom: 10px
+}
+
+.dashboard ul {
+	padding-left: 35px
+}
+
+.dashboard ul li a {
+	color: #999;
+	padding-top: 10px;
+	padding-bottom: 10px
+}
+
+.cms-right,
+.right-navbar {
+	padding: 0 15px 15px
+}
+
+.cms-right h2,
+.right-navbar h2 {
+	padding: 15px 0 10px;
+	border-bottom: 1px solid #c1c1c1;
+	font-weight: 600;
+	margin-bottom: 0
+}
+
+.cms-right ul li,
+.right-navbar ul li {
+	margin-bottom: 10px
+}
+
+.box {
+	box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+	background-color: #fff;
+	padding: 10px 15px 0;
+}
+
+article ul {
+	padding-left: 20px;
+}
+
+article ul li {
+	padding-bottom: 10px;
+	list-style-type: disc;
+}
+
+.mt-30 {
+	margin-top: 30px;
+}
+
+.mb-15 {
+	margin-bottom: 15px;
+}
+
+.hide {
+	display: none;
+}
+
+.resume_format {
+    padding-bottom: 10px;
+    line-height: 1.35rem;
+}
+
+.resume_format h1 {
+    font-size: 1.3rem;
+    line-height: 24px;
+    color: #333;
+	margin: 15px 0;
+}
+
+.blue_box {
+    padding: 20px;
+    background: #f3f8fa;
+    margin: 20px 0;
+}
+
+.blue_box ul {
+    margin-top: 10px;
+}
+
+.blue_box li {
+    list-style: circle;
+    margin-left: 20px;
+    padding: 5px 0;
+}
+
+.white_box_resume {
+    background: #fff;
+    padding: 25px 15px;
+    margin: 0 0 35px 0;
+    box-shadow: 0 0 20px 10px rgba(250, 250, 250, 0.9);
+}
+
+.white_box_resume p:last-child {
+	padding-bottom: 0;
+}
+
+    /* Navigation ends here */
+
+</style>
+    <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+
+  </head>
+<body>
+    <amp-analytics type="googleanalytics">
+        <script type="application/json">
+        {
+            "vars": {
+                "account": "UA-3537905-41"
+            },
+            "triggers": {
+                "trackPageview": {
+                    "on": "visible",
+                    "request": "pageview"
+                }
+            }
+        }
+        </script>
+    </amp-analytics>
+
+    <amp-analytics type="googleanalytics">
+        <script type="application/json">
+        {
+            "vars": {
+                "account": "UA-3537905-1"
+            },
+            "triggers": {
+                "trackPageview": {
+                    "on": "visible",
+                    "request": "pageview"
+                }
+            }
+        }
+        </script>
+    </amp-analytics> 
+
+    <header class="w100fl he-auto">
+        <!-- header menu Icon Starts here -->
+        {% include 'basic/amp-menu.html'%}
+    </header>
+
+    <div class="body-wrapper">
+        <div class="content-box">
+			<div class="resume_format">
+				<h1>Cover Letter Format</h1>
+				<p>The cover letter is the document that accompanies your resume during the job application. It is a brief summary of your professional life and career. It is required for almost every job application, whether in print or digitally. The cover letter is often THE job application in itself. And the cover letter format is the tool to communicate the right information the right way and create a good impression. <br><br>
+				A Cover letter allows you to target the job and the employer in a very specific way. Resume can be detailed but the cover letter is crisp and to the point, only hinting at the value you can bring to the table if hired. </p>
+
+				<div class="blue_box">
+					<strong>Select the most targeted cover letter format</strong>
+					<ul>
+						<li>
+							<a title="Cover Letter Format for Freshers" href=" https://learning.shine.com/cms/cover-letter-format/freshers/8/" target="_blank">Cover Letter Format for Freshers</a>
+							</li>
+		
+							<li><a title="Cover Letter Format for Engineers" href=" https://learning.shine.com/cms/cover-letter-format/engineers/9/" target="_blank">Cover Letter Format for Engineers</a></li>
+		
+							<li><a title="Cover Letter Format for Senior Technician" href="https://learning.shine.com/cms/cover-letter-format/senior-technician/12/" target="_blank">Cover Letter Format for Senior Technician</a></li>
+		
+							<li><a title="Cover Letter Format for Fitness Trainers" href=" https://learning.shine.com/cms/cover-letter-format/fitness-trainers/14/" target="_blank">Cover Letter Format for Fitness Trainers</a></li>
+		
+							<li><a title="Cover Letter Format for Defence Personnel" href="https://learning.shine.com/cms/cover-letter-format/indian-army-defense-personnel/11/" target="_blank">Cover Letter Format for Defence Personnel</a></li>
+					</ul>
+				</div><!--./ blue_box -->
+			</div><!--/. resume_format -->
+		</div><!--/. content-box -->
+
+		<div class="white_box_resume">
+			<h2>Importance Of Cover Letter</h2>
+			<p>The cover letter is an introductory note and conveys the objective of writing along with a few specific career highlights. The style of communication in the cover letter plays a vital role during the screening process. An impressive note pushes the reader to read more on your resume. Ensuring an appropriate format for your cover letter is the first step to a successful application. </p>
+		</div><!--/. white_box_resume -->
+
+		<div class="white_box_resume">
+			<h2>Types of Cover Letter Formats</h2>
+			<p>Essentially, cover letters do not have different formats. But with technology and its effects, there are certain approaches one can use to grab attention and deliver necessary information. These approaches are dependent on the method of submission of a cover letter and also, on the requirements of the profile and the job. Here are the three main content types of cover letters:</p>
+		</div><!--/. white_box_resume -->
+
+    </div><!--/. body wrapper -->
+    
+        {% include 'basic/footer.html' %}
+        {% include 'basic/navigation-amp.html' %}
+</body>
+</html>
+    
