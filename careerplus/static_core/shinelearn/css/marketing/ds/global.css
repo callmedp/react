@@ -1,0 +1,997 @@
+
+body {
+    color: #333;
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+select {
+    width: 100%;
+    height: 34px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('../../../images/marketing/ds/dropdown.png') !important;
+    background-color: #fff;
+    background-position: 100% 0;
+    background-repeat: no-repeat;
+    border: 1px solid #c1c1c1;
+    color: #999;
+    font-size: 14px;
+    outline: 0;
+    padding: 6px 35px 6px 12px;
+    text-align: left;
+    -webkit-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    transition: all .3s ease;
+    border-radius: 0;
+  }
+  
+  select option {
+    padding: 6px;
+  }
+
+
+
+.banner-bg {
+    background: url('../../../images/marketing/ds/data_science_banner.jpg');
+    height: auto;
+    background-attachment: scroll;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.right-header .top-head {
+    font-size: 18px;
+    color: rgba(255, 255, 255, .8);
+    margin-bottom: 0;
+    line-height: 26px;
+    font-weight: 300;
+}
+
+.right-header h1 {
+    font-weight: 700;
+    font-size: 68px;
+    color: #fff;
+    box-shadow: #fff;
+    margin-bottom: 0;
+    text-shadow: 0px 2px 1px rgba(0, 0, 0, .3);
+}
+
+.right-header ul {
+    color: #fff;
+    padding: 0;
+    list-style-type: none;
+}
+
+.right-header ul li {
+    padding-right: 0;
+    margin-bottom: 30px;
+    color: rgba(255, 255, 255, .8);
+}
+
+.right-header ul li span {
+    width:25px;
+    height: 38px;
+    display: block;
+    position: relative;
+    margin-right: 15px;
+    float: left;
+}
+
+.icon-industry {
+    background: url('../../../images/marketing/ds/DataScience_hands.png') no-repeat 0 0;
+}
+
+.icon-online {
+    background: url('../../../images/marketing/ds/DataScience_course.png') no-repeat;
+}
+
+.data-scientisty {
+    font-size: 14px;
+    color: #fff;
+    padding-right: 20px;
+    padding-top: 0;
+    line-height: 1.2;
+}
+.data-scientisty strong {
+    color: #ffcf01;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.main-form {
+    border-radius: 5px;
+    background-color: #e7e7e7;
+    padding: 20px 25px;
+    box-shadow: 0px 0px 18px rgba(0, 0, 0, .3);
+}
+
+.main-form h2 {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.main-form .form-control {
+    border: none;
+    border-radius: 10px;
+    height: 40px;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.main-form .form-group {
+    margin-bottom: 10px;
+}
+
+.tnc {
+    font-size: 12px;
+}
+
+.tnc a {
+    color: #333;
+    text-decoration: underline;
+}
+
+.call-us {
+    border-top: 1px solid rgba(0, 0, 0, .2);
+    margin: 0 -25px;
+    padding: 10px 15px 0 70px;
+    position: relative;
+}
+
+.call-us span {
+    width: 29px;
+    height: 29px;
+    display: block;
+    position: absolute;
+    left: 25px;
+    background: url('../../../marketing/ds/sprite.png') no-repeat -94px 0;
+    top: 18px;
+}
+
+.call-us strong {
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.call-us p {
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+.easy-emi {
+    width: 305px;
+    text-align: center;
+    padding-top: 10px;
+    color: rgba(255, 255, 255, .6);
+    font-weight: 300;
+    font-size: 12px;
+}
+
+/* Navbar starts here */
+.navbar-light {
+    background: #fff;
+    box-shadow: 0 3px 7px rgba(0,0,0,.1);
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: rgba(0, 0, 0, 1);
+    padding: 1rem 1.2rem;
+    font-weight: 700;
+}
+
+.navbar {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.active {
+    border-bottom: 5px solid #449cc6;
+}
+
+/* Course Highlights */
+
+section {
+    padding: 30px 0;
+}
+
+.light-gray {
+    background-color: #f7f7f7;
+}
+
+.main-head {
+    font-size: 28px;
+    font-weight: 700;
+    padding-bottom: 30px;
+}
+
+.course-item {
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.course-item .highlight {
+    background: #fff;
+    margin: 3%;
+    padding:10px;
+    border-radius: 5px;
+    border-bottom:solid 4px #8edbff;
+}
+.course-item .highlight strong {
+    display: block;
+    font-weight: 700;
+}
+
+
+.course-item span {
+    display: inline-block;
+    padding-bottom: 15px;
+    vertical-align: top;
+    margin-right: 10px;
+    width: 77px;
+    text-align: center;
+}
+
+.course-item span img {
+    width: 80%;
+}
+
+.course-item p {
+    display: inline-block;
+    width: 60%;
+    font-size: 14px;
+    color: #666;
+}
+
+
+.courses-wrap {
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 0px 24px rgba(0, 0, 0, .2);
+    display: flex;
+    min-height: 465px;
+    margin-top:20px; 
+}
+
+.courses-wrap .nav-tabs {
+    border: 0;
+}
+
+.courses-wrap .nav {
+    padding: 15px;
+}
+
+.courses-wrap .box {
+    background: #fff;
+    border-radius: 15px;
+    border-bottom: solid 5px #8edbff;
+    box-shadow: 10px 9px 26px 6px rgba(186,186,186,0.3);
+    padding:30px 10px 30px 10px; 
+    float: left;
+    font-size: 15px;
+
+}
+
+.courses-wrap .box li {
+   width: 38%;
+
+padding: 5px 10px 5px 0;
+
+list-style: url('../../../marketing/ds/digital_tick.gif') no-repeat;
+
+float: left;
+
+margin-left: 50px;
+}
+
+
+
+
+
+.for-ver-mid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.courses-wrap .nav-tabs .nav-link {
+    border: none;
+    color: #666;
+    font-size: 16px;
+    position: relative;
+    font-weight: 700;
+}
+
+.courses-wrap .nav-tabs .nav-link::after {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 11px 17px 11px 0;
+    border-color: transparent #1799a0 transparent transparent;
+    position: absolute;
+    right: -15px;
+    top: 10px;
+    content: '';
+    display: none;
+}
+
+.courses-wrap .nav-tabs .active::after {
+    display: block;
+}
+
+.courses-wrap .nav-item {
+    position: relative;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.courses-wrap .nav-item:last-child {
+    padding-bottom: 0;
+}
+
+.courses-wrap .nav-item .active {
+    color: #000;
+    font-weight: 700;
+}
+
+.courses-wrap .active-arrow {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 11px 17px 11px 0;
+    border-color: transparent #1799a0 transparent transparent;
+    position: absolute;
+    right: -15px;
+    top: 10px;
+}
+.courses-wrap .tab-content {
+    flex: 1;
+background:url('../../../images/marketing/ds/data_science_skill.jpg') top right no-repeat;
+padding-top:10%; 
+}
+
+
+
+.courses-wrap .jobrole {
+    background: url('../../../images/marketing/ds/DataScience_jobrole.jpg') right no-repeat;
+    padding-top:5%; 
+}
+
+
+
+.courses-wrap .tab-content h2 {
+    padding-left:50px;
+}
+
+.courses-wrap .tab-content > .tab-pane {
+    height: 100%;
+}
+
+.tab-wrap {
+    flex: 1;
+}
+
+.tag-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+.tag-wrap {
+    padding: 0 30px 30px 30px;
+}
+
+.tags {
+    border-radius: 20px;
+    background-color: #d2f1ff;
+    padding: 3px 15px 5px;
+    color: #333;
+    display: inline-block;
+    margin: 10px 7px;
+}
+
+.m_courses-wrap {
+    box-shadow: 0 -6px 11px rgba(0, 0, 0, .06);
+    padding: 15px;
+    width: 100%;
+}
+
+.m_courses-wrap .card {
+    border: none;
+}
+
+.m_courses-wrap .card-header {
+    padding: 0;
+    background-color: #fff;
+}
+
+.m_courses-wrap .btn-link {
+    text-align: left;
+    color: #0054ba;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.m_courses-wrap .card-body {
+    margin: 0 -15px;
+    position: relative;
+    top: -1px;
+    background: #1799a0; /* Old browsers */
+    background: -moz-linear-gradient(left, #1799a0 0%, #1aab94 40%, #1aab94 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, #1799a0 0%,#1aab94 40%,#1aab94 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, #1799a0 0%,#1aab94 40%,#1aab94 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1799a0', endColorstr='#1aab94',GradientType=1 ); /* IE6-9 */
+}
+
+.m_courses-wrap .card-body::before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 6.5px 9px 6.5px;
+    border-color: transparent transparent #1799a0 transparent;
+    top: -9px;
+    position: absolute;
+}
+
+.m_courses-wrap .collapsed {
+    position: relative;
+}
+
+.m_courses-wrap .btn-link:after {
+    position: absolute;
+    right: 0;
+    width: 12px;
+    height: 7px;
+    display: block;
+    content: '';
+    background: url('../../../images/marketing/ds/sprite.png') no-repeat -157px -9px;
+    top: 21px;
+}
+
+.m_courses-wrap .collapsed:after {
+    position: absolute;
+    right: 0;
+    width: 12px;
+    height: 7px;
+    display: block;
+    content: '';
+    background: url('../../../images/marketing/ds/sprite.png') no-repeat -157px 0;
+    top: 21px;
+}
+
+.m_courses-wrap .tag-wrap {
+    padding: 0;
+}
+
+.m_courses-wrap .tags {
+    font-size: 14px;
+    margin: 5px;
+}
+
+
+.digital {
+    display: table;
+   
+}
+.digital li {
+     background: #fff;
+    border-radius: 5px;
+    border-left: solid 8px #8edbff;
+    box-shadow:10px 9px 26px 6px rgba(186,186,186,0.3);
+    width: 85%;
+    padding: 15px ;
+    display: table;
+     vertical-align: middle;
+
+
+}
+
+
+
+@media (min-width:800px) {
+
+    .digital li {  width: 100%;}
+
+  }
+
+.digital li strong {
+    color: #0054ba;
+    font-size: 40px;
+    float: left;
+    margin-right: 15px;
+        text-align: center;
+    border-right: solid 1px #e7e7e7;
+    padding-right: 15px;
+    vertical-align: middle;
+    display: table-cell;
+    font-weight: 400;
+}
+
+.digital li em {
+    font-style: normal;
+      vertical-align: middle;
+    display: table-cell;
+    color: #666666;
+} 
+
+
+.list-item  {
+    font-size: 14px;
+    list-style-type: disc;
+}
+
+.list-item li {
+    margin-bottom: 35px;
+}
+
+.list-item li .bullet {
+    display: inline-block;
+    position: absolute;
+}
+
+.list-item li span .dot {
+    width: 13px;
+    height: 13px;
+    display: inline-block;
+    background-color: rgba(4, 100, 125, 1);
+    border: 2px solid #fff;
+    border-radius: 50%;
+}
+
+.list-item li span .line {
+    border-top: 1px dashed rgba(4, 100, 125, .5);
+    width: 100%;
+    position: absolute;
+    top: 11px;
+}
+
+.hexa {
+    display: table-cell;
+    background: url('../../../images/marketing/ds/digital_hexa_otline.jpg') no-repeat;
+    background-size: contain;
+    width: 100%;
+    height: 190px;
+    font-size: 12px;
+    text-align: center;
+    padding: 15px;
+    vertical-align: middle;
+    color: #666;
+}
+
+.hexa:hover {
+    background: url('../../../images/marketing/ds/digital_hexa_otline-hover.jpg') no-repeat;
+    background-size: contain;
+    color: #fff;
+}
+
+.hexa .head {
+    font-size: 15px;
+    font-weight: 700;
+    color: #000;
+    line-height: 18px;
+    margin-bottom: 5px;
+}
+
+
+.hexa:hover .head {
+    color: #fff;
+}
+
+#why-buy {
+    height: 563px;
+    background: #f7f7f7;
+}
+
+.why-buy .men {
+    position: absolute;
+    bottom: -66px;
+}
+
+.why-buy-content .col-md-4{
+    margin: 5px 0;
+}
+
+.outcomes li {
+    position: relative;
+    padding-left: 25px;
+    padding-right: 30px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.outcomes li::before {
+    background: url('../../../images/marketing/ds/bullet.png') no-repeat;
+    position: absolute;
+    left: 0;
+    content: '';
+    width: 17px;
+    height: 17px;
+    top: 4px;
+}
+
+footer {
+    background-color: #8edbff;
+    color: #fff;
+    padding: 15px 0;
+    font-size: 14px;
+}
+
+.main-menu {
+    background-color: #e6e6e6;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, .2);
+    position: relative;
+    text-align: center;
+    font-size: 14px;
+    color: #666666;
+    font-weight: 600;
+}
+
+.main-menu ul {
+    display: inline-block;
+}
+
+.main-menu ul li {
+    display: inline-block;
+}
+
+.main-menu ul li a {
+    display: block;
+    padding: 10px 15px;
+    color: #666666;
+    border-bottom: 3px solid transparent;
+}
+
+.main-menu ul li a:hover,
+.menu-active a {
+    border-bottom-color: #0054ba !important;
+    text-decoration: none;
+    color: #0054ba !important;
+}
+
+.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99;
+    box-shadow: 0px 2px 2px rgb(243, 243, 243);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+#attend {
+    padding-bottom: 40px;
+    padding-top: 0;
+}
+
+#course-preview {
+    padding-bottom: 75px;
+}
+
+.btn-link:hover {
+    text-decoration: none;
+}
+
+
+.benefits {
+    padding-top:90px; 
+}
+
+
+@media (max-width: 640px) {
+
+    .right-header h1 {
+        font-size: 32px;
+
+    }
+
+    .courses-wrap {
+        min-height: 355px;
+    }
+
+
+     .course-item .highlight {
+        text-align:center; 
+    }
+    .courses-wrap .tab-content {
+        background: none;
+    }
+
+    .courses-wrap .box {
+       box-shadow: none; 
+       border-bottom: 0;
+
+   }
+
+    .courses-wrap .box li {
+        width: 100%;
+       }
+.hexa {
+    display:block;
+    background: url('../../../images/marketing/ds/digital_hexa_otline.jpg') no-repeat;
+    background-size: cover;
+    width: 228px;
+    height: 249px;
+    font-size: 12px;
+    text-align: center;
+    padding: 15px;
+    vertical-align: middle;
+    color: #666;
+    padding-top:90px;
+    margin: 0 auto; 
+}
+
+.hexa:hover {
+    background: url('../../../images/marketing/ds/digital_hexa_otline-hover.jpg') no-repeat;
+    background-size: cover;
+    color: #fff;
+}
+
+#why-buy {
+    height: auto;
+}
+
+.benefits {
+    padding-top:10px; 
+} 
+     
+
+
+.digital li {
+    width: 100%;
+}
+
+.main-head {
+    padding-bottom:5px; 
+}
+
+.course-item  {
+    margin-bottom:10px; 
+}
+
+.courses-wrap .tab-content h2 {
+    padding-left: 24px;
+    font-size: 28px;
+
+font-weight: 700;
+
+}
+.courses-wrap .box {
+    padding-top:10px; 
+}
+
+.tag-wrap {
+padding:0 10px 10px 10px; 
+}
+.tags {
+    margin: 10px 0;
+}
+
+.courses-wrap {
+    padding-bottom:30px; 
+}
+
+ .right-header li {
+        font-size: .95rem;
+    }
+.navbar  {
+    display: none;
+}
+
+.m12 {
+    margin-left: -12px; 
+}
+
+  }
+  
+  @media (min-width: 768px) {
+
+    .main-menu {
+        font-size: 12px;
+    }
+
+    .main-menu ul li a {
+        padding: 10px 8px;
+    }
+    .htlogo  {
+        text-align: left;
+    }
+
+    .tags {
+        display: block;
+        width: auto;
+        float: left;
+    }
+
+    .main-head {
+        padding-bottom:5px; 
+    }
+
+ 
+
+    .banner-bg {
+        background: url('../../../images/marketing/ds/data_science_banner.jpg');
+        height: 600px;
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    #attend {
+        padding-bottom: 85px;
+        padding-top: 85px;
+    }
+
+    .course-item span img {
+        width: 100%;
+    }
+
+
+  .hexa {
+    display: table-cell;
+    background: url('../../../images/marketing/ds/digital_hexa_otline.jpg') no-repeat;
+    background-size: cover;
+    width: 228px;
+    height: 242px;
+    font-size: 12px;
+    text-align: center;
+    padding: 15px;
+    vertical-align: middle;
+    color: #666;
+    margin: 0 auto;
+}
+
+.hexa:hover {
+    background: url('../../../images/marketing/ds/digital_hexa_otline-hover.jpg') no-repeat;
+    background-size: cover;
+    color: #fff;
+}
+
+
+    
+  }
+  
+  @media (min-width: 992px) {
+    .right-header {
+        width: 500px;
+    }
+
+    .main-form {
+        width: 305px;
+    }
+
+    .right-header .top-head {
+        font-size: 22px;
+    }
+
+    .right-header h1 {
+        font-size: 60px;
+    }
+
+    .right-header ul li {
+        margin-right: 90px;
+    }
+
+    .main-form {
+        border-radius: 25px;
+    }
+
+    .data-scientisty {
+        line-height: 1.2;
+        padding-top: 15px;
+    }
+
+    section {
+        padding: 60px 0;
+    }
+
+    .course-item {
+        text-align: center
+    }
+
+    .course-item span {
+        margin-right: 0;
+    }
+    .course-item .highlight {
+        height: 190px;
+        padding-bottom: 20px;
+    }
+
+
+
+
+
+    .course-item p {
+        width: 90%;
+        font-size: 14px;
+    }
+    
+    .main-head {
+        font-size: 28px;
+        padding-bottom: 30px;
+    }
+
+    .list-item  {
+        font-size: 16px;
+        list-style-type: none;
+    }
+
+
+
+
+    .hexa .head {
+        font-size: 20px;
+        line-height: 24px;
+    }
+
+    .why-buy-content .col-md-4 {
+        margin: 10px 0;
+    }
+
+    .outcomes li {
+        padding-left: 35px;
+        padding-right: 75px;
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    .outcomes li::before {
+        left: 0;
+    }
+
+    .main-menu {
+        font-size: 14px;
+    }
+    
+    .main-menu ul li a {
+        padding: 10px 15px;
+    }
+
+
+
+
+  }
+  
+  @media (min-width: 1200px) {
+    .right-header {
+        width: 500px;
+    }
+
+    .main-form {
+        width: 305px;
+    }
+
+ .htlogo  {
+        text-align:center;
+    }
+
+  }
+
+
+.inline-block {
+    display:inline-block;
+}
+
+.error-txt{
+    color:red;
+}
+.js-error{
+    margin-bottom: 0px;
+    color: red;
+    font-size: 12px;
+    margin-top: 2px;
+    margin-left: 10px;
+}
+
+
+ 
