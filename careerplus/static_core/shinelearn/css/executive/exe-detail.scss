@@ -101,7 +101,7 @@
 		}
 	}
 
-	.exe-download-brochure {
+	.exe-icon-brochure {
 		padding-bottom: 10px;
 		vertical-align: middle;
 		margin-right: 5px;
@@ -137,7 +137,7 @@
 				}
 			}
 
-			.exe-download-brochure {
+			.exe-icon-brochure {
 				text-align: left;
 				vertical-align: middle;
 				margin-right: 5px;
@@ -438,6 +438,10 @@
 		height: 76px;
 		display: inline-block;
 		vertical-align: top;
+
+		img {
+			max-height: 100%;
+		}
 	}
 
 	h3 {
