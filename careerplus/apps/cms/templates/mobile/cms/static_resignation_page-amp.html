@@ -1,420 +1,276 @@
-{% extends "mobile/basic/base.html" %}
-
 {% load static compress %}
-
-{% block head %}
- {% block meta_html %}
+<!doctype html>
+<html ⚡ lang="en" itemscope itemtype="http://www.schema.org/WebPage">
+  <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0' > -->
-    <meta name="description" content="Free Resignation Letter Formats & Samples Online - Get Resignation Letter Formats & Samples recommended by experts for experienced professionals or freshers. Download Resignation Letter Formats & Samples samples in pdf or word doc">
-	<meta name="keywords" content="E-Learning, Skills, Resume, India">
-	<meta property="og:title" content="Resignation Letter Format & Samples - Resignation Email @ Shine Learning">
-	<meta property="og:url" content="https://learning.shine.com/cms/resignation-letter-formats-samples/3/">
-	<meta property="og:description" content="Free Resignation Letter Formats & Samples Online - Get Resignation Letter Formats & Samples recommended by experts for experienced professionals or freshers. Download Resignation Letter Formats & Samples samples in pdf or word doc">
-	<meta property="og:type" content="Website">
-	<meta property="og:site_name" content="ShineLearning">
-	<meta property="og:image" content="https://static1.shine.com/l/m/images/blog/Prominent_People_And_Their_Resignation_Letter_Format.jpeg">
-	<meta property="article:modified_time" content="2018-08-28 06:28:31.001117+00:00">
-	<meta property="fb:profile_id" content="282244838633660"> 
+    <title>{{page_obj.get_title}}</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    {% include 'meta/meta.html' %}
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+	<meta name="amp-google-client-id-api" content="googleanalytics">
+	
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" > 
 
-	<meta itemprop="name" content="Resignation Letter Format &Samples - Resignation Email @ Shine Learning">
-    <meta itemprop="dateModified" content="2018-08-28 08:52:47.536574+00:00">
-    <meta itemprop="url" content="https://learning.shine.com/cms/resignation-letter-formats-samples/3/">
-    <meta itemprop="description" content="Free Resignation Letter Formats & Samples Online - Get Resignation Letter Formats & Samples recommended by experts for experienced professionals or freshers. Download Resignation Letter Formats & Samples samples in pdf or word doc"> 
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
+    <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
+    <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+    <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+	<script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>
+	<script async custom-element="amp-lightbox" src="https://cdn.ampproject.org/v0/amp-lightbox-0.1.js"></script>
 
-{% endblock meta_html %}
-    {% block django_meta %}
-    {% endblock django_meta %}
+    <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
 
-{% block canonical_url %}
-<link rel="canonical" href="//learning.shine.com/cms/resignation-letter-formats-samples/3/"> 
-<link rel="amphtml" href="//mlearning.shine.com/cms/resignation-letter-formats-samples/3/?type=amp">
-{% endblock canonical_url %}
+    <style amp-custom>
+			body,pre{padding:0;color:#333;font-weight:400}.form-control,body,pre{font-family:"Open Sans",sans-serif}.btn,.btn-sm,body,pre{font-weight:400}.btn,.btn-sm,.print-version,.request,.text-center{text-align:center}body,html{height:100%}h1,h4,h5{color:#fff}.w100fl,header{width:100%}.pull-left,.w100fl{float:left}.sprite,[class^=icon-]{text-indent:200%;overflow:hidden;white-space:nowrap}*,:after,:before{box-sizing:border-box}body{display:block;font-size:14px;line-height:20px;margin:0}li,ol,ul{list-style:none}h1{font-size:2em}h4,h5{margin-top:20px}h5{font-size:.875em}em,h1,h2,h3,h4,h5,h6,i,li,p,table,td,th,tr,ul{margin:0;padding:0;border:0;outline:0;font-weight:400;text-shadow:none;text-decoration:none}figure{margin:0}a{color:#2f5ea6;text-decoration:none}pre{overflow-x:hidden;white-space:pre-wrap;width:98%;margin:10px 0 0;font-size:14px;line-height:24px}.pull-right{float:right}..pull-left,.pull-left,.w100fl,pre{float:left}.he-auto{height:auto}.clearfix{clear:both}.detail-wrap .provided-by,.detail-wrap .select-provider,.input-group .form-control,.input-group-addon,.input-group-btn{display:table-cell}.mb-10{margin-bottom:10px}.c6{color:#666}.row{margin-left:-15px;margin-right:-15px}.pb-0{padding-bottom:0}.fs-10{font-size:10px;line-height:1}.fs-15{font-size:15px;line-height:1.2}.fs-16{font-size:16px;line-height:1.5}.mt-15{margin-top:15px}.mt-20{margin-top:20px}.form-control{display:block;height:40px;width:100%;-webkit-appearance:none;-moz-appearance:none;appearance:none;background-color:#fff;border:1px solid #c1c1c1;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;color:#555;font-size:14px;line-height:1.42857;padding:6px 12px}.form-control::-moz-placeholder{color:#999;opacity:1}.btn,.btn-sm{background-color:transparent;background-image:none;border:1px solid transparent;cursor:pointer;display:inline-block;font-size:1em;line-height:1.6;margin-bottom:0;padding:10px 12px;touch-action:manipulation;user-select:none;vertical-align:middle;white-space:nowrap}.btn-blue,header{background-color:#2f5ea6}.acc_head::after,.sprite,[class^=icon-]{background-image:url("{% static 'shinelearn/images/mobile/common/sprites.svg'%}")}.sprite-resume{background-image:url("{% static 'shinelearn/images/mobile/cms/resume_sprite.svg'%}")}.btn-blue{color:#fff}.btn-round{border-radius:3px}.btn-lg{padding:6px 20px}.main-heading,h2{font-size:1.125rem;font-weight:600;line-height:25px;margin-bottom:10px}hr{border:0;border-top:1px solid #ddd;margin:10px 0 15px}header{height:50px;position:relative;z-index:9;padding:15px}header amp-img{position:absolute;right:0;top:0;width:auto;height:100%;opacity:.15}.main-menu{position:relative;z-index:1}.table{display:table;width:100%}.table-cell{display:table-cell;vertical-align:middle}.icon-cart,.icon-search,.sprite,.user,[class^=icon-]{display:block}.icon-search{background-position:0 -22px;width:21px;height:21px}.icon-cart{background-position:-3px -46px;width:18px;height:18px;margin-left:25px;position:relative;overflow:visible;text-indent:-1000px}.icon-cart span,footer{position:absolute;text-align:center}.icon-cart span{display:block;height:15px;width:15px;-webkit-border-radius:50%;-moz-border-radius:50%;-ms-border-radius:50%;border-radius:50%;background-color:#fecd2f;color:#000;line-height:15px;left:-7px;top:-10px;text-indent:0;font-size:9px;font-weight:600;letter-spacing:-1px}.heading-back{font-size:1.25em;color:#fff;font-weight:600;margin:15px 0 0;line-height:26px}.body-wrapper{width:100%;padding:0 0 65px;clear:both}.content-box{padding:15px}.container{padding:15px 0}amp-accordion>section>*{color:#333}amp-accordion>section>div{padding:15px}amp-accordion>section>h3{padding:10px}footer{background-color:#ebebeb;bottom:0;font-size:80%;left:0;width:100%;color:#666}.pb-60{padding-bottom:60px}h3{font-size:115%;font-weight:600}.user{-webkit-border-radius:50%;border-radius:50%;height:50px;width:50px}.bold{font-weight:700}p{padding-bottom:15px;line-height:1.5}.media-body,.media-left,.media-right{display:table-cell;vertical-align:top}.media-left{padding-right:15px}.icon-bar{background-position:0 0;width:20px;height:20px}.sb-menu li a,.sb-menu li a span{display:inline-block;position:relative}.login_wrap,.sb-menu li a,nav{position:relative}amp-sidebar{background-color:#fff;width:290px}nav{border-bottom:1px solid #f2f2f2}.sb-menu:last-child,nav:last-child{border-bottom:0 none}.sb-menu{font-size:14px;font-weight:400;list-style-type:none;margin:0;padding:15px 0 0;clear:left}.sb-menu li{width:100%;padding:0;margin:0}.cms-right ul,.dashboard,.right-navbar ul{margin-top:10px}.sb-menu li a{width:100%;color:#666;padding:10px 15px}.sb-menu li a span{height:21px;width:21px;margin-right:12px;top:4px}.sb-menu>li:first-child{border-top:none}.sb-menu>li:last-child{border-bottom:none}.sb-menu li a:hover{text-decoration:none;background-color:rgba(255,255,255,.05)}.login_wrap{background-color:#1564b2;background-repeat:no-repeat;color:#fff;height:90px}.login_wrap>img{opacity:.05;width:100%;height:100%}.login_wrap span img{-webkit-border-radius:100%;border-radius:100%;width:100%}.login_wrap p a{color:#fff}.login_content{position:absolute;top:0;display:100%;height:100%;width:100%;font-size:.875em}.user_details{display:table-cell;height:90px;width:1000px;padding:0 15px;vertical-align:middle}.user_details a img,.user_details span{display:block;height:50px;width:50px}.user_details a img{-webkit-border-radius:50%;border-radius:50%}.user_details .btn{-webkit-border-radius:4px;border-radius:4px;margin-right:8px;padding-top:3px;padding-bottom:3px;font-size:14px;border-color:#fff;color:#fff}.icon-home{background-position:-44px -150px}.icon-home-search{background-position:-66px -150px}.icon-rec-course{background-position:-87px -150px}.icon-dashboard{background-position:-108px -150px}.icon-career{background-position:-129px -150px}.icon-all-courses{background-position:-150px -150px}.icon-job{background-position:-171px -150px}.icon-sample{background-position:-192px -150px}.icon-talentEco{background-position:-143px -346px}.dashboard{border-top:1px solid #f2f2f2;border-bottom:1px solid #f2f2f2;padding-bottom:10px}.dashboard ul{padding-left:35px}.dashboard ul li a{color:#999;padding-top:10px;padding-bottom:10px}.cms-right,.right-navbar{padding:0 15px 15px}.cms-right h2,.right-navbar h2{padding:15px 0 10px;border-bottom:1px solid #c1c1c1;font-weight:600;margin-bottom:0}.cms-right ul li,.right-navbar ul li{margin-bottom:10px}.box{box-shadow:0 0 15px rgba(0,0,0,.1);background-color:#fff;padding:10px 15px 0}article ul{padding-left:20px}article ul li{padding-bottom:10px;list-style-type:disc}.mt-30{margin-top:30px}.mb-15{margin-bottom:15px}.hide{display:none}.resume_format{padding-bottom:10px;line-height:1.35rem}.resume_format h1{font-size:1.3rem;line-height:24px;color:#333;margin:15px 0}.blue_box{padding:20px;background:#f3f8fa;margin:20px 0}.blue_box ul{margin-top:10px}.blue_box li{list-style:circle;margin-left:20px;padding:5px 0}.white_box_resume{background:#fff;padding:25px 15px;margin:0 0 35px;box-shadow:0 0 20px 10px rgba(250,250,250,.9)}.white_box_resume li{list-style:circle;margin:2px 0 2px 15px}.white_box_resume p:last-child{padding-bottom:0}.request{display:block;width:80%;margin:10px auto 20px;background:#3e7fea;color:#fff;padding:8px 0;font-size:1.1rem;border:none}.formats1 li amp-img,.img-wrap{position:relative;border:.1rem solid #3f5f94}.formats1 li{list-style:none;width:100%;display:inline-block;margin:2px 2% 2px 0}.formats1 li amp-img{width:98%;height:95%;padding:.25rem}.img-wrap{height:238px;width:183px;padding:.5rem;margin:10px auto}.jcon-downlod{width:44px;height:44px;display:block;position:absolute;right:10px;bottom:10px;z-index:100;background-position:1px -48px}.img-wrap .img-content .overlay{background-color:rgba(0,0,0,.6);width:92%;height:94%;position:absolute}.img-fluid{width:164px;height:217px}.print-version{display:block;font-size:12px;margin-top:5px;margin-bottom:10px}amp-accordion>section>h3{background-color:transparent}amp-accordion>section>div ul{padding-left:18px;padding-top:20px;color:#666;list-style-type:disc;margin-bottom:10px;min-height:auto}amp-lightbox{background-color:rgba(0,0,0,.6)}amp-lightbox .lightbox{height:100%;display:flex;align-items:center;justify-content:center}.white-box-heading{color:#1f3d6b;border-bottom:2px solid #1f3d6b;display:block;font-size:1rem;font-weight:700;text-transform:uppercase;margin-bottom:20px}.white_box_resume ul{margin-top:10px}.media{display:flex;align-items:flex-start}.related-article-widgets li{list-style:none;margin:0}.related-article-widgets li:not(:last-child){margin-bottom:15px}.related-article-widgets li a{font-size:.813rem;color:#666;font-weight:500;vertical-align:middle}.ml-15{margin-left:15px}
+	</style>
+	<style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+	
 
-<title>Resignation Letter Format & Samples - Resignation Email @ Shine Learning</title>
+  </head>
+<body>
+    <amp-analytics type="googleanalytics">
+        <script type="application/json">
+        {
+            "vars": {
+                "account": "UA-3537905-41"
+            },
+            "triggers": {
+                "trackPageview": {
+                    "on": "visible",
+                    "request": "pageview"
+                }
+            }
+        }
+        </script>
+    </amp-analytics>
 
-{% block css_section %}
-<link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
- {% compress css %}
-<link href="{% static 'shinelearn/css/mobile/cms/resume.css' %}" rel="stylesheet">
-<link href="{% static 'shinelearn/css/mobile/cms//smk-accordion.css' %}" rel="stylesheet">
- <link rel="stylesheet" href="{% static 'shinelearn/css/mobile/cms/swipebox.css' %}">
- <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/navigation.scss' %}" rel="stylesheet">
- <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/images.scss' %}" rel="stylesheet" >
- <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/global.scss' %}" rel="stylesheet">
- <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/icons.scss' %}" rel="stylesheet">
- <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
+    <amp-analytics type="googleanalytics">
+        <script type="application/json">
+        {
+            "vars": {
+                "account": "UA-3537905-1"
+            },
+            "triggers": {
+                "trackPageview": {
+                    "on": "visible",
+                    "request": "pageview"
+                }
+            }
+        }
+        </script>
+    </amp-analytics> 
 
-{% endcompress %}
-{% endblock css_section %}
-    <link rel="shortcut icon" href="https://static1.shine.com/l/s/shinelearn/images/fav_icon.png">
+    <header class="w100fl he-auto">
+        <!-- header menu Icon Starts here -->
+        {% include 'basic/amp-menu.html'%}
+    </header>
 
-  {% block GA %}
+    <div class="body-wrapper">
+        <div class="content-box">
+			<div class="resume_format">
+				<h1>Resignation Letter Format</h1>
+				<p>Change is the only constant. Every career moves through a lot of changes and some of them are job and organization changes. One important part of the change is the resignation letter, to inform the current employer of the decision and transition. Resignation letter formats guide the process towards a standard, objective, and professional approach. It sets a milestone in the career path that marks the change without any obstacles.</p>
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script><script>
-
-window.dataLayer = window.dataLayer || [];
-
-function gtag(){dataLayer.push(arguments);}
-
-gtag('js', new Date());
-
-gtag('config', 'UA-3537905-41');
-
-gtag('config', 'UA-3537905-1',{'group':'mainProfile'}); </script><!-- Google Tag Manager -->
-
-<!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':--><!--new Date().getTime(),event:'gtm.js'}); var f=d.getElementsByTagName(s)[0],--><!--j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=-->
-
-<!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);-->
-
-<!--})(window,document,'script','dataLayer','GTM-M323HB');</script>-->
-
-<!-- End Google Tag Manager -->
-
-  {% endblock GA %}
-
-  {% endblock head %}
-
-  {% block main_container %}
-  <div class="wrapper">
-{% block header %}
-
- <header class="w100fl he-auto">
-    <img src="{% static 'shinelearn/images/mobile/common/header-back-img.png' %}">
-    <!-- header menu Icon Starts here -->
-    <div class="main-menu w100fl">
-        <div class="pull-left">
-            <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button" ></a>
-            <a class=" pull-left" role="button" onclick="goBack()"></a>
-        </div><!-- / Left side Icon ends here -->
-
-        <div class="pull-right">
-            <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
-            <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
-        </div>
-
-        <!-- / Right side Icon ends here -->
-    </div><!-- header menu Icon ends here -->
-        <h1 class="heading-back w100fl pb-0"></h1>
-</header>
-
-
-{% endblock header %}
-{% block container %}
-    <div class="wrapper">
-      <div class="body-wrapper">
-
-<div class="content-box">
-    <div class="resume_format">
-        <h1>Resignation Letter Format</h1>
-        <p>Change is the only constant. Every career moves through a lot of changes and some of them are job and organization changes. One important part of the change is the resignation letter, to inform the current employer of the decision and transition. Resignation letter formats guide the process towards a standard, objective, and professional approach. It sets a milestone in the career path that marks the change without any obstacles.</p>
-
-        <div class="blue_box">
-            <strong>Select the most targeted resignation format</strong>
-            <ul>
-                <li>
-                <a title="Resignation Letter with Notice Period" href="https://learning.shine.com/cms/resignation-letter-formats-and-samples/with-notice-period/5/" target="_blank">Resignation Letter with Notice Period</a>
-                </li>
-                <li><a title="Resignation Letter without Notice Period" href="https://learning.shine.com/cms/resignation-letter-formats-and-samples/without-notice-period/17/" target="_blank">Resignation Letter without Notice Period</a></li>
-                <li><a title="Resignation Letter Format for Personal Reasons" href="https://learning.shine.com/cms/resignation-letter-formats-and-samples/personal-reasons/15/" target="_blank">Resignation Letter Format for Personal Reasons</a></li>
-                <li><a title="Resignation Letter Format for Higher Studies" href="https://learning.shine.com/cms/resignation-letter-formats-and-samples/higher-studies-or-going-abroad/49" target="_blank">Resignation Letter Format for Higher Studies</a></li>
-                <li><a title="Resignation Letter Format for Location Change" href="https://learning.shine.com/cms/resignation-letter-formats-samples/location-change/19/" target="_blank">Resignation Letter Format for Location Change</a></li>
-            </ul>
-        </div><!--./ blue_box -->
-    </div><!-- /. resume_format -->
-</div><!-- ./content-box-->
-
-<div class="white_box_resume">
-    <h2>Why Is It Important?</h2>
-    <p>Since the resignation letter is addressed to and accessed by some key senior personnel, it is important to keep it short, simple, and objective. The professional approach ensures no misinterpretation or communication mistakes occur. This consolidates a good image and relationships with the organization and members and also, helps positively in transition, referral, background check, and other requirements of the job change. Often, it is required to be submitted to the next organization hiring the individual. The formats of resignation letter are designed to cater to these need of the document.</p>
-</div><!--/. white_box_resume -->
-
-
-<div class="white_box_resume">
-    <h2>Types of Resination Letters</h2>
-    <p>There are no standard types of resignation letter format or content but they can be bifurcated into several types based on the use case. Print and non-print resignation letters are one of them and don't need any explanation. Also, resignation letters can be divided based on whether or not the process is permanent or temporary; it is specific to the situation. Temporary resignation is often processed when an employee leaves due to non-professional reasons like medical care, education, personal problems, etc and is uncertain of joining back but wishes to. In this case only, one should specify the reason and seek permission to join if they can later. Here are the other important types:</p>
-</div><!--/. white_box_resume -->
-
-<!-- Accordion begin -->
-<div class="accordion_example1 accordion-wrap mt-30 mb-30">
-    <!-- Section 1 -->
-    <div class="accordion_in acc_active">
-      <div class="acc_head"><h3>Resignation Letter Format with Notice Period</h3></div>
-      <div class="acc_content">
-        <p>Any termination of employment is usually done with a transition period called notice period. This period serves many functions and is considered a norm while resignation. The notice period depends on employers policy and is usually a minimum of two weeks.</p>
-        <div class="img-wrap">
-            <div class="img-content">
-                <a title="Resignation Letter Format with Notice Period" href="{% static 'shinelearn/static_media/Resignation_letter_with_notice_period_Non_Print.docx' %}" class="jcon-downlod"></a>
-                <div class="overlay"></div>
-                <img src="{% static 'shinelearn/images/mobile/cms/resignation-format1.jpg' %}" alt="Resignation Letter Format with Notice Period" class="img-fluid">
-            </div>
-        </div>
-        <a title="Resignation Letter Format with Notice Period" class="print-version" href="{% static 'shinelearn/static_media/Resgination_letter_with_notice_period_Print.docx' %}">Download Print Version Here</a>
-        <strong>Points to Consider</strong>
-        <ul>
-          <li>Always specify the period in your resignation letter clearly.</li>
-          <li>It is best to discuss the notice period with HRD before sending the letter.</li>
-          <li>Provide all the necessary details that can help with a smooth transition and documentation.</li>
-        </ul>
-
-        <strong>Use Case:</strong>
-        <p>Resignation while changing jobs, for academic purposes, or any professional transition without negative effects on career.</p>
-      </div>
-    </div>
-
-    <!-- What’ll you get starts here  -->
-    <div class="accordion_in">
-      <div class="acc_head"><h3>Resignation Letter Format without Notice Period</h3></div>
-      <div class="acc_content">
-        <p>Also called Immediate Resignation Letter, this kind of resignation is used to terminate employment within a very short period. This period is usually less than a week. It is more declarative and should be used with care, possibly not used at all.</p>
-       <div class="img-wrap">
-            <div class="img-content">
-                <a title="Resignation Letter Format without Notice Period" href="{% static 'shinelearn/static_media/Resignation_letter_without_notice_period_Non_Print.docx' %}" class="jcon-downlod"></a>
-                <div class="overlay"></div>
-                <img src="{% static 'shinelearn/images/mobile/cms/resignation-format2.jpg' %}" alt="Resignation Letter Format without Notice Period" class="img-fluid">
-            </div>
-        </div>
-        <a title="Resignation Letter Format without Notice Period" class="print-version" href="{% static 'shinelearn/static_media/Resignation_letter_without_notice_period_Print.docx' %}">Download Print Version Here</a>
-        <strong>Points to Consider: </strong>
-        <ul>
-          <li>Specify the exact date of leaving the job. You may hold back on the reason to leave though.</li>
-          <li>Discuss the resignation before sending in the letter.</li>
-          <li>Request a properly documented and permitted resignation to nullify the negative effects.</li>
-          <li>An immediate resignation may harshly affect the career and financial side so it is best avoided.</li>
-        </ul>
-
-        <strong>Use Case:</strong>
-			<p>Medical Emergency, Personal Problems or Dependencies, or any kind of emergency may demand it and possibly not affect the career in the long run. However, professional transitions and other such changes should not be handled with such resignation but can be.</p>
-
-		<strong>Warning:</strong>
-			<p>Immediate resignation is often considered as absconding a job. It may also lead to loss of pay, experience certificate, and references from the employer.</p>
-      </div>
-    </div><!-- What’ll you get edns here  -->
-
-  </div>
-<!-- Accordion end -->
-
-
-<div class="white_box_resume">
-<h2>Tips For Writing A Resignation Letter</h2>
-
-<p>Adopting an appropriate resignation letter format can be utilized best with the following tips:</p>
-
-<ul>
-                        <li>Inform and discuss the resignation with your reporting manager and/or HR executive beforehand.</li>
-                        <li>Address the required person/people and state a simple, clear, and neutral reason for the resignation.</li>
-                        <li>Mention the notice period you are serving and invite discussion over it.</li>
-                        <li>Mention your gratitude and thanks for the support and learning. Do not go specific, express generally to the entire organization and your department/team.</li>
-                        <li>Close the letter on a positive note like "Hope to work with you again." "Best wishes and regards for your futures." and so on.</li>
-                        <li>Provide signature and date if submitted in print/writing. Also, keep a counter-signed copy with yourself.</li>
+				<div class="blue_box">
+                    <strong>Select the most targeted resignation format</strong>
+                    <ul>
+                        <li>
+                        <a title="Resignation Letter with Notice Period" href="https://learning.shine.com/cms/resignation-letter-formats-and-samples/with-notice-period/5/" target="_blank">Resignation Letter with Notice Period</a>
+                        </li>
+                        <li><a title="Resignation Letter without Notice Period" href="https://learning.shine.com/cms/resignation-letter-formats-and-samples/without-notice-period/17/" target="_blank">Resignation Letter without Notice Period</a></li>
+                        <li><a title="Resignation Letter Format for Personal Reasons" href="https://learning.shine.com/cms/resignation-letter-formats-and-samples/personal-reasons/15/" target="_blank">Resignation Letter Format for Personal Reasons</a></li>
+                        <li><a title="Resignation Letter Format for Higher Studies" href="https://learning.shine.com/cms/resignation-letter-formats-and-samples/higher-studies-or-going-abroad/49" target="_blank">Resignation Letter Format for Higher Studies</a></li>
+                        <li><a title="Resignation Letter Format for Location Change" href="https://learning.shine.com/cms/resignation-letter-formats-samples/location-change/19/" target="_blank">Resignation Letter Format for Location Change</a></li>
                     </ul>
-                    <p class="mt-15">Following a standard resignation letter formats streamlines and simplifies the relieving process and safeguards professional image and interests. Especially, checking your emotional expressions is important for smooth transition. With everything in place, your next journey is all you should care about.</p>
-</div>
+                </div><!--./ blue_box -->
+			</div><!--/. resume_format -->
+		</div><!--/. content-box -->
+
+		<div class="white_box_resume">
+            <h2>Why Is It Important?</h2>
+            <p>Since the resignation letter is addressed to and accessed by some key senior personnel, it is important to keep it short, simple, and objective. The professional approach ensures no misinterpretation or communication mistakes occur. This consolidates a good image and relationships with the organization and members and also, helps positively in transition, referral, background check, and other requirements of the job change. Often, it is required to be submitted to the next organization hiring the individual. The formats of resignation letter are designed to cater to these need of the document.</p>
+        </div><!--/. white_box_resume -->
+
+		<div class="white_box_resume">
+            <h2>Types of Resination Letters</h2>
+            <p>There are no standard types of resignation letter format or content but they can be bifurcated into several types based on the use case. Print and non-print resignation letters are one of them and don't need any explanation. Also, resignation letters can be divided based on whether or not the process is permanent or temporary; it is specific to the situation. Temporary resignation is often processed when an employee leaves due to non-professional reasons like medical care, education, personal problems, etc and is uncertain of joining back but wishes to. In this case only, one should specify the reason and seek permission to join if they can later. Here are the other important types:</p>
+        </div><!--/. white_box_resume -->
+
+		<amp-accordion disable-session-states>
+			<section expanded>
+				<h3>Resignation Letter Format with Notice Period</h3>
+				<div>
+					<p>Any termination of employment is usually done with a transition period called notice period. This period serves many functions and is considered a norm while resignation. The notice period depends on employers policy and is usually a minimum of two weeks.</p>
+					<div class="img-wrap">
+						<div class="img-content">
+							<a title="Resignation Letter Format with Notice Period" href="{% static 'shinelearn/static_media/Resignation_letter_with_notice_period_Non_Print.docx' %}" class="jcon-downlod sprite-resume"></a>
+							<div class="overlay"></div>
+							<amp-img 
+								src="{% static 'shinelearn/images/mobile/cms/resignation-format1.jpg' %}" 
+								alt="Resignation Letter Format with Notice Period" 
+								class="img-fluid"
+								width="164"
+								height="217">
+							</amp-img>
+						</div>
+					</div>
+					<a title="Resignation Letter Format with Notice Period" class="print-version" href="{% static 'shinelearn/static_media/Resgination_letter_with_notice_period_Print.docx' %}">Download Print Version Here</a>
+					<strong>Points to Consider</strong>
+					<ul>
+						<li>Always specify the period in your resignation letter clearly.</li>
+						<li>It is best to discuss the notice period with HRD before sending the letter.</li>
+						<li>Provide all the necessary details that can help with a smooth transition and documentation.</li>
+					</ul>
+			
+					<strong>Use Case:</strong>
+					<p>Resignation while changing jobs, for academic purposes, or any professional transition without negative effects on career.</p>
+				</div><!-- /. content-->
+			</section><!-- /. section-->
+
+			<section>
+				<h3>Resignation Letter Format without Notice Period</h3>
+				<div>
+					<p>Also called Immediate Resignation Letter, this kind of resignation is used to terminate employment within a very short period. This period is usually less than a week. It is more declarative and should be used with care, possibly not used at all.</p>
+					<div class="img-wrap">
+						<div class="img-content">
+							<a title="Resignation Letter Format without Notice Period" href="{% static 'shinelearn/static_media/Resignation_letter_without_notice_period_Non_Print.docx' %}" class="jcon-downlod sprite-resume"></a>
+							<div class="overlay"></div>
+							<amp-img 
+								src="{% static 'shinelearn/images/mobile/cms/resignation-format2.jpg' %}" 
+								alt="Resignation Letter Format without Notice Period" 
+								class="img-fluid"
+								width="164"
+								height="217">
+							</amp-img>
+						</div>
+					</div>
+					<a title="Resignation Letter Format without Notice Period" class="print-version" href="{% static 'shinelearn/static_media/Resignation_letter_without_notice_period_Print.docx' %}">Download Print Version Here</a>
+					<strong>Points to Consider: </strong>
+					<ul>
+						<li>Specify the exact date of leaving the job. You may hold back on the reason to leave though.</li>
+						<li>Discuss the resignation before sending in the letter.</li>
+						<li>Request a properly documented and permitted resignation to nullify the negative effects.</li>
+						<li>An immediate resignation may harshly affect the career and financial side so it is best avoided.</li>
+					</ul>
+				
+					<strong>Use Case:</strong>
+					<p>Medical Emergency, Personal Problems or Dependencies, or any kind of emergency may demand it and possibly not affect the career in the long run. However, professional transitions and other such changes should not be handled with such resignation but can be.</p>
+				
+					<strong>Warning:</strong>
+					<p>Immediate resignation is often considered as absconding a job. It may also lead to loss of pay, experience certificate, and references from the employer.</p>
+				</div><!-- content -->
+			</section><!--/. List-Based Cover Letter Format -->
+
+		</amp-accordion><!--/. amp-accordion -->
+
+		<div class="white_box_resume">
+				<h2>Tips For Writing A Resignation Letter</h2>
+				
+				<p>Adopting an appropriate resignation letter format can be utilized best with the following tips:</p>
+				
+				<ul>
+										<li>Inform and discuss the resignation with your reporting manager and/or HR executive beforehand.</li>
+										<li>Address the required person/people and state a simple, clear, and neutral reason for the resignation.</li>
+										<li>Mention the notice period you are serving and invite discussion over it.</li>
+										<li>Mention your gratitude and thanks for the support and learning. Do not go specific, express generally to the entire organization and your department/team.</li>
+										<li>Close the letter on a positive note like "Hope to work with you again." "Best wishes and regards for your futures." and so on.</li>
+										<li>Provide signature and date if submitted in print/writing. Also, keep a counter-signed copy with yourself.</li>
+									</ul>
+									<p class="mt-15">Following a standard resignation letter formats streamlines and simplifies the relieving process and safeguards professional image and interests. Especially, checking your emotional expressions is important for smooth transition. With everything in place, your next journey is all you should care about.</p>
+		</div><!--/. Tips For Writing A Resignation Letter -->
+
+		<div class="white_box_resume related-article-widgets">
+			<strong class="white-box-heading">Related articles</strong>
+			<ul>
+				<li>
+					<div class="media">
+						<a title="Everything You Need To Know About A Cover Letter" href="https://learning.shine.com/talenteconomy/career-help/everything-you-need-to-know-about-a-cover-letter/" target="_blank">
+
+						<amp-img
+							src="{% static 'shinelearn/images/mobile/cms/10_Etiquettes_Attached_To_Resignation_Letter_For_No-Trouble_Transition.jpg' %}" alt="10 Etiquettes Attached To Resignation Letter For No-Trouble Transition"
+							width="98"
+							height="64">
+						</amp-img>
+						</a>
+						<div class="media-body ml-15">
+							<h3><a title="10 Etiquettes Attached To Resignation Letter For No-Trouble Transition" href="https://learning.shine.com/talenteconomy/career-help/10-etiquettes-attached-to-resignation-letter-for-no-trouble-transition/" target="_blank">10 Etiquettes Attached To Resignation Letter For No-Trouble Transition</a></h3>
+						</div>
+					</div>
+				</li><!-- /. l1 - 1 -->
+
+				<li>
+					<div class="media">
+							<a title="How To Know It's Time To Quit A Job & Find A New One?" href="https://learning.shine.com/talenteconomy/career-help/how-to-know-its-time-to-quit-a-job-and-find-a-new-one/" target="_blank">
+								<amp-img 
+									src="{% static 'shinelearn/images/mobile/cms/pexels-photo-52608.jpeg' %}" 
+									alt="How To Know It's Time To Quit A Job & Find A New One?"
+									width="98"
+									height="64">
+								</amp-img>
+							</a>
+						<div class="media-body ml-15">
+							<h3><a title="How To Know It's Time To Quit A Job & Find A New One?" href="https://learning.shine.com/talenteconomy/career-help/how-to-know-its-time-to-quit-a-job-and-find-a-new-one/" target="_blank">How To Know It's Time To Quit A Job & Find A New One?</a></h3>
+						</div>
+					</div>
+				</li><!-- /. l1 - 2 -->
+
+				<li>
+					<div class="media">
+							<a title="Prominent People And Their Resignation Letter Format" href="https://learning.shine.com/talenteconomy/career-help/prominent-people-and-their-resignation-letter-format/" target="_blank">
+								<amp-img 
+									src="{% static 'shinelearn/images/mobile/cms/Prominent_People_And_Their_Resignation_Letter_Format.jpeg' %}" 
+									alt="Prominent People And Their Resignation Letter Format"
+									width="98"
+									height="64">
+								</amp-img>
+							</a>
+						<div class="media-body ml-15">
+							<h3><a title="Prominent People And Their Resignation Letter Format" href="https://learning.shine.com/talenteconomy/career-help/prominent-people-and-their-resignation-letter-format/" target="_blank">Prominent People And Their Resignation Letter Format</a></h3>
+						</div>
+					</div>
+				</li><!-- /. l1 - 3 -->
+
+				<li>
+					<div class="media">
+							<a title="Avoid These Mistakes In Your Next Job Interview" href="https://learning.shine.com/talenteconomy/career-help/avoid-these-mistakes-in-your-next-job-interview/" target="_blank">
+								<amp-img 
+									src="{% static 'shinelearn/images/mobile/cms/Avoid_These_Mistakes_In_Your_Next_Job_Interview.jpg' %} " 
+									alt="Avoid These Mistakes In Your Next Job Interview" 
+									width="98" 
+									height="64">
+								</amp-img>
+							</a>
+						<div class="media-body ml-15">
+							<h3><a title="Avoid These Mistakes In Your Next Job Interview" href="https://learning.shine.com/talenteconomy/career-help/avoid-these-mistakes-in-your-next-job-interview/" target="_blank">Avoid These Mistakes In Your Next Job Interview</a></h3>
+						</div>
+					</div>
+				</li><!-- /. l1 - 4 -->
+
+				<li>
+					<div class="media">
+							<a title="7 More Frequently Asked Interview Questions And Impactful Answers!" href="https://learning.shine.com/talenteconomy/career-help/7-more-frequently-asked-interview-questions-and-impactful-answers/" target="_blank">
+								<amp-img 
+									src="{% static 'shinelearn/images/mobile/cms/7_More_Frequently_Asked_Interview_Questions_And_Impactful_Answers.jpg' %}" 
+									alt="7 More Frequently Asked Interview Questions And Impactful Answers!"
+									width="98"
+									height="64">
+								</amp-img>
+							</a>
+						<div class="media-body ml-15">
+							<h3><a title="7 More Frequently Asked Interview Questions And Impactful Answers!" href="https://learning.shine.com/talenteconomy/career-help/7-more-frequently-asked-interview-questions-and-impactful-answers/" target="_blank">7 More Frequently Asked Interview Questions And Impactful Answers!</a></h3>
+						</div>
+					</div>
+				</li><!-- /. l1 - 5 -->
+			</ul>
+		</div><!--/. white_box_resume -->
 
 
-<button id="myBtn" class="request">Request a call</button>
-
-
-<div class="white_box_resume white-box">
-<strong class="white-box-heading">Related articles</strong>
-
-<ul>
-                            <li class="mb-20">
-                                <div class="media">
-                                    <a title="10 Etiquettes Attached To Resignation Letter For No-Trouble Transition" href="https://learning.shine.com/talenteconomy/career-help/10-etiquettes-attached-to-resignation-letter-for-no-trouble-transition/" target="_blank">
-                                    <img class="mr-3" src="{% static 'shinelearn/images/mobile/cms/10_Etiquettes_Attached_To_Resignation_Letter_For_No-Trouble_Transition.jpg' %}" alt="10 Etiquettes Attached To Resignation Letter For No-Trouble Transition"></a>
-                                    <div class="media-body ml-15 fs-16">
-                                        <h3><a title="10 Etiquettes Attached To Resignation Letter For No-Trouble Transition" href="https://learning.shine.com/talenteconomy/career-help/10-etiquettes-attached-to-resignation-letter-for-no-trouble-transition/" target="_blank">10 Etiquettes Attached To Resignation Letter For No-Trouble Transition</a></h3>
-                                    </div>
-                                </div>
-                            </li><!-- /. l1 - 1 -->
-
-                            <li class="mb-20">
-                                <div class="media">
-                                        <a title="How To Know It's Time To Quit A Job & Find A New One?" href="https://learning.shine.com/talenteconomy/career-help/how-to-know-its-time-to-quit-a-job-and-find-a-new-one/" target="_blank">
-                                            <img class="mr-3" src="{% static 'shinelearn/images/mobile/cms/pexels-photo-52608.jpeg' %}" alt="How To Know It's Time To Quit A Job & Find A New One?">
-                                        </a>
-                                    <div class="media-body ml-15 fs-16">
-                                        <h3><a title="How To Know It's Time To Quit A Job & Find A New One?" href="https://learning.shine.com/talenteconomy/career-help/how-to-know-its-time-to-quit-a-job-and-find-a-new-one/" target="_blank">How To Know It's Time To Quit A Job & Find A New One?</a></h3>
-                                    </div>
-                                </div>
-                            </li><!-- /. l1 - 2 -->
-
-                            <li class="mb-20">
-                                <div class="media">
-                                        <a title="Prominent People And Their Resignation Letter Format" href="https://learning.shine.com/talenteconomy/career-help/prominent-people-and-their-resignation-letter-format/" target="_blank">
-                                            <img class="mr-3" src="{% static 'shinelearn/images/mobile/cms/Prominent_People_And_Their_Resignation_Letter_Format.jpeg' %}" alt="Prominent People And Their Resignation Letter Format">
-                                        </a>
-                                    <div class="media-body ml-15 fs-16">
-                                        <h3><a title="Prominent People And Their Resignation Letter Format" href="https://learning.shine.com/talenteconomy/career-help/prominent-people-and-their-resignation-letter-format/" target="_blank">Prominent People And Their Resignation Letter Format</a></h3>
-                                    </div>
-                                </div>
-                            </li><!-- /. l1 - 3 -->
-
-                            <li class="mb-20">
-                                <div class="media">
-                                        <a title="Avoid These Mistakes In Your Next Job Interview" href="https://learning.shine.com/talenteconomy/career-help/avoid-these-mistakes-in-your-next-job-interview/" target="_blank">
-                                            <img class="mr-3" src="{% static 'shinelearn/images/mobile/cms/Avoid_These_Mistakes_In_Your_Next_Job_Interview.jpg' %} " alt="Avoid These Mistakes In Your Next Job Interview">
-                                        </a>
-                                    <div class="media-body ml-15 fs-16">
-                                        <h3><a title="Avoid These Mistakes In Your Next Job Interview" href="https://learning.shine.com/talenteconomy/career-help/avoid-these-mistakes-in-your-next-job-interview/" target="_blank">Avoid These Mistakes In Your Next Job Interview</a></h3>
-                                    </div>
-                                </div>
-                            </li><!-- /. l1 - 4 -->
-
-                            <li>
-                                <div class="media">
-                                        <a title="7 More Frequently Asked Interview Questions And Impactful Answers!" href="https://learning.shine.com/talenteconomy/career-help/7-more-frequently-asked-interview-questions-and-impactful-answers/" target="_blank">
-                                            <img class="mr-3" src="{% static 'shinelearn/images/mobile/cms/7_More_Frequently_Asked_Interview_Questions_And_Impactful_Answers.jpg' %}" alt="7 More Frequently Asked Interview Questions And Impactful Answers!">
-                                        </a>
-                                    <div class="media-body ml-15 fs-16">
-                                        <h3><a title="7 More Frequently Asked Interview Questions And Impactful Answers!" href="https://learning.shine.com/talenteconomy/career-help/7-more-frequently-asked-interview-questions-and-impactful-answers/" target="_blank">7 More Frequently Asked Interview Questions And Impactful Answers!</a></h3>
-                                    </div>
-                                </div>
-                            </li><!-- /. l1 - 5 -->
-                        </ul>
-
-</div>
-
-  </div>
-</div>
-
-
- <div id="snackbar"> </div>
-<!-- The Modal -->
-<div id="myModal" class="modal">
-
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <strong>Request a call</strong>
-<form class="form-group" method="post" id="callback_form">
-
-    <ul>
-<li>
-
-    <input class="form-control" placeholder="Name" type="text" name="name" value="{{request.session.full_name|safe}}">
-    <span class="error-txt"></span></li>
-    <li><input class="form-control" placeholder="Mobile Number" name="number" id="id_mobile"type="text" value="{{request.session.mobile_no|safe}}">
-        <span class="error-txt"></span>
-        </li>
-        {% if  page_obj %}
-            <input type="hidden" name="lsource" value="7">
-            <input type="hidden" name="product" value="{{page_obj.pk}}">
-            <input type="hidden" name="prd" value="{{page_obj.heading}}">
-            <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
-          {% endif %}
-    <li><textarea class="form-control" placeholder="Message" name='msg' rows="4"></textarea>
-    <span class="error-txt"></span>
-<li><button type="button" id="id_callback" class="request">Submit</button></li>
-    </ul>
-</form>
-  </div>
-
-</div>
- 
- {% block call_us %}
-    {% include "shop/partials/call_us.html" %}
- {% endblock call_us %}
-
- {% endblock container %}
-
- {% block footer %}
-    <!-- footer -->
-    {% include 'basic/footer.html' %}
- {% endblock footer %}
-
-{% block navigation %}
-                <!-- left side menu -->
-                {% include 'basic/navigation.html' %}
-      <div class="navbar-header" itemscope itemtype="http://schema.org/Organization" >
-      <a class="navbar-brand" href="{% url "homepage" %}"></a>
-      <meta itemprop="name" content="Shine">
-      <meta itemprop="url" content="https://learning.shine.com"/>
-    </div>
-            {% endblock navigation %}
-</div>
-
-{% endblock main_container %}
-
-{% block js_section %}
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"> </script>
-<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
-
-     {% compress js %}
-        <script type="text/javascript" src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.bxslider.js' %}"> </script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.simpler-sidebar.js' %}"> </script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"> </script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/slick.js' %}"></script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/cms/validate.js' %}"></script>
-        <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
-{% endcompress %}
-
-<script type="text/javascript">
-  jQuery(document).ready(function($){
-    $(".accordion_example1").smk_Accordion({
-      showIcon: true, //boolean
-      animation: true, //boolean
-      closeAble: false, //boolean
-      slideSpeed: 200 //integer, miliseconds
-    });
-  });
-</script>
-<script>
-// Get the modal
-var memodal = document.getElementById('myModal' );
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-// When the user clicks the button, open the modal
-btn.onclick = function() {
-    //modal.style.display = "block";
-    modal('myModal','block');
-}
-function modal(id,option){
-  document.getElementById(id).style.display = option;
-}
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-     modal('myModal','none');
-    <!--modal.style.display = "none";-->
-}
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == memodal) {
-        modal('myModal','none');
-    }
-}
-</script>
-
-<script src="{% static 'shinelearn/js/mobile/cms/jquery.swipebox.js' %}"></script>
-
-<script type="text/javascript">
-;( function( $ ) {
-  $( '.swipebox' ).swipebox();
-} )( jQuery );
-</script>
-
-{% endblock js_section %}
-
-{% block johukum %}
-  <!--script type='text/javascript' id='spd-busns-spt' async=''
-      src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
-      data-client='324ed0abb0694b0c66a6daecb178352d'>
-  </script-->
-{% endblock johukum %}
-
-{% block zendesk %}
-{% endblock zendesk %}
-
+    </div><!--/. body wrapper -->
+    
+        {% include 'basic/footer.html' %}
+        {% include 'basic/navigation-amp.html' %}
+</body>
+</html>
+    
