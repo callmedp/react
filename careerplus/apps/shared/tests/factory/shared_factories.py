@@ -11,7 +11,7 @@ from django.db.models.signals import post_save
 # inter-app imports
 from geolocation.models import Country
 from shop.models import (
-    Product, ProductClass, Category,
+    Product, ProductClass, Category, ProductCategory,
     CategoryRelationship, ProductAuditHistory, Skill,
     ProductSkill, ProductCategory)
 

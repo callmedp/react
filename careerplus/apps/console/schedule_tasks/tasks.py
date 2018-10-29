@@ -27,7 +27,7 @@ from celery.decorators import task
 User = get_user_model()
 
 
-# @task(name="gen_auto_login_token_task")
+@task(name="gen_auto_login_token_task")
 def gen_auto_login_token_task(task=None, user=None, next_url=None, exp_days=None):
     f = False
     try:
