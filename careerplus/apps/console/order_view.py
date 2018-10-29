@@ -2734,15 +2734,12 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         query_filters_exclude.update({'wc_sub_cat__in': [64, 65]})
         user = self.request.user
         if user.is_superuser:
-            query_filters.update({'assigned_to': None})
             pass
         elif user.has_perm('order.domestic_profile_update_assigner'):
             query_filters.update({'assigned_to': None})
-            # queryset = queryset.filter(assigned_to=None)
         elif user.has_perm('order.domestic_profile_update_assignee'):
             query_filters.update({'assigned_to':user})
             query_filters_exclude.update({'oi_status':4})
-            # queryset = queryset.filter(assigned_to=user).exclude(oi_status=4)
         else:
             return queryset.none()
         try:
@@ -2750,17 +2747,16 @@ class WhatsappListQueueView(ListView, PaginationMixin):
                 if self.sel_opt == 'number':
                     if self.query[:2].lower() == 'cp':
                         query_filters.update({'order__number__iexact': self.query})
-                        # queryset = queryset.filter(order__number__iexact=self.query)
                     else:
                         return queryset.none()
                 elif self.sel_opt == 'id' and self.query.isdigit():
                     query_filters.update({'id' : self.query})
-                    # queryset = queryset.filter(id=self.query)
+
                 elif self.sel_opt == 'mobile':
-                    # queryset = queryset.filter(order__mobile=self.query)
+
                     query_filters.update({'order__mobile' : self.query})
                 elif self.sel_opt == 'email':
-                    # queryset = queryset.filter(order__email__iexact=self.query)
+
                     query_filters.update({'order__email__iexact' : self.query})
                 elif self.sel_opt == 'product':
                     queryset = queryset.select_related('parent')
@@ -2774,10 +2770,10 @@ class WhatsappListQueueView(ListView, PaginationMixin):
                 del query_filters['assigned_to']
             if self.oi_status == '1':
 
-                # queryset = queryset.filter(assigned_to__isnull=False)
+
                 query_filters.update({'assigned_to__isnull':False})
             else:
-                # queryset = queryset.filter(oi_status=self.oi_status)
+           
                 query_filters.update({'oi_status':self.oi_status})
 
         return queryset.filter(**query_filters).exclude(**query_filters_exclude).select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
