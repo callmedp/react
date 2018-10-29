@@ -64,7 +64,10 @@ def update_initiat_orderitem_sataus(order=None):
                         assigned_to=oi.assigned_to)
                 else:
                     last_oi_status = oi.oi_status
-                    oi.oi_status = 2
+                    if oi.product.id in settings.FEATURE_PROFILE_EXCLUDE:
+                        oi.oi_status = 5
+                    else:
+                        oi.oi_status = 2
                     oi.last_oi_status = last_oi_status
                     oi.save()
                     oi.orderitemoperation_set.create(

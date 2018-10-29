@@ -254,6 +254,11 @@ urlpatterns += [
     url(r'^queue/booster/$',
         order_view.BoosterQueueVeiw.as_view(), name='queue-booster'),
 
+    url(r'^queue/whatsapplist/$',
+        order_view.WhatsappListQueueView.as_view(),
+        name='queue-whatsappjoblist'),
+
+
     url(r'^queue/domesticprofileupdate/$',
         order_view.DomesticProfileUpdateQueueView.as_view(),
         name='queue-domesticprofileupdate'),

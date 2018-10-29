@@ -243,6 +243,7 @@ class OIFilterForm(forms.Form):
             attrs={'class': 'form-control'}))
 
     def __init__(self, *args, **kwargs):
+        queue_name = kwargs.pop('queue_name', None)
         super(OIFilterForm, self).__init__(*args, **kwargs)
         from django.contrib.auth.models import Permission
         from django.db.models import Q
@@ -260,6 +261,9 @@ class OIFilterForm(forms.Form):
         # self.fields['delivery_type'].choices = NEW_DELIVERY_TYPE
 
         NEW_OI_OPS_STATUS = ((-1, 'Select Status'),) + OI_OPS_STATUS
+        if queue_name == 'queue-whatsappjoblist':
+            NEW_OI_OPS_STATUS = ((-1, 'Select Status'),(1, 'Assigned'),(4, 'Closed'),)
+
         self.fields['oi_status'].choices = NEW_OI_OPS_STATUS
 
         draft_choices = [(-1, "Select Draft Level")]
@@ -323,6 +327,8 @@ class OIActionForm(forms.Form):
                 (-10, "Approve International Profile Update"),  # domestic Profile Update approved
                 (-11, "Reject International Profile Update"),
             )
+        elif queue_name == "queue-whatsappjoblist":
+            ACTION_CHOICES += ((-15, "mark closed")), # mark whatsapp jobs inactive
 
         else:
             ACTION_CHOICES += ((-1, "Export As Csv"),)
