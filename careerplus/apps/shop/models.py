@@ -992,8 +992,6 @@ class Product(AbstractProduct, ModelMeta):
             if self.name:
                 if not self.heading:
                     self.heading = self.get_heading()
-                if not self.title:
-                    self.title = self.get_title()
                 if not self.image_alt:
                     self.image_alt = self.name
                 if not self.meta_desc:
@@ -1004,7 +1002,7 @@ class Product(AbstractProduct, ModelMeta):
                 for var in variations:
                     var.vendor = self.vendor
                     var.save()
-        self.title = self.get_title()
+            self.title = self.get_title()
         self.first_save = True
         if self.id:
             original_product = Product.objects.get(id=self.id)
