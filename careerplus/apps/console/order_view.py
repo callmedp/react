@@ -2734,6 +2734,8 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         query_filters_exclude.update({'wc_sub_cat__in': [64, 65]})
         user = self.request.user
         if user.is_superuser:
+            query_filters.update({'assigned_to': None})
+
             pass
         elif user.has_perm('order.domestic_profile_update_assigner'):
             query_filters.update({'assigned_to': None})
@@ -2765,16 +2767,17 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
-        if self.oi_status:
+        if self.oi_status and self.oi_status != '-1':
             if 'assigned_to' in query_filters.keys():
                 del query_filters['assigned_to']
             if self.oi_status == '1':
-
-
                 query_filters.update({'assigned_to__isnull':False})
+                query_filters_exclude.update({'oi_status':4})
             else:
-
                 query_filters.update({'oi_status':self.oi_status})
 
-        return queryset.filter(**query_filters).exclude(**query_filters_exclude).select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
+        queryset = queryset.filter(**query_filters)
+        for key,value in query_filters_exclude.items():
+            queryset=queryset.exclude(**{key:value})
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 

@@ -76,7 +76,7 @@
           </div>
       </form>
     </div>
-
+       {% if perms.order.domestic_profile_update_assigner %}
     <div class="row top_tiles">
 
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -111,7 +111,7 @@
         </div>
         <!-- /modals -->
     </div>
-
+{%endif%}
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
         {% if messages %}
