@@ -262,7 +262,7 @@ class OIFilterForm(forms.Form):
 
         NEW_OI_OPS_STATUS = ((-1, 'Select Status'),) + OI_OPS_STATUS
         if queue_name == 'queue-whatsappjoblist':
-            NEW_OI_OPS_STATUS = ((-1, 'Select Status'),(1, 'Assigned'),(4, 'Closed'),)
+            NEW_OI_OPS_STATUS = ((-1, 'Select Status'), (1, 'Allocated'), (4, 'Closed'),)
 
         self.fields['oi_status'].choices = NEW_OI_OPS_STATUS
 
