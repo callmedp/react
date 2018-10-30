@@ -52,7 +52,7 @@ span.twitter-typeahead .tt-suggestion:focus {
   border-radius: 3px;
 }
 span.twitter-typeahead {
-  width: auto;
+  width: 100%;
 }
 .input-group span.twitter-typeahead {
   display: block !important;
