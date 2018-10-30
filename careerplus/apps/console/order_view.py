@@ -2403,7 +2403,7 @@ class ActionOrderItemView(View):
 
         elif action == -15 and queue_name == "whatsappjoblist":
             try:
-                orderitems = OrderItem.objects.filter(id__in=selected_id).exclude(oi_status=4).select_related('order', 'product', 'partner')
+                orderitems = OrderItem.objects.filter(id__in=selected_id,product__type_flow=5).exclude(oi_status=4).select_related('order', 'product', 'partner')
                 counter = 0
                 for obj in orderitems:
                     last_oi_status = obj.oi_status
@@ -2730,7 +2730,7 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         query_filters_exclude = dict()
         queryset = super(WhatsappListQueueView, self).get_queryset()
         query_filters.update({'order__status__in': [1, 2, 3], 'product__type_flow': 5, 'no_process': False,
-            'order__welcome_call_done': True})
+          'product_id__in':settings.FEATURE_PROFILE_EXCLUDE,'order__welcome_call_done': True})
         query_filters_exclude.update({'wc_sub_cat__in': [64, 65]})
         user = self.request.user
         if user.is_superuser:
@@ -2773,7 +2773,7 @@ class WhatsappListQueueView(ListView, PaginationMixin):
 
                 query_filters.update({'assigned_to__isnull':False})
             else:
-           
+
                 query_filters.update({'oi_status':self.oi_status})
 
         return queryset.filter(**query_filters).exclude(**query_filters_exclude).select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
