@@ -2399,20 +2399,28 @@ class ActionOrderItemView(View):
                 messages.add_message(request, messages.ERROR, str(e))
             return HttpResponseRedirect(reverse('console:queue-' + queue_name))
 
-
-
         elif action == -15 and queue_name == "whatsappjoblist":
             try:
-                orderitems = OrderItem.objects.filter(id__in=selected_id,product__type_flow=5).exclude(oi_status=4).select_related('order', 'product', 'partner')
+                orderitems = OrderItem.objects.filter(
+                    id__in=selected_id,
+                    oi_status=5,
+                    product__type_flow=5).exclude(oi_status=4).select_related('order', 'product', 'partner')
                 counter = 0
                 for obj in orderitems:
                     last_oi_status = obj.oi_status
                     obj.oi_status = 4  # Closed
                     obj.last_oi_status = last_oi_status
                     obj.save()
+
+                    obj.orderitemoperation_set.create(
+                        oi_status=6,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+
                     obj.orderitemoperation_set.create(
                         oi_status=obj.oi_status,
-                        last_oi_status=last_oi_status,
+                        last_oi_status=6,
                         assigned_to=obj.assigned_to,
                         added_by=request.user)
                     counter += 1
@@ -2718,7 +2726,7 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         var = self.sel_opt
         alert = messages.get_messages(self.request)
         initial = {"oi_status": self.oi_status}
-        filter_form = OIFilterForm(initial,queue_name='queue-whatsappjoblist')
+        filter_form = OIFilterForm(initial, queue_name='queue-whatsappjoblist')
         context.update({"assignment_form": AssignmentActionForm(), "messages": alert, "query": self.query,
             "message_form": MessageForm(), "filter_form": filter_form,
             "action_form": OIActionForm(queue_name="queue-whatsappjoblist"), var: 'checked', })
@@ -2730,7 +2738,7 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         query_filters_exclude = dict()
         queryset = super(WhatsappListQueueView, self).get_queryset()
         query_filters.update({'order__status__in': [1, 2, 3], 'product__type_flow': 5, 'no_process': False,
-          'product_id__in':settings.FEATURE_PROFILE_EXCLUDE,'order__welcome_call_done': True})
+          'product_id__in': settings.FEATURE_PROFILE_EXCLUDE, 'order__welcome_call_done': True})
         query_filters_exclude.update({'wc_sub_cat__in': [64, 65]})
         user = self.request.user
         if user.is_superuser:
@@ -2738,8 +2746,8 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         elif user.has_perm('order.domestic_profile_update_assigner'):
             query_filters.update({'assigned_to': None})
         elif user.has_perm('order.domestic_profile_update_assignee'):
-            query_filters.update({'assigned_to':user})
-            query_filters_exclude.update({'oi_status':4})
+            query_filters.update({'assigned_to': user})
+            query_filters_exclude.update({'oi_status': 4})
         else:
             return queryset.none()
         try:
@@ -2750,7 +2758,7 @@ class WhatsappListQueueView(ListView, PaginationMixin):
                     else:
                         return queryset.none()
                 elif self.sel_opt == 'id' and self.query.isdigit():
-                    query_filters.update({'id' : self.query})
+                    query_filters.update({'id': self.query})
 
                 elif self.sel_opt == 'mobile':
 
