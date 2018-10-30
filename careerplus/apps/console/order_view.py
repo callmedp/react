@@ -2699,6 +2699,8 @@ class ReviewModerateView(UpdateView):
         return context
 
 
+@Decorate(stop_browser_cache())
+@method_decorator(permission_required('order.can_show_domestic_profile_update_queue', login_url='/console/login/'), name='dispatch')
 class WhatsappListQueueView(ListView, PaginationMixin):
     context_object_name = 'object_list'
     template_name = 'console/order/whatsapp_list.html'
