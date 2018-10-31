@@ -101,16 +101,34 @@
         </li>
       </ul>
     {% endif %}
+
+    {% if perms.shop.console_view_faculty %}
+    <h3>University Faculty</h3>
+    <ul class="nav side-menu">
+
+      <li><a><i class="fa fa-university"></i> Faculty <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+          <li><a href="{% url 'console:faculty-list' %}">Faculty</a></li>
+        </ul>
+      </li>
+    </ul>
+    {% endif %}
     
     {% if request.user|has_group:PRODUCT_GROUP_LIST %}
         <h3>Live Catalog</h3>
         <ul class="nav side-menu">
 
-            <li><a><i class="fa fa-certificate"></i> Skill <span class="fa fa-chevron-down"></span></a>
-              <ul class="nav child_menu">
-                <li><a href="{% url 'console:skill-list' %}">Skill</a></li>
-              </ul>
-            </li>
+          <!--li><a><i class="fa fa-certificate"></i> Faculty <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url 'console:faculty-list' %}">Faculty</a></li>
+            </ul>
+          </li-->
+
+          <li><a><i class="fa fa-certificate"></i> Skill <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url 'console:skill-list' %}">Skill</a></li>
+            </ul>
+          </li>
 
           {% if perms.shop.console_change_category %}
             <li><a><i class="fa fa-bookmark"></i> Category <span class="fa fa-chevron-down"></span></a>

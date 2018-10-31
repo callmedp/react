@@ -258,7 +258,11 @@ OI_EMAIL_STATUS = (
     (171, 'Sent Flow6 Process Mailer'),
 
     # cashback wallet status: 181 - 190
-    (181, '')
+    (181, ''),
+
+    # flow14 :191 - 200
+    (191, 'Sent Flow14 Process Mailer'),
+    (192, 'Sent Flow14 Service Initiation Mailer'),
 )
 
 OI_SMS_STATUS = (
@@ -341,6 +345,11 @@ OI_SMS_STATUS = (
     # flow6 :171 - 180
     (171, 'Sent Flow6 Process Sms'),
     (172, 'Sent Flow6 Service Initiation Sms'),
+
+
+    # flow14 :191 - 200
+    (191, 'Sent Flow14 Process Sms'),
+    (192, 'Sent Flow14 Service Initiation Sms'),
 )
 
 REFUND_MODE = (

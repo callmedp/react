@@ -1,6 +1,43 @@
 
 // Products Box Items JS Starts here
 $(document).ready(function() { 
+	var showChar = 280 ;  // How many characters are shown by default
+	var ellipsestext = "..." ;
+	var moretext = " Read more" ;
+	var lesstext = " Read less" ;
+
+	function showMoreLess(){
+	  // Configure/customize these variables.
+
+	  $('.more1 p').each(function() {
+	    var content = $(this).html();
+
+	    if(content.length > showChar) {
+	        var c = content.substr(0, showChar);
+	        var h = content.substr(showChar, content.length - showChar);
+	        var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span style="display: none;">' + h + '</span>&nbsp;&nbsp;<a href="#" class="morelink1" style="display:inline-block;">' + moretext + '</a></span>';
+
+
+	        $(this).html(html);
+	    }
+
+	  });
+
+	};
+	showMoreLess();
+    $(".morelink1").click(function(){
+      if($(this).hasClass("less")) {
+          $(this).removeClass("less");
+          $(this).html(moretext);
+      } else {
+          $(this).addClass("less");
+          $(this).html(lesstext);
+      }
+      $(this).parent().prev().toggle();
+      $(this).prev().toggle();
+      return false;
+    });
+
 
 	$("#share-btn").click(function() {
 	    $("#share-icon").slideToggle("slow");
@@ -26,6 +63,12 @@ $(document).ready(function() {
 		} else {
 			$('#hide-second').removeClass('remove-second');
 		}
+
+		if (scroll >= 900) {
+			$('#enrollNow').addClass('stick-enroll');
+		} else {
+			$('#enrollNow').removeClass('stick-enroll');
+		}
 	});
 
 	$("#search-inupt").click(function() {
@@ -41,6 +84,8 @@ $(document).ready(function() {
 		arrows: false,
 		infinite: false
 	});
+
+
 
 	$(".blog-slider").slick({
 		autoplay:false,
@@ -81,6 +126,7 @@ $(document).ready(function() {
 		slidesToScroll: 1,
 		infinite: false
 	});
+
 
 	$(".trending-slide").slick({
 		autoplay:false,
@@ -136,6 +182,38 @@ $(document).ready(function() {
   		slidesToScroll: 1
 	});
 
+	// Executive course Function starts here 
+	$(".faculty-profile").slick({
+		autoplay:false,
+		arrows: true,
+		dots: false,
+		// variableWidth: true,
+		slidesToShow: 1,
+		slidesToScroll: 1,
+		infinite: false
+	});
+
+
+	$(".youMayLike-slider").slick({
+		autoplay:false,
+		arrows: false,
+		dots: true,
+		infinite: true,
+		variableWidth: true,
+  		slidesToShow: 2,
+  		slidesToScroll: 1
+	});
+	
+	$(".info-slider").slick({
+		autoplay:true,
+		arrows: false,
+		dots: false,
+		infinite: true
+	});
+
+
+
+
 });// Document ready function ends here
 
 function goBack() {
@@ -163,3 +241,20 @@ document.ontouchmove = function ( event ) {
 $("#uploadBtn").onchange = function () {
     $("#uploadFile").value = this.value;
 };
+
+
+
+$('.btn-openPopup, .custom-modal').each(function (idx) {
+	var winnerId = "popup-" + idx;
+	this.id = winnerId;
+	var btn = $("#popup-" + idx);
+	var closeBtn = $(".close-popup");
+	var popId = $('#win-'+ idx);
+	btn.click(function(e) {
+		e.preventDefault();
+		$(popId).addClass('block');
+	}); 
+	closeBtn.click(function() {
+		$(popId).removeClass('block');
+	});
+});

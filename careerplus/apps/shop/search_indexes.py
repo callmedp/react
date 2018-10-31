@@ -140,6 +140,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pCtgs = indexes.MultiValueField(null=True)
     pCtgsD = indexes.CharField(indexed=False)
 
+    # university_courses_detail
+    pUncdl = indexes.MultiValueField(null=True, indexed=False)
+
     def get_model(self):
         return Product
 
@@ -157,7 +160,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         
         for cat in categories:
             allowed_levels = [4]
-            if cat.is_service:
+            if cat.is_service or cat.is_university or cat.is_skill:
                 allowed_levels.append(3)
             if cat.type_level in allowed_levels:
                 pcat = cat.get_parent()
@@ -888,5 +891,33 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     'pop_list': pop_list
                 })
         return json.dumps(pop_dict)
-    
 
+    def prepare_pUncdl(self, obj):
+        detail = {}
+        if obj.type_flow == 14:
+            detail['launchdate'] = obj.university_course_detail.batch_launch_date.strftime('%d %b %Y').upper() \
+                if obj.university_course_detail.batch_launch_date else ''
+            detail['applydate'] = obj.university_course_detail.apply_last_date.strftime('%d %b %Y').upper() \
+                if obj.university_course_detail.apply_last_date else ''
+            detail['payment_deadline'] = obj.university_course_detail.payment_deadline.strftime('%d/%m/%Y') \
+                if obj.university_course_detail.payment_deadline else ''
+            detail['benefits'] = obj.university_course_detail.get_benefits
+            detail['app_process'] = obj.university_course_detail.get_application_process
+            detail['assesment'] = obj.university_course_detail.assesment
+            detail['eligibility_criteria'] = obj.university_course_detail.eligibility_criteria
+            detail['attendees_criteria'] = obj.university_course_detail.attendees_criteria
+            detail['highlighted_benefits'] = obj.university_course_detail.highlighted_benefits
+            sample_certificate = obj.university_course_detail.sample_certificate
+            detail['sample_certificate'] = sample_certificate.url if sample_certificate else ''
+            brochure_attr = obj.attributes.filter(name='Brochure')
+            detail['brochure'] = brochure_attr[0].productattributes.first().value_file.url if brochure_attr else ''
+            payment_list = []
+            for payment in obj.university_course_payment.filter(active=True):
+                data = {}
+                data['installment_fee'] = str(payment.installment_fee)
+                data['ldpayment'] = payment.last_date_of_payment.strftime('%d/%m/%Y')
+
+                payment_list.append(data)
+            detail['payment'] = payment_list
+            return json.dumps(detail)
+        return ''

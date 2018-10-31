@@ -13,8 +13,8 @@ from geolocation.models import Country
 from shop.models import (
     Product, ProductClass, Category, ProductCategory,
     CategoryRelationship, ProductAuditHistory, Skill,
-    ProductSkill, ProductCategory)
-
+    ProductSkill, ProductCategory, Faculty)
+from shop.choices import FACULTY_TEACHER
 from order.models import Order, OrderItem
 from users.models import User, UserProfile
 from partner.models import Vendor
@@ -25,9 +25,9 @@ class CategoryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Category
         django_get_or_create = ('name',)
-
+    id = 1
+    type_level = 3
     name = factory.LazyAttributeSequence(lambda o, n: "test_category_level_%d" % o.type_level)
-
     active = True
     banner = ''
     career_outcomes = 'First outcome, second outcome'
@@ -87,7 +87,7 @@ class ProductClassFactory(factory.django.DjangoModelFactory):
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
-        django_get_or_create = ('email',)
+        django_get_or_create = ('email', )
 
     name = 'ritesh'
     email = 'ritesh.bisht93@gmail.com'
@@ -352,3 +352,26 @@ class WriterFactory(UserFactory):
     email = 'writer1@gmail.com'
     userprofile = factory.RelatedFactory(
         UserProfileFactory, 'user')
+
+
+class UniversityCategoryFactory(CategoryFactory):
+    active = True
+    is_university = True
+    is_service = False
+    is_skill = False
+    type_level = 3
+
+
+class FacultyFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Faculty
+        django_get_or_create = ('name', )
+    name = "Faculty"
+    role = FACULTY_TEACHER
+    image = ''
+    designation = 'Asst Professor'
+    description = 'test description'
+    short_desc = 'test short description'
+    faculty_speak = 'test faculty speak'
+    institute = factory.SubFactory(UniversityCategoryFactory)
+    active = True

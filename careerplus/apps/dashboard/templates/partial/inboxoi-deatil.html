@@ -176,14 +176,14 @@
 
                           {% if op.oi_draft %}
                               <a href="{% url "dashboard:dashboard-resumedownload" oi.order.pk %}?path={{op.oi_draft.name}}">Download</a>
-                          {% elif oi.oi_status == 2 and op.oi_status == 2%}
+                          {% elif oi.oi_status == 2 and op.oi_status == 2 %}
                               <a role="button" class="upload-resume">Upload Resume</a>
                           {% endif %}
                         </datalist>
                     </li>
                 {% endfor %}
 
-            {% elif oi.product.type_flow == 2 %}
+            {% elif oi.product.type_flow == 2 or  oi.product.type_flow == 14 %}
                 {% for op in ops %}
                     <li>
                         <datalist class="col-sm-3">
