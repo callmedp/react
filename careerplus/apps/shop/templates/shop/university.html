@@ -96,7 +96,7 @@
                               Download Brochure
                         </a>
                       {% else %}
-                       <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" {% if request.session.university_course%} download={{ university_detail.brochure }}{% endif%}><i class="exe-icon-brochure"></i>
+                       <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" {% if request.session.university_course%} download={{ university_detail.brochure }}{% endif%} target='_blank'><i class="exe-icon-brochure"></i>
                               Download Brochure
                         </a>
                       {% endif %}
@@ -673,7 +673,7 @@
                                       Download Brochure
                                 </a>
                               {% else %}
-                               <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher"><i class="exe-icon-brochure"></i>
+                               <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" target="_blank"><i class="exe-icon-brochure"></i>
                                       Download Brochure
                                 </a>
                               {% endif %}
