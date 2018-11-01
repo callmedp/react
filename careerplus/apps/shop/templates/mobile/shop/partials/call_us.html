@@ -7,6 +7,11 @@
             <a href="tel:{{ggn_contact_full}}"><span></span>Call Us</a>
         </div>
 
+        {% if amp %}
+        <div class="ui-block-c"><a href="#"> <span></span>Chat </a></div>
+        {% else %}
+        
         <div class="ui-block-c"><a href="JavaScript:void(0);"> <span></span>Chat </a></div>
+        {% endif %}
     </div><!-- call us and chat widget ends here -->
 </div>

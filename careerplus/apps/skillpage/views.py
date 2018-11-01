@@ -203,7 +203,6 @@ class SkillPageView(DetailView, SkillPageMixin):
 
 class ServiceDetailPage(DetailView):
     model = Category
-    template_name = "services/detail.html"
     slug_field = 'slug'
     slug_url_kwarg = 'category_slug'
     pk_url_kwarg = 'category_id'
@@ -212,6 +211,11 @@ class ServiceDetailPage(DetailView):
 
     PRODUCT_PAGE_SIZE = 5
     REVIEW_PAGE_SIZE = 5
+
+    def get_template_names(self):
+        if self.request.amp:
+            return ["services/detail-amp.html"]
+        return ["services/detail.html"]
 
     def get_queryset(self):
         return Category.objects.filter(is_service=True)
