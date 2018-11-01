@@ -64,7 +64,8 @@ THIRD_PARTY_APPS = [
     'haystack',
     'celery',
     'compressor',
-    'storages'
+    'storages',
+    'django_filters'
 ]
 
 # Apps specific for this project go here.

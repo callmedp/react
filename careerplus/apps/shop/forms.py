@@ -691,23 +691,25 @@ class ProductAttributeForm(forms.ModelForm):
         if 'initial' not in kwargs:
             kwargs['initial'] = {}
         self.set_initial_attribute_values(product_class, kwargs)
-        
+
     def set_initial_attribute_values(self, product_class, kwargs):
         instance = kwargs.get('instance')
         if instance is None:
             return
-        for attribute in product_class.attributes.filter(active=True):
-            try:
-                value = instance.productattributes.get(
-                    attribute=attribute).value
-            except exceptions.ObjectDoesNotExist:
-                pass
-            else:
-                kwargs['initial']['attribute_%s' % attribute.name] = value
+        prdt_class_attr = list(product_class.attributes.filter(active=True).values_list('id',flat=True))
+        for attr in instance.productattributes.filter(attribute__in=prdt_class_attr).select_related('attribute').select_related('value_option'):
+            kwargs['initial']['attribute_%s' % attr.attribute.name] = attr.value
+        # for attribute in product_class.attributes.filter(active=True):
+        #     try:
+        #         value = instance.productattributes.get(
+        #             attribute=attribute).value
+        #     except exceptions.ObjectDoesNotExist:
+        #         pass
+        #     else:
+        #         kwargs['initial']['attribute_%s' % attribute.name] = value
 
     def add_attribute_fields(self, product_class):
-        
-        for attribute in product_class.attributes.filter(active=True):
+        for attribute in product_class.attributes.filter(active=True).select_related('option_group'):
             field = self.get_attribute_field(attribute)
             if field:
                 self.fields['attribute_%s' % attribute.name] = field
