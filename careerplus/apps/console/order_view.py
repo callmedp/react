@@ -1826,7 +1826,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(BoosterQueueVeiw, self).get_queryset()
         queryset = queryset.filter(
-            order__status=1, product__type_flow=7,
+            order__status__in=[1,3], product__type_flow=7,
             no_process=False, oi_status__in=[5, 61, 62, 4],
             order__welcome_call_done=True).exclude(
             wc_sub_cat__in=[64, 65]
@@ -1908,7 +1908,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
         obj_pk = request.POST.get('oi_pk', None)
         if form.is_valid():
             try:
-                orderitem = OrderItem.objects.get(pk=obj_pk, oi_status__in=[5, 62])
+                orderitem = OrderItem.objects.get(pk=obj_pk, oi_status__in=[5, 62,4])
                 data = {
                     "oi_draft": request.FILES.get('oi_resume', ''),
                 }
