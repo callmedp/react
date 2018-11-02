@@ -1,0 +1,847 @@
+{% load humanize search_tags compress %}
+{% load static compress %}
+<!doctype html>
+<html amp lang="en" itemscope itemtype="http://www.schema.org/WebPage">
+  <head>
+    <meta charset="utf-8">
+    <title>{% if meta.title %}{{ meta.title }}{% endif %}</title>
+    <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    {% include 'meta/meta.html' %}
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="amp-google-client-id-api" content="googleanalytics">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
+
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
+    <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
+    <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+    <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+
+    <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
+    <style amp-custom>
+
+
+        body,
+html {
+	height: 100%
+}
+
+h1,
+h4,
+h5 {
+	color: #fff
+}
+
+.icon-cart,
+.main-menu,
+header {
+	position: relative
+}
+
+.define-flow li,
+li,
+ol,
+ul {
+	list-style: none
+}
+
+*,
+:after,
+:before {
+	box-sizing: border-box
+}
+
+body {
+	color: #333;
+	display: block;
+	font-family: "Open Sans", sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 20px;
+	margin: 0;
+	padding: 0
+}
+
+h1 {
+	font-size: 2em
+}
+
+h4,
+h5 {
+	margin-top: 20px
+}
+
+h5 {
+	font-size: .875em
+}
+
+em,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+i,
+li,
+p,
+table,
+td,
+th,
+tr,
+ul {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: 400;
+	text-shadow: none;
+	text-decoration: none
+}
+
+figure {
+	margin: 0
+}
+
+a {
+	color: #2f5ea6;
+	text-decoration: none
+}
+
+.pull-right {
+	float: right
+}
+
+.pull-left,
+.pull-left,
+.w100fl {
+	float: left
+}
+
+.text-right {
+	text-align: right
+}
+
+.backthis,
+.btn,
+.btn-sm,
+.define-flow li,
+.icon-cart span,
+.text-center,
+footer {
+	text-align: center
+}
+
+.he-auto {
+	height: auto
+}
+
+.clearfix {
+	clear: both;
+    display: table;
+}
+
+.detail-wrap .provided-by,
+.detail-wrap .select-provider,
+.input-group .form-control,
+.input-group-addon,
+.input-group-btn {
+	display: table-cell
+}
+
+.mb-10 {
+	margin-bottom: 10px
+}
+
+.c6 {
+	color: #666
+}
+
+.row {
+	margin-left: -15px;
+	margin-right: -15px
+}
+
+.pb-0 {
+	padding-bottom: 0
+}
+
+.fs-10 {
+	font-size: 10px;
+	line-height: 1
+}
+
+.btn,
+.btn-sm {
+	background-color: transparent;
+	background-image: none;
+	border: 1px solid transparent;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 1em;
+	font-weight: 400;
+	line-height: 1.6;
+	margin-bottom: 0;
+	padding: 10px 12px;
+	touch-action: manipulation;
+	user-select: none;
+	vertical-align: middle;
+	white-space: nowrap
+}
+
+
+
+.fs-11 {
+	font-size: 11px;
+	line-height: 1.2
+}
+
+.main-heading,
+h2 {
+	font-size: 21px;
+	font-weight: 600;
+	line-height: 25px;
+	margin-bottom: 10px
+}
+
+hr {
+	border: 0;
+	border-top: 1px solid #ddd;
+	margin: 10px 0 15px
+}
+
+header {
+	height: 50px;
+	width: 100%;
+	z-index: 9;
+	background-color: #2f5ea6;
+	padding: 15px
+}
+
+.main-menu {
+	z-index: 1
+}
+
+.sprite,
+[class^=icon-] {
+	background-image:url("{% static 'shinelearn/images/mobile/common/sprites.svg'%}");
+	display: block;
+	text-indent: 200%;
+	overflow: hidden;
+	white-space: nowrap
+}
+
+.icon-cart {
+	background-position: -3px -46px;
+	width: 18px;
+	height: 18px;
+	display: block;
+	margin-left: 25px;
+	overflow: visible;
+	text-indent: -1000px
+}
+
+.icon-cart span {
+	display: block;
+	height: 15px;
+	width: 15px;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	-ms-border-radius: 50%;
+	border-radius: 50%;
+	position: absolute;
+	background-color: #fecd2f;
+	color: #000;
+	line-height: 15px;
+	left: -7px;
+	top: -10px;
+	text-indent: 0;
+	font-size: 9px;
+	font-weight: 600;
+	letter-spacing: -1px
+}
+
+
+.heading-back {
+	font-size: 1.25em;
+	color: #fff;
+	font-weight: 600;
+	margin: 15px 0 0;
+	line-height: 26px
+}
+
+.detail-wrap {
+	position: relative;
+	display: table;
+	width: 100%
+}
+
+
+.call-us .ui-block-a span,
+.rating .fill-star,
+.rating .unfill-star {
+	background-image:url("{% static 'shinelearn/images/mobile/common/sprites.svg'%}")
+}
+
+@media (max-width:320px) {
+	.detail-wrap .select-provider .form-control {
+		padding-right: 15px
+	}
+}
+
+.media-body,
+.media-left,
+.media-right {
+	display: table-cell;
+	vertical-align: top
+}
+
+.body-wrapper {
+	width: 100%;
+	padding: 0 0 65px;
+	clear: both
+}
+
+.icon-comments,
+.rating sup {
+	width: 13px;
+	display: inline-block;
+	height: 12px;
+	position: relative
+}
+
+.rating-wrap {
+	margin-bottom: 10px;
+	color: #666
+}
+
+.rating {
+	color: #666;
+	margin: 0 5px 0 0;
+	line-height: 1.5;
+	display: inline-block
+}
+
+.rating .fill-star {
+	background-position: -35px -110px
+}
+
+.rating .unfill-star {
+	background-position: -50px -110px
+}
+
+.rating sup {
+	top: 5px
+}
+
+.jobs-icon-wrap li {
+	display: inline-block;
+	margin: 0 14px
+}
+
+.jobs-icon-wrap li:first-child {
+	margin-left: 0;
+	margin-right: 0
+}
+
+.jobs-icon-wrap li:last-child {
+	margin-right: 0
+}
+
+@media (max-width:320px) {
+	.jobs-icon-wrap li {
+		margin: 0 8px
+	}
+}
+
+.container {
+	padding: 15px 0
+}
+
+.content-box {
+	padding: 15px
+}
+
+.free-sample {
+	padding: 20px;
+	display: block;
+	background: #fff;
+	margin: 30px 0 0
+}
+
+.free-sample strong {
+	font-size: 16px;
+	font-weight: 600;
+	display: block
+}
+
+.free-sample ul {
+	font-size: 13px;
+	font-weight: 600;
+	display: block;
+	list-style-type: none;
+	margin: 10px 0 0;
+	padding: 0
+}
+
+.free-sample ul li {
+	display: block;
+	margin-bottom: 8px
+}
+
+.free-sample ul li a {
+	line-height: 16px
+}
+
+.free-sample .sample-pic {
+	background: url(../images/sprite.png) -715px -309px no-repeat;
+	width: 84px;
+	height: 110px;
+	display: inline-block;
+	float: right;
+	margin: 5px -10px 0 0
+}
+
+.ui-grid-a {
+	float: left;
+	width: auto;
+	margin: 0
+}
+
+.ui-block-a,
+.ui-block-b,
+.ui-block-c {
+	float: left;
+	padding: 5px;
+	width: 50%
+}
+
+footer {
+	background-color: #ebebeb;
+	bottom: 0;
+	font-size: 80%;
+	left: 0;
+	position: absolute;
+	width: 100%;
+	color: #666
+}
+
+.pb-60 {
+	padding-bottom: 60px
+}
+
+.stick_bottom {
+	position: fixed;
+	bottom: 0;
+	z-index: 999;
+	background-color: #fff;
+	-webkit-box-shadow: 0 -2px 4px 1px rgba(0, 0, 0, .1);
+	-moz-box-shadow: 0 -2px 4px 1px rgba(0, 0, 0, .1);
+	box-shadow: 0 -2px 4px 1px rgba(0, 0, 0, .1);
+	width: 100%
+}
+
+.level-one,
+.login_content {
+	z-index: 9;
+	left: 0
+}
+
+.call-us .ui-grid-a {
+	width: 100%;
+	margin: 0
+}
+
+.block-3 .ui-block-a,
+.block-3 .ui-block-b,
+.block-3 .ui-block-c {
+	width: 50%;
+	padding: 15px 10px;
+	color: #fff;
+	height: 50px;
+	float: left
+}
+
+.block-3 .ui-block-c {
+	display: none
+}
+
+.call-us .ui-block-a a,
+.call-us .ui-block-b a,
+.call-us .ui-block-c a {
+	color: #fff
+}
+
+.call-us .ui-block-a {
+	background-color: #3f8bff;
+	font-size: 1em
+}
+
+.call-us .ui-block-b {
+	background-color: #5b9cff
+}
+
+.call-us .ui-block-c {
+	background-color: #3f8bff
+}
+
+.call-us .ui-block-a span {
+	background-position: -47px -216px;
+	width: 16px;
+	height: 12px;
+	display: inline-block;
+	margin-right: 5px;
+	position: relative;
+	top: 1px
+}
+
+.call-us .ui-block-b span,
+.call-us .ui-block-c span {
+	background-image:url("{% static 'shinelearn/images/mobile/common/sprites.svg'%}");
+	margin-right: 5px;
+	top: 3px;
+	display: inline-block;
+	position: relative
+}
+
+.call-us .ui-block-b span {
+	background-position: 0 -215px;
+	width: 16px;
+	height: 16px
+}
+
+.call-us .ui-block-c span {
+	background-position: -22px -216px;
+	width: 20px;
+	height: 15px
+}
+
+.box {
+	padding: 15px;
+	box-shadow: 0 0 15px rgba(0, 0, 0, .1);
+	background-color: #fff
+}
+
+.w100fl {
+	width: 100%
+}
+
+.media-left {
+	padding-right: 15px
+}
+
+.user_details span {
+	border-radius: 100%;
+	overflow: hidden
+}
+
+.user_details .btn {
+	-moz-border-radius: 4px;
+	-ms-border-radius: 4px
+}
+
+.btn-outline {
+	border: 1px solid #2f5ea6;
+	color: #2f5ea6
+}
+
+h3 {
+	font-size: 115%;
+	font-weight: 600
+}
+
+.mt-10 {
+	margin-top: 10px
+}
+
+article ol,
+p {
+	padding-bottom: 15px
+}
+
+p {
+	line-height: 1.5
+}
+
+article ol {
+	padding-left: 15px
+}
+
+article ol li {
+	padding-bottom: 10px;
+	list-style-type: decimal
+}
+
+.mt-30 {
+	margin-top: 30px
+}
+
+.mb-30 {
+	margin-bottom: 30px
+}
+
+.detail-wrap .select-provider {
+	display: none
+}
+
+.icon-search {
+	background-position: 0 -22px;
+	width: 21px;
+	height: 21px;
+	display: block
+}
+
+.pull-left {
+	float: left
+}
+
+pre {
+	overflow-x: hidden;
+	padding: 0;
+	white-space: pre-wrap;
+	line-height: 23px;
+	width: 98%;
+	margin: 10px 0 0;
+	color: #333;
+	font-family: "Open Sans", sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 24px
+} 
+
+
+/* Header CSS Satrts here */
+.main-menu {
+    position: relative;
+    z-index: 1;
+}
+
+.w100fl {
+    width: 100%;
+}
+
+.icon-back {
+    background-position: -196px -1px;
+    width: 17px;
+    height: 19px;
+    display: inline-block;
+}
+
+.heading-back {
+    font-size: 1.250em;
+    color: #fff;
+    font-weight: 600;
+    margin: 15px 0 0;
+    line-height: 26px;
+}
+/* Header CSS Ends here */
+
+
+/* Page CSS Satrt Here  */
+.skill-box h2 {
+    color: #333;
+    font-weight: 600;
+    font-size: 115%;
+}
+
+.skill-box .recommd-list li {
+    padding-left: 15px;
+    position: relative;
+    width: 50%;
+    float: left;
+    margin: 5px 0;
+    color: #666;
+}
+
+.skill-box .recommd-list li sup {
+    position: absolute;
+    left: 0;
+    top: 5px;
+}
+.sigma-pro {
+    display: block;
+    height: 50px;
+    width: 50px;
+}
+
+.sigma-pro img {
+    width: 100%;
+    height: 100%;
+}
+
+.icon-tick {
+    background-position: -37px -96px;
+    width: 10px;
+    height: 7px;
+    display: inline-block;
+}
+
+.load-more {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 8px 25px;
+    display: inline-block;
+    margin-top: 15px;
+}
+/* Page CSS Ends Here  */
+
+       
+/* Navigation Starts here */
+.sb-menu li a,.sb-menu li a span{display:inline-block;position:relative}.login_wrap,.sb-menu li a,nav{position:relative}amp-sidebar{background-color:#fff;width:290px}nav{border-bottom:1px solid #f2f2f2}.sb-menu:last-child,nav:last-child{border-bottom:0 none}.sb-menu{font-size:14px;font-weight:400;list-style-type:none;margin:0;padding:15px 0 0;clear:left}.sb-menu li{width:100%;padding:0;margin:0}.cms-right ul,.dashboard,.right-navbar ul{margin-top:10px}.sb-menu li a{width:100%;color:#666;padding:10px 15px}.sb-menu li a span{height:21px;width:21px;margin-right:12px;top:4px}.sb-menu>li:first-child{border-top:none}.sb-menu>li:last-child{border-bottom:none}.sb-menu li a:hover{text-decoration:none;background-color:rgba(255,255,255,.05)}.login_wrap{background-color:#1564b2;background-repeat:no-repeat;color:#fff;height:90px}.login_wrap>img{opacity:.05;width:100%;height:100%}.login_wrap span img{-webkit-border-radius:100%;border-radius:100%;width:100%}.login_wrap p a{color:#fff}.login_content{position:absolute;top:0;display:100%;height:100%;width:100%;font-size:.875em}.user_details{display:table-cell;height:90px;width:1000px;padding:0 15px;vertical-align:middle}.user_details a img,.user_details span{display:block;height:50px;width:50px}.user_details a img{-webkit-border-radius:50%;border-radius:50%}.user_details .btn{-webkit-border-radius:4px;border-radius:4px;margin-right:8px;padding-top:3px;padding-bottom:3px;font-size:14px;border-color:#fff;color:#fff}.icon-home{background-position:-44px -150px}.icon-home-search{background-position:-66px -150px}.icon-rec-course{background-position:-87px -150px}.icon-dashboard{background-position:-108px -150px}.icon-career{background-position:-129px -150px}.icon-all-courses{background-position:-150px -150px}.icon-job{background-position:-171px -150px}.icon-sample{background-position:-192px -150px}.icon-talentEco{background-position:-143px -346px}.dashboard{border-top:1px solid #f2f2f2;border-bottom:1px solid #f2f2f2;padding-bottom:10px}.dashboard ul{padding-left:35px}.dashboard ul li a{color:#999;padding-top:10px;padding-bottom:10px}.cms-right,.right-navbar{padding:0 15px 15px}.cms-right h2,.right-navbar h2{padding:15px 0 10px;border-bottom:1px solid #c1c1c1;font-weight:600;margin-bottom:0}.cms-right ul li,.right-navbar ul li{margin-bottom:10px}
+/* Navigation ends here */
+       </style>
+           <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+       
+</head>
+
+<body>
+
+<amp-analytics type="googleanalytics">
+    <script type="application/json">
+    {
+        "vars": {
+            "account": "UA-3537905-41"
+        },
+        "triggers": {
+            "trackPageview": {
+                "on": "visible",
+                "request": "pageview"
+            }
+        }
+    }
+    </script>
+</amp-analytics>
+<amp-analytics type="googleanalytics">
+    <script type="application/json">
+    {
+        "vars": {
+            "account": "UA-3537905-1"
+        },
+        "triggers": {
+            "trackPageview": {
+                "on": "visible",
+                "request": "pageview"
+            }
+        }
+    }
+    </script>
+</amp-analytics>
+
+<header class="he-auto clearfix">
+    <div class="main-menu w100fl">
+        <div class="pull-left">
+            <a class="sprite icon-back pull-left" href="/"></a>
+        </div><!-- / Left side Icon ends here -->
+        <div class="pull-right">
+            <a class="sprite icon-cart" href="/cart/">cart <span id="cart-counter-id">2</span></a>
+        </div><!-- / Right side Icon ends here -->
+    </div>
+
+    <h1 class="heading-back w100fl pb-0">Resume Writing Services</h1>
+</header><!-- /. header -->
+
+<div class="body-wrapper">
+    <section class="content-box">
+            <div class="skill-box">
+                <div class="container pt-0 pb-5">
+                {% if top_4_vendors %}
+                    <h2 class="mb-0">Providers</h2>
+                    <div class="slide-container">
+                        <ul class="skill-provider">
+                        {% for top_4_vendor in top_4_vendors %}
+                            {% if top_4_vendor.icon or top_4_vendor.image %}
+                            <li>
+                                <a href="#" class="box">
+                                    <amp-img 
+                                    src="{% if top_4_vendor.icon %}
+                                        {{top_4_vendor.icon.url}}
+                                    {% elif top_4_vendor.image %}{{top_4_vendor.image.url}}{% endif %}" class="img-responsive"
+                                    width="100"
+                                    height="100">
+                                    </amp-img>
+                                </a>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>
+                    </div> <!-- end of slide-container -->
+                {% endif %}
+                </div><!-- end of provider slider -->
+
+                <div class="container">
+                    <h2>About</h2>
+                    <p class="pb-0">
+                        {{category_obj.description | safe}}
+                    </p>
+                </div><!-- end of Six Sigma -->
+
+                {% if category_obj.career_outcomes %}
+                <div class="container">
+                    <h2>Professional Advantage</h2>
+                    <div class="box row">
+                        <ul class="recommd-list">
+                        {% for career_outcome in category_obj.split_career_outcomes %}
+                            <li>
+                                <sup class="sprite icon-tick"></sup>{{career_outcome}}
+                            </li>
+                        {% endfor %} 
+                        </ul>
+                        <div class="clearfix"></div>  
+                    </div>
+                </div>
+                {% endif %}
+
+
+                <div class="container" id="product_list">
+                    <h2>{{category_obj.name}} Services</h2>
+                    {% include 'mobile/include/load_product.html' %}
+                </div><!-- end of container -->
+
+                <!-- Revew Slide widget -->
+                <div class="container">
+                {% if reviews %}
+                    <div class="w100fl">
+                        <h2 class="pull-left">Reviews</h2>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="box row pb-30">
+                        <div class="review-container rel">
+                            <ul class="review-slide" id="review_list">
+                            {% for review in reviews %}
+                                <li>
+                                    <div class="wrap">
+                                        {% for rating in review.get_ratings %}
+                                        <div class="rating inline-block ml-0 fs-12">
+                                            {% if rating == "*" %}
+                                            <sup class="fill-star"></sup>
+                                            {% else %}
+                                            <sup class="unfill-star"></sup>
+                                            {% endif %}
+                                        </div><!-- end of star rating -->
+                                        {% endfor %}
+                                        <p>{{review.content | safe}}</p>
+                                        <p class="fs-12 c9 pb-0">
+                                            {{review.user_name}} 
+                                            {{review.created|timesince}} ago
+                                        </p>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        </div><!-- end of review wrap -->
+                    </div><!-- end of box -->
+                {% endif %}
+                </div><!-- end of container -->
+            
+            </div><!-- end of skill box -->
+        </section><!-- end of section here -->
+</div><!-- body wrapper ends here -->
+
+
+{% include "mobile/shop/partials/call_us.html" %}
+{% include 'basic/footer.html' %}
+
+</body>
+</html>

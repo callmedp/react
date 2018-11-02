@@ -60,6 +60,7 @@ class CMSPageView(DetailView, LoadMoreMixin):
             from newrelic import agent
             agent.disable_browser_autorum()
             return [x.split(".html")[0]+"-amp.html" for x in template_names]
+        
         return template_names
 
     def redirect_if_necessary(self, current_path, article):
