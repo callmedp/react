@@ -48,8 +48,10 @@ from .mixins import CourseCatalogueMixin, LinkedinSeriviceMixin
 from users.forms import (
     ModalLoginApiForm
 )
+from shop.choices import APPLICATION_PROCESS, BENEFITS
 from review.forms import ReviewForm
-
+from homepage.config import UNIVERSITY_COURSE
+from crmapi.models import UNIVERSITY_LEAD_SOURCE
 
 class ProductInformationMixin(object):
 
@@ -74,7 +76,7 @@ class ProductInformationMixin(object):
             if category.type_level == 4:
                 category = category.get_parent()[0] if category.get_parent() else None
         if category:
-            if product.is_course:
+            if product.is_course and product.type_flow != 14:
                 parent = category.get_parent()
                 if parent:
                     breadcrumbs.append(
@@ -362,6 +364,19 @@ class ProductInformationMixin(object):
             ctx.update({'selected_var': selected_var})
             ctx.update(pvrs_data)
             ctx['canonical_url'] = product.get_canonical_url()
+            if self.product_obj.type_flow == 14:
+                ctx['university_detail'] = json.loads(sqs.pUncdl[0])
+                faculty = [f.faculty for f in self.product_obj.facultyproducts.all().select_related('faculty','faculty__institute')]
+                ctx['faculty'] = [faculty[i:i + 2]for i in range(0, len(faculty),2)]
+                ctx['institute'] = self.product_obj.category_main
+                app_process = ctx['university_detail']['app_process']
+                ctx['university_detail']['app_process'] = [APPLICATION_PROCESS.get(proc) for proc in app_process]
+                app_process = ctx['university_detail']['benefits']
+                ctx['university_detail']['benefits'] = [BENEFITS.get(proc) for proc in app_process]
+                ctx['university_testimonial'] = Testimonial.objects.filter(
+                    page=UNIVERSITY_COURSE, object_id=self.product_obj.pk
+                )
+                ctx['lead_source'] = UNIVERSITY_LEAD_SOURCE
         else:
             if ctx.get('prd_exp', None) in ['EP', 'FP']:
                 pPOP = json.loads(sqs_main.pPOP)
@@ -469,6 +484,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         super(ProductDetailView, self).__init__(*args, **kwargs)
 
     def get_template_names(self):
+        if self.product_obj.type_flow==14:
+            return['shop/university.html']
         if self.request.amp:
             from newrelic import agent
             agent.disable_browser_autorum()

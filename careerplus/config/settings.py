@@ -325,6 +325,8 @@ CMS_ID = [1]
 FEATURE_PROFILE_PRODUCTS = [1939]
 
 SERVICE_PAGE_ID_SLUG_MAPPING = {"45":"resume-writing"}
+#whatsapp jobs list products
+FEATURE_PROFILE_EXCLUDE=[49]
 
 try:
     from .settings_local import *

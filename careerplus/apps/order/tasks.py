@@ -506,6 +506,19 @@ def process_mailer(pk=None):
                             logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
+                elif oi.product.type_flow == 14:
+                    if 191 not in email_sets and 191 not in sms_sets:
+                        send_email(to_emails, mail_type, data, 191, oi.pk)
+                        try:
+                            SendSMS().send(sms_type=mail_type, data=data)
+                            oi.smsorderitemoperation_set.create(
+                                sms_oi_status=191,
+                                to_mobile=data.get('mobile'),
+                                status=1)
+                        except Exception as e:
+                            logging.getLogger('error_log').error(
+                                "%s - %s" % (str(mail_type), str(e)))
+
                 elif oi.product.type_flow == 6:
                     if 171 not in email_sets and 171 not in sms_sets:
                         send_email(to_emails, mail_type, data, 171, oi.pk)
@@ -719,6 +732,7 @@ def service_initiation(pk=None):
                 sms_sets = list(
                     oi.smsorderitemoperation_set.all().values_list(
                         'sms_oi_status', flat=True).distinct())
+
                 if oi.product.type_flow == 2 and 162 not in sms_sets:
                     try:
                         urlshortener = create_short_url(login_url=data)
@@ -731,6 +745,20 @@ def service_initiation(pk=None):
                     except Exception as e:
                         logging.getLogger('error_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
+
+                elif oi.product.type_flow == 14 and 192 not in sms_sets:
+                    try:
+                        urlshortener = create_short_url(login_url=data)
+                        data.update({'url': urlshortener.get('url')})
+                        SendSMS().send(sms_type=sms_type, data=data)
+                        oi.smsorderitemoperation_set.create(
+                            sms_oi_status=192,
+                            to_mobile=data.get('mobile'),
+                            status=1)
+                    except Exception as e:
+                        logging.getLogger('error_log').error(
+                            "%s - %s" % (str(sms_type), str(e)))
+
                 elif oi.product.type_flow == 6 and 172 not in sms_sets:
                     try:
                         urlshortener = create_short_url(login_url=data)

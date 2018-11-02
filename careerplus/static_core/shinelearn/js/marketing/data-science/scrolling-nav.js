@@ -54,9 +54,6 @@ offset: 70
 })(jQuery); // End of use strict
 
 
-
-
-
 $(document).ready(function() {
 
 

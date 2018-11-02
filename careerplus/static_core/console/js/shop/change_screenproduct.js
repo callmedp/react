@@ -1,4 +1,25 @@
 $(document).ready(function() {
+    var d = new Date();
+    var todayDate = '' + d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear();
+
+    function dateclass(el) {
+      el.daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        minDate:todayDate,
+        autoUpdateInput: false,
+        locale: {
+          format: 'DD-MM-YYYY'
+        }
+      }, function(chosen_date) {
+        el.val(chosen_date.format('DD-MM-YYYY'));
+      });
+    }
+
+
+    $('.batch_launch_date, .apply_last_date, .last_date_of_payment, .payment_deadline').each(function(){
+      dateclass($(this));
+    });
   $('.click-modal').click(function(){
     let msg = $(this).data("msg");
     $("#alertModalOk").data("action", msg);
@@ -9,7 +30,7 @@ $(document).ready(function() {
     else if(msg == "revert"){
       let message = 'Do you want to revert all changes?';
       $("#alertModal").modal('show').find('#alertModalBody').html(message);
-    }
+  }
     else if(msg == "live"){
       let message = 'Do you want to copy data to live?';
       $("#alertModal").modal('show').find('#alertModalBody').html(message);

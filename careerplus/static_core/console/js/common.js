@@ -361,7 +361,16 @@ if (typeof NProgress != 'undefined') {
 			$('#id_career_outcomes').tagsInput({
 			  width: 'auto'
 			});
-			
+
+            $('#id_eligibility_criteria').tagsInput({
+              width: 'auto',
+              'delimiter': [';'],   // Or a string with a single delimiter. Ex: ';'
+            });
+
+			$('#id_highlighted_benefits').tagsInput({
+              width: 'auto',
+              'delimiter': [';'],   // Or a string with a single delimiter. Ex: ';'
+            });
 			}
 			
 	    };

@@ -1,0 +1,315 @@
+{% extends "basic/base1.html" %}
+{% load static meta compress %}
+{% load shop_tags %}
+
+{% block title %}
+  {% if meta.title %}{{ meta.title }}{% else %}{{category_obj.heading}}{% endif %}
+{% endblock title %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}?type=amp">
+{% endblock canonical_url %}
+
+        {% block django_meta %}
+            {% include 'meta/meta.html' %}
+        {% endblock django_meta %}
+ 
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-common.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-university-detail.scss' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+
+{% block navigation %}
+   {{block.super}}
+{% endblock navigation %}
+
+
+{% block main_container %}
+    
+  {% block page_heading %}
+
+  <!-- header -->
+  <header class="exe-header-university" style="background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url({% if category_obj.banner %}{{category_obj.banner.url}}{% else %}{% static 'shinelearn/images/executive/university-pic.jpg' %}{% endif %}) no-repeat center top;">
+    <div class="exe-header-txt container pr">
+      <div class="row">
+
+      <!-- breadcrums -->
+      <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+          <a href="/" itemprop="item">Home</a>
+          <meta itemprop="name" content="Home" />
+          <meta itemprop="position" content="1" />
+        </li>
+        <li class="active">{{category_obj.heading}}</li>
+      </ol>
+
+      <div class="row">
+        <div class="exe-university-box col-sm-8 col-md-8 col-lg-9">
+          <!-- university image -->
+          <div class="exe-university-img mb-10">
+            <figure>
+              <img src="{{category_obj.icon.url}}" alt="{{category_obj.alt_name}}" class="img-responsive">
+            </figure>
+          </div>
+          <!-- course heading -->
+          <h1>{{category_obj.heading}}</h1>
+          <!-- university description -->
+          <div class="exe-university-txt">
+            <ul>
+              {% for subheading in subheaders %}
+              <li>{{subheading.heading}}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-sm-4 col-md-4 col-lg-3 pr">
+          <div class="exe-university-form">
+            <h2>Want help with courses?</h2>
+            <form id="id-request-callback-form" role="form">
+              {% csrf_token %}
+              <div class="form-group">
+                <input type="text" class="form-control" name="name" placeholder="Name*" value="{{request.session.full_name|safe}}">
+                <span class="error-txt"></span>
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" name="email" placeholder="Email*" value="{{request.session.email|safe}}">
+                <span class="error-txt"></span>
+              </div>
+              <div class="form-group">
+                <div class="country-code">
+                  <div class="custom-select">
+                    <select class="form-control" name="country" >
+                      {% for country_choice in country_choices %}
+                      <option value="{{country_choice.0}}" {% if country_choice.0 == initial_country %}selected {% endif %}>{{country_choice.0}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <input type="text" class="form-control" name="number" placeholder="Phone Number*" maxlength="15" value="{{request.session.mobile_no|safe}}">
+                  <span class="error-txt" style="padding-left: 50px;"></span>
+                </div>
+              </div>
+              <!--div class="form-group">
+                <input type="text" class="form-control" name="number" placeholder="Phone Number" maxlength="15" value="{{request.session.mobile_no|safe}}">
+                <span class="error-txt"></span>
+              </div-->
+              <div class="form-group pr">
+                <span class="down-arrow"></span>
+                <select class="form-control" name="product">
+                  <option value="">Select course</option>
+                  {% for prd in products %}
+                  <option value="{{prd.id}}">{{prd.pHd}}</option>
+                  {% endfor %}
+                </select>
+                <span class="error-txt"></span>
+              </div>
+
+              <input type="hidden" name="lsource" value="{{UNIVERSITY_LEAD_SOURCE}}">
+              <input type="hidden" name="prd" value="">
+              <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
+              
+              <button type="button" class="exe-button-callback" id="request-callback-button">Request callback</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    </div>
+  </header>
+  {% endblock page_heading %}
+
+    {% block section2 %}
+
+    <!-- Courses offered -->
+    {% if products %}
+      <section class="exe-courses-offered-box container-fluid">
+        <div class="row">
+          <h2 class="heading-primary-exe1 text-center mt-40 mb-20">Courses offered</h2>
+          <div class="container">
+            <div class="row">
+              <div class="row d-flex flex-wrap justify-content-center" id="id-university-course-list" itemscope itemtype="http://schema.org/ItemList">
+                {% include "university/partials/university_courses.html" %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    {% endif %}  
+      
+      <!-- main parent section start -->
+      <section class="container-fluid">
+        <div class="row">
+            <!-- main container -->
+            <div class="container mt-50">
+              <div class="row">
+
+                <!-- Faculty Profile -->
+                {% if faculty %}
+                  <section class="exe-box mb-30">
+                    <div>
+                      <article class="col-sm-12 pad-25">
+                          <h2 class="heading-primary-exe1 text-center mb-10">Faculty Profile</h2>
+                          <p class="text-center fs-14 mb-30">Learn from skilled instructors with professional experience in the field.</p>
+
+                        <div id="carousel-example-generic" class="carousel slide exe-faculty-carousel" data-ride="carousel">
+
+                          <!-- Wrapper for slides -->
+                          <div class="carousel-inner" role="listbox">
+                            {% for fslide in faculty %}
+
+                            <div class="item col-sm-12 {% if forloop.first %}active{% endif %}">
+                              {% for fac in fslide %}
+                              {% if fac %}
+                              <div class="{% if fslide|length == 1 %}col-sm-12{%else %}col-sm-6{% endif %} text-center">
+                                <figure>
+                                  <a class="faculty-thumb" target="_blank" href="{{fac.get_absolute_url}}"><img src="{% if fac.image %}{{fac.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" alt="{{fac.alt_name}}.jpg"></a>
+                                  <figcaption>
+                                    <strong><a href="{{fac.get_absolute_url}}" target="_blank">{{fac.name}}</a></strong>
+                                    <div class="exe-designation">{{fac.designation}} – 
+                                      <span>{{category_obj.name}}</span>
+                                    </div>
+                                    <p>{{fac.description|safe|truncatechars:150}}<a href="{{fac.get_absolute_url}}" target="_blank">read more</a>
+                                    </p>
+                                  </figcaption>
+                                </figure>
+                              </div>
+                              {% endif %}
+                              {% endfor %}
+                            </div>
+                            {% endfor %}
+                            
+                          </div>
+
+                          <!-- Controls -->
+                          {% if faculty|length > 1 %}
+                          <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                            <span class="exe-icon-chevron-left mt-20" aria-hidden="true"></span>
+                          </a>
+                          <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                            <span class="exe-icon-chevron-right mt-20" aria-hidden="true"></span>
+                          </a>
+                          {% endif %}
+                        </div>
+                      </article>
+                    </div>
+                  </section>
+                {% endif %}
+
+                <!-- About institute -->
+                <section class="exe-box mb-30">
+                  <article class="col-sm-12 pad-45">
+                      <div class="row about-institute">
+                        <div class="col-sm-6">
+                          <h2 class="heading-primary-exe1 mb-30">About institute</h2>
+                          {{category_obj.description|safe}}
+                        </div>
+                        <div class="col-sm-6">
+                          <figure class="pr">
+                            <i><img src="{{category_obj.icon.url}}" alt="Logo" class="img-responsive"></i>
+
+                            <img src="{{category_obj.image.url}}" class="img-responsive" alt="About institute">
+                          </figure>
+                        </div>
+                      </div>
+                  </article>
+                </section>
+
+                 <!-- Principal speak -->
+                {% if principal and principal.faculty_speak %} 
+                <section class="exe-box mb-30">
+                  <article class="col-sm-12 pad-45">
+                      <div class="row principal-speak-box">
+                        <div class="media">
+                          <div class="media-left">
+                            <h2 class="heading-primary-exe1 mb-30">Principal speak</h2>
+                            <figure class="principal">
+                              <img src="{% if principal.image %}{{principal.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" class="img-responsive" alt="{{principal.name}}.jpg">
+                              {% if category_obj.icon %}
+                              <i><img src="{{category_obj.icon.url}}" alt="{{category_obj.name}}.jpg" class="img-responsive"></i>
+                              {% endif %}
+                            </figure>
+                          </div>
+                          <div class="media-body speak">
+                            {{principal.faculty_speak}}
+                            <strong class="mt-40">{{principal.name}}</strong>
+                            <span>Principal, {{category_obj.heading}}</span>
+                          </div>
+                        </div>
+                      </div>
+                  </article>
+                </section>
+                {% endif %}
+
+                <!-- Testimonials -->
+                {% if testimonials %}
+                <section class="exe-box mb-30">
+                  <div>
+                    <article class="col-sm-12">
+                      <h2 class="heading-primary-exe1 text-center mt-50 mb-20">Testimonials</h2>
+                      <div id="carousel-example-generic1" class="carousel slide exe-testimonial-carousel" data-ride="carousel">
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner text-center" role="listbox">
+
+                          {% for testimonial in testimonials %}
+                          <div class="item col-sm-12 {% if forloop.first %}active{% endif %}">
+                            <p class="mb-40 mt-20">{{testimonial.review}}</p>
+                            <figure>
+                              <img src="{% if testimonial.image %}{{testimonial.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" alt="{{testimonial.user_name}}">
+                              <figcaption>
+                                <strong>{{testimonial.user_name}}</strong>
+                                <div class="exe-designation">
+                                  {{testimonial.designation}}{% if testimonial.designation and testimonial.company %}, {% endif %}{{testimonial.company}}
+                                </div>
+                              </figcaption>
+                            </figure>
+                          </div>
+                          {% endfor %}
+                          
+                        </div>
+
+                        {% if testimonials.count > 1 %}
+                        <!-- Controls -->
+                        <a class="left carousel-control" href="#carousel-example-generic1" role="button" data-slide="prev">
+                          <span class="exe-icon-chevron-left mt-20" aria-hidden="true"></span>
+                        </a>
+                        <a class="right carousel-control" href="#carousel-example-generic1" role="button" data-slide="next">
+                          <span class="exe-icon-chevron-right mt-20" aria-hidden="true"></span>
+                        </a>
+                        {% endif %}
+                      </div>
+                    </article>
+                  </div>
+                </section>
+                {% endif %}
+
+              </div>
+            </div>
+            <!-- bottom container end -->
+
+      </div>
+      </section>
+      <!-- main parent section end -->      
+    {% endblock section2 %}
+
+      
+   </div>
+{% endblock main_container %}
+
+
+
+{% block js_section %}
+    {{block.super}}
+    {% compress js %}
+    <script src="{% static 'console/js/jquery.validate.js' %}"></script>
+    <script src="{% static 'shinelearn/js/skill/university.js' %}"></script>
+    <script src="{% static 'shinelearn/js/skill/callback-validate.js' %}"></script>
+    {% endcompress %}
+{% endblock js_section %}

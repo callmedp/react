@@ -1,6 +1,8 @@
 from django.conf.urls import url
 
-from .views import SkillPageView,ServiceDetailPage
+from .views import (
+    SkillPageView, ServiceDetailPage,
+    UniversityPageView)
 from search.views import FuncAreaPageView
 
 # from .adminview import SkillAddFormView, SkillListView, SkillUpdateView

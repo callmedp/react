@@ -125,12 +125,10 @@ class OrderListView(ListView, PaginationMixin):
 
         try:
             if self.query:
-
                 txns = PaymentTxn.objects.filter(txn__iexact=self.query)
                 if txns.exists():
                     order_ids = list(txns.values_list('order__id', flat=True))
                     queryset = queryset.filter(id__in=order_ids)
-
                 else:
                     if self.sel_opt == 'id':
                         if (self.query.strip())[:2] == 'cp' or (self.query.strip())[:2] == 'CP':
@@ -163,7 +161,6 @@ class OrderListView(ListView, PaginationMixin):
 
         try:
             if int(self.status) != -1:
-
                 queryset = queryset.filter(status=self.status)
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
@@ -1587,7 +1584,7 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
             product__type_flow=5, no_process=False,
             oi_status__in=[5, 25, 61],
             order__welcome_call_done=True).exclude(
-            wc_sub_cat__in=[64, 65])
+            wc_sub_cat__in=[64, 65]).exclude(product_id__in=settings.FEATURE_PROFILE_EXCLUDE)
         # queryset = queryset.exclude(oi_resume__isnull=True).exclude(oi_resume__exact='')
         user = self.request.user
 
@@ -2402,6 +2399,37 @@ class ActionOrderItemView(View):
                 messages.add_message(request, messages.ERROR, str(e))
             return HttpResponseRedirect(reverse('console:queue-' + queue_name))
 
+        elif action == -15 and queue_name == "whatsappjoblist":
+            try:
+                orderitems = OrderItem.objects.filter(
+                    id__in=selected_id,
+                    oi_status=5,
+                    product__type_flow=5).exclude(oi_status=4).select_related('order', 'product', 'partner')
+                counter = 0
+                for obj in orderitems:
+                    last_oi_status = obj.oi_status
+                    obj.oi_status = 4  # Closed
+                    obj.last_oi_status = last_oi_status
+                    obj.save()
+
+                    obj.orderitemoperation_set.create(
+                        oi_status=6,
+                        last_oi_status=last_oi_status,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+
+                    obj.orderitemoperation_set.create(
+                        oi_status=obj.oi_status,
+                        last_oi_status=6,
+                        assigned_to=obj.assigned_to,
+                        added_by=request.user)
+                    counter += 1
+                msg = str(counter) + ' orderitems closed.'
+                messages.add_message(request, messages.SUCCESS, msg)
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, str(e))
+            return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+
         elif action == -7 and queue_name == "partnerinbox":
             try:
                 orderitems = OrderItem.objects.filter(id__in=selected_id).select_related('order', 'product', 'partner')
@@ -2483,6 +2511,10 @@ class ActionOrderItemView(View):
             return HttpResponseForbidden()
 
 
+
+
+
+
 class AssignmentOrderItemView(View):
     def post(self, request, *args, **kwargs):
         try:
@@ -2512,6 +2544,9 @@ class AssignmentOrderItemView(View):
             except Exception as e:
                 messages.add_message(request, messages.ERROR, str(e))
                 return HttpResponseRedirect(reverse('console:queue-' + queue_name))
+
+
+
 
         messages.add_message(request, messages.ERROR, "Please select valid assignment.")
         return HttpResponseRedirect(reverse('console:queue-' + queue_name))
@@ -2662,3 +2697,97 @@ class ReviewModerateView(UpdateView):
         context.update({
             'messages': alert})
         return context
+
+
+@Decorate(stop_browser_cache())
+@method_decorator(permission_required('order.can_show_domestic_profile_update_queue', login_url='/console/login/'), name='dispatch')
+class WhatsappListQueueView(ListView, PaginationMixin):
+    context_object_name = 'object_list'
+    template_name = 'console/order/whatsapp_list.html'
+    model = OrderItem
+    http_method_names = [u'get', u'post']
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 20
+        self.query = ''
+        self.sel_opt = 'number'
+        self.oi_status = ''
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '').strip()
+        self.oi_status = request.GET.get('oi_status', '').strip()
+        self.sel_opt = request.GET.get('rad_search', 'number')
+        return super(WhatsappListQueueView, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(WhatsappListQueueView, self).get_context_data(**kwargs)
+        paginator = Paginator(context['object_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        var = self.sel_opt
+        alert = messages.get_messages(self.request)
+        initial = {"oi_status": self.oi_status}
+        filter_form = OIFilterForm(initial, queue_name='queue-whatsappjoblist')
+        context.update({"assignment_form": AssignmentActionForm(), "messages": alert, "query": self.query,
+            "message_form": MessageForm(), "filter_form": filter_form,
+            "action_form": OIActionForm(queue_name="queue-whatsappjoblist"), var: 'checked', })
+
+        return context
+
+    def get_queryset(self):
+        query_filters = dict()
+        query_filters_exclude = dict()
+        queryset = super(WhatsappListQueueView, self).get_queryset()
+        query_filters.update({'order__status__in': [1, 2, 3], 'product__type_flow': 5, 'no_process': False,
+          'product_id__in': settings.FEATURE_PROFILE_EXCLUDE, 'order__welcome_call_done': True})
+        query_filters_exclude.update({'wc_sub_cat__in': [64, 65]})
+        user = self.request.user
+        if user.is_superuser:
+            query_filters.update({'assigned_to': None})
+
+            pass
+        elif user.has_perm('order.domestic_profile_update_assigner'):
+            query_filters.update({'assigned_to': None})
+        elif user.has_perm('order.domestic_profile_update_assignee'):
+            query_filters.update({'assigned_to': user})
+            query_filters_exclude.update({'oi_status': 4})
+        else:
+            return queryset.none()
+        try:
+            if self.query:
+                if self.sel_opt == 'number':
+                    if self.query[:2].lower() == 'cp':
+                        query_filters.update({'order__number__iexact': self.query})
+                    else:
+                        return queryset.none()
+                elif self.sel_opt == 'id' and self.query.isdigit():
+                    query_filters.update({'id': self.query})
+
+                elif self.sel_opt == 'mobile':
+
+                    query_filters.update({'order__mobile' : self.query})
+                elif self.sel_opt == 'email':
+
+                    query_filters.update({'order__email__iexact' : self.query})
+                elif self.sel_opt == 'product':
+                    queryset = queryset.select_related('parent')
+                    queryset = queryset.filter(Q(product__name__icontains=self.query) | Q(parent__isnull=False,
+                        parent__product__name__icontains=self.query))
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            pass
+        if self.oi_status and self.oi_status != '-1':
+            if 'assigned_to' in query_filters.keys():
+                del query_filters['assigned_to']
+            if self.oi_status == '1':
+                query_filters.update({'assigned_to__isnull':False})
+                query_filters_exclude.update({'oi_status':4})
+            else:
+                query_filters.update({'oi_status':self.oi_status})
+
+        queryset = queryset.filter(**query_filters)
+        for key,value in query_filters_exclude.items():
+            queryset=queryset.exclude(**{key:value})
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
+
