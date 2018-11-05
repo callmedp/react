@@ -294,3 +294,4 @@ class DownloadProductListView(TemplateView, PaginationMixin):
             request, messages.SUCCESS,
             'Task Created SuccessFully, Product List is generating')
         return HttpResponseRedirect(reverse('console:tasks:tasklist'))
+

@@ -1,12 +1,26 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
+#python imports
+
+#django imports
 from django.http import Http404
-from rest_framework import status
-from rest_framework.permissions import IsAdminUser
-from console.order.partials.views import NewOrdersListPartial, ClosedOrdersListPartial, HeldOrdersListPartial, NewOrdersDetailPartial, ClosedOrdersDetailPartial, HeldOrdersDetailPartial, NewOrdersUpdatableDetailPartial, ClosedOrdersUpdatableDetailPartial, HeldOrdersUpdatableDetailPartial
+from django.views.generic import TemplateView
+
+#local imports
+
+#inter app imports
 from order.models import Order, OrderItem
 from order.api.core.serializers import OrderItemSerializer
 from partner.api.core.permissions import IsEmployeeOfVendor
+from console.order.partials.views import NewOrdersListPartial, \
+ClosedOrdersListPartial, HeldOrdersListPartial, NewOrdersDetailPartial, \
+ClosedOrdersDetailPartial, HeldOrdersDetailPartial, NewOrdersUpdatableDetailPartial, \
+ClosedOrdersUpdatableDetailPartial, HeldOrdersUpdatableDetailPartial
+
+#third party imports
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAdminUser
+
 
 class NewOrdersListView(NewOrdersListPartial):
 
@@ -74,7 +88,6 @@ class ChangeOrderItemStatusAPIMixin(APIView):
             return Response({'operation_reflected': True})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class CloseOrderAPI(ChangeOrderItemStatusAPIMixin):
     permission_classes = (IsAdminUser, )
     order_status = 9
@@ -87,3 +100,6 @@ class ArchiveOrderAPI(ChangeOrderItemStatusAPIMixin):
 
 class UnholdOrderAPI(ChangeOrderItemStatusAPIMixin):
     order_status = -1
+
+
+

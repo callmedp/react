@@ -598,8 +598,6 @@ class DownloadMonthlyWriterInvoiceView(UserGroupMixin,TemplateView):
     path = "invoice/user/"
     group_names = ['WRITER']
 
-
-
     def get(self,request,*args,**kwargs):
         context = self.get_context_data(**kwargs)
         try:
@@ -608,7 +606,6 @@ class DownloadMonthlyWriterInvoiceView(UserGroupMixin,TemplateView):
             logging.getLogger('error_log').error(str(e))
         context['month'] = self.month
         return self.render_to_response(context)
-
 
     def post(self, request, *args, **kwargs):
         file_list = []

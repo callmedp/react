@@ -246,9 +246,13 @@
         </ul>
     {% endif %}
       <h3>Orders</h3>
-      
-      <ul class="nav side-menu">
         
+      <ul class="nav side-menu">
+        {% if perms.order.can_download_discount_report %}
+        <li>
+            <a href="{% url 'console:discount-report-download' %}"><i class="fa fa-edit"></i>Discount Report</a>
+        </li>
+        {% endif %}
         {% comment %}
         {% if is_admin %}
             <li><a><i class="fa fa-edit"></i> CMS <span class="fa fa-chevron-down"></span></a>

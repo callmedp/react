@@ -52,7 +52,7 @@ if __name__=="__main__":
                 "Actual collection of order","Effective collection per item",\
                 "Price of item on site","Transaction_Amount","coupon_id","Payment_mode","Combo"])
 
-    orders = Order.objects.filter(status__in=[1,3],payment_date__gte=sdt,payment_date__lte=edt)
+    orders = Order.objects.filter(status__in=[1,3],payment_date__gte=sdt,payment_date__lte=edt).order_by('id')
     count = 0
     print("Total orders found - {}".format(orders.count()))
 

@@ -1000,3 +1000,6 @@ class UserGroupMixin(object):
         if not self.check_group(request.user):
             return self.user_check_failed(request, *args, **kwargs)
         return super(UserGroupMixin, self).dispatch(request, *args, **kwargs)
+
+
+        
