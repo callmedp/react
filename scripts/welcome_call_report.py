@@ -36,6 +36,10 @@ def date_timezone_convert(date=None):
     return date.astimezone(timezone(settings.TIME_ZONE))
 
 
+def NullAllocationList(param=5):
+    return ['NA'] * param
+
+
 def main(argv):
     cur_datetime = timezone.now()
     cur_date_end = datetime(cur_datetime.year, cur_datetime.month \
@@ -55,42 +59,70 @@ def main(argv):
         csvwriter = csv.writer(csvfile, delimiter=',', quotechar="'", \
             quoting=csv.QUOTE_MINIMAL)
         csvwriter.writerow(['Order ID', 'Order_payment_date', 'Order_created_date', \
-            'Welcome call Date','Welcome call Status','Welcome Call Status - Category',\
-            'Welcome Call Status - SubCategory', 'Days difference'])
-        def order_status(order):
-            row = OrderedDict()
-            row['Order ID'] = 'CP' + str(order.pk)
-            row['Order_payment_date'] = date_timezone_convert(order.payment_date)\
-                .strftime('%m/%d/%Y %H:%M:%S')
-            row['Order_created_date'] = date_timezone_convert(order.created)\
-                .strftime('%m/%d/%Y %H:%M:%S')
-            return row
+            'First_Touch_Welcome call Date','First_Touch_Welcome call Status',\
+            'First_Touch_Welcome Call Status - Category',
+            'First_Touch_Welcome Call Status - SubCategory',\
+            'First_Touch_Create_Difference',
+            'Current_Touch_Welcome call Date', 'Current_Touch_Welcome call Status', \
+            'Current_Touch_Welcome Call Status - Category',\
+            'Current_Touch_Welcome Call Status - SubCategory', \
+            'Current_Touch_Create_Difference', \
+            'Final_Touch_Welcome call Date',\
+            'Final_Touch_Welcome call Status', \
+            'Final_Touch_Welcome Call Status - Category', \
+            'Final_Touch_Welcome Call Status - SubCategory', \
+            'Final_Touch_Create_Difference',
+            ])
+
+
         for order in order_objects:
-            row = OrderedDict()
+            row = []
+            ist_date_order = date_timezone_convert(order.created) #order creation date
+            row.append('CP' + str(order.pk))
+            row.append(date_timezone_convert(order.payment_date)\
+                .strftime('%m/%d/%Y %H:%M:%S'))
+            row.append(date_timezone_convert(order.created)\
+                .strftime('%m/%d/%Y %H:%M:%S'))
             welc_objects = WelcomeCallOperation.objects.filter(order_id=order.id)\
-                .order_by('created')
-            base_dict = order_status(order)
-
-            for welc_obj in welc_objects:
-                row = OrderedDict(base_dict)
-                row['Welcome Call Date'] = date_timezone_convert(welc_obj.created)\
-                    .strftime('%m/%d/%Y %H:%M:%S')
+                .exclude(wc_status=1).order_by('id')
+            if welc_objects:
+                welc_obj = welc_objects.first()
+                row.append(date_timezone_convert(welc_obj.created)\
+                    .strftime('%m/%d/%Y %H:%M:%S'))
                 ist_date_welcome = date_timezone_convert(welc_obj.created)
-                ist_date_order = date_timezone_convert(order.created)
-                row['Welcome Call Status'] = welc_obj.get_wc_status("N.A")
-                row['Welcome Call Status - Category'] = welc_obj.get_wc_cat("N.A")
-                row['Welcome Call Status - SubCategory'] = welc_obj.get_wc_sub_cat("N.A")
-                row['Days difference'] = date_diff(ist_date_welcome,ist_date_order)
-                csvwriter.writerow(row.values())
-
-            if not welc_objects:
-                row = OrderedDict(base_dict)
-                row['Welcome Call Status'] = "N.A"
-                row['Welcome Call Date'] = 'NA'
-                row['Welcome Call Status - Category'] = "N.A"
-                row['Welcome Call Status - SubCategory'] = "N.A"
-                row['Days difference'] = 'NA'
-                csvwriter.writerow(row.values())
+                row.append(welc_obj.get_wc_status("N.A"))
+                row.append(welc_obj.get_wc_cat("N.A"))
+                row.append(welc_obj.get_wc_sub_cat("N.A"))
+                row.append(date_diff(ist_date_welcome,ist_date_order))
+                curren_welcome_obj = welc_objects.exclude(wc_status__in=[41,42,63])\
+                    .order_by('id').last()
+                if curren_welcome_obj:
+                    row.append(date_timezone_convert(curren_welcome_obj.created)\
+                        .strftime(
+                        '%m/%d/%Y %H:%M:%S'))
+                    ist_date_welcome = date_timezone_convert(curren_welcome_obj.created)
+                    row.append(curren_welcome_obj.get_wc_status("N.A"))
+                    row.append(curren_welcome_obj.get_wc_cat("N.A"))
+                    row.append(curren_welcome_obj.get_wc_sub_cat("N.A"))
+                    row.append(date_diff(ist_date_welcome, ist_date_order))
+                else:
+                    row += NullAllocationList(5)
+                closed_welcome = welc_objects.filter(wc_status__in=[41,42,63])\
+                        .order_by('id').last()
+                if closed_welcome:
+                    row.append(date_timezone_convert(closed_welcome.created)\
+                        .strftime('%m/%d/%Y %H:%M:%S'))
+                    ist_date_welcome = date_timezone_convert(closed_welcome.created)
+                    row.append(closed_welcome.get_wc_status("N.A"))
+                    row.append(closed_welcome.get_wc_cat("N.A"))
+                    row.append(closed_welcome.get_wc_sub_cat("N.A"))
+                    row.append(date_diff(ist_date_welcome, ist_date_order))
+                else:
+                    row += NullAllocationList(5)
+                csvwriter.writerow(row)
+            else:
+                row += NullAllocationList(param=15)
+                csvwriter.writerow(row)
         send_dict['subject'] = "Welcome call Report"
         send_dict['to'] = ["vishal.gupta@hindustantimes.com","purnima.ganguly@shine.com",\
             "vinod@shine.com","nishant.shukla@hindustantimes.com"]
