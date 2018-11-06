@@ -2463,6 +2463,8 @@ class DownloadDiscountReportView(TemplateView):
     template_name = "console/order/discount_report.html"
 
     def dispatch(self,request,*args,**kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden()
         if 'order.can_download_discount_report' not in request.user.get_all_permissions():
             return HttpResponseForbidden()
         return super(DownloadDiscountReportView,self).dispatch(request,*args,**kwargs)
