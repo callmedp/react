@@ -710,15 +710,30 @@ class OrderDetailVeiw(DetailView):
         return context
 
     def get_context_data(self, **kwargs):
+        last_status = ""
         context = super(OrderDetailVeiw, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         order = self.get_object()
         max_limit_draft = settings.DRAFT_MAX_LIMIT
-
+        last_status_object = order.welcomecalloperation_set.exclude(wc_status__in=[0, 1, 2])\
+            .order_by('id').last()
+        if not last_status_object:
+            last_status = "Not Done"
+        else:
+            timestamp= '\n' + last_status_object.created.strftime('%b. %d, %Y, %I:%M %P ')
+            last_status=last_status_object.wc_status
+            if last_status in [41, 63]:
+                last_status = "Call Done"
+            elif last_status == 42:
+                last_status = "Order processed after final reminder"
+            else:
+                last_status=last_status_object.get_wc_status()
+            last_status += timestamp
         order_items = order.orderitems.all().select_related('product', 'partner').order_by('id')
 
         context.update({
             "order": order,
+            "order_wc_status": last_status,
             'orderitems': list(order_items),
             "max_limit_draft": max_limit_draft,
             "messages": alert,
