@@ -1,11 +1,10 @@
-import json
-from collections import OrderedDict
-from datetime import datetime
+import json, os
 import logging
 import csv
 import bson
 import mimetypes
-
+from collections import OrderedDict
+from datetime import datetime
 from io import StringIO
 
 from django.views.generic import (
@@ -22,6 +21,7 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from django.utils import timezone
 from django.forms.models import modelformset_factory
 from dateutil.relativedelta import relativedelta
+from django.shortcuts import render
 
 from .decorators import (
     has_group,
@@ -57,6 +57,8 @@ from .shop_form import (
     TestimonialModelForm
 )
 
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
+
 from shop.forms import (
     AddKeywordForm, AddAttributeOptionForm, AddAttributeForm,
     ChangeProductForm, ChangeProductSEOForm,
@@ -79,6 +81,7 @@ from homepage.config import (
 
 from faq.models import FAQuestion
 from users.mixins import UserGroupMixin
+from wsgiref.util import FileWrapper
 
 
 class SkillAutocompleteView(autocomplete.Select2QuerySetView):
@@ -2456,7 +2459,49 @@ class ProductHistoryLogDownloadView(UserGroupMixin, View):
             messages.add_message(self.request, messages.ERROR, str(e))
         return HttpResponseRedirect(reverse('console:product-audit-history'))
 
+class DownloadDiscountReportView(TemplateView):
+    template_name = "console/order/discount_report.html"
 
+    def dispatch(self,request,*args,**kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden()
+        if 'order.can_download_discount_report' not in request.user.get_all_permissions():
+            return HttpResponseForbidden()
+        return super(DownloadDiscountReportView,self).dispatch(request,*args,**kwargs)
+
+    def post(self,request,*args,**kwargs):
+        report_type = request.POST.get('report_type')
+        report_date = request.POST.get('report_date')
+        file_found = False
+        file_path = "reports/discount_report_" + report_date + \
+             "_" + report_type + ".csv"
+        filename = file_path.split('/')[-1]
+
+        if not settings.IS_GCP:
+            file_path = os.path.join(settings.MEDIA_ROOT, file_path)
+            try:
+                fsock = FileWrapper(open(file_path, 'rb'))
+                file_found = True
+            except:
+                pass
+        else:
+            try:
+                fsock = GCPPrivateMediaStorage().open(file_path)
+                file_found = True
+            except:
+                pass
+        
+        if file_found:
+            response = HttpResponse(
+                fsock,content_type=mimetypes.guess_type(filename)[0])
+            response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
+            return response
+        
+        else:
+            messages.add_message(request, messages.ERROR, "No record found.")
+            return render(request,template_name=self.template_name)
+        
+        
 # @Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 # @Decorate(check_permission('shop.console_change_attribute'))
 # class AddAttributeOptionView(FormView):
