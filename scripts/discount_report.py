@@ -1,4 +1,5 @@
 #python imports
+import logging
 from decimal import Decimal
 from datetime import datetime, timedelta
 import ast,os,django,sys,subprocess,csv
@@ -53,12 +54,9 @@ if __name__=="__main__":
                 "Price of item on site","Transaction_Amount","coupon_id","Payment_mode","Combo"])
 
     orders = Order.objects.filter(status__in=[1,3],payment_date__gte=sdt,payment_date__lte=edt).order_by('id')
-    count = 0
-    print("Total orders found - {}".format(orders.count()))
+    logging.getLogger('info_log').info("Discount Report :: Total orders found - {}".format(orders.count()))
 
     for order in orders:
-        count += 1
-        print("Fetching data for order No {}".format(count))
         order_items = OrderItem.objects.filter(order=order)
         try:
             sales_user_info = ast.literal_eval(order.sales_user_info)
@@ -90,7 +88,7 @@ if __name__=="__main__":
                 csv_writer.writerow(row_data)
 
             except Exception as e:
-                print(repr(e))
+                logging.getLogger('error_log').error(repr(e))
                 continue
     file_obj.close()
 
