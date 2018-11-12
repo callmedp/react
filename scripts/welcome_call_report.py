@@ -40,18 +40,17 @@ def NullAllocationList(param=5):
     return ['NA'] * param
 
 
-def mail_report(order_objects,csvfile):
+def mail_report(order_objects, csvfile):
     send_dict = {}
-
-    send_dict['subject'] = "Welcome call Report"
-    send_dict['to'] = ["vishal.gupta@hindustantimes.com", "purnima.ganguly@shine.com", "vinod@shine.com",
-        "nishant.shukla@hindustantimes.com"]
-    send_dict['cc'] = ["sidharth.gupta1@hindustantimes.com"]
-    send_dict['body'] = 'Please find attached .csv file containing information \
-            about welcome call '
-    send_dict['from_email'] = settings.CONSULTANTS_EMAIL
-    file_name = "%s.csv" % ('welcome_call_report' + timezone.now().strftime("%Y-%m-%d "))
     if order_objects:
+        send_dict['subject'] = "Welcome call Report"
+        send_dict['to'] = ["vishal.gupta@hindustantimes.com", "purnima.ganguly@shine.com", "vinod@shine.com",
+            "nishant.shukla@hindustantimes.com"]
+        send_dict['cc'] = ["sidharth.gupta1@hindustantimes.com"]
+        send_dict['body'] = 'Please find attached .csv file containing information \
+                about welcome call '
+        send_dict['from_email'] = settings.CONSULTANTS_EMAIL
+        file_name = "%s.csv" % ('welcome_call_report' + timezone.now().strftime("%Y-%m-%d "))
         SendMail().base_send_mail(subject="welcome_call_report", body=send_dict.get('body'), to=send_dict.get('to'),
             cc=send_dict.get('cc'), from_email=send_dict.get('from_email', None),
             attachments=[file_name, csvfile.getvalue(), 'text/csv'], mimetype='text/csv')
@@ -67,11 +66,8 @@ def generate_report(duration_report):
     if duration_report == 'monthly':
         #setting last_duration for a month
         last_duration = cur_datetime + relativedelta.relativedelta(months=-1)
-
     order_objects = Order.objects.filter(created__gte=last_duration,status__in=[1,2,3])
-
     try:
-
         csvfile = StringIO()
         csvwriter = csv.writer(csvfile, delimiter=',', quotechar="'", \
             quoting=csv.QUOTE_MINIMAL)
@@ -90,7 +86,6 @@ def generate_report(duration_report):
             'Final_Touch_Welcome Call Status - SubCategory', \
             'Final_Touch_Create_Difference',
             ])
-
 
         for order in order_objects:
             row = []
