@@ -57,15 +57,14 @@ def mail_report(csvfile):
 
 def generate_report(duration_report):
     cur_datetime = timezone.now()
-    cur_date_end = datetime(cur_datetime.year, cur_datetime.month \
-        , cur_datetime.day, 23, 59, 59)
+    cur_datetime = datetime(cur_datetime.year, cur_datetime.month \
+        , cur_datetime.day, 0, 0, 0)
     #setting last_duration for a week
     last_duration = cur_datetime - timedelta(days=7)
-
     if duration_report == 'monthly':
         #setting last_duration for a month
         last_duration = cur_datetime + relativedelta.relativedelta(months=-1)
-    order_objects = Order.objects.filter(created__gte=last_duration,status__in=[1,2,3])
+    order_objects = Order.objects.filter(created__range=[last_duration,cur_datetime],status__in=[1,2,3])
     if not order_objects:
         logging.getLogger('error_log').info("welcome call not generated")
         return
