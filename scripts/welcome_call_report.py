@@ -36,25 +36,24 @@ def date_timezone_convert(date=None):
         return 'N.A'
     return date.astimezone(timezone(settings.TIME_ZONE))
 
-def NullAllocationList(param=5):
+def get_na_list(param=5):
     return ['NA'] * param
 
 
-def mail_report(order_objects, csvfile):
+def mail_report(csvfile):
     send_dict = {}
-    if order_objects:
-        send_dict['subject'] = "Welcome call Report"
-        send_dict['to'] = ["vishal.gupta@hindustantimes.com", "purnima.ganguly@shine.com", "vinod@shine.com",
-            "nishant.shukla@hindustantimes.com"]
-        send_dict['cc'] = ["sidharth.gupta1@hindustantimes.com"]
-        send_dict['body'] = 'Please find attached .csv file containing information \
-                about welcome call '
-        send_dict['from_email'] = settings.CONSULTANTS_EMAIL
-        file_name = "%s.csv" % ('welcome_call_report' + timezone.now().strftime("%Y-%m-%d "))
-        SendMail().base_send_mail(subject="welcome_call_report", body=send_dict.get('body'), to=send_dict.get('to'),
-            cc=send_dict.get('cc'), from_email=send_dict.get('from_email', None),
-            attachments=[file_name, csvfile.getvalue(), 'text/csv'], mimetype='text/csv')
-        logging.getLogger('info_log').info("welcome call generated")
+    send_dict['subject'] = "Welcome call Report Generated on " + timezone.now().strftime("%Y-%m-%d ")
+    send_dict['to'] = ["vishal.gupta@hindustantimes.com", "purnima.ganguly@shine.com", "vinod@shine.com",
+        "nishant.shukla@hindustantimes.com"]
+    send_dict['cc'] = ["sidharth.gupta1@hindustantimes.com"]
+    send_dict['body'] = 'Please find attached .csv file containing information \
+            about welcome call '
+    send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+    file_name = "%s.csv" % ('welcome_call_report' + timezone.now().strftime("%Y-%m-%d "))
+    SendMail().base_send_mail(subject=send_dict['subject'], body=send_dict['body'], to=send_dict['to'],
+        cc=send_dict['cc'], from_email=send_dict['from_email'],
+        attachments=[file_name, csvfile.getvalue(), 'text/csv'], mimetype='text/csv')
+    logging.getLogger('info_log').info("welcome call generated")
 
 def generate_report(duration_report):
     cur_datetime = timezone.now()
@@ -67,6 +66,10 @@ def generate_report(duration_report):
         #setting last_duration for a month
         last_duration = cur_datetime + relativedelta.relativedelta(months=-1)
     order_objects = Order.objects.filter(created__gte=last_duration,status__in=[1,2,3])
+    if not order_objects:
+        logging.getLogger('error_log').info("welcome call not generated")
+        return
+
     try:
         csvfile = StringIO()
         csvwriter = csv.writer(csvfile, delimiter=',', quotechar="'", \
@@ -118,7 +121,7 @@ def generate_report(duration_report):
                     row.append(curren_welcome_obj.get_wc_sub_cat("N.A"))
                     row.append(date_diff(ist_date_welcome, ist_date_order))
                 else:
-                    row += NullAllocationList(5)
+                    row += get_na_list(5)
                 closed_welcome = welc_objects.filter(wc_status__in=[41,42,63])\
                         .order_by('id').last()
                 if closed_welcome:
@@ -130,12 +133,12 @@ def generate_report(duration_report):
                     row.append(closed_welcome.get_wc_sub_cat("N.A"))
                     row.append(date_diff(ist_date_welcome, ist_date_order))
                 else:
-                    row += NullAllocationList(5)
+                    row += get_na_list(5)
                 csvwriter.writerow(row)
             else:
-                row += NullAllocationList(param=15)
+                row += get_na_list(param=15)
                 csvwriter.writerow(row)
-        mail_report(order_objects, csvfile)
+        mail_report(csvfile)
 
     except Exception as e:
         logging.getLogger('error_log').error('unable to create welcome call report%s' % str(e))
