@@ -352,6 +352,7 @@
 
 {% if sqs.id in linkedin_resume_services %}
   {% block zendesk %}
+    {{block.super}}
   {% endblock zendesk %}
 {% endif %}
 

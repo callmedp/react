@@ -152,6 +152,9 @@ urlpatterns += [
         shop_view.ProductHistoryLogDownloadView.as_view(),
         name='product-audit-history-download'),
 
+    url(r'^discount-report-download/$', 
+        shop_view.DownloadDiscountReportView.as_view(), name='discount-report-download'),
+
     url(r'^faq/list/$',
         shop_view.ListFaqView.as_view(),
         name='faq-list'),
