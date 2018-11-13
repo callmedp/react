@@ -19,6 +19,7 @@ from django.core.mail import EmailMessage
 #local imports
 
 #inter app imports
+from payment.models import PaymentTxn
 from shop.choices import DURATION_DICT,EXP_DICT
 from order.models import Order,OrderItem,CouponOrder
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
@@ -53,7 +54,9 @@ if __name__=="__main__":
                 "Actual collection of order","Effective collection per item",\
                 "Price of item on site","Transaction_Amount","coupon_id","Payment_mode","Combo"])
 
-    orders = Order.objects.filter(status__in=[1,3],payment_date__gte=sdt,payment_date__lte=edt).order_by('id')
+    transactions = PaymentTxn.objects.filter(status=1,payment_date__gte=sdt,payment_date__lte=edt)
+    order_ids = list(transactions.values_list('order_id',flat=True))
+    orders = Order.objects.filter(status__in=[1,3],id__in=order_ids).order_by('id')
     logging.getLogger('info_log').info("Discount Report :: Total orders found - {}".format(orders.count()))
 
     for order in orders:
@@ -75,7 +78,7 @@ if __name__=="__main__":
             try:
                 row_data = [
                     order.id,order.email,item.partner.name,order.date_placed.date(),\
-                    order.payment_date.date(),order.payment_date.time(),sales_user_info.get('executive',''),\
+                    txn_obj.payment_date.date(),txn_obj.payment_date.time(),sales_user_info.get('executive',''),\
                     sales_user_info.get('team_lead',''),sales_user_info.get('branch_head',''),\
                     txn_obj.txn,item.id,item.product.name,item.product.heading,\
                     EXP_DICT.get(item.product.get_exp(),"N/A"), \
@@ -88,7 +91,7 @@ if __name__=="__main__":
                 csv_writer.writerow(row_data)
 
             except Exception as e:
-                logging.getLogger('error_log').error(repr(e))
+                logging.getLogger('error_log').error("Discount Report | Order {} | {}".format(order.id,repr(e)))
                 continue
     file_obj.close()
 
