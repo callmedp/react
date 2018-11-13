@@ -14,7 +14,7 @@ class SendMail():
         '''
         if settings.DEBUG:
             subject = "Test Mail " + subject
-            to = ['kharbpriya5@gmail.com']
+            to = ['priya.kharb@hindustantimes.com','gaurav.chopra1@hindustantimes.com']
             cc = ['amar.kumar@hindustantimes.com']
         else:
             bcc = [settings.DEFAULT_FROM_EMAIL]
