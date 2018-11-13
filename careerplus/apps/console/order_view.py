@@ -2791,3 +2791,6 @@ class WhatsappListQueueView(ListView, PaginationMixin):
             queryset=queryset.exclude(**{key:value})
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
+
+
+
