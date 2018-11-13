@@ -91,7 +91,7 @@ def generate_report(duration_report):
 
         for order in order_objects:
             row = []
-            ist_date_order = date_timezone_convert(order.created) #order creation date
+            pay_date_order = date_timezone_convert(order.payment_date) #order payment date
             row.append('CP' + str(order.pk))
             row.append(date_timezone_convert(order.payment_date)\
                 .strftime('%m/%d/%Y %H:%M:%S'))
@@ -107,7 +107,7 @@ def generate_report(duration_report):
                 row.append(welc_obj.get_wc_status("N.A"))
                 row.append(welc_obj.get_wc_cat("N.A"))
                 row.append(welc_obj.get_wc_sub_cat("N.A"))
-                row.append(date_diff(ist_date_welcome,ist_date_order))
+                row.append(date_diff(ist_date_welcome,pay_date_order))
                 curren_welcome_obj = welc_objects.exclude(wc_status__in=[41,42,63])\
                     .order_by('id').last()
                 if curren_welcome_obj:
@@ -118,7 +118,7 @@ def generate_report(duration_report):
                     row.append(curren_welcome_obj.get_wc_status("N.A"))
                     row.append(curren_welcome_obj.get_wc_cat("N.A"))
                     row.append(curren_welcome_obj.get_wc_sub_cat("N.A"))
-                    row.append(date_diff(ist_date_welcome, ist_date_order))
+                    row.append(date_diff(ist_date_welcome, pay_date_order))
                 else:
                     row += get_na_list(5)
                 closed_welcome = welc_objects.filter(wc_status__in=[41,42,63])\
@@ -130,7 +130,7 @@ def generate_report(duration_report):
                     row.append(closed_welcome.get_wc_status("N.A"))
                     row.append(closed_welcome.get_wc_cat("N.A"))
                     row.append(closed_welcome.get_wc_sub_cat("N.A"))
-                    row.append(date_diff(ist_date_welcome, ist_date_order))
+                    row.append(date_diff(ist_date_welcome, pay_date_order))
                 else:
                     row += get_na_list(5)
                 csvwriter.writerow(row)
