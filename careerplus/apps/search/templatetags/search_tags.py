@@ -24,16 +24,13 @@ def get_choice_display(value, choice):
     Return user displayable value of against a lookup id. Mainly used while
     listing facets but can be used elsewhere
     """
-    try:
-        mapping = dict(getattr(choices, choice))
-        if value not in mapping:
-            if value.isdigit():
-                value = int(value)
-            elif value.lower() in mapping:
-                value = value.lower()
-            elif value.upper() in mapping:
-                value = value.upper()
-        return mapping[value]
-    except Exception as e:
-        logging.getLogger('error_log').error('error in mapping: {}, {}'.format(str(e), choice))
-        return 'Others'
+    mapping = dict(getattr(choices, choice))
+    if value not in mapping:
+        if value.isdigit():
+            value = int(value)
+        elif value.lower() in mapping:
+            value = value.lower()
+        elif value.upper() in mapping:
+            value = value.upper()
+    return mapping.get(value,'Others')
+
