@@ -721,11 +721,7 @@ class OrderDetailVeiw(DetailView):
             last_status = "Not Done"
         else:
             timestamp = '\n' + last_status_object.created.strftime('%b. %d, %Y, %I:%M %P ')
-            last_status = last_status_object.wc_status
-            if last_status in [41, 63]:
-                last_status = "Call Done"
-            else:
-                last_status = last_status_object.get_wc_status()
+            last_status = last_status_object.get_wc_status()
             last_status += timestamp
         order_items = order.orderitems.all().select_related('product', 'partner').order_by('id')
 
