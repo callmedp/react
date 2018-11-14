@@ -168,3 +168,10 @@ def send_email_from_base(subject=None, body=None, to=[], headers=None, oi=None, 
     except Exception as e:
         logging.getLogger('error_log').error(
             "%s - %s - %s" % (str(to), str(e)))
+
+
+def date_timezone_convert(date=None):
+    from pytz import timezone
+    if not date:
+        return 'N.A'
+    return date.astimezone(timezone(settings.TIME_ZONE))

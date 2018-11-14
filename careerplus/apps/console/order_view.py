@@ -33,8 +33,7 @@ from emailers.sms import SendSMS
 from core.mixins import TokenExpiry
 from payment.models import PaymentTxn
 from linkedin.autologin import AutoLogin
-from order.functions import send_email
-
+from order.functions import send_email, date_timezone_convert
 
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from review.models import Review
@@ -222,7 +221,8 @@ class OrderListView(ListView, PaginationMixin):
 #         self.created = request.GET.get('created', '')
 #         return super(WelcomeCallVeiw, self).get(request, args, **kwargs)
 #
-#     def post(self, request, *args, **kwargs):
+#     def post(self, request, *args, **kw
+# args):
 #         try:
 #             order_list = request.POST.getlist('table_records', [])
 #             action_type = int(request.POST.get('action_type', '0'))
@@ -720,7 +720,7 @@ class OrderDetailVeiw(DetailView):
         if not last_status_object:
             last_status = "Not Done"
         else:
-            timestamp = '\n' + last_status_object.created.strftime('%b. %d, %Y, %I:%M %P ')
+            timestamp = '\n' + date_timezone_convert(last_status_object.created).strftime('%b. %d, %Y, %I:%M %P ')
             last_status = last_status_object.get_wc_status()
             last_status += timestamp
         order_items = order.orderitems.all().select_related('product', 'partner').order_by('id')
