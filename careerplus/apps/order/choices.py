@@ -392,7 +392,7 @@ WC_CATEGORY = (
 WC_SUB_CATEGORY1 = (
     # 41 - 60
     (41, 'No Issue'),
-    (42, 'Order Processed After 3 Calls'),
+    (42, 'Order Processed After Final Reminde'),
 )
 
 WC_SUB_CATEGORY2 = (
