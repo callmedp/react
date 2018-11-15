@@ -80,12 +80,7 @@ class AbstractSEO(models.Model):
         max_interations = getattr(self, 'max_iterations', 1000)
         slug_separator = getattr(self, 'separator', '-')
         # fields, query set, other setup variables
-        fix_field = False
-        try:
-            fix_field = getattr(self, url_slug_fix)
-        except Exception as e:
-            logging.getLogger('error_log').error('unable to set fix fields %s'%str(e))
-            fix_field = False
+        fix_field = getattr(self, url_slug_fix,False)
         if not fix_field:    
             slug_field = self._meta.get_field(url_slug_name)
             slug_len = slug_field.max_length
