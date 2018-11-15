@@ -392,7 +392,7 @@ WC_CATEGORY = (
 WC_SUB_CATEGORY1 = (
     # 41 - 60
     (41, 'No Issue'),
-    (42, 'Order Processed After Final Reminde'),
+    (42, 'Order Processed After Final Reminder'),
 )
 
 WC_SUB_CATEGORY2 = (
