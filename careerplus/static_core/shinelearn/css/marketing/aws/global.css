@@ -550,6 +550,18 @@ h2.text-center {
     display: block !important;
 }
 
+.error-txt{
+    color:red !important;
+}
+
+.js-error{
+    margin-bottom: 0px;
+    color: red !important;
+    font-size: 12px;
+    margin-top: 2px;
+    margin-left: 10px;
+}
+
 @media (min-width:800px) {
 
 
@@ -1105,11 +1117,12 @@ h2.text-center {
 }
 
 .error-txt{
-    color:red;
+    color:red !important;
 }
+
 .js-error{
     margin-bottom: 0px;
-    color: red;
+    color: red !important;
     font-size: 12px;
     margin-top: 2px;
     margin-left: 10px;

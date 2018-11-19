@@ -13,9 +13,7 @@
     <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/ds/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/aws/global.css' %}">
 
-    
-
-    <title>Data Science Prodegree</title>
+    <title>Aws Architect Certified</title>
   </head>
   <body>
    <div class="container-fluid banner-bg">
@@ -58,16 +56,16 @@
                     </li>
                     
                     <li class="form-group">
-                       <select class="form-control" id="exampleFormControlSelect1">
-                           <option>Program</option>
-                         </select>
+                       <select class="form-control" name="selection">
+                        <option selected="selected" value="1716">Fees - Rs. 11000</option>
+                        </select>
                     </li>
 
                   </ul>
 
-                  <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
+                  <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}1716{% endif %}">
 
-                <input type="hidden" name="prd" value="Data Scientist - Rs. 55000/-">
+                <input type="hidden" name="prd" value="AWS Architect Training - Rs. 11000/-">
 
                 <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 
@@ -114,16 +112,16 @@
                    </li>
 
                    <li class="form-group" >
-                      <select class="form-control" id="exampleFormControlSelect1" >
-                          <option >Program</option>
+                      <select class="form-control" name="selection" id="exampleFormControlSelect1" >
+                          <option selected="selected" value="1716">Fees - Rs. 11000</option>
 
                         </select>
                    </li>
                  </ul>
 
-                  <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
+                  <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}1716{% endif %}">
 
-                <input type="hidden" name="prd" value="Data Scientist - Rs. 55000/-">
+                <input type="hidden" name="prd" value="AWS Architect Training - Rs. 11000/-">
 
                 <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 
