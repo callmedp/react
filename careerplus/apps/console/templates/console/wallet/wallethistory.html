@@ -76,6 +76,14 @@
                   </select>
                 </div>
               </div>
+              <div class="col-sm-3 col-md-3">
+                <div class="form-group">
+                  <label>Date Range</label>
+                  <div class='input-group date' id='startdate'>
+                    <input class="form-control date-range-picker" id="id_filter_date" name="date_range" placeholder="from date - to date" type="text" readonly=""  value="{{ request.GET.date_range}}" >                      
+                  </div>
+                </div>
+              </div>
               <div class="col-sm-3 col-md-3" style="margin-left:-15px">
                 <div class="form-group">
                   <span class="input-group-btn">
@@ -155,4 +163,25 @@
 
 
 {% endblock pagecontent %}
+
+{% block js_block %}
+  {{ block.super }}
+
+
+  {% compress js inline %}
+ <script type="text/javascript">
+      
+    $(function () {
+      $('#id_filter_date').daterangepicker({
+        opens: 'left',
+        "dateLimit": {
+           "month": 2
+        }
+      });
+    });
+  </script>
+  {% endcompress %}
+
+{% endblock js_block %}
+
 

@@ -164,6 +164,16 @@ class WalletHistoryView(TemplateView):
 
     def get_context_data(self, **kwargs):
         email = self.request.GET.get('email', '')
+        date_range = self.request.GET.get('date_range', '')
+        filter_kwargs = {}
+        if date_range:
+            start_date, end_date = date_range.split(' - ')
+            start_date = datetime.datetime.strptime(
+                start_date + " 00:00:00", "%m/%d/%Y %H:%M:%S")
+            end_date = datetime.datetime.strptime(
+                end_date + " 23:59:59", "%m/%d/%Y %H:%M:%S")
+            filter_kwargs['created__gte'] = start_date
+            filter_kwargs['created__lte'] = end_date
         context = super(WalletHistoryView, self).get_context_data(**kwargs)
         if email:
             try:
@@ -171,6 +181,9 @@ class WalletHistoryView(TemplateView):
             except Wallet.DoesNotExist:
                 return context
             context['wallet'] = wallet
-            context['wallet_data'] = wallet.wallettxn.all().order_by('-created')[:20]
+            context['wallet_data'] = wallet.wallettxn.filter(**filter_kwargs).order_by('-created')
+            # if no date_range is given show last 20 transaction as per requirement
+            if not date_range:
+                context['wallet_data'] = context['wallet_data'][:20]
 
         return context
