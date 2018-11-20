@@ -88,7 +88,8 @@ class WalletView(FormView):
                         txn_type=1,
                         status=1,
                         point_value=points,
-                        added_by=request.user.id
+                        added_by=request.user.id,
+                        notes=note
                     )
                     if order:
                         wal_txn.order = order
@@ -155,3 +156,21 @@ class WalletView(FormView):
             messages.add_message(request, messages.ERROR,
                                  'PLEASE CHECK/FILLUP THE DETAILS ')
             return self.form_invalid(form)
+
+
+class WalletHistoryView(TemplateView):
+    template_name = 'console/wallet/wallethistory.html'
+    email = ''
+
+    def get_context_data(self, **kwargs):
+        email = self.request.GET.get('email', '')
+        context = super(WalletHistoryView, self).get_context_data(**kwargs)
+        if email:
+            try:
+                wallet = Wallet.objects.get(owner_email=email)
+            except Wallet.DoesNotExist:
+                return context
+            context['wallet'] = wallet
+            context['wallet_data'] = wallet.wallettxn.all().order_by('-created')[:20]
+
+        return context

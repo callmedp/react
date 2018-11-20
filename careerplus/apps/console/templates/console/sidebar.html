@@ -252,11 +252,18 @@
             <a href="{% url 'console:discount-report-download' %}"><i class="fa fa-edit"></i>Discount Report</a>
         </li>
         {% endif %}
-         {% if perms.wallet.console_add_remove_wallet_point %}
-        <li>
-            <a href="{% url 'console:walletrewards' %}"><i class="fa fa-envelope"></i>Wallet</a>
+        <li><a><i class="fa fa-list-alt"></i> Wallet <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            {% if perms.wallet.console_add_remove_wallet_point %}
+            <li>
+              <a href="{% url 'console:walletrewards' %}"><i class="fa fa-wallet"></i>Add/Remove Points</a>
+            </li>
+            <li>
+              <a href="{% url 'console:wallethistory' %}"><i class="fa fa-wallet"></i>Wallet History</a>
+            </li>
+            {% endif %}
+          </ul>
         </li>
-        {% endif %}
         {% comment %}
         {% if is_admin %}
             <li><a><i class="fa fa-edit"></i> CMS <span class="fa fa-chevron-down"></span></a>
