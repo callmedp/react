@@ -1,0 +1,533 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/data-science/bootstrap-grid.css' %}">
+    <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/data-science/bootstrap-reboot.css' %}">
+    <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/ds/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/aws/global.css' %}">
+
+    <title>Aws Architect Certified</title>
+  </head>
+  <body>
+   <div class="container-fluid banner-bg">
+     <div class="row">
+       <div class="container">
+         <div class="row">
+           <div class="col-md-8 col-12">
+             <a href="#"><img src="{% static 'shinelearn/images/marketing/ds/logo.png' %}" /></a>
+           </div><!-- /. col -->
+           <div class="col-md-4 col-12 mt-0  pl-4 pl-lg-0 htlogo d-none ">
+            <a href="#"><img src="{% static 'shinelearn/images/marketing/ds/ht-logo.png' %}"></a>
+           </div><!-- /. col -->
+         </div><!-- /. ROW -->
+
+         <div class="row mt-lg-4 mt-2 mb-2-sm mb-3 mb-lg-5">
+           <div class="col-12  col-md-7 col-lg-8">
+             <div class="right-header">
+              <div class="mt-3"> 
+                <p>Become an</p>
+                <h1>AWS Architect Certified</h1>
+                 
+              </div><!-- /. margin -->
+              <div class="main-form mt-4 d-block d-sm-none">
+                <h2>Let’s get started</h2>
+ 
+                <form id="lead_mobile" method="POST" action="{% url 'crmapi:lead-management' %}">
+                    {% csrf_token %}
+                  <ul class="mt-2 mb-2">
+                    <li class="form-group">
+                       <input type="text" id="name" name="name" class="form-control" placeholder="Name" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %} >
+                        <p class="js-error"></p>
+                    </li>
+                    <li class="form-group">
+                       <input type="text" id="email" name="email" class="form-control" placeholder="Email" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %} >
+                        <p class="js-error"></p>
+                    </li>
+                    <li class="form-group">
+                       <input type="text" id="mobile" name="number" class="form-control" placeholder="Mobile" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %} >
+                        <p class="js-error"></p>
+                    </li>
+                    
+                    <li class="form-group">
+                       <select class="form-control" name="selection">
+                        <option selected="selected" value="1716">Fees - Rs. 11000</option>
+                        </select>
+                    </li>
+
+                  </ul>
+
+                  <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}1716{% endif %}">
+
+                <input type="hidden" name="prd" value="AWS Architect Training - Rs. 11000/-">
+
+                <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+                <input type="hidden" name="lsource" value="{{ lead_source }}">
+
+                 <button type="submit" class="btn btn-primary w-100 scrollTop" onclick="$('#lead_mobile').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;" >Enrol Now</button>
+                 <p class="tnc mt-2 mb-2">By registering with us you agree to our <br>Terms & Conditions*</p>
+                
+               </form>
+              </div><!-- /. main-form -->
+
+              <ul class="mt-4 mt-lg-5">
+                <li>30+ Hours of Online Live Instructor-led Classes</li>
+                <li>Hands-on training on CloudLab</li>
+              </ul>
+
+             <div class="mt-4 mt-lg-5 aws-stats">
+               <span><i class="icon-industry"></i>Average Salary of AWS Architect is <strong class="db">$125k</strong></span>
+               
+                <span><i class="icon-online"></i>AWS market expected to reach <strong>$236 B by 2020 at a CAGR of 22%</strong></span>
+             </div>
+
+            
+            </div><!-- Right Header -->
+           </div><!-- right col -->
+           <div class="col-12 col-md-5 col-lg-4 d-none d-sm-block">
+             <div class="main-form">
+               <h2>Let’s get started</h2>
+
+               <form id="lead" method="POST" action="{% url 'crmapi:lead-management' %}">
+                    {% csrf_token %}
+                   <ul class="mt-2 mb-2">
+                   <li class="form-group">
+                      <input type="text" id="name" name="name" class="form-control" placeholder="Name"  value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %}>
+                       <p class="error-txt js-error"></p>
+                   </li>
+                   <li class="form-group">
+                      <input type="text" id="email" name="email" class="form-control" placeholder="Email" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %}>
+                       <p class="error-txt js-error"></p>
+                   </li>
+                   <li class="form-group">
+                      <input type="text" id="mobile" name="number" class="form-control" placeholder="Mobile" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
+                       <p class="error-txt js-error"></p>
+                   </li>
+
+                   <li class="form-group" >
+                      <select class="form-control" name="selection" id="exampleFormControlSelect1" >
+                          <option selected="selected" value="1716">Fees - Rs. 11000</option>
+
+                        </select>
+                   </li>
+                 </ul>
+
+                  <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}1716{% endif %}">
+
+                <input type="hidden" name="prd" value="AWS Architect Training - Rs. 11000/-">
+
+                <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+                <input type="hidden" name="lsource" value="{{ lead_source }}">
+
+                <button type="submit" class="btn btn-primary w-100" onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enrol Now</button>
+                <p class="tnc mt-2 mb-2">By registering with us you agree to our <br>Terms & Conditions*</p>
+               
+              </form>
+             </div><!-- /. main-form -->
+           </div>
+         </div><!-- /. ROW -->
+       </div><!-- /. Container -->
+     </div><!-- /. ROW -->
+   </div><!-- /. Container fluid -->
+
+     <!-- Navigation -->
+     <nav class="navbar navbar-expand-lg navbar-light sticky" id="mainNav">
+      <div class="container">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav m-auto">
+             <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#course-highlights">Course highlights </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#objectives">Objectives</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#who-should-attend">Who should Attend?</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#skill-you-learn">Skill you learn</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#why-us">Why us</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+   </div>
+   <!-- /. Main Menu -->
+
+
+<!-- Course Highlights -->
+   <section class="light-gray" id="course-highlights">
+     <div class="container attend-m">
+       <h2 class="text-center main-head">Course Highlights</h2>
+       <div class="row">
+        <div class="col-12 col-md-6 col-lg-3 course-item">
+          <div class="highlight">
+          <span><img src="{% static 'shinelearn/images/marketing/aws/practice-project.png' %}" /></span>
+          <strong>Practice Projects </strong>
+          <p>Acquire hands-on knowledge and expertise by executing projects on CloudLab!</p>
+        </div>
+      </div><!-- /. course item- 1 -->
+
+        <div class="col-12 col-md-6 col-lg-3 course-item ">
+             <div class="highlight">
+            <span><img src="{% static 'shinelearn/images/marketing/aws/completion-rate.png' %}" /></span>
+            <strong>Course Completion Rate </strong>
+          <p>Focus on course completion which helps candidate in acquiring more knowledge</p>
+        </div>
+      </div><!-- /. course item- 1 -->
+
+        <div class="col-12 col-md-6 col-lg-3 course-item ">
+          <div class="highlight">
+            <span><img src="{% static 'shinelearn/images/marketing/aws/industry-expert.png' %}" /></span>
+           <strong>Training by industry experts </strong>
+            <p>Get trained by industry experts or AWS Certified Experts</p>
+          </div>
+        </div><!-- /. course item- 1 -->
+
+        <div class="col-12 col-md-6 col-lg-3 course-item ">
+          <div class="highlight">
+            <span><img src="{% static 'shinelearn/images/marketing/aws/certification.png' %}" /></span>
+          <strong> Certification</strong>
+            <p>Become AWS Architect Expert based on the project completion</p>
+          </div>
+        </div><!-- /. course item- 1 -->
+
+        
+       </div><!-- /. ROW -->
+     </div><!-- /. Container -->
+   </section><!-- /. Course Highlights-->
+
+
+
+ <!-- Who should attend? -->
+  <section class="container-fluid course-objectives " id="objectives">
+    <div class="container attend-m">
+      <h2 class="text-center main-head1">Course Objectives</h2>
+      <p class="text-center">During the AWS Architect Training, you’ll learn the following</p>
+      <div class="row">
+        <!-- /. col -->
+        
+        
+          
+            <div class="col-12 col-md-6 col-lg-6 objectives-list"><p>AWS Architecture and different models of Cloud Computing</p></div>
+            <div class="col-12 col-md-6 col-lg-6 objectives-list"><p>Security and Identity Services: IAM, KMS</p></div>
+            <div class="col-12 col-md-6 col-lg-6 objectives-list"><p>Compute Services: AWS EC2, Auto Scaling and Load Balancing, AWS Lambda, Elastic Beanstalk</p></div>
+            <div class="col-12 col-md-6 col-lg-6 objectives-list"><p>Networking Services: Amazon VPC, Route 53, Direct Connect</p></div>
+            <div class="col-12 col-md-6 col-lg-6 objectives-list"><p>Storage Services : AWS EBS, AWS S3, AWS Glacier, AWS CloudFront, AWS Snowball, Storage Gateway</p></div>
+            <div class="col-12 col-md-6 col-lg-6 objectives-list"><p>Management Tools: AWS CloudTrail, AWS CloudWatch, CloudFormation, OpsWorks, Trusty Advisor</p></div>
+            <div class="col-12 col-md-6 col-lg-6 objectives-list"><p>Database Services: AWS RDS, AWS DynamoDB, ElastiCache, AWS RedShift</p></div>
+            <div class="col-12 col-md-6 col-lg-6 objectives-list"><p>Application Services: SES, SNS, SQS</p></div>
+          
+          <div class="text-center col-12 objective-m">
+          <a href="#" class="btn btn-primary pl-5 pr-5 inline-block scrollTop">Enrol Now</a>
+        </div>
+
+
+         
+       
+
+      </div><!-- /. ROW -->
+    </div><!-- /. container-->
+  </section><!-- /. Who should attend? -->
+
+
+ 
+  <!-- Who should attend? -->
+  <section class="container-fluid light-gray" id="who-should-attend">
+    <div class="container">
+      <div class="row attend-m">
+        <div class="col-md-6 col-lg-6 col-12 d-xs-none d-lg-block">
+          <img src="{% static 'shinelearn/images/marketing/aws/who-attend.png' %}" class="img-fluid d-none d-md-block mt-lg-4 mt-xl-0" alt="Who should attend?" />
+        </div><!-- /. col -->
+        
+        <div class="col-md-6 col-lg-6 col-12">
+          <h2 class="text-left main-head pb-4">Who should attend?</h2>
+          <ul class="attend-item">
+            <li>Professionals who want Project Experience in migrating and deploying AWS solutions</li>
+            <li>Professionals with IT Infrastructure background</li>
+            <li>Professionals with Virtualisation experience</li>
+            <li>DevOps professionals</li>
+            <li>Professionals with understanding of application, server, and network security and compliance</li>
+          </ul><!-- UL -->
+
+        </div><!-- /. col -->
+      </div><!-- /. ROW -->
+    </div><!-- /. container-->
+  </section><!-- /. Who should attend? -->
+
+
+
+<!-- Course Highlights -->
+   <section class="container-fluid" id="skill-you-learn">
+     <div class="container attend-m">
+       <h2 class="text-center main-head">Skills You will learn</h2>
+       <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 course-item">
+          <div class="skill-learn">
+          <p>Design and deploy scalable, highly
+available, and fault tolerant <strong>systems on AWS</strong></p>
+        </div>
+      </div><!-- /. course item- 1 -->
+
+        <div class="col-12 col-md-6 col-lg-4 course-item ">
+             <div class="skill-learn">
+          <p>Understand lift and shift of an existing
+on-premises <strong>application to AWS</strong></p>
+        </div>
+      </div><!-- /. course item- 1 -->
+
+        <div class="col-12 col-md-6 col-lg-4 course-item ">
+          <div class="skill-learn">
+            <p><strong>Ingress and egress of data</strong> to and
+from AWS</p>
+          </div>
+        </div><!-- /. course item- 1 -->
+
+        <div class="col-12 col-md-6 col-lg-4 course-item ">
+          <div class="skill-learn">
+            <p><strong>Identify the appropriate AWS service</strong>
+based on data, compute, database, or security
+requirements</p>
+          </div>
+        </div><!-- /. course item- 1 -->
+        
+        <div class="col-12 col-md-6 col-lg-4 course-item ">
+          <div class="skill-learn">
+          <p>Identify the <strong>appropriate use of AWS</strong>
+architectural best practices</p>
+        </div>
+        </div><!-- /. course item- 1 -->
+        
+        <div class="col-12 col-md-6 col-lg-4 course-item ">
+          <div class="skill-learn">
+          <p> <strong>Estimate AWS costs</strong> and identifying cost
+control mechanisms</p>
+        </div>
+        </div><!-- /. course item- 1 -->
+
+      <!-- /. course item- 1 -->
+
+        <div class="text-center col-12">
+          <a href="#" class="btn btn-primary pl-5 pr-5 inline-block scrollTop">Enrol Now</a>
+        </div>
+       </div><!-- /. ROW -->
+     </div><!-- /. Container -->
+   </section><!-- /. Course Highlights-->
+
+
+  <!-- Why buy from Shine learning -->
+   <section class="container-fluid light-gray" id="why-us">
+     <div class="container attend-m">
+       <h2 class="text-center main-head">Why buy from Shine learning</h2>
+       <div class="row">
+        <div class="col-12 col-md-4 col-lg-4 course-item">
+          <div class="highlight">
+          <span><img src="{% static 'shinelearn/images/marketing/aws/return-investment.png' %}" /></span>
+          <strong>Return on Investment </strong>
+          <p>Tie-up with 2 partners instead of 1 which means more than 100% return on your investment</p>
+        </div>
+      </div><!-- /. course item- 1 -->
+
+        <div class="col-12 col-md-4 col-lg-4 course-item ">
+             <div class="highlight">
+            <span><img src="{% static 'shinelearn/images/marketing/aws/featured-profile.png' %}" /></span>
+            <strong>Free featured profile</strong>
+          <p>FREE featured profile worth Rs. 1640 for 1 month on Shine.com</p>
+        </div>
+      </div><!-- /. course item- 1 -->
+
+        <div class="col-12 col-md-4 col-lg-4 course-item ">
+          <div class="highlight">
+            <span><img src="{% static 'shinelearn/images/marketing/aws/shine-credit.png' %}" /></span>
+           <strong>Shine credits</strong>
+            <p>10% Shine credits redeemable on next purchase*</p>
+          </div>
+        </div><!-- /. course item- 1 -->
+
+       </div><!-- /. ROW -->
+     </div><!-- /. Container -->
+   </section><!-- /. Why buy from Shine learning-->
+
+  
+
+  <footer class="container-fluid">
+    <p class="text-center mb-0">Copyright © 2018 HT Media Limited.</p>
+  </footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+
+    <script src="{% static 'shinelearn/js/marketing/data-science/bootstrap.js' %}"></script>
+    <script src="{% static 'shinelearn/js/marketing/data-science/jquery.easing.js' %}"></script>
+    <script src="{% static 'shinelearn/js/marketing/data-science/scrolling-nav.js' %}"></script>
+
+   <script type="text/javascript">
+    var _gaq = _gaq || [];
+
+    $.validator.addMethod("lettersonly", function (value, element){
+        return this.optional(element) || /^[a-z\s]*$/i.test(value);
+    }, "Letters only please");
+
+    $.validator.addMethod("defaultInvalid", function (value, element) {
+        return !(element.value == element.defaultValue);
+    }, "This field is required.");
+
+        $("#lead").validate({
+            submitHandler:function (form) {
+                var action = $(form).attr('action');
+                $.post(action, $(form).serialize(), function (data) {
+                    if (data && data['status']){
+                        $.each($("#lead"), function (i, e) {
+                            e.reset();
+                        });
+                        $("#lead label").remove();
+                        var conversion_id = 991709191;
+                        var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                        var ga_code = document.createElement('div');
+                        ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                       document.body.appendChild(ga_code);
+                       window.location.href ='thankyou-for-query';
+                        return false;
+                    }
+                }, 'json');
+            },
+            rules:{
+                number:{
+                    required:true,
+                    minlength:10,
+                    maxlength:15,
+                    number:true,
+                },
+                email:{
+                    email:true,
+                    required:true,
+
+                },
+                name:{
+
+                    lettersonly:true,
+
+                },
+
+            },
+            messages:{
+                number:{
+                   required:"Field is required"
+                },
+                email:{
+                    required:"Field is required"
+                },
+                name:{
+                    required:"Field is required"
+                },
+
+            },
+            highlight:function(element, errorClass) {
+              $(element).closest('.form-group').addClass('error');
+            },
+            unhighlight:function(element, errorClass) {
+              $(element).closest('.form-group').removeClass('error');
+              $(element).siblings('.js-error').html("");
+            },
+            errorPlacement: function(error, element){
+              $(element).siblings('.js-error').html(error.text());
+            }
+          });
+
+
+ $("#lead_mobile").validate({
+            submitHandler:function (form) {
+                var action = $(form).attr('action');
+                $.post(action, $(form).serialize(), function (data) {
+                    if (data && data['status']){
+                        $.each($("#lead"), function (i, e) {
+                            e.reset();
+                        });
+                        $("#lead label").remove();
+                        var conversion_id = 991709191;
+                        var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                        var ga_code = document.createElement('div');
+                        ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                       document.body.appendChild(ga_code);
+                       window.location.href ='thankyou-for-query';
+                        return false;
+                    }
+                }, 'json');
+            },
+            rules:{
+                number:{
+                    required:true,
+                    number:true,
+                    minlength:10,
+                    maxlength:20,
+                },
+                email:{
+                    email:true,
+                    required:true,
+
+                },
+                name:{
+                    lettersonly:true,
+
+                },
+                // msg:{
+                //     required:true,
+                //     maxlength:500
+                // }
+            },
+            messages:{
+                number:{
+                   required:"Field is required",
+                   number: "Please enter valid number only"
+                },
+                email:{
+                    required:"Field is required"
+                },
+                name:{
+                    required:"Field is required"
+                },
+                // msg:{
+                //     required:"Field is required",
+                //     maxlength:"No more than 500 characters."
+
+                // }
+            },
+            highlight:function(element, errorClass) {
+              $(element).closest('.form-group').addClass('error');
+            },
+            unhighlight:function(element, errorClass) {
+              $(element).closest('.form-group').removeClass('error');
+              $(element).siblings('.js-error').html("");
+            },
+            errorPlacement: function(error, element){
+              $(element).siblings('.js-error').html(error.text());
+            }
+          });
+
+
+ </script>
+
+
+
+  </body>
+</html>

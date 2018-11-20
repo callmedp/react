@@ -1,0 +1,1212 @@
+
+body {
+    color: #333;
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+select {
+    width: 100%;
+    height: 34px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('../../../images/marketing/aws/dropdown.png') !important;
+    background-color: #fff;
+    background-position: 100% 0;
+    background-repeat: no-repeat;
+    border: 1px solid #c1c1c1;
+    color: #999;
+    font-size: 14px;
+    outline: 0;
+    padding: 6px 35px 6px 12px;
+    text-align: left;
+    -webkit-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    transition: all .3s ease;
+    border-radius: 0;
+  }
+  
+  select option {
+    padding: 6px;
+  }
+
+
+
+.banner-bg {
+    background: #51aae1;
+    height: auto;
+    background-attachment: scroll;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.right-header .top-head {
+    font-size: 18px;
+    color: rgba(255, 255, 255, .8);
+    margin-bottom: 0;
+    line-height: 26px;
+    font-weight: 300;
+}
+
+.right-header h1 {
+    font-weight: 700;
+    font-size: 41px;
+    color: #fff;
+    box-shadow: #fff;
+    margin-bottom: 0;
+    text-shadow: 0px 2px 1px rgba(0, 0, 0, .3);
+    line-height: 40px;
+}
+
+.right-header p{
+    font-weight: 400;
+    font-size: 37px;
+    color: #fff;
+    box-shadow: #fff;
+    margin-bottom: 0;
+    text-shadow: 0px 2px 1px rgba(0, 0, 0, .3);
+    display: block;
+    line-height: 40px;
+}
+
+.right-header ul {
+    color: #bfe6ff;
+    list-style-type: disc;
+    margin: 20px 0 0 15px !important;
+    font-weight: 400;
+}
+
+.right-header ul li {
+    margin-bottom: 5px;
+}
+
+.right-header .aws-stats{
+    display: table;
+    padding-bottom: 30px;
+}
+
+.right-header .aws-stats span{
+    font-size: 14px;
+    font-weight: 400;
+    color: #fff;
+    display: table;
+    border-left: 1px solid transparent;
+    padding-left: 0;
+    padding-top: 10px;
+}
+
+.right-header .aws-stats span:first-child{
+    border-left: 1px solid transparent;
+    padding-left: 0;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #8bc4eb;
+    display: block;
+}
+
+.right-header .aws-stats span i{
+    width: 29px;
+    height: 29px;
+    margin-right: 15px;
+    float: left;
+    margin-top: 7px;
+}
+
+.right-header .aws-stats span strong{
+    font-weight: 700;
+    display: inline-block;
+}
+
+.icon-industry {
+    background: url('../../../images/marketing/aws/average-salary.png') no-repeat 0 0;
+}
+
+.icon-online {
+    background: url('../../../images/marketing/aws/aws-market.png') no-repeat;
+}
+.navbar  {
+    display: none;
+}
+
+/*.data-scientisty {
+    font-size: 14px;
+    color: #fff;
+    padding-right: 20px;
+    padding-top: 0;
+    line-height: 1.2;
+}
+.data-scientisty strong {
+    color: #ffcf01;
+    font-size: 18px;
+    font-weight: 400;
+}*/
+
+.main-form {
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 20px 25px;
+    box-shadow: 0px 0px 18px rgba(0, 0, 0, .3);
+}
+
+.main-form h2 {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.main-form p{
+    font-size: 12px;
+    line-height: 16px;
+    text-shadow: none;
+    color: #333;
+}
+
+.main-form ul{
+    list-style-type: none;
+    margin: 0 !important;
+}
+
+.main-form .form-control {
+    border: none;
+    border-radius: 5px;
+    height: 40px;
+    font-weight: 400;
+    font-size: 14px;
+    background-color: #f4f4f4;
+}
+
+.main-form .form-group {
+    margin-bottom: 10px;
+}
+
+.tnc {
+    font-size: 12px;
+}
+
+.tnc a {
+    color: #333;
+    text-decoration: underline;
+}
+
+.call-us {
+    border-top: 1px solid rgba(0, 0, 0, .2);
+    margin: 0 -25px;
+    padding: 10px 15px 0 70px;
+    position: relative;
+}
+
+.call-us span {
+    width: 29px;
+    height: 29px;
+    display: block;
+    position: absolute;
+    left: 25px;
+    background: url('../../../marketing/ds/sprite.png') no-repeat -94px 0;
+    top: 18px;
+}
+
+.call-us strong {
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.call-us p {
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+.easy-emi {
+    width: 305px;
+    text-align: center;
+    padding-top: 10px;
+    color: rgba(255, 255, 255, .6);
+    font-weight: 300;
+    font-size: 12px;
+}
+
+/* Course Highlights */
+
+section {
+    padding: 30px 0;
+}
+
+.light-gray {
+    background-color: #f7f7f7;
+}
+
+.main-head {
+    font-size: 28px;
+    font-weight: 700;
+    padding-bottom: 30px;
+}
+
+.course-item {
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.course-item .highlight {
+    background: #fff;
+    /*margin: 3%;*/
+    padding:50px 10px 10px 10px;
+    border-radius: 5px;
+    /*border-bottom:solid 4px #8edbff;*/
+    box-shadow: 0px 0px 55px 0px rgba(0, 0, 0, 0.1);
+    min-height: 250px;
+    text-align: center;
+}
+.course-item .highlight strong {
+    display: block;
+    font-weight: 700;
+}
+
+.course-item .skill-learn {
+    background: #fff;
+    padding:10px;
+    border-radius: 5px;
+    border-left:solid 4px #49a8e3;
+    box-shadow: 0px 0px 55px 0px rgba(0, 0, 0, 0.1);
+    vertical-align: middle;
+    min-height: 85px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.course-item .skill-learn p {
+    margin: 0;
+}
+
+.course-item .skill-learn p strong {
+    font-weight: 700;
+}
+
+
+.course-item span {
+    display: inline-block;
+    padding-bottom: 15px;
+    vertical-align: top;
+    margin-right: 10px;
+    width: 77px;
+    text-align: center;
+}
+
+/*.course-item span img {
+    width: 80%;
+}*/
+
+.course-item p {
+    display: inline-block;
+    width: 90%;
+    font-size: 14px;
+    color: #666;
+}
+
+
+.courses-wrap {
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 0px 24px rgba(0, 0, 0, .2);
+    display: flex;
+    min-height: 465px;
+    margin-top:20px; 
+}
+
+.courses-wrap .nav-tabs {
+    border: 0;
+}
+
+.courses-wrap .nav {
+    padding: 15px;
+}
+
+.courses-wrap .box {
+    background: #fff;
+    border-radius: 15px;
+    border-bottom: solid 5px #8edbff;
+    box-shadow: 10px 9px 26px 6px rgba(186,186,186,0.3);
+    padding:30px 10px 30px 10px; 
+    float: left;
+    font-size: 15px;
+
+}
+
+.courses-wrap .box li {
+   width: 38%;
+
+padding: 5px 10px 5px 0;
+
+list-style: url('../../../marketing/ds/digital_tick.gif') no-repeat;
+
+float: left;
+
+margin-left: 50px;
+}
+
+
+
+
+
+.for-ver-mid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.courses-wrap .nav-tabs .nav-link {
+    border: none;
+    color: #666;
+    font-size: 16px;
+    position: relative;
+    font-weight: 700;
+}
+
+.courses-wrap .nav-tabs .nav-link::after {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 11px 17px 11px 0;
+    border-color: transparent #1799a0 transparent transparent;
+    position: absolute;
+    right: -15px;
+    top: 10px;
+    content: '';
+    display: none;
+}
+
+.courses-wrap .nav-tabs .active::after {
+    display: block;
+}
+
+.courses-wrap .nav-item {
+    position: relative;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.courses-wrap .nav-item:last-child {
+    padding-bottom: 0;
+}
+
+.courses-wrap .nav-item .active {
+    color: #000;
+    font-weight: 700;
+}
+
+.courses-wrap .active-arrow {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 11px 17px 11px 0;
+    border-color: transparent #1799a0 transparent transparent;
+    position: absolute;
+    right: -15px;
+    top: 10px;
+}
+.courses-wrap .tab-content {
+    flex: 1;
+background:url('../../../images/marketing/ds/data_science_skill.jpg') top right no-repeat;
+padding-top:10%; 
+}
+
+
+
+.courses-wrap .jobrole {
+    background: url('../../../images/marketing/ds/DataScience_jobrole.jpg') right no-repeat;
+    padding-top:5%; 
+}
+
+
+
+.courses-wrap .tab-content h2 {
+    padding-left:50px;
+}
+
+.courses-wrap .tab-content > .tab-pane {
+    height: 100%;
+}
+
+
+
+
+.digital {
+    color: #333;
+    list-style-type: none;
+    margin: 0;
+
+}
+.digital li {
+     background: #fff;
+    border-radius: 5px;
+    border-left: solid 8px #8edbff;
+    box-shadow:10px 9px 26px 6px rgba(186,186,186,0.3);
+     vertical-align: middle;
+
+
+}
+
+.digital li strong {
+    font-weight: 600;
+}
+
+.digital li em {
+    font-style: normal;
+      vertical-align: middle;
+    color: #666666;
+} 
+
+.btn-primary {
+    background-color: #f1c300;
+    border-color: #f1c300;
+    color: #000;
+    font-weight: 600;
+    line-height: 30px;
+}
+
+.btn-primary:hover {
+  color: #000;
+  background-color: #ffda3d;
+  border-color: #ffda3d;
+}
+
+.attend-item {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    color: #666;
+}
+
+.attend-item li {
+    margin: 0 0 20px 0;
+    display: block;
+    position: relative;
+    padding-left: 35px;
+}
+
+.attend-item li:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    background: url('../../../images/marketing/aws/tick.png') no-repeat 0 0;
+    display: inline-block;
+    width: 14px;
+    height: 11px;
+}
+
+.course-objectives {
+    background: url('../../../images/marketing/aws/course-objective-bg.jpg') no-repeat bottom center;
+}
+
+.course-objectives p {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.course-objectives p.text-center {
+    text-align: left !important;
+}
+
+.objectives-list p {
+    position: relative;
+    margin-bottom: 10px;
+    padding: 0 20px 0 20px;
+    font-size: 16px;
+}
+
+.objectives-list p:before {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: #49a8e3;
+    display: inline-block;
+    content: '';
+}
+
+.objective-m {
+    margin-bottom: 60px;
+    margin-top: 30px;
+}
+
+h2.text-center {
+    text-align: left !important;
+}
+
+#skill-you-learn .course-item {
+    margin-bottom: 15px;
+}
+
+.db {
+    display: block !important;
+}
+
+.error-txt{
+    color:red !important;
+}
+
+.js-error{
+    margin-bottom: 0px;
+    color: red !important;
+    font-size: 12px;
+    margin-top: 2px;
+    margin-left: 10px;
+}
+
+@media (min-width:800px) {
+
+
+
+
+
+.hexa {
+    display: table-cell;
+    background: url('../../../images/marketing/ds/digital_hexa_otline.jpg') no-repeat;
+    background-size: contain;
+    width: 100%;
+    height: 190px;
+    font-size: 12px;
+    text-align: center;
+    padding: 15px;
+    vertical-align: middle;
+    color: #666;
+}
+
+.hexa:hover {
+    background: url('../../../images/marketing/ds/digital_hexa_otline-hover.jpg') no-repeat;
+    background-size: contain;
+    color: #fff;
+}
+
+.hexa .head {
+    font-size: 15px;
+    font-weight: 700;
+    color: #000;
+    line-height: 18px;
+    margin-bottom: 5px;
+}
+
+
+.hexa:hover .head {
+    color: #fff;
+}
+
+#why-buy {
+    height: 563px;
+    background: #f7f7f7;
+}
+
+.outcomes li {
+    position: relative;
+    padding-left: 25px;
+    padding-right: 30px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.outcomes li::before {
+    background: url('../../../images/marketing/ds/bullet.png') no-repeat;
+    position: absolute;
+    left: 0;
+    content: '';
+    width: 17px;
+    height: 17px;
+    top: 4px;
+}
+
+footer {
+    background-color: #b0b0b0;
+    color: #fff;
+    padding: 15px 0;
+    font-size: 14px;
+}
+
+.main-menu {
+    background-color: #e6e6e6;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, .2);
+    position: relative;
+    text-align: center;
+    font-size: 14px;
+    color: #666666;
+    font-weight: 600;
+}
+
+.main-menu ul {
+    display: inline-block;
+}
+
+.main-menu ul li {
+    display: inline-block;
+}
+
+.main-menu ul li a {
+    display: block;
+    padding: 10px 15px;
+    color: #666666;
+    border-bottom: 3px solid transparent;
+}
+
+.main-menu ul li a:hover,
+.menu-active a {
+    border-bottom-color: #0054ba !important;
+    text-decoration: none;
+    color: #0054ba !important;
+}
+
+.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99;
+    box-shadow: 0px 2px 2px rgb(243, 243, 243);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+#attend {
+    padding-bottom: 40px;
+    padding-top: 0;
+}
+
+#course-preview {
+    padding-bottom: 75px;
+}
+
+.btn-link:hover {
+    text-decoration: none;
+}
+
+
+
+
+@media (max-width: 640px) {
+
+    .right-header h1 {
+        font-size: 52px;
+
+    }
+
+    .right-header p {
+        font-size: 32px;
+    }
+
+    .courses-wrap {
+        min-height: 355px;
+    }
+
+
+     .course-item .highlight {
+        text-align:center; 
+    }
+    .courses-wrap .tab-content {
+        background: none;
+    }
+
+    .courses-wrap .box {
+       box-shadow: none; 
+       border-bottom: 0;
+
+   }
+
+    .courses-wrap .box li {
+        width: 100%;
+       }
+.hexa {
+    display:block;
+    background: url('../../../images/marketing/ds/digital_hexa_otline.jpg') no-repeat;
+    background-size: cover;
+    width: 228px;
+    height: 249px;
+    font-size: 12px;
+    text-align: center;
+    padding: 15px;
+    vertical-align: middle;
+    color: #666;
+    padding-top:90px;
+    margin: 0 auto; 
+}
+
+.hexa:hover {
+    background: url('../../../images/marketing/ds/digital_hexa_otline-hover.jpg') no-repeat;
+    background-size: cover;
+    color: #fff;
+}
+
+#why-buy {
+    height: auto;
+}
+
+     
+
+
+.digital li {
+    width: 100%;
+}
+
+.main-head {
+    padding-bottom:5px; 
+}
+
+.course-item  {
+    margin-bottom:10px; 
+}
+
+.courses-wrap .tab-content h2 {
+    padding-left: 24px;
+    font-size: 28px;
+
+font-weight: 700;
+
+}
+.courses-wrap .box {
+    padding-top:10px; 
+}
+
+.tag-wrap {
+padding:0 10px 10px 10px; 
+}
+.tags {
+    margin: 10px 0;
+}
+
+.courses-wrap {
+    padding-bottom:30px; 
+}
+
+ .right-header li {
+        font-size: .95rem;
+    }
+.navbar  {
+    display: none;
+}
+
+.m12 {
+    margin-left: -12px; 
+}
+
+  }
+  
+  @media (min-width: 768px) {
+
+    .main-menu {
+        font-size: 12px;
+    }
+
+    .main-menu ul li a {
+        padding: 10px 8px;
+    }
+    .htlogo  {
+        text-align: left;
+    }
+
+    .tags {
+        display: block;
+        width: auto;
+        float: left;
+    }
+
+    .main-head {
+        padding-bottom:5px; 
+    }
+
+ 
+
+    .banner-bg {
+        background: url('../../../images/marketing/aws/aws-banner-bg.jpg');
+        height: 600px;
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    #attend {
+        padding-bottom: 85px;
+        padding-top: 85px;
+    }
+
+    /*.course-item span img {
+        width: 100%;
+    }*/
+
+
+  .hexa {
+    display: table-cell;
+    background: url('../../../images/marketing/ds/digital_hexa_otline.jpg') no-repeat;
+    background-size: cover;
+    width: 228px;
+    height: 242px;
+    font-size: 12px;
+    text-align: center;
+    padding: 15px;
+    vertical-align: middle;
+    color: #666;
+    margin: 0 auto;
+}
+
+.hexa:hover {
+    background: url('../../../images/marketing/ds/digital_hexa_otline-hover.jpg') no-repeat;
+    background-size: cover;
+    color: #fff;
+}
+
+/* Navbar starts here */
+.navbar-light {
+    background: #fff;
+    box-shadow: 0 3px 7px rgba(0,0,0,.1);
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #666;
+    padding: 1rem 1.2rem;
+    font-weight: 600;
+}
+
+.navbar {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.active {
+    border-bottom: 4px solid #0054ba;
+    color: #0054ba !important;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #0054ba;
+}
+
+.banner-bg {
+    background: url('../../../images/marketing/aws/aws-banner-bg.jpg') #51aae1;
+    height: auto;
+    background-attachment: scroll;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.course-item .highlight {
+    min-height: 270px;
+}
+
+h2.text-center {
+    text-align: center !important;
+}
+
+.course-objectives p.text-center {
+    text-align: center !important;
+    margin-bottom: 60px;
+}
+
+#skill-you-learn .course-item {
+    margin-bottom: 30px;
+}
+
+.db {
+    display: inline-block !important;
+}
+
+    
+  }
+  
+  @media (min-width: 992px) {
+    .right-header {
+        width: 500px;
+    }
+
+    .main-form {
+        width: 305px;
+    }
+
+    .right-header .top-head {
+        font-size: 22px;
+    }
+
+    .right-header h1 {
+        font-size: 48px;
+        line-height: 50px;
+    }
+
+    .right-header p {
+        font-size: 60px;
+        line-height: 65px;
+    }
+
+    .right-header ul li {
+        margin-right: 90px;
+    }
+
+    /*.data-scientisty {
+        line-height: 1.2;
+        padding-top: 15px;
+    }*/
+
+    section {
+        padding: 60px 0;
+    }
+
+    .course-item {
+        text-align: center
+    }
+
+    .course-item span {
+        margin-right: 0;
+    }
+    .course-item .highlight {
+        height: 190px;
+        padding-bottom: 20px;
+    }
+
+
+
+
+
+    .course-item p {
+        width: 89%;
+        font-size: 14px;
+    }
+    
+    .main-head {
+        font-size: 28px;
+        padding-bottom: 30px;
+    }
+
+    .main-head1 {
+        font-size: 28px;
+    }
+
+
+    .hexa .head {
+        font-size: 20px;
+        line-height: 24px;
+    }
+
+
+    .outcomes li {
+        padding-left: 35px;
+        padding-right: 75px;
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    .outcomes li::before {
+        left: 0;
+    }
+
+    .main-menu {
+        font-size: 14px;
+    }
+    
+    .main-menu ul li a {
+        padding: 10px 15px;
+    }
+
+    .right-header .aws-stats span{
+    font-size: 14px;
+    font-weight: 400;
+    color: #fff;
+    display: table-cell;
+    border-left: 1px solid #86baeb;
+    padding-left: 20px;
+}
+
+.right-header .aws-stats span:first-child{
+    border-left: 1px solid transparent;
+    padding-left: 0;
+    padding-right: 15px;
+}
+/* Navbar starts here */
+.navbar-light {
+    background: #fff;
+    box-shadow: 0 3px 7px rgba(0,0,0,.1);
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #666;
+    padding: 1rem 1.2rem;
+    font-weight: 600;
+}
+
+.navbar {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.active {
+    border-bottom: 4px solid #0054ba;
+    color: #0054ba !important;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #0054ba;
+}
+
+.banner-bg {
+    background: url('../../../images/marketing/aws/aws-banner-bg.jpg') #51aae1;
+    height: auto;
+    background-attachment: scroll;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.course-item .highlight {
+    min-height: 270px;
+}
+
+h2.text-center {
+    text-align: center !important;
+}
+
+.course-objectives p.text-center {
+    text-align: center !important;
+    margin-bottom: 60px;
+}
+
+#skill-you-learn .course-item {
+    margin-bottom: 30px;
+}
+
+.db {
+    display: inline-block !important;
+}
+
+  }
+  
+  @media (min-width: 1200px) {
+    .right-header {
+        width: 500px;
+    }
+
+    .right-header h1 {
+        font-size: 58px;
+        line-height: 60px;
+    }
+
+    .right-header p {
+        font-size: 52px;
+        line-height: 58px;
+    }
+
+    .course-item p {
+        width: 89%;
+    }
+
+    .main-form {
+        width: 305px;
+    }
+
+ .htlogo  {
+        text-align:center;
+    }
+
+  }
+
+
+.inline-block {
+    display:inline-block;
+}
+
+.error-txt{
+    color:red !important;
+}
+
+.js-error{
+    margin-bottom: 0px;
+    color: red !important;
+    font-size: 12px;
+    margin-top: 2px;
+    margin-left: 10px;
+}
+
+.right-header .aws-stats span{
+    font-size: 14px;
+    font-weight: 400;
+    color: #fff;
+    display: table-cell;
+    border-left: 1px solid #86baeb;
+    padding-left: 20px;
+    padding-top: 0;
+}
+
+.right-header .aws-stats span:first-child{
+    border-left: 1px solid transparent;
+    padding-left: 0;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 0;
+    padding-right: 15px;
+}
+/* Navbar starts here */
+.navbar-light {
+    background: #fff;
+    box-shadow: 0 3px 7px rgba(0,0,0,.1);
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #666;
+    padding: 1rem 1.2rem;
+    font-weight: 600;
+}
+
+.navbar {
+    padding-top: 0;
+    padding-bottom: 0;
+    display: block;
+}
+
+.active {
+    border-bottom: 4px solid #0054ba;
+    color: #0054ba !important;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: #0054ba;
+}
+
+.attend-m {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.banner-bg {
+    background: url('../../../images/marketing/aws/aws-banner-bg.jpg') #51aae1;
+    height: auto;
+    background-attachment: scroll;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.course-item .highlight {
+    min-height: 270px;
+}
+
+h2.text-center {
+    text-align: center !important;
+}
+
+.course-objectives p.text-center {
+    text-align: center !important;
+    margin-bottom: 60px;
+}
+
+#skill-you-learn .course-item {
+    margin-bottom: 30px;
+}
+
+.db {
+    display: inline-block !important;
+}
+
+}
+
+ 
