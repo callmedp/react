@@ -282,7 +282,7 @@ class ServiceQueryView(ListView, PaginationMixin):
         queryset = super(ServiceQueryView, self).get_queryset()
         queryset = queryset.filter(
             lead_created=False,
-            inactive=False, lead_source=8)
+            inactive=False, lead_source__in=[8,9])
 
         try:
             if self.query:
