@@ -328,7 +328,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             return list(set(DM))
         elif obj.is_service and obj.type_flow == 5:
             DM = []
-            DM.append(str(obj.get_duration_in_day()))
+            DM.append(obj.get_duration_in_day())
+            return list(set(DM))
         return []
 
     def prepare_pCert(self, obj):
