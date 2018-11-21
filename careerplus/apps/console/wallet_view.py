@@ -175,15 +175,16 @@ class WalletHistoryView(TemplateView):
             filter_kwargs['created__gte'] = start_date
             filter_kwargs['created__lte'] = end_date
         context = super(WalletHistoryView, self).get_context_data(**kwargs)
+        wal_obj = None
+
         if email:
-            try:
-                wallet = Wallet.objects.get(owner_email=email)
-            except Wallet.DoesNotExist:
-                return context
-            context['wallet'] = wallet
-            context['wallet_data'] = wallet.wallettxn.filter(**filter_kwargs).order_by('-created')
-            # if no date_range is given show last 20 transaction as per requirement
-            if not date_range:
-                context['wallet_data'] = context['wallet_data'][:20]
+            wal_obj = Wallet.objects.filter(owner_email=email)
+            wallet = wal_obj[0] if wal_obj.exists() else None
+            if wallet:
+                context['wallet'] = wallet
+                context['wallet_data'] = wallet.wallettxn.filter(**filter_kwargs).order_by('-created')
+                # if no date_range is given show last 20 transaction as per requirement
+                if not date_range:
+                    context['wallet_data'] = context['wallet_data'][:20]
 
         return context
