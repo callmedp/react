@@ -326,6 +326,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             else:
                 DM.append(obj.get_duration())
             return list(set(DM))
+        elif obj.is_service and obj.type_flow == 5:
+            DM = []
+            DM.append(obj.get_duration_in_day())
         return []
 
     def prepare_pCert(self, obj):
@@ -878,6 +881,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'label': pv.name,
                         'heading':pv.heading if pv.heading else '',
                         'experience': pv.get_exp(),
+                        'duration': pv.get_duration_in_day(),
                         'url': pv.get_url(relative=True),
                         'inr_price': float(pv.inr_price),
                         'fake_inr_price': float(pv.fake_inr_price),
