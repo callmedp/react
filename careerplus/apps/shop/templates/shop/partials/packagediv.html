@@ -56,9 +56,7 @@
         {% if sqs_main.id == sqs.id %}
         <a role="button" class="other-package selected" data-id="{{sqs_main.id}}" main-id="{{sqs_main.id}}">
             <p>
-              {% if package.duration %}
-                <strong>{{package.duration}} days</strong>
-              {% endif %}
+                <strong>{{sqs_main.pDM.0}} days</strong>
               Starting at <small>Rs. {{start_price|floatformat}}/-</small>
             </p>
         </a>
