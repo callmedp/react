@@ -65,7 +65,10 @@ class WalletView(FormView):
                 elif wal_obj == 1:
                     wal_obj = Wallet.objects.filter(owner_email=email)[0]
             if order:
-                orders = Order.objects.filter(email=email, number=order)
+                if email:
+                    orders = Order.objects.filter(email=email, number=order)
+                elif owner:
+                    orders = Order.objects.filter(candidate_id=owner, number=order)
                 if not orders.exists():
                     messages.add_message(
                         request, messages.ERROR,
