@@ -109,6 +109,11 @@ class WalletView(FormView):
                 else:
                     rew_points = wal_obj.point.filter(status=1, expiry__gt=timezone.now()).order_by('created')
                     wal_total = sum(rew_points.values_list('current',flat=True))
+                    if wal_total == 0:
+                        messages.add_message(
+                            request, messages.ERROR,
+                            'Wallet has Zero Points')
+                        return self.form_invalid(form)
                     if wal_total < points:
                         points = wal_total
                     wallettxn = WalletTransaction.objects.create(wallet=wal_obj, txn_type=2, point_value=points,
