@@ -114,8 +114,8 @@ class WalletView(FormView):
                     wallettxn = WalletTransaction.objects.create(wallet=wal_obj, txn_type=2, point_value=points,
                                                                      notes=note, added_by=request.user.id)
                     if order:
-                        wal_txn.order = order
-                        wal_txn.save()
+                        wallettxn.order = order
+                        wallettxn.save()
                     for pts in rew_points:
                         if pts.current >= points:
                             pts.current -= points
