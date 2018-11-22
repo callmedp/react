@@ -5,7 +5,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from cart.models import Cart
-
+from users.models import User
 from order.models import Order
 
 from seo.models import AbstractAutoDate
@@ -52,6 +52,10 @@ class Wallet(AbstractAutoDate):
         verbose_name = _('Wallet')
         verbose_name_plural = _('Wallets')
         ordering = ["-created"]
+
+        permissions = (
+            ("console_add_remove_wallet_point", "Can Add/Remove Wallet Point"),
+        )
 
     def __str__(self):
         return self.owner
@@ -161,6 +165,9 @@ class WalletTransaction(AbstractAutoDate):
     current_value = models.DecimalField(
         _('Current Value'), decimal_places=2, max_digits=12,
         null=True)
+    added_by = models.IntegerField(
+        null=True
+    )
 
     class Meta:
         verbose_name = _('Wallet Transaction')
@@ -179,6 +186,11 @@ class WalletTransaction(AbstractAutoDate):
     def get_txn_type(self):
         txn_type_dict = dict(TXN_TYPE)
         return txn_type_dict.get(self.txn_type)
+
+    def get_added_by(self):
+        if self.added_by:
+            return User.objects.get(id=self.added_by)
+
 
     def get_cashback_details(self):
         response = {}
