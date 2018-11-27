@@ -1,0 +1,561 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>DevOps proffessional | Shine Learning</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/bootstrap-4.css' %}">
+    <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/devops/devops.css' %}">
+    <link href="{% static 'shinelearn/css/marketing/thank-you.css' %}" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+  </head>
+  <body>
+    <div class="main-wrapper" id="cls_landing-page">
+    <div class="container-fluid banner-bg">
+      <nav class="navbar navbar-expand-lg navbar-dark row bg-dark sticky" id="mainNav">
+        <div class="container">
+          <a class="navbar-brand" href="#"><img src="{% static 'shinelearn/images/marketing/data-science/logo.png' %}" /></a>
+          
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger active" href="#course-highlight">Course Highlights <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="#course-objectives">Course Objectives</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="#who-attend">Who should attend?</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="#skill-learn">Skills you will learn</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="#why-us">Why us?</a>
+              </li>
+            </ul>
+          </div>
+        </div><!-- /. container -->
+      </nav><!-- navBar ends here -->
+
+      <div class="row">
+        <div class="container">
+          <div class="row mt-lg-4 mt-2 mb-2-sm mb-3 mb-lg-5">
+            <div class="col-12  col-md-7 col-lg-8">
+              <div class="right-header">
+                <div class="mt-sm-3 mt-4"> 
+                  <p class="top-head mb-sm-3 mb-1">Become a Certified</p>
+                  <h1>DevOps Professional</h1>
+                </div><!-- /. margin -->
+                <div class="main-form mt-4 d-block d-sm-none">
+                  <h2>Let’s get started</h2>
+  
+                <form id="lead_mobile" method="POST"
+                  action="{% url 'crmapi:lead-management' %}">{% csrf_token %}
+                    <ul class="mt-2 mb-2">
+                      <li class="form-group">
+                        <input id="name" name="name" type="text" class="form-control" placeholder="Name" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %}>
+                        <p class="js-error"></p>
+                      </li>
+                      <li class="form-group">
+                        <input id="email" name="email" type="text" class="form-control" value="{{request.session.email}}" placeholder="Email" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %}>
+                        <p class="js-error"></p>
+                      </li>
+                      <li class="form-group">
+                        <input id="mobile" name="number" maxlength="10" minlength="10" type="text" class="form-control" placeholder="Mobile" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
+                        <p class="js-error"></p>
+                      </li>
+                      
+                      <li class="form-group">
+                        <select class="form-control" id="selection" name="selection">
+                            <option selected="selected" value="3101">Data Scientist - Rs. 44999/-</option>
+                          </select>
+                      </li>
+                    </ul>
+
+                    <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
+
+                  <input type="hidden" name="prd" value="Data Scientist - Rs. 44999/-">
+
+                  <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+                  <input type="hidden" name="lsource" value="{{ lead_source }}">
+  
+                  <button type="submit" class="btn btn-primary w-100 scrollTop mt-3" onclick="$('#lead_mobile').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enroll Now</button>
+                  <p class="tnc mt-2 mb-2">By registering with us you agree to our <br><a href="/tnc">Terms & Conditions</a></p>
+                  <!-- <div class="call-us">
+                    <span></span>
+                    <strong>7042793540</strong>
+                    <p>Call our academic counsellor</p>
+                  </div> -->
+                </form>
+                </div><!-- /. main-form -->
+
+              <ul class="mt-4 mt-lg-4">
+                <li>
+                  <span class="icon-class sprite"></span>
+                  <span class="pointer">33+ Hours of Online Live Instructor-led Classes</span>
+                </li>
+                <li>
+                  <span class="icon-training sprite"></span>
+                  <span class="pointer">Hands-on training</span>
+                </li>
+                <li>
+                  <span class="icon-courses sprite"></span>
+                  <span class="pointer">Java & Linux Fundamentals courses to brush up your skills</span>
+                </li>
+              </ul>
+              </div><!-- Right Header -->
+            </div><!-- right col -->
+            <div class="col-12 col-md-5 col-lg-4 d-none d-sm-block">
+              <div class="main-form">
+                <h2>Let’s get started</h2>
+
+                <form id="lead" method="POST"
+                  action="{% url 'crmapi:lead-management' %}">{% csrf_token %}
+                  <ul class="mt-2 mb-2">
+                    <li class="form-group">
+                        <input id="name" name="name" type="text" class="form-control" placeholder="Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}">
+                        <p class="js-error"></p>
+                    </li>
+                    <li class="form-group">
+                        <input id="email" name="email" type="text" class="form-control" value="{{request.session.email}}" placeholder="Email">
+                        <p class="js-error"></p>
+                    </li>
+                    <li class="form-group">
+                        <input id="mobile" name="number" maxlength="10" minlength="10" type="text" class="form-control" placeholder="Mobile" value="{{request.session.mobile_no}}">
+                        <p class="js-error"></p>
+                    </li>
+                    
+                    <li class="form-group">
+                        <select class="form-control" id="selection" name="selection">
+                          <option selected="selected" value="3101">Data Scientist - Rs. 44999/-</option>
+                        </select>
+                    </li>
+                  </ul>
+
+                  <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
+
+                  <input type="hidden" name="prd" value="Data Scientist - Rs. 44999/-">
+
+                  <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+                  <input type="hidden" name="lsource" value="{{ lead_source }}">
+
+                  <button type="submit" class="btn btn-primary mt-2 mb-1 w-100" onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enroll Now</button>
+                  <p class="tnc mt-2 mb-2">By registering with us you agree to our <br><a href="/tnc">Terms & Conditions</a></p>
+                  <!-- <div class="call-us">
+                    <span></span>
+                    <strong>7042793540</strong>
+                    <p>Call our academic counsellor</p>
+                  </div> -->
+                </form>
+              </div><!-- /. main-form -->
+            </div>
+          </div><!-- /. ROW -->
+        </div><!-- /. Container -->
+      </div><!-- /. ROW -->
+  </div><!-- /. Container fluid -->
+
+  <section class="container" id="course-highlight">
+    <div class="row">
+      <div class="col-12 col-md-5 pr-4 d-none d-sm-block">
+        <img src="{% static 'shinelearn/images/marketing/devops/course-highlights.jpg' %}" class="img-fluid"/>
+      </div><!-- /. col -->
+      <div class="col-12 col-md-7">
+        <h2 class="mb-4 mb-md-5">Course Highlights</h2>
+        <ul class="course-highlight">
+          <li>
+            <span class="icon-project sprite"></span>
+            <h3>Projects</h3>
+            <p>Acquire hands-on knowledge and expertise by executing projects!</p>
+          </li>
+          <li>
+            <span class="icon-course sprite"></span>
+            <h3>Lifetime Course Access</h3>
+            <p>Get access to course material for lifetime</p>
+          </li>
+          <li>
+            <span class="icon-certificate sprite"></span>
+            <h3>Certificate Recognized</h3>
+            <p>Get Certificate which is recognized by top companies</p>
+          </li>
+          <li>
+            <span class="icon-learning sprite"></span>
+            <h3>Personal Learning Manager</h3>
+            <p>Get a learning manager who would answer your queries instantly</p>
+          </li>
+          <li>
+            <span class="icon-experts sprite"></span>
+            <h3>Training by industry experts</h3>
+            <p>Get trained by industry experts with 10+ years of experience</p>
+          </li>
+          <li>
+            <span class="icon-rate sprite"></span>
+            <h3>Course Completion Rate</h3>
+            <p>Focus on course completion which helps candidate in acquiring more knowledge</p>
+          </li>
+        </ul>
+        <div class="text-center text-md-left">
+            <a href="#" class="btn btn-secondary btn-round btn-blue">Enroll Now</a>
+        </div>
+        
+      </div><!-- /. col -->
+    </div><!-- /. Row-->
+  </section><!-- /. Course Highlights -->
+  
+  <section class="container grey-bg" id="course-objectives">
+    <div class="row">
+      <div class="col-12 col-md-6">
+          <h2>Course Objectives</h2>
+          <p>During the DevOps Training, you’ll learn the following:</p>
+          <ul class="bullet-list">
+            <li>In-depth knowledge on Continuous Development, Continuous Integration, and Continuous Testing by performing hands-on on GIT, Jenkins and Selenium</li>
+            
+            <li>Comprehensive knowledge on Configuration Management, and Continuous Deployment using Puppet, Ansible</li>
+            <li>Working on Continuous Deployment stage by performing hands-on on popular tools like Docker and Kubernetes</li>
+            <li>The exposure to the stage of continuous monitoring using Nagios</li>
+            <li>Projects which are diverse in nature and will cover proper involvement of all the tools covered within this course</li>
+            <li>Rigorous involvement of a DevOps expert throughout the DevOps Training to learn industry standards and best practices</li>
+          </ul>
+      </div><!-- /. col -->
+      <div class="col-12 col-md-6 d-none d-sm-block">
+        <img src="{% static 'shinelearn/images/marketing/devops/course-objectives.jpg' %}" class="img-fluid"/>
+      </div><!-- /. col -->
+      
+    </div><!-- /. Row-->
+  </section><!-- /. Course Objectives -->
+
+  <section class="container" id="who-attend">
+    <div class="row">
+      <div class="col-12 col-md-6 d-none d-sm-block">
+        <img src="{% static 'shinelearn/images/marketing/devops/who-should-attend.jpg' %}" class="img-fluid"/>
+      </div><!-- /. col -->
+      <div class="col-12 col-md-6">
+        <h2>Who should attend?</h2>
+        <p>DevOps training is a must to do for IT professionals, who are:</p>
+        <ul class="bullet-list">
+          <li>Software Tester</li>
+          <li>System Admin</li>
+          <li>Solution Architect</li>
+          <li>Security Engineer</li>
+          <li>Application Developers</li>
+          <li>Integration Specialist</li>
+        </ul>
+        <div class="text-center text-md-left mt-5">
+            <a href="#" class="btn btn-secondary btn-round btn-blue">Enroll Now</a>
+        </div>
+      </div><!-- /. col -->
+    </div><!-- /. Row-->
+  </section><!-- /. Who should attend? -->
+
+  <section class="container grey-bg" id="skill-learn">
+    <div class="row">
+      <div class="col-12 col-md-6">
+          <h2>Skills You will learn</h2>
+          <ul class="bullet-list">
+            <li>Manage and keep a track of different versions of the source code using GIT</li>
+            <li>Build and Automate Test using Jenkins and Maven</li>
+            <li>Automate testing of web elements using Selenium suite of tools</li>
+            <li>Build and Deploy containerization using Docker</li>
+            <li>Learn different roles and Command Line usage of Ansible</li>
+            <li>Manage clustering and scaling with Kubernetes</li>
+            <li>Perform Continuous Monitoring using Nagios</li>
+            <li>Gain experience of working on an industry standard live Project</li>
+          </ul>
+      </div><!-- /. col -->
+      <div class="col-12 col-md-6 d-none d-sm-block">
+        <img src="{% static 'shinelearn/images/marketing/devops/skills.jpg' %}" class="img-fluid"/>
+      </div><!-- /. col -->
+      
+    </div><!-- /. Row-->
+  </section><!-- /. Skills You will learn -->
+
+  <section id="why-us">
+    <div class="container">
+      <h2 class="text-center mb-4 mb-md-5">Why buy from Shine learning</h2>
+      <div class="row mb-md-3">  
+        <div class="col-12 col-md-4 mb-4 mb-md-0">
+          <div class="white-box text-center">
+            <span class="icon-global sprite"></span>
+            <h3>Top Global Providers</h3>
+            <p>Choose from a list of global providers as per your requirement</p>
+          </div><!-- /. White box -->
+        </div><!-- /. col -->
+        <div class="col-12 col-md-4 mb-4 mb-md-0">
+          <div class="white-box text-center">
+            <span class="icon-profile sprite"></span>
+            <h3>Free featured profile</h3>
+            <p>FREE featured profile worth Rs. 1640 for 1 month on Shine.com</p>
+          </div><!-- /. White box -->
+        </div><!-- /. col -->
+        <div class="col-12 col-md-4 mb-4 mb-md-0">
+          <div class="white-box text-center">
+            <span class="icon-credits sprite"></span>
+            <h3>Shine credits</h3>
+            <p>10% Shine credits redeemable on next purchase*</p>
+          </div><!-- /. White box -->
+        </div><!-- /. col -->
+      </div><!-- /. Row -->
+      <div class="text-center pt-4 pt-md-5">
+        <a href="#" class="btn btn-secondary btn-round btn-blue">Enroll Now</a>
+      </div>
+    </div><!-- /. container -->
+  </section><!-- /. Why buy from Shine learning -->
+
+  <footer class="container-fluid">
+    <p class="text-center mb-0">Copyright © 2018 HT Media Limited.</p>
+  </footer>
+
+    </div><!-- /. Landing page wrapper -->
+
+
+  <div class="main-wraper" id="cls-thank-you">
+      <div class="container-fluid top-bar">
+          <div class="container">
+              <div class="row">
+                  <div class="col-12">
+                      <a class="shinelearning-logo" href="#">
+                      <img src="/media/static/shinelearn/images/marketing/six-sigma-cert-cpy/shine-learning-logo.png" alt="Shinelearning">
+                      </a>
+                  </div>
+              </div>
+          </div>
+      </div><!-- Top bar ends-->
+
+      <div class="container-fluid main-banner">
+          <div class="text-center container">
+              <div class="row">
+                  <div class="col-12">
+                      <img src="{% static 'shinelearn/images/marketing/thank-you.png' %}" class="thank-img"/>
+                      <p class="para-text">We strive to give the best possible answers to your queries and will get back to you soon. For further query or suggestions, please feel free to contact us at</p>
+
+                      <div class="text-center btn-wrap">
+                          <a href="#" class="btn-white">
+                              <span class="phone-icon"></span>
+                              0124-4312500
+                          </a>
+                          <a href="#" class="btn-white">
+                              <span class="mail-icon"></span>
+                              contactus@shine.com
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div><!-- banner ends here -->
+
+      <div class="container main-body">
+          <h2 class="heading">Related Articles</h2>
+          <div class="row">
+              <div class="article-list col-12 col-md-4">
+                  <a class="box-panel" href="https://learning.shine.com/talenteconomy/project-management/the-biggest-project-management-trends-that-will-shape-2018/" title="The Biggest Project Management Trends That Will Shape 2018" itemprop="url">
+                      <figure class="pr"><img src="https://static1.shine.com/l/m/images/blog/The-biggest-project-management-trends-that-will-shape-2018.jpg" alt="The Biggest Project Management Trends That Will Shape 2018" itemprop="image"><span class="product-title product-title-pos">Project Management</span></figure>
+                      <h3 class="heading-article" itemprop="name">The Biggest Project Management Trends That Will Shape 2018</h3>
+                      <article>Project Management has taken the center-stage for many industries, especially with hyperpolarization and transnational businesses becoming more coherent to every business’ growth. This article is for the project managers of 2018 and the coming years.</article>
+                      <hr>
+                      <span class="view-forward">
+                          <figure class="view-icon ml-20"></figure> 295
+                      </span>
+                      <div class="author author-secondary">
+                          <figure>
+                              <img src="https://static1.shine.com/l/m/images/blog/author/Neha_Kaul.jpg" alt="Neha Kaul">
+                          </figure>
+                          <span itemprop="author">Neha Kaul</span>
+                      </div>
+                  </a>
+                  <meta itemprop="datePublished" content="Jan. 16, 2018"><meta itemprop="position" content="1"><meta itemprop="headline" content="The Biggest Project Management Trends That Will Shape 2018"><meta itemprop="dateModified" content="Jan. 16, 2018"><meta itemprop="mainEntityOfPage" content="/talenteconomy/"><div itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"><div itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"><meta itemprop="url" content="https://static1.shine.com/l/s/shinelearn/images/logo.png"></div><meta itemprop="name" content="Shine"></div>
+              </div><!-- col-4-->
+
+              <div class="article-list col-12 col-md-4" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/Article">
+                  <a class="box-panel" href="https://learning.shine.com/talenteconomy/project-management/how-prince2-certification-can-boost-your-career-growth/" title="How PRINCE2 Certification Can Boost Your Career Growth" itemprop="url"><figure class="pr"><img src="https://static1.shine.com/l/m/images/blog/How-PRINCE2-Certification-Can-Boost-Your-Career-Growth.jpg" alt="How PRINCE2 Certification Can Boost Your Career Growth" itemprop="image"><span class="product-title product-title-pos">Project Management</span></figure><h3 class="heading-article" itemprop="name">How PRINCE2 Certification Can Boost Your Career Growth</h3><article>
+                      PRINCE2 is an ideal certification for Project Management professionals to meet the expanding demands of corporations. This article will take you through the nitty-gritty of how to go about getting a PRINCE2 certification.
+                  </article><hr><span class="view-forward"><figure class="view-icon ml-20"></figure> 621
+                      
+                      </span><div class="author author-secondary"><figure><img src="https://static1.shine.com/l/m/images/blog/author/Kshtitij-Pandey-Author.jpg" alt="Kshitij Pandey"></figure><span itemprop="author">Kshitij Pandey</span></div></a><meta itemprop="datePublished" content="Jan. 15, 2018"><meta itemprop="position" content="2"><meta itemprop="headline" content="How PRINCE2 Certification Can Boost Your Career Growth"><meta itemprop="dateModified" content="Jan. 15, 2018"><meta itemprop="mainEntityOfPage" content="/talenteconomy/"><div itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"><div itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"><meta itemprop="url" content="https://static1.shine.com/l/s/shinelearn/images/logo.png"></div><meta itemprop="name" content="Shine"></div></div>
+
+
+                      <div class="article-list col-12 col-md-4" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/Article"><a class="box-panel" href="https://learning.shine.com/talenteconomy/project-management/pmp-vs-mba-what-should-you-opt-for/" title="PMP Vs MBA: What Should You Opt For?" itemprop="url"><figure class="pr"><img src="https://static1.shine.com/l/m/images/blog/8_2.jpg" alt="PMP Vs MBA: What Should You Opt For" itemprop="image"><span class="product-title product-title-pos">Project Management</span></figure><h3 class="heading-article" itemprop="name">PMP Vs MBA: What Should You Opt For?</h3><article>
+                              Well, comparing the two can somewhat similar to comparing apples to oranges. However, looking at the current demand generation and skillset requirement, we’ve created a checklist for you to make a rather informed decision.
+                          </article><hr><span class="view-forward">
+                              
+                              
+                                  <figure class="view-icon ml-20"></figure> 1919
+                              
+                              </span><div class="author author-secondary"><figure><img src="https://static1.shine.com/l/m/images/blog/author/Neeraj-Author.jpg" alt="Neeraj Singh"></figure><span itemprop="author">Neeraj Singh</span></div></a><meta itemprop="datePublished" content="Dec. 4, 2017"><meta itemprop="position" content="3"><meta itemprop="headline" content="PMP Vs MBA: What Should You Opt For?"><meta itemprop="dateModified" content="Dec. 4, 2017"><meta itemprop="mainEntityOfPage" content="/talenteconomy/"><div itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"><div itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"><meta itemprop="url" content="https://static1.shine.com/l/s/shinelearn/images/logo.png"></div><meta itemprop="name" content="Shine"></div></div>
+          </div>
+      </div>
+
+      <footer class="text-center">Copyright © 2018 HT Media Limited.</footer>
+  </div><!-- Main Wrapper-->
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+
+    <script src="{% static 'shinelearn/js/marketing/jquery.easing.js' %}"></script>
+    <script src="{% static 'shinelearn/js/marketing/bootstrap.js' %}"></script>
+    <script src="{% static 'shinelearn/js/marketing/scrolling-nav.js' %}"></script>
+    
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+
+    $.validator.addMethod("lettersonly", function (value, element){
+        return this.optional(element) || /^[a-z\s]*$/i.test(value);
+    }, "Letters only please");
+
+    $.validator.addMethod("defaultInvalid", function (value, element) {
+        return !(element.value == element.defaultValue);
+    }, "This field is required.");
+        $("#lead").validate({
+            submitHandler:function (form) {
+                var action = $(form).attr('action');
+                $.post(action, $(form).serialize(), function (data) {
+                    if (data && data['status']){
+                        $.each($("#lead"), function (i, e) {
+                            e.reset();
+                        });
+                        $("#lead label").remove();
+                        var conversion_id = 991709191;
+                        var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                        var ga_code = document.createElement('div');
+                        ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                       document.body.appendChild(ga_code);
+                       window.location.href ='thankyou-for-query';
+                        return false;
+                    }
+                }, 'json');
+            },
+            rules:{
+                number:{
+                    required:true,
+                    number:true,
+                    minlength:10,
+                    maxlength:20,
+                },
+                email:{
+                    email:true,
+                    required:true,
+
+                },
+                name:{
+                    lettersonly:true,
+
+                },
+                // msg:{
+                //     required:true,
+                //     maxlength:500
+                // }
+            },
+            messages:{
+                number:{
+                   required:"Field is required",
+                   number: "Please enter valid number only"
+                },
+                email:{
+                    required:"Field is required"
+                },
+                name:{
+                    required:"Field is required"
+                },
+                // msg:{
+                //     required:"Field is required",
+                //     maxlength:"No more than 500 characters."
+
+                // }
+            },
+            highlight:function(element, errorClass) {
+              $(element).closest('.form-group').addClass('error');
+            },
+            unhighlight:function(element, errorClass) {
+              $(element).closest('.form-group').removeClass('error');
+              $(element).siblings('.js-error').html("");
+            },
+            errorPlacement: function(error, element){
+              $(element).siblings('.js-error').html(error.text());
+            } 
+          });
+
+          $("#lead_mobile").validate({
+            submitHandler:function (form) {
+                var action = $(form).attr('action');
+                $.post(action, $(form).serialize(), function (data) {
+                    if (data && data['status']){
+                        $.each($("#lead"), function (i, e) {
+                            e.reset();
+                        });
+                        $("#lead label").remove();
+                        var conversion_id = 991709191;
+                        var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                        var ga_code = document.createElement('div');
+                        ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                       document.body.appendChild(ga_code);
+                       window.location.href ='thankyou-for-query';
+                        return false;
+                    }
+                }, 'json');
+            },
+            rules:{
+                number:{
+                    required:true,
+                    number:true,
+                    minlength:10,
+                    maxlength:20,
+                },
+                email:{
+                    email:true,
+                    required:true,
+
+                },
+                name:{
+                    required:true,
+                    lettersonly:true,
+
+                },
+                // msg:{
+                //     required:true,
+                //     maxlength:500
+                // }
+            },
+            messages:{
+                number:{
+                   required:"Field is required",
+                   number: "Please enter valid number only"
+                },
+                email:{
+                    required:"Field is required"
+                },
+                name:{
+                    required:"Field is required"
+                },
+                // msg:{
+                //     required:"Field is required",
+                //     maxlength:"No more than 500 characters."
+
+                // }
+            },
+            highlight:function(element, errorClass) {
+              $(element).closest('.form-group').addClass('error');
+            },
+            unhighlight:function(element, errorClass) {
+              $(element).closest('.form-group').removeClass('error');
+              $(element).siblings('.js-error').html("");
+            },
+            errorPlacement: function(error, element){
+              $(element).siblings('.js-error').html(error.text());
+            } 
+          });
+
+        </script>
+
+  </body>
+</html>

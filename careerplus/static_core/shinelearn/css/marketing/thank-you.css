@@ -202,13 +202,12 @@ figure {
     height: 37px;
 }
 
-footer {
-    height: 60px;
-    width: 100%;
-    background-color: #e0e0e0;
-    text-align: center;
-    font-size: 14px;
-    color: #000;
+#cls-thank-you {
+    display: none;
+}
+
+#cls_landing-page {
+    display: block;
 }
 
 

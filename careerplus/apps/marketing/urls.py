@@ -94,15 +94,18 @@ urlpatterns = [
     url(r'^linkedin$',
         marketing_views.MarketingPages.as_view(),
         name='linkedin'),
+    
     url(r'^linkedin-1$',
-        marketing_views.MarketingPages.as_view(),
-        name='linkedin'),
+        marketing_views.MarketingPages.as_view(),name='linkedin'),
 
     url(r'^international-resume-writing-1$', marketing_views.MarketingPages.as_view(),
       name='international-resume-writing'),
 
     url(r'^resume-writing-services-1$', marketing_views.MarketingPages.as_view(),
        name='resume-writing'),
+    
+    url(r'^devops-professional$', marketing_views.MarketingPages.as_view(),
+       name='devops-professional'),
 
     url(r'^data-scientist$', marketing_views.MarketingPages.as_view(),
        name='data-scientist'),
