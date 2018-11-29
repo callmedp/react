@@ -203,12 +203,28 @@ figure {
 }
 
 #cls-thank-you {
-    display: none;
+    transform: translateY(3000px);
+    opacity: 0;
 }
 
-#cls_landing-page {
-    display: block;
+.fadeOut {
+    transition: all .3s ease-out;
+    opacity: 0;
 }
+
+.fadeIn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transition: all .6s ease-out;
+    transform: translateY(0) !important;
+    z-index: 9999;
+    opacity: 1 !important;
+    
+}
+
+
 
 
 
