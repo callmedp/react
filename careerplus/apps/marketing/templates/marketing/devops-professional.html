@@ -314,6 +314,7 @@
 
     </div><!-- /. Landing page wrapper -->
 
+<!-- Thank you page starts here -->
 
   <div class="main-wraper" id="cls-thank-you">
       <div class="container-fluid top-bar">
@@ -430,8 +431,10 @@
                         var ga_code = document.createElement('div');
                         ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
                        document.body.appendChild(ga_code);
-                       window.location.href ='thankyou-for-query';
-                        return false;
+                       // window.location.href ='thankyou-for-query';
+                       document.getElementById('cls_landing-page').style.display = "none";
+                       document.getElementById('cls-thank-you').style.display = "block";
+                      return false;
                     }
                 }, 'json');
             },
@@ -499,7 +502,9 @@
                         var ga_code = document.createElement('div');
                         ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
                        document.body.appendChild(ga_code);
-                       window.location.href ='thankyou-for-query';
+                       // window.location.href ='thankyou-for-query';
+                       document.getElementById('cls_landing-page').style.display = "hidden";
+                       document.getElementById('cls-thank-you').style.display = "block";
                         return false;
                     }
                 }, 'json');
