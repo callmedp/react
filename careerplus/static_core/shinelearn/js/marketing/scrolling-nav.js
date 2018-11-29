@@ -53,3 +53,17 @@ offset: 70
 
 })(jQuery); // End of use strict
 
+
+
+$(document).ready(function(){
+var scrollTop = $(".scrollTop");
+//Click event to scroll to top
+  $(scrollTop).click(function() {
+    $('html, body').animate({
+      scrollTop: 0
+    }, 800);
+    return false;
+
+  }); // click() scroll top EMD
+
+});
