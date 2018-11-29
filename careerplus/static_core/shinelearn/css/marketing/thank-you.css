@@ -203,25 +203,29 @@ figure {
 }
 
 #cls-thank-you {
-    transform: translateY(3000px);
+    visibility: hidden;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 0;
+    transform: translateY(1500px);
     opacity: 0;
+
 }
 
 .fadeOut {
-    transition: all .3s ease-out;
+    transition: all .2s ease-out;
+    display: none;
+    z-index: 1;
+    top: 0;
     opacity: 0;
 }
 
 .fadeIn {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    transition: all .6s ease-out;
+    transition: all .5s ease-out;
     transform: translateY(0) !important;
-    z-index: 9999;
+    visibility: visible !important;
     opacity: 1 !important;
-    
 }
 
 
