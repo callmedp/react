@@ -29,7 +29,6 @@ class MarketingPages(TemplateView):
                 "alt_contact":decoded_tuple[2]}
 
     def get(self, request, *args, **kwargs):
-
         valid = False
         email = None
         candidateid = None

@@ -15,6 +15,7 @@ LEAD_LOCATION = (
     (6, 'Chat Lead'),
     (7, 'CMS Page'),
     (8, 'Resume Detail Page'),
+    (9, 'Skill Service Page'),
     (20, 'Miss Call Lead'),
     (21, 'AdServerLead'),
     (22, 'CartLead'),
@@ -32,6 +33,7 @@ DEFAULT_SLUG_SOURCE = (
     (6, 'defaultchatleads'),
     (7, 'cmsonline'),
     (8, 'resumeonline'),
+    (9, 'skillservice'),    # service pages
     (21, 'adserverdefault'),
     (22, 'cartleads'),
     (20, 'missedcalldefault'),
