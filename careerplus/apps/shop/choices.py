@@ -119,7 +119,7 @@ R_ATTR_DICT = {
 
 S_ATTR_DICT = {
     'EXP': 'experience_service',
-    'FD': 'feature_duration',
+    'FD': 'featured_duration',
     'SD': 'service_doc',
     'SI': 'service_im',
 }
