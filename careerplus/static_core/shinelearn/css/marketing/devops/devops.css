@@ -1,0 +1,455 @@
+body {
+    color: #666;
+    font-size: 14px;
+}
+ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.error {
+    font-size: 11px;
+    color: #f74343 !important;
+    font-weight: 400;
+  }
+
+.error p {
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+h2 {
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: bold;
+    color: #4a4a4a;
+    margin-bottom: 0;
+}
+
+.sprite {
+    background-image: url('/l/s/shinelearn/images/marketing/devops/sprite.png');
+    background-repeat: no-repeat;
+}
+
+.navbar {
+    font-size: 15px;
+    font-weight: 300;
+    height: 51px;
+}
+
+.navbar-brand {
+    position: absolute;
+    top: -6px;
+}
+
+.navbar-nav .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+.navbar-nav li:not(:last-child) {
+    margin: 0 5px;
+}
+
+.bg-dark {
+    background-color: rgba(0, 0, 0, .3) !important;
+}
+
+.banner-bg {
+    background: url('/l/s/shinelearn/images/marketing/devops/mobile-bg.jpg');
+    height: auto;
+    background-attachment: scroll;
+    background-position: bottom;
+    background-size: contain;
+    background-repeat: no-repeat;
+    padding-bottom: 65px;
+    background-color: #391085;
+    padding-top: 51px;
+}
+
+.right-header {
+    position: relative;
+    top: auto;
+    transform: none;
+}
+
+.right-header .top-head {
+    font-size: 24px;
+    color: rgba(255, 255, 255, 1);
+    margin-bottom: 15px;
+    line-height: 26px;
+    font-weight: 300;
+}
+
+.right-header h1 {
+    font-weight: 700;
+    font-size: 34px;
+    color: #fff;
+    box-shadow: #fff;
+    margin-bottom: 0;
+    text-shadow: 0px 2px 1px rgba(0, 0, 0, .3);
+}
+
+.right-header ul {
+    color: #fff;
+    padding: 0;
+    list-style-type: none;
+    padding-right: 0;
+    float: left;
+    width: 100%;
+}
+
+.right-header ul li {
+    padding-right: 0;
+    margin-bottom: 12px;
+    color: rgba(255, 255, 255, .8);
+    padding-bottom: 12px;
+    float: left;
+    font-size: 16px;
+    width: 100%;
+}
+
+.right-header ul li:not(:last-child) {
+    border-bottom: 1px dashed rgba(255, 255, 255, .6);
+}
+
+.right-header ul li span {
+    width: 40px;
+    height: 40px;
+    display: block;
+    position: relative;
+    margin-right: 15px;
+    float: left;
+}
+.right-header ul li .pointer {
+    display: flex;
+    align-items: center;
+    float: left;
+    width: 78%;
+}
+
+.icon-class {
+    background-position: 0 0;
+}
+
+.icon-training {
+    background-position: -42px 0;
+}
+
+.icon-courses {
+    background-position: -84px 0;
+}
+
+.data-scientisty {
+    font-size: 25px;
+    color: #fff;
+    padding-right: 20px;
+    padding-top: 0;
+    line-height: 1.2;
+}
+
+.main-form {
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 20px 25px;
+    box-shadow: 0px 0px 18px rgba(0, 0, 0, .3);
+}
+
+.main-form h2 {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.main-form .form-control {
+    border: none;
+    border-radius: 0;
+    height: 40px;
+    font-weight: 400;
+    font-size: 14px;
+    background-color: transparent;
+    border-bottom: 2px solid #cccccc;
+    padding-left: 0;
+}
+
+.main-form .form-group {
+    margin-bottom: 0;
+    padding-bottom: 0
+}
+
+.tnc {
+    font-size: 12px;
+}
+
+.tnc a {
+    color: #333;
+    text-decoration: underline;
+}
+
+.call-us {
+    border-top: 1px solid rgba(0, 0, 0, .2);
+    margin: 0 -25px;
+    padding: 10px 15px 0 70px;
+    position: relative;
+}
+
+.call-us span {
+    width: 29px;
+    height: 29px;
+    display: block;
+    position: absolute;
+    left: 25px;
+    background: url('/l/s/shinelearn/images/marketing/data-science/sprite.png') no-repeat -94px 0;
+    top: 18px;
+}
+
+.call-us strong {
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.call-us p {
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+.easy-emi {
+    width: 305px;
+    text-align: center;
+    padding-top: 10px;
+    color: rgba(255, 255, 255, .6);
+    font-weight: 300;
+    font-size: 12px;
+}
+
+.btn-primary {
+    background-color: #fdc12e;
+    border-color: #fdc12e;
+    box-shadow: 0px 4px 9px rgba(0, 0, 0, 0.2);
+    color: #000;
+}
+
+.btn {
+    padding-top: 0.575rem;
+    padding-bottom: 0.575rem;
+}
+
+
+section {
+    padding: 40px 0;
+}
+
+.course-highlight {
+    color: #545454;
+    margin: 0;
+
+}
+
+.course-highlight li {
+    width: 100%;
+    display: inline-block;
+    padding: 0 15px;
+    vertical-align: top;
+    position: relative;
+    padding-left: 60px;
+    margin-bottom: 10px;
+}
+
+.course-highlight li span {
+    position: absolute;
+    width: 48px;
+    height: 45px;
+    display: block;
+    left: 0;
+}
+
+.course-highlight h3 {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.course-highlight p {
+    font-size: 14px;
+}
+
+.icon-project {
+    background-position: -126px 0;
+}
+
+.icon-course {
+    background-position: -176px 0;
+}
+
+.icon-certificate {
+    background-position: 0 -47px;
+}
+
+.icon-learning {
+    background-position: -50px -47px;
+}
+
+.icon-experts {
+    background-position: -102px -47px;
+}
+
+.icon-rate {
+    background-position: -151px -47px;
+}
+
+.bullet-list {
+    margin: 20px 0 0 0;
+    padding: 0 0 0 15px;
+}
+
+.bullet-list li {
+    padding: 0;
+    list-style-type: disc;
+    
+}
+
+.bullet-list li:not(:last-child) {
+    margin-bottom: 15px;
+}
+
+/* Buttons */
+.btn-round {
+    border-radius: 30px;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.btn-blue {
+    color: #fff;
+    background-color: #059fe3;
+    border-color: #059fe3;
+    box-shadow: 0 0 50px rgba(29, 95, 183, .6);
+}
+
+.white-box {
+    background-color: #fff;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+    padding: 0 30px;
+    border-radius: 10px;
+    height: 240px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.white-box h3 {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.white-box span {
+    width: 67px;
+    height: 67px;
+    display: inline-block;
+    margin: 15px 0px;
+}
+
+.white-box p {
+    padding: 0 15px;
+    margin-bottom: 0;
+}
+
+.icon-global {
+    background-position: 4px -101px;
+}
+
+.icon-profile {
+    background-position: -62px -101px;
+}
+
+.icon-credits {
+    background-position: -138px -101px;
+}
+
+footer {
+    background-color: #dcdcdc;
+    padding: 10px 0;
+}
+
+.grey-bg {
+    background-color: #f3f3f3;
+}
+
+
+.sticky {
+    background-color: #3a1c76 !important;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+    box-shadow: 0 0 50px rgba(0, 0, 0, .3);
+}
+
+
+@media (min-width: 576px) {
+
+}
+
+@media (min-width: 768px) {
+}
+
+@media (min-width: 992px) {
+    .right-header {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .right-header .top-head {
+        font-size: 40px;
+    }
+
+    .right-header h1 {
+        font-size: 50px;
+    }
+
+    .right-header ul {
+        padding-right: 40%;
+    }
+
+    .banner-bg {
+        background: url('/l/s/shinelearn/images/marketing/devops/banner-bg.jpg');
+        height: auto;
+        background-attachment: scroll;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        padding-bottom: 130px;
+    }
+
+    section {
+        padding: 70px 0;
+    }
+
+    .course-highlight {
+        margin: 0 -15px;
+    }
+
+    .course-highlight li {
+        width: 49%;
+    }
+
+    h2 {
+        font-size: 28px;
+    }
+
+    .grey-bg {
+        background-color: #fff;
+    }
+    
+    .white-box p {
+        padding: 0 40px;
+    }
+
+    .bullet-list {
+        margin: 30px 0 0 0;
+    }
+
+}
+
+@media (min-width: 1200px) {
+}

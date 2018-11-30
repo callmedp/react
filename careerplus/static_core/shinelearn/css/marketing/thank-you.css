@@ -1,0 +1,296 @@
+a:hover {
+    text-decoration: none;
+}
+
+.top-bar {
+    background-color: #2f5da5;
+    height: 60px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .3);
+    position: relative;
+}
+
+.main-banner {
+    background-color: #5b7eda;
+    padding: 30px 0;
+}
+
+.para-text {
+    width: 600px;
+    margin: 0 auto;
+    color: #fff;
+    padding: 15px 0 40px 0;
+}
+
+.btn-wrap {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    bottom: -65px;
+}
+
+.btn-white {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 0 25px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 15px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, .2);
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+}
+
+.btn-white span {
+    background-color: #2c65b4;
+    width: 45px;
+    height: 45px;
+    display: inline-block;
+    border-radius: 50%;
+    position: relative;
+    top: 2px;
+    vertical-align: middle;
+    margin-right: 10px;
+    background-image: url('/media/static/shinelearn/images/marketing/sprite.png');
+}
+
+.btn-white .phone-icon {
+    background-position: 0 0;
+}
+
+.btn-white .mail-icon {
+    background-position: -47px 0;
+}
+
+.main-body {
+    padding-top: 100px;
+}
+
+.heading {
+    font-size: 30px;
+    text-align: center;
+    padding: 0 0 30px 0;
+}
+
+
+.article-list {
+    display: inline-block;
+    margin-bottom: 30px;
+}
+
+.article-list .box-panel {
+    display: block;
+    padding-bottom: 20px;
+    overflow: hidden;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, .1);
+}
+
+.article-list figure.pr {
+    height: 210px;
+    overflow: hidden;
+}
+
+.pr {
+    position: relative;
+}
+
+figure {
+    margin: 0;
+}
+
+.article-list figure.pr img {
+    margin-top: -5%;
+    width: 100%;
+}
+
+
+.article-list figure .product-title-pos {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
+
+.product-title {
+    border: 1px solid #fff;
+    background: rgba(0,0,0,0.5);
+    font-size: 11px;
+    border-radius: 2px;
+    padding: 2px 5px;
+    display: table;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.article-list .heading-article {
+    font-weight: 600;
+    display: block;
+    margin: 15px 20px 10px 20px;
+    line-height: 20px;
+    font-size: 18px;
+    height: 41px;
+    overflow: hidden;
+    color: #333;
+}
+
+.article-list article {
+    font-size: 13px;
+    color: #666;
+    padding: 0 20px;
+    height: 55px;
+    display: block;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.article-list hr {
+    height: 1px;
+    background: #f0f0f0;
+    display: block;
+    margin: 0 20px 10px 20px;
+    clear: both;
+    border: 0;
+}
+
+.article-list .view-forward {
+    margin: 3px 20px 0 0;
+    color: #999;
+    float: right;
+}
+
+.article-list .view-forward .view-icon {
+    width: 18px;
+    height: 11px;
+}
+
+.ml-20 {
+    margin-left: 20px;
+}
+
+.view-icon {
+    width: 18px;
+    height: 11px;
+    background: url('https://static1.shine.com/l/s/shinelearn/images/sprite.png') no-repeat -438px -74px;
+    display: inline-block;
+    vertical-align: inherit;
+}
+
+.author-secondary {
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.article-list .author figure {
+    width: 37px;
+    height: 37px;
+    vertical-align: middle;
+    border-radius: 100%;
+    display: inline-block;
+    overflow: hidden;
+    margin: 0 10px 0 20px;
+}
+
+.article-list .author figure img {
+    max-width: 100%;
+    width: 37px;
+    height: 37px;
+}
+
+#cls-thank-you {
+    visibility: hidden;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 0;
+    transform: translateY(1500px);
+    opacity: 0;
+
+}
+
+.fadeOut {
+    transition: all .2s ease-out;
+    display: none;
+    z-index: 1;
+    top: 0;
+    opacity: 0;
+}
+
+.fadeIn {
+    transition: all .5s ease-out;
+    transform: translateY(0) !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+
+.loader {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    background: rgba(255, 255, 255, 1);
+    z-index: 99999;
+}
+
+.loader span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.load-txt {
+    font-size: 26px;
+    padding-top: 10px;
+}
+
+
+
+
+@media (max-width: 600px) {
+    .btn-wrap {
+        flex-direction: column;
+        position: relative;
+        bottom: auto;
+    }
+
+    .para-text {
+        width: 100%;
+        padding-bottom: 15px;
+        font-size: 13px;
+    }
+
+    .btn-white {
+        margin: 0;
+        width: 100%;
+        justify-content: start;
+        height: 55px;
+    }
+
+    .btn-white span {
+        transform: scale(.8);
+    }
+
+    .btn-white:first-child {
+        margin-bottom: 15px;
+    }
+
+    .thank-img {
+        width: 60%;
+    }
+
+    .main-body {
+        padding-top: 40px;
+    }
+
+    .heading {
+        font-size: 25px;
+        padding-bottom: 20px;
+    }
+}

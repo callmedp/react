@@ -54,6 +54,11 @@ urlpatterns = [
     url(r'^thankyou-for-query$',
         marketing_views.MarketingPages.as_view(),
         name='thankyou-for-query'),
+    
+    url(r'^thank-you-1$',
+    marketing_views.MarketingPages.as_view(),
+    name='thank-you-1'),
+
 
     url(r'^six-sigma-green-belt$',
         marketing_views.MarketingPages.as_view(),
@@ -67,33 +72,43 @@ urlpatterns = [
         marketing_views.MarketingPages.as_view(),
         name='digital-marketing'),
 
-    url(r'^aws-cert',
+    url(r'^aws-cert$',
         marketing_views.MarketingPages.as_view(),
         name='aws-cert'),
 
-    url(r'^ban-cert',
+    url(r'^aws-cert1$',
+        marketing_views.MarketingPages.as_view(),
+        name='aws-cert1'),
+
+    url(r'^ban-cert$',
         marketing_views.MarketingPages.as_view(),
         name='ban-cert'),
 
-    url(r'^data-science',
+    url(r'^data-science$',
         marketing_views.MarketingPages.as_view(),
         name='data-science'),
 
-    url(r'^international-resume-writing',
+    url(r'^international-resume-writing$',
         marketing_views.MarketingPages.as_view(),
         name='international-resume-writing'),
-    url(r'^linkedin',
+    url(r'^linkedin$',
         marketing_views.MarketingPages.as_view(),
         name='linkedin'),
-    url(r'^linkedin-1',
-        marketing_views.MarketingPages.as_view(),
-        name='linkedin'),
+    
+    url(r'^linkedin-1$',
+        marketing_views.MarketingPages.as_view(),name='linkedin'),
 
-    url(r'^international-resume-writing-1', marketing_views.MarketingPages.as_view(),
+    url(r'^international-resume-writing-1$', marketing_views.MarketingPages.as_view(),
       name='international-resume-writing'),
 
     url(r'^resume-writing-services-1$', marketing_views.MarketingPages.as_view(),
        name='resume-writing'),
+    
+    url(r'^devops-professional$', marketing_views.MarketingPages.as_view(),
+       name='devops-professional'),
+
+    url(r'^data-scientist$', marketing_views.MarketingPages.as_view(),
+       name='data-scientist'),
 
 
 
