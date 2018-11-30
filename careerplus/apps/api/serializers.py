@@ -283,6 +283,8 @@ class RecommendedProductSerializerSolr(Serializer):
     buy_count = serializers.IntegerField(source='pBC')
     pImg = serializers.CharField()
     pURL = serializers.CharField()
+    pStar = serializers.ListField(
+        child=serializers.CharField())
     no_jobs = serializers.IntegerField(source='pNJ')
     review_count = serializers.IntegerField(source='pRC')
     avg_rating = serializers.DecimalField(

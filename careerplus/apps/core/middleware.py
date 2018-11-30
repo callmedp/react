@@ -100,7 +100,8 @@ class LoginMiddleware(object):
                 skills_obj = Skill.objects.filter(name__in=skills)[:15]
                 skills_ids = [str(s.id) for s in skills_obj]
                 request.session.update({
-                    'skills': skills_ids
+                    'skills': skills_ids,
+                    'skills_name': skills[:15],
                 })
         response = self.get_response(request)
         return response

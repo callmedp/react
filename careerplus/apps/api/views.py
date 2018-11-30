@@ -40,6 +40,7 @@ from .serializers import (
     OrderListHistorySerializer,
     RecommendedProductSerializer,
     RecommendedProductSerializerSolr)
+from shared.rest_addons.pagination import Learning_custom_pagination
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -352,7 +353,7 @@ class EmailLTValueApiView(APIView):
                     personal_detail = candidate_response.get('personal_detail')[0] if candidate_response.get('personal_detail') else None
                     if personal_detail:
                         candidate_id = personal_detail.get('id')
-                        name = personal_detail.get('first_name', '') + ' ' + personal_detail.get('last_name', '')  
+                        name = personal_detail.get('first_name', '') + ' ' + personal_detail.get('last_name', '')
             else:
                 candidate_id = c_id
             if candidate_id:
@@ -386,7 +387,7 @@ class EmailLTValueApiView(APIView):
             else:
                 return Response(
                     {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
-                    status=status.HTTP_400_BAD_REQUEST)    
+                    status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(
                 {"status": "FAIL", "msg": "Bad Parameters Provided"},
@@ -490,7 +491,7 @@ class ValidateCouponApiView(APIView):
                             "status": "FAIL",
                             "msg": 'This code is not valid for your account.'},
                             status=status.HTTP_400_BAD_REQUEST)
-                        
+
                     if coupon.user_limit is coupon.users.filter(redeemed_at__isnull=False).count():  # all coupons redeemed
                         return Response({
                             "status": "FAIL",
@@ -514,7 +515,7 @@ class ValidateCouponApiView(APIView):
                         coupon_user.user = lead_mobile
                     except CouponUser.DoesNotExist:
                         coupon_user = CouponUser(coupon=coupon, user=lead_mobile)
-                
+
                 coupon_user.redeemed_at = timezone.now()
                 coupon_user.save()
                 discount_amount = 0
@@ -530,7 +531,7 @@ class ValidateCouponApiView(APIView):
                     "discount_amount": discount_amount,
                     "msg": 'Successfully Redeemed'},
                     status=status.HTTP_200_OK)
-               
+
             except Exception as e:
                 msg = str(e)
                 logging.getLogger('error_log').error(msg)
@@ -602,6 +603,7 @@ class RecommendedProductsApiView(ListAPIView):
     authentication_classes = []
     permission_classes = []
     serializer_class = RecommendedProductSerializerSolr
+    pagination_class = Learning_custom_pagination
 
     def get_queryset(self, *args, **kwargs):
         skills = self.request.GET.get('skills', [])

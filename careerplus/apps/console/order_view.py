@@ -33,8 +33,7 @@ from emailers.sms import SendSMS
 from core.mixins import TokenExpiry
 from payment.models import PaymentTxn
 from linkedin.autologin import AutoLogin
-from order.functions import send_email
-
+from order.functions import send_email, date_timezone_convert
 
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from review.models import Review
@@ -222,7 +221,8 @@ class OrderListView(ListView, PaginationMixin):
 #         self.created = request.GET.get('created', '')
 #         return super(WelcomeCallVeiw, self).get(request, args, **kwargs)
 #
-#     def post(self, request, *args, **kwargs):
+#     def post(self, request, *args, **kw
+# args):
 #         try:
 #             order_list = request.POST.getlist('table_records', [])
 #             action_type = int(request.POST.get('action_type', '0'))
@@ -710,15 +710,24 @@ class OrderDetailVeiw(DetailView):
         return context
 
     def get_context_data(self, **kwargs):
+        last_status = ""
         context = super(OrderDetailVeiw, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
         order = self.get_object()
         max_limit_draft = settings.DRAFT_MAX_LIMIT
-
+        last_status_object = order.welcomecalloperation_set.exclude(wc_status__in=[0, 1, 2])\
+            .order_by('id').last()
+        if not last_status_object:
+            last_status = "Not Done"
+        else:
+            timestamp = '\n' + date_timezone_convert(last_status_object.created).strftime('%b. %d, %Y, %I:%M %P ')
+            last_status = last_status_object.get_wc_status()
+            last_status += timestamp
         order_items = order.orderitems.all().select_related('product', 'partner').order_by('id')
 
         context.update({
             "order": order,
+            "order_wc_status": last_status,
             'orderitems': list(order_items),
             "max_limit_draft": max_limit_draft,
             "messages": alert,
@@ -1826,7 +1835,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(BoosterQueueVeiw, self).get_queryset()
         queryset = queryset.filter(
-            order__status=1, product__type_flow=7,
+            order__status__in=[1,3], product__type_flow=7,
             no_process=False, oi_status__in=[5, 61, 62, 4],
             order__welcome_call_done=True).exclude(
             wc_sub_cat__in=[64, 65]
@@ -1908,7 +1917,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
         obj_pk = request.POST.get('oi_pk', None)
         if form.is_valid():
             try:
-                orderitem = OrderItem.objects.get(pk=obj_pk, oi_status__in=[5, 62])
+                orderitem = OrderItem.objects.get(pk=obj_pk, oi_status__in=[5, 62,4])
                 data = {
                     "oi_draft": request.FILES.get('oi_resume', ''),
                 }

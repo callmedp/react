@@ -48,7 +48,6 @@ urlpatterns = [
                   url(r'^aws-cert$', marketing_views.MarketingPages.as_view(), name='aws-cert'),
 
                   url(r'^aws-cert1$', marketing_views.MarketingPages.as_view(), name='aws-cert1'),
-
                   url(r'^ban-cert$', marketing_views.MarketingPages.as_view(), name='ban-cert'),
 
                   url(r'^data-science$', marketing_views.MarketingPages.as_view(), name='data-science'),

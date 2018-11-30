@@ -52,9 +52,12 @@
 
 
 {% block main_container %}
-    
+
     <div id="id-detail-body">
+
       {{product_detail|safe}}
+        <input id="skill" type="hidden" value=" {{skill}} ">
+
    </div>
 {% endblock main_container %}
 
@@ -68,6 +71,21 @@
     <script src="{% static 'shinelearn/js/common/scroller.js' %}" type="text/javascript"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     {% endcompress %}
+
+<script type="text/javascript">
+var authen=false;
+var prod_id = {{product.id}};
+var skill =document.getElementById("skill").value;
+$(document).ready(function() {
+{% if request.session.candidate_id %}
+    authen=true;
+{%else%}
+    authen =false;
+{%endif%}
+ ajax_call(authen,prod_id);
+});
+</script>
+
 {% endblock js_section %}
 
   {% block zendesk %}

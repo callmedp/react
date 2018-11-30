@@ -65,7 +65,9 @@ if __name__=="__main__":
             sales_user_info = ast.literal_eval(order.sales_user_info)
         except:
             sales_user_info = {}
-        txn_obj = order.get_txns().filter(status=1).first()
+        txn_obj_list = order.get_txns().filter(status=1)
+        txn_obj = txn_obj_list.first()
+        transaction_ids = ", ".join([x.txn for x in txn_obj_list])
         coupon_order = CouponOrder.objects.filter(order=order).first()
         coupon_code = coupon_order.coupon_code if coupon_order else ""
 
@@ -80,7 +82,7 @@ if __name__=="__main__":
                     order.id,order.email,item.partner.name,order.date_placed.date(),\
                     txn_obj.payment_date.date(),txn_obj.payment_date.time(),sales_user_info.get('executive',''),\
                     sales_user_info.get('team_lead',''),sales_user_info.get('branch_head',''),\
-                    txn_obj.txn,item.id,item.product.name,item.product.heading,\
+                    transaction_ids,item.id,item.product.name,item.product.heading,\
                     EXP_DICT.get(item.product.get_exp(),"N/A"), \
                     DURATION_DICT.get(item.product.get_duration(),"N/A"),order.get_status,\
                     item.cost_price,order_discount,price_without_wallet_discount,order.total_incl_tax,\

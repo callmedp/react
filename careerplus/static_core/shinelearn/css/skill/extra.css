@@ -2,3 +2,12 @@
 .position-error{
     position: initial !important;
 }
+
+#loadingimg{
+width: 100px;
+display: block;
+margin-left: auto;
+margin-right: auto;
+
+}
+

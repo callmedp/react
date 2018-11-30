@@ -75,7 +75,7 @@
                           <td>{{order.first_name}} {{order.last_name}}</td>
                           <td>{{order.get_status}}</td>
                           <td>{{order.payment_date}}</td>
-                          <td>{% if order.welcome_call_done %}Done{% else %}Not Done{% endif %}</td>
+                          <td>{{order_wc_status}}</td>
                           <td>{{order.date_placed}}</td>
                           <td>{% if order.closed_on %}{{order.closed_on}}{% else %}Not Closed Yet.{% endif %}</td>
                         </tr>
