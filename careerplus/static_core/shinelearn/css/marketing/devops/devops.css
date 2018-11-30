@@ -28,7 +28,7 @@ h2 {
 }
 
 .sprite {
-    background-image: url('../../../images/marketing/devops/sprite.png');
+    background-image: url('/l/s/shinelearn/images/marketing/devops/sprite.png');
     background-repeat: no-repeat;
 }
 
@@ -58,7 +58,7 @@ h2 {
 }
 
 .banner-bg {
-    background: url('../../../images/marketing/devops/mobile-bg.jpg');
+    background: url('/l/s/shinelearn/images/marketing/devops/mobile-bg.jpg');
     height: auto;
     background-attachment: scroll;
     background-position: bottom;
@@ -200,7 +200,7 @@ h2 {
     display: block;
     position: absolute;
     left: 25px;
-    background: url('../../../images/marketing/data-science/sprite.png') no-repeat -94px 0;
+    background: url('/l/s/shinelearn/images/marketing/data-science/sprite.png') no-repeat -94px 0;
     top: 18px;
 }
 
@@ -412,7 +412,7 @@ footer {
     }
 
     .banner-bg {
-        background: url('../../../images/marketing/devops/banner-bg.jpg');
+        background: url('/l/s/shinelearn/images/marketing/devops/banner-bg.jpg');
         height: auto;
         background-attachment: scroll;
         background-position: center;
