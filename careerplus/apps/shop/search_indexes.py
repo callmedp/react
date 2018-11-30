@@ -313,19 +313,23 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_pDM(self, obj):
         if obj.is_course:
-            DM = []
+            dm = []
             if obj.type_product == 1:
                 var = obj.get_variations()
                 for pv in var:
-                    DM.append(pv.get_duration())
+                    dm.append(pv.get_duration())
             elif obj.type_product == 3:
-                cmbs =list()
+                cmbs = list()
                 cmbs = obj.get_combos()
                 for cmb in cmbs:
-                    DM.append(cmb.get_duration())
+                    dm.append(cmb.get_duration())
             else:
-                DM.append(obj.get_duration())
-            return list(set(DM))
+                dm.append(obj.get_duration())
+            return list(set(dm))
+        elif obj.is_service and obj.type_flow == 5:
+            dm = []
+            dm.append(obj.get_duration_in_day())
+            return list(set(dm))
         return []
 
     def prepare_pCert(self, obj):
@@ -878,6 +882,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'label': pv.name,
                         'heading':pv.heading if pv.heading else '',
                         'experience': pv.get_exp(),
+                        'duration': pv.get_duration_in_day(),
                         'url': pv.get_url(relative=True),
                         'inr_price': float(pv.inr_price),
                         'fake_inr_price': float(pv.fake_inr_price),
