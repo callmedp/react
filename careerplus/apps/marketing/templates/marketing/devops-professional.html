@@ -314,15 +314,24 @@
 
     </div><!-- /. Landing page wrapper -->
 
-<!-- Thank you page starts here -->
 
+    <!-- Loading widgets strts here -->
+    <div class="loader">
+      <span>
+        <img src="{% static 'shinelearn/images/marketing/spinner.gif' %}">
+        <p class="load-txt">Loading...</p>
+      </span>
+    </div>
+    <!-- Loading widgets ends here -->
+
+<!-- Thank you page starts here -->
   <div class="main-wraper" id="cls-thank-you">
       <div class="container-fluid top-bar">
           <div class="container">
               <div class="row">
                   <div class="col-12">
                       <a class="shinelearning-logo" href="#">
-                      <img src="/media/static/shinelearn/images/marketing/six-sigma-cert-cpy/shine-learning-logo.png" alt="Shinelearning">
+                      <img src ="{% static 'shinelearn/images/marketing/six-sigma-cert-cpy/shine-learning-logo.png' %}" alt="Shinelearning" />
                       </a>
                   </div>
               </div>
