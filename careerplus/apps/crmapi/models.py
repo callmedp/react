@@ -32,7 +32,7 @@ DEFAULT_SLUG_SOURCE = (
     (6, 'defaultchatleads'),
     (7, 'cmsonline'),
     (8, 'resumeonline'),
-    (9, 'online-services'),
+    (9, 'skillservice'),    # service pages
     (21, 'adserverdefault'),
     (22, 'cartleads'),
     (20, 'missedcalldefault'),
