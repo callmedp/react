@@ -1,4 +1,4 @@
-{% load static %}
+{% load static compress %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -8,10 +8,11 @@
     <title>DevOps proffessional | Shine Learning</title>
 
     <!-- Bootstrap CSS -->
+    {% compress css%}
     <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/bootstrap-4.css' %}">
     <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/devops/devops.css' %}">
     <link href="{% static 'shinelearn/css/marketing/thank-you.css' %}" rel="stylesheet">
-
+    {% endcompress %}
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
   </head>
   <body>
@@ -316,10 +317,10 @@
 
 
     <!-- Loading widgets strts here -->
-    <div class="loader">
-      <span>
+    <div class="loader" id="gif-loader" style="display:none;">
+      <span class="text-center">
         <img src="{% static 'shinelearn/images/marketing/spinner.gif' %}">
-        <p class="load-txt">Loading...</p>
+        <p class="load-txt">Thanks for showing interest. Please wait..</p>
       </span>
     </div>
     <!-- Loading widgets ends here -->
@@ -412,10 +413,13 @@
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
 
+    {% compress js %}
     <script src="{% static 'shinelearn/js/marketing/jquery.easing.js' %}"></script>
     <script src="{% static 'shinelearn/js/marketing/bootstrap.js' %}"></script>
     <script src="{% static 'shinelearn/js/marketing/scrolling-nav.js' %}"></script>
+    {% endcompress %}
     
+    {% compress js inline %}
     <script type="text/javascript">
     var _gaq = _gaq || [];
 
@@ -429,6 +433,7 @@
         $("#lead").validate({
             submitHandler:function (form) {
                 var action = $(form).attr('action');
+                document.getElementById('gif-loader').style.display = "block";
                 $.post(action, $(form).serialize(), function (data) {
                     if (data && data['status']){
                         $.each($("#lead"), function (i, e) {
@@ -441,8 +446,10 @@
                         ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
                        document.body.appendChild(ga_code);
                        // window.location.href ='thankyou-for-query';
+                       document.getElementById('gif-loader').style.display = "none";
                        $('#cls_landing-page').addClass("fadeOut");
                        $('#cls-thank-you').addClass("fadeIn");
+
                       return false;
                     }
                 }, 'json');
@@ -570,6 +577,7 @@
           });
 
         </script>
+        {% endcompress %}
 
   </body>
 </html>
