@@ -258,7 +258,11 @@ OI_EMAIL_STATUS = (
     (171, 'Sent Flow6 Process Mailer'),
 
     # cashback wallet status: 181 - 190
-    (181, '')
+    (181, ''),
+
+    # flow14 :191 - 200
+    (191, 'Sent Flow14 Process Mailer'),
+    (192, 'Sent Flow14 Service Initiation Mailer'),
 )
 
 OI_SMS_STATUS = (
@@ -341,6 +345,11 @@ OI_SMS_STATUS = (
     # flow6 :171 - 180
     (171, 'Sent Flow6 Process Sms'),
     (172, 'Sent Flow6 Service Initiation Sms'),
+
+
+    # flow14 :191 - 200
+    (191, 'Sent Flow14 Process Sms'),
+    (192, 'Sent Flow14 Service Initiation Sms'),
 )
 
 REFUND_MODE = (
@@ -383,7 +392,7 @@ WC_CATEGORY = (
 WC_SUB_CATEGORY1 = (
     # 41 - 60
     (41, 'No Issue'),
-    (42, 'Order Processed After 3 Calls'),
+    (42, 'Order Processed After Final Reminder'),
 )
 
 WC_SUB_CATEGORY2 = (
@@ -418,7 +427,7 @@ WC_FLOW_STATUS = (
 
     # 41 - 60
     (41, 'No Issue'),
-    (42, 'Order Processed After 3 Calls'),
+    (42, 'Order Processed After Final Reminder'),
 
     # 61 - 80
     (61, 'Service Issue'),

@@ -756,14 +756,14 @@ class WelcomeCallOperation(AbstractAutoDate):
     def __str__(self):
         return str(self.pk)
 
-    def get_wc_cat(self):
+    def get_wc_cat(self,default_text=""):
         sub_dict = dict(WC_CATEGORY)
-        return sub_dict.get(self.wc_cat, '')
+        return sub_dict.get(self.wc_cat, default_text)
 
-    def get_wc_sub_cat(self):
+    def get_wc_sub_cat(self,default_text=""):
         cat_dict = dict(WC_SUB_CATEGORY)
-        return cat_dict.get(self.wc_sub_cat, '')
+        return cat_dict.get(self.wc_sub_cat, default_text)
 
-    def get_wc_status(self):
+    def get_wc_status(self,default_text=""):
         status_dict = dict(WC_FLOW_STATUS)
-        return status_dict.get(self.wc_status, '')
+        return status_dict.get(self.wc_status, default_text)

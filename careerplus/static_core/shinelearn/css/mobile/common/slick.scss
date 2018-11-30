@@ -113,6 +113,43 @@
 
 /* Arrows */
 
+
+.faculty-profile {
+.slick-prev,
+.slick-next {
+    @include position(absolute, 50% null null null, 1);
+    @include size(40px);
+    @include border-radius(50%);
+    background-color: $bg-white;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    outline: 0;
+    text-indent: -9999px;
+    margin-top: -20px;
+    border: 0 none;
+    z-index: 2;
+    background-repeat: no-repeat;
+}
+
+.slick-prev {
+    left: -50px;
+    background-image: url($executive-sprite);
+    background-position: 0 -87px;
+}
+
+.slick-next {
+    right: -50px;
+    background-image: url($executive-sprite);
+    background-position: -43px -87px;
+}
+
+.slick-list {
+    overflow: hidden;
+}
+
+
+
+}
+
 .slick-prev,
 .slick-next {
     @include position(absolute, 50% null null null, 1);
@@ -121,10 +158,14 @@
     text-indent: -9999px;
     margin-top: -8px;
     border: 0 none;
+    opacity: 1;
 }
 
 .slick-disabled {
-    opacity: .25;
+    opacity: 0;
+    transition-property: opacity;
+    transition-delay: 0;
+    transition-duration: 0.3s;
 }
 
 .slick-prev {

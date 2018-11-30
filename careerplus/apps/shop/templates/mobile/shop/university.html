@@ -1,0 +1,882 @@
+{% extends "mobile/basic/base.html" %}
+{% load static compress %}
+{% load humanize search_tags shop_tags compress %}
+{% block css_section %}
+{{ block.super }}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/shop/course-detail.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/smk-accordion.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/executive-course/exec-detail.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
+    {% endcompress css %}
+        <style>
+            a[disabled], a[disabled]:hover {
+               pointer-events: none;
+               color: #e1e1e1;
+            }
+            /*div[data-test-id="ChatWidgetMobileButton"]{
+                display: none !important;
+            }*/
+        </style>
+{% endblock css_section %}
+{% block title %}
+  {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
+{% endblock title %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{request.get_full_path}}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}?type=amp">
+{% endblock canonical_url %}
+
+        {% block django_meta %}
+            {% include 'meta/meta.html' %}
+        {% endblock django_meta %}
+
+{% block main_container %}
+        <div class="wrapper executive-bg">
+            {% block header %}
+            <!-- header menu Icon Starts here -->
+                <div class="exec-header">
+                    <div class="header-content">
+                        <h1 class="semi-bold">{{ prd_H1 }}</h1>
+                        <div class="university-logo">
+                            <img 
+                                src="{% static 'shinelearn/images/mobile/executive-course/university-logo.jpg' %}"/>
+                        </div>
+                        <!-- Banner info band -->
+                        <div class="info-band">
+                            <span class="exe-icon-round-arrow"></span>
+                            <div class="slide-container">
+                                <ul class="info-slider">
+                                {% with university_detail.highlighted_benefits|split:";" as benefits %}
+                                    {% for benefit in benefits %}
+                                    <li>{{ benefit }}</li>
+                                    {% endfor %}
+                                {% endwith %}
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- Banner info band -->
+                    </div><!-- /. header content -->
+
+                    <!-- header menu Icon Starts here -->
+                    <div class="main-menu w100fl">
+                        <div class="pull-left">
+                            <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button" ></a>  
+                        </div><!-- / Left side Icon ends here -->
+                        
+                        <div class="pull-right">
+                            <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                        </div><!-- / Right side Icon ends here -->
+                    </div><!-- header menu Icon ends here -->
+                    <div class="overlay"></div>
+                    <img src="{% static 'shinelearn/images/mobile/executive-course/exec-landing-img.jpg' %}">
+                {% block header_title %}{% endblock header_title %}
+                </div><!-- header ends here -->
+            {% endblock header %}
+
+            {% block container %}
+            <div class="content-box pt-0">
+                <div class="university-info row mb-15">
+                    <ul>
+                        <li>
+                            <span class="batch-execIcon">
+                                <span>Starts:</span>  
+                                <strong class="text-upper">{{ university_detail.launchdate }}</strong>
+                            </span> 
+                        </li>
+                        <li>
+                            <span class="duration-execIcon">
+                                <span>Duration:</span> 
+                                <strong class="text-upper">{{ selected_var.dur_days|convert_to_month }}</strong>
+                            </span> 
+                        </li>
+                        <li>
+                            <span class="price-execIcon">
+                                <span>Price:</span>
+                                <strong class="fs-24 price">Rs.{{ sqs.pPinb|floatformat }}</strong>
+                            </span> 
+                        </li>
+                    </ul>
+                    <div class="text-center text-upper">
+                     {% if not request.session.candidate_id and not request.session.university_course %}
+                        <a class="btn btn-round-30 btn-slg btn-shadow btn-grOrange bold" id="enroll_now" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll Now</a>
+                    {% else %}
+                        <a role="button" class="btn btn-round-30 btn-slg btn-shadow btn-grOrange bold" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                    {% endif %}
+                    </div>
+                    {% if  university_detail.brochure %}
+                      {% if not request.session.candidate_id and not request.session.university_course %}
+                        <div class="download-brochure text-center mt-15">
+                          <a href="{{ university_detail.brochure }}" id="download_broucher" ><i class="exe-icon-download"></i>
+                          <strong> Download Brochure</strong>
+                          </a>
+                        </div>
+                      {% else %}
+                        <div class="download-brochure text-center mt-15">
+                          <a href="{{ university_detail.brochure }}" id="download_broucher"><i class="exe-icon-download"></i>
+                          <strong> Download Brochure</strong>
+                          </a>
+                        </div>
+                      {% endif %}
+                    {% endif %}
+
+                    
+<!-- 
+                    <div class="download-brochure text-center mt-15">
+                        <a href="#"><i class="exe-icon-download"></i><strong>Download Brochure</strong></a>
+                    </div> -->
+                   
+                </div><!-- ./ university-info -->
+
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-program"></i></span>About program</h2>
+                        <div class="content">
+                             <div class="pointers mt-15 more1">
+                                  {{ prd_desc|safe}}
+                             </div> 
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ About program -->
+                {% if university_detail.attendees_criteria %}
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-who"></i></span>Who should attend?</h2>
+                        <div class="content">
+                            <ul class="who-attend">
+                            {% with university_detail.attendees_criteria|get_eval_value  as attendees_list %}
+                            {% for attendees in attendees_list %}
+                                <li class="{% if forloop.counter == 1 %}manager{% elif forloop.counter == 2 %} senior-managers {% elif forloop.counter == 3 %} department-heads {%else%} line-manager {% endif %}">
+                                    <div>
+                                        <h3>{{attendees.0}}</h3>
+                                        <p class="pb-0">{{attendees.1}}</p>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                            {% endwith %}
+                            </ul>
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ Who should attend? -->
+                {% endif %}
+                <div class="container eligibility">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-eligibility"></i></span>Eligibility criteria</h2>
+                        <div class="content">
+                            <ul class="tick-list">
+                                  {% with university_detail.eligibility_criteria|split:";" as eligibilities %}
+                                    {% for eligibility in  eligibilities %}
+                                      <li>{{eligibility}}</li>
+                                    {% endfor %}
+                                    {% endwith %}
+                            </ul>
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ Eligibility criteria -->
+
+                <input type="hidden" id="skilllist" value="{% if sqs.pSkilln %} {{sqs.pSkilln|join:''}}{% endif %}">
+                <div id="skill_list_box">
+                </div>
+                
+                {% if faculty %}
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-faculty"></i></span>Faculty profile</h2>
+                        <div class="content pl-40 pr-40">
+                            <ul class="faculty-profile text-center" id="executive-slide">
+                                {% for inner_fac in faculty %}
+
+                                {% for fac in inner_fac %}
+
+                                    <li>
+                                        <span class="faculty-image">
+                                            <img src="{{ fac.get_image_url }}"/>
+                                        </span>
+                                        <h3><a href="{{fac.get_absolute_url}}">{{ fac.name }}</a></h3>
+                                        <p class="desigation mt-15">{{ fac.designation }} – {{ fac.institute.name }}
+                                        <span></span>
+                                        </p>
+                                        <p>{{fac.description|truncatechars:"120"}}... <a  href="{{fac.get_absolute_url}}">read more</a></p>
+                                    </li>
+                                {% endfor %}
+                                {% endfor %}
+
+                            </ul>
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ Faculty profile -->
+                {% endif %}
+
+
+                {% if university_detail.benefits %}
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-exclusive"></i></span>Exclusive benefits</h2>
+                        <div class="content">
+                            <p class="subhead mb-15"><strong>Key Benefits</strong></p>
+                            <div class="key-benefits">
+                                {% for benefit in university_detail.benefits %}
+
+                                <div class="media">
+                                    <div class="media-left">
+                                        <i class="{{benefit.1}}"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <h3>{{ benefit.0 }}</h3>
+                                        <p class="pb-0">{{ benefit.2 }}</p>
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+                            </div>
+                            <hr />
+                            <p class="subhead mb-15"><strong>Other Benefits</strong></p>
+
+                            <ul class="tick-list">
+                                <li>
+                                    <div>
+                                        <h3>Free Services</h3>
+                                        <p>Free Resume, Cover Letter Formats and Career Guidance Services.</p>
+                                    </div>
+                                </li>
+                                
+                                <li>
+                                    <div>
+                                        <h3>Global Education Providers</h3>
+                                        <p class="pb-0">Choose from a list of global providers as per your requirement.</p>
+                                    </div>
+                                </li>
+                                
+                                <li>
+                                    <div>
+                                        <h3>Refer and Earn</h3>
+                                        <p class="pb-0">Refer your friend and get an Amazon Voucher worth Rs. 2000*</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ Exclusive benefits -->
+
+                {% endif %}
+    
+                {% if chapter_list %}
+                <div class="container">
+                    <div class="white-box program-structure">
+                        <h2><span><i class="execIcon-program"></i></span>Program Structure</h2>
+                        <div class="content">
+                            <!-- Accordion begin -->
+                            <div class="accordion_example1 accordion-wrap">
+                                <!-- Section 1 -->  
+                                {% for chapter in chapter_list|slice:"5" %}
+                                <div class="accordion_in {% if forloop.counter == 1 %} acc_active {% endif %} {% if not chapter.content %} no-content {% endif %}">
+                                    <div class="acc_head">{{ chapter.heading }}</div>
+                                    {% if chapter.content %}
+                                        <div class="acc_content">
+                                            <p> {{chapter.content|safe }}</p>
+                                        </div>
+                                    {% endif %}
+                                </div><!--/. Accordion 1 -->
+
+                                {% endfor %}
+                            </div><!-- /. accordion-wrap -->
+                            {% if chapter_list|length > 5 %}
+                            <p class="mt-15 text-center"><span class="btn btn-outline btn-round-30 btn-lg btn-openPopup">View all programs</span></p>
+ 
+                            <div class="modal custom-modal" id="win-0">
+                                <!-- Modal content -->
+                                <div class="modal-content">
+                                    <div class="header">
+                                        <span class="icon-close close-popup"></span>
+                                        <h2>All programs</h2>
+                                    </div><!-- /. header -->
+    
+                                    <div class="modal-body p-15">
+                                        <!-- Accordion begin -->
+                                        <div class="accordion_example1 accordion-wrap">
+                                            <!-- Section 1 -->  
+                                            {% for chapter in chapter_list %}
+                                            <div class="accordion_in {% if forloop.counter == 1 %} acc_active {% endif %} {% if not chapter.content %} no-content {% endif %}">
+                                                <div class="acc_head">{{ chapter.heading }}</div>
+                                                {% if chapter.content %}
+                                                    <div class="acc_content">
+                                                        <p> {{chapter.content|safe }}</p>
+                                                    </div>
+                                                {% endif %}
+                                            </div><!--/. Accordion 1 -->
+            
+                                            {% endfor %}
+                                        </div><!-- /. accordion-wrap -->
+                                    </div><!-- /. modal-body -->
+                                </div><!-- /. modal-content-->
+                            </div><!-- /. modal -->
+
+                            {% endif %}
+                        </div><!-- /. content -->
+                        
+                    </div><!-- /. white box-->
+                </div><!-- ./ Program Structure -->
+                {% endif %}
+
+                {% if university_detail.assesment or university_detail.sample_certificate %}
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-assessment"></i></span>Assessment & Evaluation</h2>
+                        <div class="content">
+                            {% if university_detail.assesment %}
+                                {{university_detail.assesment|safe}}
+                            {% endif %}
+                            {% if university_detail.sample_certificate %}
+                            <p class="mt-15 text-center"><a  class="btn btn-outline btn-round-30 btn-lg btn-openPopup" >View sample certificate</a></p>
+                            <div class="modal custom-modal" id="win-2">
+                                <!-- Modal content -->
+                                <div class="modal-content">
+                                    <div class="header">
+                                        <span class="icon-close close-popup">&times;</span>
+                                        <h2>Sample Certificate</h2>
+                                    </div><!-- /. header -->
+
+                                    <div class="modal-body">
+                                        <img src="{{ university_detail.sample_certificate }}" class="img-responsive"/>
+                                    </div>
+                                </div><!-- /. modal-content-->
+                            </div><!-- /. modal -->
+                            {% endif %}
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ Assessment & Evaluation -->
+                {% endif %}
+                      
+                {% if institute %}    
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-institute"></i></span>Institute</h2>
+                        <div class="content">
+                            <div class="instutite-image gr_instutite mb-10">
+                                <h3>{{ institute.name }}</h3>
+                                <img src="{% static 'shinelearn/images/mobile/executive-course/institute.jpg'%}" class="img-responsive"/>
+                            </div>
+                            <div class="more1">
+                            {{ institute.description|safe }}
+                            </div>
+                            <p class="mt-15 text-center"><a href="{{ institute.get_absolute_url }}" class="btn btn-outline btn-round-30 btn-lg">View all courses</a></p>
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ Institute -->
+                {% endif %}
+                {% if university_testimonial %}
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-testimonials"></i></span>Testimonials</h2>
+                        <div class="content pl-40 pr-40">
+                            <ul class="testimonials faculty-profile testi-slide">
+                                {%for testimonial in university_testimonial %}
+                                <li>
+                                    <p class="mb-15">{{ testimonial.review|safe }}</p>
+
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <span class="testimonial-image">
+                                             <img class="media-object" src="{{ testimonial.get_image_url }}" alt="...">
+                                            </span>
+                                        </div>
+                                        <div class="media-body">
+                                            <p class="pb-0 text-upper fs-14 c-333">{{testimonial.user_name }}</p>
+                                            <p class="pb-0 line-height-sm c-999">{{ testimonial.designation }}, {{ testimonial.company }}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ Testimonials -->
+                {% endif %}
+                
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-paymentModes"></i></span>Fee & Process</h2>
+                        <div class="content payment-mode">
+                            <!-- Accordion begin -->
+                            <div class="accordion_example1 accordion-wrap">
+                                <!-- Section 1 -->  
+                                <div class="accordion_in acc_active">
+                                    <div class="acc_head fs-16">Program Fee</div>
+                                    <div class="acc_content">
+                                        <div class="overall-fees ">
+                                            <div class="">
+                                                <p class="title pb-0">Overall fee</p>
+                                                <p class="fee pb-0">Rs. {{start_price|floatformat|intcomma}}</p>
+                                            </div>
+                                            <div class="payment-deadline pull-right">
+                                                <span class="fs-11">Payment Deadline</span>
+                                                <span class="fs-14 c-333 semi-bold">{{university_detail.payment_deadline}}</span>
+                                            </div>
+                                        </div><!-- /. Overall fees -->
+                                        <div class="clearfix"></div>
+                                        {% if  university_detail.payment %}
+                                            <hr class="row blueborder"/>
+                                            <p class="text-upper text-center c-333">Installment Available</p>
+                                            <ul class="text-center payment-instament">
+                                              {% for payment in university_detail.payment %}
+                                                <li>
+                                                    <p>{{forloop.counter|ordinal }} Installment</p>
+                                                    <p class="price">Rs. {{ payment.installment_fee|floatformat|intcomma }}</p>
+                                                    <p>Payment Deadline: <strong>{{ payment.ldpayment }}</strong></p>
+                                                </li>
+                                              {% endfor %}
+                                            </ul>
+                                        {% endif %}
+
+                                    </div>
+                                </div><!--/. Accordion 1 -->
+
+                                <div class="accordion_in">
+                                    <div class="acc_head fs-16">Application Process</div>
+                                    <div class="acc_content">
+                                        <ul class="application-process mt-15">
+                                            {% for proc in university_detail.app_process%}
+                                            <li class="text-center">
+                                                <span class="white-circle">
+                                                    <i class="{{proc.1}}"></i>
+                                                </span>
+                                                <p class="c-999 mt-5">{{proc.0}}</p>
+                                                <span class="execIcon-down-arrow-big"></span>
+                                            </li>
+                                            {% endfor %}
+                                            
+                                        </ul>
+                                    </div>
+                                </div><!--/. Accordion 2 -->
+                                    
+                                <div class="accordion_in">
+                                    <div class="acc_head fs-16">Late Fee</div>
+                                    <div class="acc_content">
+                                        <p>Requests for refund of fee on account of cancellation of enrolment shall be considered only if such requests are received prior to closure of registration or 21 days before date of course commencement whichever is earlier.</p>
+                                    </div>
+                                </div><!--/. Accordion 3 -->
+                            </div><!-- /. accordion-wrap -->
+                        </div><!-- /. content -->
+                    </div><!-- /. white box-->
+                </div><!-- ./ Fee and Payment Modes -->
+                
+                {% if faq_list %}
+                <div class="container">
+                    <div class="white-box">
+                        <h2><span><i class="execIcon-faq"></i></span>FAQ</h2>
+                        <div class="content">
+                            <!-- Accordion begin -->
+                            <div class="accordion_example1 accordion-wrap">
+                                <!-- Section 1 -->  
+                                {% for ques in faq_list %}
+                                <div class="accordion_in {% if forloop.counter == 1 %} acc_active {% endif %}">
+                                    <div class="acc_head fs-16">{{ ques.question }}</div>
+                                    <div class="acc_content">{{ques.answer|safe}}</div>
+                                </div><!--/. Accordion 1 -->
+                                {% endfor %}
+                            </div><!-- /. accordion-wrap -->
+                        </div>
+                    </div><!-- /. white box-->
+                </div><!-- ./ FAQ -->
+                {% endif %}
+            <div class="topSticky-enrollNow" id="enrollNow">
+                <div class="content-box">
+                    <div class="pr-15">Search Engine Optimisation Master...</div>
+                    <div>  
+                    {% if not request.session.candidate_id and not request.session.university_course %}
+                        <a class="btn btn-round-30 btn-lg btn-shadow btn-grOrange bold" id="enroll_now_bg" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Enroll Now</a>
+                    {% else %}
+                        <a role="button" class="btn btn-round-30 btn-slg btn-shadow btn-grOrange bold"  id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Enroll now</a>
+                    {% endif %}
+                    </div>
+                </div>
+                <img src="{% static 'shinelearn/images/mobile/executive-course/enroll-now.jpg' %}" class="img-responsive"/>
+            </div>
+            <div id="popup-modal1" class="modal" style="display: none;z-index:99999;">
+                  <div class="modal-helper">
+                    <div class="modal-vertical-center">
+                       <!-- Modal content -->
+                        <div class="modal-content university-marketing-popup">
+                          <div class="header">
+                            <a class="icon-close" data-dismiss="modal" onclick="closeOverlayModal()">X</a>
+                            <h3 class="text-center">
+                            <br>
+                            Want help with this course?<br>
+                            Let our learning specialists guide you
+                            <br>
+                            </h3>
+                          </div><!-- end of header -->
+                          <div class="content-box pt-0">
+                            <form method="POST" action="{% url 'crmapi:lead-management' %}" id="lead2">
+                              {% csrf_token %}
+                              <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Name" type="Name" class="form-control" id="exampleInputName" name="name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}">
+                                <span class="error-txt js-error"></span>
+                              </div>
+                              <div class="form-group">
+                                <input type="email" class="form-control" placeholder="Email" value="{{request.session.email}}" type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" name="email">
+                                <span class="error-txt js-error"></span>
+                              </div>
+                              <div class="form-group">
+                                <div class="pull-left code">
+                                  <select>
+                                    <option>+91</option>
+                                  </select>
+                                </div>
+                                <input type="text" class="form-control pull-left number" placeholder="Mobile" placeholder="Mobile Number" maxlength="10"  name="number"  value="{{request.session.mobile_no}}">
+                                <span class="error-txt js-error"></span>
+                                <div class="clearfix"></div>
+                              </div>
+                              <div class="form-group">
+                                <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+                                <input type="hidden" name="prd" value="Resume Writing Service">
+                                <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+                                <input type="hidden" name="uc" value="1">
+                                <input type="hidden" name="lsource" value="{{ lead_source }}">
+                              </div>
+                              <div class="form-group text-center tabs mt-30">
+                                <button type="submit" id="overlay-submit-btn" class="btn btn-blue w100fl btn-round mb-20">Enroll Now</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                    </div><!-- end of modal-vertical-center -->
+                  </div><!-- end of modal-helper -->
+            </div>
+
+            <div id="popup-modal2" class="modal" style="display: none;z-index:99999;">
+              <div class="modal-helper">
+                <div class="modal-vertical-center">
+                   <!-- Modal content -->
+                    <div class="modal-content university-marketing-popup">
+                      <div class="header">
+                        <a class="icon-close" data-dismiss="modal" onclick="closeOverlayModal()">X</a>
+                        <h3 class="text-center">
+                        <br>
+                        Want help with this course?<br>
+                        Let our learning specialists guide you
+                        <br>
+                        </h3>
+                     
+                      </div><!-- end of header -->
+
+                      <div class="content-box pt-0">
+                        <form method="POST" action="{% url 'crmapi:lead-management' %}" id="lead3">
+                          {% csrf_token %}
+                          <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Name" type="Name" class="form-control" id="exampleInputName" name="name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}">
+                            <span class="error-txt js-error"></span>
+                          </div>
+                          <div class="form-group">
+                            <input type="email" class="form-control" placeholder="Email" type="Name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" name="email" value="{{request.session.email}}">
+                            <span class="error-txt js-error"></span>
+                          </div>
+                          <div class="form-group">
+                            <div class="pull-left code">
+                              <select>
+                                <option>+91</option>
+                              </select>
+                            </div>
+                            <input type="text" class="form-control pull-left number" placeholder="Mobile" placeholder="Mobile Number" maxlength="10"  name="number"  value="{{request.session.mobile_no}}">
+                            <span class="error-txt js-error"></span>
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="form-group">
+                            <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
+                            <input type="hidden" name="prd" value="Resume Writing Service">
+                            <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+                            <input type="hidden" name="lsource" value="{{ lead_source }}">
+                            <input type="hidden" name="uc" value="1">
+                          </div>
+                          <div class="form-group text-center tabs mt-30">
+                            <button type="submit" id="overlay-submit-btn" class="btn btn-blue w100fl btn-round mb-20">Download Brochure</button>
+                          </div>
+                        </form>
+                      </div><!-- Tab content ends here -->
+                    </div><!-- end of modal content here -->
+                </div><!-- end of modal-vertical-center -->
+              </div><!-- end of modal-helper -->
+            </div>
+
+        {% block call_us %}
+              {% include "shop/partials/call_us.html" %}
+          {% endblock call_us %}
+
+
+
+            {% endblock container %}
+
+            {% block footer %}
+                <!-- footer -->
+                {% include 'basic/footer.html' %}
+            {% endblock footer %}
+
+            {% block navigation %}
+                <!-- left side menu -->
+                {% include 'basic/navigation.html' %}
+            {% endblock navigation %}
+        </div>
+{% endblock main_container %}
+
+
+
+
+
+{% block js_section %}
+    {{block.super}}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/shop/detail.js' %}"></script>
+    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
+    {% endcompress %}
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var recommended_product_url = '/api/v1/recommended-products/?skills='+$('#skilllist').val()+'&product={{sqs.id}}&uc=1'
+            start_html = '<div class="you-may-like row"><div class="container"><h2 class="pt-5">You may also like</h2><div class="slide-container"><ul class="login-slider">'
+            end_html = '</ul></div></div></div>'
+            final_html = ''
+            product_html = '<li><div class="media"><div class="media-body"> <p class="fs-15 bold"><a title="product_name" href="product_url">product_name</a></p><div class="rating block ml-0 fs-12 pb-10"><sup class="fill-star"></sup><strong>3.3</strong>/5</div><p class="fs-12 c6"><strong>jobs_available</strong> Jobs available</p></div><div class="media-left"><a title="Lean Six Sigma Green Belt" href="product_url" class="home-banner-img"><img src="product_image" alt="..."></a></div></div></li>'
+            $.get(recommended_product_url, function(data){
+              if(data.count){
+                for(i=0; i< data.results.length;i++) {
+                 
+                  final_html += product_html.replace(/product_name/g, data.results[i].display_name,)
+                  .replace('product_rating', data.results[i].avg_rating)
+                  .replace('jobs_available', data.results[i].no_jobs)
+                  .replace('product_image', data.results[i].pImg)
+                  .replace(/product_url/g, data.results[i].pURL)
+                }
+                $("#skill_list_box").html(start_html + final_html + end_html)
+              }
+              $(".login-slider").slick({
+                autoplay:false,
+                autoplaySpeed:3000,
+                dots: false,
+                arrows: false,
+                variableWidth: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                infinite: false
+            });
+            });
+        })
+        
+    </script>
+    <script>
+
+
+        
+  
+ 
+
+
+
+
+
+
+
+      // Get the modal
+      var memodal = document.getElementById('myModal');
+      // Get the button that opens the modal
+      var btn = document.getElementById("myBtn");
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+
+      
+
+      function modal(id,option){
+        document.getElementById(id).style.display = option;
+      }
+
+
+      if (document.getElementById('enroll_now')) {
+        document.getElementById('enroll_now').onclick = function() {
+            modal('popup-modal1','block');
+        }
+      }
+      if (document.getElementById('enroll_now_bg')) {
+        document.getElementById('enroll_now_bg').onclick = function() {
+            modal('popup-modal1','block');
+        }
+      }
+      
+      // Js when user is logged in but not submitted query for university course 
+      {% if request.session.candidate_id and not request.session.university_course  %}
+        document.getElementById('download_broucher').onclick = function(event) {
+          event.preventDefault();
+          // when Information is not present in session open pop up else submit form
+          if(!$("#lead3 input[name=name]").val() || !$("#lead3 input[name=email]").val()  || !$("#lead3 input[name=number]").val()) 
+            {
+              modal('popup-modal2','block');
+            }
+           else {
+             $('#lead3').submit();
+           }
+        }
+      // When user is logged in
+      {% else %}
+
+        document.getElementById('download_broucher').onclick = function(event) {
+          // When user has not submitted query for university course
+          {% if not request.session.university_course %}
+            event.preventDefault();
+            modal('popup-modal2','block');
+          // When usr has submitted query for university course
+          {% else %}
+            event.preventDefault();
+            var href = $('#download_broucher').attr('href');
+            $("#download_broucher").attr('download',href);
+            document.getElementById('download_broucher').onclick = null;
+            document.getElementById('download_broucher').click();
+          {% endif%}
+
+        }
+
+      {% endif %}
+      
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+          if (event.target == memodal) {
+              modal('myModal','none');
+          }
+      }
+      </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+           if(commonJs.getParameterByName('type') == 'autoEnrol'){
+               $('#enrol-now-button').trigger('click'); 
+            }
+            if(commonJs.getParameterByName('type') == 'autoCart'){
+               $('#add-to-cart').trigger('click');
+            } 
+        })
+        
+    </script>
+  <script tyep="text/javascript">
+   $(document).ready(function(){ 
+        $(document).on( "click", '.ui-block-c', function(e){
+            $zopim.livechat.window.show();
+        })
+    });
+  </script>
+        <script type="text/javascript">
+    var _gaq = _gaq || [];
+
+    $.validator.addMethod("lettersonly", function (value, element){
+        return this.optional(element) || /^[a-z\s]*$/i.test(value);
+    }, "Letters only please");
+
+    $("#lead1, #lead2, #lead3").each(function() {
+        $(this).validate({
+          submitHandler:function (form) {
+              var action = $(form).attr('action');
+              $.post(action, $(form).serialize(), function (data) {
+                  if (data && data['status']){
+                    form_id = $(form).attr('id')
+                    // lead2 form for enroll now , add id to add-to-cart and trigger click
+                    // lead3 form for download broucher, remove modal on  lcick from enroll now
+                    // and download broucher button.
+                    // lead1 form for form on detail page.
+                     if(form_id == 'lead2'){
+                      if( document.getElementById('enroll_now')){
+                        document.getElementById('enroll_now').onclick = null;
+                        document.getElementById('enroll_now_bg').onclick = null;
+                      }
+                      document.getElementById('download_broucher').onclick = null;
+                      var href = $('#download_broucher').attr('href');
+                      $("#download_broucher").attr('download',href)
+                      $("#enroll_now").attr('id','add-to-cart')
+                      $('#enroll_now_bg').attr('id', 'add-to-cart')
+                      $("#add-to-cart").trigger('click')
+                      }
+                      else if (form_id == 'lead3')
+                      {
+                        modal('popup-modal2', 'none');
+                        document.getElementById('download_broucher').onclick = null;
+                        if( document.getElementById('enroll_now')){
+                          document.getElementById('enroll_now').onclick = null;
+                          $("#enroll_now").attr('id','add-to-cart')
+                        }
+                        var href = $('#download_broucher').attr('href');
+                        $("#download_broucher").attr('download',href)
+                        document.getElementById('download_broucher').click();
+                        return false;
+                      }
+                      else {
+                        alert('Your Query Submitted Successfully.');
+                        window.location.reload();
+                        return false;
+                      }
+                  }
+              }, 'json');
+          },
+          rules:{
+              number:{
+                  required:true,
+                  number:true,
+                  minlength:10,
+                  maxlength:20,
+              },
+              email:{
+                  email:true,
+                  required:true,
+
+              },
+              name:{
+                  required:true,
+                  lettersonly:true,
+
+              },
+              // msg:{
+              //     required:true,
+              //     maxlength:500
+              // }
+          },
+          messages:{
+              number:{
+                 required:"Field is required",
+                 number: "Please enter valid number only"
+              },
+              email:{
+                  required:"Field is required"
+              },
+              name:{
+                  required:"Field is required"
+              },
+              // msg:{
+              //     required:"Field is required",
+              //     maxlength:"No more than 500 characters."
+
+              // }
+          },
+          highlight:function(element, errorClass) {
+            $(element).closest('.form-group').addClass('error');
+          },
+          unhighlight:function(element, errorClass) {
+            $(element).closest('.form-group').removeClass('error');
+            $(element).siblings('.js-error').html("");
+          },
+          errorPlacement: function(error, element){
+            $(element).siblings('.js-error').html(error.text());
+          } 
+        });
+    });
+
+        </script>
+{% endblock js_section %}
+
+
+{% if sqs.id in linkedin_resume_services %}
+  {% block zendesk %}
+  {% endblock zendesk %}
+{% endif %}
+
+
+
+
+

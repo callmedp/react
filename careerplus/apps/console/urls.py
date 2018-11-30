@@ -2,7 +2,9 @@ from django.conf.urls import url, include
 
 from .views import ConsoleLoginView, ConsoleDashboardView, ConsoleLogoutView, \
     ConsoleForgotPasswordView, ConsolePasswordResetView, ConsoleAutoLoginView
-from . import shop_view, vendor_view, blog_view, order_view, refund_view,wallet_view
+from . import (
+    shop_view, vendor_view, blog_view, order_view,
+    refund_view, wallet_view, university_views)
 from geolocation import adminviews
 
 
@@ -18,7 +20,8 @@ urlpatterns = [
         include('console.badgeuser.urls', namespace='badge')),
     url(r'^welcomecall/',
         include('console.welcomecall.urls', namespace='welcomecall')),
-    url(r'^wallet/', wallet_view.WalletView.as_view(), name='walletrewards'),
+    url(r'^wallet/$', wallet_view.WalletView.as_view(), name='walletrewards'),
+    url(r'^wallet/history/$', wallet_view.WalletHistoryView.as_view(), name='wallethistory'),
 ]
 
 
@@ -38,6 +41,20 @@ urlpatterns += [
 #         order_view.SearchOrderView.as_view(),
 #         name='search-order'),
 # ]
+
+# url for skills
+urlpatterns += [
+
+    url(r'^university/faculty/list/$',
+        university_views.FacultyListView.as_view(),
+        name='faculty-list'),
+    url(r'^university/faculty/add/$',
+        university_views.FacultyAddView.as_view(),
+        name='faculty-add'),
+    url(r'^university/faculty/change/(?P<pk>[\d]+)/$',
+        university_views.FacultyChangeView.as_view(),
+        name='faculty-change'),
+]
 
 # url for skills
 urlpatterns += [
@@ -135,6 +152,9 @@ urlpatterns += [
     url(r'product-audit-history/download$',
         shop_view.ProductHistoryLogDownloadView.as_view(),
         name='product-audit-history-download'),
+
+    url(r'^discount-report-download/$', 
+        shop_view.DownloadDiscountReportView.as_view(), name='discount-report-download'),
 
     url(r'^faq/list/$',
         shop_view.ListFaqView.as_view(),
@@ -253,6 +273,11 @@ urlpatterns += [
 
     url(r'^queue/booster/$',
         order_view.BoosterQueueVeiw.as_view(), name='queue-booster'),
+
+    url(r'^queue/whatsapplist/$',
+        order_view.WhatsappListQueueView.as_view(),
+        name='queue-whatsappjoblist'),
+
 
     url(r'^queue/domesticprofileupdate/$',
         order_view.DomesticProfileUpdateQueueView.as_view(),

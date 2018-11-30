@@ -39,7 +39,13 @@ $(document).ready(function() {
 (function() {
 	'use strict';
 	
-	
+
+	// Activate scrollspy to add active class to navbar items on scroll
+	$('body').scrollspy({
+		target: '#mainNav',
+		offset: 54
+	});
+
 	// Scroll smoothly on click on learn more button
 	$('.btn_outline').click(function(){
 		$('html, body').animate({
@@ -150,3 +156,5 @@ $(document).ready(function() {
 	
 
 }());
+
+

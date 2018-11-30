@@ -12,11 +12,12 @@ from shop.models import (
     Keyword, AttributeOptionGroup, AttributeOption,
     Attribute, Product, Category, ProductCategory,
     FAQProduct, Chapter,
-    ChildProduct, VariationProduct, RelatedProduct)
+    ChildProduct, VariationProduct, RelatedProduct,
+    UniversityCourseDetail)
 from partner.models import Vendor
 from geolocation.models import Country
 from shop.choices import BG_CHOICES
-from shop.utils import FIELD_FACTORIES
+from shop.utils import FIELD_FACTORIES, PRODUCT_TYPE_FLOW_FIELD_ATTRS
 from faq.models import FAQuestion
 
 
@@ -217,7 +218,6 @@ class DataColorChoiceField(forms.ChoiceField):
         super(DataColorChoiceField, self).__init__(*args, **kwargs)
 
 
-
 class ChangeProductForm(forms.ModelForm):
 
     image_bg = DataColorChoiceField(choices=BG_CHOICES)
@@ -364,7 +364,9 @@ class ChangeProductForm(forms.ModelForm):
                 if pv.type_flow != product.type_flow:
                     pv.type_flow = product.type_flow
                     pv.save()
-        
+        if product.type_flow == 14:
+            UniversityCourseDetail.objects.get_or_create(product=product)
+
         return product
 
 
@@ -402,6 +404,9 @@ class ChangeProductSEOForm(forms.ModelForm):
 
         self.fields['meta_desc'].widget.attrs['class'] = form_class
         self.fields['meta_keywords'].widget.attrs['class'] = form_class
+        if self.instance.type_flow == 14:
+            for val in ['about', 'buy_shine', 'attend']:
+                self.fields.pop(val)
 
     class Meta:
         model = Product
@@ -667,7 +672,7 @@ class ChangeProductOperationForm(forms.ModelForm):
 
 class ProductAttributeForm(forms.ModelForm):
     FIELD_FACTORIES = FIELD_FACTORIES
-
+    PRODUCT_TYPE_FLOW_FIELD_ATTRS = PRODUCT_TYPE_FLOW_FIELD_ATTRS
     def __init__(self, *args, **kwargs):
         super(ScreenProductAttributeForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
@@ -691,30 +696,39 @@ class ProductAttributeForm(forms.ModelForm):
         if 'initial' not in kwargs:
             kwargs['initial'] = {}
         self.set_initial_attribute_values(product_class, kwargs)
-        
+
     def set_initial_attribute_values(self, product_class, kwargs):
         instance = kwargs.get('instance')
         if instance is None:
             return
-        for attribute in product_class.attributes.filter(active=True):
-            try:
-                value = instance.productattributes.get(
-                    attribute=attribute).value
-            except exceptions.ObjectDoesNotExist:
-                pass
-            else:
-                kwargs['initial']['attribute_%s' % attribute.name] = value
+        prdt_class_attr = list(product_class.attributes.filter(active=True).values_list('id',flat=True))
+        for attr in instance.productattributes.filter(attribute__in=prdt_class_attr).select_related('attribute').select_related('value_option'):
+            kwargs['initial']['attribute_%s' % attr.attribute.name] = attr.value
+        # for attribute in product_class.attributes.filter(active=True):
+        #     try:
+        #         value = instance.productattributes.get(
+        #             attribute=attribute).value
+        #     except exceptions.ObjectDoesNotExist:
+        #         pass
+        #     else:
+        #         kwargs['initial']['attribute_%s' % attribute.name] = value
 
     def add_attribute_fields(self, product_class):
-        
-        for attribute in product_class.attributes.filter(active=True):
+        for attribute in product_class.attributes.filter(active=True).select_related('option_group'):
+            if self.instance.type_flow != 14 and attribute.name == 'Brochure':
+                continue
             field = self.get_attribute_field(attribute)
+            if self.instance.type_flow == 14 and attribute.name in ['course_type', 'study_mode', 'course_level']:
+                field.required = False
             if field:
                 self.fields['attribute_%s' % attribute.name] = field
                 
     def get_attribute_field(self, attribute):
-        
-        return self.FIELD_FACTORIES[attribute.type_attribute](attribute)
+        type_flow_present_in_mapping = self.instance.type_flow \
+            if self.instance.type_flow in PRODUCT_TYPE_FLOW_FIELD_ATTRS.get(attribute.type_attribute, {}).keys()\
+            else -1
+        attrs = self.PRODUCT_TYPE_FLOW_FIELD_ATTRS.get(attribute.type_attribute, {}).get(type_flow_present_in_mapping, {})
+        return self.FIELD_FACTORIES[attribute.type_attribute](attribute, attrs)
 
     def save(self, commit=True, *args, **kwargs):
         self.instance.attr.initiate_attributes()
@@ -1052,7 +1066,7 @@ class VariationInlineFormSet(forms.BaseInlineFormSet):
 
 class ChangeProductVariantForm(forms.ModelForm):
     FIELD_FACTORIES = FIELD_FACTORIES
-    
+    PRODUCT_TYPE_FLOW_FIELD_ATTRS = PRODUCT_TYPE_FLOW_FIELD_ATTRS
     class Meta:
         model = Product
         fields = [
@@ -1260,12 +1274,18 @@ class ChangeProductVariantForm(forms.ModelForm):
 
     def add_attribute_fields(self, product_class):
         for attribute in product_class.attributes.filter(active=True):
+            if self.instance.type_flow != 14 and attribute.name == 'Brochure':
+                continue
             field = self.get_attribute_field(attribute)
             if field:
                 self.fields['attribute_%s' % attribute.name] = field
                 
     def get_attribute_field(self, attribute):
-        return self.FIELD_FACTORIES[attribute.type_attribute](attribute)
+        type_flow_present_in_mapping = self.instance.type_flow \
+            if self.instance.type_flow in PRODUCT_TYPE_FLOW_FIELD_ATTRS.get(attribute.type_attribute, {}).keys()\
+            else -1
+        attrs = self.PRODUCT_TYPE_FLOW_FIELD_ATTRS.get(attribute.type_attribute, {}).get(type_flow_present_in_mapping, {})
+        return self.FIELD_FACTORIES[attribute.type_attribute](attribute, attrs)
 
     def set_initial(self, product_class, kwargs):
         if 'initial' not in kwargs:

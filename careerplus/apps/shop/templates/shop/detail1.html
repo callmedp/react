@@ -88,9 +88,9 @@ $(document).ready(function() {
 
 {% endblock js_section %}
 
-  {% block johukum %}
+  {% block zendesk %}
     {% if sqs.id in linkedin_resume_services %}
     {% else %}
       {{block.super}}
     {% endif %}
-  {% endblock johukum %}
+  {% endblock zendesk %}

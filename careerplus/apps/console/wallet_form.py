@@ -22,8 +22,7 @@ class Walletform(forms.Form):
             attrs={'class': 'form-control col-md-7 col-xs-12'}),required=False)
     point_value = forms.DecimalField(label='Points', decimal_places=2, max_digits=12,widget=forms.NumberInput(attrs={'class': 'form-control col-md-7 col-xs-12'}),required=False)
     wallet_action = forms.ChoiceField(label="Action", choices=WalletAction,required=False, widget=forms.RadioSelect(attrs={'class': 'form-control col-md-7 col-xs-12'}))
-
-
+    order = forms.CharField(label='Order', max_length=255, required=False, widget=forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
 
     def clean_notes(self):

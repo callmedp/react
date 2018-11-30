@@ -1,0 +1,131 @@
+{% extends "mobile/basic/base.html" %}
+{% load static meta compress humanize shop_tags %}
+{% block css_section %}
+{{ block.super }}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/shop/course-detail.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/executive-course/exec-detail.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
+    {% endcompress css %}
+{% endblock css_section %}
+{% block title %}
+  {% if meta.title %}{{ meta.title }}{% else %}{{faculty_obj.name}}{% endif %}
+{% endblock title %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{request.get_full_path}}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}?type=amp">
+{% endblock canonical_url %}
+
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{% endblock django_meta %}
+
+{% block main_container %}
+        <div class="wrapper executive-bg faculty-detail">
+            {% block header %}
+            <!-- header menu Icon Starts here -->
+                <div class="exec-header">             
+                    <!-- header menu Icon Starts here -->
+                    <div class="main-menu w100fl">
+                        <div class="pull-left">
+                            <a class="icon-back pull-left" role="button" onclick="goBack()"></a>
+                        </div><!-- / Left side Icon ends here -->
+                        
+                        <div class="pull-right">
+                            <a class="icon-cart" href="{% url "cart:cart-product-list" %}" ><span id="cart-counter-id">{{cart_count}}</span></a>
+                        </div><!-- / Right side Icon ends here -->
+                    </div><!-- header menu Icon ends here -->
+                    <div class="overlay"></div>
+                    <div 
+                        class="banner-image" 
+                        style="background-image:url({% if university.banner %}{{university.banner.url}}{% else %}{% static 'shinelearn/images/mobile/executive-course/college-image.jpg' %}{% endif %})">
+                        <div class="principal-image-wrap">
+                            <div class="university-logo">
+                                <img src="{{university.icon.url}}" alt="{{university.name}}"/>
+                            </div>
+                            <div class="principle-image">
+                                <img src="{% if faculty_obj.image %}{{faculty_obj.image.url}}{% else %}{% static 'shinelearn/images/executive/default-user-pic.jpg' %}{% endif %}" class="img-responsive" alt="{{faculty_obj.alt_name}}"/>
+                            </div>
+                        </div><!-- /. principal-image-wrap -->
+                    </div><!-- /. background image -->
+                {% block header_title %}{% endblock header_title %}
+                </div><!-- header ends here -->
+            {% endblock header %}
+
+            {% block container %}
+
+            <div class="white-container pt-100">
+                <h1>{{faculty_obj.name}}</h1>
+                <p class="c-999">{{faculty_obj.designation}} – {{university.heading}}</p>
+
+                {{faculty_obj.description|safe}}
+            </div><!-- /. white container -->
+            <div class="content-box">
+                <!-- Courses offered Start Here -->
+                {% if products %}
+                <div class="courses-offered container mt-15" itemscope itemtype="http://schema.org/ItemList">
+                    <h2 class="mb-20">Courses taken by {{faculty_obj.name}}</h2>
+                        {% for prd in products %}
+                        <div class="white-box p-15 pr-0" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                            <meta itemprop="position" content="{{forloop.counter}}" />
+                            {% if prd.is_admission_open %}
+                            <div class="offer-tag">Admission open</div>
+                            {% endif %}
+                            <div class="university-logo">
+                                <img
+                                    src="{{university.icon.url}}" alt="{{university.name}}" />
+                            </div>
+                            <div class="media mt-15">
+                                <div class="media-body pb-0">
+                                    <a href="{{prd.get_absolute_url}}"><h3 class="mb-5" itemprop="name">{{prd.heading}}</h3></a>
+                                    <div><span class="date-icon">Starts</span>  {{prd.get_batch_launch_date|date:"M Y"}} <span class="spacer">|</span> {{prd.get_duration_in_day|convert_to_month}} months</div>
+                                </div>
+                                
+                                <div class="media-left pr-0">
+                                    <a href="{{prd.get_absolute_url}}" class="course-logo" itemprop="url">
+                                        <img    
+                                            src="{{prd.icon.url}}" 
+                                            class="img-responsive" alt="{{prd.image_alt}}"
+                                        />
+                                    </a>
+                                </div><!-- end of media body --></div>
+                        </div><!-- white box ends here -->
+                        {% endfor %}
+
+                </div><!-- Courses offered Ends Here -->
+                {% endif %}
+            </div><!-- /. content-box --> 
+
+             {% block call_us %}
+                {% include "shop/partials/call_us.html" %}
+            {% endblock call_us %}
+
+            {% endblock container %}
+
+            {% block footer %}
+                <!-- footer -->
+                {% include 'basic/footer.html' %}
+            {% endblock footer %}
+
+            {% block navigation %}
+                <!-- left side menu -->
+                {% include 'basic/navigation.html' %}
+            {% endblock navigation %}
+        </div>
+{% endblock main_container %}
+
+
+
+
+
+{% block js_section %}
+    {{block.super}}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
+    {% endcompress %}
+{% endblock js_section %}
+
+
+
+

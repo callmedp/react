@@ -480,7 +480,7 @@ $(document).ready(function () {
 
 function ajax_call(authen,prod_id){
 if(skill != false) {
-$.ajax({ url: "/api/v1/recommended-products/?skills=" +skill+"&exclude_id="+prod_id,
+$.ajax({ url: "/api/v1/recommended-products/?skills=" +skill+"&product="+prod_id,
         type: "GET",
           success: function(data, textStatus, jqXHR){
           var count=((data.results).length);

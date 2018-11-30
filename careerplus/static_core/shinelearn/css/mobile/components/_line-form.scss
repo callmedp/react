@@ -3,10 +3,11 @@
     border: 0 none;
     border-bottom: 1px solid $border-grey-c1;
     padding: 0;
+    width: 100%;
   }
 
   .code {
-    width: 18%;
+    width: 17%;
 
     select {
       @include border-radius(0);

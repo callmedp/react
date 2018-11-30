@@ -21,5 +21,4 @@ urlpatterns = [
     url(r'^(?P<orderitem_id>\d+)/hold/$', views.HoldOrderAPI.as_view(), name='order-hold'),
     url(r'^(?P<orderitem_id>\d+)/archive/$', views.ArchiveOrderAPI.as_view(), name='order-archive'),
     url(r'^(?P<orderitem_id>\d+)/unhold/$', views.UnholdOrderAPI.as_view(), name='order-unhold'),
-
 ]

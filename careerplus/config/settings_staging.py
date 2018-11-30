@@ -343,6 +343,8 @@ except:
 
 CMS_ID = [1]
 
+FEATURE_PROFILE_EXCLUDE=[1941]
+
 
 SERVICE_PAGE_ID_SLUG_MAPPING = {"45":"resume-writing"}
 

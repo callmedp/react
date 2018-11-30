@@ -32,7 +32,9 @@ from shop.views import ProductDetailView, CourseCatalogueView
 from users.views import LinkedinCallbackView, UserLoginTokenView
 from search.views import FuncAreaPageView
 from blog import views as blog_view
-from skillpage.views import ServiceDetailPage
+from skillpage.views import (
+    ServiceDetailPage, UniversityPageView,
+    UniversityFacultyView)
 
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
@@ -102,6 +104,10 @@ urlpatterns += [
     url(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='service-detail'),
     url(r'^courses/', include('skillpage.urls', namespace='skillpage')),
+    url(r'^university/faculty/(?P<faculty_slug>[-\w]+)/(?P<pk>\d+)/$',
+        UniversityFacultyView.as_view(), name='university-faculty'),
+    url(r'^university/(?P<fa_slug>[-\w]+)/(?P<university_slug>[-\w]+)/(?P<pk>\d+)/$',
+        UniversityPageView.as_view(), name='university-page'),
     url(r'^services/(?P<fa_slug>[-\w]+)/(?P<pk>\d+)/$',
         FuncAreaPageView.as_view(), name='func_area_results'),
 
@@ -164,6 +170,7 @@ urlpatterns += [
         LinkedinCallbackView.as_view(), name='linkedin-login'),
 
     url(r'^api/', include('api.urls', namespace='api')),
+    url(r'api/v1/', include('shop.api.v1.urls', namespace='shop-api')),
     url(r'^lead/', include('crmapi.urls', namespace='crmapi')),
 
     url(r'^', include('marketing.urls', namespace='marketing')),

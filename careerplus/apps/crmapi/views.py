@@ -6,7 +6,9 @@ from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from geolocation.models import Country
-from .models import UserQuries, DEFAULT_SLUG_SOURCE
+from .models import (
+    UserQuries, DEFAULT_SLUG_SOURCE,
+    UNIVERSITY_LEAD_SOURCE)
 from .tasks import create_lead_crm
 
 
@@ -46,6 +48,7 @@ class LeadManagement(View):
         created = False
         try:
             email = request.POST.get('email', '')
+            university_course = request.POST.get('uc', 0)
             mobile = request.POST.get('number', '')
             name = request.POST.get('name', '')
             msg = request.POST.get('msg', '')
@@ -94,6 +97,19 @@ class LeadManagement(View):
                 slug_source = dict(DEFAULT_SLUG_SOURCE)
                 campaign_slug = slug_source.get(int(lead_source))
 
+            if university_course:
+                request.session['university_course'] = True
+                request.session['lead_email'] = email
+                request.session['lead_mobile'] = mobile
+                if " " in name:
+                    first_name = name.split(" ")[0]
+                    last_name = " ".join(name.split(" ")[1:len(name)])
+                else:
+                    first_name = name
+                    last_name = ""
+                request.session['lead_first_name'] = first_name
+                request.session['lead_last_name'] = last_name
+
             lead = UserQuries.objects.create(
                 name=name,
                 email=email,
@@ -110,7 +126,7 @@ class LeadManagement(View):
                 campaign_slug=campaign_slug
             )
             created = True
-            valid_source_list = [4, 23]
+            valid_source_list = [4, 23, UNIVERSITY_LEAD_SOURCE]
             if lead.lead_source in valid_source_list:
                 create_lead_crm.delay(pk=lead.pk)
         except Exception as e:

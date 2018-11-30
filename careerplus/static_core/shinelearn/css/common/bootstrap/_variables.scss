@@ -883,6 +883,7 @@ $font-family:  'Open Sans', sans-serif;
 $imagePath : $path;
 $sprite: url($path + 'images/sprite.png') no-repeat;
 $logo: url($path + 'images/logo.png') no-repeat;
+$logo-sm: url($path + 'images/logo-sm.png') no-repeat;
 $black-color: #000;
 $white-color: #fff;
 $primary-color: #333;
@@ -914,3 +915,17 @@ $white-bg: #fff;
 $border-white: #fff;
 $text-white: #fff;
 $text-333: #333;
+
+
+/* executive pages variables */
+$sprite-exe: url($path + 'images/executive/sprite-executive.png') no-repeat;
+$e-yellow-color: #ffcf26;
+$e-light-color: #d4d4d4;
+$e-txt-color: #777777;
+$e-blue-color: #3e7fea;
+$e-secondary-color: #555555;
+$e-anchor-color: #6a76b8;
+$e-border-color: #dfe0e4;
+$e-blue-bdr: #d6e5fd;
+$e-grey-bg: #f9f9f9;
+$e-oragne-color: #f4a456;

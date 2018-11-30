@@ -1,0 +1,32 @@
+<button class="request" on="tap:request-form">Request a call</button>
+
+		<amp-lightbox id="request-form" layout="nodisplay">
+            <div class="popup-box">
+                <div class="head-section">
+                    <button class="close" on="tap:request-form.close">X</button>
+                    <strong>Request a call</strong>
+                </div><!--/. head-section -->
+                <div class="form-wrap">
+                    <form class="form-group" method="post" id="callback_form">
+                        <ul>
+                            <li>
+                            <input class="form-control" placeholder="Name" type="text" name="name" value="{{request.session.full_name|safe}}">
+                            <span class="error-txt"></span></li>
+                            <li><input class="form-control" placeholder="Mobile Number" name="number" id="id_mobile"type="text" value="{{request.session.mobile_no|safe}}">
+                            <span class="error-txt"></span>
+                            </li>
+                            {% if  page_obj %}
+                                <input type="hidden" name="lsource" value="7">
+                                <input type="hidden" name="product" value="{{page_obj.pk}}">
+                                <input type="hidden" name="prd" value="{{page_obj.heading}}">
+                                <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
+                                {% endif %}
+                        <li><textarea class="form-control" placeholder="Message" name='msg' rows="4"></textarea>
+                        <span class="error-txt"></span>
+                        <li><button type="button" id="id_callback" class="request">Submit</button></li>
+                        </ul>
+                    </form>
+                </div> <!-- /. form-wrap-->
+            </div>
+			
+		</amp-lightbox>

@@ -431,7 +431,7 @@
 
 	            },
 	            messages: {
-	                en: 'Only .jpeg/.png/.svg is allowed'
+	                en: 'Only %s is allowed'
 	            }
 	        });
 
@@ -536,7 +536,6 @@
 		};	  
 	  	
 	  };
-	  
 	  
 	  function init_category_seo_change() {
 	  	if($('#change-category-seo-form').length > 0){

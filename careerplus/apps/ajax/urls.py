@@ -8,6 +8,10 @@ urlpatterns = [
     url(r'^page/load-more/$',
         views.AjaxCommentLoadMoreView.as_view(), name='comment-load-more'),
 
+    url(r'^university-skill-course/loadmore/$',
+        views.UniversityCourseLoadMoreView.as_view(),
+        name='university-course-load-more'),
+
     url(r'^page/cms-share/$',
         views.CmsShareView.as_view(), name='cms-share'),
 

@@ -3470,7 +3470,7 @@ text-decoration:none;
     }
 
 }
-<<<<<<< HEAD
+
 input[type='number'] {
     -moz-appearance:textfield;
 }
@@ -3479,13 +3479,6 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
-=======
-
-
-
-
-
-
 
  .country-code {
     display: block; }
@@ -3539,10 +3532,3 @@ input::-webkit-inner-spin-button {
         .inter-call .country-code .form-control {
           width: 91%; } }
 
-
-
-
-
-
-
->>>>>>> linkedin_marketing

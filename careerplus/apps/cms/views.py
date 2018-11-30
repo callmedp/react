@@ -14,6 +14,7 @@ from django.conf import settings
 from django.utils.http import urlquote
 from django.db.models import Q
 from django.middleware.csrf import get_token
+from django.shortcuts import render
 
 from geolocation.models import Country
 
@@ -45,25 +46,22 @@ class CMSPageView(DetailView, LoadMoreMixin):
             queryset = self.get_queryset()
 
         if pk is not None:
-            queryset = queryset.filter(pk=pk, is_active=True)
+            queryset = queryset.filter(pk=pk, is_active=True).first()
         elif slug is not None:
-            queryset = queryset.filter(slug=slug, is_active=True)
-        try:
-            obj = queryset.get()
-        except Exception as e:
-            logging.getLogger('error_log').error('unable to get cms page view%s'%str(e))
+            queryset = queryset.filter(slug=slug, is_active=True).first()
+        if not queryset:
             raise Http404
-        return obj
+        return queryset
 
     def get_template_names(self):
+        template_names = ["cms/" + settings.CMS_STATIC_TEMP_DICT.get(
+                self.object.id, 'cms_page.html')]
         if self.request.amp:
             from newrelic import agent
             agent.disable_browser_autorum()
-            return ["cms/cms_page-amp.html"]
-        if self.object.id in settings.CMS_STATIC_TEMP_DICT.keys():
-            return ["cms/" + settings.CMS_STATIC_TEMP_DICT.get(
-                self.object.id, 'cms_page.html')]
-        return ["cms/cms_page.html"]
+            return [x.split(".html")[0]+"-amp.html" for x in template_names]
+        
+        return template_names
 
     def redirect_if_necessary(self, current_path, article):
         expected_path = article.get_absolute_url()
@@ -72,6 +70,11 @@ class CMSPageView(DetailView, LoadMoreMixin):
         return None
 
     def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.request.amp and settings.CMS_STATIC_TEMP_DICT.get(self.object.id):
+            template_to_render = 'mobile/cms/'+settings.CMS_STATIC_TEMP_DICT.get(self.object.id).split(".")[0] + "-amp.html"
+            return render(request,template_name=template_to_render)
+
         self.slug = kwargs.get('slug', None)
         self.page = request.GET.get('page', 1)
         self.object = self.get_object()
