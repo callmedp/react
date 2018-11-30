@@ -15,6 +15,7 @@ LEAD_LOCATION = (
     (6, 'Chat Lead'),
     (7, 'CMS Page'),
     (8, 'Resume Detail Page'),
+    (9, 'Skill Service Page'),
     (20, 'Miss Call Lead'),
     (21, 'AdServerLead'),
     (22, 'CartLead'),
