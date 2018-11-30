@@ -459,8 +459,6 @@ class ProductInformationMixin(object):
 
 
     # def get_product_detail_context(self, product, sqs, product_main, sqs_main):
-    #     import ipdb;
-    #     ipdb.set_trace()
     #     pk = product.pk
     #     ctx = {}
     #     key = str(pk)+'-' + 'get_prod_detail'
@@ -1151,6 +1149,7 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
                 self.sqs_main = cached_slr_item
             if not self.sqs_main:
                 raise 404
+
             if self.sqs_obj and self.sqs_main and self.product_obj and self.product_main:
                 product_data = self.get_product_detail_context(
                     self.product_obj, self.sqs_obj,
@@ -1159,6 +1158,11 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
                 product_detail_content = render_to_string(
                     'shop/product-detail.html', product_data,
                     request=request)
+                if self.product_obj.type_flow == 2:
+                    skill = self.product_obj.productskills.filter(skill__active=True)\
+                        .values_list('skill__name',flat=True)[:3]
+                    skill = ",".join(skill)
+                    data.update({'skills': skill})
 
                 data.update({
                     'status': 1,

@@ -605,11 +605,15 @@ class RecommendedProductsApiView(ListAPIView):
 
     def get_queryset(self, *args, **kwargs):
         skills = self.request.GET.get('skills', [])
+        exclude_id = self.request.GET.get('exclude_id', None)
         products = None
         if not skills:
             return products
         skills = skills.split(',')
-        products = SearchQuerySet().filter(pSkilln__in=skills, pPc=settings.COURSE_SLUG[0])
+        if exclude_id:
+            products = SearchQuerySet().filter(pSkilln__in=skills, pPc=settings.COURSE_SLUG[0]).exclude(id=exclude_id)
+        else:
+            products = SearchQuerySet().filter(pSkilln__in=skills, pPc=settings.COURSE_SLUG[0])
         return products
         # skills = Skill.objects.filter(
         #     active=True,

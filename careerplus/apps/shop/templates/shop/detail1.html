@@ -74,6 +74,7 @@
 
 <script type="text/javascript">
 var authen=false;
+var prod_id = {{product.id}};
 var skill =document.getElementById("skill").value;
 $(document).ready(function() {
 {% if request.session.candidate_id %}
@@ -81,7 +82,7 @@ $(document).ready(function() {
 {%else%}
     authen =false;
 {%endif%}
- ajax_call(authen);
+ ajax_call(authen,prod_id);
 });
 </script>
 

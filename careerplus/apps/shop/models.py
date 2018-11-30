@@ -1547,7 +1547,6 @@ class Product(AbstractProduct, ModelMeta):
 
     @classmethod
     def post_save_product(cls, sender, instance, **kwargs):
-
         #deleting caches for absolute urls,solar data and product object
         cache.delete("product_{}_absolute_url".format(instance.id))
         cache.delete("context_product_detail_" + str(instance.pk))

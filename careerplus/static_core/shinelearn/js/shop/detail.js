@@ -218,7 +218,7 @@ $(document).ready(function () {
               data : formData,
               success: function(data, textStatus, jqXHR)
               {
-                  console.log(data);
+
                   if (data.response == 'login_user'){
                       var formData = $('#feedback-form').serialize();
                       feedback_submit(formData)
@@ -290,22 +290,20 @@ $(document).ready(function () {
     $(document).on("click", ".other-product", function() {
       var data_pk = $(this).attr('data-id');
       var main_pk = $(this).attr('main-id');
-
       data = "?main_pk="+ main_pk + "&obj_pk=" + data_pk;
       $.ajax({
         url: "/shop/product/content-by-ajax/" + data,
         type: "GET",
         dataType: "json",
         success: function(data) {
-          // console.log("success");
+
+          skill=data.skills;
           if (data.status == 1 ){
             currentUrl = top.window.location.pathname;
             $("#id-detail-body").empty();
             $('#id-detail-body').html(data.detail_content);
             if (typeof (history.pushState) != "undefined") {
-              // console.log('hello');
-              // console.log(data.url);
-              // console.log(data.title);
+
               var obj = { Title: data.title, Url: data.url };
               history.pushState(obj, obj.Title, obj.Url);
               document.title = data.title;
@@ -316,12 +314,12 @@ $(document).ready(function () {
             $('.cls_scroller').scrollerdiv();
             $('.cls_sticky_scroller').productdetailAnimations();
             activeOnScroll.init({ className:'.cls_scroll_tab'});
-                ajax_call(authen);
+                ajax_call(authen,data_pk);
           }
         },
         failure: function(response){
-          ajax_call(authen);
-          console.log("failure");
+          ajax_call(authen,data_pk);
+
         }
       });
 
@@ -480,9 +478,9 @@ $(document).ready(function () {
 
   });
 
-function ajax_call(authen){
+function ajax_call(authen,prod_id){
 if(skill != false) {
-$.ajax({ url: "/api/v1/recommended-products/?skills=" +skill,
+$.ajax({ url: "/api/v1/recommended-products/?skills=" +skill+"&exclude_id="+prod_id,
         type: "GET",
           success: function(data, textStatus, jqXHR){
           var count=((data.results).length);
