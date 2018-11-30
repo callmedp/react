@@ -507,6 +507,7 @@
           $("#lead_mobile").validate({
             submitHandler:function (form) {
                 var action = $(form).attr('action');
+                document.getElementById('gif-loader').style.display = "block";
                 $.post(action, $(form).serialize(), function (data) {
                     if (data && data['status']){
                         $.each($("#lead"), function (i, e) {
@@ -519,8 +520,9 @@
                         ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
                        document.body.appendChild(ga_code);
                        // window.location.href ='thankyou-for-query';
-                       document.getElementById('cls_landing-page').style.display = "hidden";
-                       document.getElementById('cls-thank-you').style.display = "block";
+                       document.getElementById('gif-loader').style.display = "none";
+                       $('#cls_landing-page').addClass("fadeOut");
+                       $('#cls-thank-you').addClass("fadeIn");
                         return false;
                     }
                 }, 'json');
