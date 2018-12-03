@@ -27,6 +27,7 @@ from core.tasks import upload_resume_to_shine
 from console.mixins import ActionUserMixin
 from order.functions import create_short_url
 from linkedin.autologin import AutoLogin
+from shop.models import Product
 from blog.mixins import BlogMixin
 from shop.models import Category
 

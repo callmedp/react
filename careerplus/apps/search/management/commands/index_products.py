@@ -6,7 +6,7 @@ from django.conf import settings
 from django_redis import get_redis_connection
 import requests
 from django.core.management import call_command
-
+from django.core.cache import cache
 
 class Command(BaseCommand):
     """
@@ -37,11 +37,19 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        cache_list=[]
         response = requests.get('http://10.136.2.25:8989/solr/prdt/replication?command=disablereplication')
         logging.getLogger('info_log').info(
             "Disabled Replication on master. Response: {} {}".format(
                 response, response.__dict__))
         call_command('rebuild_index', **options)
+        for obj in Product.objects.values_list('id',flat=True):
+            cache_list.append("product_{}_absolute_url".format(obj))
+            cache_list.append("context_product_detail_" + str(obj))
+            cache_list.append("detail_db_product_" + str(obj))
+            cache_list.append("detail_solr_product_" + str(obj))
+            cache_list.append("category_main_" + str(obj))
+        cache.delete_many(cache_list)
         response = requests.get('http://10.136.2.25:8989/solr/prdt/replication?command=enablereplication')
         logging.getLogger('info_log').info(
             "Enabled Replication on master. Response: {} {}".format(

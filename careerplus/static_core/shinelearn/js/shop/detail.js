@@ -57,7 +57,7 @@ $("#feedback-form").validate({
   errorPlacement: function(error, element){
       $(element).siblings('small').find('.error').html(error.text());
   },
-  submitHandler: function(form) {                
+  submitHandler: function(form) {
       return false;
   },
 
@@ -77,7 +77,7 @@ function feedback_submit(formData){
   if (flag && rating_flag){
     request_to_submit_feedback(formData)
   }
-        
+
 }
 
 function request_to_submit_feedback(formData){
@@ -125,7 +125,7 @@ function submit_feedback_form(is_logged_in) {
   else {
     var flag = $('#feedback-form').valid();
     if(flag){
-      $('#login-modal').modal('show');      
+      $('#login-modal').modal('show');
     }
   }
 }
@@ -167,7 +167,7 @@ $(document).on('click', '[name="rating"]', function () {
         $('#selected-rating').html(html);
     }
     $('#rating-error').text('');
-   
+
 });
 
 
@@ -185,12 +185,12 @@ function submitReviewFromLocalStorage(){
 function saveReviewFormDataToLocalStorage(){
     var formData = $('#feedback-form').serialize();
     if(formData) {
-        localStorage.setItem('formData', formData );        
+        localStorage.setItem('formData', formData );
     }
 }
 
 function reviewLinkedInLogin() {
- 
+
   saveReviewFormDataToLocalStorage()
   window.location.href= '/user/linkedin/code/?next=' + window.location.href
 }
@@ -218,7 +218,7 @@ $(document).ready(function () {
               data : formData,
               success: function(data, textStatus, jqXHR)
               {
-                  console.log(data);
+
                   if (data.response == 'login_user'){
                       var formData = $('#feedback-form').serialize();
                       feedback_submit(formData)
@@ -243,12 +243,12 @@ $(document).ready(function () {
     });
 
     var processing = false;
-  
+
     function LoadMoreProductReview(pv_id) {
       if (processing) {
           return false;
       }
-      else{    
+      else{
         if (pv_id) {
           try{
             let page, elem;
@@ -261,15 +261,15 @@ $(document).ready(function () {
             }
             page = document.getElementById("id_review_page").value;
             processing = true;
-            
+
             $.ajax({
                 url: '/shop/reviews/' + encodeURIComponent(pv_id) + '/?pg=' + encodeURIComponent(page),
                 dataType: 'html',
                 success: function(html) {
                     $('#loadmorereviewbtn').remove();
-                    
+
                     $('#id_review_list').append(html);
-                    
+
                },
                complete: function(response){
                     return processing = false;
@@ -290,22 +290,20 @@ $(document).ready(function () {
     $(document).on("click", ".other-product", function() {
       var data_pk = $(this).attr('data-id');
       var main_pk = $(this).attr('main-id');
-
       data = "?main_pk="+ main_pk + "&obj_pk=" + data_pk;
       $.ajax({
         url: "/shop/product/content-by-ajax/" + data,
         type: "GET",
         dataType: "json",
         success: function(data) {
-          // console.log("success");
+
+          skill=data.skills;
           if (data.status == 1 ){
             currentUrl = top.window.location.pathname;
             $("#id-detail-body").empty();
             $('#id-detail-body').html(data.detail_content);
             if (typeof (history.pushState) != "undefined") {
-              // console.log('hello');
-              // console.log(data.url);
-              // console.log(data.title);
+
               var obj = { Title: data.title, Url: data.url };
               history.pushState(obj, obj.Title, obj.Url);
               document.title = data.title;
@@ -316,22 +314,25 @@ $(document).ready(function () {
             $('.cls_scroller').scrollerdiv();
             $('.cls_sticky_scroller').productdetailAnimations();
             activeOnScroll.init({ className:'.cls_scroll_tab'});
+                ajax_call(authen,data_pk);
           }
         },
         failure: function(response){
-          console.log("failure");
+          ajax_call(authen,data_pk);
+
         }
       });
+
 
     });
 
 
     $(document).on("click", ".review-load-more", function() {
-   
+
            LoadMoreProductReview($(this).attr('data-product'));
       });
 
-    
+
     $.validator.addMethod("indiaMobile", function(value, element) {
         var country_code = $("input[name=country_code]").val(); //$('#call_back_country_code-id').val();
         if(country_code == '91'){
@@ -339,8 +340,8 @@ $(document).ready(function () {
         }
         return true;
     });
-    
-    
+
+
 
   $(document).on('click', '#id_callback', function() {
     $('#callback_form').validate({
@@ -382,14 +383,14 @@ $(document).ready(function () {
           indiaMobile: "Please enter 10 digits only",
           maxlength: "Please enter 10 digits",
           // minlength: "Please enter atleast 4 digits"
-        }, 
+        },
       },
       highlight:function(element, errorClass) {
           $(element).closest('.form-group').addClass('error');
       },
       unhighlight:function(element, errorClass) {
           $(element).closest('.form-group').removeClass('error');
-          $(element).siblings('.error-txt').html('');      
+          $(element).siblings('.error-txt').html('');
       },
       errorPlacement: function(error, element){
           $(element).siblings('.error-txt').html(error.text());
@@ -397,7 +398,7 @@ $(document).ready(function () {
       ignore : '',
       submitHandler: function(form){
         // ga code
-        var path = window.location.pathname, 
+        var path = window.location.pathname,
             action = '';
         if (path.indexOf('/course/') > -1) {
           action = 'Course Enquiry';
@@ -464,16 +465,96 @@ $(document).ready(function () {
           $('html,body').animate({scrollTop : $(''+target.attr('href')).offset().top - target.outerHeight() - $('#id_nav').outerHeight()},1000);
         }
       });
-      
+
       function getUrlVar(key){
-        var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
-        return result && unescape(result[1]) || ""; 
+        var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search);
+        return result && unescape(result[1]) || "";
       }
       var res = getUrlVar('query');
       if (res == 'True')
       {
         $('#detailpage').modal('show');
       }
-        
+
   });
-          
+
+function ajax_call(authen,prod_id){
+if(skill != false) {
+$.ajax({ url: "/api/v1/recommended-products/?skills=" +skill+"&product="+prod_id+"&page_size="+6,
+        type: "GET",
+          success: function(data, textStatus, jqXHR){
+          var count=((data.results).length);
+          var i;
+    if (count){
+        document.getElementById('heads').style.display="block";
+          var recom= "";
+                    if (authen) {
+                     recom+='<h2 class="detail-heading">Recommended products</h2>';
+                     }
+                     else{
+                     recom+='<h2 class="detail-heading">Related products</h2>';
+                     }
+                    recom+='<div class="row">'+
+                     '<ul class="listing">';
+
+         for(i=0;i<count;i++) {
+
+             var first = '<li class="col-sm-6 col-md-4">' +
+              '<a title="'+ (data.results[i].display_name).substring(0, 40)+'"class="box-panel" href="'+data.results[i].pURL+'">'+
+              '<div class="media">'+
+              '<div class="media-body">'+
+              '<h3 class="listing-heading">'
+              + data.results[i].display_name+ '</h3>'
+              +'<div class="rating-review-box">';
+                if (data.results[i].review_count){
+
+                         for (star in data.results[i].pStar){
+
+                               if (data.results[i].pStar[star] == "*"){
+                              first= first+'<figure class="full-star"></figure>' ;
+                              }
+                               else if(data.results[i].pStar[star] == "+" ){
+                                first=first+'<figure class="half-star"></figure>';
+                                }
+                               else{
+                                first=first+ '<figure class="blank-star"></figure>';
+                              }
+                        }
+                first = first + '<strong><small>'+ (data.results[i].avg_rating)+'</small>/5</strong>'
+                }
+             else{
+            first = first + '<strong>'+data.results[i].buy_count+'</strong> people bought'
+            }
+            var second = '<span class="jobs-available"><strong>' + data.results[i].no_jobs +'</strong> jobs available</span>'+
+             '</div>'+
+             '</div>' +
+             '<div class="media-left">'+
+             '<figure>'+
+             '<img class="img-responsive" src="'+data.results[i].pImg+'" alt="'+data.results[i].pImg+'">'+
+             '</figure>'+
+             '</div>'+
+             '</div>'+
+             '</a>'+
+             '</li>';
+             recom =recom + first + second;
+              }
+            +'</ul>'
+            +'</div>'
+            +'</div>'
+            +'</div>'
+            +'</div>';
+
+
+           document.getElementById('recommended_product').innerHTML=recom;
+            }
+         else{
+            document.getElementById('recommended_product').innerHTML= "" ;
+         }
+     }
+        });
+        }
+        else{
+           document.getElementById('recommended_product').innerHTML= "" ;
+
+        }
+};

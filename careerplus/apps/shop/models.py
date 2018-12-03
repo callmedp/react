@@ -8,6 +8,8 @@ from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
+from django.core.cache import cache
+
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
@@ -1056,26 +1058,32 @@ class Product(AbstractProduct, ModelMeta):
 
     @property
     def category_main(self):
+        cache_key = "category_main_"+str(self.pk)
+        cached_data = cache.get(cache_key)
+        data = None
+        if cached_data:
+            return cached_data
         main_prod_cat = self.categories.filter(
             productcategories__is_main=True,
             productcategories__active=True,
             active=True)
-        if main_prod_cat:
-            if main_prod_cat[0].type_level == 4:
-                main_prod_cat = main_prod_cat[0].get_parent()[0] if main_prod_cat[0].get_parent() else None 
-                return main_prod_cat
-            return main_prod_cat[0]
+        if main_prod_cat and main_prod_cat[0].type_level == 4:
+                main_prod_cat = main_prod_cat[0].get_parent()[0] if main_prod_cat[0].get_parent() else None
+                data = main_prod_cat
+        elif main_prod_cat:
+            data = main_prod_cat[0]
         else:
             prod_cat = self.categories.filter(
                 productcategories__is_main=False,
                 productcategories__active=True,
                 active=True)
-            if prod_cat:
-                if prod_cat[0].type_level == 4:
-                    prod_cat = prod_cat[0].get_parent()[0] if prod_cat[0].get_parent() else None 
-                    return prod_cat
-                return prod_cat[0]
-        return None
+            if prod_cat and prod_cat[0].type_level == 4:
+                prod_cat = prod_cat[0].get_parent()[0] if prod_cat[0].get_parent() else None
+                data = prod_cat
+            elif prod_cat:
+                data = prod_cat[0]
+        cache.set(cache_key, data, 7*24*60*60)
+        return data
 
     def category_attached(self):
         main_prod_cat = self.categories.filter(
@@ -1174,11 +1182,12 @@ class Product(AbstractProduct, ModelMeta):
         return self.get_full_url(self.get_absolute_url()) if not relative else self.get_absolute_url()
 
     def get_absolute_url(self, prd_slug=None, cat_slug=None):
-        unique_key = 'prd_absolute_url_' + str(self.pk)
-        prd_url = cache.get(unique_key)
-        if prd_url:
-            return prd_url
+        cache_key = "product_{}_absolute_url".format(self.id)
+        cached_value = cache.get(cache_key)
+        if cached_value:
+            return cached_value
 
+        url_to_return = None
         if not cat_slug:
             cat_slug = self.category_main
             if cat_slug:
@@ -1187,13 +1196,14 @@ class Product(AbstractProduct, ModelMeta):
         cat_slug = cat_slug.slug if cat_slug else None
         if cat_slug:
             if self.is_course:
-                prd_url = reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+                url_to_return = reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
             else:
-                prd_url = reverse('service-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+                url_to_return = reverse('service-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
         else:
-            prd_url = reverse('homepage')
-        cache.set(unique_key, prd_url, 86400)
-        return prd_url
+            url_to_return = reverse('homepage')
+
+        cache.set(cache_key,url_to_return,7*24*60*60)
+        return url_to_return
         # else self.is_writing:
         #     return reverse('resume-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
         # elif self.is_service:
@@ -1615,6 +1625,13 @@ class Product(AbstractProduct, ModelMeta):
 
     @classmethod
     def post_save_product(cls, sender, instance, **kwargs):
+        #deleting caches for absolute urls,solar data and product object
+        # cache.delete("product_{}_absolute_url".format(instance.id))
+        # cache.delete("context_product_detail_" + str(instance.pk))
+        # cache.delete("detail_db_product_" + str(instance.pk))
+        # cache.delete("detail_solr_product_" + str(instance.pk))
+        # cache.delete("category_main_" + str(instance.pk))
+
         from .tasks import add_log_in_product_audit_history
         duration = instance.get_duration_in_day() if instance.get_duration_in_day() else -1
         variation_name = [str(var) for var in instance.variation.all()] if instance.variation.all() else ['N.A']
