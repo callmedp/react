@@ -1626,11 +1626,11 @@ class Product(AbstractProduct, ModelMeta):
     @classmethod
     def post_save_product(cls, sender, instance, **kwargs):
         #deleting caches for absolute urls,solar data and product object
-        cache.delete("product_{}_absolute_url".format(instance.id))
-        cache.delete("context_product_detail_" + str(instance.pk))
-        cache.delete("detail_db_product_" + str(instance.pk))
-        cache.delete("detail_solr_product_" + str(instance.pk))
-        cache.delete("category_main_" + str(instance.pk))
+        # cache.delete("product_{}_absolute_url".format(instance.id))
+        # cache.delete("context_product_detail_" + str(instance.pk))
+        # cache.delete("detail_db_product_" + str(instance.pk))
+        # cache.delete("detail_solr_product_" + str(instance.pk))
+        # cache.delete("category_main_" + str(instance.pk))
 
         from .tasks import add_log_in_product_audit_history
         duration = instance.get_duration_in_day() if instance.get_duration_in_day() else -1

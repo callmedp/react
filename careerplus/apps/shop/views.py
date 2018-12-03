@@ -1148,7 +1148,7 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
                 raise 404
 
             slr_key = 'detail_solr_product_' + str(self.obj_pk)
-            cached_slr_item = cache.get('slr_key', "")
+            cached_slr_item = cache.get(slr_key, "")
             # setting cache if product is not in solrcache
             if not cached_slr_item:
                 sqs = SearchQuerySet().filter(id=self.obj_pk)
@@ -1159,7 +1159,7 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
             if not self.sqs_obj:
                 raise 404
             slr_key = 'detail_solr_product_' + str(self.main_pk)
-            cached_slr_item = cache.get('slr_key', "")
+            cached_slr_item = cache.get(slr_key, "")
             if not cached_slr_item:
                 sqs = SearchQuerySet().filter(id=self.main_pk)
                 self.sqs_main = sqs[0]
