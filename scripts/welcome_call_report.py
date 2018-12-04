@@ -74,7 +74,7 @@ def generate_report(duration_report):
         csvwriter = csv.writer(csvfile, delimiter=',', quotechar="'", \
             quoting=csv.QUOTE_MINIMAL)
         csvwriter.writerow(['Order ID', 'Order_payment_date', 'Order_created_date', \
-            'First_Touch_Welcome call Date','First_Touch_Welcome call Status',\
+            'Assigned_to','First_Touch_Welcome call Date','First_Touch_Welcome call Status',\
             'First_Touch_Welcome Call Status - Category',
             'First_Touch_Welcome Call Status - SubCategory',\
             'First_Touch_Create_Difference',
@@ -101,6 +101,8 @@ def generate_report(duration_report):
                 .exclude(wc_status=1).order_by('id')
             if welc_objects:
                 welc_obj = welc_objects.first()
+                agent_info=welc_obj.assigned_to
+                row.append(agent_info.name)
                 row.append(date_timezone_convert(welc_obj.created)\
                     .strftime('%m/%d/%Y %H:%M:%S'))
                 ist_date_welcome = date_timezone_convert(welc_obj.created)
@@ -135,7 +137,7 @@ def generate_report(duration_report):
                     row += get_na_list(5)
                 csvwriter.writerow(row)
             else:
-                row += get_na_list(param=15)
+                row += get_na_list(param=16)
                 csvwriter.writerow(row)
         mail_report(csvfile)
 
