@@ -8,12 +8,15 @@ window.fbAsyncInit = function() {
         });
     };
     
-    function Login()
+    function Login(redirect_url)
     {
+    if (redirect_url == undefined){
+        redirect_url="/";
+        }
         FB.login(function(response) {
            if (response.status == 'connected')
                {
-                    ajaxCallSocialLogin(response.authResponse.accessToken, response.authResponse.expiresIn,'fb')
+                    ajaxCallSocialLogin(response.authResponse.accessToken, response.authResponse.expiresIn,'fb',redirect_url)
                } 
             else 
                 {
@@ -108,7 +111,6 @@ function googleLoginCallback(result) {
 }
 function reviewSocialLogin(next_url=undefined, social_id){
     if(social_id=='fb'){
-        next_url='/cart/payment-shipping/';
         FB.login(function(response) {
            if (response.status == 'connected')
                {
