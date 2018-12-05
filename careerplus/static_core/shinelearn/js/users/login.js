@@ -12,7 +12,7 @@ window.fbAsyncInit = function() {
     {
     if (redirect_url == undefined){
         redirect_url="/";
-        }
+       }
         FB.login(function(response) {
            if (response.status == 'connected')
                {
