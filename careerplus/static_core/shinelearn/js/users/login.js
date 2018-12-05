@@ -13,7 +13,7 @@ window.fbAsyncInit = function() {
         FB.login(function(response) {
            if (response.status == 'connected')
                {
-                    ajaxCallSocialLogin(response.authResponse.accessToken, response.authResponse.expiresIn,'fb','/cart/payment-shipping/')
+                    ajaxCallSocialLogin(response.authResponse.accessToken, response.authResponse.expiresIn,'fb')
                } 
             else 
                 {
@@ -108,6 +108,7 @@ function googleLoginCallback(result) {
 }
 function reviewSocialLogin(next_url=undefined, social_id){
     if(social_id=='fb'){
+        next_url='/cart/payment-shipping/';
         FB.login(function(response) {
            if (response.status == 'connected')
                {
