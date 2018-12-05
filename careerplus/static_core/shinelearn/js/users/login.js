@@ -13,7 +13,7 @@ window.fbAsyncInit = function() {
         FB.login(function(response) {
            if (response.status == 'connected')
                {
-                    ajaxCallSocialLogin(response.authResponse.accessToken, response.authResponse.expiresIn,'fb')
+                    ajaxCallSocialLogin(response.authResponse.accessToken, response.authResponse.expiresIn,'fb','/cart/payment-shipping/')
                } 
             else 
                 {
