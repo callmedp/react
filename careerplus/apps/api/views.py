@@ -245,9 +245,9 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                 # setup delivery service
                                 p_oi.delivery_service = delivery_service
 
-                                cost_price = p_oi.delivery_service.get_price()
+                                cost_price = float(p_oi.delivery_service.get_price())
                                 p_oi.delivery_price_excl_tax = cost_price
-                                discount = (cost_price * Decimal(percentage_discount)) / 100
+                                discount = (cost_price * percentage_discount) / 100
                                 cost_price_after_discount = cost_price - discount
                                 tax_amount = (cost_price_after_discount * tax_rate_per) / 100
                                 selling_price = cost_price_after_discount + tax_amount
@@ -282,13 +282,14 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                     # setup delivery service
                                     p_oi.delivery_service = delivery_service
 
-                                    cost_price = p_oi.delivery_service.get_price()
+                                    cost_price = float(p_oi.delivery_service.get_price())
                                     p_oi.delivery_price_excl_tax = cost_price
                                     discount = (cost_price * percentage_discount) / 100
                                     cost_price_after_discount = cost_price - discount
                                     tax_amount = (cost_price_after_discount * tax_rate_per) / 100
                                     selling_price = cost_price_after_discount + tax_amount
                                     p_oi.delivery_price_incl_tax = selling_price
+                                    p_oi.save()
                             else:
                                 if delivery_service:
                                     oi.delivery_service = delivery_service
