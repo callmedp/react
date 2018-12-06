@@ -1068,8 +1068,8 @@ class Product(AbstractProduct, ModelMeta):
             productcategories__active=True,
             active=True)
         if main_prod_cat and main_prod_cat[0].type_level == 4:
-                main_prod_cat = main_prod_cat[0].get_parent()[0] if main_prod_cat[0].get_parent() else None
-                data = main_prod_cat
+            main_prod_cat = main_prod_cat[0].get_parent()[0] if main_prod_cat[0].get_parent() else None
+            data = main_prod_cat
         elif main_prod_cat:
             data = main_prod_cat[0]
         else:
