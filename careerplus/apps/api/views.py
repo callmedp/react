@@ -34,7 +34,7 @@ from order.tasks import (
     process_mailer,
     invoice_generation_order
 )
-from shop.models import Skill
+from shop.models import Skill, DeliveryService
 
 from .serializers import (
     OrderListHistorySerializer,
@@ -175,13 +175,16 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     total_discount = coupon_amount
                     total_amount_before_discount = order.total_excl_tax  # berfore discount and excl tax
                     percentage_discount = (total_discount * 100) / total_amount_before_discount
-
                     for data in item_list:
+                        delivery_service = None
                         parent_id = data.get('id')
                         addons = data.get('addons', [])
                         variations = data.get('variations', [])
                         combos = data.get('combos', [])
                         product = Product.objects.get(id=parent_id)
+                        if data.get('delivery_service', None):
+                            delivery_service = data.get('delivery_service', None)
+                            delivery_service = DeliveryService.objects.get(name=delivery_service)
 
                         p_oi = order.orderitems.create(
                             product=product,
@@ -211,6 +214,9 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                 oi.selling_price = 0
                                 oi.tax_amount = 0
                                 oi.discount_amount = 0
+                                # setup delivery service
+                                if delivery_service:
+                                    oi.delivery_service = delivery_service
                                 oi.save()
 
                         elif variations:
@@ -234,6 +240,20 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                             p_oi.discount_amount = 0
                             p_oi.save()
 
+                        else:
+                            if delivery_service:
+                                # setup delivery service
+                                p_oi.delivery_service = delivery_service
+
+                                cost_price = float(p_oi.delivery_service.get_price())
+                                p_oi.delivery_price_excl_tax = cost_price
+                                discount = (cost_price * percentage_discount) / 100
+                                cost_price_after_discount = cost_price - discount
+                                tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                                selling_price = cost_price_after_discount + tax_amount
+                                p_oi.delivery_price_incl_tax = selling_price
+                                p_oi.save()
+
                         for var in variations:
                             prd = Product.objects.get(id=var.get('id'))
                             oi = order.orderitems.create(
@@ -255,6 +275,24 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                             oi.selling_price = selling_price
                             oi.tax_amount = tax_amount
                             oi.discount_amount = discount
+
+                            # setup delivery service
+                            if p_oi.product.product_class.slug == 'course':
+                                if delivery_service:
+                                    # setup delivery service
+                                    p_oi.delivery_service = delivery_service
+
+                                    cost_price = float(p_oi.delivery_service.get_price())
+                                    p_oi.delivery_price_excl_tax = cost_price
+                                    discount = (cost_price * percentage_discount) / 100
+                                    cost_price_after_discount = cost_price - discount
+                                    tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                                    selling_price = cost_price_after_discount + tax_amount
+                                    p_oi.delivery_price_incl_tax = selling_price
+                                    p_oi.save()
+                            else:
+                                if delivery_service:
+                                    oi.delivery_service = delivery_service
                             oi.save()
 
                         for addon in addons:
@@ -278,6 +316,9 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                             oi.selling_price = selling_price
                             oi.tax_amount = tax_amount
                             oi.discount_amount = discount
+                            # setup delivery service
+                            if delivery_service:
+                                oi.delivery_service = delivery_service
                             oi.save()
 
                     update_initiat_orderitem_sataus(order=order)
