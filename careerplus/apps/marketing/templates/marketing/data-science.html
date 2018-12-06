@@ -82,6 +82,14 @@
                        <input id="mobile" name="number" maxlength="10" minlength="10" type="text" class="form-control" placeholder="Mobile" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
                        <p class="js-error"></p>
                     </li>
+                    
+                    <li class="form-group">
+                       <select class="form-control" id="selection" name="selection">
+                           {%for prd in products_lists %}
+							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >{{prd.pPin}} </option>
+                              {%endfor%}
+                         </select>
+                    </li>
                   </ul>
 
                   <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
@@ -128,7 +136,14 @@
                       <input id="mobile" name="number" maxlength="10" minlength="10" type="text" class="form-control" placeholder="Mobile" value="{{request.session.mobile_no}}">
                       <p class="js-error"></p>
                    </li>
-                   
+
+                   <li class="form-group">
+                      <select class="form-control" id="selection" name="selection">
+                        {%for prd in products_lists %}
+							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >DataScientist - {{prd.response.pPin}} </option>
+                              {%endfor%}
+                      </select>
+                   </li>
                  </ul>
 
                  <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">

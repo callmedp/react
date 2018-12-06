@@ -5,7 +5,7 @@
     <div class="row">
       <div id="review" class="col-sm-12 col-md-8 reviews mb-40 scroll">
       <h2>Reviews</h2>
-          <a class="write-review" role="button" data-toggle="collapse" href="#collapseExampleform" aria-expanded="true" aria-controls="collapseExampleform">Write a review</a>
+          <a class="write-review" role="button" data-toggle="collapse" href="#collapseExampleform" aria-expanded="true" aria-controls="collapseExampleform">{% if review_obj%}Update your review{%else%}Write a review{%endif%}</a>
           <input type="hidden" name="page" id="id_review_page" value="{{prd_rv_page}}">
           <div class="collapse {% if not prd_review_list %}in {% endif %} " id="collapseExampleform" aria-expanded="true" >
             <div class="well box-panel write-review-box">

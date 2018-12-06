@@ -541,7 +541,7 @@ class CartMixin(object):
         cart_pk = self.request.session.get('cart_pk')
         if cart_pk:
             try:
-                cart_obj = Cart.objects.get(pk=cart_pk)
+                cart_obj = Cart.objects.get(pk=cart_pk).prefetch_related('lineitems')
                 product = Product.objects.get(id=sqs.id)
                 parent_li = cart_obj.lineitems.get(product=product)
             except Exception as e:

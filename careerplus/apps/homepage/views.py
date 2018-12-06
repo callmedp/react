@@ -43,7 +43,7 @@ class HomePageView(TemplateView, MetadataMixin):
                 is_active=True, is_jobassistance=True)[0]
             job_services = tjob.get_trending_products()
             # services_class = ProductClass.objects.filter(slug__in=settings.SERVICE_SLUG)
-            job_services = job_services.filter(product__type_product__in=[0, 1, 3])
+            # job_services = job_services.filter(product__type_product__in=[0, 1, 3])
             job_services_pks = list(job_services.all().values_list('product', flat=True))
             job_sqs = SearchQuerySet().filter(id__in=job_services_pks).exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS)
             job_services = job_sqs[:5]
@@ -78,10 +78,9 @@ class HomePageView(TemplateView, MetadataMixin):
 
         i = 0
         tabs = ['home', 'profile', 'message', 'settings']
+        course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
         for tcourse in t_objects:
             tprds = tcourse.get_trending_products()
-            course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
-
             tprds = tprds.filter(product__product_class__in=course_classes, product__type_product__in=[0, 1, 3])
             product_pks = list(tprds.all().values_list('product', flat=True))
             tprds = SearchQuerySet().filter(id__in=product_pks).exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS)[:9]
