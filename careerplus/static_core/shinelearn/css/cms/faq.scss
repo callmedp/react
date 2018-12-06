@@ -1,0 +1,155 @@
+@import "../path";
+@import "../common/bootstrap/variables";
+@import "../common/bootstrap/mixins";
+
+.faq-static {
+
+  .panel-group {
+    padding-left: 0;
+    list-style-type: none;
+  }
+
+  .panel-body {
+    strong, b {
+      font-weight: $font-weight+300;
+    }
+
+    p {
+      margin-bottom: 0;
+    }
+  }
+
+  .panel, .panel-default {
+    box-shadow: none;
+    border-top: 2px solid #e4e5e7;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    border-radius: 0;
+    background-color: transparent;
+    padding: 0;
+
+    strong, b {
+      font-weight: $font-weight+300;
+    }
+
+    ul {
+      margin: 10px 0 10px 20px;
+      padding: 0;
+      list-style-type: disc;
+      display: list-item;
+
+      li {
+        display: list-item;
+        padding: 5px 0;
+        list-style-type: disc;
+        clear: both;
+        font-size: $font-size+2;
+        margin-bottom: 0;
+
+        a {
+          color: $anchor-color;
+        }
+
+        em {
+          font-style: italic;
+        }
+
+        p {
+          margin: 0;
+          padding: 0;
+        }
+
+        strong, b {
+          font-weight: $font-weight+300;
+        }
+      }
+    }
+  }
+
+  .panel-heading {
+    border: none;
+    background-color: transparent;
+    border-radius: 0;
+    padding: 15px 0 10px 0;
+  }
+
+  .panel-title {
+    font-size: $font-size+4;
+    font-weight: $font-weight+300;
+    margin-bottom: 0;
+  }
+
+  .panel-group .panel-heading + .panel-collapse > .panel-body, .panel-group .panel-heading + .panel-collapse > .list-group {
+    border-top: none;
+    padding: 15px 0;
+  }
+
+  .panel-title > a {
+    display: block;
+    position: relative;
+    color: $secondary-color;
+    line-height: 20px;
+    font-size: $font-size+5;
+  }
+
+  .panel-title > a:after {
+      content:"";
+      position: absolute;
+      top: 0;
+      right: 15px;  
+      font-size: $font-size+29;
+      color: #707070;  
+      font-weight: $font-weight+100;
+      background: url(https://static1.shine.com/l/s/shinelearn/images/sprite.png) -445px -92px; 
+      width: 16px;
+      height: 3px;
+  }
+
+  .panel-title > a.collapsed:after {
+      content:"";
+      position: absolute;
+      top: 0;
+      right: 15px;
+      font-size: $font-size+29;
+      color: #707070;
+      font-weight: $font-weight+100;
+      background: url(https://static1.shine.com/l/s/shinelearn/images/sprite.png) -427px -91px; 
+      width: 16px;
+      height: 17px;
+  }
+}
+
+.wd71 {
+	width: 71%;
+	display: inline-block;
+}
+
+.wd27 {
+	width: 27%;
+	display: inline-block;
+	margin-right: 2%;
+	min-height: 259px;
+	vertical-align: top;
+	background-color: #fff;
+	border: 1px solid #f6f7f9;
+}
+
+.top-on-page {
+	position: fixed;
+	bottom: 5%;
+	right: 10px;
+	background-color: #666666;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 50px;
+	color: #fff;
+
+	&:hover, &:focus {
+		color: #fff;
+	}
+}
+
