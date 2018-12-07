@@ -136,6 +136,7 @@ def create_lead_crm(pk=None):
             "medium": lead.medium,
             "source": lead.source,
             "utm_parameter": lead.utm_parameter,
+            "sub_campaign":lead.sub_campaign_slug
         })
         flag = CrmApiMixin().create_lead_by_api(data_dict=data_dict)
         if flag:
