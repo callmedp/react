@@ -56,6 +56,7 @@ window.fbAsyncInit = function() {
             'callback' : 'loginCallback', //callback function
             'approvalprompt':'force',
             'scope' : 'profile email',
+            'next_url':redirect_url,
         };
         gapi.auth.signIn(myParams);
     }
