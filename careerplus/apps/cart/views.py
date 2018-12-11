@@ -333,6 +333,19 @@ class PaymentShippingView(UpdateView, CartMixin):
                 form.initial.update({
                     'mobile': self.request.session.get('mobile_no')})
 
+        elif self.request.session.get('prefill_details'):
+            prefill_details = self.request.session.get('prefill_details')
+            social_login = self.request.session.get('key','')
+            if social_login == 'g_plus':
+                name = prefill_details.get('name','').split(" ")
+                if len(name) > 1 and name[0] != "":
+                    form.initial.update({'first_name': name[0],'last_name': name[-1]})
+                elif len(name) == 1:
+                    form.initial.update({'first_name': name[0]})
+
+            elif social_login == 'fb':
+                pass
+
         if not form.initial.get('mobile'):
             form.initial.update({
                 'mobile': self.request.session.get('lead_mobile')})

@@ -45,8 +45,11 @@ window.fbAsyncInit = function() {
     }
 
 
-    function glogin() 
+    function glogin(redirect_url)
     {
+    if (redirect_url == undefined){
+        redirect_url="/";
+       }
         var myParams = {
             'clientid' : '653414155457-ufec3m78n4ctcvfqn34jf8skn4mv909e.apps.googleusercontent.com',
             'cookiepolicy' : 'single_host_origin',
@@ -106,7 +109,7 @@ function googleLoginCallback(result) {
 
     if(result['status']['signed_in']) {
             saveReviewFormDataToLocalStorage()
-            ajaxCallSocialLogin(result.access_token, result.expires_in,'gplus',window.location.href)
+            ajaxCallSocialLogin(result.access_token, result.expires_in,'gplus',window.location.href,redirect_url)
     }   
 }
 function reviewSocialLogin(next_url=undefined, social_id){

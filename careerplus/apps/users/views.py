@@ -402,10 +402,16 @@ class SocialLoginView(View):
                     return HttpResponseRedirect('/login/')
             elif request.GET.get('key') == 'gplus':
                 gplus_user = RegistrationLoginApi.social_login(request.GET)
+                resp_status={}
                 if gplus_user.get('response'):
-                    candidateid = gplus_user['user_details']['candidate_id']
-                    resp_status = ShineCandidateDetail().get_status_detail(
-                        email=None, shine_id=candidateid)
+                    candidateid = gplus_user['user_details'].get('candidate_id','')
+                    if candidateid:
+                        resp_status = ShineCandidateDetail().get_status_detail(
+                            email=None, shine_id=candidateid)
+                    else:
+                        if gplus_user.get('prefill_details',''):
+                            gplus_user.update({'key': 'g_plus'})
+                            resp_status = gplus_user
                     request.session.update(resp_status)
                     return HttpResponseRedirect(self.success_url)
                 elif gplus_user.get('response') == 400:
@@ -413,7 +419,6 @@ class SocialLoginView(View):
         except Exception as e:
             logging.getLogger('error_log').error('unable to do social login%s'%str(e))
             return HttpResponseRedirect('/login/')
-
 
 class LinkedinLoginView(View):
 
