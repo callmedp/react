@@ -558,13 +558,19 @@ class LinkedinCallbackView(View):
                             cart_obj = Cart.objects.get(pk=cart_pk)
                             cart_obj.email = linkedin_user['prefill_details'].get('email')
                             cart_obj.save()
-                        request.session.update(prefill_details)
+                        request.session.update({'prefill_details':prefill_details})
             else:
                 url_to_hit = settings.LINKEDIN_INFO_API + data_dict.get('access_token', '')+"&format=json"
                 response = requests.get(url_to_hit)
                 if response.status_code == 200:
-                    response_json = response.json()
-                    pass
+                    response_json = response.text
+                    response_json=json.loads(response_json)
+                    cart_pk = self.request.session.get('cart_pk')
+                    if cart_pk:
+                        cart_obj = Cart.objects.get(pk=cart_pk)
+                        cart_obj.email = response_json.get('emailAddress')
+                        cart_obj.save()
+                    request.session.update({"direct_linkedin":response_json})
                 else:
                     return HttpResponseRedirect('/login/')
             return HttpResponseRedirect(self.success_url)
