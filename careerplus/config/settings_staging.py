@@ -244,6 +244,8 @@ STATE = "9899002507upender"
 SCOPE = 'r_emailaddress r_basicprofile'
 TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
 OAUTH_URL = "https://www.linkedin.com/oauth/v2/authorization?"
+LINKEDIN_INFO_API="https://api.linkedin.com/v1/people/~:(id,first-name,last-name,picture-url,public-profile-url,email-address)?oauth2_access_token="
+
 LINKEDIN_DICT = {
     "CLIENT_ID": "81fbxkgs5558q0",
     "CLIENT_SECRET": "ECioffWZKBbXhkbu",

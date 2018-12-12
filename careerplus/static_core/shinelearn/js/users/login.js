@@ -1,3 +1,4 @@
+var googleRedirectionUrl;
 window.fbAsyncInit = function() {
         FB.init({
           appId  : '1482454715170390', // App ID
@@ -40,8 +41,8 @@ window.fbAsyncInit = function() {
 
         if(result['status']['signed_in'])
             {
-                ajaxCallSocialLogin(result.access_token, result.expires_in,'gplus')
-            }   
+                ajaxCallSocialLogin(result.access_token, result.expires_in,'gplus',googleRedirectionUrl)
+            }
     }
 
 
@@ -50,13 +51,13 @@ window.fbAsyncInit = function() {
     if (redirect_url == undefined){
         redirect_url="/";
        }
+       googleRedirectionUrl=redirect_url;
         var myParams = {
             'clientid' : '653414155457-ufec3m78n4ctcvfqn34jf8skn4mv909e.apps.googleusercontent.com',
             'cookiepolicy' : 'single_host_origin',
             'callback' : 'loginCallback', //callback function
             'approvalprompt':'force',
             'scope' : 'profile email',
-            'next_url':redirect_url,
         };
         gapi.auth.signIn(myParams);
     }
@@ -110,7 +111,7 @@ function googleLoginCallback(result) {
 
     if(result['status']['signed_in']) {
             saveReviewFormDataToLocalStorage()
-            ajaxCallSocialLogin(result.access_token, result.expires_in,'gplus',window.location.href,redirect_url)
+            ajaxCallSocialLogin(result.access_token, result.expires_in,'gplus',window.location.href)
     }   
 }
 function reviewSocialLogin(next_url=undefined, social_id){

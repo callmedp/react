@@ -26,6 +26,7 @@ from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCP
 from order.models import OrderItem
 from users.mixins import WriterInvoiceMixin,UserGroupMixin
 from users.models import User
+from cart.models import Cart
 from emailers.tasks import send_email_task
 
 
@@ -391,12 +392,21 @@ class SocialLoginView(View):
         try:
             if request.GET.get('key') == 'fb':
                 fb_user = RegistrationLoginApi.social_login(request.GET)
-                candidateid = fb_user['user_details']['candidate_id']
-                if fb_user.get('response'):
+                candidateid = fb_user['user_details'].get('candidate_id')
+                if candidateid:
                     resp_status = ShineCandidateDetail().get_status_detail(
                         email=None,
                         shine_id=candidateid)
                     request.session.update(resp_status)
+                    return HttpResponseRedirect(self.success_url)
+                elif fb_user['prefill_details'].get('email'):
+                    cart_pk = self.request.session.get('cart_pk')
+                    if cart_pk:
+                        cart_obj = Cart.objects.get(pk=cart_pk)
+                        cart_obj.email = fb_user['prefill_details'].get('email')
+                        cart_obj.save()
+                    fb_user.update({'key': 'fb'})
+                    request.session.update(fb_user)
                     return HttpResponseRedirect(self.success_url)
                 elif fb_user.get('response') == 400:
                     return HttpResponseRedirect('/login/')
@@ -410,6 +420,11 @@ class SocialLoginView(View):
                             email=None, shine_id=candidateid)
                     else:
                         if gplus_user.get('prefill_details',''):
+                            cart_pk = self.request.session.get('cart_pk')
+                            if cart_pk:
+                                cart_obj = Cart.objects.get(pk=cart_pk)
+                                cart_obj.email = gplus_user['prefill_details'].get('email')
+                                cart_obj.save()
                             gplus_user.update({'key': 'g_plus'})
                             resp_status = gplus_user
                     request.session.update(resp_status)
@@ -472,20 +487,31 @@ class LinkedinCallbackView(View):
             'client_id': client_id,
             'client_secret': client_secret,
         }
+        pr = params.copy()
         if not params['code']:
             return HttpResponseRedirect('/login/')
         params = urllib.parse.urlencode(params)
+        # print(params.encode('utf-8'))
         try:
-            info = urllib.request.urlopen(
-                settings.TOKEN_URL, params.encode("utf-8"))
-            read_data = info.read()
-            # convert byte object into string
-            str_data = str(read_data, 'utf-8')
-            data_dict = json.loads(str_data)
+            # info = urllib.request.urlopen(pe
+            #     settings.TOKEN_URL, params.encode("utf-8"))
+            import requests
+            query_str = "&".join(["{}={}".format(key,value) for key,value in pr.items()])
+            url_to_hit = settings.TOKEN_URL+"?"+query_str
+            # print(url_to_hit)
+            response = requests.post(url_to_hit,\
+                data=json.dumps(pr),\
+                headers={"Accept":"applications/json",\
+                    "Content-Type":"application/json"})
+
+            read_data = response.text
+            # # convert byte object into string
+            # str_data = str(read_data, 'utf-8')
+            data_dict = json.loads(read_data)
             data_dict.update({'key': 'linkedin'})
             linkedin_user = RegistrationLoginApi.social_login(data_dict)
             logging.getLogger('info_log').info('Response Received from shine for linkedin login: {}'.format(linkedin_user))
-            if linkedin_user.get('response'):
+            if type(linkedin_user) != list and linkedin_user.get('response'):
                 logging.getLogger('info_log').info(linkedin_user)
                 if linkedin_user.get('user_details'):
                     candidateid = linkedin_user['user_details']['candidate_id']
@@ -523,8 +549,28 @@ class LinkedinCallbackView(View):
                         #                                              'for candidate status api')
                         #     return HttpResponseRedirect(self.success_url)
 
-            elif linkedin_user['status_code'] == 400:
-                return HttpResponseRedirect('/login/')
+                else:
+                    if linkedin_user.get('prefill_details'):
+                        prefill_details=linkedin_user.get('prefill_details')
+                        prefill_details.update({'key':'linkedin'})
+                        cart_pk = self.request.session.get('cart_pk')
+                        if cart_pk:
+                            cart_obj = Cart.objects.get(pk=cart_pk)
+                            cart_obj.email = linkedin_user['prefill_details'].get('email')
+                            cart_obj.save()
+                        request.session.update(prefill_details)
+            else:
+                url_to_hit = settings.LINKEDIN_INFO_API + data_dict.get('access_token', '')+"&format=json"
+                response = requests.get(url_to_hit)
+                if response.status_code == 200:
+                    response_json = response.json()
+                    pass
+                else:
+                    return HttpResponseRedirect('/login/')
+            return HttpResponseRedirect(self.success_url)
+
+            # elif linkedin_user['status_code'] == 400:
+            #     return HttpResponseRedirect('/login/')
 
         except Exception as e:
             logging.getLogger('error_log').error('unable to do linked in callback view %s'%str(e))

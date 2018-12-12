@@ -62,17 +62,17 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         if flavour == 'mobile':
             self.fields['mobile'].widget.attrs['class'] += ' pull-left number'
 
-        self.fields['address'].required = True
+        self.fields['address'].required = False
         self.fields['address'].widget.attrs['placeholder'] = 'Address'
         self.fields['address'].widget.attrs['class'] = form_class
 
-        self.fields['pincode'].required = True
+        self.fields['pincode'].required = False
         self.fields['pincode'].widget.attrs['placeholder'] = 'Pincode'
         self.fields['pincode'].widget.attrs['class'] = form_class
         # if flavour == 'mobile':
         #     self.fields['pincode'].widget.attrs['class'] += ' pull-left number'
 
-        self.fields['state'].required = True
+        self.fields['state'].required = False
         self.fields['state'].widget.attrs['placeholder'] = 'State'
         self.fields['state'].widget.attrs['class'] = form_class
 
@@ -119,30 +119,30 @@ class ShippingDetailUpdateForm(forms.ModelForm):
 
     def clean_address(self):
         address = self.cleaned_data.get('address', '').strip()
-        if not address:
-            raise forms.ValidationError(
-                "This field is required.")
+        # if not address:
+        #     raise forms.ValidationError(
+        #         "This field is required.")
         return address
 
     def clean_pincode(self):
         pincode = self.cleaned_data.get('pincode', '').strip()
-        country_code = self.cleaned_data.get('country_code', None)
-        if not pincode:
-            raise forms.ValidationError(
-                "This field is required.")
-        elif not pincode.isdigit():
-            raise forms.ValidationError(
-                "This field required only digits.")
-
-        elif country_code == '91' and len(pincode) != 6:
-            raise forms.ValidationError(
-                "pincode should be 6 digits.")
+        # country_code = self.cleaned_data.get('country_code', None)
+        # if not pincode:
+        #     raise forms.ValidationError(
+        #         "This field is required.")
+        # elif not pincode.isdigit():
+        #     raise forms.ValidationError(
+        #         "This field required only digits.")
+        #
+        # elif country_code == '91' and len(pincode) != 6:
+        #     raise forms.ValidationError(
+        #         "pincode should be 6 digits.")
 
         return pincode
 
     def clean_state(self):
         state = self.cleaned_data.get('state', '').strip()
-        if not state:
-            raise forms.ValidationError(
-                "This field is required.")
+        # if not state:
+        #     raise forms.ValidationError(
+        #         "This field is required.")
         return state

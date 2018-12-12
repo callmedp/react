@@ -346,6 +346,9 @@ class PaymentShippingView(UpdateView, CartMixin):
             elif social_login == 'fb':
                 pass
 
+            else:
+                pass
+
         if not form.initial.get('mobile'):
             form.initial.update({
                 'mobile': self.request.session.get('lead_mobile')})
