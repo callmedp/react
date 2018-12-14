@@ -74,9 +74,9 @@ class FileUploadForm(forms.Form):
         elif file:
             name = file.name
             extn = name.split('.')[-1]
-            if extn not in ['pdf', 'doc', 'docx','ppt','pptx']:
+            if extn not in ['pdf', 'doc', 'docx','ppt','pptx','rar','zip']:
                 raise forms.ValidationError(
-                    "only pdf, doc, docx, ppt and pptx formats are allowed.")
+                    "only pdf, doc, docx, rar, zip ppt and pptx formats are allowed.")
             elif file.size > 5 * 1024 * 10000:
                 raise forms.ValidationError(
                     "file is too large ( > 5 MB ).")
@@ -138,7 +138,7 @@ class WaitingForInputForm(forms.ModelForm):
 
 class OrderFilterForm(forms.Form):
 
-    def __init__(self, *args, **kwargs):
+    def     __init__(self, *args, **kwargs):
         super(OrderFilterForm, self).__init__(*args, **kwargs)
 
         NEWSTATUS = ((-1, 'All'),) + STATUS_CHOICES
