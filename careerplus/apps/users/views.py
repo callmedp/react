@@ -44,6 +44,7 @@ class RegistrationApiView(FormView):
     success_url = '/'
     form_class = RegistrationForm
 
+
     def get_context_data(self, **kwargs):
         context = super(RegistrationApiView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
@@ -101,6 +102,13 @@ class RegistrationApiView(FormView):
         kwargs = super(RegistrationApiView, self).get_form_kwargs()
         kwargs['flavour'] = self.request.flavour
         return kwargs
+
+    def get_initial(self):
+        initial= super(RegistrationApiView, self).get_initial()
+        prefill_details = self.request.session.get('prefill_details','')
+        if prefill_details:
+            initial['email']=prefill_details.get('email','')
+        return initial
 
     def dispatch(self, request, *args, **kwargs):
 
@@ -559,6 +567,8 @@ class LinkedinCallbackView(View):
                             cart_obj.email = linkedin_user['prefill_details'].get('email')
                             cart_obj.save()
                         request.session.update({'prefill_details':prefill_details})
+                        if self.success_url == '/':
+                            self.success_url = '/users/register.html'
             else:
                 url_to_hit = settings.LINKEDIN_INFO_API + data_dict.get('access_token', '')+"&format=json"
                 response = requests.get(url_to_hit)
@@ -571,8 +581,10 @@ class LinkedinCallbackView(View):
                         cart_obj.email = response_json.get('emailAddress')
                         cart_obj.save()
                     request.session.update({"direct_linkedin":response_json})
+                    if self.success_url == '/':
+                        self.success_url = '/users/register.html'
                 else:
-                    return HttpResponseRedirect('/login/')
+                    return HttpResponseRedirect(self.success_url)
             return HttpResponseRedirect(self.success_url)
 
             # elif linkedin_user['status_code'] == 400:
