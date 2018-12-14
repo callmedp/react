@@ -587,7 +587,7 @@ class LinkedinCallbackView(View):
                     if self.success_url == '/':
                         self.success_url = '/register/'
                 else:
-                    return HttpResponseRedirect(self.success_url)
+                    return HttpResponseRedirect('/register/')
             return HttpResponseRedirect(self.success_url)
 
             # elif linkedin_user['status_code'] == 400:
