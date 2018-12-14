@@ -108,6 +108,9 @@ class RegistrationApiView(FormView):
         prefill_details = self.request.session.get('prefill_details','')
         if prefill_details:
             initial['email']=prefill_details.get('email','')
+        elif self.request.session.get('direct_linkedin'):
+            initial['email'] = self.request.session.get('direct_linkedin').get('emailAddress')
+
         return initial
 
     def dispatch(self, request, *args, **kwargs):
