@@ -21,7 +21,7 @@ class ShippingDetailUpdateForm(forms.ModelForm):
     class Meta:
         model = Cart
 
-        fields = ['first_name', 'last_name', 'country_code', 'mobile', 'address', 'pincode', 'state', 'country']
+        fields = ['first_name', 'last_name', 'country_code', 'mobile', 'country']
 
     def __init__(self, *args, **kwargs):
         flavour = kwargs.pop('flavour', None)
@@ -62,19 +62,19 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         if flavour == 'mobile':
             self.fields['mobile'].widget.attrs['class'] += ' pull-left number'
 
-        self.fields['address'].required = False
-        self.fields['address'].widget.attrs['placeholder'] = 'Address'
-        self.fields['address'].widget.attrs['class'] = form_class
+        # self.fields['address'].required = False
+        # self.fields['address'].widget.attrs['placeholder'] = 'Address'
+        # self.fields['address'].widget.attrs['class'] = form_class
 
-        self.fields['pincode'].required = False
-        self.fields['pincode'].widget.attrs['placeholder'] = 'Pincode'
-        self.fields['pincode'].widget.attrs['class'] = form_class
+        # self.fields['pincode'].required = False
+        # self.fields['pincode'].widget.attrs['placeholder'] = 'Pincode'
+        # self.fields['pincode'].widget.attrs['class'] = form_class
         # if flavour == 'mobile':
         #     self.fields['pincode'].widget.attrs['class'] += ' pull-left number'
 
-        self.fields['state'].required = False
-        self.fields['state'].widget.attrs['placeholder'] = 'State'
-        self.fields['state'].widget.attrs['class'] = form_class
+        # self.fields['state'].required = False
+        # self.fields['state'].widget.attrs['placeholder'] = 'State'
+        # self.fields['state'].widget.attrs['class'] = form_class
 
         # if flavour == 'mobile':
         #     self.fields['state'].widget.attrs['class'] += ' pull-left w-50'
@@ -117,15 +117,15 @@ class ShippingDetailUpdateForm(forms.ModelForm):
                 "Mobile length must be 4 to 15 digits.")
         return mobile
 
-    def clean_address(self):
-        address = self.cleaned_data.get('address', '').strip()
+    # def clean_address(self):
+    #     address = self.cleaned_data.get('address', '').strip()
         # if not address:
         #     raise forms.ValidationError(
         #         "This field is required.")
-        return address
-
-    def clean_pincode(self):
-        pincode = self.cleaned_data.get('pincode', '').strip()
+        # return address
+    #
+    # def clean_pincode(self):
+    #     pincode = self.cleaned_data.get('pincode', '').strip()
         # country_code = self.cleaned_data.get('country_code', None)
         # if not pincode:
         #     raise forms.ValidationError(
@@ -138,11 +138,11 @@ class ShippingDetailUpdateForm(forms.ModelForm):
         #     raise forms.ValidationError(
         #         "pincode should be 6 digits.")
 
-        return pincode
+        # return pincode
 
-    def clean_state(self):
-        state = self.cleaned_data.get('state', '').strip()
+    # def clean_state(self):
+    #     state = self.cleaned_data.get('state', '').strip()
         # if not state:
         #     raise forms.ValidationError(
         #         "This field is required.")
-        return state
+        # return state

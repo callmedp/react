@@ -124,26 +124,32 @@
               </div>
             </div>
           </div>
+            {%comment%}
           <div class="form-group clearfix">
-            <div class="col-sm-6 {% if form.address.errors %} error {% endif %}">
-              {{form.address}}
-              <span class="error-txt">{{form.address.errors.0}}</span>
-            </div>
-            <div class="col-sm-6 {% if form.pincode.errors %} error {% endif %}">
-               {{form.pincode}}
-              <span class="error-txt">{{form.pincode.errors.0}}</span>
-            </div>
+
+            <!--<div class="col-sm-6 {% if form.address.errors %} error {% endif %}">-->
+              <!--{{form.address}}-->
+              <!--<span class="error-txt">{{form.address.errors.0}}</span>-->
+            <!--</div>-->
+            <!--<div class="col-sm-6 {% if form.pincode.errors %} error {% endif %}">-->
+               <!--{{form.pincode}}-->
+              <!--<span class="error-txt">{{form.pincode.errors.0}}</span>-->
+            <!--</div>-->
+
           </div>
+              {%endcomment%}
           <div class="form-group clearfix">
-            <div class="col-sm-6 {% if form.state.errors %} error {% endif %}">
-              {{form.state}}
-              <span class="error-txt">{{form.state.errors.0}}</span>
-              
-            </div>
+              {%comment%}
+            <!--<div class="col-sm-6 {% if form.state.errors %} error {% endif %}">-->
+              <!--{{form.state}}-->
+              <!--<span class="error-txt">{{form.state.errors.0}}</span>-->
+              <!---->
+            <!--</div>-->
+              {%endcomment%}
             <div class="col-sm-6 custom-select {% if form.country.errors %} error {% endif %}">
               {{form.country}}
               <span class="error-txt">{{form.country.errors.0}}</span>
-             
+
             </div>
           </div>
           <div class="continue ml-15">
