@@ -78,7 +78,8 @@ DJANGO_APPS = [
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 DEV_APPS = [
-    'debug_toolbar'
+    'debug_toolbar',
+    'rest_framework_swagger',
 ]
 INSTALLED_APPS += DEV_APPS
 
