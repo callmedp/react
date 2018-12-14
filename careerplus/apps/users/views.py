@@ -571,7 +571,8 @@ class LinkedinCallbackView(View):
                             cart_obj.save()
                         request.session.update({'prefill_details':prefill_details})
                         if self.success_url == '/':
-                            self.success_url = '/register/'
+                            self.success_url = '/login/?signerror'
+
             else:
                 url_to_hit = settings.LINKEDIN_INFO_API + data_dict.get('access_token', '')+"&format=json"
                 response = requests.get(url_to_hit)
@@ -585,9 +586,9 @@ class LinkedinCallbackView(View):
                         cart_obj.save()
                     request.session.update({"direct_linkedin":response_json})
                     if self.success_url == '/':
-                        self.success_url = '/register/'
+                        self.success_url = '/login/?signerror'
                 else:
-                    return HttpResponseRedirect('/register/')
+                    return HttpResponseRedirect('/login/?signerror')
             return HttpResponseRedirect(self.success_url)
 
             # elif linkedin_user['status_code'] == 400:
@@ -596,7 +597,7 @@ class LinkedinCallbackView(View):
         except Exception as e:
             logging.getLogger('error_log').error('unable to do linked in callback view %s'%str(e))
 
-            return HttpResponseRedirect('/login/')
+            return HttpResponseRedirect('/login/?signerror')
 
 
 # HTTP Error 404

@@ -400,7 +400,7 @@ class CartMixin(object):
                     logging.getLogger('error_log').error("Unable to add item on cart %s " % str(e))
                     m_prod.delete()
 
-        return {"cart_items": cart_items, "total_amount": round(total_amount,2)}
+        return {"cart_items": cart_items, "total_amount": int(round(total_amount))}
 
     def getTotalAmount(self, cart_obj=None):
         total = Decimal(0)

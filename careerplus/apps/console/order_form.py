@@ -77,9 +77,10 @@ class FileUploadForm(forms.Form):
             if extn not in ['pdf', 'doc', 'docx','ppt','pptx','rar','zip']:
                 raise forms.ValidationError(
                     "only pdf, doc, docx, rar, zip ppt and pptx formats are allowed.")
-            elif file.size > 5 * 1024 * 10000:
+
+            elif file.size > 15 * 1024 * 1000:
                 raise forms.ValidationError(
-                    "file is too large ( > 5 MB ).")
+                    "file is too large ( > 15 MB ).")
         return file
 
 
