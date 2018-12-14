@@ -568,7 +568,7 @@ class LinkedinCallbackView(View):
                             cart_obj.save()
                         request.session.update({'prefill_details':prefill_details})
                         if self.success_url == '/':
-                            self.success_url = '/register.html'
+                            self.success_url = '/register/'
             else:
                 url_to_hit = settings.LINKEDIN_INFO_API + data_dict.get('access_token', '')+"&format=json"
                 response = requests.get(url_to_hit)
@@ -582,7 +582,7 @@ class LinkedinCallbackView(View):
                         cart_obj.save()
                     request.session.update({"direct_linkedin":response_json})
                     if self.success_url == '/':
-                        self.success_url = '/register.html'
+                        self.success_url = '/register/'
                 else:
                     return HttpResponseRedirect(self.success_url)
             return HttpResponseRedirect(self.success_url)
