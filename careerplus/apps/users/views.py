@@ -418,6 +418,8 @@ class SocialLoginView(View):
                         cart_obj.save()
                     fb_user.update({'key': 'fb'})
                     request.session.update(fb_user)
+                    if self.success_url == '/':
+                        self.success_url = '/register'
                     return HttpResponseRedirect(self.success_url)
                 elif fb_user.get('response') == 400:
                     return HttpResponseRedirect('/login/')
@@ -438,10 +440,13 @@ class SocialLoginView(View):
                                 cart_obj.save()
                             gplus_user.update({'key': 'g_plus'})
                             resp_status = gplus_user
+                            if self.success_url == '/':
+                                self.success_url = '/register'
                     request.session.update(resp_status)
+
                     return HttpResponseRedirect(self.success_url)
                 elif gplus_user.get('response') == 400:
-                    return HttpResponseRedirect('/login/')
+                    return HttpResponseRedirect('/register/')
         except Exception as e:
             logging.getLogger('error_log').error('unable to do social login%s'%str(e))
             return HttpResponseRedirect('/login/')
@@ -501,7 +506,7 @@ class LinkedinCallbackView(View):
         pr = params.copy()
         if not params['code']:
             return HttpResponseRedirect('/login/')
-        params = urllib.parse.urlencode(params)
+        # params = urllib.parse.urlencode(params)
         # print(params.encode('utf-8'))
         try:
             # info = urllib.request.urlopen(pe
@@ -571,7 +576,7 @@ class LinkedinCallbackView(View):
                             cart_obj.save()
                         request.session.update({'prefill_details':prefill_details})
                         if self.success_url == '/':
-                            self.success_url = '/login/?signerror'
+                            self.success_url = '/register/'
 
             else:
                 url_to_hit = settings.LINKEDIN_INFO_API + data_dict.get('access_token', '')+"&format=json"
@@ -586,9 +591,9 @@ class LinkedinCallbackView(View):
                         cart_obj.save()
                     request.session.update({"direct_linkedin":response_json})
                     if self.success_url == '/':
-                        self.success_url = '/login/?signerror'
+                        self.success_url = '/register/'
                 else:
-                    return HttpResponseRedirect('/login/?signerror')
+                    return HttpResponseRedirect('/register/')
             return HttpResponseRedirect(self.success_url)
 
             # elif linkedin_user['status_code'] == 400:
