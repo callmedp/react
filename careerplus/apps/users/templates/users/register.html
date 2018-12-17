@@ -86,12 +86,14 @@
                     </label>
                 </div>
                 <button type="submit" class="btn btn-primary submit">Register</button>
-                <div class="social-login">
-                    <span>or Register with</span>
-                    <a class="facebook" onclick="Login();"></a>
-                    <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
-                    <a class="gplus" onclick="glogin()"></a>
-                </div>
+              {% comment %}
+                <!--<div class="social-login">-->
+                    <!--<span>or Register with</span>-->
+                    <!--<a class="facebook" onclick="Login();"></a>-->
+                    <!--<a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>-->
+                    <!--<a class="gplus" onclick="glogin()"></a>-->
+                <!--</div>-->
+                 {% endcomment %}
                 <small class="form-text text-muted text-center mt-4">
                     Already have an account? <a href="{% url 'login' %}">Login Now</a>
                 </small>
