@@ -204,12 +204,31 @@ urlpatterns += [
 
 if settings.DEBUG:
     import debug_toolbar
-    from rest_framework_swagger.views import get_swagger_view
 
-    schema_view = get_swagger_view(title='Learning API')
+    from rest_framework.response import Response
+    from rest_framework.schemas import SchemaGenerator
+    from rest_framework.views import APIView
+    from rest_framework_swagger import renderers
+
+
+    class SwaggerSchemaView(APIView):
+        renderer_classes = [
+            renderers.OpenAPIRenderer,
+            renderers.SwaggerUIRenderer
+        ]
+
+        authentication_classes = []
+        permission_classes = []
+
+        def get(self, request):
+            generator = SchemaGenerator(title="Learning API Docs")
+            schema = generator.get_schema(request=request)
+
+            return Response(schema)
+
     urlpatterns = [
         url(r'^__debug__/', include(debug_toolbar.urls)),
-        url(r'^api-swagger-docs/', schema_view),
+        url(r'^api-docs/', SwaggerSchemaView.as_view()),
     ] + urlpatterns
 
 
