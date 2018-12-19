@@ -101,7 +101,10 @@ if __name__=="__main__":
                 item_refund_request_list = RefundItem.objects.filter(oi_id=item.parent.id,\
                     refund_request__status__in=[1,3,5,7,8,11])
                 total_refund = item_refund_request_list.first().amount if item_refund_request_list else 0
-                refund_amount = round(total_refund * (item_selling_price / item.parent.selling_price),2)
+                if item.parent.selling_price:
+                    refund_amount = round(total_refund * (item_selling_price / item.parent.selling_price),2)
+                else:
+                    refund_amount = 0
 
             if item.is_combo and not item.parent:
                 combo_parent = True
