@@ -16,7 +16,7 @@ class GoogleCloudStorageMixin(GoogleCloudStorage):
 
     def _normalize_name(self, name):
         name = super(GoogleCloudStorageMixin, self)._normalize_name(name)
-        return safe_join(self.location, name)
+        return name
 
 
 class GCPStaticStorage(GoogleCloudStorageMixin):
