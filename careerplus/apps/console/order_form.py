@@ -139,7 +139,7 @@ class WaitingForInputForm(forms.ModelForm):
 
 class OrderFilterForm(forms.Form):
 
-    def     __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(OrderFilterForm, self).__init__(*args, **kwargs)
 
         NEWSTATUS = ((-1, 'All'),) + STATUS_CHOICES
