@@ -172,6 +172,7 @@ class PaymentLoginView(TemplateView):
             remember_me = request.POST.get('remember_me')
             email = self.request.POST.get('email', '').strip()
             password = self.request.POST.get('password', '')
+            login_with = self.request.POST.get('login_with','')
 
             valid_email = False
             try:
@@ -181,12 +182,20 @@ class PaymentLoginView(TemplateView):
                 logging.getLogger('error_log').error("email validation failed  %s " % str(e))
                 valid_email = False
 
+            if valid_email and login_with:
+                cart_pk = self.request.session.get('cart_pk')
+                if cart_pk:
+                    cart_obj = Cart.objects.get(pk=cart_pk)
+                    cart_obj.email = email
+                    cart_obj.save()
+                    return HttpResponseRedirect(reverse('cart:payment-shipping'))
+                return HttpResponseRedirect(reverse('cart:cart-product-list'))
+
             if valid_email:
                 login_dict.update({
                     "email": email,
                     "password": password,
                 })
-
                 user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
 
                 if user_exist.get('exists') and password:
@@ -215,6 +224,7 @@ class PaymentLoginView(TemplateView):
 
                 elif user_exist.get('exists'):
                     context = self.get_context_data()
+                    context.update({"guest_login":"guest_login"})
                     cart_pk = self.request.session.get('cart_pk')
                     if cart_pk:
                         cart_obj = Cart.objects.get(pk=cart_pk)
