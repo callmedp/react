@@ -92,7 +92,9 @@ class LeadManagement(View):
 
             utm = request.session.get('utm', {})
             campaign_slug = utm.get('utm_campaign', '')
+            sub_campaign_slug = utm.get('sub_campaign_slug')
             utm_parameter = json.dumps(utm)
+            
             if not campaign_slug:
                 slug_source = dict(DEFAULT_SLUG_SOURCE)
                 campaign_slug = slug_source.get(int(lead_source))
@@ -123,7 +125,8 @@ class LeadManagement(View):
                 source=source,
                 path=path,
                 utm_parameter=utm_parameter,
-                campaign_slug=campaign_slug
+                campaign_slug=campaign_slug,
+                sub_campaign_slug=sub_campaign_slug
             )
             created = True
             valid_source_list = [4, 23, UNIVERSITY_LEAD_SOURCE]
@@ -197,6 +200,7 @@ class LeadManagementWithCaptcha(View, ReCaptchaMixin):
                 country = Country.objects.get(phone='91')
 
             utm = request.session.get('utm', {})
+            sub_campaign_slug = utm.get('sub_campaign_slug')
             campaign_slug = utm.get('utm_campaign', '')
             utm_parameter = json.dumps(utm)
             if not campaign_slug:
@@ -216,7 +220,8 @@ class LeadManagementWithCaptcha(View, ReCaptchaMixin):
                 source=source,
                 path=path,
                 utm_parameter=utm_parameter,
-                campaign_slug=campaign_slug
+                campaign_slug=campaign_slug,
+                sub_campaign_slug=sub_campaign_slug
             )
 
             created = True
