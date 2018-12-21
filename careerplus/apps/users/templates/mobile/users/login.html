@@ -73,6 +73,7 @@
                 </div><!-- Tab content ends here -->
 
             {% else %}
+
                 <ul class="tabs box-panel p-0">
                     <li><a href="{% url 'login' %}" class="current">Login</a></li>
                     <li><a href="{% url 'register' %}">Register</a></li>
@@ -85,6 +86,7 @@
                         <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable"{% endif %}>{{ message }}</div>
                         {% endfor %}
                     {% endif %}
+                         <div id="custom-form-error" style="color:red;"> </div>
                     <form method="post" id="login_form" data-role="form">
                         {% csrf_token %}
                         {% for field in form %}
@@ -134,6 +136,15 @@
 {% block js_section %}
     {{block.super}}
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var error_login=location.search.split('?')[1];
+        if(error_login == 'signerror'){
+        document.getElementById("custom-form-error").innerHTML=" Unable to SignIn ,Please try in Sometime";
+         }
+    });
+
+</script>
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}

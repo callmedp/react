@@ -82,7 +82,16 @@
             </div><!-- call us and chat widget ends here -->
         </form>
     </div>
-
+    <div class="line_wrap w100fl">
+                            <span>or sign in with</span>
+                            <div class="line"></div>
+                        </div>
+ <div class="social-login w100fl text-center">
+                    <a class="facebook" onclick="Login('/cart/payment-shipping/');"><sup class="icon-fb-2"></sup></a>
+                    <a class="linkedin" href="{% url 'users:linkedin-code' %}?next=/cart/payment-shipping/"><sup class="icon-link-2"></sup></a>
+                    <a class="gplus" onclick="glogin('/cart/payment-shipping/');"><sup class="icon-gp-2"></a>
+                </div>
+                        </div>
 {% endblock container %}
 
 
@@ -91,6 +100,7 @@
 
     {% compress js %}
         <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
+        <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
         <script type="text/javascript" src="{% static 'shinelearn/js/users/forgot_password.js' %}"></script>
     {% endcompress %}
 

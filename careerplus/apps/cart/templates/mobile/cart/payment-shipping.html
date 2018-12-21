@@ -75,22 +75,22 @@
                 <p class="error-txt pull-right">{% if form.mobile.errors %} {{form.mobile.errors.0}} {% else %}{{form.country_code.errors.0}}{% endif %}</p>
                 <div class="clearfix"></div>
               </div>
+        {%comment%}
+              <!--<div class="form-group {% if form.address.errors %} error {% endif %}">-->
+                <!--{{form.address}}-->
+                <!--<p class="error-txt">{{form.address.errors.0}}</p>-->
+              <!--</div>-->
 
-              <div class="form-group {% if form.address.errors %} error {% endif %}">
-                {{form.address}}
-                <p class="error-txt">{{form.address.errors.0}}</p>
-              </div>
-
-             <div class="form-group {% if form.pincode.errors %} error {% endif %}">
-                {{form.pincode}}
-                <p class="error-txt">{{form.pincode.errors.0}}</p>
-             </div>
-             
-              <div class="form-group {% if form.state.errors %} error {% endif %}">
-                {{form.state}}
-                <p class="error-txt">{{form.state.errors.0}}</p>
-              </div>
-
+             <!--<div class="form-group {% if form.pincode.errors %} error {% endif %}">-->
+                <!--{{form.pincode}}-->
+                <!--<p class="error-txt">{{form.pincode.errors.0}}</p>-->
+             <!--</div>-->
+             <!---->
+              <!--<div class="form-group {% if form.state.errors %} error {% endif %}">-->
+                <!--{{form.state}}-->
+                <!--<p class="error-txt">{{form.state.errors.0}}</p>-->
+              <!--</div>-->
+  {%endcomment%}
               
 
               <div class="form-group {% if form.country.errors %} error {% endif %}">

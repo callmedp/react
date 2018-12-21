@@ -46,16 +46,16 @@ $().ready(function() {
                     required: true,
                 },
                 address:{
-                    required: true,
+                    required: false,
                     maxlength: 200, 
                 },
                 pincode:{
-                    required: true,
+                    required: false,
                     digits: true,
-                    indiaPin: true,
+                    indiaPin: false,
                 },
                 state:{
-                    required: true,
+                    required: false,
                     maxlength: 100,
                 }
                       

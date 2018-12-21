@@ -1608,12 +1608,11 @@ footer {
 
 .search {
     padding: 0;
-    width: 100%;
+    width: auto;
     height: 32px;
-    position: absolute;
+    position: relative;
     left: 10px;
-    top: 10px;
-    direction: rtl;
+    top: -5px;
 }
 
     .search input {
@@ -1638,7 +1637,7 @@ footer {
             margin-left: 0px;
             opacity: 1;
             transition: all 100ms ease;
-
+            padding-right: 32px;
         }
 
          .search:hover .search-icon, .search:hover input:focus .search-icon {
