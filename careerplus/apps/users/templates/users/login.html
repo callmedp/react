@@ -65,6 +65,7 @@
 
     <!-- login form start -->
     <div class="register login-signup-box">
+        <div id="custom-form-error" style="color:red;"> </div>
         <div>
             {% if not linkedin %}
             <h1 class="modal-title">Login</h1>
@@ -226,6 +227,15 @@
     {% compress js %}
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     {% endcompress %}
+<script type="text/javascript">
+    $(document).ready(function () {
+        var error_login=location.search.split('?')[1];
+        if(error_login == 'signerror'){
+        document.getElementById("custom-form-error").innerHTML=" Unable to SignIn ,Please try in Sometime";
+         }
+    });
+
+</script>
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}

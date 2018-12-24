@@ -104,6 +104,12 @@
                     </div>
                 {% endif %}
             </form>
+              <div class="social-login" style="margin:30px 0 15px 0px;">
+                    <span>or login with</span>
+                    <a class="facebook" onclick="Login('/cart/payment-shipping/');"></a>
+                    <a class="linkedin" href="{% url 'users:linkedin-code' %}?next=/cart/payment-shipping/"></a>
+                    <a class="gplus" onclick="glogin('/cart/payment-shipping/');"></a>
+                </div>
 
         </div>
         <!-- right content end -->
