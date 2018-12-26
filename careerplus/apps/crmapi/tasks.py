@@ -8,7 +8,9 @@ from celery.decorators import task
 from geolocation.models import Country
 from core.api_mixin import CrmApiMixin
 
+from shine.core import ShineCandidateDetail
 from .models import UserQuries
+from .models import UNIVERSITY_LEAD_SOURCE
 
 
 @task(name="post_psedu_lead")
@@ -115,13 +117,26 @@ def add_server_lead_task(query_dict):
 
 
 @task(name="create_lead_crm")
-def create_lead_crm(pk=None):
+def create_lead_crm(pk=None, validate=False):
     flag = False
     try:
         data_dict = {}
         lead = UserQuries.objects.get(pk=pk)
         lsource = lead.lead_source
-        
+        total_experience = 0
+        total_salary = 0
+        valid_source_list = [4, 23, UNIVERSITY_LEAD_SOURCE]
+        if validate:
+            candidate_response = ShineCandidateDetail().get_candidate_detail(email=lead.email)
+            if 'total_experience' in candidate_response and candidate_response['total_experience']:
+                total_experience = candidate_response['total_experience'][0].get('experience_in_years', 0)
+
+            if candidate_response['workex']:
+                total_salary = candidate_response['workex'][0].get('salary_in_lakh', 0)
+
+            if lead.lead_source not in valid_source_list and (total_experience < 4 or total_salary < 4):
+                return flag
+
         data_dict.update({
             "name": lead.name,
             "email": lead.email,
