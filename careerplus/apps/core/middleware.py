@@ -121,7 +121,6 @@ class TrackingMiddleware(object):
         max_age = 24 * 60 * 60
         expires = datetime.strftime(
             datetime.now() + timedelta(seconds=max_age), "%Y-%m-%d %H:%M:%S")
-
         if not request.is_ajax():
             utm = request.session.get('utm', {})
             expiry = utm.get('expires', None)
@@ -181,6 +180,7 @@ class TrackingMiddleware(object):
                 if placement:
                     utm['placement'] = placement[:100]
 
+            utm['sub_campaign_slug'] = request.GET.get('sub_campaign_slug','')[:50] or utm.get('sub_campaign_slug')
             request.session['utm'] = utm
 
         response = self.get_response(request)

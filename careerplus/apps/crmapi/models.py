@@ -73,6 +73,8 @@ class UserQuries(AbstractAutoDate):
         default='')
     campaign_slug = models.CharField(
         max_length=255, null=True, blank=True)
+    sub_campaign_slug = models.CharField(
+        max_length=50, null=True, blank=True)
     inactive = models.BooleanField(default=False)
     timestamp = models.DateTimeField(null=True, blank=True)
 

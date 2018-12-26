@@ -74,14 +74,14 @@ def generate_report(duration_report):
         csvwriter = csv.writer(csvfile, delimiter=',', quotechar="'", \
             quoting=csv.QUOTE_MINIMAL)
         csvwriter.writerow(['Order ID', 'Order_payment_date', 'Order_created_date', \
-            'First_Touch_Welcome call Date','First_Touch_Welcome call Status',\
+            'First_Touch_Assigned_to','First_Touch_Welcome call Date','First_Touch_Welcome call Status',\
             'First_Touch_Welcome Call Status - Category',
             'First_Touch_Welcome Call Status - SubCategory',\
-            'First_Touch_Create_Difference',
+            'First_Touch_Create_Difference','Current_Touch_Assigned_to',
             'Current_Touch_Welcome call Date', 'Current_Touch_Welcome call Status', \
             'Current_Touch_Welcome Call Status - Category',\
             'Current_Touch_Welcome Call Status - SubCategory', \
-            'Current_Touch_Create_Difference', \
+            'Current_Touch_Create_Difference','Final_Touch_Assigned_to', \
             'Final_Touch_Welcome call Date',\
             'Final_Touch_Welcome call Status', \
             'Final_Touch_Welcome Call Status - Category', \
@@ -101,6 +101,8 @@ def generate_report(duration_report):
                 .exclude(wc_status=1).order_by('id')
             if welc_objects:
                 welc_obj = welc_objects.first()
+                agent_info=welc_obj.assigned_to
+                row.append(agent_info.name if agent_info else "N.A")
                 row.append(date_timezone_convert(welc_obj.created)\
                     .strftime('%m/%d/%Y %H:%M:%S'))
                 ist_date_welcome = date_timezone_convert(welc_obj.created)
@@ -111,6 +113,8 @@ def generate_report(duration_report):
                 curren_welcome_obj = welc_objects.exclude(wc_status__in=[41,42,63])\
                     .order_by('id').last()
                 if curren_welcome_obj:
+                    agent_info = curren_welcome_obj.assigned_to
+                    row.append(agent_info.name if agent_info else "N.A")
                     row.append(date_timezone_convert(curren_welcome_obj.created)\
                         .strftime(
                         '%m/%d/%Y %H:%M:%S'))
@@ -120,10 +124,12 @@ def generate_report(duration_report):
                     row.append(curren_welcome_obj.get_wc_sub_cat("N.A"))
                     row.append(date_diff(ist_date_welcome, pay_date_order))
                 else:
-                    row += get_na_list(5)
+                    row += get_na_list(6)
                 closed_welcome = welc_objects.filter(wc_status__in=[41,42,63])\
                         .order_by('id').last()
                 if closed_welcome:
+                    agent_info = closed_welcome.assigned_to
+                    row.append(agent_info.name if agent_info else "N.A")
                     row.append(date_timezone_convert(closed_welcome.created)\
                         .strftime('%m/%d/%Y %H:%M:%S'))
                     ist_date_welcome = date_timezone_convert(closed_welcome.created)
@@ -132,10 +138,10 @@ def generate_report(duration_report):
                     row.append(closed_welcome.get_wc_sub_cat("N.A"))
                     row.append(date_diff(ist_date_welcome, pay_date_order))
                 else:
-                    row += get_na_list(5)
+                    row += get_na_list(6)
                 csvwriter.writerow(row)
             else:
-                row += get_na_list(param=15)
+                row += get_na_list(param=18)
                 csvwriter.writerow(row)
         mail_report(csvfile)
 

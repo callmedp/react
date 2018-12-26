@@ -1,3 +1,4 @@
+var googleRedirectionUrl;
 window.fbAsyncInit = function() {
         FB.init({
           appId  : '1482454715170390', // App ID
@@ -8,12 +9,15 @@ window.fbAsyncInit = function() {
         });
     };
     
-    function Login()
+    function Login(redirect_url)
     {
+    if (redirect_url == undefined){
+        redirect_url="/";
+       }
         FB.login(function(response) {
            if (response.status == 'connected')
                {
-                    ajaxCallSocialLogin(response.authResponse.accessToken, response.authResponse.expiresIn,'fb')
+                    ajaxCallSocialLogin(response.authResponse.accessToken, response.authResponse.expiresIn,'fb',redirect_url)
                } 
             else 
                 {
@@ -37,13 +41,17 @@ window.fbAsyncInit = function() {
 
         if(result['status']['signed_in'])
             {
-                ajaxCallSocialLogin(result.access_token, result.expires_in,'gplus')
-            }   
+                ajaxCallSocialLogin(result.access_token, result.expires_in,'gplus',googleRedirectionUrl)
+            }
     }
 
 
-    function glogin() 
+    function glogin(redirect_url)
     {
+    if (redirect_url == undefined){
+        redirect_url="/";
+       }
+       googleRedirectionUrl=redirect_url;
         var myParams = {
             'clientid' : '653414155457-ufec3m78n4ctcvfqn34jf8skn4mv909e.apps.googleusercontent.com',
             'cookiepolicy' : 'single_host_origin',
