@@ -3,7 +3,7 @@
    {% if download_doc %}
 	  <a id="id_download_button" href="{{download_doc.doc.url}}" data-popup="{% if request.session.candidate_id %}no{% else %}yes{% endif %}">
       {% if request.amp %}
-	    <amp-img class="img-responsive" src="{{image.url}}" alt="{{image_alt}}" width="1200" height="366" layout="responsive"></amp-img>
+	     <amp-img class="img-responsive" src="{{image.url}}" alt="{{image_alt}}" width="1200" height="366" layout="responsive"></amp-img>
       {% else %}
         <img class="img-responsive" src="{{image.url}}" alt="{{image_alt}}" />
       {% endif %}

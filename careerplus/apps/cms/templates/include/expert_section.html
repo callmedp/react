@@ -3,9 +3,15 @@
   <h2>{{heading}}</h2>
   <div class="media">
     <div class="media-left media-middle">
-      <a href="#">
-        <img class="media-object img-circle" src="{{image.url}}" alt="Shine">
-      </a>
+      {% if request.amp %}
+        <a href="#">
+          <amp-img class="media-object img-circle" src="{{image.url}}" alt="Shine" width="140" height="180" layout="responsive"></amp-img>
+        </a>
+      {% else %}
+        <a href="#">
+          <img class="media-object img-circle" src="{{image.url}}" alt="Shine">
+        </a>
+      {% endif %}
     </div>
     <div class="media-body media-middle">
       <strong class="media-heading">{{display_name|title}}</strong>
