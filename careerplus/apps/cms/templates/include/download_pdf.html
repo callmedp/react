@@ -2,7 +2,11 @@
 <div class="download-pdf mb-40">
    {% if download_doc %}
 	  <a id="id_download_button" href="{{download_doc.doc.url}}" data-popup="{% if request.session.candidate_id %}no{% else %}yes{% endif %}">
-	    <img class="img-responsive" src="{{image.url}}" alt="{{image_alt}}">
+      {% if request.amp %}
+	    <amp-img class="img-responsive" src="{{image.url}}" alt="{{image_alt}}" width="1200" height="366" layout="responsive"></amp-img>
+      {% else %}
+        <img class="img-responsive" src="{{image.url}}" alt="{{image_alt}}" />
+      {% endif }
 	    <span class="download-box">
 	      <figure class="download-icon"></figure>
 	      <center>{{heading}}</center>
@@ -20,6 +24,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <span class="modal-title" id="myModalLabel">Download as PDF</span>
       </div>
+        {% if not request.amp %}
         <form role="form" method="post" id="downloadpdf_form">
           <!--div style='display:none'>
             <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token_value }}'/>
@@ -68,6 +73,8 @@
           <button type="submit" id="id_download" class="btn btn-primary submit">Download</button>
           <small class="form-text text-muted text-center"><a id="id_skip" href="#" data-toggle="modal" data-dismiss="modal">Skip</a></small>
         </form>
+
+        {% endif %}
       </div>
     </div>
   </div>
