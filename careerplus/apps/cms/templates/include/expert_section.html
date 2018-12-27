@@ -13,7 +13,7 @@
     </div>
   </div>          
   <article class="mt-20">
-    {% if amp %}
+    {% if request.amp %}
     <pre>{{ description|striptags|safe }}</pre>
     {% else %}
     {{ description|safe }}

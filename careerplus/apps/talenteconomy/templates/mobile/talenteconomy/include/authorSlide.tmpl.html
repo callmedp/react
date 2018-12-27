@@ -5,7 +5,7 @@
   <a href="{% url 'talent:authors-listing' %}" class="pull-right mt-5">View all</a>
 </div>
 
-{% if amp %}
+{% if request.amp %}
 <div class="clearfix"></div>
 <amp-carousel layout="fixed-height" height="220" controls>
   

@@ -5,7 +5,7 @@
   <a title="{{articlelist.heading}}" href="{% url 'talent:te-articles-detail' articlelist.p_cat.slug articlelist.slug %}" itemprop="url">
     <figure class="media-left">
       {% thumbnail articlelist.image "96x73" crop="center" as im %}
-      {% if amp %}
+      {% if request.amp %}
       <amp-img
         class="media-object"
         width="{{ im.width }}"
