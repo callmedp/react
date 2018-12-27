@@ -3,7 +3,7 @@
 <div class="download-wrap mt-30 mb-15">
     <div class="download-pdf">
         {% if download_doc %}
-        {% if amp %}
+        {% if request.amp %}
         <a download href="{{download_doc.doc.url}}">
                 <div class="wrap">
                     <div class="table">
@@ -45,7 +45,7 @@
 
 
 
-{% if amp %}
+{% if request.amp %}
 <!-- Select countries (optional) start here -->
 <div class="sidebar hide"></div>
 
