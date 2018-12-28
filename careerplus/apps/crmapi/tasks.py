@@ -127,17 +127,21 @@ def create_lead_crm(pk=None, validate=False):
         total_salary = 0
         valid_source_list = [4, 23, 2, 1, UNIVERSITY_LEAD_SOURCE]
         if validate:
-            candidate_response = ShineCandidateDetail().get_candidate_detail(email=lead.email)
-            if 'total_experience' in candidate_response and candidate_response['total_experience']:
-                total_experience = candidate_response['total_experience'][0].get('experience_in_years', 0)
+            # if lead source not in valid source list , we will check for salary and experience criteria
+            if lead.lead_source not in valid_source_list:
 
-            if candidate_response['workex']:
-                total_salary = candidate_response['workex'][0].get('salary_in_lakh', 0)
+                candidate_response = ShineCandidateDetail().get_candidate_detail(email=lead.email)
+                if candidate_response:
+                    if 'total_experience' in candidate_response and candidate_response['total_experience']:
+                        total_experience = candidate_response['total_experience'][0].get('experience_in_years', 0)
 
-            # if lead is not in valid source list and (experience or salary) both are not above 4 , then
-            # do not create lead directly and return false
-            if lead.lead_source not in valid_source_list and (total_experience < 4 or total_salary < 4):
-                return flag
+                    if candidate_response['workex']:
+                        total_salary = candidate_response['workex'][0].get('salary_in_lakh', 0)
+
+                    if total_experience < 4 or total_salary < 4:
+                        return flag
+                else:
+                    return flag
 
         data_dict.update({
             "name": lead.name,
