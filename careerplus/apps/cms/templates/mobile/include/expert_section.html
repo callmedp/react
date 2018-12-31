@@ -6,7 +6,7 @@
         <div class="media">
             <figure class="media-left">
 
-                {% if amp %}
+                {% if request.amp %}
                 <amp-img 
                     class="media-object user" 
                     src="{{image.url}}" 
@@ -25,7 +25,7 @@
             </div>
         </div>
         <hr class="row">
-        {% if amp %}
+        {% if request.amp %}
         <pre>{{ description|striptags|safe }}</pre>
         {% else %}
                {{ description|safe }}

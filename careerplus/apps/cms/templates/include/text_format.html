@@ -1,5 +1,5 @@
 <div class="col-sm-12 box-panel formatting mb-40">
-   {% if amp %}
+   {% if request.amp %}
     <pre>{{ description|striptags|safe }}</pre>
     {% else %}
     {{ description|safe }}

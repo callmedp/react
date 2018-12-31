@@ -2,7 +2,7 @@
 <div class="container">
     <div class="box row">
     	<article>
-			{% if amp %}
+			{% if request.amp %}
 				<pre>{{description|striptags|safe}}</pre>
 			{% else %}
 				{{description|safe}}
