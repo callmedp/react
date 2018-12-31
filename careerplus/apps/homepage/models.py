@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 from seo.models import AbstractAutoDate
 
@@ -54,7 +55,8 @@ class TrendingProduct(AbstractAutoDate):
 
 
 class Testimonial(AbstractAutoDate):
-    page = models.PositiveIntegerField(default=1, choices=PAGECHOICES)
+    page = models.PositiveIntegerField(
+        default=0, choices=PAGECHOICES)
     user_id = models.CharField(
         max_length=100,
         verbose_name=_("User ID"),)
@@ -75,8 +77,17 @@ class Testimonial(AbstractAutoDate):
 
     is_active = models.BooleanField(default=False)
 
+    # for university/Course skill page
+    object_id = models.PositiveIntegerField(
+        null=True, blank=True)
+
     def __str__(self):
-        return str(self.id)
+        return str(self.user_name) + ' - ' + str(self.id)
 
     class Meta:
         ordering = ['priority']
+
+    def get_image_url(self):
+        if self.image:
+            return self.image.url
+        return settings.STATIC_URL + 'shinelearn/images/executive/default-user-pic.jpg'

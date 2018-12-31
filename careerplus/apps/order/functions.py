@@ -22,7 +22,7 @@ def update_initiat_orderitem_sataus(order=None):
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
 
-            elif oi.product.type_flow == 2:
+            elif oi.product.type_flow in [2, 14]:
                 last_oi_status = oi.oi_status
                 oi.oi_status = 5
                 oi.last_oi_status = last_oi_status
@@ -64,7 +64,10 @@ def update_initiat_orderitem_sataus(order=None):
                         assigned_to=oi.assigned_to)
                 else:
                     last_oi_status = oi.oi_status
-                    oi.oi_status = 2
+                    if oi.product.id in settings.FEATURE_PROFILE_EXCLUDE:
+                        oi.oi_status = 5
+                    else:
+                        oi.oi_status = 2
                     oi.last_oi_status = last_oi_status
                     oi.save()
                     oi.orderitemoperation_set.create(
@@ -165,3 +168,10 @@ def send_email_from_base(subject=None, body=None, to=[], headers=None, oi=None, 
     except Exception as e:
         logging.getLogger('error_log').error(
             "%s - %s - %s" % (str(to), str(e)))
+
+
+def date_timezone_convert(date=None):
+    from pytz import timezone
+    if not date:
+        return 'N.A'
+    return date.astimezone(timezone(settings.TIME_ZONE))

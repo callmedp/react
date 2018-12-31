@@ -14,87 +14,105 @@ from django.contrib import messages
 from shop.choices import PRODUCT_VENDOR_CHOICES
 
 
-def _attribute_text_field(attribute):
+def _attribute_text_field(attribute, attrs={}):
+    attr = {'class': 'form-control col-md-7 col-xs-12'}
+    attr.update(attrs)
     return forms.CharField(
         label=attribute.display_name,
         required=attribute.required,
         widget=forms.TextInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs=attr))
 
-def _attribute_textarea_field(attribute):
+def _attribute_textarea_field(attribute, attrs={}):
+    attr = {'class': 'form-control col-md-7 col-xs-12'}
+    attr.update(attrs)
     return forms.CharField(
         label=attribute.display_name,
         required=attribute.required,
         widget=forms.Textarea(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}))
+            attrs=attr))
 
-def _attribute_integer_field(attribute):
+def _attribute_integer_field(attribute, attrs={}):
+    attr = {'class': 'form-control col-md-7 col-xs-12'}
+    attr.update(attrs)
     return forms.IntegerField(
         label=attribute.display_name,
         required=attribute.required,
         widget=forms.NumberInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}),)
+            attrs=attr),)
 
-def _attribute_boolean_field(attribute):
+def _attribute_boolean_field(attribute, attrs={}):
+    attr = {'class': 'js-switch'}
+    attr.update(attrs)
     return forms.BooleanField(
         label=attribute.display_name,
         required=False,
         widget=forms.CheckboxInput(
-            attrs={'class': 'js-switch', 'data-switchery': True}),)
+            attrs=attr),)
 
-def _attribute_float_field(attribute):
+def _attribute_float_field(attribute, attrs={}):
+    attr = {'class': 'form-control col-md-7 col-xs-12'}
+    attr.update(attrs)
     return forms.FloatField(
         label=attribute.display_name,
         required=attribute.required,
         widget=forms.NumberInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}),)
+            attrs=attr),)
 
-def _attribute_date_field(attribute):
+def _attribute_date_field(attribute, attrs={}):
+    attr = {'class': 'form-control col-md-7 col-xs-12'}
+    attr.update(attrs)
     return forms.DateField(label=attribute.display_name,
         required=attribute.required,
         widget=forms.widgets.DateInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}),)
+            attrs=attr),)
 
-def _attribute_option_field(attribute):
+def _attribute_option_field(attribute, attrs={}):
+    attr = {'class': 'form-control col-md-7 col-xs-12'}
+    attr.update(attrs)
     return forms.ModelChoiceField(
         label=attribute.display_name,
         required=attribute.required,
         queryset=attribute.option_group.options.all(),
         empty_label = 'Select',
         widget=forms.widgets.Select(
-            attrs={'class': 'form-control col-md-7 col-xs-12',
-                'data-parsley-notdefault': ''}),)
+            attrs=attr),)
 
 
-def _attribute_multi_option_field(attribute):
+def _attribute_multi_option_field(attribute, attrs={}):
+    attr = {'class': 'js-switch'}
+    attr.update(attrs)
     return forms.ModelMultipleChoiceField(
         label=attribute.display_name,
         required=attribute.required,
         queryset=attribute.option_group.options.all(),
         widget=forms.widgets.SelectMultiple(
-            attrs={'class': 'form-control col-md-7 col-xs-12'}),)
+            attrs=attr),)
 
-def _attribute_numeric_field(attribute):
+def _attribute_numeric_field(attribute, attrs={}):
     return forms.FloatField(label=attribute.display_name,
         required=attribute.required)
 
-def _attribute_file_field(attribute):
+
+def _attribute_file_field(attribute, attrs={}):
+    attr = {'class': 'form-control col-md-7 col-xs-12 clearimg'}
+    attr.update(attrs)
     return forms.FileField(
         label=attribute.display_name,
         required=attribute.required,
         widget=forms.widgets.ClearableFileInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12 clearimg',
-                'data-parsley-max-file-size': 250}),)
+            attrs=attr)
+        )
 
 
-def _attribute_image_field(attribute):
+def _attribute_image_field(attribute, attrs):
+    attr = {'class': 'form-control col-md-7 col-xs-12 clearimg'}
+    attr.update(attrs)
     return forms.ImageField(
         label=attribute.display_name,
         required=attribute.required,
         widget=forms.widgets.ClearableFileInput(
-            attrs={'class': 'form-control col-md-7 col-xs-12 clearimg',
-                'data-parsley-max-file-size': 250,
-                'data-parsley-filemimetypes': 'image/jpeg, image/png, image/jpg, image/svg'}),)
+            attrs=attr),)
 
 
 FIELD_FACTORIES = {
@@ -110,6 +128,29 @@ FIELD_FACTORIES = {
         "file": _attribute_file_field,
         "image": _attribute_image_field,
     }
+
+PRODUCT_TYPE_FLOW_FIELD_ATTRS = {
+    'file': {
+        14: {
+            'data-parsley-max-file-size': 4096,
+            'data-parsley-filemimetypes': 'application/pdf'
+        },
+        -1: {'data-parsley-max-file-size': 250}
+    },
+    'boolean': {
+        -1: {'data-switchery': True}
+    },
+    'option': {
+        -1: {'data-parsley-notdefault': ''}
+    },
+    'image': {
+        -1: {
+            'data-parsley-max-file-size': 250,
+            'data-parsley-filemimetypes': 'image/jpeg, image/png, image/jpg, image/svg'
+        }
+    }
+}
+
 
 class ProductAttributesContainer(object):
 
@@ -157,6 +198,7 @@ class ProductAttributesContainer(object):
             return self.product.screenattributes.all()
         elif isinstance(self.product, Product):
             return self.product.productattributes.all()
+
     def get_value_by_attribute(self, attribute):
         return self.get_values().get(attribute=attribute)
 
@@ -165,6 +207,7 @@ class ProductAttributesContainer(object):
             if self.product.product_class:
                 return self.product.product_class.attributes.filter(active=True)  
         return self.objects.none()
+
     def get_attribute_by_name(self, name):
         return self.get_all_attributes().get(name=name)
 
@@ -224,6 +267,15 @@ class ProductModeration(object):
                     if not product.countries.all().exists():
                         messages.error(request, "Available Country is required")
                         return test_pass
+
+                    if product.type_flow == 14:
+                        attributes = ['batch_launch_date', 'apply_last_date',
+                                      'application_process',
+                                      'attendees_criteria', "payment_deadline"]
+                        for attr in attributes:
+                            if not getattr(product.screen_university_course_detail, attr):
+                                messages.error(request, "Univeristy Course details are required")
+                                return test_pass
                     test_pass = True
                     return test_pass
                 else:
@@ -237,7 +289,6 @@ class ProductModeration(object):
                 ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
 
-    
     def validate_variation(self, request, product):
         test_pass = False
         try:
@@ -275,7 +326,6 @@ class ProductModeration(object):
             messages.error(request, (
                 ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
-    
 
     def validate_screenproduct(self, request, productscreen):
         test_pass = False
@@ -347,7 +397,8 @@ class ProductModeration(object):
                 
                 product.save()
                 from shop.models import (
-                    FAQProduct, VariationProduct,)
+                    FAQProduct, VariationProduct,
+                    ProductSkill, UniversityCoursePayment)
 
                 productfaq = product.productfaqs.all()
                 screenfaq = screen.screenfaqs.all()
@@ -367,6 +418,16 @@ class ProductModeration(object):
                         question=faq)
                     fqprd.active = False
                     fqprd.save()
+
+                screen_skills = screen.screenskills.all()
+                for screenskill in screen_skills:
+                    skillprd, created = ProductSkill.objects.get_or_create(
+                    product=product,
+                    skill=screenskill.skill)
+
+                    skillprd.active = screenskill.active
+                    skillprd.priority = screenskill.priority
+                    skillprd.save()
                 
                 screenchap = screen.chapter_product.all()
                 prdchap = product.chapter_product.all()
@@ -438,9 +499,26 @@ class ProductModeration(object):
                         value = getattr(screen.attr, attribute.name)
                         
                         attribute.save_value(product, value)
+                if screen.type_flow == 14:
+                    attributes = ['batch_launch_date', 'apply_last_date', 'sample_certificate', 
+                                  'application_process', 'assesment', "benefits", 'eligibility_criteria',
+                                  'attendees_criteria',"payment_deadline", "highlighted_benefits"]
+                    for attr in attributes:
+                        setattr(product.university_course_detail, attr, getattr(screen.screen_university_course_detail, attr))
+                    product.university_course_detail.save()
+
+                    product.type_flow = screen.type_flow
+                    for university_payment in screen.screen_university_course_payment.all():
+                        UniversityCoursePayment.objects.create(
+                            product=product,
+                            installment_fee=university_payment.installment_fee,
+                            last_date_of_payment=university_payment.last_date_of_payment,
+                            active=university_payment.active
+                        )
                 product.save()
                 
                 copy = True
+
                 return (product, screen, copy)
         except IntegrityError:
             copy = False
@@ -523,7 +601,6 @@ class ProductModeration(object):
                     chap.status = False
                     chap.save()
                 
-
                 if screen.type_product == 1:
                     screenvar = screen.variation.all()
                     screenvariation = screen.mainproduct.all()
@@ -585,6 +662,32 @@ class ProductModeration(object):
 
 
 class CategoryValidation(object):
+
+    def validate_before_university(self, request, category):
+        test_pass = False
+        try:
+            if request and category:
+                if not self.validate_fields(
+                    request=request, category=category):
+                    return test_pass
+                if category.type_level in [2, 3, 4]:
+                    if not self.validate_parent(
+                        request=request, category=category):
+                        return test_pass
+                if not self.validate_universitypage(
+                    request=request, category=category):
+                    return test_pass
+                test_pass = True
+                return test_pass
+            else:
+                messages.error(request, "Object Do not Exists")
+                return test_pass
+        except Exception as e:
+            test_pass = False
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
+        return test_pass
+
 
     def validate_before_active(self, request, category):
         test_pass = False
@@ -757,6 +860,49 @@ class CategoryValidation(object):
                     return test_pass
             else:
                 return test_pass         
+        except Exception as e:
+            test_pass = False
+            messages.error(request, (
+                ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
+        return test_pass
+
+    def validate_universitypage(self, request, category):
+        test_pass = False
+        try:
+            if request:
+                if category:
+                    if category.type_level in [1, 2]:
+                        messages.error(
+                            request,
+                            "Level 1 and 2 Can't be made University")
+                        return test_pass
+                    if not category.description:
+                        messages.error(
+                            request,
+                            "University Description is required")
+                        return test_pass
+                    if not category.image:
+                        messages.error(
+                            request,
+                            "University Image is required")
+                        return test_pass
+
+                    if not category.icon:
+                        messages.error(
+                            request,
+                            "University Icon is required")
+                        return test_pass
+
+                    # if not category.check_products():
+                    #     messages.error(request, "University Products is required")
+                    #     return test_pass
+                    test_pass = True
+                    return test_pass
+                else:
+                    messages.error(request, "Object Do not Exists")
+                    return test_pass
+            else:
+                return test_pass
         except Exception as e:
             test_pass = False
             messages.error(request, (

@@ -5,24 +5,33 @@ from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from django.conf import settings
+from django.forms.fields import MultipleChoiceField
+from dal import autocomplete
+
 from .decorators import has_group
 from shop.models import (
     ProductClass,
-    ProductScreen, 
+    ProductScreen,
     FAQProductScreen,
     VariationProductScreen,
-    ScreenChapter)
+    ScreenChapter,
+    Skill, ScreenProductSkill,
+    UniversityCourseDetailScreen,
+    UniversityCoursePaymentScreen)
 from faq.models import ScreenFAQ
 from partner.models import Vendor
 from geolocation.models import Country
 from shop.utils import ProductAttributesContainer
 from faq.models import ScreenFAQ, FAQuestion
 from shop.utils import ProductAttributesContainer
-
+from shop.choices import (
+    APPLICATION_PROCESS_CHOICES, APPLICATION_PROCESS,
+    BENEFITS_CHOICES, BENEFITS
+)
 from shop.choices import (
     BG_CHOICES,
     PRODUCT_VENDOR_CHOICES)
-from shop.utils import FIELD_FACTORIES
+from shop.utils import FIELD_FACTORIES, PRODUCT_TYPE_FLOW_FIELD_ATTRS
 
 
 class AddScreenFaqForm(forms.ModelForm):
@@ -130,8 +139,7 @@ class AddScreenProductForm(forms.ModelForm):
         model = ProductScreen
         fields = [
             'name', 'product_class',
-            'type_product', 'upc', 'inr_price']
-
+            'type_product', 'upc', 'inr_price', 'type_flow']
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
@@ -142,13 +150,20 @@ class AddScreenProductForm(forms.ModelForm):
         self.fields['product_class'].empty_label = 'Select Product Class'
         self.fields['product_class'].required = True
         self.fields['type_product'].widget.attrs['class'] = form_class
+        self.fields['type_flow'].widget.attrs['class'] = form_class
         if has_group(user=self.user, grp_list=settings.PRODUCT_GROUP_LIST):
             self.fields['type_product'].choices = PRODUCT_VENDOR_CHOICES + ((3, 'Combo'),
                 (4, 'No-Direct-Sell/Virtual'),
                 (5, 'Downloadable'),)
+            self.fields['type_flow'].widget.attrs['class'] = form_class
+
         else:
             self.fields['type_product'].choices = PRODUCT_VENDOR_CHOICES
-        
+            self.fields['type_flow'].choices = (
+                (0, 'Default'), (14, 'University Courses')
+            )
+
+
         if not vendor:
             if has_group(user=self.user, grp_list=settings.PRODUCT_GROUP_LIST):
                 pass
@@ -227,6 +242,8 @@ class AddScreenProductForm(forms.ModelForm):
     def save(self, commit=True, *args, **kwargs):
         productscreen = super(AddScreenProductForm, self).save(
             commit=True, *args, **kwargs)
+        if productscreen.type_flow == 14:
+            UniversityCourseDetailScreen.objects.create(productscreen=productscreen)
         return productscreen
 
 
@@ -260,7 +277,9 @@ class ChangeScreenProductForm(forms.ModelForm):
         self.fields['upc'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['upc'].widget.attrs['data-parsley-length'] = "[2, 100]"
         self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-100 characters.'
-    
+        if self.instance.type_flow == 14:
+            for val in ['about', 'buy_shine']:
+                self.fields.pop(val)
 
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
@@ -519,6 +538,7 @@ class ScreenProductCountryForm(forms.ModelForm):
 
 class ScreenProductAttributeForm(forms.ModelForm):
     FIELD_FACTORIES = FIELD_FACTORIES
+    PRODUCT_TYPE_FLOW_FIELD_ATTRS = PRODUCT_TYPE_FLOW_FIELD_ATTRS
 
     def __init__(self, *args, **kwargs):
         super(ScreenProductAttributeForm, self).__init__(*args, **kwargs)
@@ -556,13 +576,21 @@ class ScreenProductAttributeForm(forms.ModelForm):
     def add_attribute_fields(self, product_class):
         
         for attribute in product_class.attributes.filter(active=True):
+            if self.instance.type_flow != 14 and attribute.name == 'Brochure':
+                continue
             field = self.get_attribute_field(attribute)
+            if self.instance.type_flow == 14 and attribute.name in ['course_type', 'study_mode', 'course_level']:
+                field.required = False
             if field:
                 self.fields['attribute_%s' % attribute.name] = field
                 
     def get_attribute_field(self, attribute):
-        
-        return self.FIELD_FACTORIES[attribute.type_attribute](attribute)
+
+        type_flow_present_in_mapping = self.instance.type_flow \
+            if self.instance.type_flow in PRODUCT_TYPE_FLOW_FIELD_ATTRS.get(attribute.type_attribute, {}).keys()\
+            else -1
+        attrs = self.PRODUCT_TYPE_FLOW_FIELD_ATTRS.get(attribute.type_attribute, {}).get(type_flow_present_in_mapping, {})
+        return self.FIELD_FACTORIES[attribute.type_attribute](attribute, attrs)
 
     def save(self, commit=True, *args, **kwargs):
         self.instance.attr.initiate_attributes()
@@ -571,7 +599,7 @@ class ScreenProductAttributeForm(forms.ModelForm):
             if field_name in self.cleaned_data:
                 value = self.cleaned_data[field_name]
                 setattr(self.instance.attr, attribute.name, value)
-        productscreen = super(ScreenProductAttributeForm, self).save(commit=True, *args, **kwargs)
+        productscreen = super(ScreenProductAttributeForm, self).save(commit=False, *args, **kwargs)
         return productscreen
 
 class ScreenProductFAQForm(forms.ModelForm):
@@ -644,7 +672,7 @@ class ScreenFAQInlineFormSet(forms.BaseInlineFormSet):
 
 class AddScreenProductVariantForm(forms.ModelForm):
     FIELD_FACTORIES = FIELD_FACTORIES
-    
+    PRODUCT_TYPE_FLOW_FIELD_ATTRS = PRODUCT_TYPE_FLOW_FIELD_ATTRS
     class Meta:
         model = ProductScreen
         fields = [
@@ -843,12 +871,18 @@ class AddScreenProductVariantForm(forms.ModelForm):
 
     def add_attribute_fields(self, product_class):
         for attribute in product_class.attributes.filter(active=True):
+            if self.instance.type_flow != 14 and attribute.name == 'Brochure':
+                continue
             field = self.get_attribute_field(attribute)
             if field:
                 self.fields['attribute_%s' % attribute.name] = field
                 
     def get_attribute_field(self, attribute):
-        return self.FIELD_FACTORIES[attribute.type_attribute](attribute)
+        type_flow_present_in_mapping = self.instance.type_flow \
+            if self.instance.type_flow in PRODUCT_TYPE_FLOW_FIELD_ATTRS.get(attribute.type_attribute, {}).keys()\
+            else -1
+        attrs = self.PRODUCT_TYPE_FLOW_FIELD_ATTRS.get(attribute.type_attribute, {}).get(type_flow_present_in_mapping, {})
+        return self.FIELD_FACTORIES[attribute.type_attribute](attribute, attrs)
 
     def set_initial(self, product_class, kwargs):
         if 'initial' not in kwargs:
@@ -925,7 +959,6 @@ class ScreenProductChapterForm(forms.ModelForm):
     def clean(self):
         super(ScreenProductChapterForm, self).clean()
 
-
     def clean_heading(self):
         heading = self.cleaned_data.get('heading', None)
         if heading:
@@ -935,9 +968,307 @@ class ScreenProductChapterForm(forms.ModelForm):
                 "This field is required.")
         return heading
 
+
 class ScreenChapterInlineFormSet(forms.BaseInlineFormSet):
     def clean(self):
         super(ScreenChapterInlineFormSet, self).clean()
         if any(self.errors):
             return
-        
+
+
+class ScreenProductSkillForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        obj = kwargs.pop('object', None)
+        super(ScreenProductSkillForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        queryset = Skill.objects.filter(active=True)
+        # if self.instance.pk:
+        #     self.fields['skill'].queryset = queryset
+        # else:
+        #     skills = obj.screenskills.all().values_list(
+        #         'skill_id', flat=True)
+        #     queryset = queryset.exclude(pk__in=skills)
+        self.fields['skill'].queryset = queryset
+        self.fields['skill'].widget.attrs['class'] = form_class
+        self.fields['skill'].required = True
+
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+        self.fields['priority'].widget.attrs['class'] = form_class
+
+    class Meta:
+        model = ScreenProductSkill
+        fields = (
+            'skill', 'active', 'priority')
+        widgets = {
+            'skill': autocomplete.ModelSelect2(
+                url='console:skill-autocomplete')
+        }
+
+    def clean(self):
+        super(ScreenProductSkillForm, self).clean()
+
+    def clean_skill(self):
+        skill = self.cleaned_data.get('skill', None)
+        if skill:
+            pass
+        else:
+            raise forms.ValidationError(
+                "This field is required.")
+        return skill
+
+
+class ScreenSkillInlineFormSet(forms.BaseInlineFormSet):
+    def clean(self):
+        super(ScreenSkillInlineFormSet, self).clean()
+        # if any(self.errors):
+        #     return
+        skills = []
+        duplicates = False
+        for form in self.forms:
+            if form.cleaned_data:
+                skill = form.cleaned_data['skill']
+                if skill in skills:
+                    duplicates = True
+                skills.append(skill)
+
+                if duplicates:
+                    raise forms.ValidationError(
+                        'Skill must be unique.',
+                        code='duplicate_skill'
+                    )
+        return
+
+
+class ScreenUniversityCoursesPaymentInlineFormset(forms.BaseInlineFormSet):
+    def clean(self):
+        super(UniversityCoursesPaymentInlineFormset, self).clean()
+        if any(self.errors):
+            return
+
+
+class ScreenUniversityCourseForm(forms.ModelForm):
+
+    batch_launch_date = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                'class': 'form-control batch_launch_date',
+                "readonly": True,
+            }, format='%d-%m-%Y'
+        ),
+        input_formats=['%d-%m-%Y']
+
+    )
+    apply_last_date = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                'class': 'form-control apply_last_date',
+                "readonly": True,
+            }, format='%d-%m-%Y'
+        ),
+        input_formats=['%d-%m-%Y']
+    )
+    payment_deadline = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                'class': 'form-control payment_deadline',
+                "readonly": True,
+            }, format='%d-%m-%Y'
+        ),
+        input_formats=['%d-%m-%Y']
+    )
+    application_process_choices = MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=APPLICATION_PROCESS_CHOICES
+    )
+    selected_process_choices = MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=[]
+    )
+    benefits_choices = MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=BENEFITS_CHOICES
+    )
+    selected_benefits_choices = MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=[]
+    )
+    eligibility_criteria = forms.CharField(
+        label=("Eligibility Criteria"),
+        help_text='semi-colon(;) separated criteria, e.g. Line Managers; Decision Maker; ...', 
+        max_length=500,
+        required=False,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control col-md-7 col-xs-12'})
+    )
+    benefits = forms.CharField(
+        required=False
+    )
+    attendees_criteria_choices = MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=[]
+    )
+
+    class Meta:
+        model = UniversityCourseDetailScreen
+        fields = [
+            'batch_launch_date', 'apply_last_date',
+            'sample_certificate', 'application_process', 'assesment',
+            'benefits', 'eligibility_criteria', 'attendees_criteria',
+            'payment_deadline', 'highlighted_benefits'
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super(ScreenUniversityCourseForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['batch_launch_date'].widget.attrs['required'] = True
+        self.fields['apply_last_date'].widget.attrs['required'] = True
+        self.fields['sample_certificate'].widget.attrs['required'] = True
+        self.fields['assesment'].widget.attrs['required'] = True
+        self.fields['assesment'].widget.attrs['class'] = form_class
+        self.fields['sample_certificate'].widget.attrs['class'] = form_class
+        self.fields['eligibility_criteria'].widget.attrs['class'] = form_class + ' tagsinput tags form-control'
+        self.fields['highlighted_benefits'].widget.attrs['required'] = True
+        self.fields['highlighted_benefits'].widget.attrs['class'] = form_class +  ' tagsinput tags form-control'
+
+        if self.instance.get_application_process:
+            self.fields['application_process_choices'].initial = [
+                int(k) for k in self.instance.get_application_process
+            ]
+            self.fields['selected_process_choices'].choices = [
+                (int(k), APPLICATION_PROCESS.get(k)[1], APPLICATION_PROCESS.get(k)[0]) for k in self.instance.get_application_process
+            ]
+        attendees_criteria = self.instance.get_attendees_criteria
+        if attendees_criteria and len(attendees_criteria) < 4:
+            extra_form = 4 - len(attendees_criteria)
+            attendees_criteria.extend([('', '')] * extra_form)
+        elif attendees_criteria and len(attendees_criteria) >= 4:
+            attendees_criteria.extend([('', '')])
+        else:
+            attendees_criteria = [('', '')] * 4
+        self.fields['attendees_criteria_choices'].choices = attendees_criteria
+
+        self.fields['application_process_choices'].widget.attrs['class'] = form_class
+        self.fields['application_process_choices'].widget.attrs['required'] = True
+        self.fields['application_process_choices'].widget.attrs['class'] = form_class + ' process_item'
+
+        if self.instance.benefits:
+            self.fields['benefits_choices'].initial = [
+                int(k) for k in self.instance.get_benefits
+            ]
+            self.fields['selected_benefits_choices'].choices = [
+                (int(k), BENEFITS.get(k)[1], BENEFITS.get(k)[0]) for k in self.instance.get_benefits
+            ]
+
+        self.fields['benefits_choices'].widget.attrs['class'] = form_class
+        self.fields['benefits_choices'].widget.attrs['class'] = form_class + ' benefit_item'
+
+    def clean_batch_launch_date(self):
+        batch_launch_date = self.cleaned_data.get('batch_launch_date', '')
+        if batch_launch_date is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        return batch_launch_date
+
+    def clean_apply_last_date(self):
+        apply_last_date = self.cleaned_data.get('apply_last_date', '')
+        if apply_last_date is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        return apply_last_date
+
+    def clean_sample_certificate(self):
+        file = self.cleaned_data.get('sample_certificate')
+        if file:
+            filename = file.name
+            if not (filename.endswith('.mp3') or filename.endswith('.jpg') or
+                    filename.endswith('.jpeg') or filename.endswith('.pdf') or
+                    filename.endswith('.png')):
+                raise forms.ValidationError("File is not supported. Please upload jpg, png or pdf file only,")
+
+        return file
+
+    def clean_attendees_criteria(self):
+        attendees_criteria = self.cleaned_data.get('attendees_criteria', '')
+        if not eval(attendees_criteria):
+            raise forms.ValidationError(
+                "Provide atleast one 'Who should attend?'.")
+        return attendees_criteria
+
+    def clean_highlighted_benefits(self):
+        highlighted_benefits = self.cleaned_data.get('highlighted_benefits', '')
+        if not highlighted_benefits:
+            raise forms.ValidationError(
+                "Provide Highlighted benefits.")
+        return highlighted_benefits
+
+
+class ScreenUniversityCoursePaymentForm(forms.ModelForm):
+
+    last_date_of_payment = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                'class': 'form-control col-md-7 col-xs-12 last_date_of_payment',
+                "readonly": True,
+            }, format='%d-%m-%Y'
+        ),
+        input_formats=['%d-%m-%Y']
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(ScreenUniversityCoursePaymentForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+
+        self.fields['installment_fee'].widget.attrs['class'] = form_class
+        self.fields['installment_fee'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['installment_fee'].widget.attrs['required'] = True
+        self.fields['installment_fee'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['last_date_of_payment'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['last_date_of_payment'].widget.attrs['required'] = True
+
+        self.fields['active'].widget.attrs['class'] = 'js-switch'
+        self.fields['active'].widget.attrs['data-switchery'] = 'true'
+
+    class Meta:
+        model = UniversityCoursePaymentScreen
+        fields = (
+            'installment_fee',
+            'last_date_of_payment',
+            'active'
+        )
+
+    def clean(self):
+        super(ScreenUniversityCoursePaymentForm, self).clean()
+
+    def clean_installment_fee(self):
+        from django.db.models import Sum
+        installment_fee = self.cleaned_data.get('installment_fee', '')
+        sum_already_present = 0
+        if getattr(self.instance.productscreen, 'screen_university_course_payment', None):
+            sum_already_present = self.instance.productscreen.screen_university_course_payment.all().aggregate(Sum('installment_fee'))['installment_fee__sum']
+        sum_already_present = sum_already_present if sum_already_present else 0
+        if not self.instance.id and (installment_fee + sum_already_present > self.instance.productscreen.inr_price):
+            raise forms.ValidationError(
+                "Total installment cannot be greater than product price.")
+        elif self.instance.id:
+            if installment_fee + (sum_already_present - self.instance.installment_fee) > self.instance.productscreen.inr_price:
+                raise forms.ValidationError(
+                    "Total installment cannot be greater than product price.")
+
+        if installment_fee is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        return installment_fee
+
+    def clean_last_date_of_payment(self):
+        last_date_of_payment = self.cleaned_data.get('last_date_of_payment', '')
+        if last_date_of_payment is None:
+            raise forms.ValidationError(
+                "This value is requred.")
+        return last_date_of_payment

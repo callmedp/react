@@ -1,5 +1,16 @@
+#python imports
+
+#django imports
+
+#local imports
 from .base_settings import *  # noqa
 from .celery import *
+
+#inter app imports
+
+#third party imports
+from pymongo import read_preferences
+from mongoengine import connect
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,20 +48,22 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
-    'oldDB': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'shinecp',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': '',
-        'PORT': '',
-    },
+    # 'oldDB': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'shinecp',
+    #     'USER': 'root',
+    #     'PASSWORD': 'root',
+    #     'HOST': '',
+    #     'PORT': '',
+    # },
 }
 
 DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
 
 ######### Apps specific for this project go here. ###########
 DJANGO_APPS = [
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -65,7 +78,8 @@ DJANGO_APPS = [
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 DEV_APPS = [
-    'debug_toolbar'
+    'debug_toolbar',
+    'rest_framework_swagger',
 ]
 INSTALLED_APPS += DEV_APPS
 
@@ -76,6 +90,9 @@ DEV_MIDDLEWARE = [
 ]
 MIDDLEWARE = MIDDLEWARE + DEV_MIDDLEWARE
 
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK" : lambda request: DEBUG and not request.GET.get('nodebug'),
+}
 
 #### CELERY SETTINGS ########
 BROKER_URL = 'redis://localhost:6379/0'
@@ -206,6 +223,8 @@ STATE = "9899002507upender"
 SCOPE = 'r_emailaddress r_basicprofile'
 TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
 OAUTH_URL = "https://www.linkedin.com/oauth/v2/authorization?"
+LINKEDIN_INFO_API="https://api.linkedin.com/v1/people/~:(id,first-name,last-name,picture-url,public-profile-url,email-address)?oauth2_access_token="
+
 LINKEDIN_DICT = {
     "CLIENT_ID": "81fbxkgs5558q0",
     "CLIENT_SECRET": "ECioffWZKBbXhkbu",
@@ -285,6 +304,8 @@ GCP_INVOICE_BUCKET = 'learning-invoices-staging-189607'
 VISUAL_RESUME_PRODUCT_LIST = [305, 306, 307, 308, 309]
 COVER_LETTER_PRODUCT_LIST = [83, ]
 SECOND_REGULAR_RESUME_PRODUCT_LIST = [126, 127, 128, 129, 130]
+# new flow product
+PORTFOLIO_PRODUCT_LIST = [2632, ]
 
 # product list for linkedin resume services
 LINKEDIN_RESUME_FREE = [2684, 2685]
@@ -301,10 +322,14 @@ GGN_CONTACT = '0124-4312500'
 
 ########### CMS STATIC PAGE RENDERING ID#########
 
-CMS_ID=[1]
+CMS_ID = [1]
 
 # used for coupon generation for free feature product on payment realization
 FEATURE_PROFILE_PRODUCTS = [1939]
+
+SERVICE_PAGE_ID_SLUG_MAPPING = {"45":"resume-writing"}
+#whatsapp jobs list products
+FEATURE_PROFILE_EXCLUDE=[49]
 
 try:
     from .settings_local import *

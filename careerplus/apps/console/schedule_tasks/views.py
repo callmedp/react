@@ -22,7 +22,8 @@ from scheduler.models import Scheduler
 
 from .tasks import (
     gen_auto_login_token_task,
-    gen_product_list_task
+    gen_product_list_task,
+    generate_encrypted_urls_for_mailer_task
 )
 from . import forms
 
@@ -113,6 +114,56 @@ class GenerateAutoLoginTask(FormView):
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.MARKETING_GROUP_LIST]))
+class GenerateEncryptedURLSForMailer(FormView):
+    template_name = "console/tasks/encrypted_links_for_mailer.html"
+    success_url = "/console/tasks/tasklist/"
+    http_method_names = [u'get', u'post']
+    form_class = forms.EncryptedURLSGenerateForm
+
+    def get_context_data(self, **kwargs):
+        context = super(GenerateEncryptedURLSForMailer, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert})
+        return context
+
+    def form_valid(self,form):
+        import time
+        f_obj = form.cleaned_data.get('file')
+        task_type = 5
+
+        file_name_tuple = os.path.splitext(f_obj.name)
+        extension = file_name_tuple[len(file_name_tuple) - 1] if len(
+            file_name_tuple) > 1 else ''
+        scheduler_obj = Scheduler.objects.create(
+            task_type=task_type,
+            created_by=self.request.user)
+        file_name = str(scheduler_obj.pk) + '_' + 'UPLOAD' + extension
+        
+        path = 'scheduler/' + time.strftime("%Y_%m_%d") + '/'
+        if not settings.IS_GCP:
+            full_path = os.path.join(settings.MEDIA_ROOT, path)
+            if not os.path.exists(full_path):
+                os.makedirs(full_path)
+            dest = open(full_path + file_name, 'wb')
+            for chunk in f_obj.chunks():
+                dest.write(chunk)
+            dest.close()
+        else:
+            GCPPrivateMediaStorage().save(path + file_name, f_obj)
+        scheduler_obj.file_uploaded = path + file_name
+        scheduler_obj.save()
+
+        generate_encrypted_urls_for_mailer_task.delay(
+            task_id=scheduler_obj.pk, user=self.request.user.pk)
+        messages.add_message(
+            self.request, messages.SUCCESS,
+            'Task Created SuccessFully, Your file is being generated.')
+        return super(GenerateEncryptedURLSForMailer,self).form_valid(form)
+
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.MARKETING_GROUP_LIST]))
 class TaskListView(ListView, PaginationMixin):
     template_name = 'console/tasks/tasklist.html'
     model = Scheduler
@@ -138,7 +189,7 @@ class TaskListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(TaskListView, self).get_queryset()
-        queryset = queryset.filter(task_type__in=[1, 4])
+        queryset = queryset.filter(task_type__in=[1, 4, 5])
         return queryset.order_by('-modified')
 
 
@@ -243,3 +294,4 @@ class DownloadProductListView(TemplateView, PaginationMixin):
             request, messages.SUCCESS,
             'Task Created SuccessFully, Product List is generating')
         return HttpResponseRedirect(reverse('console:tasks:tasklist'))
+

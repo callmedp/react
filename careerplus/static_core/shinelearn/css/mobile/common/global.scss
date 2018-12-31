@@ -15,8 +15,17 @@
 /* Main CSS Start From Here */
 @import '../components/popup';
 
+/* Button  Start From Here */
+@import '../components/buttons';
+
+@import '../components/form-items';
+
 /* Line form Start From Here */
 @import '../components/line-form';
+
+/* Line form with transition  Start From Here */
+@import '../components/inline-form';
+
 
 .blue-link {
   color: -imp($txt-blue);
@@ -101,6 +110,10 @@
   width: 100%;
 }
 
+.strike-through {
+  text-decoration: line-through;
+}
+
 .table-row {
   display: table-row;
 }
@@ -117,36 +130,6 @@
 .semi-bold {
   font-weight: 600;
 }
-
-// buttons
-
-.btn {
-  @extend %button;
-
-  @media (max-width: 320px) { 
-    padding: 10px 5px;
-    font-size: 14px;
-  }
-}
-
-.btn-sm {
-  @extend %button;
-  padding: 2px 10px;
-  font-size: 14px;
-}
-
-.btn-slg {
-  padding: 10px 40px;
-}
-
-.btn-lg {
-  padding: 6px 20px;
-}
-
-.btn-round {
-  border-radius: $global-radius;
-}
-
 .wrapper {
   display: block;
   min-height: 100%;
@@ -326,6 +309,7 @@
     -moz-box-shadow: 0 -2px 4px 1px rgba(0, 0, 0, 0.1);
     box-shadow: 0 -2px 4px 1px rgba(0, 0, 0, 0.1);
     width: 100%;
+    left: 0;
 
     .content-box {
       padding-bottom: 10px;
@@ -415,6 +399,10 @@ article {
   display: none;
 }
 
+
+.line-height-sm {
+  line-height: 1.2rem;
+}
 .sidebar-filter {
   z-index: 999999999999 !important;
 }
@@ -637,4 +625,64 @@ article {
     display: block;
     margin: 25px 0 30px 0;
   }
+}
+
+
+.btn-grOrange {
+  color: $txt-white;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#efa859+0,e39344+100 */
+background: #efa859; /* Old browsers */
+background: -moz-linear-gradient(left, #efa859 0%, #e39344 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(left, #efa859 0%,#e39344 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to right, #efa859 0%,#e39344 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efa859', endColorstr='#e39344',GradientType=1 ); /* IE6-9 */
+}
+
+.university-marketing-popup {
+  .content-box {
+    .number {
+      width: 72%;
+      margin-left: 15px;
+    }
+  }
+  .code {
+    width: 22%;
+  }
+  border-radius:13px;
+
+  .header {
+    background-image: url("../../../images/popup-bg-1.jpg");
+    background-size: cover;
+    display: block;
+    padding-bottom: 10px;
+
+    h2 {
+      color: $txt-white;
+      border-bottom: none;
+      font-size: $font-size+11;
+      padding: 20px 15px 0 15px;
+    }
+
+    .icon-close {
+      top: 10% !important;
+      background-position: -189px -175px;
+    }
+  }
+}
+
+.resume-writing-service-head {
+  font-size: 16px;
+  font-weight: 700;
+  color: #3f5f94;
+}
+
+.resume-writing-service-txt {
+  font-size: 13px;
+  color: #999;
+}
+
+.resume-writing-service-btn {
+  font-size: 16px;
+  color: #333;
+  background: #ffcf26;
 }

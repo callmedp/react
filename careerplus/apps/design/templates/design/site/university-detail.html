@@ -1,0 +1,512 @@
+{% extends "basic/base1.html" %}
+{% load static meta compress %}
+
+{% block title %}
+  {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
+{% endblock title %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}?type=amp">
+{% endblock canonical_url %}
+
+        {% block django_meta %}
+            {% include 'meta/meta.html' %}
+        {% endblock django_meta %}
+ 
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-common.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-university-detail.scss' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+
+{% block navigation %}
+   {{block.super}}
+{% endblock navigation %}
+
+
+{% block main_container %}
+    
+    <div id="id-detail-body">
+      {% block page_heading %}
+
+      <!-- header -->
+      <header class="exe-header-university" style="background: linear-gradient( rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) ), url({% static 'shinelearn/images/executive/university-pic.jpg' %}) no-repeat center top;">
+        <div class="exe-header-txt container pr">
+          <div class="row">
+          <!-- breadcrums -->
+          <ol class="breadcrumb mt-30">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">XLRI</a></li>
+            <li class="active">XLRI Jamshedpur</li>
+          </ol>
+          <div class="row">
+            <div class="exe-university-box col-sm-8 col-md-8 col-lg-9">
+              <!-- university image -->
+              <div class="exe-university-img mb-10">
+                <figure>
+                  <img src="{% static 'shinelearn/images/executive/xlri-logo.jpg' %}" alt="Logo" class="img-responsive">
+                </figure>
+              </div>
+              <!-- course heading -->
+              <h1>XLRI Jamshedpur</h1>
+              <!-- university description -->
+              <div class="exe-university-txt">
+                <ul>
+                  <li>Ranked 3rd amongst the management institutes in India</li>
+                  <li>Top Management college in india - India Today</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-sm-4 col-md-4 col-lg-3 pr">
+              <div class="exe-university-form">
+                <h2>Want help with courses?</h2>
+                <form>
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="exampleInputName" placeholder="Name">
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="exampleInputEmail" placeholder="Email">
+                  </div>
+                  <div class="form-group">
+                    <div class="country-code">
+                      <div class="custom-select">
+                        <select class="form-control" name="country_code">
+                          <option>+91</option>
+                          <option>+911</option>
+                        </select>
+                      </div>
+                      <input type="text" class="form-control" id="exampleInputPhone" placeholder="Phone Number">
+                    </div>
+                  </div>
+                  <div class="form-group pr">
+                    <span class="down-arrow"></span>
+                    <select class="form-control">
+                      <option>Select course</option>
+                      <option>Select course 1</option>
+                      <option>Select course 2</option>
+                      <option>Select course 3</option>
+                      <option>Select course 4</option>
+                    </select>
+                  </div>
+                  
+                  <button type="submit" class="exe-button-callback">Request callback</button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+          </div>
+        </div>
+      </header>
+
+    {% endblock page_heading %}
+
+
+
+    {% block section2 %}
+
+    <!-- Courses offered -->
+      <section class="exe-courses-offered-box container-fluid">
+        <div class="row">
+          <h2 class="heading-primary-exe1 text-center mt-40 mb-20">Courses offered</h2>
+          <div class="container">
+            <div class="row">
+              <div class="row d-flex justify-content-center">
+                <div class="col-sm-4">
+                  <div class="exe-box exe-courses-offered pr">
+                    <div class="media">
+                      <div class="media-body">
+                        <figure>
+                          <i class="exe-university-small-img"><img src="{% static 'shinelearn/images/executive/xlri-logo.jpg' %}" alt="Logo" class="img-responsive"></i>
+                          <figcaption>
+                            <h3>Material Management Professional</h3>
+                            <p> <i class="exe-icon-batch-grey"></i> Starts  <strong>Dec 2018</strong>  |  <strong>6 months</strong></p>
+                          </figcaption>
+                        </figure>
+                      </div>
+                      <div class="media-right">
+                        <span class="admission-open">Admission open</span>
+                        <figure>
+                          <img src="https://static1.shine.com/l/m/product_image/276/1509558215_9064.png" alt="Logo">
+                        </figure>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="exe-box exe-courses-offered pr">
+                    <div class="media">
+                      <div class="media-body">
+                        <figure>
+                          <i class="exe-university-small-img"><img src="{% static 'shinelearn/images/executive/xlri-logo.jpg' %}" alt="Logo" class="img-responsive"></i>
+                          <figcaption>
+                            <h3>Management Fundamentals</h3>
+                            <p> <i class="exe-icon-batch-grey"></i> Starts  <strong>Dec 2018</strong>  |  <strong>6 months</strong></p>
+                          </figcaption>
+                        </figure>
+                      </div>
+                      <div class="media-right">
+                        <span class="admission-open">Admission open</span>
+                        <figure>
+                          <img src="https://static1.shine.com/l/m/product_image/275/1508147934_5947.png" alt="Logo">
+                        </figure>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="exe-box exe-courses-offered pr">
+                    <div class="media">
+                      <div class="media-body">
+                        <figure>
+                          <i class="exe-university-small-img"><img src="{% static 'shinelearn/images/executive/xlri-logo.jpg' %}" alt="Logo" class="img-responsive"></i>
+                          <figcaption>
+                            <h3>Operation Management</h3>
+                            <p> <i class="exe-icon-batch-grey"></i> Starts  <strong>Dec 2018</strong>  |  <strong>6 months</strong></p>
+                          </figcaption>
+                        </figure>
+                      </div>
+                      <div class="media-right">
+                        <span class="admission-open">Admission open</span>
+                        <figure>
+                          <img src="https://static1.shine.com/l/m/product_image/276/1509558215_9064.png" alt="Logo">
+                        </figure>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-sm-4">
+                  <div class="exe-box exe-courses-offered pr">
+                    <div class="media">
+                      <div class="media-body">
+                        <figure>
+                          <i class="exe-university-small-img"><img src="{% static 'shinelearn/images/executive/xlri-logo.jpg' %}" alt="Logo" class="img-responsive"></i>
+                          <figcaption>
+                            <h3>Campaign Management</h3>
+                            <p> <i class="exe-icon-batch-grey"></i> Starts  <strong>Dec 2018</strong>  |  <strong>6 months</strong></p>
+                          </figcaption>
+                        </figure>
+                      </div>
+                      <div class="media-right">
+                        <span class="admission-open">Admission open</span>
+                        <figure>
+                          <img src="https://static1.shine.com/l/m/product_image/280/1509340449_60.png" alt="Logo">
+                        </figure>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="exe-box exe-courses-offered pr">
+                    <div class="media">
+                      <div class="media-body">
+                        <figure>
+                          <i class="exe-university-small-img"><img src="{% static 'shinelearn/images/executive/xlri-logo.jpg' %}" alt="Logo" class="img-responsive"></i>
+                          <figcaption>
+                            <h3>Talent Management Essentials</h3>
+                            <p> <i class="exe-icon-batch-grey"></i> Starts  <strong>Dec 2018</strong>  |  <strong>6 months</strong></p>
+                          </figcaption>
+                        </figure>
+                      </div>
+                      <div class="media-right">
+                        <span class="admission-open">Admission open</span>
+                        <figure>
+                          <img src="https://static1.shine.com/l/m/product_image/276/1509558215_9064.png" alt="Logo">
+                        </figure>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="exe-box exe-courses-offered pr">
+                    <div class="media">
+                      <div class="media-body">
+                        <figure>
+                          <i class="exe-university-small-img"><img src="{% static 'shinelearn/images/executive/xlri-logo.jpg' %}" alt="Logo" class="img-responsive"></i>
+                          <figcaption>
+                            <h3>Event Management Professional</h3>
+                            <p> <i class="exe-icon-batch-grey"></i> Starts  <strong>Dec 2018</strong>  |  <strong>6 months</strong></p>
+                          </figcaption>
+                        </figure>
+                      </div>
+                      <div class="media-right">
+                        <span class="admission-open">Admission open</span>
+                        <figure>
+                          <img src="https://static1.shine.com/l/m/product_image/1767/1516793620_175.png" alt="Logo">
+                        </figure>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="clearfix mt-20"></div>
+                <a href="#" class="exe-button-view-more" type="button" data-toggle="modal" data-target=".bs-example-modal-sm">View more</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Modal - Want help with this course? -->
+      <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content exe-modal-form">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body"><h2 class="modal-title">Want help with this course?</h2>
+              <strong>Let our learning specialists guide you</strong>
+              <form>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="exampleInputName" placeholder="Name">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="exampleInputEmail" placeholder="Email">
+                </div>
+                <div class="form-group">
+                  <div class="country-code">
+                    <div class="custom-select">
+                      <select class="form-control" name="country_code">
+                        <option>+91</option>
+                        <option>+911</option>
+                      </select>
+                    </div>
+                    <input type="text" class="form-control" id="exampleInputPhone" placeholder="Phone Number">
+                  </div>
+                </div>
+                <button type="submit" class="exe-button-callback">Request callback</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- main parent section start -->
+      <section class="container-fluid">
+        <div class="row">
+            <!-- main container -->
+            <div class="container mt-50">
+              <div class="row">
+
+                <!-- Faculty Profile -->
+                <section class="exe-box mb-30">
+                  <div>
+                    <article class="col-sm-12 pad-25">
+                        <h2 class="heading-primary-exe1 text-center mb-10">Faculty Profile</h2>
+                        <p class="text-center fs-14 mb-30">Learn from skilled instructors with professional experience in the field.</p>
+
+                      <div id="carousel-example-generic" class="carousel slide exe-faculty-carousel" data-ride="carousel">
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner" role="listbox">
+                          <div class="item col-sm-12 active">
+                            <div class="col-sm-6 text-center">
+                              <figure>
+                                <a class="faculty-thumb" href="#"><img src="{% static 'shinelearn/images/executive/faculty-pic1.jpg' %}" alt="Faculty Profile"></a>
+                                <figcaption>
+                                  <strong><a href="#">Dr Ajay Garg</a></strong>
+                                  <div class="exe-designation">Associate Professor – 
+                                    <span>Marketing XLRI Jamshedpur</span>
+                                  </div>
+                                  <p>Dr. Ajay Garg is a full-time professor of Information Management.  Professor Garg’s primary expertise and interest is in the area of business analytics including text mining, data mining, artificial intelligence, machine learning, predictive analytics, big data and various techniques for knowledge discovery in databases.</p>
+                                </figcaption>
+                              </figure>
+                            </div>
+
+                            <div class="col-sm-6 text-center">
+                              <figure>
+                                <a class="faculty-thumb" href="#"><img src="{% static 'shinelearn/images/executive/faculty-pic2.jpg' %}" alt="Faculty Profile"></a>
+                                <figcaption>
+                                  <strong><a href="#">Dr. Soumyakanti Chakraborty</a></strong>
+                                  <div class="exe-designation">Fellow (IIM Calcutta), B.Tech (Calcutta University) – 
+                                    <span>Marketing XLRI Jamshedpur</span>
+                                  </div>
+                                  <p>Dr. Soumyakanti Chakraborty joined XLRI Information Systems Area in 2009. His primary teaching interests include Business Modeling, Strategies of Information and Network Industries. machine learning, predictive analytics, big data and various techniques for knowledge discovery in databases.</p>
+                                </figcaption>
+                              </figure>
+                            </div>
+                          </div>
+
+                          <div class="item col-sm-12">
+                            <div class="col-sm-6 text-center">
+                              <figure>
+                                <a class="faculty-thumb" href="#"><img src="{% static 'shinelearn/images/executive/faculty-pic1.jpg' %}" alt="Faculty Profile"></a>
+                                <figcaption>
+                                  <strong><a href="#">Dr Ajay Garg</a></strong>
+                                  <div class="exe-designation">Associate Professor – 
+                                    <span>Marketing XLRI Jamshedpur</span>
+                                  </div>
+                                  <p>Dr. Ajay Garg is a full-time professor of Information Management.  Professor Garg’s primary expertise and interest is in the area of business analytics including text mining, data mining, artificial intelligence, machine learning, predictive analytics, big data and various techniques for knowledge discovery in databases.</p>
+                                </figcaption>
+                              </figure>
+                            </div>
+
+                            <div class="col-sm-6 text-center">
+                              <figure>
+                                <a class="faculty-thumb" href="#"><img src="{% static 'shinelearn/images/executive/faculty-pic2.jpg' %}" alt="Faculty Profile"></a>
+                                <figcaption>
+                                  <strong><a href="#">Dr. Soumyakanti Chakraborty</a></strong>
+                                  <div class="exe-designation">Fellow (IIM Calcutta), B.Tech (Calcutta University) – 
+                                    <span>Marketing XLRI Jamshedpur</span>
+                                  </div>
+                                  <p>Dr. Soumyakanti Chakraborty joined XLRI Information Systems Area in 2009. His primary teaching interests include Business Modeling, Strategies of Information and Network Industries. machine learning, predictive analytics, big data and various techniques for knowledge discovery in databases.</p>
+                                </figcaption>
+                              </figure>
+                            </div>
+                          </div>
+                          
+                        </div>
+
+                        <!-- Controls -->
+                        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                          <span class="exe-icon-chevron-left mt-20" aria-hidden="true"></span>
+                        </a>
+                        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                          <span class="exe-icon-chevron-right mt-20" aria-hidden="true"></span>
+                        </a>
+                      </div>
+                    </article>
+                  </div>
+                </section>
+
+                <!-- About institute -->
+                <section class="exe-box mb-30">
+                  <article class="col-sm-12 pad-45">
+                      <div class="row about-institute">
+                        <div class="col-sm-6">
+                          <h2 class="heading-primary-exe1 mb-30">About institute</h2>
+                          <p>XLRI is one of India’s leading management school based in Jamshedpur, Jharkhand, India. Established in 1949 as the Xavier Labor Relations Institute, by Fr. Quinn Enright, XLRI is acknowledged as India’s oldest business management school.<br>
+                          <br>
+                          XLRI with its single vision of Magis, i.e., pursuit of excellence, focuses on three areas: academic excellence, personal values and social concern. XLRI spares no effort to make its curriculum world-class and deliver it in the most effective manner. It constantly scans the developments in business and in society and tries to pro-act to meet the challenges.
+                          Its world-class faculty with its commitment and deep sense of service delivers the curriculum very effectively.<br>
+                          <br>
+                          Consistently being acknowledged as the Best “HR Course” in Asia–Pacific, it has also been recognized for its research acumen by the London Business School and is ranked among top 5 research schools in India cutting across management and technical institutes. For more details, visit <a href="#">www.xlri.ac.in</a></p>
+                        </div>
+                        <div class="col-sm-6">
+                          <figure class="pr">
+                            <i><img src="{% static 'shinelearn/images/executive/xlri-logo.jpg' %}" alt="Logo" class="img-responsive"></i>
+                            <img src="{% static 'shinelearn/images/executive/institute-pic-large.jpg' %}" class="img-responsive" alt="About institute">
+                          </figure>
+                        </div>
+                      </div>
+                  </article>
+                </section>
+
+                 <!-- Principal speak -->
+                <section class="exe-box mb-30">
+                  <article class="col-sm-12 pad-45">
+                      <div class="row principal-speak-box">
+                        <div class="media">
+                          <div class="media-left">
+                            <h2 class="heading-primary-exe1 mb-30">Principal speak</h2>
+                            <figure class="principal">
+                              <img src="{% static 'shinelearn/images/executive/principal-pic.jpg' %}" class="img-responsive" alt="Principal speak">
+                              <i><img src="{% static 'shinelearn/images/executive/xlri-logo.jpg' %}" alt="Logo" class="img-responsive"></i>
+                            </figure>
+                          </div>
+                          <div class="media-body speak">
+                            <p>One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning.</p>
+                            <strong class="mt-40">Mr. T. V. Narendran</strong>
+                            <span>Principal, XLRI- Ahmedabad</span>
+                          </div>
+                        </div>
+                      </div>
+                  </article>
+                </section>
+
+                <!-- Testimonials -->
+                <section class="exe-box mb-30">
+                  <div>
+                    <article class="col-sm-12">
+                      <h2 class="heading-primary-exe1 text-center mt-50 mb-20">Testimonials</h2>
+                      <div id="carousel-example-generic1" class="carousel slide exe-testimonial-carousel" data-ride="carousel">
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner text-center" role="listbox">
+                          <div class="item col-sm-12 active">
+                            <p class="mb-40 mt-20">One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry.</p>
+                            <figure>
+                              <img src="{% static 'shinelearn/images/executive/testimonial-pic.jpg' %}" alt="Faculty Profile">
+                              <figcaption>
+                                <strong>Bhaskar</strong>
+                                <div class="exe-designation">
+                                  Project Leader, Amnet Systems Pvt. Ltd.
+                                </div>
+                              </figcaption>
+                            </figure>
+                          </div>
+
+                          <div class="item col-sm-12">
+                            <p class="mb-40 mt-20">One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry. It was a case study based learning. One of the best courses. Faculty is the best of the lot in the industry.</p>
+                            <figure>
+                              <img src="{% static 'shinelearn/images/executive/testimonial-pic.jpg' %}" alt="Faculty Profile">
+                              <figcaption>
+                                <strong>Bhaskar</strong>
+                                <div class="exe-designation">
+                                  Project Leader, Amnet Systems Pvt. Ltd.
+                                </div>
+                              </figcaption>
+                            </figure>
+                          </div>
+                          
+                        </div>
+
+                        <!-- Controls -->
+                        <a class="left carousel-control" href="#carousel-example-generic1" role="button" data-slide="prev">
+                          <span class="exe-icon-chevron-left mt-20" aria-hidden="true"></span>
+                        </a>
+                        <a class="right carousel-control" href="#carousel-example-generic1" role="button" data-slide="next">
+                          <span class="exe-icon-chevron-right mt-20" aria-hidden="true"></span>
+                        </a>
+                      </div>
+                    </article>
+                  </div>
+                </section>
+
+              </div>
+            </div>
+            <!-- bottom container end -->
+
+      </div>
+      </section>
+      <!-- main parent section end -->      
+    {% endblock section2 %}
+
+      
+   </div>
+{% endblock main_container %}
+
+
+
+{% block js_section %}
+    {{block.super}}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/common/plugin.activeOnScroll-executive.js' %}"></script>
+    <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/shop/detail.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/scroller-executive.js' %}" type="text/javascript"></script>
+    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+    <script type="text/javascript">
+      $('.carousel-inner').each(function() {
+
+          if ($(this).children('div').length === 1) $(this).siblings('.carousel-control, .carousel-indicators').hide();
+
+      });
+    </script>
+    {% endcompress %}
+{% endblock js_section %}
+
+  {% block zendesk %}
+    {% if sqs.id in linkedin_resume_services %}
+    {% else %}
+      {{block.super}}
+    {% endif %}
+  {% endblock zendesk %}

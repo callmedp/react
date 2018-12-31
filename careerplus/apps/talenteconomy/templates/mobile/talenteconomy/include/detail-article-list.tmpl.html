@@ -16,7 +16,7 @@
     </span>
 </div>
 
-{% if amp %}
+{% if request.amp %}
 
 {% else %}
 {% with main_article.tags.all as tags %}
@@ -33,7 +33,7 @@
 {% endif%}
 
 <p class="mt-15">
-    {% if amp %}
+    {% if request.amp %}
     <amp-img 
         src="{{main_article.image.url}}"
         itemprop="image"
@@ -47,7 +47,7 @@
     {% endif %}
 </p>
 <article class="" itemprop="articleBody">
-{% if amp %}<pre>{{main_article.content|striptags|safe}}</pre>{%else%}{{main_article.content|safe}}{%endif%}
+{% if request.amp %}<pre>{{main_article.content|striptags|safe}}</pre>{%else%}{{main_article.content|safe}}{%endif%}
 <meta itemprop="headline" content="{{main_article.heading}}">
 <meta itemprop="dateModified" content="{{main_article.publish_date.date}}">
 <meta itemprop="mainEntityOfPage" content="{% url 'talent:talent-landing' %}">
@@ -60,7 +60,7 @@
   </div>
 
 
-{% if amp %}
+{% if request.amp %}
 
 {% else %}
 <hr>
@@ -79,7 +79,7 @@
 <div class="clearfix"></div>
 </article>
 
-{% if amp %}
+{% if request.amp %}
 
 {% else %}
 

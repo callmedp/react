@@ -53,8 +53,17 @@ datalist {
 }
 
 .navbar-default {
-	background-color: #2f5da5;
+	background: rgb(18,70,144); /* Old browsers */
+	background: -moz-linear-gradient(left, rgba(18,70,144,1) 0%, rgba(55,112,186,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(left, rgba(18,70,144,1) 0%,rgba(55,112,186,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right, rgba(18,70,144,1) 0%,rgba(55,112,186,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#124690', endColorstr='#3770ba',GradientType=1 ); /* IE6-9 */
 	margin-bottom: 0;
+	-webkit-transform: translate3d(0,0,0);
+}
+
+.exe-detail-course-links {
+	-webkit-transform: translate3d(0,0,0);
 }
 
 .navbar-nav {
@@ -76,20 +85,20 @@ datalist {
 
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
 	background-color: transparent;
-	color: #fff;
-	border-bottom: 4px solid #ffcf26;
+	color: $white-color;
+	border-bottom: 4px solid $e-yellow-color;
 	min-height: 54px;
 }
 
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
-	color: #fff;
+	color: $white-color;
 	visibility: visible;
 	display: block;
 	min-height: 54px;
 }
 
 .navbar-default .navbar-nav > li > a, .navbar-default .navbar-nav > li > a:hover {
-	color: #fff;
+	color: $white-color;
 	cursor: pointer;
 	padding-left: 0;
 	padding-right: 0;
@@ -97,7 +106,7 @@ datalist {
 	min-height: 54px;
 
 	@media (max-width: 1190px) {
-		margin-left: 17px;
+		margin-left: 10px;
 	}
 }
 
@@ -121,6 +130,28 @@ datalist {
 				}
 			}
 		}
+	}
+}
+
+.ms-link {
+	a {
+		border-bottom: 3px solid transparent;
+
+		&:hover {
+			border-bottom: 3px solid $e-yellow-color;
+
+			&:focus {
+				border-bottom: 3px solid $e-yellow-color;
+			}
+		}
+	}
+}
+
+.navbar-right {
+	margin-right: 3%;
+
+	@media (max-width: 1190px) {
+		margin-right: 0;
 	}
 }
 
@@ -881,6 +912,7 @@ footer {
 		border: 1px solid #3b5896;
 		display: inline-block;
 		text-align: center;
+		cursor: pointer;
 	}
 
 	.twitter {
@@ -903,6 +935,7 @@ footer {
 		display: inline-block;
 		text-align: center;
 		margin-left: 10px;
+		cursor: pointer;
 	}
 
 	.linkedin {
@@ -1600,11 +1633,11 @@ footer {
     }
 
         .search:hover input, .search input:focus {
-            width: 200px;
+            width: 188px;
             margin-left: 0px;
             opacity: 1;
             transition: all 100ms ease;
-
+            padding-right: 32px;
         }
 
          .search:hover .search-icon, .search:hover input:focus .search-icon {
@@ -2536,7 +2569,10 @@ footer {
 	}
 }
 
-
+/*---------font size css---------*/
+.fs-14 {
+	font-size: $font-size+3;
+}
 
 /*---------margin padding css---------*/
 
@@ -2604,13 +2640,20 @@ footer {
 	margin-bottom: 40px;
 }
 
+.mb-50 {
+	margin-bottom: 50px;
+}
+
 .mb-100 {
 	margin-bottom: 100px;
 }
 
-
 .ml-50 {
 	margin-left: 50px;
+}
+
+.ml-40 {
+	margin-left: 40px;
 }
 
 .ml-30 {
@@ -2645,8 +2688,16 @@ footer {
 	margin-right: 20px;
 }
 
+.mr-30 {
+	margin-right: 30px;
+}
+
 .mtm-20 {
 	margin-top: -20px !important;
+}
+
+.mt-30less {
+	margin-top: -30px;
 }
 
 .no-pad {
@@ -2655,6 +2706,14 @@ footer {
 
 .pt-0 {
 	padding-top: 0 !important;
+}
+
+.pad-25 {
+	padding: 25px;
+}
+
+.pad-45 {
+	padding: 45px;
 }
 
 .db {
@@ -2995,5 +3054,400 @@ footer {
 				margin: 15px 0 30px 0;
 			}
 		}
+	}
+}
+
+/*--- executive courses css ---*/
+
+.exe-icon-apply {
+	width: 27px;
+	height: 30px;
+	background: $sprite-exe 0 0;
+	display: inline-block;
+}
+
+.exe-icon-batch {
+	width: 26px;
+	height: 26px;
+	background: $sprite-exe -37px 0;
+	display: inline-block;
+}
+
+.exe-icon-batch-grey {
+	width: 21px;
+	height: 22px;
+	background: $sprite-exe -391px -91px;
+	display: inline-block;
+}
+
+.exe-icon-duration {
+	width: 30px;
+	height: 35px;
+	background: $sprite-exe -75px 0;
+	display: inline-block;
+}
+
+.exe-icon-batch-sm {
+	width: 15px;
+	height: 15px;
+	background: $sprite-exe -96px -91px;
+	display: inline-block;
+}
+
+.exe-icon-batch-blk {
+	width: 20px;
+	height: 20px;
+	background: $sprite-exe -479px -92px;
+	display: inline-block;
+}
+
+.exe-icon-duration-sm {
+	width: 13px;
+	height: 15px;
+	background: $sprite-exe -97px -112px;
+	display: inline-block;
+}
+
+.exe-icon-about-program {
+	width: 24px;
+	height: 20px;
+	background: $sprite-exe -114px 0;
+	display: inline-block;
+}
+
+.exe-icon-who-attend {
+	width: 29px;
+	height: 20px;
+	background: $sprite-exe -147px 0;
+	display: inline-block;
+}
+
+.exe-icon-manager {
+	width: 37px;
+	height: 40px;
+	background: $sprite-exe 0 -40px;
+	display: inline-block;
+}
+
+.exe-icon-division {
+	width: 29px;
+	height: 40px;
+	background: $sprite-exe -42px -40px;
+	display: inline-block;
+}
+
+.exe-icon-srmanager {
+	width: 33px;
+	height: 40px;
+	background: $sprite-exe -76px -40px;
+	display: inline-block;
+}
+
+.exe-icon-lnmanager {
+	width: 35px;
+	height: 39px;
+	background: $sprite-exe -115px -40px;
+	display: inline-block;
+}
+
+.exe-icon-criteria {
+	width: 20px;
+	height: 20px;
+	background: $sprite-exe -181px 0;
+	display: inline-block;
+}
+
+.exe-icon-faculty {
+	width: 37px;
+	height: 22px;
+	background: $sprite-exe -207px 0;
+	display: inline-block;
+}
+
+.exe-icon-chevron-left {
+	width: 11px;
+	height: 19px;
+	background: $sprite-exe -485px -40px;
+	display: inline-block;
+}
+
+.exe-icon-chevron-right {
+	width: 11px;
+	height: 19px;
+	background: $sprite-exe -471px -40px;
+	display: inline-block;
+}
+
+.exe-icon-benefit {
+	width: 29px;
+	height: 20px;
+	background: $sprite-exe -248px 0;
+	display: inline-block;
+}
+
+.exe-icon-feat-profile {
+	width: 44px;
+	height: 40px;
+	background: $sprite-exe -158px -40px;
+	display: inline-block;
+}
+
+.exe-icon-feat-profile {
+	width: 44px;
+	height: 40px;
+	background: $sprite-exe -158px -40px;
+	display: inline-block;
+}
+
+.exe-icon-shine-credit {
+	width: 42px;
+	height: 36px;
+	background: $sprite-exe -211px -40px;
+	display: inline-block;
+}
+
+.exe-icon-education-provider {
+	width: 40px;
+	height: 40px;
+	background: $sprite-exe -259px -40px;
+	display: inline-block;
+}
+
+.exe-icon-0-emi {
+	width: 39px;
+	height: 40px;
+	background: $sprite-exe -305px -40px;
+	display: inline-block;
+}
+
+.exe-icon-free-service {
+	width: 43px;
+	height: 41px;
+	background: $sprite-exe -350px -40px;
+	display: inline-block;
+}
+
+.exe-icon-refer-earn {
+	width: 41px;
+	height: 45px;
+	background: $sprite-exe -400px -40px;
+	display: inline-block;
+}
+
+.exe-icon-program-structure {
+	width: 28px;
+	height: 22px;
+	background: $sprite-exe -284px 0;
+	display: inline-block;
+}
+
+.exe-icon-assesment {
+	width: 20px;
+	height: 25px;
+	background: $sprite-exe -319px 0;
+	display: inline-block;
+}
+
+.exe-icon-institute {
+	width: 22px;
+	height: 22px;
+	background: $sprite-exe -344px 0;
+	display: inline-block;
+}
+
+.exe-icon-testimonials {
+	width: 25px;
+	height: 25px;
+	background: $sprite-exe -373px 0;
+	display: inline-block;
+}
+
+.exe-icon-fee-payments {
+	width: 21px;
+	height: 26px;
+	background: $sprite-exe -406px 0;
+	display: inline-block;
+}
+
+.exe-icon-faq {
+	width: 25px;
+	height: 25px;
+	background: $sprite-exe -433px 0;
+	display: inline-block;
+}
+
+.exe-icon-brochure {
+	width: 16px;
+	height: 18px;
+	background: $sprite-exe -484px 0;
+	display: inline-block;
+}
+
+.exe-icon-request-call {
+	width: 18px;
+	height: 20px;
+	background: $sprite-exe -462px 0;
+	display: inline-block;
+}
+
+.exe-icon-place-order {
+	width: 37px;
+	height: 40px;
+	background: $sprite-exe -119px -91px;
+	display: inline-block;
+}
+
+.exe-icon-study-material {
+	width: 39px;
+	height: 39px;
+	background: $sprite-exe -167px -91px;
+	display: inline-block;
+}
+
+.exe-icon-start-learning {
+	width: 37px;
+	height: 42px;
+	background: $sprite-exe -216px -91px;
+	display: inline-block;
+}
+
+.exe-icon-get-certified {
+	width: 39px;
+	height: 30px;
+	background: $sprite-exe -266px -91px;
+	display: inline-block;
+}
+
+.exe-icon-online-application {
+	width: 50px;
+	height: 36px;
+	background: $sprite-exe -92px -137px;
+	display: inline-block;
+}
+
+.exe-icon-fee-payment {
+	width: 49px;
+	height: 31px;
+	background: $sprite-exe -153px -137px;
+	display: inline-block;
+}
+
+.exe-icon-access-online {
+	width: 40px;
+	height: 40px;
+	background: $sprite-exe -217px -137px;
+	display: inline-block;
+}
+
+.exe-icon-start-course {
+	width: 35px;
+	height: 38px;
+	background: $sprite-exe -269px -137px;
+	display: inline-block;
+}
+
+.exe-icon-check-eligible {
+	width: 30px;
+	height: 38px;
+	background: $sprite-exe -315px -137px;
+	display: inline-block;
+}
+
+.exe-icon-complete-application {
+	width: 35px;
+	height: 38px;
+	background: $sprite-exe -356px -137px;
+	display: inline-block;
+}
+
+.exe-icon-highilights {
+	width: 34px;
+	height: 34px;
+	display: inline-block;
+	background: $sprite-exe -439px -91px;
+}
+
+.exe-button-enrol {
+	background-color: #efa859;
+	border-radius: 20px;
+	padding: 8px 14%;
+	display: inline-block;
+	text-transform: uppercase;
+	color: $white-color;
+	box-shadow: 0px 0px 25px 0px rgba(227, 147, 69, 0.2);
+
+	&:hover, &:focus {
+		color: $white-color;
+	}
+}
+
+.exe-button-view-sample {
+	border: 1px solid $anchor-color;
+	background-color: transparent;
+	padding: 7px 15px;
+	font-size: $font-size+2;
+	color: $anchor-color;
+	border-radius: 20px;
+
+	&:hover, &:focus {
+		color: $anchor-color;
+	}
+}
+
+.exe-button-view-course {
+	border: 1px solid $white-color;
+	background-color: transparent;
+	padding: 7px 15px;
+	font-size: $font-size+2;
+	color: $white-color;
+	border-radius: 20px;
+	opacity: 0.8;
+
+	&:hover, &:focus {
+		color: $white-color;
+	}
+}
+
+.exe-button-submit {
+	background-color: $anchor-color;
+	border-radius: 20px;
+	padding: 10px 25px;
+	display: inline-block;
+	text-transform: uppercase;
+	color: $white-color;
+	border: none;
+	box-shadow: 0px 0px 15px 0px rgba(39, 68, 117, 0.2);
+
+	&:hover, &:focus {
+		color: $white-color;
+	}
+}
+
+.exe-button-callback {
+	background-color: $e-oragne-color;
+	border-radius: 20px;
+	padding: 12px 20px;
+	display: block;
+	text-transform: uppercase;
+	color: $white-color;
+	border: none;
+	box-shadow: 0px 0px 15px 0px rgba(39, 68, 117, 0.2);
+	margin: 0 auto;
+
+	&:hover, &:focus {
+		color: $white-color;
+	}
+}
+
+.exe-button-view-more {
+	border: 1px solid $anchor-color;
+	background-color: transparent;
+	padding: 10px 20px;
+	font-size: $font-size+2;
+	color: $anchor-color;
+	border-radius: 20px;
+
+	&:hover, &:focus {
+		color: $anchor-color;
 	}
 }

@@ -1,5 +1,15 @@
 from decimal import Decimal
 
+FACULTY_DEFAULT = 0
+FACULTY_TEACHER = 1
+FACULTY_PRINCIPAL = 2
+
+FACULTY_CHOICES = (
+    (FACULTY_DEFAULT, '--Select Role--'),
+    (FACULTY_TEACHER, 'Teacher'),
+    (FACULTY_PRINCIPAL, 'Principal'),
+)
+
 RELATION_CHOICES = (
     (0, 'Default'),
     (1, 'UpSell'),
@@ -45,6 +55,7 @@ FLOW_CHOICES = (
     (11, 'TSSC'),  # flow 11
     (12, 'Country Specific Resume'),  # flow 12
     (13, 'Executive Bio,Portfolio,Visual Resume,Cover Letter,Second Regular Resume'),  # flow 13
+    (14, 'University Courses')
 )
 
 BG_COLOR = {0: "#c8b98d", 1: "#cfbabd", 2: "#75dac2", 3: "#d2db86",
@@ -108,7 +119,7 @@ R_ATTR_DICT = {
 
 S_ATTR_DICT = {
     'EXP': 'experience_service',
-    'FD': 'feature_duration',
+    'FD': 'featured_duration',
     'SD': 'service_doc',
     'SI': 'service_im',
 }
@@ -194,3 +205,34 @@ def convert_gbp(price=Decimal(0)):
         elif Decimal(360) < price:
             return '5'
     return '0'
+
+BENEFITS = {
+    '1': ['Free featured profile', 'exe-icon-feat-profile', 'FREE featured profile worth Rs. 1440 for 1 month on Shine.com'],
+    '2': ['Shine credits', 'exe-icon-shine-credit', '10% Shine credits redeemable on next purchase*'],
+    '3': ['Global Education Providers', 'exe-icon-education-provider', 'Choose from a list of global providers as per your requirement.'],
+    '4': ['Appear for exam – Get Certified', 'exe-icon-get-certified'],
+    '5': ['Fill Online Application Form', 'exe-icon-online-application'],
+    '6': ['Get Access to online learning management system', 'exe-icon-access-online'], 
+    # '7': ['Check eligibility before filling online application','exe-icon-check-eligible'],
+    # '8': ['Complete online application form', 'exe-icon-complete-application'],
+    # '9': ['Make Course Fee Payment', 'exe-icon-fee-payment'],
+    # '10': ['Start your course', 'exe-icon-start-course']
+}
+
+APPLICATION_PROCESS = {
+    '1': ['Place Order', 'exe-icon-place-order'],
+    '2': ['Receive online access/study material from course material', 'exe-icon-study-material'],
+    '3': ['Access the material and start learning', 'exe-icon-start-learning'],
+    '4': ['Appear for exam – Get Certified', 'exe-icon-get-certified'],
+    '5': ['Fill Online Application Form', 'exe-icon-online-application'],
+    '6': ['Get Access to online learning management system', 'exe-icon-access-online'],
+    # '7': ['Check eligibility before filling online application','exe-icon-check-eligible'],
+    # '8': ['Complete online application form', 'exe-icon-complete-application'],
+    # '9': ['Make Course Fee Payment', 'exe-icon-fee-payment'],
+    # '10': ['Start your course', 'exe-icon-start-course']
+
+}
+
+APPLICATION_PROCESS_CHOICES = [(int(key), val[1], val[0])for key, val in list(APPLICATION_PROCESS.items())]
+
+BENEFITS_CHOICES = [(int(key), val[1], val[0])for key, val in list(BENEFITS.items())]

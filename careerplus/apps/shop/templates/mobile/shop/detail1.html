@@ -8,20 +8,24 @@
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/shop/course-detail.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/smk-accordion.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     {% endcompress css %}
         <style>
             a[disabled], a[disabled]:hover {
                pointer-events: none;
                color: #e1e1e1;
             }
+            /*div[data-test-id="ChatWidgetMobileButton"]{
+                display: none !important;
+            }*/
         </style>
 {% endblock css_section %}
 {% block title %}
   {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
 {% endblock title %}
 {% block canonical_url %}
-  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
-  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}?type=amp">
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{request.get_full_path}}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}?type=amp">
 {% endblock canonical_url %}
 
         {% block django_meta %}
@@ -200,76 +204,26 @@
                 </ul>
             </div>
         </div>
-    {% elif product.pk == 1941 %}
+    {% elif product.type_flow == 5 %}
         <!-- Other packages start here -->
-    <div class="sidebar" id="sidebar-secondary">
-      <div class="right-navbar packages pt-0">
-        <h2 class="mb-0">Other packages</h2>
-        <ul class="underline">
-            <li>
-                <a href="/services/profile-update/featured-profile-10/pd-1939" class="blue-link pb-0">
-                    <strong>
-                        90 days
-                    </strong>
-                </a>
-            </li>
-            <li>
-                <a href="/services/profile-update/featured-profile-8/pd-1942" class="blue-link pb-0">
-                    <strong>
-                        180 days
-                    </strong>
-                </a>
-            </li>
-        </ul>
-      </div>
-    </div><!-- Other packages ends here -->
-    {% elif product.pk == 1939 %}
-        <!-- Other packages start here -->
-    <div class="sidebar" id="sidebar-secondary">
-      <div class="right-navbar packages pt-0">
-        <h2 class="mb-0">Other packages</h2>
-        <ul class="underline">
-            <li>
-                <a href="/services/profile-update/featured-profile-9/pd-1941" class="blue-link pb-0">
-                    <strong>
-                        30 days
-                    </strong>
-                </a>
-            </li>
-            <li>
-                <a href="/services/profile-update/featured-profile-8/pd-1942" class="blue-link pb-0">
-                    <strong>
-                        180 days
-                    </strong>
-                </a>
-            </li>
-        </ul>
-      </div>
-    </div><!-- Other packages ends here -->
-    {% elif product.pk == 1942 %}
-        <!-- Other packages start here -->
-    <div class="sidebar" id="sidebar-secondary">
-      <div class="right-navbar packages pt-0">
-        <h2 class="mb-0">Other packages</h2>
-        <ul class="underline">
-            <li>
-                <a href="/services/profile-update/featured-profile-9/pd-1941" class="blue-link pb-0">
-                    <strong>
-                        30 days
-                    </strong>
-                </a>
-            </li>
-            <li>
-                <a href="/services/profile-update/featured-profile-10/pd-1939" class="blue-link pb-0">
-                    <strong>
-                        90 days
-                    </strong>
-                </a>
-            </li>
-        </ul>
-      </div>
-    </div><!-- Other packages ends here -->
-    
+        <div class="sidebar" id="sidebar-secondary">
+          <div class="right-navbar packages pt-0">
+            <h2 class="mb-0">Other packages</h2>
+            <ul class="underline">
+            {% for package in pop_list|slice:"0:4"  %}
+                <li>
+                    <a href="{{package.url}}">
+                    {% if package.duration %} 
+                        <strong>
+                            {{ package.duration }} days
+                        </strong>
+                    {% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+            </ul>
+          </div>
+        </div><!-- Other packages ends here -->
     {% else %}
     <!-- Other packages start here -->
     <div class="sidebar" id="sidebar-secondary">
@@ -330,6 +284,7 @@
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/shop/detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     {% endcompress %}
     <script type="text/javascript">
         $(document).ready(function(){
@@ -339,12 +294,16 @@
             if(commonJs.getParameterByName('type') == 'autoCart'){
                $('#add-to-cart').trigger('click');
             } 
-        })
+        });
         
     </script>
 {% endblock js_section %}
 
+
 {% if sqs.id in linkedin_resume_services %}
-  {% block johukum %}
-  {% endblock johukum %}
+  {% block zendesk %}
+    {{block.super}}
+  {% endblock zendesk %}
 {% endif %}
+
+

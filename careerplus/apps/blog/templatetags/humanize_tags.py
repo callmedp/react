@@ -12,4 +12,4 @@ def get_humanize_date(value):
         return value.replace('\xa0', ' ') + ' ' + 'ago'
     else:
         return value.replace('\xa0', ' ')
-    return value
+    # return value

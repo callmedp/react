@@ -1,0 +1,412 @@
+{% extends "basic/base.html" %}
+{% load static compress %}
+
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}">
+  <link rel="amphtml" href="https://{{ SITE_DOMAIN }}{{canonical_url}}?type=amp">
+{% endblock canonical_url %}
+
+{% block title %}	
+	{{meta.title}}
+{% endblock title %}
+
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/skill/skill.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/skill/extra.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+{% block pageheading %}
+	<header class="skill-header">
+		<div class="container">
+		<!-- breadcrums -->
+			<ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
+                
+                <li itemprop="itemListElement" itemscope
+			      itemtype="http://schema.org/ListItem">
+				    <a href='/' itemprop="item">Home
+                    </a>
+					<meta itemprop="name" content="Home" />
+				    <meta itemprop="position" content="1" />
+                </li>
+
+                <li style="color:white;" itemprop="itemListElement" itemscope
+			      itemtype="http://schema.org/ListItem">
+				    {{category_obj.name|title}}
+					<meta itemprop="name" content="{{category_obj.name}}" />
+				    <meta itemprop="position" content="2" />
+                </li>
+                    
+            </ol>
+			<div class="skill-caption">
+				<h1>
+				{% if meta.heading %}
+					{{ meta.heading | title }}
+				{% else %}
+					{{category_obj.name|title}}
+				{% endif %}
+				</h1>
+					<strong>
+					{% if top_3_prod.0 %}
+					    <a href="{{top_3_prod.0.pURL}}">{{top_3_prod.0.pNm}}</a> 
+					{% endif %}
+					{% if top_3_prod.1 %}    
+						| <a href="{{top_3_prod.1.pURL}}">{{top_3_prod.1.pNm}}</a> 
+					{% endif %}
+
+					{% if top_3_prod.2 %}
+						| <a href="{{top_3_prod.2.pURL}}">{{top_3_prod.2.pNm}}</a>
+					{% endif %}
+					</strong>
+				{% if top_4_vendors %}
+					<div class="provider">
+					       Provider
+					   {% for top_4_vendor in top_4_vendors %}    
+							{% if top_4_vendor.icon or top_4_vendor.image %}
+
+								<img src="{% if top_4_vendor.icon %}
+									{{top_4_vendor.icon.url}}
+								{% elif top_4_vendor.image %}{{top_4_vendor.image.url}}{% endif %}" 
+								alt="{% if top_4_vendor.image_alt %} {{top_4_vendor.image_alt}} {% else %}
+								{{top_4_vendor.name}}{% endif %}" class="img-responsive">
+							{% endif %}
+						{% endfor %}
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</header>
+{% endblock pageheading %}
+{% block container %}
+<section class="container">
+    <!-- page content body start -->
+	<div class="row">
+	<!-- left content start -->
+		<div id="about-courses" class="col-md-9 col-sm-12 cls_scroller_parent">
+
+			<div class="about-course-links mb-40 cls_scroller pr cls_scroll_tab">
+	        	<a title="About" class="active cls_tab_child" href="#about-courses">About</a>
+	        	{% if category_obj.graph_image or api_data.job_count or api_data.jFArea %}
+	        		<a title="Importance in Market" class="cls_tab_child" href="#market">Importance in Market</a>
+	        	{% endif %}
+	        	{% if products %}
+	        		<a title="Services" class="cls_tab_child" href="#programs">Services</a>
+	        	{% endif %}
+	        	{% if reviews %}
+	        		<a title="Reviews" class="cls_tab_child" href="#reviews">Reviews</a>
+	        	{% endif %}
+	        </div>
+
+		    <div class="about-course-text mb-40">
+				<div class="row">
+					<article class="col-sm-12">
+						{% if category_obj.video_link %}
+						    <div class="pull-right col-sm-6">
+						        <iframe width="560" height="315" 
+						        	src="{{url}}" frameborder="0" allowfullscreen>	
+						        </iframe>
+						    </div>
+						{% endif %}
+						{{category_obj.description | safe}}
+					</article>
+				</div>
+		    </div>
+
+		    <!-- Career Outcomes -->
+		    {% if category_obj.career_outcomes %}
+		    <div class="career-outcomes">
+		    	<h2>Professional Advantage</h2>
+		        <ul class="box-panel">
+		            {% for career_outcome in category_obj.split_career_outcomes %}
+		            	<li>{{career_outcome}}</li>
+		            {% endfor %}
+		        </ul>
+		    </div>
+		    {% endif %}
+
+			<!-- Importance in Market -->
+            {% if category_obj.graph_image or api_data.job_count or api_data.jFArea %}
+			<div id="market" class="importance-market clearfix mb-40 scroll">
+				<h2>Importance in Market</h2>
+				{% if category_obj.graph_image %}
+			    <div class="col-sm-6 box-panel">
+			    	<figure>
+			        	<img src="{{category_obj.graph_image.url}}" alt="Importance in Market" class="img-responsive">
+			    	</figure>
+			    </div>
+			    {% endif %} 
+				<div class="col-sm-6 market-growth">
+					{% if api_data.job_count %}
+						<div class="col-sm-12 box-panel">
+							<div class="media">
+							    <div class="media-left media-middle">
+							    	<span class="jobs-growth-icon"></span>
+							    </div>
+							    <div class="media-body">
+							    	<a target="_blank" href="https://www.shine.com/job-search/{{category_obj.name|slugify}}-jobs">
+							    		<strong>{{api_data.job_count}}</strong>
+							    	</a>
+							      	jobs in the market demanding this skill
+							    </div>
+							</div>
+							{% comment %}
+								
+							<div class="media">
+								<div class="media-left media-middle">
+							    	<span class="career-growth-icon"></span>
+							    </div>
+							    <div class="media-body">
+							    	<strong>Only 10%</strong>
+							      	candidates are six sigma certified
+							    </div>
+							</div>
+							{% endcomment %}
+							
+						</div>
+					{% endif %}
+					{% if api_data.jFArea %}
+					    <div class="col-sm-12 box-panel mt-20 job-require">
+					    	<strong>Jobs which require this skill in different functional areas
+					    	</strong>
+					    	{% for ls in api_data.jFArea %}
+					    	    {% if forloop.counter == 1 and ls %}
+					    		<a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{ls.0}}" target="_blank">{{ls.2}} ({{ls.1}})</a>
+					    		{% endif %}
+					    		{% if forloop.counter == 2 and ls %}
+					    		| <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{ls.0}}" target="_blank">{{ls.2}} ({{ls.1}})</a>
+					    		{% endif %}
+					    		{% if forloop.counter == 3 and ls %}
+					    		| <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{ls.0}}" target="_blank">{{ls.2}} ({{ls.1}})</a>
+					    		{% endif %}
+					    	{% endfor %} 
+					    </div>
+					{% endif %}
+			    </div>
+			</div>
+			{% endif %}
+
+		    <!-- certification programs listing -->
+		    {% if products %}
+		    <div id="programs" class="listing-box mb-40 scroll" itemscope itemtype="http://schema.org/ItemList">
+		    	<h2 itemprop="name">{{category_obj.name}} Services</h2>
+		    	<ul class="listing1" id="product_list">
+		    		{% for product in products %}
+				        <li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+				        	<meta itemprop="position" content="{{forloop.counter}}" />
+				        	<a itemprop="url" title="{{product.pNm}}" 
+				        	href="{{product.pURL}}">
+
+					            <div class="media" >
+					            	<div class="media-left">
+					                	<img class="media-object" 
+					                	src="{{product.pImg}}" 
+					                	alt="{{product.pNm}}" height="130px" width="130px">
+					            	</div>
+					            	<div class="media-body">
+					                	<div class="certification-jobs-box">
+					                	{% if "true" in product.pCert %}
+					                  		<span class="certification-jobs"><figure class="certification-icon">
+					                  		</figure> Certification</span>
+					                  	{% endif %}
+					                  	{% if product.pNJ %}
+					                  		<span class="certification-jobs"><figure class="jobs-icon"></figure> 
+					                  		<span class="jobs-number">
+					                  		{{product.pNJ}}
+					                  		</span>jobs available</span>
+					                  	{% endif %}
+					                	</div>
+					                	<h3 itemprop="name" class="listing-heading">{{product.pNm}}</h3>
+
+						                <div class="rating-review-box">
+						                {% for rating in product.pStar %}
+						                    {% if rating == "*" %}
+						                    	<figure class="full-star">
+						                    	</figure>
+						                    {% endif %}
+						                    {% if rating == "+" %}
+						                    	<figure class="half-star">	
+						                    	</figure>
+						                    {% endif %}
+						                    {% if rating == "-" %}
+						                    	<figure class="blank-star">	
+						                    	</figure>
+						                    {% endif %}
+						                {% endfor %}
+						                    <strong >{{product.pARx |floatformat:1}}/5</strong>{% if product.pRC %} | {{ product.pRC }} ratings{% endif %} <b>{{product.pRC}} reviews</b>
+						                    {% comment %}
+						                    <meta itemprop="ratingValue" content="{{product.pARx}}">
+						                     <meta itemprop="reviewCount" content="{% if product.pRC > 0 %}
+						                      {{product.pRC}}
+						                      {% else %}
+						                        1      
+						                      {% endif %}" />
+						                    {% endcomment %}
+
+						                </div>
+
+						                <!--meta itemprop="position" content="{{forloop.counter}}" /--> 
+
+
+						                <div class="providers">
+						                   Providers
+						                   <span>{{product.pPvn}}</span>
+						                </div>
+
+						                <div class="pricing-box">
+						                	Starting at <strong>Rs. {{ product.pPin |floatformat:'0' }}/-</strong>{% if product.pPfin|floatformat:0|add:"0" %}<strike>Rs. {{ product.pPfin|floatformat:"0" }}/-</strike> <span class="discount">{{ product.discount }}% OFF</span>{% endif %}
+						                </div>
+
+					              	</div>
+					            </div>
+				          	</a>
+				        </li>
+			    	{% endfor %}
+			    	<!-- {% if products.has_next %}
+				        <a href="javascript:void(0)" 
+				        id="product_load_more" class="load-more loadmore"> 
+				        Load more</a>
+	            		<div id="prod_load_more">
+		      				<input type="hidden" name="page" 
+		      				value="{{products.next_page_number}}" id="page_id">
+		      				<input type="hidden" name="slug" value="{{category_obj.pk}}" 
+		      				id="slug_id">
+			    		</div>
+				    {% endif %} -->
+		      	</ul>
+		    </div>
+		    {% endif %}
+		    <!-- Reviews -->
+		    {% if reviews %}
+		    <div id="reviews" class="reviews mb-40 scroll">
+		    	<h2>Reviews</h2>
+		        <ul id="review_list">
+		        	{% for review in reviews %}
+		          		<li class="box-panel" itemscope itemtype="http://schema.org/Review">
+		            		<span class="review-heading" itemprop="name">Excellent!</span>
+				            <div class="rating-review-box" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+				                {% for rating in review.get_ratings %}
+				                    {% if rating == "*" %}
+				                    	<figure class="full-star">
+				                    	</figure>
+				                    {% endif %}
+				                    {% if rating == "+" %}
+				                    	<figure class="half-star">	
+				                    	</figure>
+				                    {% endif %}
+				                    {% if rating == "-" %}
+				                    	<figure class="blank-star">	
+				                    	</figure>
+				                    {% endif %}
+				                {% endfor %}
+				                <meta itemprop="worstRating" content="1">
+			                    <meta itemprop="bestRating" content="5">
+				                <strong itemprop="ratingValue">{{review.average_rating |floatformat:1}}/5</strong>
+				            </div>
+		            		<article itemprop="description">
+		            		{{review.content | safe}}
+		            		</article>
+
+		            		 <meta itemprop="author" content="{% if review.user_name %}{{review.user_name}}{% else %}Anonymous{% endif %}" />
+
+		            		<span class="editor">By <a>{% if review.user_name %}{{review.user_name}}{% else %}Anonymous{% endif %}</a>, {{review.created}}</span>
+		            		<div itemprop="itemReviewed" itemscope itemtype="http://schema.org/Product">
+				                <meta itemprop="name" content="{{category_obj.name|title}} Courses & Certifications" />
+				            </div>
+		          		</li>
+		          	{% endfor %}
+		          	<!-- {% if reviews.has_next %}
+			        	<div id="review_load_more">
+			          		<a href="javascript:void(0);" id="review_load_more" class="load-more loadreview">Load more</a>
+				      		<input type="hidden" name="page" 
+				      		value="{{reviews.next_page_number}}" id="page_id1">
+				      		<input type="hidden" name="slug" value="{{category_obj.pk}}" 
+		      				id="slug_id1">
+				      	</div>
+		          	{% endif %} -->
+		        </ul>	    	
+		    </div>
+		    {% endif %}
+		</div>  
+		<!-- left content end -->
+
+		<!-- right content start -->
+		
+	<div class="col-md-3 col-sm-12">
+			<!-- request a call -->
+	<div class="request-call query-form-right box-panel mt-40 cleafix">
+    <h2 class="heading-right">request a call</h2>
+      <form class="mt-20" role="form" id="queryform" >
+        <div style='display:none'>
+            <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="name" placeholder="Name" 
+          maxlength="100" value="{{request.session.full_name}}">
+          <span class="error-txt position-error"></span>
+        </div>
+        <div class="form-group">
+            <div class="country-code">
+                <div class="custom-select">
+                  <select class="form-control" name="country">
+                    {% for country in country_choices %}
+                       <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}</option>
+                  {% endfor %}
+                  </select>
+                </div>
+                <input type="text" class="form-control" name="number" 
+                placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
+                <span class="error-txt position-error"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <textarea class="form-control" rows="1" name="msg" placeholder="Message" maxlength="500"></textarea>
+            <span class="error-txt position-error"></span>
+        </div>
+        <input type="hidden" name="lsource" value="9">
+        <input type="hidden" name="product" value="{{category_obj.pk}}">
+        <input type="hidden" name="prd" value="{{category_obj.heading}}">
+      	<input type="hidden" name="path" value="{{request.build_absolute_uri}}">
+      	
+      	<button type="button" id="id_query"  class="submit-button">
+     		Submit
+      	</button>
+      </form>
+      <div class="call-service">
+        <strong>
+          <span class="call-service-icon"></span>
+          {{GGN_CONTACT}}
+        </strong>
+        9am to 7pm ist monday-saturday
+      </div>
+	</div> 
+	<!-- request a call --> 
+	<!-- right content end -->
+	{% if widget_objs %}
+    <div class="free-sample ml-0 mr-0">
+      <span class="sample-pic"></span>
+      <strong>{{widget_obj.name}}</strong>
+      <ul>
+      {% for widget_obj in widget_objs %}
+        <li><a href="{{widget_obj.url}}" target="_blank">{{widget_obj.name}}</a></li>
+      {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+	</div>
+	<!-- page content body end -->
+</section>
+{% endblock container %}
+{% block js_section %}
+    {{ block.super }}
+    {% compress js %}
+    <script src="{% static 'console/js/jquery.validate.js' %}"></script>
+    <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
+    <script src="{% static 'shinelearn/js/skill/skill_scroller.js' %}"></script>
+    {% endcompress %}
+{% endblock js_section %}

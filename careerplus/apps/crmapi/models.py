@@ -1,6 +1,9 @@
+
 from django.db import models
 from seo.models import AbstractAutoDate
 from geolocation.models import Country
+
+UNIVERSITY_LEAD_SOURCE = 28
 
 
 LEAD_LOCATION = (
@@ -12,11 +15,13 @@ LEAD_LOCATION = (
     (6, 'Chat Lead'),
     (7, 'CMS Page'),
     (8, 'Resume Detail Page'),
+    (9, 'Skill Service Page'),
     (20, 'Miss Call Lead'),
     (21, 'AdServerLead'),
+    (22, 'CartLead'),
     (26, 'Email Marketing Course Leads'),
     (27, 'Email Marketing Resume Leads'),
-    (22, 'CartLead'),
+    (UNIVERSITY_LEAD_SOURCE, 'University Course Leads'),
 )
 
 DEFAULT_SLUG_SOURCE = (
@@ -28,11 +33,13 @@ DEFAULT_SLUG_SOURCE = (
     (6, 'defaultchatleads'),
     (7, 'cmsonline'),
     (8, 'resumeonline'),
+    (9, 'skillservice'),    # service pages
     (21, 'adserverdefault'),
+    (22, 'cartleads'),
     (20, 'missedcalldefault'),
     (26, 'coursemailerdefault'),
     (27, 'resmdefault'),  # resume mailer default
-    (22, 'cartleads'),
+    (UNIVERSITY_LEAD_SOURCE, 'university-campaign')
 )
 
 
@@ -66,6 +73,8 @@ class UserQuries(AbstractAutoDate):
         default='')
     campaign_slug = models.CharField(
         max_length=255, null=True, blank=True)
+    sub_campaign_slug = models.CharField(
+        max_length=50, null=True, blank=True)
     inactive = models.BooleanField(default=False)
     timestamp = models.DateTimeField(null=True, blank=True)
 

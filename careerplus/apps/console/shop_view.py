@@ -1,8 +1,16 @@
-import json
-from collections import OrderedDict
+import json, os
 import logging
-from django.views.generic import ( View,
-    FormView, TemplateView, ListView, DetailView)
+import csv
+import bson
+import mimetypes
+from collections import OrderedDict
+from datetime import datetime
+from io import StringIO
+
+from django.views.generic import (
+    View, UpdateView, FormView,
+    TemplateView, ListView, DetailView)
+
 from django.http import (
     HttpResponseForbidden, HttpResponse,
     HttpResponseRedirect, HttpResponseBadRequest, Http404)
@@ -10,6 +18,11 @@ from django.forms.models import inlineformset_factory
 from django.template.response import TemplateResponse
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
+from django.utils import timezone
+from django.forms.models import modelformset_factory
+from dateutil.relativedelta import relativedelta
+from django.shortcuts import render
+
 from .decorators import (
     has_group,
     Decorate, check_permission,
@@ -17,52 +30,183 @@ from .decorators import (
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.conf import settings
-from partner.models import Vendor,VendorHierarchy
 
+from dal import autocomplete
+
+from partner.models import Vendor, VendorHierarchy
 from blog.mixins import PaginationMixin
 from shop.models import (
     Category, Keyword,
     Attribute, AttributeOptionGroup,
-    Product,Chapter)
-
+    Product, Chapter, Skill, ProductAuditHistory, UniversityCoursePayment,
+    SubHeaderCategory
+)
+from homepage.models import Testimonial
 from .shop_form import (
     AddCategoryForm, ChangeCategoryForm,
     ChangeCategorySEOForm,
     CategoryRelationshipForm,
     RelationshipInlineFormSet,
-    ChangeCategorySkillForm,)
+    ChangeCategorySkillForm, SkillAddForm,
+    SkillChangeForm,
+    ProductSkillForm, SkillInlineFormSet,
+    UniversityCourseForm,
+    UniversityCoursePaymentForm,
+    UniversityCoursesPaymentInlineFormset,
+    SubHeaderCategoryForm, SubHeaderInlineFormSet,
+    TestimonialModelForm
+)
+
+from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 
 from shop.forms import (
-    AddKeywordForm,
-    AddAttributeOptionForm,
-    AddAttributeForm,
-    ChangeProductForm,
-    ChangeProductSEOForm,
-    ChangeProductOperationForm,
-    ProductCategoryForm,
-    CategoryInlineFormSet,
-    ProductPriceForm,
-    ProductCountryForm,
-    ProductAttributeForm,
-    FAQInlineFormSet,
-    ProductFAQForm,
-    ProductVariationForm,
-    VariationInlineFormSet,
-    ProductChildForm,
-    ChildInlineFormSet,
-    ProductRelatedForm,
-    RelatedInlineFormSet,
-    ChangeProductVariantForm,
-    ChapterInlineFormSet,
-    ProductChapterForm,)
+    AddKeywordForm, AddAttributeOptionForm, AddAttributeForm,
+    ChangeProductForm, ChangeProductSEOForm,
+    ChangeProductOperationForm, ProductCategoryForm,
+    CategoryInlineFormSet, ProductPriceForm,
+    ProductCountryForm, ProductAttributeForm,
+    FAQInlineFormSet, ProductFAQForm, ProductVariationForm,
+    VariationInlineFormSet, ProductChildForm,
+    ChildInlineFormSet, ProductRelatedForm,
+    RelatedInlineFormSet, ChangeProductVariantForm,
+    ChapterInlineFormSet, ProductChapterForm)
 
 from shop.utils import CategoryValidation, ProductValidation
 from faq.forms import (
     AddFaqForm,
     ChangeFaqForm,
     ChangePublicFaqForm,)
+from homepage.config import (
+    UNIVERSITY_PAGE, UNIVERSITY_COURSE)
 
 from faq.models import FAQuestion
+from users.mixins import UserGroupMixin
+from wsgiref.util import FileWrapper
+
+
+class SkillAutocompleteView(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated():
+            return Skill.objects.none()
+        qs = Skill.objects.filter(active=True)
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+        return qs
+
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
+class SkillChangeView(UpdateView):
+    model = Skill
+    template_name = 'console/skill/change_skill.html'
+    success_url = reverse_lazy('console:skill-list')
+    http_method_names = [u'get', u'post']
+    form_class = SkillChangeForm
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = super(SkillChangeView, self).get(request, *args, **kwargs)
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(SkillChangeView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert})
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            try:
+                form.save()
+                valid_form = self.form_valid(form)
+                messages.add_message(
+                    request, messages.SUCCESS,
+                    'Skill %s - %s Updated Successfully.' % (
+                        self.object.name, self.object.id))
+                return valid_form
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, 'Blog %s Not Updated. Due to %s' % (self.object.id, str(e)))
+                return self.form_invalid(form)
+        return self.form_invalid(form)
+
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
+class SkillAddView(FormView):
+    form_class = SkillAddForm
+    template_name = 'console/skill/add_skill.html'
+    http_method_names = ['get', 'post']
+    success_url = reverse_lazy('console:skill-list')
+
+    def get(self, request, *args, **kwargs):
+        return super(SkillAddView, self).get(
+            request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(SkillAddView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        return context
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(
+            self.request,
+            "You have successfully added a Skill"
+        )
+        self.success_url = reverse_lazy('console:skill-list')
+        return super(SkillAddView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(
+            self.request,
+            "Your addition has not been saved. Try again."
+        )
+        return super(SkillAddView, self).form_invalid(form)
+
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
+class SkillListView(ListView, PaginationMixin):
+    model = Skill
+    context_object_name = 'skill_list'
+    template_name = 'console/skill/list_skill.html'
+    http_method_names = [u'get', ]
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(SkillListView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(SkillListView, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(SkillListView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        paginator = Paginator(context['skill_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "messages": alert,
+        })
+        return context
+
+    def get_queryset(self):
+        queryset = super(SkillListView, self).get_queryset()
+
+        if self.query:
+            queryset = queryset.filter(Q(name__icontains=self.query))
+        
+        return queryset
 
 
 @Decorate(stop_browser_cache())
@@ -125,10 +269,22 @@ class ChangeCategoryView(DetailView):
         CategoryRelationshipFormSet = inlineformset_factory(
             Category, Category.related_to.through, fk_name='related_from',
             form=CategoryRelationshipForm,
-            can_delete = False,
+            can_delete=False,
             formset=RelationshipInlineFormSet, extra=1,
             max_num=20, validate_max=True)
 
+        SubHeaderFormSet = inlineformset_factory(
+            Category, SubHeaderCategory,
+            fk_name='category',
+            form=SubHeaderCategoryForm,
+            can_delete=False,
+            formset=SubHeaderInlineFormSet, extra=1,
+            max_num=5, validate_max=True)
+
+        TestimonialModelFormset = modelformset_factory(
+            Testimonial, form=TestimonialModelForm,
+            can_delete=True, extra=1, max_num=5,
+            validate_max=True)
         alert = messages.get_messages(self.request)
         main_change_form = ChangeCategoryForm(
             instance=self.get_object())
@@ -144,6 +300,19 @@ class ChangeCategoryView(DetailView):
                 instance=self.get_object(),
                 form_kwargs={'object': self.get_object()})
             context.update({'relationship_formset': relationship_formset})
+
+        if self.object.type_level in [3, 4]:
+            sub_heading_formset = SubHeaderFormSet(instance=self.get_object())
+            context.update({'sub_heading_formset': sub_heading_formset})
+
+        if self.object.type_level in [3, 4]:
+            testimonial_model_formset = TestimonialModelFormset(
+                data=None,
+                queryset=Testimonial.objects.filter(
+                    page=UNIVERSITY_PAGE,
+                    object_id=self.object.pk))
+            context.update({'testimonial_model_formset': testimonial_model_formset})
+
         childrens = self.object.category_set.filter(
             from_category__related_to=self.object)
         products = self.object.check_products()
@@ -152,8 +321,7 @@ class ChangeCategoryView(DetailView):
             'form': main_change_form,
             'seo_form': seo_change_form,
             "childrens": childrens,
-            "products": products
-            })
+            "products": products})
         return context
 
     def post(self, request, *args, **kwargs):
@@ -234,7 +402,7 @@ class ChangeCategoryView(DetailView):
                         CategoryRelationshipFormSet = inlineformset_factory(
                             Category, Category.related_to.through,
                             fk_name='related_from',
-                            can_delete = False,
+                            can_delete=False,
                             form=CategoryRelationshipForm,
                             formset=RelationshipInlineFormSet, extra=1,
                             max_num=20, validate_max=True)
@@ -274,6 +442,100 @@ class ChangeCategoryView(DetailView):
                                 "You cannot add parent for level1")
                             return HttpResponseRedirect(
                                 reverse('console:category-change', kwargs={'pk': cat}))
+                    elif slug == 'subheading':
+                        SubHeaderFormSet = inlineformset_factory(
+                            Category, SubHeaderCategory,
+                            fk_name='category',
+                            form=SubHeaderCategoryForm,
+                            can_delete=False,
+                            formset=SubHeaderInlineFormSet, extra=1,
+                            max_num=5, validate_max=True)
+
+                        if self.object.type_level in [3, 4]:
+                            formset = SubHeaderFormSet(request.POST, instance=obj)
+                            from django.db import transaction
+                            if formset.is_valid():
+                                with transaction.atomic():
+                                    formset.save(commit=False)
+                                    saved_formset = formset.save(commit=False)
+                                    for ins in formset.deleted_objects:
+                                        ins.delete()
+
+                                    for form in saved_formset:
+                                        form.save()
+                                    formset.save_m2m()
+
+                                messages.success(
+                                    self.request,
+                                    "Category Sub header changed Successfully")
+                                return HttpResponseRedirect(reverse('console:category-change',kwargs={'pk': obj.pk}))
+                            else:
+                                context = self.get_context_data()
+                                if formset:
+                                    context.update({'sub_heading_formset': formset})
+                                messages.error(
+                                    self.request,
+                                    "Category Sub Header Change Failed, Changes not Saved")
+                                return TemplateResponse(
+                                    request, [
+                                        "console/shop/change_category.html"
+                                    ], context)
+                        else:
+                            messages.error(
+                                self.request,
+                                "You cannot add Sub Header for level1 and Level2")
+                            return HttpResponseRedirect(
+                                reverse('console:category-change', kwargs={'pk': cat}))
+
+                    elif slug == 'testimonial_model':
+                        TestimonialModelFormset = modelformset_factory(
+                            Testimonial,
+                            form=TestimonialModelForm,
+                            can_delete=True,
+                            extra=1,
+                            max_num=5, validate_max=True)
+
+                        if self.object.type_level in [3, 4]:
+                            formset = TestimonialModelFormset(
+                                request.POST, request.FILES,
+                                queryset=Testimonial.objects.filter(
+                                    page=UNIVERSITY_PAGE, object_id=obj.pk))
+                            from django.db import transaction
+                            if formset.is_valid():
+                                with transaction.atomic():
+                                    formset.save(commit=False)
+                                    saved_formset = formset.save(commit=False)
+                                    for ins in formset.deleted_objects:
+                                        ins.delete()
+
+                                    for form in saved_formset:
+                                        form.page = UNIVERSITY_PAGE
+                                        form.object_id = obj.pk
+                                        form.save()
+                                    formset.save_m2m()
+
+                                messages.success(
+                                    self.request,
+                                    "Category Testimonial changed Successfully")
+                                return HttpResponseRedirect(reverse('console:category-change',kwargs={'pk': obj.pk}))
+                            else:
+                                context = self.get_context_data()
+                                if formset:
+                                    context.update({'testimonial_model_formset': formset})
+                                messages.error(
+                                    self.request,
+                                    "Category Testimonial Change Failed, Changes not Saved")
+                                return TemplateResponse(
+                                    request, [
+                                        "console/shop/change_category.html"
+                                    ], context)
+                        else:
+                            messages.error(
+                                self.request,
+                                "You cannot add Testimonial for level1 and Level2")
+                            return HttpResponseRedirect(
+                                reverse('console:category-change', kwargs={'pk': cat}))
+
                 messages.error(
                     self.request,
                     "Object Does Not Exists")
@@ -284,7 +546,7 @@ class ChangeCategoryView(DetailView):
                 messages.error(request, (
                     ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
             return HttpResponseRedirect(
-                    reverse('console:category-change', kwargs={'pk': cat}))
+                reverse('console:category-change', kwargs={'pk': cat}))
         return HttpResponseBadRequest()
 
 
@@ -317,9 +579,6 @@ class ListCategoryView(ListView, PaginationMixin):
             logging.getLogger('error_log').error('unable to get query set%s'%str(e))
             pass
         return queryset
-
-
-
 
     def get_context_data(self, **kwargs):
         context = super(ListCategoryView, self).get_context_data(**kwargs)
@@ -960,10 +1219,14 @@ class ChangeProductView(DetailView):
         return super(ChangeProductView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        product = self.get_object()
-        if product.type_product == 2:
+        self.object = self.get_object()
+        if self.object.type_product == 2:
             raise Http404
         return super(ChangeProductView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ChangeProductView, self).get_queryset()
+        return queryset.select_related('product_class', 'vendor')
 
     def get_object(self, queryset=None):
         if hasattr(self, 'object'):
@@ -990,9 +1253,22 @@ class ChangeProductView(DetailView):
         if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
             vendor = self.get_object().vendor
         else:
-            vendor  = self.request.user.get_vendor()
-        
-        
+            vendor = self.request.user.get_vendor()
+
+        ProductSkillFormSet = inlineformset_factory(
+            Product, Skill.skillproducts.through,
+            fk_name='product',
+            form=ProductSkillForm,
+            can_delete=True,
+            formset=SkillInlineFormSet, extra=1,
+            max_num=15, validate_max=True)
+
+        if self.object:
+            prdskill_formset = ProductSkillFormSet(
+                instance=self.get_object(),
+                form_kwargs={'object': self.get_object()})
+            context.update({'prdskill_formset': prdskill_formset})
+
         ProductCategoryFormSet = inlineformset_factory(
             Product, Product.categories.through, fk_name='product',
             form=ProductCategoryForm,
@@ -1014,8 +1290,9 @@ class ChangeProductView(DetailView):
         if self.object:
             prdfaq_formset = ProductFAQFormSet(
                 instance=self.get_object(),
-                form_kwargs={'object': self.get_object(),
-                    'vendor':vendor },)
+                form_kwargs={
+                    'object': self.get_object(),
+                    'vendor': vendor},)
             context.update({'prdfaq_formset': prdfaq_formset})
 
         ProductChapterFormSet = inlineformset_factory(
@@ -1029,7 +1306,7 @@ class ChangeProductView(DetailView):
                 instance=self.get_object(),
                 form_kwargs={'object': self.get_object()},)
             context.update({'prdchapter_formset': prdchapter_formset})
-        
+
         if self.object.type_product == 1:
             ProductVariationFormSet = inlineformset_factory(
                 Product, Product.variation.through, fk_name='main',
@@ -1066,8 +1343,30 @@ class ChangeProductView(DetailView):
                     instance=self.get_object(),
                     form_kwargs={'object': self.get_object()})
                 context.update({'prdrelated_formset': prdrelated_formset})
-        
-        
+        if self.object.type_flow == 14:
+            context.update({'prd_university_form': UniversityCourseForm(
+                instance=self.object.university_course_detail)})
+            TestimonialModelFormset = modelformset_factory(
+                Testimonial, form=TestimonialModelForm,
+                can_delete=True, extra=1, max_num=5,
+                validate_max=True)
+            testimonial_model_formset = TestimonialModelFormset(
+                data=None,
+                queryset=Testimonial.objects.filter(
+                    page=UNIVERSITY_COURSE,
+                    object_id=self.object.pk))
+            context.update({'testimonial_model_formset': testimonial_model_formset})
+            UniversityCoursesPaymentFormset = inlineformset_factory(
+                Product, UniversityCoursePayment,
+                fk_name='product',
+                form=UniversityCoursePaymentForm,
+                can_delete=True,
+                formset=UniversityCoursesPaymentInlineFormset, extra=1,
+                max_num=15, validate_max=True
+            )
+            university_payment_formset = UniversityCoursesPaymentFormset(instance=self.object)
+            context.update({'prd_university_payment_formset': university_payment_formset })
+
         context.update({
             'messages': alert,
             'form': main_change_form,
@@ -1075,12 +1374,10 @@ class ChangeProductView(DetailView):
             'op_form': op_change_form,
             'country_form': con_change_form,
             'price_form': price_change_form,
-            'attribute_form':attribute_form
-            })
+            'attribute_form': attribute_form})
         return context
 
     def post(self, request, *args, **kwargs):
-        
         if self.request.POST or self.request.FILES:
             try:
                 obj = int(self.kwargs.get('pk', None))
@@ -1178,8 +1475,6 @@ class ChangeProductView(DetailView):
                         form = ProductPriceForm(request.POST, instance=obj)
                         if form.is_valid():
                             product = form.save()
-                            product.title = product.get_title()
-                            product.save()
                             messages.success(
                                 self.request,
                                 "Product Prices changed Successfully")
@@ -1201,7 +1496,7 @@ class ChangeProductView(DetailView):
                                 request.FILES,
                                 instance=obj)
                         if form.is_valid():
-                            product = form.save()
+                            form.save()
                             messages.success(
                                 self.request,
                                 "Product Attributes changed Successfully")
@@ -1259,7 +1554,7 @@ class ChangeProductView(DetailView):
                         if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
                             vendor = self.get_object().vendor
                         else:
-                            vendor  = self.request.user.get_vendor()
+                            vendor = self.request.user.get_vendor()
                         
                         ProductFAQFormSet = inlineformset_factory(
                             Product, Product.faqs.through, fk_name='product',
@@ -1454,7 +1749,178 @@ class ChangeProductView(DetailView):
                                 request, [
                                     "console/shop/change_product.html"
                                 ], context)
-                    
+
+                    elif slug == 'skill':
+                        ProductSkillFormSet = inlineformset_factory(
+                            Product, Skill.skillproducts.through, fk_name='product',
+                            form=ProductSkillForm,
+                            can_delete=True,
+                            formset=SkillInlineFormSet, extra=0)
+                        formset = ProductSkillFormSet(
+                            request.POST, instance=obj,
+                            form_kwargs={'object': obj},)
+                        from django.db import transaction
+                        if formset.is_valid():
+                            with transaction.atomic():
+                                formset.save(commit=False)
+                                saved_formset = formset.save(commit=False)
+                                for ins in formset.deleted_objects:
+                                    ins.delete()
+
+                                for form in saved_formset:
+                                    form.save()
+                                formset.save_m2m()
+                            messages.success(
+                                self.request,
+                                "Product Skill Changed Successfully")
+                            return HttpResponseRedirect(
+                                reverse(
+                                    'console:product-change',
+                                    kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if formset:
+                                context.update({'prdskill_formset': formset})
+                            messages.error(
+                                self.request,
+                                "Product Skill Change Failed, \
+                                Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_product.html"
+                                ], context)
+
+                    elif slug == 'university':
+                        form = UniversityCourseForm(request.POST, request.FILES, instance=obj.university_course_detail)
+                        application_process_priority = [k for k in form.data['application_process_priority'].split(',') if k]
+
+                        if application_process_priority:
+                            form.data['application_process'] = str(application_process_priority)
+
+                        benefits_priority = [k for k in form.data['benefits_priority'].split(',') if k]
+                        form.data['benefits'] = str(benefits_priority) if benefits_priority else ''
+                        headings = [key for key in form.data.keys() if key.startswith('heading')]
+                        attendees_criteria = []
+
+                        for heading in sorted(headings):
+                            if form.data[heading] or form.data['sub' + heading]:
+                                attendees_criteria.append((form.data[heading], form.data['sub'+heading]))
+
+                        form.data['attendees_criteria'] = str(attendees_criteria)
+
+                        if form.is_valid():
+                            form.save()
+                            messages.success(
+                                self.request,
+                                "University course details changed Successfully")
+                            return HttpResponseRedirect(reverse('console:product-change',kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'prd_university_form': form})
+                            messages.error(
+                                self.request,
+                                "University course details Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_product.html"
+                                ], context)
+
+                    elif slug == 'university_payment':
+                        UniversityCoursesPaymentFormset = inlineformset_factory(
+                            Product, UniversityCoursePayment,
+                            form=UniversityCoursePaymentForm,
+                            can_delete=True,
+                            extra=2,
+                            max_num=15, validate_max=True
+                        )
+                        formset = UniversityCoursesPaymentFormset(
+                            request.POST, instance=obj)
+                        from django.db import transaction
+                        if formset.is_valid():
+                            with transaction.atomic():
+                                formset.save(commit=False)
+                                saved_formset = formset.save(commit=False)
+                                for ins in formset.deleted_objects:
+                                    ins.delete()
+
+                                for form in saved_formset:
+                                    form.save()
+                            messages.success(
+                                self.request,
+                                "University course Changed Successfully")
+                            return HttpResponseRedirect(
+                                reverse(
+                                    'console:product-change',
+                                    kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if formset:
+                                context.update({'prd_university_payment_formset': formset})
+                            messages.error(
+                                self.request,
+                                "University course payment Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_product.html"
+                                ], context)
+                    elif slug == 'testimonial_model':
+                        TestimonialModelFormset = modelformset_factory(
+                            Testimonial,
+                            form=TestimonialModelForm,
+                            can_delete=True,
+                            extra=1,
+                            max_num=5, validate_max=True)
+
+                        if self.object.type_flow == 14:
+                            formset = TestimonialModelFormset(
+                                request.POST, request.FILES,
+                                queryset=Testimonial.objects.filter(
+                                    page=UNIVERSITY_COURSE, object_id=obj.pk))
+                            from django.db import transaction
+                            if formset.is_valid():
+                                with transaction.atomic():
+                                    formset.save(commit=False)
+                                    saved_formset = formset.save(commit=False)
+                                    for ins in formset.deleted_objects:
+                                        ins.delete()
+
+                                    for form in saved_formset:
+                                        form.page = UNIVERSITY_COURSE
+                                        form.object_id = obj.pk
+                                        form.save()
+                                    formset.save_m2m()
+
+                                messages.success(
+                                    self.request,
+                                    "University Course Testimonial changed Successfully")
+                                return HttpResponseRedirect(
+                                    reverse(
+                                        'console:product-change',
+                                        kwargs={'pk': obj.pk}))
+                            else:
+                                context = self.get_context_data()
+                                if formset:
+                                    context.update({'testimonial_model_formset': formset})
+                                messages.error(
+                                    self.request,
+                                    "University Course Testimonial Change Failed, Changes not Saved")
+                                return TemplateResponse(
+                                    request, [
+                                        "console/shop/change_product.html"
+                                    ], context)
+                        else:
+                            context = self.get_context_data()
+                            if formset:
+                                context.update({'prd_university_payment_formset': formset})
+                            messages.error(
+                                self.request,
+                                "University Course Change Failed, \
+                                Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_product.html"
+                                ], context)
                 messages.error(
                     self.request,
                     "Object Does Not Exists")
@@ -1666,7 +2132,9 @@ class ActionCategoryView(View, CategoryValidation):
             allowed_action = []
             if has_group(user=self.request.user,
                 grp_list=settings.PRODUCT_GROUP_LIST):
-                allowed_action = ['active', 'inactive','skill', 'noskill']
+                allowed_action = ['active', 'inactive', 'skill',
+                'noskill', 'service', 'noservice',
+                'university', 'nouniversity']
             else:
                 allowed_action = []
 
@@ -1675,7 +2143,7 @@ class ActionCategoryView(View, CategoryValidation):
                     category = Category.objects.get(pk=pk_obj)
                     if action == "active":
                         if self.validate_before_active(
-                            request=self.request,category=category):    
+                            request=self.request, category=category):    
                             category.active = True
                             category.save()
                             messages.success(
@@ -1717,6 +2185,47 @@ class ActionCategoryView(View, CategoryValidation):
                                     "Category is removed as skill!") 
                             data = {'success': 'True',
                                 'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
+                    
+                    elif action == "service":
+                        category.is_service = True
+                        category.save()    
+                        messages.success(
+                            self.request,
+                                "Category is made service!") 
+                        data = {'success': 'True',
+                            'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
+                        # else:
+                        #     data = {'error': 'True'}
+                    elif action == "noservice":
+                            category.is_service = False
+                            category.save()    
+                            messages.success(
+                                self.request,
+                                    "Category is removed as service!") 
+                            data = {'success': 'True',
+                                'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
+
+                    elif action == "university":
+                        if self.validate_before_university(
+                            request=self.request, category=category):
+                            category.is_university = True
+                            category.save()
+                            messages.success(
+                                self.request,
+                                    "Category is made university!")
+                            data = {'success': 'True',
+                                'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
+                        else:
+                            data = {'error': 'True'}
+                    elif action == "nouniversity":
+                        category.is_university = False
+                        category.save()
+                        messages.success(
+                            self.request,
+                                "Category is removed as university!")
+                        data = {'success': 'True',
+                            'next_url': reverse('console:category-change', kwargs={'pk': category.pk}) }
+
                 except Exception as e:
                     logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
 
@@ -1748,7 +2257,7 @@ class ActionProductView(View, ProductValidation):
             action = form_data.get('action', None)
             pk_obj = form_data.get('product', None)
             allowed_action = []
-            
+
             if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
                 allowed_action = ['active', 'inactive','index', 'unindex']
             else:
@@ -1843,6 +2352,156 @@ class ActionProductView(View, ProductValidation):
         data = {'error': 'True'}
         return HttpResponse(json.dumps(data), content_type="application/json")
 
+
+class ProductAuditHistoryView(UserGroupMixin, ListView, PaginationMixin):
+    model = ProductAuditHistory
+    template_name = 'console/tasks/product-audit-history.html'
+    context_object_name = 'product_audit_list'
+    page = 1
+    paginated_by = 20
+    query = ''
+    group_names = ['FINANCE', 'PRODUCT']
+
+    def get_queryset(self):
+        self.page = self.request.GET.get('page', 1)
+        product_id = self.request.GET.get('product_id', '')
+        date_range = self.request.GET.get('date_range', '')
+        queryset = self.model.objects.all().order_by('-created_at')
+        filter_kwargs = {}
+        if product_id:
+            filter_kwargs['product_id'] = product_id
+        if date_range:
+            start_date, end_date = date_range.split(' - ')
+            start_date = datetime.strptime(start_date, "%m/%d/%Y")
+            end_date = datetime.strptime(end_date, "%m/%d/%Y") + relativedelta(days=1)
+            start_id = bson.ObjectId.from_datetime(start_date)
+            end_id = bson.ObjectId.from_datetime(end_date)
+            filter_kwargs['id__gte'] = start_id
+            filter_kwargs['id__lte'] = end_id
+
+        return queryset.filter(**filter_kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductAuditHistoryView, self).get_context_data(**kwargs)
+        paginator = Paginator(context['product_audit_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        context['vendor_list'] = Vendor.objects.values_list('id', 'name')
+        return context
+
+
+class ProductHistoryLogDownloadView(UserGroupMixin, View):
+    model = ProductAuditHistory
+    date_range = None
+    product_id = None
+    group_names = ['FINANCE', 'PRODUCT']
+
+    def get_queryset(self):
+        self.page = self.request.GET.get('page', 1)
+        queryset = self.model.objects.all().order_by('-created_at')
+        if self.product_id:
+            queryset = queryset.filter(product_id=self.product_id)
+        if self.date_range:
+            start_date, end_date = self.date_range.split(' - ')
+            start_date = datetime.strptime(start_date, "%m/%d/%Y")
+            end_date = datetime.strptime(end_date, "%m/%d/%Y")
+            end_date = end_date + relativedelta(days=1)
+            start_id = bson.ObjectId.from_datetime(start_date)
+            end_id = bson.ObjectId.from_datetime(end_date)
+            queryset = queryset.filter(id__gte=start_id, id__lte=end_id)
+        return queryset
+
+    def post(self, request, *args, **kwargs):
+        self.product_id = self.request.POST.get('product_id', '')
+        self.date_range = self.request.POST.get('date_range', '')
+
+        if self.date_range and self.product_id:
+            queryset = self.get_queryset()
+            return self.download_csv_file(queryset)
+        else:
+            messages.add_message(request, messages.ERROR, 'Please select Product and Date Range')
+            return HttpResponseRedirect(reverse('console:product-audit-history'))
+
+    def download_csv_file(self, queryset):
+        product_name = 'no_log'
+        try:
+            csvfile = StringIO()
+            csv_writer = csv.writer(
+                csvfile, delimiter=',', quotechar="'",
+                quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writerow([
+                'Product Id','Product Name', 'Variation Name', 'UPC',
+                'Price', 'Duration', 'Vendor Name', 'Date', 'Time'
+            ])
+
+            for log in queryset:
+                product_name = log.product_name
+                try:
+                    csv_writer.writerow([
+                        str(log.product_id),
+                        str(log.product_name),
+                        str(log.variation_name),
+                        str(log.upc),
+                        str(log.price),
+                        str(log.duration),
+                        str(log.vendor_name),
+                        str(log.created_at.strftime('%d-%b-%Y')),
+                        str(log.created_at.strftime('%H:%M:%S'))
+                    ])
+                except Exception as e:
+                    logging.getLogger('error_log').error("%s " % str(e))
+                    continue
+            file_name = product_name + timezone.now().date().strftime("%Y-%m-%d")
+            response = HttpResponse(csvfile.getvalue(), content_type=mimetypes.guess_type('%s.csv' % file_name))
+            response["Content-Disposition"] = "attachment; filename=%s.csv" % (file_name)
+            return response
+
+        except Exception as e:
+            messages.add_message(self.request, messages.ERROR, str(e))
+        return HttpResponseRedirect(reverse('console:product-audit-history'))
+
+class DownloadDiscountReportView(TemplateView):
+    template_name = "console/order/discount_report.html"
+
+    def dispatch(self,request,*args,**kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden()
+        if 'order.can_download_discount_report' not in request.user.get_all_permissions():
+            return HttpResponseForbidden()
+        return super(DownloadDiscountReportView,self).dispatch(request,*args,**kwargs)
+
+    def post(self,request,*args,**kwargs):
+        report_type = request.POST.get('report_type')
+        report_date = request.POST.get('report_date')
+        file_found = False
+        file_path = "reports/discount_report_" + report_date + \
+             "_" + report_type + ".csv"
+        filename = file_path.split('/')[-1]
+
+        if not settings.IS_GCP:
+            file_path = os.path.join(settings.MEDIA_ROOT, file_path)
+            try:
+                fsock = FileWrapper(open(file_path, 'rb'))
+                file_found = True
+            except:
+                pass
+        else:
+            try:
+                fsock = GCPPrivateMediaStorage().open(file_path)
+                file_found = True
+            except:
+                pass
+        
+        if file_found:
+            response = HttpResponse(
+                fsock,content_type=mimetypes.guess_type(filename)[0])
+            response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
+            return response
+        
+        else:
+            messages.add_message(request, messages.ERROR, "No record found.")
+            return render(request,template_name=self.template_name)
+        
+        
 # @Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 # @Decorate(check_permission('shop.console_change_attribute'))
 # class AddAttributeOptionView(FormView):

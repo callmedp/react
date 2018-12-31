@@ -1,11 +1,15 @@
 import json
+import logging
+
 from haystack import indexes
-from .models import Product
+
 from django.template.loader import render_to_string
+from django.conf import settings
+
 from shop.choices import DURATION_DICT, convert_to_month
 from shop.choices import (
     DURATION_DICT, convert_to_month)
-import logging
+from .models import Product
 
 def get_attributes(pv, currency='INR'):
     SM, CL, CERT, DM, PI = '', '', '', '', '' 
@@ -39,8 +43,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pFAn = indexes.MultiValueField(null=True)
     pCtg = indexes.MultiValueField(null=True)
     pCtgn = indexes.MultiValueField(null=True)
-    pCC = indexes.CharField(null=True)    
-    pAb = indexes.CharField(default='') 
+    pCC = indexes.CharField(null=True)
+    pAb = indexes.CharField(default='')
     
     # Meta and SEO #
     pURL = indexes.CharField(null=True, indexed=False)
@@ -127,7 +131,18 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pPOP = indexes.CharField(indexed=False)
     pCD = indexes.DateTimeField(model_attr='created', indexed=True)
     pMD = indexes.DateTimeField(model_attr='modified', indexed=False)
-    
+
+    # skill Field
+    pSkill = indexes.MultiValueField(null=True)
+    pSkilln = indexes.MultiValueField(null=True)
+
+    # skill category
+    pCtgs = indexes.MultiValueField(null=True)
+    pCtgsD = indexes.CharField(indexed=False)
+
+    # university_courses_detail
+    pUncdl = indexes.MultiValueField(null=True, indexed=False)
+
     def get_model(self):
         return Product
 
@@ -142,8 +157,12 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             productcategories__active=True,
             active=True)
         categories_list = []
+        
         for cat in categories:
-            if cat.type_level == 4:
+            allowed_levels = [4]
+            if cat.is_service or cat.is_university or cat.is_skill:
+                allowed_levels.append(3)
+            if cat.type_level in allowed_levels:
                 pcat = cat.get_parent()
                 for pc in pcat:
                     categories_list.append(pc)
@@ -179,7 +198,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         if len(categories) > 0:
             p_category = [pcat for cat in categories for pcat in cat.get_parent()]
             # pp_category = [pcat for cat in p_category for pcat in cat.get_parent()]
-            parents = [p_category,]
+            parents = [p_category, ]
             return [item.pk for sublist in parents for item in sublist if sublist]
         return []
 
@@ -198,10 +217,65 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             return [item.name for sublist in parents for item in sublist if sublist]
         return []
 
+    def prepare_pSkill(self, obj):
+        # if obj.is_course:
+        skill_ids = list(obj.productskills.filter(
+            skill__active=True,
+            active=True).values_list('skill', flat=True))
+        return skill_ids
+
+    def prepare_pSkilln(self, obj):
+        # if obj.is_course:
+        skill_names = list(obj.productskills.filter(
+            skill__active=True,
+            active=True).values_list('skill__name', flat=True))
+        return skill_names
+
+    def prepare_pCtgs(self, obj):
+        categories = obj.categories.filter(
+            productcategories__active=True,
+            active=True)
+        categories_list = list(categories.filter(
+            type_level=4, is_skill=True))
+        for cat in categories:
+            if cat.type_level == 4 and not cat.is_skill:
+                pcat = cat.get_parent()
+                for pc in pcat:
+                    if pc.type_level == 3 and pc.is_skill:
+                        categories_list.append(pc)
+        categories_list = list(set(categories_list))
+        return [cat.pk for cat in categories_list]
+
+    def prepare_pCtgsD(self, obj):
+        categories = obj.categories.filter(
+            productcategories__active=True,
+            active=True)
+        data = {}
+        categories_list = list(categories.filter(
+            type_level=4, is_skill=True))
+        for cat in categories:
+            if cat.type_level == 4 and not cat.is_skill:
+                pcat = cat.get_parent()
+                for pc in pcat:
+                    if pc.type_level == 3 and pc.is_skill:
+                        categories_list.append(pc)
+        categories_list = list(set(categories_list))
+        for cat in categories_list:
+            url = cat.get_absolute_url()
+            url = '%s://%s%s' % (
+                settings.SITE_PROTOCOL,
+                settings.SITE_DOMAIN, url)
+            data_dict = {
+                'name': cat.heading if cat.heading else cat.name,
+                'url': url}
+            data.update({
+                cat.id: data_dict, })
+        return json.dumps(data)
+
     def prepare_pCC(self, obj):
         content = ''
         chapters = obj.chapter_product.filter(status=True)\
-                .order_by('ordering')
+            .order_by('ordering')
         chapter_list = []
         if chapters:
             for pch in chapters:
@@ -239,19 +313,23 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_pDM(self, obj):
         if obj.is_course:
-            DM = []
+            dm = []
             if obj.type_product == 1:
                 var = obj.get_variations()
                 for pv in var:
-                    DM.append(pv.get_duration())
+                    dm.append(pv.get_duration())
             elif obj.type_product == 3:
-                cmbs =list()
+                cmbs = list()
                 cmbs = obj.get_combos()
                 for cmb in cmbs:
-                    DM.append(cmb.get_duration())
+                    dm.append(cmb.get_duration())
             else:
-                DM.append(obj.get_duration())
-            return list(set(DM))
+                dm.append(obj.get_duration())
+            return list(set(dm))
+        elif obj.is_service and obj.type_flow == 5:
+            dm = []
+            dm.append(obj.get_duration_in_day())
+            return list(set(dm))
         return []
 
     def prepare_pCert(self, obj):
@@ -804,6 +882,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'label': pv.name,
                         'heading':pv.heading if pv.heading else '',
                         'experience': pv.get_exp(),
+                        'duration': pv.get_duration_in_day(),
                         'url': pv.get_url(relative=True),
                         'inr_price': float(pv.inr_price),
                         'fake_inr_price': float(pv.fake_inr_price),
@@ -817,5 +896,33 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     'pop_list': pop_list
                 })
         return json.dumps(pop_dict)
-    
 
+    def prepare_pUncdl(self, obj):
+        detail = {}
+        if obj.type_flow == 14:
+            detail['launchdate'] = obj.university_course_detail.batch_launch_date.strftime('%d %b %Y').upper() \
+                if obj.university_course_detail.batch_launch_date else ''
+            detail['applydate'] = obj.university_course_detail.apply_last_date.strftime('%d %b %Y').upper() \
+                if obj.university_course_detail.apply_last_date else ''
+            detail['payment_deadline'] = obj.university_course_detail.payment_deadline.strftime('%d/%m/%Y') \
+                if obj.university_course_detail.payment_deadline else ''
+            detail['benefits'] = obj.university_course_detail.get_benefits
+            detail['app_process'] = obj.university_course_detail.get_application_process
+            detail['assesment'] = obj.university_course_detail.assesment
+            detail['eligibility_criteria'] = obj.university_course_detail.eligibility_criteria
+            detail['attendees_criteria'] = obj.university_course_detail.attendees_criteria
+            detail['highlighted_benefits'] = obj.university_course_detail.highlighted_benefits
+            sample_certificate = obj.university_course_detail.sample_certificate
+            detail['sample_certificate'] = sample_certificate.url if sample_certificate else ''
+            brochure_attr = obj.attributes.filter(name='Brochure')
+            detail['brochure'] = brochure_attr[0].productattributes.first().value_file.url if brochure_attr else ''
+            payment_list = []
+            for payment in obj.university_course_payment.filter(active=True):
+                data = {}
+                data['installment_fee'] = str(payment.installment_fee)
+                data['ldpayment'] = payment.last_date_of_payment.strftime('%d/%m/%Y')
+
+                payment_list.append(data)
+            detail['payment'] = payment_list
+            return json.dumps(detail)
+        return ''

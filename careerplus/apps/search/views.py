@@ -466,6 +466,15 @@ class FuncAreaPageView(SearchBaseView):
     params_class = FuncAreaParams
     allow_empty_query = True
 
+    def get(self,request,*args,**kwargs):
+        paths_to_redirect = {"/services/resume-services/537/":"/services/resume-writing/63/",
+                "/services/linkedin-profile-writing/65/":"/services/linkedin-profile/180/"}
+
+        if request.path in paths_to_redirect.keys():
+            return HttpResponsePermanentRedirect(paths_to_redirect.get(request.path))
+
+        return super(FuncAreaPageView,self).get(request,*args,**kwargs)
+
     def empty_query_handler(self):
         """
         Override for allowing no query search

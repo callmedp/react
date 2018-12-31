@@ -19,11 +19,14 @@ from .decorators import (
     stop_browser_cache, has_group)
 from django.core.paginator import Paginator
 from django.db.models import Q
-from shop.choices import PRODUCT_VENDOR_CHOICES
+from shop.choices import PRODUCT_VENDOR_CHOICES, APPLICATION_PROCESS
 from blog.mixins import PaginationMixin
 from shop.models import (
-    Product, ProductScreen, ScreenChapter)
-from faq.models import ScreenFAQ, FAQuestion
+    Product, ProductScreen, ScreenChapter,
+    Skill, ScreenProductSkill,
+    UniversityCoursePaymentScreen)
+from faq.models import (
+    ScreenFAQ, FAQuestion)
 from shop.utils import ProductModeration
 from .vendor_form import (
     AddScreenProductForm,
@@ -39,7 +42,12 @@ from .vendor_form import (
     ScreenProductChapterForm,
     ScreenChapterInlineFormSet,
     ScreenProductVariationForm,
-    ScreenVariationInlineFormSet,)
+    ScreenVariationInlineFormSet,
+    ScreenProductSkillForm,
+    ScreenSkillInlineFormSet,
+    ScreenUniversityCourseForm,
+    ScreenUniversityCoursePaymentForm,
+    ScreenUniversityCoursesPaymentInlineFormset)
 
 
 @Decorate(stop_browser_cache())
@@ -521,7 +529,7 @@ class ChangeScreenProductView(DetailView):
         if has_group(user=self.request.user, grp_list=settings.PRODUCT_GROUP_LIST):
             vendor = self.get_object().vendor
         else:
-            vendor  = self.request.user.get_vendor()
+            vendor = self.request.user.get_vendor()
         
         ScreenProductFAQFormSet = inlineformset_factory(
             ProductScreen, ProductScreen.faqs.through, fk_name='product',
@@ -533,9 +541,23 @@ class ChangeScreenProductView(DetailView):
             prdfaq_formset = ScreenProductFAQFormSet(
                 instance=self.get_object(),
                 form_kwargs={'object': self.get_object(),
-                    'vendor':vendor },)
+                    'vendor': vendor},)
             context.update({'prdfaq_formset': prdfaq_formset})
-        
+
+        ScreenProductSkillFormSet = inlineformset_factory(
+            ProductScreen, ScreenProductSkill,
+            fk_name='product',
+            form=ScreenProductSkillForm,
+            can_delete=True,
+            formset=ScreenSkillInlineFormSet, extra=1,
+            max_num=15, validate_max=True)
+
+        if self.object:
+            prdskill_formset = ScreenProductSkillFormSet(
+                instance=self.get_object(),
+                form_kwargs={'object': self.get_object()})
+            context.update({'prdskill_formset': prdskill_formset})
+
         ScreenProductChapterFormSet = inlineformset_factory(
             ProductScreen, ScreenChapter, fk_name='product',
             form=ScreenProductChapterForm,
@@ -552,7 +574,7 @@ class ChangeScreenProductView(DetailView):
             ScreenProductVariationFormSet = inlineformset_factory(
                 ProductScreen, ProductScreen.variation.through, fk_name='main',
                 form=ScreenProductVariationForm,
-                can_delete=False,
+                can_delete=True,
                 formset=ScreenVariationInlineFormSet, extra=0,
                 max_num=50, validate_max=True)
             if self.object:
@@ -560,7 +582,22 @@ class ChangeScreenProductView(DetailView):
                     instance=self.get_object(),
                     form_kwargs={'object': self.get_object()})
                 context.update({'prdvars_formset': prdvar_formset})
-            
+        if self.object.type_flow == 14:
+            context.update({'prd_university_form': ScreenUniversityCourseForm(
+                instance=self.object.screen_university_course_detail)})
+
+            UniversityCoursesPaymentFormset = inlineformset_factory(
+                ProductScreen, UniversityCoursePaymentScreen,
+                fk_name='productscreen',
+                form=ScreenUniversityCoursePaymentForm,
+                can_delete=True,
+                formset=ScreenUniversityCoursesPaymentInlineFormset, extra=1,
+                max_num=15, validate_max=True
+            )
+ 
+            university_payment_formset = UniversityCoursesPaymentFormset(instance=self.object)
+            context.update({'prd_university_payment_formset': university_payment_formset })
+
         context.update({
             'messages': alert,
             'form': main_change_form,
@@ -677,7 +714,7 @@ class ChangeScreenProductView(DetailView):
                             productscreen = form.save()
                             if not productscreen.status == 2:    
                                 productscreen.status = 1
-                                productscreen.save()        
+                            productscreen.save()        
                             messages.success(
                                 self.request,
                                 "Product Attributes changed Successfully")
@@ -819,7 +856,127 @@ class ChangeScreenProductView(DetailView):
                                 request, [
                                     "console/vendor/change_screenproduct.html"
                                 ], context)
-                    
+
+                    elif slug == 'skill':
+                        ScreenProductSkillFormSet = inlineformset_factory(
+                            ProductScreen, ScreenProductSkill, fk_name='product',
+                            form=ScreenProductSkillForm,
+                            can_delete=True,
+                            formset=ScreenSkillInlineFormSet, extra=0,
+                            max_num=15, validate_max=True)
+                        formset = ScreenProductSkillFormSet(
+                            request.POST, instance=obj,
+                            form_kwargs={'object': obj},)
+                        from django.db import transaction
+                        if formset.is_valid():
+                            with transaction.atomic():
+                                formset.save(commit=False)
+                                saved_formset = formset.save(commit=False)
+                                for ins in formset.deleted_objects:
+                                    ins.delete()
+
+                                for form in saved_formset:
+                                    form.save()
+                                formset.save_m2m()
+                            messages.success(
+                                self.request,
+                                "Product Skill Changed Successfully")
+                            return HttpResponseRedirect(
+                                reverse(
+                                    'console:screenproduct-change',
+                                    kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if formset:
+                                context.update({'prdskill_formset': formset})
+                            messages.error(
+                                self.request,
+                                "Product Skill Change Failed, \
+                                Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/vendor/change_screenproduct.html"
+                                ], context)
+                    elif slug == 'university':
+                        form = ScreenUniversityCourseForm(request.POST, request.FILES, instance=obj.screen_university_course_detail)
+                        application_process_priority = [k for k in form.data['application_process_priority'].split(',') if k]
+
+                        if application_process_priority:
+                            form.data['application_process'] = str(application_process_priority)
+
+                        benefits_priority = [k for k in form.data['benefits_priority'].split(',') if k]
+                        form.data['benefits'] = str(benefits_priority) if benefits_priority else ''
+                        headings = [key for key in form.data.keys() if key.startswith('heading')]
+                        attendees_criteria = []
+
+                        for heading in sorted(headings):
+                            if form.data[heading] or form.data['sub' + heading]:
+                                attendees_criteria.append((form.data[heading], form.data['sub'+heading]))
+
+                        form.data['attendees_criteria'] = str(attendees_criteria)
+                        if form.is_valid():
+                            form.save()
+                            if not obj.status == 2:
+                                obj.status = 1
+                                obj.save()
+                            messages.success(
+                                self.request,
+                                "University course details changed Successfully")
+                            return HttpResponseRedirect(reverse('console:screenproduct-change',kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'prd_university_form': form})
+                            messages.error(
+                                self.request,
+                                "University course details Change Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/vendor/change_screenproduct.html"
+                                ], context)
+
+                    elif slug == 'university_payment':
+                        UniversityCoursesPaymentFormset = inlineformset_factory(
+                            ProductScreen, UniversityCoursePaymentScreen,
+                            form=ScreenUniversityCoursePaymentForm,
+                            can_delete=True,
+                            extra=2,
+                            max_num=15, validate_max=True
+                        )
+                        formset = UniversityCoursesPaymentFormset(
+                            request.POST, instance=obj)
+                        from django.db import transaction
+                        if formset.is_valid():
+                            with transaction.atomic():
+                                formset.save(commit=False)
+                                saved_formset = formset.save(commit=False)
+                                for ins in formset.deleted_objects:
+                                    ins.delete()
+
+                                for form in saved_formset:
+                                    form.save()
+                                if not obj.status == 2:
+                                    obj.status = 1
+                                    obj.save()
+                            messages.success(
+                                self.request,
+                                "University course Changed Successfully")
+                            return HttpResponseRedirect(
+                                reverse(
+                                    'console:screenproduct-change',
+                                    kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if formset:
+                                context.update({'prd_university_payment_formset': formset})
+                            messages.error(
+                                self.request,
+                                "University Course Change Failed, \
+                                Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/vendor/change_screenproduct.html"
+                                ], context)
                 messages.error(
                     self.request,
                     "Object Does Not Exists")

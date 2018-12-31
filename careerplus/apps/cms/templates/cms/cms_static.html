@@ -5,7 +5,7 @@
  {% block canonical_url %}
       <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
       <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
-      <link rel="amphtml" href="//{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}?type=amp">
+      <link rel="amphtml" href="https://learning.shine.com{{ page_obj.get_absolute_url }}?type=amp">
     {% endblock canonical_url %}
 {% block css_section %}
         <!-- Bootstrap -->
@@ -16,6 +16,7 @@
         <!--<link type="text/css"  href="{% static 'shinelearn/css/common/bootstrapv3.3.7.css' %}" rel="stylesheet" >-->
         <link type="text/scss" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
         <link type="text/css"  href="{% static 'shinelearn/css/cms/global.css' %}"  rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/cms/faq.scss' %}" rel="stylesheet">
 
         {% endcompress %}
          <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -65,6 +66,14 @@
         <!-- Google Tag Manager --><!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':--><!--new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],--><!--j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=--><!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);--><!--})(window,document,'script','dataLayer','GTM-M323HB');</script>--><!-- End Google Tag Manager -->
         <script type="text/javascript">window['CURRENT_FLAVOUR']="full";window['SHINE_SITE']="https://m.shine.com";window['MAIN_DOMAIN_PREFIX']="https://learning.shine.com";window['MOBILE_LOGIN_URL']="https://learning.shine.com/login/";</script>
 
+         <script>
+              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+              ga('create', 'UA-3537905-41', 'auto');
+              ga('send', 'pageview');
+        </script>
         {% endblock GA %}
 
 
@@ -78,7 +87,7 @@
 
 {% block container %}
 
-    <div class="container">
+    <div id="top" class="container">
         <div class="row">
             <div class="col-md-12 d-resume fs-12 mt-15">
                 <nav aria-label="breadcrumb">
@@ -92,8 +101,19 @@
                 <h1 class="mb-30">Resume Format and CV Samples</h1>
                 <!-- white box -->
                 <div class="white-box">
-                    <p>The resume is one of those documents that represent your professional information, mostly to depict one's professional growth and expertise. It is usually submitted to and accessed by professionals like hiring managers, recruiters, organizational heads, etc. To standardize either of the processes, resume formats are introduced for different needs and specifications like academic, job search (industry specific), freshers resume format and so on. It makes the presentation of information streamlined and simple, giving an edge to both sides in hiring and other forms of decision making.</p>
-                    <div class="most-resume mt-25">
+                    <p>A Resume is a summarized document which represents a job applicant's professional background and skills for a prospective employer. It describes an individual’s work experience, qualifications, and relevant skills in reference to a job application. It is one of the essential parts of the job application process. A relevant and well-organized resume will aid you to get an interview call while a poor one may even pose a negative impression in the pool of applicants. To solve this concern, we have introduced free customized resume samples for discrete profiles. 
+                    </p>
+                    <div class="most-resume mt-25 wd27">
+                        <p class="mt-0 subhead">Table of index</p>
+                        <ul class="mt-15">
+                            <li><a href="#resume-formats">Types of Resume formats and their use</a></li>
+                            <li><a href="#creative-visual">Creative and visual resume formats</a></li>
+                            <li><a href="#faq">Frequently asked Questions</a></li>
+                            <li><a href="#layout-tips">Resume formatting and layout tips</a></li>
+                            <li><a href="#difference">Difference Between Resume, CV and Biodata</li>
+                        </ul>
+                    </div>
+                    <div class="most-resume mt-25 wd71">
                         <div class="media">
                             <div class="media-left">
                                 <div class="img-wrap mr-20">
@@ -122,23 +142,17 @@
                             </div>
                         </div>
                     </div><!-- /. most-resume -->
+                    
                 </div><!--/. White box -->
 
                 <!-- white box -->
-                <div class="white-box mt-30">
-                    <h2 class="mb-15">Importance of Resume Formats</h2>
-                    <p>A well-formatted resume is a must to provide relevant and correct information to the recruiters and also, make it attractive. A competitive edge can be gained by using the right resume formats and content. Also, with digital scanning and screening of resumes, it is even more important to have the right format in order for software to read and shortlist your resume for the next step.</p>
-                    <p>Our Resume Writers hold 5-10 years of organizational experience and bring their expertise in delivering value to the customers. Through the correct selection of format and keyword rich content, they are known to make resumes that pass all tests.</p>
-                </div><!--/. White box -->
-
-                <!-- white box -->
-                <div class="white-box mt-30">
+                <div id="resume-formats" class="white-box mt-30 scroll">
                     <h2 class="mb-15">Types of Resume formats and their use</h2>
-                    <p>There are three basic types of resume formats that are considered standard as per industry norms. These resume formats are devised to simplify the application process by standardizing the important information and presenting in an easy-to-access manner. Apart from these, there is another class of resume formats called creative resume format or visual resume format. Every format has unique features that make them useful in different cases. Here's how:</p>
+                    <p>From traditional format to a highly creative one, there are many suitable resume samples to choose from. However, there are three basic types of resume formats that are considered standard as per industry norms and HR best practices. Another class of resumes which can be considered are creative resume and visual resume formats. Every format has unique features that make them useful in different cases. Here's how: </p>
 
                     <div class="most-resume mt-25">
-                        <h3 class="uppercase">CHRONOLOGICAL RESUME FORMATS</h3>
-                        <p>The chronological resume is the type of format in which information is presented in a standard timeline, preferably reverse chronological. It means that the information is presented from recent to old or vice versa, as the events happened.</p>
+                        <h3 class="uppercase">CHRONOLOGICAL RESUME FORMAT</h3>
+                        <p>Chronological resumes are one of the most traditional and accepted format for a resume. Recruiters prefer this format because of its familiar and simple layout. The information is presented in ‘reverse-chronological’ order which lists your experience from the most recent to older ones of your professional and academic history. </p>
                         <hr />
                         <div class="media">
                             <div class="media-left">
@@ -153,22 +167,22 @@
                             <div class="media-body mt-15">
                                 <p class="mt-0 subhead">Features of a Chronological Resume Format:</p>
                                 <ul class="mt-15">
-                                    <li>The chronological resume is a simple resume, easy to go through, and detailed in nature.</li>
-                                    <li>This type of resume is used to highlight work history from recent to oldest.</li>
-                                    <li>It enhances the way experience and achievements are presented in the resume.</li>
-                                    <li>It is the best resume format to convert into a detailed CV.</li>
+                                    <li>Simple, easy to go through, and detailed in nature. </li>
+                                    <li>Used to highlight work history from recent to oldest. </li>
+                                    <li>Enhances the way to showcase experience and achievements. </li>
+                                    <li>Best resume format to convert into a detailed CV format. </li>
                                 </ul>
                             </div>
                         </div>
                         <hr />
 
                         <p class="rec-head">Recommended for:</p>
-                        <p>Experienced professionals (2+ years of experience), professionals applying for a similar profile as current, and graduates or above applying for higher education.</p>
+                        <p>Experienced professionals (2+ years of experience), and graduates or above applying for higher education. Also useful as a detailed Curriculum Vitae (CV). </p>
                     </div><!-- /. most-resume -->
 
                     <div class="most-resume mt-25">
-                        <h3 class="uppercase">FUNCTIONAL RESUME FORMATS</h3>
-                        <p>The functional resume is used to present direct points with an emphasis on factual, static, and simple information. The information does not follow a defined pattern except as defined by headings.</p>
+                        <h3 class="uppercase">FUNCTIONAL RESUME FORMAT</h3>
+                        <p>Functional resumes are known for a skill based resume which emphasize qualifications, skills, and accomplishments. This format does not follow a defined pattern and is customizable to highlight the most impactful points. </p>
                         <hr />
                         <div class="media">
                             <div class="media-left">
@@ -183,22 +197,22 @@
                             <div class="media-body mt-15">
                                 <p class="mt-0 subhead">Features of a Functional Resume Format:</p>
                                 <ul class="mt-15">
-                                    <li>The functional resume is a simple format with direct and factual information.</li>
-                                    <li>This type of resume is used to highlight skills, academic achievements, co-curricular achievements, etc.</li>
-                                    <li>It is very versatile and can be made with tables, bullet points, or any other similar formatting.</li>
-                                    <li>It is easiest to go through and doesn’t contain narrative details.</li>
+                                    <li>Simple format with direct and factual information. </li>
+                                    <li>Used to highlight skills, academic qualifications, achievements, etc. </li>
+                                    <li>Versatile and can be made with tables, bullet points, or any other similar formatting. </li>
+                                    <li>Easy to go through and doesn’t contain narrative details and can be used as a Biodata format if required. </li>
                                 </ul>
                             </div>
                         </div>
                         <hr />
 
                         <p class="rec-head">Recommended for:</p>
-                        <p>Freshers with very less to no experience, undergraduate students applying for internships, college, etc, back/front office job applications, part-time job applications.</p>
+                        <p>Freshers, undergraduate students applying for internships, college, etc, back office and front office job applications, part-time job applications. Also suitable for use as Biodata format. </p>
                     </div><!-- /. most-resume -->
 
                     <div class="most-resume mt-25">
-                        <h3 class="uppercase">COMBINATION RESUME FORMATS</h3>
-                        <p>The combination resumes are hybrid and custom resume formats. They use features of both chronological and functional resume to build custom profiles.</p>
+                        <h3 class="uppercase">COMBINATION RESUME FORMAT</h3>
+                        <p>The combination resumes, also known as the hybrid resumes, have gained popularity with their customizable yet practical form. They use features of both chronological and functional resume to build custom profiles. </p>
                         <hr />
                         <div class="media">
                             <div class="media-left">
@@ -213,22 +227,22 @@
                             <div class="media-body mt-15">
                                 <p class="mt-0 subhead">Features of a combination resumes Format</p>
                                 <ul class="mt-15">
-                                    <li>The combination resume is a custom format following chronology but not directly and including other information comprehensively.</li>
-                                    <li>This type of resume is used to highlight experience, learning, and achievements with an analytical/storytelling/detailed approach.</li>
-                                    <li>It is versatile with the customization that can be made but follows a list-based content approach. It is a very influential format if prepared correctly.</li>
-                                    <li>It is difficult to make and read as well. It is best used customized for every job application.</li>
+                                    <li>Used to highlight experience, learning, and achievements with an analytical, storytelling, or detailed approach. </li>
+                                    <li>Versatile with the customization that can be made but follows a list-based content approach. </li>
+                                    <li>Difficult to create and read as well. However, it should be customized according to a job application. </li>
+                                    <li>This format is consistent with many profile formats and CV formats and can be used as such. </li>
                                 </ul>
                             </div>
                         </div>
                         <hr />
 
                         <p class="rec-head">Recommended for:</p>
-                        <p>Experienced professionals with a variety of experience, freelancers with a variety of results to show, professionals changing industry/profiles, freshers with extensive extra-curricular activities and results, and anyone who can combine different information (experience, learning, skills, results) together.</p>
+                        <p>Experienced professionals, freelancers, and candidates looking for a higher position or changing profession. The best option to convert into a CV format. </p>
                     </div><!-- /. most-resume -->
                 </div><!--/. White box -->
 
                 <!-- white box -->
-                <div class="white-box mt-30">
+                <div id="creative-visual" class="white-box mt-30">
                     <h2 class="mb-15">Creative and visual resume formats</h2>
                     <p>When it comes to creative resumes, there are no specific formats. The resume itself is used as a work sample, depiction, or presentation of skills apart from the information provided. Young professionals in creative profiles have started the trend of using visual resumes, especially graphic designers and writers. On similar lines, developers have used HTML based resumes, animators and filmmakers have used video scripts, UI/UEx developers have used interactive flash files, and so on. Here are a few samples to take inspiration from.</p>
 
@@ -316,33 +330,174 @@
                     </div><!-- /. most-resume -->
                 </div><!--/. White box -->
 
+
                 <!-- White box -->
-                <div class="white-box mt-30">
+                <div id="faq" class="white-box mt-30 faq-static">
+                    <h2 class="mb-15">Frequently Asked Questions (FAQs) </h2>
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-bottom: 0;">
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                          <h3 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                              1. What is a resume format? 
+                            </a>
+                          </h3>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                          <div class="panel-body">
+                            A resume format is a sample resume that can be edited and filled with the required details. It is often provided with instructions or sample text and needs a rigorous edit to make it useful. 
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                          <h3 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                              2. I’ve never created a resume before, how do I make a resume for the first time? 
+                            </a>
+                          </h3>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                          <div class="panel-body">
+                            Use a word template to start your resume and choose amongst the type of resumes mentioned above. Make your resume legible, readable and well managed with relevant titles and headings. 
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingThree">
+                          <h3 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                              3. How to choose a resume format? 
+                            </a>
+                          </h3>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                          <div class="panel-body">
+                            There are various kinds of resume formats that can be used. You can also develop your customized format from scratch. The format should provide the required information strategically and clearly. Also, based on various factors like experience, skills, industry, etc, you can choose between a chronological resume format, a functional resume format, or a combination resume format. 
+                            <ul>
+                                <li>A chronological resume is used when you have been working in the same industry and you are applying for another job within the same space. </li>
+                                <li>A functional resume is used if you are a new graduate and have very less or no work experience. </li>
+                                <li>A combination resume is used when if you have skills developed outside your area of expertise, have career gaps or changing profession. </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingFour">
+                          <h3 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                              4.  Why are resume formats important? 
+                            </a>
+                          </h3>
+                        </div>
+                        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                          <div class="panel-body">
+                            Resume formats are important, especially the resume types that are mainstream due to their simplicity, targeting, and utility with job applications and their processing. A good resume is easily legible, readable and well managed with relevant titles and headings. Different resume formats are also important to show information in different ways to emphasize the connection of a candidate with the job profile, organization, and industry. 
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingFive">
+                          <h3 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                              5. What makes a resume good and attractive? 
+                            </a>
+                          </h3>
+                        </div>
+                        <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+                          <div class="panel-body">
+                            A resume is considered good if it looks neat, simple, well-managed, and is easy to read and skim through without missing important information. Simple text fonts in a maximum of two colors and three sizes are the basic requirements. Distributing information in shorter points, giving proper headings, aligning text on the left margin and other best practices make the resume look good and attractive. Composing simpler sentences, using appropriate vocabulary, highlighting or underlining important phrases, and similar practices with content will make it readable and legible. You can also use some creativity with these but keep it limited and uncompromising on its utility. 
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingSix">
+                          <h3 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                              6. Should I include hobbies in my resume? 
+                            </a>
+                          </h3>
+                        </div>
+                        <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+                          <div class="panel-body">
+                            One should only list hobbies if they are professionally relevant. Make sure the hobbies project skills and personality traits related to the job you are applying for. You can take advantage of this section if you have achievements to quote with your hobbies. 
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingSeven">
+                          <h3 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                              7. What makes a resume bad or unattractive? What not to do in a resume? 
+                            </a>
+                          </h3>
+                        </div>
+                        <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+                          <div class="panel-body">
+                            There are several factors that can make a resume bad or unattractive; the worst is unmanaged and badly formatted text. Standard resume formats solve this problem beforehand. Apart from it, recursive or multiple grammatical and spelling mistakes can result in bad impressions. Using odd fonts, uneven text alignment, long paragraphs (<4-5 sentences), long sentences (<22 words), etc are a strict no-no. Do not include your picture and other unnecessary information. Do not make your resume longer than two A4 size pages. But also, do not cramp the text in the document; leave ample spaces between lines, paragraphs, and other elements in the resume. 
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingEight">
+                          <h3 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                              8. Should I include an objective statement in my resume? 
+                            </a>
+                          </h3>
+                        </div>
+                        <div id="collapseEight" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEight">
+                          <div class="panel-body">
+                            Every employer has a different perspective. We suggest if you are including objective in your resume, make sure it is directed and specific to the employer. Also, objective statements work better without the heading 'Objective' or something else. 
+                          </div>
+                        </div>
+                      </div>
+                      <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingNine">
+                          <h3 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                              9. How many pages are allowed in a resume? 
+                            </a>
+                          </h3>
+                        </div>
+                        <div id="collapseNine" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingNine">
+                          <div class="panel-body">
+                            Employers prefer resumes with 1 or 2 pages. Moreover, for freshers, a single-page resume is acceptable and for experienced two pages resume serves the purpose. In case of highly experienced, one more page can be added but it is best to not extend it further. 
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    </ul>
+                </div><!--/. White box -->
+
+                 <!-- White box -->
+                <div id="layout-tips" class="white-box mt-30">
                     <h2 class="mb-15">Resume formatting and layout tips</h2>
-                    <p>A professionally formatted resume always catches the right eyes. These simple rules can help you make your resume better:</p>
                     <ul class="list">
-                        <li>Use left margin justification i.e. keep all text in the main body left-aligned.</li>
-                        <li>Use single line spacing between the lines.</li>
-                        <li>Use straight lines to break sections and also to give an outline to the resume, if you wish to.</li>
-                        <li>Simple bullet points under each category head give a neat format.</li>
-                        <li>For a hard copy, print on plain white or cream paper.</li>
-                        <li>A resume should ideally be two pages in length and a cover letter strictly between half to one page.</li>
+                        <li>Present your work experience history in an order irrespective of the resume format you are using. </li>
+                        <li>Keep all the text left aligned. </li>
+                        <li>Avoid long paragraphs and lengthy bullet lists. </li>
+                        <li>Avoid too much white space. </li>
+                        <li>Courier, Times New Roman, Helvetica, Verdana, and Arial are some of the best fonts to use. </li>
+                        <li>Never use double spaces between words and use just a single line space between lines. </li>
+                        <li>Use 0.5 inches to 1 inch of margins on all sides to give your resume a neat look. </li>
+                        <li>Avoid using a table with multiple columns. Make them simpler and easy to understand if used. </li>
+                        <li>Don’t include graphics, background images or pictures in your resume. </li>
+                        <li>Ensure that there are no spelling or grammatical errors in your resume. </li>
+                        <li>Ensure that you have just the relevant information in your resume.</li>
                     </ul>
                 </div><!--/. White box -->
 
                 <!-- White box -->
-                <div class="white-box mt-30">
-                    <h2 class="mb-15">Resume content tips</h2>
-                    <p>A good resume is defined by the format used and content layout. Here are some things to keep in mind while writing your resume:</p>
+                <div id="difference" class="white-box mt-30">
+                    <h2 class="mb-15">Difference Between Resume, Curriculum Vitae (CV) and Biodata </h2>
+                    <p>Resumes, CV and Biodata are very similar in nature and are used to present personal-professional information about a person. They are usually used in job applications, academic applications, and similar documentation. The primary differences between the three are: </p>
                     <ul class="list">
-                        <li>Based on the job and application type along with your profile and experience, you can select any one of the three types of resumes.</li>
-                        <li>Content should be crisp, clear, and targeted towards the application and job requirements.</li>
-                        <li>Content should clearly present the skills, their relevance to the job, and their previous application if any.</li>
-                        <li>Use relevant keywords and key phrases for digital and targeted information.</li>
+                        <li>Biodata is a very short document with basic factual information only while resume and CV present the same information in more details. Curriculum Vitaes contain very detailed information while resumes have brief descriptions only. </li>
+                        <li>Biodata formats are single page while resume formats can extend to two pages and CV formats can be even longer due to the details presented. However, it is not recommended to have a CV longer than 3-pages unless you are highly experienced. </li>
+                        <li>Biodata is used widely and may be required for documentation other than jobs or academic. Resumes and CVs are mainly used for job applications and academic applications or similar professional use. </li>
+                        <li>Biodata follows the format of a functional resume while CVs can be made with either combination resume or chronological resume. </li>
                     </ul>
-
-                    <p>Once done, get it reviewed by someone experienced and others and make it even better. </p>
-                    <p>Our best wishes for your job search!</p>
                 </div><!--/. White box -->
 
                 <!--&lt;!&ndash; Write a comment &ndash;&gt;-->
@@ -498,6 +653,21 @@
                         </ul>
                     </div><!-- /. white-box -->
 
+                    <div class="white-box mt-30">
+                        <div class="media">
+                            <div class="media-left">
+                                <img class="mr-3" src="{% static 'shinelearn/images/cms/resume-writing-service-pic.png' %}"alt="Resume Writing Service">
+                            </div>
+                            <div class="media-body ml-15 fs-16">
+                                <p class="resume-writing-service-head">Resume Writing Service</p>
+                                <p class="resume-writing-service-txt">Having trouble writing your Resume? Hire our Professional Writers to give your Resume the best of everything. We know the recruitment industry for 10+ years.</p>
+                                <a onclick="hitGA()" href="https://learning.shine.com/services/resume-services/freshers-level/pd-1921" class="btn mt-10 resume-writing-service-btn">Write My Resume</a>
+                            </div>
+                        </div>
+                    </div><!-- /. white-box -->
+
+                    <a id="top-page" class="top-on-page" href="#top">Top</a>
+
 
                 </div><!-- /. Right pan -->
             </div><!-- /. col -->
@@ -530,5 +700,44 @@
         $('.dropdown').hover(function(){
             $('.dropdown-toggle', this).trigger('click');
           });
+
+        // $('a[href*=#]').click(function(event){
+        //     $('html, body').animate({
+        //         scrollTop: $( $.attr(this, 'href') ).offset().top
+        //     }, 500);
+        //     event.preventDefault();
+        // });
+        function hitGA(){
+            ga('send', 'event', 'Clicks', 'Write My Resume', 'Resume Static Page');
+          }
+    </script>
+    <script type="text/javascript">
+        $("a[href^='#']").on('click', function(e) {
+           // prevent default anchor click behavior
+           e.preventDefault();
+
+           // animate
+           $('html, body').animate({
+               scrollTop: $(this.hash).offset().top - 55
+             }, 300, function(){
+             });
+        });
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                document.getElementById("top-page").style.display = "block";
+            } else {
+                document.getElementById("top-page").style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
     </script>
  {% endblock js_section %}

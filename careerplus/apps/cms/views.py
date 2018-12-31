@@ -1,7 +1,10 @@
+#python imports
 import datetime
 import json
 import logging
-from django.views.generic import View, DetailView
+
+#django imports
+from django.views.generic import View, DetailView, TemplateView
 from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse,\
     HttpResponseForbidden, HttpResponsePermanentRedirect
@@ -11,17 +14,23 @@ from django.conf import settings
 from django.utils.http import urlquote
 from django.db.models import Q
 from django.middleware.csrf import get_token
+from django.shortcuts import render
 
 from geolocation.models import Country
 
+#inter app imorts
 from users.forms import (
     ModalLoginApiForm,
     ModalRegistrationApiForm,
     PasswordResetRequestForm,
 )
+
+#local imports
 from .models import Page, Comment
 from .mixins import LoadMoreMixin
 
+
+#third party imports
 
 class CMSPageView(DetailView, LoadMoreMixin):
     model = Page
@@ -37,24 +46,22 @@ class CMSPageView(DetailView, LoadMoreMixin):
             queryset = self.get_queryset()
 
         if pk is not None:
-            queryset = queryset.filter(pk=pk, is_active=True)
+            queryset = queryset.filter(pk=pk, is_active=True).first()
         elif slug is not None:
-            queryset = queryset.filter(slug=slug, is_active=True)
-        try:
-            obj = queryset.get()
-        except Exception as e:
-            logging.getLogger('error_log').error('unable to get cms page view%s'%str(e))
+            queryset = queryset.filter(slug=slug, is_active=True).first()
+        if not queryset:
             raise Http404
-        return obj
+        return queryset
 
     def get_template_names(self):
+        template_names = ["cms/" + settings.CMS_STATIC_TEMP_DICT.get(
+                self.object.id, 'cms_page.html')]
         if self.request.amp:
             from newrelic import agent
             agent.disable_browser_autorum()
-            return ["cms/cms_page-amp.html"]
-        if self.object.id in settings.CMS_ID:
-            return ["cms/cms_static.html"]
-        return ["cms/cms_page.html"]
+            return [x.split(".html")[0]+"-amp.html" for x in template_names]
+        
+        return template_names
 
     def redirect_if_necessary(self, current_path, article):
         expected_path = article.get_absolute_url()
@@ -63,6 +70,11 @@ class CMSPageView(DetailView, LoadMoreMixin):
         return None
 
     def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.request.amp and settings.CMS_STATIC_TEMP_DICT.get(self.object.id):
+            template_to_render = 'mobile/cms/'+settings.CMS_STATIC_TEMP_DICT.get(self.object.id).split(".")[0] + "-amp.html"
+            return render(request,template_name=template_to_render)
+
         self.slug = kwargs.get('slug', None)
         self.page = request.GET.get('page', 1)
         self.object = self.get_object()
@@ -182,14 +194,17 @@ class CMSPageView(DetailView, LoadMoreMixin):
             context['right_widgets'] += render_to_string('include/' + right.widget.get_template(), widget_context)
 
         comments = page_obj.comment_set.filter(is_published=True, is_removed=False)
-        context['comment_listing'] = self.pagination_method(
-            page=self.page, comment_list=comments, page_obj=page_obj)
+        if self.request.amp:
+            context['comment_listing'] =self.pagination_method(page=self.page, comment_list=comments, page_obj=page_obj,page_size=5)
+        else:
+            context['comment_listing'] =self.pagination_method(page=self.page, comment_list=comments, page_obj=page_obj)
         context['total_comment'] = comments.count()
         context.update({
             "hostname": settings.SITE_DOMAIN,
             'country_choices': country_choices,
             'initial_country': initial_country,
         })
+        context['show_chat'] = True
         context.update({
             "loginform": ModalLoginApiForm(),
             "registerform": ModalRegistrationApiForm(),
@@ -199,6 +214,18 @@ class CMSPageView(DetailView, LoadMoreMixin):
 
         return context
 
+class CMSStaticView(TemplateView):
+    template_name = "resignation_static.html"
+
+    def get_template_names(self):
+        static_kwarg = self.kwargs.get("static_kwarg")
+        return ["cms/static_%s_page.html" % static_kwarg]
+
+    def get_context_data(self, **kwargs):
+        context = super(CMSStaticView, self).get_context_data(**kwargs)
+        context.update({
+            "hostname": settings.SITE_DOMAIN, })
+        return context
 
 # class LeadManagementView(View, UploadInFile):
 #     http_method_names = [u'post', ]

@@ -172,6 +172,7 @@ class PaymentLoginView(TemplateView):
             remember_me = request.POST.get('remember_me')
             email = self.request.POST.get('email', '').strip()
             password = self.request.POST.get('password', '')
+            login_with = self.request.POST.get('login_with','')
 
             valid_email = False
             try:
@@ -181,12 +182,20 @@ class PaymentLoginView(TemplateView):
                 logging.getLogger('error_log').error("email validation failed  %s " % str(e))
                 valid_email = False
 
+            if valid_email and login_with:
+                cart_pk = self.request.session.get('cart_pk')
+                if cart_pk:
+                    cart_obj = Cart.objects.get(pk=cart_pk)
+                    cart_obj.email = email
+                    cart_obj.save()
+                    return HttpResponseRedirect(reverse('cart:payment-shipping'))
+                return HttpResponseRedirect(reverse('cart:cart-product-list'))
+
             if valid_email:
                 login_dict.update({
                     "email": email,
                     "password": password,
                 })
-
                 user_exist = RegistrationLoginApi.check_email_exist(login_dict['email'])
 
                 if user_exist.get('exists') and password:
@@ -215,6 +224,7 @@ class PaymentLoginView(TemplateView):
 
                 elif user_exist.get('exists'):
                     context = self.get_context_data()
+                    context.update({"guest_login":"guest_login"})
                     cart_pk = self.request.session.get('cart_pk')
                     if cart_pk:
                         cart_obj = Cart.objects.get(pk=cart_pk)
@@ -332,6 +342,44 @@ class PaymentShippingView(UpdateView, CartMixin):
             if not form.initial.get('mobile'):
                 form.initial.update({
                     'mobile': self.request.session.get('mobile_no')})
+
+        elif self.request.session.get('prefill_details'):
+            prefill_details = self.request.session.get('prefill_details')
+            social_login = self.request.session.get('key','')
+            if social_login == 'g_plus':
+                name = prefill_details.get('name','').split(" ")
+                if len(name) > 1 and name[0] != "":
+                    form.initial.update({'first_name': name[0],'last_name': name[-1]})
+                elif len(name) == 1:
+                    form.initial.update({'first_name': name[0]})
+
+            elif social_login == 'linkedin':
+                name = prefill_details.get('name', '').split(" ")
+                if len(name) > 1 and name[0] != "":
+                    form.initial.update({'first_name': name[0], 'last_name': name[-1]})
+                elif len(name) == 1:
+                    form.initial.update({'first_name': name[0]})
+
+            else:
+                pass
+
+        elif self.request.session.get('direct_linkedin'):
+            form.initial.update({'first_name': self.request.session.get('first_name')})
+            form.initial.update({'last_name': self.request.session.get('last_name')})
+
+
+
+
+        if not form.initial.get('mobile'):
+            form.initial.update({
+                'mobile': self.request.session.get('lead_mobile')})
+
+        if not form.initial.get('first_name'):
+            form.initial.update({
+                'first_name': self.request.session.get('lead_first_name')})
+        if not form.initial.get('last_name'):
+            form.initial.update({
+                'last_name': self.request.session.get('lead_last_name')})
 
         if not form.initial.get('country_code'):
             form.initial.update({

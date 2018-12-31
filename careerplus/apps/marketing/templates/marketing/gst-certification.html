@@ -1,0 +1,396 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>GST Certified Professional</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+<link href='{% static "shinelearn/css/common/custom_landing.css" %}' rel="stylesheet">
+<link href='{% static "shinelearn/css/marketing/gst-cert/style.css" %}' rel="stylesheet">
+        <!--<script src="https://www.google.com/recaptcha/api.js?onload=recaptchaCallBack&render=explicit" async defer></script>-->
+         <!--Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-M323HB');</script>
+         <!--End Google Tag Manager -->
+   <script>
+     /*
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      <!--ga('create', 'UA-3537905-1', 'auto', {'name': 'a'});-->
+      <!--ga('a.send', 'pageview');-->
+      ga('create', 'UA-3537905-41', 'auto');
+      ga('send', 'pageview');
+      */
+
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-3537905-41', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+</head>
+
+<body>
+<div class="container-full top-head-sec">
+  <div class="container">
+    <!-- header start -->
+    <div class=""> 
+     <a href="#" class="sprite logo-main"></a>
+    </div>
+    <!-- header end -->
+    <div class="clear-fix"></div>
+    
+    <div class="">
+    <!--
+     <div class="offer"></div>
+    --> 
+     
+     <!-- banner left section start -->
+      <div class="top-baner-left">
+        <h1><span>Become a </span>GST Certified Professional </h1>
+       <div class="clear-fix"></div>  
+       <h2>(Government of India approved)</h2>
+        <p>The course will provide intensive GST training and will help you to demonstrate clear understanding and practical aspects of GST and to get visible recognition for this knowledge. </p>
+             
+        <h3>Course Highlights</h3>        
+        <ul class="career">
+          <li>GST Levy and Exemptions</li>
+          <li>Returns, Refunds, Assessments and Audits</li>
+          <li>GST and GST Offences and PenaltiesLaw</li>
+        </ul>        
+      </div> <!-- banner left section end -->
+      
+      <!-- banner right section start -->
+      <div class="top-baner-rgt">
+        <div class="register-bx-sec pull-right">
+          <h2>Join the course</h2>
+          
+          <div class="clear-fix"></div>
+          <form id="lead" 
+          action="{% url 'crmapi:lead-management' %}"
+          method="post" class="cert-form">{% csrf_token %}
+          <div>          
+          <input type="text" id="name" name="name" placeholder="Your Full Name" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %} maxlength="100">
+          <span class="error" for="name" style="color: rgb(255, 0, 0);font-size: 11px;width:100%; " ></span>
+         </div>
+        
+        <div>  
+          <input type="email" id="email" name="email" placeholder="Email Address" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %} maxlength="60">
+          <span class="error" for="email" style="color: rgb(255, 0, 0);font-size: 11px;width:100%; "></span>
+          
+        </div>
+        <div>
+            <input type="hidden" id="country" name="country" aria-invalid="false" value="91">
+                            
+            <input id="mobile" type="text" name="number"
+            placeholder="Mobile Number" value={% if alt_contact %} "{{alt_contact}}" {% else %} "" {% endif %} maxlength="10" class="pull-right">
+            
+            <span class="error" for="mobile" style="color: rgb(255, 0, 0);font-size: 11px;width:100%;" ></span>
+         </div>
+        
+           <div>
+                <textarea id="message" name="msg" hidden="hidden" class="message_input" placeholder="Message" rows="1"></textarea>
+                <span class="error" for="message" style="color: rgb(255, 0, 0); font-size: 11px; width:100%; " ></span>
+            </div>
+           
+           <select id="selection" name="selection" aria-invalid="false" class="register-bx-sec-cod pull-left">
+               <!--<option selected="selected" value="5133">GST Certification Program – 10593</option>-->
+                  {%for prd in products_lists %}
+							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >{{prd.pTt}} </option>
+                              {%endfor%}
+            </select>
+            <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}1884{% endif %}">
+            <input type="hidden" name="prd" value="GST Certification Program">
+            <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+            <input type="hidden" name="lsource" value="{{ lead_source }}">
+
+            <input type="hidden" name="path" value="{{request.path}}">
+                        
+          <input id="submit" type="button" value="Enquire Now" class="submit button" onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;" >
+          </form>
+          
+<!--        <a href="#" class="emi-butn">Easy EMI payment option</a>-->
+       <p>*Easy EMI option available</p>
+        </div>
+      </div><!-- banner right section start -->
+      
+    </div>
+  </div>
+  <div class="clear-fix"></div>
+</div>
+<div class="clear-fix"></div>
+
+<div class="container course-structure">
+    <h3>Course Structure</h3>   
+      <ul>
+        <li>Taxation and GST Basics </li>
+        <li>GST Registration</li>
+        <li>GST Invoicing</li>
+        <li>GST Returns</li>
+        <li>Input Tax Credit.</li>
+        <li>GST Valuation</li>
+        <li>GST Administration</li>
+        <li>GST Payment</li>
+        <li>GST and Law</li>
+        <li>IGST and UTGST</li>
+        <li>GST Accounting and Record Keeping</li>
+       <li>GST in other countries</li>
+    </ul>
+    
+</div>
+
+<div class="clear-fix"></div>
+<div class="container-full bg-grey box-padding">
+<div class="container wht-atnd">
+<div class="who-shd-bx">
+<img src="{{STATIC_CSS_URL}}marketing/gst-cert/who-shd-img.png" width="341" height="328" alt=""/></div>
+    <h3>Who should attend?</h3>
+      <ul>
+        <li>Tax and Accounting Professionals / Consultants</li>
+        <li>Business owners and Accounting Professionals who want to be GST ready for smooth functioning of their company.</li>
+        <li>Professionals who want to shift to Finance and Taxation domain.</li>
+        <li>Individuals / beginners seeking career opportunities in the taxation domain.</li>
+        <li>Students with engineering/commerce or arts background.</li>              
+    </ul>
+    
+</div>  
+    <div class="clear-fix"></div>
+</div>
+
+<div class="clear-fix"></div>
+
+<div class="container-full course-high">
+<div class="container">
+<div class="row">
+    <h2>Why buy from Shinelearning?</h2>
+    
+    <div class="col-lg-4 col-md-4 col-sm-6">
+        <div class="course-bx">
+        <div class="bdr-hvr"></div>
+        <h2>Free featured profile</h2>
+        <span>FREE featured profile worth Rs. 1399 for 1 month on Shine.com</span>
+        </div>      
+    </div>
+    
+    <div class="col-lg-4 col-md-4 col-sm-6">
+        <div class="course-bx">
+        <div class="bdr-hvr"></div>
+        <h2>Shine credits</h2>
+        <span>10% Shine credits redeemable on next purchase*</span>
+        </div>      
+    </div>
+    
+    <div class="col-lg-4 col-md-4 col-sm-6">
+        <div class="course-bx">
+        <div class="bdr-hvr"></div>
+        <h2>Vskills certification</h2>
+        <span>Get an industry recognized certification and get a ‘Vskills Certified’ tag on your Shine profile.</span>
+        </div>      
+    </div>
+    
+    <div class="col-lg-4 col-md-4 col-sm-6">
+        <div class="course-bx">
+        <div class="bdr-hvr"></div>
+        <h2>Vskill job center</h2>
+        <span>Become a part of Vskills job center for life.</span>
+        </div>      
+    </div>
+    
+    <div class="col-lg-4 col-md-4 col-sm-6">
+        <div class="course-bx">
+        <div class="bdr-hvr"></div>
+        <h2>EMI</h2>
+        <span>Easy EMI payment option.</span>
+        </div>      
+    </div>
+    
+    <div class="col-lg-4 col-md-4 col-sm-6">
+        <div class="course-bx">
+        <div class="bdr-hvr"></div>
+        <h2>Counseling</h2>
+        <span>Counselors to help you select the right course.</span>
+        </div>      
+    </div>
+    
+    <div class="clear-fix"></div>
+    </div>
+</div>
+    
+    
+    
+</div>
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+<script type="text/javascript">
+
+
+            $(function() {
+              $('a[href*=#]:not([href=#])').click(function() {
+                if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+
+                  var target = $(this.hash);
+                  target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+                  if (target.length) {
+                    $('html,body').animate({
+                      scrollTop: target.offset().top
+                    }, 1000);
+                    return false;
+                  }
+                }
+              });
+
+            var _gaq = _gaq || [];
+            $.validator.addMethod("lettersonly", function (value, element){
+                return this.optional(element) || /^[a-z\s]*$/i.test(value);
+            }, "Letters only please");
+
+            $.validator.addMethod("defaultInvalid", function (value, element) {
+                return !(element.value == element.defaultValue);
+            }, "This field is required.");
+
+            $.validator.addMethod("custommobile",
+                function(value, element) {
+                       if (value.length<10 || value.length>16)
+                       {
+                         return false;
+                       }
+                    return true ;
+                }
+            );
+
+            
+            $("#lead").validate({
+                submitHandler:function (form) {
+                    var action = $(form).attr('action');
+                    $.post(action, $(form).serialize(), function (data) {
+                       if (data && data['status']){
+                            $.each($("#lead"), function (i, e) {
+                                e.reset();
+                            });
+                            $("#lead label").remove();
+                            var conversion_id = 991709191;
+                            var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                            var ga_code = document.createElement('div');
+                            ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                            document.body.appendChild(ga_code);
+                            window.location.href ='thankyou-for-query'
+                            return false;
+
+                       }
+
+                    }, 'json');
+
+
+                },
+                rules:{
+                    number:{
+                        required:true,
+                        custommobile:true,
+                        number:true,
+                    },
+                    email:{
+                        email:true,
+                        required:true
+
+                    },
+                    name:{
+                        lettersonly:true,
+                    },
+                    msg:{
+                        maxlength:500
+                    }
+                },
+                messages:{
+                    number:{
+                       required:"Field is required",
+                       number:"Enter only number",
+                       custommobile: "Please enter atleast 10 digits mobile number",
+                    },
+                    email:{
+                        required:"Field is required"
+                    },
+                    name:{
+                        required:"Field is required"
+                    },
+                    msg:{
+                        maxlength:"No more than 500 characters."
+                    }
+                },
+                highlight:function(element, errorClass) {
+                    $(element).siblings('.error').addClass('noerror');
+
+                },
+                unhighlight:function(element, errorClass) {
+                    $(element).siblings('.error').removeClass('noerror');
+                    $(element).siblings('.error').text('');
+
+                },
+                errorPlacement: function(error, element){
+                    element.siblings('.error').text(error.text());
+                    
+                },
+                });
+            });
+            
+        </script>
+
+        <!-- Facebook Pixel Code -->
+
+        <script>
+
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+
+        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+
+        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+
+        document,'script','//connect.facebook.net/en_US/fbevents.js');
+
+
+
+        fbq('init', '630068977028888');
+
+        fbq('track', "PageView");</script>
+
+        <noscript><img height="1" width="1" style="display:none"
+
+        src="https://www.facebook.com/tr?id=630068977028888&ev=PageView&noscript=1"
+        /></noscript>
+        <script>
+            $(document).ready(function() {
+            $('[id^="txt"]').focus(function() {
+                $(this).addClass('expand');
+            });
+            $('[id^="txt"]').blur(function() {
+                $(this).removeClass('expand');
+            });
+        });
+    </script>
+
+ {% block zendesk %}
+    <!--Start of Zendesk Chat Script-->
+      <script type="text/javascript">
+      window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+      d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+      _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+      $.src="https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";z.t=+new Date;$.
+      type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+      </script>
+      <!--End of Zendesk Chat Script-->
+    {% endblock zendesk %}
+
+
+</body>
+</html>

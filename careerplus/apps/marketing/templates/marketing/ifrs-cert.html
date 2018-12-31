@@ -41,16 +41,27 @@
         <!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);-->
         <!--})(window,document,'script','dataLayer','GTM-M323HB');</script>-->
         <!-- End Google Tag Manager -->
-        <script>
-              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-              ga('create', 'UA-3537905-1', 'auto', {'name': 'a'});
-              ga('a.send', 'pageview');
-              ga('create', 'UA-3537905-41', 'auto');
-              ga('send', 'pageview');
-            </script>
+     <script>
+     /*
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      <!--ga('create', 'UA-3537905-1', 'auto', {'name': 'a'});-->
+      <!--ga('a.send', 'pageview');-->
+      ga('create', 'UA-3537905-41', 'auto');
+      ga('send', 'pageview');
+      */
+
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-3537905-41', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
 </head>
 
 <body>
@@ -58,7 +69,7 @@
   <div class="container">
     <!-- header start -->
     <div class=""> 
-     <a href="/" class="sprite logo-main"></a>     
+     <a href="#" class="sprite logo-main"></a>
     </div>
     <!-- header end -->
     <div class="clear-fix"></div>
@@ -67,7 +78,7 @@
      
      <!-- banner left section start -->
       <div class="top-baner-left">
-        <h1><span>Be at par with global accounting professionals</span>Get your IFRS Certification today </h1>
+        <h1><span>Be at par with global accounting professionals</span>Complete your IFRS Training today </h1>
 	   <div class="clear-fix"></div>  
 <!--	   <h2>(Government of India approved)</h2>-->
         <p>IFRS Certification helps equip you with the International Financial Reporting Standards which is a global accounting standard/practice followed by 100+ countries.</p>
@@ -90,12 +101,12 @@
           action="{% url 'crmapi:lead-management' %}" 
           >{% csrf_token %}
           <div>
-          <input type="text" id="name" name="name" placeholder="Full Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}" maxlength="100">
+          <input type="text" id="name" name="name" placeholder="Full Name" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %} maxlength="100">
           <span class="error" for="name" style="color: rgb(255, 0, 0);font-size: 11px;width:100%; " ></span>
          </div>
 
         <div>
-          <input type="email" id="email" name="email" placeholder="Email Address" value="{{request.session.email}}" maxlength="100">
+          <input type="email" id="email" name="email" placeholder="Email Address" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %} maxlength="100">
           <span class="error" for="email" style="color: rgb(255, 0, 0);font-size: 11px;width:100%; "></span>
 
         </div>
@@ -103,13 +114,13 @@
             <input type="hidden" id="country" name="country" aria-invalid="false" value="91">
 
             <input id="mobile" type="text" name="number"
-            placeholder="Mobile Number" maxlength="10" aria-required="true" class="pull-right" value="{{request.session.mobile_no}}">
+            placeholder="Mobile Number" maxlength="10" aria-required="true" class="pull-right" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
 
             <span class="error" for="mobile" style="color: rgb(255, 0, 0);font-size: 11px;width:100%;" ></span>
          </div>
 
            <div>
-                <label style="width: 100%;background:transparent; color: #fff !important; visibility: visible;padding: 0px 0px 0px 8px;margin-bottom: 10px;border: none;font: normal 14px &quot;Open Sans&quot;;outline: 0;height: 40px;">IFRS Training – Rs. 15990/-</label>
+                <label style="width: 100%;background:transparent; color: #fff !important; visibility: visible;padding: 0px 0px 0px 8px;margin-bottom: 10px;border: none;font: normal 14px &quot;Open Sans&quot;;outline: 0;height: 40px;">IFRS Training – Rs. 16525/-</label>
                 <span class="error" for="message" style="color: rgb(255, 0, 0); font-size: 11px; width:100%; " ></span>
             </div>
 
@@ -176,48 +187,50 @@
 	<div class="col-lg-4 col-md-4 col-sm-6">
 		<div class="course-bx">
 		<div class="bdr-hvr"></div>
-		<h2>Free featured profile</h2>
-		<span>FREE featured profile worth Rs. 1399 for 1 month on Shine.com</span>
+		<h2> Free Featured Profile</h2>
+            <span>Free featured profile worth Rs. 1,640 for 1 month on shine.com</span>
 		</div>		
 	</div>
 	
 	<div class="col-lg-4 col-md-4 col-sm-6">
 		<div class="course-bx">
 		<div class="bdr-hvr"></div>
-		<h2>Shine credits</h2>
-		<span>10% Shine credits redeemable on next purchase*</span>
+		<h2>Shine Credits</h2>
+		<span>10% Shine credits redeemable on next purchase</span>
 		</div>		
 	</div>
 	
 	<div class="col-lg-4 col-md-4 col-sm-6">
 		<div class="course-bx">
 		<div class="bdr-hvr"></div>
-		<h2>Vskills certification</h2>
-		<span>Get an industry recognized certification and get a ‘Vskills Certified’ tag on your Shine profile.</span>
+		<h2>Top Global Education Providers</h2>
+		<span>Choose from the list of global providers as per your requirement</span>
 		</div>		
 	</div>
+	
+
+	<div class="col-lg-4 col-md-4 col-sm-6">
+		<div class="course-bx">
+		<div class="bdr-hvr"></div>
+		<h2>0% EMI </h2>
+		<span>Easy EMI payment option</span>
+		</div>		
+	</div>
+
+    <div class="col-lg-4 col-md-4 col-sm-6">
+		<div class="course-bx">
+		<div class="bdr-hvr"></div>
+		<h2>Free Services</h2>
+		<span>Free Resume, Cover Letter Formats and Career Guidance Services</span>
+		</div>
+	</div>
+
 	
 	<div class="col-lg-4 col-md-4 col-sm-6">
 		<div class="course-bx">
 		<div class="bdr-hvr"></div>
-		<h2>Vskill job center</h2>
-		<span>Become a part of Vskills job center for life.</span>
-		</div>		
-	</div>
-	
-	<div class="col-lg-4 col-md-4 col-sm-6">
-		<div class="course-bx">
-		<div class="bdr-hvr"></div>
-		<h2>EMI</h2>
-		<span>Easy EMI payment option.</span>
-		</div>		
-	</div>
-	
-	<div class="col-lg-4 col-md-4 col-sm-6">
-		<div class="course-bx">
-		<div class="bdr-hvr"></div>
-		<h2>Counseling</h2>
-		<span>Counselors to help you select the right course.</span>
+		<h2> Refer and Earn</h2>
+		<span>Refer your friend and get an Amazon Voucher worth Rs. 2,000</span>
 		</div>		
 	</div>
 	
@@ -270,7 +283,12 @@
 
             $.validator.addMethod("custommobile",
                 function(value, element) {
-                    return value.length == 10 ;
+                    if (value.length<10 || value.length>16){
+                            return false;
+                            }
+                    else{
+                    return true ;
+                    }
                 }
             );
 
@@ -309,6 +327,7 @@
                     name:{
                         lettersonly:true
 
+
                     },
                     msg:{
                         maxlength:500
@@ -318,7 +337,7 @@
                     number:{
                        required:"Field is required",
                        number:"Enter only number",
-                       custommobile: "Please enter 10 digits mobile number",
+                       custommobile: "Please enter atleast 10 digits mobile number",
                     },
                     email:{
                         required:"Field is required"
@@ -378,5 +397,18 @@
         });
     });
 	</script>
+
+  {% block zendesk %}
+    <!--Start of Zendesk Chat Script-->
+      <script type="text/javascript">
+      window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+      d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+      _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+      $.src="https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";z.t=+new Date;$.
+      type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+      </script>
+      <!--End of Zendesk Chat Script-->
+    {% endblock zendesk %}
+
 </body>
 </html>

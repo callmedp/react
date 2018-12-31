@@ -1,8 +1,12 @@
 from rest_framework.serializers import (
     ModelSerializer,
-    SerializerMethodField
+    SerializerMethodField,
+    Serializer
 )
+from rest_framework import serializers
+
 from order.models import Order, OrderItem
+from shop.models import Product
 from payment.models import PaymentTxn
 
 import logging
@@ -243,3 +247,48 @@ class OrderListHistorySerializer(ModelSerializer):
         payment_obj = obj.ordertxns.all()
         if payment_obj:
             return PaymentSerializer(payment_obj, many=True).data
+
+
+class RecommendedProductSerializer(ModelSerializer):
+    display_name = SerializerMethodField()
+    pUrl = SerializerMethodField()
+    pImg = SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = [
+            'id',
+            'display_name',
+            'pUrl',
+            'avg_rating',
+            'no_review',
+            'buy_count',
+            'num_jobs',
+            'pImg',
+        ]
+
+    def get_display_name(self, obj):
+        return obj.get_name
+
+    def get_pUrl(self, obj):
+        return obj.get_url(relative=False) if obj.get_url(relative=False) else ''
+
+    def get_pImg(self, obj):
+        return obj.get_image_url(relative=False)
+
+
+class RecommendedProductSerializerSolr(Serializer):
+    id = serializers.CharField()
+    display_name = serializers.CharField(source='pHd')
+    buy_count = serializers.IntegerField(source='pBC')
+    pImg = serializers.CharField()
+    pURL = serializers.CharField()
+    pStar = serializers.ListField(
+        child=serializers.CharField())
+    no_jobs = serializers.IntegerField(source='pNJ')
+    review_count = serializers.IntegerField(source='pRC')
+    avg_rating = serializers.DecimalField(
+        source='pARx',
+        max_digits=8, decimal_places=2)
+    # pSkilln = serializers.ListField(
+    #     child=serializers.CharField())

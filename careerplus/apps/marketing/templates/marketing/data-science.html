@@ -8,8 +8,6 @@
 
     <!-- Bootstrap CSS -->
 
-    <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/data-science/bootstrap-grid.css' %}">
-    <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/data-science/bootstrap-reboot.css' %}">
     <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/data-science/custom_landing.css' %}">
     <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/data-science/global.css' %}">
     <link rel="stylesheet" href="{% static 'shinelearn/css/marketing/data-science/hexagon.css' %} ">
@@ -32,17 +30,26 @@
 
     <title>Data Science | Shine Learning</title>
 
-    <script>
+ <script>
+     /*
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-3537905-1', 'auto', {'name': 'a'});
-      ga('a.send', 'pageview');
+      <!--ga('create', 'UA-3537905-1', 'auto', {'name': 'a'});-->
+      <!--ga('a.send', 'pageview');-->
       ga('create', 'UA-3537905-41', 'auto');
       ga('send', 'pageview');
-    </script>
+      */
 
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-3537905-41', 'auto');
+      ga('send', 'pageview');
+
+    </script>
   </head>
   <body>
    <div class="container-fluid banner-bg">
@@ -50,7 +57,7 @@
        <div class="container">
          <div class="row">
            <div class="col-md-8 col-12">
-            <a href="/"><img src="{% static 'shinelearn/images/marketing/data-science/logo.png' %}" /></a>
+            <a href="#"><img src="{% static 'shinelearn/images/marketing/data-science/logo.png' %}" /></a>
 
            </div><!-- /. col -->
            <div class="col-md-4 col-12 mt-0 mt-lg-3 pl-4 pl-lg-0 text-sm-left text-lg-right">
@@ -73,21 +80,23 @@
                 action="{% url 'crmapi:lead-management' %}">{% csrf_token %}
                   <ul class="mt-2 mb-2">
                     <li class="form-group">
-                       <input id="name" name="name" type="text" class="form-control" placeholder="Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}">
+                       <input id="name" name="name" type="text" class="form-control" placeholder="Name" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %}>
                        <p class="js-error"></p>
                     </li>
                     <li class="form-group">
-                       <input id="email" name="email" type="text" class="form-control" value="{{request.session.email}}" placeholder="Email">
+                       <input id="email" name="email" type="text" class="form-control" value="{{request.session.email}}" placeholder="Email" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %}>
                        <p class="js-error"></p>
                     </li>
                     <li class="form-group">
-                       <input id="mobile" name="number" maxlength="10" minlength="10" type="text" class="form-control" placeholder="Mobile" value="{{request.session.mobile_no}}">
+                       <input id="mobile" name="number" maxlength="10" minlength="10" type="text" class="form-control" placeholder="Mobile" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
                        <p class="js-error"></p>
                     </li>
                     
                     <li class="form-group">
                        <select class="form-control" id="selection" name="selection">
-                           <option selected="selected" value="3101">Data Scientist - Rs. 44999/-</option>
+                           {%for prd in products_lists %}
+							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >{{prd.pPin}} </option>
+                              {%endfor%}
                          </select>
                     </li>
                   </ul>
@@ -102,11 +111,7 @@
  
                  <button type="submit" class="btn btn-primary w-100 scrollTop" onclick="$('#lead_mobile').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enroll Now</button>
                  <p class="tnc mt-2 mb-2">By registering with us you agree to our <br><a href="/tnc">Terms & Conditions</a></p>
-                 <div class="call-us">
-                   <span></span>
-                   <strong>7042793540</strong>
-                   <p>Call our academic counsellor</p>
-                 </div>
+                 
                </form>
               </div><!-- /. main-form -->
 
@@ -140,10 +145,12 @@
                       <input id="mobile" name="number" maxlength="10" minlength="10" type="text" class="form-control" placeholder="Mobile" value="{{request.session.mobile_no}}">
                       <p class="js-error"></p>
                    </li>
-                   
+
                    <li class="form-group">
                       <select class="form-control" id="selection" name="selection">
-                        <option selected="selected" value="3101">Data Scientist - Rs. 44999/-</option>
+                        {%for prd in products_lists %}
+							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >DataScientist - {{prd.response.pPin}} </option>
+                              {%endfor%}
                       </select>
                    </li>
                  </ul>
@@ -158,11 +165,7 @@
 
                 <button type="submit" class="btn btn-primary w-100" onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enroll Now</button>
                 <p class="tnc mt-2 mb-2">By registering with us you agree to our <br><a href="/tnc">Terms & Conditions</a></p>
-                <div class="call-us">
-                  <span></span>
-                  <strong>7042793540</strong>
-                  <p>Call our academic counsellor</p>
-                </div>
+                
               </form>
              </div><!-- /. main-form -->
            </div>
@@ -658,7 +661,7 @@
               <div class="hexa">
                 <div class="mt-1 mt-md-3">
                   <p class="head">Free featured profile</p>
-                  <p>FREE featured profile worth Rs. 1440 for 1 month on Shine.com</p>
+                  <p>FREE featured profile worth Rs. 1,640 for 1 month on Shine.com</p>
                 </div>
               </div>
             </div><!-- /. col -->
@@ -751,7 +754,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
 
     <script src="{% static 'shinelearn/js/marketing/data-science/bootstrap.js' %}"></script>
-    <script src="{% static 'shinelearn/js/marketing/data-science/base.js' %}"></script>
 
     <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -795,7 +797,6 @@
 
                 },
                 name:{
-                    required:true,
                     lettersonly:true,
 
                 },
@@ -904,6 +905,18 @@
           });
 
         </script>
+
+   {% block zendesk %}
+    <!--Start of Zendesk Chat Script-->
+      <script type="text/javascript">
+      window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+      d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+      _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+      $.src="https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";z.t=+new Date;$.
+      type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+      </script>
+      <!--End of Zendesk Chat Script-->
+    {% endblock zendesk %}
 
   </body>
 </html>

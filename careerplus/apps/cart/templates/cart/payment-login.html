@@ -85,10 +85,17 @@
                       <input type="password" required name="password" class="form-control"  placeholder="Password">
                       <span class="error-txt"></span>
                     </div>
-                    <div class="continue col-sm-12">
-                      <button type="submit">Continue</button>
+
+                    <div class="continue col-sm-6">
+                      <button style="font-size:16px;" type="submit">Continue</button>
                     </div>
-                    <small class="form-text text-muted">
+                 {% if guest_login%}
+                <div class="continue col-sm-6">
+                 <button id="login_guests" style="background:#3f5f94; font-size:16px;" type="button">Guest Login</button>
+                    </div>
+                {% endif %}
+
+                    <small style="display:block" class="form-text text-muted">
                       <a href="javascript:void(0)" id="modalforgot">
                       Forgot Password?</a>
                     </small>
@@ -96,14 +103,21 @@
                     <strong class="personal-details-heading col-sm-12">Enter your email id</strong>
                     <p id="non-field-error" class="error">{{non_field_error}}</p>
                     <div class="form-group col-sm-12 {% if email_error %}error{% endif %}">
-                      <input type="email" name="email" class="form-control" placeholder="Enter your email id" value="{% if request.session.email%}{{request.session.email}}{% endif %}" {% if request.session.email %} readonly {% endif %}>
+                      <input type="email" name="email" class="form-control" placeholder="Enter your email id" value="{% if request.session.email%}{{request.session.email}}{% elif request.session.lead_email %}{{ request.session.lead_email }}{% endif %}" {% if request.session.email %} readonly {% endif %}>
                       <span class="error-txt">{{email_error}}</span>
                     </div>
                     <div class="continue col-sm-12">
                       <button type="submit">Continue</button>
                     </div>
                 {% endif %}
+
             </form>
+              <div class="social-login" style="margin:30px 0 15px 0px;">
+                    <span>or login with</span>
+                    <a class="facebook" onclick="Login('/cart/payment-shipping/');"></a>
+                    <a class="linkedin" href="{% url 'users:linkedin-code' %}?next=/cart/payment-shipping/"></a>
+                    <a class="gplus" onclick="glogin('/cart/payment-shipping/');"></a>
+                </div>
 
         </div>
         <!-- right content end -->
@@ -141,7 +155,29 @@
   
 
 {% block js_section %}
+<script>
+
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+              ga('create', 'UA-3537905-41', 'auto', {'name': 'a'});
+              ga('a.send', 'pageview');
+              ga('create', 'UA-3537905-41', 'auto');
+              ga('send', 'pageview');
+ function hitGAContinue(){
+    ga('send', 'event', 'Button Clicked', 'Buy Flow', 'Contimue');
+  }
+
+
+
+
+</script>
+
+
    {{ block.super }}
+      <script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>
+
     {% compress js %}
       <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
       <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
@@ -150,3 +186,6 @@
 
 {% block johukum %}
 {% endblock johukum %}
+
+{% block zendesk %}
+{% endblock zendesk %}

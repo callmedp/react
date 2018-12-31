@@ -44,7 +44,15 @@
                 {% if combos.combo %}
                     <div class="providers">
                        Includes
-                       {% for combo in combos.combo_list %}<span>{{ combo.name }}</span>{% endfor %}
+                       {% for combo in combos.combo_list %}
+                         <span>
+                          {% if combo.heading %}
+                            {{ combo.heading }}
+                          {% else %}
+                            {{ combo.name }}
+                          {% endif %}
+                       </span>
+                     {% endfor %}
                     </div>
                 {% endif %}
             {% endwith %}

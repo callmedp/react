@@ -1,0 +1,391 @@
+@import "../path";
+@import "../common/bootstrap/variables";
+@import "../common/bootstrap/mixins";
+
+
+.exe-header-university {
+	background-size: cover !important;
+	display: block;
+	position: relative;
+	min-height: 340px;
+
+	.exe-header-txt {
+	  color: #fff;
+
+	  h1 {
+	  	font-size: $font-size+39;
+	  	color: $white-color;
+	  	font-weight: $font-weight+300;
+	  }
+	}
+
+	.breadcrumb {
+		margin-top: 30px;
+	}
+}
+
+.exe-university-box {
+	display: table;
+	vertical-align: top;
+	padding: 10px;
+
+	.exe-university-img {
+		width: 180px;
+		height: 94px;
+		border-bottom: 4px solid $blue-color;
+		background-color: $white-color;
+		display: block;
+		border-radius: 5px;
+		vertical-align: top;
+
+		figure {
+			width: 150px;
+			height: 78px;
+			display: block;
+			text-align: center;
+			vertical-align: middle;
+			margin: 0 auto;
+			padding-top: 10px;
+
+			img {
+				max-width: 100%;
+				height: 100%;
+				text-align: center;
+				vertical-align: middle;
+				display: block;
+				border: 0;
+				margin: 0 auto;
+			}
+		}
+	}
+
+	.exe-university-txt {
+		font-size: $font-size+3;
+		color: $white-color;
+
+		ul {
+			margin: 10px 0 0 15px;
+			padding: 0;
+
+			li {
+				list-style-type: disc;
+			}
+		}
+	}
+}
+
+.exe-university-form {
+	font-size: $font-size+2;
+	color: $e-txt-color;
+	border-bottom: 5px solid $blue-color;
+	border-radius: 5px;
+	overflow: hidden;
+	display: block;
+	box-shadow: 0px 4px 24px 0px rgba(0, 0, 0, 0.31);
+	position: relative;
+	left: 0;
+	top: 20px;
+
+
+	h2 {
+		font-size: $font-size+7;
+		color: $white-color;
+		background-image: -moz-linear-gradient( 30deg, rgb(83,108,212) 0%, rgb(105,128,222) 100%);
+	    background-image: -webkit-linear-gradient( 30deg, rgb(83,108,212) 0%, rgb(105,128,222) 100%);
+	    background-image: -ms-linear-gradient( 30deg, rgb(83,108,212) 0%, rgb(105,128,222) 100%);
+		text-align: center;
+		padding: 15px 10px;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px
+	}
+
+	form {
+		padding: 10px 30px 20px 30px;
+		background-color: $white-color;
+
+		.form-group {
+			margin-bottom: 10px;
+
+			.form-control {
+				border-bottom: 1px solid $e-border-color;
+				border-left: none;
+				border-top: none;
+				border-right: none;
+				border-radius: 0;
+				box-shadow: none;
+				font-size: $font-size+2;
+				padding-left: 0;
+				font-weight: $font-weight+100;
+			}
+
+			select {
+				color: $grey-color;
+				padding-left: 0;
+				margin-left: 0;
+				-webkit-appearance: none;
+			    -moz-appearance: none;
+			    appearance: none;
+			    position: relative;
+			    cursor: pointer;
+			    overflow: hidden;
+			}
+
+			.down-arrow {
+		      width: 0;
+		      height: 0;
+		      border-left: 5px solid transparent;
+		      border-right: 5px solid transparent;
+		      border-top: 6px solid $e-border-color;
+		      content: '';
+		      position: absolute;
+		      right: 10px;
+		      top: 15px;
+		      display: inline-block;
+		      z-index: 99;
+		      pointer-events: none;
+		    }
+		}
+
+		.exe-button-callback {
+			margin-top: 20px;
+		}
+	}
+}
+
+.about-institute {
+	font-size: $font-size+3;
+
+	figure {
+
+		i {
+			position: absolute;
+			left: -20px;
+			top: 25px;
+			width: 135px;
+			height: 118px;
+			border-bottom: 5px solid $blue-color;
+			display: inline-block;
+			background-color: $white-color;
+			box-shadow: -1px 0px 33px 0px rgba(0, 0, 0, 0.13);
+			border-radius: 10px;
+			padding: 15px 15px 0 15px;
+			overflow: hidden;
+
+			img {
+				vertical-align: middle;
+				width: 100%
+			}
+		}
+
+		img {
+			border-radius: 10px;
+			float: right;
+			width: 100%;
+		}
+	}
+}
+
+.principal-speak-box {
+	font-size: $font-size+3;
+	padding-left: 15px;
+	padding-right: 15px;
+
+	.principal {
+		width: 210px;
+		height: 210px;
+		position: relative;
+
+		img {
+			border-radius: 5px;
+			width: 100%
+		}
+
+		i {
+			position: absolute;
+			right: -35px;
+			top: 15px;
+			width: 72px;
+			height: 62px;
+			border-bottom: 5px solid $blue-color;
+			display: inline-block;
+			background-color: $white-color;
+			box-shadow: -1px 0px 33px 0px rgba(0, 0, 0, 0.13);
+			border-radius: 10px;
+			padding: 10px 10px 0 10px;
+			overflow: hidden;
+		}
+	}
+
+	.speak {
+		padding: 45px 0 0 65px;
+		vertical-align: middle;
+
+		strong {
+			font-size: $font-size+4;
+			color: $primary-color;
+			text-transform: uppercase;
+			display: block;
+		}
+
+		span {
+			font-size: $font-size+2;
+			color: $grey-color;
+		}
+
+	}
+}
+
+.exe-courses-offered-box {
+	background: url(#{$imagePath}images/executive/courses-offered-bg.jpg) #f6f6f6 no-repeat center top;
+	background-size: cover;
+	overflow: hidden;
+	padding-bottom: 2%;
+	min-height: 340px;
+
+	.exe-button-view-more {
+		margin:  25px auto 20px auto;
+		display: table;
+	}
+}
+
+.exe-courses-offered {
+	padding: 0 0 0 10px;
+	margin: 15px 0;
+
+	.media {
+		margin: 0 0 0 15px;
+
+		.media-right {
+			position: relative;
+
+			.admission-open {
+				position: absolute;
+				right: 5px;
+				top: 14px;
+				padding: 0 15px 0 7px;
+				font-size: $font-size+1;
+				font-weight: $font-weight+300;
+				display: inline-block;
+				background-color: $e-oragne-color;
+				color: $white-color;
+				height: 19px;
+				line-height: 19px;
+
+				&:before {
+					
+					width: 20px;
+					height: 20px;
+					content: '';
+					width: 7px;
+					height: 19px;
+					position: absolute;
+					left: -7px;
+					background: $sprite-exe -419px -91px;
+				}
+			}
+
+			figure {
+				width: 120px;
+				height: 120px;
+				margin-top: 50px;
+
+				img {
+					max-width: 100%;
+					display: block;
+				}
+			}
+		}
+	}
+
+	.exe-university-small-img {
+		width: 58px;
+		height: 41px;
+		border-bottom: 3px solid $blue-color;
+		display: inline-block;
+		background-color: $white-color;
+		box-shadow: 0px 2px 13px 0px rgba(0, 0, 0, 0.11);
+		border-radius: 5px;
+		padding: 5px 5px 0 5px;
+		margin: 15px 0 10px 0;
+		overflow: hidden;
+	}
+
+	h3 {
+		font-size: $font-size+5;
+		font-weight: $font-weight+300;
+		color: $anchor-color;
+		margin-bottom: 10px;
+		line-height: 20px;
+	}
+
+	p {
+		font-size: $font-size+2;
+		color: $grey-color;
+		font-weight: $font-weight+100;
+		display: table;
+
+		i {
+			display: table-cell;
+			border-right: 28px solid transparent;
+		}
+
+		strong {
+			font-weight: $font-weight+100;
+			color: $e-secondary-color;
+			display: inline-block;
+		}
+
+		.exe-icon-batch-grey {
+			vertical-align: middle;
+		}
+	}
+}
+
+.pad-25 {
+	padding: 45px 25px;
+}
+
+.exe-testimonial-carousel {
+	margin-bottom: 45px;
+}
+
+
+.faculty {
+
+	h1 {
+		color: $white-color;
+		font-weight: $font-weight+400;
+	}
+
+	.media-left {
+		margin-left: -20px;
+	}
+
+	figure {
+		width: 210px;
+		height: 210px;
+		position: relative;
+		margin: 20px;
+		box-shadow: 0px 4px 24px 0px rgba(0, 0, 0, 0.31);
+		border-radius: 5px;
+
+
+		img {
+			border-radius: 5px;
+		}
+
+		i {
+			position: absolute;
+			right: 20px;
+			bottom: -25px;
+			width: 72px;
+			height: 62px;
+			border-bottom: 5px solid $blue-color;
+			display: inline-block;
+			background-color: $white-color;
+			box-shadow: -1px 0px 33px 0px rgba(0, 0, 0, 0.13);
+			border-radius: 10px;
+			padding: 10px 10px 0 10px;
+		}
+	}
+}

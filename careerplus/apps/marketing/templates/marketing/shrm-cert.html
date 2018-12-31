@@ -40,16 +40,27 @@
         <!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);-->
         <!--})(window,document,'script','dataLayer','GTM-M323HB');</script>-->
         <!-- End Google Tag Manager -->
-        <script>
-              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-              ga('create', 'UA-3537905-1', 'auto', {'name': 'a'});
-              ga('a.send', 'pageview');
-              ga('create', 'UA-3537905-41', 'auto');
-              ga('send', 'pageview');
-            </script>
+      <script>
+     /*
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      <!--ga('create', 'UA-3537905-1', 'auto', {'name': 'a'});-->
+      <!--ga('a.send', 'pageview');-->
+      ga('create', 'UA-3537905-41', 'auto');
+      ga('send', 'pageview');
+      */
+
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-3537905-41', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
 </head>
 
 <body>
@@ -57,7 +68,7 @@
   <div class="container">
     <!-- header start -->
     <div class=""> 
-     <a href="/" class="sprite logo-main"></a>     
+     <a href="#" class="sprite logo-main"></a>
     </div>
     <!-- header end -->
     <div class="clear-fix"></div>
@@ -69,16 +80,15 @@
         <div class="register-bx-sec pull-right">
           <h2>Know more</h2>
           <div class="clear-fix"></div>
-          <form id="lead" 
-          action="{% url "crmapi:lead-management-captcha" %}"  data-non_captcha_action="{% url "crmapi:lead-management" %}"
-          >    {% csrf_token %}
+          <form id="lead" method="post"  action="{% url 'crmapi:lead-management' %}" >
+            {% csrf_token %}
               <div>
-          <input type="text" id="name" name="name" placeholder="Full Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}" maxlength="100">
+          <input type="text" id="name" name="name" placeholder="Full Name" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %} maxlength="100">
           <span class="error" for="name" style="color: rgb(255, 0, 0);font-size: 11px;width:100%; " ></span>
          </div>
 
         <div>
-          <input type="email" id="email" name="email" placeholder="Email Address" value="{{request.session.email}}" maxlength="100">
+          <input type="email" id="email" name="email" placeholder="Email Address" value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %} maxlength="100">
           <span class="error" for="email" style="color: rgb(255, 0, 0);font-size: 11px;width:100%; "></span>
 
         </div>
@@ -86,20 +96,26 @@
             <input type="hidden" id="country" name="country" aria-invalid="false" value="91">
 
             <input id="mobile" type="text" name="number"
-            placeholder="Mobile Number" maxlength="10" aria-required="true" class="pull-right" value="{{request.session.mobile_no}}">
+            placeholder="Mobile Number" maxlength="10" aria-required="true" class="pull-right" value={% if alt_contact %} "{{alt_contact}}" {% else %} "{{request.session.mobile_no}}" {% endif %}>
 
             <span class="error" for="mobile" style="color: rgb(255, 0, 0);font-size: 11px;width:100%;" ></span>
          </div>
 
-           <div>
+           <!-- <div>
                 <textarea id="message" name="msg" class="message_input" placeholder="Message" rows="1"></textarea>
                 <span class="error" for="message" style="color: rgb(255, 0, 0); font-size: 11px; width:100%; " ></span>
-            </div>
+            </div> -->
    
-              <div style="clear:both; height:77px; overflow:hidden; display:block; position: relative;">
+              <!-- <div style="clear:both; height:77px; overflow:hidden; display:block; position: relative;">
                 <div id="captcha1" class="input-field" style="width:45%; margin: 0px;" ></div>
                 <p style="color: rgb(255, 0, 0); display: none; font-size: 11px; margin: 0px; padding: 0px;  position: absolute; top: 58px;" id="hiddenrecaptcha"> Captcha Validation is required</p>
-            </div>
+            </div> -->
+
+            <div>
+          <input type="text" id="value" readonly name="name" value="Fees : Rs.15,255" placeholder="" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %} maxlength="100">
+
+          <span class="error" for="name" style="color: rgb(255, 0, 0);font-size: 11px;width:100%; " ></span>
+         </div>
             
               <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
               <input type="hidden" name="prd" value="shrm certification">
@@ -133,17 +149,31 @@
 </div>
 <div class="clear-fix"></div>
 <div class="container"> 
-  <!--white box first section start here -->
+  
+<!--white box first section start here -->
   <div class="main-bx box-padding">
     <h4>Why should one take SHRM certification?</h4>
     <div class="clear-fix"></div>
-    <p>Earning your SHRM-CP credential from shinelearning makes you a recognized expert and leader in the HR field—and a valuable asset to your organization, keeping you and your organization more competitive in today's economy. This professional distinction sets you apart from your colleagues, proving your high level of knowledge and skills.<br>
-      <br>
-    </p>
-    <p>The certification is competency based and teaches you how you effectively implement that knowledge in the workplace each and every day. SHRM certifications directly link to on-the-job scenarios and realistic work situations, making them the most relevant certifications available for HR professionals. SHRM certification is universally applicable across industries, geographic borders, job responsibilities and career levels. The SHRM-CP is based on the current HR landscape, focusing on the competencies and knowledge HR professionals need to lead in today’s business community. Based on in-depth research focused on—and backed by—global employers and business leaders, the SHRM-CP and SHRM-SCP credentials reflect what HR practitioners need to know to be leaders in their organizations and in the profession.</p>        
-  
+    <div class="row certification">
+<div class="col-md-4 col-sm-4 col-xs-12 col-lg-4 "><span class="Competency"></span><strong>Competency</strong> Based Effectively implement the knowledge in the workplace</div>
+<div class="col-md-4 col-sm-4 col-xs-12 col-lg-4 "><span class="Universally"></span><strong>Universally Applicable</strong> Certification is applicable across industries, geographic borders, job responsibilities and career levels</div>
+<div class="col-md-4 col-sm-4 col-xs-12 col-lg-4 "><span class="focused"></span><strong>Focused on Advancement</strong>More than 5000 employers are seeking SHRM credential-holder every month</div>
+<div class="clear-fix"></div>
+<div class="col-md-1 col-sm-1 col-xs-hidden col-lg-2 "></div>
+<div class="col-md-5 col-sm-5 col-xs-12 col-lg-4 "><span class="Strategic1"></span><strong>Strategic Planning </strong>SHRM credentials reflects what HR practitioners need to know to be leaders in the organization and in the profession</div>
+<div class="col-md-5 col-sm-5 col-xs-12 col-lg-4 "><span class="releva"></span><strong>Relevant</strong>SHRM Certification directly link to  on-the-job scenarios and realistic work situations</div>
+
+<div class="col-md-1 col-sm-1 col-xs-hidden col-lg-2 "></div>
+
+
+</div>
+
   </div>
   <!-- white box first section end here -->
+
+
+
+
   <div class="clear-fix"></div>
 </div>
 <div class="clear-fix"></div>
@@ -227,9 +257,9 @@
               });
 
             var _gaq = _gaq || [];
-            $.validator.addMethod("lettersonly", function (value, element){
-                return this.optional(element) || /^[a-z\s]*$/i.test(value);
-            }, "Letters only please");
+        //    $.validator.addMethod("lettersonly", function (value, element){
+         //       return this.optional(element) || /^[a-z\s]*$/i.test(value);
+          //  }, "Letters only please");
 
             $.validator.addMethod("defaultInvalid", function (value, element) {
                 return !(element.value == element.defaultValue);
@@ -237,7 +267,13 @@
 
             $.validator.addMethod("custommobile",
                 function(value, element) {
-                    return value.length == 10 ;
+
+                   if (value.length < 10 || value.length>16){
+                            return false;
+                            }
+                    else{
+                    return true ;
+                    }
                 }
             );
 
@@ -303,13 +339,16 @@
                     number:{
                        required:"Field is required",
                        number:"Enter only number",
-                       custommobile: "Please enter 10 digits mobile number",
+                       custommobile: "Please enter atleast 10 digits mobile number"
                     },
                     email:{
                         required:"Field is required"
                     },
                     msg:{
                         maxlength:"No more than 500 characters."
+                    },
+                    name:{
+                        lettersonly : "please enter your name in alphabets only"
                     }
                 },
                 highlight:function(element, errorClass) {
@@ -326,6 +365,77 @@
             });
             
         </script>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            $('#submit').click(function(e) {
+              e.preventDefault();
+                var formEmail = $('#lead').find('input[name="email"]').val();
+                var formName = $('#lead').find('input[name="name"]').val();
+                var formMobile = $('#lead').find('input[name="number"]').val();
+
+                var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                var isValidEmail = regex.test(formEmail);
+
+                if (formMobile.length < 10 || formMobile.length >16 ){
+                    alert("Please enter a valid mobile number.");
+                    return;
+                }
+
+                if (!isValidEmail){
+                   alert("Please enter a valid email address.");
+                   return; 
+                }
+                createLead();
+            });
+        });
+
+        function createLead() {
+            var url = "{% url 'crmapi:lead-management' %}";
+            var leadData = $('form').serialize();
+
+            $.ajax({
+                async: true,
+                url: url,
+                type: "POST",
+                data: leadData,
+                headers: {
+                  "X-CSRFToken":"{{csrf_token}}"
+                },
+                success: function(result) {
+                    $(':input','#lead')
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .prop('checked', false)
+                        .prop('selected', false);
+
+                    var conversion_id = 991709191;
+                    var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+                    var ga_code = document.createElement('div');
+                    ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="http://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+                    document.body.appendChild(ga_code);
+
+                    window.location.href ='thankyou-for-query'
+
+                    setTimeout(function(){
+                        $('a.no-click').click(function(e) {
+                          e.preventDefault()
+                        });
+                        },0);
+                },
+                error: function(result) {
+                  alert("Something went wrong!");
+                }
+                });
+        }
+
+    </script>
+
+
+
+
 
         <!-- Facebook Pixel Code -->
 
@@ -352,5 +462,19 @@
         src="https://www.facebook.com/tr?id=630068977028888&ev=PageView&noscript=1"
 
         /></noscript>
+
+  {% block zendesk %}
+    <!--Start of Zendesk Chat Script-->
+      <script type="text/javascript">
+      window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+      d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+      _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+      $.src="https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";z.t=+new Date;$.
+      type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+      </script>
+      <!--End of Zendesk Chat Script-->
+    {% endblock zendesk %}
+
+
 </body>
 </html>

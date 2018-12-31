@@ -1,0 +1,158 @@
+{% extends "basic/base1.html" %}
+{% load static meta compress humanize shop_tags %}
+
+{% block title %}
+  {% if meta.title %}{{ meta.title }}{% else %}{{faculty_obj.name}}{% endif %}
+{% endblock title %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}?type=amp">
+{% endblock canonical_url %}
+
+        {% block django_meta %}
+            {% include 'meta/meta.html' %}
+        {% endblock django_meta %}
+ 
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-common.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-faculty.scss' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+
+{% block navigation %}
+   {{block.super}}
+{% endblock navigation %}
+
+
+{% block main_container %}
+    
+    <div id="id-detail-body">
+      {% block page_heading %}
+
+      <!-- header -->
+      <header class="exe-header-faculty" style="background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url({% if university.banner %}{{university.banner.url}}{% else %}{% static 'shinelearn/images/executive/university-pic.jpg' %}{% endif %}) no-repeat center top;">
+        <div class="exe-header-txt container pr">
+          <div class="row">
+          <!-- breadcrums -->
+            <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
+              <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                <a href="/" itemprop="item">Home</a>
+                <meta itemprop="name" content="Home" />
+                <meta itemprop="position" content="1" />
+              </li>
+              <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                <a href="{{university.get_absolute_url}}" itemprop="item">{{university.heading}}</a>
+                <meta itemprop="name" content="{{university.heading}}" />
+                <meta itemprop="position" content="2" />
+              </li>
+              <li class="active">{{faculty_obj.name}}</li>
+            </ol>
+          </div>
+        </div>
+      </header>
+
+    {% endblock page_heading %}
+
+
+
+    {% block section2 %}
+
+    
+      
+      <!-- main parent section start -->
+      <section class="container-fluid">
+        <div class="row">
+            <!-- main container -->
+            <div class="container mb-50">
+              <div class="row">
+
+                <div class="faculty">
+                  <div class="faculty-pic">
+                    <figure>
+                      {% if faculty_obj.image %}
+                      <img src="{{ faculty_obj.get_image_url }}" height="209px" width="209px" class="img-responsive" alt="{{faculty_obj.name}}">
+                      {% else %}
+                      <img src="{% static 'shinelearn/images/executive/default-user-pic.jpg' %}" alt="{{faculty_obj.name}}">
+                      {% endif %}
+                      <i><img src="{{university.icon.url}}" alt="{{university.name}}" class="img-responsive"></i>
+                    </figure>
+                  </div>
+                  <div class="faculty-intro">
+                    <h1 class="heading-primary-exe1 mt-20">{{ faculty_obj.name }}</h1>
+                    <span>
+                    <p class="mt-20 sm-intro">{{ faculty_obj.designation }} <span>{{ university.heading }}</span></p>
+                   {{ faculty_obj.description|safe }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- bottom container end -->
+      </div>
+      </section>
+      <!-- main parent section end -->   
+
+      <!-- Courses taken -->
+      {% if products %}
+      <section class="exe-courses-taken-box container-fluid">
+        <div class="row">
+          <h2 class="heading-primary-exe1 text-center mt-40 mb-20">Courses taken by {{ faculty_obj.name }}</h2>
+          <div class="container">
+            <div class="row">
+              <div class="row d-flex justify-content-center" itemscope itemtype="http://schema.org/ItemList">
+
+                {% for prd in products %}
+                <div class="col-sm-4" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                  <meta itemprop="position" content="{{forloop.counter}}" />
+                  <div class="exe-box exe-courses-offered pr">
+                    <div class="media">
+                      <div class="media-body">
+                        <figure>
+                          <i class="exe-university-small-img"><img src="{{university.icon.url}}" alt="{{university.heading}}" class="img-responsive"></i>
+                          <figcaption>
+                            <a href="{{prd.get_absolute_url}}">
+                            <h3 itemprop="name">{{prd.heading}}</h3>
+                            </a>
+                            <p> <i class="exe-icon-batch-grey"></i> Starts  <strong>
+                            {{prd.get_batch_launch_date|date:"M Y"}}</strong>  |  <strong>{{prd.get_duration_in_day|convert_to_month}} months</strong></p>
+                          </figcaption>
+                        </figure>
+                      </div>
+                      <div class="media-right">
+                        {% if prd.is_admission_open %}
+                        <span class="admission-open">Admission open</span>
+                        {% endif %}
+                        <a href="{{prd.get_absolute_url}}" itemprop="url">
+                        <figure>
+                          <img src="{{prd.icon.url}}" alt="{{prd.name}}">
+                        </figure></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+                                
+                <div class="clearfix mt-20"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {% endif %}
+    {% endblock section2 %}
+
+      
+   </div>
+{% endblock main_container %}
+
+
+
+{% block js_section %}
+    {{block.super}}
+    {% compress js %}
+    <!--script src="{% static 'shinelearn/js/users/login.js' %}"></script-->
+    {% endcompress %}
+{% endblock js_section %}

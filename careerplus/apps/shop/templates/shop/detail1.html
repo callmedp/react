@@ -6,8 +6,8 @@
 {% endblock title %}
 {% block canonical_url %}
   <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
-  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}">
-  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}?type=amp">
+  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}?type=amp">
 {% endblock canonical_url %}
 
         {% block django_meta %}
@@ -52,9 +52,12 @@
 
 
 {% block main_container %}
-    
+
     <div id="id-detail-body">
+
       {{product_detail|safe}}
+        <input id="skill" type="hidden" value=" {{skill}} ">
+
    </div>
 {% endblock main_container %}
 
@@ -68,11 +71,26 @@
     <script src="{% static 'shinelearn/js/common/scroller.js' %}" type="text/javascript"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     {% endcompress %}
+
+<script type="text/javascript">
+var authen=false;
+var prod_id = {{product.id}};
+var skill =document.getElementById("skill").value;
+$(document).ready(function() {
+{% if request.session.candidate_id %}
+    authen=true;
+{%else%}
+    authen =false;
+{%endif%}
+ ajax_call(authen,prod_id);
+});
+</script>
+
 {% endblock js_section %}
 
-  {% block johukum %}
+  {% block zendesk %}
     {% if sqs.id in linkedin_resume_services %}
     {% else %}
       {{block.super}}
     {% endif %}
-  {% endblock johukum %}
+  {% endblock zendesk %}

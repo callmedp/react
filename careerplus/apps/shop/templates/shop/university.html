@@ -1,0 +1,990 @@
+{% extends "basic/base1.html" %}
+{% load static meta compress %}
+{% load shop_tags %}
+{% load humanize %}
+{% block title %}
+  {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
+{% endblock title %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}">
+  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}?type=amp">
+  <style rel="stylesheet" type="text/css">
+    .error {
+      font-size: 11px;
+      color: #f74343 !important;
+      font-weight: 400;
+    }
+
+    .error p {
+      margin-top: 5px;
+      margin-bottom: 0;
+    }
+   
+  </style>
+{% endblock canonical_url %}
+
+        {% block django_meta %}
+            {% include 'meta/meta.html' %}
+        {% endblock django_meta %}
+ 
+{% block css_section %}
+    {{block.super}}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-common.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/executive/exe-detail.scss' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
+
+{% block navigation %}
+   {{block.super}}
+{% endblock navigation %}
+
+
+{% block main_container %}
+    
+    <div id="id-detail-body">
+      {% block page_heading %}
+
+      <!-- header -->
+      <header class="exe-header-detail">
+        <div class="exe-header-txt container pr">
+          <div class="row">
+          <!-- breadcrums -->
+         {% block breadcrumbs %}
+                {% include "shop/partials/breadcrumb.html" %}
+          {% endblock breadcrumbs %}
+          
+          <div class="row">
+            <div class="exe-course-box col-md-8 col-lg-9">
+              <!-- course heading -->
+              <h1>{{prd_H1}}</h1>
+
+              <!-- course image -->
+              <div class="exe-course-img mt-30">
+                <figure>
+                  <img src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive">
+                </figure>
+              </div>
+              <div class="exe-course-sep"></div>
+            </div>
+            <!-- course detail -->
+            <div class="exe-enrol-now col-md-4 col-lg-3">
+              <div class="exe-box">
+                <figure>
+                  <i class="exe-icon-batch-blk"></i>
+                  <figcaption>
+                    Batch starts:
+                    <strong>{{ university_detail.launchdate }}</strong>
+                    <span>Duration: <strong>{{ selected_var.dur_days|convert_to_month }}</strong></span>
+                    <div class="sep mt-10 mb-10"></div>
+                    Fee
+                    <div class="exe-price">
+                      Rs. {{ sqs.pPinb|floatformat|intcomma }}
+                    </div>
+                    {% if not request.session.candidate_id and not request.session.university_course %}
+                        <a class="exe-button-enrol mt-10" id="enroll_now"  data-toggle="modal" data-target=".bs-example-modal-sm" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll Now</a>
+                    {% else %}
+                        <a role="button" class="exe-button-enrol mt-10" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                    {% endif %}
+                    
+                    
+                    {% if  university_detail.brochure %}
+                      {% if not request.session.candidate_id and not request.session.university_course %}
+                        <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><i class="exe-icon-brochure"></i>
+                              Download Brochure
+                        </a>
+                      {% else %}
+                       <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" {% if request.session.university_course%} download={{ university_detail.brochure }}{% endif%} target='_blank'><i class="exe-icon-brochure"></i>
+                              Download Brochure
+                        </a>
+                      {% endif %}
+                    {% endif %}
+                  </figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+
+
+          </div>
+        </div>
+        <!-- course highligts -->
+        <div class="exe-course-highlights container-fluid">
+          <div class="col-sm-12">
+            <div class="row">
+             {% with university_detail.highlighted_benefits|split:";" as benefits %}
+                {% for benefit in benefits %}
+                  <div class="col-sm-4">
+                    <div class="exe-course-highlights-box {% if forloop.counter > 1 %}left-bdr{% endif %}">
+                      <i class="exe-icon-highilights"></i>
+                      <span>{{ benefit }}</span>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% endwith %}
+          </div>
+        </div>
+      </header>
+
+    {% endblock page_heading %}
+
+
+
+    {% block section1 %}
+      <!-- main parent1 section start -->
+      <section class="cls_sticky_scroller_p pr">
+            <!-- sticky sub header 1 -->
+            <div class="cls_sticky_scroller" >
+            </div>
+      </section>
+      <!-- main parent1 section end -->
+
+    {% endblock section1 %}
+
+    {% block section2 %}
+      
+      <!-- main parent2 section start -->
+      <section class="container cls_scroller_parent pr mt-30">
+        <div class="row">
+            
+              <!-- About course container -->
+              <section id="about-course" class="container-fluid">
+                <div class="row exe-detail-course-links cls_scroller pr">
+                <!-- sticky sub header 2 -->
+                  <div class="container no-pad">
+                    <div class="col-sm-12 about-tab cls_scroll_tab">
+
+                      <a title="About Course" class="active cls_tab_child" href="#about-course">About Program</a>                      
+                      <a title="Who Should Attend" class=" cls_tab_child" href="#who-should-attend">Who Should Attend</a>
+                      {% if faculty %}
+
+                      <a title="Faculty Profile" class=" cls_tab_child" href="#faculty-profile">Faculty Profile</a>
+                      {% endif %}
+                      <a title="Exclusive Benefits" class=" cls_tab_child" href="#execlusive-benefits">Exclusive Benefits</a>
+
+                      <a title="Program Structure" class="cls_tab_child" href="#program-structure">Program Structure</a>
+
+                      <a title="Fees & Payments Modes" class="cls_tab_child" href="#fees-payments">Fee & Payment Modes</a>
+
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+            <div class="row mt-30">
+
+              <!-- inner left container -->
+              <div class="col-sm-9">
+
+              <!-- About Course -->
+                <section class="exe-box mb-30">
+                  <div id="about-course" class="scroll">
+                    <div class="e-btm-bdr">
+                      <figure class="pr">
+                        <i class="exe-icon-about-program"></i>
+                      </figure>
+                      <h2 class="heading-primary-exe">About Program</h2>
+                    </div>
+                    <article class="col-sm-12 pad-25">
+                      <span class="e-program-list mt-20">
+                      {{prd_desc|safe}}
+                      </span>  
+                    </article>
+                  </div>
+                </section>
+
+                <!-- Who Should Attend -->
+                <section class="exe-box mb-30">
+                  <div id="who-should-attend" class="scroll">
+                    <div class="e-btm-bdr">
+                      <figure class="pr">
+                        <i class="exe-icon-who-attend"></i>
+                      </figure>
+                      <h2 class="heading-primary-exe">Who Should Attend</h2>
+                    </div>
+                    <article class="col-sm-12 pad-25">
+                      <div class="row exe-who-attend">
+                      {%with university_detail.attendees_criteria|get_eval_value  as attendees_list %}
+                      {% for attendees in attendees_list %}
+                        <div class="media col-sm-6">
+                          <div class="media-left">
+                            <figure class="{% if forloop.counter == 1 %}exe-icon-manager {% elif forloop.counter == 2%} exe-icon-division {% elif forloop.counter == 3 %} exe-icon-srmanager  {% else %} exe-icon-lnmanager {% endif %}"></figure>
+                          </div>
+                          <div class="media-body media-middle">
+                            <h3 class="media-heading">{{attendees.0}}</h3>
+                            {{attendees.1}}
+                          </div>
+                        </div>
+                        {% endfor %}
+                        {% endwith %}
+                      </div>
+                    </article>
+                  </div>
+                </section>
+
+                <!-- Eligibility criteria -->
+                {% if university_detail.eligibility_criteria %}
+                <section class="exe-box mb-30">
+                  <div class="e-btm-bdr">
+                    <figure class="pr">
+                      <i class="exe-icon-criteria"></i>
+                    </figure>
+                    <h2 class="heading-primary-exe">Eligibility criteria</h2>
+                  </div>
+                   <article class="col-sm-12 pad-25">
+                    <ul class="exe-criteria-list">
+                    {% with university_detail.eligibility_criteria|split:";" as eligibilities %}
+                    {% for eligibility in  eligibilities %}
+                      <li>{{eligibility}}</li>
+                    {% endfor %}
+                    {% endwith %}
+                    </ul>
+                  </article>
+                </section>
+                {% endif %}
+                <input type="hidden" id="skilllist" value="{% if sqs.pSkilln %} {{sqs.pSkilln|join:""}}{% endif %}">
+                
+                {% block prdrecommended %}
+                  <div id="skill_list_box">
+                  </div>
+                {% endblock prdrecommended %}
+
+                {% if faculty %}
+                  <!-- Faculty Profile -->
+                  <section class="exe-box mb-30">
+                    <div id="faculty-profile" class="scroll">
+                      <div class="e-btm-bdr">
+                        <figure class="pr">
+                          <i class="exe-icon-faculty"></i>
+                        </figure>
+                        <h2 class="heading-primary-exe">Faculty Profile</h2>
+                      </div>
+                      <article class="col-sm-12 pad-25">
+                        <div id="carousel-example-generic" class="carousel slide exe-faculty-carousel" data-ride="carousel">
+
+                          <!-- Wrapper for slides -->
+                          <div class="carousel-inner" role="listbox">
+                            {% for inner_fac in faculty %}
+                             <div class="item col-sm-12 {% if forloop.counter == 1%}active {% endif %}">
+                             {% for fac in inner_fac %}
+                              <div class="{% if inner_fac|length == 1 %}col-sm-12{% else %}col-sm-6{% endif %} text-center">
+                                <figure>
+                                  <a class="faculty-thumb" href="{{fac.get_absolute_url}}"  target='_blank'><img src="{{ fac.get_image_url }}" alt="Faculty Profile"></a>
+                                  <figcaption>
+                                    <strong><a href="{{fac.get_absolute_url}}" target='_blank'>{{ fac.name }}</a></strong>
+                                    <div class="exe-designation">{{ fac.designation }} – 
+                                      <span>{{ fac.institute.name }}</span>
+                                    </div>
+                                    <p>{{fac.description|truncatechars:"120"}}...   <a class="e-anchor-color" href="{{fac.get_absolute_url}}" target='_blank'>read more</a>
+                                    </p>
+                                  </figcaption>
+                                </figure>
+                              </div>
+                              {% endfor %}
+                           
+                            </div>
+                            {% endfor %}
+                            
+                          </div>
+                          {% if faculty|length > 1%}
+                          <!-- Controls -->
+                          <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                            <span class="exe-icon-chevron-left mt-20" aria-hidden="true"></span>
+                          </a>
+                          <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                            <span class="exe-icon-chevron-right mt-20" aria-hidden="true"></span>
+                          </a>
+                          {% endif %}
+                        </div>
+                      </article>
+                    </div>
+                  </section>
+                {% endif %}
+
+                <section class="exe-box mb-30">
+                  <div id="execlusive-benefits" class="scroll">
+                    <div class="e-btm-bdr">
+                      <figure class="pr">
+                        <i class="exe-icon-benefit"></i>
+                      </figure>
+                      <h2 class="heading-primary-exe">Exclusive Benefits</h2>
+                    </div>
+                    <article class="col-sm-12 pad-25">
+                      <div class="row exe-exclusive-benefits">
+                        {% if university_detail.benefits%}
+
+                        <h3 class="col-sm-12 mb-20">Key Benefits</h2>
+
+                        {% for benefit in university_detail.benefits %}
+                        <div class="col-sm-4">
+                          <figure class="thumbnail">
+                            <i class="{{benefit.1}}"></i>
+                            <figcaption class="caption">
+                              <h3>{{ benefit.0 }}</h3>
+                              <p>{{ benefit.2 }}</p>
+                            </figcaption>
+                          </figure>
+                        </div>
+                        {% endfor %}
+                        <div class="clearfix e-btm-bdr mb-30 mt-10 col-sm-12"></div>
+                        {% endif %}
+
+                        <h3 class="col-sm-12 mb-20">Other Benefits</h2>
+                          <ul class="exe-why-shine-learning">
+                            <li class="col-sm-4">
+                              <figure class="thumbnail">
+                                <figcaption class="caption">
+                                  <h3>0% EMI</h3>
+                                  <p>Easy EMI payment option.</p>
+                                </figcaption>
+                              </figure>
+                            </li>
+                            <li class="col-sm-4">
+                              <figure class="thumbnail">
+                                <figcaption class="caption">
+                                  <h3>Free Services</h3>
+                                  <p>Free Resume, Cover Letter Formats and Career Guidance Services.</p>
+                                </figcaption>
+                              </figure>
+                            </li>
+                            <li class="col-sm-4">
+                              <figure class="thumbnail">
+                                <figcaption class="caption">
+                                  <h3>Refer and Earn</h3>
+                                  <p>Refer your friend and get an Amazon Voucher worth Rs. 2000*</p>
+                                </figcaption>
+                              </figure>
+                            </li>
+                          </ul>
+                      </div>
+                    </article>
+                  </div>
+                </section>
+
+                <!-- Program Structure 2 -->
+                <section class="exe-box mb-30">
+                  <div id="program-structure" class="scroll">
+                    <div class="e-btm-bdr">
+                      <figure class="pr">
+                        <i class="exe-icon-program-structure"></i>
+                      </figure>
+                      <h2 class="heading-primary-exe">Program Structure</h2>
+                    </div>
+                    <article class="col-sm-12 pad-25 exe-accordian exe-structure-list2">
+                        <ul class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        {% for chapter in chapter_list %}
+                          <li class="panel panel-default {% if not chapter.content %} no-content {% endif %}">
+                            <div class="panel-heading" role="tab" id="heading_{{forloop.counter}}">
+                              <h3 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOneExe_{{forloop.counter}}" {%if forloop.counter != 1%} class="collapsed" aria-expanded="false" {%else %} aria-expanded="true" {% endif %}  aria-controls="collapseOneExe_{{forloop.counter}}">
+                                  {{ chapter.heading }}
+                                </a>
+                              </h3>
+                            </div>
+                            {% if chapter.content %}
+                            <div id="collapseOneExe_{{forloop.counter}}" class="panel-collapse collapse {% if forloop.counter == 1 %} in {% endif %}" role="tabpanel" aria-labelledby="heading_{{forloop.counter}}">
+                              <div class="panel-body">
+                               {{chapter.content|safe }}
+                              </div>
+                            </div>
+                            {% endif %}
+                          </li>
+                        {% endfor %}
+                          </ul>
+                      </article>
+                  </div>
+                </section>
+
+               <!-- Assessment & Evaluation -->
+                {% if university_detail.assesment or university_detail.sample_certificate %}
+                <section class="exe-box mb-30">
+                  <div class="scroll">
+                    <div class="e-btm-bdr">
+                      <figure class="pr">
+                        <i class="exe-icon-program-structure"></i>
+                      </figure>
+                      <h2 class="heading-primary-exe">Assessment & Evaluation</h2>
+                    </div>
+                    <article class="col-sm-12 pad-25">
+                     {% if university_detail.assesment %}
+                      <span class="exe-structure-list1">
+                        {{university_detail.assesment|safe}}
+                      </span>
+                      {% endif %}
+                      {% if university_detail.sample_certificate %}
+                      <div class="exe-sample-certificate mt-20">
+                        <figure>
+                          <img class="img-responsive" src="{{university_detail.sample_certificate}}" alt="Sample certificate">
+                        </figure>
+                        <h3 class="mt-30 ml-40">Sample Certificate</h3>
+                        <a class="exe-button-view-sample pull-right mt-20 mr-20" href="#" type="button" data-toggle="modal" data-target=".bs-example-modal-lg">View sample certificate</a>
+                      </div>
+                      {% endif %}
+                    </article>
+                  </div>
+                </section>
+                {% endif%}
+               {% if university_detail.sample_certificate %}
+                <!-- sample certificate modal -->
+                <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h3 class="heading-primary-exe" id="myModalLabel">Sample Certificate</h3>
+                      </div>
+                      <div class="modal-body exe-sample-certificate-modal">
+                        <img class="img-responsive text-center" src="{{university_detail.sample_certificate}}"  alt="Sample certificate">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+
+                <!-- Institute -->
+                <section class="exe-box mb-30">
+                  <div class="scroll">
+                    <div class="e-btm-bdr">
+                      <figure class="pr">
+                        <i class="exe-icon-program-structure"></i>
+                      </figure>
+                      <h2 class="heading-primary-exe">Institute</h2>
+                    </div>
+                    <article class="col-sm-12 pad-25 exe-institute">
+                      <figure>
+                        <span class="institute-txt">
+                          <h3>{{ institute.name }}</h3>
+                          <a class="exe-button-view-course pull-right" href="{{ institute.get_absolute_url }}" target='_blank'>View all courses</a>
+                        </span>
+                      </figure>
+                      <p class="mt-20">
+                         {{ institute.description|safe|truncatechars:"150"}}
+                      </p>
+                    </article>
+                  </div>
+                </section>
+                {% if university_testimonial %}
+                <!-- Testimonials -->
+                <section class="exe-box mb-30">
+                  <div class="scroll">
+                    <div class="e-btm-bdr">
+                      <figure class="pr">
+                        <i class="exe-icon-testimonials"></i>
+                      </figure>
+                      <h2 class="heading-primary-exe">Testimonials</h2>
+                    </div>
+                    <article class="col-sm-12">
+                      <div id="carousel-example-generic1" class="carousel slide exe-testimonial-carousel" data-ride="carousel">
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner text-center" role="listbox">
+                        {%for testimonial in university_testimonial %}
+                          <div class="item col-sm-12 {% if forloop.counter == 1%} active {% endif %}">
+
+                            <p class="mb-20 mt-20">{{ testimonial.review|safe }}</p>
+                            <figure>
+                              <img src="{{ testimonial.get_image_url }}" alt="Faculty Profile">
+                              <figcaption>
+                                <strong>{{testimonial.user_name }}</strong>
+                                <div class="exe-designation">
+                                 {{ testimonial.designation }}, {{ testimonial.company }}
+                                </div>
+                              </figcaption>
+                            </figure>
+                          </div>
+                          {% endfor %}
+
+                          
+                        </div>
+
+                        <!-- Controls -->
+                        {% if university_testimonial|length > 1%}
+                          <a class="left carousel-control" href="#carousel-example-generic1" role="button" data-slide="prev">
+                            <span class="exe-icon-chevron-left mt-20" aria-hidden="true"></span>
+                          </a>
+                          <a class="right carousel-control" href="#carousel-example-generic1" role="button" data-slide="next">
+                            <span class="exe-icon-chevron-right mt-20" aria-hidden="true"></span>
+                          </a>
+                        {% endif %}
+                      </div>
+                    </article>
+                  </div>
+                </section>
+                {% endif %}
+
+
+                   <!-- Fees & Payments Modes -->
+                <section class="exe-box mb-30">
+                   <div id="fees-payments" class="scroll">
+                    <div class="e-btm-bdr">
+                      <figure class="pr">
+                        <i class="exe-icon-fee-payments"></i>
+                      </figure>
+                      <h2 class="heading-primary-exe">Fee and Payment Modes</h2>
+                    </div>
+                    <article class="col-sm-12 pad-25 exe-accordian exe-fee-payments-box">
+                      <ul class="panel-group" id="accordion1" role="tablist" aria-multiselectable="true">
+                        <li class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingOne">
+                            <h3 class="panel-title">
+                              <a role="button" data-toggle="collapse" data-parent="#accordion1" href="#collapseOneExe1" aria-expanded="true" aria-controls="collapseOneExe1">
+                                Program Fee
+                              </a>
+                            </h3>
+                          </div>
+                          <div id="collapseOneExe1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body exe-program-fee">
+                              <div class="payment-deadline pull-right">
+                                Payment Deadline                                  
+                                <strong>{{university_detail.payment_deadline}}</strong> 
+                              </div> 
+                              <div class="overall-fees">
+                                Overall fee                                  
+                                <strong>Rs. {{start_price|floatformat|intcomma}}</strong> 
+                              </div> 
+                              <span class="e-blue-bdr mt-15"></span>
+                              {% if  university_detail.payment %}
+                              <div class="installment text-center">
+                                <span class="text-uppercase">Installment Available</span>
+                                <div class="d-flex justify-content-center mt-15">
+                                 {% for payment in university_detail.payment %}
+                                <div class="col-sm-4 installment-available">
+                                  {{forloop.counter|ordinal }} Installment
+                                  <strong>Rs. {{ payment.installment_fee|floatformat|intcomma }} </strong>
+                                  <span>Payment Deadline: <b>{{ payment.ldpayment }}</b></span>
+                                </div>
+                                {% endfor %}
+                              </div>
+                              </div>
+                              {% endif %}
+                            </div>
+                          </div>
+                        </li>
+                        <li class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingTwo">
+                            <h3 class="panel-title">
+                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwoExe1" aria-expanded="false" aria-controls="collapseTwoExe1">
+                                Application Process
+                              </a>
+                            </h3>
+                          </div>
+                          <div id="collapseTwoExe1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body exe-application-process">
+                              {% for proc in university_detail.app_process%}
+                              <figure class="col-sm-3 process-box">
+                                <span class="circle"><i class="{{proc.1}}"></i></span>
+                                <figcaption>{{proc.0}}</figcaption>
+                              </figure>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        </li>
+                        <li class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingThree">
+                            <h3 class="panel-title">
+                              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion1" href="#collapseThreeExe1" aria-expanded="false" aria-controls="collapseThreeExe1">
+                                Late Fee
+                              </a>
+                            </h3>
+                          </div>
+                          <div id="collapseThreeExe1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="panel-body exe-late-fee">
+                              <p>Requests for refund of fee on account of cancellation of enrolment shall be considered only if such requests are received prior to closure of registration or 21 days before date of course commencement    whichever is earlier.</p>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </article>
+                  </div>
+                </section>
+
+                {% if faq_list %}
+                <!-- Frequenty Asked Questions -->
+                <section class="exe-box mb-30">
+                  <div id="fees-payments" class="scroll">
+                    <div class="e-btm-bdr">
+                      <figure class="pr">
+                        <i class="exe-icon-faq"></i>
+                      </figure>
+                      <h2 class="heading-primary-exe">Frequenty Asked Questions</h2>
+                    </div>
+                    <article class="col-sm-12 pad-25 exe-accordian">
+                      <ul class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+                      {% for ques in faq_list %}
+                        <li class="panel panel-default">
+                          <div class="panel-heading" role="tab" id="headingExe{{forloop.counter}}">
+                            <h3 class="panel-title">
+                              <a class="" role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne{{forloop.counter}}" aria-expanded="true" aria-controls="collapseOne{{forloop.counter}}">
+                                {{ques.question}}
+                              </a>
+                            </h3>
+                          </div>
+                          <div id="collapseOne{{forloop.counter}}" class="panel-collapse collapse {% if forloop.counter == 1 %}
+                  in {% endif %}" role="tabpanel" aria-labelledby="headingExe{{forloop.counter}}">
+                            <div class="panel-body">
+                              {{ques.answer|safe}}
+                            </div>
+                          </div>
+                        </li>
+                      {% endfor %} 
+                      </ul>
+                    </article>
+                  </div>
+                </section>
+                {% endif %}
+
+              </div>
+              <!-- inner left container end -->
+
+              <!-- inner right container -->
+              <div class="col-sm-3 pr">
+
+              <!-- box-scroll start -->
+              <div class="query-price-box-scroll">
+                <div class="cls_samples_enquiry samples_enquiry">
+                  <div class="col-sm-12 no-pad">
+                    <!-- Enrol Now -->
+                    <section class="exe-box mb-30 exe-show-enrol-now">
+                      <figure>
+                        <i></i>
+                        <figcaption>
+                          
+                          <strong>
+                            <span>Batch starts:</span>
+                            {{ university_detail.launchdate }}
+                          </strong>
+                          <strong>
+                            <span>Fees:</span> 
+                            Rs. {{ sqs.pPinb|floatformat|intcomma }}
+                          </strong>
+                          <div class="sep mt-10 mb-10"></div>
+
+                           {% if not request.session.candidate_id and not request.session.university_course %}
+                                <a class="exe-button-enrol mt-5" id="enroll_now"  data-toggle="modal" data-target=".bs-example-modal-sm" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+
+                            {% else %}
+                                <a role="button" class="exe-button-enrol mt-5" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                            {% endif %}
+                            {% if  university_detail.brochure %}
+                             {% if not request.session.candidate_id and not request.session.university_course %}
+                                <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" data-toggle="modal" data-target=".bs-example-modal-sm-download" target='_blank'><i class="exe-icon-brochure"></i>
+                                      Download Brochure
+                                </a>
+                              {% else %}
+                               <a href="{{ university_detail.brochure }}" class="exe-download-brochure download_broucher" target="_blank"><i class="exe-icon-brochure"></i>
+                                      Download Brochure
+                                </a>
+                              {% endif %}
+                            {% endif %}
+                        </figcaption>
+                      </figure>
+                    </section>
+
+                    <!-- Request a call -->
+                    <section class="exe-box mb-30 exe-request-call-form">
+                      <h2>Want help with this course?</h2>
+                      <strong>Let our learning specialists guide you</strong>
+                      <article class="col-sm-12 exe-box mt-15">
+                       <input type="hidden" id="skilllist" value="{% if sqs.pSkilln %} {{sqs.pSkilln|join:""}}{% endif %}">
+                        <form  id="lead1" method="POST" action="{% url 'crmapi:lead-management' %}">
+                          {% csrf_token %}
+                        <div class="form-group">
+                            <input name="name" id="name1" type="text" class="form-control" placeholder="Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}" >
+                            <p class="js-error"></p>
+                          </div>
+                          <div class="form-group">
+                            <input id="email1" name="email" type="text" class="form-control" value="{{request.session.email}}" placeholder="Email">
+                            <p class="js-error"></p>
+                          </div>
+                          <div class="form-group">
+                            <input id="mobile1" name="number" maxlength="10" minlength="10" type="text" class="form-control" placeholder="Mobile" value="{{request.session.mobile_no}}">
+                            <p class="js-error"></p>
+                          </div>
+                            <input type="hidden" name="product" value="{{ sqs.id }}">
+
+                            <input type="hidden" name="prd" value="{{ prd_H1 }}">
+
+                            <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+                            <input type="hidden" name="uc" value="1">
+                            <input type="hidden" name="lsource" value="{{ lead_source }}">                          
+                          <button type="submit" class="exe-button-submit mb-15">Request callback</button>
+                        </form>
+                      </article>
+                    </section>
+                  </div>
+                  </div>
+                </div>
+
+              </div>
+              <!-- inner right container end -->
+            </div>
+      </div>
+      </section>
+      <!-- main parent2 section end --> 
+        <!-- Modal - Want help with this course? -->
+      <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content exe-modal-form">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body"><h2 class="modal-title">Want help with this course?</h2>
+              <strong>Let our learning specialists guide you</strong>
+              <form  id="lead2" method="POST" action="{% url 'crmapi:lead-management' %}">
+                          {% csrf_token %}
+                <div class="form-group">
+                  <input type="text" class="form-control" name="name" id="exampleInputName2"  name="name" placeholder="Name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}">
+                  <p class="js-error"></p>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control"  name="email" id="exampleInputEmail2" name='email' placeholder="Email" value="{{request.session.email}}">
+                  <p class="js-error"></p>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="number" maxlength="10" minlength="10" type="text" id="exampleInputPhone2" placeholder="Phone Number"  value="{{request.session.mobile_no}}">
+                     <p class="js-error"></p>
+                </div>
+                <input type="hidden" name="product" value="{{ sqs.id }}">
+
+                <input type="hidden" name="prd" value="{{ prd_H1 }}">
+
+                <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+                <input type="hidden" name="lsource" value="{{ lead_source }}">
+
+                <input type="hidden" name="uc" value="1">
+                <button type="submit" class="exe-button-callback">Enroll Now</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade bs-example-modal-sm-download" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content exe-modal-form">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body"><h2 class="modal-title">Want help with this course?</h2>
+              <strong>Let our learning specialists guide you</strong>
+              <form  id="lead3" method="POST" action="{% url 'crmapi:lead-management' %}">
+                          {% csrf_token %}
+                <div class="form-group">
+                  <input type="text" class="form-control" id="exampleInputName3" placeholder="Name" name="name" value="{% if request.session.full_name %}{{request.session.full_name}}{% endif %}">
+                  <p class="js-error"></p>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="exampleInputEmail3" placeholder="Email" name="email"  value="{{request.session.email}}">
+                  <p class="js-error"></p>
+                </div>
+                <div class="form-group">                    
+                    <input type="text" class="form-control" name="number" maxlength="10" minlength="10" type="text" id="exampleInputPhone" placeholder="Phone Number" value="{{request.session.mobile_no}}">
+                    <p class="js-error"></p>
+                </div>
+                <input type="hidden" name="product" value="{{ sqs.id }}">
+
+                <input type="hidden" name="prd" value="{{ prd_H1 }}">
+
+                <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
+
+                <input type="hidden" name="lsource" value="{{ lead_source }}">
+                <input type="hidden" name="uc" value="1">
+                <button type="submit" class="exe-button-callback">Download Brochure</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>     
+    {% endblock section2 %}
+
+      
+   </div>
+   <div class="cls_hide_sticky_panel"></div>
+{% endblock main_container %}
+
+
+
+{% block js_section %}
+    {{block.super}}
+    <script type="text/javascript">
+        $("#id_nav").css('position', 'absolute')
+    </script>
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/common/plugin.activeOnScroll-executive.js' %}"></script>
+    <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/shop/detail.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/scroller-executive.js' %}" type="text/javascript"></script>
+    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+       <script type="text/javascript">
+    var _gaq = _gaq || [];
+
+    $.validator.addMethod("lettersonly", function (value, element){
+        return this.optional(element) || /^[a-z\s]*$/i.test(value);
+    }, "Letters only please");
+
+$("#lead1, #lead2, #lead3").each(function() {
+        $(this).validate({
+          submitHandler:function (form) {
+              var action = $(form).attr('action');
+              $.post(action, $(form).serialize(), function (data) {
+                  if (data && data['status']){
+                    form_id = $(form).attr('id')
+                    // lead2 form for enroll now , add id to add-to-cart and trigger click
+                    // lead3 form for download broucher, remove modal on  lcick from enroll now
+                    // and download broucher button.
+                    // lead1 form for form on detail page.
+                     if(form_id == 'lead2'){
+                      var href = $('#download_broucher').attr('href');
+                      $(".download_broucher")[0].setAttribute("download", href);
+                      $(".download_broucher")[1].setAttribute("download", href);
+                      $(".download_broucher").unbind( "click" );
+                      $("#enroll_now").attr('id','add-to-cart')
+                      $("#add-to-cart").trigger('click')
+                      }
+                      else if (form_id == 'lead3')
+                      {
+                        $(".bs-example-modal-sm-download").modal('hide')
+                        $(".download_broucher").removeAttr('data-toggle').removeAttr('data-target')
+                        var href = $('#download_broucher').attr('href');
+                        $(".download_broucher")[0].setAttribute("download", href);
+                        $(".download_broucher")[1].setAttribute("download", href);
+                        $(".download_broucher").unbind( "click" );
+                        $('.download_broucher')[0].click();
+                        $("#enroll_now").attr('id','add-to-cart')
+                        $("#add-to-cart").removeAttr('data-toggle').removeAttr('data-target')
+                        return false;
+                      }
+                      else {
+                        alert('Your Query Submitted Successfully.');
+                        window.location.reload();
+                        return false;
+                      }
+                  }
+              }, 'json');
+          },
+          rules:{
+              number:{
+                  required:true,
+                  number:true,
+                  minlength:10,
+                  maxlength:20,
+              },
+              email:{
+                  email:true,
+                  required:true,
+
+              },
+              name:{
+                  required:true,
+                  lettersonly:true,
+
+              },
+              // msg:{
+              //     required:true,
+              //     maxlength:500
+              // }
+          },
+          messages:{
+              number:{
+                 required:"Field is required",
+                 number: "Please enter valid number only"
+              },
+              email:{
+                  required:"Field is required"
+              },
+              name:{
+                  required:"Field is required"
+              },
+              // msg:{
+              //     required:"Field is required",
+              //     maxlength:"No more than 500 characters."
+
+              // }
+          },
+          highlight:function(element, errorClass) {
+            $(element).closest('.form-group').addClass('error');
+          },
+          unhighlight:function(element, errorClass) {
+            $(element).closest('.form-group').removeClass('error');
+            $(element).siblings('.js-error').html("");
+          },
+          errorPlacement: function(error, element){
+            $(element).siblings('.js-error').html(error.text());
+          } 
+        });
+      });
+
+        </script>
+    {% endcompress %}
+    <script type="text/javascript">
+    var recommended_product_url = '/api/v1/recommended-products/?skills='+$('#skilllist').val()+'&product={{sqs.id}}&uc=1'
+ 
+    var product_html = '<li class="col-sm-6"><a title="product_name" class="box-panel" href="product_url"><div class="media"><div class="media-body"><h3 class="listing-heading">product_name</h3><div class="rating-review-box"><strong>product_bought</strong> people bought<span class="jobs-available"><strong>product_bought</strong> jobs available</span></div></div><div class="media-left"><figure><img class="img-responsive" src="product_image" alt="CSS Designer"></figure></div></div></a></li>';
+
+
+    var start_html = '<section class="container-fluid detail-box you-may-like-carousel mb-30"><div class="scroll"><h2 class="heading-primary-exe mt-30 mb-10 text-center">You may also like</h2><article class="col-sm-12"><div id="carousel-example-generic2" class="carousel slide" data-ride="carousel"><div class="carousel-inner " role="listbox" id="skill_list_box">';
+
+    var end_html ='</div>carousel_arrow_html</div></article></div></section>';
+    var carousel_arrow_html =  '<a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev"><span class="exe-icon-chevron-left mt-10" aria-hidden="true"></span></a><a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next"><span class="exe-icon-chevron-right mt-10" aria-hidden="true"></span></a> '
+    final_html = ''
+    $.get(recommended_product_url, function(data){
+      var num_of_element = 2
+      if(data.count){
+        if(data.count > 2) {
+          end_html = end_html.replace('carousel_arrow_html', carousel_arrow_html)
+        }
+        else{
+           end_html = end_html.replace('carousel_arrow_html', '')
+        }
+        for(i=0; i< data.results.length;i++) {
+          if(i % num_of_element == 0 && i == 0){
+            final_html += '<div class="item col-sm-12 d-flex justify-content-center active"><ul class="listing d-flex justify-content-center">'
+          }
+          else if(i % num_of_element == 0) {
+            final_html += '<div class="item col-sm-12"><ul class="listing">'
+          }
+          final_html += product_html.replace(/product_name/g, data.results[i].display_name)
+          .replace('product_bought', data.results[i].buy_count)
+          .replace('jobs_available', data.results[i].no_jobs)
+          .replace('product_image', data.results[i].pImg)
+          .replace(/product_url/g, data.results[i].pURL)
+          if(num_of_element - (i % num_of_element) == 1 ){
+            final_html += '</ul></div>'
+          }
+        $("#skill_list_box").html(start_html + final_html + end_html)
+        }
+      }
+    });
+
+    $(".download_broucher").click(function(event){
+      {% if request.session.candidate_id and not request.session.university_course  %}
+        // when Information is not present in session open pop up else submit form
+        event.preventDefault();
+        if(!$("#lead3 input[name=name]").val() || !$("#lead3 input[name=email]").val()  || !$("#lead3 input[name=number]").val()) 
+          {
+            $(".bs-example-modal-sm-download").modal('show')
+          }
+         else{
+          $('#lead3').submit();
+          $(".download_broucher")[0].click();
+         }
+      {% else %}
+        event.preventDefault();
+        var href = $('.download_broucher').attr('href');
+        $(".download_broucher").attr('download',href)
+        $(".download_broucher").unbind('click')
+        $(".download_broucher")[0].click();
+      {% endif %}
+    });
+    </script>
+
+{% endblock js_section %}
+
+  {% block zendesk %}
+    {% if sqs.id in linkedin_resume_services %}
+    {% else %}
+      {{block.super}}
+    {% endif %}
+  {% endblock zendesk %}

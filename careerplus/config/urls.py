@@ -29,9 +29,12 @@ from users.views import (
 from homepage import views as homepage_view
 from linkedin.views import AutoLoginView
 from shop.views import ProductDetailView, CourseCatalogueView
-from users.views import LinkedinCallbackView
+from users.views import LinkedinCallbackView, UserLoginTokenView
 from search.views import FuncAreaPageView
 from blog import views as blog_view
+from skillpage.views import (
+    ServiceDetailPage, UniversityPageView,
+    UniversityFacultyView)
 
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
@@ -72,7 +75,8 @@ talent_sitemap = {
 }
 
 
-urlpatterns = []
+urlpatterns = [url(r'^services/%s/%s/$' %(cat_slug,cat_id),
+        ServiceDetailPage.as_view())  for cat_id,cat_slug in settings.SERVICE_PAGE_ID_SLUG_MAPPING.items()]
 
 # Product Detail URLs
 urlpatterns += [
@@ -96,9 +100,14 @@ urlpatterns += [
 
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
+    
     url(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='service-detail'),
     url(r'^courses/', include('skillpage.urls', namespace='skillpage')),
+    url(r'^university/faculty/(?P<faculty_slug>[-\w]+)/(?P<pk>\d+)/$',
+        UniversityFacultyView.as_view(), name='university-faculty'),
+    url(r'^university/(?P<fa_slug>[-\w]+)/(?P<university_slug>[-\w]+)/(?P<pk>\d+)/$',
+        UniversityPageView.as_view(), name='university-page'),
     url(r'^services/(?P<fa_slug>[-\w]+)/(?P<pk>\d+)/$',
         FuncAreaPageView.as_view(), name='func_area_results'),
 
@@ -111,6 +120,22 @@ urlpatterns += [
     #     ProductDetailView.as_view(), name='other-detail'),
     
 ]
+
+# Additional admin urls
+_admin_site_get_urls = admin.site.get_urls
+
+
+def get_urls():
+    from django.conf.urls import url
+    urls = _admin_site_get_urls()
+    urls += [
+        url(r'^autologintoken/$',
+            admin.site.admin_view(UserLoginTokenView.as_view()))
+    ]
+    return urls
+
+admin.site.get_urls = get_urls
+
 urlpatterns += [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api-auth/',
@@ -145,6 +170,7 @@ urlpatterns += [
         LinkedinCallbackView.as_view(), name='linkedin-login'),
 
     url(r'^api/', include('api.urls', namespace='api')),
+    url(r'api/v1/', include('shop.api.v1.urls', namespace='shop-api')),
     url(r'^lead/', include('crmapi.urls', namespace='crmapi')),
 
     url(r'^', include('marketing.urls', namespace='marketing')),
@@ -178,8 +204,31 @@ urlpatterns += [
 
 if settings.DEBUG:
     import debug_toolbar
+
+    from rest_framework.response import Response
+    from rest_framework.schemas import SchemaGenerator
+    from rest_framework.views import APIView
+    from rest_framework_swagger import renderers
+
+
+    class SwaggerSchemaView(APIView):
+        renderer_classes = [
+            renderers.OpenAPIRenderer,
+            renderers.SwaggerUIRenderer
+        ]
+
+        authentication_classes = []
+        permission_classes = []
+
+        def get(self, request):
+            generator = SchemaGenerator(title="Learning API Docs")
+            schema = generator.get_schema(request=request)
+
+            return Response(schema)
+
     urlpatterns = [
         url(r'^__debug__/', include(debug_toolbar.urls)),
+        url(r'^api-docs/', SwaggerSchemaView.as_view()),
     ] + urlpatterns
 
 

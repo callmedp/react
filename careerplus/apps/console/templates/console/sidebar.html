@@ -77,8 +77,8 @@
         <li><a><i class="fa fa-list-alt"></i> Task <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li><a href="{% url 'console:tasks:generate-autologintoken' %}">Generate AutoLogin</a></li>
+              <li><a href="{% url 'console:tasks:generate-encrypted-urls' %}">Generate Encoded URL</a></li>
               <li><a href="{% url 'console:tasks:tasklist' %}">Task List</a></li>
-              <li><a href="{% url 'console:walletrewards' %}"> Wallet </a></li>
               {% if perms.scheduler.can_download_product_list%}
               <li><a href="{% url 'console:tasks:download-product-list'%}">Product List</a></li>
               {% endif %}
@@ -100,10 +100,35 @@
         </li>
       </ul>
     {% endif %}
+
+    {% if perms.shop.console_view_faculty %}
+    <h3>University Faculty</h3>
+    <ul class="nav side-menu">
+
+      <li><a><i class="fa fa-university"></i> Faculty <span class="fa fa-chevron-down"></span></a>
+        <ul class="nav child_menu">
+          <li><a href="{% url 'console:faculty-list' %}">Faculty</a></li>
+        </ul>
+      </li>
+    </ul>
+    {% endif %}
     
     {% if request.user|has_group:PRODUCT_GROUP_LIST %}
         <h3>Live Catalog</h3>
         <ul class="nav side-menu">
+
+          <!--li><a><i class="fa fa-certificate"></i> Faculty <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url 'console:faculty-list' %}">Faculty</a></li>
+            </ul>
+          </li-->
+
+          <li><a><i class="fa fa-certificate"></i> Skill <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url 'console:skill-list' %}">Skill</a></li>
+            </ul>
+          </li>
+
           {% if perms.shop.console_change_category %}
             <li><a><i class="fa fa-bookmark"></i> Category <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
@@ -118,6 +143,7 @@
             <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
                 <li><a href="{% url 'console:product-list' %}">Product</a></li>
+                <li><a href="{% url 'console:product-audit-history'%}">Product Audit History</a></li>
               </ul>
             </li>
             <li><a><i class="fa fa-edit"></i> Product Content <span class="fa fa-chevron-down"></span></a>
@@ -200,6 +226,11 @@
             
           {% endif %}
         </ul>
+    {% elif request.user|has_group:FINANCE_GROUP_LIST %} 
+        <h3>Product</h3>
+        <ul class="nav side-menu">
+          <li><a href="{% url 'console:product-audit-history'%}">Product Audit History</a></li>
+        </ul>
     {% endif %}
 
     {% if perms.review.can_change_review_queue %}
@@ -214,9 +245,25 @@
         </ul>
     {% endif %}
       <h3>Orders</h3>
-      
-      <ul class="nav side-menu">
         
+      <ul class="nav side-menu">
+        {% if perms.order.can_download_discount_report %}
+        <li>
+            <a href="{% url 'console:discount-report-download' %}"><i class="fa fa-edit"></i>Discount Report</a>
+        </li>
+        {% endif %}
+        <li><a><i class="fa fa-list-alt"></i> Wallet <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            {% if perms.wallet.console_add_remove_wallet_point %}
+            <li>
+              <a href="{% url 'console:walletrewards' %}"><i class="fa fa-wallet"></i>Add/Remove Points</a>
+            </li>
+            <li>
+              <a href="{% url 'console:wallethistory' %}"><i class="fa fa-wallet"></i>Wallet History</a>
+            </li>
+            {% endif %}
+          </ul>
+        </li>
         {% comment %}
         {% if is_admin %}
             <li><a><i class="fa fa-edit"></i> CMS <span class="fa fa-chevron-down"></span></a>
@@ -324,6 +371,10 @@
 
             {% if perms.order.can_show_booster_queue %}
                 <li><a href="{% url "console:queue-booster" %}">Booster</a></li>
+            {% endif %}
+
+             {% if perms.order.can_show_domestic_profile_update_queue %}
+                <li><a href="{% url "console:queue-whatsappjoblist" %}">Whatsapp Jobs</a></li>
             {% endif %}
 
             {% if perms.order.can_show_domestic_profile_update_queue %}

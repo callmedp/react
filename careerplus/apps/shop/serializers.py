@@ -24,7 +24,8 @@ class CRMProductSerializer(ModelSerializer):
     combo = SerializerMethodField()
     variation = SerializerMethodField()
     attributes = SerializerMethodField()
-    
+    delivery_type = SerializerMethodField()
+
     class Meta:
         model = Product
         fields = [
@@ -45,7 +46,8 @@ class CRMProductSerializer(ModelSerializer):
             'combo',
             'variation',
             'attributes',
-            'active'
+            'active',
+            'delivery_type'
         ]
 
     def get_display_name(self,obj):
@@ -88,6 +90,20 @@ class CRMProductSerializer(ModelSerializer):
 
     def get_combo(self,obj):
         return ProductIndex().prepare_pCmbs(obj=obj)
+
+    def get_delivery_type(self, obj):
+        delivery_types = obj.get_delivery_types()
+        if delivery_types.exists():
+            keys = ['name', 'slug', 'inr_price', 'usd_price', 'aed_price', 'gbp_price']
+            delivery_list = []
+
+            for dt in delivery_types:
+                dt_dict = {}
+                [dt_dict.update({key: str(getattr(dt, key))}) for key in keys]
+                delivery_list.append(dt_dict)
+
+            return json.dumps(delivery_list)
+        return []
 
     def get_variation(self,obj):
         var_dict = {

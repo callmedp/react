@@ -27,6 +27,9 @@ from core.tasks import upload_resume_to_shine
 from console.mixins import ActionUserMixin
 from order.functions import create_short_url
 from linkedin.autologin import AutoLogin
+from shop.models import Product
+from blog.mixins import BlogMixin
+from shop.models import Category
 
 # from order.mixins import OrderMixin
 
@@ -405,8 +408,7 @@ class UploadDraftView(View):
                 logging.getLogger('error_log').error("Making flow=0 explicitly failed: %s " % str(e))
                 flow = 0
 
-
-            if flow in [2, 6, 10]:
+            if flow in [2, 6, 10, 14]:
                 form = VendorFileUploadForm(request.POST, request.FILES)
             else:
                 form = FileUploadForm(request.POST, request.FILES)
@@ -787,3 +789,57 @@ class OrderListModal(View):
 
         else:
             return HttpResponseForbidden()
+
+
+class UniversityCourseLoadMoreView(TemplateView):
+    template_name = 'university/partials/university_courses.html'
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            cat_pk = request.GET.get('category_pk', None)
+            self.PRODUCT_PAGE_SIZE = int(request.GET.get('page_size', '6'))
+            self.page = int(request.GET.get('page'))
+            cat_objs = Category.objects.filter(
+                pk=cat_pk, active=True)
+            if cat_objs.exists():
+                self.cat_obj = cat_objs.first()
+                return super(UniversityCourseLoadMoreView, self).get(request, args, **kwargs)
+            else:
+                return ''
+        return HttpResponseForbidden()
+
+    def _get_paginated_products(self, products, page=1):
+        """
+        Return the first paginated results of products list.
+        In compliance with Ajax views for University Product Load More.
+        """
+        prod_page = Paginator(products, self.PRODUCT_PAGE_SIZE)
+        products = prod_page.page(page)
+        for product in products:
+            if product.pVrs:
+                product.pVrs = json.loads(product.pVrs)
+            if product.pUncdl:
+                product.pUncdl = json.loads(product.pUncdl[0])
+            if not float(product.pPfin): continue
+            product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
+
+        return products
+
+    def get_context_data(self, **kwargs):
+        """
+        preparing university course  context
+        for loadmore
+        """
+        context = super(
+            UniversityCourseLoadMoreView, self).get_context_data(**kwargs)
+
+        standalone_products = SQS().exclude(
+            id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(
+            pTF=14, pCtg=self.cat_obj.pk)
+    
+        context['products'] = self._get_paginated_products(
+            standalone_products, self.page)
+        context.update({
+            'category_obj': self.cat_obj,
+            'PRODUCT_PAGE_SIZE': self.PRODUCT_PAGE_SIZE})
+        return context

@@ -43,7 +43,7 @@ class HomePageView(TemplateView, MetadataMixin):
                 is_active=True, is_jobassistance=True)[0]
             job_services = tjob.get_trending_products()
             # services_class = ProductClass.objects.filter(slug__in=settings.SERVICE_SLUG)
-            job_services = job_services.filter(product__type_product__in=[0, 1, 3])
+            # job_services = job_services.filter(product__type_product__in=[0, 1, 3])
             job_services_pks = list(job_services.all().values_list('product', flat=True))
             job_sqs = SearchQuerySet().filter(id__in=job_services_pks).exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS)
             job_services = job_sqs[:5]
@@ -78,10 +78,9 @@ class HomePageView(TemplateView, MetadataMixin):
 
         i = 0
         tabs = ['home', 'profile', 'message', 'settings']
+        course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
         for tcourse in t_objects:
             tprds = tcourse.get_trending_products()
-            course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
-
             tprds = tprds.filter(product__product_class__in=course_classes, product__type_product__in=[0, 1, 3])
             product_pks = list(tprds.all().values_list('product', flat=True))
             tprds = SearchQuerySet().filter(id__in=product_pks).exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS)[:9]
@@ -109,40 +108,51 @@ class HomePageView(TemplateView, MetadataMixin):
         candidate_detail = None
         session_fa = self.request.session.get('func_area')
         session_skills = self.request.session.get('skills')
-        if not session_fa:
-            # Fetch from shine
-            if candidate_id:
-                candidate_detail = ShineCandidateDetail().get_candidate_public_detail(shine_id=candidate_id)
-                if candidate_detail:
-                    func_area = candidate_detail.get('jobs')[0].get("parent_sub_field", "") \
-                        if len(candidate_detail.get('jobs', [])) else ''
-                    func_area_obj = FunctionalArea.objects.filter(name__iexact=func_area)
-                    if func_area_obj:
-                        self.request.session.update({
-                            'func_area': func_area_obj[0].id
-                        })
-                        context.update({'recmnd_func_area': func_area})
-        else:
-            # Pre-populate session FA
-            try:
-                context.update({'recmnd_func_area': FunctionalArea.objects.get(id=session_fa).name})
-            except FunctionalArea.DoesNotExist:
-                logging.getLogger('error_log').error("FA not in DB - from session %s " % str(session_fa))
-        if not session_skills:
-            if not candidate_detail and candidate_id:
-                candidate_detail = ShineCandidateDetail().get_candidate_public_detail(shine_id=candidate_id)
-            if candidate_detail:
-                skills = [skill['value'] for skill in candidate_detail['skills']]
-                skills_obj = Skill.objects.filter(name__in=skills)[:2]
-                skills_ids = [s.id for s in skills_obj][:2]
-                if skills_obj:
-                    self.request.session.update({
-                        'skills': skills_ids
-                    })
-                    context.update({'recmnd_skills': ','.join([skill.name for skill in skills_obj])})
-        else:
+
+        if session_fa:
+            fa = FunctionalArea.objects.filter(
+                id=session_fa).first()
+            if fa:
+                context.update({'recmnd_func_area': fa.name})
+
+        if session_skills:
             skills_found = Skill.objects.filter(pk__in=session_skills).values_list('name', flat=True)
             context.update({'recmnd_skills': ','.join(skills_found)})
+
+        # if not session_fa:
+        #     # Fetch from shine
+        #     if candidate_id:
+        #         candidate_detail = ShineCandidateDetail().get_candidate_public_detail(shine_id=candidate_id)
+        #         if candidate_detail:
+        #             func_area = candidate_detail.get('jobs')[0].get("parent_sub_field", "") \
+        #                 if len(candidate_detail.get('jobs', [])) else ''
+        #             func_area_obj = FunctionalArea.objects.filter(name__iexact=func_area)
+        #             if func_area_obj:
+        #                 self.request.session.update({
+        #                     'func_area': func_area_obj[0].id
+        #                 })
+        #                 context.update({'recmnd_func_area': func_area})
+        # else:
+        #     # Pre-populate session FA
+        #     try:
+        #         context.update({'recmnd_func_area': FunctionalArea.objects.get(id=session_fa).name})
+        #     except FunctionalArea.DoesNotExist:
+        #         logging.getLogger('error_log').error("FA not in DB - from session %s " % str(session_fa))
+        # if not session_skills:
+        #     if not candidate_detail and candidate_id:
+        #         candidate_detail = ShineCandidateDetail().get_candidate_public_detail(shine_id=candidate_id)
+        #     if candidate_detail:
+        #         skills = [skill['value'] for skill in candidate_detail['skills']]
+        #         skills_obj = Skill.objects.filter(name__in=skills)[:2]
+        #         skills_ids = [s.id for s in skills_obj][:2]
+        #         if skills_obj:
+        #             self.request.session.update({
+        #                 'skills': skills_ids
+        #             })
+        #             context.update({'recmnd_skills': ','.join([skill.name for skill in skills_obj])})
+        # else:
+        #     skills_found = Skill.objects.filter(pk__in=session_skills).values_list('name', flat=True)
+        #     context.update({'recmnd_skills': ','.join(skills_found)})
 
         func_areas_set = [f.decode() for f in redis_conn.smembers('func_area_set')]
         skills_set = [s.decode() for s in redis_conn.smembers('skills_set')]

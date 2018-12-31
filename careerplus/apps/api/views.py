@@ -1,14 +1,22 @@
 import logging
 import datetime
+import requests
 from decimal import Decimal
-from django.db.models import Sum
+
+from django.db.models import Sum, Count
 from django.utils import timezone
+from django.conf import settings
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser, )
+from haystack import connections
+from haystack.query import SearchQuerySet
+from core.library.haystack.query import SQS
+
 from rest_framework.generics import ListAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 
@@ -18,7 +26,6 @@ from shop.views import ProductInformationMixin
 from shop.models import Product
 from coupon.models import Coupon, CouponUser
 from core.api_mixin import ShineCandidateDetail
-from .serializers import OrderListHistorySerializer
 from payment.tasks import add_reward_point_in_wallet
 from order.functions import update_initiat_orderitem_sataus
 from geolocation.models import Country
@@ -27,6 +34,13 @@ from order.tasks import (
     process_mailer,
     invoice_generation_order
 )
+from shop.models import Skill, DeliveryService
+
+from .serializers import (
+    OrderListHistorySerializer,
+    RecommendedProductSerializer,
+    RecommendedProductSerializerSolr)
+from shared.rest_addons.pagination import Learning_custom_pagination
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -161,13 +175,16 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     total_discount = coupon_amount
                     total_amount_before_discount = order.total_excl_tax  # berfore discount and excl tax
                     percentage_discount = (total_discount * 100) / total_amount_before_discount
-
                     for data in item_list:
+                        delivery_service = None
                         parent_id = data.get('id')
                         addons = data.get('addons', [])
                         variations = data.get('variations', [])
                         combos = data.get('combos', [])
                         product = Product.objects.get(id=parent_id)
+                        if data.get('delivery_service', None):
+                            delivery_service = data.get('delivery_service', None)
+                            delivery_service = DeliveryService.objects.get(name=delivery_service)
 
                         p_oi = order.orderitems.create(
                             product=product,
@@ -197,6 +214,9 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                 oi.selling_price = 0
                                 oi.tax_amount = 0
                                 oi.discount_amount = 0
+                                # setup delivery service
+                                if delivery_service:
+                                    oi.delivery_service = delivery_service
                                 oi.save()
 
                         elif variations:
@@ -220,6 +240,20 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                             p_oi.discount_amount = 0
                             p_oi.save()
 
+                        else:
+                            if delivery_service:
+                                # setup delivery service
+                                p_oi.delivery_service = delivery_service
+
+                                cost_price = float(p_oi.delivery_service.get_price())
+                                p_oi.delivery_price_excl_tax = cost_price
+                                discount = (cost_price * percentage_discount) / 100
+                                cost_price_after_discount = cost_price - discount
+                                tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                                selling_price = cost_price_after_discount + tax_amount
+                                p_oi.delivery_price_incl_tax = selling_price
+                                p_oi.save()
+
                         for var in variations:
                             prd = Product.objects.get(id=var.get('id'))
                             oi = order.orderitems.create(
@@ -241,6 +275,24 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                             oi.selling_price = selling_price
                             oi.tax_amount = tax_amount
                             oi.discount_amount = discount
+
+                            # setup delivery service
+                            if p_oi.product.product_class.slug == 'course':
+                                if delivery_service:
+                                    # setup delivery service
+                                    p_oi.delivery_service = delivery_service
+
+                                    cost_price = float(p_oi.delivery_service.get_price())
+                                    p_oi.delivery_price_excl_tax = cost_price
+                                    discount = (cost_price * percentage_discount) / 100
+                                    cost_price_after_discount = cost_price - discount
+                                    tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                                    selling_price = cost_price_after_discount + tax_amount
+                                    p_oi.delivery_price_incl_tax = selling_price
+                                    p_oi.save()
+                            else:
+                                if delivery_service:
+                                    oi.delivery_service = delivery_service
                             oi.save()
 
                         for addon in addons:
@@ -264,6 +316,9 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                             oi.selling_price = selling_price
                             oi.tax_amount = tax_amount
                             oi.discount_amount = discount
+                            # setup delivery service
+                            if delivery_service:
+                                oi.delivery_service = delivery_service
                             oi.save()
 
                     update_initiat_orderitem_sataus(order=order)
@@ -339,7 +394,7 @@ class EmailLTValueApiView(APIView):
                     personal_detail = candidate_response.get('personal_detail')[0] if candidate_response.get('personal_detail') else None
                     if personal_detail:
                         candidate_id = personal_detail.get('id')
-                        name = personal_detail.get('first_name', '') + ' ' + personal_detail.get('last_name', '')  
+                        name = personal_detail.get('first_name', '') + ' ' + personal_detail.get('last_name', '')
             else:
                 candidate_id = c_id
             if candidate_id:
@@ -373,7 +428,7 @@ class EmailLTValueApiView(APIView):
             else:
                 return Response(
                     {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
-                    status=status.HTTP_400_BAD_REQUEST)    
+                    status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(
                 {"status": "FAIL", "msg": "Bad Parameters Provided"},
@@ -477,7 +532,7 @@ class ValidateCouponApiView(APIView):
                             "status": "FAIL",
                             "msg": 'This code is not valid for your account.'},
                             status=status.HTTP_400_BAD_REQUEST)
-                        
+
                     if coupon.user_limit is coupon.users.filter(redeemed_at__isnull=False).count():  # all coupons redeemed
                         return Response({
                             "status": "FAIL",
@@ -501,7 +556,7 @@ class ValidateCouponApiView(APIView):
                         coupon_user.user = lead_mobile
                     except CouponUser.DoesNotExist:
                         coupon_user = CouponUser(coupon=coupon, user=lead_mobile)
-                
+
                 coupon_user.redeemed_at = timezone.now()
                 coupon_user.save()
                 discount_amount = 0
@@ -517,7 +572,7 @@ class ValidateCouponApiView(APIView):
                     "discount_amount": discount_amount,
                     "msg": 'Successfully Redeemed'},
                     status=status.HTTP_200_OK)
-               
+
             except Exception as e:
                 msg = str(e)
                 logging.getLogger('error_log').error(msg)
@@ -583,3 +638,51 @@ class RemoveCouponApiView(APIView):
             "status": "FAIL",
             "msg": 'Coupon code is not found!.'},
             status=status.HTTP_400_BAD_REQUEST)
+
+
+class RecommendedProductsApiView(ListAPIView):
+    authentication_classes = []
+    permission_classes = []
+    serializer_class = RecommendedProductSerializerSolr
+    pagination_class = Learning_custom_pagination
+
+    def get_queryset(self, *args, **kwargs):
+        skills = self.request.GET.get('skills', [])
+        university_course = self.request.GET.get('uc', 0)
+        prd_id = self.request.GET.get('product', None)
+        if skills:
+            skills = skills.split(',')
+        products = SearchQuerySet().filter(
+            pSkilln__in=skills,
+            pPc=settings.COURSE_SLUG[0])
+        if prd_id and prd_id.isdigit():
+            products = products.exclude(id=int(prd_id))
+
+        if university_course:
+            products = products.filter(pTF=14)
+        return products
+
+
+class RecommendedProductsCategoryView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, *args, **kwargs):
+        skills = self.request.GET.get('skills', '')
+        res = {}
+        haystack_conns = settings.HAYSTACK_CONNECTIONS.get(
+            'default', {})
+
+        solr_url = haystack_conns.get(
+            'URL', 'http://10.136.2.25:8989/solr/prdt')
+
+        url = '{}/select?defType=edismax&indent=on&\
+        q={}&wt=json&qf=pHd^2%20pSkilln&group=true&group.field=pCtgs&\
+        group.limit=5&rows=10&fq=pCtgs:[*%20TO%20*]&\
+        fl=id,%20pHd,%20pBC,%20pImg,%20pURL,\
+        %20pNJ,%20pRC,%20pARx,%20pSkilln,%20pCtgsD,%20pCtgs'.format(
+            solr_url, skills)
+        res = requests.get(url)
+        return Response(
+            res.json(),
+            status=status.HTTP_200_OK)

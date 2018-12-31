@@ -60,7 +60,7 @@
     </figure>
 
     <article class="article-content" itemprop="articleBody">
-        {% if amp %}<pre>{{main_article.content|striptags|safe}}</pre>{%else%}{{main_article.content|safe}}{%endif%}
+        {% if request.amp %}<pre>{{main_article.content|striptags|safe}}</pre>{%else%}{{main_article.content|safe}}{%endif%}
     </article>
 
     <div class="clearfix"></div>

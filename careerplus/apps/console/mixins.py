@@ -6,6 +6,8 @@ from random import random
 
 from django.utils import timezone
 from django.conf import settings
+from django.core.files.uploadedfile import UploadedFile
+
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from emailers.email import SendMail
 from emailers.tasks import send_email_task
@@ -13,7 +15,6 @@ from emailers.sms import SendSMS
 from order.models import OrderItem
 from linkedin.models import Draft, Organization, Education
 from quizs.models import QuizResponse
-from django.core.files.uploadedfile import UploadedFile
 
 
 class ActionUserMixin(object):
@@ -78,6 +79,8 @@ class ActionUserMixin(object):
                     "writer_email": assigned_to.email,
                     "subject": "Your service has been initiated",
                     "type_flow": obj.product.type_flow,
+                    "product_pk": obj.product.pk,
+                    "PORTFOLIO_PRODUCT_LIST": settings.PORTFOLIO_PRODUCT_LIST,
                     'delivery_service': True if obj.delivery_service else False,
                     'delivery_service_slug': obj.delivery_service.slug if obj.delivery_service else '',
                     'delivery_service_name': obj.delivery_service.name if obj.delivery_service else '',
@@ -333,7 +336,7 @@ class ActionUserMixin(object):
                 logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
                 raise
 
-            if oi.product.type_flow in [2, 10]:
+            if oi.product.type_flow in [2, 10, 14]:
                 last_oi_status = oi.last_oi_status
                 oi.oi_status = 4  # closed orderitem
                 oi.oi_draft = oi_draft
@@ -420,6 +423,20 @@ class ActionUserMixin(object):
                         last_oi_status=oi.last_oi_status,
                         assigned_to=oi.assigned_to,
                         added_by=user)
+
+            elif oi.product.type_flow == 7:
+                oi.draft_counter += 1
+                oi.oi_draft = oi_draft
+                oi.save()
+                last_status = oi.oi_status
+                oi.orderitemoperation_set.create(
+                    oi_draft=oi.oi_draft,
+                    draft_counter=oi.draft_counter + 1,
+                    oi_status=22,
+                    last_oi_status=last_status,
+                    assigned_to=oi.assigned_to,
+                    added_by=user)
+                message_dict['display_message'] = 'Draft uploaded Successfully.'
 
             else:
                 last_status = oi.oi_status

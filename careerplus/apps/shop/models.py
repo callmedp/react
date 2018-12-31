@@ -4,17 +4,23 @@ import logging
 from decimal import Decimal
 from django.db import models
 from django.utils.html import strip_tags
-from django.utils import six        
+from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
+from django.core.cache import cache
+
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
+from django.core.cache import cache
+from django.db.models.signals import post_save
 
 from ckeditor.fields import RichTextField
 from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
+from mongoengine import Document, ListField, FloatField,\
+    StringField, IntField, DateTimeField
 
 from partner.models import Vendor
 from faq.models import (
@@ -28,13 +34,15 @@ from .managers import (
 from .utils import ProductAttributesContainer
 from . import choices
 from .functions import (
+    get_upload_path_faculty,
     get_upload_path_category,
     get_upload_path_product_banner,
     get_upload_path_product_icon,
     get_upload_path_product_image,
-    get_upload_path_product_file,)
+    get_upload_path_product_file,
+    get_upload_path_for_sample_certicate)
 from .choices import (
-    SERVICE_CHOICES,
+    SERVICE_CHOICES, FACULTY_CHOICES,
     CATEGORY_CHOICES,
     PRODUCT_CHOICES,
     FLOW_CHOICES,
@@ -96,6 +104,10 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     is_skill = models.BooleanField(
         _('Is Skill'),
         default=False)
+    is_service = models.BooleanField(_('Show as a Service Page'),default=False)
+    is_university = models.BooleanField(
+        _('Show as a University Page'),
+        default=False)
     graph_image = models.ImageField(
         _('Graph Image'), upload_to=get_upload_path_category,
         blank=True, null=True)
@@ -120,7 +132,6 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     active = models.BooleanField(default=False)
     display_order = models.IntegerField(default=1)
 
-    
     _metadata_default = ModelMeta._metadata_default.copy()
     
     _metadata = {
@@ -167,6 +178,9 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
             if self.description:
                 if not self.meta_desc:
                     self.meta_desc = self.get_meta_desc(self.description.strip())
+
+            unique_key = 'cat_absolute_url_' + str(self.pk)
+            cache.delete(unique_key)
                 
         super(Category, self).save(*args, **kwargs)
 
@@ -191,19 +205,33 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         return self.get_absolute_url()
 
     def get_absolute_url(self):
+        unique_key = 'cat_absolute_url_' + str(self.pk)
+        cat_url = cache.get(unique_key)
+        if cat_url:
+            return cat_url
+        cat_url = ''
         if self.type_level in [3, 4]:
             if self.is_skill:
                 parent = self.get_parent()[0].slug if self.get_parent() else None
-                return reverse('skillpage:skill-page-listing',
+                cat_url = reverse('skillpage:skill-page-listing',
                     kwargs={'fa_slug': parent,'skill_slug': self.slug, 'pk': self.pk})
+            elif self.is_service:
+                cat_url = "/services/{}/{}/".format(self.slug,self.pk)
+            elif self.is_university:
+                parent = self.get_parent()[0].slug if self.get_parent() else None
+                cat_url = reverse('university-page',
+                    kwargs={'fa_slug': parent, 'university_slug': self.slug, 'pk': self.pk})
             elif self.type_level == 3:
-                return reverse('skillpage:func_area_results',
-                    kwargs={'fa_slug': self.slug, 'pk': self.pk})    
-            return ''
+                cat_url = reverse('skillpage:func_area_results',
+                    kwargs={'fa_slug': self.slug, 'pk': self.pk})
         elif self.type_level == 2:
-            return reverse('skillpage:func_area_results',
+            cat_url = reverse('skillpage:func_area_results',
                 kwargs={'fa_slug': self.slug, 'pk': self.pk})
-        return ''
+        if cat_url:
+            cache.set(
+                unique_key, cat_url, 86400)
+
+        return cat_url
 
     def add_relationship(self, category):
         relationship, created = CategoryRelationship.objects.get_or_create(
@@ -368,6 +396,26 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
 
     def get_canonical_url(self):
         return self.get_absolute_url()
+
+
+class SubHeaderCategory(AbstractAutoDate):
+    heading = models.CharField(
+        max_length=100,
+        blank=False, null=False)
+    description = RichTextField(
+        verbose_name=_('Description'),
+        blank=True, default='')
+    active = models.BooleanField(default=False)
+    display_order = models.PositiveIntegerField(
+        default=1)
+    category = models.ForeignKey(
+        'shop.Category',
+        verbose_name=_('University'),
+        related_name='subheaders')
+
+    def __str__(self):
+        return '{} - for University - {}'.format(
+            self.heading, self.category.heading)
 
 
 class CategoryRelationship(AbstractAutoDate):
@@ -933,7 +981,7 @@ class Product(AbstractProduct, ModelMeta):
         _('CP Page View'), default=0)
     active = models.BooleanField(default=False)
     is_indexable = models.BooleanField(default=False)
-
+    is_indexed = models.BooleanField(default=False)
     objects = ProductManager()
     indexable = IndexableProductManager()
     saleable = SaleableProductManager()
@@ -978,13 +1026,13 @@ class Product(AbstractProduct, ModelMeta):
                 return self.name + ' - (' + str(self.pk) + ')'
         return self.name
 
+
+
     def save(self, *args, **kwargs):
         if self.pk:
             if self.name:
                 if not self.heading:
                     self.heading = self.get_heading()
-                if not self.title:
-                    self.title = self.get_title()
                 if not self.image_alt:
                     self.image_alt = self.name
                 if not self.meta_desc:
@@ -995,32 +1043,47 @@ class Product(AbstractProduct, ModelMeta):
                 for var in variations:
                     var.vendor = self.vendor
                     var.save()
+            self.title = self.get_title()
+        self.first_save = True
+        if self.id:
+            original_product = Product.objects.get(id=self.id)
+            self.initialize_variables(original_product)
+            self.first_save = False
+            delete_keys = cache.keys('prd_*_' + str(self.pk))
+            for uk in delete_keys:
+                cache.delete(uk)
         super(Product, self).save(*args, **kwargs)
         if getattr(self, 'attr', None):
             self.attr.save()
 
     @property
     def category_main(self):
+        cache_key = "category_main_"+str(self.pk)
+        cached_data = cache.get(cache_key)
+        data = None
+        if cached_data:
+            return cached_data
         main_prod_cat = self.categories.filter(
             productcategories__is_main=True,
             productcategories__active=True,
             active=True)
-        if main_prod_cat:
-            if main_prod_cat[0].type_level == 4:
-                main_prod_cat = main_prod_cat[0].get_parent()[0] if main_prod_cat[0].get_parent() else None 
-                return main_prod_cat
-            return main_prod_cat[0]
+        if main_prod_cat and main_prod_cat[0].type_level == 4:
+            main_prod_cat = main_prod_cat[0].get_parent()[0] if main_prod_cat[0].get_parent() else None
+            data = main_prod_cat
+        elif main_prod_cat:
+            data = main_prod_cat[0]
         else:
             prod_cat = self.categories.filter(
                 productcategories__is_main=False,
                 productcategories__active=True,
                 active=True)
-            if prod_cat:
-                if prod_cat[0].type_level == 4:
-                    prod_cat = prod_cat[0].get_parent()[0] if prod_cat[0].get_parent() else None 
-                    return prod_cat
-                return prod_cat[0]
-        return None
+            if prod_cat and prod_cat[0].type_level == 4:
+                prod_cat = prod_cat[0].get_parent()[0] if prod_cat[0].get_parent() else None
+                data = prod_cat
+            elif prod_cat:
+                data = prod_cat[0]
+        cache.set(cache_key, data, 7*24*60*60)
+        return data
 
     def category_attached(self):
         main_prod_cat = self.categories.filter(
@@ -1119,24 +1182,47 @@ class Product(AbstractProduct, ModelMeta):
         return self.get_full_url(self.get_absolute_url()) if not relative else self.get_absolute_url()
 
     def get_absolute_url(self, prd_slug=None, cat_slug=None):
+        cache_key = "product_{}_absolute_url".format(self.id)
+        cached_value = cache.get(cache_key)
+        if cached_value:
+            return cached_value
+
+        url_to_return = None
         if not cat_slug:
             cat_slug = self.category_main
             if cat_slug:
-                cat_slug = cat_slug.get_parent()[0] if cat_slug.get_parent() else None
+                cat_slug1 = cat_slug.get_parent()
+                cat_slug = cat_slug1[0] if cat_slug1 else None
         cat_slug = cat_slug.slug if cat_slug else None
         if cat_slug:
             if self.is_course:
-                return reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+                url_to_return = reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
             else:
-                return reverse('service-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+                url_to_return = reverse('service-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
         else:
-            return reverse('homepage')
+            url_to_return = reverse('homepage')
+
+        cache.set(cache_key,url_to_return,7*24*60*60)
+        return url_to_return
         # else self.is_writing:
         #     return reverse('resume-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
         # elif self.is_service:
         #     return reverse('job-assist-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
         # else:
         #     return reverse('other-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
+
+    def initialize_variables(self, original_product):
+        self.original_duration = original_product.get_duration_in_day() if original_product.get_duration_in_day() else -1
+        if self.id:
+            self.original_variation_name = [str(var) for var in original_product.variation.all()] if original_product.variation.all() else ['N.A']
+        else:
+            self.original_variation_name = ['N.A']
+        self.original_product_id = original_product.id
+        self.original_upc = original_product.upc
+        self.original_price = float(original_product.inr_price)
+        self.original_vendor_name = original_product.get_vendor()
+        self.original_product_name = original_product.name
+
 
     def get_ratings(self):
         pure_rating = int(self.avg_rating)
@@ -1445,6 +1531,11 @@ class Product(AbstractProduct, ModelMeta):
                 if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
                 else 0
             return dd
+        elif self.is_service and self.type_flow == 5:
+            dd = getattr(self.attr, S_ATTR_DICT.get('FD')) \
+                if getattr(self.attr, S_ATTR_DICT.get('FD'), None) \
+                else 0
+            return dd
         else:
             return ''
 
@@ -1500,7 +1591,69 @@ class Product(AbstractProduct, ModelMeta):
         return convert_gbp(price)
 
     def get_canonical_url(self):
+        if self.category_main and self.category_main.is_service and \
+                self.category_main.type_level == 3:
+            return self.category_main.get_absolute_url()
+
         return self.get_absolute_url()
+
+    def get_batch_launch_date(self):
+        unique_key = 'prd_batch_launch_date_' + str(self.pk)
+        launch_date = cache.get(unique_key)
+        if launch_date:
+            return launch_date
+
+        launch_date = ''
+        if self.university_course_detail:
+            launch_date = self.university_course_detail.batch_launch_date
+            cache.set(unique_key, launch_date, 86400)
+        return ''
+
+    def is_admission_open(self):
+        unique_key = 'prd_is_admission_open_' + str(self.pk)
+        apply_date = cache.get(unique_key)
+        if apply_date:
+            return apply_date
+        apply_date = False
+        if self.university_course_detail:
+            apply_date = self.university_course_detail.apply_last_date
+        apply_date = apply_date >= timezone.now().date()
+        cache.set(unique_key, apply_date, 86400)
+        return apply_date
+
+
+
+    @classmethod
+    def post_save_product(cls, sender, instance, **kwargs):
+        #deleting caches for absolute urls,solar data and product object
+        # cache.delete("product_{}_absolute_url".format(instance.id))
+        # cache.delete("context_product_detail_" + str(instance.pk))
+        # cache.delete("detail_db_product_" + str(instance.pk))
+        # cache.delete("detail_solr_product_" + str(instance.pk))
+        # cache.delete("category_main_" + str(instance.pk))
+
+        from .tasks import add_log_in_product_audit_history
+        duration = instance.get_duration_in_day() if instance.get_duration_in_day() else -1
+        variation_name = [str(var) for var in instance.variation.all()] if instance.variation.all() else ['N.A']
+        if not instance.first_save:
+            if (instance.original_duration != duration or instance.original_variation_name != variation_name \
+                    or instance.original_price != float(instance.inr_price) or instance.original_upc != instance.upc or
+                    instance.original_vendor_name != instance.get_vendor() or
+                    instance.original_product_name != instance.name):
+                instance.initialize_variables(instance)
+                data = {
+                    "product_id": instance.id,
+                    "upc": instance.upc,
+                    "price": float(instance.inr_price),
+                    "vendor_name": instance.get_vendor(),
+                    "product_name": instance.name,
+                    "duration": duration,
+                    "variation_name": variation_name
+                }
+                add_log_in_product_audit_history.delay(**data)
+
+
+post_save.connect(Product.post_save_product, sender=Product)
 
 
 class ProductScreen(AbstractProduct):
@@ -1561,6 +1714,7 @@ class ProductScreen(AbstractProduct):
         through='ProductAttributeScreen',
         through_fields=('product', 'attribute'),
         blank=True)
+    
 
     class Meta:
         verbose_name = _('Product Screen')
@@ -1596,6 +1750,8 @@ class ProductScreen(AbstractProduct):
                     upc=self.upc,
                     vendor=self.vendor,
                     inr_price=self.inr_price)
+                if self.type_flow == 14:
+                    UniversityCourseDetail.objects.get_or_create(product=product)
                 self.product = product
                 self.save()
         return self.product
@@ -1639,7 +1795,6 @@ class ProductScreen(AbstractProduct):
             return True
         else:
             return False
-
 
 
 # class ProductArchive(AbstractProduct):
@@ -2288,11 +2443,19 @@ class Skill(AbstractAutoDate, ModelMeta):
         ordering = ("-modified", "-created")
         get_latest_by = 'created'
 
+    def __str__(self):
+        return self.name + ' - ' + str(self.id)
+
     def get_products(self):
         products = self.skillproducts.filter(
             active=True,
             productskills__active=True)
         return products
+
+    def get_active(self):
+        if self.active:
+            return 'Active'
+        return 'Inactive'
 
 
 class ProductSkill(AbstractAutoDate):
@@ -2309,7 +2472,379 @@ class ProductSkill(AbstractAutoDate):
     priority = models.PositiveIntegerField(default=1)
     active = models.BooleanField(default=True)
 
+    def __str__(self):
+        name = '{} - ({}) to {} - ({})'.format(
+            self.skill.name, self.skill_id,
+            self.product.get_name, self.product_id)
+        return name
+
     class Meta:
         unique_together = ('product', 'skill')
         verbose_name = _('Product Skill')
         verbose_name_plural = _('Product Skills')
+
+
+class ScreenProductSkill(AbstractAutoDate):
+    skill = models.ForeignKey(
+        Skill,
+        verbose_name=_('Skill'),
+        related_name='screenskills',
+        on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        ProductScreen,
+        verbose_name=_('Product'),
+        related_name='screenskills',
+        on_delete=models.CASCADE)
+    priority = models.PositiveIntegerField(default=1)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        name = '{} - ({}) to {} - ({})'.format(
+            self.skill.name, self.skill_id,
+            self.product.name, self.product_id)
+        return name
+
+    class Meta:
+        unique_together = ('product', 'skill')
+        verbose_name = _('Product Skill')
+        verbose_name_plural = _('Product Skills')
+
+
+class ProductAuditHistory(Document):
+    product_id = IntField(required=True, db_field='pid')
+    product_name = StringField(required=True, db_field='pn')
+    variation_name = ListField(required=True, db_field='varn', default='N.A')
+    upc = StringField(required=True, db_field='upc')
+    price = FloatField(required=True, db_field='p')
+    duration = IntField(required=True, db_field='dur', default=0)
+    vendor_name = StringField(required=True, db_field='vn')
+    created_at = DateTimeField(required=True, db_field='crt', default=datetime.now)
+
+    meta = {
+        'collection': 'ProductAuditHistory',
+        'allow_inheritance': False,
+        'indexes': [
+            'product_id',
+        ]
+    }
+
+
+class UniversityCourseDetailScreen(models.Model):
+    batch_launch_date = models.DateField(
+        help_text=_('This university course launch date'),
+        null=True, blank=True
+    )
+    apply_last_date = models.DateField(
+        help_text=_('Last date to apply for this univeristy course'),
+        null=True, blank=True
+    )
+    sample_certificate = models.FileField(
+        upload_to=get_upload_path_for_sample_certicate, max_length=255,
+        null=True, blank=True
+    )
+    benefits = models.CharField(max_length=1024, default='')
+    application_process = models.CharField(max_length=1024, default='')
+    assesment = RichTextField(
+        verbose_name=_('assesment'),
+        help_text=_('Description of Assesment and Evaluation'),
+        blank=True
+    )
+    productscreen = models.OneToOneField(
+        ProductScreen,
+        help_text=_('Product related to these details'),
+        related_name='screen_university_course_detail',
+    )
+    eligibility_criteria = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True,
+        help_text='semi-colon(;) separated designations, e.g. Managers, Decision makers; Line Managers; ...')
+
+    attendees_criteria = models.CharField(
+        max_length=1024,
+        null=True,
+        blank=True,
+        help_text='who shoule attend this course'
+    )
+    payment_deadline = models.DateField(
+        _('Payment Deadline'),
+        null=True, blank=True
+    )
+    highlighted_benefits = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True,
+        help_text='semi-colon(;) separated designations, e.g. Managers, Decision makers; Line Managers; ...')
+
+    @property
+    def get_application_process(self):
+        if self.application_process:
+            return eval(self.application_process)
+        else:
+            return ''
+
+    @property
+    def get_benefits(self):
+        if self.benefits:
+            return eval(self.benefits)
+        else:
+            return ''
+
+    @property
+    def get_attendees_criteria(self):
+        if self.attendees_criteria:
+            return eval(self.attendees_criteria)
+        else:
+            return ''
+
+
+class UniversityCoursePaymentScreen(models.Model):
+    installment_fee = models.DecimalField(
+        _('INR Program Fee'),
+        max_digits=12, decimal_places=2
+    )
+    last_date_of_payment = models.DateField(
+        _('Last date of payment')
+    )
+    productscreen = models.ForeignKey(
+        ProductScreen,
+        related_name='screen_university_course_payment'
+    )
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        payment = '{} -  for {} - ({})'.format(
+            self.installment_fee,
+            self.productscreen.name, self.productscreen.id
+        )
+        return payment
+
+
+class UniversityCourseDetail(models.Model):
+    batch_launch_date = models.DateField(
+        help_text=_('This university course launch date'),
+        null=True, blank=True
+    )
+    apply_last_date = models.DateField(
+        help_text=_('Last date to apply for this univeristy course'),
+        null=True, blank=True
+    )
+    sample_certificate = models.FileField(
+        upload_to=get_upload_path_for_sample_certicate, max_length=255,
+        null=True, blank=True
+    )
+    benefits = models.CharField(max_length=1024, default='')
+    application_process = models.CharField(max_length=1024, default='')
+    assesment = RichTextField(
+        verbose_name=_('assesment'),
+        help_text=_('Description of Assesment and Evaluation'),
+        blank=True
+    )
+    product = models.OneToOneField(
+        Product,
+        help_text=_('Product related to these details'),
+        related_name='university_course_detail',
+    )
+    eligibility_criteria = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True,
+        help_text='semi-colon(;) separated designations, e.g. Managers, Decision makers; Line Managers; ...')
+    attendees_criteria = models.CharField(
+        max_length=1024,
+        null=True,
+        blank=True,
+        help_text='who shoule attend this course'
+    )
+    payment_deadline = models.DateField(
+        _('Payment Deadline'),
+        null=True, blank=True
+    )
+    highlighted_benefits = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True,
+        help_text='semi-colon(;) separated designations, e.g. Managers, Decision makers; Line Managers; ...')
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            delete_keys = cache.keys('prd_*_' + str(self.product.pk))
+            for uk in delete_keys:
+                cache.delete(uk)
+        super(UniversityCourseDetail, self).save(*args, **kwargs)
+
+    @property
+    def get_application_process(self):
+        if self.application_process:
+            return eval(self.application_process)
+        else:
+            return ''
+
+    @property
+    def get_benefits(self):
+        if self.benefits:
+            return eval(self.benefits)
+        else:
+            return ''
+
+    @property
+    def get_attendees_criteria(self):
+        if self.attendees_criteria:
+            return eval(self.attendees_criteria)
+        else:
+            return ''
+
+
+class UniversityCoursePayment(models.Model):
+    installment_fee = models.DecimalField(
+        _('INR Program Fee'),
+        max_digits=12, decimal_places=2
+    )
+    last_date_of_payment = models.DateField(
+        _('Last date of payemnt')
+    )
+    product = models.ForeignKey(
+        Product,
+        related_name='university_course_payment'
+    )
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        payment = '{} -  for {} - ({})'.format(
+            self.installment_fee,
+            self.product.name, self.product.id
+        )
+        return payment
+
+
+class Faculty(AbstractAutoDate, AbstractSEO, ModelMeta):
+    name = models.CharField(
+        _('Name'), max_length=200,
+        help_text=_('Faculty Name decides slug'))
+    slug = models.CharField(
+        _('Slug'), unique=True,
+        max_length=200, help_text=_('Unique slug'))
+    role = models.IntegerField(
+        default=0, choices=FACULTY_CHOICES)
+    image = models.ImageField(
+        _('Image'), upload_to=get_upload_path_faculty,
+        blank=True, null=True)
+    designation = models.CharField(
+        _('Designation'), max_length=200)
+    description = RichTextField(
+        verbose_name=_('Description'), blank=True, default='')
+    short_desc = models.TextField(
+        verbose_name=_('Short Description'),
+        blank=True, default='')
+    faculty_speak = models.TextField(
+        verbose_name=_('Faculty Speak'),
+        blank=True, default='')
+    institute = models.ForeignKey(
+        'shop.Category',
+        blank=True,
+        null=True)
+    products = models.ManyToManyField(
+        'shop.Product',
+        verbose_name=_('Faculty Products'),
+        through='FacultyProduct',
+        through_fields=('faculty', 'product'),
+        blank=True)
+    active = models.BooleanField(
+        default=False)
+
+    _metadata_default = ModelMeta._metadata_default.copy()
+    
+    _metadata = {
+        'title': 'title',
+        'description': 'get_description',
+        'og_description': 'get_description',
+        'keywords': 'get_keywords',
+        'published_time': 'created',
+        'modified_time': 'modified',
+        'url': 'get_absolute_url',
+    }
+
+    class Meta:
+        verbose_name = _('Faculty')
+        verbose_name_plural = _('Faculty')
+        ordering = ("-modified", "-created")
+        get_latest_by = 'created'
+        permissions = (
+            ("console_add_faculty", "Can Add Faculty From Console"),
+            ("console_change_faculty", "Can Change Faculty From Console"),
+            ("console_view_faculty", "Can View Faculty From Console"),
+        )
+
+    def __str__(self):
+        return '{} - {}'.format(self.name, self.id)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            self.url = self.get_full_url()
+        if self.name:
+            if not self.heading:
+                self.heading = self.name
+            if not self.title:
+                self.title = self.name
+            if not self.image_alt:
+                self.image_alt = self.name
+            if not self.meta_desc:
+                self.meta_desc = self.get_meta_desc()
+        super(Faculty, self).save(*args, **kwargs)
+
+    def get_full_url(self):
+        return self.get_absolute_url()
+
+    def get_meta_desc(self, description=''):
+        try:
+            from bs4 import BeautifulSoup
+            soup = BeautifulSoup(self.description, 'html.parser')
+            cleantext = soup.get_text()
+            cleantext = cleantext.strip()
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+            cleantext = ''
+        return cleantext
+
+    def get_keywords(self):
+        return self.meta_keywords.strip().split(",")
+
+    def get_absolute_url(self):
+        return reverse('university-faculty',
+            kwargs={'faculty_slug': self.slug, 'pk': self.pk})
+
+    def get_active(self):
+        if self.active:
+            return 'Active'
+        return 'In-Active'
+
+    def get_description(self):
+        return self.meta_desc
+
+    def get_canonical_url(self):
+        return self.get_absolute_url()
+
+    def get_image_url(self):
+        if self.image:
+            return self.image.url
+        return settings.STATIC_URL + 'shinelearn/images/executive/default-user-pic.jpg'
+
+
+class FacultyProduct(AbstractAutoDate):
+    faculty = models.ForeignKey(
+        'shop.Faculty',
+        verbose_name=_('Faculty'),
+        related_name='facultyproducts',
+        on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        'shop.Product',
+        verbose_name=_('Product'),
+        related_name='facultyproducts',
+        on_delete=models.CASCADE)
+    active = models.BooleanField(default=False)
+    display_order = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return '{} - {} ---- {}'.format(
+            self.product.heading, self.product_id,
+            self.faculty.name)

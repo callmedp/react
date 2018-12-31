@@ -3,7 +3,7 @@
 <div class="download-wrap mt-30 mb-15">
     <div class="download-pdf">
         {% if download_doc %}
-        {% if amp %}
+        {% if request.amp %}
         <a download href="{{download_doc.doc.url}}">
                 <div class="wrap">
                     <div class="table">
@@ -25,7 +25,7 @@
             
 
         {% else %}
-            <a id="id_download_button" href="{{download_doc.doc.url}}" pop-up="{% if request.session.candidate_id %}no{% else %}yes{% endif %}">
+            <a id="id_download_button" href="{{download_doc.doc.url}}" data-popup="{% if request.session.candidate_id %}no{% else %}yes{% endif %}">
                 <div class="wrap">
                     <div class="table">
                         <div class="table-cell">
@@ -45,7 +45,7 @@
 
 
 
-{% if amp %}
+{% if request.amp %}
 <!-- Select countries (optional) start here -->
 <div class="sidebar hide"></div>
 

@@ -32,12 +32,12 @@ class ResumeUploadForm(forms.ModelForm):
         elif resume:
             name = resume.name
             extn = name.split('.')[-1]
-            if extn not in ['pdf', 'doc', 'docx']:
+            if extn not in ['pdf', 'doc', 'docx','ppt','pptx']:
                 raise forms.ValidationError(
-                    "only pdf, doc and docx formats are allowed.")
-            elif resume.size > 500 * 1024:
+                    "only pdf, doc,docx, ppt and pptx formats are allowed.")
+            elif resume.size > 5 * 1024 * 10000:
                 raise forms.ValidationError(
-                    "resume is too large ( > 500kb ).")
+                    "resume is too large ( > 5 MB ).")
         return resume
 
 
@@ -74,12 +74,13 @@ class FileUploadForm(forms.Form):
         elif file:
             name = file.name
             extn = name.split('.')[-1]
-            if extn not in ['pdf', 'doc', 'docx']:
+            if extn not in ['pdf', 'doc', 'docx','ppt','pptx','rar','zip']:
                 raise forms.ValidationError(
-                    "only pdf, doc and docx formats are allowed.")
-            elif file.size > 500 * 1024:
+                    "only pdf, doc, docx, rar, zip ppt and pptx formats are allowed.")
+
+            elif file.size > 15 * 1024 * 1000:
                 raise forms.ValidationError(
-                    "file is too large ( > 500kb ).")
+                    "file is too large ( > 15 MB ).")
         return file
 
 
@@ -243,6 +244,7 @@ class OIFilterForm(forms.Form):
             attrs={'class': 'form-control'}))
 
     def __init__(self, *args, **kwargs):
+        queue_name = kwargs.pop('queue_name', None)
         super(OIFilterForm, self).__init__(*args, **kwargs)
         from django.contrib.auth.models import Permission
         from django.db.models import Q
@@ -260,6 +262,9 @@ class OIFilterForm(forms.Form):
         # self.fields['delivery_type'].choices = NEW_DELIVERY_TYPE
 
         NEW_OI_OPS_STATUS = ((-1, 'Select Status'),) + OI_OPS_STATUS
+        if queue_name == 'queue-whatsappjoblist':
+            NEW_OI_OPS_STATUS = ((-1, 'Select Status'), (1, 'Allocated'), (4, 'Closed'),)
+
         self.fields['oi_status'].choices = NEW_OI_OPS_STATUS
 
         draft_choices = [(-1, "Select Draft Level")]
@@ -323,6 +328,8 @@ class OIActionForm(forms.Form):
                 (-10, "Approve International Profile Update"),  # domestic Profile Update approved
                 (-11, "Reject International Profile Update"),
             )
+        elif queue_name == "queue-whatsappjoblist":
+            ACTION_CHOICES += ((-15, "mark closed")), # mark whatsapp jobs inactive
 
         else:
             ACTION_CHOICES += ((-1, "Export As Csv"),)

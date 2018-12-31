@@ -7,7 +7,7 @@ from django.conf import settings
 from django_redis import get_redis_connection
 import requests
 from django.core.management import call_command
-
+from django.core.cache import cache
 
 class Command(BaseCommand):
     """
@@ -38,16 +38,24 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        cache_list = []
         if settings.IS_LIVE:
             response = requests.get('http://10.136.2.25:8989/solr/prdt/replication?command=disablereplication')
             logging.getLogger('info_log').info(
             "Disabled Replication on master. Response: {} {}".format(
                 response, response.__dict__))
+        for obj in Product.objects.values_list('id', flat=True):
+            cache_list.append("product_{}_absolute_url".format(obj))
+            cache_list.append("context_product_detail_" + str(obj))
+            cache_list.append("detail_db_product_" + str(obj))
+            cache_list.append("detail_solr_product_" + str(obj))
+            cache_list.append("category_main_" + str(obj))
+        cache.delete_many(cache_list)
         call_command('rebuild_index', **options)
         if settings.IS_LIVE:
             response = requests.get('http://10.136.2.25:8989/solr/prdt/replication?command=enablereplication')
             logging.getLogger('info_log').info(
             "Enabled Replication on master. Response: {} {}".format(
                 response, response.__dict__))
-        # response = requests.get('http://172.22.65.36:8983/solr/prdt/replication?command=fetchIndex')
-        # print("Fetched indexes on slave. Response:", response, response.__dict__)
+        response = requests.get('http://172.22.65.36:8983/solr/prdt/replication?command=fetchIndex')
+        print("Fetched indexes on slave. Response:", response, response.__dict__)
