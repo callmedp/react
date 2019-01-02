@@ -6,7 +6,7 @@ cffi==1.10.0
 
 cssselect==1.0.1
 Django==1.11.8
-celery==4.0.2
+celery==4.1.0
 celery[redis]
 django-autocomplete-light==3.2.10
 django-autoslug==1.9.3
