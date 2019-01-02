@@ -1,4 +1,4 @@
-import json
+import json, ast
 import mimetypes
 import logging
 import time
@@ -11,7 +11,7 @@ from wsgiref.util import FileWrapper
 from django.http import (
     HttpResponse,
     HttpResponseRedirect,
-    HttpResponseForbidden,)
+    HttpResponseForbidden,HttpResponseBadRequest)
 # from django.contrib import messages
 from django.views.generic import TemplateView, View
 from django.core.urlresolvers import reverse
@@ -50,6 +50,12 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
+        if self.request.GET.get('oirate'):
+            try:
+                oirate = ast.literal_eval(self.request.GET.get('oirate'))
+                context.update({"ref_item_id":oirate[0],"ref_rating":oirate[1]})
+            except Exception as e:
+                pass
         candidate_id = self.request.session.get('candidate_id', None)
         email = self.request.session.get('email')
 
@@ -339,15 +345,16 @@ class DashboardFeedbackView(TemplateView):
 
         if request.is_ajax() and self.oi_pk and self.candidate_id:
             try:
-
                 self.oi = OrderItem.objects.select_related("order").get(pk=self.oi_pk)
-                if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3] and self.oi.oi_status == 4 and not self.oi.user_feedback:
+                if self.oi and self.oi.order.candidate_id == self.candidate_id and \
+                    self.oi.order.status in [1, 3] and self.oi.oi_status == 4 \
+                    and not self.oi.user_feedback:
                     pass
                 else:
-                    return ''
+                    return HttpResponseBadRequest()
             except Exception as e:
                 logging.getLogger('error_log').error('unable to get order item object%s'%str(e))
-                return ''
+                return HttpResponseBadRequest()
             return super(DashboardFeedbackView, self).get(request, args, **kwargs)
         else:
             return HttpResponseForbidden()
