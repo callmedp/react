@@ -72,11 +72,12 @@ class SearchBaseView(TemplateView):
         return self.params_class
 
     def get_template_names(self):
-        if self.request.amp:
+        if not self.request.amp:
+            return ["search/search.html"]
+        if not settings.DEBUG:
             from newrelic import agent
             agent.disable_browser_autorum()
-            return ["search/search-amp.html"]
-        return ["search/search.html"]
+        return ["search/search-amp.html"]
 
     def get_search_params(self):
         self.params_class_obj = self.params_class()
