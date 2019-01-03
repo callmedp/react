@@ -452,8 +452,7 @@ class DraftDownloadView(View):
                             'current_org': current_org,
                         }
                         template = get_template('linkedin/linkedin-resume-pdf.html')
-                        context = Context(context_dict)
-                        html = template.render(context)
+                        html = template.render(context_dict)
                         pdf_file = HTML(string=html).write_pdf()
                         http_response = HttpResponse(pdf_file, content_type='application/pdf')
                         http_response['Content-Disposition'] = 'filename="linkedin-draft.pdf"'
@@ -519,8 +518,7 @@ class DashboardDraftDownloadView(View):
                     'current_org': current_org,
                 }
                 template = get_template('linkedin/linkedin-resume-pdf.html')
-                context = Context(context_dict)
-                html = template.render(context)
+                html = template.render(context_dict)
                 pdf_file = HTML(string=html).write_pdf()
                 http_response = HttpResponse(pdf_file, content_type='application/pdf')
                 http_response['Content-Disposition'] = 'filename="linkedin-draft.pdf"'
