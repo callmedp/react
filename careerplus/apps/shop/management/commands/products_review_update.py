@@ -33,7 +33,7 @@ class Command(BaseCommand):
         db = MySQLdb.connect(db_host,db_user,db_pwd,db_name)
         cursor = db.cursor()
         content_type_id = ContentType.objects.get(app_label="shop", model="product").id
-        cursor.execute('select object_id, avg(average_rating), count(id) from review_review where content_type_id = '+str(content_type_id)+' group by (object_id);',{})
+        cursor.execute('select object_id, avg(average_rating), count(id) from review_review where content_type_id = '+str(content_type_id)+' and status = 1 group by (object_id);',{})
 
         result = cursor.fetchall()
         try:
