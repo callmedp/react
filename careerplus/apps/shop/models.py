@@ -178,8 +178,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
                 if not self.meta_desc:
                     self.meta_desc = self.get_meta_desc(self.description.strip())
 
-            unique_key = 'cat_absolute_url_' + str(self.pk)
-            cache.delete(unique_key)
+            # unique_key = 'cat_absolute_url_' + str(self.pk)
+            # cache.delete(unique_key)
                 
         super(Category, self).save(*args, **kwargs)
 
@@ -1659,7 +1659,7 @@ class Product(AbstractProduct, ModelMeta):
         cache.delete("detail_db_product_" + str(instance.pk))
         cache.delete("detail_solr_product_" + str(instance.pk))
         cache.delete("category_main_" + str(instance.pk))
-        category_ids=instance.productcategories.all().values_list('category__id',flat=True)
+        category_ids = set(instance.productcategories.all().values_list('category__id',flat=True))
         for cat_id in category_ids:
             cache.delete('cat_absolute_url_' + str(cat_id))
         from .tasks import add_log_in_product_audit_history
@@ -1765,7 +1765,8 @@ class ProductScreen(AbstractProduct):
         cache.delete("context_product_detail_" + str(self.pk))
         cache.delete("detail_db_product_" + str(self.pk))
         cache.delete("detail_solr_product_" + str(self.pk))
-        cache.delete("category_main_" + str(self.pk))
+        if self.product:
+            cache.delete("category_main_" + str(self.product.pk))
         # cache.delete('cat_absolute_url_' + str(self.pk))
         super(ProductScreen, self).save(*args, **kwargs)
         if getattr(self, 'attr', None):
@@ -1886,8 +1887,8 @@ class ProductCategory(AbstractAutoDate):
 
     @classmethod
     def post_save_productcategory(cls, sender, instance, **kwargs):
-        id_list = instance.product.productcategories.all().values_list('product__id',flat=True).distinct()
-        category_id = instance.category.categoryproducts.all().values_list('category__id',flat=True).distinct()
+        id_list = set(instance.product.productcategories.all().values_list('product__id',flat=True))
+        category_id = set(instance.category.categoryproducts.all().values_list('category__id',flat=True))
         for id in id_list:
             cache.delete("product_{}_absolute_url".format(id))
             cache.delete("context_product_detail_" + str(id))

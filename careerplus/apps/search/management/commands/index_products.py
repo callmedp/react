@@ -1,7 +1,7 @@
 import logging
 from django.core.management.base import BaseCommand
 
-from shop.models import Skill, FunctionalArea, Product
+from shop.models import Skill, FunctionalArea, Product,Category
 from django.conf import settings
 from django_redis import get_redis_connection
 import requests
@@ -49,6 +49,9 @@ class Command(BaseCommand):
             cache_list.append("detail_db_product_" + str(obj))
             cache_list.append("detail_solr_product_" + str(obj))
             cache_list.append("category_main_" + str(obj))
+        for obj in Category.objects.values_list('id',flat=True):
+            cache_list.append('cat_absolute_url' + str(obj))
+        cache_list.append('course_catalogue')
         cache.delete_many(cache_list)
         response = requests.get('http://10.136.2.25:8989/solr/prdt/replication?command=enablereplication')
         logging.getLogger('info_log').info(
