@@ -293,6 +293,7 @@ class RemoveSessionCookieMiddleware:
 
     def __call__(self, request):
         response = self.get_response(request)
-        if response.remove_cookie:
-            response.delete_cookie('sessionid',  path='/')
+        if 'remove_cookie' in  response.__dict__:
+            if response.remove_cookie:
+                response.delete_cookie('sessionid',  path='/')
         return response
