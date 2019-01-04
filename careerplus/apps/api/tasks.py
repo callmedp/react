@@ -23,6 +23,10 @@ def cron_initiate(cron_id):
     cron_id = int(cron_id)
     python = '/var/www/virtualenvs/learning/bin/python '
     command = settings.PROJECT_DIR + "/manage.py "
-    cron_shell_command = python + " " + command + CRON_TO_ID_MAPPING[cron_id]+"  --settings=careerplus.config.settings_staging"
+    settings = "  --settings=careerplus.config.settings_staging"
+    cron_shell_command = python + " " + command + CRON_TO_ID_MAPPING[cron_id]
+    if cron_id == 20:
+        cron_shell_command += " --noinput"
+    cron_shell_command += settings
     subprocess.call(cron_shell_command, shell=True)
     send_email_after_completion(cron_id)
