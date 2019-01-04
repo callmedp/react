@@ -710,3 +710,15 @@ class CronInitiateApiView(APIView):
                 "status": "FAIL",
                 "msg": 'Invalid cron id'},
                 status=status.HTTP_400_BAD_REQUEST)
+
+
+class RemoveCookieFromHeader(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def get(self, request, *args, **kwargs):
+        from django.http.response import HttpResponse
+        response = HttpResponse()
+        response.remove_cookie = True
+
+        return response

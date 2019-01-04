@@ -60,6 +60,18 @@
 
 </section> 
 {% endblock container %}
+{% block js_section %}
+    {{block.super}}
+
+    <script type="text/javascript">
+      $.get('/api/v1/remove-cookie-from-header/', function(){
+        setTimeOut(function(){
+          window.reload()
+        }, 2000)
+          
+      });
+    </script>
+{% endblock js_section %}
 
 {% block johukum %}
 {% endblock johukum %}
