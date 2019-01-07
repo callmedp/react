@@ -350,12 +350,6 @@ if 'test' in sys.argv[1:]:
     TESTS_IN_PROGRESS = True
     MIGRATION_MODULES = DisableMigrations()
 
-
-try:
-    from .settings_local import *
-except:
-    pass
-
 ########### CMS STATIC PAGE RENDERING ID#########
 
 CMS_ID = [1]
@@ -364,4 +358,12 @@ FEATURE_PROFILE_EXCLUDE=[1941]
 
 
 SERVICE_PAGE_ID_SLUG_MAPPING = {"45":"resume-writing"}
+
+
+try:
+    from .settings_local import *
+except:
+    pass
+
+
 
