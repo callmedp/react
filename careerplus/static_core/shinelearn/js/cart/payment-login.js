@@ -1,4 +1,7 @@
 $().ready(function() {
+$('#login_form').on('submit', function() {
+ hitGAContinue();
+});
 
     $("#login_form").validate({
         rules: {
@@ -27,4 +30,5 @@ $().ready(function() {
             $(element).siblings('.error-txt').html(error.text());
         }
     });
+
 });

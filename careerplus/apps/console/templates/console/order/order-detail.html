@@ -103,6 +103,7 @@
                         <tr>
                           <th>TxnId</th>
                           <th>Payment Mode</th>
+                          <th>Amount</th>
                           <th>Payment Status</th>
                           <th>Created On</th>
                           <th>Paid On</th>
@@ -116,6 +117,7 @@
                         <tr>
                           <td>{{txn_obj.txn}}</td>
                           <td>{{txn_obj.get_payment_mode}}</td>
+                           <td>{{txn_obj.txn_amount}}</td>
                           <td>{{txn_obj.get_payment_status}}</td>
                           <td>{{txn_obj.created}}</td>
                           <td>{{txn_obj.payment_date}}</td>

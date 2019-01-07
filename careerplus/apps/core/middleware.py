@@ -60,6 +60,10 @@ class LoginMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
+        if request.path.startswith('/console/'):
+            response = self.get_response(request)
+            return response
+
         em_data = request.COOKIES.get('_em_', '')
         if em_data and '|' in em_data:
             cookies_data = em_data.split('|')
@@ -113,6 +117,10 @@ class TrackingMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
+        if request.path.startswith('/console/'):
+            response = self.get_response(request)
+            return response
+            
         dict_data = {}
         full_url = request.build_absolute_uri()
         decode_url = urllib.parse.unquote(full_url)
@@ -210,6 +218,10 @@ class LearningShineMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
+        if request.path.startswith('/console/'):
+            response = self.get_response(request)
+            return response
+
         country_obj = UserMixin().get_client_country(request)
         set_session_country(country_obj, request)
         ad_content = request.GET.get('ad_content', '')

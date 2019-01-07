@@ -52,7 +52,7 @@
         <script type="application/json">
         {
             "vars": {
-                "account": "UA-3537905-1"
+                "account": "UA-3537905-41"
             },
             "triggers": {
                 "trackPageview": {
@@ -73,6 +73,20 @@
     <div class="body-wrapper ">
         <section class="content-box pt-0">
             {{ left_widgets|safe|default:'' }}
+            <div class="container">
+                <div class="box row mt-30 mb-30">
+                    <div class="media">
+                        <div class="media-left">
+                            <amp-img class="mr-3" src="{% static 'shinelearn/images/mobile/cms/resume-writing-service-pic.png' %}"alt="Resume Writing Service" width="59" height="66"></amp-img>
+                        </div>
+                        <div class="media-body ml-15 fs-16">
+                            <p class="resume-writing-service-head">Resume Writing Service</p>
+                            <p class="resume-writing-service-txt">Having trouble writing your Resume? Hire our Professional Writers to give your Resume the best of everything. We know the recruitment industry for 10+ years.</p>
+                            <a href="https://mlearning.shine.com/services/resume-services/freshers-level/pd-1921" class="btn mt-10 mb-30 resume-writing-service-btn">Write My Resume</a>
+                        </div>
+                    </div>
+                </div><!-- /. white-box -->
+            </div>
             {% if page_obj.allow_comment %}
                 <div class="comment-wrap mt-20">
                     <input type='hidden' id='page_slug' value='{{page_obj.slug}}'/>
