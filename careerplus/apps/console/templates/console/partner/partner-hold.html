@@ -196,7 +196,7 @@
                         <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
                     </th>
                     {% endif %}
-                    <th class="column-title">#ItemId</th>
+
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Email</th>
@@ -204,7 +204,6 @@
                     <th class="column-title">Item Name</th>
                     <th class="column-title">MRP</th>
                     <th class="column-title">Product Id</th>
-                    <th class="column-title">Order Details</th>
                     <th class="column-title">Submit Msg</th>
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">How Old</th>
@@ -224,8 +223,10 @@
                             <input autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
                       </td>
                       {% endif %}
-                      <td>{{obj.pk}}</td>
-                      <td>{{obj.order.number}}</td>
+                      <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><b style="text-decoration: underline;">{{obj.order.number}}</b></a>
+                      </br>
+                          ({{obj.pk}})
+                      </td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
@@ -255,7 +256,7 @@
                         {% endif %}
                       </td>
                       
-                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order Details</button></a></td>
+
                        
                         <td>
                             <form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}

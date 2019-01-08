@@ -228,23 +228,18 @@
                             <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
                         </th>
                     {% endif %}
-                    <th class="column-title">#Id</th>
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Delivery Type</th>
-                    <th class="column-title">User Category</th>
                     <th class="column-title">Expert Name</th>
                     <th class="column-title">Draft Submitted On</th>
                     <th class="column-title">How Old</th>
                     <th class="column-title">Draft Level</th>
-                    <th class="column-title">Draft</th>
-                    <th class="column-title">Upload Draft</th>
-                    <th class="column-title">Review Order</th>
+                    <th class="column-title">Actions</th>
                     <th class="column-title">Submit Msg</th>
-                    <th class="column-title">Waiting For Input</th>
                   </tr>
                 </thead>
 
@@ -256,8 +251,10 @@
                               <input autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
                             </td>
                       {% endif %}
-                      <td>{{obj.pk}}</td>
-                      <td>{{obj.order.number}}</td>
+                     <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><b style="text-decoration: underline;">{{obj.order.number}}</b></a>
+                                      </br>
+                                          ({{obj.pk}})
+                                      </td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
@@ -280,7 +277,6 @@
                       </td>
                       
                       <td>{% if obj.delivery_service %}{{obj.delivery_service.name}}{% endif %}</td>
-                      <td>User Category</td>
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
                       <td>{{obj.draft_added_on}}</td>
                       <td>{{obj.modified|naturaltime}}
@@ -290,15 +286,15 @@
                       <td>Draft Level {% if obj.draft_counter|add:"1" == max_limit_draft %}Final{% else %}{{obj.draft_counter|add:"1"}} {% endif %}</td>
 
                       <td><a href="{% url "console:queue-resume-download" %}?path={{obj.oi_draft.name}}&next={{ request.path }}" >
-                        <button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>
+                        <button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a>
+                          <hr style=" margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 
-                      <td>
-                        <form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">{% csrf_token %}
+                      <form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">{% csrf_token %}
                             {{draft_form.file}}
                             <div style="display:none">
                                 <input type="hidden" name="oi_pk" value="{{obj.pk}}">
                             </div>
-                            <button type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button>
+                            <button style="margin-top:5px;"  type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Upload Draft</button>
                         </form>
                         <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="draftmodal{{obj.pk}}">
                             <div class="modal-dialog modal-lg">
@@ -320,10 +316,23 @@
                               </div>
                             </div>
                         </div>
-                          
-                      </td>
+                                                    <hr style=" margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 
-                      <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review order</button></a></td>
+
+                        <form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="waiting-form{{obj.pk}}">{% csrf_token %}
+                            <div class="form-group">
+                            <input type="checkbox" class="flat form-control" {% if obj.waiting_for_input %}checked="checked"{% endif %} name="waiting_input">Waiting for User Input </div>
+                            <div style="display:none">
+                                <input type="hidden" name="oi_pk" value="{{obj.pk}}">
+                                <textarea id="msgid" maxlength="255" name="inputmsg">
+                                </textarea>
+                            </div>
+                            <button type="button" onclick="saveWaitingForInput('{{obj.pk}}',)" class="btn btn-success btn-xs">Save</button>
+                        </form>
+
+
+
+                      </td>
 
                       <td>
                           <form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
@@ -350,21 +359,6 @@
                             </div>
                         </form>
                       </td>
-
-                      <td>
-                        <form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="waiting-form{{obj.pk}}">{% csrf_token %}
-                            <div class="form-group">
-                            <input type="checkbox" class="flat form-control" {% if obj.waiting_for_input %}checked="checked"{% endif %} name="waiting_input"></div>
-                            <div style="display:none">
-                                <input type="hidden" name="oi_pk" value="{{obj.pk}}">
-                                <textarea id="msgid" maxlength="255" name="inputmsg">
-                                </textarea>
-                            </div>
-                            <button type="button" onclick="saveWaitingForInput('{{obj.pk}}',)" class="btn btn-success btn-xs">Save</button>
-                        </form>
-                      </td>
-                      
-                      
                     </tr>
                   {% endfor %}
                 </tbody>

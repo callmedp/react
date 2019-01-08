@@ -204,8 +204,7 @@
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">Midout sent on</th>
                     <th class="column-title">How Old</th>
-                    <th class="column-title">Order Deatil</th>
-                    <th class="column-title">Upload</th>
+                    <th class="column-title">Actions</th>
                   </tr>
                 </thead>
 
@@ -220,7 +219,8 @@
                       <!--
                       <td>{{obj.pk}}</td>
                       -->
-                      <td>{{obj.number}}</td>
+                   <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><b style="text-decoration: underline;">{{obj.number}}</b></a></td>
+
                       <td>{{obj.first_name}} {{obj.last_name}}</td>
                       <td>{{obj.email}}</td>
                       <td>{{obj.country_code}} {{obj.mobile}}</td>
@@ -250,14 +250,13 @@
                           {{obj.modified|naturaltime}}</br>
                           <b>Updated On: {{obj.modified}}</b>
                       </td>
-                      <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
                       <td>
                         <form autocomplete="off" data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="resume-upload-form">{% csrf_token %}
                           {{form.oi_resume}}
                           <div style="display:none">
                           <input type="hidden" name="oi_pk" value="{{obj.pk}}"></div>
                           </br>
-                          <button type="submit" class="btn btn-success btn-xs">Submit</button>
+                          <button type="submit" class="btn btn-success btn-xs">Upload Document</button>
                         </form>
                       </td>
                       
