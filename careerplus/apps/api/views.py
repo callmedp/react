@@ -380,59 +380,52 @@ class EmailLTValueApiView(APIView):
     permission_classes = [IsAuthenticated, IsAdminUser]
 
     def post(self, request, format=None):
-        email = request.data.get('candidate_email', '')
-        c_id = request.data.get('candidate_id', '')
-        last_order=""
+        email = request.data.get('candidate_email', '').lower().strip()
+        candidate_id = request.data.get('candidate_id')
+        last_order = ""
         name = ''
-        candidate_id = None
-        if email or c_id:
-            ltv = Decimal(0)
-            if not c_id:
-                email = email.lower().strip()
-                candidate_response = ShineCandidateDetail().get_candidate_detail(email=email)
-                if candidate_response:
-                    personal_detail = candidate_response.get('personal_detail')[0] if candidate_response.get('personal_detail') else None
-                    if personal_detail:
-                        candidate_id = personal_detail.get('id')
-                        name = personal_detail.get('first_name', '') + ' ' + personal_detail.get('last_name', '')
-            else:
-                candidate_id = c_id
-            if candidate_id:
-                ltv_pks = list(Order.objects.filter(
-                    candidate_id=candidate_id,
-                    status__in=[1,2,3]).values_list('pk', flat=True))
-                if ltv_pks:
-                    ltv_order_sum = Order.objects.filter(
-                        pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
-                    last_order = OrderItem.objects.select_related('order').filter(order__in = ltv_pks)\
-                        .exclude(oi_status=163).order_by('-order__payment_date').first()
-                    if last_order:
-                        last_order =last_order.order.payment_date.strftime('%Y-%m-%d %H:%M:%S')
-                    else:
-                        last_order=""
 
-                    ltv = ltv_order_sum.get('ltv_price') if ltv_order_sum.get('ltv_price') else Decimal(0)
-                    rf_ois = list(OrderItem.objects.filter(
-                        order__in=ltv_pks,
-                        oi_status=163).values_list('order', flat=True))
-
-
-                    rf_sum = RefundRequest.objects.filter(
-                        order__in=rf_ois).aggregate(rf_price=Sum('refund_amount'))
-                    if rf_sum.get('rf_price'):
-                        ltv = ltv - rf_sum.get('rf_price')
-
-                return Response(
-                    {"status": "SUCCESS", "ltv_price": str(ltv), "name": name, "last_order": str(last_order)},
-                    status=status.HTTP_200_OK)
-            else:
-                return Response(
-                    {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
-                    status=status.HTTP_400_BAD_REQUEST)
-        else:
+        if not email and not candidate_id:
             return Response(
                 {"status": "FAIL", "msg": "Bad Parameters Provided"},
                 status=status.HTTP_400_BAD_REQUEST)
+
+        ltv = Decimal(0)
+        if not candidate_id:
+            candidate_id = ShineCandidateDetail().get_shine_id(email=email)
+
+        if not candidate_id:
+            return Response(
+                {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
+                status=status.HTTP_400_BAD_REQUEST)
+        
+        ltv_pks = list(Order.objects.filter(
+            candidate_id=candidate_id,
+            status__in=[1,2,3]).values_list('pk', flat=True))
+        if ltv_pks:
+            ltv_order_sum = Order.objects.filter(
+                pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
+            last_order = OrderItem.objects.select_related('order').filter(order__in = ltv_pks)\
+                .exclude(oi_status=163).order_by('-order__payment_date').first()
+            if last_order:
+                last_order =last_order.order.payment_date.strftime('%Y-%m-%d %H:%M:%S')
+            else:
+                last_order=""
+
+            ltv = ltv_order_sum.get('ltv_price') if ltv_order_sum.get('ltv_price') else Decimal(0)
+            rf_ois = list(OrderItem.objects.filter(
+                order__in=ltv_pks,
+                oi_status=163).values_list('order', flat=True))
+
+            rf_sum = RefundRequest.objects.filter(
+                order__in=rf_ois).aggregate(rf_price=Sum('refund_amount'))
+            if rf_sum.get('rf_price'):
+                ltv = ltv - rf_sum.get('rf_price')
+
+        return Response(
+            {"status": "SUCCESS", "ltv_price": str(ltv), "name": name, "last_order": str(last_order)},
+            status=status.HTTP_200_OK)
+                            
 
 
 class OrderHistoryAPIView(ListAPIView):
