@@ -21,7 +21,7 @@ if __name__=="__main__":
 
 for root, dirs, files in os.walk(ROOT_FOLDER):
     for file in files:
-        if not file.endswith(IMAGE_EXTENSIONS) or file.ends :
+        if not file.endswith(IMAGE_EXTENSIONS):
             continue
         file_path = os.path.join(root, file)
         img_dir = file_path[:file_path.rindex('/')]
