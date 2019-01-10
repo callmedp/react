@@ -133,7 +133,7 @@ CCAVENUE_ACCESS_CODE = 'AVEX73EI34CC49XECC'
 CCAVENUE_WORKING_KEY = 'DE002F3C615C11E7FB7D333050103230'
 CCAVENUE_MOBILE_ACCESS_CODE = 'AVYX74EK04AB50XYBA'
 CCAVENUE_MOBILE_WORKING_KEY = 'A081DDE3B5B50F269F8980EB2ADEC9F3'
-CCAVENUE_URL = 'https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
+CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
 
 ###### CACHE SETTINGS #################
 SITEMAP_CACHING_TIME = 86400
