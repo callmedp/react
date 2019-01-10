@@ -76,6 +76,9 @@
           {% endif %}
         {% endblock %}
         {% block main_container %}
+        {% if IS_MAINTENANCE %}
+        <marquee> {{ MAINTENANCE_MESSAGE }} </marquee>
+        {% endif %}
         <div class="wrapper">
             {% block header %}
             <!-- header menu Icon Starts here -->

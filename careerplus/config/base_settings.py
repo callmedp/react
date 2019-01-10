@@ -487,6 +487,6 @@ CMS_STATIC_TEMP_DICT = {
     3: 'static_resignation_page.html',
     7: 'static_cover_page.html'}
 
-
-
+IS_MAINTENANCE = False
+MAINTENANCE_MESSAGE = "This site will be under maintenance from 9 pm to 12 pm on Friday, 11th Jan, 2019."
     
