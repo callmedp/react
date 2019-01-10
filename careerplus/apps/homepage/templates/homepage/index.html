@@ -37,7 +37,7 @@
     {% block page_heading %}
 
         <!-- header -->
-        <header class="home-header">
+        <header class="home-header" {% if IS_MAINTENANCE %} style="position: relative; top: -53px;" {% endif %}>
             <div id="carousel-example-generic1" class="carousel slide" data-ride="carousel">
 
                 <!-- Wrapper for slides -->
