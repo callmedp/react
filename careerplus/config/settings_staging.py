@@ -350,3 +350,6 @@ FEATURE_PROFILE_EXCLUDE=[1941]
 
 SERVICE_PAGE_ID_SLUG_MAPPING = {"45":"resume-writing"}
 
+##for testing purpose using live working key
+
+CCAVENUE_WORKING_KEY = 'BB84397177B2D640744BA272627C2A61'
