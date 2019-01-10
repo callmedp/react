@@ -33,7 +33,6 @@
 <title> {% block title %}Resume Format and CV Samples - Download Online @ Shine Learning{% endblock title %}</title>
 
 {% block css_section %}
-<!-- <link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'> -->
  {% compress css %}
 <link href="{% static 'shinelearn/css/mobile/cms/resume.css' %}" rel="stylesheet">
 <link href="{% static 'shinelearn/css/mobile/cms//smk-accordion.css' %}" rel="stylesheet">
@@ -557,18 +556,6 @@ window.onclick = function(event) {
 } )( jQuery );
 </script>
 
-<script type="text/javascript">
-  WebFontConfig = {
-    google: { families: [ 'Lato:400,700,300' ] }
-  };
-  (function() {
-    var wf = document.createElement('script');
-    wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-    wf.type = 'text/javascript';
-    wf.async = 'true';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(wf, s);
-  })(); </script>
 {% endblock js_section %}
 
 {% block johukum %}
