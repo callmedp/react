@@ -70,15 +70,16 @@
     {% endblock GA %}
    </head>
     <body>
+        {% if IS_MAINTENANCE %}
+        <marquee> {{ MAINTENANCE_MESSAGE }} </marquee>
+        {% endif %}
         {% block marketingpopup%}
           {% if marketing_popup_html %}
               {% include marketing_popup_html %}
           {% endif %}
         {% endblock %}
+
         {% block main_container %}
-        {% if IS_MAINTENANCE %}
-        <marquee> {{ MAINTENANCE_MESSAGE }} </marquee>
-        {% endif %}
         <div class="wrapper">
             {% block header %}
             <!-- header menu Icon Starts here -->
