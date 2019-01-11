@@ -1,6 +1,6 @@
 import os, sys, django, re
 
-#Settings Import
+# Settings Import
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings")
 ROOT_FOLDER = os.path.realpath(os.path.dirname(__file__))
 ROOT_FOLDER = ROOT_FOLDER[:ROOT_FOLDER.rindex('/')]
@@ -10,13 +10,13 @@ if ROOT_FOLDER not in sys.path:
 
 django.setup()
 
-#third party imports
+# third party imports
 from PIL import Image
 
-#Global Constants
+# Global Constants
 IMAGE_EXTENSIONS = ('png', 'jpg', 'jpeg', 'PNG', 'JPG', 'JPEG',)
 
-if __name__=="__main__":
+if __name__ == "__main__":
 
     for root, dirs, files in os.walk(ROOT_FOLDER):
         regex_text = '-thumbnail'
@@ -29,6 +29,9 @@ if __name__=="__main__":
             file_name = ".".join(file.split(".")[:-1])
             file_path_without_extension = os.path.join(root, file_name)
             thumbnail_name = '{}-thumbnail.{}'.format(file_name, file_extension)
-            img = Image.open(file_path)
-            img.thumbnail((100, 100))
-            img.save(os.path.join(img_dir, thumbnail_name))
+            try:
+                img = Image.open(file_path)
+                img.thumbnail((100, 100))
+                img.save(os.path.join(img_dir, thumbnail_name))
+            except:
+                continue
