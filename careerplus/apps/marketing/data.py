@@ -10,6 +10,6 @@ URL_MAPPING_TO_PRODUCT = {"resume-writing-services-1": ([1921,1922,1923,1924,32]
                             "ban-cert":([3133],3133),
                             "data-scientist":([1],1),
                             "ifrs-cert":([1880],1880),
-                            "gst-certification":([1],1)
+                            "gst-certification":([1810],1810)
 
 }

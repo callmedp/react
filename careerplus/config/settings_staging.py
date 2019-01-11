@@ -335,22 +335,17 @@ if 'test' in sys.argv[1:]:
     TESTS_IN_PROGRESS = True
     MIGRATION_MODULES = DisableMigrations()
 
+########### CMS STATIC PAGE RENDERING ID#########
+
+CMS_ID = [1]
+FEATURE_PROFILE_EXCLUDE=[1941]
+SERVICE_PAGE_ID_SLUG_MAPPING = {"45":"resume-writing"}
+IS_MAINTENANCE = False
+MAINTENANCE_MESSAGE = "This site will be under maintenance from 9 pm to 12 pm on Friday, 11 Jan, 2019."
 
 try:
     from .settings_local import *
 except:
     pass
 
-########### CMS STATIC PAGE RENDERING ID#########
 
-CMS_ID = [1]
-
-FEATURE_PROFILE_EXCLUDE=[1941]
-
-
-SERVICE_PAGE_ID_SLUG_MAPPING = {"45":"resume-writing"}
-
-
-IS_MAINTENANCE = False
-
-MAINTENANCE_MESSAGE = "This site will be under maintenance from 9 pm to 12 pm on Friday, 11 Jan, 2019."
