@@ -95,7 +95,7 @@
                     <li class="form-group">
                        <select class="form-control" id="selection" name="selection">
                            {%for prd in products_lists %}
-							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >{{prd.pPin}} </option>
+							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >Fees- Rs. {{prd.pPin}}/- </option>
                               {%endfor%}
                          </select>
                     </li>
@@ -103,7 +103,7 @@
 
                   <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
 
-                <input type="hidden" name="prd" value="Data Scientist - Rs. 44999/-">
+                <input type="hidden" name="prd" value="{{prd.pNm}} - Rs. {{prd.pPin}}/- ">
 
                 <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 
@@ -149,7 +149,7 @@
                    <li class="form-group">
                       <select class="form-control" id="selection" name="selection">
                         {%for prd in products_lists %}
-							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >DataScientist - {{prd.response.pPin}} </option>
+							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >Fees - {{prd.pPinb}} /- </option>
                               {%endfor%}
                       </select>
                    </li>
@@ -157,7 +157,7 @@
 
                  <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
 
-                <input type="hidden" name="prd" value="Data Scientist - Rs. 44999/-">
+                <input type="hidden" name="prd" value="{{prd.pNm}} - Rs. {{prd.pPinb}}/-">
 
                 <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 
