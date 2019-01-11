@@ -236,10 +236,9 @@
               </div>
               <div role="tabpanel" class="tab-pane other-payment" id="upi">
                 <article>For UPI, you will be redirected to a secure page where you can choose your bank, and make your payment.</article>
-                <strong>Rs. 4599 <small>(amount payable)</small> </strong>
-
-                <div class="continue">
-                  <button type="button" class="make-payment">Make Payment</button>
+                <strong>Rs. {{total_amount}} <small>(amount payable)</small> </strong>
+                  <div class="continue">
+                  <a href="{% url "payment:ccavenue_request" cart_id 'upi' %}"><button type="button" class="make-payment">Make UPI Payment</button></a>
                   <figure class="secure-payment-icon"></figure>100% Secure Payment
                 </div>
               </div>
