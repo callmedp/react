@@ -16,19 +16,17 @@ from PIL import Image
 IMAGE_EXTENSIONS = ('png', 'jpg', 'jpeg', 'PNG', 'JPG', 'JPEG',)
 
 if __name__=="__main__":
-    total_original_size = 0
-    total_new_size = 0
 
-for root, dirs, files in os.walk(ROOT_FOLDER):
-    for file in files:
-        if not file.endswith(IMAGE_EXTENSIONS):
-            continue
-        file_path = os.path.join(root, file)
-        img_dir = file_path[:file_path.rindex('/')]
-        file_extension = file.split(".")[-1]
-        file_name = ".".join(file.split(".")[:-1])
-        file_path_without_extension = os.path.join(root, file_name)
-        thumbnail_name = file_name + '-thumbnail.' + file_extension
-        img = Image.open(file_path)
-        img.thumbnail((100, 100))
-        img.save(os.path.join(img_dir, thumbnail_name))
+    for root, dirs, files in os.walk(ROOT_FOLDER):
+        for file in files:
+            if not file.endswith(IMAGE_EXTENSIONS):
+                continue
+            file_path = os.path.join(root, file)
+            img_dir = file_path[:file_path.rindex('/')]
+            file_extension = file.split(".")[-1]
+            file_name = ".".join(file.split(".")[:-1])
+            file_path_without_extension = os.path.join(root, file_name)
+            thumbnail_name = file_name + '-thumbnail.' + file_extension
+            img = Image.open(file_path)
+            img.thumbnail((100, 100))
+            img.save(os.path.join(img_dir, thumbnail_name))
