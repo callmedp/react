@@ -92,7 +92,8 @@
 							<button type="submit" class="btn btn-default newbtn" onclick="$('#lead').submit();_gaq.push(['resume._trackEvent','Lead','submit']);return false;">Enquire Now</button>
 						  <p class="easy">*Easy EMI option available</p>
 							<input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3133{% endif %}">
-							<input type="hidden" name="prd" value="{{prd.pNm}}">
+							<input type="hidden" name="prd" value="Linkedin">
+
 							<input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 							<input type="hidden" name="lsource" value="{{ lead_source }}">
 						</form>

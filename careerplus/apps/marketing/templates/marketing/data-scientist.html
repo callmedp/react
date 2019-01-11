@@ -81,16 +81,19 @@
                     </li>
                     
                     <li class="form-group">
-                       <select class="form-control" name="selection">
-                        <option selected="selected" value="1716">Fees - Rs. 89999</option>
-                        </select>
+                      <select class="form-control" id="selection" name="selection">
+                           {%for prd in products_lists %}
+							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >Fees- Rs. {{prd.pPinb}}/- </option>
+                              {%endfor%}
+                         </select>
                     </li>
 
                   </ul>
 
                   <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}1716{% endif %}">
 
-                <input type="hidden" name="prd" value="Data Scientist - Rs. 89999/-">
+                                <input type="hidden" name="prd" value="Data Scientist - Rs. 89999/-">
+
 
                 <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 
@@ -136,10 +139,11 @@
                    </li>
 
                    <li class="form-group" >
-                      <select class="form-control" name="selection" id="exampleFormControlSelect1" >
-                          <option selected="selected" value="1716">Fees - Rs. 89999</option>
-
-                        </select>
+                       <select class="form-control" id="selection" name="selection">
+                           {%for prd in products_lists %}
+							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >Fees- Rs. {{prd.pPinb}}/- </option>
+                              {%endfor%}
+                         </select>
                    </li>
                  </ul>
 

@@ -499,9 +499,9 @@ URL_MAPPING_TO_PRODUCT = {"resume-writing-services-1": ([1921,1922,1923,1924,32]
                             "data-scientist":([3417],3417),
                             "ifrs-cert":([1880],1880),
                             "gst-certification":([1810],1810),
-                            "data-science":([3417],[3417]),
-                            "six-sigma":([3400],[3400]),
-                            "linkedin":([1926],[1926])
+                            "data-science":([3417],3417),
+                            "six-sigma":([3400],3400),
+                            "linkedin":([1926],1926)
 
 
 }
