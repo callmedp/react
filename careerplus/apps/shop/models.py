@@ -12,6 +12,8 @@ from django.core.cache import cache
 
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericRelation
+
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models.signals import post_save
@@ -23,6 +25,7 @@ from mongoengine import Document, ListField, FloatField,\
     StringField, IntField, DateTimeField
 
 from partner.models import Vendor
+from review.models import Review
 from faq.models import (
     FAQuestion, ScreenFAQ)
 from geolocation.models import Country, Currency, CURRENCY_EXCHANGE
@@ -996,6 +999,7 @@ class Product(AbstractProduct, ModelMeta):
     cp_page_view = models.IntegerField(
         _('CP Page View'), default=0)
     active = models.BooleanField(default=False)
+    reviews = GenericRelation(Review, related_query_name='reviews')
     is_indexable = models.BooleanField(default=False)
     is_indexed = models.BooleanField(default=False)
     objects = ProductManager()
