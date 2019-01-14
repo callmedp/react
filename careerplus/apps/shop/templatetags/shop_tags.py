@@ -2,7 +2,6 @@ from django import template
 import math, re
 register = template.Library()
 
-
 @register.filter(name='get_value')
 def get_value(key, dictionary):
     return dictionary.get(key, [])
@@ -37,6 +36,8 @@ def convert_to_month(val):
 
 @register.filter
 def modify_url(val):
-    match = re.search(r'([\w\/\.:]+)(.png?|.jpg?|.jpeg?|.PNG?|.JPG?|.JPEG)$', val)
+    match = re.search(r'([\w\/\.:]+)(.png?|.jpg?|.jpeg?|.PNG?|.JPG?|.JPEG?)$', val)
     if match:
         return '{}-thumbnail{}'.format(match.group(1), match.group(2))
+    else:
+        return val 

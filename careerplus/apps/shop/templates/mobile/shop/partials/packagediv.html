@@ -1,4 +1,4 @@
-{% load humanize search_tags %}
+{% load humanize shop_tags search_tags %}
 {% if prd_service == 'course' %}
     <div class="detail-wrap">
         <div class="provided-by">
@@ -12,7 +12,7 @@
                         height="17">
                      </amp-img>
                     {% else %}
-                    <img src="{{prd_vendor_img}}">
+                    <img src="{{prd_vendor_img | modify_url}}">
                     {% endif %}
 
 
