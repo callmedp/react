@@ -228,22 +228,18 @@
                         <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
                     </th>
                     {% endif %}
-                    <th class="column-title">#Id</th>
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Candidate Info</th>
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Delivery Type</th>
                     <th class="column-title">Assigned</th>
-                    <th class="column-title">User Category</th>
                     <!--<th class="column-title">Uploaded Document</th>-->
-                    <th class="column-title">Complete Order Information</th>
+                    <th class="column-title">Actions</th>
                     <th class="column-title">How Old</th>
                   {% if perms.order.can_show_linkedin_writer_draft %}
                     <th class="column-title">Counselling Form</th>
-                    <th class="column-title">Draft Submit</th>
-                  {% endif %}
+                         {% endif %}
                     <th class="column-title">Submit Msg</th>
-                    <th class="column-title">Waiting for input</th>
                   </tr>
                 </thead>
 
@@ -255,8 +251,12 @@
                           <input type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
                       </td>
                     {% endif %}
-                      <td>{{obj.pk}}</td>
-                      <td>{{obj.order.number}}</td>
+
+                         <td>
+                             <a target="_blank" href="{% url 'console:linkedin-order-detail' obj.order.id %}"><b style="text-decoration: underline;">{{obj.order.number}}</b></a>
+                             </br>
+                             ({{obj.pk}})
+                      </td>
                       <td>
                         email:{{obj.order.email}}<br>
                         name:{{obj.order.first_name}}<br>
@@ -282,18 +282,49 @@
                       </td>
                       <td>{% if obj.delivery_service %}{{obj.delivery_service.name}}{% endif %}</td>
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
-                      <td>User Category</td>
-                      <!--
+
                       <td>
-                        <a href="#" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye">
-                        </i>Download Document</button></a>
+                        {% if perms.order.can_show_linkedin_writer_draft %}
+
+                          {% if obj.oio_linkedin %}
+
+                          <a target="_blank" href="{% url 'console:change-draft' obj.oio_linkedin.pk %}">
+                          <button type="button" class="btn btn-primary btn-xs">
+                          <i class="fa fa-edit"></i>
+                            Edit
+                            Linkedin
+                            Draft
+                          </button></a>
+
+                      {% else %}
+                          <a target="_blank" href="{% url 'console:create-draft' obj.pk %}">
+                          <button type="button" class="btn btn-primary btn-xs">
+                          <i class="fa fa-edit"></i>
+                            Edit
+                            Linkedin
+                            Draft
+                          </button></a>
+                      {% endif %}
+
+                   <hr style=" margin-top: 4px; height:1px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
+
+                          {% endif %}
+
+
+                        <form role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="waiting-form{{obj.pk}}">{% csrf_token %}
+                            <div class="form-group">
+                            <input type="checkbox" class="flat form-control" {% if obj.waiting_for_input %}checked="checked"{% endif %} name="waiting_input"> Waiting for User Input</div>
+                            <div style="display:none">
+                                <input type="hidden" name="oi_pk" value="{{obj.pk}}">
+                                <textarea id="msgid" maxlength="255" name="inputmsg">
+                                </textarea>
+                            </div>
+                            <button type="button" onclick="saveWaitingForInput('{{obj.pk}}',)" class="btn btn-success btn-xs">Save</button>
+                        </form>
+
                       </td>
-                      -->
-                      <td>
-                        <a target="_blank" href="{% url "console:linkedin-order-detail" obj.order.id %}"><button type="button" class="btn btn-success btn-xs">
-                        <i class="fa fa-eye"></i>
-                        Detailed Information</button></a>
-                      </td>
+
+
                       <td>
                         <b>Updated On: {{obj.modified}}</b>
                       </td>
@@ -309,27 +340,7 @@
                         </a>
                       </td>
                       {% endif %}
-                      {% if obj.oio_linkedin %}
-                        <td>
-                          <a target="_blank" href="{% url 'console:change-draft' obj.oio_linkedin.pk %}">
-                          <button type="button" class="btn btn-success btn-xs">
-                          <i class="fa fa-eye"></i>
-                            Edit
-                            Linkedin
-                            Draft 
-                          </button></a>
-                        </td>
-                      {% else %}
-                        <td>
-                          <a target="_blank" href="{% url 'console:create-draft' obj.pk %}">
-                          <button type="button" class="btn btn-success btn-xs">
-                          <i class="fa fa-eye"></i>
-                            Edit
-                            Linkedin
-                            Draft 
-                          </button></a>
-                        </td>
-                      {% endif %}
+
                     {% endif %}
                       <td>
                         <form id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
@@ -354,18 +365,6 @@
                                   <center><button type="button" onclick="submitMessage('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button></center>
                                 </div>
                             </div>
-                        </form>
-                      </td>
-                      <td>
-                        <form role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="waiting-form{{obj.pk}}">{% csrf_token %}
-                            <div class="form-group">
-                            <input type="checkbox" class="flat form-control" {% if obj.waiting_for_input %}checked="checked"{% endif %} name="waiting_input"></div>
-                            <div style="display:none">
-                                <input type="hidden" name="oi_pk" value="{{obj.pk}}">
-                                <textarea id="msgid" maxlength="255" name="inputmsg">
-                                </textarea>
-                            </div>
-                            <button type="button" onclick="saveWaitingForInput('{{obj.pk}}',)" class="btn btn-success btn-xs">Save</button>
                         </form>
                       </td>
                     </tr>

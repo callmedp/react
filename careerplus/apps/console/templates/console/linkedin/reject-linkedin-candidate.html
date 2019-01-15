@@ -228,23 +228,20 @@
                             <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
                         </th>
                     {% endif %}
-                    <th class="column-title">#Id</th>
+
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Delivery Type</th>
-                    <th class="column-title">User Category</th>
                     <th class="column-title">Expert Name</th>
                     <th class="column-title">Draft Submitted On</th>
                     <th class="column-title">How Old</th>
                     <th class="column-title">Draft Level</th>
-                    <th class="column-title">Draft</th>
-                    <th class="column-title">Draft Submit</th>
-                    <th class="column-title">Review Order</th>
+                    <th class="column-title">Actions</th>
                     <th class="column-title">Submit Msg</th>
-                    <th class="column-title">Wating For Input</th>
+
                   </tr>
                 </thead>
 
@@ -256,8 +253,11 @@
                               <input type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
                             </td>
                       {% endif %}
-                      <td>{{obj.pk}}</td>
-                      <td>{{obj.order.number}}</td>
+                        <td>
+                             <a target="_blank" href="{% url 'console:linkedin-order-detail' obj.order.id %}"><b style="text-decoration: underline;">{{obj.order.number}}</b></a>
+                             </br>
+                             ({{obj.pk}})
+                      </td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
@@ -281,7 +281,7 @@
                       </td>
                       
                       <td>{% if obj.delivery_service %}{{obj.delivery_service.name}}{% endif %}</td>
-                      <td>User Category</td>
+
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
                       <td>{{obj.draft_added_on}}</td>
                       <td>{{obj.modified|naturaltime}}
@@ -290,8 +290,10 @@
 
                       <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
 
-                      <td><a href="{% url 'console-linkedin-draft' obj.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>
-                    <!-- 
+                      <td><a href="{% url 'console-linkedin-draft' obj.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i>View Draft</button></a>
+                                        <hr style=" margin-top: 4px; height:1px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
+
+                    <!--
                       <td>
                         <form role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">{% csrf_token %}
                             {{draft_form.file}}
@@ -323,16 +325,27 @@
                           
                       </td>
                       -->
-                      <td>
+
                         <a target="_blank" href="{% url 'console:change-draft' obj.oio_linkedin.pk %}">
-                        <button type="button" class="btn btn-success btn-xs">
-                        <i class="fa fa-eye"></i>
+                        <button type="button" class="btn btn-primary btn-xs">
+                        <i class="fa fa-edit"></i>
                           Edit
                           Linkedin
                           Draft 
                         </button></a>
+                                               <hr style=" margin-top: 4px; height:1px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
+
+                            <form role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="waiting-form{{obj.pk}}">{% csrf_token %}
+                            <div class="form-group">
+                            <input type="checkbox" class="flat form-control" {% if obj.waiting_for_input %}checked="checked"{% endif %} name="waiting_input"> Waiting For User Input</div>
+                            <div style="display:none">
+                                <input type="hidden" name="oi_pk" value="{{obj.pk}}">
+                            </div>
+                            <button type="button" onclick="saveWaitingForInput('{{obj.pk}}',)" class="btn btn-success btn-xs">Save</button>
+                        </form>
+
+
                       </td>
-                      <td><a target="_blank" href="{% url "console:linkedin-order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
 
                       <td>
                           <form id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
@@ -360,16 +373,8 @@
                         </form>
                       </td>
 
-                      <td>
-                        <form role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="waiting-form{{obj.pk}}">{% csrf_token %}
-                            <div class="form-group">
-                            <input type="checkbox" class="flat form-control" {% if obj.waiting_for_input %}checked="checked"{% endif %} name="waiting_input"></div>
-                            <div style="display:none">
-                                <input type="hidden" name="oi_pk" value="{{obj.pk}}">
-                            </div>
-                            <button type="button" onclick="saveWaitingForInput('{{obj.pk}}',)" class="btn btn-success btn-xs">Save</button>
-                        </form>
-                      </td>
+
+
                       
                       
                     </tr>
