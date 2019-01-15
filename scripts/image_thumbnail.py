@@ -1,7 +1,7 @@
 import os, sys, django, re
 
 # Settings Import
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings_live")
 ROOT_FOLDER = os.path.realpath(os.path.dirname(__file__))
 ROOT_FOLDER = ROOT_FOLDER[:ROOT_FOLDER.rindex('/')]
 print(ROOT_FOLDER)
