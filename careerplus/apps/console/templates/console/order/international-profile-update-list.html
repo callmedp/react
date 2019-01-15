@@ -298,10 +298,10 @@
                             {% endif %}
                       </td>
                       <td>{{obj.get_oi_status}}</td>
-                      <td><a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
+                      <td><a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Download Doc</button></a>
                      <hr style=" margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 
-                        <a class="btn btn-success btn-xs" href="{% url "console:international_profile_update" obj.pk %}">Profile Update</a>
+                          <a class="btn btn-primary btn-xs" href="{% url "console:international_profile_update" obj.pk %}"><i class="fa fa-newspaper-o"></i> Profile Update</a>
                       </td>
                       <td>
                           <form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}

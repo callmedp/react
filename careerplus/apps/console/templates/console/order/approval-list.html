@@ -282,14 +282,14 @@
                       <td>Draft Level {% if obj.draft_counter|add:"1" == max_limit_draft %}Final{% else %}{{obj.draft_counter|add:"1"}} {% endif %}</td>
                       <td>
 
-                          <a href="{% url "console:queue-resume-download" %}?path={{obj.oi_draft.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a>
+                          <a href="{% url "console:queue-resume-download" %}?path={{obj.oi_draft.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> View Draft</button></a>
                           {% if perms.order.can_approve_or_reject_draft %}
                         <hr style=" margin-top: 6px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
                          <form autocomplete="off" role="form" method="post" id="accept-reject-form{{obj.id}}">{% csrf_token %}
                           <input type="hidden" name="oi_pk" id="oi_id" value="{{obj.pk}}">
                           <center>
-                            <button type="button" onclick="clickApproveDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Approve Draft</button> Or
-                            <button type="button" onclick="clickRejectDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Reject Draft</button>
+                            <button type="button" onclick="clickApproveDraft('{{obj.pk}}',)" class="btn btn-primary btn-xs"><i class="fa fa-check"> Approve Draft</i> </button>Or
+                              <button type="button" onclick="clickRejectDraft('{{obj.pk}}',)" class="btn btn-danger btn-xs"><i class="fa fa-times"> Reject Draft </i> </button>
                           </center>
                           </form>
 

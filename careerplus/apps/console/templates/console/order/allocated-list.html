@@ -280,7 +280,7 @@
                       </td>
                       <td>
                         {% if obj.oi_resume %}
-                        <a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Doc</button></a>
+                        <a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> View Doc</button></a>
                         {% endif %}
                       </td>
                       <td>Delivery Type</td>

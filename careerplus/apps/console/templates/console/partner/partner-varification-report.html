@@ -210,7 +210,7 @@
 
                        <td>
                            {% if obj.oi_draft %}
-                                <a target="_blank" href="{{obj.oi_draft.url}}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Initial Doc</button></a>
+                                <a target="_blank" href="{{obj.oi_draft.url}}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Initial Doc</button></a>
                         <hr style=" margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 
                            {% endif %}
@@ -224,7 +224,7 @@
                                     <input type="hidden" name="oi_pk" value="{{obj.pk}}">
                                     <input type="hidden" id="flow-id{{obj.pk}}" name="flow" value="{{obj.product.type_flow}}" />
                                 </div>
-                                <button style="margin-top:3px; type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">VarificationReportUpload</button>
+                                <button style="margin-top:3px; type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-primary btn-xs"><i class="fa fa-upload"></i> VarificationReportUpload</button>
                             </form>
                             <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="draftmodal{{obj.pk}}">
                                 <div class="modal-dialog modal-lg">

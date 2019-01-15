@@ -235,13 +235,13 @@
                       </td>
                       <td>
                            {% if obj.oi_resume %}
-                           <a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Candidate Doc</button></a>
+                           <a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Candidate Doc</button></a>
 
                                                          <hr style=" margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 
  {% endif %}
                         {% if obj.oi_draft %}
-                        <a href="{% url "console:queue-resume-download" %}?path={{obj.oi_draft.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Uploded Draft</button></a>
+                        <a href="{% url "console:queue-resume-download" %}?path={{obj.oi_draft.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Uploaded Draft</button></a>
 
                                                          <hr style=" margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 
@@ -251,7 +251,7 @@
                           <div style="display:none">
                           <input type="hidden" name="oi_pk" value="{{obj.pk}}"></div>
                           </br>
-                          <button type="submit" class="btn btn-success btn-xs">Upload Draft</button>
+                           <button type="submit" class="btn btn-primary btn-xs"><i class="fa fa-upload">Upload Draft</i></button>
                         </form>
                       </td>
 

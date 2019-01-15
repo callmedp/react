@@ -303,11 +303,11 @@
                             {% endif %}
                       </td>
                       <td>{{obj.get_oi_status}}</td>
-                      <td><a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
+                      <td><a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Download Doc</button></a>
                            <hr style=" margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 
                           {% if obj.oi_draft %}
-                            <a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Uploaded Draft</button></a>
+                            <a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Uploaded Draft</button></a>
                              <hr style=" margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
                           {% endif %}
 
@@ -317,7 +317,7 @@
                                 <input type="hidden"  value="30" name="expires" />
 
                                 <div >
-                                      <center><button type="button" onclick="redirectToShineProfile('{{obj.pk}}',)" class="btn btn-success btn-xs">Login to shine</button></center>
+                                      <center><button type="button" onclick="redirectToShineProfile('{{obj.pk}}',)" class="btn btn-warning btn-xs"><i class="fa fa-user"> LOGIN TO SHINE </i></button></center>
                                 </div>
                             </form>
                       </td>
