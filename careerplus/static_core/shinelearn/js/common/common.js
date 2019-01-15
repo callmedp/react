@@ -38,6 +38,16 @@ $('.cls_search').each(function(index,item){
 
 });
 
+ $(window).on('scroll', function() {
+          var scroll = $(window).scrollTop();
+
+          if (scroll >= 50) {
+              $('.navbar').addClass('navbar-color');
+          } else {
+              $('.navbar').removeClass('navbar-color');
+          }
+      });
+
 
 $('.cls_showPanel').on('click',function(e){
     var that = $(this),

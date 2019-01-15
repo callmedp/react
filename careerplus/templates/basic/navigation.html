@@ -1,5 +1,8 @@
 {% load static %}
 <nav id="id_nav" class="navbar navbar-default navbar-fixed-top">
+  {% if IS_MAINTENANCE %}
+  <marquee> {{ MAINTENANCE_MESSAGE }} </marquee>
+  {% endif %}
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header" itemscope itemtype="http://schema.org/Organization" >

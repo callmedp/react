@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 from django.http.response import HttpResponsePermanentRedirect
 from django.core.cache import cache
 from urllib.parse import urlencode
-
+from django.conf import settings
 #local imports
 
 #inter app imports
@@ -13,6 +13,7 @@ from core.mixins import EncodeDecodeUserData
 from linkedin.autologin import AutoLogin
 from shine.core import ShineCandidateDetail
 from .data import *
+
 from shop.models import Product
 
 #third party imports
@@ -82,7 +83,7 @@ class MarketingPages(TemplateView):
         # tpl_path = path[0]
         # if '.html' not in path[0]:
         #     tpl_path = tpl_path + '.html'
-        prod_keys, select = URL_MAPPING_TO_PRODUCT.get(path[0],(None,None))
+        prod_keys, select = settings.URL_MAPPING_TO_PRODUCT.get(path[0],(None,None))
         if prod_keys:
             prod_obj = []
             for pk in prod_keys:
