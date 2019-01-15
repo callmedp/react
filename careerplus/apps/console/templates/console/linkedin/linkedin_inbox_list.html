@@ -236,9 +236,6 @@
                     <!--<th class="column-title">Uploaded Document</th>-->
                     <th class="column-title">Actions</th>
                     <th class="column-title">How Old</th>
-                  {% if perms.order.can_show_linkedin_writer_draft %}
-                    <th class="column-title">Counselling Form</th>
-                         {% endif %}
                     <th class="column-title">Submit Msg</th>
                   </tr>
                 </thead>
@@ -286,6 +283,24 @@
                       <td>
                         {% if perms.order.can_show_linkedin_writer_draft %}
 
+                            {% if obj.quizresponse.submitted %}
+                      <a href="{% url 'counselling-form' obj.pk %}"><button type="button" class="btn btn-success btn-xs">
+                        <i class="fa fa-check"></i>
+                          Counselling Form Submitted </button></a>
+
+                      {% else %}
+
+                        <a href="{% url 'counselling-form' obj.pk %}">
+                            <button type="button" class="btn btn-warning btn-xs">
+                        <i class="fa fa-warning"></i>
+                                Submit Counselling Form</button>
+                        </a>
+
+                      {% endif %}
+                   <hr style=" margin-top: 4px; height:1px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
+
+
+
                           {% if obj.oio_linkedin %}
 
                           <a target="_blank" href="{% url 'console:change-draft' obj.oio_linkedin.pk %}">
@@ -327,22 +342,6 @@
 
                       <td>
                         <b>Updated On: {{obj.modified}}</b>
-                      </td>
-                    {% if perms.order.can_show_linkedin_writer_draft %}
-                      {% if obj.quizresponse.submitted %}
-                      <td><a href="{% url 'counselling-form' obj.pk %}" style="color:green">
-                        Counselling Form Submitted</a>
-                      </td>
-                      {% else %}
-                      <td>
-                        <a href="{% url 'counselling-form' obj.pk %}" style="color:red">
-                          Submit Counselling Form
-                        </a>
-                      </td>
-                      {% endif %}
-
-                    {% endif %}
-                      <td>
                         <form id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
                             <fieldset>
 

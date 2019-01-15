@@ -232,7 +232,6 @@
                     <th class="column-title">Rejected Date</th>
                     <th class="column-title">How Old</th>
                     <th class="column-title">Draft Level</th>
-                    <th class="column-title">Counselling Form</th>
                     <th class="column-title">Actions</th>
                     <th class="column-title">Submit Msg</th>
 
@@ -282,21 +281,25 @@
                       </td>
 
                       <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
-                      {% if obj.quizresponse.submitted %}
                       <td>
-                        <a href="{% url 'counselling-form' obj.pk %}" 
-                        style="color:green">
-                          Counselling Form Submited</a>
-                      </td>
+
+                            {% if obj.quizresponse.submitted %}
+                      <a href="{% url 'counselling-form' obj.pk %}"><button type="button" class="btn btn-success btn-xs">
+                        <i class="fa fa-check"></i>
+                          Counselling Form Submitted </button></a>
+
                       {% else %}
-                      <td>
-                        <a href="{% url 'counselling-form' obj.pk %}" 
-                        style="color:red">
-                          Submit Counselling Form
+
+                        <a href="{% url 'counselling-form' obj.pk %}">
+                            <button type="button" class="btn btn-warning btn-xs">
+                        <i class="fa fa-warning"></i>
+                                Submit Counselling Form</button>
                         </a>
-                      </td>
+
                       {% endif %}
-                      <td>
+                   <hr style=" margin-top: 4px; height:1px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
+
+
                       <a href="{% url 'console:change-draft' obj.oio_linkedin.pk %}" target="_blank"><button type="button" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i>Edit Linkedin Draft</button></a>
                       <hr style=" margin-top: 4px; height:1px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 
