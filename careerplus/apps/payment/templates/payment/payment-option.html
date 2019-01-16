@@ -235,7 +235,7 @@
                 
               </div>
               <div role="tabpanel" class="tab-pane other-payment" id="upi">
-                <article>For UPI, you will be redirected to a secure page where you can choose your bank, and make your payment.</article>
+                <article>For UPI, you will be redirected to a secure page where you can enter your UPI address, and complete your payment.</article>
                 <strong>Rs. {{total_amount}} <small>(amount payable)</small> </strong>
                   <div class="continue">
                   <a href="{% url "payment:ccavenue_request" cart_id 'upi' %}"><button type="button" class="make-payment">Make UPI Payment</button></a>
