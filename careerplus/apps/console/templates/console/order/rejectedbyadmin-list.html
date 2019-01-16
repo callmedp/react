@@ -287,14 +287,14 @@
 
                       <td><a href="{% url "console:queue-resume-download" %}?path={{obj.oi_draft.name}}&next={{ request.path }}" >
                         <button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> View Draft</button></a>
-                          <hr style=" margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
+                          <hr style="height:1px; margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 
                       <form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">{% csrf_token %}
                             {{draft_form.file}}
                             <div style="display:none">
                                 <input type="hidden" name="oi_pk" value="{{obj.pk}}">
                             </div>
-                          <button style="margin-top:5px;"  type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-primary btn-xs"><i class="fa fa-upload"> Upload Draft </i></button>
+                          <button style="margin-top:5px;"  type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-primary btn-xs"><i class="fa fa-upload"></i> Upload Draft </button>
                         </form>
                         <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="draftmodal{{obj.pk}}">
                             <div class="modal-dialog modal-lg">
@@ -316,7 +316,7 @@
                               </div>
                             </div>
                         </div>
-                                                    <hr style=" margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
+                                                    <hr style="height:1px; margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 
 
                         <form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="waiting-form{{obj.pk}}">{% csrf_token %}
@@ -340,10 +340,10 @@
 
                                 {% for field in message_form %}
                                     <div class="form-group"> 
-                                        <div class="col-md-8">
+                                        <div class="col-md-10">
                                             {{ field }}
                                             {% if field.help_text %}
-                                                <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                                <small style="margin-left:5px;">{{ field.help_text }}</small>
                                             {% endif %}
                                         </div>
                                     </div>

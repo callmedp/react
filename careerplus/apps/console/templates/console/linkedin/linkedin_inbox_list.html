@@ -342,15 +342,17 @@
 
                       <td>
                         <b>Updated On: {{obj.modified}}</b>
+                      </td>
+                        <td>
                         <form id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
                             <fieldset>
 
                                 {% for field in message_form %}
                                     <div class="form-group"> 
-                                        <div class="col-md-4">
+                                        <div class="col-md-10">
                                             {{ field }}
                                             {% if field.help_text %}
-                                                <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                                <small style="margin-left:5px;">{{ field.help_text }}</small>
                                             {% endif %}
                                         </div>
                                     </div>

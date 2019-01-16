@@ -272,7 +272,7 @@
                        {% if perms.order.can_view_extra_field_inbox %}
 
                              <td> {% if obj.oi_resume %}<a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> View Doc</button></a>{% endif %}
-                                 <hr style=" margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
+                                 <hr style="height:1px; margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
                             <form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">{% csrf_token %}
                                 {{draft_form.file}}
                                 <div style="display:none">
@@ -301,7 +301,7 @@
                                 </div>
                             </div>
 
-                     <hr style=" margin-top: 6px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
+                     <hr style="height:1px; margin-top: 6px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 
                             <form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="waiting-form{{obj.pk}}">{% csrf_token %}
                                 <div class="form-group">
@@ -324,10 +324,10 @@
 
                                     {% for field in message_form %}
                                         <div class="form-group"> 
-                                            <div class="col-md-8">
+                                            <div class="col-md-10">
                                                 {{ field }}
                                                 {% if field.help_text %}
-                                                    <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                                  <small style="margin-left:5px;">{{ field.help_text }}</small>
                                                 {% endif %}
                                             </div>
                                         </div>

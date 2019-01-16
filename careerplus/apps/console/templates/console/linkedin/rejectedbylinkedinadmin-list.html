@@ -300,7 +300,7 @@
                    <hr style=" margin-top: 4px; height:1px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 
 
-                      <a href="{% url 'console:change-draft' obj.oio_linkedin.pk %}" target="_blank"><button type="button" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i>Edit Linkedin Draft</button></a>
+                      <a href="{% url 'console:change-draft' obj.oio_linkedin.pk %}" target="_blank"><button type="button" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit Linkedin Draft</button></a>
                       <hr style=" margin-top: 4px; height:1px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 
                         <form role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="waiting-form{{obj.pk}}">{% csrf_token %}
@@ -322,10 +322,10 @@
 
                                 {% for field in message_form %}
                                     <div class="form-group"> 
-                                        <div class="col-md-4">
+                                        <div class="col-md-10">
                                             {{ field }}
                                             {% if field.help_text %}
-                                                <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                             <small style="margin-left:5px;">{{ field.help_text }}</small>
                                             {% endif %}
                                         </div>
                                     </div>

@@ -263,10 +263,10 @@
                                 <fieldset>
                                     {% for field in message_form %}
                                         <div class="form-group"> 
-                                            <div class="col-md-8">
+                                            <div class="col-md-10">
                                                 {{ field }}
                                                 {% if field.help_text %}
-                                                    <small class="pull-left">{{ field.help_text }}</small>
+                                                    <small style="margin-left:5px;">{{ field.help_text }}</small>
                                                 {% endif %}
                                             </div>
                                         </div>
