@@ -1,6 +1,6 @@
 {% extends "mobile/basic/base.html" %}
 {% load static compress%}
-{% load thumbnail compress %}
+{% load thumbnail shop_tags compress  %}
 
 {% block django_meta %}
     {% include 'meta/meta.html' %}
@@ -59,7 +59,7 @@
         <h1>All Contributors</h1>
 
       </div>
-      <img src="{% static 'shinelearn/images/mobile/common/author-img.jpg' %}" class="img-responsive">
+      <img src="{% static 'shinelearn/images/mobile/common/author-img-thumbnail.jpg' %}" class="img-responsive">
   </div><!-- Trending articles Ends here -->
 
   <!-- Starts of talent-economy list -->
@@ -70,7 +70,7 @@
   {% for author in authors %}
   <div class="box mb-20">
       <div class="author-item">
-        <span class="author-img"><img src="{{author.image.url}}" alt="{{author.image_alt}}"></span>
+        <span class="author-img"><img src="{{author.image.url| modify_url}}" alt="{{author.image_alt}}"></span>
         <div class="author-detail">
           <h2 class="mb-0 fs-16"><a href="{% url 'talent:authors-detail' author.slug %}" title="{{author.name}}">{{author.name}} </a><sup></sup></h2>
           <span class="spacer c-666">/</span> <span class="c-666 fs-12">{{author.designation}}</span>
@@ -122,6 +122,7 @@
             Article.init();
         });
     </script>
+    <script src = "{%static 'shinelearn/js/mobile/cms/lazy-loading.js'%}"></script>
 {% endblock js_section %}
 
 {% block johukum %}

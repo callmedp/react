@@ -1,5 +1,5 @@
 {% extends "basic/base.html" %}
-{% load static humanize thumbnail compress %}
+{% load static humanize thumbnail shop_tags  compress %}
     {% block django_meta %}
         {% include 'meta/meta.html' %}
         <meta property="og:image" content="{{main_article.image.url}}">
@@ -103,7 +103,7 @@
               {% if art.image %}
                     <figure class="media-left">
                       {% thumbnail art.image "98x64" crop="center" as im %}
-                            <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
+                            <img class="media-object" src="{{ im.url | modify_url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
                       {% endthumbnail %}
                       <!--img class="media-object" src="{{article.image.url}}" alt="Government Jobs" width="173" height="113"-->
                     </figure>
@@ -125,7 +125,7 @@
                 {% if art.image %}
                     <figure class="media-left">
                       {% thumbnail art.image "98x64" crop="center" as im %}
-                            <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
+                            <img class="media-object" src="{{ im.url | modify_url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{art.image_alt}}">
                       {% endthumbnail %}
                       <!--img class="media-object" src="{{article.image.url}}" alt="Government Jobs" width="173" height="113"-->
                     </figure>
@@ -317,7 +317,7 @@
     }
     showArticleOnScroll.scroll(); /* for calling infinite articles */
   </script>
-
+    <script src = "{%static 'shinelearn/js/mobile/cms/lazy-loading.js'%}"></script>
 {% endblock js_section %}
 
 {% block johukum %}

@@ -1,4 +1,6 @@
-import os, sys, django, re
+# python imports
+import os, sys, django, re, requests
+from io import BytesIO
 
 # Settings Import    # change it to settings_live while push  it to git
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings_live")
@@ -9,13 +11,62 @@ if ROOT_FOLDER not in sys.path:
 
 django.setup()
 
+# django imports
+from django.conf import settings
+from django.core.files.storage import default_storage
+
 # third party imports
 from PIL import Image
 
 # Global Constants
 IMAGE_EXTENSIONS = ('png', 'jpg', 'jpeg', 'PNG', 'JPG', 'JPEG',)
 
+# inter app imports
+from blog.models import Blog, Category, Author
+
+from core.library.gcloud.custom_cloud_storage import GCPMediaStorage, GCPPrivateMediaStorage
+
 if __name__ == "__main__":
+    modelList = []
+    for blog in Blog.objects.all():
+        modelList.append(blog)
+    for author in Author.objects.all():
+        modelList.append(author)
+    for category in Category.objects.all():
+        modelList.append(category)
+
+    for obj in modelList:
+        if settings.IS_GCP:
+
+            try:
+                img = GCPMediaStorage().open(obj.image.name, 'rb')
+            except Exception as e:
+                print(e)
+                continue
+            url = GCPMediaStorage().url(obj.image.name)
+            match = re.search(r'(.*)(.png?|.jpg?|.jpeg?|.PNG?|.JPG?|.JPEG?)$', obj.image.name)
+            if match:
+                thumbnail_path = '{}-thumbnail{}'.format(match.group(1), match.group(2))
+                temp_path = os.path.join(ROOT_FOLDER, 'careerplus', 'media', thumbnail_path)
+                try:
+                    dest = open(temp_path, 'wb')
+                except Exception as e:
+                    print(e)
+                    continue
+                for chunk in img.chunks():
+                    dest.write(chunk)
+                dest.close()
+                img.close()
+                temp_img = Image.open(temp_path)
+                temp_img.thumbnail((100, 100))
+                temp_img.save(temp_path)
+                temp_img = open(temp_path, 'rb')
+                upload_image = default_storage.open(thumbnail_path, 'wb')
+                for chunk in temp_img:
+                    upload_image.write(chunk)
+                upload_image.close()
+                temp_img.close()
+                os.remove(temp_path)
 
     for root, dirs, files in os.walk(ROOT_FOLDER):
         regex_text = '-thumbnail'
