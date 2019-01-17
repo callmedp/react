@@ -14,7 +14,7 @@ DATABASES = {
         'NAME': 'careerplus1',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': '',
+        'HOST': '172.22.65.33',
         'PORT': '',
     },
     'master': {
@@ -22,7 +22,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': '',
+        'HOST': '172.22.65.33',
         'PORT': '',
     },
     'slave': {
@@ -30,7 +30,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': '',
+        'HOST': '172.22.65.33',
         'PORT': '',
     },
     'oldDB': {
@@ -38,7 +38,7 @@ DATABASES = {
         'NAME': 'shinecp',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': '',
+        'HOST': '172.22.65.33',
         'PORT': '',
     },
 }
@@ -256,7 +256,7 @@ DEFAULT_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPMediaStorage
 GS_BUCKET_NAME = 'learning-media-staging-189607'
 
 PRIVATE_MEDIA_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPPrivateMediaStorage'
-GCP_PRIVATE_MEDIA_BUCKET = 'learning--misc-staging-189607'
+GCP_PRIVATE_MEDIA_BUCKET = 'learning-misc-staging-189607'
 
 COMPRESS_STORAGE = STATICFILES_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPStaticStorage'
 GS_PROJECT_ID = 'shine-staging-189607'
