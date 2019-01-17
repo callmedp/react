@@ -12,7 +12,8 @@ TASK_TYPE = (
     (2, 'Upload Certificate'),
     (3, 'Upload Candidate Certificate'),
     (4, 'Generate Product  List'),
-    (5, 'Encrypted URLs for Mailer')
+    (5, 'Encrypted URLs for Mailer'),
+    (6, 'Generate Compliance Report')
 )
 
 TASK_STATUS = (
@@ -51,7 +52,8 @@ class Scheduler(AbstractAutoDate):
         permissions = (
             ("can_generate_auto_login_token_task_scheduler", "Can Generate Autologin Token From Console"),
             ("can_view_completed_task_list_scheduler", "Can View All Completed Task List From Console"),
-            ("can_download_product_list", "Can Download Product List from Console")
+            ("can_download_product_list", "Can Download Product List from Console"),
+            ('can_generate_compliance_report','Can Download Compliance Report From Console'),
         )
 
     def __str__(self):

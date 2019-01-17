@@ -12,9 +12,9 @@ from django.utils import timezone
 from django.urls import reverse
 
 #local imports
-
 #inter app imports
 from shop.models import Product
+from order.models import OrderItem
 from scheduler.models import Scheduler
 from linkedin.autologin import AutoLogin
 from core.mixins import EncodeDecodeUserData
@@ -360,3 +360,88 @@ def gen_product_list_task(task=None, user=None, status=None, vendor=None, produc
         logging.getLogger('error_log').error(
             "%(msg)s : %(err)s" % {'msg': 'genrate product list task', 'err': str(e)})
     return f
+
+
+@task(name="generate_compliance_report")
+def generate_compliance_report(task_id=None,start_date=None,end_date=None):
+    f = False
+    up_task = None
+    try:
+        up_task = Scheduler.objects.get(pk=task_id)
+        if not start_date or not end_date:
+            up_task.status = 1
+            up_task.save()
+            return f
+
+        if up_task:
+            up_task.status = 3
+            up_task.save()
+            timestr = time.strftime("%Y_%m_%d")
+
+            oi_list = OrderItem.objects.filter(created__gte=start_date,created__lte=end_date,\
+                                             product__type_flow__in=[1,3,8,12,13])
+            total_rows = len(oi_list)
+
+            header_fields = [
+                'OrderID', 'CandidateEmail', 'ItemId', 'ItemCategory',
+                'ItemName', 'ItemLevel', 'AllocatedTo', 'ResumeUploadDate',
+                'AssignedDate','FirstDraftDate', 'TAT'
+            ]
+            count = 0
+            path = 'scheduler/' + timestr + '/'
+            file_name = str(
+                up_task.pk) + '_compliance_report_' + timestr + ".csv"
+            if not settings.IS_GCP:
+                upload_path = os.path.join(
+                    settings.MEDIA_ROOT + '/' + path)
+                if not os.path.exists(upload_path):
+                    os.makedirs(upload_path)
+                upload_path = upload_path + file_name
+                csvfile = open(upload_path, 'w', newline='')
+            else:
+                upload_path = path + file_name
+                csvfile = GCPPrivateMediaStorage().open(upload_path,'wb')
+            f = True
+            csvwriter = csv.DictWriter(
+                csvfile, delimiter=',', fieldnames=header_fields)
+            csvwriter.writeheader()
+
+            for orderitem in oi_list:
+                oi_row = {}
+                oi_row['OrderID'] = orderitem.order.id
+                oi_row['CandidateEmail'] = orderitem.order.email
+                oi_row['ItemId'] = orderitem.id
+                category_list = orderitem.product.categories.all().values_list('name',flat=True)
+                category_name = ", ".join(category_list) if category_list else None
+                oi_row['ItemCategory'] = category_name if category_name else "N.A"
+                oi_row['ItemName'] = orderitem.product.name
+                oi_row['ItemLevel'] = orderitem.product.get_exp_db() if orderitem.product.get_exp_db() else "N.A"
+                oi_row['AllocatedTo'] = orderitem.assigned_to
+                upload_date = orderitem.orderitemoperation_set.filter(oi_status=3,last_oi_status=2).first()
+                oi_row['ResumeUploadDate'] = ((upload_date.created).strftime('%m/%d/%Y %H:%M:%S')) if\
+                    upload_date and upload_date.created else "N.A"
+                oi_row['AssignedDate'] = (orderitem.assigned_date.strftime('%m/%d/%Y %H:%M:%S')) if\
+                    orderitem.assigned_date else "N.A"
+                oi_row['FirstDraftDate'] = ((orderitem.draft_added_on).strftime('%m/%d/%Y %H:%M:%S')) if \
+                    orderitem.draft_added_on else "N.A"
+                oi_row['TAT'] = ((orderitem.tat_date).strftime('%m/%d/%Y %H:%M:%S')) if \
+                    orderitem.tat_date else "N.A"
+                csvwriter.writerow(oi_row)
+                count = count + 1
+                if count % 20 == 0:
+                    up_task.percent_done = round(
+                        (count / float(total_rows)) * 100, 2)
+                    up_task.save()
+            up_task.percent_done = 100
+            up_task.status = 2
+            up_task.completed_on = timezone.now()
+            csvfile.close()
+            up_task.file_generated = upload_path
+            up_task.save()
+    except Exception as e:
+        up_task.status = 1
+        up_task.save()
+        logging.getLogger('error_log').error(
+            "%(msg)s : %(err)s" % {'msg': 'generate compliance list task', 'err': str(e)})
+    return f
+
