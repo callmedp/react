@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.conf import settings
 
 from . import views
 
@@ -23,4 +24,13 @@ urlpatterns = [
     url(r'^v1/recommended-products-by-category/$',
         views.RecommendedProductsCategoryView.as_view(),
         name='api-recommended-products-category'),
+    url(r'^v1/remove-cookie-from-header/$',
+        views.RemoveCookieFromHeader.as_view(),
+        name='remove-cookie-from-header')
 ]
+
+if settings.DEBUG:
+    urlpatterns += [
+        url(r'v1/cron/(?P<cron_id>\d+)/$', views.CronInitiateApiView.as_view(),
+            name='api-cron-inititate')
+    ]

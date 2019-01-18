@@ -268,9 +268,8 @@ class InvoiceGenerate(object):
     def generate_pdf(self, context_dict={}, template_src=None):
         if template_src:
             html_template = get_template(template_src)
-            context = Context(context_dict)
 
-            rendered_html = html_template.render(context).encode(encoding='UTF-8')
+            rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
 
             pdf_file = HTML(string=rendered_html).write_pdf()
             return pdf_file

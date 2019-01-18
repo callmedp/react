@@ -56,12 +56,13 @@ class CMSPageView(DetailView, LoadMoreMixin):
     def get_template_names(self):
         template_names = ["cms/" + settings.CMS_STATIC_TEMP_DICT.get(
                 self.object.id, 'cms_page.html')]
-        if self.request.amp:
+        if not self.request.amp:
+            return template_names
+        if not settings.DEBUG:
             from newrelic import agent
             agent.disable_browser_autorum()
-            return [x.split(".html")[0]+"-amp.html" for x in template_names]
+        return [x.split(".html")[0]+"-amp.html" for x in template_names]
         
-        return template_names
 
     def redirect_if_necessary(self, current_path, article):
         expected_path = article.get_absolute_url()

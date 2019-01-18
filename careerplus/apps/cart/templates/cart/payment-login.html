@@ -89,16 +89,17 @@
                     <div class="continue col-sm-6">
                       <button style="font-size:16px;" type="submit">Continue</button>
                     </div>
-                 {% if guest_login%}
-                <div class="continue col-sm-6">
-                 <button id="login_guests" style="background:#3f5f94; font-size:16px;" type="button">Guest Login</button>
+                     {% if guest_login%}
+                    <div class="continue col-sm-6">
+                     <a id="login_guests" style="cursor: pointer; line-height:50px;" type="button">Continue As Guest</a>
+                        </div>
+                    {% endif %}
+                    <div class="col-sm-12" style="padding: 0px;">
+                      <small style="display:block" class="form-text text-muted">
+                        <a href="javascript:void(0)" id="modalforgot">
+                        Forgot Password?</a>
+                      </small>
                     </div>
-                {% endif %}
-
-                    <small style="display:block" class="form-text text-muted">
-                      <a href="javascript:void(0)" id="modalforgot">
-                      Forgot Password?</a>
-                    </small>
                 {% else %}
                     <strong class="personal-details-heading col-sm-12">Enter your email id</strong>
                     <p id="non-field-error" class="error">{{non_field_error}}</p>

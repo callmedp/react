@@ -95,15 +95,17 @@
                       </li>
                       
                       <li class="form-group">
-                        <select class="form-control" id="selection" name="selection">
-                            <option selected="selected" value="3101">Data Scientist - Rs. 19,995/-</option>
-                          </select>
+                         {%for prd in products_lists %}
+							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >Fees - Rs. {{prd.pPinb}} /- </option>
+                              {%endfor%}
+                      </select>
                       </li>
                     </ul>
 
                     <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
 
-                  <input type="hidden" name="prd" value="Data Scientist - Rs. 19,995/-">
+                                   <input type="hidden" name="prd" value="Data Scientist - Rs. 19,995/-">
+
 
                   <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 
@@ -156,15 +158,17 @@
                     </li>
                     
                     <li class="form-group">
-                        <select class="form-control" id="selection" name="selection">
-                          <option selected="selected" value="3101">Data Scientist - Rs. 19,995/-</option>
-                        </select>
+                         {%for prd in products_lists %}
+							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >Fees - Rs. {{prd.pPinb}} /- </option>
+                              {%endfor%}
+                      </select>
                     </li>
                   </ul>
 
                   <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}3101{% endif %}">
 
-                  <input type="hidden" name="prd" value="Data Scientist - Rs. 19,995/-">
+                   <input type="hidden" name="prd" value="Data Scientist - Rs. 19,995/-">
+
 
                   <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
 

@@ -89,7 +89,7 @@ class RegistrationApiView(FormView):
         elif resp['response'] == 'exist_user':
             messages.add_message(
                 self.request, messages.ERROR,
-                "This user already exists", 'danger')
+                resp['non_field_errors'][0], 'danger')
             return HttpResponseRedirect(reverse('login'))
 
         elif not resp['response']:
