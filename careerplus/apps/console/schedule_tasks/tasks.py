@@ -15,6 +15,7 @@ from django.urls import reverse
 #inter app imports
 from shop.models import Product
 from order.models import OrderItem
+from order.functions import date_diff
 from scheduler.models import Scheduler
 from linkedin.autologin import AutoLogin
 from core.mixins import EncodeDecodeUserData
@@ -379,7 +380,7 @@ def generate_compliance_report(task_id=None,start_date=None,end_date=None):
             timestr = time.strftime("%Y_%m_%d")
 
             oi_list = OrderItem.objects.filter(created__gte=start_date,created__lte=end_date,\
-                                             product__type_flow__in=[1,3,8,12,13])
+                                             product__type_flow__in=[1,3,8,12,13],no_process=False)
             total_rows = len(oi_list)
 
             header_fields = [
@@ -408,24 +409,37 @@ def generate_compliance_report(task_id=None,start_date=None,end_date=None):
 
             for orderitem in oi_list:
                 oi_row = {}
-                oi_row['OrderID'] = orderitem.order.id
-                oi_row['CandidateEmail'] = orderitem.order.email
+                oi_filter_kwargs = {}
+                order_info = orderitem.order
+                oi_row['OrderID'] = order_info.id if order_info else 'NA'
+                oi_row['CandidateEmail'] = order_info.email if order_info else 'NA'
                 oi_row['ItemId'] = orderitem.id
-                category_list = orderitem.product.categories.all().values_list('name',flat=True)
+                orderitem_product=orderitem.product
+                category_list = orderitem_product.categories.all().values_list('name',flat=True)
                 category_name = ", ".join(category_list) if category_list else None
                 oi_row['ItemCategory'] = category_name if category_name else "N.A"
-                oi_row['ItemName'] = orderitem.product.name
-                oi_row['ItemLevel'] = orderitem.product.get_exp_db() if orderitem.product.get_exp_db() else "N.A"
+                oi_row['ItemName'] = orderitem_product.name
+                oi_row['ItemLevel'] = orderitem_product.get_exp_db() if orderitem_product.get_exp_db() else "N.A"
                 oi_row['AllocatedTo'] = orderitem.assigned_to
                 upload_date = orderitem.orderitemoperation_set.filter(oi_status=3,last_oi_status=2).first()
                 oi_row['ResumeUploadDate'] = ((upload_date.created).strftime('%m/%d/%Y %H:%M:%S')) if\
                     upload_date and upload_date.created else "N.A"
                 oi_row['AssignedDate'] = (orderitem.assigned_date.strftime('%m/%d/%Y %H:%M:%S')) if\
                     orderitem.assigned_date else "N.A"
-                oi_row['FirstDraftDate'] = ((orderitem.draft_added_on).strftime('%m/%d/%Y %H:%M:%S')) if \
-                    orderitem.draft_added_on else "N.A"
-                oi_row['TAT'] = ((orderitem.tat_date).strftime('%m/%d/%Y %H:%M:%S')) if \
-                    orderitem.tat_date else "N.A"
+
+                if orderitem_product.type_flow == 8:
+                    oi_filter_kwargs.update({'oi_status':'44','last_oi_status':'42'})
+                else:
+                    oi_filter_kwargs.update({'oi_status':'22','last_oi_status':'5'})
+
+                first_draft = orderitem.orderitemoperation_set.filter(**oi_filter_kwargs).first()
+
+                oi_row['FirstDraftDate'] = ((first_draft.created).strftime('%m/%d/%Y %H:%M:%S')) if \
+                    first_draft and first_draft.created else "N.A"
+
+                oi_row['TAT'] = date_diff(orderitem.assigned_date,first_draft.created) if \
+                    orderitem.assigned_date and first_draft and first_draft.created else "N.A"
+
                 csvwriter.writerow(oi_row)
                 count = count + 1
                 if count % 20 == 0:
