@@ -150,6 +150,13 @@
         {{block.super}}
         {% compress js %}
         <script src="{% static 'shinelearn/js/dashboard/dashboard.js' %}"></script>
+        
+        {% if ref_item_id and ref_rating %}
+          <script type="text/javascript">
+              giveFeedbackOrderitem('{{ref_item_id}}','rating{{ref_rating}}');
+          </script>
+        {% endif %}
+
         {% endcompress %}
     {% endblock js_section %}
 
