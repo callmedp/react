@@ -154,7 +154,7 @@
               <table class="table table-striped jambo_table bulk_action" id="inbox-table">
                 <thead>
                   <tr class="headings">
-                    <th class="column-title">#ItemId</th>
+
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Email</th>
@@ -162,9 +162,7 @@
                     <th class="column-title">Item Name</th>
                     <th class="column-title">MRP</th>
                     <th class="column-title">Product Id</th>
-                    <th class="column-title">Order Details</th>
-                    <th class="column-title">Initial Document</th>
-                    <th class="column-title">Upload verification Report</th>
+                    <th class="column-title">Actions</th>
                     <th class="column-title">Submit Msg</th>
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">How Old</th>
@@ -176,8 +174,10 @@
                   {% with obj.get_test_obj as test_obj %}
                     <tr class="even pointer">
                       
-                      <td>{{obj.pk}}</td>
-                      <td>{{obj.order.number}}</td>
+                      <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><b style="text-decoration: underline;">{{obj.order.number}}</b></a>
+                      </br>
+                          ({{obj.pk}})
+                      </td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
@@ -207,16 +207,16 @@
                           {{obj.product.id}}
                         {% endif %}
                       </td>
-                      
-                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order Details</button></a></td>
 
                        <td>
                            {% if obj.oi_draft %}
-                                <a target="_blank" href="{{obj.oi_draft.url}}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a>
-                           {% endif %}
-                        </td>
+                                <a target="_blank" href="{{obj.oi_draft.url}}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Initial Doc</button></a>
+                        <hr style=" margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 
-                        <td>
+                           {% endif %}
+
+
+
                             {% if obj.product.type_flow != 10 or test_obj %}
                             <form autocomplete="off" role="form" method="post" data-parsley-validate enctype="multipart/form-data" id="draft-upload-form{{obj.pk}}">{% csrf_token %}
                                 {{draft_form.file}}
@@ -224,7 +224,7 @@
                                     <input type="hidden" name="oi_pk" value="{{obj.pk}}">
                                     <input type="hidden" id="flow-id{{obj.pk}}" name="flow" value="{{obj.product.type_flow}}" />
                                 </div>
-                                <button type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Submit</button>
+                                <button style="margin-top:3px; type="button" onclick="clickSubmitDraft('{{obj.pk}}',)" class="btn btn-primary btn-xs"><i class="fa fa-upload"></i> VarificationReportUpload</button>
                             </form>
                             <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="draftmodal{{obj.pk}}">
                                 <div class="modal-dialog modal-lg">
@@ -255,10 +255,10 @@
 
                                     {% for field in message_form %}
                                         <div class="form-group"> 
-                                            <div class="col-md-8">
+                                            <div class="col-md-10">
                                                 {{ field }}
                                                 {% if field.help_text %}
-                                                    <p class="text-muted"><small>{{ field.help_text }}</small></p>
+                                                    <small style="margin-left:5px;">{{ field.help_text }}</small>
                                                 {% endif %}
                                             </div>
                                         </div>

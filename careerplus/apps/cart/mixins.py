@@ -286,7 +286,7 @@ class CartMixin(object):
                     product_class = sqs.pPc
                     name = sqs.pHd if sqs.pHd else sqs.pNm
                     vendor_name = sqs.pPvn
-                    price = Decimal(sqs.pPinb)
+                    price = round(Decimal(sqs.pPinb),2)
                     delivery_obj = m_prod.delivery_service
                     is_available = True
                     experience = sqs.pEX
@@ -311,7 +311,7 @@ class CartMixin(object):
                             if sqs_var.get('id') == var.product.id:
                                 var_id = var.id
                                 var_name = sqs_var.get('label')
-                                var_price = Decimal(sqs_var.get('inr_price'))
+                                var_price = round(Decimal(sqs_var.get('inr_price')),2)
                                 var_available = True if is_available else False
                                 var_exp = sqs_var.get('experience')
                                 var_delivery_obj = var.delivery_service
@@ -352,7 +352,7 @@ class CartMixin(object):
                             if sqs_addon.get('id') == addon.product.id:
                                 addon_id = addon.id
                                 addon_name = sqs_addon.get('label')
-                                addon_price = Decimal(sqs_addon.get('inr_price'))
+                                addon_price = round(Decimal(sqs_addon.get('inr_price')),2)
                                 addon_available = True if is_available else False
                                 addon_exp = sqs_addon.get('experience')
                                 addon_reference = addon.reference
@@ -400,7 +400,7 @@ class CartMixin(object):
                     logging.getLogger('error_log').error("Unable to add item on cart %s " % str(e))
                     m_prod.delete()
 
-        return {"cart_items": cart_items, "total_amount": int(round(total_amount))}
+        return {"cart_items": cart_items, "total_amount": round(total_amount,2)}
 
     def getTotalAmount(self, cart_obj=None):
         total = Decimal(0)

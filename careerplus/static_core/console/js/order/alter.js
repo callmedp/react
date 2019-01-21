@@ -2,7 +2,6 @@ var emailtemp;
 var mobitemp;
 function alt_email_update(email_id,order_id)
 {
-console.log("ia m in altemail call")
 emailtemp=email_id;
 document.getElementById('id_alt_email').value=email_id ;
 document.getElementById("order_id").value=order_id ;
@@ -84,7 +83,6 @@ function numb_alt_update(){
 //
 $('#alteremail').submit(function(event){
  event.preventDefault();
- console.log("i am in alter")
 
  email_alt_update();
 });

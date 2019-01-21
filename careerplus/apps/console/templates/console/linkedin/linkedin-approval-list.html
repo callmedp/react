@@ -223,22 +223,17 @@
                             <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
                         </th>
                     {% endif %}
-                    <th class="column-title">#Id</th>
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Delivery Type</th>
-                    <th class="column-title">User Category</th>
                     <th class="column-title">Expert Name</th>
                     <th class="column-title">Draft Submitted On</th>
                     <th class="column-title">How Old</th>
                     <th class="column-title">Draft Level</th>
-                    <th class="column-title">View Counselling Form</th>
-                    <th class="column-title">Draft</th>
-                    <th class="column-title">Review Order</th>
-                    <th class="column-title">Approve / Reject Draft</th>
+                    <th class="column-title">Actions</th>
                   </tr>
                 </thead>
 
@@ -250,8 +245,12 @@
                               <input type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
                             </td>
                       {% endif %}
-                      <td>{{obj.pk}}</td>
-                      <td>{{obj.order.number}}</td>
+
+                         <td>
+                             <a target="_blank" href="{% url 'console:linkedin-order-detail' obj.order.id %}"><b style="text-decoration: underline;">{{obj.order.number}}</b></a>
+                             </br>
+                             ({{obj.pk}})
+                      </td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
@@ -274,7 +273,6 @@
                           {% endif %}
                       </td>
                       <td>{% if obj.delivery_service %}{{obj.delivery_service.name}}{% endif %}</td>
-                      <td>User Category</td>
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
                       <td>{{obj.draft_added_on}}</td>
                       <td>
@@ -283,18 +281,16 @@
                       </td>
                       <td>Draft Level {% if obj.draft_counter == max_limit_draft %}Final{% else %}{{obj.draft_counter}}{% endif %}</td>
                       {% if obj.quizresponse.submitted %}
-                      <td><a href="{% url 'console:counselling-list' obj.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Counselling Form</button></a></td>
+                      <td><a href="{% url 'console:counselling-list' obj.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i>View Counselling Form</button></a>
+                     <hr style=" margin-top: 4px; height:1px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
                       {% endif %}
-                      <td><a href="{% url 'console-linkedin-draft' obj.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>
-                      <td><a target="_blank" href="{% url "console:linkedin-order-detail" obj.order.id %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review order</button></a></td>
+                      <a href="{% url 'console-linkedin-draft' obj.pk %}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i>View Draft</button></a>
+                                             <hr style=" margin-top: 4px; height:1px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 
-                      <td>
                           <form role="form" method="post" id="accept-reject-form{{obj.id}}">{% csrf_token %}
                           <input type="hidden" name="oi_pk" id="oi_id" value="{{obj.pk}}">
-                          <center>
-                            <button type="button" onclick="clickApproveDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Approve Draft</button>Or
-                            <button type="button" onclick="clickRejectDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Reject Draft</button>
-                          </center>
+                            <button type="button" onclick="clickApproveDraft('{{obj.pk}}',)" class="btn btn-success btn-xs"><i class="fa fa-check"></i>Approve Draft</button>Or
+                            <button type="button" onclick="clickRejectDraft('{{obj.pk}}',)" class="btn btn-danger btn-xs"><i class="fa fa-times"></i>Reject Draft</button>
                           </form>
 
                           <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="approvemodal{{obj.pk}}">

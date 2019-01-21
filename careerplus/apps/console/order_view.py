@@ -6,6 +6,7 @@ import mimetypes
 import textwrap
 
 from io import StringIO
+from dateutil import relativedelta
 from wsgiref.util import FileWrapper
 from django.contrib.contenttypes.models import ContentType
 from django.views.generic import (
@@ -22,6 +23,7 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidde
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
+from django.shortcuts import render
 
 from geolocation.models import Country
 from order.models import Order, OrderItem, InternationalProfileCredential, OrderItemOperation
@@ -34,9 +36,12 @@ from core.mixins import TokenExpiry
 from payment.models import PaymentTxn
 from linkedin.autologin import AutoLogin
 from order.functions import send_email, date_timezone_convert
+from .schedule_tasks.tasks import generate_compliance_report
+from scheduler.models import Scheduler
 
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from review.models import Review
+
 
 from .decorators import (
     Decorate,
@@ -2799,6 +2804,73 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         for key,value in query_filters_exclude.items():
             queryset=queryset.exclude(**{key:value})
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
+
+@method_decorator(permission_required('order.can_generate_compliance_report', login_url='/console/login/'), name='dispatch')
+class ComplianceReport(TemplateView):
+    model = OrderItem
+    template_name = 'console/order/compliance_report.html'
+
+
+
+    def post(self,request,*args,**kwargs):
+        start_date = request.POST.get('start_date', None)
+        end_date = request.POST.get('end_date', None)
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        if not start_date or not end_date:
+            messages.add_message(
+                request, messages.ERROR,
+                'Please select the both the date')
+            return render(request, self.template_name)
+        today = timezone.now()
+        start = start_date.split('/')
+        end = end_date.split('/')
+        if len(start) != 3 or len(end) != 3 :
+            messages.add_message(
+                request, messages.ERROR,
+                'Something went wrong')
+            return render(request, self.template_name)
+        start_date = datetime.datetime(int(start[2]),int(start[0]),int(start[1]),0,0,0,0,\
+                                     tzinfo=today.tzinfo)
+        end_date = datetime.datetime(int(end[2]), int(end[0]), int(end[1]),11, 59, 59, 0,\
+                                     tzinfo=today.tzinfo)
+
+        if start_date > end_date:
+             messages.add_message(
+                request, messages.ERROR,
+                'Please select the correct dates,end date should be greater than start date')
+             return render(request, self.template_name)
+
+        reporting_limit = relativedelta.relativedelta(end_date,start_date)
+        if reporting_limit.years or reporting_limit.months > 4:
+            messages.add_message(
+                request, messages.ERROR,
+                'Please select the dates ranging within 3 months')
+            return render(request, self.template_name)
+
+        start_date = date_timezone_convert(start_date)
+        end_date = date_timezone_convert(end_date)
+
+        Task = Scheduler.objects.create(
+            task_type=6,
+            created_by=request.user,
+        )
+        generate_compliance_report.delay(
+            task_id=Task.pk,
+            start_date=start_date,
+            end_date=end_date)
+        messages.add_message(
+            request, messages.SUCCESS,
+            'Task Created SuccessFully, Compliance Report is generating')
+        return HttpResponseRedirect(reverse('console:tasks:tasklist'))
+
+
+    def get_context_data(self, **kwargs):
+        context = super(self.__class__, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert})
+        return context
+
 
 
 
