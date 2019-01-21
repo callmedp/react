@@ -11,7 +11,9 @@ from core.api_mixin import CrmApiMixin
 from shine.core import ShineCandidateDetail
 from .models import UserQuries
 from .models import UNIVERSITY_LEAD_SOURCE
-
+from crmapi.config import (
+    EXPERIENCE_IN_YEARS_MODEL_CHOICES, SALARY_IN_LAKH_MODEL_CHOICES
+)
 
 @task(name="post_psedu_lead")
 def post_psedu_lead(query_dict):
@@ -134,9 +136,15 @@ def create_lead_crm(pk=None, validate=False):
                 if candidate_response:
                     if 'total_experience' in candidate_response and candidate_response['total_experience']:
                         total_experience = candidate_response['total_experience'][0].get('experience_in_years', 0)
+                        total_experience = int(dict(EXPERIENCE_IN_YEARS_MODEL_CHOICES).get(total_experience).replace('>','').replace('Yr','').replace('s', ''))
 
                     if candidate_response['workex']:
                         total_salary = candidate_response['workex'][0].get('salary_in_lakh', 0)
+                        total_salary = dict(SALARY_IN_LAKH_MODEL_CHOICES).get(total_salary)
+                        if isinstance(total_salary, int):
+                            total_salary = total_salary
+                        elif isinstance(total_salary, str):
+                            total_salary = 55
 
                     if total_experience < 4 or total_salary < 4:
                         return flag
