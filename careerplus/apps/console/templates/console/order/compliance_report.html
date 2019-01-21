@@ -39,18 +39,18 @@
                             {% csrf_token %}
                             <div class="col-sm-3 col-md-4">
                                 <div class="form-group">
-                                    <label>For Date</label>
-                                    <div class='input-group' >
-                                        <input class="form-control datepicker" id='start_date' name="start_date" placeholder="From Date" />
+                                    <label>From Date</label>
+                                    <div class='input-group'>
+                                        <input class="form-control datepicker" id='start_date' name="start_date" placeholder="From Date"/>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-sm-3 col-md-4">
                                 <div class="form-group">
-                                    <label>For Date</label>
+                                    <label>To Date</label>
                                     <div class='input-group' id='enddate'>
-                                        <input class="form-control datepicker" id='end_date' name="end_date" placeholder="To Date" />
+                                        <input class="form-control datepicker" id='end_date' name="end_date" placeholder="To Date"/>
                                     </div>
                                 </div>
                             </div>
@@ -76,7 +76,12 @@
 {{ block.super }}
 <script type="text/javascript" src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>
 <script type="text/javascript">
-	$('#start_date').datepicker();
-	$('#end_date').datepicker();
+
+	$('#start_date').datepicker({
+    autoclose: true});
+	$('#end_date').datepicker({
+autoclose: true} );
+
+
 </script>
 {% endblock js_block %}

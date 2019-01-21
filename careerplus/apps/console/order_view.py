@@ -6,6 +6,7 @@ import mimetypes
 import textwrap
 
 from io import StringIO
+from dateutil import relativedelta
 from wsgiref.util import FileWrapper
 from django.contrib.contenttypes.models import ContentType
 from django.views.generic import (
@@ -40,6 +41,7 @@ from scheduler.models import Scheduler
 
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from review.models import Review
+
 
 from .decorators import (
     Decorate,
@@ -2819,10 +2821,10 @@ class ComplianceReport(TemplateView):
                 request, messages.ERROR,
                 'Please select the both the date')
             return render(request, self.template_name)
-        today=timezone.now()
-        start=start_date.split('/')
-        end=end_date.split('/')
-        if len(start) != 3 or len(end) !=3 :
+        today = timezone.now()
+        start = start_date.split('/')
+        end = end_date.split('/')
+        if len(start) != 3 or len(end) != 3 :
             messages.add_message(
                 request, messages.ERROR,
                 'Something went wrong')
@@ -2833,6 +2835,14 @@ class ComplianceReport(TemplateView):
                                      tzinfo=today.tzinfo)
         start_date = date_timezone_convert(start_date)
         end_date = date_timezone_convert(end_date)
+
+        reporting_limit = relativedelta.relativedelta(end_date,start_date)
+        if reporting_limit.years or reporting_limit.months > 4:
+            messages.add_message(
+                request, messages.ERROR,
+                'Please select the dates ranging within 3 months')
+            return render(request, self.template_name)
+
 
 
         Task = Scheduler.objects.create(
