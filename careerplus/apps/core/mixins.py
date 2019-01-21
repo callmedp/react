@@ -68,9 +68,9 @@ class TokenGeneration(object):
 class EncodeDecodeUserData(object):
 
     def encode(self, email, name, contact):
-        inp_str = '{salt}|{email}|{name}|{contact}'.format(\
+        inp_str = '{salt}|{email}|{name}|{contact}|{dt}'.format(\
                 **{'salt': settings.ENCODE_SALT, 'email': email, \
-                'name': name, 'contact': contact})
+                'name': name, 'contact': contact,'dt':timezone.now()})
 
         ciph = XOR.new(settings.ENCODE_SALT)
         token = base64.urlsafe_b64encode(ciph.encrypt(inp_str))
