@@ -2833,8 +2833,12 @@ class ComplianceReport(TemplateView):
                                      tzinfo=today.tzinfo)
         end_date = datetime.datetime(int(end[2]), int(end[0]), int(end[1]),11, 59, 59, 0,\
                                      tzinfo=today.tzinfo)
-        start_date = date_timezone_convert(start_date)
-        end_date = date_timezone_convert(end_date)
+
+        if start_date > end_date:
+             messages.add_message(
+                request, messages.ERROR,
+                'Please select the correct dates,end date should be greater than start date')
+             return render(request, self.template_name)
 
         reporting_limit = relativedelta.relativedelta(end_date,start_date)
         if reporting_limit.years or reporting_limit.months > 4:
@@ -2843,7 +2847,8 @@ class ComplianceReport(TemplateView):
                 'Please select the dates ranging within 3 months')
             return render(request, self.template_name)
 
-
+        start_date = date_timezone_convert(start_date)
+        end_date = date_timezone_convert(end_date)
 
         Task = Scheduler.objects.create(
             task_type=6,
