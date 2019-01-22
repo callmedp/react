@@ -14,6 +14,11 @@
 {% endblock css_section %}
 
 {% block header %}
+    {% if ref_item_id and ref_rating %}
+      <script type="text/javascript">
+          window.location = window.location.href.split("/")[0] + "/dashboard/itemfeedback/?oi={{ref_item_id}}&rating={{ref_rating}}";
+      </script>
+    {% endif %}
     <header class="w100fl he-auto">
         
         <!-- header menu Icon Starts here -->

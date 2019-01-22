@@ -39,7 +39,6 @@ function viewCommentOrderitem(oi_pk, ) {
 function giveFeedbackOrderitem(oi_pk,rating) {
 
     if (oi_pk){
-        console.log(oi_pk);
         $.ajax({
             url: '/dashboard/inbox-feedback/',
             type: "GET",
@@ -50,6 +49,9 @@ function giveFeedbackOrderitem(oi_pk,rating) {
                 window.scrollTo(0, 0);
             },
             error: function(xhr, ajaxOptions, thrownError) {
+                if (xhr.status == 400){
+                    return;
+                }
                 alert("Something went wrong, try after sometimes.");
             }
         });
@@ -414,7 +416,7 @@ $(document).ready(function(){
                 dataType: 'json',
                 success: function(json) {
                     alert(json.display_message);
-                    window.location.reload();
+                    window.location = window.location.href.split('?')[0];
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     alert("Something went wrong, try again later");

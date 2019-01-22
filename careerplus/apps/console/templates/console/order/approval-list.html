@@ -224,23 +224,17 @@
                             <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
                         </th>
                     {% endif %}
-                    <th class="column-title">#Id</th>
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Delivery Type</th>
-                    <th class="column-title">User Category</th>
                     <th class="column-title">Expert Name</th>
                     <th class="column-title">Draft Submitted On</th>
                     <th class="column-title">How Old</th>
                     <th class="column-title">Draft Level</th>
-                    <th class="column-title">Draft</th>
-                    <th class="column-title">Review Order</th>
-                    {% if perms.order.can_approve_or_reject_draft %}
-                    <th class="column-title">Approve / Reject Draft</th>
-                    {% endif %}
+                    <th class="column-title">Actions</th>
                   </tr>
                 </thead>
 
@@ -252,8 +246,10 @@
                               <input autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
                             </td>
                       {% endif %}
-                      <td>{{obj.pk}}</td>
-                      <td>{{obj.order.number}}</td>
+                      <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><b style="text-decoration: underline;">{{obj.order.number}}</b></a>
+                                      </br>
+                                          ({{obj.pk}})
+                                      </td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
@@ -277,7 +273,6 @@
                       </td>
                 
                       <td>{% if obj.delivery_service %}{{obj.delivery_service.name}}{% endif %}</td>
-                      <td>User Category</td>
                       <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
                       <td>{{obj.draft_added_on}}</td>
                       <td>
@@ -285,16 +280,16 @@
                           <b>Updated On: {{obj.modified}}</b>
                       </td>
                       <td>Draft Level {% if obj.draft_counter|add:"1" == max_limit_draft %}Final{% else %}{{obj.draft_counter|add:"1"}} {% endif %}</td>
-                      <td><a href="{% url "console:queue-resume-download" %}?path={{obj.oi_draft.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>View Draft</button></a></td>
-                      <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Review order</button></a></td>
-
-                      {% if perms.order.can_approve_or_reject_draft %}
                       <td>
-                          <form autocomplete="off" role="form" method="post" id="accept-reject-form{{obj.id}}">{% csrf_token %}
+
+                          <a href="{% url "console:queue-resume-download" %}?path={{obj.oi_draft.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> View Draft</button></a>
+                          {% if perms.order.can_approve_or_reject_draft %}
+                        <hr style=" margin-top: 6px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
+                         <form autocomplete="off" role="form" method="post" id="accept-reject-form{{obj.id}}">{% csrf_token %}
                           <input type="hidden" name="oi_pk" id="oi_id" value="{{obj.pk}}">
                           <center>
-                            <button type="button" onclick="clickApproveDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Approve Draft</button>Or
-                            <button type="button" onclick="clickRejectDraft('{{obj.pk}}',)" class="btn btn-success btn-xs">Reject Draft</button>
+                            <button type="button" onclick="clickApproveDraft('{{obj.pk}}',)" class="btn btn-primary btn-xs"><i class="fa fa-check"> Approve Draft</i> </button>Or
+                              <button type="button" onclick="clickRejectDraft('{{obj.pk}}',)" class="btn btn-danger btn-xs"><i class="fa fa-times"> Reject Draft </i> </button>
                           </center>
                           </form>
 
@@ -339,9 +334,11 @@
                                   </div>
                                 </div>
                             </div>
-                        
-                        </td>
                         {% endif %}
+
+
+                      </td>
+
                     </tr>
                   {% endfor %}
                 </tbody>

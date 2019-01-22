@@ -129,9 +129,7 @@ class LeadManagement(View):
                 sub_campaign_slug=sub_campaign_slug
             )
             created = True
-            valid_source_list = [4, 23, UNIVERSITY_LEAD_SOURCE]
-            if lead.lead_source in valid_source_list:
-                create_lead_crm.delay(pk=lead.pk)
+            create_lead_crm.delay(pk=lead.pk, validate=True)
         except Exception as e:
             logging.getLogger('error_log').error('lead creation is failed%s'%str(e))
 
@@ -225,10 +223,7 @@ class LeadManagementWithCaptcha(View, ReCaptchaMixin):
             )
 
             created = True
-
-            valid_source_list = [4]
-            if lead.lead_source in valid_source_list:
-                create_lead_crm.delay(pk=lead.pk)
+            create_lead_crm.delay(pk=lead.pk, validate=True)
             response_dict = json.dumps({'status': created, 'recaptcha': True})
             response = HttpResponse(response_dict)
             return response

@@ -615,11 +615,12 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     def get_template_names(self):
         if self.product_obj.type_flow==14:
             return['shop/university.html']
-        if self.request.amp:
+        if not self.request.amp:
+            return ['shop/detail1.html']
+        if not settings.DEBUG:
             from newrelic import agent
             agent.disable_browser_autorum()
-            return ['shop/detail-amp.html']
-        return ['shop/detail1.html']
+        return ['shop/detail-amp.html']
 
     def get_context_data(self, **kwargs):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)

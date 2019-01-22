@@ -105,7 +105,7 @@
            <select id="selection" name="selection" aria-invalid="false" class="register-bx-sec-cod pull-left">
                <!--<option selected="selected" value="5133">GST Certification Program – 10593</option>-->
                   {%for prd in products_lists %}
-							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >{{prd.pTt}} </option>
+							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >Fees- Rs. {{prd.pPinb}} </option>
                               {%endfor%}
             </select>
             <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% else %}1884{% endif %}">

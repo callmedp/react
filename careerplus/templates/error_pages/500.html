@@ -60,6 +60,22 @@
 
 </section> 
 {% endblock container %}
+{% block js_section %}
+    {{block.super}}
+
+    <script type="text/javascript">
+      cookie_removal_counter = localStorage.getItem('cookie_removal_counter')
+      if(!cookie_removal_counter) {
+        $.get('/api/v1/remove-cookie-from-header/', function(){
+            setTimeout(function(){
+              window.location.reload()
+            }, 2000)
+            localStorage.setItem('cookie_removal_counter',1)
+          });
+      }
+      
+    </script>
+{% endblock js_section %}
 
 {% block johukum %}
 {% endblock johukum %}

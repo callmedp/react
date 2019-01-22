@@ -479,11 +479,12 @@ class TEBlogDetailView(DetailView, BlogMixin):
         return obj
 
     def get_template_names(self):
-        if self.request.amp:
+        if not self.request.amp:
+            return ["talenteconomy/article-detail.html"]
+        if not settings.DEBUG:
             from newrelic import agent
             agent.disable_browser_autorum()
-            return ["talenteconomy/article-detail-amp.html"]
-        return ["talenteconomy/article-detail.html"]
+        return ["talenteconomy/article-detail-amp.html"]
 
 #    def redirect_if_necessary(self, current_path, article):
 #        expected_path = article.get_absolute_url()
@@ -676,11 +677,12 @@ class AuthorDetailView(DetailView):
     model = Author
 
     def get_template_names(self):
-        if self.request.amp:
+        if not self.request.amp:
+            return ["talenteconomy/author-detail.html"]
+        if not settings.DEBUG:
             from newrelic import agent
             agent.disable_browser_autorum()
-            return ["talenteconomy/author-detail-amp.html"]
-        return ["talenteconomy/author-detail.html"]
+        return ["talenteconomy/author-detail-amp.html"]
 
     def get(self, request, *args, **kwargs):
         context = super(self.__class__, self).get(request, args, **kwargs)

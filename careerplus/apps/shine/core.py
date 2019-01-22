@@ -141,7 +141,7 @@ class ShineCandidateDetail(ShineToken):
                 status_url = "{}/api/v2/candidate/{}/status/?format=json".format(settings.SHINE_SITE, shine_id)
                 status_response = requests.get(status_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
                 try:
-                    logging.getLogger('error_log').error(
+                    logging.getLogger('info_log').info(
                     'Response Received from shine for shine candidate status: {}'.format(status_response.__dict__))
                 except Exception as e:
                     logging.getLogger('error_log').error(str(e))
@@ -156,7 +156,7 @@ class ShineCandidateDetail(ShineToken):
                         shine_id + "/status/?format=json"
                     status_response = requests.get(status_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
                     try:
-                        logging.getLogger('error_log').error(
+                        logging.getLogger('info_log').info(
                             'Response Received from shine for shine candidate status: {}'.format(
                                 status_response.__dict__))
                     except Exception as e:

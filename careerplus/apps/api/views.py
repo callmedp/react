@@ -698,3 +698,39 @@ class RecommendedProductsCategoryView(APIView):
         return Response(
             res.json(),
             status=status.HTTP_200_OK)
+
+
+from .tasks import cron_initiate
+from .config import CRON_TO_ID_MAPPING
+
+
+class CronInitiateApiView(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def get(self, request, *args, **kwargs):
+        self.cron_id = self.kwargs.get('cron_id')
+        if self.cron_id and int(self.cron_id) in CRON_TO_ID_MAPPING.keys():
+            cron_initiate.delay(self.cron_id)
+            return Response({
+                "status": "SUCCESS",
+                "msg": "Taks has been added, will notify you on your email after completion"},
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response({
+                "status": "FAIL",
+                "msg": 'Invalid cron id'},
+                status=status.HTTP_400_BAD_REQUEST)
+
+
+class RemoveCookieFromHeader(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def get(self, request, *args, **kwargs):
+        from django.http.response import HttpResponse
+        response = HttpResponse()
+        response.remove_cookie = True
+
+        return response

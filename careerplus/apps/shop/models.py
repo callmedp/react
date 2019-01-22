@@ -12,6 +12,8 @@ from django.core.cache import cache
 
 from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericRelation
+
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models.signals import post_save
@@ -23,6 +25,7 @@ from mongoengine import Document, ListField, FloatField,\
     StringField, IntField, DateTimeField
 
 from partner.models import Vendor
+from review.models import Review
 from faq.models import (
     FAQuestion, ScreenFAQ)
 from geolocation.models import Country, Currency, CURRENCY_EXCHANGE
@@ -160,7 +163,6 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     def __str__(self):
 
         return self.name + '(' + self.get_level + ')'
-
     @property
     def get_level(self):
         return dict(CATEGORY_CHOICES).get(self.type_level)
@@ -179,8 +181,8 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
                 if not self.meta_desc:
                     self.meta_desc = self.get_meta_desc(self.description.strip())
 
-            unique_key = 'cat_absolute_url_' + str(self.pk)
-            cache.delete(unique_key)
+            # unique_key = 'cat_absolute_url_' + str(self.pk)
+            # cache.delete(unique_key)
                 
         super(Category, self).save(*args, **kwargs)
 
@@ -396,6 +398,23 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
 
     def get_canonical_url(self):
         return self.get_absolute_url()
+
+
+    @classmethod
+    def post_save_category(cls, sender, instance, **kwargs):
+        delete_keys = cache.keys('prd_*_' + str(instance.pk))
+        for uk in delete_keys:
+            cache.delete(uk)
+        prods_list = instance.categoryproducts.all().values_list('product__id', flat=True)
+        for prod in prods_list:
+            cache.delete("product_{}_absolute_url".format(prod))
+            cache.delete("context_product_detail_" + str(prod))
+            cache.delete("detail_db_product_" + str(prod))
+            cache.delete("detail_solr_product_" + str(prod))
+            cache.delete("category_main_" + str(prod))
+        cache.delete('cat_absolute_url_' + str(instance.pk))
+
+post_save.connect(Category.post_save_category, sender=Category)
 
 
 class SubHeaderCategory(AbstractAutoDate):
@@ -980,6 +999,7 @@ class Product(AbstractProduct, ModelMeta):
     cp_page_view = models.IntegerField(
         _('CP Page View'), default=0)
     active = models.BooleanField(default=False)
+    reviews = GenericRelation(Review, related_query_name='reviews')
     is_indexable = models.BooleanField(default=False)
     is_indexed = models.BooleanField(default=False)
     objects = ProductManager()
@@ -1029,29 +1049,31 @@ class Product(AbstractProduct, ModelMeta):
 
 
     def save(self, *args, **kwargs):
+        # deleting caches for absolute urls,solar data and product object
         if self.pk:
+
+            delete_keys = cache.keys('prd_*_' + str(self.pk))
+            for uk in delete_keys:
+                cache.delete(uk)
             if self.name:
                 if not self.heading:
-                    self.heading = self.get_heading()
+                    self.heading = self.get_heading(no_cache=True)
                 if not self.image_alt:
                     self.image_alt = self.name
                 if not self.meta_desc:
-                    self.meta_desc = self.get_meta_desc()
+                    self.meta_desc = self.get_meta_desc(no_cache=True)
             if self.type_product == 1:
                 variations = self.variation.all().exclude(
                     vendor=self.vendor)
                 for var in variations:
                     var.vendor = self.vendor
                     var.save()
-            self.title = self.get_title()
+            self.title = self.get_title(no_cache=True)
         self.first_save = True
         if self.id:
             original_product = Product.objects.get(id=self.id)
             self.initialize_variables(original_product)
             self.first_save = False
-            delete_keys = cache.keys('prd_*_' + str(self.pk))
-            for uk in delete_keys:
-                cache.delete(uk)
         super(Product, self).save(*args, **kwargs)
         if getattr(self, 'attr', None):
             self.attr.save()
@@ -1084,6 +1106,17 @@ class Product(AbstractProduct, ModelMeta):
                 data = prod_cat[0]
         cache.set(cache_key, data, 7*24*60*60)
         return data
+
+
+    def get_category_main(self,no_cache=False):
+        cache_key = "category_main_" + str(self.pk)
+        cached_data = cache.get(cache_key)
+        if cached_data and not no_cache:
+            return cached_data
+        return self.category_main
+
+
+
 
     def category_attached(self):
         main_prod_cat = self.categories.filter(
@@ -1127,45 +1160,45 @@ class Product(AbstractProduct, ModelMeta):
         # display name
         return self.heading if self.heading else self.name
 
-    def get_heading(self):
+    def get_heading(self,no_cache=False):
         if self.is_course:
             return '%s ' % (
                 self.name,
             )
         elif self.is_service or self.is_writing:
-            if self.category_main:
+            if self.get_category_main(no_cache):
                 return '%s for %s' % (
-                    self.category_main.name,
+                    self.get_category_main(no_cache).name,
                     EXP_DICT.get(self.get_exp(), ''),
                 )
 
         return self.name
 
-    def get_title(self):
+    def get_title(self,no_cache=False):
         if self.is_course:
             return '%s (INR %s) - Shine Learning' % (
                 self.heading,
                 str(round(self.inr_price, 0)),
             )
         elif self.is_service or self.is_writing:
-            if self.category_main:
+            if self.get_category_main(no_cache):
                 return '%s for %s - Online Services - Shine Learning' % (
-                    self.category_main.name,
+                    self.get_category_main(no_cache).name,
                     EXP_DICT.get(self.get_exp(), ''),
                 )
         return ''
 
-    def get_meta_desc(self):
+    def get_meta_desc(self,no_cache=False):
         if self.is_course:
             return '%s - Get Online Access, Supports from Experts, Study Materials, Course Module, Fee Structure and other details at Shine Learning' % (
                 self.heading,
             )
         elif self.is_service or self.is_writing:
-            if self.category_main:
+            if self.get_category_main(no_cache):
                 return 'Online %s Services for %s. Get expert advice & tips for %s at Shine Learning' % (
-                    self.category_main.name,
+                    self.get_category_main(no_cache).name,
                     EXP_DICT.get(self.get_exp(), ''),
-                    self.category_main.name,)
+                    self.get_category_main(no_cache).name,)
         return ''
 
     def get_icon_url(self, relative=False):
@@ -1181,15 +1214,15 @@ class Product(AbstractProduct, ModelMeta):
     def get_url(self, relative=False):
         return self.get_full_url(self.get_absolute_url()) if not relative else self.get_absolute_url()
 
-    def get_absolute_url(self, prd_slug=None, cat_slug=None):
+    def get_absolute_url(self, prd_slug=None, cat_slug=None,no_cache=False):
         cache_key = "product_{}_absolute_url".format(self.id)
         cached_value = cache.get(cache_key)
-        if cached_value:
+        if cached_value and not no_cache:
             return cached_value
 
         url_to_return = None
         if not cat_slug:
-            cat_slug = self.category_main
+            cat_slug = self.get_category_main(no_cache)
             if cat_slug:
                 cat_slug1 = cat_slug.get_parent()
                 cat_slug = cat_slug1[0] if cat_slug1 else None
@@ -1241,18 +1274,18 @@ class Product(AbstractProduct, ModelMeta):
         return final_score
 
     def get_avg_ratings(self):
-        AR = float(self.avg_rating)
-        if 0.0 <= AR <= 0.5:
+        avg = float(self.avg_rating)
+        if 0.0 <= avg <= 0.5:
             return 0
-        elif 0.5 < AR <= 1.5:
+        elif 0.5 < avg <= 1.5:
             return 1
-        elif 1.5 < AR <= 2.5:
+        elif 1.5 < avg <= 2.5:
             return 2
-        elif 2.5 < AR <= 3.5:
+        elif 2.5 < avg <= 3.5:
             return 3
-        elif 3.5 < AR <= 4.5:
+        elif 3.5 < avg <= 4.5:
             return 4
-        elif 4.5 < AR <= 5.0:
+        elif 4.5 < avg <= 5.0:
             return 5
         else:
             return 2.5
@@ -1625,13 +1658,14 @@ class Product(AbstractProduct, ModelMeta):
 
     @classmethod
     def post_save_product(cls, sender, instance, **kwargs):
-        #deleting caches for absolute urls,solar data and product object
-        # cache.delete("product_{}_absolute_url".format(instance.id))
-        # cache.delete("context_product_detail_" + str(instance.pk))
-        # cache.delete("detail_db_product_" + str(instance.pk))
-        # cache.delete("detail_solr_product_" + str(instance.pk))
-        # cache.delete("category_main_" + str(instance.pk))
-
+        cache.delete("product_{}_absolute_url".format(instance.id))
+        cache.delete("context_product_detail_" + str(instance.pk))
+        cache.delete("detail_db_product_" + str(instance.pk))
+        cache.delete("detail_solr_product_" + str(instance.pk))
+        cache.delete("category_main_" + str(instance.pk))
+        category_ids=instance.productcategories.all().values_list('category__id',flat=True)
+        for cat_id in category_ids:
+            cache.delete('cat_absolute_url_' + str(cat_id))
         from .tasks import add_log_in_product_audit_history
         duration = instance.get_duration_in_day() if instance.get_duration_in_day() else -1
         variation_name = [str(var) for var in instance.variation.all()] if instance.variation.all() else ['N.A']
@@ -1728,6 +1762,15 @@ class ProductScreen(AbstractProduct):
             self.attr = ProductAttributesContainer(product=self)
 
     def save(self, *args, **kwargs):
+        delete_keys = cache.keys('prd_*_' + str(self.pk))
+        for uk in delete_keys:
+            cache.delete(uk)
+        cache.delete("product_{}_absolute_url".format(self.pk))
+        cache.delete("context_product_detail_" + str(self.pk))
+        cache.delete("detail_db_product_" + str(self.pk))
+        cache.delete("detail_solr_product_" + str(self.pk))
+        cache.delete("category_main_" + str(self.pk))
+        # cache.delete('cat_absolute_url_' + str(self.pk))
         super(ProductScreen, self).save(*args, **kwargs)
         if getattr(self, 'attr', None):
             self.attr.save_screen()
@@ -1843,6 +1886,20 @@ class ProductCategory(AbstractAutoDate):
         unique_together = ('product', 'category')
         verbose_name = _('Product Category')
         verbose_name_plural = _('Product Categories')
+
+
+    @classmethod
+    def post_save_productcategory(cls, sender, instance, **kwargs):
+        id_list = instance.product.productcategories.all().values_list('product__id',flat=True).distinct()
+        category_id = instance.category.categoryproducts.all().values_list('category__id',flat=True).distinct()
+        for id in id_list:
+            cache.delete("product_{}_absolute_url".format(id))
+            cache.delete("context_product_detail_" + str(id))
+            cache.delete("detail_db_product_" + str(id))
+            cache.delete("category_main_" + str(id))
+        for cid in category_id:
+            cache.delete('cat_absolute_url_' + str(cid))
+post_save.connect(ProductCategory.post_save_productcategory, sender=ProductCategory)
 
 
 class VariationProduct(AbstractAutoDate):

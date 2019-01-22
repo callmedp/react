@@ -3,6 +3,7 @@ import json
 import requests
 from django.conf import settings
 from emailers.email import SendMail
+from dateutil import relativedelta
 
 
 def update_initiat_orderitem_sataus(order=None):
@@ -175,3 +176,12 @@ def date_timezone_convert(date=None):
     if not date:
         return 'N.A'
     return date.astimezone(timezone(settings.TIME_ZONE))
+
+
+
+def date_diff(date1,date2):
+    datediff = relativedelta.relativedelta(date1, date2)
+    # return str(datediff.days) + '-days-' + str(datediff.hours)+'-hours-'\
+    #        +str(datediff.minutes)+'-minutes'
+    #only returning days difference
+    return str(datediff.days)
