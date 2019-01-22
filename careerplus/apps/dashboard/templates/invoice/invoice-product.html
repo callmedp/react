@@ -194,16 +194,20 @@
 
                                 <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 13px Arial; padding: 10px 0 10px 0px; text-align:center;" valign="top">{{total_amount_after_discount|floatformat:2}}</td>
                             </tr>
+                            {% if sgst_amount > 0 %}
                             <tr>
                                 <td style=" border-bottom:solid 1px #CCCCCC; border-left:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 13px Arial; padding: 10px 0 10px 13px;" valign="top">SGST @ {{sgst}}%</td>
 
                                 <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 13px Arial; padding: 10px 0 10px 0px; text-align:center;" valign="top">{{sgst_amount|floatformat:2}}</td>
                             </tr>
+                            {% endif %}
+                            {% if cgst_amount > 0 %}
                             <tr>
                                 <td style=" border-bottom:solid 1px #CCCCCC; border-left:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 13px Arial; padding: 10px 0 10px 13px;" valign="top">CGST @ {{cgst}}%</td>
 
                                 <td style="border-bottom:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 13px Arial; padding: 10px 0 10px 0px; text-align:center;" valign="top">{{cgst_amount|floatformat:2}}</td>
                             </tr>
+                            {% endif %}
                             <!--tr>
                                 <td style=" border-bottom:solid 1px #CCCCCC; border-left:solid 1px #CCCCCC; border-right: 1px solid #CCCCCC; color: #333333; font: 13px Arial; padding: 10px 0 10px 13px;" valign="top">IGST @ {{igst}}%</td>
 
