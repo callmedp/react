@@ -4,7 +4,7 @@ function clickSubmitDraft(oi_id, ){
     	$('#draft-upload-form' + oi_id).parsley().validate();
         if ($('#draft-upload-form' + oi_id).parsley().isValid()){
             var flow_type = $('#flow-id' + oi_id).val();
-            console.log(flow_type);
+//            console.log(flow_type);
             if (flow_type && (flow_type == 2 || flow_type == 10)){
                 $('#myModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to upload document and close orderitem?</div>');
             }
