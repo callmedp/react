@@ -500,7 +500,7 @@ class WriterInvoiceMixin(object):
                     closed_child_items = p_oi.orderitem_set.filter(
                         no_process=False, oi_status=4).order_by('-closed_on')
 
-                    if child_items.count() == closed_child_items.count() and p_oi.pk not in added_delivery_object:
+                    if p_oi.pk not in added_delivery_object:
                         if p_oi.delivery_service and p_oi.delivery_service.slug in delivery_slug_list:
                             amount = 0
                             if p_oi.delivery_service.slug in express_slug_list:
