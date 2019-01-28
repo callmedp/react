@@ -65,7 +65,7 @@ urlpatterns += [
         shop_view.SkillAutocompleteView.as_view(),
         name='skill-autocomplete'),
     url(r'^skill/add/$',
-        shop_view.SkillAddView.as_view()),
+        shop_view.SkillAddView.as_view(), name='skill-add'),
     url(r'^productskill/add/$',
         product_skill_view.ProductSkillAddView.as_view(),
         name='productskill-add'),
