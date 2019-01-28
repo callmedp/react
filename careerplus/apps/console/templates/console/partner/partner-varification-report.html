@@ -210,7 +210,10 @@
 
                        <td>
                            {% if obj.oi_draft %}
-                                <a target="_blank" href="{{obj.oi_draft.url}}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Initial Doc</button></a>
+                                <a target="_blank" href="{% url 'console:queue-resume-download' %}?path={{obj.oi_draft.name}}&next={{ request.path }}"">
+                                    <button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Initial Doc</button></a>
+
+                           
                         <hr style=" margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 
                            {% endif %}
