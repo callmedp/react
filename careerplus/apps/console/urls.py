@@ -4,7 +4,7 @@ from .views import ConsoleLoginView, ConsoleDashboardView, ConsoleLogoutView, \
     ConsoleForgotPasswordView, ConsolePasswordResetView, ConsoleAutoLoginView
 from . import (
     shop_view, vendor_view, blog_view, order_view,
-    refund_view, wallet_view, university_views)
+    refund_view, wallet_view, university_views, product_skill_view)
 from geolocation import adminviews
 
 
@@ -65,8 +65,10 @@ urlpatterns += [
         shop_view.SkillAutocompleteView.as_view(),
         name='skill-autocomplete'),
     url(r'^skill/add/$',
-        shop_view.SkillAddView.as_view(),
-        name='skill-add'),
+        shop_view.SkillAddView.as_view()),
+    url(r'^productskill/add/$',
+        product_skill_view.ProductSkillAddView.as_view(),
+        name='productskill-add'),
     url(r'^skill/list/$',
         shop_view.SkillListView.as_view(),
         name='skill-list'),

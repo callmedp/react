@@ -2,11 +2,11 @@
 <!-- sidebar menu -->
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
   <div class="menu_section">
-    {% if request.user|has_group:BLOGGER_GROUP_LIST %} 
+    {% if request.user|has_group:BLOGGER_GROUP_LIST %}
       <h3>Blogs</h3>
-        
+
       <ul class="nav side-menu">
-        
+
       <li><a><i class="fa fa-edit"></i> Blog <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
           <li><a href="{% url 'console:blog-article-list' %}">Article</a></li>
@@ -20,7 +20,7 @@
     {% endif %}
 
     {% if request.user|has_group:WELCOMECALL_GROUP_LIST or request.user|has_group:OPS_HEAD_GROUP_LIST %}
-      <h3>Welcome Call</h3>   
+      <h3>Welcome Call</h3>
       <ul class="nav side-menu">
         <li><a><i class="fa fa-list-alt"></i> Welcome call <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
@@ -47,9 +47,9 @@
       </ul>
     {% endif %}
 
-    {% if request.user|has_group:USER_QUERY_GROUP_LIST %} 
+    {% if request.user|has_group:USER_QUERY_GROUP_LIST %}
       <h3>User Query</h3>
-        
+
       <ul class="nav side-menu">
         <li><a><i class="fa fa-list-alt"></i> User Query <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
@@ -70,9 +70,9 @@
       </ul>
     {% endif %}
 
-    {% if request.user|has_group:MARKETING_GROUP_LIST %} 
+    {% if request.user|has_group:MARKETING_GROUP_LIST %}
       <h3>Tasks</h3>
-        
+
       <ul class="nav side-menu">
         <li><a><i class="fa fa-list-alt"></i> Task <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
@@ -86,9 +86,9 @@
         </li>
       </ul>
     {% endif %}
-    {% if request.user.is_superuser or request.user|has_group:VENDOR_GROUP_LIST %} 
+    {% if request.user.is_superuser or request.user|has_group:VENDOR_GROUP_LIST %}
       <h3>Badge User</h3>
-        
+
       <ul class="nav side-menu">
         <li><a><i class="fa fa-list-alt"></i> Badge User <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
@@ -112,7 +112,7 @@
       </li>
     </ul>
     {% endif %}
-    
+
     {% if request.user|has_group:PRODUCT_GROUP_LIST %}
         <h3>Live Catalog</h3>
         <ul class="nav side-menu">
@@ -129,6 +129,8 @@
             </ul>
           </li>
 
+
+
           {% if perms.shop.console_change_category %}
             <li><a><i class="fa fa-bookmark"></i> Category <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
@@ -137,9 +139,9 @@
               </ul>
             </li>
           {% endif %}
-          
+
           {% if perms.shop.console_change_product %}
-          
+
             <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
                 <li><a href="{% url 'console:product-list' %}">Product</a></li>
@@ -160,9 +162,16 @@
                   </li>
                 {% endif %}
               {% endcomment %}
-              
+
               </ul>
             </li>
+
+
+        <li><a><i class="fa fa-book"></i> Product Skill <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li><a href="{% url 'console:productskill-add' %}">Product-Skill</a></li>
+            </ul>
+          </li>
 
             <li><a><i class="fa fa-edit"></i>Country<span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
@@ -175,27 +184,27 @@
         <h3>Product Moderation</h3>
         <ul class="nav side-menu">
           {% if perms.shop.console_change_product %}
-          
+
             <li><a><i class="fa fa-book"></i> Product Moderation <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
                 <li><a href="{% url 'console:screenproduct-list' %}">Product Screens</a></li>
                 <li><a href="{% url 'console:screenproduct-moderationlist' %}">Moderation List</a></li>
-                
-                
+
+
               </ul>
             </li>
             <li><a><i class="fa fa-book"></i> FAQ Moderation <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
-                
+
                 <li><a href="{% url 'console:screenfaq-list' %}">FAQ Screens</a></li>
                 <li><a href="{% url 'console:screenfaq-moderationlist' %}">Moderation List</a></li>
-              
+
               </ul>
             </li>
-            
+
           {% endif %}
         </ul>
-    {% elif request.user|has_group:OPERATION_GROUP_LIST %} 
+    {% elif request.user|has_group:OPERATION_GROUP_LIST %}
         <h3>Product</h3>
         <ul class="nav side-menu">
           {% if perms.shop.console_change_product %}
@@ -204,10 +213,10 @@
                 <li><a href="{% url 'console:product-list' %}">Product</a></li>
               </ul>
             </li>
-            
+
           {% endif %}
         </ul>
-    {% elif request.user|has_group:VENDOR_GROUP_LIST %} 
+    {% elif request.user|has_group:VENDOR_GROUP_LIST %}
         <h3>Product</h3>
         <ul class="nav side-menu">
           {% if perms.shop.console_change_product %}
@@ -223,10 +232,10 @@
               {% endif %}
               </ul>
             </li>
-            
+
           {% endif %}
         </ul>
-    {% elif request.user|has_group:FINANCE_GROUP_LIST %} 
+    {% elif request.user|has_group:FINANCE_GROUP_LIST %}
         <h3>Product</h3>
         <ul class="nav side-menu">
           <li><a href="{% url 'console:product-audit-history'%}">Product Audit History</a></li>
@@ -235,8 +244,8 @@
 
     {% if perms.review.can_change_review_queue %}
         <h3>REVIEW MODERATIONS</h3>
-   
-        <ul class="nav side-menu"> 
+
+        <ul class="nav side-menu">
           <li><a><i class="fa fa-edit"></i> Review Moderations <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li><a href="{% url 'console:review-to-moderate' %}">Review</a></li>
@@ -245,7 +254,7 @@
         </ul>
     {% endif %}
       <h3>Orders</h3>
-        
+
       <ul class="nav side-menu">
         {% if perms.order.can_download_discount_report %}
         <li>
@@ -284,7 +293,7 @@
             </li>
         {% endif %}
       {% endcomment %}
-    
+
         {% if request.user|has_group:REFUND_GROUP_LIST %}
             <ul class="nav side-menu">
                 <li><a><i class="fa fa-edit"></i> Refund Operation <span class="fa fa-chevron-down"></span></a>
@@ -415,11 +424,11 @@
                 <a href="{% url "console:partner:varificationreports" %}">Verification Reports</a>
             </li>
             {% endif %}
-            
+
         </ul>
       </li>
 
-    
+
   </div>
 
 </div>

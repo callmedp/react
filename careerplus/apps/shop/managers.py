@@ -54,3 +54,11 @@ class SaleableProductManager(ProductManager):
     
     def get_queryset(self):
         return super(SaleableProductManager, self).get_queryset().saleable()
+
+
+class SelectedFieldProductManager(models.Manager):
+
+    def get_queryset(self):
+        queryset = super(SelectedFieldProductManager,self).get_queryset()
+        return queryset.only('id','product_class', 'name')
+

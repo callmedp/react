@@ -1151,9 +1151,9 @@ class ListProductView(ListView, PaginationMixin):
     context_object_name = 'product_list'
     template_name = 'console/shop/list_product.html'
     http_method_names = [u'get', ]
-    vendor_list=[]
-    vendor_select=None
-    status=None
+    vendor_list = []
+    vendor_select = None
+    status = None
 
 
     def dispatch(self, request, *args, **kwargs):

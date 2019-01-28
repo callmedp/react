@@ -14,29 +14,35 @@ class ProductSkillSerializer(serializers.ModelSerializer):
         model = ProductSkill
         fields = ('id', 'skill_id', 'active', 'priority', 'product_id',)
 
-
-
     def validate_skill_id(self, value):
-
-        try:
-            Skill.objects.get(id=value)
-            return value
-        except Exception as e:
+        skill = Skill.objects.filter(id=value).first()
+        if skill is None:
             raise serializers.ValidationError("Skill with given id does not exits.")
+        return value
 
     def validate_product_id(self, value):
-        try:
-            Product.objects.get(id=value)
-            return value
-        except Exception as e:
+        product = Product.objects.filter(id=value).first()
+        if product is None:
             raise serializers.ValidationError("Product with given id does not exits.")
+        return value
 
     def validate(self, data):
-        try:
-            product_skill = ProductSkill.objects.get(skill_id=data['skill_id'], product_id=data['product_id'])
-            if product_skill:
+        if self.context['request'].method == 'POST':
+            product_skill = ProductSkill.objects.filter(skill_id=data['skill_id'], product_id=data['product_id']).first()
+            if product_skill is not None:
                 raise serializers.ValidationError("Duplicate entry. Product Id {} and Skill Id {} already exists together.".format(data['product_id'], data['skill_id']))
-        except Exception as e:
-            raise serializers.ValidationError(e)
+        return data
 
 
+class SkillSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Skill
+        fields = ('id', 'name',)
+
+
+class ProductSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Product
+        fields = ('id', 'name',)
