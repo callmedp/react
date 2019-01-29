@@ -129,7 +129,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
                             "writer_email": writer.email,
                             "subject": "Your service has been initiated",
                             "type_flow": obj.product.type_flow,
-                            'delivery_service': obj.delivery_service,
+                            'delivery_service': str(obj.delivery_service),
                             'delivery_service_slug': obj.delivery_service.slug if obj.delivery_service else '',
                             'delivery_service_name': obj.delivery_service.name if obj.delivery_service else '',
                         })

@@ -500,25 +500,24 @@ class WriterInvoiceMixin(object):
                     closed_child_items = p_oi.orderitem_set.filter(
                         no_process=False, oi_status=4).order_by('-closed_on')
 
-                    if child_items.count() == closed_child_items.count() and p_oi.pk not in added_delivery_object:
-                        if p_oi.delivery_service and p_oi.delivery_service.slug in delivery_slug_list:
-                            amount = 0
-                            if p_oi.delivery_service.slug in express_slug_list:
-                                amount = EXPRESS
-                            elif p_oi.delivery_service.slug in super_express_slug_list:
-                                amount = SUPER_EXPRESS
-                            product_name = p_oi.product.get_name + ' - ' + p_oi.delivery_service.name
-                            d_dict = {
-                                "item_id": p_oi.pk,
-                                "product_name": product_name,
-                                "closed_on": closed_child_items[0].closed_on.date(),
-                                "combo_discount": 0,
-                                "amount": amount,
-                                "item_type": "delivery_service",
-                            }
-                            item_list.append(d_dict)
-                            added_delivery_object.append(p_oi.pk)
-                            total_sum += amount
+                    if oi.delivery_service and oi.delivery_service.slug in delivery_slug_list:
+                        amount = 0
+                        if oi.delivery_service.slug in express_slug_list:
+                            amount = EXPRESS
+                        elif oi.delivery_service.slug in super_express_slug_list:
+                            amount = SUPER_EXPRESS
+                        product_name = oi.product.get_name + ' - ' + oi.delivery_service.name
+                        d_dict = {
+                            "item_id": oi.pk,
+                            "product_name": product_name,
+                            "closed_on": oi.closed_on.date(),
+                            "combo_discount": 0,
+                            "amount": amount,
+                            "item_type": "delivery_service",
+                        }
+                        item_list.append(d_dict)
+                        added_delivery_object.append(oi.pk)
+                        total_sum += amount
                     process = True
                 
                 if not process:
