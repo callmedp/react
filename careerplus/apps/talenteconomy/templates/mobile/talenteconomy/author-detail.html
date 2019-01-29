@@ -1,5 +1,5 @@
 {% extends "mobile/basic/base.html" %}
-{% load static shop_tags compress %}
+{% load static compress %}
 {% load thumbnail compress %}
 
 {% block django_meta %}
@@ -56,7 +56,7 @@
         </ul>
 
         <div class="author-item mt-20 mb-10">
-            <span class="author-img"><img src="{{author.image.url| modify_url}}" alt="{{author.image_alt}}"></span>
+            <span class="author-img"><img src="{{author.image.url}}" alt="{{author.image_alt}}"></span>
             <div class="author-detail">
                 <h1 class="mb-0 fs-16">{{author.name}}<sup></sup></h1>
                 <span class="spacer c-666">/</span> <span class="c-666 fs-12">{{author.designation}}</span>
@@ -109,7 +109,6 @@
             Article.init();
         });
     </script>
-    <script src = "{%static 'shinelearn/js/mobile/cms/lazy-loading.js'%}"></script>
 {% endblock js_section %}
 
 {% block johukum %}

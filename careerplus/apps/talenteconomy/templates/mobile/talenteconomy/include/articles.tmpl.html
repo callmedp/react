@@ -1,5 +1,4 @@
 {% load thumbnail static %}
-{% load shop_tags %}
 
 {% for articlelist in articlelists %}
 <div class="media article-list" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
@@ -16,7 +15,7 @@
         itemprop="image">
       </amp-img>
       {% else %}
-      <img class="media-object" width="{{ im.width }}" height="{{ im.height }}" src="{{articlelist.image.url | modify_url}}" alt="{{articlelist.image_alt}}" itemprop="image">
+      <img class="media-object" width="{{ im.width }}" height="{{ im.height }}" src="{{articlelist.image.url}}" alt="{{articlelist.image_alt}}" itemprop="image">
       {% endif %}
       {% endthumbnail %}
     </figure>

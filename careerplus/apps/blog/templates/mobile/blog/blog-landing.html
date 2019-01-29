@@ -1,5 +1,5 @@
 {% extends "mobile/basic/base.html" %}
-{% load static compress shop_tags %}
+{% load static compress %}
 {% block django_meta %}
         {% include 'meta/meta.html' %}
     {%  endblock django_meta %}
@@ -49,7 +49,7 @@
                                             </div>
                                         </a>
                                         {% if art.image %}
-                                            <img src="{{art.image.url | modify_url}}" alt="{{art.image_alt}}">
+                                            <img src="{{art.image.url}}" alt="{{art.image_alt}}">
                                         {% endif %}
                                     </li>
                                     
@@ -80,8 +80,6 @@
 {% block js_section %}
     {{block.super}}
     <script src="{% static 'shinelearn/js/blog/blog-landing.js' %}"></script>
-    <script src = "{%static 'shinelearn/js/mobile/cms/lazy-loading.js'%}"></script>
-
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}

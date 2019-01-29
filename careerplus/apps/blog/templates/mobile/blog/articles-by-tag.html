@@ -1,6 +1,6 @@
 {% extends "mobile/basic/base.html" %}
 {% load static compress %}
-{% load thumbnail shop_tags %}
+{% load thumbnail %}
 
 {% block django_meta %}
    {% include 'meta/meta.html' %}
@@ -27,7 +27,7 @@
     <header class="w100fl he-auto">
     
     
-        <img src="{% static 'shinelearn/images/mobile/common/header-back-img-thumbnail.png' %}">
+        <img src="{% static 'shinelearn/images/mobile/common/header-back-img.png' %}">
         
         <!-- header menu Icon Starts here -->
         <div class="main-menu w100fl">
@@ -75,7 +75,7 @@
         {% if obj.image %}
             <figure class="media-left">
                 {% thumbnail obj.image "96x73" crop="center" as im %}
-                   <img class="media-object w-auto" src="{{im.url| modify_url}}" width="{{ im.width }}" height="{{ im.height }}" alt="{{obj.image_alt}}">
+                   <img class="media-object w-auto" src="{{im.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="{{obj.image_alt}}">
                 {% endthumbnail %}
             </figure>
         {% endif %}
@@ -119,7 +119,7 @@
             {% if obj.image %}
                 <figure class="media-left">
                     {% thumbnail obj.image "96x73" crop="center" as im %}
-                       <img class="media-object w-auto" src="{{im.url | modify_url}}" width="{{ im.width }}" height="{{ im.height }}" alt="{{obj.image_alt}}">
+                       <img class="media-object w-auto" src="{{im.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="{{obj.image_alt}}">
                     {% endthumbnail %}
                 </figure>
             {% endif %}
@@ -167,8 +167,6 @@
 {% block js_section %}
     {{block.super}}
     <script src="{% static 'shinelearn/js/mobile/blog/blog.js' %}"></script>
-    <script src = "{%static 'shinelearn/js/mobile/cms/lazy-loading.js'%}"></script>
-
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}

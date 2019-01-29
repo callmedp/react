@@ -1,4 +1,4 @@
-{% load thumbnail  %}
+{% load thumbnail %}
 
 <div class="clearfix mt-20">
   <h2 class="pull-left">Contributors</h2>
@@ -40,7 +40,7 @@
           <a href="{% url 'talent:authors-detail' author.slug %}" title="{{author.name}}">
           {% if author.image %}
             {% thumbnail author.image "130x130" crop="center" as im %}
-            <img src="{{author.image.url | modify_url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{author.image_alt}}">
+            <img src="{{author.image.url}}" width="{{ im.width }}" height="{{ im.height }}" alt="{{author.image_alt}}">
             {% endthumbnail %}
           {% endif %}
           <div class="contributor-body">
