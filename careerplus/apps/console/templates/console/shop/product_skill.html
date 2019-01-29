@@ -307,10 +307,10 @@
 <script type="text/javascript" src="{% static 'console/js/shop/console_shop.js' %}"></script>
 <script type="text/javascript" src="{% static 'packages/switchery/dist/switchery.min.js' %}"></script>
 <!-- Custom Theme Scripts -->
-<script>
-    var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";</script>
-<script src="{% static 'shinelearn/js/shop/product-skill-relation.js' %}"></script>
 {% endcompress %}
-
+<script>
+    var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
+</script>
+<script src="{% static 'shinelearn/js/shop/product-skill-relation.js' %}"></script>
 
 {% endblock js_block %}
