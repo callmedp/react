@@ -301,10 +301,10 @@
 {{ block.super }}
 <script type="text/javascript" src="{% static 'packages/select2/dist/js/select2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'packages/switchery/dist/switchery.min.js' %}"></script>
-{% compress js %}
 <script>
 var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
 </script>
+{% compress js %}
 <script type="text/javascript" src="{% static 'shinelearn/js/shop/product-skill-relation.js' %}"></script>
 {% endcompress %}
 
