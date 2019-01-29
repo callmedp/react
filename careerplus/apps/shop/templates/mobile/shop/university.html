@@ -42,7 +42,7 @@
                         <h1 class="semi-bold">{{ prd_H1 }}</h1>
                         <div class="university-logo">
                             <img 
-                                src="{% static 'shinelearn/images/mobile/executive-course/university-logo-thumbnail.jpg' %}"/>
+                                src="{% static 'shinelearn/images/mobile/executive-course/university-logo.jpg' %}"/>
                         </div>
                         <!-- Banner info band -->
                         <div class="info-band">
@@ -71,7 +71,7 @@
                         </div><!-- / Right side Icon ends here -->
                     </div><!-- header menu Icon ends here -->
                     <div class="overlay"></div>
-                    <img src="{% static 'shinelearn/images/mobile/executive-course/exec-landing-img-thumbnail.jpg' %}">
+                    <img src="{% static 'shinelearn/images/mobile/executive-course/exec-landing-img.jpg' %}">
                 {% block header_title %}{% endblock header_title %}
                 </div><!-- header ends here -->
             {% endblock header %}
@@ -192,7 +192,7 @@
 
                                     <li>
                                         <span class="faculty-image">
-                                            <img src="{{ fac.get_image_url | modify_url }}"/>
+                                            <img src="{{ fac.get_image_url }}"/>
                                         </span>
                                         <h3><a href="{{fac.get_absolute_url}}">{{ fac.name }}</a></h3>
                                         <p class="desigation mt-15">{{ fac.designation }} – {{ fac.institute.name }}
@@ -339,7 +339,7 @@
                                     </div><!-- /. header -->
 
                                     <div class="modal-body">
-                                        <img src="{{ university_detail.sample_certificate | modify_url }}" class="img-responsive"/>
+                                        <img src="{{ university_detail.sample_certificate }}" class="img-responsive"/>
                                     </div>
                                 </div><!-- /. modal-content-->
                             </div><!-- /. modal -->
@@ -356,7 +356,7 @@
                         <div class="content">
                             <div class="instutite-image gr_instutite mb-10">
                                 <h3>{{ institute.name }}</h3>
-                                <img src="{% static 'shinelearn/images/mobile/executive-course/institute-thumbnail.jpg'%}" class="img-responsive"/>
+                                <img src="{% static 'shinelearn/images/mobile/executive-course/institute.jpg'%}" class="img-responsive"/>
                             </div>
                             <div class="more1">
                             {{ institute.description|safe }}
@@ -379,7 +379,7 @@
                                     <div class="media">
                                         <div class="media-left">
                                             <span class="testimonial-image">
-                                             <img class="media-object" src="{{ testimonial.get_image_url | modify_url }}" alt="...">
+                                             <img class="media-object" src="{{ testimonial.get_image_url }}" alt="...">
                                             </span>
                                         </div>
                                         <div class="media-body">
@@ -492,7 +492,7 @@
                     {% endif %}
                     </div>
                 </div>
-                <img src="{% static 'shinelearn/images/mobile/executive-course/enroll-now-thumbnail.jpg' %}" class="img-responsive"/>
+                <img src="{% static 'shinelearn/images/mobile/executive-course/enroll-now.jpg' %}" class="img-responsive"/>
             </div>
             <div id="popup-modal1" class="modal" style="display: none;z-index:99999;">
                   <div class="modal-helper">
