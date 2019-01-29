@@ -1,5 +1,5 @@
 from django import template                                                                      
-import math, re
+import math
 register = template.Library()
 
 
@@ -33,10 +33,3 @@ def convert_to_month(val):
         else:
             return str(year) + ' years'
     return str(month) + ' months'
-
-
-@register.filter
-def modify_url(val):
-    match = re.search(r'([\w\/\.:]+)(.png?|.jpg?|.jpeg?|.PNG?|.JPG?|.JPEG)$', val)
-    if match:
-        return '{}-thumbnail{}'.format(match.group(1), match.group(2))
