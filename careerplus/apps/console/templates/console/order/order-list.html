@@ -110,17 +110,6 @@
 
          {%include "console/order/partials/modals.html" %}
 
-        {%block emailmodals%}
-        {%endblock%}
-
-
-        {%block numbermodals%}
-        {%endblock%}
-
-
-
-
-
         <!-- /modals -->
     </div>
 
@@ -173,20 +162,14 @@
                     <th class="column-title">Name</th>
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
-                    <th class="column-title">Detail Info</th>
                     <th class="column-title">Transactions</th>
-                    <th class="column-title">Currency</th>
                     <th class="column-title">Amount Payable</th>
                     <th class="column-title">Gross Amount(excl tax. and excl. dis)</th>
                     <th class="column-title">LTV(in Rs.)</th>
-                    
                     <th class="column-title">Agent ID</th>
                     <th class="column-title">Order Status</th>
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">Added On</th>
-                    <th class="column-title">Instrument Number</th>
-                    <th class="column-title">Instrument Issuer</th>
-                    <th class="column-title">Instrument Issue Date</th>
 
                   </tr>
                 </thead>
@@ -194,7 +177,8 @@
                 <tbody>
                   {% for obj in page %}
                     <tr class="even pointer">
-                      <td>{{obj.number}}</td>
+                        <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><b style="text-decoration: underline;">{{obj.number}}</b></a></td>
+
                       <td>{% if obj.first_name %}{{obj.first_name}}{% endif %}{% if obj.last_name %} {{obj.last_name}}{% endif %}</td>
                       <td><div id="{{obj.id}}">
                           {{obj.email}}
@@ -204,8 +188,8 @@
                           {%endif%}
                           </div>
 
-                          <button type="button" class="glyphicon glyphicon-envelope" aria-hidden="true" onclick="alt_email_update('{{obj.email}}','{{obj.number}}')">
-                                <i class="fa fa-email"> </i>Alternate Email
+                          <button type="button" class="btn btn-default btn-xs" aria-hidden="true" onclick="alt_email_update('{{obj.email}}','{{obj.number}}')">
+                                <i class="fa fa-envelope"> Alternate Email</i>
                               </button>
                       </td>
                       <td> <div id="{{obj.number}}" style="display: -moz-inline-stack;">{{obj.country_code}}-
@@ -219,17 +203,15 @@
 
 
 
-                          <button type="button" class="glyphicon glyphicon-phone-alt" aria-hidden="true" onclick="alt_num_update('{{obj.mobile}}','{{obj.number}}')">
-                                <i class="fa fa-phone"> </i>Alternate
+                          <button type="button" class="btn btn-default btn-xs" aria-hidden="true" onclick="alt_num_update('{{obj.mobile}}','{{obj.number}}')">
+                                <i class="fa fa-phone"> Alternate Number</i>
                               </button> </td>
-                      <td><a target="_blank" href="{% url "console:order-detail" obj.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Details order</button></a></td>
                       <td>
                           {% for txn in obj.get_txns %}
                               {{txn.txn}}<br>{{txn.get_payment_mode}} {{txn.get_payment_status}}<br>
                           {% endfor %}
                       </td>
-                      <td>{% if obj.currency %}{{obj.currency}}{% else %}Rs.{% endif %}</td>
-                      <td>{{obj.total_incl_tax}}</td>
+                      <td>{% if obj.currency %}{{obj.currency}}{% else %}Rs.{% endif %}{{obj.total_incl_tax}}</td>
                       <td>{{obj.total_excl_tax}}</td>
                       <td><span class="ltv-value" data-pk="{{obj.pk}}">Loading..</span></td>
                       
@@ -267,9 +249,6 @@
                       </td>
                       <td>{{obj.payment_date}}</td>
                       <td>{{obj.created}}</td>
-                      <td>{{obj.get_txns.first.instrument_number}}</td> 
-                      <td>{{obj.get_txns.first.instrument_issuer}}</td> 
-                      <td>{{obj.get_txns.first.instrument_issue_date}}</td> 
                     </tr>
                   {% endfor %}
                 </tbody>

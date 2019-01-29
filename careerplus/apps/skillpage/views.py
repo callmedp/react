@@ -56,11 +56,12 @@ class SkillPageView(DetailView, SkillPageMixin):
             raise Http404
 
     def get_template_names(self):
-        if self.request.amp:
+        if not self.request.amp:
+            return ["skillpage/skill.html"]
+        if not settings.DEBUG:
             from newrelic import agent
             agent.disable_browser_autorum()
-            return ["skillpage/skill-amp.html"]
-        return ["skillpage/skill.html"]
+        return ["skillpage/skill-amp.html"]
         
     def redirect_if_necessary(self, current_path, skill):
         expected_path = skill.get_absolute_url()

@@ -1,0 +1,87 @@
+{% extends "console/base_console.html" %}
+{% load static compress %}
+{% load humanize %}
+{% load thumbnail %}
+{% block title %}
+<title>Compliance Report - Shine Learning</title>
+{% endblock title %}
+{% block css_block %}
+{{block.super}}
+{% compress css %}
+<link href="{% static 'packages/iCheck/skins/flat/green.css' %}" rel="stylesheet" type="text/css">
+{% endcompress %}
+<link type="text/css" href="{% static 'shinelearn/css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
+{% endblock css_block %}
+{% block pagecontent %}
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Download Compliance Report</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                {% for message in messages %}
+                <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissable" {% endif %}>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <form autocomplete="off" method="POST" role="form" id="compliance_report_form" action="{%url 'console:compliance-report'%}">
+                            {% csrf_token %}
+                            <div class="col-sm-3 col-md-4">
+                                <div class="form-group">
+                                    <label>From Date</label>
+                                    <div class='input-group'>
+                                        <input class="form-control datepicker" id='start_date' name="start_date" placeholder="From Date"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 col-md-4">
+                                <div class="form-group">
+                                    <label>To Date</label>
+                                    <div class='input-group' id='enddate'>
+                                        <input class="form-control datepicker" id='end_date' name="end_date" placeholder="To Date"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-4" style="margin-left:-15px">
+                                <div class="form-group">
+                                    <label> </label>
+                                    <span class="input-group-btn">
+					                    <button type="submit" class="btn btn-primary" id="action_button_go" style="border-radius:10px;right:10px;top:5px;">Generate Report</button>
+					                  </span>
+                                </div>
+                            </div>
+
+                    </form>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock pagecontent %}
+{% block js_block %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>
+<script type="text/javascript">
+
+	$('#start_date').datepicker({
+    autoclose: true});
+	$('#end_date').datepicker({
+autoclose: true} );
+
+
+</script>
+{% endblock js_block %}

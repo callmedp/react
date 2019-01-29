@@ -1534,7 +1534,8 @@ class ChangeProductView(DetailView):
                                 for form in saved_formset:
                                     form.save()
                                 formset.save_m2m()
-
+                            obj.title=obj.get_title()
+                            obj.save()
                             messages.success(
                                 self.request,
                                 "Product Category changed Successfully")

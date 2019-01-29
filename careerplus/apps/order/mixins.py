@@ -68,7 +68,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                 order.candidate_id = cart_obj.owner_id
 
             order.email = cart_obj.email
-            order.alt_email=cart_obj.email
+            order.alt_email = cart_obj.email
             order.first_name = cart_obj.first_name
             order.last_name = cart_obj.last_name
             order.country_code = cart_obj.country_code
@@ -349,8 +349,9 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                                     oi.delivery_service = parent_li.delivery_service
                                 elif child_li.delivery_service:
                                     # in case of course variation
-                                    oi.delivery_service = var.delivery_service
-                                    cost_price = var.delivery_service.get_price()
+                                    delivery_obj= var.get('delivery_obj')
+                                    oi.delivery_service = delivery_obj
+                                    cost_price = delivery_obj.get_price()
                                     oi.delivery_price_excl_tax = cost_price
                                     discount = (cost_price * percentage_discount) / 100
                                     cost_price_after_discount = cost_price - discount

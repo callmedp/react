@@ -1342,8 +1342,7 @@ class ProfileCredentialDownload(View):
                         'profile_credentials': profile_credentials,
                     }
                     template = get_template('console/order/profile-update-credentials.html')
-                    context = Context(context_dict)
-                    html = template.render(context)
+                    html = template.render(context_dict)
                     pdf_file = HTML(string=html).write_pdf()
                     http_response = HttpResponse(pdf_file, content_type='application/pdf')
                     http_response['Content-Disposition'] = 'filename="profile_credential.pdf"'

@@ -435,6 +435,9 @@ class OrderItem(AbstractAutoDate):
             # Action Permission
             ("oi_action_permission", "OrderItem Action Permission"),
             ("oi_export_as_csv_permission", "Order Item Export As CSV Permission"),
+
+            # complaince generation permission
+            ("can_generate_compliance_report", "can create compliance report permmission"),
         )
 
     def __str__(self):

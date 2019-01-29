@@ -189,7 +189,7 @@ class TaskListView(ListView, PaginationMixin):
 
     def get_queryset(self):
         queryset = super(TaskListView, self).get_queryset()
-        queryset = queryset.filter(task_type__in=[1, 4, 5])
+        queryset = queryset.filter(task_type__in=[1, 4, 5, 6])
         return queryset.order_by('-modified')
 
 

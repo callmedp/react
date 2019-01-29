@@ -60,6 +60,12 @@ datalist {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#124690', endColorstr='#3770ba',GradientType=1 ); /* IE6-9 */
 	margin-bottom: 0;
 	-webkit-transform: translate3d(0,0,0);
+
+	marquee {
+		background: #fff; 
+		padding: 10px 0;
+		font-size: 13px;
+	}
 }
 
 .exe-detail-course-links {
@@ -3449,5 +3455,14 @@ footer {
 
 	&:hover, &:focus {
 		color: $anchor-color;
+	}
+}
+
+.navbar-color {
+	background-color: #2f5da5;
+	top:0;
+
+	marquee {
+		display:none;
 	}
 }

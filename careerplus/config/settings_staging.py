@@ -44,6 +44,21 @@ DATABASES = {
 }
 DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
 
+DEBUG_TOOLBAR_PANELS = [
+    'debug_toolbar.panels.versions.VersionsPanel',
+    'debug_toolbar.panels.timer.TimerPanel',
+    'debug_toolbar.panels.settings.SettingsPanel',
+    'debug_toolbar.panels.headers.HeadersPanel',
+    'debug_toolbar.panels.request.RequestPanel',
+    'debug_toolbar.panels.sql.SQLPanel',
+    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+    # 'debug_toolbar.panels.templates.TemplatesPanel',
+    'debug_toolbar.panels.cache.CachePanel',
+    'debug_toolbar.panels.signals.SignalsPanel',
+    'debug_toolbar.panels.logging.LoggingPanel',
+    'debug_toolbar.panels.redirects.RedirectsPanel',
+]
+
 
 ####### APPS SETTIMGS #################
 DJANGO_APPS = [
@@ -335,18 +350,25 @@ if 'test' in sys.argv[1:]:
     TESTS_IN_PROGRESS = True
     MIGRATION_MODULES = DisableMigrations()
 
+########### CMS STATIC PAGE RENDERING ID#########
+
+CMS_ID = [1]
+FEATURE_PROFILE_EXCLUDE=[1941]
+SERVICE_PAGE_ID_SLUG_MAPPING = {"45":"resume-writing"}
+IS_MAINTENANCE = False
+MAINTENANCE_MESSAGE = "This site will be under maintenance from 9 pm to 12 pm on Friday, 11 Jan, 2019."
 
 try:
     from .settings_local import *
 except:
     pass
 
-########### CMS STATIC PAGE RENDERING ID#########
-
-CMS_ID = [1]
-
-FEATURE_PROFILE_EXCLUDE=[1941]
 
 
-SERVICE_PAGE_ID_SLUG_MAPPING = {"45":"resume-writing"}
+try:
+    from .settings_local import *
+except:
+    pass
+
+
 
