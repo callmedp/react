@@ -88,9 +88,8 @@ $(document).ready(function () {
     const fetchProductSkills = function (productId) {
         $.ajax({
             type: 'GET',
-            url: `http://127.0.0.1:8000/console/api/v1/product-skills/?product_id=${productId}`,
+            url: `${site_domain}/console/api/v1/product-skills/?product_id=${productId}`,
             success: function (response) {
-                console.log('response', response);
                 emptyList('current_product_list');
                 $.each(response && response['results'], function (i, item) {
                     let currentSkill = skills.find(skill => skill['id'] === parseInt(item['skill_id']))
@@ -127,10 +126,9 @@ $(document).ready(function () {
      */
     $.ajax({
         type: 'GET',
-        url: 'http://127.0.0.1:8000/console/api/v1/skills/',
+        url: `${site_domain}/console/api/v1/skills/`,
         success: function (result) {
             skills = result && result['results'];
-            console.log('result -> ', skills);
             populate_list(skills, '#select_skills', 'Skill')
         }
     });
@@ -139,10 +137,9 @@ $(document).ready(function () {
     * */
     $.ajax({
         type: 'GET',
-        url: 'http://127.0.0.1:8000/console/api/v1/products/',
+        url: `${site_domain}/console/api/v1/products/`,
         success: function (result) {
             products = result && result['results'];
-            console.log('products - ', products);
             populate_list(products, '#select_products', 'Product')
         }
     });
@@ -159,7 +156,6 @@ $(document).ready(function () {
             } else obj[item.name] = parseInt(item.value)
             return obj;
         }, {});
-        console.log('instance_detail -> ', instance);
         invalid_keys = [];
         for (const key in instance) {
             if (isNaN(instance[key])) {
@@ -205,7 +201,6 @@ $(document).ready(function () {
             } else obj[item.name] = parseInt(item.value)
             return obj;
         }, {});
-        console.log('product_skill -=> ', instance);
         const ps_id = instance['ps_id'];
         delete instance['ps_id'];
         invalid_keys = [];
@@ -220,12 +215,11 @@ $(document).ready(function () {
         }
         $.ajax({
             type: "PUT",
-            url: `http://127.0.0.1:8000/console/api/v1/product-skills/${ps_id}/`,
+            url: `${site_domain}/console/api/v1/product-skills/${ps_id}/`,
             dataType: 'json',
             data: JSON.stringify(instance),
             contentType: 'application/json',
             success: function (response) {
-                console.log('updated response ->', response);
                 fetchProductSkills(instance['product_id']);
                 resetForms('skill-edit-modal-form');
                 $('#edit-modal').modal('toggle');
@@ -251,7 +245,6 @@ $(document).ready(function () {
 
         // populate model with product skill items
         let psObj = (productSkillList || []).find(ps => ps.id === parseInt(psId));
-        console.log(psObj);
         $('#ps_priority').val(psObj['priority']);
 
 
@@ -268,15 +261,13 @@ $(document).ready(function () {
     * Submit New product Skills Relations
     * */
     $('#submit_product_skills').click(function () {
-        console.log('new data', data);
         $.ajax({
             type: 'POST',
-            url: 'http://127.0.0.1:8000/console/api/v1/product-skills/',
+            url: `${site_domain}/console/api/v1/product-skills/`,
             data: JSON.stringify(data),
             contentType: 'application/json',
             dataType: 'json',
             success: function (response) {
-                console.log(response);
                 emptyList('tags_1_tagsinput');
                 disableSubmitButton('submit_product_skills');
                 throwMessage('Successful!', 'alert-success');
@@ -288,7 +279,6 @@ $(document).ready(function () {
     * On Skill Selected
     * */
     $('#select_skills').on('change', (function (el) {
-        console.log(el.target.value);
         $('#skill_id').val(el.target.value);
     }));
     /*
