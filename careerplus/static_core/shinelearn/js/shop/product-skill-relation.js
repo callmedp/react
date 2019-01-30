@@ -11,7 +11,7 @@ $(document).ready(function () {
 
     let data = [], skills = [], products = [],
         currentSkillId = null, currentProductId = null,
-        invalid_keys = [], productSkillList = [];
+        invalid_keys = [], productSkillList = [], notAvailSkills=[];
 
     const populate_list = (data, id, name) => {
         $(id).select2({
@@ -80,6 +80,7 @@ $(document).ready(function () {
     };
 
     const enableSkills = function (productId) {
+
         let availProdSkills = productSkillList.map(ps => (ps['skill_id']));
         removeSkills(availProdSkills);
         $('#select_skills').prop('disabled', false);
@@ -91,9 +92,11 @@ $(document).ready(function () {
             url: `${site_domain}/console/api/v1/product-skills/?product_id=${productId}`,
             success: function (response) {
                 emptyList('current_product_list');
+                notAvailSkills = [];
                 $.each(response && response['results'], function (i, item) {
-                    let currentSkill = skills.find(skill => skill['id'] === parseInt(item['skill_id']))
-                    $('#current_product_list').append(`<li class="list-group-item" value= ${item['id']}>
+                        let currentSkill = skills.find(skill => skill['id'] === parseInt(item['skill_id']));
+                        if (currentSkill) {
+                            $('#current_product_list').append(`<li class="list-group-item" value= ${item['id']}>
                                     <div>
                                         <label class="list-appearence">
                                           ${currentSkill['name']}-${item['skill_id']}
@@ -104,8 +107,14 @@ $(document).ready(function () {
                                                 class="glyphicon glyphicon-pencil edit-span"></span></a>
                                     </div>
                                 </li>`)
-                });
+                        }
+                        else {
+                            notAvailSkills.push(item['skill_id']);
+                        }
+                    }
+                );
                 productSkillList = response && response['results'];
+                productSkillList = productSkillList.filter(ps => notAvailSkills.indexOf(ps['skill_id']) === -1);
                 enableSkills(productId)
 
             }
