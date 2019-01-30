@@ -20,7 +20,7 @@ class ProductSkillAddView(ListCreateAPIView):
 
     def get_queryset(self):
         product_id = self.request.GET.get('product_id')
-        return ProductSkill.objects.all().filter(product_id=product_id)
+        return ProductSkill.objects.all().filter(product_id=product_id).select_related('skill')
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):

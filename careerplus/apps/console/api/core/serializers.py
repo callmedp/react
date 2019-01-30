@@ -33,6 +33,15 @@ class ProductSkillSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("Duplicate entry. Product Id {} and Skill Id {} already exists together.".format(data['product_id'], data['skill_id']))
         return data
 
+    def to_representation(self, instance):
+        data = super(ProductSkillSerializer, self).to_representation(instance)
+        skill_instance = instance.__dict__['_skill_cache']
+        skill_name = skill_instance.__dict__['name']
+        data.update({'skill_name': skill_name})
+        return data
+
+
+
 
 class SkillSerializer(serializers.ModelSerializer):
 

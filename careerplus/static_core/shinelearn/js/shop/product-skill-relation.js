@@ -94,12 +94,10 @@ $(document).ready(function () {
                 emptyList('current_product_list');
                 notAvailSkills = [];
                 $.each(response && response['results'], function (i, item) {
-                        let currentSkill = skills.find(skill => skill['id'] === parseInt(item['skill_id']));
-                        if (currentSkill) {
                             $('#current_product_list').append(`<li class="list-group-item" value= ${item['id']}>
                                     <div>
                                         <label class="list-appearence">
-                                          ${currentSkill['name']}-${item['skill_id']}
+                                          ${item['skill_name']}-${item['skill_id']}
                                         </label>
                                     </div>
                                     <div class="pull-right action-buttons float-edit ">
@@ -107,10 +105,6 @@ $(document).ready(function () {
                                                 class="glyphicon glyphicon-pencil edit-span"></span></a>
                                     </div>
                                 </li>`)
-                        }
-                        else {
-                            notAvailSkills.push(item['skill_id']);
-                        }
                     }
                 );
                 productSkillList = response && response['results'];
