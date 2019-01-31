@@ -1,29 +1,7 @@
 $(document).ready(function () {
 
-    $("#test_id").select2();
-    $('#select_skills').select2({
-        allowClear: true
-
-    });
-    $('#select_products').select2({
-        allowClear: true
-    });
-
-    let data = [], skills = [], products = [],
-        currentSkillId = null, currentProductId = null,
+    let data = [], currentSkillId = null, currentProductId = null,
         invalid_keys = [], productSkillList = [];
-
-    const populate_list = (data, id, name) => {
-        $(id).select2({
-            placeholder: `Please Select ${name}`,
-            data: data.map(el => {
-                return {
-                    id: el['id'], text: `${el['name']}-${el['id']}`
-                };
-            }),
-            allowClear: true,
-        });
-    };
 
     const throwMessage = (message, message_class) => {
         const el = $('#warn_message');
@@ -74,26 +52,18 @@ $(document).ready(function () {
         data = [], currentSkillId = null, currentProductId = null, invalid_keys = [], productSkillList = [];
     };
 
-    const removeSkills = function (list) {
-        $.each(list, function (i, item) {
-            $(`#select_skills option[value=${item}]`).remove()
-        })
-    };
-
-    const enableSkills = function (productId) {
-
-        let availProdSkills = productSkillList.map(ps => (ps['skill_id']));
-        removeSkills(availProdSkills);
+    const enableSkills = function () {
         $('#select_skills').prop('disabled', false);
     };
 
     const fetchProductSkills = function (productId) {
+        let filter = $('#product-skill-choice option:selected').val();
         $.ajax({
             type: 'GET',
-            url: `${site_domain}/console/api/v1/product-skills/?product_id=${productId}`,
+            url: `${site_domain}/console/api/v1/product-skills/?product_id=${productId}&active=${filter === "1" ? 'False' : 'True'}`,
             success: function (response) {
                 emptyList('current_product_list');
-                $.each(response && response['results'], function (i, item) {
+                $.each(response, function (i, item) {
                         $('#current_product_list').append(`<li class="list-group-item" value="${item['id']}">
                                     <div>
                                         <label class="list-appearence">
@@ -107,13 +77,11 @@ $(document).ready(function () {
                                 </li>`)
                     }
                 );
-                productSkillList = response && response['results'];
-                enableSkills(productId)
-
+                productSkillList = response;
+                enableSkills();
             }
         });
     };
-
 
     if (!data.length) {
         disableSubmitButton('submit_product_skills');
@@ -124,27 +92,80 @@ $(document).ready(function () {
     }
 
     /*
-    Fetch skills List
-     */
-    $.ajax({
-        type: 'GET',
-        url: `${site_domain}/console/api/v1/skills/`,
-        success: function (result) {
-            skills = result && result['results'];
-            populate_list(skills, '#select_skills', 'Skill')
-        }
-    });
-    /*
-    * Fetch product list
+    * Fetch Skills
     * */
-    $.ajax({
-        type: 'GET',
-        url: `${site_domain}/console/api/v1/products/`,
-        success: function (result) {
-            products = result && result['results'];
-            populate_list(products, '#select_products', 'Product')
-        }
-    });
+
+    const fetchSkillList = () => {
+        $('#select_skills').select2({
+            placeholder: 'Please Select Skill',
+            allowClear: true,
+            ajax: {
+                delay: 300,
+                url: `${site_domain}/console/api/v1/skills/`,
+                data: function (params) {
+
+                    let query = {
+                        page: params.page || 1,
+                        page_size: 10,
+                        search: (params.term || '').trim()
+                    };
+                    if (currentProductId) query['exel_prd_skill'] = currentProductId;
+                    return query;
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: data.results.map(skill => ({
+                            id: skill['id'], text: `${skill['name']}-${skill['id']}`
+                        })),
+                        pagination: {
+                            more: (params.page * 10) < data.count
+                        }
+                    };
+                }
+            }
+        });
+    };
+    fetchSkillList();
+
+    /*
+    * Fetch Product List 
+    * */
+    const fetchProductList = () => {
+
+        $('#select_products').select2({
+            placeholder: 'Please Select Product',
+            allowClear: true,
+            ajax: {
+                delay: 300,
+                url: `${site_domain}/console/api/v1/products/`,
+                data: function (params) {
+                    let query = {
+                        page: params.page || 1,
+                        page_size: 10,
+                        search: (params.term || '').trim()
+                    };
+                    return query;
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: data.results.map(product => ({
+                            id: product['id'], text: `${product['name']}-${product['id']}`
+                        })),
+                        pagination: {
+                            more: (params.page * 10) < data.count
+                        }
+                    };
+                }
+            }
+        });
+
+    };
+
+    fetchProductList();
+
+
     /*
     * Add Skills
     * */
@@ -168,7 +189,7 @@ $(document).ready(function () {
             throwMessage(`${invalid_keys.join(',')} ${invalid_keys.length > 1 ? 'are' : 'is'} either invalid or not provided.`, 'alert-warning');
             return;
         }
-        let index = productSkillList.findIndex(productSkill => parseInt(productSkill['skill_id']) === parseInt(instance['skill_id']));
+        let index = (productSkillList || []).findIndex(productSkill => parseInt(productSkill['skill_id']) === parseInt(instance['skill_id']));
         if (index > -1) {
             throwMessage(`Skill already exists in the current product.`, 'alert-warning');
             return;
@@ -183,11 +204,11 @@ $(document).ready(function () {
         resetObjects('select_skills');
         resetPriority('priority');
 
-        let skill = skills.find(skill => skill.id === instance['skill_id']);
-        let product = products.find(product => product.id === instance['product_id']);
+        let skill = $(`#select_skills option[value=${instance['skill_id']}]`).text();
+        let product = $(`#select_products option[value=${instance['product_id']}]`).text();
 
         $('#tags_1_tagsinput').append(`
-                                    <span class="tag"><span data-product="${product.id}" data-skill="${skill.id}">${product.name}-${skill.name}&nbsp;&nbsp;</span><a class="remove-tags-input"  href="#" title="Remove tag">x</a></span>
+                                    <span class="tag"><span data-product="${instance['product_id']}" data-skill="${instance['skill_id']}">${product}-${skill}&nbsp;&nbsp;</span><a class="remove-tags-input"  href="#" title="Remove tag">x</a></span>
 
 `);
         enableSubmitButton('submit_product_skills');
@@ -225,10 +246,8 @@ $(document).ready(function () {
             contentType: 'application/json',
             success: function (response) {
                 fetchProductSkills(instance['product_id']);
-                resetForms('skill-edit-modal-form');
                 $('#edit-modal').modal('toggle');
                 throwMessage('Update Successfully !', 'alert-success');
-
             }
         })
     });
@@ -250,7 +269,6 @@ $(document).ready(function () {
         // populate model with product skill items
         let psObj = (productSkillList || []).find(ps => ps.id === parseInt(psId));
         $('#ps_priority').val(psObj['priority']);
-
 
         if ((psObj['active'] === false && $('#ps_active').prop('checked')) || (psObj['active'] === true && !$('#ps_active').prop('checked'))) {
             $('#ps_active').trigger('click');
@@ -282,12 +300,14 @@ $(document).ready(function () {
             }
         })
     });
+
     /*
     * On Skill Selected
     * */
     $('#select_skills').on('change', (function (el) {
         $('#skill_id').val(el.target.value);
     }));
+
     /*
     *  On product selected
     * */
@@ -299,9 +319,12 @@ $(document).ready(function () {
         } else {
             // freeze skills
             resetObjects('select_skills');
+            currentProductId = null;
+            emptyList('current_product_list');
             $('#select_skills').prop('disabled', 'disabled')
         }
-    }))
+    }));
+
     /*
     * remove dynamic added tags
     * */
@@ -315,6 +338,15 @@ $(document).ready(function () {
         }
         this.parentNode.parentNode.removeChild(this.parentNode);
         return false;
+    });
+    /*
+    * select only active or bring all given product
+    * */
+    $('#product-skill-choice').on('change', function () {
+        if (currentProductId) {
+            fetchProductSkills(currentProductId);
+        }
     })
+
 
 });

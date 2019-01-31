@@ -10,16 +10,27 @@ from shop.models import (ProductSkill, Product, Skill)
 
 # third party imports
 from rest_framework.generics import (ListCreateAPIView, CreateAPIView, ListAPIView, RetrieveUpdateAPIView, )
+from rest_framework.pagination import PageNumberPagination
+
+
+class StandardResultSetPagination(PageNumberPagination):
+    page_size_query_param = "page_size"
+    max_page_size = 10000
 
 
 class ProductSkillAddView(ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     serializer_class = ProductSkillSerializer
+    pagination_class = None
 
     def get_queryset(self):
         product_id = self.request.GET.get('product_id')
-        return ProductSkill.objects.all().filter(product_id=product_id).select_related('skill')
+        active = self.request.GET.get('active')
+        if active == 'True':
+            return ProductSkill.objects.all().filter(product_id=product_id, active=True).select_related('skill')
+        else:
+            return ProductSkill.objects.all().filter(product_id=product_id).select_related('skill')
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -41,13 +52,44 @@ class ProductListView(ListAPIView):
     authentication_classes = ()
     permission_classes = ()
     serializer_class = ProductSerializer
+    pagination_class = StandardResultSetPagination
 
     def get_queryset(self):
-        return Product.selected.all().select_related('product_class')
+
+        search_text = self.request.GET.get('search')
+        if search_text is not None:
+            return Product.selected.all().select_related('product_class').filter(name__icontains=search_text)
+        else:
+            return Product.selected.all().select_related('product_class')
 
 
 class SkillListView(ListAPIView):
     authentication_classes = ()
     permission_classes = ()
-    queryset = Skill.objects.only('id', 'name', ).filter(active=True)
+    pagination_class = StandardResultSetPagination
+
+    def get_queryset(self):
+
+        product_id = self.request.GET.get('exel_prd_skill')
+        search_text = self.request.GET.get('search')
+        product_skill_list = []
+        query_value_list = []
+
+        if product_id:
+            product_skill_list = ProductSkill.objects.all().filter(product_id=product_id)
+            query_value_list = product_skill_list.values_list('skill_id', flat=True)
+
+        if product_id is not None and search_text is not None:
+            return Skill.objects.only('id', 'name', ).filter(active=True, name__icontains=search_text).exclude(
+                id__in=query_value_list)
+
+        elif product_id is not None:
+            return Skill.objects.only('id', 'name', ).filter(active=True).exclude(id__in=query_value_list)
+
+        elif search_text is not None:
+            return Skill.objects.only('id', 'name', ).filter(active=True, name__icontains=search_text)
+
+        else:
+            return Skill.objects.only('id', 'name', ).filter(active=True)
+
     serializer_class = SkillSerializer
