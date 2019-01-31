@@ -94,7 +94,7 @@ $(document).ready(function () {
             success: function (response) {
                 emptyList('current_product_list');
                 $.each(response && response['results'], function (i, item) {
-                        $('#current_product_list').append(`<li class="list-group-item" value= ${item['id']}>
+                        $('#current_product_list').append(`<li class="list-group-item" value="${item['id']}">
                                     <div>
                                         <label class="list-appearence">
                                           ${item['skill_name']}-${item['skill_id']}
@@ -187,7 +187,7 @@ $(document).ready(function () {
         let product = products.find(product => product.id === instance['product_id']);
 
         $('#tags_1_tagsinput').append(`
-                                    <span class="tag"><span data-product=${product.id} data-skill=${skill.id}>${product.name}-${skill.name}&nbsp;&nbsp;</span><a class="remove-tags-input"  href="#" title="Remove tag">x</a></span>
+                                    <span class="tag"><span data-product="${product.id}" data-skill="${skill.id}">${product.name}-${skill.name}&nbsp;&nbsp;</span><a class="remove-tags-input"  href="#" title="Remove tag">x</a></span>
 
 `);
         enableSubmitButton('submit_product_skills');
