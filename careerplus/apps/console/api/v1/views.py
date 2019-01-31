@@ -12,7 +12,6 @@ from shop.models import (ProductSkill, Product, Skill)
 from rest_framework.generics import (ListCreateAPIView, CreateAPIView, ListAPIView, RetrieveUpdateAPIView, )
 
 
-
 class ProductSkillAddView(ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()

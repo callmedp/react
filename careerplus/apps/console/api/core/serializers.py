@@ -35,8 +35,7 @@ class ProductSkillSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super(ProductSkillSerializer, self).to_representation(instance)
-        skill_instance = instance.__dict__['_skill_cache']
-        skill_name = skill_instance.__dict__['name']
+        skill_name = instance.skill.name
         data.update({'skill_name': skill_name})
         return data
 

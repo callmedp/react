@@ -11,7 +11,7 @@ $(document).ready(function () {
 
     let data = [], skills = [], products = [],
         currentSkillId = null, currentProductId = null,
-        invalid_keys = [], productSkillList = [], notAvailSkills=[];
+        invalid_keys = [], productSkillList = [];
 
     const populate_list = (data, id, name) => {
         $(id).select2({
@@ -54,18 +54,6 @@ $(document).ready(function () {
         $(`#${elemId}`).trigger('reset');
     }
 
-    const handleTagDelete = (elem) => {
-        const dataElem = $(elem).siblings()[0];
-        const prodId = $(dataElem).data('product');
-        const skillId = $(dataElem).data('skill');
-        data = data.filter(item => !(item['product_id'] === parseInt(prodId) && item['skill_id'] === parseInt(skillId)));
-        if (!data.length) {
-            disableSubmitButton('submit_product_skills');
-        }
-        elem.parentNode.parentNode.removeChild(elem.parentNode);
-        return false;
-    };
-
     const resetInitials = () => {
         resetObjects('select_skills');
         resetObjects('select_products');
@@ -92,9 +80,8 @@ $(document).ready(function () {
             url: `${site_domain}/console/api/v1/product-skills/?product_id=${productId}`,
             success: function (response) {
                 emptyList('current_product_list');
-                notAvailSkills = [];
                 $.each(response && response['results'], function (i, item) {
-                            $('#current_product_list').append(`<li class="list-group-item" value= ${item['id']}>
+                        $('#current_product_list').append(`<li class="list-group-item" value= ${item['id']}>
                                     <div>
                                         <label class="list-appearence">
                                           ${item['skill_name']}-${item['skill_id']}
@@ -108,7 +95,6 @@ $(document).ready(function () {
                     }
                 );
                 productSkillList = response && response['results'];
-                productSkillList = productSkillList.filter(ps => notAvailSkills.indexOf(ps['skill_id']) === -1);
                 enableSkills(productId)
 
             }
@@ -181,14 +167,16 @@ $(document).ready(function () {
         data.push(instance);
 
         resetForms('add-product-skill-form');
+        resetObjects('select_skills');
+
 
         let skill = skills.find(skill => skill.id === instance['skill_id']);
         let product = products.find(product => product.id === instance['product_id']);
 
         $('#tags_1_tagsinput').append(`
-                                    <span class="tag"><span data-product=${product.id} data-skill=${skill.id}>${product.name}-${skill.name}&nbsp;&nbsp;</span><a onclick=handleTagDelete(this) href="#" title="Remove tag">x</a></span>
+                                    <span class="tag"><span data-product=${product.id} data-skill=${skill.id}>${product.name}-${skill.name}&nbsp;&nbsp;</span><a class="remove-tags-input"  href="#" title="Remove tag">x</a></span>
 
-`)
+`);
         enableSubmitButton('submit_product_skills');
     });
     /*
@@ -264,6 +252,9 @@ $(document).ready(function () {
     * Submit New product Skills Relations
     * */
     $('#submit_product_skills').click(function () {
+        if (this.hasAttribute('disabled')) {
+            return;
+        }
         $.ajax({
             type: 'POST',
             url: `${site_domain}/console/api/v1/product-skills/`,
@@ -298,5 +289,19 @@ $(document).ready(function () {
             $('#select_skills').prop('disabled', 'disabled')
         }
     }))
+    /*
+    * remove dynamic added tags
+    * */
+    $(document).on("click", 'a.remove-tags-input', function () {
+        const dataElem = $(this).siblings()[0];
+        const prodId = $(dataElem).data('product');
+        const skillId = $(dataElem).data('skill');
+        data = data.filter(item => !(item['product_id'] === parseInt(prodId) && item['skill_id'] === parseInt(skillId)));
+        if (!data.length) {
+            disableSubmitButton('submit_product_skills');
+        }
+        this.parentNode.parentNode.removeChild(this.parentNode);
+        return false;
+    })
 
 });
