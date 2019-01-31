@@ -54,10 +54,23 @@ $(document).ready(function () {
         $(`#${elemId}`).trigger('reset');
     }
 
+    const resetPriority = (elemId) => {
+        $(`#${elemId}`).val('1');
+    }
+
+    const resetActiveSwitch = (elemId) => {
+        if (!$(`#${elemId}`).prop('checked')) {
+            $(`#${elemId}`).trigger('click');
+        }
+
+    }
+
     const resetInitials = () => {
         resetObjects('select_skills');
         resetObjects('select_products');
         emptyList('current_product_list');
+        resetPriority('priority');
+        resetActiveSwitch('active');
         data = [], currentSkillId = null, currentProductId = null, invalid_keys = [], productSkillList = [];
     };
 
@@ -165,10 +178,10 @@ $(document).ready(function () {
             return;
         }
         data.push(instance);
-
+        resetActiveSwitch('active');
         resetForms('add-product-skill-form');
         resetObjects('select_skills');
-
+        resetPriority('priority');
 
         let skill = skills.find(skill => skill.id === instance['skill_id']);
         let product = products.find(product => product.id === instance['product_id']);
