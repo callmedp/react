@@ -143,6 +143,7 @@ $(document).ready(function () {
                     let query = {
                         page: params.page || 1,
                         page_size: 10,
+                        courses: "True",
                         search: (params.term || '').trim()
                     };
                     return query;
@@ -247,7 +248,7 @@ $(document).ready(function () {
             success: function (response) {
                 fetchProductSkills(instance['product_id']);
                 $('#edit-modal').modal('toggle');
-                throwMessage('Update Successfully !', 'alert-success');
+                throwMessage('Updated Successfully!', 'alert-success');
             }
         })
     });

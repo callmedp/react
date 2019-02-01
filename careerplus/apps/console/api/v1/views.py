@@ -1,6 +1,7 @@
 # python imports
 
 # django imports
+from django.conf import settings
 
 # local imports
 from console.api.core.serializers import (ProductSkillSerializer, SkillSerializer, ProductSerializer)
@@ -56,7 +57,13 @@ class ProductListView(ListAPIView):
 
     def get_queryset(self):
 
+        courses = self.request.GET.get('courses')
         search_text = self.request.GET.get('search')
+        if courses == 'True' and search_text is not None:
+            return Product.selected.all().select_related('product_class').filter(name__icontains=search_text,
+                                                                                 product_class__slug__in=settings.COURSE_SLUG)
+        elif courses == 'True':
+            return Product.selected.all().select_related('product_class').filter(produt_class__slug__in=settings.COURSE_SLUG)
         if search_text is not None:
             return Product.selected.all().select_related('product_class').filter(name__icontains=search_text)
         else:
@@ -67,6 +74,7 @@ class SkillListView(ListAPIView):
     authentication_classes = ()
     permission_classes = ()
     pagination_class = StandardResultSetPagination
+    serializer_class = SkillSerializer
 
     def get_queryset(self):
 
@@ -91,5 +99,3 @@ class SkillListView(ListAPIView):
 
         else:
             return Skill.objects.only('id', 'name', ).filter(active=True)
-
-    serializer_class = SkillSerializer
