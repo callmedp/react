@@ -100,7 +100,7 @@ urlpatterns += [
 
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
-    
+
     url(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='service-detail'),
     url(r'^courses/', include('skillpage.urls', namespace='skillpage')),
@@ -113,12 +113,12 @@ urlpatterns += [
 
     url(r'^online-courses.html$',
         CourseCatalogueView.as_view(), name='course-catalogoue'),
-    
+
     # url(r'^job-assistance/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
     #     ProductDetailView.as_view(), name='job-assist-detail'),
     # url(r'^product/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
     #     ProductDetailView.as_view(), name='other-detail'),
-    
+
 ]
 
 # Additional admin urls
@@ -148,7 +148,7 @@ urlpatterns += [
     url(r'^article/', include('blog.urls', namespace='blog')),
     url(r'^talenteconomy/', include('talenteconomy.urls', namespace='talent')),
     url(r'^hr-insider/', include('hrinsider.urls', namespace='hrinsider')),
-    
+
     url(r'^cart/', include('cart.urls', namespace='cart')),
     url(r'^order/', include('order.urls', namespace='order')),
     url(r'^geolocation/', include('geolocation.urls', namespace='geolocation')),
@@ -193,6 +193,9 @@ urlpatterns += [
 
     # django-oauth-toolkit
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+
+    # entry point for react template
+    url(r'^resume-templates/$', TemplateView.as_view(template_name='frontend/index.html'))
 
 
 ] + static(

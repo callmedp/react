@@ -65,7 +65,8 @@ THIRD_PARTY_APPS = [
     'celery',
     'compressor',
     'storages',
-    'django_filters'
+    'django_filters',
+    'webpack_loader'
 ]
 
 # Apps specific for this project go here.
@@ -160,6 +161,14 @@ DEFAULT_MOBILE_FLAVOUR = 'mobile'
 FLAVOURS = ('full', 'mobile')
 
 WSGI_APPLICATION = 'careerplus.wsgi.application'
+
+# Webpack loader is used to load webpack generated files
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'react/dist/',
+        'STATS_FILE': os.path.join(BASE_DIR,'..', 'webpack-stats.json'),
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
