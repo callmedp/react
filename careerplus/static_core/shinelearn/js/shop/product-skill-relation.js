@@ -235,7 +235,7 @@ $(document).ready(function () {
             }
         }
         if (invalid_keys.length) {
-            throwMessage(`${invalid_keys.join(',')} ${invalid_keys.length > 1 ? 'are' : 'is'} either invalid or not provided.`, 'alert-warning');
+            throwMessage(`${invalid_keys.join(',')} ${invalid_keys.length > 1 ? ' are ' : ' is '} either invalid or not provided.`, 'alert-warning');
             return;
         }
         $.ajax({
