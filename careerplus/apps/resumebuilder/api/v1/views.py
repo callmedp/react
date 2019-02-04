@@ -4,18 +4,19 @@
 
 # local imports
 from resumebuilder.models import (User, Skill, UserExperience, UserEducation, UserCertification,
-                                  UserProject, UserReference , ExternalLink)
+                                  UserProject, UserReference, ExternalLink)
 from resumebuilder.api.core.serializers import (UserSerializer, SkillSerializer, UserExperienceSerializer,
                                                 UserEducationSerializer, UserCertificationSerializer,
-                                                UserProjectSerializer, UserReferenceSerializer , ExternalLinkSerializer)
+                                                UserProjectSerializer, UserReferenceSerializer, ExternalLinkSerializer)
 
+from resumebuilder.mixins import (SessionManagerMixin)
 # inter app imports
 
 # third party imports
 from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateAPIView, )
 
 
-class UserListCreateView(ListCreateAPIView):
+class UserListCreateView(SessionManagerMixin,ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = User.objects.all()
@@ -27,7 +28,7 @@ class UserListCreateView(ListCreateAPIView):
         return super(UserListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class UserRetrieveUpdateView(RetrieveUpdateAPIView):
+class UserRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
@@ -38,7 +39,7 @@ class UserRetrieveUpdateView(RetrieveUpdateAPIView):
         return User.objects.filter(id=user_id)
 
 
-class SkillListCreateView(ListCreateAPIView):
+class SkillListCreateView(SessionManagerMixin, ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = Skill.objects.all()
@@ -50,7 +51,7 @@ class SkillListCreateView(ListCreateAPIView):
         return super(SkillListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class SkillRetrieveUpdateView(RetrieveUpdateAPIView):
+class SkillRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
@@ -61,7 +62,7 @@ class SkillRetrieveUpdateView(RetrieveUpdateAPIView):
         return Skill.objects.filter(id=skill_id)
 
 
-class UserExperienceListCreateView(ListCreateAPIView):
+class UserExperienceListCreateView(SessionManagerMixin, ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = UserExperience.objects.all()
@@ -73,7 +74,7 @@ class UserExperienceListCreateView(ListCreateAPIView):
         return super(UserExperienceListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class UserExperienceRetrieveUpdateView(RetrieveUpdateAPIView):
+class UserExperienceRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
@@ -84,7 +85,7 @@ class UserExperienceRetrieveUpdateView(RetrieveUpdateAPIView):
         return UserExperience.objects.filter(id=user_experience_id)
 
 
-class UserEducationListCreateView(ListCreateAPIView):
+class UserEducationListCreateView(SessionManagerMixin, ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = UserEducation.objects.all()
@@ -96,7 +97,7 @@ class UserEducationListCreateView(ListCreateAPIView):
         return super(UserEducationListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class UserEducationRetrieveUpdateView(RetrieveUpdateAPIView):
+class UserEducationRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
@@ -107,7 +108,7 @@ class UserEducationRetrieveUpdateView(RetrieveUpdateAPIView):
         return UserEducation.objects.filter(id=user_education_id)
 
 
-class UserCertificationListCreateView(ListCreateAPIView):
+class UserCertificationListCreateView(SessionManagerMixin, ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = UserCertification.objects.all()
@@ -119,7 +120,7 @@ class UserCertificationListCreateView(ListCreateAPIView):
         return super(UserCertificationListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class UserCertificationRetrieveUpdateView(RetrieveUpdateAPIView):
+class UserCertificationRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
@@ -130,7 +131,7 @@ class UserCertificationRetrieveUpdateView(RetrieveUpdateAPIView):
         return UserCertification.objects.filter(id=user_certification_id)
 
 
-class UserProjectListCreateView(ListCreateAPIView):
+class UserProjectListCreateView(SessionManagerMixin, ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = UserProject.objects.all()
@@ -142,7 +143,7 @@ class UserProjectListCreateView(ListCreateAPIView):
         return super(UserProjectListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class UserProjectRetrieveUpdateView(RetrieveUpdateAPIView):
+class UserProjectRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
@@ -153,7 +154,7 @@ class UserProjectRetrieveUpdateView(RetrieveUpdateAPIView):
         return UserProject.objects.filter(id=user_project_id)
 
 
-class UserReferenceListCreateView(ListCreateAPIView):
+class UserReferenceListCreateView(SessionManagerMixin, ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = UserReference.objects.all()
@@ -165,7 +166,7 @@ class UserReferenceListCreateView(ListCreateAPIView):
         return super(UserReferenceListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class UserReferenceRetrieveUpdateView(RetrieveUpdateAPIView):
+class UserReferenceRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
@@ -176,7 +177,7 @@ class UserReferenceRetrieveUpdateView(RetrieveUpdateAPIView):
         return UserReference.objects.filter(id=user_reference_id)
 
 
-class ExternalLinkListCreateView(ListCreateAPIView):
+class ExternalLinkListCreateView(SessionManagerMixin, ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = ExternalLink.objects.all()
@@ -188,7 +189,7 @@ class ExternalLinkListCreateView(ListCreateAPIView):
         return super(ExternalLinkListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class ExternalLinkRetrieveUpdateView(RetrieveUpdateAPIView):
+class ExternalLinkRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
