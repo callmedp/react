@@ -1,12 +1,8 @@
+# django imports
 from django.db import models
 
-# import models from inter app
+# import from inter app
 from shop.models import AbstractAutoDate
-
-
-# Create your models here.
-
-# UserDetail
 
 
 class UserProfile(AbstractAutoDate):
@@ -88,6 +84,7 @@ class UserProject(models.Model):
 class UserReference(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
     reference_name = models.CharField('Reference Name', max_length=150),
+    reference_designation = models.CharField('Reference Designation', max_length=150)
     about_user = models.TextField('About User')
 
     def __str__(self):
