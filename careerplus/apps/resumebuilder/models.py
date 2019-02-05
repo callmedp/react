@@ -11,7 +11,7 @@ class UserProfile(AbstractAutoDate):
     mobile = models.CharField('User Contact Number', max_length=15)
     date_of_birth = models.DateField('DOB')
     location = models.CharField('User Location', max_length=100)
-    gender = models.CharField('Gender', choices=(('M', 'Male'), ('F', 'Female'), ('O', 'Others')))
+    gender = models.CharField('Gender', choices=(('M', 'Male'), ('F', 'Female'), ('O', 'Others')), max_length=1)
     extra_info = models.TextField('Extra Information')
 
     class Meta:
@@ -51,7 +51,7 @@ class UserEducation(models.Model):
     specialization = models.CharField('Specialization', max_length=200)
     institution_name = models.CharField('Institution Name', max_length=250)
     course_type = models.CharField('Institution Name', choices=(('FT', 'Full Time'), ('PT', 'Part Time'),
-                                                                ('CR', 'Correspondence')))
+                                                                ('CR', 'Correspondence')), max_length=2)
     percentage_cgpa = models.CharField('Percentage Or CGPA', max_length=250)
     start_date = models.DateField('Start Date', blank=False)
     end_date = models.DateField('End Date', blank=True)
@@ -75,7 +75,7 @@ class UserProject(models.Model):
     project_name = models.CharField('Project Name', max_length=150)
     start_date = models.DateField('Start Date', blank=False)
     end_date = models.DateField('End Date', blank=True)
-    skills = models.ManyToManyFields(Skill, 'List of Skills')
+    skills = models.ManyToManyField(Skill, verbose_name= 'List of Skills')
 
     def __str__(self):
         return self.project_name
