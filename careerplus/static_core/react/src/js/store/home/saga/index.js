@@ -1,5 +1,5 @@
 import {Api} from './Api';
-import {takeLatest, takeEvery, put, call} from "redux-saga/effects";
+import {takeLatest, put, call} from "redux-saga/effects";
 import * as Actions from '../actions/actionTypes';
 
 
@@ -9,22 +9,20 @@ function* fetchHome() {
         const homeData = yield call(Api.fetchHomeData);
         yield put({type: Actions.SAVE_HOME_DATA, data: homeData});
     } catch (e) {
-        console.log('--the error is here---', e);
+        console.log('error', e);
     }
 }
 
-//
-// function* saveHome(action) {
-//     try {
-//         console.log('----in herer', action);
-//         const response = yield call(Api.saveHomeData);
-//         console.log('-----', response);
-//     } catch (e) {
-//
-//     }
-// }
+
+function* saveHome(action) {
+    try {
+        const response = yield call(Api.saveHomeData, action.data);
+    } catch (e) {
+        console.log('error', e);
+    }
+}
 
 export default function* watchFetchHomeData() {
-    console.log('00herre');
-    yield takeEvery(Actions.FETCH_HOME_DATA, fetchHome);
+    yield takeLatest(Actions.FETCH_HOME_DATA, fetchHome);
+    yield takeLatest(Actions.SAVE_HOME_DATA, saveHome);
 }

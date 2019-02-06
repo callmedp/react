@@ -22,15 +22,7 @@ class Home extends React.Component {
             email: this.state.email,
             number: this.state.number
         }
-            this.props.onFetchHomeDetail();
-        // return fetch('http://127.0.0.1:8000/resume/api/v1/users/', {
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     method: 'POST',
-        //     body: JSON.stringify(userDetails)
-        // })
-        //     .then(response => console.log(response))
+        this.props.saveHomeDetail(userDetails);
     }
 
     handleNameChange(e) {

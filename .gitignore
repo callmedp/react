@@ -126,3 +126,5 @@ node_modules/
 package-lock.json
 
 careerplus/static_core/react/dist/
+
+webpack-stats.json
