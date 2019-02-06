@@ -9,8 +9,9 @@
   <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
 {% endblock canonical_url %}
 
-{% block title %}   
-    {{category_obj.name|title}} Certification ({{ products.paginator.count }} Professional Courses) - Shine Learning
+{% block title %}
+    	{{meta.title}}
+
 {% endblock title %}
 {% block css_section %}
 {{ block.super }}
@@ -20,29 +21,50 @@
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/shop/course-detail.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     {% endcompress %}
+<style>
+     .breadcrumb > li a{
+            color: #ffff;
+             }
+</style>
+
 {% endblock css_section %}
 {% block header %}
     <header class="w100fl he-auto">
         <img src="{% static 'shinelearn/images/mobile/skill/header-back-img-2.png' %}">
-        
+
         <!-- header menu Icon Starts here -->
         <div class="main-menu w100fl">
             <div class="pull-left">
-                
-                <a class=" pull-left" id="sidebar-main-trigger" href="#"></a> 
 
-                
-                <a class="icon-back pull-left"  href="/"></a> 
+                <a class=" pull-left" id="sidebar-main-trigger" href="#"></a>
+
+
+                <a class="icon-back pull-left"  href="/"></a>
             </div><!-- / Left side Icon ends here -->
 
             <div class="pull-right">
-                
+
                 <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
                 <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
             </div><!-- / Right side Icon ends here -->
-            
+
         </div><!-- header menu Icon ends here -->
-        <h1 class="heading-back w100fl pb-0">{{category_obj.name}} Programs</h1>
+        <h1 class="heading-back w100fl pb-0">{{category_obj.name}} Courses & Certifications</h1>
+        <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
+                {% for bread in breadcrumbs %}
+                    {% if bread.url %}
+                        <li itemprop="itemListElement" itemscope
+					      itemtype="http://schema.org/ListItem">
+						    <a href='{{bread.url}}' itemprop="item">{{bread.name}}
+	                        </a>
+							<meta itemprop="name" content="{{bread.name}}" />
+						    <meta itemprop="position" content="{{forloop.counter}}" />
+	                    </li>
+                    {% else %}
+                        <li class="active">{{bread.name}}</li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
         <ul class="header-taging mt-10 w100fl">
             {% if top_3_prod.0 %}
             <li><a href="{{top_3_prod.0.pURL}}">{{top_3_prod.0.pNm}}</a></li>
@@ -54,7 +76,7 @@
             <li><a href="{{top_3_prod.2.pURL}}">{{top_3_prod.2.pNm}}</a></li>
             {% endif %}
         </ul>
-    </header><!-- header ends here -->    
+    </header><!-- header ends here -->
 {% endblock header %}
 
 {% block container %}
@@ -96,9 +118,9 @@
                             <li>
                                 <sup class="icon-tick"></sup>{{career_outcome}}
                             </li>
-                        {% endfor %} 
+                        {% endfor %}
                         </ul>
-                        <div class="clearfix"></div>  
+                        <div class="clearfix"></div>
                     </div>
                 </div><!-- end of Recommended  for -->
 
@@ -117,7 +139,7 @@
                                     <span class="fs-22 blue-link">
                                         <a href="https://www.shine.com/job-search/{{category_obj.name|slugify}}/">
                                             {{api_data.job_count}}
-                                        </a>    
+                                        </a>
                                     </span>
                                      <p class="pb-0 c6">
                                         jobs in the market demanding this skill
@@ -186,7 +208,7 @@
                                         {% endfor %}
                                         <p>{{page_review.content | safe}}</p>
                                         <p class="fs-12 c9 pb-0">
-                                            {{page_review.user_name}} 
+                                            {{page_review.user_name}}
                                             {{page_review.created|timesince}} ago
                                         </p>
                                     </div>
@@ -197,14 +219,14 @@
                     </div><!-- end of box -->
                 {% endif %}
                 </div><!-- end of container -->
-            
+
             </div><!-- end of skill box -->
         </section><!-- end of section here -->
     </div><!-- body wrapper ends here -->
     {% block call_us %}
         {% include "shop/partials/call_us.html" %}
     {% endblock call_us %}
-    
+
 {% endblock container %}
 
 {% block js_section %}
@@ -214,4 +236,5 @@
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}
+
 

@@ -11,6 +11,9 @@
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     {% endcompress css %}
         <style>
+        .breadcrumb > li a{
+            color: #ffff;
+                    }
             a[disabled], a[disabled]:hover {
                pointer-events: none;
                color: #e1e1e1;
@@ -65,7 +68,18 @@
                 </div><!-- / Right side Icon ends here -->
             </div><!-- header menu Icon ends here -->
         {% endif %}
+
+
         <h1 class="heading-back w100fl pb-0">{{prd_H1}}</h1>
+         {% block breadcrumbs %}
+                  {% if sqs.id in linkedin_resume_services %}
+                    <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
+                        <li class="active"></li>
+                    </ol>
+                  {% else %}
+                    {% include "shop/partials/breadcrumb.html" %}
+                  {% endif %}
+              {% endblock breadcrumbs %}
         <div class="clearfix"></div>
         {% include "shop/partials/packagediv.html" %}
     </header><!-- header ends here -->    
@@ -85,7 +99,13 @@
                     <li>
                         <figure class="icon-comments"></figure>
                         {% if prd_num_rating %}
-                        <a href="javascript:void(0);">{{prd_num_rating}}</a>
+                        <a href="javascript:void(0);">{{prd_num_rating}}
+                        {%if prd_num_rating == 1 %}
+                            review
+                            {%else%}
+                            reviews
+                            {% endif %}
+                        </a>
                         {% else %}
                         <span class="fs-11">Be the first to review</span>
                         {% endif %}
