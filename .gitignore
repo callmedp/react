@@ -127,4 +127,6 @@ package-lock.json
 
 careerplus/static_core/react/dist/
 
+# Webpack Stats
+
 webpack-stats.json

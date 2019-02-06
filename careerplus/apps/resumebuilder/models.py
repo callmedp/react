@@ -6,13 +6,15 @@ from shop.models import AbstractAutoDate
 
 
 class UserProfile(AbstractAutoDate):
-    name = models.CharField('User Name', max_length=100)
+    first_name = models.CharField('User First Name', max_length=100)
+    last_name = models.CharField('User Last Name', max_length=100)
     email = models.CharField('User Email', max_length=100, unique=True, blank=False)
-    mobile = models.CharField('User Contact Number', max_length=15)
-    date_of_birth = models.DateField('DOB')
-    location = models.CharField('User Location', max_length=100)
-    gender = models.CharField('Gender', choices=(('M', 'Male'), ('F', 'Female'), ('O', 'Others')), max_length=1)
-    extra_info = models.TextField('Extra Information')
+    number = models.CharField('User Contact Number', max_length=15)
+    date_of_birth = models.DateField('DOB', blank=True, null=True)
+    location = models.CharField('User Location', max_length=100, blank=True, null=True)
+    gender = models.CharField('Gender', choices=(('M', 'Male'), ('F', 'Female'), ('O', 'Others')), max_length=1,
+                              blank=True, null=True)
+    extra_info = models.TextField('Extra Information', blank=True, null=True)
 
     class Meta:
         abstract = True
@@ -75,7 +77,7 @@ class UserProject(models.Model):
     project_name = models.CharField('Project Name', max_length=150)
     start_date = models.DateField('Start Date', blank=False)
     end_date = models.DateField('End Date', blank=True)
-    skills = models.ManyToManyField(Skill, verbose_name= 'List of Skills')
+    skills = models.ManyToManyField(Skill, verbose_name='List of Skills')
 
     def __str__(self):
         return self.project_name

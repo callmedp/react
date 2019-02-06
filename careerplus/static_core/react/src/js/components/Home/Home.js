@@ -15,13 +15,13 @@ class Home extends React.Component {
                 <form onSubmit={handleSubmit}>
                     <div className={'Text-spacing'}>
                         <div>
-                            <Field type="text" name="firstName" component={renderField} validate={required}
+                            <Field type="text" name="first_name" component={renderField} validate={required}
                                    label="First Name:"/>
                         </div>
                     </div>
                     <div className={'Text-spacing'}>
                         <div>
-                            <Field type="text" name="lastName" component={renderField} validate={required}
+                            <Field type="text" name="last_name" component={renderField} validate={required}
                                    label="Last Name:"/>
                         </div>
                     </div>
@@ -49,7 +49,7 @@ class Home extends React.Component {
                     </div>
                     <div className={'Button-parent'}>
                         <button className={'Submit-button'} type="submit" disabled={pristine || submitting}>
-                            Submit
+                            Next
                         </button>
                     </div>
                 </form>
