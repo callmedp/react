@@ -1,10 +1,7 @@
 #
-from django.contrib.sessions.backends.db import SessionStore
 from django.http import HttpResponse
-from django.shortcuts import redirect
 
 # inter app imports
-from resumebuilder.models import User
 
 # python imports
 import json

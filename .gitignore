@@ -124,3 +124,5 @@ node_modules/
 
 # Package-lock
 package-lock.json
+
+careerplus/static_core/react/dist/

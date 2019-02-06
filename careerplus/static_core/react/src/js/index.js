@@ -1,10 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-class App extends React.Component {
-  render () {
-    return (
-      <h1>Django + React + Webpack + Babel = Awesome App</h1>
-    )
-  }
-}
-ReactDOM.render(<App />, document.getElementById('react-app'));
+import {Provider} from 'react-redux';
+import store from './store/index';
+import App from './App';
+
+
+const rootElement = document.getElementById('react-app');
+
+ReactDOM.render(
+    <Provider store={store}>
+        <App/>
+    </Provider>, rootElement
+);
+
+
+
+

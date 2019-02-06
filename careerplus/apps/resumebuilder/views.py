@@ -7,5 +7,5 @@ from django.views.generic.base import TemplateView
 from .mixins import SessionManagerMixin
 
 
-class WriteResumeView(SessionManagerMixin, TemplateView):
+class WriteResumeView(TemplateView):
     template_name = 'frontend/index.html'

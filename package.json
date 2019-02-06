@@ -8,6 +8,9 @@
     "start": "./node_modules/.bin/webpack --config webpack.config.js",
     "watch": "npm run start -- --watch"
   },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/firefly-eventures/careerplus.git"
@@ -20,6 +23,7 @@
   "homepage": "https://github.com/firefly-eventures/careerplus#readme",
   "devDependencies": {
     "@babel/core": "^7.2.2",
+    "@babel/plugin-transform-runtime": "^7.2.0",
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
     "babel-cli": "^6.26.0",
@@ -36,7 +40,12 @@
     "webpack-cli": "^3.2.1"
   },
   "dependencies": {
+    "@babel/runtime": "^7.3.1",
     "react": "^16.7.0",
-    "react-dom": "^16.7.0"
+    "react-dom": "^16.7.0",
+    "react-redux": "^6.0.0",
+    "react-router-dom": "^4.3.1",
+    "redux": "^4.0.1",
+    "redux-saga": "^1.0.1"
   }
 }
