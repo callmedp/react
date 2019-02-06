@@ -18,11 +18,51 @@
     color: white;
 }
 
-.Text-spacing{
-    margin:10px;
+.Text-spacing {
+    margin: 10px;
 }
+
 .App-link {
     color: #61dafb;
+}
+
+.Authentication-page {
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    align-items: center;
+
+}
+
+.Button-parent {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.Submit-button {
+    font-size: 12px;
+    padding: 10px;
+}
+
+.Error-message {
+    font-size: 14px;
+    display: block;
+    color: #ff000057;
+    padding-top: 5px;
+}
+
+.Warn-message {
+    font-size: 14px;
+    display: block;
+    color: #ff000057;
+    padding-top: 5px;
+}
+
+.Top-space {
+    margin-top: 5px;
 }
 
 @keyframes App-logo-spin {

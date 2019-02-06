@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Field, reduxForm} from 'redux-form';
+import {renderField, required, phoneNumber} from '../../fieldLevelValidationForm';
 
 class Home extends React.Component {
     constructor(props) {
@@ -10,63 +11,54 @@ class Home extends React.Component {
     render() {
         const {handleSubmit, pristine, reset, submitting} = this.props;
         return (
-            <div className={'App-header'}>
+            <div className={'Authentication-page'}>
                 <form onSubmit={handleSubmit}>
                     <div className={'Text-spacing'}>
-                        <label>
-                            First Name:
-                        </label>
                         <div>
-                            <Field type="text" name="firstName" component="input" placeholder="First Name"/>
+                            <Field type="text" name="firstName" component={renderField} validate={required}
+                                   label="First Name:"/>
                         </div>
                     </div>
                     <div className={'Text-spacing'}>
-                        <label>
-                            Last Name:
-                        </label>
                         <div>
-                            <Field type="text" name="lastName" component="input" placeholder="Lasst Name"/>
+                            <Field type="text" name="lastName" component={renderField} validate={required}
+                                   label="Last Name:"/>
                         </div>
                     </div>
                     <div className={'Text-spacing'}>
-                        <label>
-                            Email:
-                        </label>
                         <div>
                             <Field
                                 name="email"
-                                component="input"
+                                component={renderField}
+                                validate={required}
                                 type="email"
-                                placeholder="Email"
+                                label="Email:"
                             />
                         </div>
                     </div>
                     <div className={'Text-spacing'}>
-                        <label>
-                            Number:
-                        </label>
                         <div>
                             <Field
                                 name="number"
-                                component="input"
+                                component={renderField}
+                                validate={[required, phoneNumber]}
                                 type="text"
-                                placeholder="Contact Number"
+                                label="Contact Number:"
                             />
                         </div>
                     </div>
-
-                    <button type="submit" disabled={pristine || submitting}>
-                        Submit
-                    </button>
+                    <div className={'Button-parent'}>
+                        <button className={'Submit-button'} type="submit" disabled={pristine || submitting}>
+                            Submit
+                        </button>
+                    </div>
                 </form>
             </div>
         );
     }
 }
 
-Home.propTypes = {
-    pinCode: PropTypes.number
-}
+Home.propTypes = {};
 
 export default reduxForm({
     form: 'user_info'
