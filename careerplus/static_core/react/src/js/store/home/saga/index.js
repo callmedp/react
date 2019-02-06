@@ -14,9 +14,11 @@ function* fetchHome() {
 }
 
 
-function* saveHome(action) {
+function* saveUserInfo(action) {
     try {
-        const response = yield call(Api.saveHomeData, action.data);
+        const {payload: {userDetails, resolve, reject}} = action;
+        const result = yield call(Api.saveUserData, userDetails);
+        resolve();
     } catch (e) {
         console.log('error', e);
     }
@@ -24,5 +26,6 @@ function* saveHome(action) {
 
 export default function* watchFetchHomeData() {
     yield takeLatest(Actions.FETCH_HOME_DATA, fetchHome);
-    yield takeLatest(Actions.SAVE_HOME_DATA, saveHome);
+    yield takeLatest(Actions.SAVE_USER_DETAILS, saveUserInfo);
+
 }

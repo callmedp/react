@@ -10,12 +10,12 @@ const fetchHomeData = () => {
     }
 };
 
-const saveHomeData = (data) => {
+const saveUserData = (data) => {
     const url = 'users/';
     return BaseApiService.post(`http://127.0.0.1:8000/resume/api/v1/${url}`, data);
 };
 
 export const Api = {
     fetchHomeData,
-    saveHomeData
+    saveUserData
 };

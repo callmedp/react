@@ -1,10 +1,11 @@
-import {FETCH_HOME_DATA, SAVE_HOME_DATA} from "../actions/actionTypes";
+import {FETCH_HOME_DATA, SAVE_USER_DETAILS} from "../actions/actionTypes";
 
 const initialState = {
-    "location": "Delhi",
-    "pinCode": 110064,
-    "state": "Delhi"
-}
+    firstName: '',
+    lastName: '',
+    email: '',
+    number: ''
+};
 
 
 const homeReducer = (state = initialState, action) => {
@@ -15,7 +16,7 @@ const homeReducer = (state = initialState, action) => {
             };
         }
 
-        case SAVE_HOME_DATA: {
+        case SAVE_USER_DETAILS: {
             return {
                 ...state,
                 ...action.data
@@ -25,7 +26,6 @@ const homeReducer = (state = initialState, action) => {
             return state;
         }
     }
-}
-
+};
 
 export default homeReducer;

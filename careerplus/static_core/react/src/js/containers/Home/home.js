@@ -12,13 +12,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        "onFetchHomeDetail": () => {
-            dispatch(actions.fetchHomeData());
-        },
-        "saveHomeDetail": (homeData) => {
-            dispatch(actions.saveHomeData(homeData));
-        }
-    }
+        "onSubmit": (userDetails) => new Promise((resolve, reject) => {
+            dispatch(actions.saveUserDetails({userDetails, resolve, reject}))
+        })
+}
 
 };
 

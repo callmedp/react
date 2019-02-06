@@ -1,3 +1,3 @@
 export const FETCH_HOME_DATA = "FETCH_HOME_DATA";
 
-export const SAVE_HOME_DATA = "SAVE_HOME_DATA";
+export const SAVE_USER_DETAILS = 'SAVE_USER_DETAILS';

@@ -1,74 +1,63 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Field, reduxForm} from 'redux-form';
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            'name': '',
-            'email': '',
-            'phone': ''
-        };
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleNameChange = this.handleNameChange.bind(this);
-        this.handleEmailChange = this.handleEmailChange.bind(this);
-        this.handleNumberChange = this.handleNumberChange.bind(this);
     }
-
-    handleSubmit(e) {
-        e.preventDefault();
-        const userDetails = {
-            name: this.state.name,
-            email: this.state.email,
-            number: this.state.number
-        }
-        this.props.saveHomeDetail(userDetails);
-    }
-
-    handleNameChange(e) {
-        this.setState({
-            name: e.target.value
-        })
-    }
-
-    handleEmailChange(e) {
-        this.setState({
-            email: e.target.value
-        })
-
-    }
-
-    handleNumberChange(e) {
-        this.setState({
-            number: e.target.value
-        })
-    }
-
 
     render() {
+        const {handleSubmit, pristine, reset, submitting} = this.props;
         return (
             <div className={'App-header'}>
-                <form onSubmit={this.handleSubmit}>
+                <form onSubmit={handleSubmit}>
                     <div className={'Text-spacing'}>
                         <label>
-                            Name:
-                            <input type="text" value={this.state.name} onChange={this.handleNameChange}/>
+                            First Name:
                         </label>
+                        <div>
+                            <Field type="text" name="firstName" component="input" placeholder="First Name"/>
+                        </div>
+                    </div>
+                    <div className={'Text-spacing'}>
+                        <label>
+                            Last Name:
+                        </label>
+                        <div>
+                            <Field type="text" name="lastName" component="input" placeholder="Lasst Name"/>
+                        </div>
                     </div>
                     <div className={'Text-spacing'}>
                         <label>
                             Email:
-                            <input type="text" value={this.state.email} onChange={this.handleEmailChange}/>
                         </label>
+                        <div>
+                            <Field
+                                name="email"
+                                component="input"
+                                type="email"
+                                placeholder="Email"
+                            />
+                        </div>
                     </div>
                     <div className={'Text-spacing'}>
                         <label>
                             Number:
-                            <input type="text" value={this.state.number} onChange={this.handleNumberChange}/>
                         </label>
+                        <div>
+                            <Field
+                                name="number"
+                                component="input"
+                                type="text"
+                                placeholder="Contact Number"
+                            />
+                        </div>
                     </div>
 
-                    <input type="submit" value="Submit"/>
+                    <button type="submit" disabled={pristine || submitting}>
+                        Submit
+                    </button>
                 </form>
             </div>
         );
@@ -79,4 +68,6 @@ Home.propTypes = {
     pinCode: PropTypes.number
 }
 
-export default Home;
+export default reduxForm({
+    form: 'user_info'
+})(Home);
