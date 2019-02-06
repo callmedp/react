@@ -9,7 +9,7 @@ class Home extends React.Component {
     }
 
     render() {
-        const {handleSubmit, pristine, reset, submitting} = this.props;
+        const {error, handleSubmit, pristine, reset, submitting} = this.props;
         return (
             <div className={'Authentication-page'}>
                 <form onSubmit={handleSubmit}>
@@ -53,6 +53,11 @@ class Home extends React.Component {
                         </button>
                     </div>
                 </form>
+                {error && <div className={'Api-error'}>
+                    <span>{error}</span>
+                </div>
+
+                }
             </div>
         );
     }

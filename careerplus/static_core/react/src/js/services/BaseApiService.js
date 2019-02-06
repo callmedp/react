@@ -20,7 +20,6 @@ const post = (url, data, headers = defaultHeaders) => {
         method: 'POST',
         body: JSON.stringify(data)
     })
-        .then(response => response.json())
         .then(handleResponse)
 }
 
@@ -30,15 +29,26 @@ const put = (url, data, headers = defaultHeaders) => {
         method: 'PUT',
         body: JSON.stringify(data)
     })
-        .then(response => response.json())
         .then(handleResponse)
 }
 
 
-function handleResponse(response) {
+async function handleResponse(response) {
     // handle all the status and conditions here
-
-    return response;
+    if (response['ok'] === false) {
+        let message = '';
+        let data = await response.json();
+        for (const key in data) {
+            message += `${data[key]} `;
+        }
+        return {
+            error: true,
+            errorMessage: message,
+            status: response['status'],
+        }
+    } else {
+        return {data: response.json()};
+    }
 }
 
 
