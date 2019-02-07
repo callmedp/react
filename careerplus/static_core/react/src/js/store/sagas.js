@@ -1,4 +1,4 @@
-import watchFetchHomeData from './home/saga/index';
+import watchFetchHomeData from './userInfo/saga/index';
 import {call} from 'redux-saga/effects';
 
 export default function* () {

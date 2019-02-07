@@ -11,7 +11,7 @@ function* saveUserInfo(action) {
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
-        yield put({type: Actions.SAVE_USER_DETAILS, data: result['data']});
+        yield put({type: Actions.STORE_USER_INFO, data: result['data']});
         return resolve('Done');
     } catch (e) {
         console.log('error', e);

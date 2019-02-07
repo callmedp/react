@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {connect} from "react-redux";
+import * as actions from '../../../store/userInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
-import {renderField, required, phoneNumber} from '../../fieldLevelValidationForm';
+import {renderField, required, phoneNumber} from '../../../fieldLevelValidationForm';
 
-class Home extends React.Component {
+export class Register extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -63,8 +65,33 @@ class Home extends React.Component {
     }
 }
 
-Home.propTypes = {};
 
-export default reduxForm({
-    form: 'user_info'
-})(Home);
+export const RegisterForm = reduxForm({
+    form: 'user_info',
+    onSubmitSuccess: (result, dispatch, props) => {
+        console.log('after successs');
+        props.history.push({
+            pathname: '/resume-builder/detail'
+        })
+    }
+})(Register);
+
+
+const mapStateToProps = (state) => {
+    return {
+        pinCode: state.userInfoReducer["pinCode"],
+
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "onSubmit": (userDetails) => new Promise((resolve, reject) => {
+            dispatch(actions.saveUserDetails({userDetails, resolve, reject}))
+        })
+    }
+
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterForm);
+

@@ -1,20 +1,17 @@
 import React from "react";
-
-import {BrowserRouter as Router, Route, Link} from "react-router-dom";
-
-import HomeContainer from '../containers/Home/home';
-
-const Index = () => <h1> Home </h1>;
-const About = () => <h1> About</h1>;
-const User = () => <h1> User</h1>;
+import {BrowserRouter as Router, Route, Link, Switch} from "react-router-dom";
+import RegisterContainer from '../components/UserInfo/Register/register.jsx';
+import DetailContainer from '../components/UserInfo/Detail/detail.jsx';
+import Main from '../components/Main/main.jsx';
 
 const AppRouter = () => (
     <Router>
-        <div>
-            <Route path="/resume-builder/" exact component={HomeContainer}/>
-            <Route path="/resume-builder/about" component={About}/>
-            <Route path="/resume-builder/users" component={User}/>
-        </div>
+        <Switch>
+            <Route path='/resume-builder' exact component={Main}/>
+            <Route path="/resume-builder/register" component={RegisterContainer}/>
+            <Route path="/resume-builder/detail" component={DetailContainer}/>
+        </Switch>
+
     </Router>
 );
 

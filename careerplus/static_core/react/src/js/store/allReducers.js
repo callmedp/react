@@ -2,11 +2,11 @@ import {combineReducers} from 'redux';
 import {reducer as formReducer} from 'redux-form'
 
 
-import homeReducer from './home/reducer/index';
+import userInfoReducer from './userInfo/reducer/index';
 
 
 const allReducer = combineReducers({
-    homeReducer,
+    userInfoReducer,
     form: formReducer
 
 });

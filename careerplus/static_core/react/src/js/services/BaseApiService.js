@@ -47,7 +47,8 @@ async function handleResponse(response) {
             status: response['status'],
         }
     } else {
-        return {data: response.json()};
+        let result = await response.json();
+        return {data: result};
     }
 }
 

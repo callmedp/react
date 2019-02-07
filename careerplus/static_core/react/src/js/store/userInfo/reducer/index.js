@@ -1,4 +1,4 @@
-import {FETCH_HOME_DATA, SAVE_USER_DETAILS} from "../actions/actionTypes";
+import {FETCH_HOME_DATA, STORE_USER_INFO} from "../actions/actionTypes";
 
 const initialState = {
     firstName: '',
@@ -8,7 +8,7 @@ const initialState = {
 };
 
 
-const homeReducer = (state = initialState, action) => {
+const userInfoReducer = (state = initialState, action) => {
     switch (action.type) {
         case FETCH_HOME_DATA: {
             return {
@@ -16,7 +16,7 @@ const homeReducer = (state = initialState, action) => {
             };
         }
 
-        case SAVE_USER_DETAILS: {
+        case STORE_USER_INFO: {
             return {
                 ...state,
                 ...action.data
@@ -28,4 +28,4 @@ const homeReducer = (state = initialState, action) => {
     }
 };
 
-export default homeReducer;
+export default userInfoReducer;
