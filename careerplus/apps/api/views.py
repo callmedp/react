@@ -73,7 +73,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                         "cell_phone": mobile,
                         "name": name,
                     }
-                    candidate_id = user_register(data)
+                    candidate_id, error = user_register(data)
 
                 if not candidate_id and flag:
                     msg = 'candidate_id is required.'
