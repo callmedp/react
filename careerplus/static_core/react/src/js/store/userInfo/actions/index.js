@@ -1,5 +1,5 @@
 import {
-    FETCH_HOME_DATA, SAVE_USER_DETAILS
+    FETCH_HOME_DATA, SAVE_USER_DETAILS, UPDATE_USER_DETAILS
 } from "./actionTypes";
 
 export const fetchHomeData = () => ({
@@ -8,5 +8,10 @@ export const fetchHomeData = () => ({
 
 export const saveUserDetails = (payload) => ({
     type: SAVE_USER_DETAILS,
+    payload
+})
+
+export const updateUserDetails = (payload) => ({
+    type: UPDATE_USER_DETAILS,
     payload
 })

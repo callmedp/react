@@ -16,7 +16,7 @@ from resumebuilder.mixins import (SessionManagerMixin)
 from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateAPIView, )
 
 
-class UserListCreateView(SessionManagerMixin,ListCreateAPIView):
+class UserListCreateView(SessionManagerMixin, ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = User.objects.all()
@@ -33,6 +33,16 @@ class UserRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
     permission_classes = ()
 
     serializer_class = UserSerializer
+
+    # def put(self, request, *args, **kwargs):
+    #     user_id = int(kwargs.get('pk'))
+    #     user = User.objects.filter(id=user_id)
+    #     import ipdb;
+    #     ipdb.set_trace();
+    #     info = request.data
+    # #     update user with info provided.
+    # #     return updated_user
+
 
     def get_queryset(self):
         user_id = int(self.kwargs.get('pk'))

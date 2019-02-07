@@ -6,10 +6,10 @@ from shop.models import AbstractAutoDate
 
 
 class UserProfile(AbstractAutoDate):
-    first_name = models.CharField('User First Name', max_length=100)
-    last_name = models.CharField('User Last Name', max_length=100)
-    email = models.CharField('User Email', max_length=100, unique=True, blank=False)
-    number = models.CharField('User Contact Number', max_length=15)
+    first_name = models.CharField('User First Name', max_length=100, blank=True, null=True)
+    last_name = models.CharField('User Last Name', max_length=100, blank=True, null=True)
+    email = models.CharField('User Email', max_length=100, unique=True, blank=True, null=True)
+    number = models.CharField('User Contact Number', max_length=15, blank=True, null=True)
     date_of_birth = models.DateField('DOB', blank=True, null=True)
     location = models.CharField('User Location', max_length=100, blank=True, null=True)
     gender = models.CharField('Gender', choices=(('M', 'Male'), ('F', 'Female'), ('O', 'Others')), max_length=1,

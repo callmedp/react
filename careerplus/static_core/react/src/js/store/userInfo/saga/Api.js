@@ -15,7 +15,14 @@ const saveUserData = (data) => {
     return BaseApiService.post(`http://127.0.0.1:8000/resume/api/v1/${url}`, data);
 };
 
+const updateUserData = (data, userId) => {
+    const url = `users/${userId}/`;
+    return BaseApiService.put(`http://127.0.0.1:8000/resume/api/v1/${url}`, data);
+};
+
+
 export const Api = {
     fetchHomeData,
-    saveUserData
+    saveUserData,
+    updateUserData
 };

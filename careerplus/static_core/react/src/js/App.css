@@ -65,6 +65,11 @@
     color: #ff00007a;
 }
 
+.Button-group {
+    display: flex;
+    justify-content: space-between;
+}
+
 .Top-space {
     margin-top: 5px;
 }

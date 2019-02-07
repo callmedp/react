@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import * as actions from '../../../store/userInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
-import {renderField, required, phoneNumber} from '../../../fieldLevelValidationForm';
+import {renderField, required, datePicker, renderSelect, renderTextArea} from '../../../fieldLevelValidationForm';
 
 export class Detail extends React.Component {
     constructor(props) {
@@ -17,42 +17,55 @@ export class Detail extends React.Component {
                 <form onSubmit={handleSubmit}>
                     <div className={'Text-spacing'}>
                         <div>
-                            <Field type="text" name="first_name" component={renderField} validate={required}
-                                   label="First Name:"/>
+                            <Field type="date" name="date_of_birth" component={renderField} validate={required}
+                                   label="Date Of Birth:"/>
                         </div>
                     </div>
                     <div className={'Text-spacing'}>
                         <div>
-                            <Field type="text" name="last_name" component={renderField} validate={required}
-                                   label="Last Name:"/>
+                            <Field type="text" name="location" component={renderField} validate={required}
+                                   label="Location :"/>
                         </div>
                     </div>
                     <div className={'Text-spacing'}>
                         <div>
                             <Field
-                                name="email"
-                                component={renderField}
+                                name="gender"
+                                component={renderSelect}
                                 validate={required}
-                                type="email"
-                                label="Email:"
-                            />
+                                label="Gender:"
+                            >
+                                <option></option>
+                                <option name="Male" value="M">Male</option>
+                                <option name="Female" value="F">Female</option>
+                                <option name="Other" value="O">Other</option>
+
+                            </Field>
                         </div>
                     </div>
                     <div className={'Text-spacing'}>
                         <div>
                             <Field
-                                name="number"
-                                component={renderField}
-                                validate={[required, phoneNumber]}
+                                name="extra_info"
+                                component={renderTextArea}
                                 type="text"
-                                label="Contact Number:"
+                                label="Extra Information:"
                             />
                         </div>
                     </div>
-                    <div className={'Button-parent'}>
-                        <button className={'Submit-button'} type="submit" disabled={pristine || submitting}>
-                            Back
-                        </button>
+                    <div className={'Button-group'}>
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} onClick={() => {
+                                this.props.history.goBack()
+                            }}>
+                                Back
+                            </button>
+                        </div>
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="submit" disabled={pristine || submitting}>
+                                Next
+                            </button>
+                        </div>
                     </div>
                 </form>
                 {error && <div className={'Api-error'}>
@@ -81,7 +94,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userDetails) => new Promise((resolve, reject) => {
-            dispatch(actions.saveUserDetails({userDetails, resolve, reject}))
+            dispatch(actions.updateUserDetails({userDetails, resolve, reject}))
         })
     }
 
