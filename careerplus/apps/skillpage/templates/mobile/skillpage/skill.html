@@ -24,33 +24,27 @@
 <style>
      .breadcrumb > li a{
             color: #ffff;
-             overflow:hidden;
              }
 </style>
 
 {% endblock css_section %}
 {% block header %}
     <header class="w100fl he-auto">
-        <img src="{% static 'shinelearn/images/mobile/skill/header-back-img-2.png' %}">
+  <div class="main-menu w100fl">
+                <div class="pull-left">
+                    <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button"></a>
+                </div>
 
-        <!-- header menu Icon Starts here -->
-        <div class="main-menu w100fl">
-            <div class="pull-left">
+                <div class="pull-right">
 
-                <a class=" pull-left" id="sidebar-main-trigger" href="#"></a>
+                   <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
+
+                   <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                </div><!-- / Right side Icon ends here -->
+            </div>
 
 
-                <a class="icon-back pull-left"  href="/"></a>
-            </div><!-- / Left side Icon ends here -->
-
-            <div class="pull-right">
-
-                <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
-                <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
-            </div><!-- / Right side Icon ends here -->
-
-        </div><!-- header menu Icon ends here -->
-        <h1 class="heading-back w100fl pb-0">{{category_obj.name}} Courses & Certifications</h1>
+             <h1 class="heading-back w100fl pb-0">{{category_obj.name}} Courses & Certifications</h1>
         <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
                 {% for bread in breadcrumbs %}
                     {% if bread.url %}
