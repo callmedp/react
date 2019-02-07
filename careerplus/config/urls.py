@@ -198,7 +198,7 @@ urlpatterns += [
                    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
                    # entry point for react template
-                   url(r'^resume-builder/$', WriteResumeView.as_view())
+                   url(r'^resume-builder/', WriteResumeView.as_view())
 
                ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
