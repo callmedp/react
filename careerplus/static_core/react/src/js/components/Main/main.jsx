@@ -12,7 +12,7 @@ class Main extends React.Component {
     render() {
         return (
             <div>
-                <div>
+                <div className={'Main-page'}>
                     <Link to="/resume-builder/register">Create Your Resume</Link>
                 </div>
             </div>

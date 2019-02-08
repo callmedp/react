@@ -69,7 +69,6 @@ export class Register extends React.Component {
 export const RegisterForm = reduxForm({
     form: 'user_info',
     onSubmitSuccess: (result, dispatch, props) => {
-        console.log('after successs');
         props.history.push({
             pathname: '/resume-builder/detail'
         })

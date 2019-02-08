@@ -5,7 +5,7 @@ import * as actions from '../../../store/userInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
 import {renderField, required, datePicker, renderSelect, renderTextArea} from '../../../fieldLevelValidationForm';
 
-export class Detail extends React.Component {
+export class Experience extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -79,14 +79,14 @@ export class Detail extends React.Component {
 }
 
 
-export const DetailForm = reduxForm({
+export const ExperienceForm = reduxForm({
     form: 'user_info',
     onSubmitSuccess: (result, dispatch, props) => {
         props.history.push({
             pathname: '/resume-builder/experience'
         })
     }
-})(Detail);
+})(Experience);
 
 
 const mapStateToProps = (state) => {
@@ -95,12 +95,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        "onSubmit": (userDetails) => new Promise((resolve, reject) => {
-            dispatch(actions.updateUserDetails({userDetails, resolve, reject}))
+        "onSubmit": (userExperiences) => new Promise((resolve, reject) => {
+            dispatch(actions.updateUserExperiences({userExperiences, resolve, reject}))
         })
     }
 
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DetailForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ExperienceForm);
 

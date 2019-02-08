@@ -70,6 +70,12 @@
     justify-content: space-between;
 }
 
+.Main-page{
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    align-items: center;
+}
 .Top-space {
     margin-top: 5px;
 }
