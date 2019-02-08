@@ -23,9 +23,8 @@ export const renderField = ({
                                 meta: {touched, error, warning}
                             }) => (
     <div>
-        <label>{label}</label>
         <div className={'Top-space'}>
-            <input {...input} placeholder={label} type={type}/>
+            <input {...input} className={'Field-spacing'} placeholder={label} type={type}/>
             {touched &&
             ((error && <span className={'Error-message'}>{error}</span>) ||
                 (warning && <span className={'Warn-Message'}>{warning}</span>))}
@@ -41,7 +40,6 @@ export const datePicker = ({
                                meta: {touched, error, warning}
                            }) => (
     <div>
-        <label>{label}</label>
         <div className={'Top-space'}>
             <DatePicker {...input} dateForm="MM/DD/YYYY" placeholder={label}
                         selected={input.value ? moment(input.value) : null}/>
@@ -59,7 +57,6 @@ export const renderSelect = ({
                                  children
                              }) => (
     <div>
-        <label>{label}</label>
         <div className={'Top-space'}>
             <select {...input} >
                 {children}
@@ -79,7 +76,6 @@ export const renderTextArea = ({
 
                                }) => (
     <div>
-        <label>{label}</label>
         <div className={'Top-space'}>
             <textarea {...input} placeholder={label} type={type}/>
             {touched &&

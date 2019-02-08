@@ -13,53 +13,74 @@ export class Register extends React.Component {
     render() {
         const {error, handleSubmit, pristine, reset, submitting} = this.props;
         return (
-            <div className={'Authentication-page'}>
-                <form onSubmit={handleSubmit}>
-                    <div className={'Text-spacing'}>
-                        <div>
-                            <Field type="text" name="first_name" component={renderField} validate={required}
-                                   label="First Name:"/>
-                        </div>
+            <div className="container pr">
+                <header className="login-page-bg">
+                    <div className="login-bg-txt">
+                        <figure className="login-icon1"></figure>
+                        <strong>1 Lacs+</strong>
+                        Satisfied users
                     </div>
-                    <div className={'Text-spacing'}>
-                        <div>
-                            <Field type="text" name="last_name" component={renderField} validate={required}
-                                   label="Last Name:"/>
-                        </div>
+                    <div className="login-bg-txt">
+                        <figure className="login-icon2"></figure>
+                        <strong>300+</strong>
+                        Courses
                     </div>
-                    <div className={'Text-spacing'}>
-                        <div>
-                            <Field
-                                name="email"
-                                component={renderField}
-                                validate={required}
-                                type="email"
-                                label="Email:"
-                            />
-                        </div>
+                    <div className="login-bg-txt">
+                        <figure className="login-icon3"></figure>
+                        <strong>500+</strong>
+                        Professional resumes delivered
                     </div>
-                    <div className={'Text-spacing'}>
-                        <div>
-                            <Field
-                                name="number"
-                                component={renderField}
-                                validate={[required, phoneNumber]}
-                                type="text"
-                                label="Contact Number:"
-                            />
-                        </div>
-                    </div>
-                    <div className={'Button-parent'}>
-                        <button className={'Submit-button'} type="submit" disabled={pristine || submitting}>
-                            Next
-                        </button>
-                    </div>
-                </form>
-                {error && <div className={'Api-error'}>
-                    <span>{error}</span>
-                </div>
+                </header>
 
-                }
+                <div className="register login-signup-box">
+                    <h1 className="modal-title">Register</h1>
+
+                    <form onSubmit={handleSubmit}>
+                        <div className={'Text-spacing'}>
+                            <div>
+                                <Field type="text" name="first_name" component={renderField} validate={required}
+                                       label="First Name:"/>
+                            </div>
+                        </div>
+                        <div className={'Text-spacing'}>
+                            <div>
+                                <Field type="text" name="last_name" component={renderField} validate={required}
+                                       label="Last Name:"/>
+                            </div>
+                        </div>
+                        <div className={'Text-spacing'}>
+                            <div>
+                                <Field
+                                    name="email"
+                                    component={renderField}
+                                    validate={required}
+                                    type="email"
+                                    label="Email:"
+                                />
+                            </div>
+                        </div>
+                        <div className={'Text-spacing'}>
+                            <div>
+                                <Field
+                                    name="number"
+                                    component={renderField}
+                                    validate={[required, phoneNumber]}
+                                    type="text"
+                                    label="Contact Number:"
+                                />
+                            </div>
+                        </div>
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="submit" disabled={pristine || submitting}>
+                                Next
+                            </button>
+                        </div>
+                    </form>
+                    {error && <div className={'Api-error'}>
+                        <span>{error}</span>
+                    </div>
+                    }
+                </div>
             </div>
         );
     }
