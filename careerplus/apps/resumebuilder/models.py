@@ -77,7 +77,8 @@ class UserProject(models.Model):
     project_name = models.CharField('Project Name', max_length=150)
     start_date = models.DateField('Start Date', blank=False)
     end_date = models.DateField('End Date', blank=True)
-    skills = models.ManyToManyField(Skill, verbose_name='List of Skills')
+    skills = models.ManyToManyField(Skill, verbose_name='List of Skills', null=True, blank=True)
+    description = models.TextField('Project Description')
 
     def __str__(self):
         return self.project_name
@@ -85,7 +86,7 @@ class UserProject(models.Model):
 
 class UserReference(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
-    reference_name = models.CharField('Reference Name', max_length=150),
+    reference_name = models.CharField('Reference Name', max_length=150)
     reference_designation = models.CharField('Reference Designation', max_length=150)
     about_user = models.TextField('About User')
 
@@ -95,8 +96,18 @@ class UserReference(models.Model):
 
 class ExternalLink(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
-    link_name = models.CharField('Link Name', max_length=100),
+    link_name = models.CharField('Link Name', max_length=100)
     link = models.CharField('Link', max_length=200)
 
     def __str__(self):
         return self.link_name
+
+
+class UserAchievement(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+    title = models.CharField('Title', max_length=100)
+    date = models.DateField('Date')
+    summary = models.TextField('Summary')
+
+    def __str__(self):
+        return self.title

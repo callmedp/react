@@ -1,8 +1,8 @@
 import {FETCH_HOME_DATA, STORE_USER_INFO} from "../actions/actionTypes";
 
 const initialState = {
-    firstName: '',
-    lastName: '',
+    first_name: '',
+    last_name: '',
     email: '',
     number: ''
 };

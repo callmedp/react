@@ -5,7 +5,7 @@ import * as actions from '../../../store/userInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
 import {renderField, required, datePicker, renderSelect, renderTextArea} from '../../../fieldLevelValidationForm';
 
-export class Experience extends React.Component {
+export class Skill extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -33,56 +33,28 @@ export class Experience extends React.Component {
                 </header>
 
                 <div className="register login-signup-box">
-                    <h1 className="modal-title">Add Your Experience</h1>
+                    <h1 className="modal-title">Add Your Skill</h1>
 
                     <form onSubmit={handleSubmit}>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field type="text" name="job_profile" component={renderField} validate={required}
-                                       label="Job Profile"/>
+                                <Field type="text" name="title" component={renderField} validate={required}
+                                       label="Title"/>
                             </div>
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field type="text" name="company_name" component={renderField} validate={required}
-                                       label="Company"/>
+                                <Field type="date" name="date" component={renderField} validate={required}
+                                       label="Date"/>
                             </div>
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field type="date" name="start_date" component={renderField} validate={required}
-                                       label="Start Date"/>
-                            </div>
-                        </div>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="date" name="end_date" component={renderField} validate={required}
-                                       label="End Date"/>
-                            </div>
-                        </div>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="checkbox" name="is_working" component={renderField} validate={required}
-                                       label="Currently Working"/>
-                            </div>
-                        </div>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="text" name="job_location" component={renderField} validate={required}
-                                       label="Job Location"/>
+                                <Field type="text" name="summary" component={renderTextArea} validate={required}
+                                       label="Summary"/>
                             </div>
                         </div>
 
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field
-                                    name="work_description"
-                                    component={renderTextArea}
-                                    type="text"
-                                    label="Job Description"
-                                />
-                            </div>
-                        </div>
                         <div className={'Button-group'}>
                             <div className={'Button-parent'}>
                                 <button className={'Submit-button'} onClick={() => {
@@ -109,14 +81,14 @@ export class Experience extends React.Component {
 }
 
 
-export const ExperienceForm = reduxForm({
+export const SkillForm = reduxForm({
     form: 'user_info',
     onSubmitSuccess: (result, dispatch, props) => {
         props.history.push({
-            pathname: '/resume-builder/education'
+            pathname: '/resume-builder/reference'
         })
     }
-})(Experience);
+})(Skill);
 
 
 const mapStateToProps = (state) => {
@@ -125,12 +97,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        "onSubmit": (userExperiences) => new Promise((resolve, reject) => {
-            dispatch(actions.saveUserExperience({userExperiences, resolve, reject}))
+        "onSubmit": (userSkill) => new Promise((resolve, reject) => {
+            dispatch(actions.saveUserSkill({userSkill, resolve, reject}))
         })
     }
 
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ExperienceForm);
+export default connect(mapStateToProps, mapDispatchToProps)(SkillForm);
 

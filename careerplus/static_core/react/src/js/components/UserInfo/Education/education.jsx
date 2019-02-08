@@ -5,7 +5,7 @@ import * as actions from '../../../store/userInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
 import {renderField, required, datePicker, renderSelect, renderTextArea} from '../../../fieldLevelValidationForm';
 
-export class Experience extends React.Component {
+export class Education extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -33,19 +33,31 @@ export class Experience extends React.Component {
                 </header>
 
                 <div className="register login-signup-box">
-                    <h1 className="modal-title">Add Your Experience</h1>
+                    <h1 className="modal-title">Add Your Qualifications</h1>
 
                     <form onSubmit={handleSubmit}>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field type="text" name="job_profile" component={renderField} validate={required}
-                                       label="Job Profile"/>
+                                <Field type="text" name="specialization" component={renderField} validate={required}
+                                       label="Specialization"/>
                             </div>
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field type="text" name="company_name" component={renderField} validate={required}
-                                       label="Company"/>
+                                <Field type="text" name="institution_name" component={renderField} validate={required}
+                                       label="Institution Name"/>
+                            </div>
+                        </div>
+                        <div className={'Text-spacing'}>
+                            <div>
+                                <Field type="text" name="course_type" component={renderField} validate={required}
+                                       label="Course Type"/>
+                            </div>
+                        </div>
+                        <div className={'Text-spacing'}>
+                            <div>
+                                <Field type="text" name="percentage_cgpa" component={renderField} validate={required}
+                                       label="Percentage/Cgpa"/>
                             </div>
                         </div>
                         <div className={'Text-spacing'}>
@@ -62,27 +74,11 @@ export class Experience extends React.Component {
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field type="checkbox" name="is_working" component={renderField} validate={required}
-                                       label="Currently Working"/>
-                            </div>
-                        </div>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="text" name="job_location" component={renderField} validate={required}
-                                       label="Job Location"/>
+                                <Field type="checkbox" name="is_pursuing" component={renderField} validate={required}
+                                       label="Currently Pursuing"/>
                             </div>
                         </div>
 
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field
-                                    name="work_description"
-                                    component={renderTextArea}
-                                    type="text"
-                                    label="Job Description"
-                                />
-                            </div>
-                        </div>
                         <div className={'Button-group'}>
                             <div className={'Button-parent'}>
                                 <button className={'Submit-button'} onClick={() => {
@@ -109,14 +105,14 @@ export class Experience extends React.Component {
 }
 
 
-export const ExperienceForm = reduxForm({
+export const EducationForm = reduxForm({
     form: 'user_info',
     onSubmitSuccess: (result, dispatch, props) => {
         props.history.push({
-            pathname: '/resume-builder/education'
+            pathname: '/resume-builder/project'
         })
     }
-})(Experience);
+})(Education);
 
 
 const mapStateToProps = (state) => {
@@ -125,12 +121,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        "onSubmit": (userExperiences) => new Promise((resolve, reject) => {
-            dispatch(actions.saveUserExperience({userExperiences, resolve, reject}))
+        "onSubmit": (userEducation) => new Promise((resolve, reject) => {
+            dispatch(actions.saveUserEducation({userEducation, resolve, reject}))
         })
     }
 
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ExperienceForm);
+export default connect(mapStateToProps, mapDispatchToProps)(EducationForm);
 

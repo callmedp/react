@@ -4,10 +4,11 @@
 
 # local imports
 from resumebuilder.models import (User, Skill, UserExperience, UserEducation, UserCertification,
-                                  UserProject, UserReference, ExternalLink)
+                                  UserProject, UserReference, ExternalLink, UserAchievement)
 from resumebuilder.api.core.serializers import (UserSerializer, SkillSerializer, UserExperienceSerializer,
                                                 UserEducationSerializer, UserCertificationSerializer,
-                                                UserProjectSerializer, UserReferenceSerializer, ExternalLinkSerializer)
+                                                UserProjectSerializer, UserAchievementSerializer,
+                                                UserReferenceSerializer, ExternalLinkSerializer)
 
 from resumebuilder.mixins import (SessionManagerMixin)
 # inter app imports
@@ -42,7 +43,6 @@ class UserRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
     #     info = request.data
     # #     update user with info provided.
     # #     return updated_user
-
 
     def get_queryset(self):
         user_id = int(self.kwargs.get('pk'))
@@ -208,3 +208,26 @@ class ExternalLinkRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView)
     def get_queryset(self):
         external_link_id = int(self.kwargs.get('pk'))
         return ExternalLink.objects.filter(id=external_link_id)
+
+
+class UserAchievementListCreateView(SessionManagerMixin, ListCreateAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+    queryset = UserAchievement.objects.all()
+    serializer_class = UserAchievementSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+        return super(UserAchievementListCreateView, self).get_serializer(*args, **kwargs)
+
+
+class UserAchievementRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+
+    serializer_class = UserAchievementSerializer
+
+    def get_queryset(self):
+        external_link_id = int(self.kwargs.get('pk'))
+        return UserAchievement.objects.filter(id=external_link_id)
