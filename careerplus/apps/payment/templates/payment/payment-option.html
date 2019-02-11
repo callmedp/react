@@ -88,6 +88,7 @@
               <li role="presentation"><a href="#emi" aria-controls="emi" role="tab" data-toggle="tab">EMI</a></li>
               <li role="presentation"><a href="#cash" aria-controls="cash" role="tab" data-toggle="tab">Cash</a></li>
               <li role="presentation"><a href="#cheque" aria-controls="cheque" role="tab" data-toggle="tab">Cheque</a></li>
+              <li role="presentation"><a href="#upi" aria-controls="upi" role="tab" data-toggle="tab">UPI</a></li>
             </ul>
             
             <div class="tab-content payment-tabs-content col-sm-8 col-md-8 col-lg-9">
@@ -232,6 +233,14 @@
                   <figure class="secure-payment-icon"></figure>100% Secure Payment
                 </div>
                 
+              </div>
+              <div role="tabpanel" class="tab-pane other-payment" id="upi">
+                <article>For UPI, you will be redirected to a secure page where you can enter your UPI address, and complete your payment.</article>
+                <strong>Rs. {{total_amount}} <small>(amount payable)</small> </strong>
+                  <div class="continue">
+                  <a href="{% url "payment:ccavenue_request" cart_id 'upi' %}"><button type="button" class="make-payment">Make UPI Payment</button></a>
+                  <figure class="secure-payment-icon"></figure>100% Secure Payment
+                </div>
               </div>
             </div>
 
