@@ -1,6 +1,7 @@
 import {FETCH_HOME_DATA, STORE_USER_INFO, SAVE_DEFAULT_SKILL_LIST, ADD_PROJECT} from "../actions/actionTypes";
 
 const initialState = {
+    id: '',
     first_name: '',
     last_name: '',
     email: '',

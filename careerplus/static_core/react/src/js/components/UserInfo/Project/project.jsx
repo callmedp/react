@@ -34,17 +34,26 @@ export class Project extends React.Component {
         this.props.fetchDefaultSkills()
     }
 
-    handleAddProject(formErrors, projects, projectValues, reset) {
-        if (Object.keys(formErrors).length) return;
+    handleAddProject(invalid, projects, projectValues, reset, userId) {
+
+        if (invalid) return;
         let projectList = projects || [];
-        projectList.push(projectValues);
+        const {skills} = projectValues
+        const updatedSkills = (skills || []).map(skill => skill['value'])
+
+        projectList.push({
+            ...projectValues,
+            skills: updatedSkills,
+            user: userId
+        })
+        ;
         this.props.addProject({projects: projectList});
         reset();
 
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, projects, projectValues, formErrors} = this.props;
+        const {error, handleSubmit, pristine, reset, submitting, projects, projectValues, invalid, userId} = this.props;
         return (
             <div className="container pr">
                 <header className="login-page-bg">
@@ -113,7 +122,7 @@ export class Project extends React.Component {
 
                             <div className={'Button-parent'}>
                                 <button className={'Submit-button'} type="button" onClick={
-                                    this.handleAddProject.bind(this, formErrors, projects, projectValues, reset)
+                                    this.handleAddProject.bind(this, invalid, projects, projectValues, reset, userId)
                                 }>
                                     Add
                                 </button>
@@ -156,8 +165,8 @@ const mapStateToProps = (state) => {
     return {
         defaultSkills: state.skill.defaultList,
         projectValues: state.form && state.form.projectForm && state.form.projectForm.values || {},
-        formErrors: state.form && state.form.projectForm && state.form.projectForm.syncErrors || {},
-        projects: state.userInfoReducer.projects
+        projects: state.userInfoReducer.projects,
+        userId: state.userInfoReducer.id
     }
 };
 

@@ -120,13 +120,22 @@ function* saveUserReference(action) {
 
 function* saveUserProject(action) {
     try {
-        const {userInfoReducer: {id}} = yield select();
+        const {userInfoReducer: {id, projects}} = yield select();
         let {payload: {userProject, resolve, reject}} = action;
+
+        const {skills} = userProject
+        const updatedSkills = (skills || []).map(skill => skill['value'])
         userProject = {
             ...userProject,
-            user: id
+            user: id,
+            skills: updatedSkills
         };
-        const result = yield call(Api.saveUserProject, userProject, id);
+        let projectList = projects || [];
+        projectList.push(userProject);
+        yield put({type: Actions.ADD_PROJECT, data: {'projects': projectList}});
+
+        const result = yield call(Api.saveUserProject, projectList, id);
+        console.log('result after --', result);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
