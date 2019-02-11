@@ -82,11 +82,11 @@
                 {% if top_4_vendors %}
                     <h2 class="mb-0">Providers</h2>
                     <div class="slide-container">
-                        <ul class="skill-provider">
+                        <ul class="skill-provider fixed cropcenterimg">
                         {% for top_4_vendor in top_4_vendors %}
                             {% if top_4_vendor.icon or top_4_vendor.image %}
-                            <li>
-                                <a href="#" class="box">
+                            <li class="cuad">
+                                <a class="box">
                                     <img src="{% if top_4_vendor.icon %}
                                         {{top_4_vendor.icon.url}}
                                     {% elif top_4_vendor.image %}{{top_4_vendor.image.url}}{% endif %}" class="img-responsive">
@@ -226,6 +226,74 @@
 
 {% block js_section %}
     {{block.super}}
+<script>
+    $(function() {
+	CenterCropImage($('.cropcenterimg li'))
+	$(window).resize(function(){
+		CenterCropImage($('.cropcenterimg li'))
+	})
+})
+
+/***CENTER CROP IMAGE***/
+function CenterCropImage(x){
+    x.each(function(){
+        $(this).children('img').load(function(){
+            ContentBox=$(this).parent()
+            PropBox=getProportions(ContentBox)
+
+            ImgtoResize=$(this)
+            PropImg=getProportions(ImgtoResize)
+            if(PropBox>PropImg){
+                ProportionVertical(ImgtoResize)
+            }
+            else{
+                ProportionHorizontal(ImgtoResize)
+            }
+        })
+        ContentBox=$(this)
+        PropBox=getProportions(ContentBox)
+
+        ImgtoResize=$(this).children('img')
+        PropImg=getProportions(ImgtoResize)
+        if(PropBox>PropImg){
+            ProportionVertical(ImgtoResize)
+        }
+        else{
+            ProportionHorizontal(ImgtoResize)
+        }
+    })
+}
+
+
+function getProportions(x){
+    Height=x.height()
+    Width=x.width()
+    Prop=Width/Height
+    return Prop
+}
+
+function ProportionHorizontal(x){
+    x.removeAttr("style")
+    x.css({'height':'100%','width':'auto'})
+    Wimg=x.width()
+    Wcont=x.parent().width()
+
+    MarginLeft=(Wcont-Wimg)/2
+    x.css({'margin-left':MarginLeft})
+}
+
+function ProportionVertical(x){
+    x.removeAttr("style")
+    x.css({'width':'100%','height':'auto'})
+    Himg=x.height()
+    Hcont=x.parent().height()
+
+    MarginTop=(Hcont-Himg)/2
+    x.css({'margin-top':MarginTop})
+}
+
+</script>
+
     {% compress js %}
     <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
