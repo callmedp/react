@@ -16,6 +16,7 @@ export class Project extends React.Component {
     constructor(props) {
         super(props);
         this.fetchSkillList.bind(this);
+        this.handleAddProject.bind(this);
     }
 
 
@@ -33,8 +34,17 @@ export class Project extends React.Component {
         this.props.fetchDefaultSkills()
     }
 
+    handleAddProject(formErrors, projects, projectValues, reset) {
+        if (Object.keys(formErrors).length) return;
+        let projectList = projects || [];
+        projectList.push(projectValues);
+        this.props.addProject({projects: projectList});
+        reset();
+
+    }
+
     render() {
-        const {error, handleSubmit, pristine, reset, submitting} = this.props;
+        const {error, handleSubmit, pristine, reset, submitting, projects, projectValues, formErrors} = this.props;
         return (
             <div className="container pr">
                 <header className="login-page-bg">
@@ -85,7 +95,7 @@ export class Project extends React.Component {
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field name="skills" component={select} validate={required}
+                                <Field name="skills" component={select}
                                        loadOptions={this.fetchSkillList.bind(this)}
                                        defaultOptions={this.props.defaultSkills}
                                        label="End Date"/>
@@ -94,10 +104,18 @@ export class Project extends React.Component {
 
                         <div className={'Button-group'}>
                             <div className={'Button-parent'}>
-                                <button className={'Submit-button'} onClick={() => {
+                                <button className={'Submit-button'} type="button" onClick={() => {
                                     this.props.history.goBack()
                                 }}>
                                     Back
+                                </button>
+                            </div>
+
+                            <div className={'Button-parent'}>
+                                <button className={'Submit-button'} type="button" onClick={
+                                    this.handleAddProject.bind(this, formErrors, projects, projectValues, reset)
+                                }>
+                                    Add
                                 </button>
                             </div>
                             <div className={'Button-parent'}>
@@ -111,6 +129,12 @@ export class Project extends React.Component {
                         <span>{error}</span>
                     </div>
                     }
+                    {
+                        projects && projects.length ?
+                            (projects || []).map(project => (
+                                <button>{project['project_name']}</button>
+                            )) : ''
+                    }
                 </div>
             </div>
         );
@@ -119,7 +143,7 @@ export class Project extends React.Component {
 
 
 export const ProjectForm = reduxForm({
-    form: 'user_info',
+    form: 'projectForm',
     onSubmitSuccess: (result, dispatch, props) => {
         props.history.push({
             pathname: '/resume-builder/certification'
@@ -130,15 +154,20 @@ export const ProjectForm = reduxForm({
 
 const mapStateToProps = (state) => {
     return {
-        defaultSkills: state.skill.defaultList
+        defaultSkills: state.skill.defaultList,
+        projectValues: state.form && state.form.projectForm && state.form.projectForm.values || {},
+        formErrors: state.form && state.form.projectForm && state.form.projectForm.syncErrors || {},
+        projects: state.userInfoReducer.projects
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        "onSubmit": (userProject) => new Promise((resolve, reject) => {
-            dispatch(actions.saveUserProject({userProject, resolve, reject}))
-        }),
+        "onSubmit": (userProject) => {
+            return new Promise((resolve, reject) => {
+                dispatch(actions.saveUserProject({userProject, resolve, reject}))
+            })
+        },
         "fetchSkills": (inputValue = '') => {
             return new Promise((resolve, reject) => {
                 dispatch(actions.fetchSkillList({inputValue, resolve, reject}))
@@ -146,6 +175,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         "fetchDefaultSkills": (inputValue = '') => {
             return dispatch(actions.fetchDefaultSkillList(inputValue))
+        },
+        "addProject": (project) => {
+            return dispatch(actions.addProject(project))
         }
     }
 

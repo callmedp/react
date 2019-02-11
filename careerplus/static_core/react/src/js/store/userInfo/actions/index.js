@@ -1,7 +1,7 @@
 import {
     FETCH_HOME_DATA, SAVE_USER_DETAILS, UPDATE_USER_DETAILS, SAVE_USER_EXPERIENCES,
     SAVE_USER_EDUCATION, SAVE_USER_CERTIFICATION, SAVE_USER_REFERENCE, SAVE_USER_PROJECT,
-    SAVE_USER_ACHIEVEMENT, FETCH_SKILL_LIST, FETCH_DEFAULT_SKILL_LIST
+    SAVE_USER_ACHIEVEMENT, FETCH_SKILL_LIST, FETCH_DEFAULT_SKILL_LIST, ADD_PROJECT
 } from "./actionTypes";
 
 export const fetchHomeData = () => ({
@@ -46,6 +46,11 @@ export const saveUserReference = (payload) => ({
 export const saveUserProject = (payload) => ({
     type: SAVE_USER_PROJECT,
     payload
+});
+
+export const addProject = (data) => ({
+    type: ADD_PROJECT,
+    data
 });
 
 export const saveUserAchievement = (payload) => ({
