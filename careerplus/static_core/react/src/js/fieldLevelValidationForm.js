@@ -2,6 +2,8 @@ import React from 'react'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment';
+import AsyncSelect from 'react-select/lib/Async';
+
 
 export const required = value => value ? undefined : 'Required';
 
@@ -66,6 +68,22 @@ export const renderSelect = ({
                 (warning && <span className={'Warn-Message'}>{warning}</span>))}
         </div>
     </div>
+);
+
+const options = [
+    {value: 'chocolate', label: 'Chocolate'},
+    {value: 'strawberry', label: 'Strawberry'},
+    {value: 'vanilla', label: 'Vanilla'}
+];
+
+export const select = ({
+                loadOptions,
+                defaultOptions
+                       }) => (
+    <AsyncSelect isMulti={true}
+                 loadOptions={loadOptions}
+                 defaultOptions={defaultOptions}
+    />
 )
 
 export const renderTextArea = ({

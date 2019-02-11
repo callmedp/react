@@ -3,11 +3,34 @@ import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import * as actions from '../../../store/userInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
-import {renderField, required, datePicker, renderSelect, renderTextArea} from '../../../fieldLevelValidationForm';
+import {
+    renderField,
+    required,
+    datePicker,
+    renderSelect,
+    renderTextArea,
+    select
+} from '../../../fieldLevelValidationForm';
 
 export class Project extends React.Component {
     constructor(props) {
         super(props);
+        this.fetchSkillList.bind(this);
+    }
+
+
+    async fetchSkillList(inputValue, callback) {
+        try {
+            const skills = await this.props.fetchSkills(inputValue);
+            const listData = (skills && skills.results || []).map(skill => ({value: skill.id, label: skill.name}))
+            callback(listData);
+        } catch (e) {
+            console.log('--error-', e);
+        }
+    }
+
+    componentDidMount() {
+        this.props.fetchDefaultSkills()
     }
 
     render() {
@@ -60,6 +83,15 @@ export class Project extends React.Component {
                                        label="End Date"/>
                             </div>
                         </div>
+                        <div className={'Text-spacing'}>
+                            <div>
+                                <Field name="skills" component={select} validate={required}
+                                       loadOptions={this.fetchSkillList.bind(this)}
+                                       defaultOptions={this.props.defaultSkills}
+                                       label="End Date"/>
+                            </div>
+                        </div>
+
                         <div className={'Button-group'}>
                             <div className={'Button-parent'}>
                                 <button className={'Submit-button'} onClick={() => {
@@ -97,14 +129,24 @@ export const ProjectForm = reduxForm({
 
 
 const mapStateToProps = (state) => {
-    return {}
+    return {
+        defaultSkills: state.skill.defaultList
+    }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userProject) => new Promise((resolve, reject) => {
             dispatch(actions.saveUserProject({userProject, resolve, reject}))
-        })
+        }),
+        "fetchSkills": (inputValue = '') => {
+            return new Promise((resolve, reject) => {
+                dispatch(actions.fetchSkillList({inputValue, resolve, reject}))
+            });
+        },
+        "fetchDefaultSkills": (inputValue = '') => {
+            return dispatch(actions.fetchDefaultSkillList(inputValue))
+        }
     }
 
 };
