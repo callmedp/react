@@ -9,7 +9,7 @@ const get = (url, headers = defaultHeaders) => {
         headers,
         method: 'GET',
     })
-        .then(response => response.json())
+        // .then(response => response.json())
         .then(handleResponse)
 }
 

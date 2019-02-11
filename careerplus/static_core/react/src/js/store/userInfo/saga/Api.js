@@ -50,6 +50,11 @@ const updateUserData = (data, userId) => {
     return BaseApiService.put(`http://127.0.0.1:8000/resume/api/v1/${url}`, data);
 };
 
+const fetchSkills = () => {
+    const url = `skills/?page_size=10`;
+    return BaseApiService.get(`http://127.0.0.1:8000/resume/api/v1/${url}`);
+};
+
 
 export const Api = {
     fetchHomeData,
@@ -60,5 +65,6 @@ export const Api = {
     saveUserCertification,
     saveUserReference,
     saveUserProject,
-    saveUserAchievement
+    saveUserAchievement,
+    fetchSkills
 };

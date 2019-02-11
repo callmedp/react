@@ -23,7 +23,7 @@ class UserProfile(AbstractAutoDate):
 class User(UserProfile):
 
     def __str__(self):
-        return self.name
+        return '{}-{}'.format(self.first_name, self.last_name)
 
 
 class Skill(AbstractAutoDate):

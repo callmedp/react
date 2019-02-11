@@ -3,6 +3,7 @@ import {takeLatest, put, call, select} from "redux-saga/effects";
 import * as Actions from '../actions/actionTypes';
 import {SubmissionError} from 'redux-form'
 import {UPDATE_USER_DETAILS} from "../actions/actionTypes";
+import {FETCH_SKILL_LIST} from "../actions/actionTypes";
 
 
 function* saveUserInfo(action) {
@@ -157,6 +158,38 @@ function* saveUserAchievement(action) {
 }
 
 
+function* fetchSkillList(action) {
+    try {
+        let {payload: {inputValue, resolve, reject}} = action;
+        const result = yield call(Api.fetchSkills, inputValue);
+
+        console.log('result ===', result, result['error']);
+        if (result['error']) {
+            return reject(new Error(result['errorMessage']));
+        }
+        // yield put({type: Actions.SAVE_SKILL_LIST, data: {'achievements': result['data']}});
+        return resolve(result['data']);
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+function* fetchDefaultSkillList(action) {
+    try {
+        let {inputValue} = action;
+        const result = yield call(Api.fetchSkills, inputValue);
+        console.log('result ===', result, result['error']);
+        const list = (result && result.data && result.data.results || []).map(skill => ({
+            value: skill.id,
+            label: skill.name
+        }));
+        yield put({type: Actions.SAVE_DEFAULT_SKILL_LIST, data: {'defaultList': list}});
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+
 export default function* watchFetchHomeData() {
     yield takeLatest(Actions.SAVE_USER_DETAILS, saveUserInfo);
     yield takeLatest(Actions.UPDATE_USER_DETAILS, updateUserInfo);
@@ -166,5 +199,7 @@ export default function* watchFetchHomeData() {
     yield takeLatest(Actions.SAVE_USER_ACHIEVEMENT, saveUserAchievement);
     yield takeLatest(Actions.SAVE_USER_CERTIFICATION, saveUserCertification);
     yield takeLatest(Actions.SAVE_USER_REFERENCE, saveUserReference);
+    yield takeLatest(Actions.FETCH_SKILL_LIST, fetchSkillList);
+    yield takeLatest(Actions.FETCH_DEFAULT_SKILL_LIST, fetchDefaultSkillList);
 
 }
