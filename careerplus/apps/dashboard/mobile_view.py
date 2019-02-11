@@ -99,6 +99,7 @@ class DashboardItemFeedbackView(TemplateView):
     def get(self, request, *args, **kwargs):
         self.candidate_id = request.session.get('candidate_id', None)
         self.oi_pk = request.GET.get('oi', None)
+        self.rating = request.GET.get('rating')
         if self.oi_pk and self.candidate_id:
             try:
                 self.oi = OrderItem.objects.get(pk=self.oi_pk)
@@ -113,6 +114,7 @@ class DashboardItemFeedbackView(TemplateView):
         if self.oi and self.oi.order.candidate_id == self.candidate_id:
             context.update({
                 "oi": self.oi,
+                "rating":self.rating
             })
         return context
 

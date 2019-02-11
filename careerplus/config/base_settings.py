@@ -111,6 +111,7 @@ AUTH_USER_MODEL = 'users.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'core.middleware.RemoveSessionCookieMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -234,6 +235,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
     ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 100,
 }
 
@@ -487,6 +489,21 @@ CMS_STATIC_TEMP_DICT = {
     3: 'static_resignation_page.html',
     7: 'static_cover_page.html'}
 
+IS_MAINTENANCE = False
+MAINTENANCE_MESSAGE = "This site will be under maintenance from 9 pm to 12 pm on Friday, 11th Jan, 2019."
+
+############ MARKETING PAGES MAPPING WITH ID
+
+URL_MAPPING_TO_PRODUCT = {"resume-writing-services-1": ([1921,1922,1923,1924,32],1921)
+                            ,"linkedin-1": ([1926,1925,1927,1928,33],1926),
+                            "aws-cert": ([3133],3133),
+                            "ban-cert":([3133],3133),
+                            "data-scientist":([3417],3417),
+                            "ifrs-cert":([1880],1880),
+                            "gst-certification":([1810],1810),
+                            "data-science":([3417],3417),
+                            "six-sigma":([3400],3400),
+                            "linkedin":([1926],1926)
 
 
-    
+}

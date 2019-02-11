@@ -79,7 +79,7 @@
    </head>
    
 {% endblock head %} 
-<body>
+<body {%if IS_MAINTENANCE %}style="padding-top:91px;" {% endif %}>
 {% block navigation %}
   <!-- navigation bar -->
   {% include 'basic/navigation.html' %}

@@ -227,7 +227,11 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                         p_oi.cost_price = cost_price
                         discount = (cost_price * percentage_discount) / 100
                         cost_price_after_discount = cost_price - discount
-                        tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                        # As per product requirement , apply GST only for INR
+                        if order.currency == 0:
+                            tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                        else:
+                            tax_amount = 0
                         selling_price = cost_price_after_discount + tax_amount
                         p_oi.selling_price = selling_price
                         p_oi.tax_amount = tax_amount
@@ -249,7 +253,11 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                 p_oi.delivery_price_excl_tax = cost_price
                                 discount = (cost_price * percentage_discount) / 100
                                 cost_price_after_discount = cost_price - discount
-                                tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                                # As per product requirement , apply GST only for INR
+                                if order.currency == 0:
+                                    tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                                else:
+                                    tax_amount = 0
                                 selling_price = cost_price_after_discount + tax_amount
                                 p_oi.delivery_price_incl_tax = selling_price
                                 p_oi.save()
@@ -270,7 +278,11 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                             oi.cost_price = cost_price
                             discount = (cost_price * percentage_discount) / 100
                             cost_price_after_discount = cost_price - discount
-                            tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                            # As per product requirement , apply GST only for INR
+                            if order.currency == 0:
+                                tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                            else:
+                                tax_amount = 0
                             selling_price = cost_price_after_discount + tax_amount
                             oi.selling_price = selling_price
                             oi.tax_amount = tax_amount
@@ -286,7 +298,10 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                     p_oi.delivery_price_excl_tax = cost_price
                                     discount = (cost_price * percentage_discount) / 100
                                     cost_price_after_discount = cost_price - discount
-                                    tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                                    if order.currency == 0:
+                                        tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                                    else:
+                                        tax_amount = 0
                                     selling_price = cost_price_after_discount + tax_amount
                                     p_oi.delivery_price_incl_tax = selling_price
                                     p_oi.save()
@@ -311,7 +326,11 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                             oi.cost_price = cost_price
                             discount = (cost_price * percentage_discount) / 100
                             cost_price_after_discount = cost_price - discount
-                            tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                            # As per product requirement , apply GST only for INR
+                            if order.currency == 0:
+                                tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                            else:
+                                tax_amount = 0
                             selling_price = cost_price_after_discount + tax_amount
                             oi.selling_price = selling_price
                             oi.tax_amount = tax_amount
@@ -679,3 +698,39 @@ class RecommendedProductsCategoryView(APIView):
         return Response(
             res.json(),
             status=status.HTTP_200_OK)
+
+
+from .tasks import cron_initiate
+from .config import CRON_TO_ID_MAPPING
+
+
+class CronInitiateApiView(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def get(self, request, *args, **kwargs):
+        self.cron_id = self.kwargs.get('cron_id')
+        if self.cron_id and int(self.cron_id) in CRON_TO_ID_MAPPING.keys():
+            cron_initiate.delay(self.cron_id)
+            return Response({
+                "status": "SUCCESS",
+                "msg": "Taks has been added, will notify you on your email after completion"},
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response({
+                "status": "FAIL",
+                "msg": 'Invalid cron id'},
+                status=status.HTTP_400_BAD_REQUEST)
+
+
+class RemoveCookieFromHeader(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def get(self, request, *args, **kwargs):
+        from django.http.response import HttpResponse
+        response = HttpResponse()
+        response.remove_cookie = True
+
+        return response

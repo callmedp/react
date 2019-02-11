@@ -201,19 +201,16 @@
                             <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
                         </th>
                     {% endif %}
-                    <th class="column-title">#Id</th>
+
                     <th class="column-title">OrderId</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Email</th>
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
-                    <th class="column-title">Candidate Doc</th>
-                    <th class="column-title">Order Deatils</th>
-                    <th class="column-title">Uploded Draft</th>
+                    <th class="column-title">Actions</th>
                     <th class="column-title">Submit Message</th>
                     <th class="column-title">Payment Date</th>
                     <th class="column-title">How Old</th>
-                    <th class="column-title">Auto Login</th>
                     <th class="column-title">Assigned To</th>
                   </tr>
                 </thead>
@@ -226,8 +223,10 @@
                               <input autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
                             </td>
                       {% endif %}
-                      <td>{{obj.pk}}</td>
-                      <td>{{obj.order.number}}</td>
+                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><b style="text-decoration: underline;">{{obj.order.number}}</b></a>
+                      </br>
+                          ({{obj.pk}})
+                      </td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
                       <td>{{obj.order.country_code}} {{obj.order.mobile}}</td>
@@ -249,18 +248,39 @@
                                 <strong>Duration:</strong> {{obj.product.get_duration_db}}
                             {% endif %}
                       </td>
-                      <td><a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Download Doc</button></a></td>
-                      <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Order details</button></a></td>
-                      <td>{% if obj.oi_draft %}<a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-eye"></i>Uploaded Draft</button></a>{% endif %}</td>
+                      <td><a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Download Doc </button></a>
+                          <hr style=" margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
+
+                          {% if obj.oi_draft %}
+                          <a href="{{obj.oi_draft.url}}" target="_blank"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Uploaded Draft</button></a>
+                             <hr style=" margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
+
+                          {% endif %}
+
+                            <form autocomplete="off" id="redirecShineForm{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
+                                <input type="hidden" value="{{obj.order.email}}" name="email" />
+                                <input type="hidden"  value="1" name="type"/>
+                                <input type="hidden"  value="30" name="expires" />
+
+                                <div>
+                                    <center><button type="button" onclick="redirectToShineProfile('{{obj.pk}}',)" class="btn btn-warning btn-xs"><i class="fa fa-user"></i> LOGIN TO SHINE </button></center>
+                                </div>
+                            </form>
+
+
+                      </td>
+
+
+
                       <td>
                           <form autocomplete="off" id="message-add-form{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
                                 <fieldset>
                                     {% for field in message_form %}
                                         <div class="form-group"> 
-                                            <div class="col-md-8">
+                                            <div class="col-md-10">
                                                 {{ field }}
                                                 {% if field.help_text %}
-                                                    <small class="pull-left">{{ field.help_text }}</small>
+                                                    <small style="margin-left:5px;">{{ field.help_text }}</small>
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -281,20 +301,7 @@
                           {{obj.modified|naturaltime}}
                           <b>Updated On: {{obj.modified}}</b>
                       </td>
-                      <td>
-                            <strong>Email:</strong></br>{{obj.order.email}}
-                            <form autocomplete="off" id="redirecShineForm{{obj.pk}}" method="post" data-parsley-validate class="form-horizontal form-label-left">{% csrf_token %}
-                                <input type="hidden" value="{{obj.order.email}}" name="email" />
-                                <input type="hidden"  value="1" name="type"/>
-                                <input type="hidden"  value="30" name="expires" />  
 
-                                <div class="form-group">
-                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                      <center><button type="button" onclick="redirectToShineProfile('{{obj.pk}}',)" class="btn btn-success btn-xs">Login to shine</button></center>
-                                    </div>
-                                </div>
-                            </form>
-                      </td>
                       <td>{{obj.assigned_to}}</td>
                     </tr>
                   {% endfor %}

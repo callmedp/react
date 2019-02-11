@@ -84,6 +84,8 @@ def common_context_processor(request):
         "WELCOMECALL_GROUP_LIST": settings.WELCOMECALL_GROUP_LIST,
         "ggn_contact_full": settings.GGN_CONTACT_FULL,
         "ggn_contact": settings.GGN_CONTACT,
+        "IS_MAINTENANCE": settings.IS_MAINTENANCE,
+        "MAINTENANCE_MESSAGE": settings.MAINTENANCE_MESSAGE,
     })
     return context
 

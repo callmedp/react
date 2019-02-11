@@ -25,12 +25,13 @@ def get_choice_display(value, choice):
     listing facets but can be used elsewhere
     """
     mapping = dict(getattr(choices, choice))
-    if value not in mapping:
-        if value.isdigit():
-            value = int(value)
-        elif value.lower() in mapping:
-            value = value.lower()
-        elif value.upper() in mapping:
-            value = value.upper()
+    if not value or value in mapping:
+        return mapping.get(value, 'Others')
+    if value.isdigit():
+        value = int(value)
+    elif value.lower() in mapping:
+        value = value.lower()
+    elif value.upper() in mapping:
+        value = value.upper()
     return mapping.get(value,'Others')
 

@@ -16,7 +16,7 @@ class GoogleCloudStorageMixin(GoogleCloudStorage):
 
     def _normalize_name(self, name):
         name = super(GoogleCloudStorageMixin, self)._normalize_name(name)
-        return safe_join(self.location, name)
+        return name
 
 
 class GCPStaticStorage(GoogleCloudStorageMixin):
@@ -24,7 +24,7 @@ class GCPStaticStorage(GoogleCloudStorageMixin):
     GCP storage backend that saves the files locally, too.
     """
     bucket_name = settings.GCP_STATIC_BUCKET
-    location = '/l/s/'
+    location = 'l/s/'
 
     def __init__(self, **settings):
         super(GCPStaticStorage, self).__init__(**settings)
@@ -46,7 +46,7 @@ class GCPMediaStorage(GoogleCloudStorageMixin):
     GCP storage backend for public media
     """
     bucket_name = settings.GS_BUCKET_NAME
-    location = '/l/m/'
+    location = 'l/m/'
 
     def url(self, name):
         return settings.MEDIA_URL + name

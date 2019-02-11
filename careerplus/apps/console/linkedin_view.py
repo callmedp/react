@@ -129,7 +129,7 @@ class LinkedinQueueView(ListView, PaginationMixin):
                             "writer_email": writer.email,
                             "subject": "Your service has been initiated",
                             "type_flow": obj.product.type_flow,
-                            'delivery_service': obj.delivery_service,
+                            'delivery_service': str(obj.delivery_service),
                             'delivery_service_slug': obj.delivery_service.slug if obj.delivery_service else '',
                             'delivery_service_name': obj.delivery_service.name if obj.delivery_service else '',
                         })
@@ -1342,8 +1342,7 @@ class ProfileCredentialDownload(View):
                         'profile_credentials': profile_credentials,
                     }
                     template = get_template('console/order/profile-update-credentials.html')
-                    context = Context(context_dict)
-                    html = template.render(context)
+                    html = template.render(context_dict)
                     pdf_file = HTML(string=html).write_pdf()
                     http_response = HttpResponse(pdf_file, content_type='application/pdf')
                     http_response['Content-Disposition'] = 'filename="profile_credential.pdf"'

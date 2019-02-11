@@ -101,8 +101,8 @@ if __name__=="__main__":
 
     for interval in time_intervals_to_check:
         sdt = (current_utc_time - timedelta(minutes=interval)).replace(tzinfo=utc_tz)
-        edt = (sdt + timedelta(minutes=2)).replace(tzinfo=utc_tz)
-        all_initiated_transactions = PaymentTxn.objects.filter(txn_status=0,\
+        edt = (sdt + timedelta(minutes=62)).replace(tzinfo=utc_tz) #Hour + buffer
+        all_initiated_transactions = PaymentTxn.objects.filter(txn_status__in=[0,4,5],\
                 payment_mode=5,created__gte=sdt,created__lte=edt)
         logging.getLogger('info_log').info(\
             "Total initiated transactions for interval {} minutes - {}".format(\

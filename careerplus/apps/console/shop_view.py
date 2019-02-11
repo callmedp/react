@@ -1151,9 +1151,9 @@ class ListProductView(ListView, PaginationMixin):
     context_object_name = 'product_list'
     template_name = 'console/shop/list_product.html'
     http_method_names = [u'get', ]
-    vendor_list=[]
-    vendor_select=None
-    status=None
+    vendor_list = []
+    vendor_select = None
+    status = None
 
 
     def dispatch(self, request, *args, **kwargs):
@@ -1534,7 +1534,8 @@ class ChangeProductView(DetailView):
                                 for form in saved_formset:
                                     form.save()
                                 formset.save_m2m()
-
+                            obj.title=obj.get_title()
+                            obj.save()
                             messages.success(
                                 self.request,
                                 "Product Category changed Successfully")
@@ -1745,46 +1746,6 @@ class ChangeProductView(DetailView):
                             messages.error(
                                 self.request,
                                 "Product Chapter Change Failed, Changes not Saved")
-                            return TemplateResponse(
-                                request, [
-                                    "console/shop/change_product.html"
-                                ], context)
-
-                    elif slug == 'skill':
-                        ProductSkillFormSet = inlineformset_factory(
-                            Product, Skill.skillproducts.through, fk_name='product',
-                            form=ProductSkillForm,
-                            can_delete=True,
-                            formset=SkillInlineFormSet, extra=0)
-                        formset = ProductSkillFormSet(
-                            request.POST, instance=obj,
-                            form_kwargs={'object': obj},)
-                        from django.db import transaction
-                        if formset.is_valid():
-                            with transaction.atomic():
-                                formset.save(commit=False)
-                                saved_formset = formset.save(commit=False)
-                                for ins in formset.deleted_objects:
-                                    ins.delete()
-
-                                for form in saved_formset:
-                                    form.save()
-                                formset.save_m2m()
-                            messages.success(
-                                self.request,
-                                "Product Skill Changed Successfully")
-                            return HttpResponseRedirect(
-                                reverse(
-                                    'console:product-change',
-                                    kwargs={'pk': obj.pk}))
-                        else:
-                            context = self.get_context_data()
-                            if formset:
-                                context.update({'prdskill_formset': formset})
-                            messages.error(
-                                self.request,
-                                "Product Skill Change Failed, \
-                                Changes not Saved")
                             return TemplateResponse(
                                 request, [
                                     "console/shop/change_product.html"

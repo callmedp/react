@@ -1,0 +1,311 @@
+{% extends "console/base_console.html" %}
+{% load static compress %}
+{% load humanize %}
+
+{% block title %}
+<title>Add Skill</title>
+{% endblock title %}
+
+{% block css_block %}
+{{ block.super }}
+<link href="{% static 'packages/select2/dist/css/select2.min.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'packages/switchery/dist/switchery.min.css' %}" rel="stylesheet" type="text/css">
+
+<style type="text/css">
+    ul.parsley-errors-list {
+        list-style: none;
+        color: #fff;
+        padding-left: 0;
+    }
+
+    ul.errorlist {
+        list-style: none;
+        color: #fff;
+        padding-left: 0;
+    }
+
+    .select {
+        height: 100px;
+        overflow: scroll;
+        border: 0.5px solid #00000024;
+        width: 300px;
+
+    }
+
+    label {
+        clear: left;
+        margin: 10px;
+        text-align: right;
+    }
+
+    .align-text {
+        text-align: center;
+
+    }
+
+    .danger-message {
+        color: red;
+        font-size: 15px;
+        margin-left: 50px;
+
+    }
+
+    .success-message {
+        color: green;
+        font-size: 20px;
+        margin-left: 50px;
+    }
+
+    .space-bottom {
+        margin-bottom: 20px;
+    }
+
+    .default-prop {
+        width: 100%;
+    }
+
+    .add-scroll {
+        overflow: scroll;
+        height: 286px
+
+    }
+
+    .trash {
+        color: rgb(209, 91, 71);
+    }
+
+    .flag {
+        color: rgb(248, 148, 6);
+    }
+
+    .panel-body {
+        padding: 0px;
+    }
+
+    .panel-footer .pagination {
+        margin: 0;
+    }
+
+    .panel .glyphicon, .list-group-item .glyphicon {
+        margin-right: 5px;
+    }
+
+    .panel-body .radio, .checkbox {
+        display: inline-block;
+        margin: 0px;
+    }
+
+    .panel-body input[type=checkbox]:checked + label {
+        text-decoration: line-through;
+        color: rgb(128, 144, 160);
+    }
+
+    .list-group-item:hover, a.list-group-item:focus {
+        text-decoration: none;
+        background-color: rgb(245, 245, 245);
+
+    }
+
+
+    .list-group {
+        margin-bottom: 0px;
+    }
+
+    .float-edit {
+        position: absolute;
+        top: 20px;
+        right: 15px;
+    }
+
+    .list-appearence {
+        font-size: 16px;
+
+    }
+
+    .edit-skill-style {
+        font-weight: bold;
+        margin: 18px 0px 14px 20px;
+    }
+
+    .light-theme {
+        background: #9dde9d;
+    }
+
+
+    .add-space {
+        margin: 10px;
+    }
+</style>
+{% endblock css_block %}
+
+{% block pagecontent %}
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>PRODUCT SKILLS</h3>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-lg-6">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Add Product Skills
+                    </h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <br>
+                    <form id="add-product-skill-form" data-parsley-validate=""
+                          class="form-horizontal form-label-left"
+                          novalidate="">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                   for="first-name">Product</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <select id='select_products' class="default-prop">
+                                    <option></option>
+                                </select>
+                                <input type="hidden" id="product_id" name="product_id">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Skill</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <select id='select_skills' class="default-prop">
+                                    <option></option>
+                                </select>
+                                <input type="hidden" id="skill_id" name="skill_id">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Active</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="checkbox">
+                                    <input type="checkbox" name="active" id="active" class="js-switch" checked/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                   for="last-name">Priority</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" id="priority" name="priority" value="1"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-12 col-sm-12 col-xs-12" style="text-align:center">
+                                <button type="submit" class="btn btn-success light-theme">Add</button>
+                                <button id="submit_product_skills" type="submit" class="btn btn-success dark-theme">
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Current Product Skill List
+                    </h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content add-scroll">
+                    <br>
+                    <div class="panel-body">
+                        <ul id="current_product_list" class="list-group">
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+        <div>
+            <div class="x-panel">
+                <div class="clearfix"></div>
+                <div class="control-group">
+                    <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div id="tags_1_tagsinput" class="tagsinput"
+                             style="width: auto; min-height: 100px; height: 100px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+
+        <div id="error_warn" class="add-space align-text">
+            <div id="warn_message" class="alert">
+
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="x_title">
+                        <h2 class="edit-skill-style">Edit Skill</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <form id="skill-edit-modal-form" data-parsley-validate=""
+                          class="form-horizontal form-label-left"
+                          novalidate="">
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Active</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="checkbox">
+                                    <input type="checkbox" name="active" id="ps_active" class="js-switch" checked/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                   for="last-name">Priority</label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" id="ps_priority" name="priority"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name='skill_id' id="ps_skill_id">
+                            <input type="hidden" name="product_id" id="ps_product_id">
+                            <input type="hidden" name="ps_id" id="ps_id">
+                        </div>
+                        <div class="ln_solid"></div>
+                        <div class="form-group">
+                            <div class="col-md-12 col-sm-12 col-xs-12" style="text-align:center">
+                                <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success">Submit</button>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+{% endblock pagecontent %}
+
+{% block js_block %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'packages/select2/dist/js/select2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'packages/switchery/dist/switchery.min.js' %}"></script>
+<script>
+var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
+</script>
+{% compress js %}
+<script type="text/javascript" src="{% static 'shinelearn/js/shop/product-skill-relation.js' %}"></script>
+{% endcompress %}
+
+{% endblock js_block %}

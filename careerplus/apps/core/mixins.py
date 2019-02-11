@@ -68,9 +68,9 @@ class TokenGeneration(object):
 class EncodeDecodeUserData(object):
 
     def encode(self, email, name, contact):
-        inp_str = '{salt}|{email}|{name}|{contact}'.format(\
+        inp_str = '{salt}|{email}|{name}|{contact}|{dt}'.format(\
                 **{'salt': settings.ENCODE_SALT, 'email': email, \
-                'name': name, 'contact': contact})
+                'name': name, 'contact': contact,'dt':timezone.now()})
 
         ciph = XOR.new(settings.ENCODE_SALT)
         token = base64.urlsafe_b64encode(ciph.encrypt(inp_str))
@@ -268,9 +268,8 @@ class InvoiceGenerate(object):
     def generate_pdf(self, context_dict={}, template_src=None):
         if template_src:
             html_template = get_template(template_src)
-            context = Context(context_dict)
 
-            rendered_html = html_template.render(context).encode(encoding='UTF-8')
+            rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
 
             pdf_file = HTML(string=rendered_html).write_pdf()
             return pdf_file

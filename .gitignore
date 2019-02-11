@@ -16,6 +16,8 @@ develop-eggs/
 #dist/
 download/
 
+logger/
+
 eggs/
 .eggs/
 lib/
