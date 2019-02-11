@@ -87,6 +87,14 @@
     margin-top: 5px;
 }
 
+.react-datepicker-wrapper {
+    width: 100%;
+}
+
+.react-datepicker__input-container {
+    width: 100%;
+}
+
 @keyframes App-logo-spin {
     from {
         transform: rotate(0deg);

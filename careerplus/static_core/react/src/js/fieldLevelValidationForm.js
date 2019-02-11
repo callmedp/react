@@ -39,12 +39,15 @@ export const datePicker = ({
                                input,
                                label,
                                type,
+                               onDateChange,
                                meta: {touched, error, warning}
                            }) => (
     <div>
         <div className={'Top-space'}>
-            <DatePicker {...input} dateForm="MM/DD/YYYY" placeholder={label}
-                        selected={input.value ? moment(input.value) : null}/>
+            <DatePicker {...input} dateFormat="yyyy-MM-dd" placeholderText={label} className="Field-spacing"
+                        selected={input.value ? moment(input.value, "yyyy-MM-dd").valueOf() : null}
+                        onChange={date => input.onChange(moment((date), "yyyy-MM-dd").valueOf())}
+            />
             {touched &&
             ((error && <span className={'Error-message'}>{error}</span>) ||
                 (warning && <span className={'Warn-Message'}>{warning}</span>))}

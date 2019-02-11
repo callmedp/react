@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import {connect} from "react-redux";
 import * as actions from '../../../store/userInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
@@ -16,6 +17,8 @@ export class Project extends React.Component {
     constructor(props) {
         super(props);
         this.fetchSkillList.bind(this);
+        this.handleEndDateChange.bind(this);
+        this.handleStartDateChange.bind(this);
     }
 
 
@@ -32,6 +35,15 @@ export class Project extends React.Component {
     componentDidMount() {
         this.props.fetchDefaultSkills()
     }
+
+    handleEndDateChange(date) {
+        console.log('---endDate--', date);
+    }
+
+    handleStartDateChange(date) {
+        console.log('---startDate---', date);
+    }
+
 
     render() {
         const {error, handleSubmit, pristine, reset, submitting} = this.props;
@@ -73,13 +85,16 @@ export class Project extends React.Component {
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field type="date" name="start_date" component={renderField} validate={required}
+                                <Field type="date" name="start_date" component={datePicker}
+                                       validate={required}
+                                       onDateChange={this.handleStartDateChange}
                                        label="Start Date"/>
                             </div>
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field type="date" name="end_date" component={renderField} validate={required}
+                                <Field type="date" name="end_date" component={datePicker} validate={required}
+                                       onDateChange={this.handleEndDateChange}
                                        label="End Date"/>
                             </div>
                         </div>
