@@ -10,7 +10,7 @@ import {
     datePicker,
     renderSelect,
     renderTextArea,
-    select
+    renderDynamicSelect
 } from '../../../fieldLevelValidationForm';
 
 export class Project extends React.Component {
@@ -120,7 +120,7 @@ export class Project extends React.Component {
 
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field name="skills" component={select}
+                                <Field name="skills" component={renderDynamicSelect}
                                        loadOptions={this.fetchSkillList.bind(this)}
                                        defaultOptions={this.props.defaultSkills}
                                        label="Select Skills"/>

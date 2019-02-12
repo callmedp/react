@@ -17,6 +17,14 @@ export class Detail extends React.Component {
         super(props);
     }
 
+    genderOptions() {
+        return [
+            {value: 'M', label: 'Male'},
+            {value: 'F', label: 'Female'},
+            {value: 'O', label: 'Other'}
+        ]
+    }
+
     render() {
         const {error, handleSubmit, pristine, reset, submitting} = this.props;
         return (
@@ -45,7 +53,7 @@ export class Detail extends React.Component {
                     <form onSubmit={handleSubmit}>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field type="date" name="date_of_birth" component={renderField} validate={required}
+                                <Field name="date_of_birth" component={datePicker} validate={required}
                                        label="Date Of Birth:"/>
                             </div>
                         </div>
@@ -62,13 +70,13 @@ export class Detail extends React.Component {
                                     component={renderSelect}
                                     validate={required}
                                     label="Gender:"
-                                >
-                                    <option></option>
-                                    <option name="Male" value="M">Male</option>
-                                    <option name="Female" value="F">Female</option>
-                                    <option name="Other" value="O">Other</option>
+                                    options={[
+                                        {value: 'M', label: 'Male'},
+                                        {value: 'F', label: 'Female'},
+                                        {value: 'O', label: 'Other'}
+                                    ]}
+                                />
 
-                                </Field>
                             </div>
                         </div>
                         <div className={'Text-spacing'}>
@@ -108,7 +116,7 @@ export class Detail extends React.Component {
 
 
 export const DetailForm = reduxForm({
-    form: 'user_info',
+    form: 'detailForm',
     onSubmitSuccess: (result, dispatch, props) => {
         props.history.push({
             pathname: '/resume-builder/experience'
@@ -124,7 +132,12 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userDetails) => new Promise((resolve, reject) => {
-            dispatch(actions.updateUserDetails({userDetails, resolve, reject}))
+            let details = {
+                ...userDetails,
+                "gender": userDetails['gender'].value
+            }
+
+            dispatch(actions.updateUserDetails({details, resolve, reject}))
         })
     }
 

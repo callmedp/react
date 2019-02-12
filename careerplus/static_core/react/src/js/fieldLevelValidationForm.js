@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment';
 import AsyncSelect from 'react-select/lib/Async';
+import Select from 'react-select';
 
 
 export const required = value => value ? undefined : 'Required';
@@ -59,13 +60,17 @@ export const renderSelect = ({
                                  input,
                                  label,
                                  meta: {touched, error, warning},
-                                 children
+                                 options
                              }) => (
     <div>
         <div className={'Top-space'}>
-            <select {...input} >
-                {children}
-            </select>
+            <Select {...input}
+                    placeholder={label}
+                    options={options}
+                    onBlur={() => {
+                        input.onBlur(input.value)
+                    }}
+            />
             {touched &&
             ((error && <span className={'Error-message'}>{error}</span>) ||
                 (warning && <span className={'Warn-Message'}>{warning}</span>))}
@@ -80,12 +85,12 @@ const options = [
 ];
 
 
-export const select = ({
-                           input,
-                           loadOptions,
-                           label,
-                           defaultOptions
-                       }) => (
+export const renderDynamicSelect = ({
+                                        input,
+                                        loadOptions,
+                                        label,
+                                        defaultOptions
+                                    }) => (
     <AsyncSelect {...input}
                  loadOptions={loadOptions}
                  defaultOptions={defaultOptions}
