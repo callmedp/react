@@ -107,7 +107,7 @@ export class Project extends React.Component {
                                 <Field name="skills" component={select}
                                        loadOptions={this.fetchSkillList.bind(this)}
                                        defaultOptions={this.props.defaultSkills}
-                                       label="End Date"/>
+                                       label="Select Skills"/>
                             </div>
                         </div>
 
@@ -139,11 +139,17 @@ export class Project extends React.Component {
                     </div>
                     }
                     {
-                        projects && projects.length ?
-                            (projects || []).map(project => (
-                                <button>{project['project_name']}</button>
-                            )) : ''
+                        !!(projects && projects.length) &&
+                        <div className={'Project-list'}>
+                            <span className={'Project-heading'}>Projects:</span>
+                            {
+                                (projects || []).map(project => (
+                                    <button>{project['project_name']}</button>
+                                ))
+                            }
+                        </div>
                     }
+
                 </div>
             </div>
         );
@@ -166,7 +172,8 @@ const mapStateToProps = (state) => {
         defaultSkills: state.skill.defaultList,
         projectValues: state.form && state.form.projectForm && state.form.projectForm.values || {},
         projects: state.userInfoReducer.projects,
-        userId: state.userInfoReducer.id
+        userId: state.userInfoReducer.id,
+        initialValues: state.activeProject
     }
 };
 

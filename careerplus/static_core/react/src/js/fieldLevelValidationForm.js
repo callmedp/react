@@ -80,11 +80,13 @@ const options = [
 export const select = ({
                             input,
                            loadOptions,
+                            label,
                            defaultOptions
                        }) => (
     <AsyncSelect {...input}
         loadOptions={loadOptions}
         defaultOptions={defaultOptions}
+                 placeholder={label}
                  isMulti={true}
                  onBlur={() => {input.onBlur(input.value)}}
     />
