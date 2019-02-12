@@ -28,82 +28,63 @@ export class Certification extends React.Component {
     render() {
         const {error, handleSubmit, pristine, reset, submitting, certifications, certificationValues, invalid, userId} = this.props;
         return (
-            <div className="container pr">
-                <header className="login-page-bg">
-                    <div className="login-bg-txt">
-                        <figure className="login-icon1"></figure>
-                        <strong>1 Lacs+</strong>
-                        Satisfied users
-                    </div>
-                    <div className="login-bg-txt">
-                        <figure className="login-icon2"></figure>
-                        <strong>300+</strong>
-                        Courses
-                    </div>
-                    <div className="login-bg-txt">
-                        <figure className="login-icon3"></figure>
-                        <strong>500+</strong>
-                        Professional resumes delivered
-                    </div>
-                </header>
 
-                <div className="register login-signup-box">
-                    <h1 className="modal-title">Add Your Certifications</h1>
+            <div className="register login-signup-box">
+                <h1 className="modal-title">Add Your Certifications</h1>
 
-                    <form onSubmit={handleSubmit}>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="text" name="name_of_certification" component={renderField}
-                                       validate={required}
-                                       label="Name Of Certification"/>
-                            </div>
+                <form onSubmit={handleSubmit}>
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <Field type="text" name="name_of_certification" component={renderField}
+                                   validate={required}
+                                   label="Name Of Certification"/>
                         </div>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="date" name="year_of_certification" component={datePicker}
-                                       validate={required}
-                                       label="Year Of Certification"/>
-                            </div>
-                        </div>
-
-                        <div className={'Button-group'}>
-                            <div className={'Button-parent'}>
-                                <button className={'Submit-button'} type="button" onClick={() => {
-                                    this.props.history.goBack()
-                                }}>
-                                    Back
-                                </button>
-                            </div>
-                            <div className={'Button-parent'}>
-                                <button className={'Submit-button'} type="button" onClick={
-                                    this.handleAddCertification.bind(this, invalid, certifications, certificationValues, reset, userId)
-                                }>
-                                    Add
-                                </button>
-                            </div>
-                            <div className={'Button-parent'}>
-                                <button className={'Submit-button'} type="submit" disabled={pristine || submitting}>
-                                    Next
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                    {error && <div className={'Api-error'}>
-                        <span>{error}</span>
                     </div>
-                    }
-                    {
-                        !!(certifications && certifications.length) &&
-                        <div className={'Project-list'}>
-                            <span className={'Project-heading'}>Certifications:</span>
-                            {
-                                (certifications || []).map(certification => (
-                                    <button>{certification['name_of_certification']}</button>
-                                ))
-                            }
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <Field type="date" name="year_of_certification" component={datePicker}
+                                   validate={required}
+                                   label="Year Of Certification"/>
                         </div>
-                    }
+                    </div>
+
+                    <div className={'Button-group'}>
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="button" onClick={() => {
+                                this.props.history.goBack()
+                            }}>
+                                Back
+                            </button>
+                        </div>
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="button" onClick={
+                                this.handleAddCertification.bind(this, invalid, certifications, certificationValues, reset, userId)
+                            }>
+                                Add
+                            </button>
+                        </div>
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="submit" disabled={pristine || submitting}>
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                {error && <div className={'Api-error'}>
+                    <span>{error}</span>
                 </div>
+                }
+                {
+                    !!(certifications && certifications.length) &&
+                    <div className={'Project-list'}>
+                        <span className={'Project-heading'}>Certifications:</span>
+                        {
+                            (certifications || []).map(certification => (
+                                <button>{certification['name_of_certification']}</button>
+                            ))
+                        }
+                    </div>
+                }
             </div>
         );
     }

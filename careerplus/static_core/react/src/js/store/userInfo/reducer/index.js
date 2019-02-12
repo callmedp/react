@@ -2,7 +2,8 @@ import {
     FETCH_HOME_DATA, STORE_USER_INFO,
     SAVE_DEFAULT_SKILL_LIST, ADD_PROJECT,
     GET_PROJECT_DETAIL, ADD_EXPERIENCE, ADD_EDUCATION,
-    ADD_CERTIFICATION, ADD_REFERENCE, ADD_ACHIEVEMENT
+    ADD_CERTIFICATION, ADD_REFERENCE,
+    ADD_ACHIEVEMENT,ADD_SKILL
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -12,11 +13,12 @@ const initialState = {
     email: '',
     number: '',
     projects: [],
-    experiences:[],
+    experiences: [],
     educations: [],
     certifications: [],
     references: [],
-    achievements:[]
+    achievements: [],
+    skills: []
 };
 
 
@@ -70,6 +72,13 @@ const userInfoReducer = (state = initialState, action) => {
             }
         }
         case ADD_ACHIEVEMENT: {
+            return {
+                ...state,
+                ...action.data
+
+            }
+        }
+        case ADD_SKILL: {
             return {
                 ...state,
                 ...action.data

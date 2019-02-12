@@ -8,73 +8,72 @@ import {renderField, required, datePicker, renderSelect, renderTextArea} from '.
 export class Skill extends React.Component {
     constructor(props) {
         super(props);
+        this.handleAddSkill.bind(this);
+
+    }
+
+    handleAddSkill(invalid, skills, skillValues, reset, userId) {
+        if (invalid) return;
+        let skillList = skills || [];
+        skillList.push({
+            ...skillValues,
+            user: userId
+        });
+        this.props.addSkill({skills: skillList});
+        reset();
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting} = this.props;
+        const {error, handleSubmit, pristine, reset, submitting, skills, skillValues, invalid, userId} = this.props;
         return (
-            <div className="container pr">
-                <header className="login-page-bg">
-                    <div className="login-bg-txt">
-                        <figure className="login-icon1"></figure>
-                        <strong>1 Lacs+</strong>
-                        Satisfied users
-                    </div>
-                    <div className="login-bg-txt">
-                        <figure className="login-icon2"></figure>
-                        <strong>300+</strong>
-                        Courses
-                    </div>
-                    <div className="login-bg-txt">
-                        <figure className="login-icon3"></figure>
-                        <strong>500+</strong>
-                        Professional resumes delivered
-                    </div>
-                </header>
+            <div className="register login-signup-box">
+                <h1 className="modal-title">Add Your Skill</h1>
 
-                <div className="register login-signup-box">
-                    <h1 className="modal-title">Add Your Skill</h1>
-
-                    <form onSubmit={handleSubmit}>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="text" name="title" component={renderField} validate={required}
-                                       label="Title"/>
-                            </div>
+                <form onSubmit={handleSubmit}>
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <Field type="text" name="name" component={renderField} validate={required}
+                                   label="Name"/>
                         </div>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="date" name="date" component={renderField} validate={required}
-                                       label="Date"/>
-                            </div>
-                        </div>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="text" name="summary" component={renderTextArea} validate={required}
-                                       label="Summary"/>
-                            </div>
-                        </div>
-
-                        <div className={'Button-group'}>
-                            <div className={'Button-parent'}>
-                                <button className={'Submit-button'} onClick={() => {
-                                    this.props.history.goBack()
-                                }}>
-                                    Back
-                                </button>
-                            </div>
-                            <div className={'Button-parent'}>
-                                <button className={'Submit-button'} type="submit" disabled={pristine || submitting}>
-                                    Next
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                    {error && <div className={'Api-error'}>
-                        <span>{error}</span>
                     </div>
-                    }
+
+                    <div className={'Button-group'}>
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="button" onClick={() => {
+                                this.props.history.goBack()
+                            }}>
+                                Back
+                            </button>
+                        </div>
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="button" onClick={
+                                this.handleAddSkill.bind(this, invalid, skills, skillValues, reset, userId)
+                            }>
+                                Add
+                            </button>
+                        </div>
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="submit" disabled={pristine || submitting}>
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                {error && <div className={'Api-error'}>
+                    <span>{error}</span>
                 </div>
+                }
+                {
+                    !!(skills && skills.length) &&
+                    <div className={'Project-list'}>
+                        <span className={'Project-heading'}>SKILLS:</span>
+                        {
+                            (skills || []).map(skill => (
+                                <button>{skill['name']}</button>
+                            ))
+                        }
+                    </div>
+                }
             </div>
         );
     }
@@ -82,24 +81,31 @@ export class Skill extends React.Component {
 
 
 export const SkillForm = reduxForm({
-    form: 'user_info',
+    form: 'skillForm',
     onSubmitSuccess: (result, dispatch, props) => {
         props.history.push({
-            pathname: '/resume-builder/reference'
+            pathname: '/resume-builder/experience'
         })
     }
 })(Skill);
 
 
 const mapStateToProps = (state) => {
-    return {}
+    return {
+        skillValues: state.form && state.form.skillForm && state.form.skillForm.values || {},
+        skills: state.userInfoReducer.skills,
+        userId: state.userInfoReducer.id,
+    }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userSkill) => new Promise((resolve, reject) => {
             dispatch(actions.saveUserSkill({userSkill, resolve, reject}))
-        })
+        }),
+        "addSkill": (skill) => {
+            return dispatch(actions.addSkill(skill))
+        }
     }
 
 };

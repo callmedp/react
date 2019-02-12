@@ -28,25 +28,6 @@ export class Reference extends React.Component {
     render() {
         const {error, handleSubmit, pristine, reset, submitting, references, referenceValues, invalid, userId} = this.props;
         return (
-            <div className="container pr">
-                <header className="login-page-bg">
-                    <div className="login-bg-txt">
-                        <figure className="login-icon1"></figure>
-                        <strong>1 Lacs+</strong>
-                        Satisfied users
-                    </div>
-                    <div className="login-bg-txt">
-                        <figure className="login-icon2"></figure>
-                        <strong>300+</strong>
-                        Courses
-                    </div>
-                    <div className="login-bg-txt">
-                        <figure className="login-icon3"></figure>
-                        <strong>500+</strong>
-                        Professional resumes delivered
-                    </div>
-                </header>
-
                 <div className="register login-signup-box">
                     <h1 className="modal-title">Add Your References</h1>
 
@@ -66,7 +47,7 @@ export class Reference extends React.Component {
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field type="date" name="about_user" component={datePicker}
+                                <Field type="text" name="about_user" component={renderTextArea}
                                        validate={required}
                                        label="About Reference"/>
                             </div>
@@ -110,7 +91,6 @@ export class Reference extends React.Component {
                         </div>
                     }
                 </div>
-            </div>
         );
     }
 }

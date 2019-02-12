@@ -31,119 +31,99 @@ export class Education extends React.Component {
     render() {
         const {error, handleSubmit, pristine, reset, submitting, educations, educationValues, invalid, userId} = this.props;
         return (
-            <div className="container pr">
-                <header className="login-page-bg">
-                    <div className="login-bg-txt">
-                        <figure className="login-icon1"></figure>
-                        <strong>1 Lacs+</strong>
-                        Satisfied users
-                    </div>
-                    <div className="login-bg-txt">
-                        <figure className="login-icon2"></figure>
-                        <strong>300+</strong>
-                        Courses
-                    </div>
-                    <div className="login-bg-txt">
-                        <figure className="login-icon3"></figure>
-                        <strong>500+</strong>
-                        Professional resumes delivered
-                    </div>
-                </header>
+            <div className="register login-signup-box">
+                <h1 className="modal-title">Add Your Qualifications</h1>
 
-                <div className="register login-signup-box">
-                    <h1 className="modal-title">Add Your Qualifications</h1>
-
-                    <form onSubmit={handleSubmit}>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="text" name="specialization" component={renderField} validate={required}
-                                       label="Specialization"/>
-                            </div>
+                <form onSubmit={handleSubmit}>
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <Field type="text" name="specialization" component={renderField} validate={required}
+                                   label="Specialization"/>
                         </div>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="text" name="institution_name" component={renderField} validate={required}
-                                       label="Institution Name"/>
-                            </div>
-                        </div>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="text" name="course_type"
-                                       component={renderSelect}
-                                       validate={required}
-                                       options={[
-                                           {value: 'FT', label: 'FULL TIME'},
-                                           {value: 'PT', label: 'PART TIME'},
-                                       ]}
-                                       label="Course Type"/>
-                            </div>
-                        </div>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="text" name="percentage_cgpa" component={renderField} validate={required}
-                                       label="Percentage/Cgpa"/>
-                            </div>
-                        </div>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="date" name="start_date" component={datePicker} validate={required}
-                                       label="Start Date"/>
-                            </div>
-                        </div>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="date" name="end_date" component={datePicker} validate={required}
-                                       label="End Date"/>
-                            </div>
-                        </div>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <div>
-                                    <label>Currently Pursuing</label>
-                                </div>
-                                <Field type="checkbox" name="is_pursuing" component={renderField} validate={required}
-                                       label="Currently Pursuing"/>
-                            </div>
-                        </div>
-
-                        <div className={'Button-group'}>
-                            <div className={'Button-parent'}>
-                                <button className={'Submit-button'} type="button" onClick={() => {
-                                    this.props.history.goBack()
-                                }}>
-                                    Back
-                                </button>
-                            </div>
-                            <div className={'Button-parent'}>
-                                <button className={'Submit-button'} type="button" onClick={
-                                    this.handleAddEducation.bind(this, invalid, educations, educationValues, reset, userId)
-                                }>
-                                    Add
-                                </button>
-                            </div>
-                            <div className={'Button-parent'}>
-                                <button className={'Submit-button'} type="submit" disabled={pristine || submitting}>
-                                    Next
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                    {error && <div className={'Api-error'}>
-                        <span>{error}</span>
                     </div>
-                    }
-                    {
-                        !!(educations && educations.length) &&
-                        <div className={'Project-list'}>
-                            <span className={'Project-heading'}>Educations:</span>
-                            {
-                                (educations || []).map(education => (
-                                    <button>{education['institution_name']}</button>
-                                ))
-                            }
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <Field type="text" name="institution_name" component={renderField} validate={required}
+                                   label="Institution Name"/>
                         </div>
-                    }
+                    </div>
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <Field type="text" name="course_type"
+                                   component={renderSelect}
+                                   validate={required}
+                                   options={[
+                                       {value: 'FT', label: 'FULL TIME'},
+                                       {value: 'PT', label: 'PART TIME'},
+                                   ]}
+                                   label="Course Type"/>
+                        </div>
+                    </div>
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <Field type="text" name="percentage_cgpa" component={renderField} validate={required}
+                                   label="Percentage/Cgpa"/>
+                        </div>
+                    </div>
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <Field type="date" name="start_date" component={datePicker} validate={required}
+                                   label="Start Date"/>
+                        </div>
+                    </div>
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <Field type="date" name="end_date" component={datePicker} validate={required}
+                                   label="End Date"/>
+                        </div>
+                    </div>
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <div>
+                                <label>Currently Pursuing</label>
+                            </div>
+                            <Field type="checkbox" name="is_pursuing" component={renderField} validate={required}
+                                   label="Currently Pursuing"/>
+                        </div>
+                    </div>
+
+                    <div className={'Button-group'}>
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="button" onClick={() => {
+                                this.props.history.goBack()
+                            }}>
+                                Back
+                            </button>
+                        </div>
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="button" onClick={
+                                this.handleAddEducation.bind(this, invalid, educations, educationValues, reset, userId)
+                            }>
+                                Add
+                            </button>
+                        </div>
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="submit" disabled={pristine || submitting}>
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                {error && <div className={'Api-error'}>
+                    <span>{error}</span>
                 </div>
+                }
+                {
+                    !!(educations && educations.length) &&
+                    <div className={'Project-list'}>
+                        <span className={'Project-heading'}>Educations:</span>
+                        {
+                            (educations || []).map(education => (
+                                <button>{education['institution_name']}</button>
+                            ))
+                        }
+                    </div>
+                }
             </div>
         );
     }

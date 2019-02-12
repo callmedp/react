@@ -40,6 +40,11 @@ const saveUserProject = (data) => {
     return BaseApiService.post(`http://127.0.0.1:8000/resume/api/v1/${url}`, data);
 };
 
+const saveUserSkill = (data) => {
+    const url = 'skills/';
+    return BaseApiService.post(`http://127.0.0.1:8000/resume/api/v1/${url}`, data);
+};
+
 const saveUserAchievement = (data) => {
     const url = 'user-achievements/';
     return BaseApiService.post(`http://127.0.0.1:8000/resume/api/v1/${url}`, data);
@@ -65,6 +70,7 @@ export const Api = {
     saveUserCertification,
     saveUserReference,
     saveUserProject,
+    saveUserSkill,
     saveUserAchievement,
     fetchSkills
 };

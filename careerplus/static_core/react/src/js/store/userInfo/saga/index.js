@@ -196,6 +196,33 @@ function* saveUserAchievement(action) {
 }
 
 
+
+
+function* saveUserSkill(action) {
+    try {
+        const {userInfoReducer: {id, skills}} = yield select();
+        let {payload: {userSkill, resolve, reject}} = action;
+        userSkill = {
+            ...userSkill,
+            user: id
+        };
+
+        let skillList = skills || [];
+        skillList.push(userSkill);
+        yield put({type: Actions.ADD_SKILL, data: {'skills': skillList}});
+
+        const result = yield call(Api.saveUserSkill, skillList);
+        if (result['error']) {
+            return reject(new SubmissionError({_error: result['errorMessage']}));
+        }
+        yield put({type: Actions.STORE_USER_INFO, data: {'skills': result['data']}});
+        return resolve('User skills added successfully.');
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+
 function* fetchSkillList(action) {
     try {
         let {payload: {inputValue, resolve, reject}} = action;
@@ -237,6 +264,7 @@ export default function* watchFetchHomeData() {
     yield takeLatest(Actions.SAVE_USER_ACHIEVEMENT, saveUserAchievement);
     yield takeLatest(Actions.SAVE_USER_CERTIFICATION, saveUserCertification);
     yield takeLatest(Actions.SAVE_USER_REFERENCE, saveUserReference);
+    yield takeLatest(Actions.SAVE_USER_SKILL, saveUserSkill);
     yield takeLatest(Actions.FETCH_SKILL_LIST, fetchSkillList);
     yield takeLatest(Actions.FETCH_DEFAULT_SKILL_LIST, fetchDefaultSkillList);
 

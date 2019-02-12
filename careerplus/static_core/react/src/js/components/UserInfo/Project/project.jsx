@@ -67,26 +67,7 @@ export class Project extends React.Component {
     render() {
         const {error, handleSubmit, pristine, reset, submitting, projects, projectValues, invalid, userId} = this.props;
         return (
-            <div className="container pr">
-                <header className="login-page-bg">
-                    <div className="login-bg-txt">
-                        <figure className="login-icon1"></figure>
-                        <strong>1 Lacs+</strong>
-                        Satisfied users
-                    </div>
-                    <div className="login-bg-txt">
-                        <figure className="login-icon2"></figure>
-                        <strong>300+</strong>
-                        Courses
-                    </div>
-                    <div className="login-bg-txt">
-                        <figure className="login-icon3"></figure>
-                        <strong>500+</strong>
-                        Professional resumes delivered
-                    </div>
-                </header>
-
-                <div className="register login-signup-box">
+             <div className="register login-signup-box">
                     <h1 className="modal-title">Add Your Projects</h1>
 
                     <form onSubmit={handleSubmit}>
@@ -167,7 +148,6 @@ export class Project extends React.Component {
                     }
 
                 </div>
-            </div>
         );
     }
 }

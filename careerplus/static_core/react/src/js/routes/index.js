@@ -2,6 +2,7 @@ import React from "react";
 import {BrowserRouter as Router, Route, Link, Switch} from "react-router-dom";
 import RegisterContainer from '../components/UserInfo/Register/register.jsx';
 import DetailContainer from '../components/UserInfo/Detail/detail.jsx';
+import SkillContainer from '../components/UserInfo/Skill/skill.jsx';
 import ExperienceContainer from '../components/UserInfo/Experience/experience.jsx';
 import EducationContainer from '../components/UserInfo/Education/education.jsx';
 import ProjectContainer from '../components/UserInfo/Project/project.jsx';
@@ -10,21 +11,68 @@ import AchievementContainer from '../components/UserInfo/Achievement/achievement
 import ReferenceContainer from '../components/UserInfo/Reference/reference.jsx';
 import Main from '../components/Main/main.jsx';
 
+export const RouteWithSubRoutes = route => (
+    <Route
+        path={route.path}
+        render={props => (
+            // pass the sub-routes down to keep nesting
+            <route.component {...props} routes={route.routes}/>
+        )}
+    />
+);
+
+
 const AppRouter = () => (
     <Router>
-        <Switch>
-            <Route path='/resume-builder' exact component={Main}/>
-            <Route path="/resume-builder/register" component={RegisterContainer}/>
-            <Route path="/resume-builder/detail" component={DetailContainer}/>
-            <Route path="/resume-builder/experience" component={ExperienceContainer}/>
-            <Route path="/resume-builder/education" component={EducationContainer}/>
-            <Route path="/resume-builder/project" component={ProjectContainer}/>
-            <Route path="/resume-builder/certification" component={CertificationContainer}/>
-            <Route path="/resume-builder/achievement" component={AchievementContainer}/>
-            <Route path="/resume-builder/reference" component={ReferenceContainer}/>
-        </Switch>
-
+        <div>
+            {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
+        </div>
     </Router>
 );
+
+const routes = [
+    {
+        path: '/resume-builder',
+        component: Main,
+        routes: [
+            {
+                path: '/resume-builder/register',
+                component: RegisterContainer
+            },
+            {
+                path: '/resume-builder/detail',
+                component: DetailContainer
+            },
+            {
+                path: '/resume-builder/skill',
+                component: SkillContainer
+            },
+            {
+                path: '/resume-builder/education',
+                component: EducationContainer
+            },
+            {
+                path: '/resume-builder/experience',
+                component: ExperienceContainer
+            },
+            {
+                path: '/resume-builder/project',
+                component: ProjectContainer
+            },
+            {
+                path: '/resume-builder/certification',
+                component: CertificationContainer
+            },
+            {
+                path: '/resume-builder/achievement',
+                component: AchievementContainer
+            },
+            {
+                path: '/resume-builder/reference',
+                component: ReferenceContainer
+            }
+        ]
+    }
+]
 
 export default AppRouter;
