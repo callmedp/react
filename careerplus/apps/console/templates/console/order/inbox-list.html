@@ -235,7 +235,8 @@
                       {% endif %}
 
                                       <td><a target="_blank" href="{% url "console:order-detail" obj.order.pk %}"><b style="text-decoration: underline;">{{obj.order.number}}</b></a>
-                                      <br id="orderitempk">({{obj.pk}})</br>
+                                      <br/>
+                                         <span id="orderitempk">({{obj.pk}})</span>
                                       </td>
                       <td>{{obj.order.first_name}} {{obj.order.last_name}}</td>
                       <td>{{obj.order.email}}</td>
