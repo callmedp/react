@@ -1,4 +1,9 @@
-import {FETCH_HOME_DATA, STORE_USER_INFO, SAVE_DEFAULT_SKILL_LIST, ADD_PROJECT, GET_PROJECT_DETAIL} from "../actions/actionTypes";
+import {
+    FETCH_HOME_DATA, STORE_USER_INFO,
+    SAVE_DEFAULT_SKILL_LIST, ADD_PROJECT,
+    GET_PROJECT_DETAIL, ADD_EXPERIENCE, ADD_EDUCATION,
+    ADD_CERTIFICATION, ADD_REFERENCE, ADD_ACHIEVEMENT
+} from "../actions/actionTypes";
 
 const initialState = {
     id: '',
@@ -6,7 +11,12 @@ const initialState = {
     last_name: '',
     email: '',
     number: '',
-    projects: []
+    projects: [],
+    experiences:[],
+    educations: [],
+    certifications: [],
+    references: [],
+    achievements:[]
 };
 
 
@@ -25,6 +35,41 @@ const userInfoReducer = (state = initialState, action) => {
             };
         }
         case ADD_PROJECT: {
+            return {
+                ...state,
+                ...action.data
+
+            }
+        }
+        case ADD_EXPERIENCE: {
+            return {
+                ...state,
+                ...action.data
+
+            }
+        }
+        case ADD_EDUCATION: {
+            return {
+                ...state,
+                ...action.data
+
+            }
+        }
+        case ADD_CERTIFICATION: {
+            return {
+                ...state,
+                ...action.data
+
+            }
+        }
+        case ADD_REFERENCE: {
+            return {
+                ...state,
+                ...action.data
+
+            }
+        }
+        case ADD_ACHIEVEMENT: {
             return {
                 ...state,
                 ...action.data
@@ -54,9 +99,9 @@ const skillReducer = (state = {
 }
 
 const projectReducer = (state = {}, action) => {
-     switch (action.type){
-         case GET_PROJECT_DETAIL:
-     }
+    switch (action.type) {
+        case GET_PROJECT_DETAIL:
+    }
 }
 
 export const UserReducer = {

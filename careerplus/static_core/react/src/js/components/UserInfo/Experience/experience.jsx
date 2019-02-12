@@ -8,10 +8,23 @@ import {renderField, required, datePicker, renderSelect, renderTextArea} from '.
 export class Experience extends React.Component {
     constructor(props) {
         super(props);
+        this.handleAddExperience.bind(this);
+    }
+
+    handleAddExperience(invalid, experiences, experienceValues, reset, userId) {
+        if (invalid) return;
+        let experienceList = experiences || [];
+        experienceList.push({
+            ...experienceValues,
+            user: userId
+        });
+        this.props.addExperience({experiences: experienceList});
+        reset();
+
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting} = this.props;
+        const {error, handleSubmit, pristine, reset, submitting, experiences, experienceValues, invalid, userId} = this.props;
         return (
             <div className="container pr">
                 <header className="login-page-bg">
@@ -50,18 +63,21 @@ export class Experience extends React.Component {
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field type="date" name="start_date" component={renderField} validate={required}
+                                <Field type="date" name="start_date" component={datePicker} validate={required}
                                        label="Start Date"/>
                             </div>
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field type="date" name="end_date" component={renderField} validate={required}
+                                <Field type="date" name="end_date" component={datePicker} validate={required}
                                        label="End Date"/>
                             </div>
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
+                                <div>
+                                    <label>Currently Working</label>
+                                </div>
                                 <Field type="checkbox" name="is_working" component={renderField} validate={required}
                                        label="Currently Working"/>
                             </div>
@@ -85,10 +101,17 @@ export class Experience extends React.Component {
                         </div>
                         <div className={'Button-group'}>
                             <div className={'Button-parent'}>
-                                <button className={'Submit-button'} onClick={() => {
+                                <button className={'Submit-button'} type="button" onClick={() => {
                                     this.props.history.goBack()
                                 }}>
                                     Back
+                                </button>
+                            </div>
+                            <div className={'Button-parent'}>
+                                <button className={'Submit-button'} type="button" onClick={
+                                    this.handleAddExperience.bind(this, invalid, experiences, experienceValues, reset, userId)
+                                }>
+                                    Add
                                 </button>
                             </div>
                             <div className={'Button-parent'}>
@@ -102,6 +125,17 @@ export class Experience extends React.Component {
                         <span>{error}</span>
                     </div>
                     }
+                    {
+                        !!(experiences && experiences.length) &&
+                        <div className={'Project-list'}>
+                            <span className={'Project-heading'}>Experiences:</span>
+                            {
+                                (experiences || []).map(experience => (
+                                    <button>{experience['job_profile']}</button>
+                                ))
+                            }
+                        </div>
+                    }
                 </div>
             </div>
         );
@@ -110,7 +144,7 @@ export class Experience extends React.Component {
 
 
 export const ExperienceForm = reduxForm({
-    form: 'user_info',
+    form: 'experienceForm',
     onSubmitSuccess: (result, dispatch, props) => {
         props.history.push({
             pathname: '/resume-builder/education'
@@ -120,16 +154,22 @@ export const ExperienceForm = reduxForm({
 
 
 const mapStateToProps = (state) => {
-    return {}
+    return {
+        experienceValues: state.form && state.form.experienceForm && state.form.experienceForm.values || {},
+        experiences: state.userInfoReducer.experiences,
+        userId: state.userInfoReducer.id,
+    }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userExperiences) => new Promise((resolve, reject) => {
             dispatch(actions.saveUserExperience({userExperiences, resolve, reject}))
-        })
+        }),
+        "addExperience": (experience) => {
+            return dispatch(actions.addExperience(experience))
+        }
     }
-
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExperienceForm);

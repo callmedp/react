@@ -4,6 +4,8 @@ import * as Actions from '../actions/actionTypes';
 import {SubmissionError} from 'redux-form'
 import {UPDATE_USER_DETAILS} from "../actions/actionTypes";
 import {FETCH_SKILL_LIST} from "../actions/actionTypes";
+import {ADD_EXPERIENCE} from "../actions/actionTypes";
+import {ADD_EDUCATION} from "../actions/actionTypes";
 
 
 function* saveUserInfo(action) {
@@ -22,14 +24,18 @@ function* saveUserInfo(action) {
 
 function* saveUserExperience(action) {
     try {
+        const {userInfoReducer: {id, experiences}} = yield select();
         let {payload: {userExperiences, resolve, reject}} = action;
-        const {userInfoReducer: {id}} = yield select();
         userExperiences = {
             ...userExperiences,
             user: id
         };
 
-        const result = yield call(Api.saveUserExperience, userExperiences);
+        let experienceList = experiences || [];
+        experienceList.push(userExperiences);
+        yield put({type: Actions.ADD_EXPERIENCE, data: {'experiences': experienceList}});
+
+        const result = yield call(Api.saveUserExperience, experienceList);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
@@ -46,6 +52,7 @@ function* updateUserInfo(action) {
         let {payload: {userDetails, resolve, reject}} = action;
         userDetails = {
             ...userDetails,
+            "gender": userDetails['gender'].value,
             id: id
         }
         const result = yield call(Api.updateUserData, userDetails, id);
@@ -62,17 +69,23 @@ function* updateUserInfo(action) {
 
 function* saveUserEducation(action) {
     try {
-        const {userInfoReducer: {id}} = yield select();
+        const {userInfoReducer: {id, educations}} = yield select();
         let {payload: {userEducation, resolve, reject}} = action;
         userEducation = {
             ...userEducation,
+            "course_type": userEducation['course_type'].value,
             user: id
         }
-        const result = yield call(Api.saveUserEducation, userEducation, id);
+
+        let educationList = educations || [];
+        educationList.push(userEducation);
+        yield put({type: Actions.ADD_EDUCATION, data: {'educations': educationList}});
+
+        const result = yield call(Api.saveUserEducation, educationList);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
-        yield put({type: Actions.STORE_USER_INFO, data: {'education': result['data']}});
+        yield put({type: Actions.STORE_USER_INFO, data: {'educations': result['data']}});
         return resolve('User Education added successfully.');
     } catch (e) {
         console.log('error', e);
@@ -81,13 +94,19 @@ function* saveUserEducation(action) {
 
 function* saveUserCertification(action) {
     try {
-        const {userInfoReducer: {id}} = yield select();
+        const {userInfoReducer: {id, certifications}} = yield select();
         let {payload: {userCertification, resolve, reject}} = action;
         userCertification = {
             ...userCertification,
             user: id
         };
-        const result = yield call(Api.saveUserCertification, userCertification, id);
+
+        let certificationList = certifications || [];
+        certificationList.push(userCertification);
+        yield put({type: Actions.ADD_CERTIFICATION, data: {'certifications': certificationList}});
+
+
+        const result = yield call(Api.saveUserCertification, certificationList);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
@@ -100,13 +119,18 @@ function* saveUserCertification(action) {
 
 function* saveUserReference(action) {
     try {
-        const {userInfoReducer: {id}} = yield select();
+        const {userInfoReducer: {id, references}} = yield select();
         let {payload: {userReference, resolve, reject}} = action;
         userReference = {
             ...userReference,
             user: id
         };
-        const result = yield call(Api.saveUserReference, userReference, id);
+
+        let referenceList = references || [];
+        referenceList.push(userReference);
+        yield put({type: Actions.ADD_REFERENCE, data: {'references': referenceList}});
+
+        const result = yield call(Api.saveUserReference, referenceList);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
@@ -134,7 +158,7 @@ function* saveUserProject(action) {
         projectList.push(userProject);
         yield put({type: Actions.ADD_PROJECT, data: {'projects': projectList}});
 
-        const result = yield call(Api.saveUserProject, projectList, id);
+        const result = yield call(Api.saveUserProject, projectList);
         console.log('result after --', result);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
@@ -149,13 +173,18 @@ function* saveUserProject(action) {
 
 function* saveUserAchievement(action) {
     try {
-        const {userInfoReducer: {id}} = yield select();
+        const {userInfoReducer: {id, achievements}} = yield select();
         let {payload: {userAchievement, resolve, reject}} = action;
         userAchievement = {
             ...userAchievement,
             user: id
         };
-        const result = yield call(Api.saveUserAchievement, userAchievement, id);
+
+        let achievementList = achievements || [];
+        achievementList.push(userAchievement);
+        yield put({type: Actions.ADD_ACHIEVEMENT, data: {'achievements': achievementList}});
+
+        const result = yield call(Api.saveUserAchievement, achievementList);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }

@@ -8,10 +8,24 @@ import {renderField, required, datePicker, renderSelect, renderTextArea} from '.
 export class Achievement extends React.Component {
     constructor(props) {
         super(props);
+        this.handleAddAchievement.bind(this);
+
+    }
+
+    handleAddAchievement(invalid, achievements, achievementValues, reset, userId) {
+        if (invalid) return;
+        let achievementList = achievements || [];
+        achievementList.push({
+            ...achievementValues,
+            user: userId
+        });
+        this.props.addAchievement({achievements: achievementList});
+        reset();
+
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting} = this.props;
+        const {error, handleSubmit, pristine, reset, submitting, achievements, achievementValues, invalid, userId} = this.props;
         return (
             <div className="container pr">
                 <header className="login-page-bg">
@@ -44,7 +58,7 @@ export class Achievement extends React.Component {
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field type="date" name="date" component={renderField} validate={required}
+                                <Field type="date" name="date" component={datePicker} validate={required}
                                        label="Date"/>
                             </div>
                         </div>
@@ -57,10 +71,17 @@ export class Achievement extends React.Component {
 
                         <div className={'Button-group'}>
                             <div className={'Button-parent'}>
-                                <button className={'Submit-button'} onClick={() => {
+                                <button className={'Submit-button'} type="button" onClick={() => {
                                     this.props.history.goBack()
                                 }}>
                                     Back
+                                </button>
+                            </div>
+                            <div className={'Button-parent'}>
+                                <button className={'Submit-button'} type="button" onClick={
+                                    this.handleAddAchievement.bind(this, invalid, achievements, achievementValues, reset, userId)
+                                }>
+                                    Add
                                 </button>
                             </div>
                             <div className={'Button-parent'}>
@@ -74,6 +95,17 @@ export class Achievement extends React.Component {
                         <span>{error}</span>
                     </div>
                     }
+                    {
+                        !!(achievements && achievements.length) &&
+                        <div className={'Project-list'}>
+                            <span className={'Project-heading'}>Achievements:</span>
+                            {
+                                (achievements || []).map(achievement => (
+                                    <button>{achievement['title']}</button>
+                                ))
+                            }
+                        </div>
+                    }
                 </div>
             </div>
         );
@@ -82,7 +114,7 @@ export class Achievement extends React.Component {
 
 
 export const AchievementForm = reduxForm({
-    form: 'user_info',
+    form: 'achievementForm',
     onSubmitSuccess: (result, dispatch, props) => {
         props.history.push({
             pathname: '/resume-builder/reference'
@@ -92,14 +124,21 @@ export const AchievementForm = reduxForm({
 
 
 const mapStateToProps = (state) => {
-    return {}
+    return {
+        achievementValues: state.form && state.form.achievementForm && state.form.achievementForm.values || {},
+        achievements: state.userInfoReducer.achievements,
+        userId: state.userInfoReducer.id,
+    }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userAchievement) => new Promise((resolve, reject) => {
             dispatch(actions.saveUserAchievement({userAchievement, resolve, reject}))
-        })
+        }),
+        "addAchievement": (achievement) => {
+            return dispatch(actions.addAchievement(achievement))
+        }
     }
 
 };

@@ -1,7 +1,8 @@
 import {
     FETCH_HOME_DATA, SAVE_USER_DETAILS, UPDATE_USER_DETAILS, SAVE_USER_EXPERIENCES,
     SAVE_USER_EDUCATION, SAVE_USER_CERTIFICATION, SAVE_USER_REFERENCE, SAVE_USER_PROJECT,
-    SAVE_USER_ACHIEVEMENT, FETCH_SKILL_LIST, FETCH_DEFAULT_SKILL_LIST, ADD_PROJECT, GET_PROJECT_DETAIL
+    SAVE_USER_ACHIEVEMENT, FETCH_SKILL_LIST, FETCH_DEFAULT_SKILL_LIST, ADD_PROJECT,
+    GET_PROJECT_DETAIL, ADD_EXPERIENCE, ADD_EDUCATION, ADD_CERTIFICATION, ADD_ACHIEVEMENT, ADD_REFERENCE
 } from "./actionTypes";
 
 export const fetchHomeData = () => ({
@@ -28,19 +29,44 @@ export const saveUserExperience = (payload) => ({
     payload
 });
 
+export const addExperience = (data) => ({
+    type: ADD_EXPERIENCE,
+    data
+});
+
+
 export const saveUserEducation = (payload) => ({
     type: SAVE_USER_EDUCATION,
     payload
 });
+
+
+export const addEducation = (data) => ({
+    type: ADD_EDUCATION,
+    data
+});
+
 
 export const saveUserCertification = (payload) => ({
     type: SAVE_USER_CERTIFICATION,
     payload
 });
 
+
+export const addCertification = (data) => ({
+    type: ADD_CERTIFICATION,
+    data
+});
+
 export const saveUserReference = (payload) => ({
     type: SAVE_USER_REFERENCE,
     payload
+});
+
+
+export const addReference = (data) => ({
+    type: ADD_REFERENCE,
+    data
 });
 
 export const saveUserProject = (payload) => ({
@@ -63,6 +89,12 @@ export const getProjectDetail = (data) => ({
 export const saveUserAchievement = (payload) => ({
     type: SAVE_USER_ACHIEVEMENT,
     payload
+});
+
+
+export const addAchievement = (data) => ({
+    type: ADD_ACHIEVEMENT,
+    data
 });
 
 export const fetchDefaultSkillList = (inputValue) => ({

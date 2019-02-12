@@ -8,10 +8,28 @@ import {renderField, required, datePicker, renderSelect, renderTextArea} from '.
 export class Education extends React.Component {
     constructor(props) {
         super(props);
+        this.handleAddEducation.bind(this);
+    }
+
+    handleAddEducation(invalid, educations, educationValues, reset, userId) {
+        if (invalid) return;
+        let educationList = educations || [];
+
+        educationList.push({
+            ...educationValues,
+            "course_type": educationValues['course_type'].value,
+
+
+            user: userId
+        })
+        ;
+        this.props.addEducation({educations: educationList});
+        reset();
+
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting} = this.props;
+        const {error, handleSubmit, pristine, reset, submitting, educations, educationValues, invalid, userId} = this.props;
         return (
             <div className="container pr">
                 <header className="login-page-bg">
@@ -50,7 +68,13 @@ export class Education extends React.Component {
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field type="text" name="course_type" component={renderField} validate={required}
+                                <Field type="text" name="course_type"
+                                       component={renderSelect}
+                                       validate={required}
+                                       options={[
+                                           {value: 'FT', label: 'FULL TIME'},
+                                           {value: 'PT', label: 'PART TIME'},
+                                       ]}
                                        label="Course Type"/>
                             </div>
                         </div>
@@ -62,18 +86,21 @@ export class Education extends React.Component {
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field type="date" name="start_date" component={renderField} validate={required}
+                                <Field type="date" name="start_date" component={datePicker} validate={required}
                                        label="Start Date"/>
                             </div>
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field type="date" name="end_date" component={renderField} validate={required}
+                                <Field type="date" name="end_date" component={datePicker} validate={required}
                                        label="End Date"/>
                             </div>
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
+                                <div>
+                                    <label>Currently Pursuing</label>
+                                </div>
                                 <Field type="checkbox" name="is_pursuing" component={renderField} validate={required}
                                        label="Currently Pursuing"/>
                             </div>
@@ -81,10 +108,17 @@ export class Education extends React.Component {
 
                         <div className={'Button-group'}>
                             <div className={'Button-parent'}>
-                                <button className={'Submit-button'} onClick={() => {
+                                <button className={'Submit-button'} type="button" onClick={() => {
                                     this.props.history.goBack()
                                 }}>
                                     Back
+                                </button>
+                            </div>
+                            <div className={'Button-parent'}>
+                                <button className={'Submit-button'} type="button" onClick={
+                                    this.handleAddEducation.bind(this, invalid, educations, educationValues, reset, userId)
+                                }>
+                                    Add
                                 </button>
                             </div>
                             <div className={'Button-parent'}>
@@ -98,6 +132,17 @@ export class Education extends React.Component {
                         <span>{error}</span>
                     </div>
                     }
+                    {
+                        !!(educations && educations.length) &&
+                        <div className={'Project-list'}>
+                            <span className={'Project-heading'}>Educations:</span>
+                            {
+                                (educations || []).map(education => (
+                                    <button>{education['institution_name']}</button>
+                                ))
+                            }
+                        </div>
+                    }
                 </div>
             </div>
         );
@@ -106,7 +151,7 @@ export class Education extends React.Component {
 
 
 export const EducationForm = reduxForm({
-    form: 'user_info',
+    form: 'educationForm',
     onSubmitSuccess: (result, dispatch, props) => {
         props.history.push({
             pathname: '/resume-builder/project'
@@ -116,14 +161,21 @@ export const EducationForm = reduxForm({
 
 
 const mapStateToProps = (state) => {
-    return {}
+    return {
+        educationValues: state.form && state.form.educationForm && state.form.educationForm.values || {},
+        educations: state.userInfoReducer.educations,
+        userId: state.userInfoReducer.id,
+    }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userEducation) => new Promise((resolve, reject) => {
             dispatch(actions.saveUserEducation({userEducation, resolve, reject}))
-        })
+        }),
+        "addEducation": (experience) => {
+            return dispatch(actions.addEducation(experience))
+        }
     }
 
 };

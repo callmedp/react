@@ -54,13 +54,13 @@ export class Detail extends React.Component {
                         <div className={'Text-spacing'}>
                             <div>
                                 <Field name="date_of_birth" component={datePicker} validate={required}
-                                       label="Date Of Birth:"/>
+                                       label="Date Of Birth"/>
                             </div>
                         </div>
                         <div className={'Text-spacing'}>
                             <div>
                                 <Field type="text" name="location" component={renderField} validate={required}
-                                       label="Location :"/>
+                                       label="Location"/>
                             </div>
                         </div>
                         <div className={'Text-spacing'}>
@@ -69,7 +69,7 @@ export class Detail extends React.Component {
                                     name="gender"
                                     component={renderSelect}
                                     validate={required}
-                                    label="Gender:"
+                                    label="Gender"
                                     options={[
                                         {value: 'M', label: 'Male'},
                                         {value: 'F', label: 'Female'},
@@ -131,14 +131,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        "onSubmit": (userDetails) => new Promise((resolve, reject) => {
-            let details = {
-                ...userDetails,
-                "gender": userDetails['gender'].value
-            }
+        "onSubmit": (userDetails) => {
+            return new Promise((resolve, reject) => {
 
-            dispatch(actions.updateUserDetails({details, resolve, reject}))
-        })
+                dispatch(actions.updateUserDetails({userDetails, resolve, reject}))
+            })
+        }
     }
 
 };
