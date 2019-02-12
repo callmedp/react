@@ -77,31 +77,41 @@ var authen=false;
 var prod_id = {{product.id}};
 var skill =document.getElementById("skill").value;
 var display_info = " ";
-function toggle_review(text_to_display){
-display_info=text_to_display;
-var review_display = $('#review').children('h2').text();
-if(review_display == " "){
 
-$('#review').children('h2').text('Reviews');
-$('#review').children('a').text(text_to_display);
-$('#review').children('a').css({'right':'15px','left':'','margin-top':'0px'});
-if ($('#collapseExampleform').hasClass('in')) {
-  $('#review').children('a').before('<input type="button" id="close" style=" margin-bottom:5px;border: 1px solid red;margin-left:725px;border-radius: 40px;background:red;font-weight: bolder;" onclick="close_review()" value="X"></input>');
-}
-}
-else{
-$('#review').children('h2').text($('#review').children('a').text());
-  $('#review').children('a').before('<input type="button" id="close" style=" margin-bottom:5px;border: 1px solid red;margin-left:725px;border-radius: 40px;background:red;font-weight: bolder;" onclick="close_review()" value="X"></input>');
-$('#review').children('a').css({'display':'none'});
-}
+function toggle_review(text_to_display) {
+	display_info = text_to_display;
+	var review_display = $('#review').children('h2').text();
+	if (review_display == " ") {
+
+		$('#review').children('h2').text('Reviews');
+		$('#review').children('a').text(text_to_display);
+		$('#review').children('a').css({
+			'right': '15px',
+			'left': '',
+			'margin-top': '0px'
+		});
+		if ($('#collapseExampleform').hasClass('in')) {
+			$('#review').children('a').before('<input type="button" id="close" style=" margin-bottom:5px;border: 1px solid red;margin-left:725px;border-radius: 40px;background:red;font-weight: bolder;" onclick="close_review()" value="X"></input>');
+		}
+	} else {
+		$('#review').children('h2').text($('#review').children('a').text());
+		$('#review').children('a').before('<input type="button" id="close" style=" margin-bottom:5px;border: 1px solid red;margin-left:725px;border-radius: 40px;background:red;font-weight: bolder;" onclick="close_review()" value="X"></input>');
+		$('#review').children('a').css({
+			'display': 'none'
+		});
+	}
 }
 
-function close_review(){
-$('#close').remove();
-$('#review').children('h2').text("Reviews");
-$('#review').children('a').css({'display':'block'});
-$('#collapseExampleform').removeClass('in');
-$('#collapseExampleform').css({'height':''});
+function close_review() {
+	$('#close').remove();
+	$('#review').children('h2').text("Reviews");
+	$('#review').children('a').css({
+		'display': 'block'
+	});
+	$('#collapseExampleform').removeClass('in');
+	$('#collapseExampleform').css({
+		'height': ''
+	});
 }
 
 $(document).ready(function() {
