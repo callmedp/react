@@ -91,11 +91,11 @@ function toggle_review(text_to_display) {
 			'margin-top': '0px'
 		});
 		if ($('#collapseExampleform').hasClass('in')) {
-			$('#review').children('a').before('<input type="button" id="close" style=" margin-bottom:5px;border: 1px solid red;margin-left:725px;border-radius: 40px;background:red;font-weight: bolder;" onclick="close_review()" value="X"></input>');
+			$('#review').children('a').before('<input type="button" class="review-close" id="close" onclick="close_review()" value="X"></input>');
 		}
 	} else {
 		$('#review').children('h2').text($('#review').children('a').text());
-		$('#review').children('a').before('<input type="button" id="close" style=" margin-bottom:5px;border: 1px solid red;margin-left:725px;border-radius: 40px;background:red;font-weight: bolder;" onclick="close_review()" value="X"></input>');
+		$('#review').children('a').before('<input type="button" id="close" class="review-close" onclick="close_review()" value="X"></input>');
 		$('#review').children('a').css({
 			'display': 'none'
 		});

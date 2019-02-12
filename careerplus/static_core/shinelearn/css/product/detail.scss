@@ -1710,3 +1710,18 @@ footer {
 		}
 	}
 }
+
+
+.review-close {
+	border: 0 none;
+	border-radius: 50%;
+	background-color: $brand-warning;
+	position: absolute;
+    right: 6px;
+    top: 140px;
+	color: $white-color;
+	font-size: 12px;
+    width: 25px;
+    height: 25px;
+    display: block;
+}
