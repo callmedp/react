@@ -87,12 +87,15 @@
     margin-top: 5px;
 }
 
-.react-datepicker-wrapper {
-    width: 100%;
+.Project-heading {
+    display: block;
+    margin: 5px;
 }
 
-.react-datepicker__input-container {
-    width: 100%;
+.Project-list{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
 }
 
 @keyframes App-logo-spin {

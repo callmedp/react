@@ -1,10 +1,12 @@
-import {FETCH_HOME_DATA, STORE_USER_INFO, SAVE_DEFAULT_SKILL_LIST} from "../actions/actionTypes";
+import {FETCH_HOME_DATA, STORE_USER_INFO, SAVE_DEFAULT_SKILL_LIST, ADD_PROJECT, GET_PROJECT_DETAIL} from "../actions/actionTypes";
 
 const initialState = {
+    id: '',
     first_name: '',
     last_name: '',
     email: '',
-    number: ''
+    number: '',
+    projects: []
 };
 
 
@@ -22,6 +24,13 @@ const userInfoReducer = (state = initialState, action) => {
                 ...action.data
             };
         }
+        case ADD_PROJECT: {
+            return {
+                ...state,
+                ...action.data
+
+            }
+        }
         default : {
             return state;
         }
@@ -38,10 +47,16 @@ const skillReducer = (state = {
                 ...action.data
             }
         }
-        default: {
+        default : {
             return state;
         }
     }
+}
+
+const projectReducer = (state = {}, action) => {
+     switch (action.type){
+         case GET_PROJECT_DETAIL:
+     }
 }
 
 export const UserReducer = {

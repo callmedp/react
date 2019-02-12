@@ -19,8 +19,9 @@ export class Project extends React.Component {
         this.fetchSkillList.bind(this);
         this.handleEndDateChange.bind(this);
         this.handleStartDateChange.bind(this);
-    }
+        this.handleAddProject.bind(this);
 
+    }
 
     async fetchSkillList(inputValue, callback) {
         try {
@@ -44,9 +45,27 @@ export class Project extends React.Component {
         console.log('---startDate---', date);
     }
 
+    handleAddProject(invalid, projects, projectValues, reset, userId) {
+
+        if (invalid) return;
+        let projectList = projects || [];
+        const {skills} = projectValues
+        const updatedSkills = (skills || []).map(skill => skill['value'])
+
+        projectList.push({
+            ...projectValues,
+            skills: updatedSkills,
+            user: userId
+        })
+        ;
+        this.props.addProject({projects: projectList});
+        reset();
+
+    }
+
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting} = this.props;
+        const {error, handleSubmit, pristine, reset, submitting, projects, projectValues, invalid, userId} = this.props;
         return (
             <div className="container pr">
                 <header className="login-page-bg">
@@ -98,21 +117,30 @@ export class Project extends React.Component {
                                        label="End Date"/>
                             </div>
                         </div>
+
                         <div className={'Text-spacing'}>
                             <div>
-                                <Field name="skills" component={select} validate={required}
+                                <Field name="skills" component={select}
                                        loadOptions={this.fetchSkillList.bind(this)}
                                        defaultOptions={this.props.defaultSkills}
-                                       label="End Date"/>
+                                       label="Select Skills"/>
                             </div>
                         </div>
 
                         <div className={'Button-group'}>
                             <div className={'Button-parent'}>
-                                <button className={'Submit-button'} onClick={() => {
+                                <button className={'Submit-button'} type="button" onClick={() => {
                                     this.props.history.goBack()
                                 }}>
                                     Back
+                                </button>
+                            </div>
+
+                            <div className={'Button-parent'}>
+                                <button className={'Submit-button'} type="button" onClick={
+                                    this.handleAddProject.bind(this, invalid, projects, projectValues, reset, userId)
+                                }>
+                                    Add
                                 </button>
                             </div>
                             <div className={'Button-parent'}>
@@ -126,6 +154,18 @@ export class Project extends React.Component {
                         <span>{error}</span>
                     </div>
                     }
+                    {
+                        !!(projects && projects.length) &&
+                        <div className={'Project-list'}>
+                            <span className={'Project-heading'}>Projects:</span>
+                            {
+                                (projects || []).map(project => (
+                                    <button>{project['project_name']}</button>
+                                ))
+                            }
+                        </div>
+                    }
+
                 </div>
             </div>
         );
@@ -134,7 +174,7 @@ export class Project extends React.Component {
 
 
 export const ProjectForm = reduxForm({
-    form: 'user_info',
+    form: 'projectForm',
     onSubmitSuccess: (result, dispatch, props) => {
         props.history.push({
             pathname: '/resume-builder/certification'
@@ -145,15 +185,21 @@ export const ProjectForm = reduxForm({
 
 const mapStateToProps = (state) => {
     return {
-        defaultSkills: state.skill.defaultList
+        defaultSkills: state.skill.defaultList,
+        projectValues: state.form && state.form.projectForm && state.form.projectForm.values || {},
+        projects: state.userInfoReducer.projects,
+        userId: state.userInfoReducer.id,
+        initialValues: state.activeProject
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        "onSubmit": (userProject) => new Promise((resolve, reject) => {
-            dispatch(actions.saveUserProject({userProject, resolve, reject}))
-        }),
+        "onSubmit": (userProject) => {
+            return new Promise((resolve, reject) => {
+                dispatch(actions.saveUserProject({userProject, resolve, reject}))
+            })
+        },
         "fetchSkills": (inputValue = '') => {
             return new Promise((resolve, reject) => {
                 dispatch(actions.fetchSkillList({inputValue, resolve, reject}))
@@ -161,6 +207,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         "fetchDefaultSkills": (inputValue = '') => {
             return dispatch(actions.fetchDefaultSkillList(inputValue))
+        },
+        "addProject": (project) => {
+            return dispatch(actions.addProject(project))
         }
     }
 
