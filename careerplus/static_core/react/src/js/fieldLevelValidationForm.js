@@ -45,8 +45,8 @@ export const datePicker = ({
     <div>
         <div className={'Top-space'}>
             <DatePicker {...input} dateFormat="yyyy-MM-dd" placeholderText={label} className="Field-spacing"
-                        selected={input.value ? moment(input.value, "yyyy-MM-dd").valueOf() : null}
-                        onChange={date => input.onChange(moment((date), "yyyy-MM-dd").valueOf())}
+                        selected={input.value ? moment(input.value).format("YYYY-MM-DD") : null}
+                        onChange={date => input.onChange(moment(date).format("YYYY-MM-DD"))}
             />
             {touched &&
             ((error && <span className={'Error-message'}>{error}</span>) ||
@@ -81,17 +81,19 @@ const options = [
 
 
 export const select = ({
-                            input,
+                           input,
                            loadOptions,
-                            label,
+                           label,
                            defaultOptions
                        }) => (
     <AsyncSelect {...input}
-        loadOptions={loadOptions}
-        defaultOptions={defaultOptions}
+                 loadOptions={loadOptions}
+                 defaultOptions={defaultOptions}
                  placeholder={label}
                  isMulti={true}
-                 onBlur={() => {input.onBlur(input.value)}}
+                 onBlur={() => {
+                     input.onBlur(input.value)
+                 }}
     />
 )
 
