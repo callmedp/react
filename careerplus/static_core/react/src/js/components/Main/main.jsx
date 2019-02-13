@@ -22,51 +22,47 @@ class Main extends React.Component {
         return (
             <div className="container pr">
                 <div>
-                    <Router>
-                        <div>
-                            <ul className={'Row-navigation'}>
-                                <li>
-                                    <NavLink to="/resume-builder/" activeClassName={'Highlight'}>Home</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/resume-builder/register"
-                                             activeClassName={'Highlight'}>Register</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/resume-builder/detail" activeClassName={'Highlight'}>Detail</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/resume-builder/skill" activeClassName={'Highlight'}>Skill</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/resume-builder/experience"
-                                             activeClassName={'Highlight'}>Experience</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/resume-builder/education"
-                                             activeClassName={'Highlight'}>Education</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/resume-builder/project"
-                                             activeClassName={'Highlight'}>Project</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/resume-builder/certification"
-                                             activeClassName={'Highlight'}>Certification</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/resume-builder/achievement"
-                                             activeClassName={'Highlight'}>Achievement</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/resume-builder/reference"
-                                             activeClassName={'Highlight'}>Reference</NavLink>
-                                </li>
-                            </ul>
-                            {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
-
-                        </div>
-                    </Router>
+                    <div>
+                        <ul className={'Row-navigation'}>
+                            <li>
+                                <NavLink to="/resume-builder/" activeClassName={'Highlight'}>Home</NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/resume-builder/register"
+                                         activeClassName={'Highlight'}>Register</NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/resume-builder/detail" activeClassName={'Highlight'}>Detail</NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/resume-builder/skill" activeClassName={'Highlight'}>Skill</NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/resume-builder/experience"
+                                         activeClassName={'Highlight'}>Experience</NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/resume-builder/education"
+                                         activeClassName={'Highlight'}>Education</NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/resume-builder/project"
+                                         activeClassName={'Highlight'}>Project</NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/resume-builder/certification"
+                                         activeClassName={'Highlight'}>Certification</NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/resume-builder/achievement"
+                                         activeClassName={'Highlight'}>Achievement</NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/resume-builder/reference"
+                                         activeClassName={'Highlight'}>Reference</NavLink>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <header className="login-page-bg">
                     <div className="login-bg-txt">
@@ -85,7 +81,9 @@ class Main extends React.Component {
                         Professional resumes delivered
                     </div>
                 </header>
-                {this.props.children}
+                <div>
+                    {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
+                </div>
             </div>
         );
     }
