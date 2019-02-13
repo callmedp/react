@@ -21,6 +21,22 @@
             /*div[data-test-id="ChatWidgetMobileButton"]{
                 display: none !important;
             }*/
+            .review-close {
+	border: 0 none;
+	border-radius: 50%;
+	background-color: #fff;
+	position: absolute;
+    right: 6px;
+    top: 0px;
+	color: #000;
+	font-size: 12px;
+    width: 25px;
+    height: 25px;
+    display: block;
+    z-index: 9;
+    box-shadow: 0 0 10px rgba(0,0,0, .3);
+}
+
         </style>
 {% endblock css_section %}
 {% block title %}
@@ -306,6 +322,49 @@
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     {% endcompress %}
+
+<script type="text/javascript">
+    var display_info = " ";
+
+function toggle_review(text_to_display) {
+	display_info = text_to_display;
+	var review_display = $('#review').children('h2').text();
+	if (review_display == " ") {
+
+		$('#review').children('h2').text('Reviews');
+		$('#review').children('a').text(text_to_display);
+		$('#review').children('a').css({
+			'right': '15px',
+			'left': '',
+			'margin-top': '0px'
+		});
+		if ($('#write_review_container').is(":visible")) {
+			$('#review').children('a').before('<input type="button" class="review-close" id="close" onclick="close_review()" value="X"></input>');
+		}
+	} else {
+		$('#review').children('h2').text($('#review').children('a').text());
+		$('#review').children('a').before('<input type="button" id="close" class="review-close" onclick="close_review()" value="X"></input>');
+		$('#review').children('a').css({
+			'display': 'none'
+		});
+	}
+}
+
+function close_review() {
+	$('#close').remove();
+	$('#review').children('h2').text("Reviews");
+	$('#review').children('a').css({
+		'display': 'block'
+	});
+	$('#write_review_container').css({'display':'none'});
+	$('#write_review_container').css({
+		'height': ''
+	});
+}
+
+
+</script>
+
     <script type="text/javascript">
         $(document).ready(function(){
            if(commonJs.getParameterByName('type') == 'autoEnrol'){
