@@ -52,8 +52,7 @@ const saveUserAchievement = (data) => {
 
 const updateUserData = (data, userId) => {
     const url = `users/${userId}/`;
-    return BaseApiService.put(`http://127.0.0.1:8000/resume/api/v1/${url}`, data, {    "Content-Type": "multipart/form-data"
-});
+    return BaseApiService.put(`http://127.0.0.1:8000/resume/api/v1/${url}`, data, {});
 };
 
 const fetchSkills = () => {

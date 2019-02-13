@@ -10,7 +10,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'id', 'first_name', 'last_name', 'email', 'date_of_birth', 'number', 'gender', 'location', 'extra_info',)
+            'id', 'first_name', 'last_name', 'email', 'date_of_birth', 'number', 'gender', 'location', 'extra_info',
+            'image')
 
 
 class SkillSerializer(serializers.ModelSerializer):
@@ -61,4 +62,3 @@ class UserAchievementSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAchievement
         fields = ('id', 'user', 'title', 'date', 'summary')
-

@@ -62,7 +62,6 @@ export class Detail extends React.Component {
                             <Field
                                 name="image"
                                 component={renderFileInput}
-                                validate={required}
                                 label="Upload Image"
                                 type="file"
                             />
