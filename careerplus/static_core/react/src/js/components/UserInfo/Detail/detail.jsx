@@ -9,6 +9,7 @@ import {
     datePicker,
     renderSelect,
     renderTextArea,
+    renderFileInput,
     phoneNumber
 } from '../../../fieldLevelValidationForm';
 
@@ -52,6 +53,19 @@ export class Detail extends React.Component {
                                 ]}
                             />
 
+                        </div>
+
+                    </div>
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <label>Upload Image</label>
+                            <Field
+                                name="image"
+                                component={renderFileInput}
+                                validate={required}
+                                label="Upload Image"
+                                type="file"
+                            />
                         </div>
                     </div>
                     <div className={'Text-spacing'}>

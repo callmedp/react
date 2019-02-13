@@ -24,10 +24,11 @@ const post = (url, data, headers = defaultHeaders) => {
 }
 
 const put = (url, data, headers = defaultHeaders) => {
+    console.log('----', data)
     return fetch(url, {
         headers,
         method: 'PUT',
-        body: JSON.stringify(data)
+        body: data
     })
         .then(handleResponse)
 }

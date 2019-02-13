@@ -12,6 +12,7 @@ class UserProfile(AbstractAutoDate):
     number = models.CharField('User Contact Number', max_length=15, blank=True, null=True)
     date_of_birth = models.DateField('DOB', blank=True, null=True)
     location = models.CharField('User Location', max_length=100, blank=True, null=True)
+    image = models.FileField(upload_to='users/', null=True, blank=True)
     gender = models.CharField('Gender', choices=(('M', 'Male'), ('F', 'Female'), ('O', 'Others')), max_length=1,
                               blank=True, null=True)
     extra_info = models.TextField('Extra Information', blank=True, null=True)

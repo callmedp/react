@@ -50,12 +50,17 @@ function* updateUserInfo(action) {
     try {
         const {userInfoReducer: {id}} = yield select();
         let {payload: {userDetails, resolve, reject}} = action;
+        var data = new FormData()
         userDetails = {
             ...userDetails,
             "gender": userDetails['gender'].value,
             id: id
         }
-        const result = yield call(Api.updateUserData, userDetails, id);
+        for (const key in userDetails) {
+            data.append(key, userDetails[key]);
+        }
+        console.log('-data---', data);
+        const result = yield call(Api.updateUserData, data, id);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
@@ -194,8 +199,6 @@ function* saveUserAchievement(action) {
         console.log('error', e);
     }
 }
-
-
 
 
 function* saveUserSkill(action) {
