@@ -9,6 +9,8 @@ export class Skill extends React.Component {
     constructor(props) {
         super(props);
         this.handleAddSkill.bind(this);
+        const {userId, history} = props;
+        if (!userId) history.push('/resume-builder/register');
 
     }
 

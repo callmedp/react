@@ -15,6 +15,8 @@ import {
 export class Detail extends React.Component {
     constructor(props) {
         super(props);
+        const {userId, history} = props;
+        if (!userId) history.push('/resume-builder/register');
     }
 
     render() {
@@ -98,7 +100,9 @@ export const DetailForm = reduxForm({
 
 
 const mapStateToProps = (state) => {
-    return {}
+    return {
+        userId: state.userInfoReducer.id,
+    }
 };
 
 const mapDispatchToProps = (dispatch) => {

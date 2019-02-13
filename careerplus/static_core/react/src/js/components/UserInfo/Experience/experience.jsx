@@ -9,6 +9,8 @@ export class Experience extends React.Component {
     constructor(props) {
         super(props);
         this.handleAddExperience.bind(this);
+        const {userId, history} = props;
+        if (!userId) history.push('/resume-builder/register');
     }
 
     handleAddExperience(invalid, experiences, experienceValues, reset, userId) {

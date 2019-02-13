@@ -9,6 +9,8 @@ export class Education extends React.Component {
     constructor(props) {
         super(props);
         this.handleAddEducation.bind(this);
+        const {userId, history} = props;
+        if (!userId) history.push('/resume-builder/register');
     }
 
     handleAddEducation(invalid, educations, educationValues, reset, userId) {

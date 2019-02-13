@@ -20,7 +20,8 @@ export class Project extends React.Component {
         this.handleEndDateChange.bind(this);
         this.handleStartDateChange.bind(this);
         this.handleAddProject.bind(this);
-
+        const {userId, history} = props;
+        if (!userId) history.push('/resume-builder/register');
     }
 
     async fetchSkillList(inputValue, callback) {
@@ -67,87 +68,87 @@ export class Project extends React.Component {
     render() {
         const {error, handleSubmit, pristine, reset, submitting, projects, projectValues, invalid, userId} = this.props;
         return (
-             <div className="register login-signup-box">
-                    <h1 className="modal-title">Add Your Projects</h1>
+            <div className="register login-signup-box">
+                <h1 className="modal-title">Add Your Projects</h1>
 
-                    <form onSubmit={handleSubmit}>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="text" name="project_name" component={renderField} validate={required}
-                                       label="Project Name"/>
-                            </div>
+                <form onSubmit={handleSubmit}>
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <Field type="text" name="project_name" component={renderField} validate={required}
+                                   label="Project Name"/>
                         </div>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="text" name="description" component={renderField} validate={required}
-                                       label="Project Description"/>
-                            </div>
-                        </div>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="date" name="start_date" component={datePicker}
-                                       validate={required}
-                                       onDateChange={this.handleStartDateChange}
-                                       label="Start Date"/>
-                            </div>
-                        </div>
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field type="date" name="end_date" component={datePicker} validate={required}
-                                       onDateChange={this.handleEndDateChange}
-                                       label="End Date"/>
-                            </div>
-                        </div>
-
-                        <div className={'Text-spacing'}>
-                            <div>
-                                <Field name="skills" component={renderDynamicSelect}
-                                       loadOptions={this.fetchSkillList.bind(this)}
-                                       defaultOptions={this.props.defaultSkills}
-                                       label="Select Skills"/>
-                            </div>
-                        </div>
-
-                        <div className={'Button-group'}>
-                            <div className={'Button-parent'}>
-                                <button className={'Submit-button'} type="button" onClick={() => {
-                                    this.props.history.goBack()
-                                }}>
-                                    Back
-                                </button>
-                            </div>
-
-                            <div className={'Button-parent'}>
-                                <button className={'Submit-button'} type="button" onClick={
-                                    this.handleAddProject.bind(this, invalid, projects, projectValues, reset, userId)
-                                }>
-                                    Add
-                                </button>
-                            </div>
-                            <div className={'Button-parent'}>
-                                <button className={'Submit-button'} type="submit" disabled={pristine || submitting}>
-                                    Next
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                    {error && <div className={'Api-error'}>
-                        <span>{error}</span>
                     </div>
-                    }
-                    {
-                        !!(projects && projects.length) &&
-                        <div className={'Project-list'}>
-                            <span className={'Project-heading'}>Projects:</span>
-                            {
-                                (projects || []).map(project => (
-                                    <button>{project['project_name']}</button>
-                                ))
-                            }
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <Field type="text" name="description" component={renderField} validate={required}
+                                   label="Project Description"/>
                         </div>
-                    }
+                    </div>
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <Field type="date" name="start_date" component={datePicker}
+                                   validate={required}
+                                   onDateChange={this.handleStartDateChange}
+                                   label="Start Date"/>
+                        </div>
+                    </div>
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <Field type="date" name="end_date" component={datePicker} validate={required}
+                                   onDateChange={this.handleEndDateChange}
+                                   label="End Date"/>
+                        </div>
+                    </div>
 
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <Field name="skills" component={renderDynamicSelect}
+                                   loadOptions={this.fetchSkillList.bind(this)}
+                                   defaultOptions={this.props.defaultSkills}
+                                   label="Select Skills"/>
+                        </div>
+                    </div>
+
+                    <div className={'Button-group'}>
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="button" onClick={() => {
+                                this.props.history.goBack()
+                            }}>
+                                Back
+                            </button>
+                        </div>
+
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="button" onClick={
+                                this.handleAddProject.bind(this, invalid, projects, projectValues, reset, userId)
+                            }>
+                                Add
+                            </button>
+                        </div>
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="submit" disabled={pristine || submitting}>
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                {error && <div className={'Api-error'}>
+                    <span>{error}</span>
                 </div>
+                }
+                {
+                    !!(projects && projects.length) &&
+                    <div className={'Project-list'}>
+                        <span className={'Project-heading'}>Projects:</span>
+                        {
+                            (projects || []).map(project => (
+                                <button>{project['project_name']}</button>
+                            ))
+                        }
+                    </div>
+                }
+
+            </div>
         );
     }
 }
