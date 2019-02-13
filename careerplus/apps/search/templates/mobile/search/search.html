@@ -22,6 +22,12 @@ Search Result Page - Shine Learning
 
 {% block css_section %}
     {{ block.super }}
+<style>
+         .breadcrumb > li a{
+        color:#ffffff;
+        }
+
+</style>
     {% compress css %}
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/homepage/home.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
@@ -49,6 +55,9 @@ Search Result Page - Shine Learning
                 <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
             </div><!-- / Right side Icon ends here -->
         </div><!-- header menu Icon ends here -->
+ {% block breadcrumbs %}
+                  {% include "shop/partials/breadcrumb.html" %}
+                {% endblock breadcrumbs %}
 
 
         <div class="clearfix"></div>

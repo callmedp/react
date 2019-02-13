@@ -1,7 +1,15 @@
 <div class="container">
-    <div class="w100fl">
-        <h2 class="pull-left">Reviews</h2>
-         <a class="write-review pull-right" role="button" data-toggle="collapse" id="write_review_btn" href="#collapseExampleform" aria-expanded="true">Write a review</a>
+    <div class="w100fl" id="review" style="position:relative">
+
+             {% if not prd_review_list %}
+           <h2 class="pull-left">Write a Review </h2>
+          {% else %}<h2 class="pull-left"> {% if prd_review_list == 1 %} Review {% else %} Reviews {% endif %}</h2>
+            <a class="write-review pull-right mt-5" role="button" data-toggle="collapse" id="write_review_btn" href="#collapseExampleform" aria-expanded="true" onclick="toggle_review({% if review_obj%}'Update your review'{%else%}'Write a review'{%endif%});">{% if review_obj%}Update your review{%else%}Write a review{%endif%}</a>
+         {% endif %}
+
+
+
+
     </div>
     <div class="clearfix"></div>
 
@@ -9,7 +17,7 @@
     <div class="rate-now-box">
         <input type="hidden" name="page" id="id_review_page" value="{{prd_rv_page}}">
         <div >
-          <div class="well box-panel write-review-box" {% if prd_review_list %}style="display:none" {% endif %}  id="write_review_container">
+          <div class="well box-panel write-review-box" {% if prd_review_list %} style="display:none" {% endif %}  id="write_review_container">
             <form role="form" id="feedback-form">
               {% csrf_token %}
               <div class="rating-feedback mt-10 mb-20">
