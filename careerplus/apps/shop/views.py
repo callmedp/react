@@ -367,7 +367,7 @@ class ProductInformationMixin(object):
                 selected_var = None
             ctx.update({'selected_var': selected_var})
             ctx.update(pvrs_data)
-            ctx['canonical_url'] = product.get_canonical_url()
+            ctx['canonical_url'] = product.get_parent_canonical_url()
             if self.product_obj.type_flow == 14:
                 ctx['university_detail'] = json.loads(sqs.pUncdl[0])
                 faculty = [f.faculty for f in self.product_obj.facultyproducts.all().select_related('faculty','faculty__institute')]
@@ -395,15 +395,15 @@ class ProductInformationMixin(object):
                 try:
                     if pid:
                         pid = Product.objects.get(pk=pid)
-                        ctx['canonical_url'] = pid.get_canonical_url()
+                        ctx['canonical_url'] = pid.get_parent_canonical_url()
                     else:
-                        ctx['canonical_url'] = product.get_canonical_url()
+                        ctx['canonical_url'] = product.get_parent_canonical_url()
                 except Exception as e:
-                    ctx['canonical_url'] = product.get_canonical_url()
+                    ctx['canonical_url'] = product.get_parent_canonical_url()
                     logging.getLogger('error_log').error(
                         "%(msg)s : %(err)s" % {'msg': 'Canonical Url ERROR', 'err': e})
             else:
-                ctx['canonical_url'] = product.get_canonical_url()
+                ctx['canonical_url'] = product.get_parent_canonical_url()
             ctx.update(json.loads(sqs_main.pPOP))
             pvrs_data = json.loads(sqs.pVrs)
             ctx.update(pvrs_data)

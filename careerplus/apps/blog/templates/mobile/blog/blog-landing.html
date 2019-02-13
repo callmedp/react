@@ -64,6 +64,20 @@
         <!-- Trending articles Ends here -->
     {% endblock trending_article %}
 
+       {% block breadcrumb %}
+        <section class="container">
+            <ol class="breadcrumb">
+                {% for bread in breadcrumbs %}
+                    {% if bread.url %}
+                        <li><a href='{{bread.url}}'>{{bread.name}}</a></li>
+                    {% else %}
+                        <li class="active">{{bread.name}}</li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </section>
+    {% endblock breadcrumb %}
+
     <div id="category_container">
 
        {{article_list|safe}}

@@ -203,6 +203,9 @@ class Ccavenue(View, PaymentMixin, OrderMixin):
             elif paytype == "debit":
                 data = {'p_payment_option': 'OPTDBCRD', 'p_card_type': 'DBCRD'}
 
+            elif paytype == 'upi':
+                data = {'p_payment_option': 'OPTUPI', 'p_card_type': 'UPI'}
+
             elif paytype == "all":
                 data = {'p_payment_option': 'ALL', 'p_card_type': 'ALL'}
 
