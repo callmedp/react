@@ -157,6 +157,23 @@
                     </div>
                 </div><!-- end of Recommended for -->
 
+
+                 {% if widget_objs %}
+                    <div class="w100fl">
+                        <h2 class="pull-left">{{widget_obj.name}}</h2>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="box row pb-30">
+                        <div>
+                            <ul>
+                            {% for widget_obj in widget_objs %}
+                                <li><a href="{{widget_obj.url}}" target="_blank">{{widget_obj.name}}</a></li>
+                            {% endfor %}
+                            </ul>
+                        </div><!-- end of review wrap -->
+                    </div><!-- end of box -->
+                {% endif %}
+
                 <div class="container" id="product_list">
                     <h2>{{category_obj.name}} Programs</h2>
                     {% include 'mobile/include/load_product.html' %}
