@@ -17,14 +17,6 @@ export class Detail extends React.Component {
         super(props);
     }
 
-    genderOptions() {
-        return [
-            {value: 'M', label: 'Male'},
-            {value: 'F', label: 'Female'},
-            {value: 'O', label: 'Other'}
-        ]
-    }
-
     render() {
         const {error, handleSubmit, pristine, reset, submitting} = this.props;
         return (
@@ -121,5 +113,5 @@ const mapDispatchToProps = (dispatch) => {
 
 };
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(DetailForm);
+export default connect(mapStateToProps, mapDispatchToProps)(DetailForm);
 

@@ -116,7 +116,13 @@
 
 .Highlight {
     color: red;
+
 }
+
+.Highlight:focus {
+    color: red;
+}
+
 
 @keyframes App-logo-spin {
     from {

@@ -25,7 +25,7 @@ class Main extends React.Component {
                     <div>
                         <ul className={'Row-navigation'}>
                             <li>
-                                <NavLink to="/resume-builder/" activeClassName={'Highlight'}>Home</NavLink>
+                                <NavLink to="/resume-builder"  exact activeClassName={'Highlight'}>Home</NavLink>
                             </li>
                             <li>
                                 <NavLink to="/resume-builder/register"
@@ -81,9 +81,7 @@ class Main extends React.Component {
                         Professional resumes delivered
                     </div>
                 </header>
-                <div>
                     {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
-                </div>
             </div>
         );
     }
