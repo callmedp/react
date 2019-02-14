@@ -242,7 +242,8 @@
                                       {% endif %}
                                       </td>
                                     </tr>
-                                    {% if op.oi_status == 4 and obj.oi_draft %}
+                                    {% if op.oi_status == 4 %}
+                                    {% if obj.oi_draft or op.linkedin %}
                                     <tr>
                                       <td colspan="4">
                                         <form autocomplete="off" role="form" method="post"  data-parsley-validate enctype="multipart/form-data" 
@@ -275,6 +276,7 @@
                                         </div>
                                       </td>
                                     </tr>
+                                    {% endif %}
                                     {% endif %}
                                   {% endfor %}
                               </table>
@@ -323,7 +325,7 @@
                                 </form>
                                 </div>
                           </td>
-                          <td>{% if obj.no_process %}Can not Processed{% endif %}</td>
+                          <td>{% if obj.no_process %}Can't be processed{% endif %}</td>
                           <td>{% if obj.is_combo %}Combo product{% endif %}</td>
                           <td>{% if obj.is_variation %}Variation product{% endif %}</td>
                           <td>{% if obj.is_addon %}addon product{% endif %}</td>

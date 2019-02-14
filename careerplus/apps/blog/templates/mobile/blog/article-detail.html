@@ -36,6 +36,9 @@
             list-style: none;
             color: red;
             padding-left: 0;
+}
+        .breadcrumb > li a{
+        color:#ffffff;
         }
     </style>
     
@@ -63,7 +66,22 @@
             </div><!-- / Right side Icon ends here -->
         </div><!-- header menu Icon ends here -->
 
-        
+
+    {% block breadcrumb %}
+       <section class="container">
+            <ol class="breadcrumb">
+                {% for bread in breadcrumbs %}
+                    {% if bread.url %}
+                        <li><a href='{{bread.url}}'>{{bread.name}}</a></li>
+                    {% else %}
+                        <li class="active">{{bread.name}}</li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </section>
+
+    {% endblock breadcrumb %}
+
         
         
         <h1 class="heading-back w100fl pb-0">{{main_article.display_name}}</h1>

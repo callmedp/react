@@ -76,6 +76,44 @@
 var authen=false;
 var prod_id = {{product.id}};
 var skill =document.getElementById("skill").value;
+var display_info = " ";
+
+function toggle_review(text_to_display) {
+	display_info = text_to_display;
+	var review_display = $('#review').children('h2').text();
+	if (review_display == " ") {
+
+		$('#review').children('h2').text('Reviews');
+		$('#review').children('a').text(text_to_display);
+		$('#review').children('a').css({
+			'right': '15px',
+			'left': '',
+			'margin-top': '0px'
+		});
+		if ($('#collapseExampleform').hasClass('in')) {
+			$('#review').children('a').before('<input type="button" class="review-close" id="close" onclick="close_review()" value="X"></input>');
+		}
+	} else {
+		$('#review').children('h2').text($('#review').children('a').text());
+		$('#review').children('a').before('<input type="button" id="close" class="review-close" onclick="close_review()" value="X"></input>');
+		$('#review').children('a').css({
+			'display': 'none'
+		});
+	}
+}
+
+function close_review() {
+	$('#close').remove();
+	$('#review').children('h2').text("Reviews");
+	$('#review').children('a').css({
+		'display': 'block'
+	});
+	$('#collapseExampleform').removeClass('in');
+	$('#collapseExampleform').css({
+		'height': ''
+	});
+}
+
 $(document).ready(function() {
 {% if request.session.candidate_id %}
     authen=true;
@@ -84,6 +122,9 @@ $(document).ready(function() {
 {%endif%}
  ajax_call(authen,prod_id);
 });
+
+
+
 </script>
 
 {% endblock js_section %}
