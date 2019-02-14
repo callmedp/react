@@ -13,15 +13,16 @@ var Scroller = function(itm,className) {
         }
         var parentDivTop = that.parentItem.offset().top,
         windowTop = $(window).scrollTop();
-
+        var stickyBarHeight = $(".cls_sticky_scroller").outerHeight() || 0;
+        var navBarHeight = $('#id_nav').outerHeight() || 0;
         if(windowTop >= parentDivTop && windowTop < (that.item.closest('.cls_scroller_parent').height() + parentDivTop)) {
             that.item.css({
-                'top': (windowTop - parentDivTop) + 140
+                'top': (windowTop - parentDivTop) + stickyBarHeight + navBarHeight
             })
             that.item.find('.cls_scroller_hiddenDiv').removeClass('hidden');
         }else {
             that.item.css({
-                'top': 40
+                'top': 0
             })
             that.item.find('.cls_scroller_hiddenDiv').addClass('hidden');
         }
@@ -61,7 +62,7 @@ stickyHeaderDetail.prototype = {
         windowTop = $(window).scrollTop();
         if(windowTop >= parentDivTop){
             that.item.css({
-                'top': (windowTop - parentDivTop) + $('#id_nav').outerHeight()
+                'top': (windowTop - parentDivTop) + $('#id_nav').outerHeight() - 30
             });
             //$('#id_nav').hide();
             that.item.find('.cls_scroller_hiddenDiv').removeClass('hidden');
@@ -77,11 +78,20 @@ stickyHeaderDetail.prototype = {
           $('.cls_samples_enquiry').removeClass('fixedSample')
         }
         if($('.cls_samples_enquiry').hasClass('fixedSample')){
+            var sampleEnquiry = $('.cls_samples_enquiry');
             if($('.cls_hide_sticky_panel').length){
-                if((windowTop + $('.cls_samples_enquiry').height() + 10) > $($('.cls_hide_sticky_panel')[0]).offset().top){
-                    $('.cls_samples_enquiry').hide();       
+                var top = sampleEnquiry.css('top').replace("px","");
+                if(top){
+                    try{
+                        top = parseInt(top);
+                    }catch(e){
+                        top = 0;
+                    }
+                }
+                if((windowTop + sampleEnquiry.height() + top) > $($('.cls_hide_sticky_panel')[0]).offset().top){
+                    sampleEnquiry.hide();       
                 }else{
-                    $('.cls_samples_enquiry').show(); 
+                    sampleEnquiry.show(); 
                 }
             }
 

@@ -248,86 +248,79 @@
             </section>
 
              {% if prd_uget %}
-
             <!-- What’ll you get container -->
               <section class="container-fluid detail-box">
                 <div class="container">
                   <div class="row">
-                    <div id="get" class="col-sm-12 col-md-8 scroll ">
+                    <div id="get" class="col-sm-12 col-md-8">
 
                     <h2>{% if prd_service == 'course' %}Course{% else %}Service{% endif %}Highlights</h2>
 
-                        {{prd_uget|safe}}
-                   </div>
-                  </div>
-                </div>
-            </section>
-            {% endif %}
-
-               {% if product.attend %}
-             <section class="container-fluid detail-box">
-                <div class="container">
-                  <div class="row">
-                    <div id="attends" class="col-sm-12 col-md-8 scroll">
-                    <h2>Who Should Attend</h2>
-                        {{product.attend|safe}}
-                   </div>
-                  </div>
-                </div>
-            </section>
-            {% endif %}
-
-            {% if prd_desc %}
-                <section class="container-fluid detail-box">
-                <div class="container">
-                  <div class="row">
-                    <div id="course" class="col-sm-12 col-md-8 scroll">
-                        {%if product.visibility %}
-                      <h2>About {{prd_H1}}</h2>
-                        {%else%}
-                        <h2>Shine Advantage </h2>
-                        {%endif%}
-
-                        {% if prd_video %}
-                          <iframe width="100%" height="315" src="https://{{prd_video}}" frameborder="0" allowfullscreen></iframe>
-                        {% endif %}
-                            {{prd_desc|safe}}
-                     </div>
+                      {{prd_uget|safe}}
+                    </div>
                   </div>
                 </div>
               </section>
-      
             {% endif %}
 
-          {% if prd_service == 'course' %}
-            {% include "shop/partials/program_structure.html" %}
-          {% endif %}
+            {% if product.attend %}
+              <section class="container-fluid detail-box">
+              <div class="container">
+                <div class="row">
+                  <div id="attends" class="col-sm-12 col-md-8">
+                  <h2>Who Should Attend</h2>
+                      {{product.attend|safe}}
+                  </div>
+                </div>
+              </div>
+              </section>
+            {% endif %}
 
-          {% include "shop/partials/delivery_flow.html" %}
+            {% if prd_desc %}
+              <section class="container-fluid detail-box">
+              <div class="container">
+                <div class="row">
+                  <div id="course" class="col-sm-12 col-md-8">
+                      {%if product.visibility %}
+                    <h2>About {{prd_H1}}</h2>
+                      {%else%}
+                      <h2>Shine Advantage </h2>
+                      {%endif%}
 
+                      {% if prd_video %}
+                        <iframe width="100%" height="315" src="https://{{prd_video}}" frameborder="0" allowfullscreen></iframe>
+                      {% endif %}
+                          {{prd_desc|safe}}
+                    </div>
+                </div>
+              </div>
+              </section>
+            {% endif %}
 
+            {% if prd_service == 'course' %}
+              {% include "shop/partials/program_structure.html" %}
+            {% endif %}
 
-          {% include "shop/partials/reviews.html" %}
+            {% include "shop/partials/delivery_flow.html" %}
+
+            {% include "shop/partials/reviews.html" %}
             {% include "shop/partials/faq.html" %}
 
-
-      </div>
-      </section>
-      <!-- main parent2 section end -->      
+            {% if sqs.id not in linkedin_resume_services %}
+              {% block prdrecommended %}
+              <section class="container-fluid detail-box cls_hide_sticky_panel" id="heads">
+                <div class="container">
+                    <div class="row">
+                      <div class="col-sm-12"></div>
+                        <div id="recommended_product" style="display:block">
+                          <img id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" > 
+                        </div>
+                    </div>
+                </div>
+              </section>
+              {% endblock prdrecommended %}
+            {% endif %}
+        </div><!-- ./ row -->
+      </section><!-- main parent2 section end -->      
     {% endblock section2 %}
-
-
-{% if sqs.id not in linkedin_resume_services %}
-  {% block prdrecommended %}
-<div id="heads">
-  <section class="container-fluid cls_hide_sticky_panel">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12 mt-40"></div>
-          <div id="recommended_product" style="display:block">
-            <img id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" > 
-          </div>
-      </div>
-  {% endblock prdrecommended %}
-{% endif %}
 

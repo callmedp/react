@@ -15,11 +15,12 @@
 				var child = $(container).children();
 				var scrollPos = $(document).scrollTop();
 				var height = $(container).height();
+				var navBarHeight = $('#id_nav').outerHeight() || 0;
+        		var stickyBarHeight = $(".cls_sticky_scroller").outerHeight() || 0;
 			    child.each(function () {
 			        var currLink = $(this);
 			        var refElement = $(currLink.attr("href"));
-			        if (refElement.offset().top - $('.cls_sticky_scroller').outerHeight() <= scrollPos + height && 
-			        		refElement.offset().top + refElement.outerHeight()  > scrollPos + height ) {
+			        if (refElement.offset().top - stickyBarHeight - navBarHeight <= scrollPos + height && refElement.offset().top + refElement.outerHeight()  > scrollPos + height ) {
 			            child.removeClass("active");
 			            currLink.addClass("active");
 			        }
