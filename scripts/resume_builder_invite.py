@@ -1,12 +1,9 @@
 import os, django, sys, csv, math
 import multiprocessing as mp
-from django.core.mail import EmailMessage
-from django.core import mail
+from django.core.mail import (EmailMessage, get_connection)
 from django.conf import settings
 
 from django.template.loader import render_to_string
-
-sub_lists = []
 
 
 def get_emails(user_details):
@@ -33,9 +30,15 @@ def get_emails(user_details):
     return mail_list
 
 
-def bulk_email_send(details, output_method):
-    connection = mail.get_connection()
-    emails = get_emails(details)
+def bulk_email_send(file_id, output_method):
+    csv_file = open('file_{}.csv'.format(file_id), 'r')
+    reader = csv.DictReader(csv_file)
+    candidate_info = [row for row in reader]
+    csv_file.close()
+    if not (len(candidate_info)):
+        return
+    connection = get_connection()
+    emails = get_emails(candidate_info)
     connection.send_messages(emails)
     output_method.put(emails)
 
@@ -54,22 +57,11 @@ if __name__ == '__main__':
     # import inter apps
     from linkedin.autologin import AutoLogin
 
-    with open('test_file.csv') as csv_file:
-        reader = csv.DictReader(csv_file)
-        list_data = [row for row in reader]
-        sub_lists_length = int(math.ceil(len(list_data) / 8))
-        if len(list_data) != 0:
-            if sub_lists_length == 0:
-                sub_lists.append(list_data)
-            else:
-                for ind in range(0, 8):
-                    sub_lists.append(list_data[ind * sub_lists_length: ind * sub_lists_length + sub_lists_length])
-
     # Define an output queue
     output = mp.Queue()
 
     # Setup a list of processes that we want to run
-    processes = [mp.Process(target=bulk_email_send, args=(x, output)) for x in sub_lists]
+    processes = [mp.Process(target=bulk_email_send, args=(x, output)) for x in range(1, 9)]
 
     # Run processes
     for p in processes:
@@ -78,7 +70,3 @@ if __name__ == '__main__':
     # Exit the completed processes
     for p in processes:
         p.join()
-
-    # Get process results from the output queue
-    results = [output.get() for p in processes]
-
