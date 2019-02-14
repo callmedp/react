@@ -3,9 +3,8 @@ import multiprocessing as mp
 from django.core.mail import EmailMessage
 from django.core import mail
 from django.conf import settings
-from django.template.loader import render_to_string
 
-# from core.mixins import TokenGeneration
+from django.template.loader import render_to_string
 
 sub_lists = []
 
@@ -15,13 +14,17 @@ def get_emails(user_details):
     for row in user_details:
         name = row['name']
         email = row['email']
-        token_gen = TokenGeneration()
-        login_token = token_gen.encode(email, 2)
+        token_gen = AutoLogin()
+        login_token = token_gen.encode(email, '5c4ede4da4d7330573d8c79b', None)
+        upload_url = "http://127.0.0.1:8000/autologin/%s/?next=/resume-builder/register/" % (
+            login_token)
+        context_data = {
+            'first_name': name,
+            'upload_url': upload_url
+        }
         msg = EmailMessage(
             subject="New Message",
-            body=render_to_string('emailers/candidate/resume_builder_invite.html',
-                                  {'first_name': name, 'login_token': login_token,
-                                   'upload_url': 'https://learning.shine.com'}),
+            body=render_to_string('emailers/candidate/resume_builder_invite.html', context_data),
             to=[email],
             from_email=settings.DEFAULT_FROM_EMAIL
         )
@@ -49,14 +52,19 @@ if __name__ == '__main__':
 
     django.setup()
     # import inter apps
-    from core.mixins import TokenGeneration
+    from linkedin.autologin import AutoLogin
 
     with open('test_file.csv') as csv_file:
         reader = csv.DictReader(csv_file)
         list_data = [row for row in reader]
-        sub_lists_length = math.ceil(len(list_data) / 10)
-        for ind in range(0, sub_lists_length):
-            sub_lists.append(list_data[ind * 10: ind * 10 + 10])
+        sub_lists_length = int(math.ceil(len(list_data) / 8))
+        if len(list_data) != 0:
+            if sub_lists_length == 0:
+                sub_lists.append(list_data)
+            else:
+                for ind in range(0, 8):
+                    sub_lists.append(list_data[ind * sub_lists_length: ind * sub_lists_length + sub_lists_length])
+
     # Define an output queue
     output = mp.Queue()
 
@@ -74,4 +82,3 @@ if __name__ == '__main__':
     # Get process results from the output queue
     results = [output.get() for p in processes]
 
-    print(results)
