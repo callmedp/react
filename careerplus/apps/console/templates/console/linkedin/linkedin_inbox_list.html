@@ -252,7 +252,7 @@
                          <td>
                              <a target="_blank" href="{% url 'console:linkedin-order-detail' obj.order.id %}"><b style="text-decoration: underline;">{{obj.order.number}}</b></a>
                              </br>
-                             ({{obj.pk}})
+                             <span id="orderitempk">({{obj.pk}})</span>
                       </td>
                       <td>
                         email:{{obj.order.email}}<br>

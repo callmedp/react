@@ -18,6 +18,11 @@
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/blog/blog.scss' %}" rel="stylesheet">
     {%endcompress%}
+<style>
+     .breadcrumb > li a{
+        color:#ffffff;
+        }
+</style>
 {% endblock css_section %}
 
 {% block header %}
@@ -43,7 +48,20 @@
             </div><!-- / Right side Icon ends here -->
         </div><!-- header menu Icon ends here -->
 
-        
+
+    {% block breadcrumb %}
+        <section class="container">
+            <ol class="breadcrumb">
+                {% for bread in breadcrumbs %}
+                    {% if bread.url %}
+                        <li><a href='{{bread.url}}'>{{bread.name}}</a></li>
+                    {% else %}
+                        <li class="active">{{bread.name}}</li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </section>
+    {% endblock breadcrumb %}
         
         
         <h1 class="heading-back w100fl pb-0">{{category.name}}</h1>

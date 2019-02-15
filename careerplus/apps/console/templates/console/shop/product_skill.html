@@ -167,7 +167,7 @@
                                 <select id='select_products' class="default-prop">
                                     <option></option>
                                 </select>
-                                <input type="hidden" id="product_id" name="product_id">
+                                <input type="hidden" id="product_id" name="product_id" data-extra ="">
                             </div>
                         </div>
                         <div class="form-group">
@@ -199,9 +199,9 @@
                         <div class="form-group">
                             <div class="col-md-12 col-sm-12 col-xs-12" style="text-align:center">
                                 <button type="submit" class="btn btn-success light-theme">Add</button>
-                                <button id="submit_product_skills" type="submit" class="btn btn-success dark-theme">
+                                <div id="submit_product_skills" class="btn btn-success dark-theme">
                                     Submit
-                                </button>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -213,6 +213,12 @@
                 <div class="x_title">
                     <h2>Current Product Skill List
                     </h2>
+                    <select id="product-skill-choice" class="nav navbar-right panel_toolbox" style="
+                        margin-top: 5px;
+                    ">
+                        <option value="1">All</option>
+                        <option value ="2">Active</option>
+                </select>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content add-scroll">
@@ -253,7 +259,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="x_title">
-                        <h2 class="edit-skill-style">Edit Skill</h2>
+                        <h2 class="edit-skill-style">Edit Product-Skill</h2>
                         <div class="clearfix"></div>
                     </div>
                     <form id="skill-edit-modal-form" data-parsley-validate=""
@@ -300,7 +306,6 @@
 {% block js_block %}
 {{ block.super }}
 <script type="text/javascript" src="{% static 'packages/select2/dist/js/select2.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'packages/switchery/dist/switchery.min.js' %}"></script>
 <script>
 var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
 </script>

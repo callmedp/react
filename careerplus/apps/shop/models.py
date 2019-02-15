@@ -1634,6 +1634,14 @@ class Product(AbstractProduct, ModelMeta):
 
         return self.get_absolute_url()
 
+
+    def get_parent_canonical_url(self):
+        if self.category_main:
+            return self.category_main.get_absolute_url()
+        else:
+            return " "
+
+
     def get_batch_launch_date(self):
         unique_key = 'prd_batch_launch_date_' + str(self.pk)
         launch_date = cache.get(unique_key)

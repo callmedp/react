@@ -698,19 +698,17 @@ class DownloadMonthlyWriterInvoiceView(UserGroupMixin,TemplateView):
         try:
             bucket = storage.Client().get_bucket(settings.GCP_INVOICE_BUCKET)
             for blob in bucket.list_blobs(prefix=self.path):
-                file_list.append(blob.name)
-            file_list.sort(reverse=True)
+                file_list.append((blob.name,blob.time_created))
+            file_list = sorted(file_list, key=lambda x: x[1],reverse=True)
             if file_list:
                 file_list = file_list[0]
-                fsock = GCPInvoiceStorage().open(file_list)
-                filename = file_list.split('/')[-1]
+                fsock = GCPInvoiceStorage().open(file_list[0])
+                filename = file_list[0].split('/')[-1]
                 response = HttpResponse(
                     fsock,
                     content_type=mimetypes.guess_type(filename)[0])
                 response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
                 return response
-
-
             else:
                 messages.add_message(
                     self.request, messages.ERROR,
