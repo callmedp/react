@@ -1,14 +1,5 @@
 import React from "react";
-import {BrowserRouter as Router, Route, NavLink, Switch} from "react-router-dom";
-import RegisterContainer from '../UserInfo/Register/register.jsx';
-import DetailContainer from '../UserInfo/Detail/detail.jsx';
-import SkillContainer from '../UserInfo/Skill/skill.jsx';
-import ExperienceContainer from '../UserInfo/Experience/experience.jsx';
-import EducationContainer from '../UserInfo/Education/education.jsx';
-import ProjectContainer from '../UserInfo/Project/project.jsx';
-import CertificationContainer from '../UserInfo/Certification/certification.jsx';
-import AchievementContainer from '../UserInfo/Achievement/achievement.jsx';
-import ReferenceContainer from '../UserInfo/Reference/reference.jsx';
+import {NavLink} from "react-router-dom";
 import {RouteWithSubRoutes} from "../../routes";
 
 class Main extends React.Component {
@@ -25,7 +16,7 @@ class Main extends React.Component {
                     <div>
                         <ul className={'Row-navigation'}>
                             <li>
-                                <NavLink to="/resume-builder"  exact activeClassName={'Highlight'}>Home</NavLink>
+                                <NavLink to="/resume-builder" exact activeClassName={'Highlight'}>Home</NavLink>
                             </li>
                             <li>
                                 <NavLink to="/resume-builder/register"
@@ -81,7 +72,7 @@ class Main extends React.Component {
                         Professional resumes delivered
                     </div>
                 </header>
-                    {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
+                {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
             </div>
         );
     }

@@ -51,6 +51,7 @@ class TokenGeneration(object):
         key_expires = datetime.datetime.today() + datetime.timedelta(
             settings.LOGIN_TOKEN_EXPIRY if not days else days)
         inp_str = '{salt}|{email}|{type}|{dt}'.format(**{'salt': settings.ENCODE_SALT, 'email': email, 'type': type, 'dt': key_expires.strftime(settings.TOKEN_DT_FORMAT)})
+        print(inp_str)
         ciph = XOR.new(settings.ENCODE_SALT)
         token = base64.urlsafe_b64encode(ciph.encrypt(inp_str))
         return token.decode()

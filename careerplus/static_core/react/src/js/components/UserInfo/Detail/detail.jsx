@@ -9,8 +9,9 @@ import {
     datePicker,
     renderSelect,
     renderTextArea,
-    renderFileInput,
+        renderFileInput,
     phoneNumber
+
 } from '../../../fieldLevelValidationForm';
 
 export class Detail extends React.Component {
