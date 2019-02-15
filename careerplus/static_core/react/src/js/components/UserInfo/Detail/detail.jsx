@@ -8,8 +8,7 @@ import {
     required,
     datePicker,
     renderSelect,
-    renderTextArea,
-    phoneNumber
+    renderTextArea
 } from '../../../fieldLevelValidationForm';
 
 export class Detail extends React.Component {

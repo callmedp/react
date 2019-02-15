@@ -8,8 +8,6 @@ import {
     renderField,
     required,
     datePicker,
-    renderSelect,
-    renderTextArea,
     renderDynamicSelect
 } from '../../../fieldLevelValidationForm';
 

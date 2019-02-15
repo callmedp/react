@@ -170,7 +170,7 @@ urlpatterns += [
                    url(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
                    url(r'^linkedin/login/$',
                        LinkedinCallbackView.as_view(), name='linkedin-login'),
-                   url(r'^resume/', include('resumebuilder.urls', namespace='resume_builder')),
+                   url(r'^api/v1/resume/', include('resumebuilder.api.v1.urls', namespace='resume_builder')),
 
                    url(r'^api/', include('api.urls', namespace='api')),
                    url(r'api/v1/', include('shop.api.v1.urls', namespace='shop-api')),

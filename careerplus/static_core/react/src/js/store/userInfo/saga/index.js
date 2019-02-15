@@ -2,11 +2,6 @@ import {Api} from './Api';
 import {takeLatest, put, call, select} from "redux-saga/effects";
 import * as Actions from '../actions/actionTypes';
 import {SubmissionError} from 'redux-form'
-import {UPDATE_USER_DETAILS} from "../actions/actionTypes";
-import {FETCH_SKILL_LIST} from "../actions/actionTypes";
-import {ADD_EXPERIENCE} from "../actions/actionTypes";
-import {ADD_EDUCATION} from "../actions/actionTypes";
-
 
 function* saveUserInfo(action) {
     try {
@@ -54,7 +49,7 @@ function* updateUserInfo(action) {
             ...userDetails,
             "gender": userDetails['gender'].value,
             id: id
-        }
+        };
         const result = yield call(Api.updateUserData, userDetails, id);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
@@ -75,7 +70,7 @@ function* saveUserEducation(action) {
             ...userEducation,
             "course_type": userEducation['course_type'].value,
             user: id
-        }
+        };
 
         let educationList = educations || [];
         educationList.push(userEducation);
@@ -159,7 +154,6 @@ function* saveUserProject(action) {
         yield put({type: Actions.ADD_PROJECT, data: {'projects': projectList}});
 
         const result = yield call(Api.saveUserProject, projectList);
-        console.log('result after --', result);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
@@ -196,8 +190,6 @@ function* saveUserAchievement(action) {
 }
 
 
-
-
 function* saveUserSkill(action) {
     try {
         const {userInfoReducer: {id, skills}} = yield select();
@@ -228,11 +220,9 @@ function* fetchSkillList(action) {
         let {payload: {inputValue, resolve, reject}} = action;
         const result = yield call(Api.fetchSkills, inputValue);
 
-        console.log('result ===', result, result['error']);
         if (result['error']) {
             return reject(new Error(result['errorMessage']));
         }
-        // yield put({type: Actions.SAVE_SKILL_LIST, data: {'achievements': result['data']}});
         return resolve(result['data']);
     } catch (e) {
         console.log('error', e);
@@ -243,7 +233,6 @@ function* fetchDefaultSkillList(action) {
     try {
         let {inputValue} = action;
         const result = yield call(Api.fetchSkills, inputValue);
-        console.log('result ===', result, result['error']);
         const list = (result && result.data && result.data.results || []).map(skill => ({
             value: skill.id,
             label: skill.name

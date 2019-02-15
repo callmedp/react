@@ -1,16 +1,16 @@
-import os, django, sys, csv, math
-import multiprocessing as mp
+# python imports
+import os, django, sys, csv, math, multiprocessing as mp
+
+# django imports
 from django.core.mail import (EmailMessage, get_connection)
 from django.conf import settings
-
 from django.template.loader import render_to_string
 
 
 def get_emails(user_details):
     mail_list = []
     for row in user_details:
-        name = row['name']
-        email = row['email']
+        name, email = row.values()
         token_gen = AutoLogin()
         login_token = token_gen.encode(email, '5c4ede4da4d7330573d8c79b', None)
         upload_url = "http://127.0.0.1:8000/autologin/%s/?next=/resume-builder/register/" % (
@@ -31,7 +31,7 @@ def get_emails(user_details):
 
 
 def bulk_email_send(file_id, output_method):
-    csv_file = open('file_{}.csv'.format(file_id), 'r')
+    csv_file = open('../csv-files/file_{}.csv'.format(file_id), 'r')
     reader = csv.DictReader(csv_file)
     candidate_info = [row for row in reader]
     csv_file.close()
@@ -53,7 +53,9 @@ if __name__ == '__main__':
     if ROOT_FOLDER not in sys.path:
         sys.path.insert(1, ROOT_FOLDER + '/')
 
+    #  setup django
     django.setup()
+
     # import inter apps
     from linkedin.autologin import AutoLogin
 

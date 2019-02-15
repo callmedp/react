@@ -1,5 +1,5 @@
 import React from "react";
-import {BrowserRouter as Router, Route, Link, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Route} from "react-router-dom";
 import RegisterContainer from '../components/UserInfo/Register/register.jsx';
 import DetailContainer from '../components/UserInfo/Detail/detail.jsx';
 import SkillContainer from '../components/UserInfo/Skill/skill.jsx';
