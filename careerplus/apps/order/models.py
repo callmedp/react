@@ -506,10 +506,10 @@ class OrderItem(AbstractAutoDate):
         return status_dict.get(self.wc_status, '')
 
     def save(self, *args, **kwargs):
-        if not self.oi_status == 4:
-            orderitem_status = OrderItem.objects.get(id=self.pk).oi_status
-            if orderitem_status == 4:
-                self.oi_status = orderitem_status
+        if not self.oi_status == 4 and self.pk:
+            orderitem = OrderItem.objects.filter(id=self.pk).first()
+            if orderitem and orderitem.oi_status == 4:
+                self.oi_status = orderitem.oi_status
         super().save(*args, **kwargs)  # Call the "real" save() method.
 
 
