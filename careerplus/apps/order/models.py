@@ -505,6 +505,14 @@ class OrderItem(AbstractAutoDate):
         status_dict = dict(WC_FLOW_STATUS)
         return status_dict.get(self.wc_status, '')
 
+    def save(self, *args, **kwargs):
+        if not self.oi_status == 4:
+            orderitem_status = OrderItem.objects.get(id=self.pk).oi_status
+            if orderitem_status == 4:
+                self.oi_status = orderitem_status
+        super().save(*args, **kwargs)  # Call the "real" save() method.
+
+
 
 class OrderItemOperation(AbstractAutoDate):
     coio_id = models.IntegerField(
