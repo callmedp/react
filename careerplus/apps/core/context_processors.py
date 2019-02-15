@@ -8,6 +8,7 @@ from cart.mixins import CartMixin
 from cart.models import Subscription
 from marketing.data import UTM_CAMPAIGN_HTML_MAPPING
 
+
 def js_settings(request):
     js_vars = {}
     js_vars.update(
@@ -46,11 +47,11 @@ def common_context_processor(request):
             invoice_date = today_date.replace(day=1)
             invoice_date = invoice_date - datetime.timedelta(days=1)
             userprofile = console_user.userprofile
-            if userprofile.user_invoice and userprofile.invoice_date.month==invoice_date.month and userprofile.invoice_date.year==invoice_date.year:
+            if userprofile.user_invoice and userprofile.invoice_date.month == invoice_date.month and userprofile.invoice_date.year == invoice_date.year:
                 writer_invoice = True
 
     except Exception as e:
-        logging.getLogger('error_log').error('writer invoice is not reachable %s'%str(e))
+        logging.getLogger('error_log').error('writer invoice is not reachable %s' % str(e))
         pass
 
     context.update({

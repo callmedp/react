@@ -6,6 +6,20 @@ from django.core.mail import (EmailMessage, get_connection)
 from django.conf import settings
 from django.template.loader import render_to_string
 
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings_staging")
+
+ROOT_FOLDER = os.path.realpath(os.path.dirname(__file__))
+ROOT_FOLDER = ROOT_FOLDER[:ROOT_FOLDER.rindex('/')]
+
+if ROOT_FOLDER not in sys.path:
+    sys.path.insert(1, ROOT_FOLDER + '/')
+
+#  setup django
+django.setup()
+
+# import inter apps
+from linkedin.autologin import AutoLogin
+
 
 def get_emails(user_details):
     mail_list = []
@@ -44,20 +58,6 @@ def bulk_email_send(file_id, output_method):
 
 
 if __name__ == '__main__':
-
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings_staging")
-
-    ROOT_FOLDER = os.path.realpath(os.path.dirname(__file__))
-    ROOT_FOLDER = ROOT_FOLDER[:ROOT_FOLDER.rindex('/')]
-
-    if ROOT_FOLDER not in sys.path:
-        sys.path.insert(1, ROOT_FOLDER + '/')
-
-    #  setup django
-    django.setup()
-
-    # import inter apps
-    from linkedin.autologin import AutoLogin
 
     # Define an output queue
     output = mp.Queue()
