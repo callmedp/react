@@ -8,9 +8,9 @@ import {renderField, required, datePicker, renderSelect, renderTextArea} from '.
 export class Achievement extends React.Component {
     constructor(props) {
         super(props);
-        this.handleAddAchievement.bind(this);
         const {userId, history} = props;
         if (!userId) history.push('/resume-builder/register');
+
     }
 
     handleAddAchievement(invalid, achievements, achievementValues, reset, userId) {

@@ -4,13 +4,16 @@ import {connect} from "react-redux";
 import * as actions from '../../../store/userInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
 import {renderField, required, datePicker, renderSelect, renderTextArea} from '../../../fieldLevelValidationForm';
+import ChoosePlanModal from '../../Modal/ChoosePlan/choosePlanModal.jsx'
 
 export class Reference extends React.Component {
     constructor(props) {
         super(props);
-        this.handleAddReference.bind(this);
         const {userId, history} = props;
         if (!userId) history.push('/resume-builder/register');
+        this.state = {
+            'showModal': false
+        }
     }
 
 
@@ -23,6 +26,23 @@ export class Reference extends React.Component {
         });
         this.props.addReference({references: referenceList});
         reset();
+
+    }
+
+    handleOpenModal() {
+        this.setState({
+            'showModal': true
+        })
+    }
+
+    handleCloseModal() {
+        this.setState({
+            'showModal': false
+        })
+        const {history} = this.props;
+        history.push({
+            pathname: '/resume-builder/pricing'
+        })
 
     }
 
@@ -41,7 +61,7 @@ export class Reference extends React.Component {
                     </div>
                     <div className={'Text-spacing'}>
                         <div>
-                            <Field type="date" name="reference_designation" component={datePicker}
+                            <Field type="text" name="reference_designation" component={renderField}
                                    validate={required}
                                    label="Designation Of Reference"/>
                         </div>
@@ -74,6 +94,11 @@ export class Reference extends React.Component {
                                 Next
                             </button>
                         </div>
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="button" onClick={this.handleOpenModal.bind(this)}>
+                                Download Resume
+                            </button>
+                        </div>
                     </div>
                 </form>
                 {error && <div className={'Api-error'}>
@@ -91,6 +116,7 @@ export class Reference extends React.Component {
                         }
                     </div>
                 }
+                <ChoosePlanModal showModal={this.state.showModal} closeModal={this.handleCloseModal.bind(this)}/>
             </div>
         );
     }
@@ -101,8 +127,9 @@ export const ReferenceForm = reduxForm({
     form: 'referenceForm',
     onSubmitSuccess: (result, dispatch, props) => {
         props.history.push({
-            pathname: '/resume-builder/education'
+            pathname: '/resume-builder/pricing'
         })
+        window.location.reload()
     }
 })(Reference);
 

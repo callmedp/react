@@ -10,6 +10,7 @@ import CertificationContainer from '../components/UserInfo/Certification/certifi
 import AchievementContainer from '../components/UserInfo/Achievement/achievement.jsx';
 import ReferenceContainer from '../components/UserInfo/Reference/reference.jsx';
 import Main from '../components/Main/main.jsx';
+import PricingContainer from '../components/Payment/pricing.jsx'
 
 export const RouteWithSubRoutes = route => (
     <Route
@@ -44,6 +45,7 @@ const routes = [
                 component: DetailContainer
             },
             {
+
                 path: '/resume-builder/skill',
                 component: SkillContainer
             },
@@ -70,9 +72,14 @@ const routes = [
             {
                 path: '/resume-builder/reference',
                 component: ReferenceContainer
+            },
+            {
+                path:'/resume-builder/pricing',
+                component: PricingContainer
             }
         ]
     }
+
 ]
 
 export default AppRouter;

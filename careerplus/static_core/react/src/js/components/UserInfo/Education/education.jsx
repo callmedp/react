@@ -8,7 +8,6 @@ import {renderField, required, datePicker, renderSelect, renderTextArea} from '.
 export class Education extends React.Component {
     constructor(props) {
         super(props);
-        this.handleAddEducation.bind(this);
         const {userId, history} = props;
         if (!userId) history.push('/resume-builder/register');
     }

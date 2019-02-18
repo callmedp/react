@@ -14,10 +14,6 @@ import {
 export class Project extends React.Component {
     constructor(props) {
         super(props);
-        this.fetchSkillList.bind(this);
-        this.handleEndDateChange.bind(this);
-        this.handleStartDateChange.bind(this);
-        this.handleAddProject.bind(this);
         const {userId, history} = props;
         if (!userId) history.push('/resume-builder/register');
     }
@@ -191,7 +187,6 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.addProject(project))
         }
     }
-
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectForm);

@@ -8,9 +8,8 @@ import {renderField, required, datePicker, renderSelect, renderTextArea} from '.
 export class Certification extends React.Component {
     constructor(props) {
         super(props);
-        this.handleAddCertification.bind(this);
         const {userId, history} = props;
-        if(!userId) history.push('/resume-builder/register');
+        if (!userId) history.push('/resume-builder/register');
     }
 
 
