@@ -147,14 +147,17 @@ function saveWaitingForInput(oi_id, ){
 
 function clickApproveDraft(oi_id, ){
     if (oi_id){
+        $('#approveDraftBtn').attr('disabled', true);
         $('#accept-reject-form' + oi_id).parsley().validate();
         if ($('#accept-reject-form' + oi_id).parsley().isValid()){
             $('#approveModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to approve draft?</div>');
             $('#approveAction' + oi_id).show();
             $('#approvemodal' + oi_id).modal("show");
         }
+
     }
 };
+
 
 
 function approveDraftByAdmin(oi_id, ){
@@ -168,10 +171,12 @@ function approveDraftByAdmin(oi_id, ){
             success: function(json) {
                 if (json.status == 1){
                     alert('Approved draft successfully');
+
                     window.location.reload();
                 }
                 else{
                     alert("Something went wrong. Try again later");
+                    $('#approveDraftBtn').removeAttr('disabled');
                      window.location.reload();
                 }
             },
@@ -186,6 +191,7 @@ function approveDraftByAdmin(oi_id, ){
 
 function clickRejectDraft(oi_id, ){
     if (oi_id){
+        $('#rejectDraftBtn').attr('disabled', true);
         $('#accept-reject-form' + oi_id).parsley().validate();
         if ($('#accept-reject-form' + oi_id).parsley().isValid()){
             $('#rejectModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to reject draft?</div>');
@@ -219,4 +225,9 @@ function rejectDraftByAdmin(oi_id, ){
             }
         });
     }
+};
+
+function onClose(){
+$('#approveDraftBtn').removeAttr('disabled');
+$('#rejectDraftBtn').removeAttr('disabled');
 };

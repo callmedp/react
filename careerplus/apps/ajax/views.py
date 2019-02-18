@@ -388,7 +388,7 @@ class RejectByAdminDraft(View):
         oi_pk = request.POST.get('oi_pk', None)
         if not oi_pk:
             return HttpResponse(json.dumps(data), content_type="application/json")
-        obj = OrderItem.objects.filter(pk=oi_pk).exclude(oi_status__in=[25,4]).first()
+        obj = OrderItem.objects.filter(pk=oi_pk).exclude(oi_status__in=[25,4,24]).first()
         if not obj:
             return HttpResponse(json.dumps(data), content_type="application/json")
         data['status'] = 1
@@ -595,7 +595,7 @@ class RejectDraftByLinkedinAdmin(View):
         oi_pk = request.POST.get('oi_pk', None)
         if not oi_pk:
             return HttpResponse(json.dumps(data), content_type="application/json")
-        obj = OrderItem.objects.filter(pk=oi_pk).exclude(oi_status__in=[47,4]).first()
+        obj = OrderItem.objects.filter(pk=oi_pk).exclude(oi_status__in=[47,46,4]).first()
         if not obj:
             return HttpResponse(json.dumps(data), content_type="application/json")
         data['status'] = 1

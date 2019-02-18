@@ -142,6 +142,7 @@ function saveWaitingForInput(oi_id, ){
 
 function clickApproveDraft(oi_id, ){
     if (oi_id){
+        $('#approveDraftBtn').attr('disabled', true);
         $('#accept-reject-form' + oi_id).parsley().validate();
         if ($('#accept-reject-form' + oi_id).parsley().isValid()){
             $('#approveModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to approve draft???</div>');
@@ -167,6 +168,7 @@ function approveDraftByLinkedinAdmin(oi_id, ){
                 }
                 else{
                     alert("Something went wrong. Try again later");
+                    onClose();
                 }
             },
             error: function(xhr, ajaxOptions, thrownError) {
@@ -179,6 +181,7 @@ function approveDraftByLinkedinAdmin(oi_id, ){
 
 function clickRejectDraft(oi_id, ){
     if (oi_id){
+        $('#rejectDraftBtn').attr('disabled', true);
         $('#accept-reject-form' + oi_id).parsley().validate();
         if ($('#accept-reject-form' + oi_id).parsley().isValid()){
             $('#rejectModalbody' + oi_id).html('<div class="alert alert-success">Are you sure to reject draft???</div>');
@@ -204,6 +207,7 @@ function rejectLinkedinDraftByAdmin(oi_id, ){
                 }
                 else{
                     alert("Something went wrong. Try again later");
+                    onClose();
                 }
             },
             error: function(xhr, ajaxOptions, thrownError) {
@@ -211,4 +215,10 @@ function rejectLinkedinDraftByAdmin(oi_id, ){
             }
         });
     }
+};
+
+
+function onClose(){
+$('#approveDraftBtn').removeAttr('disabled');
+$('#rejectDraftBtn').removeAttr('disabled');
 };

@@ -443,9 +443,9 @@ WC_FLOW_STATUS = (
 )
 
 
-SMS_DRAFT_OI_MAPPING = (
-    (1, '102'),
-    (2, '103'),
-    (3, '104'),
+SMS_DRAFT_OI_MAPPING = {
+    1:'102',
+    2: '103',
+    3: '104',
 
-)
+}
