@@ -27,4 +27,5 @@ PAYMENT_MODE = (
     (9, 'Credit Card'),
     (10, 'Net Banking'),
     (11, 'Paid Free'),
+    (12, "EPAYLATER")
 )

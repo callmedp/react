@@ -65,6 +65,21 @@ class PaymentMixin(object):
 
             return_parameter = reverse('payment:thank-you')
 
+        elif payment_type == "EPAYLATER":
+            payment_date = datetime.now()
+            payment_mode = 12
+
+            order.status = 1
+            order.payment_date = payment_date
+            order.save()
+
+            txn_obj.status = 1
+            txn_obj.payment_mode = payment_mode
+            txn_obj.payment_date = payment_date
+            txn_obj.save()
+
+            return_parameter = reverse('payment:thank-you')
+
         elif payment_type == "CHEQUE":
             return_parameter = reverse('payment:thank-you')
 

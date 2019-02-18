@@ -150,6 +150,17 @@ CCAVENUE_MOBILE_ACCESS_CODE = 'AVYX74EK04AB50XYBA'
 CCAVENUE_MOBILE_WORKING_KEY = 'A081DDE3B5B50F269F8980EB2ADEC9F3'
 CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
 
+
+####### EPAYLATER SETTINGS ###########################
+EPAYLATER_INFO = {"payment_url":"https://payment-sandbox.epaylater.in/web/process-transaction",
+                "apiKey": "secret_31f23758-6325-442c-a98c-9eaf1d41a188",
+                "aeskey": "698042ECAE38D843A166AEFADD109687",
+                "iv": "D58C8D87960088FF",
+                "mCode": "SHINELEARNING",
+                "category" : "LEARNING",
+                "base_url":"https://api-sandbox.epaylater.in/"}
+
+
 ###### CACHE SETTINGS #################
 SITEMAP_CACHING_TIME = 86400
 # Cache related settings
@@ -364,15 +375,6 @@ try:
     from .settings_local import *
 except:
     pass
-
-
-
-try:
-    from .settings_local import *
-except:
-    pass
-
-
 
 ##for testing purpose using live working key
 

@@ -18,6 +18,8 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     WC_FLOW_STATUS
 from .functions import get_upload_path_order_invoice
 
+#Global Constants
+CURRENCY_SYMBOL_CODE_MAPPING = {0:"INR",1:"USD",2:"AED",3:"GBP"}
 
 class Order(AbstractAutoDate):
     co_id = models.IntegerField(
@@ -156,6 +158,9 @@ class Order(AbstractAutoDate):
     def __str__(self):
         return u"#%s" % (self.number,)
 
+    def get_currency_code(self):
+        return CURRENCY_SYMBOL_CODE_MAPPING.get(self.currency)
+
     @property
     def get_status(self):
         statusD = dict(STATUS_CHOICES)
@@ -165,6 +170,10 @@ class Order(AbstractAutoDate):
     def get_payment_mode(self):
         payD = dict(PAYMENT_MODE)
         return payD.get(self.payment_mode)
+
+    def get_past_orders_for_email_and_mobile(self):
+        return Order.objects.filter(email=self.email,mobile=self.mobile,\
+            status__in=[1,2,3]).exclude(id=self.id)
 
     def get_txns(self):
         return self.ordertxns.all()
