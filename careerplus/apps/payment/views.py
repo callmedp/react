@@ -419,7 +419,8 @@ class EPayLaterRequestView(OrderMixin,TemplateView):
         initial_dict = {
             "redirectType": "WEBPAGE","marketplaceOrderId": txn_id,
             "mCode": settings.EPAYLATER_INFO.get('mCode'),
-            "callbackUrl": "{}/payment/epaylater/response/{}/".format(settings.SITE_DOMAIN,cart_id),
+            "callbackUrl": "{}://{}/payment/epaylater/response/{}/".format(\
+                settings.SITE_PROTOCOL,settings.SITE_DOMAIN,cart_id),
             "customerEmailVerified": False,"customerTelephoneNumberVerified": False,
             "customerLoggedin": True,"amount": float(order.total_incl_tax*100),
             "currencyCode": order.get_currency_code(),
