@@ -441,3 +441,8 @@ WC_FLOW_STATUS = (
     (82, 'Not reachable'),
     (83, 'User is busy'),
 )
+
+BOOSTER_RECRUITER_TYPE = (
+    (0, 'Resume Booster India'),
+    (1, 'Resume Booster International'),
+)

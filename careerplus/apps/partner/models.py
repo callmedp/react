@@ -12,6 +12,7 @@ from geolocation.models import (
     Country,
     State,
     City,)
+from order.choices import BOOSTER_RECRUITER_TYPE
 
 
 class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
@@ -158,3 +159,19 @@ class UserCertificate(models.Model):
 
     def __str__(self):
         return '{}'.format(self.certificate.name)
+
+
+class BoosterRecruiter(AbstractAutoDate):
+    recruiter_list = models.TextField(help_text=_('Recruiter name'),)
+    type_recruiter = models.PositiveIntegerField(
+        _('Recruiter Type'),
+        choices=BOOSTER_RECRUITER_TYPE, default=0,
+        help_text=_('Recruiter type for booster service')
+    )
+
+    @property
+    def get_recruiter_list(self):
+        return self.recruiter_list.split(',')
+
+    def __str__(self):
+        return '<' + self.get_type_recruiter_display() + '>'

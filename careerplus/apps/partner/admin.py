@@ -1,6 +1,6 @@
 from django.contrib import admin
 from . import models
-
+from order.choices import BOOSTER_RECRUITER_TYPE
 
 class VendorHierarchyInline(admin.TabularInline):
     model = models.VendorHierarchy
@@ -33,6 +33,44 @@ class UserCertificateAdmin(admin.ModelAdmin):
     get_vendor.short_description = 'Vendor'
 
 
+class BoosterRecruiterAdmin(admin.ModelAdmin):
+    list_display = (
+        'type_recruiter',
+    )
+
+    def changelist_view(self, request, extra_context=None):        
+
+        if request.method == 'POST' and 'upload_booster_recruiter' == request.POST.get('action', None):
+            from django.contrib import messages
+            try:
+                import pandas as pd
+                file = request.FILES.get('upload_file', None)
+                recruiter_type = request.POST.get('recruiter_type', None)
+                recruiters = []
+                email_added = []
+                if file and recruiter_type:
+                    recruiter_type = int(recruiter_type)
+                    upload_file = pd.read_csv(file)
+                    for i, row in upload_file.iterrows():
+                        if row['email'] not in email_added:
+                            recruiters.append(row['name'] + '<' + row['email'] + '>')
+                            email_added.append(row['email'])
+                        else:
+                            continue
+                    recruiter_name_email_as_string = ",".join(recruiters)
+                    boosterrecruiter, created = models.BoosterRecruiter.objects.get_or_create(type_recruiter=recruiter_type)
+                    boosterrecruiter.recruiter_list = recruiter_name_email_as_string
+                    boosterrecruiter.save()
+                else:
+                    # Then, when you need to error the user:
+                    messages.error(request, "Recruiter Type or File is not Provided")
+            except Exception as e:
+                messages.error(request, str(e))
+        extra_context = extra_context or {}
+        extra_context['booster_recruiter_type'] = BOOSTER_RECRUITER_TYPE
+        return super(BoosterRecruiterAdmin, self).changelist_view(request, extra_context=extra_context)
+
 admin.site.register(models.Vendor, VendorAdmin)
 admin.site.register(models.Certificate, CeritficateAdmin)
 admin.site.register(models.UserCertificate, UserCertificateAdmin)
+admin.site.register(models.BoosterRecruiter, BoosterRecruiterAdmin)
