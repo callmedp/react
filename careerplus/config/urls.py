@@ -177,6 +177,9 @@ urlpatterns += [
 
     url(r'^about-us$',
         homepage_view.AboutUsView.as_view(), name='about-us'),
+    url(r'^disclaimer$',
+        homepage_view.DisclaimerView.as_view(), name='disclaimer'),
+
     url(r'^privacy-policy$',
         homepage_view.PrivacyPolicyView.as_view(),
         name='privacy-policy'),
