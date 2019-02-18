@@ -2265,7 +2265,7 @@ class ActionOrderItemView(View):
 
                     if international_booster_candidate_list != []:
                         recruiters = BoosterRecruiter.objects.get(type_recruiter=1).recruiter_list.split(',')
-                        send_email_task(
+                        send_email_task.delay(
                             recruiters, mail_type, recruiter_data)
 
                     if candidate_list != [] or international_booster_candidate_list != []:

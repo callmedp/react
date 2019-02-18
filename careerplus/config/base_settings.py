@@ -34,7 +34,7 @@ MOBILE_ADSERVER_ENCODE_KEY = 'el!bomen!h$'
 ACROSS_ENCODE_KEY = '@$h1n3c4r33rplu5'
 
 TEMPLATE_DEBUG = False  # django sorl required
-
+TEST_EMAIL = True
 
 # Application definition
 DJANGO_APPS = [

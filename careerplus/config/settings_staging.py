@@ -265,7 +265,7 @@ LINKEDIN_DICT = {
     "CLIENT_ID": "81fbxkgs5558q0",
     "CLIENT_SECRET": "ECioffWZKBbXhkbu",
 }
-
+TEST_EMAIL = True
 ###### STORAGE SETTINGS #############
 DEFAULT_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPMediaStorage'
 GS_BUCKET_NAME = 'learning-media-staging-189607'

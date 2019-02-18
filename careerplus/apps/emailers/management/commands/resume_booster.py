@@ -165,7 +165,7 @@ def booster():
             recruiters = BoosterRecruiter.objects.get(type_recruiter=1).recruiter_list.split(',')
             send_email_task.delay(recruiters, mail_type, recruiter_data)
 
-         if candidate_list != [] or international_booster_candidate_list != []:
+        if candidate_list != [] or international_booster_candidate_list != []:
             for oi in item_emailoperation:
                 oi.emailorderitemoperation_set.create(email_oi_status=92)
     except Exception as e:
