@@ -441,3 +441,11 @@ WC_FLOW_STATUS = (
     (82, 'Not reachable'),
     (83, 'User is busy'),
 )
+
+
+SMS_DRAFT_OI_MAPPING = (
+    (1, '102'),
+    (2, '103'),
+    (3, '104'),
+
+)

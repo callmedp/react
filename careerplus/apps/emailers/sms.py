@@ -26,12 +26,13 @@ class SendSMS(object):
         return render_to_string(template, context)
 
     def process(self, send_dict=None, data=None):
+        from .tasks import send_sms_for_base_task
         if data.get('mobile', None) and not len(data.get('mobile', '')) < 10:
             mobile = data.get('mobile', '')
             if len(mobile) > 10:
                 mobile = str(mobile)[-10:]
             try:
-                self.base_send_sms(mobile, self.render_template(
+                send_sms_for_base_task.delay(mobile, self.render_template(
                     send_dict.get('template'), data))
             except Exception as e:
                 logging.getLogger('error_log').error("%s - %s" % (

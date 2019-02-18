@@ -19,6 +19,7 @@ from geolocation.models import Country
 from review.models import Review
 from users.mixins import RegistrationLoginApi
 from order.models import Order, OrderItem, RefundRequest
+from order.choices import  SMS_DRAFT_OI_MAPPING
 from console.order_form import FileUploadForm, VendorFileUploadForm,emailupdateform,mobileupdateform
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
@@ -239,167 +240,171 @@ class AjaxOrderItemCommentView(View):
 class ApproveByAdminDraft(View):
     def post(self, request, *args, **kwargs):
         data = {"status": 0}
-        if request.is_ajax() and request.user.is_authenticated():
-            oi_pk = request.POST.get('oi_pk', None)
-            try:
-                obj = OrderItem.objects.select_related('order', 'product').get(
-                    pk=oi_pk)
-                data['status'] = 1
-                product_flow = obj.product.type_flow
-
-                if product_flow == 3:
-                    last_oi_status = obj.last_oi_status
-                    obj.oi_status = 4
-                    obj.last_oi_status = 121
-                    obj.draft_counter += 1
-                    obj.closed_on = timezone.now()
-                    obj.save()
-
-                    # mail to candidate for resume critique closed
-                    to_emails = [obj.order.get_email()]
-                    token = token = AutoLogin().encode(obj.order.email, obj.order.candidate_id, days=None)
-                    email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
-                    email_dict = {}
-                    email_dict.update({
-                        "first_name": obj.order.first_name,
-                        "subject": 'Your developed document has been uploaded',
-                        'mobile': obj.order.get_mobile(),
-                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token)
-                    })
-
-                    mail_type = 'RESUME_CRITIQUE_CLOSED'
-
-                    if 42 not in email_sets:
-                        send_email_task.delay(
-                            to_emails, mail_type, email_dict, status=42,
-                            oi=obj.pk)
-                        try:
-                            urlshortener = create_short_url(login_url=email_dict)
-                            email_dict.update({'url': urlshortener.get('url')})
-                            SendSMS().send(sms_type=mail_type, data=email_dict)
-                        except Exception as e:
-                            logging.getLogger('error_log').error(
-                                "Unable to shortern url %s - %s" % (str(mail_type), str(e)))
-                    obj.orderitemoperation_set.create(
-                        oi_draft=obj.oi_draft,
-                        draft_counter=obj.draft_counter,
-                        oi_status=121,
-                        last_oi_status=last_oi_status,
-                        assigned_to=obj.assigned_to,
-                        added_by=request.user)
-
-                    obj.orderitemoperation_set.create(
-                        oi_status=obj.oi_status,
-                        last_oi_status=obj.last_oi_status,
-                        assigned_to=obj.assigned_to,
-                        added_by=request.user)
-
-                elif product_flow in [1, 12, 13]:
-                    last_oi_status = obj.last_oi_status
-                    if (obj.draft_counter + 1) <= settings.DRAFT_MAX_LIMIT:
-                        obj.oi_status = 4
-                        obj.last_oi_status = 24
-                        obj.closed_on = timezone.now()
-                    else:
-                        obj.last_oi_status = last_oi_status
-                    if not obj.oi_status == 4:
-                        obj.oi_status = 24
-                    obj.draft_counter += 1
-                    obj.approved_on = timezone.now()
-                    obj.save()
-
-                    # mail to candidate
-                    email_sets = list(
-                        obj.emailorderitemoperation_set.all().values_list(
-                            'email_oi_status', flat=True).distinct())
-                    to_emails = [obj.order.get_email()]
-                    token = AutoLogin().encode(
-                        obj.order.email, obj.order.candidate_id, days=None)
-                    mail_type = 'DRAFT_UPLOAD'
-                    # data = {}
-                    data.update({
-                        "draft_level": obj.draft_counter,
-                        "first_name": obj.order.first_name,
-                        'mobile': obj.order.get_mobile(),
-                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token),
-                    })
-
-                    draft_upload_mail(
-                        oi=obj, to_emails=to_emails, mail_type=mail_type,
-                        email_dict=data)
-                    if obj.oi_status == 4:
-                        obj.orderitemoperation_set.create(
-                            oi_status=24,
-                            draft_counter=obj.draft_counter,
-                            oi_draft=obj.oi_draft,
-                            last_oi_status=last_oi_status,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user)
-
-                        obj.orderitemoperation_set.create(
-                            oi_status=obj.oi_status,
-                            last_oi_status=24,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user)
-
-                        # sync resume on shine
-                        upload_resume_to_shine(oi_pk=obj.pk)
-                        to_emails = [obj.order.get_email()]
-                        mail_type = 'WRITING_SERVICE_CLOSED'
-                        email_dict = {}
-                        email_dict.update({
-                            "subject": 'Closing your ' + obj.product.name + ' service',
-                            "username": obj.order.first_name,
-                            'draft_added': obj.draft_added_on,
-                            'mobile': obj.order.get_mobile(),
-                            'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                                settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
-                        })
-                        send_email_task.delay(
-                            to_emails, mail_type, email_dict, status=9,
-                            oi=obj.pk)
-                    else:
-                        obj.orderitemoperation_set.create(
-                            oi_draft=obj.oi_draft,
-                            draft_counter=obj.draft_counter,
-                            oi_status=obj.oi_status,
-                            last_oi_status=obj.last_oi_status,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user)
-            except Exception as e:
-                logging.getLogger('error_log').error("Unable to Approve Draft By Admin %s " % str(e))
+        if not (request.is_ajax() and request.user.is_authenticated()):
+            return HttpResponseForbidden()
+        oi_pk = request.POST.get('oi_pk', None)
+        obj = OrderItem.objects.select_related('order', 'product').filter(
+            pk=oi_pk).exclude(oi_status__in=[24,4]).first()
+        if not obj:
             return HttpResponse(
                 json.dumps(data), content_type="application/json")
-        return HttpResponseForbidden()
+        data['status'] = 1
+        product_flow = obj.product.type_flow
+        if product_flow == 3:
+            last_oi_status = obj.last_oi_status
+            obj.oi_status = 4
+            obj.last_oi_status = 121
+            obj.draft_counter += 1
+            obj.closed_on = timezone.now()
+            obj.save()
+
+            # mail to candidate for resume critique closed
+            to_emails = [obj.order.get_email()]
+            token = AutoLogin().encode(obj.order.email, obj.order.candidate_id, days=None)
+            email_sets = list(obj.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
+            email_dict = {}
+            email_dict.update({
+                "first_name": obj.order.first_name,
+                "subject": 'Your developed document has been uploaded',
+                'mobile': obj.order.get_mobile(),
+                'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
+                    token)
+            })
+
+            mail_type = 'RESUME_CRITIQUE_CLOSED'
+
+            if 42 not in email_sets:
+                send_email_task.delay(
+                    to_emails, mail_type, email_dict, status=42,
+                    oi=obj.pk)
+                try:
+                    urlshortener = create_short_url(login_url=email_dict)
+                    email_dict.update({'url': urlshortener.get('url')})
+                    SendSMS().send(sms_type=mail_type, data=email_dict)
+                except Exception as e:
+                    logging.getLogger('error_log').error(
+                        "Unable to shortern url %s - %s" % (str(mail_type), str(e)))
+            obj.orderitemoperation_set.create(
+                oi_draft=obj.oi_draft,
+                draft_counter=obj.draft_counter,
+                oi_status=121,
+                last_oi_status=last_oi_status,
+                assigned_to=obj.assigned_to,
+                added_by=request.user)
+
+            obj.orderitemoperation_set.create(
+                oi_status=obj.oi_status,
+                last_oi_status=obj.last_oi_status,
+                assigned_to=obj.assigned_to,
+                added_by=request.user)
+
+        elif product_flow in [1, 12, 13]:
+            last_oi_status = obj.last_oi_status
+            if (obj.draft_counter + 1) >= settings.DRAFT_MAX_LIMIT:
+                obj.oi_status = 4
+                obj.last_oi_status = 24
+                obj.closed_on = timezone.now()
+            else:
+                obj.last_oi_status = last_oi_status
+            if not obj.oi_status == 4:
+                obj.oi_status = 24
+            obj.draft_counter += 1
+            obj.approved_on = timezone.now()
+            obj.save()
+
+            # mail to candidate
+            to_emails = [obj.order.get_email()]
+            token = AutoLogin().encode(
+                obj.order.email, obj.order.candidate_id, days=None)
+
+            mail_type = 'DRAFT_UPLOAD'
+            # data = {}
+            data.update({
+                "draft_level": obj.draft_counter,
+                "first_name": obj.order.first_name,
+                'mobile': obj.order.get_mobile(),
+                'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
+                    token),
+            })
+
+            draft_upload_mail(
+                oi=obj, to_emails=to_emails, mail_type=mail_type,
+                email_dict=data)
+            if not obj.oi_status == 4:
+                obj.orderitemoperation_set.create(
+                    oi_draft=obj.oi_draft,
+                    draft_counter=obj.draft_counter,
+                    oi_status=obj.oi_status,
+                    last_oi_status=obj.last_oi_status,
+                    assigned_to=obj.assigned_to,
+                    added_by=request.user)
+                return HttpResponse(
+                    json.dumps(data), content_type="application/json")
+
+            obj.orderitemoperation_set.create(
+                oi_status=24,
+                draft_counter=obj.draft_counter,
+                oi_draft=obj.oi_draft,
+                last_oi_status=last_oi_status,
+                assigned_to=obj.assigned_to,
+                added_by=request.user)
+
+            obj.orderitemoperation_set.create(
+                oi_status=obj.oi_status,
+                last_oi_status=24,
+                assigned_to=obj.assigned_to,
+                added_by=request.user)
+
+            # sync resume on shine
+            upload_resume_to_shine.delay(oi_pk=obj.pk)
+            to_emails = [obj.order.get_email()]
+
+            mail_type = 'WRITING_SERVICE_CLOSED'
+            email_dict = {}
+            email_dict.update({
+                "subject": 'Closing your ' + obj.product.name + ' service',
+                "username": obj.order.first_name,
+                'draft_added': obj.draft_added_on,
+                'mobile': obj.order.get_mobile(),
+                'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token),
+            })
+            send_email_task.delay(
+                to_emails, mail_type, email_dict, status=9,
+                oi=obj.pk)
+        return HttpResponse(
+            json.dumps(data), content_type="application/json")
+
 
 
 class RejectByAdminDraft(View):
+
     def post(self, request, *args, **kwargs):
         data = {"status": 0}
-        if request.is_ajax() and request.user.is_authenticated():
-            oi_pk = request.POST.get('oi_pk', None)
-            try:
-                obj = OrderItem.objects.get(pk=oi_pk)
-                data['status'] = 1
-                last_status = obj.oi_status
-                obj.oi_status = 25
-                obj.save()
-                obj.orderitemoperation_set.create(
-                    oi_status=obj.oi_status,
-                    last_oi_status=last_status,
-                    assigned_to=obj.assigned_to,
-                    added_by=request.user)
-            except Exception as e:
-                logging.getLogger('error_log').error("Unable to reject by Admin %s " % str(e))
+        if not (request.is_ajax() and request.user.is_authenticated()):
+            return HttpResponseForbidden()
+        oi_pk = request.POST.get('oi_pk', None)
+        if not oi_pk:
             return HttpResponse(json.dumps(data), content_type="application/json")
-        return HttpResponseForbidden()
+        obj = OrderItem.objects.filter(pk=oi_pk).exclude(oi_status__in=[25,4]).first()
+        if not obj:
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        data['status'] = 1
+        last_status = obj.oi_status
+        obj.oi_status = 25
+        obj.save()
+        obj.orderitemoperation_set.create(
+            oi_status=obj.oi_status,
+            last_oi_status=last_status,
+            assigned_to=obj.assigned_to,
+            added_by=request.user)
+        return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 class UploadDraftView(View):
+
     def post(self, request, *args, **kwargs):
         if request.is_ajax() and request.user.is_authenticated():
             data = {'display_message': "", }
@@ -433,6 +438,7 @@ class UploadDraftView(View):
 
 
 class DetailPageUploadDraftView(View):
+
     def post(self, request, *args, **kwargs):
         if request.is_ajax() and request.user.is_authenticated():
             data = {'display_message': "", }
@@ -458,6 +464,7 @@ class DetailPageUploadDraftView(View):
 
 
 class SaveWaitingInput(View):
+
     def post(self, request, *args, **kwargs):
         if request.is_ajax() and request.user.is_authenticated():
             data = {"message": "Waiting input Not Updated"}
@@ -497,150 +504,111 @@ class SaveWaitingInput(View):
 
 
 class ApproveDraftByLinkedinAdmin(View):
+
+    def send_email_sms(self, obj):
+        # mail to candidate
+        to_emails = [obj.order.get_email()]
+        email_sets = list(
+            obj.emailorderitemoperation_set.all().values_list(
+                'email_oi_status', flat=True).distinct())
+        sms_sets = list(
+            obj.smsorderitemoperation_set.all().values_list(
+                'sms_oi_status', flat=True).distinct())
+
+        mail_type = 'DRAFT_UPLOAD'
+        token = AutoLogin().encode(
+            obj.order.email, obj.order.candidate_id, days=None)
+        email_dict = {}
+        email_dict.update({
+            "draft_level": obj.draft_counter,
+            "first_name": obj.order.first_name,
+            'mobile': obj.order.get_mobile(),
+            'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
+                token),
+        })
+        sms_oi_status = SMS_DRAFT_OI_MAPPING.get(obj.draft_counter, None)
+        if sms_oi_status and sms_oi_status not in email_sets and sms_oi_status not in sms_sets:
+            send_email_task.delay(
+                to_emails, mail_type, email_dict,
+                status=sms_oi_status, oi=obj.pk)
+            try:
+                urlshortener = create_short_url(
+                    login_url=email_dict)
+                email_dict.update({
+                    'url': urlshortener.get('url')})
+                SendSMS().send(
+                    sms_type=mail_type, data=email_dict)
+                obj.smsorderitemoperation_set.create(
+                    sms_oi_status=sms_oi_status)
+            except Exception as e:
+                logging.getLogger('error_log').error(
+                    " %s - %s" % (str(mail_type), str(e)))
+
+
     def post(self, request, *args, **kwargs):
         data = {"status": 0}
-        if request.is_ajax():
-            oi_pk = request.POST.get('oi_pk', None)
-            try:
-                obj = OrderItem.objects.select_related('order', 'product').get(
-                    pk=oi_pk)
-                data['status'] = 1
-                last_status = obj.oi_status
-                if obj.product.type_flow == 8:
-                    if (obj.draft_counter + 1) <= settings.DRAFT_MAX_LIMIT:
-                        obj.oi_status = 4
-                        obj.closed_on = timezone.now()
-                    if not obj.oi_status == 4:
-                        obj.oi_status = 46
-                    obj.draft_counter += 1
-                    obj.approved_on = timezone.now()
-                    obj.save()
-
-                    # mail to candidate
-                    to_emails = [obj.order.get_email()]
-                    email_sets = list(
-                        obj.emailorderitemoperation_set.all().values_list(
-                            'email_oi_status', flat=True).distinct())
-                    sms_sets = list(
-                        obj.smsorderitemoperation_set.all().values_list(
-                            'sms_oi_status', flat=True).distinct())
-                    mail_type = 'DRAFT_UPLOAD'
-                    token = AutoLogin().encode(
-                        obj.order.email, obj.order.candidate_id, days=None)
-                    email_dict = {}
-                    email_dict.update({
-                        "draft_level": obj.draft_counter,
-                        "first_name": obj.order.first_name,
-                        'mobile': obj.order.get_mobile(),
-                        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                            settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                            token),
-                    })
-
-                    if obj.draft_counter == 1:
-                        if 102 not in email_sets and 102 not in sms_sets:
-                            send_email_task.delay(
-                                to_emails, mail_type, email_dict,
-                                status=102, oi=obj.pk)
-                            try:
-                                urlshortener = create_short_url(
-                                    login_url=email_dict)
-                                email_dict.update({
-                                    'url': urlshortener.get('url')})
-                                SendSMS().send(
-                                    sms_type=mail_type, data=email_dict)
-                                obj.smsorderitemoperation_set.create(
-                                    sms_oi_status=102)
-                            except Exception as e:
-                                logging.getLogger('error_log').error(
-                                    " %s - %s" % (str(mail_type), str(e)))
-                    elif obj.draft_counter == 2:
-                        if 103 not in email_sets and 103 not in sms_sets:
-                            send_email_task.delay(
-                                to_emails, mail_type, email_dict,
-                                status=103, oi=obj.pk)
-                            try:
-                                urlshortener = create_short_url(
-                                    login_url=email_dict)
-                                email_dict.update({
-                                    'url': urlshortener.get('url')})
-                                SendSMS().send(
-                                    sms_type=mail_type, data=email_dict)
-                                obj.smsorderitemoperation_set.create(
-                                    sms_oi_status=103)
-                            except Exception as e:
-
-                                logging.getLogger('error_log').error(
-                                    " %s - %s" % (str(mail_type), str(e)))
-
-                    elif obj.draft_counter == settings.DRAFT_MAX_LIMIT and 104 not in email_sets:
-                        if 104 not in email_sets and 104 not in sms_sets:
-                            send_email_task.delay(
-                                to_emails, mail_type, email_dict,
-                                status=104, oi=obj.pk)
-                            try:
-                                urlshortener = create_short_url(
-                                    login_url=email_dict)
-                                email_dict.update({
-                                    'url': urlshortener.get('url')})
-                                SendSMS().send(
-                                    sms_type=mail_type, data=email_dict)
-                                obj.smsorderitemoperation_set.create(
-                                    sms_oi_status=104)
-                            except Exception as e:
-                                logging.getLogger('error_log').error(
-                                    "%s - %s" % (str(mail_type), str(e)))
-
-                    if obj.oi_status == 4:
-                        obj.orderitemoperation_set.create(
-                            linkedin=obj.oio_linkedin,
-                            draft_counter=obj.draft_counter,
-                            oi_status=46,
-                            last_oi_status=last_status,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user)
-
-                        obj.orderitemoperation_set.create(
-                            oi_status=obj.oi_status,
-                            last_oi_status=46,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user)
-                    else:
-                        obj.orderitemoperation_set.create(
-                            linkedin=obj.oio_linkedin,
-                            draft_counter=obj.draft_counter,
-                            oi_status=obj.oi_status,
-                            last_oi_status=last_status,
-                            assigned_to=obj.assigned_to,
-                            added_by=request.user)
-            except Exception as e:
-                logging.getLogger('error_log').error("Linkedin Admin unable to approve%s " % str(e))
-                pass
+        if not request.is_ajax():
+            return HttpResponseForbidden()
+        oi_pk = request.POST.get('oi_pk', None)
+        obj = OrderItem.objects.select_related('order', 'product').filter(
+            pk=oi_pk).exclude(oi_status__in=[4,46]).first()
+        if not obj:
             return HttpResponse(json.dumps(data), content_type="application/json")
-        return HttpResponseForbidden()
+        if not obj.product.type_flow == 8:
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        data['status'] = 1
+        last_status = obj.oi_status
+        if (obj.draft_counter + 1) >= settings.DRAFT_MAX_LIMIT:
+            obj.oi_status = 4
+            obj.closed_on = timezone.now()
+        if not obj.oi_status == 4:
+            obj.oi_status = 46
+        obj.draft_counter += 1
+        obj.approved_on = timezone.now()
+        obj.save()
+        self.send_email_sms(obj)
+        param_dict={'linkedin':obj.oio_linkedin, 'draft_counter':obj.draft_counter,
+                    'last_oi_status':last_status, 'assigned_to':obj.assigned_to,
+                    'added_by':request.user}
+        if obj.oi_status == 4:
+            param_dict.update({'oi_status': 46})
+        else:
+            param_dict.update({'oi_status': obj.oi_status})
+
+        obj.orderitemoperation_set.create(**param_dict)
+        if obj.oi_status == 4:
+            obj.orderitemoperation_set.create(
+                oi_status=obj.oi_status,
+                last_oi_status=46,
+                assigned_to=obj.assigned_to,
+                added_by=request.user)
+
+        return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 class RejectDraftByLinkedinAdmin(View):
     def post(self, request, *args, **kwargs):
         data = {"status": 0}
-        if request.is_ajax():
-            oi_pk = request.POST.get('oi_pk', None)
-            try:
-                obj = OrderItem.objects.get(pk=oi_pk)
-                data['status'] = 1
-                last_status = obj.oi_status
-                obj.oi_status = 47
-                obj.save()
-                obj.orderitemoperation_set.create(
-                    oi_status=obj.oi_status,
-                    last_oi_status=last_status,
-                    assigned_to=obj.assigned_to,
-                    added_by=request.user)
-            except Exception as e:
-                logging.getLogger('error_log').error("unable to reject by linkedin Admin %s " % str(e))
-                pass
+        if not request.is_ajax():
+            return HttpResponseForbidden()
+        oi_pk = request.POST.get('oi_pk', None)
+        if not oi_pk:
             return HttpResponse(json.dumps(data), content_type="application/json")
-        return HttpResponseForbidden()
+        obj = OrderItem.objects.filter(pk=oi_pk).exclude(oi_status__in=[47,4]).first()
+        if not obj:
+            return HttpResponse(json.dumps(data), content_type="application/json")
+        data['status'] = 1
+        last_status = obj.oi_status
+        obj.oi_status = 47
+        obj.save()
+        obj.orderitemoperation_set.create(
+            oi_status=obj.oi_status,
+            last_oi_status=last_status,
+            assigned_to=obj.assigned_to,
+            added_by=request.user)
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
 
 
 class GenerateAutoLoginToken(View):
