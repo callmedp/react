@@ -158,9 +158,6 @@ class Order(AbstractAutoDate):
     def __str__(self):
         return u"#%s" % (self.number,)
 
-    def get_currency_code(self):
-        return CURRENCY_SYMBOL_CODE_MAPPING.get(self.currency)
-
     @property
     def get_status(self):
         statusD = dict(STATUS_CHOICES)
@@ -170,6 +167,14 @@ class Order(AbstractAutoDate):
     def get_payment_mode(self):
         payD = dict(PAYMENT_MODE)
         return payD.get(self.payment_mode)
+
+    def get_first_touch_for_email(self):
+        order_obj = Order.objects.filter(email=self.email).\
+            order_by('id').first()
+        return order_obj.created
+
+    def get_currency_code(self):
+        return CURRENCY_SYMBOL_CODE_MAPPING.get(self.currency)
 
     def get_past_orders_for_email_and_mobile(self):
         return Order.objects.filter(email=self.email,mobile=self.mobile,\
@@ -191,7 +196,6 @@ class Order(AbstractAutoDate):
             return self.alt_email
         else:
             return self.email
-
 
     def get_mobile(self):
         if self.alt_mobile:

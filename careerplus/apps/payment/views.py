@@ -433,7 +433,9 @@ class EPayLaterRequestView(OrderMixin,TemplateView):
             "deviceClient": self.request.META.get('HTTP_USER_AGENT',''),
             "deviceNumber": get_client_ip(self.request)}
 
-        market_data = {"marketplaceCustomerId":order.email,"memberSince":""}
+        market_data = {"marketplaceCustomerId":order.email,
+            "memberSince":order.get_first_touch_for_email().\
+                isoformat().split("+")[0].split(".")[0] + "Z"}
 
         initial_dict.update({"customer":customer_data,"device":device_data,
             "orderHistory":self._get_order_history_list(order),
