@@ -1,6 +1,8 @@
 # In-built python
 import logging
 import json
+import datetime
+from datetime import timedelta
 from decimal import Decimal
 
 # Django imports
@@ -11,6 +13,7 @@ from django.utils import timezone
 from celery.decorators import task
 
 # Local imports
+from order.functions import date_timezone_convert
 from cart.models import Cart
 from emailers.email import SendMail
 from crmapi.functions import lead_create_on_crm
@@ -69,62 +72,62 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
                 "country_code": cart_obj.country_code,
                 "lead_source": 2,
             })
-            if cart_obj:
-                lead_type = 0
-                total_amount = CartMixin().getPayableAmount(cart_obj)
-                pay_amount = total_amount.get('total_payable_amount')
+
+            lead_type = 0
+            total_amount = CartMixin().getPayableAmount(cart_obj)
+            pay_amount = total_amount.get('total_payable_amount')
+            extra_info.update({
+                'total_amount': round(pay_amount)
+            })
+
+            m_prods = cart_obj.lineitems.filter(
+                parent=None).select_related(
+                'product', 'product__vendor').order_by('-created')
+
+            product_list = []
+            addon_list = []
+            variation_list = []
+            if m_prods:
+                deltatasktime = timezone.now() - timedelta(minutes=settings.CART_DROP_OUT_LEAD)
+                server_time = date_timezone_convert(deltatasktime)
+                prod = m_prods.filter(modified__lte=server_time).first()
+                product_name = prod.product.heading if prod.product.heading else prod.product.name
+                data_dict.update({
+                                     "product": product_name,
+                                     "productid": prod.product.id
+                                 })
+                m_prods = m_prods.exclude(id=prod.id)
+            for m_prod in m_prods:
+                product_name = m_prod.product.heading if m_prod.product.heading else m_prod.product.name
+                product_list.append(product_name)
+                addons = cart_obj.lineitems.filter(
+                    parent=m_prod,
+                    parent_deleted=False
+                ).select_related('product')
+
+                variations = cart_obj.lineitems.filter(
+                    parent=m_prod,
+                    parent_deleted=True
+                ).select_related('product')
+                for addon in addons:
+                    addon = addon.product.heading if addon.product.heading else addon.product.name
+                    addon_list.append(addon)
+                for variation in variations:
+                    variation = variation.product.heading if variation.product.heading else variation.product.name
+                    variation_list.append(variation)
                 extra_info.update({
-                    'total_amount': round(pay_amount)
+                    "parent": product_list,
+                    "addon": addon_list,
+                    "variation": variation_list
                 })
-                m_prods = cart_obj.lineitems.filter(
-                    parent=None).select_related(
-                    'product', 'product__vendor').order_by('-created')
-                product_list = []
-                addon_list = []
-                variation_list = []
-                if m_prods:
-                    count = 0
-                    for m_prod in m_prods:
-                        count = count + 1
-                        product_name = m_prod.product.heading if m_prod.product.heading else m_prod.product.name
-                        if count == 1:
-                            data_dict.update({
-                                "product": product_name,
-                                "productid": m_prod.product.id
-                            })
-                        else:
-                            product_list.append(product_name)
-                            addons = cart_obj.lineitems.filter(
-                                parent=m_prod,
-                                parent_deleted=False
-                            ).select_related('product')
-
-                            variations = cart_obj.lineitems.filter(
-                                parent=m_prod,
-                                parent_deleted=True
-                            ).select_related('product')
-                            if addons:
-                                for addon in addons:
-                                    addon = addon.product.heading if addon.product.heading else addon.product.name
-                                    addon_list.append(addon)
-                            if variations:
-                                for variation in variations:
-                                    variation = variation.product.heading if variation.product.heading else variation.product.name
-                                    variation_list.append(variation)
-
-                    extra_info.update({
-                        "parent": product_list,
-                        "addon": addon_list,
-                        "variation": variation_list
-                    })
-                if m_prods.count() == 1:
-                    m_prod = m_prods[0]
-                    if m_prod.product.is_course:
-                        lead_type = 2
-                    else:
-                        lead_type = 1
-                elif m_prods.count() > 1:
+            if m_prods and m_prods.count() == 1:
+                m_prod = m_prods[0]
+                if m_prod.product.is_course:
                     lead_type = 2
+                else:
+                    lead_type = 1
+            elif m_prods and m_prods.count() > 1:
+                lead_type = 2
 
             data_dict.update({
                 "extra_info": json.dumps(extra_info),
