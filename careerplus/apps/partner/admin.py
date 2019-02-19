@@ -43,24 +43,29 @@ class BoosterRecruiterAdmin(admin.ModelAdmin):
         if request.method == 'POST' and 'upload_booster_recruiter' == request.POST.get('action', None):
             from django.contrib import messages
             try:
-                import pandas as pd
                 file = request.FILES.get('upload_file', None)
                 recruiter_type = request.POST.get('recruiter_type', None)
                 recruiters = []
                 email_added = []
                 if file and recruiter_type:
                     recruiter_type = int(recruiter_type)
-                    upload_file = pd.read_csv(file)
-                    for i, row in upload_file.iterrows():
-                        if row['email'] not in email_added:
-                            recruiters.append(row['name'] + '<' + row['email'] + '>')
-                            email_added.append(row['email'])
+                    file_data = file.read().decode("utf-8")
+                    lines = file_data.split("\n")
+                    for index, line in enumerate(lines):
+                        if index == 0:
+                            continue
+                        name, email = line.split(',')
+                        name = name.strip()
+                        email = email.strip()
+                        if email not in email_added:
+                            recruiters.append(name + '<' + email + '>')
+                            email_added.append(email)
                         else:
                             continue
-                    recruiter_name_email_as_string = ",".join(recruiters)
-                    boosterrecruiter, created = models.BoosterRecruiter.objects.get_or_create(type_recruiter=recruiter_type)
-                    boosterrecruiter.recruiter_list = recruiter_name_email_as_string
-                    boosterrecruiter.save()
+                        recruiter_name_email_as_string = ",".join(recruiters)
+                        boosterrecruiter, created = models.BoosterRecruiter.objects.get_or_create(type_recruiter=recruiter_type)
+                        boosterrecruiter.recruiter_list = recruiter_name_email_as_string
+                        boosterrecruiter.save()
                 else:
                     # Then, when you need to error the user:
                     messages.error(request, "Recruiter Type or File is not Provided")
