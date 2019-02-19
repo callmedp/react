@@ -289,8 +289,10 @@
 
                           <form role="form" method="post" id="accept-reject-form{{obj.id}}">{% csrf_token %}
                           <input type="hidden" name="oi_pk" id="oi_id" value="{{obj.pk}}">
-                            <button type="button" id="approveDraftBtn" onclick="clickApproveDraft('{{obj.pk}}',)" class="btn btn-success btn-xs"><i class="fa fa-check"></i>Approve Draft</button>Or
-                            <button type="button" id="rejectDraftBtn" onclick="clickRejectDraft('{{obj.pk}}',)" class="btn btn-danger btn-xs"><i class="fa fa-times"></i>Reject Draft</button>
+                              <center style="text-align:left">
+                            <button type="button" id="approveDraftBtn{{obj.pk}}" onclick="clickApproveDraft('{{obj.pk}}',)" class="btn btn-success btn-xs"><i class="fa fa-check"></i>Approve Draft</button>Or
+                            <button type="button" id="rejectDraftBtn{{obj.pk}}" onclick="clickRejectDraft('{{obj.pk}}',)" class="btn btn-danger btn-xs"><i class="fa fa-times"></i>Reject Draft</button>
+                         </center>
                           </form>
 
                           <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="approvemodal{{obj.pk}}">
@@ -306,7 +308,7 @@
                                       Are You Sure???
                                     </div>
                                     <div class="modal-footer">
-                                      <button type="button" class="btn btn-default" onclick="onClose();" data-dismiss="modal">Close</button>
+                                      <button type="button" class="btn btn-default" onclick="onClose({{obj.pk}});" data-dismiss="modal">Close</button>
                                       <button type="button" id="approveAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="approveDraftByLinkedinAdmin('{{obj.id}}',)">Yes</button>
                                     </div>
 
@@ -327,7 +329,7 @@
                                       Are You Sure???
                                     </div>
                                     <div class="modal-footer">
-                                      <button type="button" class="btn btn-default" onclick="onClose();" data-dismiss="modal">Close</button>
+                                      <button type="button" class="btn btn-default" onclick="onClose({{obj.pk}});" data-dismiss="modal">Close</button>
                                       <button type="button" id="rejectAction{{obj.pk}}" data-dismiss="modal" class="btn btn-primary" onclick="rejectLinkedinDraftByAdmin('{{obj.id}}',)">Yes</button>
                                     </div>
 
