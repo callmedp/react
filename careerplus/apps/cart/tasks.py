@@ -89,7 +89,8 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
             variation_list = []
             if m_prods:
                 deltatasktime = timezone.now() - timedelta(minutes=settings.CART_DROP_OUT_LEAD)
-                server_time = date_timezone_convert(deltatasktime)
+                # server_time = date_timezone_convert(deltatasktime)
+                server_time=deltatasktime
                 prod = m_prods.filter(modified__lte=server_time).first()
                 product_name = prod.product.heading if prod.product.heading else prod.product.name
                 data_dict.update({
