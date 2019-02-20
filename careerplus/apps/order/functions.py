@@ -86,7 +86,7 @@ def update_initiat_orderitem_sataus(order=None):
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
 
-            elif oi.product.type_flow == 7:
+            elif oi.product.type_flow in [7, 15]:
                 depending_ois = order.orderitems.filter(
                     product__type_flow=1, no_process=False)
 
