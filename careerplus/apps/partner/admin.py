@@ -50,7 +50,10 @@ class BoosterRecruiterAdmin(admin.ModelAdmin):
                 if file and recruiter_type:
                     recruiter_type = int(recruiter_type)
                     file_data = file.read().decode("utf-8")
-                    lines = file_data.split("\n")
+                    if "\n" in file_data:
+                        lines = file_data.split("\n")
+                    else:
+                        lines = file_data.split("\r")
                     for index, line in enumerate(lines):
                         if index == 0:
                             continue
