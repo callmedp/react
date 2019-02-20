@@ -1,6 +1,7 @@
 from django.contrib import admin
 from . import models
 from order.choices import BOOSTER_RECRUITER_TYPE
+from django import forms
 
 class VendorHierarchyInline(admin.TabularInline):
     model = models.VendorHierarchy
@@ -33,10 +34,31 @@ class UserCertificateAdmin(admin.ModelAdmin):
     get_vendor.short_description = 'Vendor'
 
 
+class BoosterRecruiterAdminForm(forms.ModelForm):
+    model = models.BoosterRecruiter
+
+    def clean(self):
+        recruiter_type = self.cleaned_data['type_recruiter']
+        if not self.instance.id:
+            recruiter_type = models.BoosterRecruiter.objects.filter(type_recruiter=recruiter_type)
+            if recruiter_type.exists():
+                raise forms.ValidationError("This Recruiter type already exists")
+
+        else:
+            recruiter_type = models.BoosterRecruiter.objects.filter(
+                type_recruiter=recruiter_type
+            ).exclude(id=self.instance.id)
+            if recruiter_type.exists():
+                raise forms.ValidationError("This Recruiter type already exists")
+
+        return self.cleaned_data
+
+
 class BoosterRecruiterAdmin(admin.ModelAdmin):
     list_display = (
         'type_recruiter',
     )
+    form = BoosterRecruiterAdminForm
 
     def changelist_view(self, request, extra_context=None):        
 
@@ -65,10 +87,15 @@ class BoosterRecruiterAdmin(admin.ModelAdmin):
                             email_added.append(email)
                         else:
                             continue
-                        recruiter_name_email_as_string = ",".join(recruiters)
-                        boosterrecruiter, created = models.BoosterRecruiter.objects.get_or_create(type_recruiter=recruiter_type)
-                        boosterrecruiter.recruiter_list = recruiter_name_email_as_string
-                        boosterrecruiter.save()
+                    recruiter_name_email_as_string = ",".join(recruiters)
+                    boosterrecruiter, created = models.BoosterRecruiter.objects.get_or_create(type_recruiter=recruiter_type)
+                    if boosterrecruiter.recruiter_list:
+                        boosterrecruiter.recruiter_list += ','
+
+                    boosterrecruiter.recruiter_list += recruiter_name_email_as_string
+                    boosterrecruiter.recruiter_list = ",".join(set(boosterrecruiter.recruiter_list.split(',')))
+
+                    boosterrecruiter.save()
                 else:
                     # Then, when you need to error the user:
                     messages.error(request, "Recruiter Type or File is not Provided")
