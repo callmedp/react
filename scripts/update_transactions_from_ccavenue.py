@@ -126,6 +126,7 @@ if __name__=="__main__":
         edt = (sdt + timedelta(minutes=2)).replace(tzinfo=utc_tz) #Hour + buffer
         all_initiated_transactions = PaymentTxn.objects.filter(status__in=[0,2,3,4,5],\
                 payment_mode__in=[5,7],created__gte=sdt,created__lte=edt,order__site=0)
+
         logging.getLogger('info_log').info(\
             "Total initiated transactions for interval {} minutes - {}".format(\
             interval,all_initiated_transactions.count()))
