@@ -2,6 +2,8 @@ from django.contrib import admin
 from . import models
 from order.choices import BOOSTER_RECRUITER_TYPE
 from django import forms
+import csv
+import re
 
 class VendorHierarchyInline(admin.TabularInline):
     model = models.VendorHierarchy
@@ -69,32 +71,31 @@ class BoosterRecruiterAdmin(admin.ModelAdmin):
                 recruiter_type = request.POST.get('recruiter_type', None)
                 recruiters = []
                 email_added = []
+                email_presents = []
                 if file and recruiter_type:
+                    boosterrecruiter, created = models.BoosterRecruiter.objects.get_or_create(type_recruiter=recruiter_type)
                     recruiter_type = int(recruiter_type)
                     file_data = file.read().decode("utf-8")
-                    if "\n" in file_data:
-                        lines = file_data.split("\n")
-                    else:
-                        lines = file_data.split("\r")
-                    for index, line in enumerate(lines):
+                    uploaded_file = csv.reader(file_data.splitlines())
+                    if boosterrecruiter.recruiter_list:
+                        email_presents = [re.findall(r"<.*>", email)[0].replace('<','').replace('>','') for email in boosterrecruiter.recruiter_list.split(',')]
+                    for index, line in enumerate(uploaded_file):
                         if index == 0:
                             continue
-                        name, email = line.split(',')
+                        name, email = line
                         name = name.strip()
                         email = email.strip()
-                        if email not in email_added:
+
+                        if email not in email_added and email not in email_presents:
                             recruiters.append(name + '<' + email + '>')
                             email_added.append(email)
                         else:
                             continue
                     recruiter_name_email_as_string = ",".join(recruiters)
-                    boosterrecruiter, created = models.BoosterRecruiter.objects.get_or_create(type_recruiter=recruiter_type)
-                    if boosterrecruiter.recruiter_list:
+                    if boosterrecruiter.recruiter_list and recruiters:
                         boosterrecruiter.recruiter_list += ','
 
                     boosterrecruiter.recruiter_list += recruiter_name_email_as_string
-                    boosterrecruiter.recruiter_list = ",".join(set(boosterrecruiter.recruiter_list.split(',')))
-
                     boosterrecruiter.save()
                 else:
                     # Then, when you need to error the user:
