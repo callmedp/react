@@ -89,7 +89,7 @@
               <li role="presentation"><a href="#cash" aria-controls="cash" role="tab" data-toggle="tab">Cash</a></li>
               <li role="presentation"><a href="#cheque" aria-controls="cheque" role="tab" data-toggle="tab">Cheque</a></li>
               <li role="presentation"><a href="#upi" aria-controls="upi" role="tab" data-toggle="tab">UPI</a></li>
-              <li role="presentation"><a href="#paylater" aria-controls="paylater" role="tab" data-toggle="tab">Pay Later</a></li>
+              <li role="presentation"><a href="#paylater" aria-controls="paylater" role="tab" data-toggle="tab">Buy Now, Pay Later</a></li>
             </ul>
             
             <div class="tab-content payment-tabs-content col-sm-8 col-md-8 col-lg-9">
@@ -244,13 +244,13 @@
                 </div>
               </div>
 
-              <div role="tabpanel" class="tab-pane other-payment" id="paylater">
-                <article>For Pay Later, you will be redirected to a secure page where you can enter your details and complete your payment.</article>
-                <strong>Rs. {{total_amount}} <small>(amount payable)</small> </strong>
-                  <div class="continue">
-                  <a href="{% url "payment:epaylater-request" cart_id %}"><button type="button" class="make-payment">Pay Later</button></a>
-                  <figure class="secure-payment-icon"></figure>100% Secure Payment
-                </div>
+              <div role="tabpanel" class="tab-pane card-banking" id="paylater">
+                <article>
+                  You will be redirected to a secure page where you can fill up some details and pay at a later date.
+                </article>
+                <ul>
+                  <li class="credit-card"><a href="{% url "payment:epaylater-request" cart_id %}"><img width="140px" src="{% static 'shinelearn/images/payments/epaylater-logo.svg' %}" alt="EPayLater" title="EPayLater"></a></li>
+                </ul>
               </div>
 
             </div>
