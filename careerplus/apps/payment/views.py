@@ -406,6 +406,10 @@ class EPayLaterRequestView(OrderMixin,TemplateView):
         if not cart_obj:
             return HttpResponseRedirect("/")
         
+        site_domain = settings.SITE_DOMAIN
+        if self.request.flavour == 'mobile':
+            site_domain = settings.MOBILE_SITE_DOMAIN
+        
         order = self.createOrder(cart_obj)
         txn_id = 'CP%d%s' % (order.pk, int(time.time()))
         pay_txn = PaymentTxn.objects.create(
@@ -413,14 +417,14 @@ class EPayLaterRequestView(OrderMixin,TemplateView):
             cart=cart_obj,status=0,
             payment_mode=11,currency=order.currency,
             txn_amount=order.total_incl_tax,
-        )
+            )
         
         current_utc_string = datetime.utcnow().isoformat().split(".")[0] + "Z"
         initial_dict = {
             "redirectType": "WEBPAGE","marketplaceOrderId": txn_id,
             "mCode": settings.EPAYLATER_INFO.get('mCode'),
             "callbackUrl": "{}://{}/payment/epaylater/response/{}/".format(\
-                settings.SITE_PROTOCOL,settings.SITE_DOMAIN,cart_id),
+                settings.SITE_PROTOCOL,site_domain,cart_id),
             "customerEmailVerified": False,"customerTelephoneNumberVerified": False,
             "customerLoggedin": True,"amount": float(order.total_incl_tax*100),
             "currencyCode": order.get_currency_code(),
@@ -455,6 +459,9 @@ class EPayLaterRequestView(OrderMixin,TemplateView):
 
 class EPayLaterResponseView(PaymentMixin,CartMixin,TemplateView):
 
+    def get(self,request,*args,**kwargs):
+        return HttpResponseNotAllowed()
+
     def _extract_json_from_string(self,dec_data):
         start_index = dec_data.find("{")
         end_index = dec_data.rfind("}")
@@ -462,7 +469,7 @@ class EPayLaterResponseView(PaymentMixin,CartMixin,TemplateView):
         decrypted_text = decrypted_text.replace("null","\"\"")
         return ast.literal_eval(decrypted_text)
 
-    def _handle_successfull_transaction(self,txn_obj,txn_id,order):
+    def _handle_successful_transaction(self,txn_obj,txn_id,order):
         self.closeCartObject(txn_obj.cart)
         return_url = self.process_payment_method(
             payment_type='EPAYLATER', request=self.request,
@@ -503,7 +510,7 @@ class EPayLaterResponseView(PaymentMixin,CartMixin,TemplateView):
             logging.getLogger('error_log').error("PayLater No txn id - {}".format(decrypted_data))
             return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id='+txn_id)
 
-        txn_obj = PaymentTxn.objects.filter(txn=txn_id,status=0).first()
+        txn_obj = PaymentTxn.objects.filter(txn=txn_id).first()
         if not txn_obj:
             logging.getLogger('error_log').error("PayLater No txn obj - {}".format(decrypted_data))
             return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id='+txn_id)
@@ -511,10 +518,20 @@ class EPayLaterResponseView(PaymentMixin,CartMixin,TemplateView):
         order = txn_obj.order
 
         if transaction_status == "SUCCESS":
-            return_url = self._handle_successfull_transaction(txn_obj,txn_id,order)
+            
+            if txn_obj.status == 1:
+                logging.getLogger('info_log').info('EPAY - Updating successful transaction {}'.format(txn_id))
+                put_epay_for_successful_payment.delay(order_id,txn_id)
+                return HttpResponseRedirect(reverse('payment:thank-you'))
+
+            return_url = self._handle_successful_transaction(txn_obj,txn_id,order)
             put_epay_for_successful_payment.delay(order_id,txn_id)
             return HttpResponseRedirect(return_url)
+        
         else:
             self._handle_failed_transaction(txn_obj,decrypted_data.get('statusDesc'))
             return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id='+txn_id)
+
+
+
 
