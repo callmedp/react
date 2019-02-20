@@ -86,7 +86,7 @@ class BoosterRecruiterAdmin(admin.ModelAdmin):
                         name = name.strip()
                         email = email.strip()
 
-                        if email not in email_added and email not in email_presents:
+                        if email not in email_added and email not in email_presents and email:
                             recruiters.append(name + '<' + email + '>')
                             email_added.append(email)
                         else:
