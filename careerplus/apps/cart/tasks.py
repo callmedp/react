@@ -13,7 +13,7 @@ from django.utils import timezone
 from celery.decorators import task
 
 # Local imports
-from order.functions import date_timezone_convert
+# from order.functions import date_timezone_convert
 from cart.models import Cart
 from emailers.email import SendMail
 from crmapi.functions import lead_create_on_crm
@@ -23,40 +23,24 @@ from linkedin.autologin import AutoLogin
 
 @task(name="create_lead_on_crm")
 def create_lead_on_crm(pk=None, source_type=None, name=None):
-    # logging.getLogger('error_log').error('inexecution')
-    try:
-        filter_dict = {}
-        if source_type == "cart_drop_out":
-            filter_dict.update({
-                "status": 2,
-                "owner_id__isnull": False,
-                "shipping_done": False,
-                "payment_page": False,
-                "pk": pk,
-            })
-            lead_creation_function(filter_dict=filter_dict, cndi_name=name)
+    cart_lead_creation_dict = {
+        "cart_drop_out": {"shipping_done": False,
+                          "payment_page": False,
+                          },
+        "shipping_drop_out": {"shipping_done": True,
+                              "payment_page": False,
+                             },
+        "payment_drop_out": {"shipping_done": True,
+                             "payment_page": True,
+                             }
 
-        if source_type == "shipping_drop_out":
-            filter_dict.update({
-                "status": 2,
-                "owner_id__isnull": False,
-                "shipping_done": True,
-                "payment_page": False,
-                "pk": pk,
-            })
-            lead_creation_function(filter_dict=filter_dict, cndi_name=name)
-
-        if source_type == "payment_drop_out":
-            filter_dict.update({
-                "status": 2,
-                "owner_id__isnull": False,
-                "shipping_done": True,
-                "payment_page": True,
-                "pk": pk,
-            })
-            lead_creation_function(filter_dict=filter_dict, cndi_name=name)
-    except Exception as e:
-        logging.getLogger('error_log').error("error occured in lead creation  %s" % str(e))
+    }
+    source_in_dict = cart_lead_creation_dict.get(source_type,None)
+    if not source_in_dict:
+        return
+    filter_dict = {'status': 2, 'owner_id__isnull': False, 'pk': pk}
+    filter_dict.update(source_in_dict)
+    lead_creation_function(filter_dict=filter_dict, cndi_name=name)
 
 
 def lead_creation_function(filter_dict=None, cndi_name=None):
@@ -73,37 +57,33 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
                 "country_code": cart_obj.country_code,
                 "lead_source": 2,
             })
-
             lead_type = 0
             total_amount = CartMixin().getPayableAmount(cart_obj)
             pay_amount = total_amount.get('total_payable_amount')
             extra_info.update({
                 'total_amount': round(pay_amount)
             })
-
             m_prods = cart_obj.lineitems.filter(
                 parent=None).select_related(
                 'product', 'product__vendor').order_by('-created')
-
             product_list = []
             addon_list = []
             variation_list = []
-            if m_prods.exists():
-                deltatasktime = timezone.now() - timedelta(seconds=settings.CART_DROP_OUT_LEAD)
-                # deltatasktime = date_timezone_convert(deltatasktime)  if timezone is needed
-                server_time = deltatasktime
-                prod = m_prods.filter(modified__lte=server_time).first()
-                counter = 0
-                if prod:
-                    # logging.getLogger('error_log').error('prdid'+ str(prod.id))
-                    logging.getLogger('info_log').info("lead creation process for product-"+str(prod.id))
-                    counter += 1
-                    product_name = prod.product.heading if prod.product.heading else prod.product.name
-                    data_dict.update({
-                                         "product": product_name,
-                                         "productid": prod.product.id
-                                     })
-                    m_prods = m_prods.exclude(id=prod.id)
+            deltatasktime = timezone.now() - timedelta(seconds=settings.CART_DROP_OUT_LEAD)
+            # deltatasktime = date_timezone_convert(deltatasktime)  if timezone is needed
+            server_time = deltatasktime
+            prod = m_prods.filter(modified__lte=server_time).first()
+            counter = 0
+            if prod:
+                # logging.getLogger('error_log').error('prdid'+ str(prod.id))
+                logging.getLogger('info_log').info("lead creation process for product-"+str(prod.id))
+                counter += 1
+                product_name = prod.product.heading if prod.product.heading else prod.product.name
+                data_dict.update({
+                                     "product": product_name,
+                                     "productid": prod.product.id
+                                 })
+                m_prods = m_prods.exclude(id=prod.id)
             for m_prod in m_prods:
                 # logging.getLogger('error_log').error('inside the loop')
 
