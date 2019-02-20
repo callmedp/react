@@ -23,6 +23,7 @@ from linkedin.autologin import AutoLogin
 
 @task(name="create_lead_on_crm")
 def create_lead_on_crm(pk=None, source_type=None, name=None):
+    # logging.getLogger('error_log').error('inexecution')
     try:
         filter_dict = {}
         if source_type == "cart_drop_out":
@@ -87,19 +88,36 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
             product_list = []
             addon_list = []
             variation_list = []
-            if m_prods:
-                deltatasktime = timezone.now() - timedelta(minutes=settings.CART_DROP_OUT_LEAD)
-                # server_time = date_timezone_convert(deltatasktime)
-                server_time=deltatasktime
+            if m_prods.exists():
+                deltatasktime = timezone.now() - timedelta(seconds=settings.CART_DROP_OUT_LEAD)
+                # deltatasktime = date_timezone_convert(deltatasktime)  if timezone is needed
+                server_time = deltatasktime
                 prod = m_prods.filter(modified__lte=server_time).first()
-                product_name = prod.product.heading if prod.product.heading else prod.product.name
-                data_dict.update({
-                                     "product": product_name,
-                                     "productid": prod.product.id
-                                 })
-                m_prods = m_prods.exclude(id=prod.id)
+                counter = 0
+                if prod:
+                    # logging.getLogger('error_log').error('prdid'+ str(prod.id))
+                    logging.getLogger('info_log').info("lead creation process for product-"+str(prod.id))
+                    counter += 1
+                    product_name = prod.product.heading if prod.product.heading else prod.product.name
+                    data_dict.update({
+                                         "product": product_name,
+                                         "productid": prod.product.id
+                                     })
+                    m_prods = m_prods.exclude(id=prod.id)
             for m_prod in m_prods:
+                # logging.getLogger('error_log').error('inside the loop')
+
+                if counter == 0:
+                    product_name = m_prod.product.heading if m_prod.product.heading else m_prod.product.name
+                    data_dict.update({
+                        "product": product_name,
+                        "productid": m_prod.product.id
+                    })
+                    counter += 1
+                    continue
                 product_name = m_prod.product.heading if m_prod.product.heading else m_prod.product.name
+                # logging.getLogger('error_log').error('innerprod'+str(m_prod.id))
+
                 product_list.append(product_name)
                 addons = cart_obj.lineitems.filter(
                     parent=m_prod,
