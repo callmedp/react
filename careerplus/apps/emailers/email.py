@@ -12,7 +12,7 @@ class SendMail():
         '''
             Base function to send email. If debug_mode is true the cc will be shinecp@hindustantimes.com
         '''
-        if settings.DEBUG:
+        if settings.DEBUG and settings.TEST_EMAIL:
             subject = "Test Mail " + subject
             to = ['priya.kharb@hindustantimes.com']
             cc = []
