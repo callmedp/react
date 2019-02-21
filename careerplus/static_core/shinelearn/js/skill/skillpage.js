@@ -127,8 +127,10 @@ $(function() {
         e.preventDefault();
         e.stopPropagation();
         var target = $(e.target);
+        var navBarHeight = $('#id_nav').outerHeight() || 0;
+        var stickyBarHeight = $(".cls_scroll_tab").outerHeight() || 0;
         if(target.hasClass('cls_tab_child')){
-          $('html,body').animate({scrollTop : $(''+target.attr('href')).offset().top - 30},1000);
+          $('html,body').animate({scrollTop : $(''+target.attr('href')).offset().top - navBarHeight - stickyBarHeight},1000);
         }
       });
 

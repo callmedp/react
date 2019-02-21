@@ -256,7 +256,7 @@
                           <div style="display:none">
                           <input type="hidden" name="oi_pk" value="{{obj.pk}}"></div>
                           </br>
-                          <button type="submit" class="btn btn-primary btn-xs"><i class="fa fa-upload"> Upload Document</i></button>
+                          <button type="button" id="uploadbutton"  class="btn btn-primary btn-xs"><i class="fa fa-upload"> Upload Document</i></button>
                         </form>
                       </td>
                       
@@ -339,7 +339,16 @@
         
 {% block js_block %}
   {{ block.super }}
+<script>
 
+
+
+$("#uploadbutton").click(function(e){
+   $('#uploadbutton').attr('disabled','true');
+   $('#resume-upload-form').submit();
+});
+
+</script>
   {% compress js %}
   <!-- Parsley Validate Scripts -->
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>

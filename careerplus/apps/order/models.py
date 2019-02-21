@@ -505,6 +505,15 @@ class OrderItem(AbstractAutoDate):
         status_dict = dict(WC_FLOW_STATUS)
         return status_dict.get(self.wc_status, '')
 
+    def save(self, *args, **kwargs):
+        created = not bool(getattr(self,"id"))
+        if created or self.oi_status == 4:
+            return super().save(*args, **kwargs)
+        orderitem = OrderItem.objects.filter(id=self.pk).first()
+        self.oi_status = 4 if orderitem.oi_status == 4 else self.oi_status
+        super().save(*args, **kwargs)  # Call the "real" save() method.
+
+
 
 class OrderItemOperation(AbstractAutoDate):
     coio_id = models.IntegerField(

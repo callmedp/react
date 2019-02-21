@@ -660,11 +660,11 @@ footer {
 	    background-color: #ced6da;
 	    font-size: $font-size+1;
 	    color: $primary-color;
-	    padding: 15px 0 25px 0;
+	    padding: 15px 0 15px 0;
 	    display: $db;
 	    overflow: hidden;
 	    clear: both;
-	    margin-top: 40px;
+	    margin-top: 20px;
 
     a, a:hover {
         color: $primary-color;
@@ -2316,7 +2316,11 @@ footer {
 		li {
 			display: block;
 			padding: 20px;
-			margin: 0 0 25px 0;
+			margin-bottom: 25px;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
 
 			.rating-review-box {
 				display: block;
@@ -2350,12 +2354,6 @@ footer {
 				font-weight: $font-weight+300;
 			}
 		}
-	}
-
-	.write-review {
-		position: absolute;
-		right: 0;
-		top: 95px;
 	}
 }
 
@@ -2502,7 +2500,6 @@ footer {
 	li {
 		display: block;
 		padding: 0 15px;
-		margin: 0 0 25px 0;
 
 		a {
 			display: block;

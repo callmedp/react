@@ -414,7 +414,8 @@ class PaymentShippingView(UpdateView, CartMixin):
                         "cell_phone": obj.mobile,
                         "name": obj.first_name + ' ' + obj.last_name,
                     })
-                    candidate_id = user_register(data=data)
+
+                    candidate_id, error = user_register(data=data)
                     obj.owner_id = candidate_id
 
                     if request.session.get('email'):
@@ -425,7 +426,7 @@ class PaymentShippingView(UpdateView, CartMixin):
                     obj.owner_id = request.session.get('candidate_id')
 
                 if not obj.owner_id:
-                    non_field_error = 'Internal error on shinelearning, please try again after sometimes.'
+                    non_field_error = error
                     form._errors[NON_FIELD_ERRORS] = form.error_class([non_field_error])
                     return self.form_invalid(form)
                 valid_form = self.form_valid(form)

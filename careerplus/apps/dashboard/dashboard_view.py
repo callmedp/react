@@ -585,7 +585,7 @@ class DashboardAcceptService(View):
                                 logging.getLogger('error_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
 
-                            upload_resume_to_shine(oi_pk=oi.pk)
+                            upload_resume_to_shine.delay(oi_pk=oi.pk)
 
                         elif oi.product.type_flow == 8 and (9 not in email_sets and 4 not in sms_sets):
                             send_email_task.delay(

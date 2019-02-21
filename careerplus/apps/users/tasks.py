@@ -59,7 +59,11 @@ def user_register(data={}, order=None):
         if candidate_id and order:
             order.candidate_id = candidate_id
             order.save()
-        return candidate_id
+        if user_resp['response'] == 'exist_user':
+            user_resp['error_message'] = user_resp["non_field_errors"][0]
+            return candidate_id, user_resp['error_message']
+        else:
+            return candidate_id, None
     except Exception as e:
         logging.getLogger('task_log').error(
             "%s error in user_registration task" % str(e))

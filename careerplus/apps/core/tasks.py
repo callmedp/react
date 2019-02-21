@@ -1,14 +1,14 @@
 import logging
 
 from django.conf import settings
-
+from celery.decorators import task
 from order.models import Order, OrderItem
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from core.api_mixin import UploadResumeToShine
 from users.tasks import user_register
 
 
-# @task(name="sync resume on shine")
+@task(name="sync resume on shine")
 def upload_resume_to_shine(oi_pk=None):
 	try:
 		oi = OrderItem.objects.get(pk=oi_pk)
