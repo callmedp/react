@@ -248,153 +248,79 @@
             </section>
 
              {% if prd_uget %}
-
             <!-- What’ll you get container -->
               <section class="container-fluid detail-box">
                 <div class="container">
                   <div class="row">
-                    <div id="get" class="col-sm-12 col-md-8 scroll ">
+                    <div id="get" class="col-sm-12 col-md-8">
 
                     <h2>{% if prd_service == 'course' %}Course{% else %}Service{% endif %}Highlights</h2>
 
-                        {{prd_uget|safe}}
-                   </div>
-                  </div>
-                </div>
-            </section>
-            {% endif %}
-
-               {% if product.attend %}
-             <section class="container-fluid detail-box">
-                <div class="container">
-                  <div class="row">
-                    <div id="attends" class="col-sm-12 col-md-8 scroll">
-                    <h2>Who Should Attend</h2>
-                        {{product.attend|safe}}
-                   </div>
-                  </div>
-                </div>
-            </section>
-            {% endif %}
-
-            {% if prd_desc %}
-                <section class="container-fluid detail-box">
-                <div class="container">
-                  <div class="row">
-                    <div id="course" class="col-sm-12 col-md-8 scroll">
-                        {%if product.visibility %}
-                      <h2>About {{prd_H1}}</h2>
-                        {%else%}
-                        <h2>Shine Advantage </h2>
-                        {%endif%}
-
-                        {% if prd_video %}
-                          <iframe width="100%" height="315" src="https://{{prd_video}}" frameborder="0" allowfullscreen></iframe>
-                        {% endif %}
-                            {{prd_desc|safe}}
-                     </div>
+                      {{prd_uget|safe}}
+                    </div>
                   </div>
                 </div>
               </section>
-      
             {% endif %}
 
+            {% if product.attend %}
+              <section class="container-fluid detail-box">
+              <div class="container">
+                <div class="row">
+                  <div id="attends" class="col-sm-12 col-md-8">
+                  <h2>Who Should Attend</h2>
+                      {{product.attend|safe}}
+                  </div>
+                </div>
+              </div>
+              </section>
+            {% endif %}
 
+            {% if prd_desc %}
+              <section class="container-fluid detail-box">
+              <div class="container">
+                <div class="row">
+                  <div id="course" class="col-sm-12 col-md-8">
+                      {%if product.visibility %}
+                    <h2>About {{prd_H1}}</h2>
+                      {%else%}
+                      <h2>Shine Advantage </h2>
+                      {%endif%}
 
+                      {% if prd_video %}
+                        <iframe width="100%" height="315" src="https://{{prd_video}}" frameborder="0" allowfullscreen></iframe>
+                      {% endif %}
+                          {{prd_desc|safe}}
+                    </div>
+                </div>
+              </div>
+              </section>
+            {% endif %}
 
+            {% if prd_service == 'course' %}
+              {% include "shop/partials/program_structure.html" %}
+            {% endif %}
 
-          {% if prd_service == 'course' %}
-            {% include "shop/partials/program_structure.html" %}
-          {% endif %}
+            {% include "shop/partials/delivery_flow.html" %}
 
-          {% include "shop/partials/delivery_flow.html" %}
-
-
-
-          {% include "shop/partials/reviews.html" %}
+            {% include "shop/partials/reviews.html" %}
             {% include "shop/partials/faq.html" %}
 
-
-      </div>
-      </section>
-      <!-- main parent2 section end -->      
+            {% if sqs.id not in linkedin_resume_services %}
+              {% block prdrecommended %}
+              <section class="container-fluid detail-box cls_hide_sticky_panel" id="heads">
+                <div class="container">
+                    <div class="row">
+                      <div class="col-sm-12"></div>
+                        <div id="recommended_product" style="display:block">
+                          <img id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" > 
+                        </div>
+                    </div>
+                </div>
+              </section>
+              {% endblock prdrecommended %}
+            {% endif %}
+        </div><!-- ./ row -->
+      </section><!-- main parent2 section end -->      
     {% endblock section2 %}
 
-
-    {% if sqs.id not in linkedin_resume_services %}
-      {% block prdrecommended %}
-<div id="heads"><section class="container-fluid detail-box recomend-product-bg cls_hide_sticky_panel">
-                     <div class="container">
-                     <div class="row">
-                     <div class="col-sm-12 mt-40">
-                     </div>
-<div id="recommended_product" style="display:block"><img id="loadingimg" src="{% static 'shinelearn/images/loader.gif' %}" > </div>
-                     </div>
-                         {% endblock prdrecommended %}
-    {% endif %}
-
-
-{% comment %}    
-<!--equiry form-->
-<div class="modal fade bs-example-modal-sm3" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="detailpage">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-     <div class="request-call call1">
-     <div>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <span class="modal-title" id="myModalLabel">Have a Query?</span>
-      </div>
-        <form id="callback_form" role="form" action="" method="get">
-          <div style='display:none'>
-            <input type='hidden' name='csrfmiddlewaretoken' value='{{csrf_token}}'/>
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" name="name" 
-            placeholder="Name" maxlength="100" value="{{request.session.full_name}}">
-            <span class="error-txt"></span>
-          </div>
-
-          <div class="form-group">
-            <div class="country-code">
-              <div class="custom-select">
-                <select class="form-control" name="country_code">
-                  {% for country in country_choices %}
-                      <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; --&nbsp;&nbsp;&nbsp;&nbsp; {{country.1}}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <input type="text" class="form-control" name="number" 
-              placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
-              <span class="error-txt"></span>
-            </div>
-          </div>
-          <div class="form-group">
-            <textarea class="form-control" rows="1" placeholder="Message" 
-            name="msg" maxlength="500"></textarea>
-            <span class="error-txt"></span>
-          </div>
-          {% if  prd_service == 'course' %}
-            <input type="hidden" name="lsource" value="2">
-          {% else %}
-            <input type="hidden" name="lsource" value="8">
-          {% endif %}
-          <input type="hidden" name="product" value="{{product.pk}}">
-          <input type="hidden" name="prd" value="{{product.heading}}">
-          <input type="hidden" name="path" value="{{product.get_absolute_url}}">
-  
-        </form>
-          <button type="button" id="id_callback" class="submit-button">
-            Submit
-          </button>
-        <div class="call-service">
-          <strong>
-            <span class="call-service-icon"></span>
-            {{ggn_contact}}
-          </strong>
-          9am to 7pm ist monday-saturday
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-{% endcomment %}

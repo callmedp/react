@@ -35,5 +35,19 @@
   }
 }
 
+header {
+  .breadcrumb {
+    color: $txt-white;
+
+    a{
+      color: $txt-white;
+    }
+  }
+
+  .active {
+    color: rgba($txt-white, .8);
+  }
+}
+
 
 

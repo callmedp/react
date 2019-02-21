@@ -21,11 +21,6 @@
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/shop/course-detail.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     {% endcompress %}
-<style>
-     .breadcrumb > li a{
-            color: #ffff;
-             }
-</style>
 
 {% endblock css_section %}
 {% block header %}
@@ -37,7 +32,7 @@
 
                 <div class="pull-right">
 
-                   <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
+                   <a class="icon-search pull-left" href="search-listing.html">search</a>
 
                    <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                 </div><!-- / Right side Icon ends here -->
@@ -82,14 +77,14 @@
                 {% if top_4_vendors %}
                     <h2 class="mb-0">Providers</h2>
                     <div class="slide-container">
-                        <ul class="skill-provider fixed cropcenterimg">
+                        <ul  id="cropcenterimg" class="skill-provider  cropcenterimg">
                         {% for top_4_vendor in top_4_vendors %}
                             {% if top_4_vendor.icon or top_4_vendor.image %}
                             <li class="cuad">
                                 <a class="box">
                                     <img src="{% if top_4_vendor.icon %}
                                         {{top_4_vendor.icon.url}}
-                                    {% elif top_4_vendor.image %}{{top_4_vendor.image.url}}{% endif %}" class="img-responsive">
+                                    {% elif top_4_vendor.image %}{{top_4_vendor.image.url}}{% endif %}">
                                 </a>
                             </li>
                             {% endif %}
@@ -244,11 +239,11 @@
 {% block js_section %}
     {{block.super}}
 <script>
-    $(function() {
-	CenterCropImage($('.cropcenterimg li'))
+    $(document).ready(function() {
+	CenterCropImage($('.cropcenterimg li a '))
 	$(window).resize(function(){
-		CenterCropImage($('.cropcenterimg li'))
-	})
+		CenterCropImage($('#cropcenterimg li a'))
+	});
 })
 
 /***CENTER CROP IMAGE***/

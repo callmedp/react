@@ -121,61 +121,65 @@
 
 			<!-- Importance in Market -->
             {% if category_obj.graph_image or api_data.job_count or api_data.jFArea %}
-			<div id="market" class="importance-market clearfix mb-40 scroll">
+			<div id="market" class="importance-market clearfix scroll">
 				<h2>Importance in Market</h2>
 				{% if category_obj.graph_image %}
-			    <div class="col-sm-6 box-panel">
+			    <div class="col-sm-12 box-panel mb-30">
 			    	<figure>
 			        	<img src="{{category_obj.graph_image.url}}" alt="Importance in Market" class="img-responsive">
 			    	</figure>
 			    </div>
 			    {% endif %} 
-				<div class="col-sm-6 market-growth">
+				<div class="col-sm-12 market-growth">
+					<div class="row">
 					{% if api_data.job_count %}
-						<div class="col-sm-12 box-panel">
-							<div class="media">
-							    <div class="media-left media-middle">
-							    	<span class="jobs-growth-icon"></span>
-							    </div>
-							    <div class="media-body">
-							    	<a target="_blank" href="https://www.shine.com/job-search/{{category_obj.name|slugify}}-jobs">
-							    		<strong>{{api_data.job_count}}</strong>
-							    	</a>
-							      	jobs in the market demanding this skill
-							    </div>
-							</div>
-							{% comment %}
-								
-							<div class="media">
-								<div class="media-left media-middle">
-							    	<span class="career-growth-icon"></span>
-							    </div>
-							    <div class="media-body">
-							    	<strong>Only 10%</strong>
-							      	candidates are six sigma certified
-							    </div>
-							</div>
-							{% endcomment %}
-							
-						</div>
+						<div class="col-sm-6">
+							<div class="box-panel" style="padding: 15px; min-height: 125px;">
+								<div class="media">
+									<div class="media-left media-middle">
+										<span class="jobs-growth-icon"></span>
+									</div>
+									<div class="media-body">
+										<a target="_blank" href="https://www.shine.com/job-search/{{category_obj.name|slugify}}-jobs">
+											<strong>{{api_data.job_count}}</strong>
+										</a>
+										  jobs in the market demanding this skill
+									</div>
+								</div>
+								{% comment %}
+								<div class="media">
+									<div class="media-left media-middle">
+										<span class="career-growth-icon"></span>
+									</div>
+									<div class="media-body">
+										<strong>Only 10%</strong>
+										  candidates are six sigma certified
+									</div>
+								</div>
+								{% endcomment %}
+							</div><!-- ./ box-panel -->
+						</div><!-- ./ col-sm-6 -->
 					{% endif %}
 					{% if api_data.jFArea %}
-					    <div class="col-sm-12 box-panel mt-20 job-require">
-					    	<strong>Jobs which require this skill in different functional areas
-					    	</strong>
-					    	{% for ls in api_data.jFArea %}
-					    	    {% if forloop.counter == 1 and ls %}
-					    		<a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{ls.0}}" target="_blank">{{ls.2}} ({{ls.1}})</a>
-					    		{% endif %}
-					    		{% if forloop.counter == 2 and ls %}
-					    		| <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{ls.0}}" target="_blank">{{ls.2}} ({{ls.1}})</a>
-					    		{% endif %}
-					    		{% if forloop.counter == 3 and ls %}
-					    		| <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{ls.0}}" target="_blank">{{ls.2}} ({{ls.1}})</a>
-					    		{% endif %}
-					    	{% endfor %} 
-					    </div>
+					    <div class="col-sm-6">
+					    	<div class="box-panel box-panel job-require" style="min-height: 125px;">
+								<strong>Jobs which require this skill in different functional areas
+								</strong>
+								{% for ls in api_data.jFArea %}
+									{% if forloop.counter == 1 and ls %}
+									<a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{ls.0}}" target="_blank">{{ls.2}} ({{ls.1}})</a>
+									{% endif %}
+									{% if forloop.counter == 2 and ls %}
+									| <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{ls.0}}" target="_blank">{{ls.2}} ({{ls.1}})</a>
+									{% endif %}
+									{% if forloop.counter == 3 and ls %}
+									| <a href="https://www.shine.com/job-search/quotes-{{slug}}-quotes-jobs?farea={{ls.0}}" target="_blank">{{ls.2}} ({{ls.1}})</a>
+									{% endif %}
+								{% endfor %} 
+							</div><!-- ./ box-panel -->
+					    </div><!-- ./ col-sm-6 -->
 					{% endif %}
+				</div>
 			    </div>
 			</div>
 			{% endif %}
