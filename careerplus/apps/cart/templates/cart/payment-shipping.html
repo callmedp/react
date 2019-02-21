@@ -96,7 +96,7 @@
         <form class="personal-details col-sm-12" method="post" action="" id="shipping_form">{% csrf_token %}
           <strong class="personal-details-heading ml-15">Personal details</strong>
           {% if form.non_field_errors %}
-               <span class="error">{{form.non_field_errors.0}}</span>
+               <span class="error" style="left:14px;">{{form.non_field_errors.0}}</span>
           {% endif %}
           <div class="form-group clearfix">
             <div class="col-sm-6 {% if form.first_name.errors %} error {% endif %}">
