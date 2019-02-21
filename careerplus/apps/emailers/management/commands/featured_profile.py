@@ -79,6 +79,7 @@ def featured_updated():
                         data.update({
                             "subject": 'Your Featured Profile Is Updated',
                             "username": obj.order.first_name,
+                            "product_timeline": obj.product.get_duration_in_day(),
                         })
 
                         if 72 not in email_sets:
