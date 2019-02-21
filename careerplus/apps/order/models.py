@@ -510,7 +510,7 @@ class OrderItem(AbstractAutoDate):
         if created or self.oi_status == 4:
             return super().save(*args, **kwargs)
         orderitem = OrderItem.objects.filter(id=self.pk).first()
-        self.oi_status = 4 if orderitem.oi_status == 4 else self.oi_status
+        self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         super().save(*args, **kwargs)  # Call the "real" save() method.
 
 
