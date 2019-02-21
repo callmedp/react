@@ -31,6 +31,10 @@
 				vertical-align: middle;
 				text-align: center;
 
+				&:focus {
+					outline: none;
+				}
+
 
 				// img {
 				// 	@include box (auto, auto, inline-block);
