@@ -1,6 +1,8 @@
 # In-built python
 import logging
 import json
+import datetime
+from datetime import timedelta
 from decimal import Decimal
 
 # Django imports
@@ -11,6 +13,7 @@ from django.utils import timezone
 from celery.decorators import task
 
 # Local imports
+# from order.functions import date_timezone_convert
 from cart.models import Cart
 from emailers.email import SendMail
 from crmapi.functions import lead_create_on_crm
@@ -20,39 +23,24 @@ from linkedin.autologin import AutoLogin
 
 @task(name="create_lead_on_crm")
 def create_lead_on_crm(pk=None, source_type=None, name=None):
-    try:
-        filter_dict = {}
-        if source_type == "cart_drop_out":
-            filter_dict.update({
-                "status": 2,
-                "owner_id__isnull": False,
-                "shipping_done": False,
-                "payment_page": False,
-                "pk": pk,
-            })
-            lead_creation_function(filter_dict=filter_dict, cndi_name=name)
+    cart_lead_creation_dict = {
+        "cart_drop_out": {"shipping_done": False,
+                          "payment_page": False,
+                          },
+        "shipping_drop_out": {"shipping_done": True,
+                              "payment_page": False,
+                             },
+        "payment_drop_out": {"shipping_done": True,
+                             "payment_page": True,
+                             }
 
-        if source_type == "shipping_drop_out":
-            filter_dict.update({
-                "status": 2,
-                "owner_id__isnull": False,
-                "shipping_done": True,
-                "payment_page": False,
-                "pk": pk,
-            })
-            lead_creation_function(filter_dict=filter_dict, cndi_name=name)
-
-        if source_type == "payment_drop_out":
-            filter_dict.update({
-                "status": 2,
-                "owner_id__isnull": False,
-                "shipping_done": True,
-                "payment_page": True,
-                "pk": pk,
-            })
-            lead_creation_function(filter_dict=filter_dict, cndi_name=name)
-    except Exception as e:
-        logging.getLogger('error_log').error("error occured in lead creation  %s" % str(e))
+    }
+    source_in_dict = cart_lead_creation_dict.get(source_type,None)
+    if not source_in_dict:
+        return
+    filter_dict = {'status': 2, 'owner_id__isnull': False, 'pk': pk}
+    filter_dict.update(source_in_dict)
+    lead_creation_function(filter_dict=filter_dict, cndi_name=name)
 
 
 def lead_creation_function(filter_dict=None, cndi_name=None):
@@ -69,62 +57,76 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
                 "country_code": cart_obj.country_code,
                 "lead_source": 2,
             })
-            if cart_obj:
-                lead_type = 0
-                total_amount = CartMixin().getPayableAmount(cart_obj)
-                pay_amount = total_amount.get('total_payable_amount')
-                extra_info.update({
-                    'total_amount': round(pay_amount)
-                })
-                m_prods = cart_obj.lineitems.filter(
-                    parent=None).select_related(
-                    'product', 'product__vendor').order_by('-created')
-                product_list = []
-                addon_list = []
-                variation_list = []
-                if m_prods:
-                    count = 0
-                    for m_prod in m_prods:
-                        count = count + 1
-                        product_name = m_prod.product.heading if m_prod.product.heading else m_prod.product.name
-                        if count == 1:
-                            data_dict.update({
-                                "product": product_name,
-                                "productid": m_prod.product.id
-                            })
-                        else:
-                            product_list.append(product_name)
-                            addons = cart_obj.lineitems.filter(
-                                parent=m_prod,
-                                parent_deleted=False
-                            ).select_related('product')
+            lead_type = 0
+            total_amount = CartMixin().getPayableAmount(cart_obj)
+            pay_amount = total_amount.get('total_payable_amount')
+            extra_info.update({
+                'total_amount': round(pay_amount)
+            })
+            m_prods = cart_obj.lineitems.filter(
+                parent=None).select_related(
+                'product', 'product__vendor').order_by('-created')
+            product_list = []
+            addon_list = []
+            variation_list = []
+            deltatasktime = timezone.now() - timedelta(seconds=settings.CART_DROP_OUT_LEAD)
+            # deltatasktime = date_timezone_convert(deltatasktime)  if timezone is needed
+            server_time = deltatasktime
+            prod = m_prods.filter(modified__lte=server_time).first()
+            counter = 0
+            if prod:
+                # logging.getLogger('error_log').error('prdid'+ str(prod.id))
+                logging.getLogger('info_log').info("lead creation process for product-"+str(prod.id))
+                counter += 1
+                product_name = prod.product.heading if prod.product.heading else prod.product.name
+                data_dict.update({
+                                     "product": product_name,
+                                     "productid": prod.product.id
+                                 })
+                m_prods = m_prods.exclude(id=prod.id)
+            for m_prod in m_prods:
+                # logging.getLogger('error_log').error('inside the loop')
 
-                            variations = cart_obj.lineitems.filter(
-                                parent=m_prod,
-                                parent_deleted=True
-                            ).select_related('product')
-                            if addons:
-                                for addon in addons:
-                                    addon = addon.product.heading if addon.product.heading else addon.product.name
-                                    addon_list.append(addon)
-                            if variations:
-                                for variation in variations:
-                                    variation = variation.product.heading if variation.product.heading else variation.product.name
-                                    variation_list.append(variation)
-
-                    extra_info.update({
-                        "parent": product_list,
-                        "addon": addon_list,
-                        "variation": variation_list
+                if counter == 0:
+                    product_name = m_prod.product.heading if m_prod.product.heading else m_prod.product.name
+                    data_dict.update({
+                        "product": product_name,
+                        "productid": m_prod.product.id
                     })
-                if m_prods.count() == 1:
-                    m_prod = m_prods[0]
-                    if m_prod.product.is_course:
-                        lead_type = 2
-                    else:
-                        lead_type = 1
-                elif m_prods.count() > 1:
+                    counter += 1
+                    continue
+                product_name = m_prod.product.heading if m_prod.product.heading else m_prod.product.name
+                # logging.getLogger('error_log').error('innerprod'+str(m_prod.id))
+
+                product_list.append(product_name)
+                addons = cart_obj.lineitems.filter(
+                    parent=m_prod,
+                    parent_deleted=False
+                ).select_related('product')
+
+                variations = cart_obj.lineitems.filter(
+                    parent=m_prod,
+                    parent_deleted=True
+                ).select_related('product')
+                for addon in addons:
+                    addon = addon.product.heading if addon.product.heading else addon.product.name
+                    addon_list.append(addon)
+                for variation in variations:
+                    variation = variation.product.heading if variation.product.heading else variation.product.name
+                    variation_list.append(variation)
+                extra_info.update({
+                    "parent": product_list,
+                    "addon": addon_list,
+                    "variation": variation_list
+                })
+            if m_prods and m_prods.count() == 1:
+                m_prod = m_prods[0]
+                if m_prod.product.is_course:
                     lead_type = 2
+                else:
+                    lead_type = 1
+            elif m_prods and m_prods.count() > 1:
+                lead_type = 2
 
             data_dict.update({
                 "extra_info": json.dumps(extra_info),
