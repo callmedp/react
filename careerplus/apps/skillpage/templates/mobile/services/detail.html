@@ -43,7 +43,24 @@
                 {{category_obj.name|title}} Programs
             {% endif %}
         </h1>
-        
+       			<ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
+
+                <li itemprop="itemListElement" itemscope
+			      itemtype="http://schema.org/ListItem">
+				    <a href='/' itemprop="item">Home
+                    </a>
+					<meta itemprop="name" content="Home" />
+				    <meta itemprop="position" content="1" />
+                </li>
+
+                <li style="color:white;" itemprop="itemListElement" itemscope
+			      itemtype="http://schema.org/ListItem">
+				    {{category_obj.name|title}}
+					<meta itemprop="name" content="{{category_obj.name}}" />
+				    <meta itemprop="position" content="2" />
+                </li>
+
+            </ol>
         <ul class="header-taging mt-10 w100fl">
             {% if top_3_prod.0 %}
             <li><a href="{{top_3_prod.0.pURL}}">{{top_3_prod.0.pNm}}</a></li>
