@@ -180,7 +180,7 @@ def pending_item_email(pk=None):
                             logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
-                elif oi.product.type_flow == 7:
+                elif oi.product.type_flow  in  [7, 15]:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
@@ -475,7 +475,7 @@ def process_mailer(pk=None):
                             logging.getLogger('error_log').error(
                                 "%s - %s" % (str(mail_type), str(e)))
 
-                elif oi.product.type_flow == 7:
+                elif oi.product.type_flow in [7, 15]:
                     data.update({
                         'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
                             settings.SITE_PROTOCOL, settings.SITE_DOMAIN,

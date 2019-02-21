@@ -162,7 +162,7 @@
 
                 {% endif %}
 
-            {% elif obj.product.type_flow == 7 %}
+            {% elif obj.product.type_flow == 7 or obj.product.type_flow == 15 %}
                 {% if obj.oi_status == 2 %}
                 <p><strong>Status:</strong> {{obj.get_user_oi_status}} - <a role="button" class="upload-resume">Upload Resume</a></p>
                 {% else %}

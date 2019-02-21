@@ -449,3 +449,8 @@ SMS_DRAFT_OI_MAPPING = {
     3: '104',
 
 }
+
+BOOSTER_RECRUITER_TYPE = (
+    (0, 'Resume Booster India'),
+    (1, 'Resume Booster International'),
+)
