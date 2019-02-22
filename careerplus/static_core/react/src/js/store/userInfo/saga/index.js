@@ -45,7 +45,7 @@ function* updateUserInfo(action) {
     try {
         const {userInfoReducer: {id}} = yield select();
         let {payload: {userDetails, resolve, reject}} = action;
-        var data = new FormData()
+        var data = new FormData();
         userDetails = {
             ...userDetails,
             "gender": userDetails['gender'].value,
@@ -147,8 +147,8 @@ function* saveUserProject(action) {
         const {userInfoReducer: {id, projects}} = yield select();
         let {payload: {userProject, resolve, reject}} = action;
 
-        const {skills} = userProject
-        const updatedSkills = (skills || []).map(skill => skill['value'])
+        const {skills} = userProject;
+        const updatedSkills = (skills || []).map(skill => skill['value']);
         userProject = {
             ...userProject,
             user: id,
@@ -248,6 +248,20 @@ function* fetchDefaultSkillList(action) {
     }
 }
 
+function* sendProductToCart(action) {
+    try {
+        let data = {
+            'prod_id': 2761,
+            'cart_type': 'cart',
+            'cv_id': 2764,
+            'req_options[]': 2764
+        };
+        const result = yield call(Api.addToCart, data);
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
 
 export default function* watchFetchHomeData() {
     yield takeLatest(Actions.SAVE_USER_DETAILS, saveUserInfo);
@@ -261,5 +275,6 @@ export default function* watchFetchHomeData() {
     yield takeLatest(Actions.SAVE_USER_SKILL, saveUserSkill);
     yield takeLatest(Actions.FETCH_SKILL_LIST, fetchSkillList);
     yield takeLatest(Actions.FETCH_DEFAULT_SKILL_LIST, fetchDefaultSkillList);
+    yield takeLatest(Actions.ADD_TO_CART, sendProductToCart);
 
 }

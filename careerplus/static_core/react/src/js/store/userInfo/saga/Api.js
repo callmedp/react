@@ -51,6 +51,13 @@ const fetchSkills = () => {
 };
 
 
+
+const addToCart = (data) => {
+    const url = `cart/add-to-cart/`;
+    return BaseApiService.post(`/${url}`, data, {'Content-Type': 'application/x-www-form-urlencoded'})
+}
+
+
 export const Api = {
     saveUserData,
     updateUserData,
@@ -61,5 +68,6 @@ export const Api = {
     saveUserProject,
     saveUserSkill,
     saveUserAchievement,
-    fetchSkills
+    fetchSkills,
+    addToCart
 };

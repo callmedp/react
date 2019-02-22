@@ -3,7 +3,7 @@ import {
     SAVE_USER_EDUCATION, SAVE_USER_CERTIFICATION, SAVE_USER_REFERENCE, SAVE_USER_PROJECT,
     SAVE_USER_ACHIEVEMENT, FETCH_SKILL_LIST, FETCH_DEFAULT_SKILL_LIST, ADD_PROJECT,
     GET_PROJECT_DETAIL, ADD_EXPERIENCE, ADD_EDUCATION, ADD_CERTIFICATION, ADD_ACHIEVEMENT,
-    ADD_REFERENCE, ADD_SKILL, SAVE_USER_SKILL
+    ADD_REFERENCE, ADD_SKILL, SAVE_USER_SKILL, ADD_TO_CART
 } from "./actionTypes";
 
 export const fetchHomeData = () => ({
@@ -112,6 +112,10 @@ export const addAchievement = (data) => ({
 export const fetchDefaultSkillList = (inputValue) => ({
     type: FETCH_DEFAULT_SKILL_LIST,
     inputValue
+});
+
+export const addToCart = () => ({
+    type: ADD_TO_CART
 });
 
 

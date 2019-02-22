@@ -9,22 +9,24 @@ const get = (url, headers = defaultHeaders) => {
         headers,
         method: 'GET',
     })
-        // .then(response => response.json())
+    // .then(response => response.json())
         .then(handleResponse)
 }
 
+const handleParams = (data) => Object.keys(data).map((key) => {
+    return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
+}).join('&');
 
 const post = (url, data, headers = defaultHeaders) => {
     return fetch(url, {
         headers,
         method: 'POST',
-        body: JSON.stringify(data)
+        body:  handleParams(data)
     })
         .then(handleResponse)
 }
 
 const put = (url, data, headers = defaultHeaders) => {
-    console.log('----', data)
     return fetch(url, {
         headers,
         method: 'PUT',

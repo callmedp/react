@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as action from '../../store/userInfo/actions'
 import {connect} from "react-redux";
 
 export class Pricing extends React.Component {
@@ -7,10 +8,17 @@ export class Pricing extends React.Component {
         super(props);
     }
 
+    redirectToCart() {
+        this.props.addToCart();
+        // window.location.href = '/cart'
+    }
+
     render() {
         return (
             <div>
-                Handle Pricing here
+                <span> Handle Pricing here</span>
+                <p>Welcome</p>
+                <button onClick={this.redirectToCart.bind(this)}>Go to Cart</button>
             </div>
         );
     }
@@ -22,7 +30,11 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {}
+    return {
+        'addToCart': () => {
+            return dispatch(action.addToCart())
+        }
+    }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Pricing);
