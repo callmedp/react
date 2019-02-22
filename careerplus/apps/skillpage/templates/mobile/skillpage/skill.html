@@ -239,12 +239,13 @@
 {% block js_section %}
     {{block.super}}
 <script>
+
 CenterCropImage($('.cropcenterimg li a'));
 
 /***CENTER CROP IMAGE***/
 function CenterCropImage(x) {
 	x.each(function () {
-		$(this).children('img').load(function () {
+		$(this).children('img').onload(function () {
 			ContentBox = $(this).parent()
 			PropBox = getProportions(ContentBox)
 			ImgtoResize = $(this)
