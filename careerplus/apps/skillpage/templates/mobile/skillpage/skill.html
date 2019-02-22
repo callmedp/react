@@ -245,7 +245,7 @@ CenterCropImage($('.cropcenterimg li a'));
 /***CENTER CROP IMAGE***/
 function CenterCropImage(x) {
 	x.each(function () {
-		$(this).children('img').onload(function () {
+		$(this).children('img').load(function () {
 			ContentBox = $(this).parent()
 			PropBox = getProportions(ContentBox)
 			ImgtoResize = $(this)
