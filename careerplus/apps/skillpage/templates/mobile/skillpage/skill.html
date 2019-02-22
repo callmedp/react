@@ -244,18 +244,16 @@ CenterCropImage($('.cropcenterimg li a'));
 
 /***CENTER CROP IMAGE***/
 function CenterCropImage(x) {
-	x.each(function () 
-	if ($(this).children('img').prop('complete')){
-		$(this).children('img').load(function () {
+	x.each(function ()
+	if ($(this).children('img').complete){
 			ContentBox = $(this).parent()
 			PropBox = getProportions(ContentBox)
 			ImgtoResize = $(this)
 			PropImg = getProportions(ImgtoResize)
 			ProportionHorizontal(ImgtoResize)
 
-		})
 		}
-		else{
+	else{
 		CenterCropImage($('.cropcenterimg li a'));
 		}
 
