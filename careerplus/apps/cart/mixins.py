@@ -437,66 +437,56 @@ class CartMixin(object):
         return total_amount, var_list
 
     # add the product to the cart in case of resume builder
-    def add_item_to_cart(self, main_products, products, cart_obj, cart_items, total_amount):
+    def add_item_to_cart(self, main_products: object, products: object, cart_obj: object, cart_items: object,
+                         total_amount: object) -> object:
 
         for m_prod in main_products:
             addon_list = []
             combo_list = []
             var_list = []
+            sqs = products.filter(id=m_prod.product.pk).first()
+            if not (sqs.exists()):
+                continue
+            main_id = m_prod.id
+            product_class = sqs.product_class.name
+            name = sqs.name
+            vendor_name = sqs.vendor.name
+            price = round(Decimal(sqs.get_price()), 2)
+            delivery_obj = m_prod.delivery_service
+            experience = ''
+            is_available = True
+            reference = m_prod.reference
 
-            try:
-                sqs = products.filter(id=m_prod.product.pk)
-                sqs = sqs[0]
-                main_id = m_prod.id
-                product_class = sqs.product_class.name
-                name = sqs.name
-                vendor_name = sqs.vendor.name
-                price = round(Decimal(sqs.get_price()), 2)
-                delivery_obj = m_prod.delivery_service
-                experience = ''
-                is_available = True
-                reference = m_prod.reference
+            variations = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=True).select_related('product')
 
-                variations = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=True).select_related('product')
+            if m_prod.no_process and product_class == 'course' and variations:
+                pass
+            elif is_available:
+                total_amount += price
 
-                if m_prod.no_process and product_class == 'course' and variations:
-                    pass
-                elif is_available:
-                    total_amount += price
+            if m_prod.delivery_service and is_available:
+                total_amount += m_prod.delivery_service.get_price()
 
-                if m_prod.delivery_service and is_available:
-                    total_amount += m_prod.delivery_service.get_price()
+            total_amount, var_list = self.get_variant_list(variations, total_amount, is_available, var_list)
 
-                # sqs_vars = json.loads(sqs.pVrs).get('var_list', [])
-                deleted = False
+            data = {
+                "id": main_id,
+                "li": m_prod,
+                "product_class": product_class,
+                "vendor": vendor_name,
+                "name": name,
+                "price": price,
+                "experience": experience,
+                "reference": reference,
+                "delivery_obj": delivery_obj,
+                "addons": addon_list,
+                "variations": var_list,
+                "combos": combo_list,
+                "is_available": is_available,
+                "delivery_types": m_prod.product.get_delivery_types(),
+            }
+            cart_items.append(data)
 
-                total_amount, var_list = self.get_variant_list(variations, total_amount, is_available, var_list)
-
-                if deleted and not cart_obj.lineitems.filter(parent=m_prod, parent_deleted=True).exists():
-                    m_prod.delete()
-                    continue
-
-                data = {
-                    "id": main_id,
-                    "li": m_prod,
-                    "product_class": product_class,
-                    "vendor": vendor_name,
-                    "name": name,
-                    "price": price,
-                    "experience": experience,
-                    "reference": reference,
-                    "delivery_obj": delivery_obj,
-                    "addons": addon_list,
-                    "variations": var_list,
-                    "combos": combo_list,
-                    "is_available": is_available,
-                    "delivery_types": m_prod.product.get_delivery_types(),
-                }
-                cart_items.append(data)
-
-            except Exception as e:
-                logging.getLogger('error_log').error("Unable to add item on cart %s " % str(e))
-                m_prod.delete()
         return cart_items, total_amount
 
     # use local db not solar for fetching items in case of resume builder
