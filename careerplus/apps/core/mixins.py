@@ -16,6 +16,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from core.library.gcloud.custom_cloud_storage import (GCPInvoiceStorage, GCPPrivateMediaStorage)
 from pathlib import Path
 from weasyprint import HTML
+import zipfile
 
 
 class TokenExpiry(object):
@@ -314,13 +315,27 @@ class InvoiceGenerate(object):
 
 class ResumeGenerate(object):
 
-    def save_order_resume_pdf(self, order=None):
-        if not order:
-            return None, None
+    def store_file(self, full_path, file_name, file):
+        if not settings.IS_GCP:
+            if not os.path.exists(settings.RESUME_TEMPLATE_DIR + full_path):
+                os.makedirs(settings.RESUME_TEMPLATE_DIR + full_path)
+            dest = open(
+                settings.RESUME_TEMPLATE_DIR + full_path + file_name, 'wb')
+            for chunk in file.chunks():
+                dest.write(chunk)
+            dest.close()
+        else:
+            GCPPrivateMediaStorage().save(settings.RESUME_TEMPLATE_DIR + full_path + file_name, file)
+
+    def handle_pdf(self, order=None, index=''):
 
         full_path = 'order/%s/' % str(order.pk)
         file_name = 'resumetemplateupload-' + str(order.number) + '-' \
-                    + timezone.now().strftime('%Y%m%d') + '.pdf'
+                    + timezone.now().strftime('%Y%m%d')
+        if index:
+            file_name += '-' + index + '.pdf'
+        else:
+            file_name += '.pdf'
 
         resume_template_full_path = settings.RESUME_TEMPLATE_DIR + full_path + file_name
 
@@ -343,15 +358,23 @@ class ResumeGenerate(object):
             file_name, pdf_file,
             content_type='application/pdf')
 
-        if not settings.IS_GCP:
-            if not os.path.exists(settings.RESUME_TEMPLATE_DIR + full_path):
-                os.makedirs(settings.RESUME_TEMPLATE_DIR + full_path)
-            dest = open(
-                settings.RESUME_TEMPLATE_DIR + full_path + file_name, 'wb')
-            for chunk in pdf_file.chunks():
-                dest.write(chunk)
-            dest.close()
-        else:
-            GCPPrivateMediaStorage().save(settings.RESUME_TEMPLATE_DIR + full_path + file_name, pdf_file)
+        self.store_file(full_path, file_name, pdf_file)
 
         return order, resume_template_full_path, resume_template_name
+
+    def save_order_resume_pdf(self, order=None, isCombo):
+        if not order:
+            return None, None
+        if not isCombo:
+            return self.handle_pdf(order)
+
+        for i in range(1, 6):
+            self.handle_pdf(str(order, i))
+
+        zip_file_path = 'order/%s/' % str(order.pk)
+        zip_file_name = 'resumetemplateupload-' + str(order.number) + '-' \
+                        + timezone.now().strftime('%Y%m%d') + '.zip'
+        with zipfile.ZipFile(zip_file_path + zip_file_name, 'w') as zip_file:
+            for root, dirs, files in os.walk(zip_file_path):
+                for name in files:
+                    print(os.path.join(root, name))
