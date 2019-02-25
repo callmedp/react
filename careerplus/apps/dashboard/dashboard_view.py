@@ -845,7 +845,7 @@ class DashboardResumeTemplateDownload(View):
         try:
             order_pk = request.POST.get('order_pk', None)
             order = Order.objects.get(pk=order_pk)
-            if not candidate_id or not order.status in [1, 3, 0] or not (order.email == email) \
+            if not candidate_id or not order.status in [1, 3] or not (order.email == email) \
                     or not (order.candidate_id == candidate_id):
                 return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 

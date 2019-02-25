@@ -315,6 +315,13 @@ class InvoiceGenerate(object):
 
 class ResumeGenerate(object):
 
+    # if file exists then return only the path , name hence don't overwrite it again
+    def isFileExist(self, file_path):
+        file = Path(settings.RESUME_TEMPLATE_DIR)
+
+        if file.is_file():
+            return True
+
     def store_file(self, full_path, file_name, file):
         if not settings.IS_GCP:
             if not os.path.exists(settings.RESUME_TEMPLATE_DIR + full_path):
@@ -327,66 +334,69 @@ class ResumeGenerate(object):
         else:
             GCPPrivateMediaStorage().save(settings.RESUME_TEMPLATE_DIR + full_path + file_name, file)
 
-    def handle_pdf(self, order=None, index=''):
+    def handle_content_type(self, order=None, content_type='pdf', index=''):
 
-        full_path = 'order/%s/' % str(order.pk)
+        file_dir = 'order/%s/' % str(order.pk)
         file_name = 'resumetemplateupload-' + str(order.number) + '-' \
                     + timezone.now().strftime('%Y%m%d')
-        if index:
-            file_name += '-' + index + '.pdf'
-        else:
-            file_name += '.pdf'
+        if index and content_type == 'pdf':
+            file_name += '-' + index + '.%s' % content_type
+        elif content_type == 'pdf':
+            file_name += '.%s' % content_type
 
-        resume_template_full_path = settings.RESUME_TEMPLATE_DIR + full_path + file_name
+        file_path = settings.RESUME_TEMPLATE_DIR + file_dir + file_name
 
-        resume_template_name = file_name
+        if self.isFileExist(file_path):
+            return order, file_path, file_name
 
-        # if file exists then return only the path , name hence don't overwrite it again
-        template_file = Path(settings.RESUME_TEMPLATE_DIR + full_path + file_name)
+        #  handle for pdf
+        if content_type == 'pdf':
 
-        if template_file.is_file():
-            return order, resume_template_full_path, resume_template_name
+            #  handle context here later
+            context_dict = {"STATIC_URL": settings.STATIC_URL, "SITE_DOMAIN": settings.SITE_DOMAIN,
+                            "SITE_PROTOCOL": settings.SITE_PROTOCOL}
 
-        #  handle context here later
-        context_dict = {}
+            pdf_file = InvoiceGenerate().generate_pdf(
+                context_dict=context_dict,
+                template_src='emailers/candidate/resume_test.html')
 
-        pdf_file = InvoiceGenerate().generate_pdf(
-            context_dict={"STATIC_URL": settings.STATIC_URL, "SITE_DOMAIN": settings.SITE_DOMAIN,
-                          "SITE_PROTOCOL": settings.SITE_PROTOCOL},
-            template_src='emailers/candidate/resume_test.html')
+            pdf_file = SimpleUploadedFile(
+                file_name, pdf_file,
+                content_type='application/pdf')
 
-        pdf_file = SimpleUploadedFile(
-            file_name, pdf_file,
-            content_type='application/pdf')
+            self.store_file(file_path, file_name, pdf_file)
 
-        self.store_file(full_path, file_name, pdf_file)
+        #  handle for zip
+        elif content_type == 'zip':
 
-        return order, resume_template_full_path, resume_template_name
+            zip_dir = 'order/%s-zip/' % str(order.pk)
+
+            file_path = settings.RESUME_TEMPLATE_DIR + zip_dir + file_name + '.zip'
+
+            if self.isFileExist(file_path):
+                return order, file_path, file_name
+
+            #  if directory does not exists
+            if not os.path.exists(settings.RESUME_TEMPLATE_DIR + zip_dir):
+                os.makedirs(settings.RESUME_TEMPLATE_DIR + zip_dir)
+
+            shutil.make_archive(settings.RESUME_TEMPLATE_DIR + zip_dir + file_name, 'zip',
+                                settings.RESUME_TEMPLATE_DIR + file_dir)
+
+            file_name += '.zip'
+
+        return order, file_path, file_name
 
     def save_order_resume_pdf(self, order=None, is_combo=False):
         if not order:
             return None, None
+
+        # check if pack is combo or not
         if not is_combo:
-            return self.handle_pdf(order)
-        files = []
+            return self.handle_content_type(order, content_type='pdf')
+
         for i in range(1, 6):
-            self.handle_pdf(order, str(i))
+            self.handle_content_type(order, content_type='pdf', index=str(i))
 
-        dir_path = 'order/%s/' % str(order.pk)
-        zip_file_path = 'order/%s-zip/' % str(order.pk)
-        zip_file_name = 'resumetemplateupload-' + str(order.number) + '-' \
-                        + timezone.now().strftime('%Y%m%d')
-        zip_file_full_path = settings.RESUME_TEMPLATE_DIR + zip_file_path + zip_file_name
-
-        #  if directory does not exists
-        if not os.path.exists(settings.RESUME_TEMPLATE_DIR + zip_file_path):
-            os.makedirs(settings.RESUME_TEMPLATE_DIR + zip_file_path)
-
-        shutil.make_archive(settings.RESUME_TEMPLATE_DIR + zip_file_path + zip_file_name, 'zip',
-                            settings.RESUME_TEMPLATE_DIR + dir_path)
-
-        #  add zip extension
-        zip_file_name += '.zip'
-        zip_file_full_path += '.zip'
-
-        return order, zip_file_full_path, zip_file_name,
+        # handle zip content type
+        return self.handle_content_type(order, content_type='zip')
