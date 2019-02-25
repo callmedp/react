@@ -1,6 +1,8 @@
+from typing import Tuple
+
 CANCELLED = 5
 OI_CANCELLED = 14
-STATUS_CHOICES = (
+STATUS_CHOICES: Tuple[Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str]] = (
     (0, "Unpaid"),
     (1, "Paid"),
     (2, "InProcess"),

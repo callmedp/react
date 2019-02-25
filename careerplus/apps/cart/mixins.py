@@ -445,7 +445,7 @@ class CartMixin(object):
             combo_list = []
             var_list = []
             sqs = products.filter(id=m_prod.product.pk).first()
-            if not (sqs.exists()):
+            if not (sqs):
                 continue
             main_id = m_prod.id
             product_class = sqs.product_class.name

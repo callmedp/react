@@ -13,8 +13,8 @@ from django.template.loader import get_template
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
 # from django.http import HttpResponse
-from core.library.gcloud.custom_cloud_storage import GCPInvoiceStorage
-
+from core.library.gcloud.custom_cloud_storage import (GCPInvoiceStorage, GCPPrivateMediaStorage)
+from pathlib import Path
 from weasyprint import HTML
 
 
@@ -25,9 +25,11 @@ class TokenExpiry(object):
           used for booster resume donload from link
 
         """
-        key_expires = datetime.datetime.today() + datetime.timedelta(settings.EMAIL_SMS_TOKEN_EXPIRY if not days else days)
+        key_expires = datetime.datetime.today() + datetime.timedelta(
+            settings.EMAIL_SMS_TOKEN_EXPIRY if not days else days)
 
-        inp_str = '{salt}|{email}|{oi_pk}|{dt}'.format(**{'salt': settings.ENCODE_SALT, 'email': email, 'oi_pk': oi_pk, 'dt': key_expires.strftime(settings.TOKEN_DT_FORMAT)})
+        inp_str = '{salt}|{email}|{oi_pk}|{dt}'.format(**{'salt': settings.ENCODE_SALT, 'email': email, 'oi_pk': oi_pk,
+                                                          'dt': key_expires.strftime(settings.TOKEN_DT_FORMAT)})
 
         ciph = XOR.new(settings.ENCODE_SALT)
         token = base64.urlsafe_b64encode(ciph.encrypt(inp_str))
@@ -50,7 +52,8 @@ class TokenGeneration(object):
     def encode(self, email, type, days=None):
         key_expires = datetime.datetime.today() + datetime.timedelta(
             settings.LOGIN_TOKEN_EXPIRY if not days else days)
-        inp_str = '{salt}|{email}|{type}|{dt}'.format(**{'salt': settings.ENCODE_SALT, 'email': email, 'type': type, 'dt': key_expires.strftime(settings.TOKEN_DT_FORMAT)})
+        inp_str = '{salt}|{email}|{type}|{dt}'.format(**{'salt': settings.ENCODE_SALT, 'email': email, 'type': type,
+                                                         'dt': key_expires.strftime(settings.TOKEN_DT_FORMAT)})
         print(inp_str)
         ciph = XOR.new(settings.ENCODE_SALT)
         token = base64.urlsafe_b64encode(ciph.encrypt(inp_str))
@@ -66,12 +69,13 @@ class TokenGeneration(object):
         dt = datetime.datetime.strptime(inp_list[3], settings.TOKEN_DT_FORMAT)
         return email, type, (dt >= datetime.datetime.now())
 
+
 class EncodeDecodeUserData(object):
 
     def encode(self, email, name, contact):
-        inp_str = '{salt}|{email}|{name}|{contact}|{dt}'.format(\
-                **{'salt': settings.ENCODE_SALT, 'email': email, \
-                'name': name, 'contact': contact,'dt':timezone.now()})
+        inp_str = '{salt}|{email}|{name}|{contact}|{dt}'.format( \
+            **{'salt': settings.ENCODE_SALT, 'email': email, \
+               'name': name, 'contact': contact, 'dt': timezone.now()})
 
         ciph = XOR.new(settings.ENCODE_SALT)
         token = base64.urlsafe_b64encode(ciph.encrypt(inp_str))
@@ -82,15 +86,15 @@ class EncodeDecodeUserData(object):
             token = base64.urlsafe_b64decode(str(token))
             ciph = XOR.new(settings.ENCODE_SALT)
             inp_str = ciph.decrypt(token).decode()
-        
+
         except Exception as e:
             logging.getLogger('error_log').error("%(msg)s : %(err)s" % \
-                    {'msg': 'Invalid Token for Decryption', 'err': e})
+                                                 {'msg': 'Invalid Token for Decryption', 'err': e})
             return None
-        
+
         inp_list = inp_str.split('|')
         if len(inp_list) < 3:
-            return None 
+            return None
         email = inp_list[1]
         name = inp_list[2]
         contact = inp_list[3]
@@ -261,7 +265,7 @@ class InvoiceGenerate(object):
                 "coupon_amount": coupon_amount,
                 "redeemed_reward_point": redeemed_reward_point,
                 "tax_rate_per": tax_rate_per,
-                
+
             })
 
         return invoice_data
@@ -283,8 +287,8 @@ class InvoiceGenerate(object):
                     context_dict=context_dict,
                     template_src='invoice/invoice-product.html')
                 full_path = 'order/%s/' % str(order.pk)
-                file_name = 'invoice-' + str(order.number) + '-'\
-                    + timezone.now().strftime('%Y%m%d') + '.pdf'
+                file_name = 'invoice-' + str(order.number) + '-' \
+                            + timezone.now().strftime('%Y%m%d') + '.pdf'
 
                 pdf_file = SimpleUploadedFile(
                     file_name, pdf_file,
@@ -292,7 +296,7 @@ class InvoiceGenerate(object):
 
                 if not settings.IS_GCP:
                     if not os.path.exists(settings.INVOICE_DIR + full_path):
-                        os.makedirs(settings.INVOICE_DIR +  full_path)
+                        os.makedirs(settings.INVOICE_DIR + full_path)
                     dest = open(
                         settings.INVOICE_DIR + full_path + file_name, 'wb')
                     for chunk in pdf_file.chunks():
@@ -306,3 +310,48 @@ class InvoiceGenerate(object):
         except Exception as e:
             logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
         return None, None
+
+
+class ResumeGenerate(object):
+
+    def save_order_resume_pdf(self, order=None):
+        if not order:
+            return None, None
+
+        full_path = 'order/%s/' % str(order.pk)
+        file_name = 'resumetemplateupload-' + str(order.number) + '-' \
+                    + timezone.now().strftime('%Y%m%d') + '.pdf'
+
+        resume_template_full_path = settings.RESUME_TEMPLATE_DIR + full_path + file_name
+
+        resume_template_name = file_name
+
+        # if file exists then return only the path , name hence don't overwrite it again
+        template_file = Path(settings.RESUME_TEMPLATE_DIR + full_path + file_name)
+
+        if template_file.is_file():
+            return order, resume_template_full_path, resume_template_name
+
+        #  handle context here later
+        context_dict = {}
+        pdf_file = InvoiceGenerate().generate_pdf(
+            context_dict={"STATIC_URL": settings.STATIC_URL, "SITE_DOMAIN": settings.SITE_DOMAIN,
+                          "SITE_PROTOCOL": settings.SITE_PROTOCOL},
+            template_src='emailers/candidate/resume_test.html')
+
+        pdf_file = SimpleUploadedFile(
+            file_name, pdf_file,
+            content_type='application/pdf')
+
+        if not settings.IS_GCP:
+            if not os.path.exists(settings.RESUME_TEMPLATE_DIR + full_path):
+                os.makedirs(settings.RESUME_TEMPLATE_DIR + full_path)
+            dest = open(
+                settings.RESUME_TEMPLATE_DIR + full_path + file_name, 'wb')
+            for chunk in pdf_file.chunks():
+                dest.write(chunk)
+            dest.close()
+        else:
+            GCPPrivateMediaStorage().save(settings.RESUME_TEMPLATE_DIR + full_path + file_name, pdf_file)
+
+        return order, resume_template_full_path, resume_template_name

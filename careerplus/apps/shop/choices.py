@@ -36,7 +36,7 @@ PRODUCT_VENDOR_CHOICES = (
     (1, 'Variation-Parent'),)
 
 
-PRODUCT_CHOICES = PRODUCT_VENDOR_CHOICES + ((2, 'Variation-Child'),
+PRODUCT_CHOICES: Tuple[Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str]] = PRODUCT_VENDOR_CHOICES + ((2, 'Variation-Child'),
     (3, 'Combo'),
     (4, 'No-Direct-Sell/Virtual'),
     (5, 'Downloadable'),)

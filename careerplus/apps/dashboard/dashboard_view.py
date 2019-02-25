@@ -11,7 +11,7 @@ from wsgiref.util import FileWrapper
 from django.http import (
     HttpResponse,
     HttpResponseRedirect,
-    HttpResponseForbidden,HttpResponseBadRequest)
+    HttpResponseForbidden, HttpResponseBadRequest)
 # from django.contrib import messages
 from django.views.generic import TemplateView, View
 from django.core.urlresolvers import reverse
@@ -32,7 +32,7 @@ from emailers.sms import SendSMS
 from wallet.models import Wallet
 from core.tasks import upload_resume_to_shine
 from core.api_mixin import ShineCandidateDetail
-from core.mixins import InvoiceGenerate
+from core.mixins import (InvoiceGenerate, ResumeGenerate)
 from console.decorators import Decorate, stop_browser_cache
 from search.helpers import get_recommendations
 from .dashboard_mixin import DashboardInfo
@@ -53,7 +53,7 @@ class DashboardView(TemplateView):
         if self.request.GET.get('oirate'):
             try:
                 oirate = ast.literal_eval(self.request.GET.get('oirate'))
-                context.update({"ref_item_id":oirate[0],"ref_rating":oirate[1]})
+                context.update({"ref_item_id": oirate[0], "ref_rating": oirate[1]})
             except Exception as e:
                 pass
         candidate_id = self.request.session.get('candidate_id', None)
@@ -116,12 +116,13 @@ class DashboardView(TemplateView):
                         try:
                             order = obj.order
                             file = ContentFile(response.content)
-                            file_name = 'resumeupload_shine_resume_' + str(order.pk) + '_' + str(obj.pk) + '_' + str(int(random()*9999)) \
-                                + '_' + timezone.now().strftime('%Y%m%d') + '.' + resume_extn
+                            file_name = 'resumeupload_shine_resume_' + str(order.pk) + '_' + str(obj.pk) + '_' + str(
+                                int(random() * 9999)) \
+                                        + '_' + timezone.now().strftime('%Y%m%d') + '.' + resume_extn
                             full_path = '%s/' % str(order.pk)
                             if not settings.IS_GCP:
                                 if not os.path.exists(settings.RESUME_DIR + full_path):
-                                    os.makedirs(settings.RESUME_DIR +  full_path)
+                                    os.makedirs(settings.RESUME_DIR + full_path)
                                 dest = open(
                                     settings.RESUME_DIR + full_path + file_name, 'wb')
                                 for chunk in file.chunks():
@@ -130,7 +131,7 @@ class DashboardView(TemplateView):
                             else:
                                 GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                         except Exception as e:
-                            logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
+                            logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e)))
                             continue
 
                         # obj.oi_resume.save(file_name, ContentFile(response.content))
@@ -183,7 +184,7 @@ class DashboardView(TemplateView):
 
 class DashboardMyorderView(TemplateView):
     template_name = 'dashboard/dashboard-order.html'
-    
+
     def get(self, request, *args, **kwargs):
         if request.session.get('candidate_id', None):
             return super(DashboardMyorderView, self).get(request, args, **kwargs)
@@ -233,7 +234,7 @@ class DashboardDetailView(TemplateView):
                 else:
                     return ''
             except Exception as e:
-                logging.getLogger('error_log').error('unable to fetch order item %s'%str(e))
+                logging.getLogger('error_log').error('unable to fetch order item %s' % str(e))
                 return ''
             return super(DashboardDetailView, self).get(request, args, **kwargs)
         else:
@@ -293,7 +294,7 @@ class DashboardCommentView(TemplateView):
                 else:
                     return ''
             except Exception as e:
-                logging.getLogger('error_log').error('unable to get comments %s'%str(e))
+                logging.getLogger('error_log').error('unable to get comments %s' % str(e))
                 return ''
             return super(DashboardCommentView, self).get(request, args, **kwargs)
         else:
@@ -322,11 +323,12 @@ class DashboardCommentView(TemplateView):
                         candidate_id=self.candidate_id,
                     )
             except Exception as e:
-                logging.getLogger('error_log').error('unable to create comment %s'%str(e))
+                logging.getLogger('error_log').error('unable to create comment %s' % str(e))
             redirect_url = reverse('dashboard:dashboard-comment') + '?oi_pk=%s' % (self.oi_pk)
             return HttpResponseRedirect(redirect_url)
         else:
             return HttpResponseForbidden()
+
 
 class DashboardFeedbackView(TemplateView):
     template_name = 'partial/myinbox-feedback.html'
@@ -341,19 +343,19 @@ class DashboardFeedbackView(TemplateView):
     def get(self, request, *args, **kwargs):
         self.candidate_id = request.session.get('candidate_id', None)
         self.oi_pk = request.GET.get('oi_pk')
-        self.rating=request.GET.get('rating',None)
+        self.rating = request.GET.get('rating', None)
 
         if request.is_ajax() and self.oi_pk and self.candidate_id:
             try:
                 self.oi = OrderItem.objects.select_related("order").get(pk=self.oi_pk)
                 if self.oi and self.oi.order.candidate_id == self.candidate_id and \
-                    self.oi.order.status in [1, 3] and self.oi.oi_status == 4 \
-                    and not self.oi.user_feedback:
+                        self.oi.order.status in [1, 3] and self.oi.oi_status == 4 \
+                        and not self.oi.user_feedback:
                     pass
                 else:
                     return HttpResponseBadRequest()
             except Exception as e:
-                logging.getLogger('error_log').error('unable to get order item object%s'%str(e))
+                logging.getLogger('error_log').error('unable to get order item object%s' % str(e))
                 return HttpResponseBadRequest()
             return super(DashboardFeedbackView, self).get(request, args, **kwargs)
         else:
@@ -390,7 +392,8 @@ class DashboardFeedbackView(TemplateView):
                 review = request.POST.get('review', '').strip()
                 rating = int(request.POST.get('rating', 1))
                 title = request.POST.get('title', '').strip()
-                if rating and self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
+                if rating and self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [
+                    1, 3]:
                     name = ''
                     if request.session.get('first_name'):
                         name += request.session.get('first_name')
@@ -432,7 +435,8 @@ class DashboardFeedbackView(TemplateView):
                         try:
                             SendMail().send(to_emails, mail_type, email_dict)
                         except Exception as e:
-                            logging.getLogger('error_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+                            logging.getLogger('error_log').error(
+                                "%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
 
                 else:
                     data['display_message'] = "select valid input for feedback"
@@ -446,7 +450,7 @@ class DashboardFeedbackView(TemplateView):
 
 
 class DashboardRejectService(View):
-    
+
     def post(self, request, *args, **kwargs):
         candidate_id = request.session.get('candidate_id', None)
         oi_pk = request.POST.get('oi_pk', None)
@@ -460,19 +464,20 @@ class DashboardRejectService(View):
                 oi = OrderItem.objects.select_related('order').get(pk=oi_pk)
                 if oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
                     if oi.oi_status in [24, 46]:
-                        if reject_file:    
+                        if reject_file:
                             try:
                                 order = oi.order
                                 file = reject_file
                                 filename = os.path.splitext(file.name)
-                                extention = filename[len(filename)-1] if len(
+                                extention = filename[len(filename) - 1] if len(
                                     filename) > 1 else ''
-                                file_name = 'draftreject_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(int(random()*9999)) \
-                                    + '_' + timezone.now().strftime('%Y%m%d') + extention
+                                file_name = 'draftreject_' + str(order.pk) + '_' + str(oi.pk) + '_' + str(
+                                    int(random() * 9999)) \
+                                            + '_' + timezone.now().strftime('%Y%m%d') + extention
                                 full_path = '%s/' % str(order.pk)
                                 if not settings.IS_GCP:
                                     if not os.path.exists(settings.RESUME_DIR + full_path):
-                                        os.makedirs(settings.RESUME_DIR +  full_path)
+                                        os.makedirs(settings.RESUME_DIR + full_path)
                                     dest = open(
                                         settings.RESUME_DIR + full_path + file_name, 'wb')
                                     for chunk in file.chunks():
@@ -482,8 +487,8 @@ class DashboardRejectService(View):
                                     GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                                 reject_file = full_path + file_name
                             except Exception as e:
-                                logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
-                                raise 
+                                logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e)))
+                                raise
                         last_oi_status = oi.oi_status
                         if oi.oi_status == 24:
                             oi.oi_status = 26
@@ -742,7 +747,7 @@ class DownloadQuestionnaireView(View):
 
 class DashboardMyWalletView(TemplateView):
     template_name = 'dashboard/dashboard-wallet.html'
-    
+
     def get(self, request, *args, **kwargs):
         if request.session.get('candidate_id', None):
             return super(DashboardMyWalletView, self).get(request, args, **kwargs)
@@ -805,7 +810,7 @@ class DashboardResumeDownload(View):
     def get(self, request, *args, **kwargs):
         candidate_id = request.session.get('candidate_id', None)
         email = request.session.get('email', None)
-            
+
         try:
             order_pk = kwargs.get('pk', None)
             order = Order.objects.get(pk=order_pk)
@@ -825,8 +830,42 @@ class DashboardResumeDownload(View):
                     return response
         except Exception as e:
             logging.getLogger('error_log').error("%s" % str(e))
-                        
+
         return HttpResponseRedirect(reverse('dashboard:dashboard'))
+
+
+class DashboardResumeTemplateDownload(View):
+
+    def post(self, request, *args, **kwargs):
+        import ipdb;
+        ipdb.set_trace();
+
+        candidate_id = request.session.get('candidate_id', None)
+        email = request.session.get('email', None)
+        try:
+            order_pk = request.POST.get('order_pk', None)
+            order = Order.objects.get(pk=order_pk)
+            if not candidate_id or not order.status in [1, 3, 0] or not (order.email == email) \
+                    or not (order.candidate_id == candidate_id):
+                return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
+
+            order, resume_template_full_path, resume_template_name = ResumeGenerate().save_order_resume_pdf(order=order)
+
+            if resume_template_full_path:
+                file_path = resume_template_full_path
+                if not settings.IS_GCP:
+                    file_path = resume_template_full_path
+                    fsock = FileWrapper(open(file_path, 'rb'))
+                else:
+                    fsock = GCPPrivateMediaStorage().open(file_path)
+                filename = resume_template_name
+                response = HttpResponse(fsock, content_type=mimetypes.guess_type(filename)[0])
+                response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
+                return response
+        except Exception as e:
+            logging.getLogger('error_log').error("%s" % str(e))
+
+        return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
 
 class DashboardCancelOrderView(View):
