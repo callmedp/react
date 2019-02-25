@@ -850,7 +850,7 @@ class DashboardResumeTemplateDownload(View):
                 return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
             order, resume_template_full_path, resume_template_name =\
-                ResumeGenerate().save_order_resume_pdf(order=order, true)
+                ResumeGenerate().save_order_resume_pdf(order=order, is_combo=True)
 
             if resume_template_full_path:
                 file_path = resume_template_full_path

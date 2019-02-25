@@ -1,7 +1,7 @@
 import datetime
 import base64
 import os
-import logging
+import logging, gzip, shutil
 
 from django.conf import settings
 from decimal import Decimal, ROUND_HALF_DOWN
@@ -349,6 +349,7 @@ class ResumeGenerate(object):
 
         #  handle context here later
         context_dict = {}
+
         pdf_file = InvoiceGenerate().generate_pdf(
             context_dict={"STATIC_URL": settings.STATIC_URL, "SITE_DOMAIN": settings.SITE_DOMAIN,
                           "SITE_PROTOCOL": settings.SITE_PROTOCOL},
@@ -362,19 +363,30 @@ class ResumeGenerate(object):
 
         return order, resume_template_full_path, resume_template_name
 
-    def save_order_resume_pdf(self, order=None, isCombo):
+    def save_order_resume_pdf(self, order=None, is_combo=False):
         if not order:
             return None, None
-        if not isCombo:
+        if not is_combo:
             return self.handle_pdf(order)
-
+        files = []
         for i in range(1, 6):
-            self.handle_pdf(str(order, i))
+            self.handle_pdf(order, str(i))
 
-        zip_file_path = 'order/%s/' % str(order.pk)
+        dir_path = 'order/%s/' % str(order.pk)
+        zip_file_path = 'order/%s-zip/' % str(order.pk)
         zip_file_name = 'resumetemplateupload-' + str(order.number) + '-' \
-                        + timezone.now().strftime('%Y%m%d') + '.zip'
-        with zipfile.ZipFile(zip_file_path + zip_file_name, 'w') as zip_file:
-            for root, dirs, files in os.walk(zip_file_path):
-                for name in files:
-                    print(os.path.join(root, name))
+                        + timezone.now().strftime('%Y%m%d')
+        zip_file_full_path = settings.RESUME_TEMPLATE_DIR + zip_file_path + zip_file_name
+
+        #  if directory does not exists
+        if not os.path.exists(settings.RESUME_TEMPLATE_DIR + zip_file_path):
+            os.makedirs(settings.RESUME_TEMPLATE_DIR + zip_file_path)
+
+        shutil.make_archive(settings.RESUME_TEMPLATE_DIR + zip_file_path + zip_file_name, 'zip',
+                            settings.RESUME_TEMPLATE_DIR + dir_path)
+
+        #  add zip extension
+        zip_file_name += '.zip'
+        zip_file_full_path += '.zip'
+
+        return order, zip_file_full_path, zip_file_name,
