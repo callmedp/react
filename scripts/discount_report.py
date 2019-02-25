@@ -20,6 +20,7 @@ from django.db.models import Sum
 #local imports
 
 #inter app imports
+from coupon.models import Coupon
 from payment.models import PaymentTxn
 from shop.choices import DURATION_DICT,EXP_DICT
 from order.models import Order,OrderItem,CouponOrder, RefundItem
@@ -77,33 +78,61 @@ if __name__=="__main__":
         order_discount = sum(order_items.values_list('discount_amount',flat=True))
         order_cost_price = sum(order_items.values_list('cost_price',flat=True))
         order_selling_price = sum(order_items.values_list('selling_price',flat=True))
-        price_without_wallet_discount = round(Decimal(order.total_incl_tax) + Decimal(order_discount * Decimal(1.18)),2)
+        price_without_wallet_discount = round(float(order.total_incl_tax) + float(order_discount) * float(1.18),2)
         
+        coupon_objs = Coupon.objects.filter(\
+                    id__in=order.couponorder_set.values_list('coupon',flat=True))
+        
+        forced_coupon_amount = 0
+        for obj in coupon_objs:
+            amount = float(obj.value) if obj.coupon_type == "flat" else \
+                float((obj.value*order.total_excl_tax) / 100)
+            forced_coupon_amount += amount
+
         for item in order_items:
             combo_parent = False
             item_selling_price = item.selling_price
+            if item.product.type_product == 0 and item_selling_price == 0 and not item.is_combo: 
+                item_selling_price = float((float(item.product.inr_price) - forced_coupon_amount)) * 1.18
+
             item_refund_request_list = RefundItem.objects.filter(oi_id=item.id,\
                     refund_request__status__in=[1,3,5,7,8,11])
             refund_amount = item_refund_request_list.first().amount if item_refund_request_list else 0
             
             if item.is_combo and item.parent:
-                parent_sum = item.parent.cost_price
-                actual_sum_of_child_combos = item.order.orderitems.filter(\
-                    parent=item.parent).aggregate(Sum('cost_price'))['cost_price__sum']
+                parent_sum = float(item.parent.cost_price)
+                if not parent_sum:
+                    #Assuming price remains unchanged
+                    parent_sum = float(item.parent.product.inr_price)
+                    order_discount = float(forced_coupon_amount)
+                
+                item_cost_price = float(item.cost_price)
+                actual_sum_of_child_combos = 0
+                child_combos = item.order.orderitems.filter(parent=item.parent)
+                
+                for child_combo in child_combos:
+                    child_cost_price = float(child_combo.cost_price)
+                    if not child_cost_price:
+                        child_cost_price = float(child_combo.product.inr_price)
+                    actual_sum_of_child_combos += child_cost_price
+                
+                if not item_cost_price:
+                    item_cost_price = float(item.product.inr_price)
+                
                 virtual_decrease_in_price = actual_sum_of_child_combos - parent_sum
-                virtual_decrease_part_of_this_item = virtual_decrease_in_price * (item.cost_price / actual_sum_of_child_combos)
-                actual_price_of_item_after_virtual_decrease = item.cost_price - virtual_decrease_part_of_this_item
+                virtual_decrease_part_of_this_item = virtual_decrease_in_price * (float(item_cost_price) / actual_sum_of_child_combos)
+                actual_price_of_item_after_virtual_decrease = float(item_cost_price) - virtual_decrease_part_of_this_item
                 
                 if order_discount > 0:
-                    combo_discount_amount = (order_discount / order.total_excl_tax) * actual_price_of_item_after_virtual_decrease
+                    combo_discount_amount = (float(order_discount) / float(order.total_excl_tax)) * actual_price_of_item_after_virtual_decrease
                     actual_price_of_item_after_virtual_decrease -= combo_discount_amount
 
-                item_selling_price = round((actual_price_of_item_after_virtual_decrease * Decimal(1.18)), 2)
+                item_selling_price = round((actual_price_of_item_after_virtual_decrease * 1.18), 2)
                 item_refund_request_list = RefundItem.objects.filter(oi_id=item.parent.id,\
                     refund_request__status__in=[1,3,5,7,8,11])
-                total_refund = item_refund_request_list.first().amount if item_refund_request_list else 0
+                total_refund = float(item_refund_request_list.first().amount) if item_refund_request_list else 0
                 if item.parent.selling_price:
-                    refund_amount = round(total_refund * (item_selling_price / item.parent.selling_price),2)
+                    refund_amount = round(total_refund * (item_selling_price / float(item.parent.selling_price)),2)
                 else:
                     refund_amount = 0
 
@@ -111,6 +140,11 @@ if __name__=="__main__":
                 combo_parent = True
                 item_selling_price = 0
                 refund_amount = 0
+            
+            total_items = item.order.orderitems.count()
+            if total_items == 1 and item_selling_price == 0:
+                item_selling_price = float(float(order.total_excl_tax) - forced_coupon_amount)*1.18
+
             try:
                 row_data = [
                     order.id,order.email,item.partner.name,order.date_placed.date(),\
@@ -119,8 +153,8 @@ if __name__=="__main__":
                     transaction_ids,item.id,item.product.name,item.product.heading,\
                     EXP_DICT.get(item.product.get_exp(),"N/A"), \
                     DURATION_DICT.get(item.product.get_duration(),"N/A"),order.get_status,\
-                    item.cost_price,order_discount,price_without_wallet_discount,order.total_incl_tax,\
-                    item_selling_price,item.cost_price,order.total_incl_tax,\
+                    item_cost_price,order_discount,price_without_wallet_discount,order.total_incl_tax,\
+                    item_selling_price,item_cost_price,order.total_incl_tax,\
                     coupon_code,txn_obj.get_payment_mode(),item.is_combo, combo_parent,item.is_variation,\
                     bool(item_refund_request_list),refund_amount,item.no_process
                 ]
