@@ -28,7 +28,7 @@ from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 #third party imports
 
 def get_file_obj(file_name_suffix):
-    file_name = "reports/discount_report_" + datetime.strftime(datetime.now(),"%Y_%m_%d") + \
+    file_name = "reports/learning_upsell_order_report_" + datetime.strftime(datetime.now(),"%Y_%m_%d") + \
              "_" + file_name_suffix + ".csv"
 
     if settings.IS_GCP:
@@ -43,11 +43,12 @@ if __name__=="__main__":
     today = datetime.now()
     edt = datetime(today.year,today.month,today.day,0,0,0)
     sdt = edt - timedelta(days=days_diff)
-    file_name_suffix = "daily" if days_diff == 1 else "monthly"
+    file_name_suffix = "weekly" if days_diff == 7 else "monthly"
     file_obj = get_file_obj(file_name_suffix)
 
     csv_writer = csv.writer(file_obj, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    csv_writer.writerow(["order_id","Email","Owner_name","Order_Date","Payment_Date","Payment Time",\
+    csv_writer.writerow(["order_id","Lead Type","CRM Lead Id","Email",\
+                "Owner_name","Order_Date","Payment_Date","Payment Time",\
                 "Last Payment Date","Last Payment Time","Sales_executive","Sales_TL",\
                 "Branch_Head","Transaction_ID","item_id","Product_Name",\
                 "Item_Name","Experience","Course Duration","Status",\
@@ -158,7 +159,8 @@ if __name__=="__main__":
 
             try:
                 row_data = [
-                    order.id,order.email,item.partner.name,order.date_placed.date(),\
+                    order.id,order.site,order.crm_lead_id,order.email,\
+                    item.partner.name,order.date_placed.date(),\
                     txn_obj.payment_date.date(),txn_obj.payment_date.time(),\
                     last_txn_obj.payment_date.date(),last_txn_obj.payment_date.time(),\
                     sales_user_info.get('executive',''),\
@@ -179,5 +181,3 @@ if __name__=="__main__":
                     "Discount Report | Order {} | {}".format(order.id,repr(e)))
                 continue
     file_obj.close()
-
-
