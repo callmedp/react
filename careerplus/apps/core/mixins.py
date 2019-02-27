@@ -16,6 +16,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from core.library.gcloud.custom_cloud_storage import (GCPInvoiceStorage, GCPPrivateMediaStorage)
 from pathlib import Path
 from weasyprint import HTML
+from PIL import Image
 import zipfile
 
 
@@ -271,13 +272,14 @@ class InvoiceGenerate(object):
 
         return invoice_data
 
-    def generate_pdf(self, context_dict={}, template_src=None):
+    def generate_pdf(self, context_dict: object = {}, template_src: object = None) -> object:
         if template_src:
             html_template = get_template(template_src)
 
             rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
 
             pdf_file = HTML(string=rendered_html).write_pdf()
+
             return pdf_file
 
     def save_order_invoice_pdf(self, order=None):
@@ -315,24 +317,40 @@ class InvoiceGenerate(object):
 
 class ResumeGenerate(object):
 
+    # common file generator method.
+    def generate_file(self, context_dict: object = {}, template_src: object = None, file_type='pdf') -> object:
+        if not template_src:
+            return None
+        html_template = get_template(template_src)
+
+        rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
+
+        if file_type == 'pdf':
+            file = HTML(string=rendered_html).write_pdf()
+        elif file_type == 'png':
+            file = HTML(string=rendered_html).write_png()
+
+        return file
+
     # if file exists then return only the path , name hence don't overwrite it again
-    def isFileExist(self, file_path):
+    def is_file_exist(self, file_path):
+
         file = Path(settings.RESUME_TEMPLATE_DIR)
 
         if file.is_file():
             return True
 
-    def store_file(self, full_path, file_name, file):
-        if not settings.IS_GCP:
-            if not os.path.exists(settings.RESUME_TEMPLATE_DIR + full_path):
-                os.makedirs(settings.RESUME_TEMPLATE_DIR + full_path)
-            dest = open(
-                settings.RESUME_TEMPLATE_DIR + full_path + file_name, 'wb')
-            for chunk in file.chunks():
-                dest.write(chunk)
-            dest.close()
-        else:
-            GCPPrivateMediaStorage().save(settings.RESUME_TEMPLATE_DIR + full_path + file_name, file)
+    def store_file(self, file_dir: object, file_name, file: object) -> object:
+
+        if settings.IS_GCP:
+            return GCPPrivateMediaStorage().save(settings.RESUME_TEMPLATE_DIR + file_dir, file)
+
+        if not os.path.exists(settings.RESUME_TEMPLATE_DIR + file_dir):
+            os.makedirs(settings.RESUME_TEMPLATE_DIR + file_dir)
+        dest = open(settings.RESUME_TEMPLATE_DIR + file_dir + file_name, 'wb')
+        for chunk in file.chunks():
+            dest.write(chunk)
+        dest.close()
 
     def handle_content_type(self, order=None, content_type='pdf', index=''):
 
@@ -343,10 +361,12 @@ class ResumeGenerate(object):
             file_name += '-' + index + '.%s' % content_type
         elif content_type == 'pdf':
             file_name += '.%s' % content_type
+        elif content_type == 'png':
+            file_name += '.%s' % content_type
 
         file_path = settings.RESUME_TEMPLATE_DIR + file_dir + file_name
 
-        if self.isFileExist(file_path):
+        if self.is_file_exist(file_path):
             return order, file_path, file_name
 
         #  handle for pdf
@@ -356,15 +376,17 @@ class ResumeGenerate(object):
             context_dict = {"STATIC_URL": settings.STATIC_URL, "SITE_DOMAIN": settings.SITE_DOMAIN,
                             "SITE_PROTOCOL": settings.SITE_PROTOCOL}
 
-            pdf_file = InvoiceGenerate().generate_pdf(
+            pdf_file = self.generate_file(
                 context_dict=context_dict,
-                template_src='emailers/candidate/resume_test.html')
+                template_src='emailers/candidate/resume_test.html',
+                file_type='pdf')
 
+            #  pdf file
             pdf_file = SimpleUploadedFile(
                 file_name, pdf_file,
                 content_type='application/pdf')
 
-            self.store_file(file_path, file_name, pdf_file)
+            self.store_file(file_dir, file_name, pdf_file)
 
         #  handle for zip
         elif content_type == 'zip':
@@ -373,7 +395,7 @@ class ResumeGenerate(object):
 
             file_path = settings.RESUME_TEMPLATE_DIR + zip_dir + file_name + '.zip'
 
-            if self.isFileExist(file_path):
+            if self.is_file_exist(file_path):
                 return order, file_path, file_name
 
             #  if directory does not exists
@@ -385,6 +407,39 @@ class ResumeGenerate(object):
 
             file_name += '.zip'
 
+        #  handle for jpg
+        elif content_type == 'png':
+
+            img_dir = 'order/%s-img/' % str(order.pk)
+
+            file_path = settings.RESUME_TEMPLATE_DIR + img_dir + file_name
+
+            #  handle context here later
+            context_dict = {"STATIC_URL": settings.STATIC_URL, "SITE_DOMAIN": settings.SITE_DOMAIN,
+                            "SITE_PROTOCOL": settings.SITE_PROTOCOL}
+
+            img_file = self.generate_file(
+                context_dict=context_dict,
+                template_src='emailers/candidate/resume_test.html',
+                file_type='png'
+            )
+
+            #  img file
+            img_file = SimpleUploadedFile(
+                file_name, img_file,
+                content_type='image/png')
+
+            self.store_file(img_dir, file_name, img_file)
+
+            # img = Image.open(file_path)
+            # rgb_im = img.convert('RGB')
+            #
+            # jpg_img_path = os.path.splitext(file_path)[0]
+            # jpg_img_path += '.jpg'
+            # rgb_im.save(jpg_img_path)
+            #
+            # self.store_file(img_dir, file_name, rgb_im)
+
         return order, file_path, file_name
 
     def save_order_resume_pdf(self, order=None, is_combo=False):
@@ -393,9 +448,11 @@ class ResumeGenerate(object):
 
         # check if pack is combo or not
         if not is_combo:
+            # self.handle_content_type(order, content_type='png')
             return self.handle_content_type(order, content_type='pdf')
 
         for i in range(1, 6):
+            # self.handle_content_type(order, content_type='png', index=str(i))
             self.handle_content_type(order, content_type='pdf', index=str(i))
 
         # handle zip content type
