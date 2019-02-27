@@ -137,6 +137,7 @@
                     <th class="column-title">Slug</th>
                     <th class="column-title">Status</th>
                     <th class="column-title">Publish Date</th>
+                    <th class="column-title">View on Site</th>
                   </tr>
                 </thead>
 
@@ -165,6 +166,11 @@
                             Not Published
                         {% endif %}
                       </td>
+                        <td>
+                             <a class="btn btn-info btn-xs" target="_blank" href="{{obj.get_absolute_url}}">
+                             <i class="fa fa-eye"></i>View</a>
+
+                        </td>
                     </tr>
                   {% endfor %}
                 </tbody>

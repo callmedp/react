@@ -4,7 +4,7 @@
 <h1 class="h1-head" itemprop="name">{{main_article.heading}}</h1>
 
 <div class="clearfix border-bottom pb-10 mb-10 fs-13">
-    <span class="editor" itemprop="author"><a href="/talenteconomy/authors/{{main_article.author.slug}}" title="{{main_article.author.name}}">{{main_article.author.name}}</a> <span class="spacer c-666">/</span> <span class="c-666" itemprop="datePublished">{{main_article.last_modified_on.date}}</span>
+    <span class="editor" itemprop="author"><a href="/talenteconomy/authors/{{main_article.author.slug}}" title="{{main_article.author.name}}">{{main_article.author.name}}</a> <span class="spacer c-666">/</span> <span class="c-666" itemprop="datePublished">{{main_article.publish_date.date}}</span>
     </span>
     <span class="view-forward pull-right mt-0">
         {% if main_article.comment_moderated > 0 %}

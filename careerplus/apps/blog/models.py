@@ -336,6 +336,8 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
             self.display_name = self.name
         if self.id:
             self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
+            blog_obj = Blog.objects.filter(id=self.id).first()
+            self.publish_date = self.publish_date if self.content == blog_obj.content else blog_obj.last_modified_on
         if not self.summary:
             try:
                 soup = BeautifulSoup(self.content, 'html.parser')
