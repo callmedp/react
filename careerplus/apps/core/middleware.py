@@ -2,6 +2,8 @@
 import logging
 import re
 import json
+import socket
+import ipaddress
 import urllib.parse
 from datetime import datetime, timedelta
 from django.utils import timezone
@@ -18,6 +20,10 @@ from core.api_mixin import AdServerShine, ShineCandidateDetail
 # local imports
 from shop.models import Skill, FunctionalArea
 from .utils import set_session_country
+
+
+from django.http import HttpResponseForbidden
+from django.conf import settings
 
 
 class UpgradedSetFlavourMiddleware(MiddlewareMixin, SetFlavourMiddleware):
@@ -309,3 +315,76 @@ class RemoveSessionCookieMiddleware:
             if response.remove_cookie:
                 response.delete_cookie('sessionid',  path='/')
         return response
+
+
+
+
+
+
+def is_valid_ip(ip_address):
+    """
+    Check Validity of an IP address
+    """
+    valid = True
+    try:
+        socket.inet_aton(ip_address.strip())
+    except:
+        valid = False
+    return valid
+
+
+def get_ip_address_from_request(request):
+    """
+    Makes the best attempt to get the client's real IP or return the loopback
+    """
+    ip_address = ''
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', '')
+    if x_forwarded_for and ',' not in x_forwarded_for:
+        if is_valid_ip(x_forwarded_for):
+            ip_address = x_forwarded_for.strip()
+    else:
+        ips = [ip.strip() for ip in x_forwarded_for.split(',')]
+        for ip in ips:
+            if not is_valid_ip(ip):
+                continue
+            else:
+                ip_address = ip
+                break
+
+    if not ip_address:
+        x_real_ip = request.META.get('HTTP_X_REAL_IP', '')
+        if x_real_ip:
+            if is_valid_ip(x_real_ip):
+                ip_address = x_real_ip.strip()
+    if not ip_address:
+        remote_addr = request.META.get('REMOTE_ADDR', '')
+        if remote_addr:
+            if is_valid_ip(remote_addr):
+                ip_address = remote_addr.strip()
+    if not ip_address:
+        ip_address = '127.0.0.1'
+    return ip_address
+
+
+class LocalIPDetectionMiddleware(object):
+    """
+   This Middleware detects the internal ip address
+    """
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        request_ip = get_ip_address_from_request(request)
+        logging.getLogger('info_log').info('request ip:{}'.format(request_ip))
+        ip_flag = False
+        for ip_range in settings.LOCAL_NETWORK_IPS_RANGE:
+            if ipaddress.ip_address(request_ip) in ipaddress.ip_network(ip_range):
+                ip_flag = True
+                break
+        if request_ip in settings.LOCAL_NETWORK_IPS:
+            ip_flag = True
+        request.ip_restricted = ip_flag
+        return self.get_response(request)
+
+
