@@ -49,7 +49,8 @@ if __name__=="__main__":
 
     csv_writer = csv.writer(file_obj, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     csv_writer.writerow(["order_id","Email","Owner_name","Order_Date","Payment_Date","Payment Time",\
-                "Sales_executive","Sales_TL","Branch_Head","Transaction_ID","item_id","Product_Name",\
+                "Last Payment Date","Last Payment Time","Sales_executive","Sales_TL",\
+                "Branch_Head","Transaction_ID","item_id","Product_Name",\
                 "Item_Name","Experience","Course Duration","Status",\
                 "Price of item on site according to order (without tax including context)",\
                 "Discount (includes wallet and coupon)","Price of order with no discount/wallet",\
@@ -61,7 +62,8 @@ if __name__=="__main__":
     transactions = PaymentTxn.objects.filter(status=1,payment_date__gte=sdt,payment_date__lte=edt)
     order_ids = list(transactions.values_list('order_id',flat=True))
     orders = Order.objects.filter(status__in=[1,3],id__in=order_ids).order_by('id')
-    logging.getLogger('info_log').info("Discount Report :: Total orders found - {}".format(orders.count()))
+    logging.getLogger('info_log').info("\
+        Discount Report :: Total orders found - {}".format(orders.count()))
 
     for order in orders:
         order_items = OrderItem.objects.filter(order=order)
@@ -71,6 +73,7 @@ if __name__=="__main__":
             sales_user_info = {}
         txn_obj_list = order.get_txns().filter(status=1)
         txn_obj = txn_obj_list.first()
+        last_txn_obj = txn_obj_list.order_by('-id').first()
         transaction_ids = ", ".join([x.txn for x in txn_obj_list])
         coupon_order = CouponOrder.objects.filter(order=order).first()
         coupon_code = coupon_order.coupon_code if coupon_order else ""
@@ -78,7 +81,8 @@ if __name__=="__main__":
         order_discount = sum(order_items.values_list('discount_amount',flat=True))
         order_cost_price = sum(order_items.values_list('cost_price',flat=True))
         order_selling_price = sum(order_items.values_list('selling_price',flat=True))
-        price_without_wallet_discount = round(float(order.total_incl_tax) + float(order_discount) * float(1.18),2)
+        price_without_wallet_discount = round(float(order.total_incl_tax) + \
+            float(order_discount) * float(1.18),2)
         
         coupon_objs = Coupon.objects.filter(\
                     id__in=order.couponorder_set.values_list('coupon',flat=True))
@@ -97,7 +101,8 @@ if __name__=="__main__":
 
             item_refund_request_list = RefundItem.objects.filter(oi_id=item.id,\
                     refund_request__status__in=[1,3,5,7,8,11])
-            refund_amount = item_refund_request_list.first().amount if item_refund_request_list else 0
+            refund_amount = item_refund_request_list.first().amount \
+                if item_refund_request_list else 0
             
             if item.is_combo and item.parent:
                 parent_sum = float(item.parent.cost_price)
@@ -120,19 +125,26 @@ if __name__=="__main__":
                     item_cost_price = float(item.product.inr_price)
                 
                 virtual_decrease_in_price = actual_sum_of_child_combos - parent_sum
-                virtual_decrease_part_of_this_item = virtual_decrease_in_price * (float(item_cost_price) / actual_sum_of_child_combos)
-                actual_price_of_item_after_virtual_decrease = float(item_cost_price) - virtual_decrease_part_of_this_item
+                virtual_decrease_part_of_this_item = virtual_decrease_in_price * \
+                    (float(item_cost_price) / actual_sum_of_child_combos)
+                actual_price_of_item_after_virtual_decrease = float(item_cost_price) - \
+                    virtual_decrease_part_of_this_item
                 
                 if order_discount > 0:
-                    combo_discount_amount = (float(order_discount) / float(order.total_excl_tax)) * actual_price_of_item_after_virtual_decrease
+                    combo_discount_amount = (float(order_discount) / \
+                        float(order.total_excl_tax)) * \
+                            actual_price_of_item_after_virtual_decrease
                     actual_price_of_item_after_virtual_decrease -= combo_discount_amount
 
                 item_selling_price = round((actual_price_of_item_after_virtual_decrease * 1.18), 2)
                 item_refund_request_list = RefundItem.objects.filter(oi_id=item.parent.id,\
                     refund_request__status__in=[1,3,5,7,8,11])
-                total_refund = float(item_refund_request_list.first().amount) if item_refund_request_list else 0
+                total_refund = float(item_refund_request_list.first().amount) \
+                    if item_refund_request_list else 0
+                
                 if item.parent.selling_price:
-                    refund_amount = round(total_refund * (item_selling_price / float(item.parent.selling_price)),2)
+                    refund_amount = round(total_refund * (item_selling_price / \
+                        float(item.parent.selling_price)),2)
                 else:
                     refund_amount = 0
 
@@ -148,7 +160,9 @@ if __name__=="__main__":
             try:
                 row_data = [
                     order.id,order.email,item.partner.name,order.date_placed.date(),\
-                    txn_obj.payment_date.date(),txn_obj.payment_date.time(),sales_user_info.get('executive',''),\
+                    txn_obj.payment_date.date(),txn_obj.payment_date.time(),\
+                    last_txn_obj.payment_date.date(),last_txn_obj.payment_date.time(),\
+                    sales_user_info.get('executive',''),\
                     sales_user_info.get('team_lead',''),sales_user_info.get('branch_head',''),\
                     transaction_ids,item.id,item.product.name,item.product.heading,\
                     EXP_DICT.get(item.product.get_exp(),"N/A"), \
@@ -162,7 +176,8 @@ if __name__=="__main__":
                 csv_writer.writerow(row_data)
 
             except Exception as e:
-                logging.getLogger('error_log').error("Discount Report | Order {} | {}".format(order.id,repr(e)))
+                logging.getLogger('error_log').error(\
+                    "Discount Report | Order {} | {}".format(order.id,repr(e)))
                 continue
     file_obj.close()
 
