@@ -160,6 +160,9 @@ urlpatterns += [
 
     url(r'^discount-report-download/$', 
         shop_view.DownloadDiscountReportView.as_view(), name='discount-report-download'),
+    
+    url(r'^upsell-report-download/$', 
+        shop_view.DownloadUpsellReportView.as_view(), name='upsell-report-download'),
 
     url(r'^faq/list/$',
         shop_view.ListFaqView.as_view(),
