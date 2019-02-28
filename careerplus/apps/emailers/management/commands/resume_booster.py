@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from order.models import OrderItem
 from core.mixins import TokenExpiry
-from emailers.tasks import send_email_task
+from emailers.tasks import send_booster_recruiter_mail_task
 from emailers.sms import SendSMS
 from partner.models import BoosterRecruiter
 
@@ -118,13 +118,13 @@ def booster():
         recruiter_data.update({"data": candidate_list})
         if candidate_list != []:
             recruiters = BoosterRecruiter.objects.get(type_recruiter=0).recruiter_list.split(',')
-            send_email_task(recruiters, mail_type, recruiter_data, ois_to_update=order_item_to_update_list)
+            send_booster_recruiter_mail_task.delay(recruiters, mail_type, recruiter_data, ois_to_update=order_item_to_update_list)
 
         recruiter_data.update({"data": international_booster_candidate_list})
 
         if international_booster_candidate_list != []:
             recruiters = BoosterRecruiter.objects.get(type_recruiter=1).recruiter_list.split(',')
-            send_email_task(recruiters, mail_type, recruiter_data, ois_to_update=order_item_to_update_list)
+            send_booster_recruiter_mail_task.delay(recruiters, mail_type, recruiter_data, ois_to_update=order_item_to_update_list)
 
     except Exception as e:
         logging.getLogger('error_log').error("%s" % (str(e)))
