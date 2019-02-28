@@ -4,6 +4,9 @@ import requests
 from django.conf import settings
 from emailers.email import SendMail
 from dateutil import relativedelta
+from emailers.email import SendMail
+from emailers.sms import SendSMS
+from django.utils import timezone
 
 
 def update_initiat_orderitem_sataus(order=None):
@@ -185,3 +188,47 @@ def date_diff(date1,date2):
     #        +str(datediff.minutes)+'-minutes'
     #only returning days difference
     return str(datediff.days)
+
+def close_resume_booster_ois(ois_to_update):
+    import ipdb; ipdb.set_trace();
+    from order.models import OrderItem
+    from emailers.tasks import send_email_task
+    for oi in OrderItem.objects.filter(id__in=ois_to_update):
+        email_sets = list(oi.emailorderitemoperation_set.all().values_list(
+            'email_oi_status', flat=True).distinct())
+        to_emails = [oi.order.get_email()]
+        candidate_data = {
+            "email": oi.order.get_email(),
+            "mobile": oi.order.get_mobile(),
+            'subject': 'Your resume has been shared with relevant consultants',
+            "username": oi.order.first_name,
+        }
+        try:
+            # send mail to candidate
+            if 93 not in email_sets:
+                mail_type = 'BOOSTER_CANDIDATE'
+                send_email_task(
+                    to_emails, mail_type, candidate_data,
+                    status=93, oi=oi.pk)
+            # send sms to candidate
+            SendSMS().send(
+                sms_type="BOOSTER_CANDIDATE", data=candidate_data)
+            last_oi_status = oi.oi_status
+            oi.oi_status = 4
+            oi.last_oi_status = 6
+            oi.closed_on = timezone.now()
+            oi.save()
+
+            # status as tuple (status, last_status)
+            oi_statuses = ((62, last_oi_status), (6, 62), (4, 6))
+
+            for status, last_status in oi_statuses:
+                oi.orderitemoperation_set.create(
+                    oi_status=status,
+                    last_oi_status=last_status,
+                    assigned_to=oi.assigned_to,
+                )
+            oi.emailorderitemoperation_set.create(email_oi_status=92)
+
+        except Exception as e:
+            logging.getLogger('error_log').error("%s" % (str(e)))

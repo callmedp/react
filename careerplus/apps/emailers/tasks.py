@@ -1,13 +1,15 @@
 import logging
 from celery.decorators import task
 from django.conf import settings
+from django.utils import timezone
+
 from emailers.email import SendMail
 from emailers.sms import SendSMS
 from order.models import Order
-
+from order.functions import close_resume_booster_ois
 
 @task(name="send_email_task")
-def send_email_task(to_emails, mail_type, email_dict, status=None, oi=None):
+def send_email_task(to_emails, mail_type, email_dict, status=None, oi=None, ois_to_update=None):
     try:
         SendMail().send(to_emails, mail_type, email_dict)
         if oi:
@@ -18,6 +20,10 @@ def send_email_task(to_emails, mail_type, email_dict, status=None, oi=None):
                 oi_item.emailorderitemoperation_set.create(
                     email_oi_status=status,
                     to_email=to_email, status=1)
+
+        if mail_type == 'BOOSTER_RECRUITER' and ois_to_update:
+            close_resume_booster_ois(ois_to_update)
+
     except Exception as e:
         logging.getLogger('error_log').error(
             "emailing sending failed %s - %s - %s" % (str(e), str(mail_type), str(to_emails)))
