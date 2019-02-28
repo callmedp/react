@@ -240,22 +240,17 @@
     {{block.super}}
 <script>
 
-CenterCropImage($('.cropcenterimg li a'));
-
 /***CENTER CROP IMAGE***/
 function CenterCropImage(x) {
-	x.each(function ()
-	if ($(this).children('img').complete){
+	x.each(function () {
+		$(this).children('img').load(function () {
 			ContentBox = $(this).parent()
 			PropBox = getProportions(ContentBox)
 			ImgtoResize = $(this)
 			PropImg = getProportions(ImgtoResize)
 			ProportionHorizontal(ImgtoResize)
 
-		}
-	else{
-		CenterCropImage($('.cropcenterimg li a'));
-		}
+		})
 
 	})
 }
@@ -289,9 +284,13 @@ function ProportionHorizontal(x) {
 <!--Himg=x.height()-->
 <!--Hcont=x.parent().height()-->
 
-<!--MarginTop=(Hcont-Himg)/2-->
-<!--x.css({'margin-top':MarginTop})-->
-<!--}-->
+
+
+
+$(document).ready(function() {
+CenterCropImage($('.cropcenterimg li a'));
+});
+
 </script>
 
     {% compress js %}
