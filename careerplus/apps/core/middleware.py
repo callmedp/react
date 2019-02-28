@@ -6,24 +6,21 @@ import socket
 import ipaddress
 import urllib.parse
 from datetime import datetime, timedelta
-from django.utils import timezone
-from crmapi.tasks import add_server_lead_task
-from django_mobile import set_flavour
 
 # django imports
 from django_mobile.middleware import SetFlavourMiddleware
 from django.utils.deprecation import MiddlewareMixin
 from django.conf import settings
-from users.mixins import UserMixin
-from core.api_mixin import AdServerShine, ShineCandidateDetail
+from django.conf import settings
+from django_mobile import set_flavour
+from django.utils import timezone
 
 # local imports
 from shop.models import Skill, FunctionalArea
 from .utils import set_session_country
-
-
-from django.http import HttpResponseForbidden
-from django.conf import settings
+from users.mixins import UserMixin
+from core.api_mixin import AdServerShine, ShineCandidateDetail
+from crmapi.tasks import add_server_lead_task
 
 
 class UpgradedSetFlavourMiddleware(MiddlewareMixin, SetFlavourMiddleware):
