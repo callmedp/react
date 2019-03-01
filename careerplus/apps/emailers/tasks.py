@@ -72,7 +72,7 @@ def send_booster_recruiter_mail_task(to_emails, mail_type, email_dict, ois_to_up
 
     failed_percentage = (failed_count / len(to_emails)) * 100
 
-    if failed_percentage > 90:
+    if failed_percentage > 10:
         subject = "Email couldn't send for " + str(len(ois_to_update)) + ' Orders'
         body = "Failed percenatge:- " + str(failed_percentage) + '\n Failed Email Count:- ' + str(failed_count)
         to = ['ritesh.bisht@hindustantimes.com', 'animesh.sharma@hindustantimes.com','vishal.gupat@hindustantimes.com']
