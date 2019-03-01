@@ -85,6 +85,7 @@ def send_booster_recruiter_mail_task(to_emails, mail_type, email_dict, ois_to_up
     if mail_type == 'BOOSTER_RECRUITER' and ois_to_update:
         close_resume_booster_ois(ois_to_update)
 
+    from order.models import OrderItem
     # send email to candiadates for all order items
     for oi in OrderItem.objects.filter(id__in=ois_to_update):
         email_sets = list(oi.emailorderitemoperation_set.all().values_list(

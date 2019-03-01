@@ -205,7 +205,7 @@ def close_resume_booster_ois(ois_to_update):
         if last_oi_status == 5:
             oi_statuses = ((62, last_oi_status), (6, 62), (4, 6))
         else:
-            oi_statuses = ((62, last_oi_status))
+            oi_statuses = ((62, last_oi_status),)
 
         for status, last_status in oi_statuses:
             oi.orderitemoperation_set.create(
