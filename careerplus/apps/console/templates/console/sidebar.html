@@ -249,28 +249,31 @@
     {% endif %}
 
     <h3>Orders</h3>
-             {% if perms.order.can_download_discount_report or perms.order.can_generate_compliance_report %}
-
+      {% if perms.order.can_download_discount_report or perms.order.can_generate_compliance_report or perms.order.can_download_upsell_report %}
       <ul class="nav side-menu">
-           <li><a><i class="fa fa fa-file-excel-o"></i> Reports <span class="fa fa-chevron-down"></span></a>
-                <ul class="nav child_menu">
+        <li><a><i class="fa fa fa-file-excel-o"></i> Reports <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
 
-        {% if perms.order.can_download_discount_report %}
-        <li>
-            <a href="{% url 'console:discount-report-download' %}"><i class="fa fa-edit"></i>Discount Report</a>
+            {% if perms.order.can_download_discount_report %}
+              <li>
+                  <a href="{% url 'console:discount-report-download' %}"><i class="fa fa-edit"></i>Discount Report</a>
+              </li>
+            {% endif %}
+            {% if perms.order.can_download_upsell_report %}
+              <li>
+                  <a href="{% url 'console:upsell-report-download' %}"><i class="fa fa-edit"></i>Upsell Report</a>
+              </li>
+            {% endif %}
+            {% if perms.order.can_generate_compliance_report %}
+              <li>
+                  <a href="{% url 'console:compliance-report' %}"><i class="fa fa-suitcase"></i>Compliance Report</a>
+              </li>
+            {% endif %}
+          </ul>
         </li>
-        {% endif %}
-          {% if perms.order.can_generate_compliance_report %}
-        <li>
-            <a href="{% url 'console:compliance-report' %}"><i class="fa fa-suitcase"></i>Compliance Report</a>
-        </li>
-        {% endif %}
-
-                </ul>
-           </li>
-
-</ul>
+      </ul>
       {% endif %}
+
           <ul class="nav side-menu">
         <li><a><i class="fa fa-list-alt"></i> Wallet <span class="fa fa-chevron-down"></span></a>
           <ul class="nav child_menu">
