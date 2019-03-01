@@ -59,31 +59,60 @@ def send_sms_for_base_task(mob=None, message=None, oi=None, status=None):
 
 
 @task(name="send_booster_recruiter_mail_task")
-def send_booster_recruiter_mail_task(to_emails, mail_type, email_dict, status=None, oi=None, ois_to_update=None):
+def send_booster_recruiter_mail_task(to_emails, mail_type, email_dict, ois_to_update=None):
     failed_count = 0
-    try:
-        for to_email in to_emails:
-            try:
-                send_email_task([to_email], mail_type, email_dict)
-            except:
-                failed_count += 1
-                continue
+    for to_email in to_emails:
+        try:
+            send_email_task([to_email], mail_type, email_dict)
+        except Exception as e:
+            failed_count += 1
+            logging.getLogger('error_log').error(
+                "emailing sending to recruiter failed  %s - %s - %s" % (str(e), str(mail_type), str(to_email)))
+            continue
 
-        failed_percentage = (failed_count / len(to_emails)) * 100
+    failed_percentage = (failed_count / len(to_emails)) * 100
 
-        if failed_percentage > 20:
-            subject = "Email couldn't send for " + str(len(ois_to_update)) + ' Orders'
-            body = "Failed percenatge:- " + str(failed_percentage) + '\n Failed Email Count:- ' + str(failed_count)
-            to = ['ritesh.bisht@hindustantimes.com', 'animesh.sharma@hindustantimes.com','vishal.gupat@hindustantimes.com']
-            headers = {'Reply-To': settings.REPLY_TO}
-            SendMail().base_send_mail(
-                subject, body, to=to, headers=headers, bcc=[settings.DEFAULT_FROM_EMAIL]
-            )
-            return
+    if failed_percentage > 20:
+        subject = "Email couldn't send for " + str(len(ois_to_update)) + ' Orders'
+        body = "Failed percenatge:- " + str(failed_percentage) + '\n Failed Email Count:- ' + str(failed_count)
+        to = ['ritesh.bisht@hindustantimes.com', 'animesh.sharma@hindustantimes.com','vishal.gupat@hindustantimes.com']
+        headers = {'Reply-To': settings.REPLY_TO}
+        SendMail().base_send_mail(
+            subject, body, to=to, headers=headers, bcc=[settings.DEFAULT_FROM_EMAIL]
+        )
+        return
 
-        if mail_type == 'BOOSTER_RECRUITER' and ois_to_update:
-            close_resume_booster_ois(ois_to_update)
+    if mail_type == 'BOOSTER_RECRUITER' and ois_to_update:
+        close_resume_booster_ois(ois_to_update)
 
-    except Exception as e:
-        logging.getLogger('error_log').error(
-            "emailing sending failed %s - %s - %s" % (str(e), str(mail_type), str(to_emails)))
+    # send email to candiadates for all order items
+    for oi in OrderItem.objects.filter(id__in=ois_to_update):
+        email_sets = list(oi.emailorderitemoperation_set.all().values_list(
+            'email_oi_status', flat=True))
+        to_emails = [oi.order.get_email()]
+        candidate_data = {
+            "email": oi.order.get_email(),
+            "mobile": oi.order.get_mobile(),
+            'subject': 'Your resume has been shared with relevant consultants',
+            "username": oi.order.first_name,
+        }
+        try:
+            # send mail to candidate
+            if email_sets.count(93) <= 2:
+                mail_type = 'BOOSTER_CANDIDATE'
+                send_email_task(
+                    to_emails, mail_type, candidate_data,
+                    status=93, oi=oi.pk)
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                "emailing sending to candidate failed %s - %s - %s" % (str(e), str(mail_type), str(to_emails)))
+
+        # send sms to candidate
+        try:
+            SendSMS().send(
+                sms_type="BOOSTER_CANDIDATE", data=candidate_data)
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                "sms sending to candidate failed %{}".format(str(e)))
+
+

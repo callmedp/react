@@ -506,12 +506,54 @@ class OrderItem(AbstractAutoDate):
         return status_dict.get(self.wc_status, '')
 
     def save(self, *args, **kwargs):
-        created = not bool(getattr(self,"id"))
-        if created or self.oi_status == 4:
-            return super().save(*args, **kwargs)
+        created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()
-        self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
-        super().save(*args, **kwargs)  # Call the "real" save() method.
+        last_oi_status = orderitem.oi_status
+        if created or self.oi_status == 4:
+            obj = super().save(*args, **kwargs)
+        else:
+            self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
+            obj = super().save(*args, **kwargs)  # Call the "real" save() method.
+
+        # for resume booster create orderitem
+        if self.product.type_flow in [7, 15] and obj.oi_status != last_oi_status:
+            if obj.oi_status == 5:
+                self.orderitemoperation_set.create(
+                    oi_draft=self.oi_draft,
+                    draft_counter=self.draft_counter,
+                    oi_status=self.oi_status,
+                    last_oi_status=self.last_oi_status,
+                    assigned_to=self.assigned_to,
+                )
+            else:
+                self.orderitemoperation_set.create(
+                    oi_status=self.oi_status,
+                    last_oi_status=last_oi_status,
+                    assigned_to=self.assigned_to,
+                )
+            email_sets = list(self.emailorderitemoperation_set.all().values_list(
+                'email_oi_status', flat=True))
+            to_emails = [self.order.get_email()]
+            candidate_data = {
+                "email": self.order.get_email(),
+                "mobile": self.order.get_mobile(),
+                'subject': 'Your resume has been shared with relevant consultants',
+                "username": self.order.first_name,
+            }
+            if obj.oi_status == 4:
+                from emailers.tasks import send_email_task
+                from emailers.sms import SendSMS
+                # send mail to candidate
+                if email_sets.count(93) <= 2:
+                    mail_type = 'BOOSTER_CANDIDATE'
+                    send_email_task(
+                        to_emails, mail_type, candidate_data,
+                        status=93, oi=self.pk)
+
+                    # send sms to candidate
+                    SendSMS().send(
+                        sms_type="BOOSTER_CANDIDATE", data=candidate_data)
+                self.emailorderitemoperation_set.create(email_oi_status=92)
 
 
 
@@ -562,6 +604,7 @@ class OrderItemOperation(AbstractAutoDate):
         return dict_status.get(self.oi_status)
 
 
+
 class Message(AbstractAutoDate):
     oi = models.ForeignKey(OrderItem, null=True)
     oio = models.ForeignKey(OrderItemOperation, null=True)
@@ -610,6 +653,8 @@ class EmailOrderItemOperation(AbstractAutoDate):
 
     def __str__(self):
         return '{}-{}'.format(str(self.oi), self.to_email)
+
+
 
 
 class SmsOrderItemOperation(AbstractAutoDate):
