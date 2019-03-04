@@ -20,6 +20,7 @@ from scheduler.models import Scheduler
 from linkedin.autologin import AutoLogin
 from core.mixins import EncodeDecodeUserData
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
+from order.functions import date_timezone_convert
 
 #third party imports
 from celery.decorators import task
@@ -424,10 +425,10 @@ def generate_compliance_report(task_id=None,start_date=None,end_date=None):
                 oi_row['AllocatedTo'] = orderitem.assigned_to
 
                 upload_date = orderitem.orderitemoperation_set.filter(oi_status=3,last_oi_status=2).first()
-                oi_row['ResumeUploadDate'] = ((upload_date.created).strftime('%m/%d/%Y %H:%M:%S')) if\
+                oi_row['ResumeUploadDate'] = (date_timezone_convert(upload_date.created).strftime('%m/%d/%Y %H:%M:%S')) if\
                     upload_date and upload_date.created else "N.A"
 
-                oi_row['AssignedDate'] = (orderitem.assigned_date.strftime('%m/%d/%Y %H:%M:%S')) if\
+                oi_row['AssignedDate'] = date_timezone_convert(orderitem.assigned_date).strftime('%m/%d/%Y %H:%M:%S') if\
                     orderitem.assigned_date else "N.A"
 
                 if orderitem_product.type_flow == 8:
@@ -437,19 +438,17 @@ def generate_compliance_report(task_id=None,start_date=None,end_date=None):
 
                 first_draft = orderitem.orderitemoperation_set.filter(**oi_filter_kwargs).first()
 
-                oi_row['FirstDraftDate'] = ((first_draft.created).strftime('%m/%d/%Y %H:%M:%S')) if \
+                oi_row['FirstDraftDate'] = (date_timezone_convert(first_draft.created).strftime('%m/%d/%Y %H:%M:%S')) if \
                     first_draft and first_draft.created else "N.A"
 
                 oi_row['TAT'] = date_diff(first_draft.created,orderitem.assigned_date) if \
                     first_draft and first_draft.created and orderitem.assigned_date else "N.A"
 
                 oi_row['WriterBased'] = "Yes" if orderitem_product.type_flow in [1,3,8,12,13] else "No"
-
                 orderitem_closed_date = orderitem.orderitemoperation_set.filter(oi_status=4).first()
-
-                oi_row['ClosedDate'] = (orderitem_closed_date.created).strftime('%m/%d/%Y %H:%M:%S') if orderitem_closed_date else "Open"
+                oi_row['ClosedDate'] = date_timezone_convert(orderitem_closed_date.created).strftime('%m/%d/%Y %H:%M:%S') if orderitem_closed_date else "Open"
                 process_order = order_info.welcomecalloperation_set.filter(wc_cat=21).first()
-                oi_row['WelcomeCallDate'] = process_order.created.strftime('%m/%d/%Y %H:%M:%S') if process_order else "N.A"
+                oi_row['WelcomeCallDate'] = date_timezone_convert(process_order.created).strftime('%m/%d/%Y %H:%M:%S') if process_order else "N.A"
 
                 csvwriter.writerow(oi_row)
                 count = count + 1
