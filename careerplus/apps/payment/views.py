@@ -71,7 +71,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         payment_dict = self.getPayableAmount(cart_obj=self.cart_obj)
         source_type = "payment_drop_out"
         candidate_id = request.session.get('candidate_id')
-        if self.cart_obj.owner_id == candidate_id:
+        if self.cart_obj.owner_id == candidate_id and not request.ip_restricted:
             first_name = request.session.get('first_name', '')
             last_name = request.session.get('last_name', '')
             name = "{}{}".format(first_name, last_name)

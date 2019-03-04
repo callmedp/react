@@ -124,6 +124,8 @@ MIDDLEWARE = [
     'core.middleware.LoginMiddleware',
     'core.middleware.TrackingMiddleware',
     'core.middleware.AmpMiddleware',
+    'core.middleware.LocalIPDetectionMiddleware',
+
 ]
 
 ROOT_URLCONF = 'careerplus.config.urls'
@@ -507,3 +509,7 @@ URL_MAPPING_TO_PRODUCT = {"resume-writing-services-1": ([1921,1922,1923,1924,32]
 
 
 }
+
+LOCAL_NETWORK_IPS_RANGE =[]
+
+LOCAL_NETWORK_IPS = ["127.0.0.1",]
