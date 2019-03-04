@@ -341,25 +341,19 @@ def get_ip_address_from_request(request):
             ip_address = x_forwarded_for.strip()
     else:
         ips = [ip.strip() for ip in x_forwarded_for.split(',')]
-        for ip in ips:
-            if not is_valid_ip(ip):
-                continue
-            else:
-                ip_address = ip
-                break
+        ip_address = next((ip for ip in ips if is_valid_ip(ip)), '')
 
     if not ip_address:
         x_real_ip = request.META.get('HTTP_X_REAL_IP', '')
-        if x_real_ip:
-            if is_valid_ip(x_real_ip):
-                ip_address = x_real_ip.strip()
+        if x_real_ip and is_valid_ip(x_real_ip):
+            ip_address = x_real_ip.strip()
+
     if not ip_address:
         remote_addr = request.META.get('REMOTE_ADDR', '')
-        if remote_addr:
-            if is_valid_ip(remote_addr):
-                ip_address = remote_addr.strip()
-    if not ip_address:
-        ip_address = '127.0.0.1'
+        if remote_addr and is_valid_ip(remote_addr):
+            ip_address = remote_addr.strip()
+
+    if not ip_address: return '127.0.0.1'
     return ip_address
 
 
@@ -379,8 +373,7 @@ class LocalIPDetectionMiddleware(object):
             if ipaddress.ip_address(request_ip) in ipaddress.ip_network(ip_range):
                 ip_flag = True
                 break
-        if request_ip in settings.LOCAL_NETWORK_IPS:
-            ip_flag = True
+        if request_ip in settings.LOCAL_NETWORK_IPS: ip_flag = True
         request.ip_restricted = ip_flag
         return self.get_response(request)
 
