@@ -415,7 +415,7 @@ function close_review() {
         skillsSet = {{ skills_set|safe }}
         funcAreaSet = {{ func_area_set|safe }}
         $('.searchbox-input').typeahead({
-            local: skillsSet
+            local: {{ search_context|safe }}
         });
     });
     </script>
