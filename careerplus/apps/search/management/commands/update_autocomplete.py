@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.core.management.base import BaseCommand
 
 from emailers.email import SendMail
-from shop.models import Skill, FunctionalArea, Product
+from shop.models import Skill, FunctionalArea, Product, Category
 from shine.core import ShineCandidateDetail
 from linkedin.autologin import AutoLogin
 from django.conf import settings
@@ -39,3 +39,9 @@ def update_search_autocomplete():
         redis_conn.sadd('product_set', product.heading)
     logging.getLogger('info_log').info(
         "{} products added".format(products.count()))
+    categories = Category.objects.filter(is_skill = True)
+    redis_conn.delete('categories_set')
+    for category in categories:
+        redis_conn.sadd('categories_set', category.name)
+    logging.getLogger('info_log').info(
+        "{} categories added".format(categories.count()))

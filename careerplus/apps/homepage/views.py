@@ -158,6 +158,7 @@ class HomePageView(TemplateView, MetadataMixin):
         skills_set = [s.decode() for s in redis_conn.smembers('skills_set')]
         context.update({'func_area_set': func_areas_set, 'skills_set': skills_set})
         context.update({"search_context": [p.decode() for p in redis_conn.smembers('product_set')]})
+        context.update({"categories_set": [p.decode() for p in redis_conn.smembers('categories_set')]})
         context.update(self.get_job_assistance_services())
         context.update(self.get_courses())
         context.update(self.get_testimonials())
