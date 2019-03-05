@@ -4,12 +4,17 @@ import {connect} from "react-redux";
 import * as actions from '../../../store/userInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
 import {renderField, required, datePicker, renderSelect, renderTextArea} from '../../../fieldLevelValidationForm';
+import PreviewResumeModal from "../../Modal/PreviewResume/previewResumeModal.jsx";
 
 export class Achievement extends React.Component {
     constructor(props) {
         super(props);
         const {userId, history} = props;
-        if (!userId) history.push('/resume-builder/register');
+        this.state = {
+            showModal: false,
+            html: ''
+        }
+        // if (!userId) history.push('/resume-builder/register');
 
     }
 
@@ -22,11 +27,31 @@ export class Achievement extends React.Component {
         });
         this.props.addAchievement({achievements: achievementList});
         reset();
+    }
+
+    async handleOpenModal() {
+
+        let html = await this.props.showPreview()
+
+        this.setState({
+            'html': html
+        })
+
+        this.setState({
+            'showModal': true
+        })
 
     }
 
+    handleCloseModal() {
+        this.setState({
+            'showModal': false
+        })
+    }
+
+
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, achievements, achievementValues, invalid, userId} = this.props;
+        const {error, handleSubmit, pristine, reset, submitting, achievements, achievementValues, invalid, userId, showPreview} = this.props;
         return (
             <div className="register login-signup-box">
                 <h1 className="modal-title">Add Your Awards</h1>
@@ -67,6 +92,11 @@ export class Achievement extends React.Component {
                             </button>
                         </div>
                         <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="button" onClick={this.handleOpenModal.bind(this)}>
+                                Preview
+                            </button>
+                        </div>
+                        <div className={'Button-parent'}>
                             <button className={'Submit-button'} type="submit" disabled={pristine || submitting}>
                                 Next
                             </button>
@@ -88,6 +118,9 @@ export class Achievement extends React.Component {
                         }
                     </div>
                 }
+                <PreviewResumeModal showModal={this.state.showModal} html={this.state.html}
+                                    closeModal={this.handleCloseModal.bind(this)}/>
+
             </div>
 
         );
@@ -120,7 +153,11 @@ const mapDispatchToProps = (dispatch) => {
         }),
         "addAchievement": (achievement) => {
             return dispatch(actions.addAchievement(achievement))
-        }
+        },
+        "showPreview": () => new Promise((resolve, reject) => {
+            return dispatch(actions.showResumePreview({resolve, reject}))
+        })
+
     }
 
 };

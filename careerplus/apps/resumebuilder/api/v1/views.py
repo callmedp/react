@@ -16,6 +16,8 @@ from resumebuilder.mixins import (SessionManagerMixin)
 # third party imports
 from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateAPIView, )
 from rest_framework.parsers import (FormParser, MultiPartParser)
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.response import Response
 
 
 class UserListCreateView(SessionManagerMixin, ListCreateAPIView):
@@ -233,3 +235,27 @@ class UserAchievementRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIVi
     def get_queryset(self):
         external_link_id = int(self.kwargs.get('pk'))
         return UserAchievement.objects.filter(id=external_link_id)
+
+
+class UserResumePreview(SessionManagerMixin, RetrieveUpdateAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'resume4.html'
+
+    def get(self, request):
+        import ipdb;
+        ipdb.set_trace();
+        user = User.objects.get(id=95)
+        extracurricular = user.extracurricular.split(',')
+        education = user.usereducation_set.all()
+        experience = user.userexperience_set.all()
+        skills = user.skill_set.all()
+        achievements = user.userachievement_set.all()
+        references = user.userreference_set.all()
+        projects = user.userproject_set.all()
+        certifications = user.usercertification_set.all()
+
+        return Response({'user': user, 'education': education, 'experience': experience, 'skills': skills,
+                         'achievements': achievements, 'references': references, 'projects': projects,
+                         'certifications': certifications, 'extracurricular': extracurricular})

@@ -263,6 +263,17 @@ function* sendProductToCart(action) {
     }
 }
 
+function* showResumePreview(action) {
+    try {
+        const {userInfoReducer: {id}} = yield select();
+        let {payload: {resolve, reject}} = action;
+        const result = yield call(Api.showResumePreview, id)
+        return resolve(result['data']);
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
 export default function* watchFetchHomeData() {
     yield takeLatest(Actions.SAVE_USER_DETAILS, saveUserInfo);
     yield takeLatest(Actions.UPDATE_USER_DETAILS, updateUserInfo);
@@ -276,5 +287,7 @@ export default function* watchFetchHomeData() {
     yield takeLatest(Actions.FETCH_SKILL_LIST, fetchSkillList);
     yield takeLatest(Actions.FETCH_DEFAULT_SKILL_LIST, fetchDefaultSkillList);
     yield takeLatest(Actions.ADD_TO_CART, sendProductToCart);
+    yield takeLatest(Actions.SHOW_RESUME_PREVIEW, showResumePreview);
+
 
 }

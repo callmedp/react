@@ -17,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
-        fields = ('id', 'user', 'name',)
+        fields = ('id', 'user', 'name', 'proficiency')
 
 
 class UserExperienceSerializer(serializers.ModelSerializer):

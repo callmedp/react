@@ -74,7 +74,7 @@ const routes = [
                 component: ReferenceContainer
             },
             {
-                path:'/resume-builder/pricing',
+                path: '/resume-builder/pricing',
                 component: PricingContainer
             }
         ]

@@ -42,7 +42,7 @@ const saveUserAchievement = (data) => {
 
 const updateUserData = (data, userId) => {
     const url = `users/${userId}/`;
-    return BaseApiService.put(`http://127.0.0.1:8000/api/v1/resume/${url}`, data, {});
+    return BaseApiService.put(`http://127.0.0.1:8000/api/v1/resume/${url}`, data, {}, false);
 };
 
 const fetchSkills = () => {
@@ -51,11 +51,16 @@ const fetchSkills = () => {
 };
 
 
-
 const addToCart = (data) => {
     const url = `cart/add-to-cart/`;
-    return BaseApiService.post(`/${url}`, data, {'Content-Type': 'application/x-www-form-urlencoded'})
-}
+    return BaseApiService.post(`/${url}`, data, {'Content-Type': 'application/x-www-form-urlencoded'}, false)
+};
+
+
+const showResumePreview = (userId) => {
+    const url = `preview/${userId}`;
+    return BaseApiService.get(`http://127.0.0.1:8000/api/v1/resume/${url}`,undefined, true)
+};
 
 
 export const Api = {
@@ -69,5 +74,6 @@ export const Api = {
     saveUserSkill,
     saveUserAchievement,
     fetchSkills,
-    addToCart
+    addToCart,
+    showResumePreview
 };

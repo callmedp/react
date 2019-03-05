@@ -16,6 +16,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from core.library.gcloud.custom_cloud_storage import (GCPInvoiceStorage, GCPPrivateMediaStorage)
 from pathlib import Path
 from weasyprint import HTML
+from resumebuilder.models import User
 from PIL import Image
 import zipfile
 
@@ -278,7 +279,7 @@ class InvoiceGenerate(object):
 
             rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
 
-            pdf_file = HTML(string=rendered_html).write_pdf()
+            pdf_file = cp(string=rendered_html).write_pdf()
 
             return pdf_file
 
@@ -318,7 +319,8 @@ class InvoiceGenerate(object):
 class ResumeGenerate(object):
 
     # common file generator method.
-    def generate_file(self, context_dict: object = {}, template_src: object = None, file_type='pdf') -> object:
+    def generate_file(self, context_dict: object = {}, template_src: object = None,
+                      file_type: object = 'pdf') -> object:
         if not template_src:
             return None
         html_template = get_template(template_src)
@@ -371,10 +373,22 @@ class ResumeGenerate(object):
 
         #  handle for pdf
         if content_type == 'pdf':
+            user = User.objects.get(id=95)
+            extracurricular = user.extracurricular.split(',')
+            education = user.usereducation_set.all()
+            experience = user.userexperience_set.all()
+            skills = user.skill_set.all()
+            achievements = user.userachievement_set.all()
+            references = user.userreference_set.all()
+            projects = user.userproject_set.all()
+            certifications = user.usercertification_set.all()
 
             #  handle context here later
             context_dict = {"STATIC_URL": settings.STATIC_URL, "SITE_DOMAIN": settings.SITE_DOMAIN,
-                            "SITE_PROTOCOL": settings.SITE_PROTOCOL}
+                            "SITE_PROTOCOL": settings.SITE_PROTOCOL, 'user': user, 'education': education,
+                            'experience': experience, 'skills': skills,
+                            'achievements': achievements, 'references': references, 'projects': projects,
+                            'certifications': certifications, 'extracurricular': extracurricular}
 
             pdf_file = self.generate_file(
                 context_dict=context_dict,
@@ -420,7 +434,7 @@ class ResumeGenerate(object):
 
             img_file = self.generate_file(
                 context_dict=context_dict,
-                template_src='emailers/candidate/resume_test.html',
+                template_src='emailers/candidate/index.html',
                 file_type='png'
             )
 

@@ -4,39 +4,41 @@ const defaultHeaders = {
 
 // todo make seperate function for fetch request
 
-const get = (url, headers = defaultHeaders) => {
+const get = (url, headers = defaultHeaders, isFetchingHTML = false) => {
     return fetch(url, {
         headers,
         method: 'GET',
     })
     // .then(response => response.json())
-        .then(handleResponse)
+        .then(async (response) => {
+            return await handleResponse(response, isFetchingHTML)
+        })
 }
 
 const handleParams = (data) => Object.keys(data).map((key) => {
     return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
 }).join('&');
 
-const post = (url, data, headers = defaultHeaders) => {
+const post = (url, data, headers = defaultHeaders, isStringify = true) => {
     return fetch(url, {
         headers,
         method: 'POST',
-        body:  handleParams(data)
+        body: isStringify ? JSON.stringify(data) : handleParams(data)
     })
         .then(handleResponse)
 }
 
-const put = (url, data, headers = defaultHeaders) => {
+const put = (url, data, headers = defaultHeaders, isStringify = true) => {
     return fetch(url, {
         headers,
         method: 'PUT',
-        body: data
+        body: isStringify ? JSON.stringify(data) : data
     })
         .then(handleResponse)
 }
 
 
-async function handleResponse(response) {
+async function handleResponse(response, isFetchingHTML) {
     // handle all the status and conditions here
     if (response['ok'] === false) {
         let message = '';
@@ -50,7 +52,7 @@ async function handleResponse(response) {
             status: response['status'],
         }
     } else {
-        let result = await response.json();
+        let result = isFetchingHTML ? await response.text() : await response.json();
         return {data: result};
     }
 }

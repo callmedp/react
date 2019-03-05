@@ -15,6 +15,7 @@ class UserProfile(AbstractAutoDate):
     image = models.FileField(upload_to='users/', null=True, blank=True)
     gender = models.CharField('Gender', choices=(('M', 'Male'), ('F', 'Female'), ('O', 'Others')), max_length=1,
                               blank=True, null=True)
+    extracurricular = models.CharField('Extra Curricular', max_length=200, blank=True, null=True)
     extra_info = models.TextField('Extra Information', blank=True, null=True)
 
     class Meta:
@@ -29,6 +30,7 @@ class User(UserProfile):
 
 class Skill(AbstractAutoDate):
     name = models.CharField('Skill Name', max_length=100)
+    proficiency = models.IntegerField('Proficiency', default=5)
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
 
     def __str__(self):

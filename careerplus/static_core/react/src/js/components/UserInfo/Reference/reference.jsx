@@ -90,6 +90,11 @@ export class Reference extends React.Component {
                             </button>
                         </div>
                         <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="button">
+                                Preview
+                            </button>
+                        </div>
+                        <div className={'Button-parent'}>
                             <button className={'Submit-button'} type="submit" disabled={pristine || submitting}>
                                 Next
                             </button>

@@ -837,7 +837,7 @@ class DashboardResumeDownload(View):
 class DashboardResumeTemplateDownload(View):
 
     def post(self, request, *args, **kwargs):
-        
+
         candidate_id = request.session.get('candidate_id', None)
         email = request.session.get('email', None)
         try:

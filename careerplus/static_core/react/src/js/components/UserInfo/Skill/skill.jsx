@@ -9,7 +9,7 @@ export class Skill extends React.Component {
     constructor(props) {
         super(props);
         const {userId, history} = props;
-        if (!userId) history.push('/resume-builder/register');
+        // if (!userId) history.push('/resume-builder/register');
 
     }
 
@@ -34,7 +34,13 @@ export class Skill extends React.Component {
                     <div className={'Text-spacing'}>
                         <div>
                             <Field type="text" name="name" component={renderField} validate={required}
-                                   label="Name"/>
+                                   label="Skill Name"/>
+                        </div>
+                    </div>
+                    <div className={'Text-spacing'}>
+                        <div>
+                            <Field type="text" name="proficiency" component={renderField} validate={required}
+                                   label="Skill Proficiency"/>
                         </div>
                     </div>
 
@@ -51,6 +57,11 @@ export class Skill extends React.Component {
                                 this.handleAddSkill.bind(this, invalid, skills, skillValues, reset, userId)
                             }>
                                 Add
+                            </button>
+                        </div>
+                        <div className={'Button-parent'}>
+                            <button className={'Submit-button'} type="button">
+                                Preview
                             </button>
                         </div>
                         <div className={'Button-parent'}>
