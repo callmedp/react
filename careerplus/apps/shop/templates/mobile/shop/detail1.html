@@ -11,34 +11,6 @@
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
     {% endcompress css %}
-        <style>
-        .breadcrumb > li a{
-            color: #ffff;
-                    }
-            a[disabled], a[disabled]:hover {
-               pointer-events: none;
-               color: #e1e1e1;
-            }
-            /*div[data-test-id="ChatWidgetMobileButton"]{
-                display: none !important;
-            }*/
-            .review-close {
-	border: 0 none;
-	border-radius: 50%;
-	background-color: #fff;
-	position: absolute;
-    right: 6px;
-    top: 0px;
-	color: #000;
-	font-size: 12px;
-    width: 25px;
-    height: 25px;
-    display: block;
-    z-index: 9;
-    box-shadow: 0 0 10px rgba(0,0,0, .3);
-}
-
-        </style>
 {% endblock css_section %}
 {% block title %}
   {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
@@ -78,10 +50,12 @@
                 <div class="pull-right" style="width:90%;">
                     
                    <a class="icon-cart pull-right" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
-                   <form class="searchbox" method='get' action='/search/results/'>
+                   <form method='get' action='/search/results/'>
+                    <div class="searchbox">
                         <input type="text" placeholder="Search here" name="search" class="searchbox-input" >
                         <input type="submit" class="searchbox-submit" >
                         <span class="searchbox-icon"></span>
+                    </div>
                     </form>
                 </div><!-- / Right side Icon ends here -->
             </div><!-- header menu Icon ends here -->
@@ -90,7 +64,7 @@
         <h1 class="heading-back w100fl pb-0">{{prd_H1}}</h1>
          {% block breadcrumbs %}
                   {% if sqs.id in linkedin_resume_services %}
-                    <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
+                    <ol class="breadcrumb mt-30 z-auto" itemscope itemtype="http://schema.org/BreadcrumbList">
                         <li class="active"></li>
                     </ol>
                   {% else %}

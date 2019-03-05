@@ -25,6 +25,7 @@
 
 /* Line form with transition  Start From Here */
 @import '../components/inline-form';
+@import '../components/search-bar';
 
 
 .blue-link {
@@ -693,8 +694,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efa859', end
 
 }
 
-.breadcrumb {
-    position: relative;
-    z-index: 99;
+// .breadcrumb {
+//     position: relative;
+//     z-index: 99;
 
-}
+// }
