@@ -22,6 +22,7 @@ from django.views.generic import (
     View,
     CreateView
 )
+from django_redis import get_redis_connection
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from geolocation.models import Country
@@ -55,6 +56,8 @@ from review.forms import ReviewForm
 from .models import Skill
 from homepage.config import UNIVERSITY_COURSE
 from crmapi.models import UNIVERSITY_LEAD_SOURCE
+
+redis_conn = get_redis_connection("search_lookup")
 
 class ProductInformationMixin(object):
 
@@ -630,6 +633,12 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 .values_list('skill__name',flat=True)[:3]
         self.skill = ",".join(self.skill)
         ctx.update({'skill': self.skill})
+        skills_set = [s.decode() for s in redis_conn.smembers('skills_set')]
+        func_areas_set = [f.decode() for f in redis_conn.smembers('func_area_set')]
+        ctx.update({'func_area_set': func_areas_set, 'skills_set': skills_set})
+        ctx.update({"search_context": [p.decode() for p in redis_conn.smembers('product_set')]})
+        ctx.update({"skills_set": skills_set})
+
         product_data = self.get_product_detail_context(
             self.product_obj, self.sqs,
             self.product_obj, self.sqs)
