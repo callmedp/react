@@ -469,6 +469,12 @@ $(document).ready(function () {
         }
       });
 
+      $(document).on('click', '.cls_review', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $('#review-tab').trigger('click');
+      });
+
       function getUrlVar(key){
         var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search);
         return result && unescape(result[1]) || "";
