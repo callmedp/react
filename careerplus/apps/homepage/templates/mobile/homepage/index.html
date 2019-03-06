@@ -293,15 +293,6 @@
             skillsSet = {{ skills_set|safe }},
             prefetchedFuncArea = '{{ recmnd_func_area }}',
             prefetchedSkills = '{{ recmnd_skills }}';
-        $('#id_q').typeahead({
-            local: {{ search_context|safe }}
-        });
-        $('#tags11').typeahead({
-            local: funcAreaSet
-        });
-        $('#tags21').typeahead({
-            local: skillsSet
-        });
     </script>
     {% compress js %}
     <script src="{% static 'shinelearn/js/mobile/homepage/index.js' %}" type="text/javascript"></script>

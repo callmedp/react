@@ -7,6 +7,9 @@ from django.template.loader import render_to_string
 from cart.mixins import CartMixin
 from cart.models import Subscription
 from marketing.data import UTM_CAMPAIGN_HTML_MAPPING
+from django_redis import get_redis_connection
+
+redis_conn = get_redis_connection("search_lookup")
 
 def js_settings(request):
     js_vars = {}
@@ -99,3 +102,9 @@ def marketing_context_processor(request):
             context_dict['marketing_popup_html'] = template
             context_dict.update({'lead_source': 4})
     return context_dict
+
+def getCategorySkillSet(request):
+    return {"category_skill_set": [p.decode() for p in redis_conn.smembers('category_skill_set')]}
+
+def getProductSet(request):
+    return {"search_context": [p.decode() for p in redis_conn.smembers('product_set')]}

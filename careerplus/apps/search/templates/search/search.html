@@ -145,9 +145,8 @@
         var funcAreaSet = {{ func_area_set|safe|default:"[]" }},
             skillsSet = {{ skills_set|safe|default:"[]" }},
             prefetchedFuncArea = '{{ recmnd_func_area }}',
-            prefetchedSkills = '{{ recmnd_skills }}';
-        $('#id_q').typeahead({
-            local: {{ search_context|safe|default:"[]" }}
-        });
+            prefetchedSkills = '{{ recmnd_skills }}',
+            categorySkillSet = {{ category_skill_set|safe }}
+            qSearch = {{ search_context|safe|safe }} 
     </script>
 {% endblock js_section %}

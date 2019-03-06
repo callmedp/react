@@ -53,7 +53,7 @@
                    <a class="icon-cart pull-right" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                    <form method='get' action='/search/results/'>
                     <div class="searchbox">
-                        <input type="text" placeholder="Search here" name="search" class="searchbox-input" >
+                        <input type="text" placeholder="Search here" name="search" class="searchbox-input" autocomplete="off">
                         <input type="submit" class="searchbox-submit" >
                         <span class="searchbox-icon"></span>
                     </div>
@@ -343,18 +343,14 @@ function close_review() {
 </script>
 
     <script type="text/javascript">
-        $(document).ready(function(){
-           if(commonJs.getParameterByName('type') == 'autoEnrol'){
+        $(document).ready(function(){     
+            funcAreaSet = {{ func_area_set|safe }}
+            if(commonJs.getParameterByName('type') == 'autoEnrol'){
                $('#enrol-now-button').trigger('click'); 
             }
             if(commonJs.getParameterByName('type') == 'autoCart'){
                $('#add-to-cart').trigger('click');
             } 
-            skillsSet = {{ skills_set|safe }}
-            funcAreaSet = {{ func_area_set|safe }}
-            $('.searchbox-input').typeahead({
-                 local: {{ search_context|safe }}
-             });
         });
         
     </script>

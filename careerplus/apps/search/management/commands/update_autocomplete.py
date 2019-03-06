@@ -40,8 +40,8 @@ def update_search_autocomplete():
     logging.getLogger('info_log').info(
         "{} products added".format(products.count()))
     categories = Category.objects.filter(is_skill = True)
-    redis_conn.delete('categories_set')
+    redis_conn.delete('category_skill_set')
     for category in categories:
-        redis_conn.sadd('categories_set', category.name)
+        redis_conn.sadd('category_skill_set', category.name)
     logging.getLogger('info_log').info(
         "{} categories added".format(categories.count()))
