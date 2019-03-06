@@ -588,8 +588,10 @@ header {
 }
 
 .reviews .write-review {
-	margin-top: 10px;
 	font-size: 14px;
+	position: absolute;
+	top: 6px;
+	right: 15px;
 }
 
 .write-review-box {
@@ -1729,7 +1731,7 @@ footer {
 	background-color: $white-bg;
 	position: absolute;
     right: 6px;
-    top: 140px;
+    top: 38px;
 	color: #000;
 	font-size: 12px;
     width: 25px;

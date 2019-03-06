@@ -1,12 +1,21 @@
+#python imports
 import csv
+import logging
 from io import StringIO
 from collections import OrderedDict
+
+#django imports
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.conf import settings
+
+#local imports
+
+#inter app imports
 from order.models import Order
 from emailers.email import SendMail
-import logging
+
+#third party imports
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -14,7 +23,9 @@ class Command(BaseCommand):
 
 
 def close_order_report():
-    """ closing order report using this cron """
+    """ 
+    Closing order report using this cron 
+    """
 
     paid_orders = Order.objects.filter(status=1)
     closed_order = 0
@@ -29,21 +40,21 @@ def close_order_report():
             row_one = OrderedDict()
             open_ois = od.orderitems.filter(no_process=False).exclude(
                 oi_status=4)
-            if not open_ois.exists():
-                od.status = 3
-                od.closed_on = timezone.now()
-                od.save()
-                row_one['id'] = od.pk
-                row_one['candidate'] = od.candidate_id
-                row_one['added_on'] = od.created
-                row_one['modified_on'] = od.closed_on
-                spamwriter.writerow(row_one.values())
-                closed_order += 1
-        send_dict['subject'] = "Order Closer Report"
-        send_dict['to'] = ["sidharth.gupta1@hindustantimes.com"]
-        send_dict['cc'] = ["upender.singh@hindustantimes.com",
-                           "karminder.kaur@hindustantimes.com",
-                           "snigdha.batra@hindustantimes.com"]
+            if open_ois.exists():
+                continue
+            od.status = 3
+            od.closed_on = timezone.now()
+            od.save()
+            row_one['id'] = od.pk
+            row_one['candidate'] = od.candidate_id
+            row_one['added_on'] = od.created
+            row_one['modified_on'] = od.closed_on
+            spamwriter.writerow(row_one.values())
+            closed_order += 1
+            
+        send_dict['subject'] = "Order Closure Report"
+        send_dict['to'] = ["vishal.gupta@hindustantimes.com"]
+        send_dict['cc'] = ["animesh.sharma@hindustantimes.com"]
         send_dict['body'] = 'Please find attached .csv file containing information about Order Closing '
         send_dict['from_email'] = settings.CONSULTANTS_EMAIL
         file_name = "%s.csv" % (

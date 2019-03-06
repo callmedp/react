@@ -87,7 +87,7 @@
                     </div>
 
                     <div class="continue col-sm-6">
-                      <button style="font-size:16px;" type="submit">Continue</button>
+                      <button style="font-size:16px;" type="submit" onclick="soc_gaevent('Buy Flow','Cart Order Login','Continue');">Continue</button>
                     </div>
                      {% if guest_login%}
                     <div class="continue col-sm-6">
@@ -108,16 +108,16 @@
                       <span class="error-txt">{{email_error}}</span>
                     </div>
                     <div class="continue col-sm-12">
-                      <button type="submit">Continue</button>
+                      <button type="submit" onclick="soc_gaevent('Buy Flow','Cart Login','Continue')";>Continue</button>
                     </div>
                 {% endif %}
 
             </form>
               <div class="social-login" style="margin:30px 0 15px 0px;">
                     <span>or login with</span>
-                    <a class="facebook" onclick="Login('/cart/payment-shipping/');"></a>
-                    <a class="linkedin" href="{% url 'users:linkedin-code' %}?next=/cart/payment-shipping/"></a>
-                    <a class="gplus" onclick="glogin('/cart/payment-shipping/');"></a>
+                    <a class="facebook" onclick="Login('/cart/payment-shipping/');soc_gaevent('Buy Flow','Facebook_BuyFlow','Sign In');"></a>
+                    <a class="linkedin" onclick="soc_gaevent('Buy Flow','Linkedin_BuyFlow','Sign In');" href="{% url 'users:linkedin-code' %}?next=/cart/payment-shipping/"></a>
+                    <a class="gplus" onclick="glogin('/cart/payment-shipping/');soc_gaevent('Buy Flow','GooglePlus_BuyFlow','Sign In');"></a>
                 </div>
 
         </div>
@@ -166,11 +166,14 @@
               ga('a.send', 'pageview');
               ga('create', 'UA-3537905-41', 'auto');
               ga('send', 'pageview');
+
  function hitGAContinue(){
-    ga('send', 'event', 'Button Clicked', 'Buy Flow', 'Contimue');
+    ga('send', 'event', 'Cart Order Login', 'Buy Flow', 'Continue');
   }
 
-
+function soc_gaevent(event_cat,event_lab,event_action){
+  ga('send', 'event', event_cat, event_action, event_lab);
+ }
 
 
 </script>

@@ -22,32 +22,36 @@ from django.core.mail import EmailMessage
 from coupon.models import Coupon
 from payment.models import PaymentTxn
 from shop.choices import DURATION_DICT,EXP_DICT
-from order.models import Order,OrderItem,CouponOrder, RefundItem
+from order.models import Order,OrderItem,CouponOrder,RefundItem
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 
 #third party imports
 
 def get_file_obj(file_name_suffix):
-    file_name = "reports/discount_report_" + datetime.strftime(datetime.now(),"%Y_%m_%d") + \
-             "_" + file_name_suffix + ".csv"
+    current_timestamp = datetime.now()
+    file_name = "reports/{}/{}/learning_upsell_order_report_{}_{}.csv".format(\
+        current_timestamp.year,current_timestamp.month,\
+            current_timestamp.day,file_name_suffix)
 
     if settings.IS_GCP:
-        generated_file_obj = GCPPrivateMediaStorage().open(file_name, 'wb')
+        generated_file_obj = GCPPrivateMediaStorage(\
+            bucket_name=settings.CRM_PRIVATE_MEDIA_BUCKET).open(file_name, 'wb')
     else:
         generated_file_obj = open(settings.MEDIA_ROOT + '/' + file_name, 'w')
     return generated_file_obj
 
 
 if __name__=="__main__":
-    days_diff = int(sys.argv[1] if len(sys.argv) > 1 else 1)
+    days_diff = int(sys.argv[1] if len(sys.argv) > 1 else 7)
     today = datetime.now()
     edt = datetime(today.year,today.month,today.day,0,0,0)
     sdt = edt - timedelta(days=days_diff)
-    file_name_suffix = "daily" if days_diff == 1 else "monthly"
+    file_name_suffix = "weekly" if days_diff == 7 else "monthly"
     file_obj = get_file_obj(file_name_suffix)
 
     csv_writer = csv.writer(file_obj, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    csv_writer.writerow(["order_id","Email","Owner_name","Order_Date","Payment_Date","Payment Time",\
+    csv_writer.writerow(["order_id","Lead Type","CRM Lead Id","Item_Id","Email",\
+                "Owner_name","Order_Date","Payment_Date","Payment Time",\
                 "Last Payment Date","Last Payment Time","Sales_executive","Sales_TL",\
                 "Branch_Head","Transaction_ID","item_id","Product_Name",\
                 "Item_Name","Experience","Course Duration","Status",\
@@ -62,7 +66,7 @@ if __name__=="__main__":
     order_ids = list(transactions.values_list('order_id',flat=True))
     orders = Order.objects.filter(status__in=[1,3],id__in=order_ids).order_by('id')
     logging.getLogger('info_log').info("\
-        Discount Report :: Total orders found - {}".format(orders.count()))
+        Upsell Order Report :: Total orders found - {}".format(orders.count()))
 
     for order in orders:
         order_items = OrderItem.objects.filter(order=order)
@@ -158,7 +162,8 @@ if __name__=="__main__":
 
             try:
                 row_data = [
-                    order.id,order.email,item.partner.name,order.date_placed.date(),\
+                    order.id,order.site,order.crm_lead_id,item.product.id,order.email,\
+                    item.partner.name,order.date_placed.date(),\
                     txn_obj.payment_date.date(),txn_obj.payment_date.time(),\
                     last_txn_obj.payment_date.date(),last_txn_obj.payment_date.time(),\
                     sales_user_info.get('executive',''),\
@@ -176,8 +181,6 @@ if __name__=="__main__":
 
             except Exception as e:
                 logging.getLogger('error_log').error(\
-                    "Discount Report | Order {} | {}".format(order.id,repr(e)))
+                    "Upsell Order Report | Order {} | {}".format(order.id,repr(e)))
                 continue
     file_obj.close()
-
-

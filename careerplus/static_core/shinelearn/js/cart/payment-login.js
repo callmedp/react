@@ -1,6 +1,6 @@
 $().ready(function() {
 $('#login_form').on('submit', function() {
- hitGAContinue();
+// hitGAContinue();
 });
 
     $("#login_form").validate({

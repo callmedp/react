@@ -424,7 +424,7 @@ class ActionUserMixin(object):
                         assigned_to=oi.assigned_to,
                         added_by=user)
 
-            elif oi.product.type_flow == 7:
+            elif oi.product.type_flow in [7, 15]:
                 oi.draft_counter += 1
                 oi.oi_draft = oi_draft
                 oi.save()

@@ -77,7 +77,7 @@
                 {% if top_4_vendors %}
                     <h2 class="mb-0">Providers</h2>
                     <div class="slide-container">
-                        <ul  id="cropcenterimg" class="skill-provider  cropcenterimg">
+                        <ul class="skill-provider cropcenterimg">
                         {% for top_4_vendor in top_4_vendors %}
                             {% if top_4_vendor.icon or top_4_vendor.image %}
                             <li class="cuad">
@@ -239,71 +239,55 @@
 {% block js_section %}
     {{block.super}}
 <script>
-    $(document).ready(function() {
-	CenterCropImage($('.cropcenterimg li a '))
-	$(window).resize(function(){
-		CenterCropImage($('#cropcenterimg li a'))
-	});
-})
+CenterCropImage($('.cropcenterimg li a'));
 
 /***CENTER CROP IMAGE***/
-function CenterCropImage(x){
-    x.each(function(){
-        $(this).children('img').load(function(){
-            ContentBox=$(this).parent()
-            PropBox=getProportions(ContentBox)
+function CenterCropImage(x) {
+	x.each(function () {
+		$(this).children('img').load(function () {
+			ContentBox = $(this).parent()
+			PropBox = getProportions(ContentBox)
+			ImgtoResize = $(this)
+			PropImg = getProportions(ImgtoResize)
+			ProportionHorizontal(ImgtoResize)
 
-            ImgtoResize=$(this)
-            PropImg=getProportions(ImgtoResize)
-            if(PropBox>PropImg){
-                ProportionVertical(ImgtoResize)
-            }
-            else{
-                ProportionHorizontal(ImgtoResize)
-            }
-        })
-        ContentBox=$(this)
-        PropBox=getProportions(ContentBox)
+		})
 
-        ImgtoResize=$(this).children('img')
-        PropImg=getProportions(ImgtoResize)
-        if(PropBox>PropImg){
-            ProportionVertical(ImgtoResize)
-        }
-        else{
-            ProportionHorizontal(ImgtoResize)
-        }
-    })
+	})
 }
 
 
-function getProportions(x){
-    Height=x.height()
-    Width=x.width()
-    Prop=Width/Height
-    return Prop
+function getProportions(x) {
+	Height = x.height()
+	Width = x.width()
+	Prop = Width / Height
+	return Prop
 }
 
-function ProportionHorizontal(x){
-    x.removeAttr("style")
-    x.css({'height':'100%','width':'auto'})
-    Wimg=x.width()
-    Wcont=x.parent().width()
+function ProportionHorizontal(x) {
+	x.removeAttr("style")
+	x.css({
+		'height': '100%',
+		'width': 'auto'
+	})
+	Wimg = x.width()
+	Wcont = x.parent().width()
 
-    MarginLeft=(Wcont-Wimg)/2
-    x.css({'margin-left':MarginLeft})
+	MarginLeft = (Wcont - Wimg) / 2
+	x.css({
+		'margin-left': MarginLeft
+	})
 }
 
-function ProportionVertical(x){
-    x.removeAttr("style")
-    x.css({'width':'100%','height':'auto'})
-    Himg=x.height()
-    Hcont=x.parent().height()
+<!--function ProportionVertical(x){-->
+<!--x.removeAttr("style")-->
+<!--x.css({'width':'100%','height':'auto'})-->
+<!--Himg=x.height()-->
+<!--Hcont=x.parent().height()-->
 
-    MarginTop=(Hcont-Himg)/2
-    x.css({'margin-top':MarginTop})
-}
-
+<!--MarginTop=(Hcont-Himg)/2-->
+<!--x.css({'margin-top':MarginTop})-->
+<!--}-->
 </script>
 
     {% compress js %}

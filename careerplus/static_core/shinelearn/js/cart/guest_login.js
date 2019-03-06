@@ -17,7 +17,7 @@ function guest_login(){
               ga('create', 'UA-3537905-41', 'auto');
               ga('send', 'pageview');
          function hitGA(){
-            ga('send', 'event', 'Button Clicked', 'Buy Flow', 'Contimue as Guest');
+            ga('send', 'event', 'Cart Order Login', 'Buy Flow', 'Continue as Guest');
           }
 
 
