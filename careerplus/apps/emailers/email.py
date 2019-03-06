@@ -1,4 +1,6 @@
 import logging
+import json
+from datetime import datetime
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
@@ -71,8 +73,16 @@ class SendMail():
             send_dict['subject'] = data.get('subject', '')
             template_name = data.get('template_name', 'assignment_mail.html')
             send_dict['template'] = 'emailers/candidate/' + template_name
-            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            headers_dict = {
+                'Reply-To': settings.REPLY_TO,
+                'X-APIHEADER': json.dumps({'X-Uid': 'SLServiceInitiated'}),
+                'X-TAGS': 'SLServiceInitiated',
+                'X-MailerTag': 'SLServiceInitiated',
+                'X-SentDate': datetime.now(),
+            }
+            send_dict['header'] = headers_dict
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
+
             if data.get('writer_email', None):
                 send_dict['cc_list'] = []
                 send_dict['cc_list'].append(data.get('writer_email'))
@@ -81,9 +91,16 @@ class SendMail():
 
         elif mail_type == "DRAFT_UPLOAD":
             # for first draft
+            headers_dict = None
             if data.get('draft_level') == 1:
                 send_dict['template'] = 'emailers/candidate/initial_document.html'
                 send_dict['subject'] = "Your developed document has been uploaded"
+                headers_dict = {
+                    'X-APIHEADER': json.dumps({'X-Uid': 'SLDevelopedDocumentUploaded'}),
+                    'X-TAGS': 'SLDevelopedDocumentUploaded',
+                    'X-MailerTag': 'SLDevelopedDocumentUploaded',
+                    'X-SentDate': datetime.now(),
+                }
             # for 2nd draft
             elif data.get('draft_level') == 2:
                 send_dict['template'] = 'emailers/candidate/revised_document.html'
@@ -92,6 +109,13 @@ class SendMail():
             elif data.get('draft_level') == 3:
                 send_dict['template'] = 'emailers/candidate/final_document.html'
                 send_dict['subject'] = "Your final document is ready"
+                headers_dict = {
+                    'X-APIHEADER': json.dumps({'X-Uid': 'SLDevelopedDocumentReady'}),
+                    'X-TAGS': 'SLDevelopedDocumentReady',
+                    'X-MailerTag': 'SLDevelopedDocumentReady',
+                    'X-SentDate': datetime.now(),
+                }
+            send_dict['header'] = headers_dict
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
@@ -109,6 +133,14 @@ class SendMail():
             send_dict['template'] = 'emailers/candidate/' + template_name
 
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            headers_dict = {
+                'Reply-To': settings.REPLY_TO,
+                'X-APIHEADER': json.dumps({'X-Uid': 'SLServiceClosed'}),
+                'X-TAGS': 'SLServiceClosed',
+                'X-MailerTag': 'SLServiceClosed',
+                'X-SentDate': datetime.now(),
+            }
+            send_dict['header'] = headers_dict
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
 
@@ -133,8 +165,13 @@ class SendMail():
             send_dict['subject'] = data.get('subject', "Resumes of active candidates seeking jobs")
             template_name = data.get('template_name', 'booster_recruiter.html')
             send_dict['template'] = 'emailers/candidate/' + template_name
-
-            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            headers_dict = {'Reply-To': settings.REPLY_TO,
+                            'X-APIHEADER': json.dumps({'X-Uid': 'SLResumeBoosterRecruiter'}),
+                            'X-TAGS': 'SLResumeBoosterRecruiter',
+                            'X-MailerTag': 'SLResumeBoosterRecruiter',
+                            'X-SentDate': datetime.now(),
+                            }
+            send_dict['header'] = headers_dict
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
             self.process(to, send_dict, data)
@@ -167,7 +204,13 @@ class SendMail():
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
-
+            headers_dict = {
+                'X-APIHEADER': json.dumps({'X-Uid': 'SLServiceInitiated'}),
+                'X-TAGS': 'SLServiceInitiated',
+                'X-MailerTag': 'SLServiceInitiated',
+                'X-SentDate': datetime.now(),
+            }
+            send_dict['header'] = headers_dict
             self.process(to, send_dict, data)
 
         elif mail_type == "INTERNATIONATIONAL_PROFILE_UPDATED":
@@ -184,7 +227,13 @@ class SendMail():
             send_dict['subject'] = data.get('subject', "Your login credential on shine.com")
             template_name = data.get('template_name', 'register.html')
             send_dict['template'] = 'emailers/candidate/' + template_name
-            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            headers_dict = {'Reply-To': settings.REPLY_TO,
+                            'X-APIHEADER': json.dumps({'X-Uid': 'SLAutoregister'}),
+                            'X-TAGS': 'SLAutoregister',
+                            'X-MailerTag': 'SLAutoregister',
+                            'X-SentDate': datetime.now(),
+                            }
+            send_dict['header'] = headers_dict
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
 
@@ -212,6 +261,13 @@ class SendMail():
             send_dict['subject'] = "Your Shine Payment Confirmation"
             send_dict['template'] = 'emailers/candidate/payment_realisation.html'
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
-            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
+            headers_dict = {'Reply-To': settings.REPLY_TO,
+                            'X-APIHEADER': json.dumps({'X-Uid': 'SL_PaymentConfirmation'}),
+                            'X-TAGS': 'SL_PaymentConfirmation',
+                            'X-MailerTag': 'SL_PaymentConfirmation',
+                            'X-SentDate': datetime.now(),
+                            }
+            send_dict['header'] = headers_dict
+
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
