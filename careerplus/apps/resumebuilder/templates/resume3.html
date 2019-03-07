@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -16,7 +17,7 @@
         <!--left column-->
         <div style="width: 24%; background: #f2cc79; padding: 3%; display: table-cell; vertical-align: top; float: left;">
           <span style="display: block; text-align: center; margin-bottom: 10%;">
-            <img src="https://i.ibb.co/p3WVYwx/resume-pic.png" width="205" height="205" alt="Resume"
+            <img src="{% static 'resumebuilder/images/resume3/resume-pic.png' %}" width="205" height="205" alt="Resume"
                  style="border-radius: 100%; margin: 0 auto; text-align: center; width: 205px; height: 205px;">
           </span>
 
@@ -25,29 +26,34 @@
                 <strong style="font-size: 18px; display: block; font-weight: normal; color: #000000; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #bd9f5e; padding-bottom: 5px;">Contact</strong>
                 <ul style="margin: 20px 0 30px 0; padding: 0; font-size: 14px; color: #000000; list-style-type: none;">
                     <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img src="https://i.ibb.co/cXCfrjz/mobile-icon.png"
-                                                                                   alt="Mobile"
-                                                                                   style="vertical-align: middle;"></span>+91 {{ user.number }}
+                            style="display: table-cell; padding-right: 10px;"><img
+                            src="{% static 'resumebuilder/images/resume3/mobile-icon.png' %}"
+                            alt="Mobile"
+                            style="vertical-align: middle;"></span>+91 {{ user.number }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img src="https://i.ibb.co/whj8x1R/email-icon.png"
-                                                                                   alt="Email"
-                                                                                   style="vertical-align: middle;"></span>{{ user.email }}
+                            style="display: table-cell; padding-right: 10px;"><img
+                            src="{% static 'resumebuilder/images/resume3/email-icon.png' %}"
+                            alt="Email"
+                            style="vertical-align: middle;"></span>{{ user.email }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img src="https://i.ibb.co/SJHnXCM/location-icon.png"
-                                                                                   alt="Location"
-                                                                                   style="vertical-align: middle;"></span>{{ user.location }}
+                            style="display: table-cell; padding-right: 10px;"><img
+                            src="{% static 'resumebuilder/images/resume3/location-icon.png' %}"
+                            alt="Location"
+                            style="vertical-align: middle;"></span>{{ user.location }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img src="https://i.ibb.co/5Fybt2r/linkedin-icon.png"
-                                                                                   alt="Linkedin"
-                                                                                   style="vertical-align: text-top;"></span>linkedin.com/candidatename
+                            style="display: table-cell; padding-right: 10px;"><img
+                            src="{% static 'resumebuilder/images/resume3/linkedin-icon.png' %}"
+                            alt="Linkedin"
+                            style="vertical-align: text-top;"></span>linkedin.com/candidatename
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img src="https://i.ibb.co/CHyJSX8/facebook-icon.png"
-                                                                                   alt="Facebook"
-                                                                                   style="vertical-align: middle;"></span>Facebook.com/candidatename
+                            style="display: table-cell; padding-right: 10px;"><img
+                            src="{% static 'resumebuilder/images/resume3/facebook-icon.png' %}"
+                            alt="Facebook"
+                            style="vertical-align: middle;"></span>Facebook.com/candidatename
                     </li>
                 </ul>
             </div>
@@ -131,10 +137,11 @@
             <div style="display: block; vertical-align: top;">
                 <strong style="font-size: 18px; display: block; font-weight: normal; color: #000000; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #bd9f5e; padding-bottom: 5px;">Languages</strong>
                 <ul style="margin: 20px 0 30px 0; padding: 0; font-size: 14px; color: #c5e6ff; list-style-type: none;">
-                    <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 46.3%;">
-                        <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top;">Hindi</span>
-                    </li>
-                    <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 51.3%; text-align: right;">
+                    {% for language in languages %}
+                        <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 46.3%;">
+                            <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top;">{{ language.name }}</span>
+                        </li>
+                        <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 51.3%; text-align: right;">
                 <span style="color: #333333; display: block; vertical-align: top; text-align: right;">
                   <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
                   <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
@@ -142,17 +149,18 @@
                   <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
                   <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
                 </span>
-                    </li>
-                    <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 46.3%;">
+                        </li>
+                    {% endfor %}
+                    {% comment %} <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 46.3%;">
                         <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top;">English</span>
                     </li>
                     <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 51.3%; text-align: right;">
                 <span style="color: #333333; display: block; vertical-align: top; text-align: right;">
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #ffffff; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
+                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
+                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
+                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
+                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
+                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #ffffff; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
                 </span>
                     </li>
                     <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 46.3%;">
@@ -160,13 +168,13 @@
                     </li>
                     <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 51.3%; text-align: right;">
                 <span style="color: #333333; display: block; vertical-align: top; text-align: right;">
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #ffffff; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #ffffff; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
+                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
+                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
+                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
+                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #ffffff; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
+                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #ffffff; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
                 </span>
-                    </li>
+                    </li>{% endcomment %}
                 </ul>
             </div>
 
@@ -177,7 +185,7 @@
                     {% for interest in extracurricular %}
                         <li style="display: table; margin-bottom: 15px;"><span
                                 style="display: table-cell; padding-right: 10px;"><img
-                                src="https://i.ibb.co/CtMPD7b/music-icon.png"
+                                src="{% static 'resumebuilder/images/resume3/music-icon.png' %}"
                                 alt="Mobile"
                                 style="vertical-align: middle;"></span>{{ interest }}
                         </li>
@@ -336,5 +344,9 @@
 
     </div>
 </div>
+<div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;"><img
+        src="{% static 'resumebuilder/images/watermark.png' %}" alt="shinelearning.com" style="width: 100%;">
+</div>
+
 </body>
 </html>

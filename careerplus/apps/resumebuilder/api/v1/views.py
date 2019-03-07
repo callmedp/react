@@ -244,8 +244,6 @@ class UserResumePreview(SessionManagerMixin, RetrieveUpdateAPIView):
     template_name = 'resume4.html'
 
     def get(self, request):
-        import ipdb;
-        ipdb.set_trace();
         user = User.objects.get(id=95)
         extracurricular = user.extracurricular.split(',')
         education = user.usereducation_set.all()

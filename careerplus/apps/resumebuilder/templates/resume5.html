@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -16,7 +17,8 @@
                 <h1 style="margin: 0; color: #000000; font-size: 32px; font-weight: bold; text-transform: uppercase;">{{ user.first_name }} {{ user.last_name }}</h1>
                 <strong style="display: block; font-style: italic; font-size: 18px; color: #777777; font-weight: normal; text-transform: uppercase; margin: 0 0 20px 0;">{{ 'FULL STACK DEVELOPER' }}</strong>
                 <span style="display: block; text-align: center;">
-              <img src="https://i.ibb.co/p3WVYwx/resume-pic.png" width="205" height="205" alt="Resume"
+              <img src="{% static 'resumebuilder/images/resume5/resume-pic.png' %}" width="205" height="205"
+                   alt="Resume"
                    style="border-radius: 100%; margin: 0 auto; text-align: center; width: 205px; height: 205px;">
             </span>
             </div>
@@ -36,29 +38,34 @@
                     Detail</strong>
                 <ul style="margin: 20px 0 30px 0; padding: 0; font-size: 14px; color: #000000; list-style-type: none;">
                     <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img src="https://i.ibb.co/cXCfrjz/mobile-icon.png"
-                                                                                   alt="Mobile"
-                                                                                   style="vertical-align: middle;"></span>+91 {{ user.number }}
+                            style="display: table-cell; padding-right: 10px;"><img
+                            src="{% static 'resumebuilder/images/resume5/mobile-icon.png' %}"
+                            alt="Mobile"
+                            style="vertical-align: middle;"></span>+91 {{ user.number }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img src="https://i.ibb.co/whj8x1R/email-icon.png"
-                                                                                   alt="Email"
-                                                                                   style="vertical-align: middle;"></span>{{ user.email }}
+                            style="display: table-cell; padding-right: 10px;"><img
+                            src="{% static 'resumebuilder/images/resume5/email-icon.png' %}"
+                            alt="Email"
+                            style="vertical-align: middle;"></span>{{ user.email }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img src="https://i.ibb.co/SJHnXCM/location-icon.png"
-                                                                                   alt="Location"
-                                                                                   style="vertical-align: middle;"></span>{{ user.location }}
+                            style="display: table-cell; padding-right: 10px;"><img
+                            src="{% static 'resumebuilder/images/resume5/location-icon.png' %}"
+                            alt="Location"
+                            style="vertical-align: middle;"></span>{{ user.location }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img src="https://i.ibb.co/5Fybt2r/linkedin-icon.png"
-                                                                                   alt="Linkedin"
-                                                                                   style="vertical-align: text-top;"></span>linkedin.com/candidatename
+                            style="display: table-cell; padding-right: 10px;"><img
+                            src="{% static 'resumebuilder/images/resume5/linkedin-icon.png' %}"
+                            alt="Linkedin"
+                            style="vertical-align: text-top;"></span>linkedin.com/candidatename
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img src="https://i.ibb.co/CHyJSX8/facebook-icon.png"
-                                                                                   alt="Facebook"
-                                                                                   style="vertical-align: middle;"></span>Facebook.com/candidatename
+                            style="display: table-cell; padding-right: 10px;"><img
+                            src="{% static 'resumebuilder/images/resume5/facebook-icon.png' %}"
+                            alt="Facebook"
+                            style="vertical-align: middle;"></span>Facebook.com/candidatename
                     </li>
                 </ul>
             </div>
@@ -120,15 +127,17 @@
             <div style="display: block; vertical-align: top;">
                 <strong style="font-size: 18px; display: block; color: #000000; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #cac8c9; padding-bottom: 10px;">Languages</strong>
                 <ul style="margin: 20px 0 30px 0; padding: 0; font-size: 14px; color: #c5e6ff; list-style-type: none;">
-                    <li style="vertical-align: middle; display: inline-table; margin-right: 10px; background: #e9e9e9; width: 88px; height: 88px; border-radius: 100%; text-align: center;">
-                        <span style="color: #999999; display: table-cell; vertical-align: middle;">Hindi</span>
-                    </li>
-                    <li style="vertical-align: middle; display: inline-table; margin-right: 10px; background: #e9e9e9; width: 88px; height: 88px; border-radius: 100%; text-align: center;">
+                    {% for language in languages %}
+                        <li style="vertical-align: middle; display: inline-table; margin-right: 10px; background: #e9e9e9; width: 88px; height: 88px; border-radius: 100%; text-align: center;">
+                            <span style="color: #999999; display: table-cell; vertical-align: middle;">{{ language.name }}</span>
+                        </li>
+                    {% endfor %}
+                    {% comment %} <li style="vertical-align: middle; display: inline-table; margin-right: 10px; background: #e9e9e9; width: 88px; height: 88px; border-radius: 100%; text-align: center;">
                         <span style="color: #999999; display: table-cell; vertical-align: middle;">English</span>
                     </li>
                     <li style="vertical-align: middle; display: inline-table; margin-right: 10px; background: #e9e9e9; width: 88px; height: 88px; border-radius: 100%; text-align: center;">
                         <span style="color: #999999; display: table-cell; vertical-align: middle;">French</span>
-                    </li>
+                    </li>{% endcomment %}
                 </ul>
             </div>
 
@@ -139,7 +148,7 @@
                     {% for interest in extracurricular %}
                         <li style="display: table; margin-bottom: 15px;"><span
                                 style="display: table-cell; padding-right: 10px;"><img
-                                src="https://i.ibb.co/CtMPD7b/music-icon.png"
+                                src="{% static 'resumebuilder/images/resume5/music-icon.png' %}"
                                 alt="Mobile"
                                 style="vertical-align: middle;"></span>{{ interest }}
                         </li>
@@ -323,5 +332,8 @@
 
     </div>
 </div>
+<div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;"><img
+        src="{% static 'resumebuilder/images/watermark.png' %}" alt="shinelearning.com" style="width: 100%;"></div>
+
 </body>
 </html>

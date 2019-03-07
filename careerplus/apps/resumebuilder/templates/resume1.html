@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -25,26 +26,28 @@
             <ul style="margin: 20px 0 0 0; padding: 0; font-size: 14px; color: #ffffff; list-style-type: none;">
                 <li style="display: table; margin-bottom: 15px;"><span
                         style="display: table-cell; padding-right: 10px;"><img
-                        src="https://i.ibb.co/G9vZ1tL/mobile-icon.png" alt="Mobile"
+                        src="{% static 'resumebuilder/images/resume1/mobile-icon.png' %}" alt="Mobile"
                         style="vertical-align: middle;"></span>+91 {{ user.number }}
                 </li>
                 <li style="display: table; margin-bottom: 15px;"><span
                         style="display: table-cell; padding-right: 10px;"><img
-                        src="https://i.ibb.co/Qk8FK6V/email-icon.png" alt="Email"
+                        src="{% static 'resumebuilder/images/resume1/email-icon.png' %}" alt="Email"
                         style="vertical-align: middle;"></span>{{ user.email }}
                 </li>
                 <li style="display: table; margin-bottom: 15px;"><span
                         style="display: table-cell; padding-right: 10px;"><img
-                        src="https://i.ibb.co/mzMyyN6/location-icon.png" alt="Location" style="vertical-align: middle;"></span>{{ user.location }}
+                        src="{% static 'resumebuilder/images/resume1/location-icon.png' %}" alt="Location"
+                        style="vertical-align: middle;"></span>{{ user.location }}
                 </li>
                 <li style="display: table; margin-bottom: 15px;"><span
                         style="display: table-cell; padding-right: 10px;"><img
-                        src="https://i.ibb.co/kyMg0Jp/linkedin-icon.png" alt="Linkedin"
+                        src="{% static 'resumebuilder/images/resume1/linkedin-icon.png' %}" alt="Linkedin"
                         style="vertical-align: text-top;"></span>linkedin.com/candidatename
                 </li>
                 <li style="display: table; margin-bottom: 15px;"><span
                         style="display: table-cell; padding-right: 10px;"><img
-                        src="https://i.ibb.co/vjkjWqb/facebook-icon.png" alt="Facebook" style="vertical-align: middle;"></span>Facebook.com/candidatename
+                        src="{% static 'resumebuilder/images/resume1/facebook-icon.png' %}" alt="Facebook"
+                        style="vertical-align: middle;"></span>Facebook.com/candidatename
                 </li>
             </ul>
         </div>
@@ -329,5 +332,7 @@
     </div>
 
 </div>
+<div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;"><img
+            src="{% static 'resumebuilder/images/watermark.png' %}" alt="shinelearning.com" style="width: 100%;"></div>
 </body>
 </html>

@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -13,7 +14,7 @@
     <div style="display: table; width: 100%; vertical-align: top; background: #5a8d50; overflow: hidden;">
         <!--top left column-->
         <div style="width: 44%; background: #649f58; padding: 3%; display: table-cell; vertical-align: top; float: left; min-height: 275px;">
-                <img src="https://i.ibb.co/p3WVYwx/resume-pic.png" alt="Resume" width="150" height="150"
+            <img src="{% static 'resumebuilder/images/resume4/resume-pic.png' %}" alt="Resume" width="150" height="150"
                  style="border-radius: 100%; margin-bottom: 10px; width: 150px; height: 150px;">
             <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: bold; text-transform: uppercase; display: block;">{{ user.first_name }} {{ user.last_name }}</h1>
             <span style="display: block; width: 15%; border-top: 1px solid #a2c59b; margin: 10px 0 15px 0;"></span>
@@ -29,27 +30,28 @@
                 <ul style="margin: 20px 0 0 0; padding: 0; font-size: 14px; color: #ffffff; list-style-type: none;">
                     <li style="display: table; margin-bottom: 15px;"><span
                             style="display: table-cell; padding-right: 10px;"><img
-                            src="https://i.ibb.co/G9vZ1tL/mobile-icon.png" alt="Mobile" style="vertical-align: middle;"></span>+91
+                            src="{% static 'resumebuilder/images/resume4/mobile-icon.png' %}" alt="Mobile"
+                            style="vertical-align: middle;"></span>+91
                         {{ user.number }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
                             style="display: table-cell; padding-right: 10px;"><img
-                            src="https://i.ibb.co/Qk8FK6V/email-icon.png" alt="Email"
+                            src="{% static 'resumebuilder/images/resume4/email-icon.png' %}" alt="Email"
                             style="vertical-align: middle;"></span>{{ user.email }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
                             style="display: table-cell; padding-right: 10px;"><img
-                            src="https://i.ibb.co/mzMyyN6/location-icon.png" alt="Location"
+                            src="{% static 'resumebuilder/images/resume4/location-icon.png' %}" alt="Location"
                             style="vertical-align: middle;"></span>{{ user.location }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
                             style="display: table-cell; padding-right: 10px;"><img
-                            src="https://i.ibb.co/kyMg0Jp/linkedin-icon.png" alt="Linkedin"
+                            src="{% static 'resumebuilder/images/resume4/linkedin-icon.png' %}" alt="Linkedin"
                             style="vertical-align: text-top;"></span>linkedin.com/candidatename
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
                             style="display: table-cell; padding-right: 10px;"><img
-                            src="https://i.ibb.co/vjkjWqb/facebook-icon.png" alt="Facebook"
+                            src="{% static 'resumebuilder/images/resume4/facebook-icon.png' %}" alt="Facebook"
                             style="vertical-align: middle;"></span>Facebook.com/candidatename
                     </li>
                 </ul>
@@ -191,18 +193,20 @@
             <!--Languages-->
             <div style="display: block; vertical-align: top; margin-bottom: 30px;">
                 <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: 18px; margin-top: 0">Languages</strong>
-                <div style="display: block; margin: 20px 0 15px 0;">
+                {% for language in languages %}
+                    <div style="display: block; margin: 20px 0 15px 0;">
                     <span style="float: right; display: inline-block; margin: 0 10% 8px 0; font-size: 12px; color: #333333;"><b
-                            style="font-size: 16px; color: #333333; font-weight: normal;">8/</b>10</span>
-                    <strong style="font-size: 14px; display: block; color: #333333; font-weight: normal; margin-bottom: 5px;">Hindi</strong>
-                    <div style="background: #e0e0e0; height: 8px; border-radius: 5px; overflow: hidden; width: 90%; position: relative; font-size: 12px; color: #333333;">
-                        <div role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
-                             style="width: 80%; background-color: #649f58; line-height: 8px; height: 8px;">
-                            <span style="position: absolute; right: 0; width: 1px; height: 1px; overflow: hidden;"></span>
+                            style="font-size: 16px; color: #333333; font-weight: normal;">{{ language.proficiency }}/</b>10</span>
+                        <strong style="font-size: 14px; display: block; color: #333333; font-weight: normal; margin-bottom: 5px;">{{ language.name }}</strong>
+                        <div style="background: #e0e0e0; height: 8px; border-radius: 5px; overflow: hidden; width: 90%; position: relative; font-size: 12px; color: #333333;">
+                            <div role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 80%; background-color: #649f58; line-height: 8px; height: 8px;">
+                                <span style="position: absolute; right: 0; width: 1px; height: 1px; overflow: hidden;"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div style="display: block; margin: 20px 0 15px 0;">
+                {% endfor %}
+                {% comment %} <div style="display: block; margin: 20px 0 15px 0;">
                     <span style="float: right; display: inline-block; margin: 0 10% 8px 0; font-size: 12px; color: #333333;"><b
                             style="font-size: 16px; color: #333333; font-weight: normal;">9/</b>10</span>
                     <strong style="font-size: 14px; display: block; color: #333333; font-weight: normal; margin-bottom: 5px;">English</strong>
@@ -223,7 +227,7 @@
                             <span style="position: absolute; right: 0; width: 1px; height: 1px; overflow: hidden;"></span>
                         </div>
                     </div>
-                </div>
+                </div>{% endcomment %}
             </div>
 
             <!--Interest-->
@@ -403,5 +407,9 @@
     </div>
 
 </div>
+<div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;"><img
+        src="{% static 'resumebuilder/images/watermark.png' %}" alt="shinelearning.com" style="width: 100%;">
+</div>
+
 </body>
 </html>

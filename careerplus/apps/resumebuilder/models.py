@@ -114,3 +114,12 @@ class UserAchievement(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class UserLanguage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+    name = models.CharField('Language Name', max_length=100)
+    proficiency = models.IntegerField('Proficiency', default=3)
+
+    def __str__(self):
+        return self.name
