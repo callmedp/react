@@ -633,10 +633,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 .values_list('skill__name',flat=True)[:3]
         self.skill = ",".join(self.skill)
         ctx.update({'skill': self.skill})
-        skills_set = [s.decode() for s in redis_conn.smembers('skills_set')]
-        func_areas_set = [f.decode() for f in redis_conn.smembers('func_area_set')]
-        ctx.update({'func_area_set': func_areas_set, 'skills_set': skills_set})
-        ctx.update({"skills_set": skills_set})
         product_data = self.get_product_detail_context(
             self.product_obj, self.sqs,
             self.product_obj, self.sqs)
