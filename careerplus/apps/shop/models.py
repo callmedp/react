@@ -1265,8 +1265,8 @@ class Product(AbstractProduct, ModelMeta):
         pure_rating = int(self.avg_rating)
         decimal_part = self.avg_rating - pure_rating
         final_score = ['*' for i in range(pure_rating)]
-        rest_part = int(Decimal(5.0) - self.avg_rating)
-        res_decimal_part = Decimal(5.0) - self.avg_rating - Decimal(rest_part)
+        rest_part = int(Decimal(5.0) - Decimal(self.avg_rating))
+        res_decimal_part = Decimal(5.0) - Decimal(self.avg_rating) - Decimal(rest_part)
         if decimal_part >= 0.75:
             final_score.append("*")
         elif decimal_part >= 0.25:
