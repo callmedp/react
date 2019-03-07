@@ -145,8 +145,7 @@ TEMPLATES = [
                 'sekizai.context_processors.sekizai',
                 'core.context_processors.js_settings',
                 'core.context_processors.marketing_context_processor',
-                'core.context_processors.getCategorySkillSet',
-                'core.context_processors.getProductSet'
+                'core.context_processors.getSearchSet'
             ],
             'loaders': ([
                 # ('django_mobile.loader.CachedLoader', [

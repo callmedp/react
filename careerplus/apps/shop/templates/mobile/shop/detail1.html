@@ -291,6 +291,7 @@
 {% endblock container %}
 
 {% block js_section %}
+    
     {{block.super}}
     {% compress js %}
     <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
@@ -299,7 +300,7 @@
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     {% endcompress %}
-
+    
 <script type="text/javascript">
     var display_info = " ";
 
@@ -354,7 +355,7 @@ function close_review() {
         });
         
     </script>
-    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.js"></script>
 {% endblock js_section %}
 
 

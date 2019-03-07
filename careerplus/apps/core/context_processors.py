@@ -103,8 +103,8 @@ def marketing_context_processor(request):
             context_dict.update({'lead_source': 4})
     return context_dict
 
-def getCategorySkillSet(request):
-    return {"category_skill_set": [p.decode() for p in redis_conn.smembers('category_skill_set')]}
-
-def getProductSet(request):
-    return {"search_context": [p.decode() for p in redis_conn.smembers('product_set')]}
+def getSearchSet(request):
+    return {
+                "search_context": [p.decode() for p in redis_conn.smembers('product_set')],
+                "category_skill_set": [p.decode() for p in redis_conn.smembers('category_skill_set')]
+           }

@@ -382,7 +382,7 @@
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     {% compress js %}
-
+{{block.super}}
     <script type="text/javascript" src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
     <script type="text/javascript" src="{% static 'shinelearn/js/cms/validate.js' %}"></script>
     <script type="text/javascript" src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"> </script>
@@ -398,4 +398,5 @@
             $('.dropdown-toggle', this).trigger('click');
           });
     </script>
+
  {% endblock js_section %}

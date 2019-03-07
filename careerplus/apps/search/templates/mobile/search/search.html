@@ -147,7 +147,7 @@ Search Result Page - Shine Learning
 
 {% block js_section %}
     {{block.super}}
-    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.js"></script>
     <script>
         var funcAreaSet = {{ func_area_set|safe|default:"[]" }},
             skillsSet = {{ skills_set|safe|default:"[]" }},
