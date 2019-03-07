@@ -74,6 +74,7 @@ class SendMail():
             send_dict['subject'] = data.get('subject', '')
             send_dict['template'] = 'emailers/candidate/process_mailers.html'
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
 
@@ -106,6 +107,7 @@ class SendMail():
                 send_dict['subject'] = "Your developed document has been uploaded"
                 if settings.TAG_MAILER:
                     headers_dict = {
+                        'Reply-To': settings.REPLY_TO,
                         'X-APIHEADER': json.dumps({'X-Uid': 'SLDevelopedDocumentUploaded'}),
                         'X-TAGS': 'SLDevelopedDocumentUploaded',
                         'X-MailerTag': 'SLDevelopedDocumentUploaded',
@@ -121,6 +123,7 @@ class SendMail():
                 send_dict['subject'] = "Your final document is ready"
                 if settings.TAG_MAILER:
                     headers_dict = {
+                        'Reply-To': settings.REPLY_TO,
                         'X-APIHEADER': json.dumps({'X-Uid': 'SLDevelopedDocumentReady'}),
                         'X-TAGS': 'SLDevelopedDocumentReady',
                         'X-MailerTag': 'SLDevelopedDocumentReady',
@@ -135,6 +138,7 @@ class SendMail():
             send_dict['template'] = 'emailers/candidate/draft_reminder.html'
             send_dict['subject'] = "Reminder:Your developed document has been uploaded"
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
 
@@ -142,7 +146,6 @@ class SendMail():
             send_dict['subject'] = data.get('subject', "")
             template_name = data.get('template_name', 'writing_service_closed.html')
             send_dict['template'] = 'emailers/candidate/' + template_name
-
             headers_dict = {'Reply-To': settings.REPLY_TO}
             if settings.TAG_MAILER:
                 headers_dict.update({
@@ -162,6 +165,7 @@ class SendMail():
             template_name = data.get('template_name', 'pending_item.html')
             send_dict['template'] = 'emailers/candidate/' + template_name
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
 
@@ -169,6 +173,7 @@ class SendMail():
             send_dict['subject'] = data.get('subject', "Your developed document has been uploaded")
             send_dict['template'] = 'emailers/candidate/resume_critique_closed.html'
             send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
+            send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             self.process(to, send_dict, data)
 
