@@ -22,7 +22,7 @@ var Scroller = function(itm,className) {
             that.item.find('.cls_scroller_hiddenDiv').removeClass('hidden');
         }else {
             that.item.css({
-                'top': 0
+                'top': 30
             })
             that.item.find('.cls_scroller_hiddenDiv').addClass('hidden');
         }
