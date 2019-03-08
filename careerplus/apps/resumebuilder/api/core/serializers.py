@@ -1,6 +1,6 @@
 # inter app imports
 from resumebuilder.models import (User, Skill, UserExperience, UserEducation, UserCertification,
-                                  UserProject, UserReference, ExternalLink, UserAchievement)
+                                  UserProject, UserReference, UserSocialLink, UserAchievement)
 
 # third party imports
 from rest_framework import serializers
@@ -52,9 +52,9 @@ class UserReferenceSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'reference_name', 'about_user', 'reference_designation')
 
 
-class ExternalLinkSerializer(serializers.ModelSerializer):
+class UserSocialLinkSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ExternalLink
+        model = UserSocialLink
         fields = ('id', 'user', 'reference_name', 'about_user', 'reference_designation')
 
 

@@ -5,8 +5,8 @@ from .views import (UserListCreateView, UserRetrieveUpdateView, SkillRetrieveUpd
                     UserExperienceListCreateView, UserExperienceRetrieveUpdateView, UserEducationListCreateView,
                     UserEducationRetrieveUpdateView, UserCertificationListCreateView,
                     UserCertificationRetrieveUpdateView, UserProjectListCreateView, UserProjectRetrieveUpdateView,
-                    UserReferenceListCreateView, UserReferenceRetrieveUpdateView, ExternalLinkListCreateView,
-                    ExternalLinkRetrieveUpdateView, UserAchievementListCreateView, UserAchievementRetrieveUpdateView,
+                    UserReferenceListCreateView, UserReferenceRetrieveUpdateView, UserSocialLinkListCreateView,
+                    UserSocialLinkRetrieveUpdateView, UserAchievementListCreateView, UserAchievementRetrieveUpdateView,
                     UserResumePreview)
 # third party imports
 from rest_framework import routers
@@ -28,8 +28,8 @@ urlpatterns = [
     url(r'^user-projects/$', UserProjectListCreateView.as_view()),
     url(r'^user-references/(?P<pk>\d+)/$', UserReferenceRetrieveUpdateView.as_view()),
     url(r'^user-references/$', UserReferenceListCreateView.as_view()),
-    url(r'^external-links/(?P<pk>\d+)/$', ExternalLinkRetrieveUpdateView.as_view()),
-    url(r'^external-links/$', ExternalLinkListCreateView.as_view()),
+    url(r'^external-links/(?P<pk>\d+)/$', UserSocialLinkRetrieveUpdateView.as_view()),
+    url(r'^external-links/$', UserSocialLinkListCreateView.as_view()),
     url(r'^user-achievements/(?P<pk>\d+)/$', UserAchievementRetrieveUpdateView.as_view()),
     url(r'^user-achievements/$', UserAchievementListCreateView.as_view()),
     url(r'^preview/$', UserResumePreview.as_view()),  # (?P<pk>\d+)/

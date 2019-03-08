@@ -4,11 +4,11 @@
 
 # local imports
 from resumebuilder.models import (User, Skill, UserExperience, UserEducation, UserCertification,
-                                  UserProject, UserReference, ExternalLink, UserAchievement)
+                                  UserProject, UserReference, UserSocialLink, UserAchievement)
 from resumebuilder.api.core.serializers import (UserSerializer, SkillSerializer, UserExperienceSerializer,
                                                 UserEducationSerializer, UserCertificationSerializer,
                                                 UserProjectSerializer, UserAchievementSerializer,
-                                                UserReferenceSerializer, ExternalLinkSerializer)
+                                                UserReferenceSerializer, UserSocialLinkSerializer)
 
 from resumebuilder.mixins import (SessionManagerMixin)
 # inter app imports
@@ -191,27 +191,27 @@ class UserReferenceRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView
         return UserReference.objects.filter(id=user_reference_id)
 
 
-class ExternalLinkListCreateView(SessionManagerMixin, ListCreateAPIView):
+class UserSocialLinkListCreateView(SessionManagerMixin, ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
-    queryset = ExternalLink.objects.all()
-    serializer_class = ExternalLinkSerializer
+    queryset = UserSocialLink.objects.all()
+    serializer_class = UserSocialLinkSerializer
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
             kwargs['many'] = True
-        return super(ExternalLinkListCreateView, self).get_serializer(*args, **kwargs)
+        return super(UserSocialLinkListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class ExternalLinkRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
+class UserSocialLinkRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
-    serializer_class = ExternalLinkSerializer
+    serializer_class = UserSocialLinkSerializer
 
     def get_queryset(self):
         external_link_id = int(self.kwargs.get('pk'))
-        return ExternalLink.objects.filter(id=external_link_id)
+        return UserSocialLink.objects.filter(id=external_link_id)
 
 
 class UserAchievementListCreateView(SessionManagerMixin, ListCreateAPIView):
@@ -244,6 +244,7 @@ class UserResumePreview(SessionManagerMixin, RetrieveUpdateAPIView):
     template_name = 'resume4.html'
 
     def get(self, request):
+
         user = User.objects.get(id=95)
         extracurricular = user.extracurricular.split(',')
         education = user.usereducation_set.all()
@@ -253,7 +254,10 @@ class UserResumePreview(SessionManagerMixin, RetrieveUpdateAPIView):
         references = user.userreference_set.all()
         projects = user.userproject_set.all()
         certifications = user.usercertification_set.all()
+        languages = user.userlanguage_set.all()
+        current_exp = experience.filter(is_working=True).order_by('-start_date').first()
 
         return Response({'user': user, 'education': education, 'experience': experience, 'skills': skills,
                          'achievements': achievements, 'references': references, 'projects': projects,
-                         'certifications': certifications, 'extracurricular': extracurricular})
+                         'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
+                         'current_exp': current_exp})
