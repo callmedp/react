@@ -25,6 +25,8 @@
 		
 		li {
 			padding: 10px;
+			display: flex;
+
 
 			a {
 				@include box (180px, 65px, table-cell);
@@ -92,6 +94,6 @@
 }
 
 .skill-provider .slick-slide {
-  width: 180px;
+  width: auto;
 
 }
