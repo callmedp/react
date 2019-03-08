@@ -6,8 +6,8 @@ span.twitter-typeahead .tt-dropdown-menu {
   z-index: 1000;
   display: none;
   float: left;
-  min-width: 150px;
-  padding: 5px 0;
+  min-width: 655px;
+  padding: 0 0 5px 0;
   margin: 2px 0 0;
   list-style: none;
   font-size: 14px;
@@ -22,12 +22,13 @@ span.twitter-typeahead .tt-dropdown-menu {
 }
 span.twitter-typeahead .tt-suggestion {
   display: block;
-  padding: 3px 20px;
+  padding: 5px 20px;
   clear: both;
   font-weight: normal;
   line-height: 1.42857143;
   color: #333333;
-  white-space: nowrap;
+  /*white-space: nowrap;*/
+  font-size: 13px;
 }
 span.twitter-typeahead .tt-suggestion.tt-cursor,
 span.twitter-typeahead .tt-suggestion:hover,
@@ -90,4 +91,33 @@ span.twitter-typeahead {
 .input-group.input-group-lg span.twitter-typeahead .tt-menu,
 .input-group.input-group-lg span.twitter-typeahead .tt-dropdown-menu {
   top: 46px !important;
+}
+
+
+/*** New Typeahead CSS ***/
+.tt-dataset {
+  color: #666666;
+  font-size: 13px;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.tt-dataset-category_skill h3, 
+.tt-dataset-products h3 {
+  background: #f9f9f9;
+  padding: 10px 15px;
+  color: #3f5f94;
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.search-box span.twitter-typeahead .tt-menu,
+.search-box span.twitter-typeahead .tt-dropdown-menu {
+  min-width: 610px;
+}
+
+.searchNavBar span.twitter-typeahead .tt-menu,
+.searchNavBar span.twitter-typeahead .tt-dropdown-menu {
+  min-width: 400px;
 }
