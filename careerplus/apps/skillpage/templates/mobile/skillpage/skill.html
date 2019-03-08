@@ -77,12 +77,12 @@
                 {% if top_4_vendors %}
                     <h2 class="mb-0">Providers</h2>
                     <div class="slide-container">
-                        <ul class="skill-provider cropcenterimg">
+                        <ul class="skill-provider cropcenterimg" >
                         {% for top_4_vendor in top_4_vendors %}
                             {% if top_4_vendor.icon or top_4_vendor.image %}
-                            <li class="cuad">
-                                <a class="box">
-                                    <img src="{% if top_4_vendor.icon %}
+                            <li class="cuad" >
+                                <a class="box" style="padding:2px;">
+                                    <img  src="{% if top_4_vendor.icon %}
                                         {{top_4_vendor.icon.url}}
                                     {% elif top_4_vendor.image %}{{top_4_vendor.image.url}}{% endif %}">
                                 </a>
@@ -239,7 +239,6 @@
 {% block js_section %}
     {{block.super}}
 <script>
-CenterCropImage($('.cropcenterimg li a'));
 
 /***CENTER CROP IMAGE***/
 function CenterCropImage(x) {
@@ -268,7 +267,7 @@ function ProportionHorizontal(x) {
 	x.removeAttr("style")
 	x.css({
 		'height': '100%',
-		'width': 'auto'
+		'width': '100%'
 	})
 	Wimg = x.width()
 	Wcont = x.parent().width()
@@ -279,15 +278,19 @@ function ProportionHorizontal(x) {
 	})
 }
 
-<!--function ProportionVertical(x){-->
-<!--x.removeAttr("style")-->
-<!--x.css({'width':'100%','height':'auto'})-->
-<!--Himg=x.height()-->
-<!--Hcont=x.parent().height()-->
+function ProportionVertical(x){
+x.removeAttr("style")
+x.css({'width':'100%','height':'auto'})
+Himg=x.height()
+Hcont=x.parent().height()
 
-<!--MarginTop=(Hcont-Himg)/2-->
-<!--x.css({'margin-top':MarginTop})-->
-<!--}-->
+
+
+
+$(document).ready(function() {
+CenterCropImage($('.cropcenterimg li a'));
+});
+
 </script>
 
     {% compress js %}

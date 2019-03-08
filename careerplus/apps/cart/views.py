@@ -85,7 +85,7 @@ class AddToCartView(View, CartMixin):
                     logging.getLogger('error_log').error('unable to get cart object %s'%str(e))
                     cart_obj = None
                 logging.getLogger('info_log').info("Cart Obj:{}, candidate_ID: {}, Owner ID:{}".format(cart_obj, candidate_id, cart_obj.owner_id))
-                if cart_obj and (candidate_id == cart_obj.owner_id):
+                if cart_obj and (candidate_id == cart_obj.owner_id) and not request.ip_restricted:
                     first_name = request.session.get('first_name', '')
                     last_name = request.session.get('last_name', '')
                     email = request.session.get('email', '')
@@ -94,6 +94,7 @@ class AddToCartView(View, CartMixin):
                     #     (cart_pk, email),
                     #     countdown=settings.CART_DROP_OUT_EMAIL)
                     source_type = "cart_drop_out"
+
                     create_lead_on_crm.apply_async(
                         (cart_obj.pk, source_type, name),
                         countdown=settings.CART_DROP_OUT_LEAD)
@@ -430,7 +431,7 @@ class PaymentShippingView(UpdateView, CartMixin):
                     form._errors[NON_FIELD_ERRORS] = form.error_class([non_field_error])
                     return self.form_invalid(form)
                 valid_form = self.form_valid(form)
-                if obj.owner_id == request.session.get('candidate_id'):
+                if obj.owner_id == request.session.get('candidate_id') and not request.ip_restricted:
                     first_name = request.session.get('first_name', '')
                     last_name = request.session.get('last_name', '')
                     name = "{}{}".format(first_name, last_name)
