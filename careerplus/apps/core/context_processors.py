@@ -8,6 +8,8 @@ from cart.mixins import CartMixin
 from cart.models import Subscription
 from marketing.data import UTM_CAMPAIGN_HTML_MAPPING
 from django_redis import get_redis_connection
+from ast import literal_eval
+from json import loads
 
 redis_conn = get_redis_connection("search_lookup")
 
@@ -105,6 +107,6 @@ def marketing_context_processor(request):
 
 def getSearchSet(request):
     return {
-                "search_context": [p.decode() for p in redis_conn.smembers('product_set')],
-                "category_skill_set": [p.decode() for p in redis_conn.smembers('category_skill_set')]
+                "product_url_set": {eval(p.decode())['name']:eval(p.decode())['url'] for p in redis_conn.smembers('product_url_set')},
+                "category_url_set": {eval(p.decode())['name']:eval(p.decode())['url'] for p in redis_conn.smembers('category_url_set')},
            }

@@ -8,19 +8,20 @@ $(document).on("click","a[href^='tel']",function(){
 3) this function is binding typeahead for every form it finds with class .cls_search
 4) it also binding jquery validate for form validation */
 $(document).ready(function($) {
+  
     var categorySkillSource = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.whitespace,
         queryTokenizer: Bloodhound.tokenizers.whitespace,
-        local: categorySkillSet
+        local:Object.keys(categoryUrlSet)
       });
       var productSource = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.whitespace,
         queryTokenizer: Bloodhound.tokenizers.whitespace,
-        local: productSkillSet
+        local: Object.keys(productUrlSet)
       });
 
       $(".search").find("input").typeahead({
-        highlight: true
+        highlight: false
       },
       {
         name: 'category_skill',
@@ -37,10 +38,15 @@ $(document).ready(function($) {
         templates: {
           header: '<h3>Products</h3>'
         }
+      }).bind('typeahead:select', function(ev, suggestion) {
+        if (categoryUrlSet[suggestion]) 
+          window.location.href = `${categoryUrlSet[suggestion]}`;
+        else 
+          window.location.href = `${productUrlSet[suggestion]}`;
       });
 
       $(".searchbox").find("input").typeahead({
-        highlight: true
+        highlight: false
       },
       {
         name: 'category_skill',
@@ -57,10 +63,15 @@ $(document).ready(function($) {
         templates: {
           header: '<h3>Products</h3>'
         }
+      }).bind('typeahead:select', function(ev, suggestion) {
+        if (categoryUrlSet[suggestion]) 
+          window.location.href = `${categoryUrlSet[suggestion]}`;
+        else 
+          window.location.href = `${productUrlSet[suggestion]}`;
       });
 
       $("#id_q").typeahead({
-        highlight: true
+        highlight: false
       },
       {
         name: 'category_skill',
@@ -77,7 +88,13 @@ $(document).ready(function($) {
         templates: {
           header: '<h3>Products</h3>'
         }
+      }).bind('typeahead:select', function(ev, suggestion) {
+        if (categoryUrlSet[suggestion]) 
+          window.location.href = `${categoryUrlSet[suggestion]}`;
+        else 
+          window.location.href = `${productUrlSet[suggestion]}`;
       });
+      
     $('.cls_search').each(function(index,item){
         $(item).validate({
             rules : {
@@ -103,6 +120,8 @@ $(document).ready(function($) {
         });
     
     });
+
+    
 });
 
 
@@ -124,6 +143,7 @@ $('.cls_showPanel').on('click',function(e){
     childDiv = $('.cls_showPanelChild'),
     alreadyOpenDiv = null;
     for(var i=0;i<childDiv.length;i++){
+      debugger;
         if(!$(childDiv[i]).hasClass('collapse')){
             alreadyOpenDiv = childDiv[i];
         }
