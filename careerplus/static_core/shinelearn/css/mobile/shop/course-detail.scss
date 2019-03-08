@@ -160,7 +160,6 @@
 	span + span:before  {
 		content: ", "
 	}
-
 	sup {
 		@include icon-inblock (7px, 13px, -28px -197px);
 		position: absolute;
