@@ -51,9 +51,9 @@
                 <div class="pull-right" style="width:90%;">
                     
                    <a class="icon-cart pull-right" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
-                   <form method='get' action='/search/results/'>
+                   <form id="nav-search-box">
                     <div class="searchbox">
-                        <input type="text" placeholder="Search here" name="search" class="searchbox-input" >
+                        <input type="text" placeholder="Search here" name="search" class="searchbox-input">
                         <input type="submit" class="searchbox-submit" >
                         <span class="searchbox-icon"></span>
                     </div>
@@ -357,43 +357,24 @@ function close_review() {
     <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
     <script type="text/javascript">
     $(document).ready(function(){
-       /* var substringMatcher = function(strs) {
-            return function findMatches(q, cb) {
-                var matches, substringRegex;
-
-                // an array that will be populated with substring matches
-                matches = [];
-
-                // regex used to determine if a string contains the substring `q`
-                substrRegex = new RegExp(q, 'i');
-
-                // iterate through the pool of strings and for any string that
-                // contains the substring `q`, add it to the `matches` array
-                $.each(strs, function(i, str) {
-                    if (substrRegex.test(str)) {
-                        matches.push(str);
-                     }
-                    });
-
-                cb(matches);
-            };
-        };*/
-
-        var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
-            'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
-            'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-            'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-            'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-            'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-            'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
-            'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-            'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-            ];
         skillsSet = {{ skills_set|safe }}
         funcAreaSet = {{ func_area_set|safe }}
         $('.searchbox-input').typeahead({
             local: {{ search_context|safe }}
         });
+
+        $("#nav-search-box").submit(function(e){
+            inputValue = $(this).find('.searchbox-input').val()
+            if(inputValue){
+                location.href = '/search/results/?q='+encodeURI(inputValue);
+            }
+            e.preventDefault();
+            
+        });
+
+        $('.searchbox-input').click(function () {
+            console.log($(this).val())
+        }); 
     });
     </script>
 {% endblock js_section %}
