@@ -69,8 +69,8 @@ class UserExperience(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
     job_profile = models.CharField('Job Profile', max_length=100)
     company_name = models.CharField('Company Name', max_length=200)
-    start_date = models.DateField('Start Date', blank=False)
-    end_date = models.DateField('End Date', blank=True)
+    start_date = models.DateField('Start Date', blank=True, null=True)
+    end_date = models.DateField('End Date', blank=True, null=True)
     is_working = models.BooleanField('Present')
     job_location = models.CharField('Job Location', max_length=100)
     work_description = models.TextField('Job Description')
@@ -86,8 +86,8 @@ class UserEducation(models.Model):
     course_type = models.CharField('Institution Name', choices=(('FT', 'Full Time'), ('PT', 'Part Time'),
                                                                 ('CR', 'Correspondence')), max_length=2)
     percentage_cgpa = models.CharField('Percentage Or CGPA', max_length=250)
-    start_date = models.DateField('Start Date', blank=False)
-    end_date = models.DateField('End Date', blank=True)
+    start_date = models.DateField('Start Date', blank=True, null=True)
+    end_date = models.DateField('End Date', blank=True, null=True)
     is_pursuing = models.BooleanField('Still Pursuing')
 
     def __str__(self):
@@ -97,7 +97,7 @@ class UserEducation(models.Model):
 class UserCertification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
     name_of_certification = models.CharField('Certification Name', max_length=250)
-    year_of_certification = models.DateField('Year of Certification')
+    year_of_certification = models.IntegerField('Year of Certification')
 
     def __str__(self):
         return self.name_of_certification

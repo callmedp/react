@@ -7,7 +7,7 @@ IS_LIVE = False
 IS_GCP = True
 ALLOWED_HOSTS = ['*']
 
-######## DATABASE SETTINGS ###########
+####### DATABASE SETTINGS ###########
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -42,6 +42,7 @@ DATABASES = {
         'PORT': '',
     },
 }
+
 DATABASE_ROUTERS = ['careerplus.config.db_routers.MasterSlaveRouter']
 
 DEBUG_TOOLBAR_PANELS = [
