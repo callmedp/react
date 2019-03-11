@@ -119,6 +119,7 @@
 
 {% block js_section %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.js"></script>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     {% compress js %}
     <script src="{% static 'shinelearn/js/common/jquery.min.js' %}"></script>
@@ -128,7 +129,7 @@
     <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
     <script src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
     {% endcompress %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.js"></script>
+    
     <script>
         $('.nav-tabs > li > a').hover(function() {
             $(this).tab('show');
