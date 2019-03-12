@@ -22,6 +22,7 @@ from django.views.generic import (
     View,
     CreateView
 )
+from django_redis import get_redis_connection
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from geolocation.models import Country
@@ -55,6 +56,8 @@ from review.forms import ReviewForm
 from .models import Skill
 from homepage.config import UNIVERSITY_COURSE
 from crmapi.models import UNIVERSITY_LEAD_SOURCE
+
+redis_conn = get_redis_connection("search_lookup")
 
 class ProductInformationMixin(object):
 

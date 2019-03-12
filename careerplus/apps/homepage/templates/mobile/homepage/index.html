@@ -8,7 +8,7 @@
     {% compress css %}
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/homepage/home.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
-    <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 
@@ -287,21 +287,12 @@
 
 {% block js_section %}
     {{block.super}}
-    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.js"></script>
     <script type="text/javascript">
         var funcAreaSet = {{ func_area_set|safe }},
             skillsSet = {{ skills_set|safe }},
             prefetchedFuncArea = '{{ recmnd_func_area }}',
             prefetchedSkills = '{{ recmnd_skills }}';
-        $('#id_q').typeahead({
-            local: {{ search_context|safe }}
-        });
-        $('#tags11').typeahead({
-            local: funcAreaSet
-        });
-        $('#tags21').typeahead({
-            local: skillsSet
-        });
     </script>
     {% compress js %}
     <script src="{% static 'shinelearn/js/mobile/homepage/index.js' %}" type="text/javascript"></script>

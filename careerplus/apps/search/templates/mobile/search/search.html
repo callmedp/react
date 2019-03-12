@@ -35,7 +35,7 @@ Search Result Page - Shine Learning
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/search/course-listing.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/auto-suggest.css' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/search/filter.scss' %}" rel="stylesheet">
-    <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
@@ -147,20 +147,11 @@ Search Result Page - Shine Learning
 
 {% block js_section %}
     {{block.super}}
-    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.js"></script>
     <script>
         var funcAreaSet = {{ func_area_set|safe|default:"[]" }},
             skillsSet = {{ skills_set|safe|default:"[]" }},
             totalProducts = {{ paginator.count }};
-        $( "#tags11" ).typeahead({
-            local: funcAreaSet
-        });
-        $('#tags21').typeahead({
-            local: skillsSet
-        });
-         $('#id_q').typeahead({
-            local: {{ search_context|safe|default:"[]" }}
-        });
     </script>
     {% compress js %}
     <script src="{% static 'shinelearn/js/mobile/search/search.js' %}"></script>
