@@ -42,6 +42,7 @@ def update_search_autocomplete():
     categories = Category.objects.filter(is_skill = True)
     redis_conn.delete('category_url_set')
     for category in categories:
-        redis_conn.sadd("category_url_set", { "name":category.name, "url":category.get_absolute_url()})
+        if category.get_absolute_url():
+            redis_conn.sadd("category_url_set", { "name":category.name, "url":category.get_absolute_url()})
     logging.getLogger('info_log').info(
         "{} categories added".format(categories.count()))
