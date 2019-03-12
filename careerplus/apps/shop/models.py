@@ -6,6 +6,7 @@ from django.db import models
 from django.utils.html import strip_tags
 from django.utils import six
 from django.utils.translation import ugettext_lazy as _
+from django.utils.text import slugify
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.core.cache import cache
@@ -54,6 +55,7 @@ from .choices import (
     C_ATTR_DICT,
     R_ATTR_DICT,
     S_ATTR_DICT,
+    CITY_CHOICES,
     convert_to_month,
     convert_inr,
     convert_usd,
@@ -405,7 +407,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         delete_keys = cache.keys('prd_*_' + str(instance.pk))
         for uk in delete_keys:
             cache.delete(uk)
-        prods_list = instance.categoryproducts.all().values_list('product__id', flat=True)
+        prods_list = instance.categoryproducts.all().values_list('id', flat=True)
         for prod in prods_list:
             cache.delete("product_{}_absolute_url".format(prod))
             cache.delete("context_product_detail_" + str(prod))
@@ -1634,13 +1636,11 @@ class Product(AbstractProduct, ModelMeta):
 
         return self.get_absolute_url()
 
-
     def get_parent_canonical_url(self):
         if self.category_main:
             return self.category_main.get_absolute_url()
         else:
             return " "
-
 
     def get_batch_launch_date(self):
         unique_key = 'prd_batch_launch_date_' + str(self.pk)
@@ -1675,7 +1675,7 @@ class Product(AbstractProduct, ModelMeta):
         cache.delete("detail_db_product_" + str(instance.pk))
         cache.delete("detail_solr_product_" + str(instance.pk))
         cache.delete("category_main_" + str(instance.pk))
-        category_ids=instance.productcategories.all().values_list('category__id',flat=True)
+        category_ids = instance.productcategories.all().values_list('category__id',flat=True)
         for cat_id in category_ids:
             cache.delete('cat_absolute_url_' + str(cat_id))
         from .tasks import add_log_in_product_audit_history
@@ -2917,3 +2917,151 @@ class FacultyProduct(AbstractAutoDate):
         return '{} - {} ---- {}'.format(
             self.product.heading, self.product_id,
             self.faculty.name)
+
+
+class SubCategory(AbstractAutoDate,AbstractSEO,ModelMeta):
+
+    name = models.CharField(
+        _('Name'), max_length=100,
+        help_text=_('Unique name going to decide the slug'))
+
+    location = models.PositiveSmallIntegerField(
+        _('location'), choices=CITY_CHOICES, default=0)
+
+    category = models.ForeignKey(Category,on_delete=models.CASCADE)
+
+    video_link = models.CharField(
+        _('Video Link'), blank=True, max_length=200)
+    career_outcomes = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True,
+        help_text='semi-colon(;) separated designations, e.g. Project Engineer; Software Engineer; ...')
+    description = RichTextField(
+        verbose_name=_('Description'), blank=True, default='')
+    banner = models.ImageField(
+        _('Banner'), upload_to=get_upload_path_category,
+        blank=True, null=True)
+    graph_image = models.ImageField(
+        _('Graph Image'), upload_to=get_upload_path_category,
+        blank=True, null=True)
+
+    image = models.ImageField(
+        _('Image'), upload_to=get_upload_path_category,
+        blank=True, null=True)
+
+    icon = models.ImageField(
+        _('Icon'), upload_to=get_upload_path_category,
+        blank=True, null=True)
+
+    active = models.BooleanField(default=False)
+
+    products_mapped = models.CharField(
+        _('products'), max_length=100,
+        help_text=_('Product Mapping'),null=True,blank=True)
+
+    slug = models.CharField(
+        _('Slug'), unique=True,blank=True,null=True,
+        max_length=100, help_text=_('Unique slug'))
+
+    url_slug_fix = "fix_field"
+    fix_field = True
+
+    _metadata_default = ModelMeta._metadata_default.copy()
+
+    _metadata = {
+        'title': 'title',
+        'description': 'get_description',
+        'og_description': 'get_description',
+        'keywords': 'get_keywords',
+        'published_time': 'created',
+        'modified_time': 'modified',
+        'url': 'get_absolute_url',
+    }
+
+
+    def __str__(self):
+        return "{}-in-{}".format(self.category.name, self.get_location_display())
+
+
+    def create_icon(self):
+        if not self.image:
+            return
+        try:
+            from PIL import Image
+            from io import BytesIO
+            from django.core.files.uploadedfile import SimpleUploadedFile
+            import os
+
+            THUMBNAIL_SIZE = (100, 100)
+            DJANGO_TYPE = None
+
+            if self.image.name.endswith(".jpg"):
+                DJANGO_TYPE = 'image/jpeg'
+                PIL_TYPE = 'jpeg'
+                FILE_EXTENSION = 'jpg'
+            elif self.image.name.endswith(".png"):
+                DJANGO_TYPE = 'image/png'
+                PIL_TYPE = 'png'
+                FILE_EXTENSION = 'png'
+            else:
+                return
+            image = Image.open(BytesIO(self.image.read()))
+            image.thumbnail(THUMBNAIL_SIZE, Image.ANTIALIAS)
+
+            temp_handle = BytesIO()
+            image.save(temp_handle, PIL_TYPE)
+            temp_handle.seek(0)
+
+            suf = SimpleUploadedFile(os.path.split(self.image.name)[-1],
+                    temp_handle.read(), content_type=DJANGO_TYPE)
+            self.icon.save(
+                '%s_thumbnail.%s' % (os.path.splitext(suf.name)[0], FILE_EXTENSION),
+                suf,
+            )
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to create icon%s'%str(e))
+            pass
+        return
+
+
+    def get_absolute_url(self):
+        url = '/'
+        if self.slug:
+            url = "/courses/{}".format(self.slug)
+        return url
+
+
+
+    def get_canonical_url(self):
+        return self.get_absolute_url()
+
+    def get_parent(self):
+        return self.category
+
+
+    def get_description(self):
+        return self.meta_desc
+
+    def split_career_outcomes(self):
+        if self.career_outcomes:
+            return self.career_outcomes.split(',')
+        return []
+
+    def products_id_mapped(self):
+        if self.products_mapped:
+            prod_list = eval(self.products_mapped)
+            prod_integer_list = [int(id) for id in prod_list if id.isdigit()]
+            return prod_integer_list
+        return []
+
+    def save(self, *args, **kwargs):
+        if not self.url:
+            self.url = self.get_absolute_url()
+
+        if self.category and self.location:
+            value = self.category.name + '' + str(self.get_location_display())
+            slug_value = slugify(value)
+            self.slug = slug_value
+        super(SubCategory, self).save(*args, **kwargs)
+

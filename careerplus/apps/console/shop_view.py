@@ -39,7 +39,7 @@ from shop.models import (
     Category, Keyword,
     Attribute, AttributeOptionGroup,
     Product, Chapter, Skill, ProductAuditHistory, UniversityCoursePayment,
-    SubHeaderCategory
+    SubHeaderCategory,SubCategory
 )
 from homepage.models import Testimonial
 from .shop_form import (
@@ -54,7 +54,8 @@ from .shop_form import (
     UniversityCoursePaymentForm,
     UniversityCoursesPaymentInlineFormset,
     SubHeaderCategoryForm, SubHeaderInlineFormSet,
-    TestimonialModelForm
+    TestimonialModelForm,
+    AddSubCategoryForm,ChangeSubCategoryForm
 )
 
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
@@ -94,6 +95,17 @@ class SkillAutocompleteView(autocomplete.Select2QuerySetView):
         return qs
 
 
+class ProductAutocompleteView(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated():
+            return Product.objects.none()
+        qs = Product.objects.filter(is_indexed=True,active=True)
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+        return qs
+
+
+
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 class SkillChangeView(UpdateView):
@@ -129,6 +141,46 @@ class SkillChangeView(UpdateView):
                 return valid_form
             except Exception as e:
                 messages.add_message(request, messages.ERROR, 'Blog %s Not Updated. Due to %s' % (self.object.id, str(e)))
+                return self.form_invalid(form)
+        return self.form_invalid(form)
+
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
+class SkillChangeView(UpdateView):
+    model = Skill
+    template_name = 'console/skill/change_skill.html'
+    success_url = reverse_lazy('console:skill-list')
+    http_method_names = [u'get', u'post']
+    form_class = SkillChangeForm
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = super(SkillChangeView, self).get(request, *args, **kwargs)
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(SkillChangeView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert})
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            try:
+                form.save()
+                valid_form = self.form_valid(form)
+                messages.add_message(
+                    request, messages.SUCCESS,
+                    'Skill %s - %s Updated Successfully.' % (
+                        self.object.name, self.object.id))
+                return valid_form
+            except Exception as e:
+                messages.add_message(request, messages.ERROR,
+                                     'Blog %s Not Updated. Due to %s' % (self.object.id, str(e)))
                 return self.form_invalid(form)
         return self.form_invalid(form)
 
@@ -2693,3 +2745,123 @@ class DownloadUpsellReportView(TemplateView):
 #                 return HttpResponseRedirect(
 #                     reverse('console:faquestion-moderate', kwargs={'pk': faq}))
 #         return HttpResponseBadRequest()
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
+@Decorate(check_permission('shop.console_change_category'))
+class ListSubCategoryView(ListView, PaginationMixin):
+    model = SubCategory
+    context_object_name = 'category_list'
+    template_name = 'console/shop/list_subcategory.html'
+    http_method_names = [u'get', ]
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = 1
+        self.paginated_by = 50
+        self.query = ''
+        return super(ListSubCategoryView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        return super(ListSubCategoryView, self).get(request, args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(ListSubCategoryView, self).get_queryset()
+        try:
+            if self.query:
+                queryset = queryset.filter(Q(name__icontains=self.query))
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get query set%s'%str(e))
+            pass
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ListSubCategoryView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        paginator = Paginator(context['category_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        alert = messages.get_messages(self.request)
+        context.update({
+            "query": self.query,
+            "messages": alert,
+        })
+        return context
+
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
+@Decorate(check_permission('shop.console_add_subcategory'))
+class AddSubCategoryView(FormView):
+    form_class = AddSubCategoryForm
+    template_name = 'console/shop/add_subcategory.html'
+    http_method_names = ['get', 'post']
+    success_url = reverse_lazy('console:subcategory-add')
+
+    def get(self, request, *args, **kwargs):
+        return super(AddSubCategoryView, self).get(
+            request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AddSubCategoryView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({'messages': alert})
+        return context
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(
+            self.request,
+            "You have successfully added a SubCatagory"
+        )
+        self.success_url = reverse_lazy('console:subcategory-list')
+        return super(AddSubCategoryView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(
+            self.request,
+            "Your addition has not been saved. Try again."
+        )
+        return super(AddSubCategoryView, self).form_invalid(form)
+
+
+@Decorate(stop_browser_cache())
+@Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
+class SubCategoryChangeView(UpdateView):
+    model = SubCategory
+    template_name = 'console/shop/change_subcategory.html'
+    success_url = reverse_lazy('console:subcategory-list')
+    http_method_names = [u'get', u'post']
+    form_class = ChangeSubCategoryForm
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = super(SubCategoryChangeView, self).get(request, *args, **kwargs)
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(SubCategoryChangeView, self).get_context_data(**kwargs)
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert})
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            try:
+                form.save()
+                valid_form = self.form_valid(form)
+                messages.add_message(
+                    request, messages.SUCCESS,
+                    'Skill %s - %s Updated Successfully.' % (
+                        self.object.name, self.object.id))
+                return valid_form
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, 'Blog %s Not Updated. Due to %s' % (self.object.id, str(e)))
+                return self.form_invalid(form)
+        return self.form_invalid(form)
+
+

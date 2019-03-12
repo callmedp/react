@@ -133,6 +133,9 @@
             <li><a><i class="fa fa-bookmark"></i> Category <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
                 <li><a href="{% url 'console:category-list' %}">Category</a></li>
+                 {% if perms.shop.console_change_subcategory %}
+                  <li><a href="{% url 'console:subcategory-list' %}">SubCategory</a></li>
+                  {% endif %}
                 <li><a href="{% url 'console:category-relation-list' %}">Category Relationship</a></li>
               </ul>
             </li>
