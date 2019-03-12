@@ -82,15 +82,15 @@ class UserShineProfileRetrieveUpdateView(ShineCandidateDetail, RetrieveUpdateAPI
     permission_classes = ()
 
     def get(self, request, *args, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
+
         user_email = kwargs.get('email')
         if not user_email:
-            # todo send http error response
-            return
+            return Response({}, status=400)
 
         shine_profile = self.get_candidate_detail(email=user_email)
-        # todo update profile of the user
+
+        if not shine_profile:
+            return Response({})
 
         profile = shine_profile and shine_profile['personal_detail'][0]
         # update user basic profile
@@ -133,7 +133,6 @@ class UserShineProfileRetrieveUpdateView(ShineCandidateDetail, RetrieveUpdateAPI
         UserEducation.objects.bulk_create(user_education)
 
         # update user experience
-
         user_experience_keys = ['user', 'job_profile', 'company_name', 'start_date', 'end_date', 'is_working',
                                 'job_location',
                                 'work_description']
@@ -142,11 +141,11 @@ class UserShineProfileRetrieveUpdateView(ShineCandidateDetail, RetrieveUpdateAPI
         user_experience = []
 
         for exp in experience:
-            start_date = datetime.strptime(exp['start_date'], '%Y-%m-%dT%H:%M:%S').date() if exp[
-                                                                                                 'start_date'] is not None else \
+            start_date = datetime.strptime(exp['start_date'], '%Y-%m-%dT%H:%M:%S').date() \
+                if exp['start_date'] is not None else \
                 exp['start_date']
-            end_date = datetime.strptime(exp['end_date'], '%Y-%m-%dT%H:%M:%S').date() if exp[
-                                                                                             'end_date'] is not None else \
+            end_date = datetime.strptime(exp['end_date'], '%Y-%m-%dT%H:%M:%S').date() \
+                if exp['end_date'] is not None else \
                 exp['end_date']
             user_experience_values = [user, exp['job_title'], exp['company_name'],
                                       start_date, end_date,
