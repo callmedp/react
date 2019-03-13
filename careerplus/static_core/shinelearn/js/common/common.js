@@ -44,32 +44,6 @@ $(document).ready(function($) {
         else 
           window.location.href = `${productUrlSet[suggestion]}`;
       });
-
-      $(".searchbox").find("input").typeahead({
-        highlight: false
-      },
-      {
-        name: 'category_skill',
-        source: categorySkillSource,
-        limit: 3,
-        templates: {
-          header: '<h3>Skills</h3>'
-        }
-      },
-      {
-        name: 'products',
-        source: productSource,
-        limit: 3,
-        templates: {
-          header: '<h3>Products</h3>'
-        }
-      }).bind('typeahead:select', function(ev, suggestion) {
-        if (categoryUrlSet[suggestion]) 
-          window.location.href = `${categoryUrlSet[suggestion]}`;
-        else 
-          window.location.href = `${productUrlSet[suggestion]}`;
-      });
-
       $("#id_q").typeahead({
         highlight: false
       },
