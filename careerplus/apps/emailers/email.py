@@ -13,7 +13,7 @@ class SendMail():
         '''
             Base function to send email. If debug_mode is true the cc will be shinecp@hindustantimes.com
         '''
-        if settings.DEBUG:
+        if settings.DEBUG and settings.TEST_EMAIL:
             subject = "Test Mail " + subject
             to = ['amanpreet.singh1@hindustantimes.com']  # priya.kharb@hindustantimes.com
             cc = []
@@ -142,7 +142,6 @@ class SendMail():
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             send_dict['bcc_list'] = [settings.CONSULTANTS_EMAIL]
             send_dict['from_email'] = settings.CONSULTANTS_EMAIL
-
             self.process(to, send_dict, data)
 
         elif mail_type == "BOOSTER_CANDIDATE":

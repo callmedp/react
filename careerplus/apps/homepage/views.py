@@ -205,3 +205,11 @@ class ContactUsView(TemplateView):
             "countries": countries,
         })
         return context
+
+
+class DisclaimerView(TemplateView):
+    template_name = 'homepage/disclaimer.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DisclaimerView, self).get_context_data(**kwargs)
+        return context

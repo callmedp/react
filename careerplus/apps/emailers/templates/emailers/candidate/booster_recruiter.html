@@ -40,16 +40,16 @@ If you have any suitable openings, you may contact the candidates directly on th
       <td width="50%" align="left" valign="middle" style=" line-height: 18px; padding:10px; border-bottom: solid 1px #fff; border-right: solid 1px #fff;">Candidate</td>
       <td width="50%" align="left" valign="middle" style=" line-height: 18px; padding:10px;border-bottom: solid 1px #fff;">Download resume</td>
     </tr>
-    <tr>
 
     {% with data_item=data %}
       {% for data_dict in data_item %}
+        <tr>
           <td width="50%" align="left" valign="middle" style=" line-height: 18px; padding:10px; border-bottom: solid 1px #fff; border-right: solid 1px #fff;">
           <a href="mailto:{{data_dict.title}}" style="color: #2196f3; text-decoration: none;">{{data_dict.title}}</a></td>
           <td width="50%" align="left" valign="middle" style=" line-height: 18px; padding:10px;border-bottom: solid 1px #fff;"><a href="{{data_dict.download_link}}" target="" get="_blank" style="color: #2196f3; text-decoration: none;">Download</a></td>
+        </tr>
       {% endfor %}
     {% endwith %}
-    </tr>
   </tbody>
 </table>
 

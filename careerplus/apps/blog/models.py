@@ -8,6 +8,7 @@ from django.urls import reverse
 # from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from bs4 import BeautifulSoup
+from django.utils import timezone
 
 
 from meta.models import ModelMeta
@@ -336,6 +337,8 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
             self.display_name = self.name
         if self.id:
             self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
+            blog_obj = Blog.objects.filter(id=self.id).first()
+            self.publish_date = self.publish_date if self.content == blog_obj.content else timezone.now()
         if not self.summary:
             try:
                 soup = BeautifulSoup(self.content, 'html.parser')

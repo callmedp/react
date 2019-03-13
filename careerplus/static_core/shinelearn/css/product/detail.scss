@@ -210,15 +210,20 @@ header {
 	font-size: $font-size+4;
 	color: $primary-color;
 	clear: both;
+	padding: 30px 0;
+
+	p:last-child {
+		margin-bottom: 0;
+	}
 
 	&:nth-child(1n+1) {
 		background-color: $white-color;
-		border-bottom: 50px solid transparent;
+		// border-bottom: 50px solid transparent;
 	}
 
 	&:nth-child(2n+2) {
 		background-color: #f6f7f9;
-		border-bottom: 50px solid transparent;
+		// border-bottom: 50px solid transparent;
 	}
 
 	&.bt-none {
@@ -238,27 +243,28 @@ header {
 		}
 	}
 
-	article {
-		margin-bottom: 30px;
-	}
+	// article {
+	// 	margin-bottom: 30px;
+	// }
 
 	iframe {
 		margin-bottom: 30px;
 	}
 
-	h2 {
+	h2,
+	.detail-heading {
 		font-size: $font-size+14;
 		font-weight: $font-weight+300;
 		color: $primary-color;
 		margin: 0 0 20px 0;
 	}
 
-	.detail-heading {
-		font-size: $font-size+7;
-		font-weight: $font-weight+300;
-		color: $primary-color;
-		margin-bottom: 10px;
-	}
+	// .detail-heading {
+	// 	font-size: $font-size+7;
+	// 	font-weight: $font-weight+300;
+	// 	color: $primary-color;
+	// 	margin-bottom: 10px;
+	// }
 
 	.table-responsive {
 		overflow: visible;
@@ -268,7 +274,7 @@ header {
 
 .study-mode {
 	font-size: $font-size+2;
-	margin-top: 20px;
+	margin-top: 25px;
 
 	table {
 		background-color: #f6f7f9;
@@ -326,7 +332,7 @@ header {
 
 .select-product {
 	font-size: $font-size+2;
-	margin-top: 40px;
+	margin-top: 25px;
 
 	ul {
 		list-style-type: none;
@@ -467,6 +473,10 @@ header {
 	.panel-group {
 		padding-left: 0;
 		list-style-type: none;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
 	}
 
 	.panel-body {
@@ -578,7 +588,9 @@ header {
 }
 
 .reviews .write-review {
-	top: 105px;
+	font-size: 14px;
+	position: absolute;
+	top: 6px;
 	right: 15px;
 }
 
@@ -1319,6 +1331,7 @@ header {
 	li {
 		display: block !important;
 		padding: 0 15px !important;
+		margin: 15px 0;
 	}
 }
 
@@ -1336,10 +1349,10 @@ header {
 	a {
 		color: $primary-color;
 		margin-left: 4%;
-		padding: 15px 0 5px 0;
+		padding: 9px 0 5px 0;
 		display: inline-block;
 		line-height: 40px;
-		border-bottom: 3px transparent $anchor-color !important;
+		border-bottom: 3px solid transparent;
 
 		@media (max-width: 1190px) {
 			margin-left: 2%;
@@ -1361,7 +1374,7 @@ header {
 }
 
 .scroll {
-	margin-top: -50px;
+	margin-top: -43px;
 	padding-top: 50px;
 
 	div {
@@ -1375,7 +1388,7 @@ header {
 	display: block;
 	font-size: $font-size;
 	color: $primary-color;
-	padding-top: 20px;
+	padding-top: 30px;
 	margin-bottom: -10px;
 
 	strong {
@@ -1403,11 +1416,11 @@ header {
 	border-bottom: 50px solid transparent;
 }
 
-#faq:before, #review:before, #delivery:before, #programs:before, #get:before, #course:before ,#attends:before {
-	padding-top:50px;
-	display:block;
-	content:"";
-}
+// #faq:before, #review:before, #delivery:before, #programs:before, #get:before, #course:before ,#attends:before {
+// 	padding-top:50px;
+// 	display:block;
+// 	content:"";
+// }
 
 #review1:before {
 	padding-top:0;
@@ -1718,7 +1731,7 @@ footer {
 	background-color: $white-bg;
 	position: absolute;
     right: 6px;
-    top: 140px;
+    top: 38px;
 	color: #000;
 	font-size: 12px;
     width: 25px;

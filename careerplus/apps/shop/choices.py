@@ -36,12 +36,12 @@ PRODUCT_VENDOR_CHOICES = (
     (1, 'Variation-Parent'),)
 
 
-PRODUCT_CHOICES: Tuple[Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str]] = PRODUCT_VENDOR_CHOICES + ((2, 'Variation-Child'),
+PRODUCT_CHOICES = PRODUCT_VENDOR_CHOICES + ((2, 'Variation-Child'),
     (3, 'Combo'),
     (4, 'No-Direct-Sell/Virtual'),
     (5, 'Downloadable'),)
 
-FLOW_CHOICES: Tuple[Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str]] = (
+FLOW_CHOICES = (
     (0, 'Default'),
     (1, 'Resume Writing India'),  # flow1
     (2, 'Courses'),  # flow2
@@ -56,8 +56,10 @@ FLOW_CHOICES: Tuple[Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int
     (11, 'TSSC'),  # flow 11
     (12, 'Country Specific Resume'),  # flow 12
     (13, 'Executive Bio,Portfolio,Visual Resume,Cover Letter,Second Regular Resume'),  # flow 13
-    (14, 'University Courses'), #flow 14
-    (15, 'Resume Builder'), #flow 15
+    (14, 'University Courses')
+    (15, 'Resume Booster International')
+    (16, 'Resume Builder'),  # flow 15
+
 )
 
 BG_COLOR = {0: "#c8b98d", 1: "#cfbabd", 2: "#75dac2", 3: "#d2db86",

@@ -30,7 +30,7 @@ from order.models import Order, OrderItem, InternationalProfileCredential, Order
 from shop.models import DeliveryService, Product
 from blog.mixins import PaginationMixin
 from emailers.email import SendMail
-from emailers.tasks import send_email_task
+from emailers.tasks import send_email_task, send_booster_recruiter_mail_task
 from emailers.sms import SendSMS
 from core.mixins import TokenExpiry
 from payment.models import PaymentTxn
@@ -41,7 +41,7 @@ from scheduler.models import Scheduler
 
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from review.models import Review
-
+from partner.models import BoosterRecruiter
 
 from .decorators import (
     Decorate,
@@ -1840,7 +1840,7 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
     def get_queryset(self):
         queryset = super(BoosterQueueVeiw, self).get_queryset()
         queryset = queryset.filter(
-            order__status__in=[1,3], product__type_flow=7,
+            order__status__in=[1, 3], product__type_flow__in=[7, 15],
             no_process=False, oi_status__in=[5, 61, 62, 4],
             order__welcome_call_done=True).exclude(
             wc_sub_cat__in=[64, 65]
@@ -2176,7 +2176,7 @@ class ActionOrderItemView(View):
             try:
                 booster_ois = OrderItem.objects.filter(
                     id__in=selected_id,
-                    product__type_flow=7,
+                    product__type_flow__in=[7, 15],
                     oi_status__in=[5, 62, 4]
                 ).annotate(
                     booster_counter=Count(Case(
@@ -2188,8 +2188,10 @@ class ActionOrderItemView(View):
                 ).select_related('order')
                 days = 7
                 candidate_data = {}
+                international_booster_candidate_list = []
                 recruiter_data = {}
                 candidate_list = []
+                order_item_to_update_list = []
                 mail_send = 0
 
                 for oi in booster_ois:
@@ -2215,34 +2217,12 @@ class ActionOrderItemView(View):
                             "title": link_title,
                             "download_link": download_link,
                         })
-                        candidate_list.append(data_dict)
-                        try:
-                            # send mail to candidate
-                            if email_sets.count(93) <= 2:
-                                mail_type = 'BOOSTER_CANDIDATE'
-                                send_email_task.delay(
-                                    to_emails, mail_type,
-                                    candidate_data, status=93, oi=oi.pk)
-
-                            SendSMS().send(
-                                sms_type="BOOSTER_CANDIDATE",
-                                data=candidate_data)
-                            last_oi_status = oi.oi_status
-                            if oi.oi_status in [5, 62]:
-                                oi.oi_status = 62
-                            oi.last_oi_status = last_oi_status
-                            oi.save()
-                            oi.orderitemoperation_set.create(
-                                oi_status=62,
-                                last_oi_status=last_oi_status,
-                                assigned_to=oi.assigned_to,
-                                added_by=request.user,
-                            )
-                            mail_send += 1
-
-                        except Exception as e:
-                            error_message = "Mail Action Failed on item id - %s due to %s" % (oi.id, str(e))
-                            messages.add_message(request, messages.ERROR, error_message)
+                        if oi.product.type_flow == 7:
+                            candidate_list.append(data_dict)
+                        elif oi.product.type_flow == 15:
+                            international_booster_candidate_list.append(data_dict)
+                        mail_send += 1
+                        order_item_to_update_list.append(oi.pk)
                     else:
                         continue
 
@@ -2251,14 +2231,24 @@ class ActionOrderItemView(View):
                         "data": candidate_list,
                     })
                     # send mail to rectuter
-                    recruiters = settings.BOOSTER_RECRUITERS
                     mail_type = 'BOOSTER_RECRUITER'
                     if candidate_list != []:
-                        send_email_task.delay(
-                            recruiters, mail_type, recruiter_data)
-                        for oi in booster_ois:
-                            oi.emailorderitemoperation_set.create(
-                                email_oi_status=92)
+                        recruiters = BoosterRecruiter.objects.get(type_recruiter=0).recruiter_list.split(',')
+                        send_booster_recruiter_mail_task.delay(
+                            recruiters, mail_type, recruiter_data,
+                            ois_to_update=order_item_to_update_list
+                        )
+
+                    recruiter_data.update({"data": international_booster_candidate_list})
+
+                    if international_booster_candidate_list != []:
+                        recruiters = BoosterRecruiter.objects.get(type_recruiter=1).recruiter_list.split(',')
+
+                        send_booster_recruiter_mail_task.delay(
+                            recruiters, mail_type, recruiter_data,
+                            ois_to_update=order_item_to_update_list
+                        )
+
                 except Exception as e:
                     logging.getLogger('error_log').error("%s" % (str(e)))
 

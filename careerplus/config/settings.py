@@ -250,6 +250,8 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
 ############# REDIS SETTINGS ###################
 # Cache related settings
 CACHES = {
@@ -330,6 +332,7 @@ FEATURE_PROFILE_PRODUCTS = [1939]
 SERVICE_PAGE_ID_SLUG_MAPPING = {"45":"resume-writing"}
 #whatsapp jobs list products
 FEATURE_PROFILE_EXCLUDE=[49]
+TEST_EMAIL = False
 
 try:
     from .settings_local import *

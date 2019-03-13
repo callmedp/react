@@ -4,6 +4,9 @@ import requests
 from django.conf import settings
 from emailers.email import SendMail
 from dateutil import relativedelta
+from emailers.email import SendMail
+from emailers.sms import SendSMS
+from django.utils import timezone
 
 
 def update_initiat_orderitem_sataus(order=None):
@@ -86,7 +89,7 @@ def update_initiat_orderitem_sataus(order=None):
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
 
-            elif oi.product.type_flow == 7:
+            elif oi.product.type_flow in [7, 15]:
                 depending_ois = order.orderitems.filter(
                     product__type_flow=1, no_process=False)
 
@@ -185,3 +188,29 @@ def date_diff(date1,date2):
     #        +str(datediff.minutes)+'-minutes'
     #only returning days difference
     return str(datediff.days)
+
+
+def close_resume_booster_ois(ois_to_update):
+    from order.models import OrderItem
+    for oi in OrderItem.objects.filter(id__in=ois_to_update):
+        last_oi_status = oi.oi_status
+        oi.oi_status = 4
+        oi.last_oi_status = 6
+        oi.closed_on = timezone.now()
+        oi.save()
+        # status as tuple (status, last_status)
+        # if order is in service under progress create three operation
+        # resume boosted, service progress and order closed.
+        # else create single operation resume boosted.
+        if last_oi_status == 5:
+            oi_statuses = ((62, last_oi_status), (6, 62), (4, 6))
+        else:
+            oi_statuses = ((62, last_oi_status),)
+
+        for status, last_status in oi_statuses:
+            oi.orderitemoperation_set.create(
+                oi_status=status,
+                last_oi_status=last_status,
+                assigned_to=oi.assigned_to,
+            )
+        oi.emailorderitemoperation_set.create(email_oi_status=92)

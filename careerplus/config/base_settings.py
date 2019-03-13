@@ -34,7 +34,7 @@ MOBILE_ADSERVER_ENCODE_KEY = 'el!bomen!h$'
 ACROSS_ENCODE_KEY = '@$h1n3c4r33rplu5'
 
 TEMPLATE_DEBUG = False  # django sorl required
-
+TEST_EMAIL = True
 
 # Application definition
 DJANGO_APPS = [
@@ -127,6 +127,8 @@ MIDDLEWARE = [
     'core.middleware.LoginMiddleware',
     'core.middleware.TrackingMiddleware',
     'core.middleware.AmpMiddleware',
+    'core.middleware.LocalIPDetectionMiddleware',
+
 ]
 
 ROOT_URLCONF = 'careerplus.config.urls'
@@ -518,3 +520,14 @@ URL_MAPPING_TO_PRODUCT = {"resume-writing-services-1": ([1921,1922,1923,1924,32]
 
 
 }
+
+LOCAL_NETWORK_IPS_RANGE =[ "59.160.104.0/24", "220.227.160.128/25", "122.177.0.0/16", "172.22.65.0/24",
+    "125.23.128.20/30", "59.144.72.128/28", "203.145.175.0/28", "103.248.118.192/28"]
+
+LOCAL_NETWORK_IPS = [ "172.16.64.80","125.19.44.195","124.124.86.138","115.112.32.194","115.254.3.5",
+    "59.160.104.254","59.160.104.5","103.245.33.42","172.16.64.105","111.93.231.2",
+    "122.160.111.100","59.160.104.254","59.160.104.248","122.15.40.51","125.19.44.195",
+    "122.15.29.195","59.160.104.150","122.15.44.233","103.248.118.194","106.215.170.236",
+    "182.64.252.176","125.17.83.97","220.225.255.161","118.102.181.219","220.227.36.202",
+    "202.164.38.195","122.162.129.43","192.168.1.5","223.179.134.80","223.179.151.72",
+    "122.162.42.142","171.79.76.124"]

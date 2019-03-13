@@ -259,7 +259,7 @@ class DashboardDetailView(TemplateView):
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 61, 161, 162, 163])
             elif self.oi.product.type_flow == 6:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[6, 81, 82, 161, 162, 163])
-            elif self.oi.product.type_flow == 7:
+            elif self.oi.product.type_flow in [7, 15]:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 4, 5, 6, 61, 161, 162, 163])
             elif self.oi.product.type_flow == 8:
                 oi_status_list = [2, 49, 5, 46, 48, 27, 4, 161, 162, 163, 181]
@@ -590,7 +590,7 @@ class DashboardAcceptService(View):
                                 logging.getLogger('error_log').error(
                                     "%s - %s" % (str(mail_type), str(e)))
 
-                            upload_resume_to_shine(oi_pk=oi.pk)
+                            upload_resume_to_shine.delay(oi_pk=oi.pk)
 
                         elif oi.product.type_flow == 8 and (9 not in email_sets and 4 not in sms_sets):
                             send_email_task.delay(

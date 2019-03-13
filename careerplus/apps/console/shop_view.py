@@ -2462,7 +2462,50 @@ class DownloadDiscountReportView(TemplateView):
             messages.add_message(request, messages.ERROR, "No record found.")
             return render(request,template_name=self.template_name)
         
+class DownloadUpsellReportView(TemplateView):
+    template_name = "console/order/upsell_report.html"
+
+    def dispatch(self,request,*args,**kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden()
+        if 'order.can_download_upsell_report' not in request.user.get_all_permissions():
+            return HttpResponseForbidden()
+        return super(DownloadUpsellReportView,self).dispatch(request,*args,**kwargs)
+
+    def post(self,request,*args,**kwargs):
+        report_type = request.POST.get('report_type','')
+        report_date = request.POST.get('report_date','')
+        report_year,report_month,report_day = map(int,report_date.split("_"))
+        file_found = False
+        file_path = "reports/{}/{}/lead_upsell_report_{}_{}.csv".format(\
+            report_year,report_month,report_day,report_type)
+        filename = file_path.split('/')[-1]
+
+        if not settings.IS_GCP:
+            file_path = os.path.join(settings.MEDIA_ROOT, file_path)
+            try:
+                fsock = FileWrapper(open(file_path, 'rb'))
+                file_found = True
+            except:
+                pass
+        else:
+            try:
+                fsock = GCPPrivateMediaStorage(bucket_name=\
+                    settings.CRM_PRIVATE_MEDIA_BUCKET).open(file_path)
+                file_found = True
+            except:
+                pass
         
+        if file_found:
+            response = HttpResponse(
+                fsock,content_type=mimetypes.guess_type(filename)[0])
+            response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
+            return response
+        
+        else:
+            messages.add_message(request, messages.ERROR, "No record found.")
+            return render(request,template_name=self.template_name)        
+    
 # @Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
 # @Decorate(check_permission('shop.console_change_attribute'))
 # class AddAttributeOptionView(FormView):

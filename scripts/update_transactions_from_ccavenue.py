@@ -13,17 +13,20 @@ django.setup()
 
 #django imports
 from django.conf import settings
+from django.utils import timezone
 
 #local imports
 
 #inter app imports
-from payment.models import PaymentTxn
 from order.models import Order
+from payment.models import PaymentTxn
+from payment.mixin import PaymentMixin
 
 #third party imports
 import requests
 from hashlib import md5
 from Crypto.Cipher import AES
+from requests.models import Request
 
 #Global Constants
 CCAVENUE_API_URL_BASE = "https://api.ccavenue.com/apis/servlet/DoWebTrans"
@@ -61,6 +64,15 @@ def get_clean_string(string):
         string = string.replace(escape_char,'')
     return string
 
+def close_cart_obj(cart_obj):
+    if not cart_obj:
+        return
+    last_status = cart_obj.status
+    cart_obj.status = 5
+    cart_obj.last_status = last_status
+    cart_obj.date_closed = timezone.now()
+    cart_obj.save()
+
 def update_transaction_object(order_status_data,txn_obj):
     order_id = txn_obj.order_id
     order_status = order_status_data.get('order_status', '')
@@ -72,6 +84,16 @@ def update_transaction_object(order_status_data,txn_obj):
     if order_status.upper() in ["SUCCESSFUL","SHIPPED"]:
         txn_obj.status = 1
         SUCCESSFUL_TRANSACTIONS += 1
+
+        close_cart_obj(txn_obj.cart)
+        payment_mixin_obj = PaymentMixin()
+        request_obj = Request()
+        setattr(request_obj,"session",{})
+        
+        payment_mixin_obj.process_payment_method(
+            payment_type='CCAVENUE', request=request_obj,
+            txn_obj=txn_obj,
+            data={'order_id': order.pk, 'txn_id': txn_obj.txn})
         
     elif order_status.upper() == "UNSUCCESSFUL":
         txn_obj.status = 2
@@ -101,13 +123,13 @@ if __name__=="__main__":
 
     for interval in time_intervals_to_check:
         sdt = (current_utc_time - timedelta(minutes=interval)).replace(tzinfo=utc_tz)
-        edt = (sdt + timedelta(minutes=62)).replace(tzinfo=utc_tz) #Hour + buffer
-        all_initiated_transactions = PaymentTxn.objects.filter(txn_status__in=[0,4,5],\
-                payment_mode=5,created__gte=sdt,created__lte=edt)
+        edt = (sdt + timedelta(minutes=2)).replace(tzinfo=utc_tz) #Hour + buffer
+        all_initiated_transactions = PaymentTxn.objects.filter(status__in=[0,2,3,4,5],\
+                payment_mode__in=[5,7],created__gte=sdt,created__lte=edt,order__site=0)
         logging.getLogger('info_log').info(\
             "Total initiated transactions for interval {} minutes - {}".format(\
             interval,all_initiated_transactions.count()))
-        
+
         for txn in all_initiated_transactions:
             get_params_mapping = {"command":"orderStatusTracker",
                             "request_type":"JSON",

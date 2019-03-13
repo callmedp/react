@@ -78,6 +78,8 @@ class AddToCartView(View, CartMixin):
         return super(AddToCartView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        if  not request.is_ajax():
+            return HttpResponseForbidden()
         data = {"status": -1}
         cart_type = request.POST.get('cart_type')
         prod_id = request.POST.get('prod_id')
@@ -91,28 +93,28 @@ class AddToCartView(View, CartMixin):
             cv_id = request.POST.get('cv_id')
             data['status'] = self.updateCart(product, addons, cv_id, cart_type, req_options, is_resume_template)
 
-            try:
-                cart_obj = Cart.objects.get(pk=cart_pk)
+                try:
+                    cart_obj = Cart.objects.get(pk=cart_pk)
+                except Exception as e:
+                    logging.getLogger('error_log').error('unable to get cart object %s'%str(e))
+                    cart_obj = None
+                logging.getLogger('info_log').info("Cart Obj:{}, candidate_ID: {}, Owner ID:{}".format(cart_obj, candidate_id, cart_obj.owner_id))
+                if cart_obj and (candidate_id == cart_obj.owner_id) and not request.ip_restricted:
+                    first_name = request.session.get('first_name', '')
+                    last_name = request.session.get('last_name', '')
+                    email = request.session.get('email', '')
+                    name = "{}{}".format(first_name, last_name)
+                    # cart_drop_out_mail.apply_async(
+                    #     (cart_pk, email),
+                    #     countdown=settings.CART_DROP_OUT_EMAIL)
+                    source_type = "cart_drop_out"
+
+                    create_lead_on_crm.apply_async(
+                        (cart_obj.pk, source_type, name),
+                        countdown=settings.CART_DROP_OUT_LEAD)
             except Exception as e:
-                logging.getLogger('error_log').error('unable to get cart object %s' % str(e))
-                cart_obj = None
-            logging.getLogger('info_log').info(
-                "Cart Obj:{}, candidate_ID: {}, Owner ID:{}".format(cart_obj, candidate_id, cart_obj.owner_id))
-            if cart_obj and (candidate_id == cart_obj.owner_id):
-                first_name = request.session.get('first_name', '')
-                last_name = request.session.get('last_name', '')
-                email = request.session.get('email', '')
-                name = "{}{}".format(first_name, last_name)
-                # cart_drop_out_mail.apply_async(
-                #     (cart_pk, email),
-                #     countdown=settings.CART_DROP_OUT_EMAIL)
-                source_type = "cart_drop_out"
-                create_lead_on_crm.apply_async(
-                    (cart_obj.pk, source_type, name),
-                    countdown=settings.CART_DROP_OUT_LEAD)
-        except Exception as e:
-            data['error_message'] = str(e)
-            logging.getLogger('error_log').error("%s " % str(e))
+                data['error_message'] = str(e)
+                logging.getLogger('error_log').error("%s " % str(e))
 
         if data['status'] == 1 and cart_type == "express":
             data['redirect_url'] = reverse('cart:payment-login')
@@ -183,7 +185,7 @@ class PaymentLoginView(TemplateView):
             remember_me = request.POST.get('remember_me')
             email = self.request.POST.get('email', '').strip()
             password = self.request.POST.get('password', '')
-            login_with = self.request.POST.get('login_with', '')
+            login_with = self.request.POST.get('login_with','')
 
             valid_email = False
             try:
@@ -213,8 +215,7 @@ class PaymentLoginView(TemplateView):
                     login_resp = RegistrationLoginApi.user_login(login_dict)
 
                     if login_resp['response'] == 'login_user':
-                        resp_status = ShineCandidateDetail().get_status_detail(email=None,
-                                                                               shine_id=login_resp['candidate_id'])
+                        resp_status = ShineCandidateDetail().get_status_detail(email=None, shine_id=login_resp['candidate_id'])
                         self.request.session.update(resp_status)
                         cart_pk = self.request.session.get('cart_pk')
                         if cart_pk:
@@ -236,7 +237,7 @@ class PaymentLoginView(TemplateView):
 
                 elif user_exist.get('exists'):
                     context = self.get_context_data()
-                    context.update({"guest_login": "guest_login"})
+                    context.update({"guest_login":"guest_login"})
                     cart_pk = self.request.session.get('cart_pk')
                     if cart_pk:
                         cart_obj = Cart.objects.get(pk=cart_pk)
@@ -357,11 +358,11 @@ class PaymentShippingView(UpdateView, CartMixin):
 
         elif self.request.session.get('prefill_details'):
             prefill_details = self.request.session.get('prefill_details')
-            social_login = self.request.session.get('key', '')
+            social_login = self.request.session.get('key','')
             if social_login == 'g_plus':
-                name = prefill_details.get('name', '').split(" ")
+                name = prefill_details.get('name','').split(" ")
                 if len(name) > 1 and name[0] != "":
-                    form.initial.update({'first_name': name[0], 'last_name': name[-1]})
+                    form.initial.update({'first_name': name[0],'last_name': name[-1]})
                 elif len(name) == 1:
                     form.initial.update({'first_name': name[0]})
 
@@ -398,7 +399,7 @@ class PaymentShippingView(UpdateView, CartMixin):
             try:
                 initial_country = Country.objects.get(phone='91', active=True)
             except Exception as e:
-                logging.getLogger('error_log').error('unable to get country object %s' % str(e))
+                logging.getLogger('error_log').error('unable to get country object %s'%str(e))
                 initial_country = None
             form.initial.update({
                 'country': initial_country})
@@ -423,7 +424,8 @@ class PaymentShippingView(UpdateView, CartMixin):
                         "cell_phone": obj.mobile,
                         "name": obj.first_name + ' ' + obj.last_name,
                     })
-                    candidate_id = user_register(data=data)
+
+                    candidate_id, error = user_register(data=data)
                     obj.owner_id = candidate_id
 
                     if request.session.get('email'):
@@ -434,11 +436,11 @@ class PaymentShippingView(UpdateView, CartMixin):
                     obj.owner_id = request.session.get('candidate_id')
 
                 if not obj.owner_id:
-                    non_field_error = 'Internal error on shinelearning, please try again after sometimes.'
+                    non_field_error = error
                     form._errors[NON_FIELD_ERRORS] = form.error_class([non_field_error])
                     return self.form_invalid(form)
                 valid_form = self.form_valid(form)
-                if obj.owner_id == request.session.get('candidate_id'):
+                if obj.owner_id == request.session.get('candidate_id') and not request.ip_restricted:
                     first_name = request.session.get('first_name', '')
                     last_name = request.session.get('last_name', '')
                     name = "{}{}".format(first_name, last_name)

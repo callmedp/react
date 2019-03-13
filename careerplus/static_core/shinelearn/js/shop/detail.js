@@ -460,9 +460,12 @@ $(document).ready(function () {
       $(document).on('click', '.cls_scroll_tab', function(e){
         e.preventDefault();
         e.stopPropagation();
+        var navBarHeight = $('#id_nav').outerHeight() || 0;
+        var stickyBarHeight = $(".cls_sticky_scroller").outerHeight() || 0;
         var target = $(e.target);
         if(target.hasClass('cls_tab_child')){
-          $('html,body').animate({scrollTop : $(''+target.attr('href')).offset().top - target.outerHeight() - $('#id_nav').outerHeight()},1000);
+        
+        $('html,body').animate({scrollTop : $(''+target.attr('href')).offset().top - target.outerHeight() - stickyBarHeight - navBarHeight},1000);
         }
       });
 
