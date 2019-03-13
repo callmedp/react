@@ -54,6 +54,8 @@ span.twitter-typeahead .tt-suggestion:focus {
 }
 span.twitter-typeahead {
   width: 100%;
+  background: #ffffff;
+  border-radius: 2px;
 }
 .input-group span.twitter-typeahead {
   display: block !important;
@@ -120,4 +122,8 @@ span.twitter-typeahead {
 .searchNavBar span.twitter-typeahead .tt-menu,
 .searchNavBar span.twitter-typeahead .tt-dropdown-menu {
   min-width: 400px;
+}
+
+.tt-hint {
+  color: #999999 !important;
 }
