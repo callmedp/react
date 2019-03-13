@@ -12,9 +12,9 @@
 {% block css_section %}
         <!-- Bootstrap -->
         {% compress css %}
-
+    
         <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
-        <!--<link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">-->
+        <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
         <!--<link type="text/css"  href="{% static 'shinelearn/css/common/bootstrapv3.3.7.css' %}" rel="stylesheet" >-->
         <link type="text/scss" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
         <link type="text/css"  href="{% static 'shinelearn/css/cms/global.css' %}"  rel="stylesheet">
@@ -99,7 +99,6 @@
 {% endblock head %}
 
 {% block container %}
-
     <div class="container">
         <div class="row">
             <div class="col-md-12 d-resume fs-12 mt-15">
@@ -386,7 +385,6 @@
     <script type="text/javascript" src="{% static 'shinelearn/js/cms/validate.js' %}"></script>
     <script type="text/javascript" src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"> </script>
     {% comment %} <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script> {% endcomment %}
-    <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
 
     {% endcompress %}
   <script>
