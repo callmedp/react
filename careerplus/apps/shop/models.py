@@ -1267,8 +1267,8 @@ class Product(AbstractProduct, ModelMeta):
         pure_rating = int(self.avg_rating)
         decimal_part = self.avg_rating - pure_rating
         final_score = ['*' for i in range(pure_rating)]
-        rest_part = int(Decimal(5.0) - self.avg_rating)
-        res_decimal_part = Decimal(5.0) - self.avg_rating - Decimal(rest_part)
+        rest_part = int(Decimal(5.0) - Decimal(self.avg_rating))
+        res_decimal_part = Decimal(5.0) - Decimal(self.avg_rating) - Decimal(rest_part)
         if decimal_part >= 0.75:
             final_score.append("*")
         elif decimal_part >= 0.25:
@@ -1678,9 +1678,12 @@ class Product(AbstractProduct, ModelMeta):
         category_ids = instance.productcategories.all().values_list('category__id',flat=True)
         for cat_id in category_ids:
             cache.delete('cat_absolute_url_' + str(cat_id))
-        from .tasks import add_log_in_product_audit_history
+        
+        from .tasks import add_log_in_product_audit_history,push_updated_product_to_crm
+        push_updated_product_to_crm.delay(instance.id)
         duration = instance.get_duration_in_day() if instance.get_duration_in_day() else -1
         variation_name = [str(var) for var in instance.variation.all()] if instance.variation.all() else ['N.A']
+        
         if not instance.first_save:
             if (instance.original_duration != duration or instance.original_variation_name != variation_name \
                     or instance.original_price != float(instance.inr_price) or instance.original_upc != instance.upc or
