@@ -1443,7 +1443,7 @@ class AddSubCategoryForm(forms.ModelForm):
         self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-200 characters.'
         self.fields['name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['location'].widget.attrs['class'] = form_class
-        query_set = Category.objects.filter(type_level=3).values_list('id','name')
+        query_set = Category.objects.filter(type_level=3,is_skill=True).values_list('id','name')
         self.fields['category'] = forms.TypedChoiceField(choices=query_set)
 
         self.fields['category'].widget.attrs['class'] = form_class
@@ -1489,7 +1489,7 @@ class AddSubCategoryForm(forms.ModelForm):
         self.fields['products_mapped'].widget.attrs['class'] = form_class
         self.fields['products_mapped'].label = "Products"
         self.fields['products_mapped'].widget.attrs['placeholder'] = 'Add Products For Mapping'
-        prod_obj = Product.objects.values_list('id','name')
+        prod_obj = Product.objects.filter(is_indexed=True).values_list('id','name')
         self.fields['products_mapped'] = forms.MultipleChoiceField(choices=prod_obj)
         # self.fields['products_mapped'].queryset = prod_obj
         self.fields['video_link'].widget.attrs['class'] = form_class
@@ -1576,7 +1576,7 @@ class ChangeSubCategoryForm(forms.ModelForm):
         self.fields['name'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-200 characters.'
         self.fields['name'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['location'].widget.attrs['class'] = form_class
-        query_set = Category.objects.filter(type_level=3).values_list('id','name')
+        query_set = Category.objects.filter(type_level=3,is_skill=True).values_list('id','name')
         self.fields['category'] = forms.TypedChoiceField(choices=query_set)
 
         self.fields['category'].widget.attrs['class'] = form_class
@@ -1688,7 +1688,7 @@ class ChangeSubCategoryForm(forms.ModelForm):
         return file
 
     def save(self, commit=True, *args, **kwargs):
-        subcategory = super(AddSubCategoryForm, self).save(
+        subcategory = super(ChangeSubCategoryForm, self).save(
             commit=True, *args, **kwargs)
         subcategory.create_icon()
         return subcategory
