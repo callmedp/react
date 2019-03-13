@@ -47,9 +47,13 @@ class CartView(TemplateView, CartMixin, UserMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
+
         cart_obj = self.getCartObject()
-        line_item = cart_obj.lineitems.filter(parent=None)[0]
-        type_flow = int(line_item.product.type_flow)
+        line_items_list = cart_obj.lineitems.filter(parent=None)
+        type_flow = -1
+        if len(line_items_list):
+            line_item = line_items_list[0];
+            type_flow = int(line_item.product.type_flow)
         #  resume builder flow handle
         if type_flow == 13:
             cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
@@ -78,13 +82,14 @@ class AddToCartView(View, CartMixin):
         cart_type = request.POST.get('cart_type')
         prod_id = request.POST.get('prod_id')
         cart_pk = request.session.get('cart_pk', '')
+        is_resume_template = request.POST.get('add_resume', False)
         candidate_id = request.session.get('candidate_id', '')
         try:
             product = Product.objects.get(id=prod_id)  # not filter on active because product is coming from solr
             addons = request.POST.getlist('addons[]')
             req_options = request.POST.getlist('req_options[]')
             cv_id = request.POST.get('cv_id')
-            data['status'] = self.updateCart(product, addons, cv_id, cart_type, req_options)
+            data['status'] = self.updateCart(product, addons, cv_id, cart_type, req_options, is_resume_template)
 
             try:
                 cart_obj = Cart.objects.get(pk=cart_pk)
@@ -136,8 +141,6 @@ class RemoveFromCartView(View, CartMixin):
                         parent = line_obj.parent
                         childs = cart_obj.lineitems.filter(parent=parent, parent_deleted=True)
                         if childs.count() > 1:
-                            line_obj.delete()
-                        elif int(parent.product.type_flow) == 13 and childs.count() == 1:
                             line_obj.delete()
                         else:
                             parent.delete()

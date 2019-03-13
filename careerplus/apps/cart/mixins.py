@@ -1,5 +1,6 @@
 import logging
 import json
+import operator
 
 from decimal import Decimal
 
@@ -14,6 +15,8 @@ from core.mixins import InvoiceGenerate
 from geolocation.models import Country
 
 from .models import Cart, LineItem
+
+from django.db.models import Q
 
 
 class CartMixin(object):
@@ -56,7 +59,7 @@ class CartMixin(object):
             logging.getLogger('error_log').error(str(e))
 
     def updateCart(self, product: object, addons: object, cv_id: object, add_type: object,
-                   req_options: object) -> object:
+                   req_options: object, is_resume_template) -> object:
         flag = -1
         try:
             flag = 1
@@ -105,12 +108,20 @@ class CartMixin(object):
                     cart_obj.mobile = mobile
                     cart_obj.save()
 
-                cart_obj.lineitems.filter(product=product).delete()
+                # todo update it for resume builder only
+                if is_resume_template == 'true':
+                    cart_obj.lineitems.filter().delete()
+                else:
+                    cart_obj.lineitems.filter(product=product).delete()
 
-                if product.is_course and cv_id:
+                if product.is_course or product.type_flow == 13 and cv_id:
                     # courses
                     try:
-                        cv_prod = Product.objects.get(id=cv_id, active=True)
+                        # for resume builder type_flow todo create new type flow
+                        if product.type_flow == 13:
+                            cv_prod = Product.objects.get(id=cv_id)
+                        else:
+                            cv_prod = Product.objects.get(id=cv_id, active=True)
                         parent = cart_obj.lineitems.create(product=product, no_process=True)
                         parent.reference = str(cart_obj.pk) + '_' + str(parent.pk)
                         parent.price_excl_tax = product.get_price()
@@ -473,6 +484,7 @@ class CartMixin(object):
                 "id": main_id,
                 "li": m_prod,
                 "product_class": product_class,
+                'type_flow': m_prod.product.type_flow,
                 "vendor": vendor_name,
                 "name": name,
                 "price": price,
@@ -491,6 +503,8 @@ class CartMixin(object):
 
     # use local db not solar for fetching items in case of resume builder
     def get_local_cart_items(self, cart_obj: object = None) -> object:
+     
+
         cart_items = []
         total_amount = Decimal(0)
         if not cart_obj:
@@ -766,10 +780,10 @@ class CartMixin(object):
                 cart_obj = Cart.objects.filter(pk=cart_pk).first()
                 if cart_obj and cart_obj.status in [0, 2]:
                     total_count += cart_obj.lineitems.all().count()
-                    total_count -= cart_obj.lineitems.filter(
-                        parent=None,
-                        product__product_class__in=course_classes,
-                        no_process=True).count()
+                    total_count -= cart_obj.lineitems.filter(Q(parent=None, product__product_class__in=course_classes,
+                                                               no_process=True) |
+                                                             Q(parent=None, product__type_flow=13,
+                                                               no_process=True)).count()
 
         except Exception as e:
             logging.getLogger('error_log').error("{},{}".format(str(e), cart_pk))

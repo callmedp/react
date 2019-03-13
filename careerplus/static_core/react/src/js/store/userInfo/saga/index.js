@@ -251,10 +251,10 @@ function* fetchDefaultSkillList(action) {
 function* sendProductToCart(action) {
     try {
         let data = {
-            'prod_id': 2761,
+            'prod_id': 2831,
             'cart_type': 'cart',
-            'cv_id': 2764,
-            'req_options[]': 2764
+            'cv_id': 2795,
+            'add_resume': true
         };
         const result = yield call(Api.addToCart, data);
 
