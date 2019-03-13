@@ -1531,6 +1531,9 @@ class AddSubCategoryForm(forms.ModelForm):
         slug = self.cleaned_data.get('slug', '')
         if not slug:
             raise forms.ValidationError('Check the slug')
+        slug_obj = SubCategory.objects.filter(slug=slug)
+        if slug_obj:
+            raise forms.ValidationError('Duplication error')
         return slug
 
 
