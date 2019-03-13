@@ -1488,10 +1488,10 @@ class AddSubCategoryForm(forms.ModelForm):
             'data-parsley-length-message'] = 'Length should be between 2-100 characters.'
         self.fields['products_mapped'].widget.attrs['class'] = form_class
         self.fields['products_mapped'].label = "Products"
-        self.fields['products_mapped'].widget.attrs['placeholder'] = 'Add Products For Mapping'
+        # self.fields['products_mapped'].widget.attrs['placeholder'] = 'Add Products For Mapping'
         prod_obj = Product.objects.filter(is_indexed=True).values_list('id','name')
         self.fields['products_mapped'] = forms.MultipleChoiceField(choices=prod_obj)
-        # self.fields['products_mapped'].queryset = prod_obj
+        self.fields['products_mapped'].required = False
         self.fields['video_link'].widget.attrs['class'] = form_class
         self.fields['career_outcomes'].widget.attrs['class'] = form_class
 
@@ -1535,6 +1535,7 @@ class AddSubCategoryForm(forms.ModelForm):
 
 
     def clean_category(self):
+
         cat_id = self.cleaned_data.get('category','')
         if not cat_id:
             raise forms.ValidationError('Check the Category')
@@ -1553,6 +1554,10 @@ class AddSubCategoryForm(forms.ModelForm):
             if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
                 raise forms.ValidationError("Unsupported image type. Please upload svg, bmp, png or jpeg")
         return file
+
+    def clean_products_mapped(self):
+        prod = self.cleaned_data.get('products_mapped','')
+        return prod
 
     def save(self, commit=True, *args, **kwargs):
         subcategory = super(AddSubCategoryForm, self).save(
@@ -1624,6 +1629,8 @@ class ChangeSubCategoryForm(forms.ModelForm):
         # self.fields['products_mapped'].widget.attrs['placeholder'] = 'Add Products For Mapping'
         prod_obj = Product.objects.filter(is_indexed=True).values_list('id','name')
         self.fields['products_mapped'] = forms.MultipleChoiceField(choices=prod_obj)
+        self.fields['products_mapped'].required = False
+
         # self.fields['products_mapped'].queryset = prod_obj
         self.fields['video_link'].widget.attrs['class'] = form_class
         self.fields['career_outcomes'].widget.attrs['class'] = form_class
@@ -1676,8 +1683,13 @@ class ChangeSubCategoryForm(forms.ModelForm):
             raise forms.ValidationError('Check the Category')
         return cat_obj
 
+    def clean_products_mapped(self):
+        prod = self.cleaned_data.get('products_mapped', '')
+        return prod
+
 
     def clean_image(self):
+
         file = self.files.get('image', '')
         if file:
             if file._size > 500 * 1024:

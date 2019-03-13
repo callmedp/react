@@ -2836,6 +2836,7 @@ class SubCategoryChangeView(UpdateView):
     form_class = ChangeSubCategoryForm
 
     def get(self, request, *args, **kwargs):
+
         self.object = self.get_object()
         context = super(SubCategoryChangeView, self).get(request, *args, **kwargs)
         return context
@@ -2845,6 +2846,13 @@ class SubCategoryChangeView(UpdateView):
         alert = messages.get_messages(self.request)
         context.update({
             'messages': alert})
+        obj = self.get_object()
+        if obj and obj.products_id_mapped():
+            prod_ids = obj.products_id_mapped()
+            prod = list(Product.objects.filter(id__in=prod_ids).values('id', 'name'))
+            print(json.dumps(prod))
+            context.update({'selected_products': json.dumps(prod)})
+
         return context
 
     def post(self, request, *args, **kwargs):

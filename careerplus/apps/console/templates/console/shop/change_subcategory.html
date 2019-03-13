@@ -125,6 +125,18 @@
   <!-- Custom Theme Scripts -->
   <script type="text/javascript" src="{% static 'console/js/shop/console_shop.js' %}"></script>
   {% endcompress %}
+<script>
+var obj = {{selected_products|safe}};
+let data1 =[];
+  $(document).ready(function(){
+for (var i = 0; i < obj.length; i++) {
+    data1.push(obj[i].id);
+}
 
+$('#id_products_mapped').val(data1);
+$('#id_products_mapped').trigger('change');
+
+});
+</script>
 
 {% endblock js_block %}
