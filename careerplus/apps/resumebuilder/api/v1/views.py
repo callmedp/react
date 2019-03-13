@@ -14,6 +14,7 @@ from resumebuilder.mixins import (SessionManagerMixin)
 # inter app imports
 from shine.core import ShineCandidateDetail
 
+from .education_specialization import list
 # third party imports
 from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateAPIView, )
 from rest_framework.parsers import (FormParser, MultiPartParser)
@@ -82,6 +83,8 @@ class UserShineProfileRetrieveUpdateView(ShineCandidateDetail, RetrieveUpdateAPI
     permission_classes = ()
 
     def get(self, request, *args, **kwargs):
+        import ipdb;
+        ipdb.set_trace();
 
         user_email = kwargs.get('email')
         if not user_email:
@@ -122,7 +125,17 @@ class UserShineProfileRetrieveUpdateView(ShineCandidateDetail, RetrieveUpdateAPI
             else:
                 course_type = "CR"
 
-            user_education_values = [user, str(edu['education_specialization']), edu['institute_name'],
+            degree_index = next((index for (index, d) in enumerate(list) if d["pid"] == edu['education_level']), None)
+
+            degree_name = list[degree_index]['pdesc'];
+
+            child = list[degree_index]['child']
+
+            specialization_index = next((index for (index, d) in enumerate(child)
+                                         if d['cid'] == edu['education_specialization']), None)
+            specialization_name = child[specialization_index]['cdesc']
+
+            user_education_values = [user, '{}({})'.format(degree_name, specialization_name), edu['institute_name'],
                                      course_type,
                                      '',
                                      None, None, True]
