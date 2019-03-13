@@ -11,7 +11,7 @@ import shop.functions
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shop', '0035_auto_20181026_1317   '),
+        ('shop', '0035_auto_20181026_1317'),
     ]
 
     operations = [
