@@ -117,6 +117,14 @@ class SendMail():
             elif data.get('draft_level') == 2:
                 send_dict['template'] = 'emailers/candidate/revised_document.html'
                 send_dict['subject'] = "Your developed document is ready"
+                if settings.TAG_MAILER:
+                    headers_dict = {
+                        'Reply-To': settings.REPLY_TO,
+                        'X-APIHEADER': json.dumps({'X-Uid': 'SLDevelopedDocumentUploaded'}),
+                        'X-TAGS': 'SLDevelopedDocumentUploaded',
+                        'X-MailerTag': 'SLDevelopedDocumentUploaded',
+                        'X-SentDate': datetime.now(),
+                    }
             # for 3rd draf
             elif data.get('draft_level') == 3:
                 send_dict['template'] = 'emailers/candidate/final_document.html'
