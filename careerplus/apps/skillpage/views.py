@@ -690,17 +690,17 @@ class LocationSkillPageView(DetailView, SkillPageMixin):
         except EmptyPage:
             page_reviews = prod_review.page(prod_review.num_pages)
 
-        if prd_list:
-            prd_text = ' , '.join(prd_list)
-        if self.object.category.name and prd_text:
-            meta_desc = '{skill} courses in {location} - Are you looking for a {skill} courses in {location} - Check complete fee structure, training programme from top institutes.'.format(skill=self.object.category.name,location=self.object.get_location_display())
+        # if prd_list:
+        #     prd_text = ' , '.join(prd_list)
+        # if self.object.category.name and prd_text:
+        #     meta_desc = '{skill} courses in {location} - Are you looking for a {skill} courses in {location} - Check complete fee structure, training programme from top institutes.'.format(skill=self.object.category.name,location=self.object.get_location_display())
         context['meta'] = self.object.as_meta(self.request)
         context['canonical_url'] = self.object.get_canonical_url()
         context['meta']._url = context.get('canonical_url', '')
         meta_dict = context['meta'].__dict__
-        meta_dict['description'] = meta_desc
-        meta_dict['og_description'] = meta_desc
-        meta_title = '{skill} Courses in {location} - Fee structure, Practical Training - Shine Learning'.format(skill=self.object.category.name ,location=self.object.get_location_display())
+        meta_dict['description'] = self.object.get_meta_description()
+        meta_dict['og_description'] = self.object.get_meta_description()
+        meta_title = self.object.get_title()
         meta_dict['title'] = meta_title
         context.update({
             "api_data": api_data,

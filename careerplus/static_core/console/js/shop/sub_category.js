@@ -72,5 +72,6 @@ function slugify(string) {
 $(document).ready(function(){
 $('#id_products_mapped').select2();
 $('#id_products_mapped').removeAttr('required');
-funCalls();
+changeSlug();
+
 });

@@ -2970,12 +2970,13 @@ class SubCategory(AbstractAutoDate,AbstractSEO,ModelMeta):
 
     _metadata = {
         'title': 'title',
-        'description': 'get_description',
-        'og_description': 'get_description',
+        'description': 'get_meta_description',
+        'og_description': 'get_meta_description',
         'keywords': 'get_keywords',
         'published_time': 'created',
         'modified_time': 'modified',
         'url': 'get_absolute_url',
+
     }
 
 
@@ -3079,12 +3080,17 @@ class SubCategory(AbstractAutoDate,AbstractSEO,ModelMeta):
                 .format(cat=self.category.name, loc=self.get_location_display())
         return desc
 
-
+    def get_meta_description(self):
+        desc = self.meta_desc if self.meta_desc else ""
+        if not self.meta_desc and self.category and self.get_location_display():
+            desc = "{cat} courses in {loc} - Are you looking for a {cat} courses in {loc} - " \
+                       "Check complete fee structure, training programme from top institutes."\
+                .format(cat=self.category.name, loc=self.get_location_display())
+        return desc
 
 
     def save(self, *args, **kwargs):
         created = bool(getattr(self,"id"))
-
         if not created:
             self.heading = self.get_heading()
             self.title = self.get_title()
