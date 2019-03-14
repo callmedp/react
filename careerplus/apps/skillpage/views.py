@@ -15,6 +15,7 @@ from core.library.haystack.query import SQS
 from django.conf import settings
 from django.core.cache import cache
 from django.utils import timezone
+from django.shortcuts import reverse
 
 from geolocation.models import Country
 from django.db.models import Q
@@ -736,9 +737,16 @@ class LocationSkillPageView(DetailView, SkillPageMixin):
         breadcrumbs.append({"url": '/', "name": "Home"})
         parent = self.object.get_parent()
         if parent:
+            cat_parent = parent.get_parent()[0] if parent.get_parent() else ""
+            if cat_parent:
+                breadcrumbs.append({'url': cat_parent.get_absolute_url(),'name':cat_parent.name})
+
             breadcrumbs.append({
                 "url": parent.get_absolute_url(), "name": parent.name,
             })
+            # breadcrumbs.append({"url": })
         breadcrumbs.append({"url": '', "name": self.object.get_location_display()})
         data = {"breadcrumbs": breadcrumbs}
         return data
+
+

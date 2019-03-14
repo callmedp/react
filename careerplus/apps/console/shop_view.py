@@ -2880,6 +2880,7 @@ class SubCategoryChangeView(UpdateView):
             except Exception as e:
                 messages.add_message(request, messages.ERROR, 'Form %s Not Updated. Due to %s' % (self.object.id, str(e)))
                 return self.form_invalid(form)
+        messages.add_message(request, messages.ERROR, 'Error in saving form')
         return self.form_invalid(form)
 
 

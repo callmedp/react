@@ -1614,6 +1614,8 @@ class ChangeSubCategoryForm(forms.ModelForm):
             raise forms.ValidationError('Check the slug')
         return slug
 
+
+
     def clean_category(self):
         cat_id = self.cleaned_data.get('category','')
         if not cat_id:

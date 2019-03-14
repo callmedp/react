@@ -3059,8 +3059,8 @@ class SubCategory(AbstractAutoDate,AbstractSEO,ModelMeta):
 
 
     def get_title(self):
-        title = ""
-        if self.category and self.get_location_display():
+        title = self.title if self.title else ""
+        if self.category and self.get_location_display() and not self.title:
             title = "{} Courses in {} - Fee structure, Practical Training - Shine Learning"\
                 .format(self.category.name, self.get_location_display())
         return title
