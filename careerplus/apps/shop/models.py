@@ -2983,6 +2983,12 @@ class SubCategory(AbstractAutoDate,AbstractSEO,ModelMeta):
         return "{}-in-{}".format(self.category.name, self.get_location_display())
 
 
+    def get_keywords(self):
+        return self.meta_keywords.strip().split(",")
+
+
+
+
     def create_icon(self):
         if not self.image:
             return
@@ -3070,7 +3076,7 @@ class SubCategory(AbstractAutoDate,AbstractSEO,ModelMeta):
         if self.category and self.get_location_display():
             desc = "{cat} courses in {loc} - Are you looking for a {cat} courses in {loc} - " \
                        "Check complete fee structure, training programme from top institutes."\
-                .format(cat=self.category.name,loc=self.get_location_display())
+                .format(cat=self.category.name, loc=self.get_location_display())
         return desc
 
 
@@ -3082,7 +3088,7 @@ class SubCategory(AbstractAutoDate,AbstractSEO,ModelMeta):
         if not created:
             self.heading = self.get_heading()
             self.title = self.get_title()
-            self.description= self.get_description()
+            self.meta_desc = self.get_description()
 
         if self.category and self.get_location_display():
             self.url = self.get_absolute_url()

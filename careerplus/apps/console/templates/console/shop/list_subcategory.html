@@ -93,7 +93,7 @@
                 <tr class="even pointer">
                   <td>{{obj.pk}}</td>
                   <td>
-                    <a >{{obj.name}}</a>
+                    <a >{{obj.category.name}}-{{obj.get_location_display}}</a>
                     <br />
                     <small>Modified {{obj.modified|naturaltime}}</small>
                   </td>

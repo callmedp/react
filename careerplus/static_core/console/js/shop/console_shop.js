@@ -943,7 +943,7 @@
 		init_product_seo_change();
 		init_product_attr_change();
 		init_category_product_change();
-
+    changeSlug();
 		init_product_structure_change();
 		init_product_faq_change();
 		scrollReload();

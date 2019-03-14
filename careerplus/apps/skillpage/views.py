@@ -627,8 +627,8 @@ class LocationSkillPageView(DetailView, SkillPageMixin):
         prod_id_list = []
         products = []
         try:
-            if self.object.products_mapped:
-                products = SQS().filter(id__in=self.object.products_mapped)
+            if self.object.products_id_mapped():
+                products = SQS().filter(id__in=self.object.products_id_mapped())
             else:
                 products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=self.object.category.id)
             for prd in products:
