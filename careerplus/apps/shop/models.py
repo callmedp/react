@@ -1034,10 +1034,10 @@ class Product(AbstractProduct, ModelMeta):
             ("console_live_product", "Can Live Product From Console"),
         )
 
-    # def __init__(self, *args, **kwargs):
-    #     super(Product, self).__init__(*args, **kwargs)
-    #     if self.product_class:
-    #         self.attr = ProductAttributesContainer(product=self)
+    def __init__(self, *args, **kwargs):
+        super(Product, self).__init__(*args, **kwargs)
+        if self.product_class:
+            self.attr = ProductAttributesContainer(product=self)
 
     def __str__(self):
         if self.pk:
@@ -1047,10 +1047,10 @@ class Product(AbstractProduct, ModelMeta):
                 return self.name + ' - (' + str(self.pk) + ')'
         return self.name
 
-    @property
-    def attr(self):
-        if self.product_class:
-            return ProductAttributesContainer(product=self)
+    # @property
+    # def attr(self):
+    #     if self.product_class:
+    #         return ProductAttributesContainer(product=self)
 
     def save(self, *args, **kwargs):
         # deleting caches for absolute urls,solar data and product object
