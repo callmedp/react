@@ -67,14 +67,13 @@ Search Result Page - Shine Learning
             <span class="advanced">{{ recmnd_skills }}</span>
             <a href="javascript:void(0)" class="icon-edit sidebar-secondary-trigger js_advanced_trigger" ></a>
         </div>
-        {% elif search_type == 'simple' %}
+        {% else %}
         <div class="custom-search mt-15">
             <input class="form-control key_press_js_search" id="id_q" placeholder="Search for courses, services"
                    type="text" autocomplete="off" value="{{ search_params.keywords }}">
             <span class="error-txt"></span>
             <button type="images" onclick="redirectToSearch()" class="search-icon-tab"></button>
-        </div>
-        
+        </div>        
         
         
         
