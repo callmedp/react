@@ -172,4 +172,12 @@
     </body>
 </html>
 {% endspaceless %}
-
+<script type="text/javascript">
+    $("#id_q").on('keyup', function (e) {
+    if (e.keyCode == 13) {
+        if(e.target.value){
+            location.href = '/search/results/?q='+encodeURI(e.target.value);
+        }
+    }
+    });
+</script>
