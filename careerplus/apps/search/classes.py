@@ -389,13 +389,12 @@ class BaseSearch(object):
             results = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).only('pTt pURL pHd pAR pNJ pImA pImg pNm').order_by('-pBC')[:20]
             found = False
             return results, found
-
         self.results_per_page = self.get_rps()
         self.results, found = self.add_filters()
         if self.params.get("sort") != "1":
             self.results = self.add_boost()
-        self.results = self.add_sort()
         if found:
+            self.results = self.add_sort()
             self.results = self.results.extra(self.get_extra_params())
             if self.get_query():
                 self.results = self.results.filter(content=Raw(self.get_query()))
