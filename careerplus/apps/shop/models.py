@@ -1036,10 +1036,10 @@ class Product(AbstractProduct, ModelMeta):
             ("console_live_product", "Can Live Product From Console"),
         )
 
-    # def __init__(self, *args, **kwargs):
-    #     super(Product, self).__init__(*args, **kwargs)
-    #     if self.product_class:
-    #         self.attr = ProductAttributesContainer(product=self)
+    def __init__(self, *args, **kwargs):
+        super(Product, self).__init__(*args, **kwargs)
+        if self.product_class:
+            self.attr = ProductAttributesContainer(product=self)
 
     def __str__(self):
         if self.pk:
@@ -1049,10 +1049,10 @@ class Product(AbstractProduct, ModelMeta):
                 return self.name + ' - (' + str(self.pk) + ')'
         return self.name
 
-    @property
-    def attr(self):
-        if self.product_class:
-            return ProductAttributesContainer(product=self)
+    # @property
+    # def attr(self):
+    #     if self.product_class:
+    #         return ProductAttributesContainer(product=self)
 
     def save(self, *args, **kwargs):
         # deleting caches for absolute urls,solar data and product object
@@ -1274,8 +1274,8 @@ class Product(AbstractProduct, ModelMeta):
         pure_rating = int(self.avg_rating)
         decimal_part = self.avg_rating - pure_rating
         final_score = ['*' for i in range(pure_rating)]
-        rest_part = int(Decimal(5.0) - self.avg_rating)
-        res_decimal_part = Decimal(5.0) - self.avg_rating - Decimal(rest_part)
+        rest_part = int(Decimal(5.0) - Decimal(self.avg_rating))
+        res_decimal_part = Decimal(5.0) - Decimal(self.avg_rating) - Decimal(rest_part)
         if decimal_part >= 0.75:
             final_score.append("*")
         elif decimal_part >= 0.25:
