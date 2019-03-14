@@ -65,10 +65,6 @@ SUB_FLOWS = {
         (502, "Jobs on the Move"),
         (503, "Priority Applicant")
     ),
-    6: (
-        (601, 'Fiurst'),
-        (602, 'Second')
-    )
 }
 
 SUB_FLOW_CHOICES = ()
