@@ -76,6 +76,7 @@ from faq.forms import (
     AddFaqForm,
     ChangeFaqForm,
     ChangePublicFaqForm,)
+from shop.choices import SUB_FLOWS
 from homepage.config import (
     UNIVERSITY_PAGE, UNIVERSITY_COURSE)
 
@@ -1368,6 +1369,7 @@ class ChangeProductView(DetailView):
             context.update({'prd_university_payment_formset': university_payment_formset })
 
         context.update({
+            'sub_type_flow_choices': json.dumps(SUB_FLOWS),
             'messages': alert,
             'form': main_change_form,
             'seo_form': seo_change_form,

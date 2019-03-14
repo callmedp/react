@@ -49,6 +49,7 @@ from .choices import (
     CATEGORY_CHOICES,
     PRODUCT_CHOICES,
     FLOW_CHOICES,
+    SUB_FLOW_CHOICES,
     RELATION_CHOICES,
     BG_CHOICES,
     C_ATTR_DICT,
@@ -801,6 +802,7 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
         _('Type'), choices=PRODUCT_CHOICES, default=0)
     type_flow = models.PositiveSmallIntegerField(
         _('Flow'), choices=FLOW_CHOICES, default=0)
+    sub_type_flow = models.IntegerField(choices=SUB_FLOW_CHOICES, default=-1)
     upc = models.CharField(
         _('Universal Product Code'), max_length=100,
         help_text=_('To be filled by vendor'))
