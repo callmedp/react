@@ -152,6 +152,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     def read_queryset(self, using=None):
         return self.get_model().indexable.base_queryset()
 
+    def should_update(self, instance, **kwargs):
+        return instance.is_indexable
+
     def prepare_pCtg(self, obj):
         categories = obj.categories.filter(
             productcategories__active=True,
