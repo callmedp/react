@@ -42,7 +42,7 @@
                 {% endfor %}
             </ol>
 			<div class="skill-caption">
-				<h1>{{category_obj.name}} Courses in {{category_obj.get_location_display}}</h1>
+				<h1>{{category_obj.category.name}} Courses in {{category_obj.get_location_display}}</h1>
 					<strong>
 					{% if top_3_prod.0 %}
 					    <a href="{{top_3_prod.0.pURL}}">{{top_3_prod.0.pNm}}</a> 

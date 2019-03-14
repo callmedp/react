@@ -947,7 +947,6 @@
 		init_product_structure_change();
 		init_product_faq_change();
 		scrollReload();
-		funCalls();
 		$( ".save_scroll" ).click(function() {
 		  if (localStorage) {
               	  localStorage["posStorage"] = $(window).scrollTop();
@@ -965,8 +964,10 @@ function slugify(string) {
     .replace(/\s+/g, "-")
     .replace(/[^\w\-]+/g, "")
     .replace(/\-\-+/g, "-")
-    .replace(/^-+/, "")
-    .replace(/-+$/, "");
+    .replace(/^-+/, "-")
+    .replace(/-+$/, "-")
+    .replace(' ','-')
+    .replace('-','-');
 }
 
 
@@ -976,7 +977,7 @@ function slugify(string) {
 	let location = $('#id_location option:selected').text().trim();
 	if (category_selected != "" && location != "" && category_selected != undefined && location !=undefined)
 	{
-	    let new_slug = category_selected.toLowerCase() + " "+ location.toLowerCase();
+	    let new_slug = category_selected.toLowerCase() + "-"+ location.toLowerCase();
 	    new_slug = slugify(new_slug)
 	    $('#id_slug').val(new_slug);
 	}
@@ -1023,10 +1024,8 @@ function slugify(string) {
 
     }
 
-
     $('#id_category').change(funCalls);
 	$('#id_location').change(funCalls);
-
 
 $(document).ready(function(){
 $('#id_products_mapped').select2();

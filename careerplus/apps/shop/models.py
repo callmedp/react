@@ -2924,10 +2924,6 @@ class FacultyProduct(AbstractAutoDate):
 
 class SubCategory(AbstractAutoDate,AbstractSEO,ModelMeta):
 
-    name = models.CharField(
-        _('Name'), max_length=100,
-        help_text=_('Unique name going to decide the slug'))
-
     location = models.PositiveSmallIntegerField(
         _('location'), choices=CITY_CHOICES, default=0)
 
@@ -3043,9 +3039,6 @@ class SubCategory(AbstractAutoDate,AbstractSEO,ModelMeta):
         return self.category
 
 
-    def get_description(self):
-        return self.meta_desc
-
     def split_career_outcomes(self):
         if self.career_outcomes:
             return self.career_outcomes.split(',')
@@ -3058,12 +3051,42 @@ class SubCategory(AbstractAutoDate,AbstractSEO,ModelMeta):
             return prod_integer_list
         return []
 
-    def save(self, *args, **kwargs):
-        if not self.url:
-            self.url = self.get_absolute_url()
 
-        if self.category and self.location:
-            value = self.category.name + '' + str(self.get_location_display())
+    def get_title(self):
+        title = ""
+        if self.category and self.get_location_display():
+            title = "{} Courses in {} - Fee structure, Practical Training - Shine Learning"\
+                .format(self.category.name, self.get_location_display())
+        return title
+
+    def get_heading(self):
+        heading = ""
+        if self.category and self.get_location_display():
+            heading = "{} courses in {}".format(self.category.name,self.get_location_display())
+        return heading
+
+    def get_description(self):
+        desc = ""
+        if self.category and self.get_location_display():
+            desc = "{cat} courses in {loc} - Are you looking for a {cat} courses in {loc} - " \
+                       "Check complete fee structure, training programme from top institutes."\
+                .format(cat=self.category.name,loc=self.get_location_display())
+        return desc
+
+
+
+
+    def save(self, *args, **kwargs):
+        created = bool(getattr(self,"id"))
+
+        if not created:
+            self.heading = self.get_heading()
+            self.title = self.get_title()
+            self.description= self.get_description()
+
+        if self.category and self.get_location_display():
+            self.url = self.get_absolute_url()
+            value = self.category.name + '-' + str(self.get_location_display())
             slug_value = slugify(value)
             self.slug = slug_value
         super(SubCategory, self).save(*args, **kwargs)

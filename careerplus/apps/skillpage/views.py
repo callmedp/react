@@ -565,7 +565,7 @@ class LocationSkillPageView(DetailView, SkillPageMixin):
         slug = self.kwargs.get('sc_slug')
         if not slug:
             raise Http404
-        sub_cat_object = SubCategory.objects.filter(slug=slug).first()
+        sub_cat_object = SubCategory.objects.filter(slug=slug,active=True).first()
         if not sub_cat_object:
             raise Http404
         return sub_cat_object
@@ -691,7 +691,7 @@ class LocationSkillPageView(DetailView, SkillPageMixin):
 
         if prd_list:
             prd_text = ' , '.join(prd_list)
-        if self.object.name and prd_text:
+        if self.object.category.name and prd_text:
             meta_desc = '{skill} courses in {location} - Are you looking for a {skill} courses in {location} - Check complete fee structure, training programme from top institutes.'.format(skill=self.object.category.name,location=self.object.get_location_display())
         context['meta'] = self.object.as_meta(self.request)
         context['canonical_url'] = self.object.get_canonical_url()
