@@ -2868,6 +2868,7 @@ class SubCategoryChangeView(UpdateView):
     def post(self, request, *args, **kwargs):
         obj=self.object = self.get_object()
         form = ChangeSubCategoryForm(request.POST,request.FILES,instance=obj)
+        context = self.get_context_data()
         if form.is_valid():
             try:
                 form.save()
@@ -2880,7 +2881,9 @@ class SubCategoryChangeView(UpdateView):
             except Exception as e:
                 messages.add_message(request, messages.ERROR, 'Form %s Not Updated. Due to %s' % (self.object.id, str(e)))
                 return self.form_invalid(form)
-        messages.add_message(request, messages.ERROR, 'Error in saving form')
-        return self.form_invalid(form)
+        context.update({'form': form})
+        messages.add_message(request, messages.ERROR, 'Form Not Updated.Check the fields')
+
+        return TemplateResponse(request,self.template_name, context)
 
 

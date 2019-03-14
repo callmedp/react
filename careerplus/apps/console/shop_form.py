@@ -1589,6 +1589,7 @@ class ChangeSubCategoryForm(forms.ModelForm):
         # self.fields['products_mapped'].queryset = prod_obj
         self.fields['video_link'].widget.attrs['class'] = form_class
         self.fields['career_outcomes'].widget.attrs['class'] = 'tagsinput tags form-control'
+        self.fields['career_outcomes'].required = True
         self.fields['meta_desc'].widget.attrs['class'] = form_class
         self.fields['meta_keywords'].widget.attrs['class'] = form_class
 
