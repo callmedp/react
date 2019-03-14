@@ -73,13 +73,17 @@
     overflow: visible;
   
     .searchbox-input {
-      background-color: #fff !important;
       padding-left: 10px;
       padding-right: 30px;
       border-radius: 3px;
       width: 100%;
       right: 0;
       opacity: 1;
+    }
+
+    .tt-hint {
+      color: #999;
+      background: #fff !important;
     }
   
     .searchbox-icon, .searchbox-submit {
