@@ -405,6 +405,7 @@ class OrderItem(AbstractAutoDate):
             ("can_show_domestic_profile_update_queue", "Can Show Domestic Profile Update Queue"),
             ("domestic_profile_update_assigner", "Domestic Profile Update Assigner"),
             ("domestic_profile_update_assignee", "Domestic Profile Update Assignee"),
+            ("can_show_domestic_profile_initiated_queue", "Can Show Domestic Profile Update Queue"),
 
             # Domestic Profile Approval Queue Permissions
             ("can_show_domestic_profile_approval_queue", "Can Show Domestic Profile Approval Queue"),

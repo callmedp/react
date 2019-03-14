@@ -1166,6 +1166,13 @@ class Product(AbstractProduct, ModelMeta):
         # display name
         return self.heading if self.heading else self.name
 
+    @property
+    def get_sub_type_flow(self):
+        if self.sub_type_flow > 0:
+            return self.get_sub_type_flow_display()
+        return ''
+
+
     def get_heading(self,no_cache=False):
         if self.is_course:
             return '%s ' % (
