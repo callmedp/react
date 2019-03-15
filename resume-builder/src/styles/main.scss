@@ -3,3 +3,17 @@
 @import 'layout';
 @import 'form';
 @import 'reset';
+
+
+.page-container {
+	margin: 3% 5%;
+	border: 1px solid #999;
+	height: calc(100vh - 63px);
+	@include flex(flexbox);
+	flex-flow: column;
+	font-size: 1.4rem;
+}
+
+.flex-container {
+	@include flex(flexbox);
+}

@@ -4,6 +4,7 @@ import TopBar from '../TopBar/topBar.jsx'
 import LeftSideBar from '../LeftSideBar/leftSideBar.jsx'
 import Header from '../../../Common/Header/header.jsx'
 import Footer from '../../../Common/Footer/footer.jsx'
+import RightSection from '../RightSection/rightSection.jsx'
 
 export default class EditPreview extends Component {
     render() {
@@ -13,12 +14,12 @@ export default class EditPreview extends Component {
             * */
             <div>
                 <Header/>
-                <div>
-                    <div>
-                        <TopBar/>
+                <div className="page-container">
+                    <TopBar/>
+                    <section className="flex-container">
                         <LeftSideBar/>
-                        {/*<RightSection/>*/}
-                    </div>
+                        <RightSection/>
+                    </section>
                 </div>
                 <Footer/>
 

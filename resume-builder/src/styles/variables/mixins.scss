@@ -1,45 +1,32 @@
-
-
-//for flex
-@mixin flex($justify:center,$align:center,$direction:row) {
+@mixin flexbox() {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
-  justify-content: $justify;
-  align-items: $align;
-  flex-direction: $direction;
 }
 
-//for position
-@mixin position($position:relative,$top:0,$right:null,$bottom:null,$left:0) {
-  position: $position;
-  top: $top;
-  left: $left;
-  right: $right;
-  bottom: $bottom;
+@mixin flex($values) {
+  -webkit-box-flex: $values;
+  -moz-box-flex:  $values;
+  -webkit-flex:  $values;
+  -ms-flex:  $values;
+  flex:  $values;
 }
 
-//horizontally center
-@mixin h-center {
-  left: 50%;
-  transform: translate(-50%);
+@mixin order($val) {
+  -webkit-box-ordinal-group: $val;  
+  -moz-box-ordinal-group: $val;     
+  -ms-flex-order: $val;     
+  -webkit-order: $val;  
+  order: $val;
 }
 
-//No-Select
-@mixin no-select {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none;
-  /* Non-prefixed version, currently
-                              supported by Chrome and Opera */
+.wrapper {
+  @include flexbox();
 }
 
-// For Placeholders in input
-//@mixin placeholder() {
-//  &::placeholder {
-//    font-size: 14px;
-//    color: rgba(#000, 0.4);
-//    letter-spacing: normal;
-//  }
-//}
+.item {
+  @include flex(1 200px);
+  @include order(2);
+}

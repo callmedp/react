@@ -6,10 +6,10 @@ import Preview from '../Preview/preview.jsx'
 export default class LeftSideBar extends Component {
     render() {
         return (
-            <div>
+            <section className="left-sidebar">
                 <Edit/>
                 <Preview/>
-            </div>
+            </section>
         )
     }
 }

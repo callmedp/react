@@ -3,9 +3,9 @@ import './topBar.scss'
 export default class TopBar extends Component {
     render() {
         return (
-            <div>
+            <section className="flex-container">
                 <span>Top Bar here</span>
-            </div>
+            </section>
         )
     }
 }

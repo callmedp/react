@@ -3,7 +3,7 @@ import './edit.scss'
 export default class Edit extends Component {
     render(){
         return(
-            <div>
+            <div className="left">
                 <span className={'New-color'}>Add Side bar Edit options</span>
             </div>
         )

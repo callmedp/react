@@ -1,7 +1,11 @@
-$primary-color : #eee;
+@import '../../../../styles/variables/vars.scss';
+.left{
+	color: $primary;
+}
 
+.top-baneer {
+	&--banner-heading {
 
-.New-color{
-  color: $primary-color;
-  font-size: 20px;
+	}
+	
 }
