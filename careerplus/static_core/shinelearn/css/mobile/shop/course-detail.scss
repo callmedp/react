@@ -150,17 +150,23 @@
 	border: 1px solid $border-grey-c1;
 	padding: 10px;
 	position: relative;
+	display: block;
+	
+	h2 {
+		margin-bottom: 0;
+		font-size: 18px;
+	}
 
 	span + span:before  {
 		content: ", "
 	}
-
 	sup {
 		@include icon-inblock (7px, 13px, -28px -197px);
 		position: absolute;
 		right: 10px;
 		top: 50%;
 		margin-top: -7px;
+		transform: rotateY(180deg);
 	}
 }
 
