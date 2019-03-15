@@ -13,6 +13,7 @@
 	@include flex(flexbox);
 	flex-flow: column;
 	font-size: 1.4rem;
+	background-image: url(../assets/images/sprite.svg);
 }
 
 .flex-container {
