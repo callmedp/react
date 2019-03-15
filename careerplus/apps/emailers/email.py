@@ -49,7 +49,7 @@ class SendMail():
         if mail_type == "REGISTRATION":
             send_dict['template'] = 'emailers/candidate/register.html'
             send_dict['subject'] = "Welcome to Shine"
-            headers_dict = {'Reply-To': settings.REPLY_TO,}
+            headers_dict = {'Reply-To': settings.REPLY_TO}
             if settings.TAG_MAILER:
                 headers_dict.update({
                     'X-APIHEADER': json.dumps({'X-Uid': 'SLRegistration'}),
