@@ -1,7 +1,6 @@
-$primary-color : #eee;
+@import '../../../../styles/variables/vars';
 
-
-.New-color{
-  color: $primary-color;
+.New-color {
+  color: $primary;
   font-size: 20px;
 }
