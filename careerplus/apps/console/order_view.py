@@ -1707,6 +1707,7 @@ class DomesticProfileInitiatedQueueView(ListView, PaginationMixin):
         self.payment_date = request.GET.get('payment_date', '')
         self.sel_opt = request.GET.get('rad_search','number')
         self.modified = request.GET.get('modified', '')
+        self.status = request.GET.get('status', '')
         return super(DomesticProfileInitiatedQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -1733,7 +1734,7 @@ class DomesticProfileInitiatedQueueView(ListView, PaginationMixin):
         queryset = queryset.filter(
             order__status__in=[1, 3],
             product__type_flow=5, no_process=False,
-            oi_status__in=[28],
+            oi_status__in=[28, 4],
             product__sub_type_flow__in=[501, 503],
             order__welcome_call_done=True).exclude(
             wc_sub_cat__in=[64, 65])
@@ -1809,6 +1810,13 @@ class DomesticProfileInitiatedQueueView(ListView, PaginationMixin):
                     end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
                 queryset = queryset.filter(
                     modified__range=[start_date, end_date])
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            pass
+        try:
+            if self.status:
+                queryset = queryset.filter(
+                    oi_status=int(self.status))
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass

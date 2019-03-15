@@ -107,6 +107,14 @@
                             </div>
                             <br/>
                         </div>
+                         <div class="form-group">
+                            <label class="control-label col-md-6 col-sm-6 col-xs-12">Status</label></br>
+                            <select class="form-control col-md-6 col-sm-6 col-xs-12"  name="status" id="oi_status">
+                              <option value="28"> Initiated</option>
+                              <option value="4"> Expired/Closed</option>
+                            </select>
+                            <br/>
+                        </div>
                        {% if query %}
                            <input type="hidden" name="query" value="{{query}}">
                        {% endif %}
