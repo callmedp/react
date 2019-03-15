@@ -69,7 +69,7 @@ def priority_applicant_creation():
 
                     # Send mail and sms with subject line as Your Profile updated
                     try:
-                        mail_type = "FEATURED_PROFILE_UPDATED"
+                        mail_type = "PRIORITY_APPLICANT_MAIL"
                         email_sets = list(
                             obj.emailorderitemoperation_set.all().values_list(
                                 'email_oi_status', flat=True).distinct())
@@ -91,7 +91,7 @@ def priority_applicant_creation():
             except Exception as e:
                 logging.getLogger('error_log').error((str(e)))
 
-    out_str = out_str = '%s profile featured out of %s' % (
+    out_str = out_str = '%s profile given priority out of %s' % (
         priority_applicants_creation_count, priority_applicant_orderitems.count())
 
     logging.getLogger('info_log').info("{}".format(out_str))
@@ -160,7 +160,7 @@ def priority_applicant_removal():
                 logging.getLogger('error_log').error((str(e)))
                 print(str(e))
 
-    out_str = '%s profile expired out of %s featured items' % (
+    out_str = '%s profile removed from priority out of %s priority items' % (
         priority_applicant_removal_count, priority_applicant_orderitems.count())
 
     logging.getLogger('info_log').info("{}".format(out_str))
