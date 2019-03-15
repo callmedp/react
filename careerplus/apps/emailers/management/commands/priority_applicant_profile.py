@@ -23,7 +23,7 @@ def priority_applicant_creation():
     ''' featured profile cron for feature updation on shine.com'''
 
     priority_applicant_orderitems = OrderItem.objects.filter(
-        order__status__in=[1, 3], product__type_flow=5, product_sub_type_flow=3, oi_status=30)
+        order__status__in=[1, 3], product__type_flow=5, product__sub_type_flow=3, oi_status=30)
 
     priority_applicant_orderitems = priority_applicant_orderitems.select_related('order')
 
@@ -101,7 +101,7 @@ def priority_applicant_removal():
     ''' featured profile cron for closing updated orderitem '''
 
     priority_applicant_orderitems = OrderItem.objects.filter(
-        order__status__in=[1, 3], product__type_flow=5, product_sub_type_flow=3, oi_status=28)
+        order__status__in=[1, 3], product__type_flow=5, product__sub_type_flow=3, oi_status=28)
     priority_applicant_orderitems = priority_applicant_orderitems.select_related('order')
 
     priority_applicant_removal_count = 0
