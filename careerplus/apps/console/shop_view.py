@@ -2819,11 +2819,11 @@ class AddSubCategoryView(FormView):
         return super(AddSubCategoryView, self).form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(
-            self.request,
-            "Your addition has not been saved. Try again."
-        )
-        return super(AddSubCategoryView, self).form_invalid(form)
+        super(AddSubCategoryView, self).form_invalid(form)
+        context = self.get_context_data()
+        context.update({'form':form})
+        messages.error(self.request,"Form not saved please check the fields")
+        return TemplateResponse(self.request, self.template_name, context)
 
 
 @Decorate(stop_browser_cache())

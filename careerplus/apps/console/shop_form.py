@@ -1441,6 +1441,7 @@ class AddSubCategoryForm(forms.ModelForm):
         self.fields['slug'].widget.attrs['class'] = form_class
         self.fields['slug'].widget.attrs['readonly'] = True
         self.fields['slug'].required = True
+        self.fields['slug'].label = "Slug*"
         self.fields['image'].widget.attrs['class'] = form_class
         self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 500
         self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
@@ -1511,7 +1512,7 @@ class AddSubCategoryForm(forms.ModelForm):
             raise forms.ValidationError('Check the slug')
         slug_obj = SubCategory.objects.filter(slug=slug)
         if slug_obj:
-            raise forms.ValidationError('Duplication error')
+            raise forms.ValidationError('Slug Already exist')
         return slug
 
     def clean_category(self):
@@ -1557,6 +1558,7 @@ class ChangeSubCategoryForm(forms.ModelForm):
         self.fields['slug'].widget.attrs['class'] = form_class
         self.fields['slug'].widget.attrs['readonly'] = True
         self.fields['slug'].required = True
+        self.fields['slug'].label = "Slug*"
         self.fields['image'].widget.attrs['class'] = form_class
         self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 500
         self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
@@ -1590,6 +1592,7 @@ class ChangeSubCategoryForm(forms.ModelForm):
         self.fields['video_link'].widget.attrs['class'] = form_class
         self.fields['career_outcomes'].widget.attrs['class'] = 'tagsinput tags form-control'
         self.fields['career_outcomes'].required = True
+        self.fields['career_outcomes'].label = "Career Outcome*"
         self.fields['meta_desc'].widget.attrs['class'] = form_class
         self.fields['meta_keywords'].widget.attrs['class'] = form_class
 

@@ -14,13 +14,26 @@
   <style type="text/css">
     ul.parsley-errors-list {
         list-style: none;
-        color: red;
+        color: #ff0000 !important;
         padding-left: 0;
     }
     ul.errorlist {
         list-style: none;
-        color: red;
+        color: red !important;
         padding-left: 0;
+    }
+    ul.errorlist li{
+      color: #ff0000 !important;
+    }
+    .alert-red{
+    float: left;
+    margin: 0 0 0 20px;
+    color: red;
+    max-width: 170px;
+    white-space: no-wrap;
+    }
+    .select2{
+    max-width:463px;
     }
 
   </style>
@@ -90,7 +103,7 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                   {{form}}
                 </div>
-                <div class="alert">{{form.errors}}</div>
+                <div class="alert-red">{{form.errors}}</div>
               </div>
 
               {% endfor %}
