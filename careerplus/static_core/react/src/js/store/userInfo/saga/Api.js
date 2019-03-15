@@ -53,7 +53,7 @@ const fetchSkills = () => {
 
 const addToCart = (data) => {
     const url = `cart/add-to-cart/`;
-    return BaseApiService.post(`/${url}`, data, {'Content-Type': 'application/x-www-form-urlencoded'}, false)
+    return BaseApiService.post(`/${url}`, data, {'Content-Type': 'application/x-www-form-urlencoded', 'HTTP_X_REQUESTED_WITH':'XMLHttpRequest'}, false)
 };
 
 
