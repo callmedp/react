@@ -237,3 +237,12 @@ APPLICATION_PROCESS = {
 APPLICATION_PROCESS_CHOICES = [(int(key), val[1], val[0])for key, val in list(APPLICATION_PROCESS.items())]
 
 BENEFITS_CHOICES = [(int(key), val[1], val[0])for key, val in list(BENEFITS.items())]
+
+CITY_CHOICES = (
+    (0, 'Delhi'),
+    (1, 'Mumbai'),
+    (2, 'Pune'),
+    (3, 'Hyderabad'),
+    (4, 'Kolkata'),
+
+)

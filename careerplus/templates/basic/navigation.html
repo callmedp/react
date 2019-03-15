@@ -229,7 +229,7 @@
         <li>
           <a>
           <form action="" class="search searchNavBar cls_search">
-            <input class="inputTags-list key_press_js_search form-control input-sm" data-selecttype="multiple"  maxlength="64" name="q" placeholder="Search" type="text" required="">
+            <input class="inputTags-list key_press_js_search form-control input-sm" data-selecttype="multiple"  maxlength="64" name="q" placeholder="Search" type="text" required="" autocomplete="off">
             <button type="submit" class="search-icon"></button>
           </form>
           </a>
@@ -273,6 +273,15 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
 <script type="text/javascript">
-var qSearch = {{ search_context|safe|default:"[]"}} ;
+  var productUrlSet = {{ product_url_set|safe }}
+  var categoryUrlSet = {{ category_url_set|safe }}
+  $('.login-dropdown').hover(()=>{
+    $('.tt-menu').hide();
+    
+    }
+  )
+  
 </script>
+
