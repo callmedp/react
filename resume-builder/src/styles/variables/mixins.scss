@@ -1,0 +1,45 @@
+
+
+//for flex
+@mixin flex($justify:center,$align:center,$direction:row) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $direction;
+}
+
+//for position
+@mixin position($position:relative,$top:0,$right:null,$bottom:null,$left:0) {
+  position: $position;
+  top: $top;
+  left: $left;
+  right: $right;
+  bottom: $bottom;
+}
+
+//horizontally center
+@mixin h-center {
+  left: 50%;
+  transform: translate(-50%);
+}
+
+//No-Select
+@mixin no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                              supported by Chrome and Opera */
+}
+
+// For Placeholders in input
+//@mixin placeholder() {
+//  &::placeholder {
+//    font-size: 14px;
+//    color: rgba(#000, 0.4);
+//    letter-spacing: normal;
+//  }
+//}

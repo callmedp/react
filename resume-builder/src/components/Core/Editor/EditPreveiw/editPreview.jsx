@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import './editPreview.scss'
 import TopBar from '../TopBar/topBar.jsx'
 import LeftSideBar from '../LeftSideBar/leftSideBar.jsx'
+import Header from '../../../Common/Header/header.jsx'
+import Footer from '../../../Common/Footer/footer.jsx'
 
 export default class EditPreview extends Component {
     render() {
@@ -10,7 +12,7 @@ export default class EditPreview extends Component {
             * @desc Top Bar component
             * */
             <div>
-               {/*<Header/>*/}
+                <Header/>
                 <div>
                     <div>
                         <TopBar/>
@@ -18,8 +20,8 @@ export default class EditPreview extends Component {
                         {/*<RightSection/>*/}
                     </div>
                 </div>
-                {/*<Footer/>*/}
-                
+                <Footer/>
+
             </div>
         )
     }
