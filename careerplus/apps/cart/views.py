@@ -590,8 +590,14 @@ class UpdateDeliveryType(View, CartMixin):
                 delivery_obj = delivery_servieces.get(pk=delivery_type)
                 line_obj.delivery_service = delivery_obj
                 line_obj.save()
-                line_item = cart_obj.lineitems.filter(parent=None)[0]
-                type_flow = int(line_item.product.type_flow)
+                type_flow = -1
+
+                line_item_list = cart_obj.lineitems.filter(parent=None)
+
+                if len(line_item_list):
+                    line_item = line_item_list[0]
+                    type_flow = int(line_item.product.type_flow)
+
                 # resume builder flow handle
                 if type_flow == 13:
                     cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
