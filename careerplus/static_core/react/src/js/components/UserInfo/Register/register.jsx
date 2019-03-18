@@ -12,9 +12,13 @@ export class Register extends React.Component {
 
     render() {
         const {error, handleSubmit, pristine, reset, submitting} = this.props;
+        const staticPath = '/media/static'
         return (
             <div className="register login-signup-box">
                 <h1 className="modal-title">Register</h1>
+{/*
+                <img src={`${staticPath}/react/assets/images/functional.jpg`}   />
+*/}
 
                 <form onSubmit={handleSubmit}>
                     <div className={'Text-spacing'}>
