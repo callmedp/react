@@ -2792,7 +2792,7 @@ class ListSubCategoryView(ListView, PaginationMixin):
 
 @Decorate(stop_browser_cache())
 @Decorate(check_group([settings.PRODUCT_GROUP_LIST]))
-@Decorate(check_permission('shop.console_add_subcategory'))
+@Decorate(check_permission('shop.console_add_category'))
 class AddSubCategoryView(FormView):
     form_class = AddSubCategoryForm
     template_name = 'console/shop/add_subcategory.html'
