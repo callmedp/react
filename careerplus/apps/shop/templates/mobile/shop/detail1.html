@@ -354,32 +354,6 @@ function close_review() {
         });
         
     </script>
-<<<<<<< HEAD
-=======
-    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
-    <script type="text/javascript">
-    $(document).ready(function(){
-        skillsSet = {{ skills_set|safe }}
-        funcAreaSet = {{ func_area_set|safe }}
-        $('.searchbox-input').typeahead({
-            local: {{ search_context|safe }}
-        });
-
-        $("#nav-search-box").submit(function(e){
-            inputValue = $(this).find('.searchbox-input').val()
-            if(inputValue){
-                location.href = '/search/results/?q='+encodeURI(inputValue);
-            }
-            e.preventDefault();
-            
-        });
-
-        $('.searchbox-input').click(function () {
-            console.log($(this).val())
-        }); 
-    });
-    </script>
->>>>>>> design-noise
 {% endblock js_section %}
 
 
