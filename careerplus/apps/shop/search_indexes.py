@@ -57,7 +57,6 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pSg = indexes.CharField(model_attr='slug', null=True)
     pTP = indexes.IntegerField(model_attr='type_product', default=0)
     pTF = indexes.IntegerField(model_attr='type_flow', default=0)
-    pSTF = indexes.IntegerField(model_attr='sub_type_flow', default=-1)
     pUPC = indexes.CharField(model_attr='upc', null=True, indexed=False)
     pPc = indexes.CharField(null=True)
     pPv = indexes.IntegerField(null=True)
