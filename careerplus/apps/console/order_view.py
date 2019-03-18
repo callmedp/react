@@ -2881,7 +2881,7 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         query_filters_exclude = dict()
         queryset = super(WhatsappListQueueView, self).get_queryset()
         query_filters.update({'order__status__in': [1, 2, 3], 'product__type_flow': 5, 'no_process': False,
-          'product_id__in': settings.FEATURE_PROFILE_EXCLUDE, 'order__welcome_call_done': True})
+          'product__sub_type_flow': 502, 'order__welcome_call_done': True})
         query_filters_exclude.update({'wc_sub_cat__in': [64, 65]})
         user = self.request.user
         if user.is_superuser:
