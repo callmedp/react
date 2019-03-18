@@ -1481,7 +1481,7 @@ class AddSubCategoryForm(forms.ModelForm):
         self.fields['products_mapped'].widget.attrs['class'] = form_class
         self.fields['products_mapped'].label = "Products"
         # self.fields['products_mapped'].widget.attrs['placeholder'] = 'Add Products For Mapping'
-        prod_objs = Product.objects.filter(is_indexed=True)
+        prod_objs = Product.objects.filter(is_indexed=True).only('id','name','heading')
         choices = [(p.id, '{0}-{1}'.format(p.heading, p.name),) if p.heading else (p.id,'{}'.format(p.name),) for p in prod_objs]
         self.fields['products_mapped'] = forms.MultipleChoiceField(choices=choices)
         self.fields['products_mapped'].required = False
@@ -1586,7 +1586,7 @@ class ChangeSubCategoryForm(forms.ModelForm):
         self.fields['products_mapped'].widget.attrs['class'] = form_class
         self.fields['products_mapped'].label = "Products"
         # self.fields['products_mapped'].widget.attrs['placeholder'] = 'Add Products For Mapping'
-        prod_objs = Product.objects.filter(is_indexed=True)
+        prod_objs = Product.objects.filter(is_indexed=True).only('id','name','heading')
         choices = [(p.id, '{0}-{1}'.format(p.heading, p.name),) if p.heading else (p.id,'{}'.format(p.name),) for p in prod_objs]
         self.fields['products_mapped'] = forms.MultipleChoiceField(choices=choices)
         self.fields['products_mapped'].required = False
