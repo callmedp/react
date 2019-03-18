@@ -34,7 +34,7 @@ from search.views import FuncAreaPageView
 from blog import views as blog_view
 from skillpage.views import (
     ServiceDetailPage, UniversityPageView,
-    UniversityFacultyView)
+    UniversityFacultyView, LocationSkillPageView)
 
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
@@ -50,32 +50,33 @@ handler404 = 'users.views.page_not_found'
 handler500 = 'users.views.server_error'
 
 course_sitemap = {
-    'course': CourseSitemap,
-    'skill': SkillSitemap,
-    'category': CategorySitemap
+   'course': CourseSitemap,
+   'skill': SkillSitemap,
+   'category': CategorySitemap
 }
 
 service_sitemap = {
-    'service': ServiceSitemap,
+   'service': ServiceSitemap,
 }
 
 article_sitemap = {
-    'article': ArticleSitemap,
-    'category': ArticleCategorySitemap,
+   'article': ArticleSitemap,
+   'category': ArticleCategorySitemap,
 }
 
 cms_sitemap = {
-    'service': CMSSitemap,
+   'service': CMSSitemap,
 }
 
 talent_sitemap = {
-    'talenteconomy': TalentEconomySitemap,
-    'category': TalentCategorySitemap,
-    'author': TalentAuthorSitemap
+   'talenteconomy': TalentEconomySitemap,
+   'category': TalentCategorySitemap,
+   'author': TalentAuthorSitemap
 }
 
-urlpatterns = [url(r'^services/%s/%s/$' % (cat_slug, cat_id),
-                   ServiceDetailPage.as_view()) for cat_id, cat_slug in settings.SERVICE_PAGE_ID_SLUG_MAPPING.items()]
+
+urlpatterns = [url(r'^services/%s/%s/$' %(cat_slug,cat_id),
+        ServiceDetailPage.as_view())  for cat_id,cat_slug in settings.SERVICE_PAGE_ID_SLUG_MAPPING.items()]
 
 # Product Detail URLs
 urlpatterns += [
@@ -99,7 +100,7 @@ urlpatterns += [
 
     url(r'^course/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='course-detail'),
-
+    
     url(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='service-detail'),
     url(r'^courses/', include('skillpage.urls', namespace='skillpage')),
@@ -113,11 +114,15 @@ urlpatterns += [
     url(r'^online-courses.html$',
         CourseCatalogueView.as_view(), name='course-catalogoue'),
 
+    url(r'^courses/(?P<sc_slug>[a-z\-]+)/$', LocationSkillPageView.as_view(), name='location-skillpage'),
+
+
+
     # url(r'^job-assistance/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
     #     ProductDetailView.as_view(), name='job-assist-detail'),
     # url(r'^product/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
     #     ProductDetailView.as_view(), name='other-detail'),
-
+    
 ]
 
 # Additional admin urls
@@ -132,7 +137,6 @@ def get_urls():
             admin.site.admin_view(UserLoginTokenView.as_view()))
     ]
     return urls
-
 
 admin.site.get_urls = get_urls
 
@@ -230,12 +234,14 @@ if settings.DEBUG:
 
 
     urlpatterns = [
-                      url(r'^__debug__/', include(debug_toolbar.urls)),
-                      url(r'^api-docs/', SwaggerSchemaView.as_view()),
-                  ] + urlpatterns
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+        url(r'^api-docs/', SwaggerSchemaView.as_view()),
+    ] + urlpatterns
+
 
 import logging
 from sorl.thumbnail.log import ThumbnailLogHandler
+
 
 handler = ThumbnailLogHandler()
 handler.setLevel(logging.ERROR)

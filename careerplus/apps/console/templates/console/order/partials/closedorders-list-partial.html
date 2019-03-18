@@ -72,7 +72,7 @@
                     <td class=" "><a href="{% url 'console:order:pages:closedorders-detail' pk=obj.id %}">{{obj.quantity}}</a></td>
                     <td class=" "><a href="{% url 'console:order:pages:closedorders-detail' pk=obj.id %}">{{obj.order.date_placed|slice:":10"}}</a></td>
                     {% if is_vendee %}
-                      <td class=" "><input type="button" data-attr-id="{{obj.id}}" data-attr-vendorid="{{obj.partner}}" onclick="debugger;archiveOrder(event);" value="Archive" /></td>
+                      <td class=" "><input type="button" data-attr-id="{{obj.id}}" data-attr-vendorid="{{obj.partner}}" onclick="archiveOrder(event);" value="Archive" /></td>
                     {% endif %}
                     
                   </tr>

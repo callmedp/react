@@ -25,6 +25,7 @@
 
 /* Line form with transition  Start From Here */
 @import '../components/inline-form';
+@import '../components/search-bar';
 
 
 .blue-link {
@@ -499,6 +500,8 @@ article {
   .form-control {
     @include border-radius (4px);
     border: 0 none;
+    color: #333;
+    background: #fff;
   }
 
   .search-icon-tab {
@@ -513,7 +516,7 @@ article {
   }
 
   .tt-hint {
-    top: 8px !important;
+    color: #999;
   }
 }
 
@@ -689,12 +692,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efa859', end
 
 .header-taging{
     position: relative;
-    z-index: 2;
+    // z-index: 2;
 
 }
 
-.breadcrumb {
-    position: relative;
-    z-index: 99;
+// .breadcrumb {
+//     position: relative;
+//     z-index: 99;
 
-}
+// }

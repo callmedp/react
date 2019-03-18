@@ -1,0 +1,359 @@
+{% extends "mobile/basic/base.html" %}
+{% load static compress %}
+{% block django_meta %}
+    {% include 'meta/meta.html' %}
+
+{%  endblock django_meta %}
+{% block canonical_url %}
+  <link rel="amphtml" href="https://{{ MOBILE_SITE_DOMAIN }}{{canonical_url}}?type=amp">
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+{% endblock canonical_url %}
+
+{% block title %}
+    	{{meta.title}}
+
+{% endblock title %}
+{% block css_section %}
+{{ block.super }}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/skill/skill.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/shop/course-detail.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
+    {% endcompress %}
+
+{% endblock css_section %}
+{% block header %}
+    <header class="w100fl he-auto">
+        <div class="main-menu w100fl">
+            <div class="pull-left">
+                <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button"></a>
+            </div>
+
+            <div class="pull-right" style="width:90%;">
+                <a class="icon-cart pull-right" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                <form method='get' id="search-form">
+                    <div class="searchbox">
+                        <input id='id_q' type="text" placeholder="Search here" name="search" class="searchbox-input" autocomplete="off">
+                        <span class="searchbox-icon"></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <h1 class="heading-back w100fl pb-0">{{category_obj.category.name}} Courses in {{category_obj.get_location_display}}</h1>
+        <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
+                {% for bread in breadcrumbs %}
+                    {% if bread.url %}
+                        <li itemprop="itemListElement" itemscope
+					      itemtype="http://schema.org/ListItem">
+						    <a href='{{bread.url}}' itemprop="item">{{bread.name}}
+	                        </a>
+							<meta itemprop="name" content="{{bread.name}}" />
+						    <meta itemprop="position" content="{{forloop.counter}}" />
+	                    </li>
+                    {% else %}
+                        <li class="active">{{bread.name}}</li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        <ul class="header-taging mt-10 w100fl">
+            {% if top_3_prod.0 %}
+            <li><a href="{{top_3_prod.0.pURL}}">{{top_3_prod.0.pNm}}</a></li>
+            {% endif %}
+            {% if top_3_prod.1 %}
+            <li><a href="{{top_3_prod.1.pURL}}">{{top_3_prod.1.pNm}}</a></li>
+            {% endif %}
+            {% if top_3_prod.2 %}
+            <li><a href="{{top_3_prod.2.pURL}}">{{top_3_prod.2.pNm}}</a></li>
+            {% endif %}
+        </ul>
+    </header><!-- header ends here -->
+{% endblock header %}
+
+{% block container %}
+    <div class="body-wrapper">
+        <section class="content-box">
+            <div class="skill-box">
+                <div class="container pt-0 pb-5">
+                {% if top_4_vendors %}
+                    <h2 class="mb-0">Providers</h2>
+                    <div class="slide-container">
+                        <ul class="skill-provider cropcenterimg" >
+                        {% for top_4_vendor in top_4_vendors %}
+                            {% if top_4_vendor.icon or top_4_vendor.image %}
+                            <li class="cuad" >
+                                <a class="box" style="padding:2px;">
+                                    <img  src="{% if top_4_vendor.icon %}
+                                        {{top_4_vendor.icon.url}}
+                                    {% elif top_4_vendor.image %}{{top_4_vendor.image.url}}{% endif %}">
+                                </a>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>
+                    </div> <!-- end of slide-container -->
+                {% endif %}
+                </div><!-- end of provider slider -->
+                <div class="container">
+                    <h2>About Product</h2>
+                    <p class="pb-0">
+                        {{category_obj.description | safe}}
+                    </p>
+                </div><!-- end of Six Sigma -->
+
+                <div class="container">
+                    <h2>Career Outcomes</h2>
+                    <div class="box row">
+                        <ul class="recommd-list">
+                        {% for career_outcome in career_outcomes %}
+                            <li>
+                                <sup class="icon-tick"></sup>{{career_outcome}}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div><!-- end of Recommended  for -->
+
+                <div class="container">
+                    <h2>Demand in Market</h2>
+                    <div class="box row">
+                    {% if category_obj.graph_image %}
+                        <div><img src="{{category_obj.graph_image.url}}" class="img-responsive"></div>
+                    {% endif %}
+                        <div class="market-demand mb-20">
+                            <div class="media">
+                                <div class="media-left">
+                                  <span class="icon-file mt-10"></span>
+                                </div>
+                                <div class="media-body">
+                                    <span class="fs-22 blue-link">
+                                        <a href="https://www.shine.com/job-search/{{category_obj.category.name|slugify}}/">
+                                            {{api_data.job_count}}
+                                        </a>
+                                    </span>
+                                     <p class="pb-0 c6">
+                                        jobs in the market demanding this skill
+                                    </p>
+                                </div>
+                            </div><!-- end of media -->
+                            {% comment %}
+                            <div class="media">
+                                <div class="media-left">
+                                  <span class="icon-graph mt-10"></span>
+                                </div>
+                                <div class="media-body">
+                                    <span class="fs-22 blue-link">Only 10%</span>
+                                    <p class="pb-0 c6">
+                                        candidates are six sigma certified
+                                    </p>
+                                </div>
+                            </div><!-- end of media -->
+                            {% endcomment %}
+                        </div>
+
+                        <p>Jobs require this skill in different functional area</p>
+                        <ul class="links mb-10">
+                            <li>
+                                <a href="https://www.shine.com/job-search/quotes-{{slug|slugify}}-quotes-jobs?farea={{api_data.jFArea.0.0}}">{{api_data.jFArea.0.2}} ({{api_data.jFArea.0.1}})
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.shine.com/job-search/quotes-{{slug|slugify}}-quotes-jobs?farea={{api_data.jFArea.1.0}}">{{api_data.jFArea.1.2}} ({{api_data.jFArea.1.1}})
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.shine.com/job-search/quotes-{{slug|slugify}}-quotes-jobs?farea={{api_data.jFArea.2.0}}">{{api_data.jFArea.2.2}} ({{api_data.jFArea.2.1}})
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!-- end of Recommended for -->
+
+
+                 {% if widget_objs %}
+                    <div class="w100fl">
+                        <h2 class="pull-left">{{widget_obj.name}}</h2>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="box row pb-30">
+                        <div>
+                            <ul>
+                            {% for widget_obj in widget_objs %}
+                                <li><a href="{{widget_obj.url}}" target="_blank">{{widget_obj.name}}</a></li>
+                            {% endfor %}
+                            </ul>
+                        </div><!-- end of review wrap -->
+                    </div><!-- end of box -->
+                {% endif %}
+
+                <div class="container" id="product_list">
+                    <h2>{{category_obj.category.name}} Programs</h2>
+                    {% for product in products %}
+    <div class="box row mb-15">
+        <div class="media">
+            <div class="media-left">
+                <a href="#" class="sigma-pro">
+                    {% if request.amp %}
+                    <amp-img
+                        src="{{ product.pImg}}"
+                        width="50"
+                        height="50">
+                    </amp-img>
+
+                    {% else %}
+                    <img src="{{ product.pImg}}">
+                    {% endif %}
+                </a>
+            </div>
+            <div class="media-body">
+                <p class="pb-0"><a href="{{site}}{{product.pURL}}">
+                    <strong>{{product.pNm}}</strong></a>
+                </p>
+                <div class="mb-10 c6">
+                    <div class="rating inline-block ml-0 fs-12">
+                        <sup class="fill-star"></sup>
+                        {{product.pARx |floatformat:1}}/5
+                    </div>
+                    <div class="inline-block fs-12">
+                        {%if product.no_review%}
+                            <figure class="icon-comments"></figure>
+                            <a href="#">{{product.no_review}}</a>
+                        {%endif%}
+                        <figure class="icon-jobs ml-10"></figure>
+                        {% if product.pNJ %}
+                            <strong>{{product.pNJ}}</strong> Jobs
+                        {% endif %}
+                        {% if "true" in product.pCert %}
+                        <figure class="icon-certificate ml-10">
+                        </figure>Certification
+                        {% endif %}
+                    </div>
+                </div><!-- end of icons wrapper -->
+                <p class="pb-5 fs-12 c6">
+                    Providers
+                    <a href="#" class="tag-bg fs-11 ml-5">
+                    {{product.pPvn}}
+                    </a>
+                </p>
+                <p class="pb-0 fs-12">
+                    Starting at <strong>Rs. {{ product.pPin |floatformat:'0' }}/-</strong>{% if product.pPfin|floatformat:0|add:"0" %}<strike>Rs. {{ product.pPfin|floatformat:"0" }}/-</strike> <span class="discount">{{ product.discount }}% OFF</span>{% endif %}
+                </p>
+            </div><!-- end of media body -->
+        </div><!-- end of media -->
+    </div><!-- end of box -->
+{% endfor %}
+                </div><!-- end of container -->
+
+                <!-- Revew Slide widget -->
+                <div class="container">
+                {% if page_reviews %}
+                    <div class="w100fl">
+                        <h2 class="pull-left">Reviews</h2>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="box row pb-30">
+                        <div class="review-container rel">
+                            <ul class="review-slide" id="review_list">
+                            {% for page_review in page_reviews %}
+                                <li>
+                                    <div class="wrap">
+                                        {% for rating in page_review.get_ratings %}
+                                        <div class="rating inline-block ml-0 fs-12">
+                                            {% if rating == "*" %}
+                                            <sup class="fill-star"></sup>
+                                            {% else %}
+                                            <sup class="unfill-star"></sup>
+                                            {% endif %}
+                                        </div><!-- end of star rating -->
+                                        {% endfor %}
+                                        <p>{{page_review.content | safe}}</p>
+                                        <p class="fs-12 c9 pb-0">
+                                            {{page_review.user_name}}
+                                            {{page_review.created|timesince}} ago
+                                        </p>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        </div><!-- end of review wrap -->
+                    </div><!-- end of box -->
+                {% endif %}
+                </div><!-- end of container -->
+
+            </div><!-- end of skill box -->
+        </section><!-- end of section here -->
+    </div><!-- body wrapper ends here -->
+    {% block call_us %}
+        {% include "shop/partials/call_us.html" %}
+    {% endblock call_us %}
+
+{% endblock container %}
+
+{% block js_section %}
+    {{block.super}}
+<script>
+
+/***CENTER CROP IMAGE***/
+function CenterCropImage(x) {
+	x.each(function () {
+		$(this).children('img').load(function () {
+			ContentBox = $(this).parent()
+			PropBox = getProportions(ContentBox)
+			ImgtoResize = $(this)
+			PropImg = getProportions(ImgtoResize)
+			ProportionHorizontal(ImgtoResize)
+
+		})
+
+	})
+}
+
+
+function getProportions(x) {
+	Height = x.height()
+	Width = x.width()
+	Prop = Width / Height
+	return Prop
+}
+
+function ProportionHorizontal(x) {
+	x.removeAttr("style")
+	x.css({
+		'height': '100%',
+		'width': '100%'
+	})
+	Wimg = x.width()
+	Wcont = x.parent().width()
+
+	MarginLeft = (Wcont - Wimg) / 2
+	x.css({
+		'margin-left': MarginLeft
+	})
+}
+
+function ProportionVertical(x){
+x.removeAttr("style")
+x.css({'width':'100%','height':'auto'})
+Himg=x.height()
+Hcont=x.parent().height()
+
+
+
+
+$(document).ready(function() {
+CenterCropImage($('.cropcenterimg li a'));
+});
+
+</script>
+
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/skill/skillpage.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
+    {% endcompress %}
+{% endblock js_section %}
+
+
