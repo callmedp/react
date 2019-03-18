@@ -9,35 +9,8 @@
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/smk-accordion.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
     {% endcompress css %}
-        <style>
-        .breadcrumb > li a{
-            color: #ffff;
-                    }
-            a[disabled], a[disabled]:hover {
-               pointer-events: none;
-               color: #e1e1e1;
-            }
-            /*div[data-test-id="ChatWidgetMobileButton"]{
-                display: none !important;
-            }*/
-            .review-close {
-	border: 0 none;
-	border-radius: 50%;
-	background-color: #fff;
-	position: absolute;
-    right: 6px;
-    top: 0px;
-	color: #000;
-	font-size: 12px;
-    width: 25px;
-    height: 25px;
-    display: block;
-    z-index: 9;
-    box-shadow: 0 0 10px rgba(0,0,0, .3);
-}
-
-        </style>
 {% endblock css_section %}
 {% block title %}
   {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
@@ -75,12 +48,15 @@
                 <div class="pull-left">
                     <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button"></a>
                 </div>
-
-                <div class="pull-right">
-
-                   <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
-
-                   <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                <div class="pull-right" style="width:90%;">
+                    
+                   <a class="icon-cart pull-right" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                   <form method='get' id="search-form">
+                    <div class="searchbox">
+                        <input id='id_q' type="text" placeholder="Search here" name="search" class="searchbox-input" autocomplete="off">
+                        <span class="searchbox-icon"></span>
+                    </div>
+                    </form>
                 </div><!-- / Right side Icon ends here -->
             </div><!-- header menu Icon ends here -->
         {% endif %}
@@ -89,7 +65,7 @@
         <h1 class="heading-back w100fl pb-0">{{prd_H1}}</h1>
          {% block breadcrumbs %}
                   {% if sqs.id in linkedin_resume_services %}
-                    <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
+                    <ol class="breadcrumb mt-30 z-auto" itemscope itemtype="http://schema.org/BreadcrumbList">
                         <li class="active"></li>
                     </ol>
                   {% else %}
@@ -314,6 +290,7 @@
 {% endblock container %}
 
 {% block js_section %}
+    
     {{block.super}}
     {% compress js %}
     <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
@@ -322,7 +299,7 @@
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     {% endcompress %}
-
+    
 <script type="text/javascript">
     var display_info = " ";
 
@@ -362,20 +339,47 @@ function close_review() {
 	});
 }
 
-
 </script>
 
     <script type="text/javascript">
-        $(document).ready(function(){
-           if(commonJs.getParameterByName('type') == 'autoEnrol'){
+        $(document).ready(function(){  
+            funcAreaSet = {{ func_area_set|safe }}
+            if(commonJs.getParameterByName('type') == 'autoEnrol'){
                $('#enrol-now-button').trigger('click'); 
             }
             if(commonJs.getParameterByName('type') == 'autoCart'){
                $('#add-to-cart').trigger('click');
             } 
+            
         });
         
     </script>
+<<<<<<< HEAD
+=======
+    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        skillsSet = {{ skills_set|safe }}
+        funcAreaSet = {{ func_area_set|safe }}
+        $('.searchbox-input').typeahead({
+            local: {{ search_context|safe }}
+        });
+
+        $("#nav-search-box").submit(function(e){
+            inputValue = $(this).find('.searchbox-input').val()
+            if(inputValue){
+                location.href = '/search/results/?q='+encodeURI(inputValue);
+            }
+            e.preventDefault();
+            
+        });
+
+        $('.searchbox-input').click(function () {
+            console.log($(this).val())
+        }); 
+    });
+    </script>
+>>>>>>> design-noise
 {% endblock js_section %}
 
 

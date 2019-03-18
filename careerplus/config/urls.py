@@ -34,7 +34,7 @@ from search.views import FuncAreaPageView
 from blog import views as blog_view
 from skillpage.views import (
     ServiceDetailPage, UniversityPageView,
-    UniversityFacultyView)
+    UniversityFacultyView, LocationSkillPageView)
 
 from resumebuilder.views import (WriteResumeView)
 
@@ -115,7 +115,11 @@ urlpatterns += [
 
     url(r'^online-courses.html$',
         CourseCatalogueView.as_view(), name='course-catalogoue'),
-    
+
+    url(r'^courses/(?P<sc_slug>[a-z\-]+)/$', LocationSkillPageView.as_view(), name='location-skillpage'),
+
+
+
     # url(r'^job-assistance/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
     #     ProductDetailView.as_view(), name='job-assist-detail'),
     # url(r'^product/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',

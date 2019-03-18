@@ -22,6 +22,7 @@ from django.views.generic import (
     View,
     CreateView
 )
+from django_redis import get_redis_connection
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from geolocation.models import Country
@@ -33,7 +34,7 @@ from meta.views import MetadataMixin
 
 from console.decorators import (
     Decorate,
-    stop_browser_cache, )
+    stop_browser_cache,)
 from cart.mixins import CartMixin
 from core.library.haystack.query import SQS
 from search.helpers import get_recommendations
@@ -45,8 +46,8 @@ from order.models import OrderItem
 from .models import Product
 from review.models import DetailPageWidget
 from .mixins import (CourseCatalogueMixin, \
-                     LinkedinSeriviceMixin
-                     )
+    LinkedinSeriviceMixin
+)
 from users.forms import (
     ModalLoginApiForm
 )
@@ -56,6 +57,7 @@ from .models import Skill
 from homepage.config import UNIVERSITY_COURSE
 from crmapi.models import UNIVERSITY_LEAD_SOURCE
 
+redis_conn = get_redis_connection("search_lookup")
 
 class ProductInformationMixin(object):
 
@@ -102,9 +104,8 @@ class ProductInformationMixin(object):
                         breadcrumbs.append(
                             OrderedDict({
                                 'label': parent[0].name,
-                                'url': reverse('func_area_results',
-                                               kwargs={'fa_slug': parent[0].slug, 'pk': parent[0].id}),
-                                'active': True}))
+                                'url': reverse('func_area_results', kwargs={'fa_slug':parent[0].slug, 'pk': parent[0].id}),
+                            'active': True}))
             else:
                 breadcrumbs.append(
                     OrderedDict({
@@ -184,8 +185,8 @@ class ProductInformationMixin(object):
         return structure
 
     def get_jobs_url(self, product):
-        job_url = 'https://www.shine.com/job-search/{}-jobs'.format(product.slug) \
-            if product.slug else None
+        job_url = 'https://www.shine.com/job-search/{}-jobs'.format(product.slug)\
+        if product.slug else None
         return job_url
 
     def solar_faq(self, product):
@@ -214,7 +215,7 @@ class ProductInformationMixin(object):
             'other_package': False,
         }
         categoryproducts = category.categoryproducts.filter(
-            active=True, ).exclude(pk=product.pk).distinct()
+            active=True,).exclude(pk=product.pk).distinct()
         if categoryproducts:
             package.update({
                 'other_package': True,
@@ -342,9 +343,9 @@ class ProductInformationMixin(object):
 
     def get_countries(self):
         country_choices = [(m.phone, m.name) for m in
-                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
         initial_country = Country.objects.filter(phone='91')[0].phone
-        return country_choices, initial_country
+        return country_choices,initial_country
 
     def get_product_information(self, product, sqs, product_main, sqs_main):
         pk = product.pk
@@ -372,9 +373,8 @@ class ProductInformationMixin(object):
             ctx['canonical_url'] = product.get_parent_canonical_url()
             if self.product_obj.type_flow == 14:
                 ctx['university_detail'] = json.loads(sqs.pUncdl[0])
-                faculty = [f.faculty for f in
-                           self.product_obj.facultyproducts.all().select_related('faculty', 'faculty__institute')]
-                ctx['faculty'] = [faculty[i:i + 2] for i in range(0, len(faculty), 2)]
+                faculty = [f.faculty for f in self.product_obj.facultyproducts.all().select_related('faculty','faculty__institute')]
+                ctx['faculty'] = [faculty[i:i + 2]for i in range(0, len(faculty),2)]
                 ctx['institute'] = self.product_obj.category_main
                 app_process = ctx['university_detail']['app_process']
                 ctx['university_detail']['app_process'] = [APPLICATION_PROCESS.get(proc) for proc in app_process]
@@ -446,13 +446,12 @@ class ProductInformationMixin(object):
         if self.request.session.get('candidate_id'):
             candidate_id = self.request.session.get('candidate_id')
             contenttype_obj = ContentType.objects.get_for_model(product)
-            ctx['review_obj'] = Review.objects.filter(object_id=product.id, content_type=contenttype_obj,
-                                                      user_id=candidate_id).first()
+            ctx['review_obj'] = Review.objects.filter(object_id=product.id, content_type=contenttype_obj, user_id=candidate_id).first()
             # user_reviews depicts if user already has a review for this product or not
             # product_type = ContentType.objects.get(app_label='shop', model='product')
             candidate_id = self.request.session.get('candidate_id', None)
             user_reviews = Review.objects.filter(content_type=contenttype_obj, object_id=pk, status__in=[0, 1],
-                                                 user_id=candidate_id).count()
+                user_id=candidate_id).count()
 
             ctx['user_reviews'] = True if user_reviews else False
         navigation = True
@@ -462,17 +461,22 @@ class ProductInformationMixin(object):
         ctx['navigation'] = navigation
         return ctx
 
+
+
+
+
     def get_product_detail_context(self, product, sqs, product_main, sqs_main):
         main_ctx = {}
-        key = "context_product_detail_" + str(product.pk)
+        key = "context_product_detail_"+ str(product.pk)
         if cache.get(key):
             main_ctx.update(cache.get(key))
         else:
             data = self.get_product_information(product, sqs, product_main, sqs_main)
             main_ctx.update(data)
-            cache.set(key, data, 60 * 60 * 4)
+            cache.set(key,data,60*60*4)
         main_ctx.update(self.get_other_detail(product, sqs))
         return main_ctx
+
 
     # def get_product_detail_context(self, product, sqs, product_main, sqs_main):
     #     pk = product.pk
@@ -590,7 +594,6 @@ class ProductInformationMixin(object):
     #         return ctx
     #
 
-
 @Decorate(stop_browser_cache())
 class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     context_object_name = 'product'
@@ -608,13 +611,13 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         self._enforce_parent = True
         self.sqs = None
         self.skill = False
-        self.key = None
-        self.cache_dict = {}
+        self.key=None
+        self.cache_dict={}
         super(ProductDetailView, self).__init__(*args, **kwargs)
 
     def get_template_names(self):
-        if self.product_obj.type_flow == 14:
-            return ['shop/university.html']
+        if self.product_obj.type_flow==14:
+            return['shop/university.html']
         if not self.request.amp:
             return ['shop/detail1.html']
         if not settings.DEBUG:
@@ -626,8 +629,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
         self.skill = self.request.session.get('skills_name', [])
         if not self.skill and self.product_obj.type_flow == 2:
-            self.skill = self.product_obj.productskills.filter(skill__active=True) \
-                             .values_list('skill__name', flat=True)[:3]
+            self.skill = self.product_obj.productskills.filter(skill__active=True)\
+                .values_list('skill__name',flat=True)[:3]
         self.skill = ",".join(self.skill)
         ctx.update({'skill': self.skill})
         product_data = self.get_product_detail_context(
@@ -643,6 +646,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         })
         ctx.update(product_data)
         return ctx
+
+
 
         # pk = self.kwargs.get('pk')
         # product = self.product_obj
@@ -726,7 +731,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         # ctx['amp'] = self.request.amp
         # ctx['widget_objs'] = widget_objs
         # ctx['widget_obj'] = widget_obj
-
+        
         # ctx['linkedin_resume_services'] = settings.LINKEDIN_RESUME_PRODUCTS
         # navigation = True
         # if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
@@ -752,10 +757,10 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
     def get(self, request, **kwargs):
         pk = self.kwargs.get('pk')
-        self.prd_key = 'detail_db_product_' + pk
-        self.prd_solr_key = 'detail_solr_product_' + pk
-        cache_dbprd_maping = cache.get(self.prd_key, "")
-        # setting cache if product is not in dbcache
+        self.prd_key = 'detail_db_product_'+pk
+        self.prd_solr_key = 'detail_solr_product_'+pk
+        cache_dbprd_maping=cache.get(self.prd_key, "")
+       #setting cache if product is not in dbcache
         if cache_dbprd_maping:
             self.product_obj = cache_dbprd_maping
         else:
@@ -813,7 +818,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             return redirection
         return super(ProductDetailView, self).get(request, **kwargs)
         # self.send_signal(request, response, product)
-
 
 # @Decorate(stop_browser_cache())
 # class ProductDetailView(DetailView, ProductInformationMixin, CartMixin):
@@ -875,7 +879,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 #             expected_path = product.get_absolute_url(cat_slug)
 #             if expected_path != urlquote(current_path):
 #                 return HttpResponsePermanentRedirect(expected_path)
-
+    
 #     def return_http404(self, product):
 #         if not product:
 #             return True
@@ -888,7 +892,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 #         if product.is_virtual:
 #             return True
 #         return False
-
+    
 #     def get(self, request, **kwargs):
 #         self.object = product = self.get_object()
 #         if product:
@@ -931,7 +935,7 @@ class ProductReviewListView(ListView, ProductInformationMixin):
                 self._product = Product.objects.get(
                     pk=self.kwargs['product_pk'])
             except Exception as e:
-                logging.getLogger('error_log').error('unable to get product object %s' % str(e))
+                logging.getLogger('error_log').error('unable to get product object %s'%str(e))
                 pass
 
             if self._product:
@@ -956,6 +960,7 @@ class ProductReviewCreateView(CreateView):
         self.candidate_id = None
         self.rating = None
         self.sel_rat = None
+
 
     def post(self, request, *args, **kwargs):
         """
@@ -1028,6 +1033,7 @@ class ProductReviewCreateView(CreateView):
 
 
 class ProductReviewEditView(View):
+
     http_method_names = ['post']
 
     def post(self, request, *args, **kwargs):
@@ -1042,12 +1048,11 @@ class ProductReviewEditView(View):
             if review_form.is_valid():
                 review = request.POST.get('review', '').strip()
                 rating = int(request.POST.get('rating', 1))
-                title = request.POST.get('title', '').strip()
+                title = request.POST.get('title','').strip()
                 try:
                     product_obj = Product.objects.get(pk=product_pk)
                     contenttype_obj = ContentType.objects.get_for_model(product_obj)
-                    review_obj = Review.objects.filter(object_id=product_obj.id, content_type=contenttype_obj,
-                                                       user_id=candidate_id).first()
+                    review_obj = Review.objects.filter(object_id=product_obj.id, content_type=contenttype_obj, user_id=candidate_id).first()
 
                     # Setting status back to 0 for adding this review again to moderation list
                     if review_obj and review_obj.user_id == candidate_id:
@@ -1075,13 +1080,13 @@ class CourseCatalogueView(TemplateView, MetadataMixin, CourseCatalogueMixin):
     use_twitter = True
     twitter_site = True
     twitter_card = True
-
+    
     def get_meta_title(self, context=None):
         return 'Online Courses and Certifications : Free Online Education'
 
     def get_meta_description(self, context=None):
         return 'Join India\'s Largest E-Learning Online Courses and Education Platform. Get Certifications in Top Courses under Finance, IT, Analytics, Marketing and more'
-
+    
     def get_meta_url(self, context=None):
         return settings.MAIN_DOMAIN_PREFIX + '/online-courses.html'
 
@@ -1126,7 +1131,7 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
 
             if not cached_db_item:
                 self.product_obj = Product.browsable.filter(pk=self.obj_pk).first()
-                cache.set(db_key, self.product_obj, 60 * 60 * 4)
+                cache.set(db_key, self.product_obj, 60*60*4)
 
             else:
                 self.product_obj = cached_db_item
@@ -1136,10 +1141,10 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
 
             db_key = 'detail_db_product_' + str(self.main_pk)
             cached_db_item = cache.get(db_key, "")
-            # setting cache if product is not in dbcache
+            #setting cache if product is not in dbcache
             if not cached_db_item:
                 self.product_main = Product.browsable.get(pk=self.main_pk)
-                cache.set(db_key, self.product_main, 60 * 60 * 4)
+                cache.set(db_key, self.product_main, 60*60*4)
             else:
                 self.product_main = cached_db_item
 
@@ -1152,7 +1157,7 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
             if not cached_slr_item:
                 sqs = SearchQuerySet().filter(id=self.obj_pk)
                 self.sqs_obj = sqs[0]
-                cache.set(slr_key, self.sqs_obj, 60 * 60 * 4)
+                cache.set(slr_key, self.sqs_obj, 60*60*4)
             else:
                 self.sqs_obj = cached_slr_item
             if not self.sqs_obj:
@@ -1162,7 +1167,7 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
             if not cached_slr_item:
                 sqs = SearchQuerySet().filter(id=self.main_pk)
                 self.sqs_main = sqs[0]
-                cache.set(slr_key, self.sqs_main, 60 * 60 * 4)
+                cache.set(slr_key, self.sqs_main, 60*60*4)
             else:
                 self.sqs_main = cached_slr_item
             if not self.sqs_main:
@@ -1177,8 +1182,8 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
                     'shop/product-detail.html', product_data,
                     request=request)
                 if self.product_obj.type_flow == 2:
-                    skill = self.product_obj.productskills.filter(skill__active=True) \
-                                .values_list('skill__name', flat=True)[:3]
+                    skill = self.product_obj.productskills.filter(skill__active=True)\
+                        .values_list('skill__name',flat=True)[:3]
                     skill = ",".join(skill)
                     data.update({'skills': skill})
 
