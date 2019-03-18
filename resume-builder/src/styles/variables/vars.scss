@@ -1,9 +1,12 @@
 /*Main-Colors*/
 $primary: #ff0000; //---heading with 40% opacity
 $link: #0acade;
+$white: #ffffff;
+$black: #333333;
+$grey1: #eaeaea;
+$grey2: #efefef;
 
-$sprite: url(../../assets/images/sprite.svg);
+$sprite: url(/images/sprite.svg);
 
-%img-path {
-  background-image: $sprite;
-}
+
+

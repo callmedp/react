@@ -16,7 +16,7 @@ export default class EditPreview extends Component {
                 <Header/>
                 <div className="page-container">
                     <TopBar/>
-                    <section className="flex-container">
+                    <section className="flex-container mt-30">
                         <LeftSideBar/>
                         <RightSection/>
                     </section>

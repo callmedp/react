@@ -1,11 +1,8 @@
 @import '../../../../styles/variables/vars.scss';
-.left{
-	color: $primary;
+@import '../../../../styles/variables/mixins.scss';
+
+.edit-section {
+	padding: 20px 15px;
 }
 
-.top-baneer {
-	&--banner-heading {
 
-	}
-	
-}

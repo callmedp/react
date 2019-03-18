@@ -5,7 +5,13 @@ export default class Header extends Component {
         return(
             <header>
             	<div className="container">
-            		<a className="logo"></a>
+            		<a className="container--logo"></a>
+            		<div className="signin">
+            			<span className="signin--user-pic">
+            				<img src="/images/user-pic.jpg" />
+            			</span>
+            			Hello Amit
+            		</div>
             	</div>
             </header>
         )

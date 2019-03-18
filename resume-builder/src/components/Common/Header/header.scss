@@ -1,31 +1,52 @@
 @import '../../../styles/variables/vars.scss';
+@import '../../../styles/variables/mixins.scss';
+
 header {
 	background: #2A3C86;
-	display: flex;
+	@include flexbox();
 	flex-direction: row;
 	height: 63px;
 }
 
 .container {
-	margin: 0 5%;
 
 	&--logo {
 		width: 270px;
 		height: 55px;
-	}
+		position: relative;
 
-	&--login-box {
-
+		&:after {
+			content: '';
+			width: 287px;
+			height: 90px;
+			background: url(/images/logo.png) 0 0;
+			display: inline-block;
+			position: absolute;
+			left: -15px;
+			top: -3px;
+		}
 	}
 }
 
-.container {
-	margin: 0 5%;
+.signin {
+	@include flexbox();
+	justify-content: flex-end;
+	color: $white;
+	vertical-align: middle;
+	align-items: baseline;
 
-	.logo {
-		width: 270px;
-		height: 55px;
+	&--user-pic {
+		width: 23px;
+		height: 23px;
 		display: inline-block;
-		
+		@include border-radius(50%);
+		margin: 15px 10px 0 0;
+
+		img {
+			@include border-radius(50%);
+			display: inline-block;
+			vertical-align: middle;
+		}
 	}
 }
+
