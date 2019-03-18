@@ -385,9 +385,9 @@ class ChangeProductForm(forms.ModelForm):
         if product.type_flow == 14:
             UniversityCourseDetail.objects.get_or_create(product=product)
 
-        if product.type_product == 1:
+        if product.type_product == 1 and product.type_flow in list(SUB_FLOWS.keys()):
             child_variation = product.get_variations()
-            child_variation.update({'sub_type_flow': product.sub_type_flow})
+            child_variation.update(sub_type_flow=product.sub_type_flow)
 
         return product
 
