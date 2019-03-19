@@ -14,4 +14,58 @@ For example:
 @import './variables/mixins.scss';
 
 
+.mt-30 {
+	margin-top: 30px;
+} 
+
+.mr-5 {
+	margin-right: 5px;
+} 
+
+.mr-10 {
+	margin-right: 10px;
+} 
+
+.mr-20 {
+	margin-right: 30px;
+} 
+
+.pull-left {
+	float: left;
+}
+.pull-right {
+	float: right;
+}
+
+.clearfix {
+  clear: both;
+}
+
+.img-responsive {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+}
+
+
+.page-container {
+	margin: 3% 5%;
+	height: calc(100vh - 63px);
+	@include flexbox();
+	flex-flow: column;
+	font-size: 1.4rem;
+}
+
+.flex-container {
+	@include flexbox();
+}
+
+.container {
+	margin: 0 5%;
+}
+
+
+/*----button css----*/
+
 

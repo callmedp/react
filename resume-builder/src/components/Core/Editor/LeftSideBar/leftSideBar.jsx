@@ -8,19 +8,19 @@ export default class LeftSideBar extends Component {
         return (
             <section className="left-sidebar">
             <ul className="tab-heading">
-                	<li>
-                		<span class="edit-icon"></span>
+                	<li class="active">
+                		<span class="icon-edit"></span>
                 		<a href="#">Add/ Edit</a>
                 	</li>
-                	<li class="active">
-                		<span class="preview-icon"></span>
+                	<li>
+                		<span class="icon-preview"></span>
                 		<a href="#">Preview</a>
                 	</li>
                 </ul>
-{/*                <Edit/>
-*/}
-                <Preview/>
+                <Edit/>
 
+{/*                <Preview/>
+*/}
             </section>
         )
     }

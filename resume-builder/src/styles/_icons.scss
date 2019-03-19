@@ -1,0 +1,41 @@
+@import './variables/vars.scss';
+@import './variables/mixins.scss';
+
+[class^="icon-"] {
+    display: block;
+    text-indent: 200%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.icon-edit {
+    @include icon-inblock (15px, 15px, -76px -1px);
+}
+
+.icon-preview {
+    @include icon-inblock (15px, 22px, -107px -1px);
+}
+
+.icon-delete {
+    @include icon-inblock (14px, 18px, -312px -1px);
+}
+
+.icon-info {
+    @include icon-inblock (25px, 20px, -273px -1px);
+}
+
+.icon-summary {
+    @include icon-inblock (25px, 25px, -267px -38px);
+}
+
+.icon-experience {
+    @include icon-inblock (25px, 19px, -309px -39px);
+}
+
+.icon-education {
+    @include icon-inblock (25px, 25px, -189px -38px);
+}
+
+.icon-skills {
+    @include icon-inblock (25px, 25px, -232px -38px);
+}

@@ -2,7 +2,33 @@
 @import '../../../../styles/variables/mixins.scss';
 
 .edit-section {
-	padding: 20px 15px;
+	padding: 20px 0;
+	font-weight: 600;
+	color: $txt1;
+
+	strong {
+		margin: 0 15px;
+	}
+
+	ul {
+		margin: 20px 0 0 0;
+		display: block;
+
+		li {
+			color: $blue1;
+			display: block;
+			padding: 15px;
+		}
+	}
+
+	&--active {
+		background-color: $blue1;
+		color: $white !important;
+
+		.icon-delete {
+			background-position: -139px -1px;
+		}
+	}
 }
 
 

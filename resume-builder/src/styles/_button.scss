@@ -1,0 +1,10 @@
+@import './variables/vars.scss';
+@import './variables/mixins.scss';
+
+.white-button {
+	@include border-radius(20px)
+	border: 1px solid $white;
+	padding: 10px 15px;
+	display: inline-block;
+	color: $white;
+}
