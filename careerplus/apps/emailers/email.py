@@ -161,8 +161,8 @@ class SendMail():
             self.process(to, send_dict, data)
 
         elif mail_type == "PRIORITY_APPLICANT_MAIL":
-            send_dict['subject'] = data.get('subject', "Your Profile has been made priority applicant")
-            template_name = data.get('template_name', 'feature_profile.html')
+            send_dict['subject'] = data.get('subject', "Congratulations, you are now Shine’s Priority Applicant")
+            template_name = data.get('template_name', 'priority_applicant.html')
             send_dict['template'] = 'emailers/candidate/' + template_name
 
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
