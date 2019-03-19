@@ -5,8 +5,13 @@ import LeftSideBar from '../LeftSideBar/leftSideBar.jsx'
 import Header from '../../../Common/Header/header.jsx'
 import Footer from '../../../Common/Footer/footer.jsx'
 import RightSection from '../RightSection/rightSection.jsx'
+import {withRouter} from "react-router-dom";
 
-export default class EditPreview extends Component {
+class EditPreview extends Component {
+    constructor(props) {
+        super(props)
+    }
+
     render() {
         return (
             /*
@@ -17,8 +22,8 @@ export default class EditPreview extends Component {
                 <div className="page-container">
                     <TopBar/>
                     <section className="flex-container mt-30">
-                        <LeftSideBar/>
-                        <RightSection/>
+                        <LeftSideBar {...this.props}/>
+                        <RightSection {...this.props}/>
                     </section>
                 </div>
                 <Footer/>
@@ -28,3 +33,5 @@ export default class EditPreview extends Component {
     }
 
 }
+
+export default withRouter(props => <EditPreview {...props}/>)

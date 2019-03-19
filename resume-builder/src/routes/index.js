@@ -30,7 +30,7 @@ const routes = [
         exact: true
     },
     {
-        path: '/resume-builder/edit',
+        path: '/resume-builder/edit/',
         component: EditPreviewContainer
     },
     {
