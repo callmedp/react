@@ -20,22 +20,46 @@
     @include icon-inblock (14px, 18px, -312px -1px);
 }
 
+.icon-add {
+    @include icon-inblock (20px, 19px, -437px -40px);
+}
+
 .icon-info {
-    @include icon-inblock (25px, 20px, -273px -1px);
+    @include icon-inblock (27px, 20px, -423px -1px);
 }
 
 .icon-summary {
-    @include icon-inblock (25px, 25px, -267px -38px);
+    @include icon-inblock (27px, 25px, -267px -38px);
 }
 
 .icon-experience {
-    @include icon-inblock (25px, 19px, -309px -39px);
+    @include icon-inblock (27px, 19px, -309px -39px);
 }
 
 .icon-education {
-    @include icon-inblock (25px, 25px, -189px -38px);
+    @include icon-inblock (27px, 24px, -189px 0);
 }
 
 .icon-skills {
-    @include icon-inblock (25px, 25px, -232px -38px);
+    @include icon-inblock (27px, 25px, -232px -1px);
+}
+
+.icon-languages {
+    @include icon-inblock (27px, 23px, -69px -74px);
+}
+
+.icon-awards {
+    @include icon-inblock (27px, 25px, -154px -75px);
+}
+
+.icon-courses {
+    @include icon-inblock (27px, 23px, -234px -75px);
+}
+
+.icon-projects {
+    @include icon-inblock (27px, 25px, -320px -75px);
+}
+
+.icon-references {
+    @include icon-inblock (27px, 21px, -400px -75px);
 }

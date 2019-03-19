@@ -9,7 +9,6 @@ export default class Edit extends Component {
                 	<li className="edit-section--active">
                 		<span className="icon-info mr-10"></span>
                 		Personal Info 
-                		<span className="icon-delete pull-right"></span>
                 	</li>
                 	<li>
                 		<span className="icon-summary mr-10"></span>
@@ -17,20 +16,49 @@ export default class Edit extends Component {
                 		<span className="icon-delete pull-right"></span>
                 	</li>
                 	<li>
-                		<span className="icon-summary mr-10"></span>
+                		<span className="icon-experience mr-10"></span>
                 		Experience 
-                		<span className="icon-experience pull-right"></span>
+                		<span className="icon-delete pull-right"></span>
                 	</li>
                 	<li>
-                		<span className="icon-summary mr-10"></span>
+                		<span className="icon-education mr-10"></span>
                 		Education 
-                		<span className="icon-education pull-right"></span>
+                		<span className="icon-delete pull-right"></span>
                 	</li>
                 	<li>
-                		<span className="icon-summary mr-10"></span>
+                		<span className="icon-skills mr-10"></span>
                 		Skills 
-                		<span className="icon-skills pull-right"></span>
+                		<span className="icon-delete pull-right"></span>
                 	</li>
+                	<li className="edit-section--addmore">
+                		+ Add more sections
+                	</li>
+                	<li className="">
+                		<span className="icon-languages mr-10"></span>
+                		Languages 
+                		<span className="icon-add pull-right"></span>
+                	</li>
+                	<li className="hidden">
+                		<span className="icon-awards mr-10"></span>
+                		Awards 
+                		<span className="icon-add pull-right"></span>
+                	</li>
+                	<li className="hidden">
+                		<span className="icon-courses mr-10"></span>
+                		Courses 
+                		<span className="icon-add pull-right"></span>
+                	</li>
+                	<li className="hidden">
+                		<span className="icon-projects mr-10"></span>
+                		Projects 
+                		<span className="icon-add pull-right"></span>
+                	</li>
+                	<li className="hidden">
+                		<span className="icon-references mr-10"></span>
+                		References 
+                		<span className="icon-add pull-right"></span>
+                	</li>
+
                 </ul>
             </div>
         )

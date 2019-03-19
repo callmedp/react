@@ -41,6 +41,14 @@ For example:
   clear: both;
 }
 
+.text-center {
+	text-align: center;
+}
+
+.hidden {
+	display: none !important;
+}
+
 .img-responsive {
   display: block;
   max-width: 100%;

@@ -33,5 +33,13 @@
 
 	.active {
 		background: $white;
+		box-shadow: 8px -3px 7px -1px rgba(186,186,186,0.40);
+		position: relative;
+	}
+
+	.no-shadow {
+		background: $white;
+		box-shadow: 8px -3px 7px -1px rgba(186,186,186,0.40);
+		position: relative;
 	}
 }
