@@ -6,7 +6,7 @@ export default class RightSection extends Component {
     render() {
         return (
             <section className="right-sidebar">
-                Right section
+                
                 <PersonalInfo/>
             </section>
         )

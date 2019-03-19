@@ -18,6 +18,10 @@ For example:
 	margin-top: 30px;
 } 
 
+.mt-40 {
+	margin-top: 40px;
+} 
+
 .mr-5 {
 	margin-right: 5px;
 } 
@@ -73,7 +77,26 @@ For example:
 	margin: 0 5%;
 }
 
+body, html {
+	height: 100%;
+}
 
-/*----button css----*/
+.wrap {
+  height: 100vh;
+  @include flexbox();
+}
 
+h2 {
+	font-weight: 700;
+	font-size: 2rem;
+}
 
+.icon-box {
+	background: $blue1;
+	width: 60px;
+	height: 60px;
+	@include flexbox();
+	align-items: center;
+	justify-content: center;
+	border-top-left-radius: 4px;
+}

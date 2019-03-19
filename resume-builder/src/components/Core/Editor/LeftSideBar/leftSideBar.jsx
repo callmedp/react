@@ -34,11 +34,13 @@ export default class LeftSideBar extends Component {
             <section className="left-sidebar">
 
                 <ul className="tab-heading">
-                    <li onClick={this.activateEditTab} className={isEdit ? "active" : ''}>
+                    <li onClick={this.activateEditTab} className={   
+                    ' tab-heading--top-left-radius ' +(isEdit ? "active" : '' ) }>
                         <span class="icon-edit"></span>
                         <a href="#">Add/ Edit</a>
                     </li>
-                    <li onClick={this.activatePreviewTab} class={!isEdit ? "active" : ''}>
+                    <li onClick={this.activatePreviewTab} className={ ' tab-heading--top-right-radius ' + 
+                    (!isEdit ? "active" : '')}>
                         <span class="icon-preview"></span>
                         <a href="#">Preview</a>
                     </li>

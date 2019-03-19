@@ -7,8 +7,15 @@ $grey1: #eaeaea;
 $grey2: #efefef;
 $txt1: #666666;
 $blue1: #3E6EB8;
+$border1: #ebebeb;
 
 $sprite: url(/images/sprite.svg);
+
+%icon-block {
+	width: 60px;
+	height: 60px;
+	background-color: $blue1;
+}
 
 
 

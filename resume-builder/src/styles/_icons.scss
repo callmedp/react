@@ -2,7 +2,6 @@
 @import './variables/mixins.scss';
 
 [class^="icon-"] {
-    display: block;
     text-indent: 200%;
     overflow: hidden;
     white-space: nowrap;
@@ -62,4 +61,44 @@
 
 .icon-references {
     @include icon-inblock (27px, 21px, -400px -75px);
+}
+
+.icon-info1 {
+    @include icon-inblock (20px, 20px, -273px -1px);
+}
+
+.icon-summary1 {
+    @include icon-inblock (19px, 25px, -355px -38px);
+}
+
+.icon-experience1 {
+    @include icon-inblock (21px, 19px, -397px -39px);
+}
+
+.icon-education1 {
+    @include icon-inblock (27px, 24px, -339px 0);
+}
+
+.icon-skills1 {
+    @include icon-inblock (25px, 25px, -382px -1px);
+}
+
+.icon-languages1 {
+    @include icon-inblock (26px, 23px, -111px -74px);
+}
+
+.icon-awards1 {
+    @include icon-inblock (21px, 25px, -194px -75px);
+}
+
+.icon-courses1 {
+    @include icon-inblock (21px, 23px, -277px -75px);
+}
+
+.icon-projects1 {
+    @include icon-inblock (21px, 25px, -362px -75px);
+}
+
+.icon-references1 {
+    @include icon-inblock (21px, 21px, -441px -75px);
 }
