@@ -10,7 +10,6 @@ export default class LeftSideBar extends Component {
         this.state = {
             edit: true
         };
-        console.log('---', props)
         this.activateEditTab = this.activateEditTab.bind(this);
         this.activatePreviewTab = this.activatePreviewTab.bind(this);
         const path = this.props.match.path;
@@ -23,11 +22,7 @@ export default class LeftSideBar extends Component {
             edit: true
         })
 
-        console.log('props  -> ', this.props);
-
-
     }
-
 
     activatePreviewTab() {
         this.setState({
@@ -43,11 +38,13 @@ export default class LeftSideBar extends Component {
             <section className="left-sidebar">
 
                 <ul className="tab-heading">
-                    <li className={isEdit ? "active" : ''}>
+                    <li className={
+                        ' tab-heading--top-left-radius ' + (isEdit ? "active" : '')}>
                         <span className="icon-edit"></span>
                         <Link to="/resume-builder/edit">Add/ Edit</Link>
                     </li>
-                    <li className={!isEdit ? "active" : ''}>
+                    <li className={' tab-heading--top-right-radius ' +
+                    (!isEdit ? "active" : '')}>
                         <span className="icon-preview"></span>
                         <Link to="/resume-builder/preview">Preview</Link>
                     </li>

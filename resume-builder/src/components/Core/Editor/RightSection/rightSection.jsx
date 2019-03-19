@@ -41,4 +41,5 @@ export default class RightSection extends Component {
             </section>
         )
     }
+
 }
