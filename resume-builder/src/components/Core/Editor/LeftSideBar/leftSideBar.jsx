@@ -30,15 +30,17 @@ export default class LeftSideBar extends Component {
     render() {
         const isEdit = this.state.edit;
         return (
+
             <section className="left-sidebar">
+
                 <ul className="tab-heading">
                     <li onClick={this.activateEditTab} className={isEdit ? "active" : ''}>
-                        <span class="edit-icon"></span>
-                        <span>Add/ Edit</span>
+                        <span class="icon-edit"></span>
+                        <a href="#">Add/ Edit</a>
                     </li>
                     <li onClick={this.activatePreviewTab} class={!isEdit ? "active" : ''}>
-                        <span class="preview-icon"></span>
-                        <span>Preview</span>
+                        <span class="icon-preview"></span>
+                        <a href="#">Preview</a>
                     </li>
                 </ul>
                 {

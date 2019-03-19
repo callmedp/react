@@ -137,3 +137,40 @@
   -webkit-border-radius: $radius;
   -moz-border-radius: $radius;
 }
+
+
+// Icons
+@mixin icon-details($width, $height, $position) {
+  background-position: $position;
+  width: $width;
+  height: $height;
+}
+
+@mixin icon-block($width, $height, $position) {
+  @include icon-details($width, $height, $position);
+  display: block;
+}
+
+@mixin icon-inblock($width, $height, $position) {
+  @include icon-details($width, $height, $position);
+  display: inline-block;
+  background-image: $sprite;
+  vertical-align: text-top;
+}
+
+@mixin box($width, $height, $display: null) {
+  @if $display != null { display: $display; }
+  height: $height;
+  width: $width;
+}
+
+@mixin square($value, $display: null) {
+  @include box($value, $value, $display);
+}
+
+@mixin size($width, $height:null, $display: null) {
+  @if $display != null { display: $display; }
+  width: $width;
+  @if $height != null { height: $height;}
+  @if $height == null { height: $width;}
+}
