@@ -1,43 +1,52 @@
 import React, {Component} from 'react';
 import {withRouter, Link} from 'react-router-dom';
 import './edit.scss'
+import queryString from "query-string";
 
 export default class Edit extends Component {
     constructor(props) {
         super(props);
-        this.handleClick = this.handleClick.bind(this);
         this.handleSpanClick = this.handleSpanClick.bind(this);
+        const values = queryString.parse(this.props.location.search);
+
         this.state = {
-            code: 1
+            type: values && values.type || ''
+        };
+        if (!(values && values.type)) {
+            console.log('here', this.props.history);
+            this.props.history.push('/resume-builder/edit/?type=profile')
         }
-        console.log('pro   ', props);
     }
 
-    handleClick(clickId) {
-        this.setState({
-            code: clickId
-        })
-    }
 
     handleSpanClick(e) {
         console.log('event ', e, this.context);
-        e.stopPropagation()
+        e.stopPropagation();
         console.log('clickeddd');
 
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location) {
+            const values = queryString.parse(this.props.location.search);
+            this.setState({
+                type: values && values.type || ''
+            })
+        }
+    }
+
     render() {
-        const clickId = this.state.code;
+        const {type} = this.state;
         return (
             <div className="edit-section">
                 <strong>Complete your information</strong>
                 <ul>
-                    <li className={clickId === 1 ? 'edit-section--active' : ''}>
+                    <li className={type === 'profile' ? 'edit-section--active' : ''}>
                         <Link to="/resume-builder/edit/?type=profile"> <span className="icon-info mr-10"></span>
                             Personal Info
                         </Link>
                     </li>
-                    <li className={clickId === 2 ? 'edit-section--active' : ''}>
+                    <li className={type === 'summary' ? 'edit-section--active' : ''}>
                         <Link to="/resume-builder/edit/?type=summary">
                             <span className="icon-summary mr-10"></span>
                             Summary
@@ -46,20 +55,20 @@ export default class Edit extends Component {
 
                         </span>
                     </li>
-                    <li className={clickId === 3 ? 'edit-section--active' : ''}>
+                    <li className={type === 'experience' ? 'edit-section--active' : ''}>
                         <Link to="/resume-builder/edit/?type=experience"><span className="icon-experience mr-10"></span>
                             Experience
                         </Link>
                         <span className="icon-delete pull-right"></span>
                     </li>
-                    <li className={clickId === 4 ? 'edit-section--active' : ''}>
+                    <li className={type === 'education' ? 'edit-section--active' : ''}>
                         <Link to="/resume-builder/edit/?type=education">
                             <span className="icon-education mr-10"></span>
                             Education
                         </Link>
                         <span className="icon-delete pull-right"></span>
                     </li>
-                    <li className={clickId === 5 ? 'edit-section--active' : ''}>
+                    <li className={type === 'skill' ? 'edit-section--active' : ''}>
                         <Link to="/resume-builder/edit/?type=skill">
                             <span className="icon-skills mr-10"></span>
                             Skills
@@ -69,7 +78,7 @@ export default class Edit extends Component {
                     <li className="edit-section--addmore">
                         + Add more sections
                     </li>
-                    <li className="">
+                    <li className={type === 'language' ? 'edit-section--active' : ''}>
                         <Link to="/resume-builder/edit/?type=language">
                             <span className="icon-languages mr-10"></span>
                             Languages

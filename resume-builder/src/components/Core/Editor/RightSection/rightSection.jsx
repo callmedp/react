@@ -12,8 +12,10 @@ import queryString from 'query-string'
 export default class RightSection extends Component {
     constructor(props) {
         super(props);
+        const values = queryString.parse(this.props.location.search)
+
         this.state = {
-            type: ''
+            type: values  && values.type || ''
         }
     }
 
@@ -31,12 +33,12 @@ export default class RightSection extends Component {
         return (
             <section className="right-sidebar">
                 {
-                    type === 'profile' ? <PersonalInfo {...this.props}/> :
-                        type === 'education' ? <Education  {...this.props} /> :
-                            type === 'skill' ? <Skill {...this.props}/> :
-                                type === 'experience' ? <Experience {...this.props}/> :
-                                    type === 'summary' ? <Summary {...this.props}/> :
-                                        type === 'language' ? <Language {...this.props}/> : ''
+                    type === 'profile' ? <PersonalInfo/> :
+                        type === 'education' ? <Education/> :
+                            type === 'skill' ? <Skill/> :
+                                type === 'experience' ? <Experience/> :
+                                    type === 'summary' ? <Summary/> :
+                                        type === 'language' ? <Language/> : ''
                 }
             </section>
         )
