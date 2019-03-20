@@ -48,6 +48,9 @@ def featured_updated():
                 flag = FeatureProfileUpdate().update_feature_profile(
                     candidate_id=candidate_id, data=data)
                 if flag:
+                    logging.getLogger('info_log').info(
+                        'Feature:- Data sent to shine for order item %s is %s' % (str(obj.id), str(data))
+                    )
                     featured_count += 1
                     last_oi_status = obj.oi_status
                     obj.oi_status = 28
@@ -131,11 +134,13 @@ def unfeature():
             try:
                 data = {}
                 data = get_featured_profile_data_for_candidate(
-                    candidate_id=candidate_id, sub_type_flow=obj.product.sub_type_flow, feature=False)
-
+                    candidate_id=candidate_id, curr_order_item=obj, feature=False)
                 flag = FeatureProfileUpdate().update_feature_profile(
                     candidate_id=candidate_id, data=data)
                 if flag:
+                    logging.getLogger('info_log').info(
+                        'Unfeature:- Data sent to shine for order item %s is %s' % (str(obj.id), str(data))
+                    )
                     unfeature_count += 1
                     last_oi_status = obj.oi_status
                     obj.oi_status = 4
