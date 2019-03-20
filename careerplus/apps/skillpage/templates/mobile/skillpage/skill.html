@@ -42,7 +42,7 @@
         </div>
 
 
-        <h1 class="heading-back w100fl pb-0">{{category_obj.name}} Courses & Certifications</h1>
+        <h1 class="heading-back w100fl pb-0" style="text-transform: capitalize;">{{category_obj.name}} Courses & Certifications</h1>
         <ol class="breadcrumb mt-30" itemscope itemtype="http://schema.org/BreadcrumbList">
                 {% for bread in breadcrumbs %}
                     {% if bread.url %}
@@ -97,7 +97,7 @@
                 {% endif %}
                 </div><!-- end of provider slider -->
                 <div class="container">
-                    <h2>About Product</h2>
+                    <h2>About Course</h2>
                     <p class="pb-0">
                         {{category_obj.description | safe}}
                     </p>

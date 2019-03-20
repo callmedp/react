@@ -180,7 +180,8 @@
                     <!-- Section 1 -->
                     {% if prd_desc %}    
                         <div class="accordion_in">
-                            <div class="acc_head">About Product</div>
+                            <div class="acc_head" style="white-space: nowrap;overflow: hidden;
+                                    text-overflow: ellipsis;">About {{prd_H1}}</div>
                             <div class="acc_content">
                                 <p>{{prd_desc|safe}}</p>
                             </div>
@@ -190,7 +191,7 @@
                     {% if prd_uget %}
                         <!-- What’ll you get starts here  -->
                         <div class="accordion_in">
-                            <div class="acc_head">What’ll you get</div>
+                            <div class="acc_head">Course Highlights</div>
                             <div class="acc_content">
                                 <p>{{prd_uget|safe}}</p>
                             </div>
