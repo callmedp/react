@@ -18,34 +18,43 @@ label {
 
 /* Text Input */
 input[type='text'] {
-  width:94%;
+  width:100%;
   border: 1px solid $border1;
-  height: 40px;
+  height: 45px;
   @include border-radius(3px);
   box-shadow: inset 0 3px 8px 0 rgba(214,214,214,0.40);
-  padding: 0 3%;
+  padding: 0 10px;
+  font-weight: 400;
 }
 
 .input-group {
-  position: relative;
-  flex-wrap: wrap;
-  align-items: stretch;
-  &--input-group-prepend {
+  @include flexbox();
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+  &--input-group-icon {
+    flex-direction: column;
+    flex: 0 1 45px;
+    background-color: $grey1;
+    align-items: center;
+    justify-content: center;
     @include flexbox();
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
+  
+  input {
+    flex: 1;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
   }
 }
 
-.icon-linkedin__bg {
-  background-color: $grey1;
-  @include flexbox();
-  align-items: center;
-  white-space: nowrap;
-}
+
 
 ::-webkit-input-placeholder {color: $txt1;}
 :-moz-placeholder {color: $txt1;} /* FF 18 */
-::-moz-placeholder {color: $txt1;} /* FF 19+ */
-:-ms-input-placeholder {color: $txt1;}
+::-moz-placeholder {color: $txt1; font-weight: 400;} /* FF 19+ */
+:-ms-input-placeholder {color: $txt1; font-weight: 400;}
 
 
 /* Radio Buttons */

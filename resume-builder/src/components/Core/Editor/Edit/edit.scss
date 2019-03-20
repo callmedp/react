@@ -19,6 +19,12 @@
 			display: block;
 			padding: 15px;
 
+			a {
+				display: inline-block;
+				width: 90%;
+				color: $blue1;
+			}
+
 			&:hover {
 				cursor: pointer;
 			}
@@ -28,6 +34,10 @@
 	&--active {
 		background-color: $blue1;
 		color: $white !important;
+
+		a {
+			color: $white !important;
+		}
 
 		.icon-delete {
 			background-position: -139px -1px;

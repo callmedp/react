@@ -10,7 +10,7 @@ export default class TopBar extends Component {
 	                	<p>Fill the details to generate your resume </p>
                 	</div>
                 	<div className="top-banner--banner-right">
-                		<a className="white-button mr-20" href="#">Change template</a>
+                		<button className="white-button mr-20" href="#">Change template</button>
                 		<span className="top-banner--banner-right--banner-thumb">
                 			<img src="/images/resume-thumb.jpg" alt="" />
                 		</span>

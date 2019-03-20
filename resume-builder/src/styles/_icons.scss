@@ -106,3 +106,19 @@
 .icon-linkedin {
     @include icon-inblock (20px, 22px, -151px -37px);
 }
+
+.icon-facebook {
+    @include icon-inblock (14px, 25px, -191px -39px);
+}
+
+.icon-mobile {
+    @include icon-inblock (19px, 19px, -227px -39px);
+}
+
+.icon-address {
+    @include icon-inblock (15px, 21px, -114px -40px);
+}
+
+.icon-email {
+    @include icon-inblock (19px, 14px, -70px -43px);
+}

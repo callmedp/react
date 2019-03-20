@@ -25,4 +25,8 @@ h2 {
 .pic-section {
 	flex: 0 1 180px;
 	flex-direction: column;
+
+	@media (max-width: 1190px) {
+		flex: 0 1 120px;
+	}
 }

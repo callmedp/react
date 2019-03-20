@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './leftSideBar.scss'
 import Edit from '../Edit/edit.jsx'
 import Preview from '../Preview/preview.jsx'
+import {Link} from 'react-router-dom'
 
 export default class LeftSideBar extends Component {
     constructor(props) {
@@ -11,6 +12,9 @@ export default class LeftSideBar extends Component {
         };
         this.activateEditTab = this.activateEditTab.bind(this);
         this.activatePreviewTab = this.activatePreviewTab.bind(this);
+        const path = this.props.match.path;
+        if (path === '/resume-builder/edit/') this.state.edit = true;
+        else this.state.edit = false;
     }
 
     activateEditTab() {
@@ -34,19 +38,19 @@ export default class LeftSideBar extends Component {
             <section className="left-sidebar">
 
                 <ul className="tab-heading">
-                    <li onClick={this.activateEditTab} className={   
-                    ' tab-heading--top-left-radius ' +(isEdit ? "active" : '' ) }>
-                        <span class="icon-edit"></span>
-                        <a href="#">Add/ Edit</a>
+                    <li className={
+                        ' tab-heading--top-left-radius ' + (isEdit ? "active" : '')}>
+                        <span className="icon-edit"></span>
+                        <Link to="/resume-builder/edit">Add/ Edit</Link>
                     </li>
-                    <li onClick={this.activatePreviewTab} className={ ' tab-heading--top-right-radius ' + 
+                    <li className={' tab-heading--top-right-radius ' +
                     (!isEdit ? "active" : '')}>
-                        <span class="icon-preview"></span>
-                        <a href="#">Preview</a>
+                        <span className="icon-preview"></span>
+                        <Link to="/resume-builder/preview">Preview</Link>
                     </li>
                 </ul>
                 {
-                    isEdit ? <Edit/> : <Preview/>
+                    isEdit ? <Edit {...this.props} /> : <Preview {...this.props} />
                 }
             </section>
         )
