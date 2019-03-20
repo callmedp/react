@@ -68,7 +68,10 @@ def featured_updated():
 
                     # Send mail and sms with subject line as Your Profile updated
                     try:
-                        mail_type = "FEATURED_PROFILE_UPDATED"
+                        if obj.product.sub_type_flow == 501:
+                            mail_type = "FEATURED_PROFILE_UPDATED"
+                        elif obj.product.sub_type_flow == 503:
+                            mail_type = "PRIORITY_APPLICANT_MAIL"
                         email_sets = list(
                             obj.emailorderitemoperation_set.all().values_list(
                                 'email_oi_status', flat=True).distinct())
