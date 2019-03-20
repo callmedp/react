@@ -1,6 +1,7 @@
 import React from "react";
 import {BrowserRouter as Router, Route} from "react-router-dom";
-import EditPreviewContainer from '../components/Core/Editor/EditPreveiw/editPreview.jsx';
+import EditContainer from '../components/Core/Editor/Edit/edit.jsx';
+import PreviewContainer from '../components/Core/Editor/Preview/preview.jsx';
 import HomeContainer from '../components/Core/Home/home.jsx';
 
 export const RouteWithSubRoutes = route => (
@@ -31,11 +32,11 @@ const routes = [
     },
     {
         path: '/resume-builder/edit/',
-        component: EditPreviewContainer
+        component: EditContainer
     },
     {
         path: '/resume-builder/preview',
-        component: EditPreviewContainer
+        component: PreviewContainer
     }
 
 ]
