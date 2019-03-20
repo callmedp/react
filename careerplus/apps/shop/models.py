@@ -43,6 +43,7 @@ from .functions import (
     get_upload_path_product_icon,
     get_upload_path_product_image,
     get_upload_path_product_file,
+    get_upload_path_feature_profile_file,
     get_upload_path_for_sample_certicate)
 from .choices import (
     SERVICE_CHOICES, FACULTY_CHOICES,
@@ -2929,3 +2930,13 @@ class FacultyProduct(AbstractAutoDate):
         return '{} - {} ---- {}'.format(
             self.product.heading, self.product_id,
             self.faculty.name)
+
+class ShineProfileData(AbstractAutoDate):
+    name = models.CharField(max_length=255)
+    image = models.ImageField(
+        _('Image'), upload_to=get_upload_path_feature_profile_file,
+        blank=True, null=True)
+    type_flow = models.PositiveSmallIntegerField(
+        _('Flow'), choices=FLOW_CHOICES)
+    sub_type_flow = models.IntegerField(choices=SUB_FLOW_CHOICES, unique=True)
+    booster_value = models.PositiveSmallIntegerField(default=0)
