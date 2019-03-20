@@ -26,6 +26,22 @@ input[type='text'] {
   padding: 0 3%;
 }
 
+.input-group {
+  position: relative;
+  flex-wrap: wrap;
+  align-items: stretch;
+  &--input-group-prepend {
+    @include flexbox();
+  }
+}
+
+.icon-linkedin__bg {
+  background-color: $grey1;
+  @include flexbox();
+  align-items: center;
+  white-space: nowrap;
+}
+
 ::-webkit-input-placeholder {color: $txt1;}
 :-moz-placeholder {color: $txt1;} /* FF 18 */
 ::-moz-placeholder {color: $txt1;} /* FF 19+ */

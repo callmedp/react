@@ -59,9 +59,19 @@ export default class PersonalInfo extends Component {
 		        			<input type="text" name="" placeholder="" />
 		        		</fieldset>
 	        		</div>
+	        		<div class="flex-container">
+	        			<fieldset className="input-group">
+	        				<label>Linkedin</label>
+							<div className="input-group--input-group-prepend">
+							  <span className="icon-linkedin icon-linkedin__bg"></span>
+							</div>
+							<input type="text" placeholder="Username" />
+		        		</fieldset>
+	        		</div>
+
 	        	</section>
 
-	        	<section className="pic-section">
+	        	<section className="pic-section mt-30">
 	        		<img src="/images/upload-image.jpg" />
 	        	</section>
         	</section>
