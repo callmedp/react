@@ -25,6 +25,7 @@ class GCPStaticStorage(GoogleCloudStorageMixin):
     """
     bucket_name = settings.GCP_STATIC_BUCKET
     location = 'l/s/'
+    cache_control = "max-age=86400"
 
     def __init__(self, **settings):
         super(GCPStaticStorage, self).__init__(**settings)
@@ -47,6 +48,7 @@ class GCPMediaStorage(GoogleCloudStorageMixin):
     """
     bucket_name = settings.GS_BUCKET_NAME
     location = 'l/m/'
+    cache_control = "max-age=86400"
 
     def url(self, name):
         return settings.MEDIA_URL + name
@@ -55,6 +57,7 @@ class GCPMediaStorage(GoogleCloudStorageMixin):
 @deconstructible
 class GCPPrivateMediaStorage(GoogleCloudStorage):
     bucket_name = settings.GCP_PRIVATE_MEDIA_BUCKET
+    cache_control = "private, max-age=3600"
 
     def _open(self, name, mode='rb'):
         # name = self._normalize_name(clean_name(name))
@@ -84,5 +87,6 @@ class GCPPrivateMediaStorage(GoogleCloudStorage):
 @deconstructible
 class GCPInvoiceStorage(GCPPrivateMediaStorage):
     bucket_name = settings.GCP_INVOICE_BUCKET
+    cache_control = "no-store"
 
 

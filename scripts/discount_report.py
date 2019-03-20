@@ -95,6 +95,10 @@ if __name__=="__main__":
         for item in order_items:
             combo_parent = False
             item_selling_price = item.selling_price
+            item_cost_price = float(item.cost_price)
+            if not item_cost_price:
+                item_cost_price = float(item.product.inr_price)
+
             if item.product.type_product == 0 and item_selling_price == 0 and not item.is_combo: 
                 item_selling_price = float((float(item.product.inr_price) - forced_coupon_amount)) * 1.18
 
@@ -110,7 +114,6 @@ if __name__=="__main__":
                     parent_sum = float(item.parent.product.inr_price)
                     order_discount = float(forced_coupon_amount)
                 
-                item_cost_price = float(item.cost_price)
                 actual_sum_of_child_combos = 0
                 child_combos = item.order.orderitems.filter(parent=item.parent)
                 
@@ -119,9 +122,6 @@ if __name__=="__main__":
                     if not child_cost_price:
                         child_cost_price = float(child_combo.product.inr_price)
                     actual_sum_of_child_combos += child_cost_price
-                
-                if not item_cost_price:
-                    item_cost_price = float(item.product.inr_price)
                 
                 virtual_decrease_in_price = actual_sum_of_child_combos - parent_sum
                 virtual_decrease_part_of_this_item = virtual_decrease_in_price * \

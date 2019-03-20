@@ -8,7 +8,7 @@ from shop.models import (
     Category, CategoryRelationship, Skill, ProductSkill,
     Faculty, SubHeaderCategory, FacultyProduct,
     Product, UniversityCourseDetail,
-    UniversityCoursePayment)
+    UniversityCoursePayment,SubCategory)
 
 from shop.choices import (
     APPLICATION_PROCESS_CHOICES, APPLICATION_PROCESS,
@@ -1009,6 +1009,8 @@ class ChangeCategorySkillForm(forms.ModelForm):
         self.fields['video_link'].widget.attrs['data-parsley-length'] = "[2, 128]"
         self.fields['video_link'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-128 characters.'
 
+
+
     class Meta:
         model = Category
         fields = (
@@ -1424,3 +1426,229 @@ class UniversityCoursePaymentForm(forms.ModelForm):
             raise forms.ValidationError(
                 "This value is requred.")
         return last_date_of_payment
+
+
+class AddSubCategoryForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(AddSubCategoryForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+
+        self.fields['location'].widget.attrs['class'] = form_class
+        query_set = Category.objects.filter(type_level=3,is_skill=True).values_list('id','name')
+        self.fields['category'] = forms.TypedChoiceField(choices=query_set)
+        self.fields['category'].widget.attrs['class'] = form_class
+        self.fields['slug'].widget.attrs['class'] = form_class
+        self.fields['slug'].widget.attrs['readonly'] = True
+        self.fields['slug'].required = True
+        self.fields['slug'].label = "Slug*"
+        self.fields['image'].widget.attrs['class'] = form_class
+        self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 500
+        self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
+        self.fields['banner'].widget.attrs['class'] = form_class
+        self.fields['banner'].widget.attrs['data-parsley-max-file-size'] = 500
+        self.fields['banner'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
+        # self.fields['image_alt'].widget.attrs['class'] = form_class
+        # self.fields['image_alt'].widget.attrs['maxlength'] = 100
+        # self.fields['image_alt'].widget.attrs['placeholder'] = 'Add Alt'
+        # self.fields['image_alt'].widget.attrs['data-parsley-trigger'] = 'change'
+        # self.fields['image_alt'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        # self.fields['image_alt'].widget.attrs['data-parsley-length'] = "[2, 100]"
+        # self.fields['image_alt'].widget.attrs[
+        #     'data-parsley-length-message'] = 'Length should be between 2-100 characters.'
+
+        # self.fields['title'].widget.attrs['class'] = form_class
+        # self.fields['title'].widget.attrs['maxlength'] = 100
+        # self.fields['title'].widget.attrs['placeholder'] = 'Add unique title'
+        # self.fields['title'].widget.attrs['data-parsley-trigger'] = 'change'
+        # self.fields['title'].widget.attrs['required'] = "required"
+
+        # self.fields['title'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        # self.fields['title'].widget.attrs['data-parsley-length'] = "[2, 100]"
+        # self.fields['title'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-100 characters.'
+
+        # self.fields['heading'].widget.attrs['class'] = form_class
+        # self.fields['heading'].label = "Heading"
+        # self.fields['heading'].widget.attrs['maxlength'] = 100
+        # self.fields['heading'].widget.attrs['required'] = "required"
+        # self.fields['heading'].widget.attrs['placeholder'] = 'Add Heading'
+        # self.fields['heading'].widget.attrs['data-parsley-trigger'] = 'change'
+        # self.fields['heading'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        # self.fields['heading'].widget.attrs['data-parsley-length'] = "[2, 100]"
+        # self.fields['heading'].widget.attrs[
+        #     'data-parsley-length-message'] = 'Length should be between 2-100 characters.'
+        #
+        self.fields['products_mapped'].widget.attrs['class'] = form_class
+        self.fields['products_mapped'].label = "Products"
+        # self.fields['products_mapped'].widget.attrs['placeholder'] = 'Add Products For Mapping'
+        prod_objs = Product.objects.filter(is_indexed=True).only('id','name','heading')
+        choices = [(p.id, '{0}-{1}'.format(p.heading, p.name),) if p.heading else (p.id,'{}'.format(p.name),) for p in prod_objs]
+        self.fields['products_mapped'] = forms.MultipleChoiceField(choices=choices)
+        self.fields['products_mapped'].required = False
+        self.fields['video_link'].widget.attrs['class'] = form_class
+        # self.fields['career_outcomes'].widget.attrs['class'] = form_class
+        #
+        # self.fields['meta_desc'].widget.attrs['class'] = form_class
+        # self.fields['meta_keywords'].widget.attrs['class'] = form_class
+
+    class Meta:
+        model = SubCategory
+        fields = ('location','category','slug','products_mapped','image','banner','video_link')
+
+    def clean_banner(self):
+        file = self.files.get('banner', '')
+        if file:
+            if file._size > 500 * 1024:
+                raise forms.ValidationError(
+                    "Image file is too large ( > 500kb ).")
+            if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
+                raise forms.ValidationError("Unsupported image type. Please upload svg, bmp, png or jpeg")
+        else:
+            pass
+        return file
+
+    def clean_slug(self):
+        slug = self.cleaned_data.get('slug', '')
+        if not slug:
+            raise forms.ValidationError('Check the slug')
+        slug_obj = SubCategory.objects.filter(slug=slug)
+        if slug_obj:
+            raise forms.ValidationError('Slug Already exist')
+        return slug
+
+    def clean_category(self):
+
+        cat_id = self.cleaned_data.get('category','')
+        if not cat_id:
+            raise forms.ValidationError('Check the Category')
+        cat_obj = Category.objects.filter(id=cat_id).first()
+        if not cat_obj:
+            raise forms.ValidationError('Check the Category')
+        return cat_obj
+
+    def clean_image(self):
+        file = self.files.get('image', '')
+        if file:
+            if file._size > 500 * 1024:
+                raise forms.ValidationError(
+                    "Image file is too large ( > 500kb ).")
+            if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
+                raise forms.ValidationError("Unsupported image type. Please upload svg, bmp, png or jpeg")
+        return file
+
+    def clean_products_mapped(self):
+        prod = self.cleaned_data.get('products_mapped','')
+        return prod
+
+    def save(self, commit=True, *args, **kwargs):
+        subcategory = super(AddSubCategoryForm, self).save(
+            commit=True, *args, **kwargs)
+        subcategory.create_icon()
+        return subcategory
+
+
+class ChangeSubCategoryForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ChangeSubCategoryForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        self.fields['location'].widget.attrs['class'] = form_class
+        query_set = Category.objects.filter(type_level=3,is_skill=True).values_list('id','name')
+        self.fields['category'] = forms.TypedChoiceField(choices=query_set)
+        self.fields['category'].widget.attrs['class'] = form_class
+        self.fields['slug'].widget.attrs['class'] = form_class
+        self.fields['slug'].widget.attrs['readonly'] = True
+        self.fields['slug'].required = True
+        self.fields['slug'].label = "Slug*"
+        self.fields['image'].widget.attrs['class'] = form_class
+        self.fields['image'].widget.attrs['data-parsley-max-file-size'] = 500
+        self.fields['image'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
+        self.fields['banner'].widget.attrs['class'] = form_class
+        self.fields['banner'].widget.attrs['data-parsley-max-file-size'] = 500
+        self.fields['banner'].widget.attrs['data-parsley-filemimetypes'] = 'image/jpeg, image/png, image/jpg, image/svg'
+        self.fields['title'].widget.attrs['class'] = form_class
+        self.fields['title'].widget.attrs['maxlength'] = 100
+        self.fields['title'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['title'].widget.attrs['required'] = "required"
+        self.fields['title'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['title'].widget.attrs['data-parsley-length'] = "[2, 100]"
+        self.fields['title'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-100 characters.'
+        self.fields['heading'].widget.attrs['class'] = form_class
+        self.fields['heading'].label = "Heading"
+        self.fields['heading'].widget.attrs['maxlength'] = 100
+        self.fields['heading'].widget.attrs['required'] = "required"
+        self.fields['heading'].widget.attrs['placeholder'] = 'Add Heading'
+        self.fields['heading'].widget.attrs['data-parsley-trigger'] = 'change'
+        self.fields['heading'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
+        self.fields['heading'].widget.attrs['data-parsley-length'] = "[2, 100]"
+        self.fields['heading'].widget.attrs[
+            'data-parsley-length-message'] = 'Length should be between 2-100 characters.'
+        self.fields['products_mapped'].widget.attrs['class'] = form_class
+        self.fields['products_mapped'].label = "Products"
+        # self.fields['products_mapped'].widget.attrs['placeholder'] = 'Add Products For Mapping'
+        prod_objs = Product.objects.filter(is_indexed=True).only('id','name','heading')
+        choices = [(p.id, '{0}-{1}'.format(p.heading, p.name),) if p.heading else (p.id,'{}'.format(p.name),) for p in prod_objs]
+        self.fields['products_mapped'] = forms.MultipleChoiceField(choices=choices)
+        self.fields['products_mapped'].required = False
+        # self.fields['products_mapped'].queryset = prod_obj
+        self.fields['video_link'].widget.attrs['class'] = form_class
+        self.fields['career_outcomes'].widget.attrs['class'] = 'tagsinput tags form-control'
+        self.fields['career_outcomes'].required = True
+        self.fields['career_outcomes'].label = "Career Outcome*"
+        self.fields['meta_desc'].widget.attrs['class'] = form_class
+        self.fields['meta_keywords'].widget.attrs['class'] = form_class
+
+    class Meta:
+        model = SubCategory
+        exclude = ('url',)
+
+    def clean_banner(self):
+        file = self.files.get('banner', '')
+        if file:
+            if file._size > 500 * 1024:
+                raise forms.ValidationError(
+                    "Image file is too large ( > 500kb ).")
+            if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
+                raise forms.ValidationError("Unsupported image type. Please upload svg, bmp, png or jpeg")
+        else:
+            pass
+        return file
+
+    def clean_slug(self):
+        slug = self.cleaned_data.get('slug', '')
+        if not slug:
+            raise forms.ValidationError('Check the slug')
+        return slug
+
+
+
+    def clean_category(self):
+        cat_id = self.cleaned_data.get('category','')
+        if not cat_id:
+            raise forms.ValidationError('Check the Category')
+        cat_obj = Category.objects.filter(id=cat_id).first()
+        if not cat_obj:
+            raise forms.ValidationError('Check the Category')
+        return cat_obj
+
+    def clean_products_mapped(self):
+        prod = self.cleaned_data.get('products_mapped', '')
+        return prod
+
+    def clean_image(self):
+
+        file = self.files.get('image', '')
+        if not file:
+            return file
+        if file._size > 500 * 1024:
+            raise forms.ValidationError(
+                "Image file is too large ( > 500kb ).")
+        if file.image.format not in ('BMP', 'PNG', 'JPEG', 'SVG'):
+            raise forms.ValidationError("Unsupported image type. Please upload svg, bmp, png or jpeg")
+        return file
+
+    def save(self, commit=True, *args, **kwargs):
+        subcategory = super(ChangeSubCategoryForm, self).save(
+            commit=True, *args, **kwargs)
+        subcategory.create_icon()
+        return subcategory

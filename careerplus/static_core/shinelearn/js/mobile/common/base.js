@@ -276,15 +276,15 @@ $(document).ready(function(){
 		}
 	});
 
-	submitIcon.mouseup(function(){
+ 	submitIcon.mouseup(function(){
 		return false;
 	});
 
-	searchBox.mouseup(function(){
+ 	searchBox.mouseup(function(){
 		return false;
 	});
-	
-	$(document).mouseup(function(){
+
+ 	$(document).mouseup(function(){
 		if(isOpen == true){
 			$('.searchbox-icon').css('display','block');
 			submitIcon.click();
@@ -292,7 +292,7 @@ $(document).ready(function(){
 	});
 });
 
-	function buttonUp(){
+ 	function buttonUp(){
 		var inputVal = $('.searchbox-input').val();
 		inputVal = $.trim(inputVal).length;
 		if( inputVal !== 0){
