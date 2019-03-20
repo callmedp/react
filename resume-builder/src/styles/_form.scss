@@ -10,7 +10,7 @@ input, select, textarea {outline:none;}
 label {
   display: block;
   font-size: 1.3rem;
-  font-weight: 600;
+  font-weight: 400;
   margin-bottom: 5px;
   color: $txt1;
 }
@@ -49,7 +49,13 @@ input[type='text'] {
   }
 }
 
-
+.error {
+  .error-txt {
+    color: $red;
+    font-size: 1.2rem;
+    display: inline-block;
+  }
+}
 
 ::-webkit-input-placeholder {color: $txt1;}
 :-moz-placeholder {color: $txt1;} /* FF 18 */

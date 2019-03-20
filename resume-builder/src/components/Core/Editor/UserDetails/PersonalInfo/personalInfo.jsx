@@ -8,15 +8,16 @@ export default class PersonalInfo extends Component {
             <section className="head-section">
 	             <span className="icon-box"><i className="icon-info1"></i></span>
 	             <h2>Personal Info</h2>
-	             <span className="icon-edit"></span>
+	             <span className="icon-edit icon-edit__cursor"></span>
         	</section>
         	
         	<section className="flex-container">
         		<section className="info-section">
 	        		<div className="flex-container">
-	        			<fieldset>
+	        			<fieldset class="error">
 		        			<label>First Name</label>
 		        			<input type="text" name="" placeholder="" />
+		        			
 		        		</fieldset>
 		        		<fieldset>
 		        			<label>Last Name</label>
@@ -94,7 +95,7 @@ export default class PersonalInfo extends Component {
         	</section>
 
         	<div class="flex-container items-right mr-20 mb-30">
-        		<button className="blue-button mr-20">Preview</button>
+        		<button className="blue-button mr-10">Preview</button>
         		<button className="orange-button">Save & Continue</button>
         	</div>
         	

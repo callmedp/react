@@ -4,7 +4,7 @@
 .right-sidebar {
 	flex: 1;
 	background-color: rgb(255, 255, 255);
-  	box-shadow: 0px 3px 25px 0px rgba(0, 0, 0, 0.16);
+  	box-shadow: 0px 3px 25px 0px rgba(0, 0, 0, 0.10);
   	margin: 0 0 0 20px;
   	flex-direction: column;
   	@include border-radius(4px);
@@ -14,4 +14,30 @@
 .right-sidebar-scroll {
 	height: 400px;
 	overflow: auto;
+}
+
+.head-section {
+	@include flexbox();
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	align-content: center;
+	border-bottom: 1px solid $grey2;
+	width: 100%;
+	flex-wrap: nowrap;
+}
+
+.info-section {
+	flex: 1;
+	flex-direction: column;
+	margin: 20px 10px 20px 20px;
+}
+
+.pic-section {
+	flex: 0 1 180px;
+	flex-direction: column;
+
+	@media (max-width: 1190px) {
+		flex: 0 1 120px;
+	}
 }

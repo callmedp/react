@@ -4,7 +4,7 @@
 .left-sidebar {
 	flex: 0 1 265px;
 	background-color: rgb(255, 255, 255);
-  	box-shadow: 0px 3px 25px 0px rgba(0, 0, 0, 0.16);
+  	box-shadow: 0px 3px 25px 0px rgba(0, 0, 0, 0.10);
   	flex-direction: column;
   	@include border-radius(4px);
   	height: 590px;
@@ -33,14 +33,19 @@
 
 	.active {
 		background: $white;
-		box-shadow: 8px -3px 7px -1px rgba(186,186,186,0.40);
 		position: relative;
 	}
 
 	.no-shadow {
-		background: $white;
-		box-shadow: 8px -13px 7px -1px rgba(186,186,186,0.40);
-		position: relative;
+		box-shadow: none;
+	}
+
+	.shadow1 {
+		box-shadow: 8px -3px 7px -1px rgba(186,186,186,0.40);
+	}
+
+	.shadow2 {
+		box-shadow: -7px -3px 7px -1px rgba(186,186,186,0.40);
 	}
 
 	&--top-left-radius {

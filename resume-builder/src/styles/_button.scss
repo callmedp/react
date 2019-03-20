@@ -13,17 +13,23 @@
 .blue-button {
 	@include border-radius(20px)
 	border: 1px solid $blue1;
-	padding: 10px 20px;
+	padding: 8px 20px;
 	display: inline-block;
 	color: $blue1;
 	background-color: transparent;
+
+	&:hover {
+		background-color: $blue1;
+		color: $white;
+	}
 }
 
 .orange-button {
 	@include border-radius(20px)
 	border: 1px solid $orange;
-	padding: 10px 20px;
+	padding: 8px 20px;
 	display: inline-block;
 	color: $white;
 	background-color: $orange;
+	font-size: 1.4rem;
 }
