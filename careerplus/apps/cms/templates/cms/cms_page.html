@@ -6,7 +6,6 @@
     {% block canonical_url %}
       <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
       <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
-      <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{ page_obj.get_absolute_url }}?type=amp">
     {% endblock canonical_url %}
 
     {% block title %}
