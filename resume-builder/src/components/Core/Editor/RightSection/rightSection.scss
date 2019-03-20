@@ -8,4 +8,10 @@
   	margin: 0 0 0 20px;
   	flex-direction: column;
   	@include border-radius(4px);
+  	height: 590px;
+}
+
+.right-sidebar-scroll {
+	height: 400px;
+	overflow: auto;
 }

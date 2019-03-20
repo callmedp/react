@@ -7,4 +7,23 @@
 	padding: 10px 15px;
 	display: inline-block;
 	color: $white;
+	background-color: transparent;
+}
+
+.blue-button {
+	@include border-radius(20px)
+	border: 1px solid $blue1;
+	padding: 10px 20px;
+	display: inline-block;
+	color: $blue1;
+	background-color: transparent;
+}
+
+.orange-button {
+	@include border-radius(20px)
+	border: 1px solid $orange;
+	padding: 10px 20px;
+	display: inline-block;
+	color: $white;
+	background-color: $orange;
 }

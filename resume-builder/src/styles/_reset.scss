@@ -35,6 +35,11 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 
+* {
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
 body {
 	line-height: 1;
     font-family: 'Open Sans', sans-serif;
@@ -133,7 +138,7 @@ html {
  */
 
 a:focus {
-    outline: thin dotted;
+    outline: 0;
 }
 
 /**
@@ -342,12 +347,12 @@ textarea {
 
 
 ::-moz-selection {
-    background: #b3d4fc;
+    background: transparent;
     text-shadow: none;
 }
 
 ::selection {
-    background: #b3d4fc;
+    background: transparent;
     text-shadow: none;
 }
 

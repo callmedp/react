@@ -35,36 +35,68 @@ export default class PersonalInfo extends Component {
 	        		</div>
 	        		<div className="flex-container">
 	        			<fieldset>
-		        			<label>Mobile</label>
-		        			<input type="text" name="" placeholder="" />
+	        				<label>Mobile</label>
+							<div className="input-group">
+								<div class="input-group--input-group-icon">
+							  		<span className="icon-mobile"></span>
+								</div>
+								<input type="text" placeholder="" className="input-control" />
+							</div>
 		        		</fieldset>
 		        		<fieldset>
-		        			<label>Email</label>
-		        			<input type="text" name="" placeholder="" />
+	        				<label>Email</label>
+							<div className="input-group">
+								<div className="input-group--input-group-icon">
+							  		<span className="icon-email"></span>
+								</div>
+								<input type="text" placeholder="" className="input-control" />
+							</div>
 		        		</fieldset>
 	        		</div>
 	        		<div className="flex-container">
 	        			<fieldset>
-		        			<label>Address</label>
-		        			<input type="text" name="" placeholder="" />
+	        				<label>Address</label>
+							<div className="input-group">
+								<div className="input-group--input-group-icon">
+							  		<span className="icon-address"></span>
+								</div>
+								<input type="text" placeholder="" className="input-control" />
+							</div>
 		        		</fieldset>
 	        		</div>
 	        		<div className="flex-container">
 	        			<fieldset>
-		        			<label>Linkedin</label>
-		        			<input type="text" name="" placeholder="" />
+	        				<label>Linkedin</label>
+							<div className="input-group">
+								<div className="input-group--input-group-icon">
+							  		<span className="icon-linkedin"></span>
+								</div>
+								<input type="text" placeholder="" className="input-control" />
+							</div>
 		        		</fieldset>
 		        		<fieldset>
-		        			<label>Facebook</label>
-		        			<input type="text" name="" placeholder="" />
+	        				<label>Facebook</label>
+							<div className="input-group">
+								<div className="input-group--input-group-icon">
+							  		<span className="icon-facebook"></span>
+								</div>
+								<input type="text" placeholder="" className="input-control" />
+							</div>
 		        		</fieldset>
 	        		</div>
+
+
 	        	</section>
 
-	        	<section className="pic-section">
-	        		<img src="/images/upload-image.jpg" />
+	        	<section className="pic-section mt-30">
+	        		<img class="img-responsive" src="/images/upload-image.jpg" />
 	        	</section>
         	</section>
+
+        	<div class="flex-container items-right mr-20 mb-30">
+        		<button className="blue-button mr-20">Preview</button>
+        		<button className="orange-button">Save & Continue</button>
+        	</div>
         	
         </div>
         )

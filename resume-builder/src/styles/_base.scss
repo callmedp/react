@@ -32,6 +32,10 @@ For example:
 
 .mr-20 {
 	margin-right: 30px;
+}
+
+.mb-30 {
+	margin-bottom: 30px;
 } 
 
 .pull-left {
@@ -60,10 +64,9 @@ For example:
   height: auto;
 }
 
-
 .page-container {
 	margin: 3% 5%;
-	height: calc(100vh - 63px);
+	/*height: calc(100vh - 63px);*/
 	@include flexbox();
 	flex-flow: column;
 	font-size: 1.4rem;
@@ -99,4 +102,8 @@ h2 {
 	align-items: center;
 	justify-content: center;
 	border-top-left-radius: 4px;
+}
+
+.items-right {
+	justify-content: flex-end;
 }
