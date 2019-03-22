@@ -122,3 +122,19 @@
 .icon-email {
     @include icon-inblock (19px, 14px, -70px -43px);
 }
+
+.icon-date {
+    @include icon-inblock (19px, 19px, -480px -74px);
+}
+
+.icon-plus {
+    @include icon-inblock (12px, 12px, -451px 0);
+}
+
+.icon-ascend {
+    @include icon-inblock (26px, 25px, 0 -75px);
+}
+
+.icon-descend {
+    @include icon-inblock (26px, 25px, -31px -75px);
+}

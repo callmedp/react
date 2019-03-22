@@ -12,8 +12,9 @@
 }
 
 .right-sidebar-scroll {
-	height: 400px;
-	overflow: auto;
+	flex: 1 1 auto;
+	overflow-y: auto;
+	height: 470px;
 }
 
 .head-section {
@@ -27,12 +28,6 @@
 	flex-wrap: nowrap;
 }
 
-.info-section {
-	flex: 1;
-	flex-direction: column;
-	margin: 20px 10px 20px 20px;
-}
-
 .pic-section {
 	flex: 0 1 180px;
 	flex-direction: column;
@@ -40,4 +35,19 @@
 	@media (max-width: 1190px) {
 		flex: 0 1 120px;
 	}
+}
+
+.addon-buttons {
+	margin-left: auto;
+
+	span {
+		vertical-align: middle;
+		cursor: pointer;
+	}
+}
+
+.add-section-heading {
+	font-size: 1.8rem;
+	font-weight: 400;
+	margin-left: 10px;
 }

@@ -13,6 +13,9 @@
 	ul {
 		margin: 20px 0 0 0;
 		display: block;
+		flex: 1 1 auto;
+		overflow-y: auto;
+		height: 300px;
 
 		li {
 			color: $blue1;

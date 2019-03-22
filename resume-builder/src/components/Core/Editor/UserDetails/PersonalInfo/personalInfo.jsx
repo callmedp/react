@@ -11,13 +11,13 @@ export default class PersonalInfo extends Component {
 	             <span className="icon-edit icon-edit__cursor"></span>
         	</section>
         	
-        	<section className="flex-container">
+        	<section className="flex-container right-sidebar-scroll">
         		<section className="info-section">
 	        		<div className="flex-container">
-	        			<fieldset class="error">
+	        			<fieldset className="error">
 		        			<label>First Name</label>
 		        			<input type="text" name="" placeholder="" />
-		        			
+		        			<span class="error-txt"></span>
 		        		</fieldset>
 		        		<fieldset>
 		        			<label>Last Name</label>
@@ -38,7 +38,7 @@ export default class PersonalInfo extends Component {
 	        			<fieldset>
 	        				<label>Mobile</label>
 							<div className="input-group">
-								<div class="input-group--input-group-icon">
+								<div className="input-group--input-group-icon">
 							  		<span className="icon-mobile"></span>
 								</div>
 								<input type="text" placeholder="" className="input-control" />
@@ -90,7 +90,7 @@ export default class PersonalInfo extends Component {
 	        	</section>
 
 	        	<section className="pic-section mt-30">
-	        		<img class="img-responsive" src="/images/upload-image.jpg" />
+	        		<img className="img-responsive" src="/images/upload-image.jpg" />
 	        	</section>
         	</section>
 

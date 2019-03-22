@@ -12,7 +12,7 @@ export default class Summary extends Component {
 		             <span className="icon-edit icon-summary__cursor"></span>
 	        	</section>
 
-	        	<section className="flex-container p3p">
+	        	<section className="right-sidebar-scroll p3p">
 	        		<div className="summary-box">
 	        			<h3>Summary</h3>
 	        			<div className="summary-box--summary-txt">
@@ -22,7 +22,7 @@ export default class Summary extends Component {
 
 	        	</section>
 
-	        	<div class="flex-container items-right mr-20 mb-30">
+	        	<div className="flex-container items-right mr-20 mb-30">
 	        		<button className="blue-button mr-20">Preview</button>
 	        		<button className="orange-button">Save & Continue</button>
 	        	</div>
