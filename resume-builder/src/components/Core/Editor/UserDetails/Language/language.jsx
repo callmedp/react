@@ -18,7 +18,6 @@ export default class Language extends Component {
         				<div className="flex-container">
 		        			<h3 class="add-section-heading">Language1</h3>
 		        			<div className="addon-buttons mr-10">
-		        				<span className="icon-plus mr-15"></span>
 		        				<span className="icon-delete mr-15"></span>
 		        				<span className="icon-ascend mr-5"></span>
 		        				<span className="icon-descend"></span>
