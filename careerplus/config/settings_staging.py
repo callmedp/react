@@ -183,6 +183,10 @@ CACHES = {
             'CONNECTION_POOL_KWARGS': {'max_connections': 50},
         }
     },
+    'job_title_lookup': {
+        "BACKEND": "django_red.cache.RedisCache",
+        "LOCATION": "redis://172.22.67.223:6379/13",
+    }
 }
 
 ###### LOGGING SETTINGS #############
