@@ -129,7 +129,6 @@
     {% compress js %}
     <script src="{% static 'shinelearn/js/common/jquery.mCustomScrollbar.concat.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/search/bootstrap-slider.min.js' %}"></script>
-    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
     <script src="{% static 'shinelearn/js/search/search.js' %}"></script>
     {% endcompress %}
@@ -145,9 +144,8 @@
         var funcAreaSet = {{ func_area_set|safe|default:"[]" }},
             skillsSet = {{ skills_set|safe|default:"[]" }},
             prefetchedFuncArea = '{{ recmnd_func_area }}',
-            prefetchedSkills = '{{ recmnd_skills }}';
-        $('#id_q').typeahead({
-            local: {{ search_context|safe|default:"[]" }}
-        });
+            prefetchedSkills = '{{ recmnd_skills }}',
+            categoryUrlSet = {{ category_url_set|safe }}
+            productUrlSet = {{ product_url_set|safe|safe }} 
     </script>
 {% endblock js_section %}

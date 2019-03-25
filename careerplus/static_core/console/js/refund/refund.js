@@ -18,7 +18,6 @@ function totalRefundAmount(){
         }
         catch(err){
         	max_price = parseFloat(0.00);
-            console.log(err);
         }
         
         var refund_amount = $refund_amount_id.val();

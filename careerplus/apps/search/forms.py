@@ -14,7 +14,8 @@ class SearchForm(forms.Form):
                 'data-selecttype': 'multiple',
                 'maxlength': '150',
                 'placeholder': 'Search for courses, services etc..',
-                'holder': 'Search for courses, services etc..'}
+                'holder': 'Search for courses, services etc..',
+                'autocomplete': 'off'}
         ),
         initial='')
 
