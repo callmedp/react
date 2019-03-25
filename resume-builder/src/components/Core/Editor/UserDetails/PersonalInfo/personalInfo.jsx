@@ -28,7 +28,7 @@ export class PersonalInfo extends Component {
                                 <fieldset className="error">
                                     <label>First Name</label>
                                     <Field component={renderField} type={"text"} name="first_name"/>
-                                    <span class="error-txt"></span>
+                                    <span className="error-txt"></span>
                                 </fieldset>
                                 <fieldset>
                                     <label>Last Name</label>
