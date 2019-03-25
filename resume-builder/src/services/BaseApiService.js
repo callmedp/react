@@ -8,6 +8,8 @@ const get = (url, headers = defaultHeaders, isFetchingHTML = false) => {
     return fetch(url, {
         headers,
         method: 'GET',
+        mode: "cors",
+        credentials:'include'
     })
     // .then(response => response.json())
         .then(async (response) => {

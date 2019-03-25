@@ -22,7 +22,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 
 
-class UserListCreateView(SessionManagerMixin, ListCreateAPIView):
+class UserListCreateView(ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = User.objects.all()
@@ -34,7 +34,7 @@ class UserListCreateView(SessionManagerMixin, ListCreateAPIView):
         return super(UserListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class UserRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
+class UserRetrieveUpdateView(RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
     parser_class = (FormParser, MultiPartParser)
@@ -55,7 +55,7 @@ class UserRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
         return User.objects.filter(id=user_id)
 
 
-class SkillListCreateView(SessionManagerMixin, ListCreateAPIView):
+class SkillListCreateView(ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = Skill.objects.all()
@@ -67,7 +67,7 @@ class SkillListCreateView(SessionManagerMixin, ListCreateAPIView):
         return super(SkillListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class SkillRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
+class SkillRetrieveUpdateView(RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
@@ -78,19 +78,16 @@ class SkillRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
         return Skill.objects.filter(id=skill_id)
 
 
-class UserShineProfileRetrieveUpdateView(ShineCandidateDetail, RetrieveUpdateAPIView):
+class UserShineProfileRetrieveUpdateView(RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
     def get(self, request, *args, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
-
         user_email = kwargs.get('email')
         if not user_email:
             return Response({}, status=400)
 
-        shine_profile = self.get_candidate_detail(email=user_email)
+        shine_profile = ShineCandidateDetail().get_candidate_detail(email=user_email)
 
         if not shine_profile:
             return Response({})
@@ -207,10 +204,12 @@ class UserShineProfileRetrieveUpdateView(ShineCandidateDetail, RetrieveUpdateAPI
         # update user projects
         user_projects = []
 
-        return Response({})
+        return Response({
+            'status': 'OK'
+        })
 
 
-class UserExperienceListCreateView(SessionManagerMixin, ListCreateAPIView):
+class UserExperienceListCreateView(ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = UserExperience.objects.all()
@@ -222,7 +221,7 @@ class UserExperienceListCreateView(SessionManagerMixin, ListCreateAPIView):
         return super(UserExperienceListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class UserExperienceRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
+class UserExperienceRetrieveUpdateView(RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
@@ -233,7 +232,7 @@ class UserExperienceRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIVie
         return UserExperience.objects.filter(id=user_experience_id)
 
 
-class UserEducationListCreateView(SessionManagerMixin, ListCreateAPIView):
+class UserEducationListCreateView(ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = UserEducation.objects.all()
@@ -245,7 +244,7 @@ class UserEducationListCreateView(SessionManagerMixin, ListCreateAPIView):
         return super(UserEducationListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class UserEducationRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
+class UserEducationRetrieveUpdateView(RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
@@ -256,7 +255,7 @@ class UserEducationRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView
         return UserEducation.objects.filter(id=user_education_id)
 
 
-class UserCertificationListCreateView(SessionManagerMixin, ListCreateAPIView):
+class UserCertificationListCreateView(ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = UserCertification.objects.all()
@@ -268,7 +267,7 @@ class UserCertificationListCreateView(SessionManagerMixin, ListCreateAPIView):
         return super(UserCertificationListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class UserCertificationRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
+class UserCertificationRetrieveUpdateView(RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
@@ -279,7 +278,7 @@ class UserCertificationRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPI
         return UserCertification.objects.filter(id=user_certification_id)
 
 
-class UserProjectListCreateView(SessionManagerMixin, ListCreateAPIView):
+class UserProjectListCreateView(ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = UserProject.objects.all()
@@ -291,7 +290,7 @@ class UserProjectListCreateView(SessionManagerMixin, ListCreateAPIView):
         return super(UserProjectListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class UserProjectRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
+class UserProjectRetrieveUpdateView(RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
@@ -302,7 +301,7 @@ class UserProjectRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
         return UserProject.objects.filter(id=user_project_id)
 
 
-class UserReferenceListCreateView(SessionManagerMixin, ListCreateAPIView):
+class UserReferenceListCreateView(ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = UserReference.objects.all()
@@ -314,7 +313,7 @@ class UserReferenceListCreateView(SessionManagerMixin, ListCreateAPIView):
         return super(UserReferenceListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class UserReferenceRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
+class UserReferenceRetrieveUpdateView(RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
@@ -325,7 +324,7 @@ class UserReferenceRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView
         return UserReference.objects.filter(id=user_reference_id)
 
 
-class UserSocialLinkListCreateView(SessionManagerMixin, ListCreateAPIView):
+class UserSocialLinkListCreateView(ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = UserSocialLink.objects.all()
@@ -337,7 +336,7 @@ class UserSocialLinkListCreateView(SessionManagerMixin, ListCreateAPIView):
         return super(UserSocialLinkListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class UserSocialLinkRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
+class UserSocialLinkRetrieveUpdateView(RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
@@ -348,7 +347,7 @@ class UserSocialLinkRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIVie
         return UserSocialLink.objects.filter(id=external_link_id)
 
 
-class UserAchievementListCreateView(SessionManagerMixin, ListCreateAPIView):
+class UserAchievementListCreateView(ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = UserAchievement.objects.all()
@@ -360,7 +359,7 @@ class UserAchievementListCreateView(SessionManagerMixin, ListCreateAPIView):
         return super(UserAchievementListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class UserAchievementRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIView):
+class UserAchievementRetrieveUpdateView(RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
 
@@ -371,7 +370,7 @@ class UserAchievementRetrieveUpdateView(SessionManagerMixin, RetrieveUpdateAPIVi
         return UserAchievement.objects.filter(id=external_link_id)
 
 
-class UserResumePreview(SessionManagerMixin, RetrieveUpdateAPIView):
+class UserResumePreview(RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
     renderer_classes = [TemplateHTMLRenderer]

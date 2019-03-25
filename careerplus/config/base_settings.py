@@ -68,7 +68,6 @@ THIRD_PARTY_APPS = [
     'django_filters',
     'webpack_loader',
     'corsheaders'
-
 ]
 
 # Apps specific for this project go here.
