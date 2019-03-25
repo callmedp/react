@@ -28,7 +28,7 @@ export class PersonalInfo extends Component {
                                 <fieldset className="error">
                                     <label>First Name</label>
                                     <Field component={renderField} type={"text"} name="first_name"/>
-                                    <span class="error-txt"></span>
+                                    <span className="error-txt"></span>
                                 </fieldset>
                                 <fieldset>
                                     <label>Last Name</label>
@@ -110,7 +110,7 @@ export class PersonalInfo extends Component {
                 </form>
 
 
-                <div class="flex-container items-right mr-20 mb-30">
+                <div className="flex-container items-right mr-20 mb-30">
                     <button className="blue-button mr-10">Preview</button>
                     <button className="orange-button">Save & Continue</button>
                 </div>
