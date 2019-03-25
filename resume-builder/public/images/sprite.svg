@@ -107,6 +107,10 @@
         <text id="+" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500" fill="#416CBE">
             <tspan x="443" y="55">+</tspan>
         </text>
+        <rect id="Rectangle-5" stroke="#FFFFFF" x="478.5" y="13.5" width="19" height="18" rx="2"></rect>
+        <text id="+" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500" fill="#FFFFFF">
+            <tspan x="484" y="28">+</tspan>
+        </text>
         <g id="Rectangle-5">
             <use fill="#416CBE" fill-rule="evenodd" xlink:href="#path-1"></use>
             <rect stroke="#416CBE" stroke-width="1" x="478.5" y="40.5" width="19" height="18" rx="2"></rect>

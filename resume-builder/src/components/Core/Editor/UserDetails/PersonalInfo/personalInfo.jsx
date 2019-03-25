@@ -100,7 +100,6 @@ export class PersonalInfo extends Component {
                                 </fieldset>
                             </div>
 
-
                         </section>
 
                         <section className="pic-section mt-30">

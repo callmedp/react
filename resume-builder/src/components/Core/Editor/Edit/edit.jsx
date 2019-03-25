@@ -75,7 +75,7 @@ export default class Edit extends Component {
                         </Link>
                         <span className="icon-delete pull-right"></span>
                     </li>
-                    <li className="edit-section--addmore">
+                    <li className="edit-section--addmore mt-30">
                         + Add more sections
                     </li>
                     <li className={type === 'language' ? 'edit-section--active' : ''}>

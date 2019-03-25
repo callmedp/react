@@ -16,7 +16,7 @@ export default class Education extends Component {
 	        	<section className="right-sidebar-scroll">
         			<section className="info-section">
         				<div className="flex-container">
-		        			<h3 class="add-section-heading">Education1</h3>
+		        			<h3 className="add-section-heading">Education1</h3>
 		        			<div className="addon-buttons mr-10">
 		        				<span className="icon-delete mr-15"></span>
 		        				<span className="icon-ascend mr-5"></span>
@@ -24,7 +24,7 @@ export default class Education extends Component {
 		        			</div>
 		        		</div>
 		        		<div className="flex-container">
-		        			<fieldset className="width-half">
+		        			<fieldset>
 			        			<label>School name, degree </label>
 			        			<input type="text" name="" placeholder="" />			        			
 			        		</fieldset>
@@ -55,7 +55,7 @@ export default class Education extends Component {
 		        		<div className="flex-container">
 		        			<fieldset>
 			        			<label>Description</label>
-			        			<input type="text" name="" placeholder="" />
+			        			<textarea rows="3" placeholder="" name=""></textarea>
 			        		</fieldset>
 		        		</div>
 
