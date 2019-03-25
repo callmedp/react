@@ -16,7 +16,7 @@ export default class Language extends Component {
 	        	<section className="right-sidebar-scroll">
         			<section className="info-section">
         				<div className="flex-container">
-		        			<h3 class="add-section-heading">Language1</h3>
+		        			<h3 className="add-section-heading">Language1</h3>
 		        			<div className="addon-buttons mr-10">
 		        				<span className="icon-delete mr-15"></span>
 		        				<span className="icon-ascend mr-5"></span>
