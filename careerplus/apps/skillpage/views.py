@@ -15,11 +15,12 @@ from core.library.haystack.query import SQS
 from django.conf import settings
 from django.core.cache import cache
 from django.utils import timezone
+from django.shortcuts import reverse
 
 from geolocation.models import Country
 from django.db.models import Q
 from shop.models import (
-    Category, Faculty, Product)
+    Category, Faculty, Product,SubCategory)
 from shop.choices import (
     FACULTY_TEACHER, FACULTY_PRINCIPAL)
 from homepage.config import UNIVERSITY_PAGE
@@ -555,3 +556,197 @@ class UniversityFacultyView(DetailView):
         context.update(
             {"canonical_url": self.object.get_canonical_url()})
         return context
+
+
+class LocationSkillPageView(DetailView, SkillPageMixin):
+    model = SubCategory
+    page = 1
+
+    def get_object(self, queryset=None):
+        slug = self.kwargs.get('sc_slug')
+        if not slug:
+            raise Http404
+        sub_cat_object = SubCategory.objects.filter(slug=slug,active=True).first()
+        if not sub_cat_object:
+            raise Http404
+        return sub_cat_object
+
+
+
+
+    # def slug_breaker(self,slug):
+    #     import  ipdb;
+    #     ipdb.set_trace()
+    #     if not slug:
+    #         return None,None
+    #     slug_list = slug.split('-')
+    #     loc_id = 0
+    #     city = None
+    #     for loc_id, slug in enumerate(slug_list,start=1):
+    #         slug_to_compare = "-".join(slug_list[loc_id:])
+    #         city = cities_slug_dict.get(slug_to_compare,None)
+    #         if city:
+    #             break
+    #     else:
+    #         return None, None
+    #
+    #     cat_slug = "-".join(slug_list[:loc_id])
+    #     cat_obj = SubCategory.objects.filter(category__slug=cat_slug).first()
+    #     if cat_obj and city:
+    #         return cat_obj, city
+    #     return None, None
+
+
+
+
+    def get_template_names(self):
+        if not self.request.amp:
+            return ["locationskillpage/skill.html"]
+        if not settings.DEBUG:
+            from newrelic import agent
+            agent.disable_browser_autorum()
+        return ["locationskillpage/skill-amp.html"]
+
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = super(LocationSkillPageView, self).get(request, args, **kwargs)
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super(LocationSkillPageView, self).get_context_data(**kwargs)
+        page = self.request.GET.get('page', 1)
+        api_data = self.get_job_count_and_fuctionan_area(self.object.category.name)
+        career_outcomes = self.object.split_career_outcomes()
+        country_choices = [(m.phone, m.name) for m in
+                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        initial_country = Country.objects.filter(phone='91')[0].phone
+        top_3_prod, top_4_vendors = None, None
+        prd_list = []
+        prd_text = None
+        meta_desc = None
+        prod_id_list = []
+        products = []
+        try:
+            if self.object.products_id_mapped():
+                products = SQS().filter(id__in=self.object.products_id_mapped())
+            else:
+                products = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=self.object.category.id)
+            for prd in products:
+                if prd.pTP == 1:
+                    prd_vars = json.loads(prd.pVrs)
+                    var_lists = prd_vars.get('var_list')
+                    for var_lst in var_lists:
+                        prod_id_list.append(var_lst.get('id'))
+                    prod_id_list.append(prd.id)
+                if prd.pTP == 3:
+                    prd_cmbs = json.loads(prd.pCmbs)
+                    combo_lists = prd_cmbs.get('combo_list')
+                    for combo_lst in combo_lists:
+                        prod_id_list.append(combo_lst.get('pk'))
+                    prod_id_list.append(prd.id)
+                if prd.pTP in [0, 2, 4, 5]:
+                    prod_id_list.append(prd.id)
+
+            # prod_id_list = [pv.id for pv in products]
+            vendor_list = [pv.pPv for pv in products]
+            vendor_list = list(set(vendor_list))
+
+            if not len(prod_id_list):
+                raise Http404
+            top_3_prod = products[:3]
+            for tp_prod in top_3_prod:
+                prd_list.append(tp_prod.pNm)
+            top_4_vendors = Vendor.objects.filter(id__in=vendor_list)[:4] if len(
+                vendor_list) >= 4 else Vendor.objects.filter(id__in=vendor_list)
+        except Exception as e:
+            logging.getLogger('error_log').error(" MSG:unable to load the list   %s" % str(e))
+
+        prd_obj = ContentType.objects.get_for_model(Product)
+        all_results = products
+        prod_reviews = Review.objects.filter(
+            object_id__in=prod_id_list,
+            content_type=prd_obj,
+            status=1)
+
+        prod_page = Paginator(all_results, 5)
+
+        try:
+            products = prod_page.page(self.page)
+        except PageNotAnInteger:
+            products = prod_page.page(1)
+        except EmptyPage:
+            products = prod_page.page(prod_page.num_pages)
+        for product in products:
+            if float(product.pPfin):
+                product.discount = round((float(product.pPfin) - float(product.pPin)) * 100 / float(product.pPfin), 2)
+
+        prod_review = Paginator(prod_reviews, 5)
+
+        try:
+            page_reviews = prod_review.page(self.page)
+        except PageNotAnInteger:
+            page_reviews = prod_review.page(1)
+        except EmptyPage:
+            page_reviews = prod_review.page(prod_review.num_pages)
+
+        # if prd_list:
+        #     prd_text = ' , '.join(prd_list)
+        # if self.object.category.name and prd_text:
+        #     meta_desc = '{skill} courses in {location} - Are you looking for a {skill} courses in {location} - Check complete fee structure, training programme from top institutes.'.format(skill=self.object.category.name,location=self.object.get_location_display())
+        context['meta'] = self.object.as_meta(self.request)
+        context['canonical_url'] = self.object.get_canonical_url()
+        context['meta']._url = context.get('canonical_url', '')
+        meta_dict = context['meta'].__dict__
+        meta_dict['description'] = self.object.get_meta_description()
+        meta_dict['og_description'] = self.object.get_meta_description()
+        meta_title = self.object.get_title()
+        meta_dict['title'] = meta_title
+        context.update({
+            "api_data": api_data,
+            "career_outcomes": career_outcomes,
+            "page": page,
+            "slug": self.object.slug,
+            "category_obj": self.object,
+            "top_3_prod": top_3_prod,
+            "top_4_vendors": top_4_vendors,
+            "products": products,
+            'site': settings.SITE_PROTOCOL + "://" + settings.SITE_DOMAIN,
+            "page_reviews": prod_reviews[0:4] if self.request.flavour else page_reviews,
+            'url': settings.SITE_PROTOCOL + "://" + self.object.video_link,
+            'country_choices': country_choices,
+            'initial_country': initial_country,
+            'show_chat': True,
+            'amp': self.request.amp
+        })
+        try:
+            widget_obj = DetailPageWidget.objects.get(
+                content_type__model='SubCategory', listid__contains=self.object.pk)
+            widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(
+                column=1)
+        except DetailPageWidget.DoesNotExist:
+            widget_objs = None
+            widget_obj = None
+        context['widget_objs'] = widget_objs
+        context['widget_obj'] = widget_obj
+        context.update(self.get_breadcrumb_data())
+        return context
+
+    def get_breadcrumb_data(self):
+        breadcrumbs = []
+        breadcrumbs.append({"url": '/', "name": "Home"})
+        parent = self.object.get_parent()
+        if parent:
+            cat_parent = parent.get_parent()[0] if parent.get_parent() else ""
+            if cat_parent:
+                breadcrumbs.append({'url': cat_parent.get_absolute_url(),'name':cat_parent.name})
+
+            breadcrumbs.append({
+                "url": parent.get_absolute_url(), "name": parent.name,
+            })
+            # breadcrumbs.append({"url": })
+        breadcrumbs.append({"url": '', "name": self.object.get_location_display()})
+        data = {"breadcrumbs": breadcrumbs}
+        return data
+
+

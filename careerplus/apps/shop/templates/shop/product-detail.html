@@ -124,7 +124,7 @@
                     </li>
                     {% endif %}
                     <li>
-                     <a href="javascript:void(0)">
+                     <a href="#review" class="cls_review">
                       <figure class="review-icon"></figure>
                       <span>{% if prd_num_rating %}&nbsp;<strong class="anchor-color" >{{prd_num_rating}}</strong>&nbsp;{% if prd_num_rating == 1 %}review {% else %}reviews {% endif %}{% else %}Be the first to review{% endif %}</span>
                      </a> 
@@ -206,7 +206,7 @@
 
                   {% if prd_uget %}
                       {% if prd_service == 'course' %}
-   <a title="Course Highlights" class="active cls_tab_child" href="#get">Course Highlights</a>
+                      <a title="Course Highlights" class="active cls_tab_child" href="#get">Course Highlights</a>
 
 
                       {% else %}
@@ -236,7 +236,7 @@
 
 
                   {% if prd_review_list %}
-                    <a title="Reviews" class="cls_tab_child" href="#review">Reviews</a>
+                    <a title="Reviews" id="review-tab" class="cls_tab_child" href="#review">Reviews</a>
                   {% endif %}
 
                       {% if faq %}

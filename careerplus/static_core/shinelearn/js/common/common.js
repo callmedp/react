@@ -7,36 +7,98 @@ $(document).on("click","a[href^='tel']",function(){
 2) q is the element where user writes
 3) this function is binding typeahead for every form it finds with class .cls_search
 4) it also binding jquery validate for form validation */
- 
-$('.cls_search').each(function(index,item){
-    $(item).find('input[name=q]').typeahead({
-        local: qSearch
-    });
+$(document).ready(function($) {
+  
+    var categorySkillSource = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        local:Object.keys(categoryUrlSet)
+      });
+      var productSource = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        local: Object.keys(productUrlSet)
+      });
 
-    $(item).validate({
-        rules : {
-            'q':'required'
-        },
-        messages:{
-            'q':'Please enter a query'
-        },
-        submitHandler:function(form){
-            var qVal = encodeURI($(form).find('input[name=q]').val());
-            location.href = '/search/results/?q='+qVal;
-        },
-        errorPlacement:function(error,element){
-            
-            $(element).closest('div').find('.error-txt').html(error);  
-        },
-        highlight:function(el){
-            $(el).closest('div').addClass('error-search');
-        },
-        unhighlight:function(el){
-            $(el).closest('div').removeClass('error-search');
+      $(".search").find("input").typeahead({
+        highlight: false
+      },
+      {
+        name: 'category_skill',
+        source: categorySkillSource,
+        limit: 3,
+        templates: {
+          header: '<h3>Skills</h3>'
         }
+      },
+      {
+        name: 'products',
+        source: productSource,
+        limit: 3,
+        templates: {
+          header: '<h3>Products</h3>'
+        }
+      }).bind('typeahead:select', function(ev, suggestion) {
+        if (categoryUrlSet[suggestion]) 
+          window.location.href = `${categoryUrlSet[suggestion]}`;
+        else 
+          window.location.href = `${productUrlSet[suggestion]}`;
+      });
+      $("#id_q").typeahead({
+        highlight: false
+      },
+      {
+        name: 'category_skill',
+        source: categorySkillSource,
+        limit: 3,
+        templates: {
+          header: '<h3>Skills</h3>'
+        }
+      },
+      {
+        name: 'products',
+        source: productSource,
+        limit: 3,
+        templates: {
+          header: '<h3>Products</h3>'
+        }
+      }).bind('typeahead:select', function(ev, suggestion) {
+        if (categoryUrlSet[suggestion]) 
+          window.location.href = `${categoryUrlSet[suggestion]}`;
+        else 
+          window.location.href = `${productUrlSet[suggestion]}`;
+      });
+      
+    $('.cls_search').each(function(index,item){
+        $(item).validate({
+            rules : {
+                'q':'required'
+            },
+            messages:{
+                'q':'Please enter a query'
+            },
+            submitHandler:function(form){
+                var qVal = encodeURI($(form).find('input[name=q]').val());
+                location.href = '/search/results/?q='+qVal;
+            },
+            errorPlacement:function(error,element){
+                
+                $(element).closest('div').find('.error-txt').html(error);  
+            },
+            highlight:function(el){
+                $(el).closest('div').addClass('error-search');
+            },
+            unhighlight:function(el){
+                $(el).closest('div').removeClass('error-search');
+            }
+        });
+    
     });
 
+    
 });
+
+
 
  $(window).on('scroll', function() {
           var scroll = $(window).scrollTop();

@@ -65,7 +65,8 @@ THIRD_PARTY_APPS = [
     'celery',
     'compressor',
     'storages',
-    'django_filters'
+    'django_filters',
+    'webpack_loader'
 ]
 
 # Apps specific for this project go here.
@@ -102,12 +103,14 @@ LOCAL_APPS = [
     'talenteconomy',
     'hrinsider',
     'scheduler',
+    'resumebuilder'
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 AUTH_USER_MODEL = 'users.User'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -145,6 +148,7 @@ TEMPLATES = [
                 'sekizai.context_processors.sekizai',
                 'core.context_processors.js_settings',
                 'core.context_processors.marketing_context_processor',
+                'core.context_processors.getSearchSet'
             ],
             'loaders': ([
                 # ('django_mobile.loader.CachedLoader', [
@@ -162,6 +166,14 @@ DEFAULT_MOBILE_FLAVOUR = 'mobile'
 FLAVOURS = ('full', 'mobile')
 
 WSGI_APPLICATION = 'careerplus.wsgi.application'
+
+# Webpack loader is used to load webpack generated files
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'react/dist/',
+        'STATS_FILE': os.path.join(BASE_DIR,'..', 'webpack-stats.json'),
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators

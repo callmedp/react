@@ -25,7 +25,7 @@ class GCPStaticStorage(GoogleCloudStorageMixin):
     """
     bucket_name = settings.GCP_STATIC_BUCKET
     location = 'l/s/'
-    cache_control = "max-age=186400"
+    cache_control = "max-age=86400"
 
     def __init__(self, **settings):
         super(GCPStaticStorage, self).__init__(**settings)
