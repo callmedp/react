@@ -6,6 +6,10 @@ import Experience from '../UserDetails/Experience/experience.jsx'
 import Language from '../UserDetails/Language/language.jsx'
 import Skill from '../UserDetails/Skill/skill.jsx'
 import Summary from '../UserDetails/Summary/summary.jsx'
+import Award from '../UserDetails/Award/award.jsx'
+import Project from '../UserDetails/Project/project.jsx'
+import Reference from '../UserDetails/Reference/reference.jsx'
+import Course from '../UserDetails/Course/course.jsx'
 import queryString from 'query-string'
 
 
@@ -38,7 +42,12 @@ export default class RightSection extends Component {
                             type === 'skill' ? <Skill/> :
                                 type === 'experience' ? <Experience/> :
                                     type === 'summary' ? <Summary/> :
-                                        type === 'language' ? <Language/> : ''
+                                        type === 'language' ? <Language/> :
+                                        type === 'award' ? <Award/> :
+                                        type === 'project' ? <Project/> :
+                                        type === 'course' ? <Course/> :
+                                        type === 'reference' ? <Reference/> : ''
+
                 }
             </section>
         )
