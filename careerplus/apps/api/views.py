@@ -13,11 +13,11 @@ from rest_framework import status
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser, )
+from rest_framework.generics import ListAPIView,CreateAPIView
+from rest_framework.authentication import SessionAuthentication
 from haystack import connections
 from haystack.query import SearchQuerySet
 from core.library.haystack.query import SQS
-
-from rest_framework.generics import ListAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 
 from users.tasks import user_register
@@ -39,7 +39,8 @@ from shop.models import Skill, DeliveryService
 from .serializers import (
     OrderListHistorySerializer,
     RecommendedProductSerializer,
-    RecommendedProductSerializerSolr)
+    RecommendedProductSerializerSolr,
+    MediaUploadSerializer)
 from shared.rest_addons.pagination import Learning_custom_pagination
 
 
@@ -734,3 +735,8 @@ class RemoveCookieFromHeader(APIView):
         response.remove_cookie = True
 
         return response
+
+class MediaUploadView(CreateAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = MediaUploadSerializer

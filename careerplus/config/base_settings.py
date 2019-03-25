@@ -521,3 +521,10 @@ LOCAL_NETWORK_IPS = [ "172.16.64.80","125.19.44.195","124.124.86.138","115.112.3
     "182.64.252.176","125.17.83.97","220.225.255.161","118.102.181.219","220.227.36.202",
     "202.164.38.195","122.162.129.43","192.168.1.5","223.179.134.80","223.179.151.72",
     "122.162.42.142","171.79.76.124"]
+
+MEDIA_ALLOWED_CONTENT_TYPES = ['image/jpeg','image/jpg','image/gif','image/png','image/svg','image/svg+xml',\
+                                'video/x-flv','video/mp4','application/x-mpegURL','video/MP2T','video/3gpp',\
+                                'video/quicktime',' video/x-msvideo','video/x-ms-wmv','video/webm','application/pdf',\
+                                'application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document',\
+                                'application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',\
+                                'application/vnd.ms-powerpoint','application/vnd.openxmlformats-officedocument.presentationml.presentation']
