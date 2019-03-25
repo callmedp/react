@@ -7,7 +7,7 @@ export default class Language extends Component {
         return (
             <div>
             	<section className="head-section">
-		             <span className="icon-box"><i className="icon-language1"></i></span>
+		             <span className="icon-box"><i className="icon-languages1"></i></span>
 		             <h2>Languages</h2>
 		             <span className="icon-edit icon-language__cursor"></span>
 		             <button className="add-button add-button__right">Add new</button>
