@@ -7,9 +7,7 @@ const defaultHeaders = {
 const get = (url, headers = defaultHeaders, isFetchingHTML = false) => {
     return fetch(url, {
         headers,
-        method: 'GET',
-        mode: "cors",
-        credentials:'include'
+        method: 'GET'
     })
     // .then(response => response.json())
         .then(async (response) => {
