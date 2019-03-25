@@ -13,7 +13,7 @@ const get = (url, headers = defaultHeaders, isFetchingHTML = false) => {
         .then(async (response) => {
             return await handleResponse(response, isFetchingHTML)
         })
-}
+};
 
 const handleParams = (data) => Object.keys(data).map((key) => {
     return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
@@ -26,7 +26,7 @@ const post = (url, data, headers = defaultHeaders, isStringify = true) => {
         body: isStringify ? JSON.stringify(data) : handleParams(data)
     })
         .then(handleResponse)
-}
+};
 
 const put = (url, data, headers = defaultHeaders, isStringify = true) => {
     return fetch(url, {
@@ -35,7 +35,7 @@ const put = (url, data, headers = defaultHeaders, isStringify = true) => {
         body: isStringify ? JSON.stringify(data) : data
     })
         .then(handleResponse)
-}
+};
 
 
 async function handleResponse(response, isFetchingHTML) {

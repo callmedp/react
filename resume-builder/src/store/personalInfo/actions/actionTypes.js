@@ -1,0 +1,7 @@
+
+export const FETCH_PERSONAL_INFO  = 'FETCH_PERSONAL_INFO';
+
+export const SAVE_PERSONAL_INFO  = 'SAVE_PERSONAL_INFO';
+
+
+
