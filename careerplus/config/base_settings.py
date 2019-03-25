@@ -66,7 +66,9 @@ THIRD_PARTY_APPS = [
     'compressor',
     'storages',
     'django_filters',
-    'webpack_loader'
+    'webpack_loader',
+    'corsheaders'
+
 ]
 
 # Apps specific for this project go here.
@@ -128,8 +130,11 @@ MIDDLEWARE = [
     'core.middleware.TrackingMiddleware',
     'core.middleware.AmpMiddleware',
     'core.middleware.LocalIPDetectionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'careerplus.config.urls'
 
