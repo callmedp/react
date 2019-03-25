@@ -85,28 +85,28 @@ export default class Edit extends Component {
                         </Link>
                         <span className="icon-add pull-right"></span>
                     </li>
-                    <li className="hidden">
+                    <li className="">
                         <Link to="/resume-builder/edit/?type=award">
                             <span className="icon-awards mr-20"></span>
                             Awards
                         </Link>
                         <span className="icon-add pull-right"></span>
                     </li>
-                    <li className="hidden">
+                    <li className="">
                         <Link to="/resume-builder/edit/?type=course">
                             <span className="icon-courses mr-20"></span>
                             Courses
                         </Link>
                         <span className="icon-add pull-right"></span>
                     </li>
-                    <li className="hidden">
+                    <li className="">
                         <Link to="/resume-builder/edit/?type=project">
                             <span className="icon-projects mr-20"></span>
                             Projects
                         </Link>
                         <span className="icon-add pull-right"></span>
                     </li>
-                    <li className="hidden">
+                    <li className="">
                         <Link to="/resume-builder/edit/reference">
                             <span className="icon-references mr-20"></span>
                             References
