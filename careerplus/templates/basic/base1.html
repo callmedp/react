@@ -139,13 +139,14 @@
     {% block js_section %}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-    {% compress js %}
-    <script src="{% static 'shinelearn/js/common/jquery.min.js' %}"></script>
-    <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
     <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
-    <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
-    <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.js"></script>
+    
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
+    <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
     <script src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
     {% endcompress %}
     <script>
@@ -181,6 +182,25 @@
       _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
       $.src="https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";z.t=+new Date;$.
       type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+
+         const candidateId = '{{ request.session.candidate_id}}';
+
+          if (candidateId) {
+              const full_name = '{{ request.session.full_name }}';
+              const  email ='{{ request.session.email }}';
+              const mobile_no = '{{ request.session.mobile_no }}';
+
+
+              console.log('request   ', full_name, email, mobile_no);
+              $zopim(function () {
+                  $zopim.livechat.set({
+                      language: 'en',
+                      name: full_name ? full_name : '',
+                      email: email ? email : '',
+                      phone: mobile_no ? mobile_no : ''
+                  });
+              });
+          }
       </script>
       <!--End of Zendesk Chat Script-->
     {% endblock zendesk %}

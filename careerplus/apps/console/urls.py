@@ -124,9 +124,22 @@ urlpatterns += [
     url(r'^category/add/$',
         shop_view.AddCategoryView.as_view(),
         name='category-add'),
+
+    url(r'^subcategory/add/$',
+        shop_view.AddSubCategoryView.as_view(),
+        name='subcategory-add'),
+
     url(r'^category/list/$',
         shop_view.ListCategoryView.as_view(),
         name='category-list'),
+    url(r'^subcategory/list/$',
+        shop_view.ListSubCategoryView.as_view(),
+        name='subcategory-list'),
+    url(r'^changesubcategory/change/(?P<pk>[\d]+)/$',
+        shop_view.SubCategoryChangeView.as_view(),
+        name='changesubcategory-list'),
+
+
     url(r'^categoryrelationship/list/$',
         shop_view.ListCategoryRelationView.as_view(),
         name='category-relation-list'),

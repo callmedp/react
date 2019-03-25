@@ -14,11 +14,11 @@
     {% block canonical_url %}
       <link rel="canonical" href="{{ request.build_absolute_uri }}">
    {% endblock canonical_url %}
-        
+
     <title> {% block title %}Shine Learning{% endblock title %}</title>
-    
+
     {% block css_section %}
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
         {% compress css %}
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/global.scss' %}" rel="stylesheet">
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/icons.scss' %}" rel="stylesheet">
@@ -87,15 +87,15 @@
                     <!-- header menu Icon Starts here -->
                    <div class="main-menu w100fl">
                     <div class="pull-left">
-                        <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button" ></a> 
+                        <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button" ></a>
                         {% block back_icon %}
                            <a href="/" class="icon-logo pull-left"></a>
                         {% endblock back_icon %}
-                        
+
                     </div><!-- / Left side Icon ends here -->
 
                    <div class="pull-right">
-                        <!--a class="icon-search pull-left " href="search-listing.html">search</a--> 
+                        <!--a class="icon-search pull-left " href="search-listing.html">search</a-->
                         <a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                    </div><!-- / Right side Icon ends here -->
                 </div><!-- header menu Icon ends here -->
@@ -122,7 +122,8 @@
 
     {% block js_section %}
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.js"></script>
         {% compress js %}
         <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery-ui.min.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
@@ -136,14 +137,14 @@
         <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
         {% endcompress %}
-        
+
         <!-- {% block johukum %}
         <script type='text/javascript' id='spd-busns-spt' async=''
             src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
             data-client='324ed0abb0694b0c66a6daecb178352d'>
         </script>
         {% endblock johukum %} -->
-        
+
     {% endblock js_section %}
 
     {% block zendesk %}
@@ -154,7 +155,28 @@
           _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
           $.src="https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";z.t=+new Date;$.
           type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
-        </script>  
+
+
+          const candidateId = '{{ request.session.candidate_id}}';
+
+          if (candidateId) {
+              const full_name = '{{ request.session.full_name }}';
+              const  email ='{{ request.session.email }}';
+              const mobile_no = '{{ request.session.mobile_no }}';
+
+
+              console.log('request   ', full_name, email, mobile_no);
+              $zopim(function () {
+                  $zopim.livechat.set({
+                      language: 'en',
+                      name: full_name ? full_name : '',
+                      email: email ? email : '',
+                      phone: mobile_no ? mobile_no : ''
+                  });
+              });
+          }
+        </script>
+
         <!--End of Zendesk Chat Script-->
     {% endblock zendesk %}
     {% block banner_ads_bottom %}
@@ -171,4 +193,12 @@
     </body>
 </html>
 {% endspaceless %}
-
+<script type="text/javascript">
+    $("#id_q").on('keyup', function (e) {
+    if (e.keyCode == 13) {
+        if(e.target.value){
+            location.href = '/search/results/?q='+encodeURI(e.target.value);
+        }
+    }
+    });
+</script>
