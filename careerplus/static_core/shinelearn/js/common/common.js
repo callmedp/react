@@ -117,7 +117,6 @@ $('.cls_showPanel').on('click',function(e){
     childDiv = $('.cls_showPanelChild'),
     alreadyOpenDiv = null;
     for(var i=0;i<childDiv.length;i++){
-      debugger;
         if(!$(childDiv[i]).hasClass('collapse')){
             alreadyOpenDiv = childDiv[i];
         }
