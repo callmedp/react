@@ -82,6 +82,10 @@ class ShineCandidateDetail(ShineToken):
                 detail_response = requests.get(detail_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
                 if detail_response.status_code == 200 and detail_response.json():
                     return detail_response.json()
+                logging.getLogger('error_log').error('unable to get candidate details {} {}'.\
+                    format(email,shine_id))
+                return {}
+            
             elif email:
                 headers = self.get_api_headers()
                 shine_id = self.get_shine_id(email=email, headers=headers)
@@ -92,9 +96,24 @@ class ShineCandidateDetail(ShineToken):
                     detail_response = requests.get(detail_url, headers=headers)
                     if detail_response.status_code == 200 and detail_response.json():
                         return detail_response.json()
+                    
+                    logging.getLogger('error_log').error('unable to get candidate details {} {}'.\
+                    format(email,shine_id))
+                    return {}
+                
+                logging.getLogger('error_log').error('unable to get candidate details {} {}'.\
+                    format(email,shine_id))
+                return {}
+
+            logging.getLogger('error_log').error('unable to get candidate details {} {}'.\
+                    format(email,shine_id))
+            return {}
         except Exception as e:
             logging.getLogger('error_log').error('unable to get candidate details%s'%str(e))
-        return None
+
+        logging.getLogger('error_log').error('unable to get candidate details {} {}'.\
+                    format(email,shine_id))
+        return {}
 
     def get_candidate_public_detail(self, email=None, shine_id=None):
 
