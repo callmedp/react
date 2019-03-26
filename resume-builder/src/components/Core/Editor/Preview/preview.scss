@@ -1,0 +1,81 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.preview-section {
+	padding: 20px 0;
+	font-weight: 600;
+	color: $txt1;
+
+	strong {
+		margin: 0 20px 20px 20px;
+		display: block;
+	}
+
+	&__orange-button {
+		padding: 12px 30px !important;
+		margin: 0 auto;
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+	}
+}
+
+.change-theme {
+
+	border-top: 1px solid $grey2;
+
+	&--theme-heading {
+		display: block;
+		padding: 15px 20px;
+		color: $blue1;
+		position: relative;
+
+		&:after {
+			position: absolute;
+			right: 22px;
+			top: 14px;
+			content: '+';
+			font-size: 2.1rem;
+		}
+	}	
+
+	&--active {
+		background-color: $blue1;
+		color: $white !important;
+
+		a {
+			color: $white !important;
+		}
+
+		&:after {
+			position: absolute;
+			right: 25px;
+			top: 14px;
+			content: '-';
+			font-size: 2.1rem;
+		}
+
+		.icon-change-theme {
+		    background-position: 0 -107px;
+		}
+
+		.icon-change-font {
+		    background-position: -50px -107px;
+		}
+
+		.icon-change-reorder {
+		    background-position: -107px -107px;
+		}
+	}
+
+	ul {
+		margin: 0;
+		padding: 0;
+
+		li {
+			color: $blue1;
+			display: block;
+			padding: 15px;
+		}
+	}
+}
