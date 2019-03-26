@@ -108,13 +108,13 @@ export class PersonalInfo extends Component {
                     </section>
                 </form>
 
-        	<div className="flex-container items-right mr-20 mb-30">
-        		<button className="blue-button mr-10">Preview</button>
-        		<button className="orange-button">Save & Continue</button>
-        	</div>
-        	
-        </div>
-              
+
+                <div className="flex-container items-right mr-20 mb-30">
+                    <button className="blue-button mr-10">Preview</button>
+                    <button className="orange-button">Save & Continue</button>
+                </div>
+
+            </div>
         )
     }
 }

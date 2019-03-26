@@ -30,9 +30,11 @@ class AutoLoginView(View):
 
     def get(self, request, *args, **kwargs):
         token = kwargs.get('token', '')
+
         if token:
             next1 = request.GET.get('next') or '/'
             email, candidateid, valid = AutoLogin().decode(token)
+
             if valid:
                 if candidateid:
                     try:
@@ -45,12 +47,14 @@ class AutoLoginView(View):
                             return HttpResponseRedirect('/login/')
                     except Exception as e:
                         logging.getLogger('error_log').error(
-                            "Exception while auto logging in a user with email: %s. " "Exception: %s " % (email, str(e)))
+                            "Exception while auto logging in a user with email: %s. " "Exception: %s " % (
+                                email, str(e)))
                 return HttpResponseRedirect('/login/')
         return HttpResponseRedirect('/login/')
 
 
-@method_decorator(permission_required('order.can_show_linkedin_counselling_form', login_url='/console/login/'), name='dispatch')
+@method_decorator(permission_required('order.can_show_linkedin_counselling_form', login_url='/console/login/'),
+                  name='dispatch')
 class CounsellingSubmit(TemplateView):
     template_name = "linkedin/counselling_form.html"
 
@@ -84,7 +88,7 @@ class CounsellingSubmit(TemplateView):
         try:
             orderitem = OrderItem.objects.get(pk=kwargs.get('order_item', ''))
         except Exception as e:
-            logging.getLogger('error_log').error('order item object is empty %s'%str(e))
+            logging.getLogger('error_log').error('order item object is empty %s' % str(e))
             orderitem = None
         if request.POST.get('save') == 'save':
             if orderitem:
@@ -207,7 +211,8 @@ class CounsellingForm(TemplateView):
                 return HttpResponseRedirect(reverse('dashboard:dashboard'))
 
 
-@method_decorator(permission_required('order.can_show_linkedin_writer_draft', login_url='/console/login/'), name='dispatch')
+@method_decorator(permission_required('order.can_show_linkedin_writer_draft', login_url='/console/login/'),
+                  name='dispatch')
 class LinkedinDraftView(TemplateView):
     template_name = "linkedin/linkedin_draft.html"
 
@@ -248,7 +253,7 @@ class LinkedinDraftView(TemplateView):
                     context.update({
                         'flag2': flag2,
                         'orderitem': oi,
-                        'op_id':op_id,
+                        'op_id': op_id,
                         'draft': draft,
                         'skill_list': skill_list.split(','),
                         'organization_list': organization_list,
@@ -270,7 +275,8 @@ class LinkedinDraftView(TemplateView):
         return context
 
 
-@method_decorator(permission_required('order.can_show_linkedin_writer_draft', login_url='/console/login/'), name='dispatch')
+@method_decorator(permission_required('order.can_show_linkedin_writer_draft', login_url='/console/login/'),
+                  name='dispatch')
 class ConsoleLinkedinDraftView(TemplateView):
     template_name = "linkedin/console_linkedin_draft.html"
 
