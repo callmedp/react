@@ -479,6 +479,25 @@ Guidance Services</p>
       _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
       $.src="https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";z.t=+new Date;$.
       type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+
+        const candidateId = '{{ request.session.candidate_id}}';
+
+          if (candidateId) {
+              const full_name = '{{ request.session.full_name }}';
+              const  email ='{{ request.session.email }}';
+              const mobile_no = '{{ request.session.mobile_no }}';
+
+
+              console.log('request   ', full_name, email, mobile_no);
+              $zopim(function () {
+                  $zopim.livechat.set({
+                      language: 'en',
+                      name: full_name ? full_name : '',
+                      email: email ? email : '',
+                      phone: mobile_no ? mobile_no : ''
+                  });
+              });
+          }
       </script>
       <!--End of Zendesk Chat Script-->
     {% endblock zendesk %}
