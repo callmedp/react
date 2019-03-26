@@ -28,7 +28,7 @@ export class Skill extends React.Component {
         const {error, handleSubmit, pristine, reset, submitting, skills, skillValues, invalid, userId} = this.props;
         return (
             <div className="register login-signup-box">
-                <h1 className="modal-title">Add Your Skill</h1>
+                <h1 className="modal-title">Add My Skill</h1>
 
                 <form onSubmit={handleSubmit}>
                     <div className={'Text-spacing'}>
