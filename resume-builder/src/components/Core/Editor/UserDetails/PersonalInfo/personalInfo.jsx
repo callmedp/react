@@ -37,7 +37,7 @@ export class PersonalInfo extends Component {
                             </div>
                             <div className="flex-container">
                                 <fieldset>
-                                    <label>Designation</label>
+                                    <label>Gender</label>
                                     <Field component={renderField} type={"text"} name="designation"/>
                                 </fieldset>
                                 <fieldset>

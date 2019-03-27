@@ -1,0 +1,2 @@
+export const FETCH_SHINE_PROFILE = 'FETCH_SHINE_PROFILE'
+

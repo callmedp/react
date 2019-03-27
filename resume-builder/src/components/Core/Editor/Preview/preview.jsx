@@ -11,7 +11,30 @@ export default class Preview extends Component {
 	                    Change theme
                 	</a>
                 	<ul className="change-theme-content">
-                		<li></li>
+                		<li>
+                			<input type="radio" name="radio1" id="green" value="green" />
+                			<label className="green" for="green"></label>
+                		</li>
+                		<li>
+                			<input type="radio" name="radio1" id="blue" value="blue" />
+                			<label className="blue" for="blue"></label>
+                		</li>
+                		<li>
+                			<input type="radio" name="radio1" id="red" value="red"/>
+                			<label className="red" for="red"></label>
+                		</li>
+                		<li>
+                			<input type="radio" name="radio1" id="black" value="black" />
+                			<label className="black" for="black"></label>
+                		</li>
+                		<li>
+                			<input type="radio" name="radio1" id="brown" value="brown"/>
+                			<label className="brown" for="brown"></label>
+                		</li>
+                		<li>
+                			<input type="radio" name="radio1" id="violet" value="violet" />
+                			<label className="violet" for="violet"></label>
+                		</li>
                 	</ul>
                 </div>
                 <div className="change-theme">
@@ -19,7 +42,7 @@ export default class Preview extends Component {
                 		<span className="icon-change-font mr-20"></span>
 	                    Font size
                 	</a>
-                	<ul className="change-theme-content hidden">
+                	<ul className="change-font-content">
                 		<li></li>
                 	</ul>
                 </div>

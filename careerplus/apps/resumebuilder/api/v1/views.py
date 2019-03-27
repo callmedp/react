@@ -83,6 +83,8 @@ class UserShineProfileRetrieveUpdateView(RetrieveUpdateAPIView):
     permission_classes = ()
 
     def get(self, request, *args, **kwargs):
+        import ipdb;
+        ipdb.set_trace();
         user_email = kwargs.get('email')
         if not user_email:
             return Response({}, status=400)
@@ -205,7 +207,7 @@ class UserShineProfileRetrieveUpdateView(RetrieveUpdateAPIView):
         user_projects = []
 
         return Response({
-            'status': 'OK'
+            "userId": user.id
         })
 
 
