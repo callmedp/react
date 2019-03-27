@@ -1,4 +1,4 @@
-list = [{'child': [{'cdesc': 'Arts and Humanities', 'cid': 501},
+educ_list = [{'child': [{'cdesc': 'Arts and Humanities', 'cid': 501},
                    {'cdesc': 'Commerce', 'cid': 502},
                    {'cdesc': 'Science', 'cid': 507},
                    {'cdesc': 'Other', 'cid': 506}],

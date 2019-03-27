@@ -15,7 +15,7 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 
 urlpatterns = [
-    url(r'^users/(?P<pk>\d+)/$', UserRetrieveUpdateView.as_view()),
+    url(r'^users/(?P<pk>.+)/$', UserRetrieveUpdateView.as_view()),
     url(r'^users/$', UserListCreateView.as_view()),
     url(r'^skills/(?P<pk>\d+)/$', SkillRetrieveUpdateView.as_view()),
     url(r'^skills/$', SkillListCreateView.as_view()),

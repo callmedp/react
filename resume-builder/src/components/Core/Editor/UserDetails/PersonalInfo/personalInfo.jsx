@@ -21,7 +21,6 @@ export class PersonalInfo extends Component {
                     <span className="icon-edit icon-edit__cursor"></span>
                 </section>
                 <form onSubmit={handleSubmit}>
-
                     <section className="flex-container right-sidebar-scroll">
                         <section className="info-section">
                             <div className="flex-container">
@@ -41,8 +40,8 @@ export class PersonalInfo extends Component {
                                     <Field component={renderField} type={"text"} name="designation"/>
                                 </fieldset>
                                 <fieldset>
-                                    <label>Company</label>
-                                    <Field component={renderField} type={"text"} name="company"/>
+                                    <label>Date Of Birth</label>
+                                    <Field component={renderField} type={"text"} name="date_of_birth"/>
                                 </fieldset>
                             </div>
                             <div className="flex-container">
@@ -74,7 +73,7 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-address"></span>
                                         </div>
-                                        <Field component={renderField} type={"text"} name="address"
+                                        <Field component={renderField} type={"text"} name="location"
                                                className={"input-control"}/>
                                     </div>
                                 </fieldset>
@@ -86,7 +85,8 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-linkedin"></span>
                                         </div>
-                                        <input type="text" placeholder="" className="input-control"/>
+                                        <Field component={renderField} type={"text"} name="linkedIn"
+                                               className={"input-control"}/>
                                     </div>
                                 </fieldset>
                                 <fieldset>
@@ -95,7 +95,8 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-facebook"></span>
                                         </div>
-                                        <input type="text" placeholder="" className="input-control"/>
+                                        <Field component={renderField} type={"text"} name="facebook"
+                                               className={"input-control"}/>
                                     </div>
                                 </fieldset>
                             </div>
@@ -106,13 +107,16 @@ export class PersonalInfo extends Component {
                             <img className="img-responsive" src="/images/upload-image.jpg"/>
                         </section>
                     </section>
+
+
+                    <div className="flex-container items-right mr-20 mb-30">
+                        <button className="blue-button mr-10">Preview</button>
+                        <button className="orange-button" type="submit" disabled={pristine || submitting}>Save &
+                            Continue
+                        </button>
+                    </div>
                 </form>
 
-
-                <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10">Preview</button>
-                    <button className="orange-button">Save & Continue</button>
-                </div>
 
             </div>
         )
@@ -135,11 +139,11 @@ const mapDispatchToProps = (dispatch) => {
         "fetchPersonalInfo": () => {
             return dispatch(actions.fetchPersonalInfo())
         },
-        // "onSubmit": (personalDetails) => {
-        //     return new Promise((resolve, reject) => {
-        //         dispatch(actions.savePersonalInfo({personalDetails, resolve, reject}));
-        //     })
-        // }
+        "onSubmit": (personalDetails) => {
+            return new Promise((resolve, reject) => {
+                dispatch(actions.updatePersonalInfo({personalDetails, resolve, reject}));
+            })
+        }
     }
 };
 

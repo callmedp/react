@@ -47,7 +47,6 @@ export default class RightSection extends Component {
                                         type === 'project' ? <Project/> :
                                         type === 'course' ? <Course/> :
                                         type === 'reference' ? <Reference/> : ''
-
                 }
             </section>
         )

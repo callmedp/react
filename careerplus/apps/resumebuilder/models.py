@@ -33,6 +33,7 @@ INTERESTS = ((0, '3D printing'), (1, 'Acrobatics'), (2, 'Acting'), (3, 'Amateur 
 
 
 class UserProfile(AbstractAutoDate):
+    candidate_id = models.CharField('Candidate Id', max_length=100, blank=True, null=True)
     first_name = models.CharField('User First Name', max_length=100, blank=True, null=True)
     last_name = models.CharField('User Last Name', max_length=100, blank=True, null=True)
     email = models.CharField('User Email', max_length=100, unique=True, blank=True, null=True)
