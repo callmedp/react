@@ -4,9 +4,9 @@ import AppRouter from './routes/index';
 
 class App extends Component {
     render() {
-        return (
-            <AppRouter/>
-        );
+        return ( < AppRouter / >
+    )
+        ;
     }
 }
 

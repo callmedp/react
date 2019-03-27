@@ -1,0 +1,139 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.preview-section {
+	padding: 20px 0;
+	font-weight: 600;
+	color: $txt1;
+
+	strong {
+		margin: 0 20px 20px 20px;
+		display: block;
+	}
+
+	&__orange-button {
+		padding: 12px 30px !important;
+		margin: 0 auto;
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+	}
+}
+
+.change-theme {
+
+	border-top: 1px solid $grey2;
+
+	&--theme-heading {
+		display: block;
+		padding: 15px 20px;
+		color: $blue1;
+		position: relative;
+
+		&:after {
+			position: absolute;
+			right: 22px;
+			top: 14px;
+			content: '+';
+			font-size: 2.1rem;
+		}
+	}	
+
+	&--active {
+		background-color: $blue1;
+		color: $white !important;
+
+		a {
+			color: $white !important;
+		}
+
+		&:after {
+			position: absolute;
+			right: 25px;
+			top: 14px;
+			content: '-';
+			font-size: 2.1rem;
+		}
+
+		.icon-change-theme {
+		    background-position: 0 -107px;
+		}
+
+		.icon-change-font {
+		    background-position: -50px -107px;
+		}
+
+		.icon-change-reorder {
+		    background-position: -107px -107px;
+		}
+	}
+}
+
+.change-theme-content {
+	list-style-type: none;
+	margin: 20px 0 15px 0;
+	padding: 0;
+
+	li {
+		color: $blue1;
+		display: inline-block;
+		width: 48%;
+		margin: 5px 0;
+		padding: 0 15px;
+
+		input {
+			display: none;
+
+			&:checked + label {
+				display: block;
+
+				&:after {
+					content: '';
+					background: $sprite -167px -108px;
+					width: 24px;
+					height: 24px;
+					z-index: 999;
+					position: absolute;
+					top: -10px;
+					left: 10px;
+					display: inline-block;
+					box-shadow: 0 4px 10px 0 rgba(90,89,89,0.50);
+					@include border-radius(100%);
+				}
+			}
+		}
+
+		label {
+			position: relative;
+			width: 102px;
+			height: 32px;
+			display: block;
+			cursor: pointer;
+			@include border-radius(4px);
+			box-shadow: 0 2px 4px 0 rgba(180,177,177,0.50);
+
+			&.green {
+				background: $sprite -280px -107px;
+			}
+			&.blue {
+				background: $sprite -398px -107px;
+			}
+			&.red {
+				background: $sprite -280px -143px;
+			}
+			&.black {
+				background: $sprite -398px -143px;
+			}
+			&.brown {
+				background: $sprite -280px -180px;
+			}
+			&.violet {
+				background: $sprite -398px -180px;
+			}
+		}
+	}
+}
+
+.change-font-content {
+	
+}

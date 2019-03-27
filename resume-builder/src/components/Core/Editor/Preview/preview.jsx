@@ -3,8 +3,59 @@ import './preview.scss'
 export default class Preview extends Component {
     render(){
         return(
-            <div className="edit-section">
-                <span className={'New-color'}>Add Side bar Preview options</span>
+            <div className="preview-section">
+                <strong>Complete your customisation</strong>
+                <div className="change-theme">
+                	<a href="#" className="change-theme--theme-heading change-theme--active">
+                		<span className="icon-change-theme mr-20"></span>
+	                    Change theme
+                	</a>
+                	<ul className="change-theme-content">
+                		<li>
+                			<input type="radio" name="radio1" id="green" value="green" />
+                			<label className="green" for="green"></label>
+                		</li>
+                		<li>
+                			<input type="radio" name="radio1" id="blue" value="blue" />
+                			<label className="blue" for="blue"></label>
+                		</li>
+                		<li>
+                			<input type="radio" name="radio1" id="red" value="red"/>
+                			<label className="red" for="red"></label>
+                		</li>
+                		<li>
+                			<input type="radio" name="radio1" id="black" value="black" />
+                			<label className="black" for="black"></label>
+                		</li>
+                		<li>
+                			<input type="radio" name="radio1" id="brown" value="brown"/>
+                			<label className="brown" for="brown"></label>
+                		</li>
+                		<li>
+                			<input type="radio" name="radio1" id="violet" value="violet" />
+                			<label className="violet" for="violet"></label>
+                		</li>
+                	</ul>
+                </div>
+                <div className="change-theme">
+                	<a href="#" className="change-theme--theme-heading">
+                		<span className="icon-change-font mr-20"></span>
+	                    Font size
+                	</a>
+                	<ul className="change-font-content">
+                		<li></li>
+                	</ul>
+                </div>
+                <div className="change-theme">
+                	<a href="#" className="change-theme--theme-heading">
+                		<span className="icon-change-reorder mr-20"></span>
+	                    Reorder section
+                	</a>
+                	<ul className="change-theme-content hidden">
+                		<li></li>
+                	</ul>
+                </div>
+               <button className="orange-button preview-section__orange-button mt-40">Get your resume</button>
             </div>
         )
     }
