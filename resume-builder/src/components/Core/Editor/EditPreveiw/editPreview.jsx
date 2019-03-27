@@ -12,27 +12,26 @@ class EditPreview extends Component {
         super(props)
         this.myRef = React.createRef();
         this.state = {
-        fixed: false
-    }
+            fixed: false,
+            offset: 0
+        }
         this.handleScroll = this.handleScroll.bind(this);
     }
-    componentDidMount(){
+
+    componentDidMount() {
         window.addEventListener('scroll', this.handleScroll);
 
-}
+    }
 
-    handleScroll(){
-    const section = this.myRef.current;
-    console.log('seciton', window.pageYOffset, window.innerHeight);
-    if (window.pageYOffset >= window.innerHeight)
-            this.setState({
-            fixed: true
-        })
-    else 
-            this.setState({
-            fixed: false
-        })
-}
+    handleScroll() {
+        const section = this.myRef.current;
+        if (window.pageYOffset >= window.innerHeight && section.className) {
+            section.className = 'flex-container mt-30 fixed';
+        }
+        else
+            section.className = 'flex-container mt-30'
+    }
+
 
     render() {
         return (
@@ -43,7 +42,7 @@ class EditPreview extends Component {
                 <Header/>
                 <div className="page-container">
                     <TopBar/>
-                    <section className={'flex-container mt-30 '+ (this.state.fixed ? 'fixed': '' )} ref={this.myRef}>
+                    <section className={'flex-container mt-30'} ref={this.myRef}>
                         <LeftSideBar {...this.props}/>
                         <RightSection {...this.props}/>
                     </section>
