@@ -47,7 +47,7 @@ export default class RightSection extends Component {
                                                 type === 'project' ? <Project/> :
                                                     type === 'course' ? <Course/> :
                                                         type === 'reference' ? <Reference/> :
-                                                            <div  dangerouslySetInnerHTML={{__html: "<!doctype html>\n" +
+                                                            <div className="right-sidebar-scroll-main"  dangerouslySetInnerHTML={{__html: "<!doctype html>\n" +
                                                                     "<html lang=\"en\">\n" +
                                                                     "  <head>\n" +
                                                                     "    <!-- Required meta tags -->\n" +
@@ -56,9 +56,9 @@ export default class RightSection extends Component {
                                                                     "    <title>Resume</title>\n" +
                                                                     "  </head>\n" +
                                                                     "  <body style=\"margin: 0; padding: 0; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif';\">\n" +
-                                                                    "    <div style=\"max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777;\">\n" +
+                                                                    "    <div style=\"max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777; line-height: 18px;\">\n" +
                                                                     "\n" +
-                                                                    "      <div style=\"width: 93.7%; background: #d34d4d; padding: 3%;\">\n" +
+                                                                    "      <div style=\"width: 100%; background: #d34d4d; padding: 3%;\">\n" +
                                                                     "\n" +
                                                                     "        <!--top left-->\n" +
                                                                     "        <div style=\"width: 45%; margin-right: 5%; display: inline-block; vertical-align: top;\">\n" +
@@ -82,7 +82,7 @@ export default class RightSection extends Component {
                                                                     "\n" +
                                                                     "      </div>\n" +
                                                                     "\n" +
-                                                                    "      <div style=\"width: 93.7%; border-bottom: 13px solid #d34d4d; padding: 3%;\">\n" +
+                                                                    "      <div style=\"width: 100%; border-bottom: 13px solid #d34d4d; padding: 3%;\">\n" +
                                                                     "\n" +
                                                                     "        <!--Experience-->\n" +
                                                                     "        <div style=\"vertical-align: top; font-size: 13px; color: #999999;\">\n" +

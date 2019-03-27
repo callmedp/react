@@ -42,6 +42,10 @@ For example:
 	margin-bottom: 30px;
 } 
 
+.ml-0 {
+	margin-left: auto; 
+}
+
 .pull-left {
 	float: left;
 }
@@ -110,4 +114,9 @@ h2 {
 
 .items-right {
 	justify-content: flex-end;
+}
+
+.fixed {
+	position: fixed;
+	z-index: 99;
 }

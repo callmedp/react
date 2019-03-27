@@ -17,6 +17,16 @@
 	height: 470px;
 }
 
+.right-sidebar-scroll-main {
+	display: block;
+	height: 590px;
+	overflow-y: auto;
+
+	div {
+		width: 100%;
+	}
+}
+
 .head-section {
 	@include flexbox();
 	flex-direction: row;
