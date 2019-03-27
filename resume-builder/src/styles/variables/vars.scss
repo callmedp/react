@@ -1,12 +1,26 @@
 /*Main-Colors*/
-$primary: #ff0000; //---heading with 40% opacity
-$link: #0acade;
-$white: #ffffff;
-$black: #333333;
-$grey1: #eaeaea;
-$grey2: #efefef;
-$txt1: #666666;
-$blue1: #3E6EB8;
-$border1: #ebebeb;
-$orange: #FCA508;
+$blue-dark      : #2A3C86;
+$blue           : #3E6EB8;
+$orange         : #FCA508;
+$white          : #ffffff;
+$black          : #000;
+$grey-light     : #eaeaea;
+$grey-lightest  :#ebebeb;
+$grey-ec          : #CECECE;
+$grey-333       : #333333;
+$grey-666       : #666666;
+$border1        : #ebebeb;
 
+$theme-green: #639F59;
+$theme-blue: #4D7BA7;
+$theme-red: #D95B5B;
+$theme-black: #000000;
+$theme-brown: #C6A828;
+$theme-violet: #7C39CA;
+
+$sprite : url(/images/sprite.svg);
+
+
+
+// Shadow
+$box-shadow-light : rgba($black, .2);

@@ -1,52 +1,38 @@
 @import '../../../styles/variables/vars.scss';
 @import '../../../styles/variables/mixins.scss';
 
-header {
-	background: #2A3C86;
-	@include flexbox();
-	flex-direction: row;
-	height: 63px;
-}
-
-.container {
-
-	&--logo {
-		width: 270px;
-		height: 55px;
-		position: relative;
-
-		&:after {
-			content: '';
-			width: 287px;
-			height: 90px;
-			background: url(/images/logo.png) 0 0;
-			display: inline-block;
-			position: absolute;
-			left: -15px;
-			top: -3px;
-		}
-	}
-}
-
-.signin {
-	@include flexbox();
-	justify-content: flex-end;
+.header {
+	background: $blue-dark;
 	color: $white;
-	vertical-align: middle;
-	align-items: baseline;
+	width: 100%;
+	padding: 1.0rem 1.5rem;
+	position: fixed;
+	top: 0;
+	z-index: 2;
+	
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 
-	&--user-pic {
-		width: 23px;
-		height: 23px;
-		display: inline-block;
-		@include border-radius(50%);
-		margin: 15px 10px 0 0;
+	&__left {
+		font-size: 1.4rem;
 
-		img {
-			@include border-radius(50%);
-			display: inline-block;
-			vertical-align: middle;
-		}
+		display: flex;
+		align-items: center;
+	}
+
+	&__menu {
+		margin-right: 10px;
+		border: 0 none;
+		background-color: transparent;
+
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+	}
+
+	.btn--outline {
+		color: $white;
+		border-color: $white;
 	}
 }
-

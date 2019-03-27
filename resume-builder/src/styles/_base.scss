@@ -13,4 +13,34 @@ For example:
 @import './variables/vars.scss';
 @import './variables/mixins.scss';
 
+h1 {
+    font-size: 1.8rem;
+}
 
+h2{
+    font-size: 1.7rem;
+    font-weight: 300;
+}
+
+ul, li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.no-scroll {
+    overflow: hidden;
+}
+
+#root {
+    height: 100%;
+
+    > div {
+        height: 100%;
+    }
+
+    .edit-section {
+        height: 100%;
+        padding-top: 60px;
+    }
+}

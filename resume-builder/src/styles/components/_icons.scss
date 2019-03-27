@@ -1,0 +1,224 @@
+@import './variables/vars.scss';
+@import './variables/mixins.scss';
+
+.sprite {
+    background-image: url('/images/sprite.svg');
+    background-repeat: no-repeat;
+}
+
+.icon {
+    &--menu-bar {
+        @include size(20px, 12px, block);
+        background-position: -37px -18px; 
+    }
+
+    &--firstName {
+        @include size(14px, 18px, block);
+        background-position: -51px -36px;
+    }
+
+    &--lastName {
+        @include size(20px, 15px, block);
+        background-position: -49px -58px;
+    }
+
+    &--designation {
+        @include size(16px, 15px, block);
+        background-position: -52px -79px;
+    }
+
+    &--company {
+        @include size(16px, 16px, block);
+        background-position: -53px -102px;
+    }
+
+    &--personal {
+        @include size(16px, 16px, block);
+        background-position: 0 -37px;
+    }
+
+    &--summary {
+        @include size(15px, 20px, block);
+        background-position: 0 -56px;
+    }
+
+    &--experience{
+        @include size(17px, 16px, block);
+        background-position: 0 -80px;
+    }
+
+    &--education {
+        @include size(23px, 20px, block);
+        background-position: 0 -102px;
+    }
+    
+    &--education-grey {
+        @include size(22px, 20px, block);
+        background-position: -71px -39px;
+    }
+    
+    &--skills {
+        @include size(20px, 20px, block);
+        background-position: 0 -128px;
+    }
+    
+    &--skills-grey {
+        @include size(20px, 20px, block);
+        background-position: -72px -14px;
+    }
+    
+    &--add-more {
+        @include size(20px, 19px, block);
+        background-position: 0 -154px;
+    }
+
+    &--edit {
+		@include size(20px, 20px, block);
+		background-position: 5px -13px;  
+		margin-left: .5rem;
+    }
+    
+    &--mobile {
+        @include square(15px);
+        background-position: 0 -179px;
+    }
+    
+    &--mail {
+        @include size(15px, 11px, block);
+        background-position: 0 -199px;
+    }
+    
+    &--address {
+        @include size(11px, 16px, block);
+        background-position: 0 -216px;
+    }
+    
+    &--linkedin {
+        @include size(15px, 16px, block);
+        background-position: 0 -236px;
+    }
+    
+    &--facebook {
+        @include size(9px, 16px, block);
+        background-position: 0 -260px;
+    }
+    
+    &--language {
+        @include size(22px, 19px, block);
+        background-position: -53px -128px;
+    }
+    
+    &--award {
+        @include size(19px, 20px, block);
+        background-position: -55px -155px;
+    }
+    
+    &--course {
+        @include size(19px, 21px, block);
+        background-position: -55px -182px;
+    }
+    
+    &--project {
+        @include size(19px, 23px, block);
+        background-position: -54px -210px;
+    }
+    
+    &--reference {
+        @include size(19px, 19px, block);
+        background-position: -54px -238px;
+    }
+
+    &--camera {
+        @include size(22px, 18px, block);
+        background-position: 0 -282px;
+        margin-right: 10px; 
+    }
+
+    &--delete {
+        @include size(14px, 18px, block);
+        background-position: 0 -327px;   
+    }
+
+    &--upArrow {
+        @include size(10px, 6px, block);
+        background-position: -87px -114px;   
+    }
+
+    &--downArrow {
+        @include size(10px, 6px, block);
+        background-position: -87px -100px;   
+    }
+    
+    &--date {
+        @include size(19px, 19px, block);
+        background-position: -77px -62px;   
+    }
+    
+    // &--back-white {
+    //     @include square(15px, 15px);
+    //     display: block;
+    //     background-position: -29px -300px;   
+    // }
+    
+    &--back-white {
+        @include size(15px, 19px, block);
+        background-position: -29px -335px;  
+    }
+    
+    &--theme {
+        @include size(18px, 23px, block);
+        background-position: -28px -178px;  
+    }
+    
+    &--plus {
+        @include size(12px, 28px, block);
+        background-position: -25px -345px;  
+    }
+    
+    &--font {
+        @include size(20px, 20px, block);
+        background-position: -27px -207px;  
+    }
+    
+    &--reorder {
+        @include size(20px, 18px, block);
+        background-position: -27px -233px;  
+    }
+
+    &--minus {
+        @include size(7px, 24px, block);
+        background-position: 0 -348px;  
+    }
+}
+
+
+
+.sidebar--active {
+    background-color: $blue; 
+
+    .icon {
+        &--personal {
+            background-position: -26px -37px;
+        }
+    
+        &--summary {
+            background-position: -26px -56px;
+        }
+    
+        &--experience{
+            background-position: -26px -80px;
+        }
+    
+        &--education {
+            background-position: -26px -102px;
+        }
+        
+        &--skills {
+            background-position: -26px -128px;
+        }
+        
+        &--add-more {
+            background-position: -26px -154px;
+        }
+    }
+}

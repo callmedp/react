@@ -174,3 +174,14 @@
   @if $height != null { height: $height;}
   @if $height == null { height: $width;}
 }
+
+%input {
+  border: 0 none;
+  border: 1px solid $grey-lightest;
+  padding: 1.0rem 1.2rem;
+  border-radius: .5rem;
+  background-color: $white;
+  font-family: inherit;
+  font-size: 1.4rem;
+  box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.06);
+}
