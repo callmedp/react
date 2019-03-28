@@ -36,8 +36,7 @@ export default class Preview extends Component {
                                     </div>
                                 </div>
 
-                                <div className="filter__accordion__card--content">
-                                    
+                                <div className="filter__accordion__card--content">  
                                     <ul className="resume-color-theme">
                                         <li className="resume-color-theme__item">
                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="green" value="green" />
@@ -98,14 +97,19 @@ export default class Preview extends Component {
 
                                 <div className="filter__accordion__card--content">
                                     <div className="font-filter">
+                                        <h3>Section Heading</h3>
+                                        <div className="font-filter__slide-bar">
+                                            <span className="font-filter__dot"></span>
+                                            <span className="font-filter--small mt-10 fs-12">S</span>
+                                            <span className="font-filter--medium mt-10 fs-12">M</span>
+                                            <span className="font-filter--large mt-10 fs-12">L</span>
+                                        </div>
 
                                     </div>
                                 </div>
                             </div>
 
-
-                            
-                            <div className="filter__accordion__card">
+                            <div className="filter__accordion__card mt-20">
                                 <div className="filter__accordion__card__heading">
                                     <div className="filter__accordion__card__heading--left">
                                         <i className="sprite icon--reorder mr-10"></i>
@@ -118,7 +122,129 @@ export default class Preview extends Component {
                                 </div>
 
                                 <div className="filter__accordion__card--content">
-                                    Reorder section
+                                    <div className="reorder">
+                                        <ul className="reorder__items">
+                                            <li className="reorder__item reorder--select">
+                                                <span className="reorder__title">Personal Info</span>
+                                                <div className="reorder__nav">
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--upArrow"></i>
+                                                    </span>
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--downArrow"></i>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            
+                                            <li className="reorder__item">
+                                                <span className="reorder__title">Summary</span>
+                                                <div className="reorder__nav">
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--upArrow"></i>
+                                                    </span>
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--downArrow"></i>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            
+                                            <li className="reorder__item">
+                                                <span className="reorder__title">Experience</span>
+                                                <div className="reorder__nav">
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--upArrow"></i>
+                                                    </span>
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--downArrow"></i>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            
+                                            <li className="reorder__item">
+                                                <span className="reorder__title">Education</span>
+                                                <div className="reorder__nav">
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--upArrow"></i>
+                                                    </span>
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--downArrow"></i>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            
+                                            <li className="reorder__item">
+                                                <span className="reorder__title">Skills</span>
+                                                <div className="reorder__nav">
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--upArrow"></i>
+                                                    </span>
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--downArrow"></i>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            
+                                            <li className="reorder__item">
+                                                <span className="reorder__title">Language</span>
+                                                <div className="reorder__nav">
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--upArrow"></i>
+                                                    </span>
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--downArrow"></i>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            
+                                            <li className="reorder__item">
+                                                <span className="reorder__title">Awards</span>
+                                                <div className="reorder__nav">
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--upArrow"></i>
+                                                    </span>
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--downArrow"></i>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            
+                                            <li className="reorder__item">
+                                                <span className="reorder__title">Courses</span>
+                                                <div className="reorder__nav">
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--upArrow"></i>
+                                                    </span>
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--downArrow"></i>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            
+                                            <li className="reorder__item">
+                                                <span className="reorder__title">Projects</span>
+                                                <div className="reorder__nav">
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--upArrow"></i>
+                                                    </span>
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--downArrow"></i>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            
+                                            <li className="reorder__item">
+                                                <span className="reorder__title">References</span>
+                                                <div className="reorder__nav">
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--upArrow"></i>
+                                                    </span>
+                                                    <span className="reorder__nav--item">
+                                                        <i className="sprite icon--downArrow"></i>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -128,8 +254,6 @@ export default class Preview extends Component {
                             <span className="btn btn__round btn--outline">Apply</span>
                         </div>
                     </div>
-
-                    
                 </div>
             </div>
 

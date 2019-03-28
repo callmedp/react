@@ -1,0 +1,152 @@
+@import '../../../../styles/variables/vars';
+@import '../../../../styles/variables/mixins';
+
+.buy-container {
+    padding-top: 60px;
+    height: 100%;
+}
+
+.buy {
+    @extend %touch-scroll;
+    padding: 15px 15px 150px;
+    height: 100%;
+    
+    
+    &__wrap {
+        border: 1px solid $border1;
+        border-radius: 5px;
+        background-color: $white;
+    }
+
+    &__item {
+        position: relative;
+
+        display: flex;
+        padding: 15px;
+        
+        &:not(:first-child) {
+            border-top: 1px solid $border1;
+            margin-top: 15px;
+            padding-top: 15px;
+        }
+
+        &--left {
+            display: flex;
+            align-items: start;
+            justify-content: start;
+
+            margin-right: auto;
+        }
+
+        &--input {
+            position: relative;
+            top: 6px;
+            margin-right: 5px;
+        }
+
+        &--label {
+            font-size: 1.6rem;
+            line-height: 1.4;
+            width: 100%;
+
+            strong {
+                display: block;
+                color: $grey-333;
+                font-size: 2.2rem;
+                font-weight: 600;
+            }
+        }
+
+        &--right {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-direction: column;
+
+        }
+
+        &--image {
+            display: block;
+            border-radius: 3px;
+            overflow: hidden;
+            box-shadow: 0 0 10px $box-shadow-light;
+        }
+
+        &--price {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+            
+        }
+    }
+
+    
+
+    &__recommended {
+        flex-direction: column;
+        padding-top: 40px !important;
+
+        &--tag {
+            position: absolute;
+            right: -11px;
+            top: 10px;
+            background-color:$purple;
+            color: $white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            height: 20px;
+            text-transform: uppercase;
+            box-shadow: -6px 6px 10px rgba(0, 0, 0, 0.3);
+            line-height: 19px;
+            padding-right: 5px;
+
+            &::before {
+                @include size(12px, 20px, block);
+                content: '';
+                background-position: -82px -287px;
+                background-image: $sprite;
+                position: absolute;
+                left: -11px;
+            }
+            
+            &::after {
+                content: '';
+                width: 0;
+                height: 0;
+                border-top: 10px solid $black;
+                border-right: 10px solid transparent;
+                position: absolute;
+                right: 0px;
+                top: 20px;
+            }
+        }
+    }
+}
+
+.pay-now {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 0 15px;
+    width: 100%;
+    box-shadow: 0 0 10px rgba($black, .1);
+    z-index: 99;
+    background-color: $white;
+
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__price {
+        display: flex;
+        flex-direction: column;
+
+        &--pay {
+            position: relative;
+            top: 10px;
+        }
+    }
+}

@@ -1,0 +1,74 @@
+import React, {Component} from 'react';
+import Header from '../../../Common/Header/header';
+import './buy.scss';
+
+
+export default class buy extends Component {
+    render() {
+        return(
+            
+            <div className="buy-container">
+                <Header />
+                <div className="pay-now">
+                    <div className="pay-now__price">
+                        <span className="fs-14 pay-now__price--pay">You pay</span>
+                        <span className="fs-26 color-333 semi-bold">Rs. 999/-</span>
+                    </div>
+
+                    <button className="btn btn__round btn__primary fs-">Pay Now</button>
+                </div>
+
+                <div className="buy">
+                    <div className="buy__wrap">
+                        <div className="buy__item">
+                            <div className="buy__item--left">
+                                <input className="buy__item--input" type="radio" id="your-resume" name="custom-resume"></input>
+                                <label  className="buy__item--label" for="your-resume">
+                                    Buy your <br />customised resume
+                                    <strong>Rs. 999/-</strong>
+                                </label>
+                            </div>
+                            <div className="buy__item--right">
+                                <span className="buy__item--image">
+                                    <img src="/images/resume4.png" alt="Resume"/>
+                                </span>
+                                <a href="#" className="fs-12 mt-5">Edit</a>
+                            </div>
+                        </div>
+                        
+                        
+                        <div className="buy__item buy__recommended">
+
+                            <div className="buy__recommended--tag">Recommended</div>
+
+                            <div className="buy__item--left">
+                                <input className="buy__item--input" type="radio" id="all-resumes" name="custom-resume"></input>
+                                <label  className="buy__item--label" for="all-resumes">
+                                    Buy all 6 customised resumes
+                                    <div className="buy__item--price">
+                                        <span className="fs-22 color-333 semi-bold">Rs. 1249/-</span>
+                                        <span className="fs-14 line-through">Rs. 3499</span>
+                                        <span className="fs-14 bold">63% off</span>
+                                    </div>
+                                </label>
+                            </div>
+                            <div className="buy__item--right">
+                                <ul className="buy__recommended__items mt-30">
+                                    <li className="buy__recommended__item">
+                                        <span className="buy__recommended__image">
+                                            <img src="/images/resume3.png" alt="Custom resume" />
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                
+            </div>
+
+        )
+    }
+}

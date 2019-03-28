@@ -185,3 +185,8 @@
   font-size: 1.4rem;
   box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.06);
 }
+
+%touch-scroll {
+  overflow-y: auto; /* has to be scroll, not auto */
+  -webkit-overflow-scrolling: touch;
+}
