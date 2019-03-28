@@ -52,7 +52,7 @@ export default class LeftSideBar extends Component {
                 {
                     isEdit ? <Edit {...this.props} /> : <Preview {...this.props} />
                 }
-            </section>
+            </section>  
         )
     }
 }

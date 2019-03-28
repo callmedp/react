@@ -29,14 +29,7 @@ class EditPreview extends Component {
     }
 
     handleScroll() {
-        console.log('-+++--', window.pageYOffset);
-        const section = this.myRef.current;
-        if (window.pageYOffset >= 258) {
-            section.className = 'flex-container mt-30 fixed';
         }
-        else
-            section.className = 'flex-container mt-30'
-    }
 
 
     render() {
@@ -44,15 +37,13 @@ class EditPreview extends Component {
             /*
             * @desc Top Bar component
             * */
-            <div id="wrap">
+            <div>
                 <Header/>
                 <div className="page-container">
                     <TopBar/>
-                    <section style={{height:"690px"}}>
-                        <div  className={'flex-container mt-30'} ref={this.myRef}>
-                            <LeftSideBar {...this.props}/>
-                            <RightSection {...this.props}/>
-                        </div>
+                    <section className={'flex-container mt-30'}>
+                        <LeftSideBar {...this.props}/>
+                        <RightSection {...this.props}/>
                     </section>
                 </div>
                 <Footer/>

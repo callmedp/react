@@ -50,10 +50,15 @@ input[type='text'] {
 }
 
 .error {
+  position: relative;
+  
   .error-txt {
     color: $red;
     font-size: 1.2rem;
     display: inline-block;
+    position: absolute;
+    bottom: -13px;
+    left: 0;
   }
 }
 
@@ -76,7 +81,7 @@ input[type='radio'] {
 }
 
 input[type="radio"]:checked:after {
-  
+
 }
 
 /* Dropdown Box */

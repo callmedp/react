@@ -14,6 +14,13 @@ For example:
 @import './variables/mixins.scss';
 
 
+.mt-10 {
+	margin-top: 10px;
+} 
+.mt-20 {
+	margin-top: 20px;
+} 
+
 .mt-30 {
 	margin-top: 30px;
 } 
@@ -42,6 +49,10 @@ For example:
 	margin-bottom: 30px;
 } 
 
+.ml-10 {
+	margin-left: 10px; 
+}
+
 .ml-0 {
 	margin-left: auto; 
 }
@@ -49,12 +60,17 @@ For example:
 .pull-left {
 	float: left;
 }
+
 .pull-right {
 	float: right;
 }
 
 .clearfix {
   clear: both;
+}
+
+.db {
+	display: block;
 }
 
 .text-center {
@@ -65,11 +81,20 @@ For example:
 	display: none !important;
 }
 
+.pos-rel {
+	position: relative;
+}
+
 .img-responsive {
   display: block;
   max-width: 100%;
   width: 100%;
   height: auto;
+}
+
+.bdr {
+	display: block;
+	border-top: 1px solid $grey2;
 }
 
 .page-container {
@@ -114,15 +139,4 @@ h2 {
 
 .items-right {
 	justify-content: flex-end;
-}
-
-.fixed {
-	z-index: 99;
-	top:0;
-	left:0;
-	position: fixed;
-	margin-left: 5%;
-	margin-right: 5%;
-	height: 590px;
-	width:90%;
 }
