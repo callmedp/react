@@ -118,4 +118,11 @@ h2 {
 
 .fixed {
 	z-index: 99;
+	top:0;
+	left:0;
+	position: fixed;
+	margin-left: 5%;
+	margin-right: 5%;
+	height: 590px;
+	width:90%;
 }

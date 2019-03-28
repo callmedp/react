@@ -11,6 +11,7 @@ class EditPreview extends Component {
     constructor(props) {
         super(props)
         this.myRef = React.createRef();
+        console.log('---', this.myRef)
         this.state = {
             fixed: false,
             offset: 0
@@ -23,9 +24,14 @@ class EditPreview extends Component {
 
     }
 
+    componentWillUnmount() {
+        window.removeEventListener('scroll', () =>{})
+    }
+
     handleScroll() {
+        console.log('-+++--', window.pageYOffset);
         const section = this.myRef.current;
-        if (window.pageYOffset >= window.innerHeight && section.className) {
+        if (window.pageYOffset >= 258) {
             section.className = 'flex-container mt-30 fixed';
         }
         else
@@ -42,9 +48,11 @@ class EditPreview extends Component {
                 <Header/>
                 <div className="page-container">
                     <TopBar/>
-                    <section className={'flex-container mt-30'} ref={this.myRef}>
-                        <LeftSideBar {...this.props}/>
-                        <RightSection {...this.props}/>
+                    <section style={{height:"690px"}}>
+                        <div  className={'flex-container mt-30'} ref={this.myRef}>
+                            <LeftSideBar {...this.props}/>
+                            <RightSection {...this.props}/>
+                        </div>
                     </section>
                 </div>
                 <Footer/>
