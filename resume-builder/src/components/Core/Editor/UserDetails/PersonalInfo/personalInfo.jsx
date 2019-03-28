@@ -104,7 +104,7 @@ export class PersonalInfo extends Component {
                         </section>
 
                         <section className="pic-section mt-30">
-                            <img className="img-responsive" src="/images/upload-image.jpg"/>
+                            <img className="img-responsive" src="/media/static/react/assets/images/upload-image.jpg"/>
                         </section>
                     </section>
 

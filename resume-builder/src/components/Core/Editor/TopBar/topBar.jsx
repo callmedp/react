@@ -12,7 +12,7 @@ export default class TopBar extends Component {
                 	<div className="top-banner--banner-right">
                 		<button className="white-button mr-20" href="#">Change template</button>
                 		<span className="top-banner--banner-right--banner-thumb">
-                			<img src="/images/resume-thumb.jpg" alt="" />
+                			<img src="/media/static/react/assets/images/resume-thumb.jpg" alt="" />
                 		</span>
                 	</div>
                 </div>
