@@ -15,8 +15,8 @@ function* getPersonalDetails(action) {
         if (result['error']) {
             console.log('error');
         }
-        // localStorage.setItem('candidateId', result.data && result.data['candidate_id'] || '');
-
+        console.log('--get user personal Info---', result);
+        yield put({type: Actions.SAVE_USER_INFO, data:result['data']})
     } catch (e) {
         console.log(e);
     }

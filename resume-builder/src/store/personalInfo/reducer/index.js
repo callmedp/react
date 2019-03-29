@@ -18,7 +18,6 @@ export const personalInfoReducer = (state = initialState, action) => {
     switch (action.type) {
 
         case SAVE_USER_INFO: {
-            localStorage.setItem('candidateId', action.data && action.data['candidate_id'] || '');
             return {
                 ...state,
                 ...action.data

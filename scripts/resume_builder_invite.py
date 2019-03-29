@@ -27,7 +27,7 @@ def get_emails(user_details):
         name, email = row.values()
         token_gen = AutoLogin()
         login_token = token_gen.encode(email, '5c4ede4da4d7330573d8c79b', None)
-        upload_url = "http://127.0.0.1:8000/autologin/%s/?next=/resume-builder/register/" % (
+        upload_url = "http://127.0.0.1:8000/autologin/%s/?next=/resume-builder/" % (
             login_token)
         context_data = {
             'first_name': name,

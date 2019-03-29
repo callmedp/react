@@ -84,6 +84,7 @@ export const RegisterForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         pinCode: state.userInfoReducer["pinCode"],
+
     }
 };
 

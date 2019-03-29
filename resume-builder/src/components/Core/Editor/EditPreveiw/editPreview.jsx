@@ -10,27 +10,7 @@ import {withRouter} from "react-router-dom";
 class EditPreview extends Component {
     constructor(props) {
         super(props)
-        this.myRef = React.createRef();
-        console.log('---', this.myRef)
-        this.state = {
-            fixed: false,
-            offset: 0
-        }
-        this.handleScroll = this.handleScroll.bind(this);
     }
-
-    componentDidMount() {
-        window.addEventListener('scroll', this.handleScroll);
-
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', () =>{})
-    }
-
-    handleScroll() {
-        }
-
 
     render() {
         return (

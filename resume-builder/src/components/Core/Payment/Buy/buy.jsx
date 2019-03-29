@@ -6,10 +6,8 @@ import Footer from '../../../Common/Footer/footer.jsx'
 import {withRouter} from "react-router-dom";
 
 export default class Buy extends Component {
-    
-        
 
-
+ 
     render() {
         return (
             /*
@@ -18,7 +16,7 @@ export default class Buy extends Component {
             <div>
                 <Header/>
                 <div className="page-container">
-                    <TopBar/>
+                    <TopBar page={'buy'}/>
                     <section className={'flex-container mt-30'}>
 
                     	<section className="left-sidebar half-width pos-rel">
@@ -254,7 +252,7 @@ export default class Buy extends Component {
                     			</ul>
                     			<div className="">
                     				<div className="choose-plan--pay-price">
-                    					You pay 
+                    					You pay
                     					<span>Rs. <strong>999/-</strong></span>
                     				</div>
                     				<button className="choose-plan--orange-button-change orange-button items-right pull-right mt-10">Pay now</button>

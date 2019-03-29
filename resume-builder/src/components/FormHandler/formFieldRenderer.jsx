@@ -93,6 +93,7 @@ export const renderDynamicSelect = ({
                  }}
     />
 )
+*/
 
 export const renderTextArea = ({
                                    input,
@@ -101,14 +102,12 @@ export const renderTextArea = ({
                                    meta: {touched, error, warning}
 
                                }) => (
-    <div>
-        <div className={'Top-space'}>
+
             <textarea {...input} placeholder={label} type={type}/>
-            {touched &&
-            ((error && <span className={'Error-message'}>{error}</span>) ||
-                (warning && <span className={'Warn-Message'}>{warning}</span>))}
-        </div>
-    </div>
+            // {touched &&
+            // ((error && <span className={'Error-message'}>{error}</span>) ||
+            //     (warning && <span className={'Warn-Message'}>{warning}</span>))}
+
 
 )
-*/
+

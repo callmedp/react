@@ -8,7 +8,7 @@ export default class Header extends Component {
             		<a className="container--logo"></a>
             		<div className="signin">
             			<span className="signin--user-pic">
-            				<img src="/images/user-pic.jpg" />
+            				<img src="/media/static/react/assets/images/user-pic.jpg" />
             			</span>
             			Hello Amit
             		</div>

@@ -18,7 +18,7 @@ export default class DownloadResume extends Component {
             <div>
                 <Header/>
                 <div className="page-container">
-                    <TopBar/>
+                    <TopBar page={'download'}/>
                     <section className={'flex-container mt-30'}>
                     	<section className="right-sidebar right-sidebar-scroll-main ml0">
                     		<div className="order-complete">

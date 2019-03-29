@@ -1,29 +1,9 @@
-{% extends "basic/base.html" %}
 {% load render_bundle from webpack_loader %}
 {% load static humanize compress %}
 
 {% block head %}
     {% block css_section %}
-
-        {% compress css %}
-
-            <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
-            <!--<link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">-->
-            <!--<link type="text/css"  href="{% static 'shinelearn/css/common/bootstrapv3.3.7.css' %}" rel="stylesheet" >-->
-            <link type="text/scss" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
-            <link type="text/css" href="{% static 'shinelearn/css/cms/global.css' %}" rel="stylesheet">
-            <link type="text/scss" href="{% static 'shinelearn/css/cms/faq.scss' %}" rel="stylesheet">
-
-        {% endcompress %}
         {% render_bundle 'main' 'css' %}
-        {% block meta_html %}
-            <meta charset="utf-8">
-            <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
-            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0"/>
-        {% endblock meta_html %}
-
-        <title>{% block title %}Resume Format and CV Samples - Download Online @ Shine
-            Learning {% endblock title %}</title>
     {% endblock css_section %}
 {% endblock head %}
 

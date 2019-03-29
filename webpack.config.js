@@ -5,10 +5,10 @@ var ExtractText = require('extract-text-webpack-plugin');
 
 
 module.exports = {
-    entry: path.join(__dirname, 'careerplus/static_core/react/src/js/index'),
+    entry: path.join(__dirname, 'resume-builder/src/index'),
     output: {
         path: path.join(__dirname, 'careerplus/static_core/react/dist'),
-        filename: '[name]-[hash].js'
+        filename: '[name].js'
     },
     plugins: [
         new BundleTracker({
@@ -16,7 +16,7 @@ module.exports = {
             filename: 'webpack-stats.json'
         }),
         new ExtractText({
-            filename: '[name]-[hash].css'
+            filename: '[name].css'
         }),
     ],
     module: {
