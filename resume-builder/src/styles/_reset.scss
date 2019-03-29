@@ -38,6 +38,13 @@ footer, header, hgroup, menu, nav, section {
 * {
   box-sizing: border-box;
   -webkit-overflow-scrolling: touch;
+  -moz-overflow-scrolling: touch;
+  /*overflow-y: auto;*/
+}
+
+html, body {
+    /*position: fixed;*/
+    width: 100%;
 }
 
 body {

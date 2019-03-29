@@ -26,5 +26,9 @@ $sprite: url(/media/static/react/assets/images/sprite.svg);
 	background-color: $blue1;
 }
 
+%shadow{
+	box-shadow: 0px 3px 25px 0px rgba(0, 0, 0, 0.10);
+}
+
 
 

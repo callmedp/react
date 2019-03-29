@@ -73,7 +73,7 @@ export default class Preview extends Component {
 	                	</ul>
 	                </div>
 	                <div className="change-theme">
-	                	<a href="#" className="change-theme--theme-heading change-theme--active">
+	                	<a href="#" className="change-theme--theme-heading">
 	                		<span className="icon-change-reorder mr-20"></span>
 		                    Reorder section
 	                	</a>
