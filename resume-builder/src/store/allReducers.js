@@ -10,6 +10,7 @@ import {languageReducer} from './language/reducer/index'
 import {awardReducer} from './award/reducer/index'
 import {courseReducer} from './course/reducer/index'
 import {projectReducer} from './project/reducer/index'
+import {referenceReducer} from './reference/reducer/index'
 
 const allReducer = combineReducers({
         form: formReducer,
@@ -22,6 +23,7 @@ const allReducer = combineReducers({
         award: awardReducer,
         course: courseReducer,
         project: projectReducer,
+        reference: referenceReducer
     })
 ;
 

@@ -89,7 +89,7 @@ export const ProjectForm = reduxForm({
 
 const mapStateToProps = (state) => {
     return {
-        initialValues: state.education
+        initialValues: state.project
     }
 };
 

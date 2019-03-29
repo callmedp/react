@@ -57,5 +57,13 @@
 				@include border-radius(4px);
 			}
 		}
+
+		&--payment-done {
+			width: 70px;
+			height: 88px;
+			display: inline-block;
+			background: $sprite -1px -139px;
+			justify-content: flex-end;
+		}
 	}
 }

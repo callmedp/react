@@ -8,6 +8,7 @@ import watchLanguage from './language/saga/index'
 import watchAward from './award/saga/index'
 import watchCourse from './course/saga/index'
 import watchProject from './project/saga/index'
+import watchReference from './reference/saga/index'
 
 export default function* () {
     yield all([
@@ -19,6 +20,7 @@ export default function* () {
         watchLanguage(),
         watchAward(),
         watchCourse(),
-        watchProject()
+        watchProject(),
+        watchReference()
     ])
 }
