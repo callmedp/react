@@ -18,11 +18,12 @@ User = get_user_model()
 
 
 @task(name="upload_certificate_task")
-def upload_certificate_task(task=None, user=None, vendor=None):
+def upload_certificate_task(task=None, user=None, vendor=None, vendor_text=None):
     f = False
     try:
         up_task = Scheduler.objects.get(pk=task)
-        vendor = Vendor.objects.get(pk=vendor)
+        if vendor:
+            vendor = Vendor.objects.get(pk=vendor)
     except Scheduler.DoesNotExist as e:
         logging.getLogger('error_log').error(
             "%(msg)s : %(err)s" % {'msg': 'upload certificate task', 'err': str(e)})
@@ -51,7 +52,7 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                 upload_path)
         if exist_file:
             f = True
-            fieldnames = ['name', 'skill']
+            fieldnames = ['name', 'skill', 'certificate_file_url']
             if not settings.IS_GCP:
                 upload = open(
                     settings.MEDIA_ROOT + '/' + upload_path,
@@ -105,15 +106,22 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                 try:
                     name = row.get('name', '')
                     skill = row.get('skill', '')
+                    certi_file_url = row.get('certificate_file_url')
                     if name:
-                        obj, created = Certificate.objects.get_or_create(
-                        name=name, vendor_provider=vendor)
-                        if created:
-                            obj.skill = skill
-                            obj.save()
-                        else:
-                            row['error_report'] = "certificate already exist"
+                        if vendor:
+                            obj, created = Certificate.objects.get_or_create(
+                                name=name, vendor_provider=vendor)
+                        elif vendor_text:
+                            obj, created = Certificate.objects.get_or_create(
+                                name=name, vendor_text=vendor_text)
+                        if certi_file_url:
+                            obj.certificate_file_url = certi_file_url
+                        obj.skill = skill
+                        obj.save()
+                        if not created:
+                            row['error_report'] = "certificate updated"
                     else:
+
                         row['error_report'] = "certificate name missing"
                     csvwriter.writerow(row)
                 except Exception as e:
@@ -177,7 +185,7 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
             upload_path)
     if exist_file:
         f = True
-        fieldnames = ['year', 'candidate_email', 'candidate_mobile', 'certificate_name']
+        fieldnames = ['year', 'candidate_email', 'candidate_mobile', 'certificate_name', 'certificate_file_url']
         if not settings.IS_GCP:
             with open(
                 settings.MEDIA_ROOT + '/' + upload_path,
@@ -239,6 +247,7 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                 mobile = row.get('candidate_mobile', '')
                 certificate_name = row.get('certificate_name')
                 certi_yr_passing = row.get('year')
+                certi_file_url = row.get('certificate_file_url')
                 headers = ShineToken().get_api_headers()
                 shineid = ShineCandidateDetail().get_shine_id(
                     email=email, headers=headers)
@@ -262,6 +271,8 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                         if created:
                             obj.candidate_mobile = mobile
                             obj.candidate_email = email
+                            if certi_file_url:
+                                obj.certificate_file_url = certi_file_url
                             obj.save()
                             post_data = {
                                 'certification_name': certificate_name,

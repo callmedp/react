@@ -53,6 +53,7 @@ class UploadCertificate(FormView):
             file = request.FILES.get('file', None)
             vendor = request.POST.get('user')
             upload_type = self.kwargs.get('upload_type')
+            vendor_text = request.POST.get('vendor_text')
             task_type = 0
             if upload_type == "upload-certificate":
                 task_type = 2
@@ -85,7 +86,7 @@ class UploadCertificate(FormView):
                 Task.save()
                 if upload_type == "upload-certificate":
                     upload_certificate_task.delay(
-                        task=Task.pk, user=request.user.pk, vendor=vendor)
+                        task=Task.pk, user=request.user.pk, vendor=vendor, vendor_text=vendor_text)
                     # upload_certificate_task(
                     #     task=Task.pk, user=request.user.pk, vendor=vendor)
                 elif upload_type == "upload-candidate-certificate":

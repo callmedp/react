@@ -11,9 +11,17 @@ class UploadCertificateForm(forms.Form):
     user = forms.ModelChoiceField(
         label=("Vendor:"),
         queryset=Vendor.objects.exclude(email__exact='').order_by('name'),
-        empty_label="", required=True,
+        empty_label="", required=False,
         to_field_name='', widget=forms.Select(
             attrs={'class': 'form-control'}))
+
+    vendor_text = forms.CharField(
+        label=("Vendor Text:"),
+        help_text=("Provide this if vendor is not present in above dropdown."),
+        widget=forms.TextInput(
+            attrs={'class': 'form-control'}),
+        required=False
+    )
 
     def __init__(self, requestuser=None, *args, **kwargs):
         super(UploadCertificateForm, self).__init__(*args, **kwargs)
@@ -39,3 +47,9 @@ class UploadCertificateForm(forms.Form):
                 raise forms.ValidationError(
                     "file is too large ( > 5mb ).")
         return file
+
+    def clean_vendor_text(self):
+        user = self.cleaned_data.get('user')
+        vendor_text = self.cleaned_data.get('vendor_text')
+        if not user and not vendor_text:
+            raise forms.ValidationError("Please provide either vendor or vendor text.")
