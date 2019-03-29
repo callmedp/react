@@ -30,7 +30,7 @@
 .choose-plan {
 	padding: 15px;
 
-	h1 {
+	h2 {
 		font-weight: 700;
 		font-size: 1.8rem;
 		color: $black;
@@ -207,7 +207,7 @@
 	}
 }
 
-.links {
+.bottom-links {
 	margin: 20px 0 0 10%;
 	@include flexbox();
 	color: $blue1;

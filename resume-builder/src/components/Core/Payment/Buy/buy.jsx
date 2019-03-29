@@ -208,7 +208,7 @@ class Buy extends Component {
 
                     	<section className="right-sidebar right-sidebar-scroll-main">
                     		<div className="choose-plan">
-                    			<h1 className="mt-10">Choose your plan</h1>
+                    			<h2 className="mt-10">Choose your plan</h2>
                     			<ul>
                     				<li>
                     					<div className="flex-container">
@@ -254,7 +254,7 @@ class Buy extends Component {
                     			</ul>
                     			<div className="">
                     				<div className="choose-plan--pay-price">
-                    					You pay
+                    					You pay 
                     					<span>Rs. <strong>999/-</strong></span>
                     				</div>
                     				<button className="choose-plan--orange-button-change orange-button items-right pull-right mt-10">Pay now</button>
@@ -264,7 +264,7 @@ class Buy extends Component {
 
                     </section>
 
-                    <div className="links">
+                    <div className="bottom-links">
                 		<a href="#">Change template</a> | <a href="#">Edit template</a>
                 	</div>
                 </div>
