@@ -3,8 +3,19 @@
     <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
     <title>sprite</title>
     <desc>Created with Sketch.</desc>
-    <defs></defs>
+    <defs>
+        <polygon id="path-1" points="53 315 98 315 98 360"></polygon>
+        <filter x="-15.6%" y="-11.1%" width="131.1%" height="131.1%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.15 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
     <g id="sprite" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Rectangle-3" transform="translate(75.500000, 337.500000) rotate(-360.000000) translate(-75.500000, -337.500000) ">
+            <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+            <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+        </g>
         <g id="Group" transform="translate(0.000000, 154.000000)">
             <rect id="Rectangle-5" stroke="#2C84CC" x="0.5" y="0.5" width="19" height="18" rx="2"></rect>
             <text id="+" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500" fill="#2C84CC">
@@ -291,7 +302,7 @@
         <g id="checked-(1)" opacity="0.629981884" transform="translate(60.000000, 268.000000)" fill="#000000" fill-rule="nonzero">
             <path d="M0.126923077,4.4 C0.0423076923,4.32 0,4.2 0,4.12 C0,4.04 0.0423076923,3.92 0.126923077,3.84 L0.719230769,3.28 C0.888461538,3.12 1.14230769,3.12 1.31153846,3.28 L1.35384615,3.32 L3.68076923,5.68 C3.76538462,5.76 3.89230769,5.76 3.97692308,5.68 L9.64615385,0.12 L9.68846154,0.12 C9.85769231,-0.04 10.1115385,-0.04 10.2807692,0.12 L10.8730769,0.68 C11.0423077,0.84 11.0423077,1.08 10.8730769,1.24 L4.10384615,7.88 C4.01923077,7.96 3.93461538,8 3.80769231,8 C3.68076923,8 3.59615385,7.96 3.51153846,7.88 L0.211538462,4.52 L0.126923077,4.4 Z" id="Shape"></path>
         </g>
-        <g id="Group" transform="translate(82.000000, 264.000000)">
+        <g id="Group" transform="translate(77.000000, 322.000000)">
             <g id="search-(1)" opacity="0.300000012" fill="#000000" fill-rule="nonzero">
                 <path d="M16.7242946,15.3832602 L13.387451,12.0279839 C14.536812,10.708872 15.1665537,9.04915915 15.1665537,7.32132617 C15.1665537,3.28441058 11.7646298,0 7.58327686,0 C3.40192394,0 0,3.28441058 0,7.32132617 C0,11.3582418 3.40192394,14.6426523 7.58327686,14.6426523 C9.15301517,14.6426523 10.648899,14.1855469 11.9278351,13.3178106 L15.2986385,16.707147 C15.4869016,16.8959098 15.7401171,17 16.0114665,17 C16.2683088,17 16.5119628,16.9054594 16.6969288,16.7335674 C17.0899404,16.368456 17.1024693,15.7630142 16.7242946,15.3832602 Z M7.58327686,1.90991118 C10.6739567,1.90991118 13.1883076,4.33740828 13.1883076,7.32132617 C13.1883076,10.3052441 10.6739567,12.7327412 7.58327686,12.7327412 C4.49259698,12.7327412 1.97824614,10.3052441 1.97824614,7.32132617 C1.97824614,4.33740828 4.49259698,1.90991118 7.58327686,1.90991118 Z" id="Shape"></path>
             </g>

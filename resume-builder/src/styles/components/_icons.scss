@@ -189,6 +189,25 @@
         @include size(7px, 24px, block);
         background-position: 0 -348px;  
     }
+    
+    &--control {
+        @include size(8px, 14px, block);
+        background-position: -61px -288px; 
+    }
+    
+    &--prev {
+        @include size(7px, 24px, block);
+        background-position: -61px -288px;  
+    }
+
+    &--zoom {
+        @include square(45px);
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-position: -53px -315px;  
+    }
 }
 
 
