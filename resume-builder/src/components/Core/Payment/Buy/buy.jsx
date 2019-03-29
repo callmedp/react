@@ -5,7 +5,7 @@ import Header from '../../../Common/Header/header.jsx'
 import Footer from '../../../Common/Footer/footer.jsx'
 import {withRouter} from "react-router-dom";
 
-class Buy extends Component {
+export default class Buy extends Component {
     
         
 
@@ -275,5 +275,3 @@ class Buy extends Component {
     }
 
 }
-
-export default withRouter(props => <Buy {...props}/>)
