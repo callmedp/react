@@ -1,0 +1,2 @@
+export const FETCH_USER_COURSE = 'FETCH_USER_COURSE';
+export const SAVE_USER_COURSE = 'SAVE_USER_COURSE';

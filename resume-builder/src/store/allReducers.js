@@ -4,12 +4,25 @@ import {reducer as formReducer} from 'redux-form'
 import {personalInfoReducer} from './personalInfo/reducer/index'
 import {landingPageReducer} from './landingPage/reducer/index'
 import {experienceReducer} from './experience/reducer/index'
+import {educationReducer} from './education/reducer/index'
+import {skillReducer} from './skill/reducer/index'
+import {languageReducer} from './language/reducer/index'
+import {awardReducer} from './award/reducer/index'
+import {courseReducer} from './course/reducer/index'
+import {projectReducer} from './project/reducer/index'
 
 const allReducer = combineReducers({
-    form: formReducer,
-    personalInfo: personalInfoReducer,
-    experience: experienceReducer,
-    home: landingPageReducer
-});
+        form: formReducer,
+        personalInfo: personalInfoReducer,
+        experience: experienceReducer,
+        education: educationReducer,
+        skill: skillReducer,
+        language: languageReducer,
+        home: landingPageReducer,
+        award: awardReducer,
+        course: courseReducer,
+        project: projectReducer,
+    })
+;
 
 export default allReducer;
