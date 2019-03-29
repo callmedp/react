@@ -3,7 +3,7 @@ import './personalInfo.scss'
 import {connect} from "react-redux";
 import * as actions from '../../../../../store/personalInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
-import {renderField} from "../../../../FormHandler/formFieldRenderer";
+import {renderField} from "../../../../FormHandler/formFieldRenderer.jsx";
 
 export class PersonalInfo extends Component {
 
@@ -12,7 +12,7 @@ export class PersonalInfo extends Component {
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting} = this.props;
+        const {error, handleSubmit, pristine, reset, submitting, enableReinitialize} = this.props;
         return (
             <div>
                 <section className="head-section">
@@ -37,7 +37,7 @@ export class PersonalInfo extends Component {
                             <div className="flex-container">
                                 <fieldset>
                                     <label>Gender</label>
-                                    <Field component={renderField} type={"text"} name="designation"/>
+                                    <Field component={renderField} type={"text"} name="gender"/>
                                 </fieldset>
                                 <fieldset>
                                     <label>Date Of Birth</label>
@@ -51,7 +51,7 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-mobile"></span>
                                         </div>
-                                        <Field component={renderField} type={"text"} name="mobile"
+                                        <Field component={renderField} type={"text"} name="number"
                                                className={"input-control"}/>
                                     </div>
                                 </fieldset>
@@ -124,13 +124,14 @@ export class PersonalInfo extends Component {
 }
 
 export const PersonalInfoForm = reduxForm({
-    form: 'personalInfo'
+    form: 'personalInfo',
+    enableReinitialize: true
 })(PersonalInfo);
 
 
 const mapStateToProps = (state) => {
     return {
-        personalInfo: state.personalInfo
+        initialValues: state.personalInfo
     }
 };
 

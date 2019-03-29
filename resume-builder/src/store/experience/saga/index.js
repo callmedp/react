@@ -7,16 +7,16 @@ import * as Actions from '../actions/actionTypes';
 import {SubmissionError} from 'redux-form'
 
 
-function* getPersonalDetails(action) {
+function* fetchUserExperience(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        const result = yield call(Api.fetchPersonalInfo, candidateId);
+        const result = yield call(Api.fetchUserExperience, candidateId);
         if (result['error']) {
             console.log('error');
         }
-        console.log('--get user personal Info---', result);
-        yield put({type: Actions.SAVE_USER_INFO, data:result['data']})
+        console.log('--get user experiences Info---', result);
+        yield put({type: Actions.SAVE_USER_EXPERIENCE, data:result['data']})
     } catch (e) {
         console.log(e);
     }
@@ -42,7 +42,6 @@ function* updatePersonalDetails(action) {
     }
 }
 
-export default function* watchPersonalInfo() {
-    yield takeLatest(Actions.FETCH_PERSONAL_INFO, getPersonalDetails)
-    yield takeLatest(Actions.UPDATE_PERSONAL_INFO, updatePersonalDetails)
+export default function* watchExperience() {
+    yield takeLatest(Actions.FETCH_USER_EXPERIENCE, fetchUserExperience)
 }

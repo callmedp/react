@@ -16,7 +16,8 @@ from shine.core import ShineCandidateDetail
 
 from .education_specialization import educ_list
 # third party imports
-from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateAPIView, )
+from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateAPIView)
+from rest_framework.views import (APIView)
 from rest_framework.parsers import (FormParser, MultiPartParser)
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -37,24 +38,33 @@ class UserListCreateView(ListCreateAPIView):
 class UserRetrieveUpdateView(RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
-    # parser_class = (FormParser, MultiPartParser)
 
     serializer_class = UserSerializer
 
-    # def put(self, request, *args, **kwargs):
-    #     user_id = int(kwargs.get('pk'))
-    #     user = User.objects.filter(id=user_id)
-    #     import ipdb
-    #     ipdb.set_trace()
+    def get(self, request, *args, **kwargs):
 
-    #     update user with info provided.
-    #     return updated_user
+        if 'personal_info' not in self.request.session:
+            candidate_id = self.kwargs.get('pk')
+            user = User.objects.filter(candidate_id=candidate_id).values().first()
+            return Response(user)
 
-    def get_queryset(self):
-        import ipdb;
-        ipdb.set_trace();
-        candidate_id = (self.kwargs.get('pk'))
-        return User.objects.filter(candidate_id=candidate_id)
+        else:
+            personal_info = self.request.session.get('personal_info')
+            del request.session['personal_info']
+            user = User.objects.get_or_create(candidate_id=personal_info['candidate_id'], defaults=personal_info)
+
+            if user[1]:
+                user.save()
+            return Response(personal_info)
+
+    # def get_queryset(self):
+    #     import ipdb;
+    #     ipdb.set_trace();
+    #     candidate_id = (self.kwargs.get('pk'))
+    #
+    #     if self.request.session.get('personal_info'):
+    #
+    #     return User.objects.filter(candidate_id=candidate_id)
 
 
 class SkillListCreateView(ListCreateAPIView):
@@ -80,12 +90,13 @@ class SkillRetrieveUpdateView(RetrieveUpdateAPIView):
         return Skill.objects.filter(id=skill_id)
 
 
-class UserShineProfileRetrieveUpdateView(RetrieveUpdateAPIView):
+class UserShineProfileRetrieveUpdateView(APIView):
     authentication_classes = ()
     permission_classes = ()
 
     def get(self, request, *args, **kwargs):
-        user_email = kwargs.get('email')
+
+        user_email = request.session.get('email', '')
         if not user_email:
             return Response({}, status=400)
 
@@ -108,12 +119,6 @@ class UserShineProfileRetrieveUpdateView(RetrieveUpdateAPIView):
 
         request.session['personal_info'] = user_profile
 
-        user = User.objects.get_or_create(email=user_profile['email'], defaults=user_profile)
-
-        if user[1]:
-            user.save()
-
-        # user = user[0]
         #
         # # update user education
         # user_education_keys = ['user', 'specialization', 'institution_name', 'course_type', 'percentage_cgpa',
@@ -152,25 +157,26 @@ class UserShineProfileRetrieveUpdateView(RetrieveUpdateAPIView):
         # UserEducation.objects.bulk_create(user_education)
         #
         # # update user experience
-        # user_experience_keys = ['user', 'job_profile', 'company_name', 'start_date', 'end_date', 'is_working',
-        #                         'job_location',
-        #                         'work_description']
-        # experience = shine_profile and shine_profile['jobs']
-        #
-        # user_experience = []
-        #
-        # for exp in experience:
-        #     start_date = datetime.strptime(exp['start_date'], '%Y-%m-%dT%H:%M:%S').date() \
-        #         if exp['start_date'] is not None else \
-        #         exp['start_date']
-        #     end_date = datetime.strptime(exp['end_date'], '%Y-%m-%dT%H:%M:%S').date() \
-        #         if exp['end_date'] is not None else \
-        #         exp['end_date']
-        #     user_experience_values = [user, exp['job_title'], exp['company_name'],
-        #                               start_date, end_date,
-        #                               exp['is_current'], '', exp['description']]
-        #     experience_dict = dict(zip(user_experience_keys, user_experience_values))
-        #     user_experience.append(UserExperience(**experience_dict))
+        user_experience_keys = ['job_profile', 'company_name', 'start_date', 'end_date', 'is_working',
+                                'job_location',
+                                'work_description']
+        experience = shine_profile and shine_profile['jobs']
+
+        user_experience = []
+
+        for exp in experience:
+            start_date = datetime.strptime(exp['start_date'], '%Y-%m-%dT%H:%M:%S').date() \
+                if exp['start_date'] is not None else \
+                exp['start_date']
+            end_date = datetime.strptime(exp['end_date'], '%Y-%m-%dT%H:%M:%S').date() \
+                if exp['end_date'] is not None else \
+                exp['end_date']
+            user_experience_values = [exp['job_title'], exp['company_name'],
+                                      start_date, end_date,
+                                      exp['is_current'], '', exp['description']]
+            experience_dict = dict(zip(user_experience_keys, user_experience_values))
+            user_experience.append(UserExperience(**experience_dict))
+            request.session['user_experience'] = user_experience
         #
         # UserExperience.objects.bulk_create(user_experience)
         #
@@ -223,6 +229,12 @@ class UserExperienceListCreateView(ListCreateAPIView):
     permission_classes = ()
     queryset = UserExperience.objects.all()
     serializer_class = UserExperienceSerializer
+
+    # def get_queryset(self):
+    #     candidate_id = self.request.GET.get('c_id', '')
+    #     if 'user_experience' not in self.request.session:
+    #         user = User.objects.get(candidate_id=candidate_id)
+    #         return user.userexperience_set.all()
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):

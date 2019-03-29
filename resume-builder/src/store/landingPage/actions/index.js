@@ -1,7 +1,7 @@
-import {FETCH_SHINE_PROFILE} from "./actionTypes";
+import {GET_CANDIDATE_ID} from "./actionTypes";
 
-export const fetchShineProfile = () => ({
-    type: FETCH_SHINE_PROFILE
+export const getCandidateId = () => ({
+    type: GET_CANDIDATE_ID
 });
 
 

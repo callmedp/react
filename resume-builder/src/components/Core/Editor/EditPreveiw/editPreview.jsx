@@ -10,34 +10,7 @@ import {withRouter} from "react-router-dom";
 class EditPreview extends Component {
     constructor(props) {
         super(props)
-        this.myRef = React.createRef();
-        console.log('---', this.myRef)
-        this.state = {
-            fixed: false,
-            offset: 0
-        }
-        this.handleScroll = this.handleScroll.bind(this);
     }
-
-    componentDidMount() {
-        window.addEventListener('scroll', this.handleScroll);
-
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', () =>{})
-    }
-
-    handleScroll() {
-        console.log('-+++--', window.pageYOffset);
-        const section = this.myRef.current;
-        if (window.pageYOffset >= 258) {
-            section.className = 'flex-container mt-30 fixed';
-        }
-        else
-            section.className = 'flex-container mt-30'
-    }
-
 
     render() {
         return (
@@ -48,11 +21,9 @@ class EditPreview extends Component {
                 <Header/>
                 <div className="page-container">
                     <TopBar/>
-                    <section style={{height:"690px"}}>
-                        <div  className={'flex-container mt-30'} ref={this.myRef}>
-                            <LeftSideBar {...this.props}/>
-                            <RightSection {...this.props}/>
-                        </div>
+                    <section className={'flex-container mt-30'}>
+                        <LeftSideBar {...this.props}/>
+                        <RightSection {...this.props}/>
                     </section>
                 </div>
                 <Footer/>

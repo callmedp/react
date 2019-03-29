@@ -19,7 +19,7 @@ urlpatterns = [
     url(r'^users/$', UserListCreateView.as_view()),
     url(r'^skills/(?P<pk>\d+)/$', SkillRetrieveUpdateView.as_view()),
     url(r'^skills/$', SkillListCreateView.as_view()),
-    url(r'^user-profile/(?P<email>.+)/$', UserShineProfileRetrieveUpdateView.as_view()),
+    url(r'^user-profile/$', UserShineProfileRetrieveUpdateView.as_view()),
     url(r'^user-experiences/(?P<pk>\d+)/$', UserExperienceRetrieveUpdateView.as_view()),
     url(r'^user-experiences/$', UserExperienceListCreateView.as_view()),
     url(r'^user-educations/(?P<pk>\d+)/$', UserEducationRetrieveUpdateView.as_view()),
