@@ -3,7 +3,7 @@ import './personalInfo.scss'
 import {connect} from "react-redux";
 import * as actions from '../../../../../store/personalInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
-import {renderField} from "../../../../FormHandler/formFieldRenderer.jsx";
+import {renderField, datepicker} from "../../../../FormHandler/formFieldRenderer.jsx";
 import DatePickerField from "../../../../FormHandler/formFieldRenderer.jsx";
 
 export class PersonalInfo extends Component {
@@ -42,7 +42,7 @@ export class PersonalInfo extends Component {
                                 </fieldset>
                                 <fieldset>
                                     <label>Date Of Birth</label>
-                                    <Field component={DatePickerField} name="date_of_birth"  className={"input-control"}/>
+                                    <Field component={datepicker} name="date_of_birth"  className={"input-control"}/>
                                 </fieldset>
                             </div>
                             <div className="flex-container">

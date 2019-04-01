@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+    import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import * as actions from '../../../store/userInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';

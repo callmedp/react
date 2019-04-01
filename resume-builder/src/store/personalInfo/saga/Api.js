@@ -1,4 +1,5 @@
 import BaseApiService from '../../../services/BaseApiService'
+import moment from 'moment'
 
 const fetchPersonalInfo = (candidateId) => {
 
@@ -12,7 +13,7 @@ const fetchPersonalInfo = (candidateId) => {
             email: 'amanpreet@gmail.com',
             number: '9958220358',
             image: '',
-            date_of_birth: new Date('1995-12-05'),
+            date_of_birth: moment('1995-12-05').format('YYYY-MM-DD') ,
             location: 'India',
             gender: 'Male',
         }

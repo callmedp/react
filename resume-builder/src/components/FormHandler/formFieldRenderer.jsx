@@ -21,46 +21,22 @@ export const renderField = ({
     //     (warning && <span className={'Warn-Message'}>{warning}</span>))}
 );
 
-export default class DatePickerField extends React.Component {
-    constructor(props) {
-        super(props);
-        const input = props;
-        this.handleChange = this.handleChange.bind(this)
-        this.onBlur= this.onBlur.bind(this)
-    }
 
-    handleChange(date) {
-        this.setState({
-            startDate: date
-        })
-    }
-
-    onBlur = (date) => {
-        const {input} = this.props;
-        input.onBlur(date, input);
-    };
-
-    render() {
-        const {
-            input,
-            label,
-            type,
-            onDateChange,
-            meta: {touched, error, warning}
-        } = this.props;
-        return (
-            <DatePicker {...input} dateFormat="yyyy-MM-dd"
-                        selected={ input.value ? new Date(input.value) : null}
-                        onChange={date => input.onChange(date)}
-                        onBlur={this.onBlur}
-                        placeholderText={'Input Value'}
-
-            />)
-
-    }
+export const datepicker =
+    ({
+         input,
+         label,
+         type,
+         onDateChange,
+         meta: {touched, error, warning}
+     }) => (
+        <DatePicker {...input} dateFormat="yyyy-MM-dd"
+                    selected={input.value ? new Date(input.value) : null}
+                    onChange={date => input.onChange(date)}
 
 
-}
+        />)
+
 
 export const renderSelect = ({
                                  input,
