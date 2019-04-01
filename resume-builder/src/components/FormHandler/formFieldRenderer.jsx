@@ -4,6 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment';
 // import AsyncSelect from 'react-select/lib/Async';
 import Select from 'react-select';
+import PropTypes from 'prop-types';
 
 
 export const renderField = ({
@@ -20,18 +21,46 @@ export const renderField = ({
     //     (warning && <span className={'Warn-Message'}>{warning}</span>))}
 );
 
-export const datePicker = ({
-                               input,
-                               label,
-                               type,
-                               onDateChange,
-                               meta: {touched, error, warning}
-                           }) => (
-    <DatePicker {...input} dateFormat="yyyy-MM-dd"
-                selected={input.value ? moment(input.value).format("YYYY-MM-DD") : null}
-                onChange={date => input.onChange(moment(date).format("YYYY-MM-DD"))}
-    />
-)
+export default class DatePickerField extends React.Component {
+    constructor(props) {
+        super(props);
+        const input = props;
+        this.handleChange = this.handleChange.bind(this)
+        this.onBlur= this.onBlur.bind(this)
+    }
+
+    handleChange(date) {
+        this.setState({
+            startDate: date
+        })
+    }
+
+    onBlur = (date) => {
+        const {input} = this.props;
+        input.onBlur(date, input);
+    };
+
+    render() {
+        const {
+            input,
+            label,
+            type,
+            onDateChange,
+            meta: {touched, error, warning}
+        } = this.props;
+        return (
+            <DatePicker {...input} dateFormat="yyyy-MM-dd"
+                        selected={ input.value ? new Date(input.value) : null}
+                        onChange={date => input.onChange(date)}
+                        onBlur={this.onBlur}
+                        placeholderText={'Input Value'}
+
+            />)
+
+    }
+
+
+}
 
 export const renderSelect = ({
                                  input,
