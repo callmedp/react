@@ -744,7 +744,7 @@ class UpdateCertificateAndAssesment(APIView):
         self.vendor_id = self.kwargs.get('vendor_id')
 
         return Response({
-            "status": "SUCCESS",
+            "status": 1,
             "msg": "Certificate Updated"},
             status=status.HTTP_201_CREATED
         )
