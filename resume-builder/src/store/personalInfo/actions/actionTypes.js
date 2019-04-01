@@ -5,5 +5,7 @@ export const UPDATE_PERSONAL_INFO  = 'UPDATE_PERSONAL_INFO';
 
 export const SAVE_USER_INFO  = 'SAVE_USER_INFO';
 
+export const FETCH_IMAGE_URL = 'FETCH_IMAGE_URL'
+
 
 

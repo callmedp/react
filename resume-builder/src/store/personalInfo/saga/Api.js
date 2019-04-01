@@ -13,7 +13,7 @@ const fetchPersonalInfo = (candidateId) => {
             email: 'amanpreet@gmail.com',
             number: '9958220358',
             image: '',
-            date_of_birth: moment('1995-12-05').format('YYYY-MM-DD') ,
+            date_of_birth: moment('1995-12-05').format('YYYY-MM-DD'),
             location: 'India',
             gender: 'Male',
         }
@@ -38,8 +38,17 @@ const updatePersonalData = (data, candidateId) => {
     }
 };
 
+const fetchImageUrl = (data) => {
+    const url = `/media-upload/`;
+    //return BaseApiService.post(`http://127.0.0.1:8000/api/v1/${url}`, data);
+    return {
+
+    }
+};
+
 
 export const Api = {
     fetchPersonalInfo,
-    updatePersonalData
+    updatePersonalData,
+    fetchImageUrl
 }

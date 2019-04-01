@@ -8,9 +8,9 @@ export class Pricing extends React.Component {
         super(props);
     }
 
-    redirectToCart() {
-        this.props.addToCart();
-        // window.location.href = '/cart'
+    async redirectToCart() {
+        await this.props.addToCart();
+        window.location.href = '/cart'
     }
 
     render() {

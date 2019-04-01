@@ -10,6 +10,13 @@ export class PersonalInfo extends Component {
 
     componentDidMount() {
         this.props.fetchPersonalInfo()
+        this.adaptFileEventToValue = this.adaptFileEventToValue.bind(this)
+    }
+
+    adaptFileEventToValue(e) {
+        console.log(e.target.files[0]);
+        this.props.fetchImageUrl(e.target.files[0]);
+
     }
 
     render() {
@@ -42,7 +49,7 @@ export class PersonalInfo extends Component {
                                 </fieldset>
                                 <fieldset>
                                     <label>Date Of Birth</label>
-                                    <Field component={datepicker} name="date_of_birth"  className={"input-control"}/>
+                                    <Field component={datepicker} name="date_of_birth" className={"input-control"}/>
                                 </fieldset>
                             </div>
                             <div className="flex-container">
@@ -106,6 +113,12 @@ export class PersonalInfo extends Component {
 
                         <section className="pic-section mt-30">
                             <img className="img-responsive" src="/media/static/react/assets/images/upload-image.jpg"/>
+                            <input
+                                onChange={this.adaptFileEventToValue}
+                                onBlur={this.adaptFileEventToValue}
+                                type="file"
+                                name="image"
+                            />
                         </section>
                     </section>
 
@@ -144,6 +157,11 @@ const mapDispatchToProps = (dispatch) => {
         "onSubmit": (personalDetails) => {
             return new Promise((resolve, reject) => {
                 dispatch(actions.updatePersonalInfo({personalDetails, resolve, reject}));
+            })
+        },
+        "fetchImageUrl": (imageFile) => {
+            return new Promise((resolve, reject) => {
+                dispatch(actions.fetchImageUrl({imageFile, resolve, reject}));
             })
         }
     }

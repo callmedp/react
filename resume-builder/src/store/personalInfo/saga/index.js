@@ -16,7 +16,7 @@ function* getPersonalDetails(action) {
             console.log('error');
         }
         console.log('--get user personal Info---', result);
-        yield put({type: Actions.SAVE_USER_INFO, data:result['data']})
+        yield put({type: Actions.SAVE_USER_INFO, data: result['data']})
     } catch (e) {
         console.log(e);
     }
@@ -42,7 +42,35 @@ function* updatePersonalDetails(action) {
     }
 }
 
+
+function* fetchImageUrl(action) {
+    try {
+        const {payload: {imageFile, resolve, reject}} = action;
+
+        var data = new FormData();
+
+        data.append('image', imageFile);
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        const result = yield call(Api.fetchImageUrl, data, candidateId);
+        if (result['error']) {
+            return reject(new SubmissionError({_error: result['errorMessage']}));
+        }
+        yield put({type: Actions.SAVE_USER_INFO, data: result['data']});
+
+        return resolve('User Personal  Info saved successfully.');
+
+    } catch (e) {
+
+        console.log('error', e);
+    }
+}
+
+
 export default function* watchPersonalInfo() {
     yield takeLatest(Actions.FETCH_PERSONAL_INFO, getPersonalDetails)
     yield takeLatest(Actions.UPDATE_PERSONAL_INFO, updatePersonalDetails)
+    yield takeLatest(Actions.FETCH_IMAGE_URL, fetchImageUrl)
+
 }
