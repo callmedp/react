@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^v1/remove-cookie-from-header/$',
         views.RemoveCookieFromHeader.as_view(),
         name='remove-cookie-from-header'),
-    url(r'^v1/update-certificate-assesment/(?P<vendor_id>\d+)/$',
+    url(r'^v1/update-certificate-assesment/(?P<vendor_name>[\w\-]+)/$',
         views.UpdateCertificateAndAssesment.as_view(),
         name='remove-cookie-from-header')
 ]

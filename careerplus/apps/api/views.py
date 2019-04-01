@@ -741,7 +741,7 @@ class UpdateCertificateAndAssesment(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        self.vendor_id = self.kwargs.get('vendor_id')
+        self.vendor_name = self.kwargs.get('vendor_name')
 
         return Response({
             "status": 1,
