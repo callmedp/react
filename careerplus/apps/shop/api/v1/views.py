@@ -1,3 +1,4 @@
+
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from shop.models import Product
@@ -6,6 +7,7 @@ from rest_framework.authentication import SessionAuthentication
 from django_filters.rest_framework import DjangoFilterBackend
 from shared.rest_addons.mixins import FieldFilterMixin
 from rest_framework.response import Response
+from .tasks import delete_from_solr
 
 
 class ProductListView(FieldFilterMixin, ListAPIView):
@@ -38,5 +40,6 @@ class ProductDeleteView(APIView):
             count = len(products)
             # bulk deletion of the products
             products.delete()
+            delete_from_solr.delay()
 
         return Response({'message': '{} products deleted.'.format(count)}, status=200)
