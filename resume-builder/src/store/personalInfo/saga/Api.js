@@ -12,7 +12,7 @@ const fetchPersonalInfo = (candidateId) => {
             email: 'amanpreet@gmail.com',
             number: '9958220358',
             image: '',
-            date_of_birth: '22-12-1995',
+            date_of_birth: new Date('1995-12-05'),
             location: 'India',
             gender: 'Male',
         }
