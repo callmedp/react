@@ -738,7 +738,6 @@ class RemoveCookieFromHeader(APIView):
 class UpdateCertificateAndAssesment(APIView):
 
     authentication_classes = [OAuth2Authentication]
-    permission_classes = [IsAuthenticated, IsAdminUser]
 
     def post(self, request, *args, **kwargs):
         self.vendor_id = self.kwargs.get('vendor_id')
