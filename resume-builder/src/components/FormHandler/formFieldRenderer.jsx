@@ -15,7 +15,7 @@ export const renderField = ({
                                 meta: {touched, error, warning}
                             }) => (
 
-    <input {...input} className={className} placeholder={label} type={type}/>
+    <input {...input} className={className} placeholder={label} type={type} value={'here'}/>
     // {touched &&
     // ((error && <span className={'Error-message'}>{error}</span>) ||
     //     (warning && <span className={'Warn-Message'}>{warning}</span>))}

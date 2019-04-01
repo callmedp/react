@@ -7,16 +7,45 @@ import {renderField, datepicker} from "../../../../FormHandler/formFieldRenderer
 import DatePickerField from "../../../../FormHandler/formFieldRenderer.jsx";
 
 export class PersonalInfo extends Component {
+    constructor(props) {
+        super(props);
+        this.getImageURI = this.getImageURI.bind(this);
+        this.removeImage = this.removeImage.bind(this);
+        this.state = {
+            'imageURI': '',
+            'imageURL': ''
+        }
+
+    }
 
     componentDidMount() {
         this.props.fetchPersonalInfo()
-        this.adaptFileEventToValue = this.adaptFileEventToValue.bind(this)
     }
 
-    adaptFileEventToValue(e) {
-        console.log(e.target.files[0]);
-        this.props.fetchImageUrl(e.target.files[0]);
 
+    removeImage() {
+        this.setState({
+            imageURI: ''
+        })
+    }
+
+    async getImageURI(event) {
+        let reader = new FileReader();
+        reader.onload = (event) => {
+
+            this.setState({
+                imageURI: event.target.result
+            })
+            console.log('---', event.target.result)
+
+        };
+        reader.readAsDataURL(event.target.files[0]);
+
+        let url = await this.props.fetchImageUrl(event.target.files[0]);
+
+        this.setState({
+            'imageURL': url
+        })
     }
 
     render() {
@@ -110,15 +139,29 @@ export class PersonalInfo extends Component {
                             </div>
 
                         </section>
-
                         <section className="pic-section mt-30">
                             <img className="img-responsive" src="/media/static/react/assets/images/upload-image.jpg"/>
-                            <input
-                                onChange={this.adaptFileEventToValue}
-                                onBlur={this.adaptFileEventToValue}
-                                type="file"
-                                name="image"
-                            />
+
+                            <label>
+                                        <span className="plus-img"><i className="fa fa-plus"
+                                                                      aria-hidden="true"></i></span>
+                                <input accept="image/*" type="file" name="displayPicture"
+                                       onChange={this.getImageURI.bind(this)}
+                                       style={{opacity: 0}}/>
+                                <Field type={"text"} name={"image"} component={renderField}
+                                       value={this.state.imageURL} className={'zero-opacity'}/>
+                            </label>
+                            {
+                                this.state.imageURI ?
+                                    <div className='upper-cross' onClick={this.removeImage.bind(this)}>
+                                        <i className='fa fa-times'></i>
+                                    </div> : ''
+                            }
+                            {
+                                this.state.imageURI ?
+                                    <img className='img-responsive' src={this.state.imageURI}/> : ""
+                            }
+
                         </section>
                     </section>
 

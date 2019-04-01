@@ -39,16 +39,14 @@ const updatePersonalData = (data, candidateId) => {
 };
 
 const fetchImageUrl = (data) => {
-    const url = `/media-upload/`;
-    //return BaseApiService.post(`http://127.0.0.1:8000/api/v1/${url}`, data);
-    return {
-
-    }
+    const url = `media-upload/`;
+    return BaseApiService.post(`http://127.0.0.1:8000/api/v1/${url}`, data,
+        {}, false, true);
 };
 
 
 export const Api = {
     fetchPersonalInfo,
     updatePersonalData,
-    fetchImageUrl
+        fetchImageUrl
 }

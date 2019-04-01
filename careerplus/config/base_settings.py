@@ -129,7 +129,6 @@ MIDDLEWARE = [
     'core.middleware.AmpMiddleware',
     'core.middleware.LocalIPDetectionMiddleware',
 
-
 ]
 
 ROOT_URLCONF = 'careerplus.config.urls'
@@ -418,13 +417,18 @@ CLICK_TRACKING = 'https://www3.shine.com/click-tracking/'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-
-
 CORS_ALLOW_CREDENTIALS = False
 
-
-
 CORS_ORIGIN_WHITELIST = ('*',)
+
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+)
 
 ####### PRODUCT SETTINGS ####################
 # Do Not Change #
@@ -536,9 +540,12 @@ LOCAL_NETWORK_IPS = ["172.16.64.80", "125.19.44.195", "124.124.86.138", "115.112
                      "202.164.38.195", "122.162.129.43", "192.168.1.5", "223.179.134.80", "223.179.151.72",
                      "122.162.42.142", "171.79.76.124"]
 
-MEDIA_ALLOWED_CONTENT_TYPES = ['image/jpeg','image/jpg','image/gif','image/png','image/svg','image/svg+xml',\
-                                'video/x-flv','video/mp4','application/x-mpegURL','video/MP2T','video/3gpp',\
-                                'video/quicktime',' video/x-msvideo','video/x-ms-wmv','video/webm','application/pdf',\
-                                'application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document',\
-                                'application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',\
-                                'application/vnd.ms-powerpoint','application/vnd.openxmlformats-officedocument.presentationml.presentation']
+MEDIA_ALLOWED_CONTENT_TYPES = ['image/jpeg', 'image/jpg', 'image/gif', 'image/png', 'image/svg', 'image/svg+xml', \
+                               'video/x-flv', 'video/mp4', 'application/x-mpegURL', 'video/MP2T', 'video/3gpp', \
+                               'video/quicktime', ' video/x-msvideo', 'video/x-ms-wmv', 'video/webm', 'application/pdf', \
+                               'application/msword',
+                               'application/vnd.openxmlformats-officedocument.wordprocessingml.document', \
+                               'application/vnd.ms-excel',
+                               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', \
+                               'application/vnd.ms-powerpoint',
+                               'application/vnd.openxmlformats-officedocument.presentationml.presentation']

@@ -49,17 +49,22 @@ function* fetchImageUrl(action) {
 
         var data = new FormData();
 
-        data.append('image', imageFile);
+        const imageInfo = {
+            'privacy': '2',
+            'prefix': 'images',
+            'media': imageFile
+        };
+
+        for (const key in imageInfo) {
+            data.append(key, imageInfo[key]);
+        }
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
         const result = yield call(Api.fetchImageUrl, data, candidateId);
-        if (result['error']) {
-            return reject(new SubmissionError({_error: result['errorMessage']}));
-        }
-        yield put({type: Actions.SAVE_USER_INFO, data: result['data']});
 
-        return resolve('User Personal  Info saved successfully.');
+        return resolve(result['data']['path'])
+
 
     } catch (e) {
 
