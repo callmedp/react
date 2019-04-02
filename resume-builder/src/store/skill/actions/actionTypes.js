@@ -1,0 +1,2 @@
+export const FETCH_USER_SKILL = 'FETCH_USER_SKILL';
+export const SAVE_USER_SKILL = 'SAVE_USER_SKILL';
