@@ -2,6 +2,8 @@ import React from "react";
 import {BrowserRouter as Router, Route} from "react-router-dom";
 import EditPreviewContainer from '../components/Core/Editor/EditPreveiw/editPreview.jsx';
 import HomeContainer from '../components/Core/Home/home.jsx';
+import BuyContainer from '../components/Core/Payment/Buy/buy.jsx'
+import DownloadResumeContainer from '../components/Core/Payment/DownloadResume/downloadResume.jsx'
 
 export const RouteWithSubRoutes = route => (
     <Route
@@ -36,7 +38,16 @@ const routes = [
     {
         path: '/resume-builder/preview',
         component: EditPreviewContainer
+    },
+    {
+        path: '/resume-builder/buy',
+        component: BuyContainer
+    },
+    {
+        path: '/resume-builder/download-resume',
+        component: DownloadResumeContainer
     }
+
 
 ]
 
