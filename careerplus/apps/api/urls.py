@@ -26,7 +26,10 @@ urlpatterns = [
         name='api-recommended-products-category'),
     url(r'^v1/remove-cookie-from-header/$',
         views.RemoveCookieFromHeader.as_view(),
-        name='remove-cookie-from-header')
+        name='remove-cookie-from-header'),
+    url(r'^v1/shine-data-for-flow/$',
+        views.ShineDataFlowDataApiView.as_view(),
+        name='shine-data-for-flow'),
 ]
 
 if settings.DEBUG:
