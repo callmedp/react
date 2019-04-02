@@ -179,6 +179,28 @@ class ShineCandidateDetail(ShineToken):
         return None
 
 
+class PriorityApplicantUpdate(ShineToken):
+
+    def update_applicant_priority(self, candidate_id=None, data={}, headers=None):
+        try:
+            if candidate_id:
+                if not headers:
+                    headers = self.get_api_headers()
+                    if data and headers:
+                        headers.update({
+                            "Content-Type": 'application/json',
+                            "Accept": 'application/json',
+                        })
+                        api_url = settings.SHINE_SITE + '/api/v2/candidate/' +\
+                            candidate_id + '/career-plus/detail/?format=json'
+                        response = requests.patch(api_url, data=json.dumps(data), headers=headers)
+                        if response.status_code == 200:
+                            return True
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to update profile details %s'%str(e))
+        return False
+
+
 class FeatureProfileUpdate(ShineToken):
 
     def update_feature_profile(self, candidate_id=None, data={}, headers=None):
