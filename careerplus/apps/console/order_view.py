@@ -1763,6 +1763,10 @@ class DomesticProfileInitiatedQueueView(ListView, PaginationMixin):
                 exclude_list.append(oi.pk)
 
         queryset = queryset.exclude(id__in=exclude_list)
+
+        if not user.is_superuser:
+            queryset = queryset.filter(assigned_to=user)
+
         try:
             if self.query:
                 if self.sel_opt == 'number':
