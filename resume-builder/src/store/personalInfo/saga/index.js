@@ -4,8 +4,24 @@ import {takeLatest, put, call, select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
+import moment from 'moment'
+
 import {SubmissionError} from 'redux-form'
 
+const genderDict = {
+    '1': {
+        value: '1',
+        'label': 'Male'
+    },
+    '2': {
+        value: '2',
+        'label': 'Female'
+    },
+    '3': {
+        value: '3',
+        'label': 'Other'
+    }
+}
 
 function* getPersonalDetails(action) {
     try {
@@ -16,7 +32,17 @@ function* getPersonalDetails(action) {
             console.log('error');
         }
         console.log('--get user personal Info---', result);
-        yield put({type: Actions.SAVE_USER_INFO, data: result['data']})
+        let {data} = result;
+        const {date_of_birth, gender} = data;
+
+        data = {
+            ...data,
+            ...{
+                date_of_birth: date_of_birth && moment(date_of_birth).format('YYYY-MM-DD') || '',
+                gender: gender && genderDict[gender] || ''
+            }
+        }
+        yield put({type: Actions.SAVE_USER_INFO, data: data})
     } catch (e) {
         console.log(e);
     }

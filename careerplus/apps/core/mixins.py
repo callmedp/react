@@ -16,7 +16,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from core.library.gcloud.custom_cloud_storage import (GCPInvoiceStorage, GCPPrivateMediaStorage)
 from pathlib import Path
 from weasyprint import HTML
-from resumebuilder.models import User
+from resumebuilder.models import Candidate
 from PIL import Image
 import zipfile
 
@@ -373,19 +373,19 @@ class ResumeGenerate(object):
 
         #  handle for pdf
         if content_type == 'pdf':
-            user = User.objects.get(id=95)
-            extracurricular = user.extracurricular.split(',')
-            education = user.usereducation_set.all()
-            experience = user.userexperience_set.all()
-            skills = user.skill_set.all()
-            achievements = user.userachievement_set.all()
-            references = user.userreference_set.all()
-            projects = user.userproject_set.all()
-            certifications = user.usercertification_set.all()
+            candidate = Candidate.objects.get(id=95)
+            extracurricular = candidate.extracurricular.split(',')
+            education = candidate.candidateeducation_set.all()
+            experience = candidate.candidateexperience_set.all()
+            skills = candidate.skill_set.all()
+            achievements = candidate.candidateachievement_set.all()
+            references = candidate.candidatereference_set.all()
+            projects = candidate.candidateproject_set.all()
+            certifications = candidate.candidatecertification_set.all()
 
             #  handle context here later
             context_dict = {"STATIC_URL": settings.STATIC_URL, "SITE_DOMAIN": settings.SITE_DOMAIN,
-                            "SITE_PROTOCOL": settings.SITE_PROTOCOL, 'user': user, 'education': education,
+                            "SITE_PROTOCOL": settings.SITE_PROTOCOL, 'user': candidate, 'education': education,
                             'experience': experience, 'skills': skills,
                             'achievements': achievements, 'references': references, 'projects': projects,
                             'certifications': certifications, 'extracurricular': extracurricular}

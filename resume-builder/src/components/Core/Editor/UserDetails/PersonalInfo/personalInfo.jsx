@@ -3,8 +3,8 @@ import './personalInfo.scss'
 import {connect} from "react-redux";
 import * as actions from '../../../../../store/personalInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
-import {renderField, datepicker} from "../../../../FormHandler/formFieldRenderer.jsx";
-import DatePickerField from "../../../../FormHandler/formFieldRenderer.jsx";
+import {renderField, datepicker, renderSelect} from "../../../../FormHandler/formFieldRenderer.jsx";
+import moment from 'moment';
 
 export class PersonalInfo extends Component {
     constructor(props) {
@@ -25,7 +25,8 @@ export class PersonalInfo extends Component {
 
     removeImage() {
         this.setState({
-            imageURI: ''
+            imageURI: '',
+            imageURL: ''
         })
     }
 
@@ -49,7 +50,8 @@ export class PersonalInfo extends Component {
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, enableReinitialize} = this.props;
+        const {error, handleSubmit, pristine, reset, submitting, enableReinitialize, personalInfo} = this.props;
+        console.log('---', this.props);
         return (
             <div>
                 <section className="head-section">
@@ -57,7 +59,9 @@ export class PersonalInfo extends Component {
                     <h2>Personal Info</h2>
                     <span className="icon-edit icon-edit__cursor"></span>
                 </section>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit((values) => {
+                    this.props.onSubmit(values, this.state.imageURL);
+                })}>
                     <section className="flex-container right-sidebar-scroll">
                         <section className="info-section">
                             <div className="flex-container">
@@ -74,7 +78,16 @@ export class PersonalInfo extends Component {
                             <div className="flex-container">
                                 <fieldset>
                                     <label>Gender</label>
-                                    <Field component={renderField} type={"text"} name="gender"/>
+                                    <Field
+                                        name="gender"
+                                        component={renderSelect}
+                                        label="Gender"
+                                        options={[
+                                            {value: '1', label: 'Male'},
+                                            {value: '2', label: 'Female'},
+                                            {value: '3', label: 'Other'}
+                                        ]}
+                                    />
                                 </fieldset>
                                 <fieldset>
                                     <label>Date Of Birth</label>
@@ -115,28 +128,28 @@ export class PersonalInfo extends Component {
                                     </div>
                                 </fieldset>
                             </div>
-                            <div className="flex-container">
-                                <fieldset>
-                                    <label>Linkedin</label>
-                                    <div className="input-group">
-                                        <div className="input-group--input-group-icon">
-                                            <span className="icon-linkedin"></span>
-                                        </div>
-                                        <Field component={renderField} type={"text"} name="linkedIn"
-                                               className={"input-control"}/>
-                                    </div>
-                                </fieldset>
-                                <fieldset>
-                                    <label>Facebook</label>
-                                    <div className="input-group">
-                                        <div className="input-group--input-group-icon">
-                                            <span className="icon-facebook"></span>
-                                        </div>
-                                        <Field component={renderField} type={"text"} name="facebook"
-                                               className={"input-control"}/>
-                                    </div>
-                                </fieldset>
-                            </div>
+                            {/*<div className="flex-container">*/}
+                            {/*<fieldset>*/}
+                            {/*<label>Linkedin</label>*/}
+                            {/*<div className="input-group">*/}
+                            {/*<div className="input-group--input-group-icon">*/}
+                            {/*<span className="icon-linkedin"></span>*/}
+                            {/*</div>*/}
+                            {/*<Field component={renderField} type={"text"} name="linkedIn"*/}
+                            {/*className={"input-control"}/>*/}
+                            {/*</div>*/}
+                            {/*</fieldset>*/}
+                            {/*<fieldset>*/}
+                            {/*<label>Facebook</label>*/}
+                            {/*<div className="input-group">*/}
+                            {/*<div className="input-group--input-group-icon">*/}
+                            {/*<span className="icon-facebook"></span>*/}
+                            {/*</div>*/}
+                            {/*<Field component={renderField} type={"text"} name="facebook"*/}
+                            {/*className={"input-control"}/>*/}
+                            {/*</div>*/}
+                            {/*</fieldset>*/}
+                            {/*</div>*/}
 
                         </section>
                         <section className="pic-section mt-30">
@@ -152,14 +165,15 @@ export class PersonalInfo extends Component {
                                        value={this.state.imageURL} className={'zero-opacity'}/>
                             </label>
                             {
-                                this.state.imageURI ?
+                                this.state.imageURI || personalInfo.image ?
                                     <div className='upper-cross' onClick={this.removeImage.bind(this)}>
                                         <i className='fa fa-times'></i>
                                     </div> : ''
                             }
                             {
-                                this.state.imageURI ?
-                                    <img className='img-responsive' src={this.state.imageURI}/> : ""
+                                this.state.imageURI || personalInfo.image ?
+                                    <img className='img-responsive'
+                                         src={this.state.imageURI || personalInfo.image}/> : ""
                             }
 
                         </section>
@@ -168,7 +182,7 @@ export class PersonalInfo extends Component {
 
                     <div className="flex-container items-right mr-20 mb-30">
                         <button className="blue-button mr-10">Preview</button>
-                        <button className="orange-button" type="submit" disabled={pristine || submitting}>Save &
+                        <button className="orange-button" type="submit">Save &
                             Continue
                         </button>
                     </div>
@@ -188,7 +202,8 @@ export const PersonalInfoForm = reduxForm({
 
 const mapStateToProps = (state) => {
     return {
-        initialValues: state.personalInfo
+        initialValues: state.personalInfo,
+        personalInfo: state.personalInfo
     }
 };
 
@@ -197,7 +212,16 @@ const mapDispatchToProps = (dispatch) => {
         "fetchPersonalInfo": () => {
             return dispatch(actions.fetchPersonalInfo())
         },
-        "onSubmit": (personalDetails) => {
+        "onSubmit": (personalDetails, imageURL) => {
+            console.log('0----', imageURL);
+            personalDetails = {
+                ...personalDetails,
+                ...{
+                    'date_of_birth': personalDetails['date_of_birth'] && moment(personalDetails['date_of_birth']).format('YYYY-MM-DD') || '',
+                    'gender': personalDetails['gender'] && personalDetails['gender']['value'] || '',
+                    'image': imageURL
+                }
+            }
             return new Promise((resolve, reject) => {
                 dispatch(actions.updatePersonalInfo({personalDetails, resolve, reject}));
             })

@@ -1,7 +1,6 @@
 import {SAVE_USER_INFO} from "../actions/actionTypes";
 
 const initialState = {
-    candidate_id: '',
     first_name: '',
     last_name: '',
     email: '',
