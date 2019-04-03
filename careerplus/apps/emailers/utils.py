@@ -27,6 +27,7 @@ def get_featured_profile_data_for_candidate(candidate_id, curr_order_item, featu
             sub_type_flow__in=other_active_sub_type_flow
         ).order_by('-priority_value', '-id').values('id', 'priority_value'))
         current_ecs_value.extend(other_feature_profile_items)
+        current_ecs_value = list(sorted(current_ecs_value, key=lambda x: x['id'], reverse=True))
         current_ecs_value = list(sorted(current_ecs_value, key=lambda x: x['priority_value'], reverse=True))
         final_values = []
         for val in current_ecs_value:
