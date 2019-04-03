@@ -38,7 +38,7 @@ def get_featured_profile_data_for_candidate(candidate_id, curr_order_item, featu
         if feature_profile_item_id in data['ShineCareerPlus']['ec']:
             data['ShineCareerPlus']['xfr'] = 1
     else:
-        if curr_order_item.product.sub_type_flow == 501:
+        if curr_order_item.product.sub_type_flow == 501 and feature_profile_item_id not in data['ShineCareerPlus']['ec'] :
             data['ShineCareerPlus']['xfr'] = 0
         elif feature_profile_item_id in data['ShineCareerPlus']['ec']:
             data['ShineCareerPlus']['xfr'] = 1
