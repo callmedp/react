@@ -40,5 +40,7 @@ def get_featured_profile_data_for_candidate(candidate_id, curr_order_item, featu
     else:
         if curr_order_item.product.sub_type_flow == 501:
             data['ShineCareerPlus']['xfr'] = 0
+        elif feature_profile_item_id in data['ShineCareerPlus']['ec']:
+            data['ShineCareerPlus']['xfr'] = 1
 
     return data
