@@ -38,6 +38,16 @@
 	flex: 0 1 180px;
 	flex-direction: column;
 
+	label {
+		width: 150px;
+		margin: 18px 20px 0 0;
+	}
+
+	img {
+		cursor: pointer;
+		box-shadow: 0 5px 16px 0 rgba(190,187,187,0.50);
+	}
+
 	@media (max-width: 1190px) {
 		flex: 0 1 120px;
 	}

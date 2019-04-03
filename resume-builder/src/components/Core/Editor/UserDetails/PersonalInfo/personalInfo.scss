@@ -18,3 +18,13 @@ h2 {
 .zero-opacity {
   opacity: 0;
 }
+
+.upper-cross {
+	position: relative;
+
+	.icon-close {
+		position: absolute;
+		right: 20px;
+		top: 0px;
+	}
+}

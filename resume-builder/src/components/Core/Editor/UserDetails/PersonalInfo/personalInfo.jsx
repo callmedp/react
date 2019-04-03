@@ -159,29 +159,27 @@ export class PersonalInfo extends Component {
 
                         </section>
                         <section className="pic-section mt-30">
-                            <img className="img-responsive" src="/media/static/react/assets/images/upload-image.jpg"/>
+                            {
+                                this.state.imageURI || personalInfo.image ?
+                                    <div className='upper-cross' onClick={this.removeImage.bind(this)}>
+                                        <i className='icon-close'></i>
+                                    </div> : ''
+                            }
 
                             <label>
-                                        <span className="plus-img"><i className="fa fa-plus"
-                                                                      aria-hidden="true"></i></span>
+                              
+                                {
+                                this.state.imageURI || personalInfo.image ?
+                                    <img className='img-responsive'
+                                         src={this.state.imageURI || personalInfo.image}/> :  <img className="img-responsive" src="/media/static/react/assets/images/upload-image.jpg"/>
+                            }
                                 <input accept="image/*" type="file" name="displayPicture"
                                        onChange={this.getImageURI.bind(this)}
                                        style={{opacity: 0}}/>
                                 <Field type={"text"} name={"image"} component={renderField}
                                        value={this.state.imageURL} className={'zero-opacity'}/>
                             </label>
-                            {
-                                this.state.imageURI || personalInfo.image ?
-                                    <div className='upper-cross' onClick={this.removeImage.bind(this)}>
-                                        <i className='fa fa-times'></i>
-                                    </div> : ''
-                            }
-                            {
-                                this.state.imageURI || personalInfo.image ?
-                                    <img className='img-responsive'
-                                         src={this.state.imageURI || personalInfo.image}/> : ""
-                            }
-
+                           
                         </section>
                     </section>
 

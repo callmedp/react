@@ -162,3 +162,59 @@
 .icon-payment-done {
     @include icon-inblock (70px, 88px, -1px -139px);
 }
+
+.icon-advantage1 {
+    @include icon-inblock (51px, 51px, -1px -243px);
+}
+
+.icon-advantage2 {
+    @include icon-inblock (56px, 56px, -76px -244px);
+}
+
+.icon-advantage3 {
+    @include icon-inblock (54px, 52px, -155px -244px);
+}
+
+.icon-advantage4 {
+    @include icon-inblock (40px, 53px, -236px -244px);
+}
+
+.icon-works1 {
+    @include icon-inblock (119px, 122px, -1px -359px);
+}
+
+.icon-works2 {
+    @include icon-inblock (113px, 115px, -129px -354px);
+}
+
+.icon-works3 {
+    @include icon-inblock (113px, 112px, -251px -354px);
+}
+
+.icon-features1 {
+    @include icon-inblock (39px, 47px, -362px -240px);
+}
+
+.icon-features2 {
+    @include icon-inblock (35px, 35px, -410px -240px);
+}
+
+.icon-features3 {
+    @include icon-inblock (34px, 45px, -459px -240px);
+}
+
+.icon-features4 {
+    @include icon-inblock (41px, 42px, 0 -306px);
+}
+
+.icon-features5 {
+    @include icon-inblock (38px, 40px, -52px -306px);
+}
+
+.icon-features6 {
+    @include icon-inblock (42px, 42px, -105px -306px);
+}
+
+.icon-close {
+    @include icon-inblock (10px, 10px, -412px -110px);
+}
