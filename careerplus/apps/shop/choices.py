@@ -260,3 +260,8 @@ CITY_CHOICES = (
     (4, 'Kolkata'),
 
 )
+
+SHINE_FLOW_ACTION = (
+    (1, 'Highlight'),
+    (2, 'Booster')
+)

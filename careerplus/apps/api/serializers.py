@@ -300,7 +300,7 @@ class  ShineDataFlowDataSerializer(ModelSerializer):
 
     class Meta:
         model = ShineProfileData
-        fields = ('id', 'name', 'image_url')
+        fields = ('id', 'name', 'image_url', 'priority_value')
 
     def get_image_url(self, obj):
         if obj.image:

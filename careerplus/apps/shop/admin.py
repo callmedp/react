@@ -122,7 +122,7 @@ class DeliveryServiceAdmin(admin.ModelAdmin):
 
 
 class ShineProfileDataAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'type_flow', 'sub_type_flow', 'booster_value']
+    list_display = ['id', 'name', 'type_flow', 'sub_type_flow', 'priority_value']
 
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Attribute, AttributeAdmin)
