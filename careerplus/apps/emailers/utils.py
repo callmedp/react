@@ -9,9 +9,9 @@ def get_featured_profile_data_for_candidate(candidate_id, curr_order_item, featu
     current_sub_type_flow = ShineProfileData.objects.filter(sub_type_flow=curr_order_item.product.sub_type_flow)
     current_ecs_value = list(current_sub_type_flow.values('id', 'priority_value'))
     if feature:
-        data = {"ShineCareerPlus": {'ec': [current_sub_type_flow.first().id], 'xfr':1}}
+        data = {"ShineCareerPlus": {'ec': [current_sub_type_flow.first().id]}}
     else:
-        data = {"ShineCareerPlus": {'ec': [], 'xfr': 0}}
+        data = {"ShineCareerPlus": {'ec': []}}
     other_featured_items = OrderItem.objects.filter(
         order__candidate_id=candidate_id,
         product__type_flow=5,
@@ -32,4 +32,13 @@ def get_featured_profile_data_for_candidate(candidate_id, curr_order_item, featu
                 final_values.append(val['id'])
 
         data['ShineCareerPlus']['ec'] = final_values
+    # get feature profile flow id
+    feature_profile_item_id = ShineProfileData.objects.filter(sub_type_flow=501).first().id
+    if feature:
+        if feature_profile_item_id in data['ShineCareerPlus']['ec']:
+            data['ShineCareerPlus']['xfr'] = 1
+    else:
+        if curr_order_item.product.sub_type_flow == 501:
+            data['ShineCareerPlus']['xfr'] = 0
+
     return data
