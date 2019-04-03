@@ -251,3 +251,8 @@ APPLICATION_PROCESS = {
 APPLICATION_PROCESS_CHOICES = [(int(key), val[1], val[0])for key, val in list(APPLICATION_PROCESS.items())]
 
 BENEFITS_CHOICES = [(int(key), val[1], val[0])for key, val in list(BENEFITS.items())]
+
+SHINE_FLOW_ACTION = (
+    (1, 'Highlight'),
+    (2, 'Booster')
+)
