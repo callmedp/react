@@ -1,4 +1,5 @@
 from decimal import Decimal
+from typing import Tuple
 
 FACULTY_DEFAULT = 0
 FACULTY_TEACHER = 1
@@ -56,7 +57,9 @@ FLOW_CHOICES = (
     (12, 'Country Specific Resume'),  # flow 12
     (13, 'Executive Bio,Portfolio,Visual Resume,Cover Letter,Second Regular Resume'),  # flow 13
     (14, 'University Courses'),
-    (15, 'Resume Booster International')
+    (15, 'Resume Booster International'),
+    (16, 'Resume Builder'),  # flow 15
+
 )
 
 BG_COLOR = {0: "#c8b98d", 1: "#cfbabd", 2: "#75dac2", 3: "#d2db86",

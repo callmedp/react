@@ -2,7 +2,7 @@
 @import './variables/mixins.scss';
 
 .white-button {
-	@include border-radius(20px)
+	@include border-radius(20px);
 	border: 1px solid $white;
 	padding: 10px 15px;
 	display: inline-block;
@@ -11,7 +11,7 @@
 }
 
 .blue-button {
-	@include border-radius(20px)
+	@include border-radius(20px);
 	border: 1px solid $blue1;
 	padding: 8px 20px;
 	display: inline-block;
@@ -25,7 +25,7 @@
 }
 
 .orange-button {
-	@include border-radius(20px)
+	@include border-radius(20px);
 	border: 1px solid $orange;
 	padding: 8px 20px;
 	display: inline-block;
@@ -35,7 +35,7 @@
 }
 
 .add-button {
-	@include border-radius(20px)
+	@include border-radius(20px);
 	border: 1px solid $blue1;
 	padding: 6px 20px 7px 20px;
 	display: inline-block;

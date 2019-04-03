@@ -1,13 +1,19 @@
-import {FETCH_PERSONAL_INFO, SAVE_PERSONAL_INFO} from './actionTypes';
+import {FETCH_PERSONAL_INFO, UPDATE_PERSONAL_INFO, FETCH_IMAGE_URL} from './actionTypes';
 
 
-export const fetchPersonalInfo = () =>({
+export const fetchPersonalInfo = () => ({
     type: FETCH_PERSONAL_INFO
 });
 
 
-export const savePersonalInfo = (payload) => ({
-    type: SAVE_PERSONAL_INFO,
-    data: payload
+export const updatePersonalInfo = (payload) => ({
+    type: UPDATE_PERSONAL_INFO,
+    payload
+});
+
+
+export const fetchImageUrl = (payload) => ({
+    type: FETCH_IMAGE_URL,
+    payload
 });
 

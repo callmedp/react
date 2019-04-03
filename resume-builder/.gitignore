@@ -24,8 +24,10 @@ yarn-error.log*
 
 .idea/
 
-/.package-lock.json
+package-lock.json
 
 /careerplus/static_core/react/dist
 
 webpack-stats.json
+
+../dump.rdb

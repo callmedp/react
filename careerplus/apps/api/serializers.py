@@ -338,8 +338,7 @@ class MediaUploadSerializer(serializers.Serializer):
 
         storage_class_obj = privacy_storage_class_mapping.get(privacy)()
         saved_file_path = storage_class_obj._save(file_name_with_extension,file_obj)
-            
         entity_object = MediaObject()
-        media_object_path = storage_class_obj.url(storage_class_obj.location+file_name_with_extension)
+        media_object_path = storage_class_obj.url(file_name_with_extension)
         setattr(entity_object,"path",media_object_path)
         return entity_object

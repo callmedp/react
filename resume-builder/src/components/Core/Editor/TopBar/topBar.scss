@@ -6,7 +6,7 @@
 }
 
 .top-banner {
-	background: url(/images/banner-bg.jpg) 0 0 no-repeat;
+	background: url(/media/static/react/assets/images/banner-bg.jpg) 0 0 no-repeat;
 	background-size: cover;
 	@include border-radius(4px);
 	display: inline-block;
@@ -56,6 +56,14 @@
 				max-width: 100%;
 				@include border-radius(4px);
 			}
+		}
+
+		&--payment-done {
+			width: 70px;
+			height: 88px;
+			display: inline-block;
+			background: $sprite -1px -139px;
+			justify-content: flex-end;
 		}
 	}
 }

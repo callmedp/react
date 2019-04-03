@@ -2,11 +2,12 @@ import React from "react";
 import {BrowserRouter as Router, Route} from "react-router-dom";
 import EditPreviewContainer from '../components/Core/Editor/EditPreveiw/editPreview.jsx';
 import HomeContainer from '../components/Core/Home/home.jsx';
-import BuyContainer from '../components/Core/Payment/Buy/buy.jsx'
-import DownloadResumeContainer from '../components/Core/Payment/DownloadResume/downloadResume.jsx'
+import BuyContainer from '../components/Core/Payment/Buy/buy.jsx';
+import DownloadContainer from '../components/Core/Payment/DownloadResume/downloadResume.jsx';
 
 export const RouteWithSubRoutes = route => (
     <Route
+        path={route.path}
         path={route.path}
         exact={route.exact}
         render={props => (
@@ -44,8 +45,8 @@ const routes = [
         component: BuyContainer
     },
     {
-        path: '/resume-builder/download-resume',
-        component: DownloadResumeContainer
+        path: '/resume-builder/download',
+        component: DownloadContainer
     }
 
 
