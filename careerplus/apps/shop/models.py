@@ -2939,4 +2939,4 @@ class ShineProfileData(AbstractAutoDate):
     type_flow = models.PositiveSmallIntegerField(
         _('Flow'), choices=FLOW_CHOICES)
     sub_type_flow = models.IntegerField(choices=SUB_FLOW_CHOICES, unique=True)
-    booster_value = models.PositiveSmallIntegerField(default=0)
+    priority_value = models.PositiveIntegerField(default=1)

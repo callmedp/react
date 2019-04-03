@@ -7,9 +7,9 @@ def get_featured_profile_data_for_candidate(candidate_id, curr_order_item, featu
     feature_profile_items_sub_type_flow = list(ShineProfileData.objects.all().values_list('sub_type_flow',flat=True))
     current_sub_type_flow = ShineProfileData.objects.filter(sub_type_flow=curr_order_item.product.sub_type_flow)
     if feature:
-        data = {"ShineCareerPlus": {'ec': [current_sub_type_flow.first().id]}}
+        data = {"ShineCareerPlus": {'ec': [current_sub_type_flow.first().id], 'xfr':1}}
     else:
-        data = {"ShineCareerPlus": {'ec': []}}
+        data = {"ShineCareerPlus": {'ec': [], 'xfr': 0}}
     other_featured_items = OrderItem.objects.filter(
         order__candidate_id=candidate_id,
         product__type_flow=5,
