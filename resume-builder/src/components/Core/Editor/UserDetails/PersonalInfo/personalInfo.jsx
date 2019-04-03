@@ -47,7 +47,6 @@ export class PersonalInfo extends Component {
             this.setState({
                 imageURI: event.target.result
             })
-            console.log('---', event.target.result)
 
         };
         reader.readAsDataURL(event.target.files[0]);
@@ -61,7 +60,6 @@ export class PersonalInfo extends Component {
 
     render() {
         const {error, handleSubmit, pristine, reset, submitting, enableReinitialize, personalInfo} = this.props;
-        console.log('---', this.props);
         return (
             <div>
                 <section className="head-section">

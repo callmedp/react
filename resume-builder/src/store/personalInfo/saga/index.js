@@ -31,7 +31,6 @@ function* getPersonalDetails(action) {
         if (result['error']) {
             console.log('error');
         }
-        console.log('--get user personal Info---', result);
         let {data} = result;
         const {date_of_birth, gender} = data;
 
