@@ -11,6 +11,8 @@ export class PersonalInfo extends Component {
         super(props);
         this.getImageURI = this.getImageURI.bind(this);
         this.removeImage = this.removeImage.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handlePreview = this.handlePreview.bind(this);
         this.state = {
             'imageURI': '',
             'imageURL': ''
@@ -22,6 +24,14 @@ export class PersonalInfo extends Component {
         this.props.fetchPersonalInfo()
     }
 
+    async handleSubmit(values) {
+        await this.props.onSubmit(values, this.state.imageURL);
+        this.props.history.push('/resume-builder/edit/?type=summary')
+    }
+
+    handlePreview() {
+        this.props.history.push('/resume-builder/preview/');
+    }
 
     removeImage() {
         this.setState({
@@ -37,7 +47,6 @@ export class PersonalInfo extends Component {
             this.setState({
                 imageURI: event.target.result
             })
-            console.log('---', event.target.result)
 
         };
         reader.readAsDataURL(event.target.files[0]);
@@ -51,7 +60,6 @@ export class PersonalInfo extends Component {
 
     render() {
         const {error, handleSubmit, pristine, reset, submitting, enableReinitialize, personalInfo} = this.props;
-        console.log('---', this.props);
         return (
             <div>
                 <section className="head-section">
@@ -59,9 +67,7 @@ export class PersonalInfo extends Component {
                     <h2>Personal Info</h2>
                     <span className="icon-edit icon-edit__cursor"></span>
                 </section>
-                <form onSubmit={handleSubmit((values) => {
-                    this.props.onSubmit(values, this.state.imageURL);
-                })}>
+                <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <section className="flex-container right-sidebar-scroll">
                         <section className="info-section">
                             <div className="flex-container">
@@ -179,7 +185,7 @@ export class PersonalInfo extends Component {
 
 
                     <div className="flex-container items-right mr-20 mb-30">
-                        <button className="blue-button mr-10">Preview</button>
+                        <button className="blue-button mr-10" onClick={this.handlePreview}>Preview</button>
                         <button className="orange-button" type="submit">Save &
                             Continue
                         </button>
@@ -211,7 +217,6 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchPersonalInfo())
         },
         "onSubmit": (personalDetails, imageURL) => {
-            console.log('0----', imageURL);
             personalDetails = {
                 ...personalDetails,
                 ...{

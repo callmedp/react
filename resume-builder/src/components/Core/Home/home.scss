@@ -211,8 +211,9 @@
         flex: 0 0 60px;
         @include flexbox();
         flex-direction: row;
-        margin-top: -10px;
         justify-content: flex-start;
+        align-self: flex-start;
+        margin-top: 5px;
     }
 
     &--content {
@@ -221,5 +222,6 @@
         flex-direction: column;
         justify-content: flex-start;
         padding-right: 30px;
+        align-self: flex-start;
     }
 }

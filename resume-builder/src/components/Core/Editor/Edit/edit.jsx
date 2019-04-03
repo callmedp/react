@@ -13,17 +13,13 @@ export default class Edit extends Component {
             type: values && values.type || ''
         };
         if (!(values && values.type)) {
-            console.log('here', this.props.history);
             this.props.history.push('/resume-builder/edit/?type=profile')
         }
     }
 
 
     handleSpanClick(e) {
-        console.log('event ', e, this.context);
         e.stopPropagation();
-        console.log('clickeddd');
-
     }
 
     componentDidUpdate(prevProps) {

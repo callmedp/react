@@ -15,7 +15,6 @@ function* fetchUserReference(action) {
         if (result['error']) {
             console.log('error');
         }
-        console.log('--get user experiences Info---', result);
         yield put({type: Actions.SAVE_USER_REFERENCE, data: result['data']})
     } catch (e) {
         console.log(e);
