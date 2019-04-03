@@ -342,3 +342,6 @@ class MediaUploadSerializer(serializers.Serializer):
         media_object_path = storage_class_obj.url(file_name_with_extension)
         setattr(entity_object,"path",media_object_path)
         return entity_object
+
+class ResumeBuilderProductSerializer(serializers.Serializer):
+    id = serializers.IntegerField()

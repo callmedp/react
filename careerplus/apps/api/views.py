@@ -40,7 +40,8 @@ from .serializers import (
     OrderListHistorySerializer,
     RecommendedProductSerializer,
     RecommendedProductSerializerSolr,
-    MediaUploadSerializer)
+    MediaUploadSerializer,
+    ResumeBuilderProductSerializer)
 from shared.rest_addons.pagination import Learning_custom_pagination
 
 
@@ -736,7 +737,17 @@ class RemoveCookieFromHeader(APIView):
 
         return response
 
+
 class MediaUploadView(CreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     serializer_class = MediaUploadSerializer
+
+
+class ResumeBuilderProductView(ListAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = ResumeBuilderProductSerializer
+
+    def get_queryset(self):
+        return Product.objects.all().filter(type_flow=13)

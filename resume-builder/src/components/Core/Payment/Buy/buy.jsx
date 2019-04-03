@@ -3,11 +3,23 @@ import './buy.scss'
 import TopBar from '../../Editor/TopBar/topBar.jsx'
 import Header from '../../../Common/Header/header.jsx'
 import Footer from '../../../Common/Footer/footer.jsx'
-import {withRouter} from "react-router-dom";
+import * as action from '../../../../store/buy/actions'
+import {connect} from "react-redux";
 
-export default class Buy extends Component {
+export class Buy extends Component {
+	
+	constructor(props) {
+        super(props);
+    }
 
+    async redirectToCart() {
+        await this.props.addToCart();
+        window.location.href = 'http://127.0.0.1:8000/cart'
+	}
  
+	componentDidMount(){
+		this.props.getProductIds();
+	}
     render() {
         return (
             /*
@@ -255,7 +267,7 @@ export default class Buy extends Component {
                     					You pay
                     					<span>Rs. <strong>999/-</strong></span>
                     				</div>
-                    				<button className="choose-plan--orange-button-change orange-button items-right pull-right mt-10">Pay now</button>
+                    				<button className="choose-plan--orange-button-change orange-button items-right pull-right mt-10" onClick={this.redirectToCart.bind(this)}>Pay now</button>
                     			</div>
                     		</div>
                     	</section>
@@ -273,3 +285,20 @@ export default class Buy extends Component {
     }
 
 }
+
+const mapStateToProps = (state) => {
+    return {}
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+		'getProductIds': () => {
+            return dispatch(action.getProductIds())
+        },
+        'addToCart': () => {
+            return dispatch(action.addToCart())
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Buy);
