@@ -52,7 +52,7 @@ def upload_certificate_task(task=None, user=None, vendor=None, vendor_text=None)
                 upload_path)
         if exist_file:
             f = True
-            fieldnames = ['name', 'skill', 'certificate_file_url']
+            fieldnames = ['name', 'skill', 'certificate_file_url', 'vendor_image_url']
             if not settings.IS_GCP:
                 upload = open(
                     settings.MEDIA_ROOT + '/' + upload_path,
@@ -104,22 +104,52 @@ def upload_certificate_task(task=None, user=None, vendor=None, vendor_text=None)
             next(uploader, None)  # skip the headers
             for row in uploader:
                 try:
+                    import ipdb; ipdb.set_trace();
                     name = row.get('name', '')
                     skill = row.get('skill', '')
                     certi_file_url = row.get('certificate_file_url')
+                    vendor_image_url = row.get('vendor_image_url')
+                    make_entry = False
                     if name:
                         if vendor:
-                            obj, created = Certificate.objects.get_or_create(
+                            existing_certificates = Certificate.objects.filter(
                                 name=name, vendor_provider=vendor)
                         elif vendor_text:
-                            obj, created = Certificate.objects.get_or_create(
+                            existing_certificates = Certificate.objects.filter(
                                 name=name, vendor_text=vendor_text)
-                        if certi_file_url:
-                            obj.certificate_file_url = certi_file_url
-                        obj.skill = skill
-                        obj.save()
-                        if not created:
-                            row['error_report'] = "certificate updated"
+
+                        if not existing_certificates.exists():
+                            make_entry = True
+                        else:
+                            all_skills = list(existing_certificates.exclude(skill="").values_list('skill', flat=True))
+                            processed_all_skills = []
+                            for skill in all_skills:
+                                skill = sorted(map(lambda s: s.strip(), skill.split(',')))
+                                skill = "|".join(skill)
+                                processed_all_skills.append(skill)
+
+                            new_skill = list(sorted(map(lambda s: s.strip(), skill.split(','))))
+                            new_skill = "|".join(new_skill)
+
+                            if new_skill not in processed_all_skills:
+                                make_entry = True
+
+                        if make_entry:
+                            if vendor:
+                                obj = Certificate.objects.create(
+                                    name=name, vendor_provider=vendor)
+                            elif vendor_text:
+                                obj = Certificate.objects.create(
+                                    name=name, vendor_text=vendor_text)
+                            if certi_file_url:
+                                obj.certificate_file_url = certi_file_url
+                            if vendor_image_url:
+                                obj.vendor_image_url = vendor_image_url
+                            obj.skill = skill
+                            obj.save()
+
+                        else:
+                            row['error_report'] = "certificate already exists"
                     else:
 
                         row['error_report'] = "certificate name missing"
