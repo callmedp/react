@@ -43,8 +43,7 @@ class CandidateProfile(AbstractAutoDate):
     image = models.CharField('Candidate Image Url', max_length=200, blank=True, null=True)
     gender = models.CharField('Gender', choices=(('1', 'Male'), ('2', 'Female'), ('3', 'Others')), max_length=1,
                               blank=True, null=True)
-    extracurricular = models.CharField('Extra Curricular', max_length=50, blank=True, null=True,
-                                       choices=INTERESTS)
+    extracurricular = models.CharField('Extra Curricular', max_length=200, blank=True, null=True)
     extra_info = models.TextField('Extra Information', blank=True, null=True)
 
 

@@ -11,8 +11,7 @@ class CandidateSerializer(serializers.ModelSerializer):
         model = Candidate
         fields = (
             'id', 'candidate_id', 'first_name', 'last_name', 'email', 'date_of_birth', 'number', 'gender', 'location',
-            'extra_info',
-            'image')
+            'extra_info', 'extracurricular', 'image')
 
 
 class SkillSerializer(serializers.ModelSerializer):
@@ -24,15 +23,17 @@ class SkillSerializer(serializers.ModelSerializer):
 class CandidateExperienceSerializer(serializers.ModelSerializer):
     class Meta:
         model = CandidateExperience
-        fields = ('id', 'candidate', 'job_profile', 'company_name', 'start_date', 'end_date', 'is_working', 'job_location',
-                  'work_description')
+        fields = (
+            'id', 'candidate', 'job_profile', 'company_name', 'start_date', 'end_date', 'is_working', 'job_location',
+            'work_description')
 
 
 class CandidateEducationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CandidateEducation
-        fields = ('id', 'candidate', 'specialization', 'institution_name', 'course_type', 'percentage_cgpa', 'start_date',
-                  'end_date', 'is_pursuing')
+        fields = (
+            'id', 'candidate', 'specialization', 'institution_name', 'course_type', 'percentage_cgpa', 'start_date',
+            'end_date', 'is_pursuing')
 
 
 class CandidateCertificationSerializer(serializers.ModelSerializer):

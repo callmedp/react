@@ -8,6 +8,8 @@ import moment from 'moment'
 
 import {SubmissionError} from 'redux-form'
 
+import {interestList} from '../../../Utils/interestList'
+
 const genderDict = {
     '1': {
         value: '1',
@@ -32,15 +34,17 @@ function* getPersonalDetails(action) {
             console.log('error');
         }
         let {data} = result;
-        const {date_of_birth, gender} = data;
+        const {date_of_birth, gender, extracurricular} = data;
 
         data = {
             ...data,
             ...{
                 date_of_birth: date_of_birth && moment(date_of_birth).format('YYYY-MM-DD') || '',
-                gender: gender && genderDict[gender] || ''
+                gender: gender && genderDict[gender] || '',
+                extracurricular: extracurricular.split(',').map(key => interestList[key])
             }
         }
+        console.log('data');
         yield put({type: Actions.SAVE_USER_INFO, data: data})
     } catch (e) {
         console.log(e);
@@ -57,6 +61,8 @@ function* updatePersonalDetails(action) {
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+
+
         yield put({type: Actions.SAVE_USER_INFO, data: result['data']});
 
         return resolve('User Personal  Info saved successfully.');
