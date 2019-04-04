@@ -1,6 +1,8 @@
 import {SAVE_USER_REFERENCE} from "../actions/actionTypes";
 
 const initialState = {
+    'id': '',
+    'candidate_id': '',
     "reference_name": '',
     "reference_designation": '',
     "about_user": "",

@@ -7,14 +7,21 @@ import {renderField, renderTextArea} from "../../../../FormHandler/formFieldRend
 
 
 class Reference extends Component {
+    constructor(props) {
+        super(props)
+        this.handleSubmit = this.handleSubmit.bind(this)
+    }
 
+    async handleSubmit(values) {
+        await this.props.onSubmit(values);
+    }
 
     componentDidMount() {
         this.props.fetchUserReference()
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, enableReinitialize} = this.props;
+        const {error, handleSubmit, pristine, reset, submitting, enableReinitialize, reference} = this.props;
 
         return (
             <div>
@@ -24,48 +31,45 @@ class Reference extends Component {
                     <span className="icon-edit icon-references__cursor"></span>
                     <button className="add-button add-button__right">Add new</button>
                 </section>
-
-                <section className="right-sidebar-scroll">
-                    <section className="info-section">
-                        <div className="flex-container">
-                            <h3 className="add-section-heading">Reference 1</h3>
-                            <div className="addon-buttons mr-10">
-                                <span className="icon-delete mr-15"></span>
-                                <span className="icon-ascend mr-5"></span>
-                                <span className="icon-descend"></span>
+                <form onSubmit={handleSubmit(this.handleSubmit)}>
+                    <section className="right-sidebar-scroll">
+                        <section className="info-section">
+                            <div className="flex-container">
+                                <h3 className="add-section-heading">{reference.reference_name}</h3>
+                                <div className="addon-buttons mr-10">
+                                    <span className="icon-delete mr-15"></span>
+                                    <span className="icon-ascend mr-5"></span>
+                                    <span className="icon-descend"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div className="flex-container">
-                            <fieldset className="error">
-                                <label>Reference name</label>
-                                <Field component={renderField} type={"text"} name="reference_name"/>
-                            </fieldset>
-                            <fieldset>
-                                <label>Reference company name</label>
-                                <input type="text" name="" placeholder=""/>
-                            </fieldset>
-                            <fieldset>
-                                <label>Designation</label>
-                                <Field component={renderField} type={"text"} name="reference_designation"/>
-                            </fieldset>
-                        </div>
+                            <div className="flex-container">
+                                <fieldset className="error">
+                                    <label>Reference name</label>
+                                    <Field component={renderField} type={"text"} name="reference_name"/>
+                                </fieldset>
+                                <fieldset>
+                                    <label>Designation</label>
+                                    <Field component={renderField} type={"text"} name="reference_designation"/>
+                                </fieldset>
+                            </div>
 
-                        <div className="flex-container">
-                            <fieldset>
-                                <label>Description</label>
-                                <Field component={renderTextArea} type={"textarea"} name="about_user"/>
-                            </fieldset>
-                        </div>
+                            <div className="flex-container">
+                                <fieldset>
+                                    <label>Description</label>
+                                    <Field component={renderTextArea} type={"textarea"} name="about_candidate"/>
+                                </fieldset>
+                            </div>
+
+                        </section>
+
 
                     </section>
 
-
-                </section>
-
-                <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10">Preview</button>
-                    <button className="orange-button">Save & Continue</button>
-                </div>
+                    <div className="flex-container items-right mr-20 mb-30">
+                        <button className="blue-button mr-10">Preview</button>
+                        <button className="orange-button" type={'submit'}>Save & Continue</button>
+                    </div>
+                </form>
 
             </div>
         )
@@ -81,12 +85,18 @@ export const ReferenceForm = reduxForm({
 
 const mapStateToProps = (state) => {
     return {
-        initialValues: state.reference
+        initialValues: state.reference,
+        reference: state.reference
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        "onSubmit": (userReference) => {
+            return new Promise((resolve, reject) => {
+                return dispatch(actions.updateUserReference({userReference, resolve, reject}));
+            })
+        },
         "fetchUserReference": () => {
             return dispatch(actions.fetchUserReference())
         },

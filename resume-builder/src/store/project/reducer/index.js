@@ -1,11 +1,14 @@
 import {SAVE_USER_PROJECT} from "../actions/actionTypes";
 
 const initialState = {
+    "id": '',
+    "candidate_id": '',
     "project_name": '',
     "start_date": '',
     "end_date": '',
-    "skills": '',
-    "description": ''
+    "skills": [],
+    "description": '',
+    'currently_working': false,
 };
 
 

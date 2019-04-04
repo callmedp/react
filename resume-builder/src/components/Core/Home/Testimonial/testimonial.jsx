@@ -15,9 +15,9 @@ export default class Testimonial extends Component {
                 <ul className="testimonials mt-30">
                     <li className="testimonials--list">
                         <div className="testimonials--image">
-                            <div><img src="/images/testimonial1.jpg" /></div>
-                            <div><strong>Sumit Sharma</strong>
-                            Project Manager, Sapient</div>
+                            <span className="mr-20"><img src="/images/testimonial1.jpg" /></span>
+                            <span><strong>Sumit Sharma</strong>
+                            Project Manager, Sapient</span>
                         </div>
                         <div className="testimonials--content">
                             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley.</p>
@@ -25,9 +25,9 @@ export default class Testimonial extends Component {
                     </li>
                     <li className="testimonials--list">
                         <div className="testimonials--image">
-                            <div><img src="/images/testimonial2.jpg" /></div>
-                            <div><strong>Shreya Verma</strong>
-                            Associate, Amazon</div>
+                            <span className="mr-20"><img src="/images/testimonial2.jpg" /></span>
+                            <span><strong>Shreya Verma</strong>
+                            Associate, Amazon</span>
                         </div>
                         <div className="testimonials--content">
                             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley.</p>
@@ -35,9 +35,9 @@ export default class Testimonial extends Component {
                     </li>
                     <li className="testimonials--list">
                         <div className="testimonials--image">
-                            <div><img src="/images/testimonial3.jpg" /></div>
-                            <div><strong>Amit Sinha</strong></div>
-                            IT Manager, HCL
+                            <span className="mr-20"><img src="/images/testimonial3.jpg" /></span>
+                            <span><strong>Amit Sinha</strong>
+                            IT Manager, HCL</span>
                         </div>
                         <div className="testimonials--content">
                             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley.</p>

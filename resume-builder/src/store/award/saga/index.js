@@ -21,27 +21,29 @@ function* fetchUserAward(action) {
     }
 }
 
-//
-// function* updatePersonalDetails(action) {
-//     try {
-//         const {payload: {personalDetails, resolve, reject}} = action;
-//
-//         const candidateId = localStorage.getItem('candidateId') || '';
-//
-//         const result = yield call(Api.updatePersonalData, personalDetails, candidateId);
-//         if (result['error']) {
-//             return reject(new SubmissionError({_error: result['errorMessage']}));
-//         }
-//         yield put({type: Actions.SAVE_USER_INFO, data: result['data']});
-//
-//         return resolve('User Personal  Info saved successfully.');
-//
-//     } catch (e) {
-//
-//         console.log('error', e);
-//     }
-// }
+function* updateUserAward(action) {
+    try {
+        const {payload: {userAward, resolve, reject}} = action;
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        userAward['cc_id'] = candidateId;
+        const {id} = userAward;
+        const result = yield call(id ? Api.updateUserAward : Api.createUserAward, userAward, candidateId, id);
+        console.log('---',result);
+        if (result['error']) {
+            return reject(new SubmissionError({_error: result['errorMessage']}));
+        }
+        yield put({type: Actions.SAVE_USER_AWARD, data: result['data']});
+
+        return resolve('User Award  Info saved successfully.');
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
 
 export default function* watchAward() {
     yield takeLatest(Actions.FETCH_USER_AWARD, fetchUserAward)
+    yield takeLatest(Actions.UPDATE_USER_AWARD, updateUserAward)
 }

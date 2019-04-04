@@ -38,15 +38,15 @@ export default class RightSection extends Component {
             <section className="right-sidebar">
                 {
                     type === 'profile' ? <PersonalInfo {...this.props}/> :
-                        type === 'education' ? <Education/> :
-                            type === 'skill' ? <Skill/> :
-                                type === 'experience' ? <Experience/> :
-                                    type === 'summary' ? <Summary/> :
-                                        type === 'language' ? <Language/> :
-                                            type === 'award' ? <Award/> :
-                                                type === 'project' ? <Project/> :
-                                                    type === 'course' ? <Course/> :
-                                                        type === 'reference' ? <Reference/> :
+                        type === 'education' ? <Education {...this.props}/> :
+                            type === 'skill' ? <Skill {...this.props}/> :
+                                type === 'experience' ? <Experience {...this.props}/> :
+                                    type === 'summary' ? <Summary {...this.props}/> :
+                                        type === 'language' ? <Language {...this.props}/> :
+                                            type === 'award' ? <Award {...this.props}/> :
+                                                type === 'project' ? <Project {...this.props}/> :
+                                                    type === 'course' ? <Course {...this.props}/> :
+                                                        type === 'reference' ? <Reference {...this.props}/> :
                                                             <div className="right-sidebar-scroll-main"
                                                                  dangerouslySetInnerHTML={{
                                                                      __html: "<!doctype html>\n" +
