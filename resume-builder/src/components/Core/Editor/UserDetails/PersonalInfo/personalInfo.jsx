@@ -19,7 +19,7 @@ export default class PersonalInfo extends Component {
                                 <i className="sprite icon--firstName"></i>
                             </span>
                             </div>
-                            <input type="tel" name="firstName" className="form__input" placeholder="Amit" aria-label="firstName" id="firstName" />
+                            <input type="text" name="firstName" className="form__input" placeholder="Amit" aria-label="firstName" id="firstName" />
                         </div>
                     </li>
                     
@@ -31,7 +31,7 @@ export default class PersonalInfo extends Component {
                                 <i className="sprite icon--lastName"></i>
                             </span>
                             </div>
-                            <input type="tel" name="lastName" className="form__input" placeholder="Sinha" aria-label="lastName" id="lastName" />
+                            <input type="text" name="lastName" className="form__input" placeholder="Sinha" aria-label="lastName" id="lastName" />
                         </div>
                     </li>
                     
@@ -43,7 +43,7 @@ export default class PersonalInfo extends Component {
                                 <i className="sprite icon--designation"></i>
                             </span>
                             </div>
-                            <input type="tel" name="designation" className="form__input" placeholder="IT Project Manager" aria-label="designation" id="designation" />
+                            <input type="text" name="designation" className="form__input" placeholder="IT Project Manager" aria-label="designation" id="designation" />
                         </div>
                     </li>
                     
@@ -55,7 +55,7 @@ export default class PersonalInfo extends Component {
                                 <i className="sprite icon--company"></i>
                             </span>
                             </div>
-                            <input type="tel" name="company" className="form__input" placeholder="Sapient" aria-label="company" id="company" />
+                            <input type="text" name="company" className="form__input" placeholder="Sapient" aria-label="company" id="company" />
                         </div>
                     </li>
                     
@@ -79,7 +79,7 @@ export default class PersonalInfo extends Component {
                                 <i className="sprite icon--mail"></i>
                             </span>
                             </div>
-                            <input type="text" name="email" className="form__input" placeholder="amit.sinha@gmail.com" aria-label="email" id="email" />
+                            <input type="email" name="email" className="form__input" placeholder="amit.sinha@gmail.com" aria-label="email" id="email" />
                         </div>
                     </li>
                     

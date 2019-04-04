@@ -24,7 +24,7 @@ export default class Preview extends Component {
                         <div className="filter__accordion">
                             <h2 className="filter__wrap--heading">Customize template</h2>
 
-                            <div className="filter__accordion__card">
+                            <div className="filter__accordion__card filter__accordion--active">
                                 <div className="filter__accordion__card__heading">
                                     <div className="filter__accordion__card__heading--left">
                                         <i className="sprite icon--theme mr-10"></i>
@@ -32,7 +32,7 @@ export default class Preview extends Component {
                                     </div>
 
                                     <div className="filter__accordion__card__heading--right">
-                                        <i className="sprite icon--plus"></i>
+                                        <i className="sprite icon--plus icon--minus"></i>
                                     </div>
                                 </div>
 
@@ -83,7 +83,7 @@ export default class Preview extends Component {
                                 </div>
                             </div>
                             
-                            <div className="filter__accordion__card filter__accordion--active">
+                            <div className="filter__accordion__card">
                                 <div className="filter__accordion__card__heading">
                                     <div className="filter__accordion__card__heading--left">
                                         <i className="sprite icon--font mr-10"></i>
@@ -91,7 +91,7 @@ export default class Preview extends Component {
                                     </div>
 
                                     <div className="filter__accordion__card__heading--right">
-                                        <i className="sprite icon--plus icon--minus"></i>
+                                        <i className="sprite icon--plus"></i>
                                     </div>
                                 </div>
 

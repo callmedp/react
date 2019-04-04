@@ -69,3 +69,50 @@
         }
     }
 }
+
+
+.form {
+
+    &__radio-group {
+        width: 100%;
+        display: inline-block;
+    }
+
+    &__radio-label {
+        position: relative;
+        padding-left: 3.0rem;
+
+    }
+
+    &__radio-input {
+        display: none;
+    }
+
+    &__radio-button {
+        @include square(2.0rem);
+        border-radius: 50%;
+        border: 2px solid $grey-a7;
+        display: inline-block;
+        position: absolute;
+        top: 0.2rem;
+        left: 0;
+
+        &::after {
+            content: '';
+            display: block;
+            @include square(1.0rem);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: $blue;
+            opacity: 0;
+            transition: opacity .2s;
+        }
+    }
+
+    &__radio-input:checked ~ &__radio-label &__radio-button::after {
+        opacity: 1;
+    }
+}

@@ -38,7 +38,7 @@ export default class Education extends Component {
                                     <i className="sprite icon--education-grey"></i>
                                 </span>
                                 </div>
-                                <input type="tel" name="school" className="form__input" placeholder="" aria-label="school" id="school" />
+                                <input type="text" name="school" className="form__input" placeholder="" aria-label="school" id="school" />
                             </div>
                         </li>
                         
@@ -50,7 +50,7 @@ export default class Education extends Component {
                                     <i className="sprite icon--date"></i>
                                 </span>
                                 </div>
-                                <input type="tel" name="dateFrom" className="form__input" placeholder="" aria-label="dateFrom" id="dateFrom" />
+                                <input type="text" name="dateFrom" className="form__input" placeholder="" aria-label="dateFrom" id="dateFrom" />
                             </div>
                         </li>
                         
@@ -62,7 +62,7 @@ export default class Education extends Component {
                                     <i className="sprite icon--date"></i>
                                 </span>
                                 </div>
-                                <input type="tel" name="dateTo" className="form__input" placeholder="" aria-label="dateTo" id="dateTo" />
+                                <input type="text" name="dateTo" className="form__input" placeholder="" aria-label="dateTo" id="dateTo" />
                             </div>
                         </li>
                         
@@ -72,9 +72,11 @@ export default class Education extends Component {
                             <textarea rows="3" cols="30" name="description" className="form__input" aria-label="description" id="description" ></textarea>
                         </li>
 
-                        <li className="form__group">
-                            <label class="form-check-label" for="exampleRadios2">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" />Till today
+                        <li className="form__radio-group d-flex justify-content-end fs-14">
+                            <input class="form__radio-input" type="radio" name="tillToday" id="tillToday" value="option2" />
+                            <label class="form__radio-label" for="tillToday">
+                                <span className="form__radio-button"></span>
+                                Till today
                             </label>
                         </li>
                     </ul>

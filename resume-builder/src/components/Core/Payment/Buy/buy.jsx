@@ -1,14 +1,23 @@
 import React, {Component} from 'react';
 import Header from '../../../Common/Header/header';
 import './buy.scss';
+import BuyModal from '../Buy/BuyModal';
 
 
 export default class buy extends Component {
+
+    state = {
+        BuyOption: undefined
+    }
+
     render() {
         return(
             
             <div className="buy-container">
                 <Header />
+                <BuyModal 
+                BuyOption={this.SetState.BuyOption}
+                />
                 <div className="pay-now">
                     <div className="pay-now__price">
                         <span className="fs-14 pay-now__price--pay">You pay</span>
@@ -21,9 +30,10 @@ export default class buy extends Component {
                 <div className="buy">
                     <div className="buy__wrap">
                         <div className="buy__item">
-                            <div className="buy__item--left">
-                                <input className="buy__item--input" type="radio" id="your-resume" name="custom-resume"></input>
-                                <label  className="buy__item--label" for="your-resume">
+                            <div className="buy__item--left form__radio-group">
+                                <input className="buy__item--input form__radio-input" type="radio" id="your-resume" name="custom-resume"></input>
+                                <label  className="buy__item--label form__radio-label" for="your-resume">
+                                    <span className="form__radio-button"></span>
                                     Buy your <br />customised resume
                                     <strong>Rs. 999/-</strong>
                                 </label>
@@ -38,12 +48,11 @@ export default class buy extends Component {
                         
                         
                         <div className="buy__item buy__recommended">
-
                             <div className="buy__recommended--tag">Recommended</div>
-
-                            <div className="buy__item--left">
-                                <input className="buy__item--input" type="radio" id="all-resumes" name="custom-resume"></input>
-                                <label  className="buy__item--label" for="all-resumes">
+                            <div className="buy__item--left form__radio-group">
+                                <input className="buy__item--input form__radio-input" type="radio" id="all-resumes" name="custom-resume"></input>
+                                <label  className="buy__item--label form__radio-label" for="all-resumes">
+                                    <span className="form__radio-button"></span>
                                     Buy all 6 customised resumes
                                     <div className="buy__item--price">
                                         <span className="fs-22 color-333 semi-bold">Rs. 1249/-</span>
@@ -53,7 +62,7 @@ export default class buy extends Component {
                                 </label>
                             </div>
                             <div className="buy__item--right">
-                                <div className="buy__item--right__sliderWrap mt-30">
+                                <div className="buy__item--right__sliderWrap mt-20">
                                     <div className="buy__item--right__sliderWrap__controls">
                                         <span className="buy__item--right__sliderWrap__controls--next">
                                             <i className="sprite icon--control"></i>
@@ -63,7 +72,7 @@ export default class buy extends Component {
                                         </span>
                                     </div>
                                     <ul className="buy__recommended__items">
-                                        <li className="buy__recommended__item">
+                                        <li className="buy__recommended__item" onClick={this.openModal}>
                                             <span className="buy__recommended__image">
                                                 <span className="sprite icon--zoom"></span>
                                                 <img src="/images/resume-1.png" alt="Custom resume" />

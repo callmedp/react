@@ -33,6 +33,60 @@
     }
 }
 
+
+// line form starts here 
+.line-form {
+    padding: 10px;
+
+    &__group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 2rem;
+        height: 35px;
+    }
+
+    &__label {
+        font-size: 1.3rem;
+        font-weight: 600;
+        padding-bottom: 5px;
+        transition: all .3s;
+        transform: translateY(-4.5rem);
+    }
+
+    &__input {
+        @extend %line-input;
+
+        &:focus {
+            outline: 0;
+        }
+    }
+    
+    &__select {
+        @extend %line-input;
+        background-image: url('/images/downArrow.png');
+        background-repeat: no-repeat;
+        background-position: right center;
+    }
+
+    &__input:placeholder-shown + &__label {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-3rem);
+    }
+
+    &__mobile {
+        .code {
+            width: 60px;
+        }
+
+        .number {
+            flex: 1;
+            margin-left: 1.5rem;
+        }
+    }
+}
+
+
 .input-group {
     position: relative;
     width: 100%;

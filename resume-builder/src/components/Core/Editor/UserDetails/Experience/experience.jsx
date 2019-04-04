@@ -39,7 +39,7 @@ export default class Experience extends Component {
                                     <i className="sprite icon--designation"></i>
                                 </span>
                                 </div>
-                                <input type="tel" name="designation" className="form__input" placeholder="Visual Designer" aria-label="designation" id="school" />
+                                <input type="text" name="designation" className="form__input" placeholder="Visual Designer" aria-label="designation" id="school" />
                             </div>
                         </li>
                         
@@ -51,7 +51,7 @@ export default class Experience extends Component {
                                     <i className="sprite icon--company"></i>
                                 </span>
                                 </div>
-                                <input type="tel" name="company" className="form__input" placeholder="Sapient" aria-label="company" id="school" />
+                                <input type="text" name="company" className="form__input" placeholder="Sapient" aria-label="company" id="school" />
                             </div>
                         </li>
                         
@@ -63,7 +63,7 @@ export default class Experience extends Component {
                                     <i className="sprite icon--date"></i>
                                 </span>
                                 </div>
-                                <input type="tel" name="dateFrom" className="form__input" placeholder="" aria-label="dateFrom" id="dateFrom" />
+                                <input type="text" name="dateFrom" className="form__input" placeholder="" aria-label="dateFrom" id="dateFrom" />
                             </div>
                         </li>
                         
@@ -75,7 +75,7 @@ export default class Experience extends Component {
                                     <i className="sprite icon--date"></i>
                                 </span>
                                 </div>
-                                <input type="tel" name="dateTo" className="form__input" placeholder="" aria-label="dateTo" id="dateTo" />
+                                <input type="text" name="dateTo" className="form__input" placeholder="" aria-label="dateTo" id="dateTo" />
                             </div>
                         </li>
                         
@@ -85,9 +85,11 @@ export default class Experience extends Component {
                             <textarea rows="3" cols="30" name="description" className="form__input" aria-label="description" id="description" ></textarea>
                         </li>
 
-                        <li className="form__group">
-                            <label class="form-check-label" for="exampleRadios2">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" />Till today
+                        <li className="form__radio-group d-flex justify-content-end fs-14">
+                            <input class="form__radio-input" type="radio" name="tillToday" id="tillToday" value="option2" />
+                            <label class="form__radio-label" for="tillToday">
+                                <span className="form__radio-button"></span>
+                                Till today
                             </label>
                         </li>
                     </ul>

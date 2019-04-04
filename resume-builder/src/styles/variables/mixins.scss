@@ -186,6 +186,17 @@
   box-shadow: inset 0px 4px 8px rgba(0, 0, 0, 0.06);
 }
 
+%line-input {
+  border: 0 none;
+  border-bottom: 1px solid #ccc;
+  padding: 1.0rem 0 .5rem;
+  height: 4rem;
+  font-size: 1.4rem;
+  background-color: transparent;
+  border-radius: 0;
+  color: $grey-666;
+}
+
 %touch-scroll {
   overflow-y: auto; /* has to be scroll, not auto */
   -webkit-overflow-scrolling: touch;

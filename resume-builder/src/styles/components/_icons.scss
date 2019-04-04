@@ -118,9 +118,19 @@
         background-position: -55px -182px;
     }
     
+    &--course-grey {
+        @include size(19px, 21px, block);
+        background-position: -101px -1px;
+    }
+    
     &--project {
         @include size(19px, 23px, block);
         background-position: -54px -210px;
+    }
+    
+    &--project-gray {
+        @include size(19px, 23px, block);
+        background-position: -102px -27px;
     }
     
     &--reference {
@@ -207,6 +217,148 @@
         top: 0;
         right: 0;
         background-position: -53px -315px;  
+    }
+
+    &--expertise {
+        position: relative;
+
+        &::before {
+            @include size(13px, 20px, block);
+            content: '';
+            background-image: url($sprite);
+            position: absolute;
+            background-position: -106px -59px;
+            top: .2rem;
+            left: 0;
+
+        } 
+    }
+
+    &--build {
+        position: relative;
+
+        &::before {
+            @include size(16px, 16px, block);
+            content: '';
+            background-image: url($sprite);
+            position: absolute;
+            background-position: -104px -85px;
+            top: .2rem;
+            left: 0;
+
+        } 
+    }
+
+    &--download {
+        position: relative;
+
+        &::before {
+            @include size(13px, 13px, block);
+            content: '';
+            background-image: url($sprite);
+            position: absolute;
+            background-position: -107px -107px;
+            top: .2rem;
+            left: 0;
+
+        } 
+    }
+
+    &--custom {
+        position: relative;
+
+        &::before {
+            @include size(16px, 16px, block);
+            content: '';
+            background-image: url($sprite);
+            position: absolute;
+            background-position: -110px -127px;
+            top: .2rem;
+            left: 0;
+
+        } 
+    }
+
+    &--power {
+        position: relative;
+
+        &::before {
+            @include size(16px, 16px, block);
+            content: '';
+            background-image: url($sprite);
+            position: absolute;
+            background-position: -111px -156px;
+            top: .2rem;
+            left: 0;
+
+        } 
+    }
+
+    &--resume {
+        background-position: -110px -179px;
+    }
+
+    &--create {
+        background-position: -112px -198px;
+    }
+
+    &--increase {
+        background-position: -112px -217px;
+    }
+
+    &--application {
+        height: 22px !important;
+        transform: scale(2) !important;
+        top: 20px !important;
+        background-position: -112px -237px;
+    }
+
+    &--choose-resume {
+        background-position: -9px -10px;
+    }
+
+    &--choose-verify {
+        background-position: -9px -118px;
+    }
+
+    &--choose-download {
+        background-position: -9px -226px;
+    }
+
+    &--switch {
+        @include size(16px, 19px, block);
+        background-position: -114px -261px;
+    }
+
+    &--editText {
+        @include size(20px, 20px, block);
+        background-position: -27px -207px;
+        transform: scale(1) !important;
+        top: auto !important;
+    }
+
+    &--theme {
+        @include size(18px, 23px, block);
+        background-position: -28px -178px;
+        transform: scale(1) !important;
+        top: auto !important;
+    }
+
+    &--move {
+        @include square(16px);
+        display: block;
+        background-position: -114px -283px;
+    }
+
+    &--upload {
+        @include size(16px, 17px, block);
+        background-position: -114px -302px;
+    }
+
+    &--preview {
+        @include square(16px);
+        display: block;
+        background-position: -114px -323px;
     }
 }
 

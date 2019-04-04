@@ -45,6 +45,11 @@
         background-color: $orange;
         color: $white;
     }
+
+    &__shadow {
+        box-shadow: 0 0 10px rgba($black, .3);
+    }
+    
 }
 
 .btn-wrap {

@@ -5,6 +5,10 @@ import Education from '../UserDetails/Education/education';
 import Experience from '../UserDetails/Experience/experience';
 import Skills from '../UserDetails/Skill/skill';
 import Language from '../UserDetails/Language/language';
+import Award from '../UserDetails/Award/award';
+import Course from '../UserDetails/Course/course';
+import Project from '../UserDetails/Project/project';
+import Reference from '../UserDetails/Reference/references';
 import './rightSection.scss'
 
 

@@ -41,6 +41,13 @@ ul, li {
 
     .edit-section {
         height: 100%;
-        padding-top: 60px;
+        padding-top: 50px;
     }
+}
+
+.white-box {
+    @include border-radius(.8rem);
+    box-shadow: 0 0 1.0rem $box-shadow-light;
+    background-color: $white;
+    padding: 1.5rem;
 }

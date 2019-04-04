@@ -39,7 +39,7 @@ export default class Skill extends Component {
                                     <i className="sprite icon--skills-grey"></i>
                                 </span>
                                 </div>
-                                <input type="tel" name="skillName" className="form__input" placeholder="Visual Designer" aria-label="designation" id="school" />
+                                <input type="text" name="skillName" className="form__input" placeholder="Visual Designer" aria-label="designation" id="school" />
                             </div>
                         </li>
                         
