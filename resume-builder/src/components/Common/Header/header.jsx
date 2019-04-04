@@ -11,7 +11,7 @@ export default class Header extends Component {
                             <a href="#works">How it Works</a>
                         </li>
                         <li>
-                            <a href="#templates">Tamplates</a>
+                            <a href="#templates">Templates</a>
                         </li>
                     </ul>
             		<div className="signin">
