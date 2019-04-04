@@ -734,3 +734,17 @@ class RemoveCookieFromHeader(APIView):
         response.remove_cookie = True
 
         return response
+
+class UpdateCertificateAndAssesment(APIView):
+
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        self.vendor_name = self.kwargs.get('vendor_name')
+
+        return Response({
+            "status": 1,
+            "msg": "Certificate Updated"},
+            status=status.HTTP_201_CREATED
+        )
