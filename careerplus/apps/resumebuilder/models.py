@@ -43,8 +43,7 @@ class CandidateProfile(AbstractAutoDate):
     image = models.CharField('Candidate Image Url', max_length=200, blank=True, null=True)
     gender = models.CharField('Gender', choices=(('1', 'Male'), ('2', 'Female'), ('3', 'Others')), max_length=1,
                               blank=True, null=True)
-    extracurricular = models.CharField('Extra Curricular', max_length=50, blank=True, null=True,
-                                       choices=INTERESTS)
+    extracurricular = models.CharField('Extra Curricular', max_length=200, blank=True, null=True)
     extra_info = models.TextField('Extra Information', blank=True, null=True)
 
     class Meta:
@@ -110,6 +109,7 @@ class CandidateProject(models.Model):
     start_date = models.DateField('Start Date', blank=False)
     end_date = models.DateField('End Date', blank=True)
     skills = models.ManyToManyField(Skill, verbose_name='List of Skills', null=True, blank=True)
+    currently_working = models.BooleanField('Currently Working', default=False)
     description = models.TextField('Project Description')
 
     def __str__(self):

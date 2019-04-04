@@ -15,34 +15,39 @@ function* fetchUserCourse(action) {
         if (result['error']) {
             console.log('error');
         }
-        console.log('--get user experiences Info---', result);
-        yield put({type: Actions.SAVE_USER_COURSE, data: result['data']})
+        const {data: {results}} = result;
+
+        yield put({type: Actions.SAVE_USER_COURSE, data: results[0]})
     } catch (e) {
         console.log(e);
     }
 }
 
-//
-// function* updatePersonalDetails(action) {
-//     try {
-//         const {payload: {personalDetails, resolve, reject}} = action;
-//
-//         const candidateId = localStorage.getItem('candidateId') || '';
-//
-//         const result = yield call(Api.updatePersonalData, personalDetails, candidateId);
-//         if (result['error']) {
-//             return reject(new SubmissionError({_error: result['errorMessage']}));
-//         }
-//         yield put({type: Actions.SAVE_USER_INFO, data: result['data']});
-//
-//         return resolve('User Personal  Info saved successfully.');
-//
-//     } catch (e) {
-//
-//         console.log('error', e);
-//     }
-// }
+
+function* updateUserCourse(action) {
+    try {
+        const {payload: {userCourse, resolve, reject}} = action;
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        userCourse['cc_id'] = candidateId;
+        const {id} = userCourse;
+
+        const result = yield call(id ? Api.updateUserCourse : Api.createUserCourse, userCourse, candidateId, id);
+        if (result['error']) {
+            return reject(new SubmissionError({_error: result['errorMessage']}));
+        }
+
+        yield put({type: Actions.SAVE_USER_COURSE, data: result['data']});
+
+        return resolve('User Course  Info saved successfully.');
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
 
 export default function* watchCourse() {
     yield takeLatest(Actions.FETCH_USER_COURSE, fetchUserCourse)
+    yield takeLatest(Actions.UPDATE_USER_COURSE, updateUserCourse)
 }

@@ -114,11 +114,11 @@ class CartMixin(object):
                 else:
                     cart_obj.lineitems.filter(Q(product=product) | Q(product__type_flow=13)).delete()
 
-                if product.is_course or product.type_flow == 13 and cv_id:
+                if product.is_course or product.type_flow == 16 and cv_id:
                     # courses
                     try:
                         # for resume builder type_flow todo create new type flow
-                        if product.type_flow == 13:
+                        if product.type_flow == 16:
                             cv_prod = Product.objects.get(id=cv_id)
                         else:
                             cv_prod = Product.objects.get(id=cv_id, active=True)
@@ -188,7 +188,6 @@ class CartMixin(object):
         return flag
 
     def getCartObject(self, request: object = None) -> object:
-        import ipdb; ipdb.set_trace()
         try:
             cart_obj = None
             if not request:

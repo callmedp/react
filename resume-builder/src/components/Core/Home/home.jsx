@@ -26,7 +26,7 @@ class Home extends Component {
 
     render() {
         return (
-            <div>
+            <div class="nav-fixed">
                 
                 {/* <Link to={'/resume-builder/edit/'}>Customize Your Resume</Link> */}
                 <Header/>
@@ -74,7 +74,7 @@ class Home extends Component {
                     </ul>
                 </section>
 
-                <section className="section-container grey-bg">
+                <section id="works" className="section-container grey-bg">
                     <h2>How it works</h2>
                     <strong className="section-container--sub-head">Just 3 steps to create your perfect resume</strong>
                     <ul className="works mt-70">

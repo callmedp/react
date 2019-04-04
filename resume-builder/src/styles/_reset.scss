@@ -37,7 +37,7 @@ footer, header, hgroup, menu, nav, section {
 
 * {
   box-sizing: border-box;
-  -webkit-overflow-scrolling: touch;
+  /*-webkit-overflow-scrolling: touch;
   -moz-overflow-scrolling: touch;
   /*overflow-y: auto;*/
 }
@@ -352,8 +352,13 @@ textarea {
     color: #222;
 }
 
+* {
+     -webkit-user-select: text;
+     -moz-user-select: text;
+     -ms-user-select: text; 
+    }
 
-::-moz-selection {
+/*::-moz-selection {
     background: transparent;
     text-shadow: none;
 }
@@ -362,6 +367,11 @@ textarea {
     background: transparent;
     text-shadow: none;
 }
+
+::-webkit-selection {
+    background: transparent;
+    text-shadow: none;
+}*/
 
 img {
     vertical-align: middle;

@@ -4,11 +4,13 @@ from datetime import datetime
 
 # local imports
 from resumebuilder.models import (Candidate, Skill, CandidateExperience, CandidateEducation, CandidateCertification,
-                                  CandidateProject, CandidateReference, CandidateSocialLink, CandidateAchievement)
+                                  CandidateProject, CandidateReference, CandidateSocialLink, CandidateAchievement,
+                                  CandidateLanguage)
 from resumebuilder.api.core.serializers import (CandidateSerializer, SkillSerializer, CandidateExperienceSerializer,
                                                 CandidateEducationSerializer, CandidateCertificationSerializer,
                                                 CandidateProjectSerializer, CandidateAchievementSerializer,
-                                                CandidateReferenceSerializer, CandidateSocialLinkSerializer)
+                                                CandidateReferenceSerializer, CandidateSocialLinkSerializer,
+                                                CandidateLanguageSerializer)
 
 from resumebuilder.mixins import (SessionManagerMixin)
 # inter app imports
@@ -59,8 +61,6 @@ class CandidateRetrieveUpdateView(RetrieveUpdateAPIView):
     #         if candidate[1]:
     #             candidate.save()
     #         return Response(personal_info)
-
-
 
 
 class SkillListCreateView(ListCreateAPIView):
@@ -252,12 +252,13 @@ class CandidateExperienceListCreateView(ListCreateAPIView):
 class CandidateExperienceRetrieveUpdateView(RetrieveUpdateAPIView):
     authentication_classes = ()
     permission_classes = ()
-
+    queryset = CandidateExperience.objects.all()
     serializer_class = CandidateExperienceSerializer
 
-    def get_queryset(self):
-        candidate_experience_id = int(self.kwargs.get('pk'))
-        return CandidateExperience.objects.filter(id=candidate_experience_id)
+    # def get_queryset(self):
+    #     candidate_experience_id = int(self.kwargs.get('pk'))
+    #     return CandidateExperience.objects.filter(id=candidate_experience_id)
+    #
 
 
 class CandidateEducationListCreateView(ListCreateAPIView):
@@ -396,6 +397,29 @@ class CandidateAchievementRetrieveUpdateView(RetrieveUpdateAPIView):
     def get_queryset(self):
         external_link_id = int(self.kwargs.get('pk'))
         return CandidateAchievement.objects.filter(id=external_link_id)
+
+
+class CandidateLanguageListCreateView(ListCreateAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+    queryset = CandidateLanguage.objects.all()
+    serializer_class = CandidateLanguageSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+        return super(CandidateLanguageListCreateView, self).get_serializer(*args, **kwargs)
+
+
+class CandidateLanguageRetrieveUpdateView(RetrieveUpdateAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+
+    serializer_class = CandidateLanguageSerializer
+
+    def get_queryset(self):
+        external_link_id = int(self.kwargs.get('pk'))
+        return CandidateLanguage.objects.filter(id=external_link_id)
 
 
 class CandidateResumePreview(RetrieveUpdateAPIView):

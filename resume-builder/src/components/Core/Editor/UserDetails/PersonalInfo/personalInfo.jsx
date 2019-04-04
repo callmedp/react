@@ -3,7 +3,13 @@ import './personalInfo.scss'
 import {connect} from "react-redux";
 import * as actions from '../../../../../store/personalInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
-import {renderField, datepicker, renderSelect} from "../../../../FormHandler/formFieldRenderer.jsx";
+import {interestList} from '../../../../../Utils/interestList'
+import {
+    renderField,
+    datepicker,
+    renderSelect,
+    renderDynamicSelect
+} from "../../../../FormHandler/formFieldRenderer.jsx";
 import moment from 'moment';
 
 export class PersonalInfo extends Component {
@@ -13,6 +19,7 @@ export class PersonalInfo extends Component {
         this.removeImage = this.removeImage.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handlePreview = this.handlePreview.bind(this);
+        this.fetchInterestList = this.fetchInterestList.bind(this);
         this.state = {
             'imageURI': '',
             'imageURL': ''
@@ -38,6 +45,18 @@ export class PersonalInfo extends Component {
             imageURI: '',
             imageURL: ''
         })
+    }
+
+    async fetchInterestList(inputValue, callback) {
+        // try {
+        //     const interests = await this.props.fetchInterest(inputValue);
+        //     const listData = (skills && skills.results || []).map(skill => ({value: skill.id, label: skill.name}))
+        //     callback(listData);
+        // } catch (e) {
+        //     console.log('--error-', e);
+        // }
+        console.log('---', inputValue)
+        return [];
     }
 
     async getImageURI(event) {
@@ -88,6 +107,7 @@ export class PersonalInfo extends Component {
                                         name="gender"
                                         component={renderSelect}
                                         label="Gender"
+                                        isMulti={false}
                                         options={[
                                             {value: '1', label: 'Male'},
                                             {value: '2', label: 'Female'},
@@ -121,6 +141,7 @@ export class PersonalInfo extends Component {
                                                className={"input-control"}/>
                                     </div>
                                 </fieldset>
+
                             </div>
                             <div className="flex-container">
                                 <fieldset>
@@ -132,6 +153,16 @@ export class PersonalInfo extends Component {
                                         <Field component={renderField} type={"text"} name="location"
                                                className={"input-control"}/>
                                     </div>
+                                </fieldset>
+                            </div>
+                            <div className="flex-container">
+                                <fieldset>
+                                    <label>Interest</label>
+                                    <Field name="extracurricular" component={renderDynamicSelect}
+                                        // loadOptions={this.fetchInterestList.bind(this)}
+                                           defaultOptions={Object.keys(interestList).map(key => interestList[key])}
+                                           value={personalInfo.extracurricular}
+                                           label="Select Interest"/>
                                 </fieldset>
                             </div>
                             {/*<div className="flex-container">*/}
@@ -167,19 +198,21 @@ export class PersonalInfo extends Component {
                             }
 
                             <label>
-                              
+
                                 {
-                                this.state.imageURI || personalInfo.image ?
-                                    <img className='img-responsive'
-                                         src={this.state.imageURI || personalInfo.image}/> :  <img className="img-responsive" src="/media/static/react/assets/images/upload-image.jpg"/>
-                            }
+                                    this.state.imageURI || personalInfo.image ?
+                                        <img className='img-responsive'
+                                             src={this.state.imageURI || personalInfo.image}/> :
+                                        <img className="img-responsive"
+                                             src="/media/static/react/assets/images/upload-image.jpg"/>
+                                }
                                 <input accept="image/*" type="file" name="displayPicture"
                                        onChange={this.getImageURI.bind(this)}
                                        style={{opacity: 0}}/>
                                 <Field type={"text"} name={"image"} component={renderField}
                                        value={this.state.imageURL} className={'zero-opacity'}/>
                             </label>
-                           
+
                         </section>
                     </section>
 
@@ -217,14 +250,17 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchPersonalInfo())
         },
         "onSubmit": (personalDetails, imageURL) => {
+            const {gender, date_of_birth, extracurricular} = personalDetails
             personalDetails = {
                 ...personalDetails,
                 ...{
-                    'date_of_birth': personalDetails['date_of_birth'] && moment(personalDetails['date_of_birth']).format('YYYY-MM-DD') || '',
-                    'gender': personalDetails['gender'] && personalDetails['gender']['value'] || '',
-                    'image': imageURL
+                    'date_of_birth': date_of_birth && moment(date_of_birth).format('YYYY-MM-DD') || '',
+                    'gender': gender && gender['value'] || '',
+                    'image': imageURL,
+                    'extracurricular': (extracurricular || []).map(el => el.value).join(',')
                 }
             }
+            console.log('---', personalDetails);
             return new Promise((resolve, reject) => {
                 dispatch(actions.updatePersonalInfo({personalDetails, resolve, reject}));
             })

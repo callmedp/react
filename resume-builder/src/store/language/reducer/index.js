@@ -1,6 +1,8 @@
 import {SAVE_USER_LANGUAGE} from "../actions/actionTypes";
 
 const initialState = {
+    "candidate_id": '',
+    "id": '',
     "name": '',
     "proficiency": 5
 };
