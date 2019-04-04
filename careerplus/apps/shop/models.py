@@ -58,6 +58,7 @@ from .choices import (
     R_ATTR_DICT,
     S_ATTR_DICT,
     CITY_CHOICES,
+    SHINE_FLOW_ACTION,
     convert_to_month,
     convert_inr,
     convert_usd,
@@ -3121,4 +3122,5 @@ class ShineProfileData(AbstractAutoDate):
     type_flow = models.PositiveSmallIntegerField(
         _('Flow'), choices=FLOW_CHOICES)
     sub_type_flow = models.IntegerField(choices=SUB_FLOW_CHOICES, unique=True)
-    booster_value = models.PositiveSmallIntegerField(default=0)
+    priority_value = models.PositiveIntegerField(default=1)
+    action = models.IntegerField(choices=SHINE_FLOW_ACTION, default=-1)
