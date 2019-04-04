@@ -50,5 +50,15 @@ header {
 			vertical-align: middle;
 		}
 	}
+
+	@media (max-width: 991px) {
+		.white-button {
+			margin-right: 10px;
+			margin-left: 10px;
+		}
+	}
 }
+
+
+        
 

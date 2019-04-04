@@ -20,9 +20,14 @@
         position: relative;
         flex-direction: column;
         flex: 0 0 30%;
-        padding: 30px 15px;
+        padding: 15px 30px 30px 30px;
         margin: 15px;
         background-color: $white;
+
+        @media (max-width: 991px) {
+            flex: 0 0 29%;
+            padding: 15px;
+        }
     }
 
     &--image {
@@ -30,7 +35,7 @@
     	align-items: center;
         justify-content: center;
         @include flexbox();
-        margin: 0 20px 30px 0;
+        margin: 0 20px 15px 0;
         flex: 0 0 100px;
         font-size: 1.3rem;
         color: $txt2;
@@ -84,7 +89,6 @@
     		height: 15px;
     		@include border-radius(100%);
     		border: 1px solid $blue1;
-    		background: $white;
     		margin: 15px 5px 0 5px;
     		cursor: pointer;
 

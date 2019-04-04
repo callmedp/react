@@ -9,7 +9,7 @@ export default class ResumeSlider extends Component {
 
     render() {
         return (
-            <section className="section-container">
+            <section id="templates" className="section-container">
                 <h2>Proven resume templates</h2>
                 <strong className="section-container--sub-head">Choose from a library of classic templates and land a new job</strong>
                 <ul className="slider">
