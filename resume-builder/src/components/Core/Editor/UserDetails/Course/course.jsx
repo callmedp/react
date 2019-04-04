@@ -3,7 +3,7 @@ import './course.scss'
 import {Field, reduxForm} from "redux-form";
 import * as actions from "../../../../../store/course/actions";
 import {connect} from "react-redux";
-import {renderField} from "../../../../FormHandler/formFieldRenderer";
+import {renderField} from "../../../../FormHandler/formFieldRenderer.jsx";
 
 
 class Course extends Component {

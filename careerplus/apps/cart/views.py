@@ -47,7 +47,6 @@ class CartView(TemplateView, CartMixin, UserMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-
         cart_obj = self.getCartObject()
         line_items_list = cart_obj.lineitems.filter(parent=None)
         type_flow = -1
@@ -78,8 +77,7 @@ class AddToCartView(View, CartMixin):
         return super(AddToCartView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        # import ipdb;
-        # ipdb.set_trace();
+        import ipdb; ipdb.set_trace()
         # if not request.is_ajax():
         #     return HttpResponseForbidden()
         data = {"status": -1}

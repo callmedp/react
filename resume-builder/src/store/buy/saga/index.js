@@ -20,6 +20,20 @@ function* fetchProductIds(action) {
     }
 }
 
+function* addToCart(action) {
+    try {
+        const {payload:{data, resolve,reject}}= action
+        const result = yield call(Api.addToCart,data);
+        if (result['error']) {
+            console.log('error');
+        }
+        console.log(result)
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export default function* watchProductId() {
     yield takeLatest(Actions.GET_PRODUCT_IDS, fetchProductIds)
+    yield takeLatest(Actions.ADD_TO_CART, addToCart)
 }

@@ -3,7 +3,7 @@ import datetime
 import requests
 from decimal import Decimal
 
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, Subquery, OuterRef, F
 from django.utils import timezone
 from django.conf import settings
 
@@ -750,4 +750,5 @@ class ResumeBuilderProductView(ListAPIView):
     serializer_class = ResumeBuilderProductSerializer
 
     def get_queryset(self):
-        return Product.objects.all().filter(type_flow=13)
+        type_flow = self.request.query_params.get('type_flow')
+        return Product.objects.filter(type_flow=type_flow,type_product=2).annotate(parent=F  ('siblingproduct__main')).values('id','parent','name')

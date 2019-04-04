@@ -9,16 +9,49 @@ import {connect} from "react-redux";
 export class Buy extends Component {
 	
 	constructor(props) {
-        super(props);
+		super(props);
+		this.state ={
+			'checked': 'product1'
+		}
+		
     }
 
-    async redirectToCart() {
-        await this.props.addToCart();
-        window.location.href = 'http://127.0.0.1:8000/cart'
+    redirectToCart() {
+		let product;
+		if (this.state.checked==='product1'){
+			product=this.props.productIds[1]
+		}
+		else{
+			product=this.props.productIds[0]
+		}
+		const data = {
+			"prod_id": product.id,
+			"addons": [],
+			"cart_type": 'cart',
+			"cv_id": product.parent,
+			"req_options":[],
+		}
+      	this.props.addToCart(data);
+      //  window.location.href = 'http://127.0.0.1:8000/cart'
 	}
  
 	componentDidMount(){
 		this.props.getProductIds();
+		console.log(this.props)
+		
+	}
+
+	handleOnChange(checkedProduct){
+		if(checkedProduct === 'product1'){
+			this.setState({
+				'checked': 'product1'
+			})
+		}
+		else {
+			this.setState({
+				'checked': 'product2'
+			})
+		}
 	}
     render() {
         return (
@@ -223,7 +256,7 @@ export class Buy extends Component {
                     				<li>
                     					<div className="flex-container">
 	                    					<span className="choose-plann--child">
-	                    						<input type="radio" name="radio" checked/>
+	                    						<input type="radio" name="product1" checked={this.state.checked === 'product1'? true: false} onChange={this.handleOnChange.bind(this,'product1')} />
 	                    					</span>
 	                    					<span className="choose-plan--price">
 	                    						<p>Buy your customised resume</p>
@@ -235,7 +268,7 @@ export class Buy extends Component {
                     					<div className="flex-container">
                     						<span className="choose-plan--ribbon">Recommended</span>
 	                    					<span className="choose-plann--child">
-	                    						<input type="radio" name="radio" checked/>
+	                    						<input type="radio" name="product2" checked={this.state.checked === 'product2'? true: false} onChange={this.handleOnChange.bind(this,'product2')} />
 	                    					</span>
 	                    					<span className="choose-plan--price">
 	                    						<p>Buy all 6 customised resumes</p>
@@ -287,7 +320,7 @@ export class Buy extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {}
+    return {productIds:state.productIds}
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -295,8 +328,8 @@ const mapDispatchToProps = (dispatch) => {
 		'getProductIds': () => {
             return dispatch(action.getProductIds())
         },
-        'addToCart': () => {
-            return dispatch(action.addToCart())
+        'addToCart': (data) => {
+				return dispatch(action.addToCart({data}));
         }
     }
 };

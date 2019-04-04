@@ -345,3 +345,5 @@ class MediaUploadSerializer(serializers.Serializer):
 
 class ResumeBuilderProductSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+    parent = serializers.IntegerField()
+    name = serializers.CharField()
