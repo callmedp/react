@@ -11,7 +11,8 @@ from .views import (CandidateListCreateView, CandidateRetrieveUpdateView, SkillR
                     CandidateReferenceListCreateView, CandidateReferenceRetrieveUpdateView,
                     CandidateSocialLinkListCreateView,
                     CandidateSocialLinkRetrieveUpdateView, CandidateAchievementListCreateView,
-                    CandidateAchievementRetrieveUpdateView,
+                    CandidateAchievementRetrieveUpdateView, CandidateLanguageListCreateView,
+                    CandidateLanguageRetrieveUpdateView,
                     CandidateResumePreview)
 # third party imports
 from rest_framework import routers
@@ -41,6 +42,9 @@ urlpatterns = [
     url(r'^candidate/(?P<candidate_id>.+)/achievements/(?P<pk>\d+)/$',
         CandidateAchievementRetrieveUpdateView.as_view()),
     url(r'^candidate/(?P<candidate_id>.+)/achievements/$', CandidateAchievementListCreateView.as_view()),
+    url(r'^candidate/(?P<candidate_id>.+)/languages/(?P<pk>\d+)/$',
+        CandidateLanguageRetrieveUpdateView.as_view()),
+    url(r'^candidate/(?P<candidate_id>.+)/languages/$', CandidateLanguageListCreateView.as_view()),
     url(r'^preview/$', CandidateResumePreview.as_view()),  # (?P<pk>\d+)/
 
 ]

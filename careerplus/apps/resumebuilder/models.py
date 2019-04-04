@@ -110,6 +110,7 @@ class CandidateProject(models.Model):
     start_date = models.DateField('Start Date', blank=False)
     end_date = models.DateField('End Date', blank=True)
     skills = models.ManyToManyField(Skill, verbose_name='List of Skills', null=True, blank=True)
+    currently_working = models.BooleanField('Currently Working', default=False)
     description = models.TextField('Project Description')
 
     def __str__(self):

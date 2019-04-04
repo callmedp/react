@@ -55,6 +55,8 @@ export class PersonalInfo extends Component {
         // } catch (e) {
         //     console.log('--error-', e);
         // }
+        console.log('---', inputValue)
+        return [];
     }
 
     async getImageURI(event) {
@@ -157,7 +159,7 @@ export class PersonalInfo extends Component {
                                 <fieldset>
                                     <label>Interest</label>
                                     <Field name="extracurricular" component={renderDynamicSelect}
-                                           loadOptions={this.fetchInterestList.bind(this)}
+                                        // loadOptions={this.fetchInterestList.bind(this)}
                                            defaultOptions={Object.keys(interestList).map(key => interestList[key])}
                                            value={personalInfo.extracurricular}
                                            label="Select Interest"/>

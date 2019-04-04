@@ -15,32 +15,38 @@ function* fetchUserExperience(action) {
         if (result['error']) {
             console.log('error');
         }
-        yield put({type: Actions.SAVE_USER_EXPERIENCE, data:result['data']})
+        const {data: {results}} = result;
+        yield put({type: Actions.SAVE_USER_EXPERIENCE, data: results[0]})
     } catch (e) {
         console.log(e);
     }
 }
-//
-// function* updatePersonalDetails(action) {
-//     try {
-//         const {payload: {personalDetails, resolve, reject}} = action;
-//
-//         const candidateId = localStorage.getItem('candidateId') || '';
-//
-//         const result = yield call(Api.updatePersonalData, personalDetails, candidateId);
-//         if (result['error']) {
-//             return reject(new SubmissionError({_error: result['errorMessage']}));
-//         }
-//         yield put({type: Actions.SAVE_USER_INFO, data: result['data']});
-//
-//         return resolve('User Personal  Info saved successfully.');
-//
-//     } catch (e) {
-//
-//         console.log('error', e);
-//     }
-// }
+
+function* updateUserExperience(action) {
+    try {
+        let {payload: {userExperience, resolve, reject}} = action;
+
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        userExperience['cc_id'] = candidateId;
+        const {id} = userExperience;
+
+        const result = yield call(id ? Api.updateUserExperience : Api.createUserExperience, userExperience, candidateId, userExperience.id);
+        if (result['error']) {
+            return reject(new SubmissionError({_error: result['errorMessage']}));
+        }
+
+        yield put({type: Actions.SAVE_USER_EXPERIENCE, data: result['data']});
+
+        return resolve('User Experience  Info saved successfully.');
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
 
 export default function* watchExperience() {
     yield takeLatest(Actions.FETCH_USER_EXPERIENCE, fetchUserExperience)
+    yield takeLatest(Actions.UPDATE_USER_EXPERIENCE, updateUserExperience)
 }

@@ -15,33 +15,41 @@ function* fetchUserSkill(action) {
         if (result['error']) {
             console.log('error');
         }
-        yield put({type: Actions.SAVE_USER_SKILL, data: result['data']})
+        const {data: {results}} = result;
+
+        yield put({type: Actions.SAVE_USER_SKILL, data: results[0]})
     } catch (e) {
         console.log(e);
     }
 }
 
-//
-// function* updatePersonalDetails(action) {
-//     try {
-//         const {payload: {personalDetails, resolve, reject}} = action;
-//
-//         const candidateId = localStorage.getItem('candidateId') || '';
-//
-//         const result = yield call(Api.updatePersonalData, personalDetails, candidateId);
-//         if (result['error']) {
-//             return reject(new SubmissionError({_error: result['errorMessage']}));
-//         }
-//         yield put({type: Actions.SAVE_USER_INFO, data: result['data']});
-//
-//         return resolve('User Personal  Info saved successfully.');
-//
-//     } catch (e) {
-//
-//         console.log('error', e);
-//     }
-// }
+
+function* updateUserSkill(action) {
+    try {
+        let {payload: {userSkill, resolve, reject}} = action;
+
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        userSkill['cc_id'] = candidateId;
+        const {id} = userSkill;
+
+        const result = yield call(id ? Api.updateUserSkill : Api.createUserSkill, userSkill, candidateId, id);
+        if (result['error']) {
+            return reject(new SubmissionError({_error: result['errorMessage']}));
+        }
+
+        yield put({type: Actions.SAVE_USER_SKILL, data: result['data']});
+
+        return resolve('User Skill  Info saved successfully.');
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
 
 export default function* watchSkill() {
     yield takeLatest(Actions.FETCH_USER_SKILL, fetchUserSkill)
+    yield takeLatest(Actions.UPDATE_USER_SKILL, updateUserSkill)
 }
