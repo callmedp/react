@@ -98,7 +98,7 @@ export default class Home extends Component {
                     </div>
                 </section>
 
-                <section className="section proven-resume pt-30 pb-30">
+                <section className="section proven-resume pt-30">
                     <div className="text-center">
                         <h2 className="section__head">Proven resume templates</h2>
                         <p  className="section__subHead">Choose from a library of classic templates <br/>and land a new job</p>
