@@ -10,6 +10,11 @@ import {
     renderSelect,
     renderDynamicSelect
 } from "../../../../FormHandler/formFieldRenderer.jsx";
+
+import {
+    required
+} from "../../../../FormHandler/formValidations.js";
+
 import moment from 'moment';
 
 export class PersonalInfo extends Component {
@@ -92,22 +97,30 @@ export class PersonalInfo extends Component {
                             <div className="flex-container">
                                 <fieldset className="error">
                                     <label>First Name</label>
+<<<<<<< HEAD
                                     <div className="input-group">
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-name"></span>
                                         </div>
                                         <Field component={renderField} type={"text"} name="first_name"/>
                                     </div>
+=======
+                                    <Field component={renderField} type={"text"} validate={required} name="first_name"/>
+>>>>>>> abc6c107d1bb7a10236d8dc48c0db2c0bad55159
                                     <span className="error-txt"></span>
                                 </fieldset>
                                 <fieldset>
                                     <label>Last Name</label>
+<<<<<<< HEAD
                                     <div className="input-group">
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-surname"></span>
                                         </div>
                                         <Field component={renderField} type={"text"} name="last_name"/>
                                     </div>
+=======
+                                    <Field component={renderField} validate={required} type={"text"} name="last_name"/>
+>>>>>>> abc6c107d1bb7a10236d8dc48c0db2c0bad55159
                                 </fieldset>
                             </div>
                             <div className="flex-container">

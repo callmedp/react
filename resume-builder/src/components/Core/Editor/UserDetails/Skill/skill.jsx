@@ -3,7 +3,7 @@ import './skill.scss'
 import {Field, reduxForm} from "redux-form"
 import * as actions from "../../../../../store/skill/actions";
 import {connect} from "react-redux";
-import {renderField, renderSelect} from "../../../../FormHandler/formFieldRenderer";
+import {renderField, renderSelect} from "../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
 
 

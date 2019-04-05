@@ -14,12 +14,21 @@ export const renderField = ({
                                 className,
                                 meta: {touched, error, warning}
                             }) => (
+<<<<<<< HEAD
 <div className="Error">
     <input {...input} className={className} placeholder={label} type={type}/>
      {
     (( <span className={'Error-message'}>{error}</span>) ||
          (warning && <span className={'Warn-Message'}>{warning}</span>))}
 </div>
+=======
+    <div>
+        <input {...input} className={className} placeholder={label} type={type}/>
+        {touched &&
+        ((error && <span className={'Error-message'}>{error}</span>) ||
+            (warning && <span className={'Warn-Message'}>{warning}</span>))}
+    </div>
+>>>>>>> abc6c107d1bb7a10236d8dc48c0db2c0bad55159
 );
 
 
@@ -31,12 +40,18 @@ export const datepicker =
          onDateChange,
          meta: {touched, error, warning}
      }) => (
-        <DatePicker {...input} dateFormat="yyyy-MM-dd"
-                    selected={input.value ? new Date(input.value) : null}
-                    onChange={date => input.onChange(date)}
+        <div>
+            <DatePicker {...input} dateFormat="yyyy-MM-dd"
+                        selected={input.value ? new Date(input.value) : null}
+                        onChange={date => input.onChange(date)}
 
 
-        />)
+            />
+            {touched &&
+            ((error && <span className={'Error-message'}>{error}</span>) ||
+                (warning && <span className={'Warn-Message'}>{warning}</span>))}
+        </div>
+    )
 
 
 export const renderSelect = ({
@@ -46,51 +61,43 @@ export const renderSelect = ({
                                  options,
                                  isMulti
                              }) => (
-    <Select {...input}
-            placeholder={label}
-            options={options}
-            isMulti={isMulti}
-            onBlur={() => {
-                input.onBlur(input.value)
-            }}
-    />
-);
-
-
-const adaptFileEventToValue = delegate => e => delegate(e.target.files[0]);
-
-export const renderFileInput = ({
-                                    input: {value: omitValue, onChange, onBlur, ...inputProps},
-                                    meta: omitMeta,
-                                    ...props
-                                }) => {
-    return (
-        <input
-            onChange={adaptFileEventToValue(onChange)}
-            onBlur={adaptFileEventToValue(onBlur)}
-            type="file"
-            {...props.input}
-            {...props}
+    <div>
+        <Select {...input}
+                placeholder={label}
+                options={options}
+                isMulti={isMulti}
+                onBlur={() => {
+                    input.onBlur(input.value)
+                }}
         />
-    );
-};
+        {touched &&
+        ((error && <span className={'Error-message'}>{error}</span>) ||
+            (warning && <span className={'Warn-Message'}>{warning}</span>))}
+    </div>
+);
 
 
 export const renderDynamicSelect = ({
                                         input,
                                         loadOptions,
                                         label,
-                                        defaultOptions
+                                        defaultOptions,
+                                        meta: {touched, error, warning}
                                     }) => (
-    <AsyncSelect {...input}
-                 loadOptions={loadOptions}
-                 defaultOptions={defaultOptions}
-                 placeholder={label}
-                 isMulti={true}
-                 onBlur={() => {
-                     input.onBlur(input.value)
-                 }}
-    />
+    <div>
+        <AsyncSelect {...input}
+                     loadOptions={loadOptions}
+                     defaultOptions={defaultOptions}
+                     placeholder={label}
+                     isMulti={true}
+                     onBlur={() => {
+                         input.onBlur(input.value)
+                     }}
+        />
+        {touched &&
+        ((error && <span className={'Error-message'}>{error}</span>) ||
+            (warning && <span className={'Warn-Message'}>{warning}</span>))}
+    </div>
 )
 
 export const renderTextArea = ({
@@ -100,11 +107,12 @@ export const renderTextArea = ({
                                    meta: {touched, error, warning}
 
                                }) => (
-
-    <textarea {...input} placeholder={label} type={type}/>
-    // {touched &&
-    // ((error && <span className={'Error-message'}>{error}</span>) ||
-    //     (warning && <span className={'Warn-Message'}>{warning}</span>))}
+    <div>
+        <textarea {...input} placeholder={label} type={type}/>
+        {touched &&
+        ((error && <span className={'Error-message'}>{error}</span>) ||
+            (warning && <span className={'Warn-Message'}>{warning}</span>))}
+    </div>
 
 
 )

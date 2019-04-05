@@ -3,7 +3,7 @@ import './project.scss'
 import {Field, reduxForm} from "redux-form";
 import * as actions from "../../../../../store/project/actions";
 import {connect} from "react-redux";
-import {datepicker, renderField, renderTextArea} from "../../../../FormHandler/formFieldRenderer";
+import {datepicker, renderField, renderTextArea} from "../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
 
 

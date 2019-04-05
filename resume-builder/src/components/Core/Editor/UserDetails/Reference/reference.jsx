@@ -3,7 +3,7 @@ import './reference.scss'
 import {Field, reduxForm} from "redux-form";
 import * as actions from "../../../../../store/reference/actions";
 import {connect} from "react-redux";
-import {renderField, renderTextArea} from "../../../../FormHandler/formFieldRenderer";
+import {renderField, renderTextArea} from "../../../../FormHandler/formFieldRenderer.jsx";
 
 
 class Reference extends Component {
