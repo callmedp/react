@@ -15,7 +15,7 @@ export default class Testimonial extends Component {
                 <ul className="testimonials mt-30">
                     <li className="testimonials--list">
                         <div className="testimonials--image">
-                            <span className="mr-20"><img src="/images/testimonial1.jpg" /></span>
+                            <span className="mr-20"><img src="/media/static/react/assets/images/testimonial1.jpg" /></span>
                             <span><strong>Sumit Sharma</strong>
                             Project Manager, Sapient</span>
                         </div>
@@ -25,7 +25,7 @@ export default class Testimonial extends Component {
                     </li>
                     <li className="testimonials--list">
                         <div className="testimonials--image">
-                            <span className="mr-20"><img src="/images/testimonial2.jpg" /></span>
+                            <span className="mr-20"><img src="/media/static/react/assets/images/testimonial2.jpg" /></span>
                             <span><strong>Shreya Verma</strong>
                             Associate, Amazon</span>
                         </div>
@@ -35,7 +35,7 @@ export default class Testimonial extends Component {
                     </li>
                     <li className="testimonials--list">
                         <div className="testimonials--image">
-                            <span className="mr-20"><img src="/images/testimonial3.jpg" /></span>
+                            <span className="mr-20"><img src="/media/static/react/assets/images/testimonial3.jpg" /></span>
                             <span><strong>Amit Sinha</strong>
                             IT Manager, HCL</span>
                         </div>
