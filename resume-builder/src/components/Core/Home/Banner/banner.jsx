@@ -5,7 +5,9 @@ export default class Banner extends Component {
     constructor(props) {
         super(props)
     }
-
+    redirectToEdit(){
+        window.location.href = 'http://127.0.0.1:8000/resume-builder/edit/'
+    }
 
     render() {
         return (
@@ -22,10 +24,10 @@ export default class Banner extends Component {
                         <li><strong>Highly customizable</strong> resume</li>
                         <li>Power to get you <strong>hired 33% faster</strong></li>
                    </ul>
-                   <button className="orange-button banner-content--button">Build your resume</button>
+                   <button className="orange-button banner-content--button" onClick={this.redirectToEdit.bind(this)}>Build your resume</button>
                </div>
                <div className="banner-slider">
-                    <img src="/images/home-banner-slider.png" className="img-responsive" />
+                    <img src="/media/static/react/assets/images/home-banner-slider.png" className="img-responsive" />
                </div>
             </div>
         )

@@ -19,6 +19,9 @@ class Home extends Component {
         document.addEventListener('scroll', this.handleScroll);
         this.props.getCandidateId()
     }
+    redirectToEdit(){
+        window.location.href = 'http://127.0.0.1:8000/resume-builder/edit/'
+    }
 
     handleScroll() {
 
@@ -173,7 +176,7 @@ class Home extends Component {
                         </li>
                     </ul>
 
-                    <button className="orange-button">Build your resume</button>
+                    <button className="orange-button" onClick={this.redirectToEdit.bind(this)}>Build your resume</button>
 
                 </section>
 

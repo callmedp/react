@@ -13,7 +13,7 @@ export default class ResumeSlider extends Component {
                 <h2>Proven resume templates</h2>
                 <strong className="section-container--sub-head">Choose from a library of classic templates and land a new job</strong>
                 <ul className="slider">
-                    <li><img src="/images/slider.jpg" className="img-responsive" /></li>
+                    <li><img src="/media/static/react/assets/images/slider.jpg" className="img-responsive" /></li>
                 </ul>
             </section>
         )
