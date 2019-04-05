@@ -55,7 +55,6 @@ export const renderSelect = ({
     />
 );
 
-
 const adaptFileEventToValue = delegate => e => delegate(e.target.files[0]);
 
 export const renderFileInput = ({
