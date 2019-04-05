@@ -77,7 +77,6 @@ class AddToCartView(View, CartMixin):
         return super(AddToCartView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        import ipdb; ipdb.set_trace()
         # if not request.is_ajax():
         #     return HttpResponseForbidden()
         data = {"status": -1}
