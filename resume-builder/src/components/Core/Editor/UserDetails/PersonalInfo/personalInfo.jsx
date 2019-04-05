@@ -92,16 +92,26 @@ export class PersonalInfo extends Component {
                             <div className="flex-container">
                                 <fieldset className="error">
                                     <label>First Name</label>
-                                    <Field component={renderField} type={"text"} name="first_name"/>
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-name"></span>
+                                        </div>
+                                        <Field component={renderField} type={"text"} name="first_name"/>
+                                    </div>
                                     <span className="error-txt"></span>
                                 </fieldset>
                                 <fieldset>
                                     <label>Last Name</label>
-                                    <Field component={renderField} type={"text"} name="last_name"/>
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-surname"></span>
+                                        </div>
+                                        <Field component={renderField} type={"text"} name="last_name"/>
+                                    </div>
                                 </fieldset>
                             </div>
                             <div className="flex-container">
-                                <fieldset>
+                                <fieldset className="custom">
                                     <label>Gender</label>
                                     <Field
                                         name="gender"
@@ -156,7 +166,7 @@ export class PersonalInfo extends Component {
                                 </fieldset>
                             </div>
                             <div className="flex-container">
-                                <fieldset>
+                                <fieldset className="custom">
                                     <label>Interest</label>
                                     <Field name="extracurricular" component={renderDynamicSelect}
                                         // loadOptions={this.fetchInterestList.bind(this)}

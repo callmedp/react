@@ -14,6 +14,7 @@
 .right-sidebar-scroll {
 	flex: 1 1 auto;
 	overflow-y: auto;
+	overflow-x: hidden;
 	height: 450px;
 }
 
@@ -21,6 +22,7 @@
 	display: block;
 	height: 570px;
 	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .head-section {
@@ -39,8 +41,8 @@
 	flex-direction: column;
 
 	label {
-		width: 150px;
-		margin: 18px 20px 0 0;
+		width: 140px;
+		margin: 18px 25px 0 15px;
 	}
 
 	img {
