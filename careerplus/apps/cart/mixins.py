@@ -112,7 +112,7 @@ class CartMixin(object):
                 if is_resume_template == 'true':
                     cart_obj.lineitems.filter().delete()
                 else:
-                    cart_obj.lineitems.filter(Q(product=product) | Q(product__type_flow=13)).delete()
+                    cart_obj.lineitems.filter(Q(product=product) | Q(product__type_flow=16)).delete()
 
                 if product.is_course or product.type_flow == 16 and cv_id:
                     # courses
@@ -571,7 +571,7 @@ class CartMixin(object):
                     line_item = cart_obj.lineitems.filter(parent=None)[0]
                     type_flow = int(line_item.product.type_flow)
                     # resume builder flow handle
-                    if type_flow == 13:
+                    if type_flow == 16:
                         cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
                     else:
                         cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
@@ -781,9 +781,8 @@ class CartMixin(object):
                     total_count += cart_obj.lineitems.all().count()
                     total_count -= cart_obj.lineitems.filter(Q(parent=None, product__product_class__in=course_classes,
                                                                no_process=True) |
-                                                             Q(parent=None, product__type_flow=13,
+                                                             Q(parent=None, product__type_flow=16,
                                                                no_process=True)).count()
-
         except Exception as e:
             logging.getLogger('error_log').error("{},{}".format(str(e), cart_pk))
         return total_count

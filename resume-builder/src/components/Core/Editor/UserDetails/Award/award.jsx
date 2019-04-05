@@ -8,12 +8,6 @@ import moment from "moment";
 
 
 class Award extends Component {
-    constructor(props) {
-        super(props);
-        this.handleSubmit = this.handleSubmit.bind(this)
-    }
-
-
     componentDidMount() {
         this.props.fetchUserAward()
     }
