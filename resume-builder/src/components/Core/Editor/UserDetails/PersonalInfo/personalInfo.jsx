@@ -10,6 +10,11 @@ import {
     renderSelect,
     renderDynamicSelect
 } from "../../../../FormHandler/formFieldRenderer.jsx";
+
+import {
+    required
+} from "../../../../FormHandler/formValidations.js";
+
 import moment from 'moment';
 
 export class PersonalInfo extends Component {
@@ -92,12 +97,12 @@ export class PersonalInfo extends Component {
                             <div className="flex-container">
                                 <fieldset className="error">
                                     <label>First Name</label>
-                                    <Field component={renderField} type={"text"} name="first_name"/>
+                                    <Field component={renderField} type={"text"} validate={required} name="first_name"/>
                                     <span className="error-txt"></span>
                                 </fieldset>
                                 <fieldset>
                                     <label>Last Name</label>
-                                    <Field component={renderField} type={"text"} name="last_name"/>
+                                    <Field component={renderField} validate={required} type={"text"} name="last_name"/>
                                 </fieldset>
                             </div>
                             <div className="flex-container">

@@ -428,12 +428,16 @@ class CandidateResumePreview(RetrieveUpdateAPIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'resume4.html'
 
-    def get(self, request):
-        candidate = Candidate.objects.get(id=95)
+    def get(self, request, *args, **kwargs):
+        candidate_id = self.kwargs.get('candidate_id', '')
+        candidate = Candidate.objects.filter(candidate_id=candidate_id)
+        if not candidate:
+            return {}
+
         extracurricular = candidate.extracurricular.split(',')
         education = candidate.candidateeducation_set.all()
         experience = candidate.candidateexperience_set.all()
-        skills = candidate.skill_set.all()
+        # skills = candidate.skill_set.all()
         achievements = candidate.candidateachievement_set.all()
         references = candidate.candidatereference_set.all()
         projects = candidate.candidateproject_set.all()
@@ -441,7 +445,7 @@ class CandidateResumePreview(RetrieveUpdateAPIView):
         languages = candidate.candidatelanguage_set.all()
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
 
-        return Response({'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
+        return Response({'candidate': candidate, 'education': education, 'experience': experience, 'skills': [],
                          'achievements': achievements, 'references': references, 'projects': projects,
                          'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
                          'current_exp': current_exp})
