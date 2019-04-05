@@ -91,10 +91,6 @@ class CandidateShineProfileRetrieveUpdateView(APIView):
     permission_classes = ()
 
     def get(self, request, *args, **kwargs):
-
-        import ipdb;
-
-        ipdb.set_trace();
         # candidate_email = request.session.get('email', '')
         candidate_email = 'amanpreet1040@gmail.com'
         if not candidate_email:

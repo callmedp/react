@@ -6,7 +6,7 @@ export default class Banner extends Component {
         super(props)
     }
     redirectToEdit(){
-        window.location.href = 'http://127.0.0.1:8000/resume-builder/edit/'
+        window.location.href = '/resume-builder/edit/'
     }
 
     render() {

@@ -1,9 +1,42 @@
 import React ,{Component} from 'react';
 import './header.scss'
+import { Link, DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 export default class Header extends Component {
-    redirectToEdit(){
-        window.location.href = 'http://127.0.0.1:8000/resume-builder/edit/'
+    
+    constructor(props) {
+        super(props);
+        this.scrollTo = this.scrollTo.bind(this);
     }
+    redirectToEdit(){
+        window.location.href = '/resume-builder/edit/'
+    }
+
+    scrollTo(elem) {
+        scroller.scrollTo(elem, {
+          duration: 800,
+          delay: 0,
+          smooth: 'easeInOutQuad',
+          offset:'100'
+        })
+    }
+
+    componentDidMount() {
+
+        Events.scrollEvent.register('begin', function () {
+          console.log("begin", arguments);
+        });
+    
+        Events.scrollEvent.register('end', function () {
+          console.log("end", arguments);
+        });
+    
+    }
+
+    componentWillUnmount() {
+        Events.scrollEvent.remove('begin');
+        Events.scrollEvent.remove('end');
+    }
+    
     render(){
         return(
             <header className="home-nav-fixed">
@@ -11,10 +44,10 @@ export default class Header extends Component {
             		<a className="container--logo"></a>
                     <ul className="home-links">
                         <li>
-                            <a href="#works">How it Works</a>
+                            <a onClick={() => this.scrollTo('works')}>How it Works</a>
                         </li>
                         <li>
-                            <a href="#templates">Templates</a>
+                            <a onClick={() => this.scrollTo('templates')}>Templates</a>
                         </li>
                     </ul>
             		<div className="signin">
