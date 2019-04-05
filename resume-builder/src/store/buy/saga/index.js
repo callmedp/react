@@ -22,12 +22,13 @@ function* fetchProductIds(action) {
 
 function* addToCart(action) {
     try {
-        const {payload:{data, resolve,reject}}= action
-        const result = yield call(Api.addToCart,data);
+        const {payload: {data, resolve, reject}} = action
+        const result = yield call(Api.addToCart, data);
         if (result['error']) {
-            console.log('error');
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
-        console.log(result)
+        return resolve('Product added to cart successfully.');
+
     } catch (e) {
         console.log(e);
     }

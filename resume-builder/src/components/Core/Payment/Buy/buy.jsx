@@ -16,7 +16,7 @@ export class Buy extends Component {
 
     }
 
-    redirectToCart() {
+    async redirectToCart() {
         let product;
         if (this.state.checked === 'product1') {
             product = this.props.productIds[1]
@@ -24,16 +24,16 @@ export class Buy extends Component {
             product = this.props.productIds[0]
         }
         const data = {
-            "prod_id": product.id,
+            "prod_id": product.parent,
             "addons": [],
             "cart_type": 'cart',
-            "cv_id": product.parent,
+            "cv_id": product.id,
             "req_options": [],
             'add_resume': true
 
         }
-        this.props.addToCart(data);
-        //  window.location.href = 'http://127.0.0.1:8000/cart'
+        await this.props.addToCart(data);
+        window.location.href = 'http://127.0.0.1:8000/cart'
     }
 
     componentDidMount() {
@@ -342,7 +342,9 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(action.getProductIds())
         },
         'addToCart': (data) => {
-            return dispatch(action.addToCart({data}));
+            return new Promise((resolve, reject) => {
+                dispatch(action.addToCart({data, resolve, reject}));
+            })
         }
     }
 };
