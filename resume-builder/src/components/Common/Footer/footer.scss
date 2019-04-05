@@ -5,18 +5,19 @@ footer {
 	background: #2e5da5;
 	@include flexbox();
 	flex-direction: row;
-	height: 70px;
 	color: #9dabd0;
 
 	.container {
 		@include flexbox();
 		align-items: center;
   		justify-content: center;
+  		height: 70px;
 
 		&--footer-links {
 			flex: 1;
-			flex-direction: column;
-			margin-top: 25px;
+			flex-direction: row;
+			justify-content: flex-start;
+			align-items: center;
 
 			a {
 				color: #9dabd0;
@@ -28,7 +29,8 @@ footer {
 			justify-content: flex-end;
 			flex: 0 0 250px;
 			flex-direction: column;
-			margin-top: 25px;
+			align-items: center;
+			text-align: right;
 		}
 	}
 }

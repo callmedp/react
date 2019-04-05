@@ -158,6 +158,13 @@ function downloadOrderInvoice(order_pk) {
     }
 };
 
+
+function downloadOrderTemplate(order_pk) {
+    if(order_pk){
+        $('#download-resume-form' + order_pk).submit();
+    }
+}
+
 function openCancelModal(order_pk) {
     modal_id = "#cancelorder_div" + order_pk
     $(modal_id).modal('show');

@@ -1,13 +1,15 @@
 import {SAVE_USER_EDUCATION} from "../actions/actionTypes";
 
 const initialState = {
-    "specialization": '',
-    "institution_name": '',
-    "course_type": '',
-    "start_date": '',
-    "percentage_cgpa": '',
-    "end_date": '',
-    "is_pursuing": '',
+    candidate_id: '',
+    id: '',
+    specialization: '',
+    institution_name: '',
+    course_type: '',
+    start_date: '',
+    percentage_cgpa: '',
+    end_date: '',
+    is_pursuing: false,
 };
 
 

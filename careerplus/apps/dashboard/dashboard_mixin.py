@@ -62,55 +62,63 @@ class DashboardInfo(object):
             return render_to_string('partial/user-inboxlist.html', data)
 
     def get_myorder_list(self, candidate_id=None, request=None):
-        if candidate_id:
-            # days = 6 * 30
-            # last_dateplaced_date = timezone.now() - datetime.timedelta(days=days)
-            orders = Order.objects.filter(
-                status__in=[0, 1, 3],
-                candidate_id=candidate_id)
+        if not candidate_id:
+            return
+        # days = 6 * 30
+        # last_dateplaced_date = timezone.now() - datetime.timedelta(days=days)
+        orders = Order.objects.filter(
+            status__in=[0, 1, 3],
+            candidate_id=candidate_id)
 
-            excl_txns = PaymentTxn.objects.filter(
-                status__in=[0, 2, 3, 4, 5],
-                payment_mode__in=[6, 7],
-                order__candidate_id=candidate_id)
-            # excl_txns = PaymentTxn.objects.filter(status=0, ).exclude(payment_mode__in=[1, 4])
-            excl_order_list = excl_txns.all().values_list('order__pk', flat=True)
+        excl_txns = PaymentTxn.objects.filter(
+            status__in=[0, 2, 3, 4, 5],
+            payment_mode__in=[6, 7],
+            order__candidate_id=candidate_id)
+        # excl_txns = PaymentTxn.objects.filter(status=0, ).exclude(payment_mode__in=[1, 4])
+        excl_order_list = excl_txns.all().values_list('order__pk', flat=True)
 
-            orders = orders.exclude(id__in=excl_order_list)
+        orders = orders.exclude(id__in=excl_order_list)
 
-            orders = orders.order_by('-date_placed')
+        orders = orders.order_by('-date_placed')
 
-            order_list = []
-            for obj in orders:
-                orderitems = obj.orderitems.filter(no_process=False)
-                orderitems.select_related('product')
-                item_count = orderitems.count()
-                data = {
-                    "order": obj,
-                    "item_count": item_count,
-                    "orderitems": orderitems,
-                }
-                order_list.append(data)
-
-            if request:
-                csrf_token = get_token(request)
-            else:
-                csrf_token = get_token(self.request)
-
-            context = {
-                "order_list": order_list,
-                "csrf_token": csrf_token,
+        order_list = []
+        for obj in orders:
+            orderitems = obj.orderitems.filter(no_process=False)
+            orderitems.select_related('product')
+            product_type_flow = None
+            item_count = orderitems.count()
+            if item_count > 0:
+                item_order = orderitems.first()
+                product_type_flow = item_order and item_order.product and item_order.product.type_flow or 0
+            data = {
+                "order": obj,
+                "item_count": item_count,
+                'product_type_flow': product_type_flow,
+                "orderitems": orderitems,
             }
-            if not order_list:
-                return ''
-            return render_to_string('partial/myorder-list.html', context)
+            order_list.append(data)
+
+        if request:
+            csrf_token = get_token(request)
+        else:
+            csrf_token = get_token(self.request)
+
+        context = {
+            "order_list": order_list,
+            "csrf_token": csrf_token,
+        }
+        if not order_list:
+            return ''
+        return render_to_string('partial/myorder-list.html', context)
 
     def get_pending_resume_items(self, candidate_id=None, email=None):
         if candidate_id:
-            resume_pending_items = OrderItem.objects.filter(order__candidate_id=candidate_id, order__status__in=[1, 3], no_process=False, oi_status=2)
+            resume_pending_items = OrderItem.objects.filter(order__candidate_id=candidate_id, order__status__in=[1, 3],
+                                                            no_process=False, oi_status=2)
 
         elif email:
-            resume_pending_items = OrderItem.objects.filter(order__email=email, order__status__in=[1, 3], no_process=False, oi_status=2)
+            resume_pending_items = OrderItem.objects.filter(order__email=email, order__status__in=[1, 3],
+                                                            no_process=False, oi_status=2)
 
         return resume_pending_items.select_related('order', 'partner', 'product')
 
@@ -119,7 +127,9 @@ class DashboardInfo(object):
             file = data.get('candidate_resume', '')
             list_ids = data.get('list_ids', [])
             if file and list_ids:
-                pending_resumes = OrderItem.objects.filter(order__status=1, id__in=list_ids, order__candidate_id=candidate_id, no_process=False, oi_status=2)
+                pending_resumes = OrderItem.objects.filter(order__status=1, id__in=list_ids,
+                                                           order__candidate_id=candidate_id, no_process=False,
+                                                           oi_status=2)
                 path_dict = {}
                 for obj in pending_resumes:
                     try:
@@ -128,8 +138,8 @@ class DashboardInfo(object):
                             filename = os.path.splitext(file.name)
                             extention = filename[len(filename) - 1] if len(
                                 filename) > 1 else ''
-                            file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random()*9999)) \
-                                + '_' + timezone.now().strftime('%Y%m%d') + extention
+                            file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random() * 9999)) \
+                                        + '_' + timezone.now().strftime('%Y%m%d') + extention
                             full_path = '%s/' % str(order.pk)
                             if not settings.IS_GCP:
                                 if not os.path.exists(settings.RESUME_DIR + full_path):
@@ -143,7 +153,7 @@ class DashboardInfo(object):
                                 GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                             path_dict[order.pk] = full_path + file_name
                     except Exception as e:
-                        logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
+                        logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e)))
                         continue
 
                     obj.oi_resume = path_dict[order.pk]

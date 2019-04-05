@@ -1,0 +1,66 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.banner-bg {
+	background: url(/media/static/react/assets/images/home-bg.jpg);
+	background-size: cover;
+	/*min-height: 549px;*/
+	margin-bottom: 40px;
+	padding: 0 5%;
+	@include flexbox();
+}
+
+.banner-content {
+	flex: 0 0 50%;
+	padding: 14% 0 3% 0;
+
+	h1 {
+		font-weight: 700;
+		font-size: 3.8rem;
+		color: $white;
+	}
+
+	ul {
+		list-style: disc;
+		color: #c7cad6;
+		margin: 8% 0;
+		padding-left: 20px;
+		line-height: 20px;
+
+		li {
+			display: block;
+			margin-bottom: 10px;
+			display: list-item;
+
+			strong {
+				font-weight: 700;
+			}
+		}
+	}
+
+	&--txt {
+		font-size: 1.8rem;
+		color: #c7cad6;
+		margin-top: 10px;
+		line-height: 20px;
+
+		strong {
+			font-weight: 700;
+		}
+	}
+
+	&--button {
+		padding: 13px 25px !important;
+		margin-bottom: 10px;
+	}
+}
+
+.banner-slider {
+	flex: 1;
+	margin: 0 -20px -50px 0;
+
+	img {
+		margin: 110px 0 0 0;
+	}
+	
+}

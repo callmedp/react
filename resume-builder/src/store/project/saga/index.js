@@ -15,34 +15,40 @@ function* fetchUserProject(action) {
         if (result['error']) {
             console.log('error');
         }
-        console.log('--get user experiences Info---', result);
-        yield put({type: Actions.SAVE_USER_PROJECT, data: result['data']})
+        const {data: {results}} = result;
+
+        yield put({type: Actions.SAVE_USER_PROJECT, data: results[0]})
     } catch (e) {
         console.log(e);
     }
 }
 
-//
-// function* updatePersonalDetails(action) {
-//     try {
-//         const {payload: {personalDetails, resolve, reject}} = action;
-//
-//         const candidateId = localStorage.getItem('candidateId') || '';
-//
-//         const result = yield call(Api.updatePersonalData, personalDetails, candidateId);
-//         if (result['error']) {
-//             return reject(new SubmissionError({_error: result['errorMessage']}));
-//         }
-//         yield put({type: Actions.SAVE_USER_INFO, data: result['data']});
-//
-//         return resolve('User Personal  Info saved successfully.');
-//
-//     } catch (e) {
-//
-//         console.log('error', e);
-//     }
-// }
+
+function* updateUserProject(action) {
+    try {
+        let {payload: {userProject, resolve, reject}} = action;
+
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        userProject['cc_id'] = candidateId;
+        const {id} = userProject;
+
+        const result = yield call(id ? Api.updateUserProject : Api.createUserProject, userProject, candidateId, id);
+        if (result['error']) {
+            return reject(new SubmissionError({_error: result['errorMessage']}));
+        }
+
+        yield put({type: Actions.SAVE_USER_PROJECT, data: result['data']});
+
+        return resolve('User Project have saved successfully.');
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
 
 export default function* watchProject() {
     yield takeLatest(Actions.FETCH_USER_PROJECT, fetchUserProject)
+    yield takeLatest(Actions.UPDATE_USER_PROJECT, updateUserProject)
 }

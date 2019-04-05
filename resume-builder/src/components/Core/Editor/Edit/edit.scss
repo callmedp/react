@@ -15,7 +15,7 @@
 		display: block;
 		flex: 1 1 auto;
 		overflow-y: auto;
-		height: 300px;
+		height: 450px;
 
 		li {
 			color: $blue1;
@@ -87,7 +87,11 @@
 		}
 
 		.icon-add {
-			background-position: -478px -40px;
+			background-position: -478px -13px;
+
+			&:hover {
+				background-position: -478px -13px !important;
+			}
 		}
 	}
 

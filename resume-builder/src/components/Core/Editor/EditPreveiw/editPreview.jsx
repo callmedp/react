@@ -21,7 +21,7 @@ class EditPreview extends Component {
                 <Header/>
                 <div className="page-container">
                     <TopBar/>
-                    <section className="flex-container mt-30">
+                    <section className={'flex-container mt-30'}>
                         <LeftSideBar {...this.props}/>
                         <RightSection {...this.props}/>
                     </section>
@@ -35,3 +35,4 @@ class EditPreview extends Component {
 }
 
 export default withRouter(props => <EditPreview {...props}/>)
+

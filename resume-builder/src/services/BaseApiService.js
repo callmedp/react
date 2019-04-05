@@ -7,7 +7,7 @@ const defaultHeaders = {
 const get = (url, headers = defaultHeaders, isFetchingHTML = false) => {
     return fetch(url, {
         headers,
-        method: 'GET',
+        method: 'GET'
     })
     // .then(response => response.json())
         .then(async (response) => {
@@ -19,11 +19,11 @@ const handleParams = (data) => Object.keys(data).map((key) => {
     return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
 }).join('&');
 
-const post = (url, data, headers = defaultHeaders, isStringify = true) => {
+const post = (url, data, headers = defaultHeaders, isStringify = true, isUpload = false) => {
     return fetch(url, {
         headers,
         method: 'POST',
-        body: isStringify ? JSON.stringify(data) : handleParams(data)
+        body: isStringify ? JSON.stringify(data) : isUpload ? data : handleParams(data)
     })
         .then(handleResponse)
 };

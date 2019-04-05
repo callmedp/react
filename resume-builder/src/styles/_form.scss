@@ -50,10 +50,15 @@ input[type='text'] {
 }
 
 .error {
+  position: relative;
+  
   .error-txt {
     color: $red;
     font-size: 1.2rem;
     display: inline-block;
+    position: absolute;
+    bottom: -13px;
+    left: 0;
   }
 }
 
@@ -121,6 +126,11 @@ select {
 /* Text Area */
 textarea {
   width:100%;
+  border: 1px solid $border1;
+  @include border-radius(3px);
+  box-shadow: inset 0 3px 8px 0 rgba(214,214,214,0.40);
+  padding: 5px 10px;
+  font-weight: 400;
 }
 
 /* Checkbox */

@@ -36,6 +36,8 @@ from skillpage.views import (
     ServiceDetailPage, UniversityPageView,
     UniversityFacultyView, LocationSkillPageView)
 
+from resumebuilder.views import (WriteResumeView)
+
 from django.conf.urls import (
     handler400, handler403, handler404, handler500
 )
@@ -172,6 +174,7 @@ urlpatterns += [
     url(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
     url(r'^linkedin/login/$',
         LinkedinCallbackView.as_view(), name='linkedin-login'),
+    url(r'^api/v1/resume/', include('resumebuilder.api.v1.urls', namespace='resume_builder')),
 
     url(r'^api/', include('api.urls', namespace='api')),
     url(r'api/v1/', include('shop.api.v1.urls', namespace='shop-api')),
@@ -201,13 +204,14 @@ urlpatterns += [
     # django-oauth-toolkit
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
+                   # entry point for react template
+                   url(r'^resume-builder/', WriteResumeView.as_view())
 
 ] + static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 ) + static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT
 ) + static(settings.DOWNLOAD_URL, document_root=settings.DOWNLOAD_ROOT)
-
 
 if settings.DEBUG:
     import debug_toolbar
@@ -233,10 +237,11 @@ if settings.DEBUG:
 
             return Response(schema)
 
+
     urlpatterns = [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
-        url(r'^api-docs/', SwaggerSchemaView.as_view()),
-    ] + urlpatterns
+                      url(r'^__debug__/', include(debug_toolbar.urls)),
+                      url(r'^api-docs/', SwaggerSchemaView.as_view()),
+                  ] + urlpatterns
 
 
 import logging

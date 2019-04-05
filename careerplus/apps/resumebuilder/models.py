@@ -32,26 +32,26 @@ INTERESTS = ((0, '3D printing'), (1, 'Acrobatics'), (2, 'Acting'), (3, 'Amateur 
              (98, 'Yo-yoing'), (99, 'Yoga'))
 
 
-class UserProfile(AbstractAutoDate):
+class CandidateProfile(AbstractAutoDate):
     candidate_id = models.CharField('Candidate Id', max_length=100, blank=True, null=True)
-    first_name = models.CharField('User First Name', max_length=100, blank=True, null=True)
-    last_name = models.CharField('User Last Name', max_length=100, blank=True, null=True)
-    email = models.CharField('User Email', max_length=100, unique=True, blank=True, null=True)
-    number = models.CharField('User Contact Number', max_length=15, blank=True, null=True)
+    first_name = models.CharField('Candidate First Name', max_length=100, blank=True, null=True)
+    last_name = models.CharField('Candidate Last Name', max_length=100, blank=True, null=True)
+    email = models.CharField('Candidate Email', max_length=100, unique=True, blank=True, null=True)
+    number = models.CharField('Candidate Contact Number', max_length=15, blank=True, null=True)
     date_of_birth = models.DateField('DOB', blank=True, null=True)
-    location = models.CharField('User Location', max_length=100, blank=True, null=True)
-    image = models.FileField(upload_to='users/', null=True, blank=True)
-    gender = models.CharField('Gender', choices=(('M', 'Male'), ('F', 'Female'), ('O', 'Others')), max_length=1,
+    location = models.CharField('Candidate Location', max_length=100, blank=True, null=True)
+    image = models.CharField('Candidate Image Url', max_length=200, blank=True, null=True)
+    gender = models.CharField('Gender', choices=(('1', 'Male'), ('2', 'Female'), ('3', 'Others')), max_length=1,
                               blank=True, null=True)
-    extracurricular = models.CharField('Extra Curricular', max_length=50, blank=True, null=True,
-                                       choices=INTERESTS)
+    extracurricular = models.CharField('Extra Curricular', max_length=200, blank=True, null=True)
     extra_info = models.TextField('Extra Information', blank=True, null=True)
+
 
     class Meta:
         abstract = True
 
 
-class User(UserProfile):
+class Candidate(CandidateProfile):
 
     def __str__(self):
         return '{}-{}'.format(self.first_name, self.last_name)
@@ -60,14 +60,14 @@ class User(UserProfile):
 class Skill(AbstractAutoDate):
     name = models.CharField('Skill Name', max_length=100)
     proficiency = models.IntegerField('Proficiency', default=5)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
 
     def __str__(self):
         return self.name
 
 
-class UserExperience(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+class CandidateExperience(models.Model):
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     job_profile = models.CharField('Job Profile', max_length=100)
     company_name = models.CharField('Company Name', max_length=200)
     start_date = models.DateField('Start Date', blank=True, null=True)
@@ -80,8 +80,8 @@ class UserExperience(models.Model):
         return self.company_name
 
 
-class UserEducation(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+class CandidateEducation(models.Model):
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     specialization = models.CharField('Specialization', max_length=200)
     institution_name = models.CharField('Institution Name', max_length=250)
     course_type = models.CharField('Institution Name', choices=(('FT', 'Full Time'), ('PT', 'Part Time'),
@@ -95,8 +95,8 @@ class UserEducation(models.Model):
         return self.specialization
 
 
-class UserCertification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+class CandidateCertification(models.Model):
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     name_of_certification = models.CharField('Certification Name', max_length=250)
     year_of_certification = models.IntegerField('Year of Certification')
 
@@ -104,30 +104,31 @@ class UserCertification(models.Model):
         return self.name_of_certification
 
 
-class UserProject(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+class CandidateProject(models.Model):
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     project_name = models.CharField('Project Name', max_length=150)
     start_date = models.DateField('Start Date', blank=False)
     end_date = models.DateField('End Date', blank=True)
     skills = models.ManyToManyField(Skill, verbose_name='List of Skills', null=True, blank=True)
+    currently_working = models.BooleanField('Currently Working', default=False)
     description = models.TextField('Project Description')
 
     def __str__(self):
         return self.project_name
 
 
-class UserReference(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+class CandidateReference(models.Model):
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     reference_name = models.CharField('Reference Name', max_length=150)
     reference_designation = models.CharField('Reference Designation', max_length=150)
-    about_user = models.TextField('About User')
+    about_candidate = models.TextField('About Candidate')
 
     def __str__(self):
         return self.reference_name
 
 
-class UserSocialLink(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+class CandidateSocialLink(models.Model):
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     link_name = models.CharField('Link Name', max_length=10,
                                  choices=SOCIAL_LINKS)
     link = models.CharField('Link', max_length=200)
@@ -136,8 +137,8 @@ class UserSocialLink(models.Model):
         return self.link_name
 
 
-class UserAchievement(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+class CandidateAchievement(models.Model):
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     title = models.CharField('Title', max_length=100)
     date = models.DateField('Date')
     summary = models.TextField('Summary')
@@ -146,8 +147,8 @@ class UserAchievement(models.Model):
         return self.title
 
 
-class UserLanguage(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+class CandidateLanguage(models.Model):
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     name = models.CharField('Language Name', max_length=100)
     proficiency = models.IntegerField('Proficiency', default=3)
 

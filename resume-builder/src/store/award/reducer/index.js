@@ -1,6 +1,8 @@
 import {SAVE_USER_AWARD} from "../actions/actionTypes";
 
 const initialState = {
+    "candidate_id": '',
+    "id": '',
     "title": '',
     "date": '',
     "summary": '',

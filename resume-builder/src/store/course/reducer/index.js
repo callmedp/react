@@ -1,6 +1,8 @@
 import {SAVE_USER_COURSE} from "../actions/actionTypes";
 
 const initialState = {
+    'id': '',
+    'candidate_id': '',
     "name_of_certification": '',
     "year_of_certification": '',
 };

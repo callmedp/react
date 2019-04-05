@@ -15,33 +15,38 @@ function* fetchUserEducation(action) {
         if (result['error']) {
             console.log('error');
         }
-        console.log('--get user experiences Info---', result);
-        yield put({type: Actions.SAVE_USER_EDUCATION, data:result['data']})
+        const {data: {results}} = result;
+        yield put({type: Actions.SAVE_USER_EDUCATION, data: results[0]})
     } catch (e) {
         console.log(e);
     }
 }
-//
-// function* updatePersonalDetails(action) {
-//     try {
-//         const {payload: {personalDetails, resolve, reject}} = action;
-//
-//         const candidateId = localStorage.getItem('candidateId') || '';
-//
-//         const result = yield call(Api.updatePersonalData, personalDetails, candidateId);
-//         if (result['error']) {
-//             return reject(new SubmissionError({_error: result['errorMessage']}));
-//         }
-//         yield put({type: Actions.SAVE_USER_INFO, data: result['data']});
-//
-//         return resolve('User Personal  Info saved successfully.');
-//
-//     } catch (e) {
-//
-//         console.log('error', e);
-//     }
-// }
+
+function* updateUserEducation(action) {
+    try {
+        const {payload: {userEducation, resolve, reject}} = action;
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        userEducation['cc_id'] = candidateId;
+        const {id} = userEducation;
+        console.log('--user Education-');
+        const result = yield call(id ? Api.updateUserEducation : Api.createUserEducation, userEducation, candidateId, id);
+        if (result['error']) {
+            return reject(new SubmissionError({_error: result['errorMessage']}));
+        }
+
+
+        yield put({type: Actions.SAVE_USER_EDUCATION, data: result['data']});
+
+        return resolve('User Education  Info saved successfully.');
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
 
 export default function* watchEducation() {
     yield takeLatest(Actions.FETCH_USER_EDUCATION, fetchUserEducation)
+    yield takeLatest(Actions.UPDATE_USER_EDUCATION, updateUserEducation)
 }

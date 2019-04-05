@@ -3,12 +3,12 @@
 
 header {
 	background: #2A3C86;
-	@include flexbox();
-	flex-direction: row;
 	height: 63px;
 }
 
 .container {
+	@include flexbox();
+	flex-direction: row;
 
 	&--logo {
 		width: 270px;
@@ -19,7 +19,7 @@ header {
 			content: '';
 			width: 287px;
 			height: 90px;
-			background: url(/images/logo.png) 0 0;
+			background: url(/media/static/react/assets/images/logo.png) 0 0;
 			display: inline-block;
 			position: absolute;
 			left: -15px;
@@ -33,14 +33,16 @@ header {
 	justify-content: flex-end;
 	color: $white;
 	vertical-align: middle;
-	align-items: baseline;
+	align-items: center;
+	height: 63px;
+	margin-left: auto;
 
 	&--user-pic {
 		width: 23px;
 		height: 23px;
 		display: inline-block;
 		@include border-radius(50%);
-		margin: 15px 10px 0 0;
+		margin: 0 10px 0 0;
 
 		img {
 			@include border-radius(50%);
@@ -48,5 +50,15 @@ header {
 			vertical-align: middle;
 		}
 	}
+
+	@media (max-width: 991px) {
+		.white-button {
+			margin-right: 10px;
+			margin-left: 10px;
+		}
+	}
 }
+
+
+        
 

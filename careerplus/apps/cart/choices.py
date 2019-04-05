@@ -1,4 +1,6 @@
-STATUS_CHOICES = (
+from typing import Tuple
+
+STATUS_CHOICES: Tuple[Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str], Tuple[int, str]] = (
     (0, "Open - currently active but no owner"),  #EDITABLE
     (1, "Merged - merged in other cart"),
     (2, "Saved - currently active but with owner"),  #EDITABLE
