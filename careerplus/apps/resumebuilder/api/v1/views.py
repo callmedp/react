@@ -1,6 +1,7 @@
 # python imports
 from datetime import datetime
 # django imports
+from django.template.loader import get_template
 
 # local imports
 from resumebuilder.models import (Candidate, Skill, CandidateExperience, CandidateEducation, CandidateCertification,
@@ -422,19 +423,19 @@ class CandidateLanguageRetrieveUpdateView(RetrieveUpdateAPIView):
         return CandidateLanguage.objects.filter(id=external_link_id)
 
 
-class CandidateResumePreview(RetrieveUpdateAPIView):
+class CandidateResumePreview(APIView):
     authentication_classes = ()
     permission_classes = ()
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'resume4.html'
 
     def get(self, request, *args, **kwargs):
         candidate_id = self.kwargs.get('candidate_id', '')
-        candidate = Candidate.objects.filter(candidate_id=candidate_id)
+        template_id = self.kwargs.get('pk', '');
+
+        candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
         if not candidate:
             return {}
 
-        extracurricular = candidate.extracurricular.split(',')
+        # extracurricular = candidate.extracurricular.split(',')
         education = candidate.candidateeducation_set.all()
         experience = candidate.candidateexperience_set.all()
         # skills = candidate.skill_set.all()
@@ -445,7 +446,13 @@ class CandidateResumePreview(RetrieveUpdateAPIView):
         languages = candidate.candidatelanguage_set.all()
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
 
-        return Response({'candidate': candidate, 'education': education, 'experience': experience, 'skills': [],
-                         'achievements': achievements, 'references': references, 'projects': projects,
-                         'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
-                         'current_exp': current_exp})
+        template = get_template('resume{}.html'.format(template_id))
+        rendered_template = template.render(
+            {'candidate': candidate, 'education': education, 'experience': experience, 'skills': [],
+             'achievements': achievements, 'references': references, 'projects': projects,
+             'certifications': certifications, 'extracurricular': '', 'languages': languages,
+             'current_exp': current_exp}).encode(encoding='UTF-8')
+
+        return Response({
+            'html': rendered_template
+        })

@@ -102,7 +102,7 @@ export class PersonalInfo extends Component {
                                 </fieldset>
                                 <fieldset>
                                     <label>Last Name</label>
-                                    <Field component={renderField} validate={required} type={"text"} name="last_name"/>
+                                    <Field component={renderField} validate={required}           type={"text"} name="last_name"/>
                                 </fieldset>
                             </div>
                             <div className="flex-container">

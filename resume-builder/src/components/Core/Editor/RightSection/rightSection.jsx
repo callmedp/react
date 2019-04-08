@@ -10,6 +10,7 @@ import Award from '../UserDetails/Award/award.jsx'
 import Project from '../UserDetails/Project/project.jsx'
 import Reference from '../UserDetails/Reference/reference.jsx'
 import Course from '../UserDetails/Course/course.jsx'
+import Template from '../Template/template.jsx'
 import queryString from 'query-string'
 
 
@@ -30,9 +31,6 @@ export default class RightSection extends Component {
             this.setState({
                 type: values && values.type || ''
             })
-            if (this.props.match.path === '/resume-builder/preview/') {
-                this.props.fetch
-            }
         }
     }
 
@@ -71,11 +69,7 @@ export default class RightSection extends Component {
                 return <Summary {...this.props}/>
             }
             default: {
-
-                return <div className="right-sidebar-scroll-main"
-                            dangerouslySetInnerHTML={{
-                                __html: ''
-                            }}/>
+                return <Template {...this.props} />
             }
 
         }
