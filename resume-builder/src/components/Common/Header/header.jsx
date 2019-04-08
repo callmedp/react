@@ -1,14 +1,11 @@
 import React ,{Component} from 'react';
 import './header.scss'
-import { Link, DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+import { Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 export default class Header extends Component {
     
     constructor(props) {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
-    }
-    redirectToEdit(){
-        window.location.href = '/resume-builder/edit/'
     }
 
     scrollTo(elem) {
@@ -16,7 +13,7 @@ export default class Header extends Component {
           duration: 800,
           delay: 0,
           smooth: 'easeInOutQuad',
-          offset:'100'
+          offset: -63
         })
     }
 
@@ -51,7 +48,7 @@ export default class Header extends Component {
                         </li>
                     </ul>
             		<div className="signin">
-                        <button className="white-button mr-30" onClick={this.redirectToEdit.bind(this)}>Build your resume</button>
+                        <button className="white-button mr-30" onClick={() => this.scrollTo('templates')}>Build your resume</button>
             			<span className="signin--user-pic">
             				<img src="/media/static/react/assets/images/user-pic.jpg" />
             			</span>

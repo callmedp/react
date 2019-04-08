@@ -8,23 +8,38 @@ import ResumeSlider from "./ResumeSlider/resumeSlider.jsx";
 import Testimonial from "./Testimonial/testimonial.jsx";
 import Footer from "../../Common/Footer/footer.jsx";
 import Header from "../../Common/Header/header.jsx";
+import { Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
 
 class Home extends Component {
     constructor(props) {
         super(props);
-        this.handleScroll = this.handleScroll.bind(this)
+        this.scrollTo = this.scrollTo.bind(this);
     }
 
+    scrollTo(elem) {
+        scroller.scrollTo(elem, {
+          duration: 800,
+          delay: 0,
+          smooth: 'easeInOutQuad',
+          offset: -63
+        })
+    }
     componentDidMount() {
-        document.addEventListener('scroll', this.handleScroll);
+
         this.props.getCandidateId()
-    }
-    redirectToEdit(){
-        window.location.href = 'http://127.0.0.1:8000/resume-builder/edit/'
+        Events.scrollEvent.register('begin', function () {
+          console.log("begin", arguments);
+        });
+    
+        Events.scrollEvent.register('end', function () {
+          console.log("end", arguments);
+        });
+    
     }
 
-    handleScroll() {
-
+    componentWillUnmount() {
+        Events.scrollEvent.remove('begin');
+        Events.scrollEvent.remove('end');
     }
     
 
@@ -177,7 +192,7 @@ class Home extends Component {
                         </li>
                     </ul>
 
-                    <button className="orange-button" onClick={this.redirectToEdit.bind(this)}>Build your resume</button>
+                    <button className="orange-button" onClick={() => this.scrollTo('templates')}>Build your resume</button>
 
                 </section>
 

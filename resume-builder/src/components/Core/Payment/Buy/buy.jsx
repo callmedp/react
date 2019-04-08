@@ -17,6 +17,9 @@ export class Buy extends Component {
     }
 
     async redirectToCart() {
+        
+        if(!this.props.productIds[0])
+            return;
         let product;
         if (this.state.checked === 'product1') {
             product = this.props.productIds[1]
@@ -33,12 +36,12 @@ export class Buy extends Component {
 
         }
         await this.props.addToCart(data);
-        window.location.href = 'http://127.0.0.1:8000/cart'
+        window.location.href = '/cart'
     }
 
     componentDidMount() {
         this.props.getProductIds();
-        console.log(this.props)
+        console.log(this.props.productIds[0])
 
     }
 

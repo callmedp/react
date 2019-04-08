@@ -1,13 +1,39 @@
 import React, {Component} from 'react';
 import './banner.scss'
+import { Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 export default class Banner extends Component {
+
+
     constructor(props) {
-        super(props)
+        super(props);
+        this.scrollTo = this.scrollTo.bind(this);
     }
-    redirectToEdit(){
-        window.location.href = '/resume-builder/edit/'
+
+    scrollTo(elem) {
+        scroller.scrollTo(elem, {
+          duration: 800,
+          delay: 0,
+          smooth: 'easeInOutQuad',
+          offset:-63
+        })
     }
+    componentDidMount() {
+        Events.scrollEvent.register('begin', function () {
+          console.log("begin", arguments);
+        });
+    
+        Events.scrollEvent.register('end', function () {
+          console.log("end", arguments);
+        });
+    
+    }
+
+    componentWillUnmount() {
+        Events.scrollEvent.remove('begin');
+        Events.scrollEvent.remove('end');
+    }
+    
 
     render() {
         return (
@@ -24,7 +50,7 @@ export default class Banner extends Component {
                         <li><strong>Highly customizable</strong> resume</li>
                         <li>Power to get you <strong>hired 33% faster</strong></li>
                    </ul>
-                   <button className="orange-button banner-content--button" onClick={this.redirectToEdit.bind(this)}>Build your resume</button>
+                   <button className="orange-button banner-content--button" onClick={() => this.scrollTo('templates')}>Build your resume</button>
                </div>
                <div className="banner-slider">
                     <img src="/media/static/react/assets/images/home-banner-slider.png" className="img-responsive" />
