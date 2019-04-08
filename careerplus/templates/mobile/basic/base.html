@@ -12,7 +12,7 @@
     {% block django_meta %}
     {% endblock django_meta %}
     {% block canonical_url %}
-      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
+      <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
    {% endblock canonical_url %}
 
     <title> {% block title %}Shine Learning{% endblock title %}</title>
@@ -183,7 +183,7 @@
         <!-- /1198510/ShineLearning_1x1_mobile -->
         <div id='div-gpt-ad-1509431552856-0'>
         <script>
-        googletag.cmd.push(function() { googletag.display('div-gpt-ad-1509431552856-0'); });
+        
         {% if marketing_popup_html %}
             $('.marketing-popup').modal();
         {% endif %}
