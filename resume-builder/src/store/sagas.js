@@ -10,6 +10,7 @@ import watchCourse from './course/saga/index'
 import watchProject from './project/saga/index'
 import watchReference from './reference/saga/index'
 import watchProductId from './buy/saga/index'
+import watchTemplate from './template/saga/index'
 
 export default function* () {
     yield all([
@@ -23,6 +24,7 @@ export default function* () {
         watchCourse(),
         watchProject(),
         watchReference(),
-        watchProductId()
+        watchProductId(),
+        watchTemplate()
     ])
 }

@@ -29,19 +29,19 @@
                             style="display: table-cell; padding-right: 10px;"><img
                             src="{% static 'resumebuilder/images/resume3/mobile-icon.png' %}"
                             alt="Mobile"
-                            style="vertical-align: middle;"></span>+91 {{ user.number }}
+                            style="vertical-align: middle;"></span>+91 {{ candidate.number }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
                             style="display: table-cell; padding-right: 10px;"><img
                             src="{% static 'resumebuilder/images/resume3/email-icon.png' %}"
                             alt="Email"
-                            style="vertical-align: middle;"></span>{{ user.email }}
+                            style="vertical-align: middle;"></span>{{ candidate.email }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
                             style="display: table-cell; padding-right: 10px;"><img
                             src="{% static 'resumebuilder/images/resume3/location-icon.png' %}"
                             alt="Location"
-                            style="vertical-align: middle;"></span>{{ user.location }}
+                            style="vertical-align: middle;"></span>{{ candidate.location }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
                             style="display: table-cell; padding-right: 10px;"><img
@@ -214,7 +214,7 @@
         <div style="width: 63.5%; padding: 3%; display: table-cell; vertical-align: top; float: left;">
             <div style="margin-bottom: 10%;">
                 <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: bold; text-transform: uppercase;">
-                    {{ user.first_name }} {{ user.last_name }}</h1>
+                    {{ candidate.first_name }} {{ candidate.last_name }}</h1>
                 <span style="display: block; width: 15%; border-top: 1px solid #919191; margin: 10px 0 15px 0;"></span>
                 <strong style="display: block; font-size: 18px; color: #ffffff; font-weight: normal; text-transform: uppercase; margin-bottom: 1px;">{{ 'FULL STACK DEVELOPER' }}</strong>
             </div>
@@ -223,7 +223,7 @@
             <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">
                 <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 18px;">Professional
                     profile</strong>
-                <p>{{ user.extra_info }}</p>
+                <p>{{ candidate.extra_info }}</p>
             </div>
 
             <!--Work experience-->
