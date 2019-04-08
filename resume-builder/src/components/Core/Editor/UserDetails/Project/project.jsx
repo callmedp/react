@@ -81,7 +81,8 @@ class Project extends Component {
                             <div className="flex-container">
                                 <fieldset>
                                     <label>Description</label>
-                                    <Field component={renderTextArea} rows={"3"} type={"text"} name="description"/>
+                                    <Field component={renderTextArea} rows={"3"} type={"text"} name="description"
+                                           value={project.description}/>
                                 </fieldset>
                             </div>
 

@@ -438,7 +438,7 @@ class CandidateResumePreview(APIView):
         # extracurricular = candidate.extracurricular.split(',')
         education = candidate.candidateeducation_set.all()
         experience = candidate.candidateexperience_set.all()
-        # skills = candidate.skill_set.all()
+        skills = candidate.skill_set.all()
         achievements = candidate.candidateachievement_set.all()
         references = candidate.candidatereference_set.all()
         projects = candidate.candidateproject_set.all()
@@ -448,7 +448,7 @@ class CandidateResumePreview(APIView):
 
         template = get_template('resume{}.html'.format(template_id))
         rendered_template = template.render(
-            {'candidate': candidate, 'education': education, 'experience': experience, 'skills': [],
+            {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
              'achievements': achievements, 'references': references, 'projects': projects,
              'certifications': certifications, 'extracurricular': '', 'languages': languages,
              'current_exp': current_exp}).encode(encoding='UTF-8')

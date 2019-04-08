@@ -14,21 +14,12 @@ export const renderField = ({
                                 className,
                                 meta: {touched, error, warning}
                             }) => (
-<<<<<<< HEAD
-<div className="Error">
-    <input {...input} className={className} placeholder={label} type={type}/>
-     {
-    (( <span className={'Error-message'}>{error}</span>) ||
-         (warning && <span className={'Warn-Message'}>{warning}</span>))}
-</div>
-=======
-    <div>
+    <div className="Error">
         <input {...input} className={className} placeholder={label} type={type}/>
-        {touched &&
-        ((error && <span className={'Error-message'}>{error}</span>) ||
-            (warning && <span className={'Warn-Message'}>{warning}</span>))}
+        {
+            ((<span className={'Error-message'}>{error}</span>) ||
+                (warning && <span className={'Warn-Message'}>{warning}</span>))}
     </div>
->>>>>>> abc6c107d1bb7a10236d8dc48c0db2c0bad55159
 );
 
 
