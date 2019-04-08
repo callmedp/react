@@ -6,6 +6,8 @@ import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 
+import {courseTypeList} from "../../../Utils/courseTypeList";
+
 
 function* fetchUserEducation(action) {
     try {
@@ -16,7 +18,14 @@ function* fetchUserEducation(action) {
             console.log('error');
         }
         const {data: {results}} = result;
-        yield put({type: Actions.SAVE_USER_EDUCATION, data: results[0]})
+        let data = results[0];
+        data = {
+            ...results[0],
+            ...{
+                course_type: courseTypeList[data['course_type']]
+            }
+        }
+        yield put({type: Actions.SAVE_USER_EDUCATION, data: data})
     } catch (e) {
         console.log(e);
     }

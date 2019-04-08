@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './education.scss'
 import {Field, reduxForm} from "redux-form";
 import {renderField, renderTextArea, renderSelect, datepicker} from '../../../../FormHandler/formFieldRenderer.jsx'
-
+import {required} from "../../../../FormHandler/formValidations"
 import * as actions from "../../../../../store/education/actions";
 import {connect} from "react-redux";
 import moment from "moment";
@@ -48,7 +48,7 @@ class Education extends Component {
                             <div className="flex-container">
                                 <fieldset>
                                     <label>Institution Name </label>
-                                    <Field component={renderField} type={"text"} name="institution_name"/>
+                                    <Field component={renderField} type={"text"} validate={required} name="institution_name"/>
                                 </fieldset>
                                 <fieldset>
                                     <label>Date from</label>
@@ -56,7 +56,7 @@ class Education extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-date"></span>
                                         </div>
-                                        <Field component={datepicker} type={"date"} name="start_date"
+                                        <Field component={datepicker} type={"date"} validate={required} name="start_date"
                                                className="input-control"/>
                                     </div>
                                 </fieldset>
@@ -66,7 +66,7 @@ class Education extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-date"></span>
                                         </div>
-                                        <Field component={datepicker} type={"date"} name="end_date"
+                                        <Field component={datepicker} validate={required} type={"date"} name="end_date"
                                                className="input-control"/>
 
                                     </div>
@@ -81,11 +81,11 @@ class Education extends Component {
                             <div className="flex-container">
                                 <fieldset>
                                     <label>Specialization</label>
-                                    <Field component={renderField} type={"text"} name="specialization"/>
+                                    <Field component={renderField} validate={required} type={"text"} name="specialization"/>
                                 </fieldset>
                                 <fieldset>
                                     <label>Course Type</label>
-                                    <Field component={renderSelect} type={"text"} name="course_type"
+                                    <Field component={renderSelect} validate={required} type={"text"} name="course_type"
                                            options={[
                                                {value: 'FT', label: 'FULL TIME'},
                                                {value: 'PT', label: 'PART TIME'},
@@ -94,7 +94,7 @@ class Education extends Component {
                                 </fieldset>
                                 <fieldset>
                                     <label>Percentage/CGPA</label>
-                                    <Field component={renderField} type={"text"} name="percentage_cgpa"
+                                    <Field component={renderField} validate={required} type={"text"} name="percentage_cgpa"
                                            className="input-control"/>
                                 </fieldset>
                             </div>

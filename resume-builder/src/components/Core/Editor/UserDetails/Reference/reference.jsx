@@ -4,6 +4,7 @@ import {Field, reduxForm} from "redux-form";
 import * as actions from "../../../../../store/reference/actions";
 import {connect} from "react-redux";
 import {renderField, renderTextArea} from "../../../../FormHandler/formFieldRenderer.jsx";
+import {required} from "../../../../FormHandler/formValidations"
 
 
 class Reference extends Component {
@@ -45,11 +46,11 @@ class Reference extends Component {
                             <div className="flex-container">
                                 <fieldset className="error">
                                     <label>Reference name</label>
-                                    <Field component={renderField} type={"text"} name="reference_name"/>
+                                    <Field component={renderField} validate={required} type={"text"} name="reference_name"/>
                                 </fieldset>
                                 <fieldset>
                                     <label>Designation</label>
-                                    <Field component={renderField} type={"text"} name="reference_designation"/>
+                                    <Field component={renderField} validate={required} type={"text"} name="reference_designation"/>
                                 </fieldset>
                             </div>
 

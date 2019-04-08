@@ -10,6 +10,13 @@ import {
     renderSelect,
     renderDynamicSelect
 } from "../../../../FormHandler/formFieldRenderer.jsx";
+
+import {
+    required,
+    phoneNumber,
+    email
+} from "../../../../FormHandler/formValidations.js";
+
 import moment from 'moment';
 
 export class PersonalInfo extends Component {
@@ -92,7 +99,7 @@ export class PersonalInfo extends Component {
                             <div className="flex-container">
                                 <fieldset className="error">
                                     <label>First Name</label>
-                                    <Field component={renderField} type={"text"} name="first_name"/>
+                                    <Field component={renderField} type={"text"} validate={required} name="first_name"/>
                                     <span className="error-txt"></span>
                                 </fieldset>
                                 <fieldset>
@@ -108,6 +115,7 @@ export class PersonalInfo extends Component {
                                         component={renderSelect}
                                         label="Gender"
                                         isMulti={false}
+                                        validate={required}
                                         options={[
                                             {value: '1', label: 'Male'},
                                             {value: '2', label: 'Female'},
@@ -117,7 +125,7 @@ export class PersonalInfo extends Component {
                                 </fieldset>
                                 <fieldset>
                                     <label>Date Of Birth</label>
-                                    <Field component={datepicker} name="date_of_birth" className={"input-control"}/>
+                                    <Field component={datepicker} validate={required} name="date_of_birth" className={"input-control"}/>
                                 </fieldset>
                             </div>
                             <div className="flex-container">
@@ -127,7 +135,7 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-mobile"></span>
                                         </div>
-                                        <Field component={renderField} type={"text"} name="number"
+                                        <Field component={renderField} validate={[required,phoneNumber]} type={"text"} name="number"
                                                className={"input-control"}/>
                                     </div>
                                 </fieldset>
@@ -137,7 +145,7 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-email"></span>
                                         </div>
-                                        <Field component={renderField} type={"text"} name="email"
+                                        <Field component={renderField} validate={[required,email]} type={"text"} name="email"
                                                className={"input-control"}/>
                                     </div>
                                 </fieldset>

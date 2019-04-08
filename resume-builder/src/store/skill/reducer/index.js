@@ -4,7 +4,7 @@ const initialState = {
     "id": '',
     "candidate_id": '',
     "name": '',
-    "proficiency": 5
+    "proficiency": ''
 };
 
 
