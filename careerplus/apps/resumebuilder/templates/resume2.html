@@ -12,7 +12,7 @@
 
     <!--left column-->
     <div style="width: 24%; background: #3e94d6; padding: 3% 3% 6% 3%; display: table-cell; vertical-align: top;">
-        <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: bold;">{{ user.first_name }} {{ user.last_name }}</h1>
+        <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: bold;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
         <strong style="display: block; font-size: 16px; color: #c5e6ff; font-weight: normal; margin-bottom: 30px;">{{ 'FULL STACK DEVELOPER' }}</strong>
 
         <!--Personal info-->
@@ -21,14 +21,14 @@
                 info</strong>
             <ul style="margin: 20px 0 30px 0; padding: 0; font-size: 14px; color: #c5e6ff; list-style-type: none;">
                 <li style="display: table; margin-bottom: 15px;"><strong
-                        style="display: block; font-size: 16px; font-weight: normal; color: #ffffff;">Address</strong>{{ user.location }}
+                        style="display: block; font-size: 16px; font-weight: normal; color: #ffffff;">Address</strong>{{ candidate.location }}
                 </li>
                 <li style="display: table; margin-bottom: 15px;"><strong
                         style="display: block; font-size: 16px; font-weight: normal; color: #ffffff;">Phone</strong>+91
-                    {{ user.number }}
+                    {{ candidate.number }}
                 </li>
                 <li style="display: table; margin-bottom: 15px;"><strong
-                        style="display: block; font-size: 16px; font-weight: normal; color: #ffffff;">Email</strong>{{ user.email }}
+                        style="display: block; font-size: 16px; font-weight: normal; color: #ffffff;">Email</strong>{{ candidate.email }}
                 </li>
                 <li style="display: table; margin-bottom: 15px;"><strong
                         style="display: block; font-size: 16px; font-weight: normal; color: #ffffff;">Linkedin</strong>linkedin.com/candidatename
@@ -117,7 +117,7 @@
 
     <!--right column-->
     <div style="width: 63.5%; background: #ffffff; padding: 3%; display: table-cell; vertical-align: top;">
-        <p style="margin-bottom: 30px;">{{ user.extra_info }}</p>
+        <p style="margin-bottom: 30px;">{{ candidate.extra_info }}</p>
 
         <!--Experience-->
         <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">

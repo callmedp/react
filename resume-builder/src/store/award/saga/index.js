@@ -15,7 +15,8 @@ function* fetchUserAward(action) {
         if (result['error']) {
             console.log('error');
         }
-        yield put({type: Actions.SAVE_USER_AWARD, data: result['data']})
+        const {data: {results}} = result;
+        yield put({type: Actions.SAVE_USER_AWARD, data: results[0]})
     } catch (e) {
         console.log(e);
     }
@@ -30,7 +31,7 @@ function* updateUserAward(action) {
         userAward['cc_id'] = candidateId;
         const {id} = userAward;
         const result = yield call(id ? Api.updateUserAward : Api.createUserAward, userAward, candidateId, id);
-        console.log('---',result);
+        console.log('---', result);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }

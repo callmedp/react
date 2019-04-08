@@ -45,6 +45,6 @@ urlpatterns = [
     url(r'^candidate/(?P<candidate_id>.+)/languages/(?P<pk>\d+)/$',
         CandidateLanguageRetrieveUpdateView.as_view()),
     url(r'^candidate/(?P<candidate_id>.+)/languages/$', CandidateLanguageListCreateView.as_view()),
-    url(r'^preview/$', CandidateResumePreview.as_view()),  # (?P<pk>\d+)/
+    url(r'^candidate/(?P<candidate_id>.+)/preview/(?P<pk>\d+)/$', CandidateResumePreview.as_view()),  # (?P<pk>\d+)/
 
 ]

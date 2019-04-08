@@ -1,6 +1,6 @@
 import React from "react";
 import {BrowserRouter as Router, Route} from "react-router-dom";
-import EditPreviewContainer from '../components/Core/Editor/EditPreveiw/editPreview.jsx';
+import EditPreviewContainer from '../components/Core/Editor/editPreview.jsx';
 import HomeContainer from '../components/Core/Home/home.jsx';
 import BuyContainer from '../components/Core/Payment/Buy/buy.jsx';
 import DownloadContainer from '../components/Core/Payment/DownloadResume/downloadResume.jsx';

@@ -16,7 +16,7 @@
         <div style="width: 44%; background: #649f58; padding: 3%; display: table-cell; vertical-align: top; float: left; min-height: 275px;">
             <img src="{% static 'resumebuilder/images/resume4/resume-pic.png' %}" alt="Resume" width="150" height="150"
                  style="border-radius: 100%; margin-bottom: 10px; width: 150px; height: 150px;">
-            <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: bold; text-transform: uppercase; display: block;">{{ user.first_name }} {{ user.last_name }}</h1>
+            <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: bold; text-transform: uppercase; display: block;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
             <span style="display: block; width: 15%; border-top: 1px solid #a2c59b; margin: 10px 0 15px 0;"></span>
             <strong style="display: block; font-size: 18px; color: #ffffff; font-weight: normal; text-transform: uppercase; margin-bottom: 1px;">{{ 'FULL STACK DEVELOPER' }}</strong>
         </div>
@@ -31,17 +31,17 @@
                             style="display: table-cell; padding-right: 10px;"><img
                             src="{% static 'resumebuilder/images/resume4/mobile-icon.png' %}" alt="Mobile"
                             style="vertical-align: middle;"></span>+91
-                        {{ user.number }}
+                        {{ candidate.number }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
                             style="display: table-cell; padding-right: 10px;"><img
                             src="{% static 'resumebuilder/images/resume4/email-icon.png' %}" alt="Email"
-                            style="vertical-align: middle;"></span>{{ user.email }}
+                            style="vertical-align: middle;"></span>{{ candidate.email }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
                             style="display: table-cell; padding-right: 10px;"><img
                             src="{% static 'resumebuilder/images/resume4/location-icon.png' %}" alt="Location"
-                            style="vertical-align: middle;"></span>{{ user.location }}
+                            style="vertical-align: middle;"></span>{{ candidate.location }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
                             style="display: table-cell; padding-right: 10px;"><img
@@ -66,7 +66,7 @@
             <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">
                 <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: 18px; margin: 0">Professional
                     profile</strong>
-                <p style="color: #555555">{{ user.extra_info }}</p>
+                <p style="color: #555555">{{ candidate.extra_info }}</p>
                 <ul style="padding: 5px 0 0 0; margin: 0; list-style-type: none;">
                     <li style="vertical-align: top; margin: 10px 0;">
                         <span style="width: 9px; height: 9px; border-radius: 100%; background: #5a8d50; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
@@ -398,7 +398,7 @@
                     <li style="vertical-align: top; margin: 5px 0; display: block; font-size: 14px; color: #333333;">
                         <span style="width: 9px; height: 9px; border-radius: 100%; background: #5a8d50; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
                         <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 40%;">DOB</span>
-                        {{ user.date_of_birth|date:"d-m-Y" }}
+                        {{ candidate.date_of_birth|date:"d-m-Y" }}
                     </li>
                 </ul>
             </div>
