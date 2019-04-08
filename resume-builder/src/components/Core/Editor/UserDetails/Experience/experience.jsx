@@ -47,12 +47,21 @@ class Experience extends Component {
                             <div className="flex-container">
                                 <fieldset className="error">
                                     <label>Designation</label>
-                                    <Field component={renderField} type={"text"} name="job_profile"/>
-
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-designation"></span>
+                                        </div>
+                                        <Field component={renderField} type={"text"} name="job_profile"/>
+                                    </div>
                                 </fieldset>
                                 <fieldset>
                                     <label>Company Name</label>
-                                    <Field component={renderField} type={"text"} name="company_name"/>
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-company"></span>
+                                        </div>
+                                        <Field component={renderField} type={"text"} name="company_name"/>
+                                    </div>
                                 </fieldset>
                             </div>
                             <div className="flex-container">

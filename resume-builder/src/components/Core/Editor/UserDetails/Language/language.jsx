@@ -54,7 +54,6 @@ class Language extends Component {
 
                                 <fieldset className="width-half">
                                     <label>Language rating (out of 10)</label>
-                                    <span className="styled-select">
 				        			<Field name="proficiency"
                                            component={renderSelect}
                                            isMulti={false}
@@ -70,7 +69,6 @@ class Language extends Component {
                                                {value: 9, label: '9'},
                                                {value: 10, label: '10'}
                                            ]}/>
-			        			</span>
                                 </fieldset>
                             </div>
 

@@ -48,8 +48,25 @@ class Education extends Component {
                             <div className="flex-container">
                                 <fieldset>
                                     <label>Institution Name </label>
-                                    <Field component={renderField} type={"text"} name="institution_name"/>
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-company"></span>
+                                        </div>
+                                        <Field component={renderField} type={"text"} name="institution_name"/>
+                                    </div>
                                 </fieldset>
+                                <fieldset>
+                                    <label>Specialization</label>
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-company"></span>
+                                        </div>
+                                        <Field component={renderField}  type={"text"} name="specialization"/>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <div className="flex-container">
                                 <fieldset>
                                     <label>Date from</label>
                                     <div className="input-group">
@@ -71,19 +88,16 @@ class Education extends Component {
 
                                     </div>
                                     <span className="till-today">
-									<Field type="radio" name="is_pursuing" component={'input'}
+                                    <Field type="radio" name="is_pursuing" component={'input'}
                                            value={education.is_pursuing}/>
-									Till Today
-								</span>
+                                    Till Today
+                                </span>
                                 </fieldset>
                             </div>
 
                             <div className="flex-container">
-                                <fieldset>
-                                    <label>Specialization</label>
-                                    <Field component={renderField} type={"text"} name="specialization"/>
-                                </fieldset>
-                                <fieldset>
+                                
+                                <fieldset className="custom">
                                     <label>Course Type</label>
                                     <Field component={renderSelect} type={"text"} name="course_type"
                                            options={[

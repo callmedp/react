@@ -218,3 +218,43 @@
 .icon-close {
     @include icon-inblock (10px, 10px, -412px -110px);
 }
+
+.icon-name {
+    @include icon-inblock (15px, 19px, -88px -139px);
+}
+
+.icon-surname {
+    @include icon-inblock (24px, 18px, -113px -139px);
+}
+
+.icon-company {
+    @include icon-inblock (18px, 18px, -145px -139px);
+}
+
+.icon-designation {
+    @include icon-inblock (20px, 18px, -172px -139px);
+}
+
+.icon-language-gr {
+    @include icon-inblock (22px, 19px, -88px -165px);
+}
+
+.icon-skills-gr {
+    @include icon-inblock (20px, 20px, -198px -139px);
+}
+
+.icon-awards-gr {
+    @include icon-inblock (17px, 20px, -118px -165px);
+}
+
+.icon-courses-gr {
+    @include icon-inblock (17px, 19px, -144px -165px);
+}
+
+.icon-projects-gr {
+    @include icon-inblock (17px, 20px, -170px -165px);
+}
+
+.icon-refrences-gr {
+    @include icon-inblock (18px, 18px, -196px -166px);
+}
