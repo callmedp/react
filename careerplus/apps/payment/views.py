@@ -195,6 +195,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         payment_dict = self.getPayableAmount(cart_obj=self.cart_obj)
         line_item = self.cart_obj.lineitems.filter(parent=None)[0]
         type_flow = int(line_item.product.type_flow)
+        print(type_flow)
         context.update({
             "state_form": StateForm(),
             "check_form": PayByCheckForm(),
