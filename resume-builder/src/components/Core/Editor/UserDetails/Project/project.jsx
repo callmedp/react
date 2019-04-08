@@ -5,6 +5,7 @@ import * as actions from "../../../../../store/project/actions";
 import {connect} from "react-redux";
 import {datepicker, renderField, renderTextArea} from "../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
+import {required} from "../../../../FormHandler/formValidations"
 
 
 class Project extends Component {
@@ -48,7 +49,7 @@ class Project extends Component {
                             <div className="flex-container">
                                 <fieldset>
                                     <label>Project Name</label>
-                                    <Field component={renderField} type={"text"} name="project_name"/>
+                                    <Field component={renderField} validate={required} type={"text"} name="project_name"/>
                                 </fieldset>
                             </div>
                             <div className="flex-container">
@@ -58,7 +59,7 @@ class Project extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-date"></span>
                                         </div>
-                                        <Field component={datepicker} type={"date"} className={'input-control'}
+                                        <Field component={datepicker} validate={required} type={"date"} className={'input-control'}
                                                name="start_date"/>
                                     </div>
                                 </fieldset>
@@ -68,7 +69,7 @@ class Project extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-date"></span>
                                         </div>
-                                        <Field component={datepicker} type={"date"} className={'input-control'}
+                                        <Field component={datepicker} validate={required} type={"date"} className={'input-control'}
                                                name="end_date"/></div>
                                     <span className="till-today">
 									<Field type="radio" name="currently_working" component="input"

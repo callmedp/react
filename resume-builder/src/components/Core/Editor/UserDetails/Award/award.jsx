@@ -3,6 +3,7 @@ import './award.scss'
 import {Field, reduxForm} from "redux-form";
 import * as actions from "../../../../../store/award/actions";
 import {connect} from "react-redux";
+import {required} from "../../../../FormHandler/formValidations"
 import {datepicker, renderField, renderTextArea} from "../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
 
@@ -48,7 +49,7 @@ class Award extends Component {
                                 <fieldset className="error">
                                     <label>Title</label>
                                     <Field component={renderField} type={"text"} name="title"
-                                           className="input-control"/>
+                                        validate={required} className="input-control"/>
                                 </fieldset>
                                 <fieldset>
                                     <label>Date</label>
@@ -57,7 +58,7 @@ class Award extends Component {
                                             <span className="icon-date"></span>
                                         </div>
                                         <Field component={datepicker} type={"date"} className={'input-control'}
-                                               name="date"/>
+                                            validate={required} name="date"/>
                                     </div>
                                 </fieldset>
                             </div>
