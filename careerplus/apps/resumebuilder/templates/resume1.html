@@ -14,9 +14,9 @@
 
         <!--top left-->
         <div style="width: 46%; margin-right: 2%; display: inline-block; vertical-align: top;">
-            <h1 style="margin: 0; color: #ffffff; font-size: 32px;">{{ user.first_name }} {{ user.last_name }}</h1>
+            <h1 style="margin: 0; color: #ffffff; font-size: 32px;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
             <strong style="display: block; font-size: 16px; color: #ffd7d7; font-weight: normal; margin-bottom: 20px;">{{ "Full Stack Developer" }}</strong>
-            <p style="color: #ffffff">{{ user.extra_info }}</p>
+            <p style="color: #ffffff">{{ candidate.extra_info }}</p>
             <p style="color: #ffffff">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
                 incididunt ut labore et dolore magna aliqua.</p>
         </div>
@@ -27,17 +27,17 @@
                 <li style="display: table; margin-bottom: 15px;"><span
                         style="display: table-cell; padding-right: 10px;"><img
                         src="{% static 'resumebuilder/images/resume1/mobile-icon.png' %}" alt="Mobile"
-                        style="vertical-align: middle;"></span>+91 {{ user.number }}
+                        style="vertical-align: middle;"></span>+91 {{ candidate.number }}
                 </li>
                 <li style="display: table; margin-bottom: 15px;"><span
                         style="display: table-cell; padding-right: 10px;"><img
                         src="{% static 'resumebuilder/images/resume1/email-icon.png' %}" alt="Email"
-                        style="vertical-align: middle;"></span>{{ user.email }}
+                        style="vertical-align: middle;"></span>{{ candidate.email }}
                 </li>
                 <li style="display: table; margin-bottom: 15px;"><span
                         style="display: table-cell; padding-right: 10px;"><img
                         src="{% static 'resumebuilder/images/resume1/location-icon.png' %}" alt="Location"
-                        style="vertical-align: middle;"></span>{{ user.location }}
+                        style="vertical-align: middle;"></span>{{ candidate.location }}
                 </li>
                 <li style="display: table; margin-bottom: 15px;"><span
                         style="display: table-cell; padding-right: 10px;"><img

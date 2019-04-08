@@ -14,7 +14,7 @@
         <!--left column-->
         <div style="width: 44%; background: #ffffff; padding: 3%; display: table-cell; vertical-align: top; float: left;">
             <div style="display: block; text-align: center; margin-bottom: 10%;">
-                <h1 style="margin: 0; color: #000000; font-size: 32px; font-weight: bold; text-transform: uppercase;">{{ user.first_name }} {{ user.last_name }}</h1>
+                <h1 style="margin: 0; color: #000000; font-size: 32px; font-weight: bold; text-transform: uppercase;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
                 <strong style="display: block; font-style: italic; font-size: 18px; color: #777777; font-weight: normal; text-transform: uppercase; margin: 0 0 20px 0;">{{ 'FULL STACK DEVELOPER' }}</strong>
                 <span style="display: block; text-align: center;">
               <img src="{% static 'resumebuilder/images/resume5/resume-pic.png' %}" width="205" height="205"
@@ -27,7 +27,7 @@
             <div style="display: block; vertical-align: top; margin-bottom: 30px;">
                 <strong style="font-size: 18px; display: block; color: #000000; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #cac8c9; padding-bottom: 10px;">Professional
                     Detail</strong>
-                <p>{{ user.extra_info }}</p>
+                <p>{{ candidate.extra_info }}</p>
             </div>
 
             <!--Contact-->
@@ -39,19 +39,19 @@
                             style="display: table-cell; padding-right: 10px;"><img
                             src="{% static 'resumebuilder/images/resume5/mobile-icon.png' %}"
                             alt="Mobile"
-                            style="vertical-align: middle;"></span>+91 {{ user.number }}
+                            style="vertical-align: middle;"></span>+91 {{ candidate.number }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
                             style="display: table-cell; padding-right: 10px;"><img
                             src="{% static 'resumebuilder/images/resume5/email-icon.png' %}"
                             alt="Email"
-                            style="vertical-align: middle;"></span>{{ user.email }}
+                            style="vertical-align: middle;"></span>{{ candidate.email }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
                             style="display: table-cell; padding-right: 10px;"><img
                             src="{% static 'resumebuilder/images/resume5/location-icon.png' %}"
                             alt="Location"
-                            style="vertical-align: middle;"></span>{{ user.location }}
+                            style="vertical-align: middle;"></span>{{ candidate.location }}
                     </li>
                     <li style="display: table; margin-bottom: 15px;"><span
                             style="display: table-cell; padding-right: 10px;"><img
