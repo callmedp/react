@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './leftSideBar.scss'
-import Edit from '../Edit/edit.jsx'
-import Preview from '../Preview/preview.jsx'
+import Edit from './Edit/edit.jsx'
+import Preview from './Preview/preview.jsx'
 import {Link} from 'react-router-dom'
 
 export default class LeftSideBar extends Component {
