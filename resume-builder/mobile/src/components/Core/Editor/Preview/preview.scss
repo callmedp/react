@@ -1,0 +1,32 @@
+@import '../../../../styles/variables/vars';
+@import '../../../../styles/variables/mixins';
+@import '../../../../styles/layout/filters';
+
+.preview {
+    height: 100%;
+    padding-top: 60px;
+
+    &__resume {
+        padding: 15px;
+        height: calc(100vh - 130px);
+        overflow: scroll;
+
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    }
+
+    &__bottom-btns {
+        @include size(100%, auto, flex);
+        position: absolute;
+        bottom: 0;
+        background-color: $white;
+        box-shadow: 0 0 10px rgba($black, .2);
+        padding: 15px;
+
+        align-items: center;
+        justify-content: space-evenly;
+    }
+}
