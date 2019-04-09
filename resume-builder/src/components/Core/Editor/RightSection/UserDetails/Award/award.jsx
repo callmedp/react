@@ -3,8 +3,8 @@ import './award.scss'
 import {Field, reduxForm} from "redux-form";
 import * as actions from "../../../../../../store/award/actions";
 import {connect} from "react-redux";
-import {required} from "../../../../FormHandler/formValidations"
-import {datepicker, renderField, renderTextArea} from "../../../../FormHandler/formFieldRenderer.jsx";
+import {required} from "../../../../../FormHandler/formValidations"
+import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
 
 
@@ -71,7 +71,7 @@ class Award extends Component {
 
                     <div className="flex-container items-right mr-20 mb-30">
                         <button className="blue-button mr-10">Preview</button>
-                        <button className="orange-button" type={'submit'}>Save & Continue</button>
+                        <button className="orange-button" disabled={pristine || submitting} type={'submit'}>Save & Continue</button>
                     </div>
                 </form>
 

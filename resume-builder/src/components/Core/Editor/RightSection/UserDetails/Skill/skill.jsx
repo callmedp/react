@@ -5,7 +5,7 @@ import * as actions from "../../../../../../store/skill/actions";
 import {connect} from "react-redux";
 import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
-import {required} from "../../../../FormHandler/formValidations"
+import {required} from "../../../../../FormHandler/formValidations"
 
 
 class Skill extends Component {

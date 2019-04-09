@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import './education.scss'
 import {Field, reduxForm} from "redux-form";
-import {renderField, renderTextArea, renderSelect, datepicker} from '../../../../FormHandler/formFieldRenderer.jsx'
-import {required} from "../../../../FormHandler/formValidations"
-import * as actions from "../../../../../store/education/actions";
+import {renderField, renderTextArea, renderSelect, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
+import {required} from "../../../../../FormHandler/formValidations"
+import * as actions from "../../../../../../store/education/actions";
 import {connect} from "react-redux";
 import moment from "moment";
 

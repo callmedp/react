@@ -3,8 +3,7 @@ import './language.scss'
 import {Field, reduxForm} from "redux-form";
 import * as actions from "../../../../../../store/language/actions";
 import {connect} from "react-redux";
-import {renderField, renderSelect} from "../../../../FormHandler/formFieldRenderer.jsx";
-import {required} from "../../../../FormHandler/formValidations"
+import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer.jsx";
 
 
 class Language extends Component {

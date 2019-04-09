@@ -5,7 +5,7 @@ import {Field, reduxForm} from 'redux-form';
 import * as actions from '../../../../../../store/experience/actions/index';
 import {connect} from "react-redux";
 import moment from 'moment';
-import {required} from "../../../../FormHandler/formValidations"
+import {required} from "../../../../../FormHandler/formValidations"
 
 class Experience extends Component {
     constructor(props) {
