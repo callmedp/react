@@ -1,6 +1,7 @@
 from django.contrib import admin
 from . import models
-
+from core.api_mixin import ShineProfileDataUpdate
+from django.contrib import messages
 
 class CategoryRelationshipInline(admin.StackedInline):
     model = models.CategoryRelationship
@@ -123,6 +124,21 @@ class DeliveryServiceAdmin(admin.ModelAdmin):
 
 class ShineProfileDataAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'type_flow', 'sub_type_flow', 'priority_value']
+
+    def save_model(self, request, obj, form, change):
+        resp = ShineProfileDataUpdate().update_shine_profile_data()
+        if resp:
+            messages.add_message(request, messages.SUCCESS, 'Shine Profile flow data updated on Shine.')
+        super(ShineProfileDataAdmin, self).save_model(request, obj, form, change)
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Attribute, AttributeAdmin)

@@ -1,2 +1,1 @@
-/var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py featured_profile --settings=careerplus.config.settings_live
 #/var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py --settings=careerplus.config.settings_live
