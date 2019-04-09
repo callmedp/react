@@ -101,7 +101,7 @@
       font-size: $font-size+29;
       color: #707070;  
       font-weight: $font-weight+100;
-      background: url(https://static1.shine.com/l/s/shinelearn/images/sprite.png) -445px -92px; 
+      background: $sprite -445px -92px; 
       width: 16px;
       height: 3px;
   }
@@ -114,7 +114,7 @@
       font-size: $font-size+29;
       color: #707070;
       font-weight: $font-weight+100;
-      background: url(https://static1.shine.com/l/s/shinelearn/images/sprite.png) -427px -91px; 
+      background: $sprite -427px -91px; 
       width: 16px;
       height: 17px;
   }

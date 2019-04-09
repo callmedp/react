@@ -29,7 +29,10 @@ urlpatterns = [
         name='remove-cookie-from-header'),
     url(r'^v1/update-certificate-assesment/(?P<vendor_name>[\w\-]+)/$',
         views.UpdateCertificateAndAssesment.as_view(),
-        name='remove-cookie-from-header')
+        name='remove-cookie-from-header'),
+    url(r'^v1/shine-data-for-flow/$',
+        views.ShineDataFlowDataApiView.as_view(),
+        name='shine-data-for-flow'),
 ]
 
 if settings.DEBUG:

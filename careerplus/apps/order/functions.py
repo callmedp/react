@@ -68,7 +68,7 @@ def update_initiat_orderitem_sataus(order=None):
                         assigned_to=oi.assigned_to)
                 else:
                     last_oi_status = oi.oi_status
-                    if oi.product.id in settings.FEATURE_PROFILE_EXCLUDE:
+                    if oi.product.sub_type_flow == 502:
                         oi.oi_status = 5
                     else:
                         oi.oi_status = 2
