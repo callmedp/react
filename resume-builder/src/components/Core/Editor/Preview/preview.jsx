@@ -1,5 +1,5 @@
 import React ,{Component} from 'react';
-import Header from '../../../Common/Header/header';
+import Header from '../../../Common/Header/header.jsx';
 import './preview.scss';
 
 export default class Preview extends Component {

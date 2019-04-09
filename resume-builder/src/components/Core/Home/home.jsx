@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Header from '../../Common/Header/header';
+import Header from '../../Common/Header/header.jsx';
 
 import './home.scss'
 export default class Home extends Component {
