@@ -3,7 +3,7 @@ import datetime
 import requests
 from decimal import Decimal
 
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, Subquery, OuterRef, F
 from django.utils import timezone
 from django.conf import settings
 
@@ -13,11 +13,11 @@ from rest_framework import status
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser, )
+from rest_framework.generics import ListAPIView,CreateAPIView
+from rest_framework.authentication import SessionAuthentication
 from haystack import connections
 from haystack.query import SearchQuerySet
 from core.library.haystack.query import SQS
-
-from rest_framework.generics import ListAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 
 from users.tasks import user_register
@@ -39,7 +39,9 @@ from shop.models import Skill, DeliveryService
 from .serializers import (
     OrderListHistorySerializer,
     RecommendedProductSerializer,
-    RecommendedProductSerializerSolr)
+    RecommendedProductSerializerSolr,
+    MediaUploadSerializer,
+    ResumeBuilderProductSerializer)
 from shared.rest_addons.pagination import Learning_custom_pagination
 
 
@@ -734,3 +736,19 @@ class RemoveCookieFromHeader(APIView):
         response.remove_cookie = True
 
         return response
+
+
+class MediaUploadView(CreateAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = MediaUploadSerializer
+
+
+class ResumeBuilderProductView(ListAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = ResumeBuilderProductSerializer
+
+    def get_queryset(self):
+        type_flow = self.request.query_params.get('type_flow')
+        return Product.objects.filter(type_flow=type_flow,type_product=2).annotate(parent=F  ('siblingproduct__main')).values('id','parent','name')

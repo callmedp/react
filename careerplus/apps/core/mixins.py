@@ -1,7 +1,7 @@
 import datetime
 import base64
 import os
-import logging
+import logging, gzip, shutil
 
 from django.conf import settings
 from decimal import Decimal, ROUND_HALF_DOWN
@@ -13,9 +13,12 @@ from django.template.loader import get_template
 from django.utils import timezone
 from django.core.files.uploadedfile import SimpleUploadedFile
 # from django.http import HttpResponse
-from core.library.gcloud.custom_cloud_storage import GCPInvoiceStorage
-
+from core.library.gcloud.custom_cloud_storage import (GCPInvoiceStorage, GCPPrivateMediaStorage)
+from pathlib import Path
 from weasyprint import HTML
+from resumebuilder.models import Candidate
+from PIL import Image
+import zipfile
 
 
 class TokenExpiry(object):
@@ -25,9 +28,11 @@ class TokenExpiry(object):
           used for booster resume donload from link
 
         """
-        key_expires = datetime.datetime.today() + datetime.timedelta(settings.EMAIL_SMS_TOKEN_EXPIRY if not days else days)
+        key_expires = datetime.datetime.today() + datetime.timedelta(
+            settings.EMAIL_SMS_TOKEN_EXPIRY if not days else days)
 
-        inp_str = '{salt}|{email}|{oi_pk}|{dt}'.format(**{'salt': settings.ENCODE_SALT, 'email': email, 'oi_pk': oi_pk, 'dt': key_expires.strftime(settings.TOKEN_DT_FORMAT)})
+        inp_str = '{salt}|{email}|{oi_pk}|{dt}'.format(**{'salt': settings.ENCODE_SALT, 'email': email, 'oi_pk': oi_pk,
+                                                          'dt': key_expires.strftime(settings.TOKEN_DT_FORMAT)})
 
         ciph = XOR.new(settings.ENCODE_SALT)
         token = base64.urlsafe_b64encode(ciph.encrypt(inp_str))
@@ -50,7 +55,9 @@ class TokenGeneration(object):
     def encode(self, email, type, days=None):
         key_expires = datetime.datetime.today() + datetime.timedelta(
             settings.LOGIN_TOKEN_EXPIRY if not days else days)
-        inp_str = '{salt}|{email}|{type}|{dt}'.format(**{'salt': settings.ENCODE_SALT, 'email': email, 'type': type, 'dt': key_expires.strftime(settings.TOKEN_DT_FORMAT)})
+        inp_str = '{salt}|{email}|{type}|{dt}'.format(**{'salt': settings.ENCODE_SALT, 'email': email, 'type': type,
+                                                         'dt': key_expires.strftime(settings.TOKEN_DT_FORMAT)})
+        print(inp_str)
         ciph = XOR.new(settings.ENCODE_SALT)
         token = base64.urlsafe_b64encode(ciph.encrypt(inp_str))
         return token.decode()
@@ -65,12 +72,13 @@ class TokenGeneration(object):
         dt = datetime.datetime.strptime(inp_list[3], settings.TOKEN_DT_FORMAT)
         return email, type, (dt >= datetime.datetime.now())
 
+
 class EncodeDecodeUserData(object):
 
     def encode(self, email, name, contact):
-        inp_str = '{salt}|{email}|{name}|{contact}|{dt}'.format(\
-                **{'salt': settings.ENCODE_SALT, 'email': email, \
-                'name': name, 'contact': contact,'dt':timezone.now()})
+        inp_str = '{salt}|{email}|{name}|{contact}|{dt}'.format( \
+            **{'salt': settings.ENCODE_SALT, 'email': email, \
+               'name': name, 'contact': contact, 'dt': timezone.now()})
 
         ciph = XOR.new(settings.ENCODE_SALT)
         token = base64.urlsafe_b64encode(ciph.encrypt(inp_str))
@@ -81,15 +89,15 @@ class EncodeDecodeUserData(object):
             token = base64.urlsafe_b64decode(str(token))
             ciph = XOR.new(settings.ENCODE_SALT)
             inp_str = ciph.decrypt(token).decode()
-        
+
         except Exception as e:
             logging.getLogger('error_log').error("%(msg)s : %(err)s" % \
-                    {'msg': 'Invalid Token for Decryption', 'err': e})
+                                                 {'msg': 'Invalid Token for Decryption', 'err': e})
             return None
-        
+
         inp_list = inp_str.split('|')
         if len(inp_list) < 3:
-            return None 
+            return None
         email = inp_list[1]
         name = inp_list[2]
         contact = inp_list[3]
@@ -260,18 +268,19 @@ class InvoiceGenerate(object):
                 "coupon_amount": coupon_amount,
                 "redeemed_reward_point": redeemed_reward_point,
                 "tax_rate_per": tax_rate_per,
-                
+
             })
 
         return invoice_data
 
-    def generate_pdf(self, context_dict={}, template_src=None):
+    def generate_pdf(self, context_dict: object = {}, template_src: object = None) -> object:
         if template_src:
             html_template = get_template(template_src)
 
             rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
 
-            pdf_file = HTML(string=rendered_html).write_pdf()
+            pdf_file = cp(string=rendered_html).write_pdf()
+
             return pdf_file
 
     def save_order_invoice_pdf(self, order=None):
@@ -282,8 +291,8 @@ class InvoiceGenerate(object):
                     context_dict=context_dict,
                     template_src='invoice/invoice-product.html')
                 full_path = 'order/%s/' % str(order.pk)
-                file_name = 'invoice-' + str(order.number) + '-'\
-                    + timezone.now().strftime('%Y%m%d') + '.pdf'
+                file_name = 'invoice-' + str(order.number) + '-' \
+                            + timezone.now().strftime('%Y%m%d') + '.pdf'
 
                 pdf_file = SimpleUploadedFile(
                     file_name, pdf_file,
@@ -291,7 +300,7 @@ class InvoiceGenerate(object):
 
                 if not settings.IS_GCP:
                     if not os.path.exists(settings.INVOICE_DIR + full_path):
-                        os.makedirs(settings.INVOICE_DIR +  full_path)
+                        os.makedirs(settings.INVOICE_DIR + full_path)
                     dest = open(
                         settings.INVOICE_DIR + full_path + file_name, 'wb')
                     for chunk in pdf_file.chunks():
@@ -305,3 +314,160 @@ class InvoiceGenerate(object):
         except Exception as e:
             logging.getLogger('error_log').error("%(msg)s : %(err)s" % {'msg': 'Contact Tech ERROR', 'err': e})
         return None, None
+
+
+class ResumeGenerate(object):
+
+    # common file generator method.
+    def generate_file(self, context_dict: object = {}, template_src: object = None,
+                      file_type: object = 'pdf') -> object:
+        if not template_src:
+            return None
+        html_template = get_template(template_src)
+
+        rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
+
+        if file_type == 'pdf':
+            file = HTML(string=rendered_html).write_pdf()
+        elif file_type == 'png':
+            file = HTML(string=rendered_html).write_png()
+
+        return file
+
+    # if file exists then return only the path , name hence don't overwrite it again
+    def is_file_exist(self, file_path):
+
+        file = Path(settings.RESUME_TEMPLATE_DIR)
+
+        if file.is_file():
+            return True
+
+    def store_file(self, file_dir: object, file_name, file: object) -> object:
+
+        if settings.IS_GCP:
+            return GCPPrivateMediaStorage().save(settings.RESUME_TEMPLATE_DIR + file_dir, file)
+
+        if not os.path.exists(settings.RESUME_TEMPLATE_DIR + file_dir):
+            os.makedirs(settings.RESUME_TEMPLATE_DIR + file_dir)
+        dest = open(settings.RESUME_TEMPLATE_DIR + file_dir + file_name, 'wb')
+        for chunk in file.chunks():
+            dest.write(chunk)
+        dest.close()
+
+    def handle_content_type(self, order=None, content_type='pdf', index=''):
+
+        file_dir = 'order/%s/' % str(order.pk)
+        file_name = 'resumetemplateupload-' + str(order.number) + '-' \
+                    + timezone.now().strftime('%Y%m%d')
+        if index and content_type == 'pdf':
+            file_name += '-' + index + '.%s' % content_type
+        elif content_type == 'pdf':
+            file_name += '.%s' % content_type
+        elif content_type == 'png':
+            file_name += '.%s' % content_type
+
+        file_path = settings.RESUME_TEMPLATE_DIR + file_dir + file_name
+
+        if self.is_file_exist(file_path):
+            return order, file_path, file_name
+
+        #  handle for pdf
+        if content_type == 'pdf':
+            candidate = Candidate.objects.get(id=95)
+            extracurricular = candidate.extracurricular.split(',')
+            education = candidate.candidateeducation_set.all()
+            experience = candidate.candidateexperience_set.all()
+            skills = candidate.skill_set.all()
+            achievements = candidate.candidateachievement_set.all()
+            references = candidate.candidatereference_set.all()
+            projects = candidate.candidateproject_set.all()
+            certifications = candidate.candidatecertification_set.all()
+
+            #  handle context here later
+            context_dict = {"STATIC_URL": settings.STATIC_URL, "SITE_DOMAIN": settings.SITE_DOMAIN,
+                            "SITE_PROTOCOL": settings.SITE_PROTOCOL, 'user': candidate, 'education': education,
+                            'experience': experience, 'skills': skills,
+                            'achievements': achievements, 'references': references, 'projects': projects,
+                            'certifications': certifications, 'extracurricular': extracurricular}
+
+            pdf_file = self.generate_file(
+                context_dict=context_dict,
+                template_src='emailers/candidate/resume_test.html',
+                file_type='pdf')
+
+            #  pdf file
+            pdf_file = SimpleUploadedFile(
+                file_name, pdf_file,
+                content_type='application/pdf')
+
+            self.store_file(file_dir, file_name, pdf_file)
+
+        #  handle for zip
+        elif content_type == 'zip':
+
+            zip_dir = 'order/%s-zip/' % str(order.pk)
+
+            file_path = settings.RESUME_TEMPLATE_DIR + zip_dir + file_name + '.zip'
+
+            if self.is_file_exist(file_path):
+                return order, file_path, file_name
+
+            #  if directory does not exists
+            if not os.path.exists(settings.RESUME_TEMPLATE_DIR + zip_dir):
+                os.makedirs(settings.RESUME_TEMPLATE_DIR + zip_dir)
+
+            shutil.make_archive(settings.RESUME_TEMPLATE_DIR + zip_dir + file_name, 'zip',
+                                settings.RESUME_TEMPLATE_DIR + file_dir)
+
+            file_name += '.zip'
+
+        #  handle for jpg
+        elif content_type == 'png':
+
+            img_dir = 'order/%s-img/' % str(order.pk)
+
+            file_path = settings.RESUME_TEMPLATE_DIR + img_dir + file_name
+
+            #  handle context here later
+            context_dict = {"STATIC_URL": settings.STATIC_URL, "SITE_DOMAIN": settings.SITE_DOMAIN,
+                            "SITE_PROTOCOL": settings.SITE_PROTOCOL}
+
+            img_file = self.generate_file(
+                context_dict=context_dict,
+                template_src='emailers/candidate/index.html',
+                file_type='png'
+            )
+
+            #  img file
+            img_file = SimpleUploadedFile(
+                file_name, img_file,
+                content_type='image/png')
+
+            self.store_file(img_dir, file_name, img_file)
+
+            # img = Image.open(file_path)
+            # rgb_im = img.convert('RGB')
+            #
+            # jpg_img_path = os.path.splitext(file_path)[0]
+            # jpg_img_path += '.jpg'
+            # rgb_im.save(jpg_img_path)
+            #
+            # self.store_file(img_dir, file_name, rgb_im)
+
+        return order, file_path, file_name
+
+    def save_order_resume_pdf(self, order=None, is_combo=False):
+        if not order:
+            return None, None
+
+        # check if pack is combo or not
+        if not is_combo:
+            # self.handle_content_type(order, content_type='png')
+            return self.handle_content_type(order, content_type='pdf')
+
+        for i in range(1, 6):
+            # self.handle_content_type(order, content_type='png', index=str(i))
+            self.handle_content_type(order, content_type='pdf', index=str(i))
+
+        # handle zip content type
+        return self.handle_content_type(order, content_type='zip')

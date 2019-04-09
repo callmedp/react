@@ -57,7 +57,7 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
                 "country_code": cart_obj.country_code,
                 "lead_source": 2,
             })
-            lead_type = 0
+            lead_type = 1
             total_amount = CartMixin().getPayableAmount(cart_obj)
             pay_amount = total_amount.get('total_payable_amount')
             extra_info.update({
@@ -121,12 +121,7 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
                 })
             if m_prods and m_prods.count() == 1:
                 m_prod = m_prods[0]
-                if m_prod.product.is_course:
-                    lead_type = 2
-                else:
-                    lead_type = 1
-            elif m_prods and m_prods.count() > 1:
-                lead_type = 2
+                
 
             data_dict.update({
                 "extra_info": json.dumps(extra_info),

@@ -4,7 +4,6 @@ import os
 import mimetypes
 from random import random
 
-
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.urls import reverse
@@ -46,7 +45,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                 if not self.cart_obj.shipping_done or not self.cart_obj.owner_id:
                     return HttpResponsePermanentRedirect(reverse('cart:payment-shipping'))
             except Exception as e:
-                logging.getLogger('error_log').error('unable to get cart object%s'%str(e))
+                logging.getLogger('error_log').error('unable to get cart object%s' % str(e))
                 return HttpResponsePermanentRedirect(reverse('homepage'))
         if self.cart_obj and not (self.cart_obj.shipping_done):
             return HttpResponsePermanentRedirect(reverse('cart:payment-login'))
@@ -101,7 +100,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                     del request.session['checkout_type']
                     request.session.modified = True
                 except Exception as e:
-                    logging.getLogger('error_log').error('unable to delete request session objects%s'%str(e))
+                    logging.getLogger('error_log').error('unable to delete request session objects%s' % str(e))
                     pass
                 return HttpResponseRedirect(return_parameter)
 
@@ -137,7 +136,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                             request.session.modified = True
                         except Exception as e:
 
-                            logging.getLogger('error_log').error('unable to delete session request object%s'%str(e))
+                            logging.getLogger('error_log').error('unable to delete session request object%s' % str(e))
                             pass
                         return HttpResponseRedirect(return_parameter)
                 else:
@@ -179,7 +178,7 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
                             del request.session['checkout_type']
                             request.session.modified = True
                         except Exception as e:
-                            logging.getLogger('error_log').error('unable to delete request session object%s'%str(e))
+                            logging.getLogger('error_log').error('unable to delete request session object%s' % str(e))
                             pass
                         return HttpResponseRedirect(return_parameter)
                 else:
@@ -194,11 +193,16 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
     def get_context_data(self, **kwargs):
         context = super(PaymentOptionView, self).get_context_data(**kwargs)
         payment_dict = self.getPayableAmount(cart_obj=self.cart_obj)
+        line_item = self.cart_obj.lineitems.filter(parent=None)[0]
+        type_flow = int(line_item.product.type_flow)
+        print(type_flow)
         context.update({
             "state_form": StateForm(),
             "check_form": PayByCheckForm(),
             "total_amount": payment_dict.get('total_payable_amount'),
             "cart_id": self.request.session.get('cart_pk'),
+            "type_flow": type_flow
+
         })
         return context
 
@@ -255,21 +259,21 @@ class ThankYouView(TemplateView):
         try:
             order = Order.objects.get(pk=order_pk)
         except Exception as e:
-            logging.getLogger('error_log').error('unable to get order object %s'%str(e))
+            logging.getLogger('error_log').error('unable to get order object %s' % str(e))
             return HttpResponseRedirect(reverse('payment:thank-you'))
         file = request.FILES.get('resume_file', '')
-                
+
         if action_type == 'upload_resume' and order_pk and file:
             try:
                 filename = os.path.splitext(file.name)
-                extention = filename[len(filename)-1] if len(
+                extention = filename[len(filename) - 1] if len(
                     filename) > 1 else ''
-                file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random()*9999)) \
-                    + '_' + timezone.now().strftime('%Y%m%d') + extention
+                file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random() * 9999)) \
+                            + '_' + timezone.now().strftime('%Y%m%d') + extention
                 full_path = '%s/' % str(order.pk)
                 if not settings.IS_GCP:
                     if not os.path.exists(settings.RESUME_DIR + full_path):
-                        os.makedirs(settings.RESUME_DIR +  full_path)
+                        os.makedirs(settings.RESUME_DIR + full_path)
                     dest = open(
                         settings.RESUME_DIR + full_path + file_name, 'wb')
                     for chunk in file.chunks():
@@ -280,11 +284,10 @@ class ThankYouView(TemplateView):
             except Exception as e:
                 logging.getLogger('error_log').error("unable to save resume %s-%s" % ('resume_upload', str(e)))
                 return HttpResponseRedirect(reverse('payment:thank-you'))
-            
+
             order = Order.objects.get(pk=order_pk)
             pending_resumes = order.orderitems.filter(order__status__in=[0, 1], no_process=False, oi_status=2)
             for obj in pending_resumes:
-
                 obj.oi_resume = full_path + file_name
                 last_oi_status = obj.oi_status
                 obj.oi_status = 5
@@ -315,8 +318,8 @@ class ThankYouView(TemplateView):
                 resume_extn = request.session.get('resume_extn', '')
                 try:
                     file = ContentFile(response.content)
-                    file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random()*9999)) \
-                        + '_' + timezone.now().strftime('%Y%m%d') + '.' + resume_extn
+                    file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random() * 9999)) \
+                                + '_' + timezone.now().strftime('%Y%m%d') + '.' + resume_extn
                     full_path = '%s/' % str(order.pk)
                     if not settings.IS_GCP:
                         if not os.path.exists(settings.RESUME_DIR + full_path):
@@ -329,11 +332,10 @@ class ThankYouView(TemplateView):
                     else:
                         GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                 except Exception as e:
-                    logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
+                    logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e)))
                     return HttpResponseRedirect(reverse('payment:thank-you'))
-                
+
                 for obj in pending_resumes:
-                    
                     obj.oi_resume = full_path + file_name
                     last_oi_status = obj.oi_status
                     obj.oi_status = 5

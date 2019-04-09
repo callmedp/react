@@ -1,0 +1,57 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.left-sidebar {
+	flex: 0 1 265px;
+	background-color: rgb(255, 255, 255);
+  	@extend %shadow;
+  	flex-direction: column;
+  	@include border-radius(4px);
+  	height: 570px;
+}
+
+.tab-heading {
+	font-weight: 700;
+	display: table;
+	width: 100%;
+	@include border-radius(4px);
+	text-transform: uppercase;
+
+	li {
+		display: table-cell;
+		width: 50%;
+		text-align: center;
+		vertical-align: middle;
+		height: 60px;
+		background: $grey1;
+
+		a {
+			color: $black;
+			margin-left: 10px;
+		}
+	}
+
+	.active {
+		background: $white;
+		position: relative;
+	}
+
+	.no-shadow {
+		box-shadow: none;
+	}
+
+	.shadow1 {
+		box-shadow: 8px -3px 7px -1px rgba(186,186,186,0.40);
+	}
+
+	.shadow2 {
+		box-shadow: -7px -3px 7px -1px rgba(186,186,186,0.40);
+	}
+
+	&--top-left-radius {
+		border-top-left-radius: 4px;
+	}
+	&--top-right-radius {
+		border-top-right-radius: 4px;
+	}
+}

@@ -26,7 +26,13 @@ urlpatterns = [
         name='api-recommended-products-category'),
     url(r'^v1/remove-cookie-from-header/$',
         views.RemoveCookieFromHeader.as_view(),
-        name='remove-cookie-from-header')
+        name='remove-cookie-from-header'),
+    url(r'^v1/media-upload/$',
+        views.MediaUploadView.as_view(),
+        name='v1.media-upload'),
+    url(r'^v1/resume-product-id/$',
+        views.ResumeBuilderProductView.as_view(),
+        name='v1.resume-product-id')
 ]
 
 if settings.DEBUG:
