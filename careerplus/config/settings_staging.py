@@ -378,6 +378,22 @@ try:
 except:
     pass
 
+
+
+try:
+    from .settings_local import *
+except:
+    pass
+
+
+
+
+
+############### VIRTUAL_ENV PATH
+VENV_PATH = "/root/virtualenvs/careerplus3.6/bin/python3"
+
+CODE_PATH ="/code/careerplus/"
+
 ##for testing purpose using live working key
 
 # CCAVENUE_WORKING_KEY = 'BB84397177B2D640744BA272627C2A61'
