@@ -7,6 +7,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from shared.rest_addons.mixins import FieldFilterMixin
 from rest_framework.response import Response
 from .tasks import delete_from_solr
+import subprocess, os
+from django.conf import settings
 
 
 class ProductListView(FieldFilterMixin, ListAPIView):
@@ -35,7 +37,9 @@ class ProductDeleteView(APIView):
         id_list = request.data.get('data', '')
         products = Product.objects.filter(slug__in=id_list)
         product_screens = ProductScreen.objects.filter(slug__in=id_list)
-        count = 0
+        product_count = 0
+        product_screen_count = 0
+
         if products.exists() or product_screens.exists():
             # get product count
             product_count = len(products)

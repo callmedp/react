@@ -373,19 +373,6 @@ SERVICE_PAGE_ID_SLUG_MAPPING = {"45":"resume-writing"}
 IS_MAINTENANCE = False
 MAINTENANCE_MESSAGE = "This site will be under maintenance from 9 pm to 12 pm on Friday, 11 Jan, 2019."
 
-try:
-    from .settings_local import *
-except:
-    pass
-
-
-
-try:
-    from .settings_local import *
-except:
-    pass
-
-
 
 
 
@@ -393,6 +380,22 @@ except:
 VENV_PATH = "/root/virtualenvs/careerplus3.6/bin/python3"
 
 CODE_PATH ="/code/careerplus/"
+
+try:
+    from .settings_local import *
+except:
+    pass
+
+
+
+try:
+    from .settings_local import *
+except:
+    pass
+
+
+
+
 
 ##for testing purpose using live working key
 
