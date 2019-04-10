@@ -7,4 +7,4 @@ from django.conf import settings
 def delete_from_solr():
     subprocess.call([settings.VENV_PATH,
                      os.path.join(settings.CODE_PATH, "manage.py"), "index_products",
-                     "--noinput", "--settings=careerplus.config.settings"])
+                     "--noinput", "--settings=careerplus.config.settings_staging"])
