@@ -171,11 +171,11 @@ WSGI_APPLICATION = 'careerplus.wsgi.application'
 WEBPACK_LOADER = {
     'DEFAULT': {
         'BUNDLE_DIR_NAME': 'react/dist/desktop/',
-        'STATS_FILE': os.path.join(BASE_DIR, '..', 'webpack-stats.json'),
+        'STATS_FILE': os.path.join(BASE_DIR, '..', 'webpack-desktop-stats.json'),
     },
     'MOBILE': {
         'BUNDLE_DIR_NAME': 'react/dist/mobile/',
-        'STATS_FILE': os.path.join(BASE_DIR, '..', 'webpack-stats.json'),
+        'STATS_FILE': os.path.join(BASE_DIR, '..', 'webpack-mobile-stats.json'),
     }
 }
 

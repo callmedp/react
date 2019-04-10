@@ -13,7 +13,7 @@ module.exports = [{
     plugins: [
         new BundleTracker({
             path: __dirname,
-            filename: 'webpack-stats.json'
+            filename: 'webpack-desktop-stats.json'
         }),
         new ExtractText({
             filename: '[name].css'
@@ -48,7 +48,7 @@ module.exports = [{
     plugins: [
         new BundleTracker({
             path: __dirname,
-            filename: 'webpack-stats.json'
+            filename: 'webpack-mobile-stats.json'
         }),
         new ExtractText({
             filename: '[name].css'
