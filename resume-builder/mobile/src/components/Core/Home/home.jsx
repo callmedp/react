@@ -1,23 +1,17 @@
 import React, {Component} from 'react';
 import Header from '../../Common/Header/header.jsx';
+import Footer from '../../Common/Footer/footer.jsx';
 
 import './home.scss'
+import Banner from './Banner/banner.jsx';
+import ResumeSlider from './ResumeSlider/resumeSlider.jsx';
+import Testimonial from './Testimonial/testimonial.jsx';
 export default class Home extends Component {
     render() {
         return (
             <div className="home">
                 <Header />
-                
-                <section className="banner">
-                    <h1 className="mt-15">Quickest <br/>Resume Builder</h1>
-                    <p><strong>Amit</strong>, secure the job you want with our
-                    resume builder</p>
-
-                    <img src="/media/static/react/assets/images/mobile/resume-bundel.png" alt="" />
-                    <p className="text-center mt-5">
-                        <a href="#" className="btn pt-10 pb-10 btn__round btn__primary">Build your resume</a>
-                    </p>
-                </section>
+                <Banner/>
 
                 <section className="info">
                     <ul className="info__items">
@@ -98,24 +92,7 @@ export default class Home extends Component {
                     </div>
                 </section>
 
-                <section className="section proven-resume pt-30">
-                    <div className="text-center">
-                        <h2 className="section__head">Proven resume templates</h2>
-                        <p  className="section__subHead">Choose from a library of classic templates <br/>and land a new job</p>
-                    </div>
-
-                    <div className="proven-resume__slideWrap">
-                        <ul>
-                            <li>
-                                <div className="proven-resume__imageWrap">
-                                    <img src="/media/static/react/assets/images/mobile/resume.jpg" alt="" />
-                                </div>
-                            </li>
-                        </ul>
-
-                        <a href="#" className="btn btn__shadow btn__round btn__primary">Customise</a>
-                    </div>
-                </section>
+                <ResumeSlider/>
 
                 <section className="section pt-30 pb-30">
                     <div className="text-center">
@@ -139,6 +116,7 @@ export default class Home extends Component {
                         </ul>
                     </div>
                 </section>
+                <Testimonial/>
 
                 <section className="section grey-bg">
                     <div className="text-center">
@@ -293,15 +271,7 @@ export default class Home extends Component {
                         </ul>
                     </div>
                 </section>
-                
-                <footer className="footer">
-                    <ul className="footer__items">
-                        <li className="footer__item"><a href="#">Privacy Policy</a></li>
-                        <li className="footer__item"><a href="#">Terms & Condition</a></li>
-                        <li className="footer__item"><a href="#">Contact us</a></li>
-                    </ul>
-                    <p>Copyright © 2019 HT Media Limited. All rights reserved</p>
-                </footer>
+                <Footer/>
             </div>
         )
     }

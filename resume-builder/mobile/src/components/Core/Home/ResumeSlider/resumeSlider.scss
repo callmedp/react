@@ -1,0 +1,24 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.proven-resume {
+
+    &__slideWrap {
+        margin-top: 3.0rem;
+        position: relative;
+
+        .btn {
+            position: absolute;
+            bottom: 5.0rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+
+    &__imageWrap {
+        @include border-radius(8px);
+        overflow: hidden;
+        border: 3px solid $white;
+        box-shadow: 0 0 10px rgba($black, .3);
+    }
+}

@@ -102,7 +102,7 @@
     }
 
     &__text {
-        @include size(40px, 100%, flex);
+        @include size(40px, auto, flex);
         text-align: center;
         white-space: nowrap;
         background-color: $grey-light;

@@ -4,13 +4,13 @@ import './footer.scss'
 export default class Footer extends Component {
     render() {
         return (
-            <footer>
-	            <div className="container">
-	            	<div className="container--footer-links">
-	            	<a href="#">About Us</a> <a href="#">Privacy Policy</a> <a href="#">Terms & Condition</a> <a href="#">Contact us</a>
-		            </div>
-		            <div className="container--footer-txt">Copyright © 2019 HT Media Limited.</div>
-	            </div>
+            <footer className="footer">
+                <ul className="footer__items">
+                    <li className="footer__item"><a href="#">Privacy Policy</a></li>
+                    <li className="footer__item"><a href="#">Terms & Condition</a></li>
+                    <li className="footer__item"><a href="#">Contact us</a></li>
+                </ul>
+                <p>Copyright © 2019 HT Media Limited. All rights reserved</p>
             </footer>
         )
     }

@@ -1,0 +1,16 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.banner {
+    background-image: url(#{$path}/home-banner-image.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 1.5rem 1.5rem 8.5rem;
+    margin: 0 -1.5rem;
+
+    h1 {
+     color: #333333;
+     font-size: 3.5rem;
+     line-height: 1.2;
+    }
+ }
