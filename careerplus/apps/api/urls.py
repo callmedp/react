@@ -30,6 +30,9 @@ urlpatterns = [
     url(r'^v1/shine-data-for-flow/$',
         views.ShineDataFlowDataApiView.as_view(),
         name='shine-data-for-flow'),
+    url(r'^v1/login/$',
+        views.APILoginView.as_view(),
+        name='v1.api-login'),
 ]
 
 if settings.DEBUG:

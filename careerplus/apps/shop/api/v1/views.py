@@ -1,7 +1,6 @@
-
 from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
-from shop.models import Product
+from shop.models import (Product, ProductScreen)
 from .serializers import ProductListSerializerForAuditHistory
 from rest_framework.authentication import SessionAuthentication
 from django_filters.rest_framework import DjangoFilterBackend
@@ -35,11 +34,25 @@ class ProductDeleteView(APIView):
     def post(self, request):
         id_list = request.data.get('data', '')
         products = Product.objects.filter(slug__in=id_list)
+        product_screens = ProductScreen.objects.filter(slug__in=id_list)
         count = 0
-        if products.exists():
-            count = len(products)
+        if products.exists() or product_screens.exists():
+            # get product count
+            product_count = len(products)
+
+            # get product screen count
+            product_screen_count = len(product_screens)
+
             # bulk deletion of the products
-            products.delete()
+
+            if product_screen_count > 0:
+                product_screens.delete()
+
+            if product_count > 0:
+                products.delete()
+
             delete_from_solr.delay()
 
-        return Response({'message': '{} products deleted.'.format(count)}, status=200)
+        return Response({'message': '{} products deleted and {} product screens deleted'.format(product_count,
+                                                                                                product_screen_count)},
+                        status=200)
