@@ -42,7 +42,7 @@ from .serializers import (
     RecommendedProductSerializer,
     RecommendedProductSerializerSolr,
     ShineDataFlowDataSerializer)
-from shared.rest_addons.pagination import Learning_custom_pagination
+from shared.rest_addons.pagination import LearningCustomPagination
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -658,7 +658,7 @@ class RecommendedProductsApiView(ListAPIView):
     authentication_classes = []
     permission_classes = []
     serializer_class = RecommendedProductSerializerSolr
-    pagination_class = Learning_custom_pagination
+    pagination_class = LearningCustomPagination
 
     def get_queryset(self, *args, **kwargs):
         skills = self.request.GET.get('skills', [])
