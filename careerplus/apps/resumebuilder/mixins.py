@@ -29,4 +29,3 @@ class SessionManagerMixin(object):
 
         return super(SessionManagerMixin, self).dispatch(
             request, *args, **kwargs)
-
