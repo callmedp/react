@@ -20,7 +20,7 @@ export default class RightSection extends Component {
         const values = queryString.parse(this.props.location.search)
         this.renderSwitch = this.renderSwitch.bind(this);
         this.state = {
-            type: values && values.type || ''
+            type: (values && values.type) || ''
         }
     }
 
@@ -29,7 +29,7 @@ export default class RightSection extends Component {
         if (this.props.location !== prevProps.location) {
             const values = queryString.parse(this.props.location.search)
             this.setState({
-                type: values && values.type || ''
+                type: (values && values.type) || ''
             })
         }
     }

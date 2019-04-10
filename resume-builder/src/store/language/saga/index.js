@@ -1,6 +1,6 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call, select} from "redux-saga/effects";
+import {takeLatest, put, call} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 import {proficiencyList} from "../../../Utils/proficiencyList";
@@ -16,13 +16,19 @@ function* fetchUserLanguage(action) {
             console.log('error');
         }
         const {data: {results}} = result;
-        let data = results[0];
+        let data = {list: results};
         data = {
             ...data,
             ...{
-                proficiency: proficiencyList[data['proficiency'].toString()]
+                list: data['list'].map(el => {
+                    return {
+                        ...el,
+                        proficiency: proficiencyList[el['proficiency'].toString()]
+                    }
+                })
             }
         }
+        console.log('-data-', data);
         yield put({type: Actions.SAVE_USER_LANGUAGE, data: data})
     } catch (e) {
         console.log(e);
@@ -41,7 +47,7 @@ function* updateUserLanguage(action) {
         const {id} = userLanguage;
 
         const result = yield call(id ? Api.updateUserLanguage : Api.createUserLanguage, userLanguage, candidateId, id);
-        console.log('---lang ',result);
+        console.log('---lang ', result);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }

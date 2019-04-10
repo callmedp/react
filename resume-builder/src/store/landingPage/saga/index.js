@@ -1,5 +1,5 @@
 import {Api} from './Api';
-import {takeLatest, put, call, select} from "redux-saga/effects";
+import {takeLatest,  call} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
@@ -11,7 +11,7 @@ function* getCandidateId() {
             console.log('error');
 
         }
-        localStorage.setItem('candidateId', result.data && result.data['candidate_id'] || '');
+        localStorage.setItem('candidateId', (result.data && result.data['candidate_id']) || '');
 
     } catch (e) {
         console.log(e);

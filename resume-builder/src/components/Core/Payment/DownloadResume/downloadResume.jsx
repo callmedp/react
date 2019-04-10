@@ -33,22 +33,22 @@ export default class DownloadResume extends Component {
 	                    					<ul className="carousel-box--carousel">
 	                    						<li className="carousel-box--slide">
 	                    							<div className="carousel-box--slide__content">
-	                    								<img src="/images/resume1.jpg" className="img-responsive" alt="" />
+	                    								<img src="/media/static/react/assets/images/resume1.jpg" className="img-responsive" alt="" />
 	                    							</div>
 	                    							<div className="carousel-box--slide__content">
-	                    								<img src="/images/resume2.jpg" className="img-responsive" alt="" />
+	                    								<img src="/media/static/react/assets/images/resume2.jpg" className="img-responsive" alt="" />
 	                    							</div>
 	                    							<div className="carousel-box--slide__content">
-	                    								<img src="/images/resume3.jpg" className="img-responsive" alt="" />
+	                    								<img src="/media/static/react/assets/images/resume3.jpg" className="img-responsive" alt="" />
 	                    							</div>
 	                    							<div className="carousel-box--slide__content">
-	                    								<img src="/images/resume4.jpg" className="img-responsive" alt="" />
+	                    								<img src="/media/static/react/assets/images/resume4.jpg" className="img-responsive" alt="" />
 	                    							</div>
 	                    							<div className="carousel-box--slide__content">
-	                    								<img src="/images/resume5.jpg" className="img-responsive" alt="" />
+	                    								<img src="/media/static/react/assets/images/resume5.jpg" className="img-responsive" alt="" />
 	                    							</div>
 	                    							<div className="carousel-box--slide__content">
-	                    								<img src="/images/resume2.jpg" className="img-responsive" alt="" />
+	                    								<img src="/media/static/react/assets/images/resume2.jpg" className="img-responsive" alt="" />
 	                    							</div>
 	                    						</li>
 	                    					</ul>

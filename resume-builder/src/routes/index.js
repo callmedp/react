@@ -8,7 +8,6 @@ import DownloadContainer from '../components/Core/Payment/DownloadResume/downloa
 export const RouteWithSubRoutes = route => (
     <Route
         path={route.path}
-        path={route.path}
         exact={route.exact}
         render={props => (
             // pass the sub-routes down to keep nesting

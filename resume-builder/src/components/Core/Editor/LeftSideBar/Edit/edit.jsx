@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {withRouter, Link} from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import './edit.scss'
 import queryString from "query-string";
 
@@ -10,7 +10,7 @@ export default class Edit extends Component {
         const values = queryString.parse(this.props.location.search);
 
         this.state = {
-            type: values && values.type || ''
+            type: (values && values.type) || ''
         };
         if (!(values && values.type)) {
             this.props.history.push('/resume-builder/edit/?type=profile')
@@ -26,7 +26,7 @@ export default class Edit extends Component {
         if (this.props.location !== prevProps.location) {
             const values = queryString.parse(this.props.location.search);
             this.setState({
-                type: values && values.type || ''
+                type: (values && values.type) || ''
             })
         }
     }

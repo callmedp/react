@@ -2,11 +2,6 @@ import React, {Component} from 'react';
 import './banner.scss'
 
 export default class Banner extends Component {
-    constructor(props) {
-        super(props)
-    }
-
-
     render() {
         return (
             <div className="banner-bg">
@@ -25,7 +20,7 @@ export default class Banner extends Component {
                    <button className="orange-button banner-content--button">Build your resume</button>
                </div>
                <div className="banner-slider">
-                    <img src="/images/home-banner-slider.png" className="img-responsive" />
+                    <img alt={"Banner"} src="/media/static/react/assets/images/home-banner-slider.png" className="img-responsive" />
                </div>
             </div>
         )

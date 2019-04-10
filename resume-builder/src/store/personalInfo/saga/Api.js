@@ -1,5 +1,4 @@
 import BaseApiService from '../../../services/BaseApiService'
-import moment from 'moment'
 
 const fetchPersonalInfo = (candidateId) => {
 

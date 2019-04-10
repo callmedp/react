@@ -7,42 +7,42 @@ export default class Preview extends Component {
                 <strong>Complete your customisation</strong>
                 <div className="preivew-scroll">
 	                <div className="change-theme">
-	                	<a href="#" className="change-theme--theme-heading change-theme--active">
+	                	<div className="change-theme--theme-heading change-theme--active">
 	                		<span className="icon-change-theme mr-20"></span>
 		                    Change theme
-	                	</a>
+	                	</div>
 	                	<ul className="change-theme-content">
 	                		<li>
 	                			<input type="radio" name="radio1" id="green" value="green" />
-	                			<label for="green"><span className="theme-green"></span></label>
+	                			<label htmlFor="green"><span className="theme-green"></span></label>
 	                		</li>
 	                		<li>
 	                			<input type="radio" name="radio1" id="blue" value="blue" />
-	                			<label for="blue"><span className="theme-blue"></span></label>
+	                			<label htmlFor="blue"><span className="theme-blue"></span></label>
 	                		</li>
 	                		<li>
 	                			<input type="radio" name="radio1" id="red" value="red"/>
-	                			<label for="red"><span className="theme-red"></span></label>
+	                			<label htmlFor="red"><span className="theme-red"></span></label>
 	                		</li>
 	                		<li>
 	                			<input type="radio" name="radio1" id="black" value="black" />
-	                			<label for="black"><span className="theme-black"></span></label>
+	                			<label htmlFor="black"><span className="theme-black"></span></label>
 	                		</li>
 	                		<li>
 	                			<input type="radio" name="radio1" id="brown" value="brown"/>
-	                			<label for="brown"><span className="theme-brown"></span></label>
+	                			<label htmlFor="brown"><span className="theme-brown"></span></label>
 	                		</li>
 	                		<li>
 	                			<input type="radio" name="radio1" id="violet" value="violet" />
-	                			<label for="violet"><span className="theme-violet"></span></label>
+	                			<label htmlFor="violet"><span className="theme-violet"></span></label>
 	                		</li>
 	                	</ul>
 	                </div>
 	                <div className="change-theme">
-	                	<a href="#" className="change-theme--theme-heading change-theme--active">
+	                	<div className="change-theme--theme-heading change-theme--active">
 	                		<span className="icon-change-font mr-20"></span>
 		                    Font size
-	                	</a>
+	                	</div>
 	                	<ul className="change-font-content">
 	                		<li>
 	                			<strong>Section Heading</strong>
@@ -52,8 +52,8 @@ export default class Preview extends Component {
 					                </div>
 	                			</div>
 	                			<div className="change-font-content--text-align">
-	                				<span>S</span> 
-	                				<span>M</span> 
+	                				<span>S</span>
+	                				<span>M</span>
 	                				<span>L</span>
 	                			</div>
 	                		</li>
@@ -64,8 +64,8 @@ export default class Preview extends Component {
 					                  <span className="change-font-content--font-bar__bar"></span>
 					                </div>
 					                <div className="change-font-content--text-align">
-		                				<span>S</span> 
-		                				<span>M</span> 
+		                				<span>S</span>
+		                				<span>M</span>
 		                				<span>L</span>
 		                			</div>
 	                			</div>
@@ -73,10 +73,10 @@ export default class Preview extends Component {
 	                	</ul>
 	                </div>
 	                <div className="change-theme">
-	                	<a href="#" className="change-theme--theme-heading">
+	                	<div className="change-theme--theme-heading">
 	                		<span className="icon-change-reorder mr-20"></span>
 		                    Reorder section
-	                	</a>
+	                	</div>
 	                	<ul className="reorder-content">
 	                		<li className="reorder-content--select-box reorder-content--select-box__select">
 	                			Personal Info
