@@ -102,8 +102,7 @@ export class PersonalInfo extends Component {
                                             <span className="icon-name"></span>
                                         </div>
                                         <Field component={renderField} type={"text"} name="first_name"/>
-                                    </div>
-                                </fieldset>
+                                    </div>                                </fieldset>
                                 <fieldset>
                                     <label>Last Name</label>
                                     <div className="input-group">
