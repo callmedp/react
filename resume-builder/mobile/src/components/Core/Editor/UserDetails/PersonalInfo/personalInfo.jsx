@@ -133,7 +133,7 @@ export default class PersonalInfo extends Component {
                     
                     <li className="form__group">
                         <span className="upload--image">
-                            <img src="/images/default-user.jpg" />  
+                            <img src="/media/static/react/assets/images/mobile/default-user.jpg" />  
                         </span>
                     </li>
 

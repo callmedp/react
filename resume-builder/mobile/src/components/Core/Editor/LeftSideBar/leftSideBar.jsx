@@ -9,7 +9,7 @@ export default class LeftSideBar extends Component {
                     <ul className="sidebar__items">
                         <li className="sidebar__item user">
                             <span className="user__image">
-                                <img src="/images/default-user.jpg" alt="" />
+                                <img src="/media/static/react/assets/images/mobile/default-user.jpg" alt="" />
                             </span>
                             <span className="user__name">Hello Amit</span>
                         </li>

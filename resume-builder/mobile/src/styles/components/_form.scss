@@ -27,7 +27,7 @@
     
     &__select {
         @extend %input;
-        background-image: url('/images/downArrow.png');
+        background-image: url('/media/static/react/assets/images/mobile/downArrow.png');
         background-repeat: no-repeat;
         background-position: right center;
     }
@@ -63,7 +63,7 @@
     
     &__select {
         @extend %line-input;
-        background-image: url('/images/downArrow.png');
+        background-image: url('/media/static/react/assets/images/mobile/downArrow.png');
         background-repeat: no-repeat;
         background-position: right center;
     }

@@ -1,14 +1,10 @@
 import React, {Component} from 'react';
-import Header from '../../../Common/Header/header';
+import Header from '../../../Common/Header/header.jsx';
 import './buy.scss';
-import BuyModal from '../Buy/BuyModal';
+import BuyModal from '../Buy/BuyModal.jsx';
 
 
 export default class buy extends Component {
-
-    state = {
-        BuyOption: undefined
-    }
 
     render() {
         return(
@@ -16,7 +12,7 @@ export default class buy extends Component {
             <div className="buy-container">
                 <Header />
                 <BuyModal 
-                BuyOption={this.SetState.BuyOption}
+                BuyOption={''}
                 />
                 <div className="pay-now">
                     <div className="pay-now__price">
@@ -40,7 +36,7 @@ export default class buy extends Component {
                             </div>
                             <div className="buy__item--right">
                                 <span className="buy__item--image">
-                                    <img src="/images/resume4.png" alt="Resume"/>
+                                    <img src="/media/static/react/assets/images/mobile/resume4.png" alt="Resume"/>
                                 </span>
                                 <a href="#" className="fs-12 mt-5">Edit</a>
                             </div>
@@ -75,21 +71,21 @@ export default class buy extends Component {
                                         <li className="buy__recommended__item" onClick={this.openModal}>
                                             <span className="buy__recommended__image">
                                                 <span className="sprite icon--zoom"></span>
-                                                <img src="/images/resume-1.png" alt="Custom resume" />
+                                                <img src="/media/static/react/assets/images/mobile/resume-1.png" alt="Custom resume" />
                                             </span>
                                         </li>
                                         
                                         <li className="buy__recommended__item">
                                             <span className="buy__recommended__image">
                                                 <span className="sprite icon--zoom"></span>
-                                                <img src="/images/resume-2.png" alt="Custom resume" />
+                                                <img src="/media/static/react/assets/images/mobile/resume-2.png" alt="Custom resume" />
                                             </span>
                                         </li>
                                        
                                         <li className="buy__recommended__item">
                                             <span className="buy__recommended__image">
                                                 <span className="sprite icon--zoom"></span>
-                                                <img src="/images/resume-2.png" alt="Custom resume" />
+                                                <img src="/media/static/react/assets/images/mobile/resume-2.png" alt="Custom resume" />
                                             </span>
                                         </li>
                                     </ul>

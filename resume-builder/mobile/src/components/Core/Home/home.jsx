@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Header from '../../Common/Header/header';
+import Header from '../../Common/Header/header.jsx';
 
 import './home.scss'
 export default class Home extends Component {
@@ -13,7 +13,7 @@ export default class Home extends Component {
                     <p><strong>Amit</strong>, secure the job you want with our
                     resume builder</p>
 
-                    <img src="/images/resume-bundel.png" alt="" />
+                    <img src="/media/static/react/assets/images/mobile/resume-bundel.png" alt="" />
                     <p className="text-center mt-5">
                         <a href="#" className="btn pt-10 pb-10 btn__round btn__primary">Build your resume</a>
                     </p>
@@ -108,7 +108,7 @@ export default class Home extends Component {
                         <ul>
                             <li>
                                 <div className="proven-resume__imageWrap">
-                                    <img src="/images/resume.jpg" alt="" />
+                                    <img src="/media/static/react/assets/images/mobile/resume.jpg" alt="" />
                                 </div>
                             </li>
                         </ul>
@@ -153,7 +153,7 @@ export default class Home extends Component {
                                 <div className="success-stories__infoWrap">
                                     <div className="success-stories__userInfo">
                                         <span className="success-stories__user">
-                                            <img src="/images/user-1.jpg" alt="" />
+                                            <img src="/media/static/react/assets/images/mobile/user-1.jpg" alt="" />
                                         </span>
 
                                         <div className="success-stories__nameInfo">
@@ -170,7 +170,7 @@ export default class Home extends Component {
                                 <div className="success-stories__infoWrap">
                                     <div className="success-stories__userInfo">
                                         <span className="success-stories__user">
-                                            <img src="/images/user-2.jpg" alt="" />
+                                            <img src="/media/static/react/assets/images/mobile/user-2.jpg" alt="" />
                                         </span>
 
                                         <div className="success-stories__nameInfo">
@@ -187,7 +187,7 @@ export default class Home extends Component {
                                 <div className="success-stories__infoWrap">
                                     <div className="success-stories__userInfo">
                                         <span className="success-stories__user">
-                                            <img src="/images/user-3.jpg" alt="" />
+                                            <img src="/media/static/react/assets/images/mobile/user-3.jpg" alt="" />
                                         </span>
 
                                         <div className="success-stories__nameInfo">
@@ -204,7 +204,7 @@ export default class Home extends Component {
                                 <div className="success-stories__infoWrap">
                                     <div className="success-stories__userInfo">
                                         <span className="success-stories__user">
-                                            <img src="/images/user-4.jpg" alt="" />
+                                            <img src="/media/static/react/assets/images/mobile/user-4.jpg" alt="" />
                                         </span>
 
                                         <div className="success-stories__nameInfo">
@@ -221,7 +221,7 @@ export default class Home extends Component {
                                 <div className="success-stories__infoWrap">
                                     <div className="success-stories__userInfo">
                                         <span className="success-stories__user">
-                                            <img src="/images/user-5.jpg" alt="" />
+                                            <img src="/media/static/react/assets/images/mobile/user-5.jpg" alt="" />
                                         </span>
 
                                         <div className="success-stories__nameInfo">

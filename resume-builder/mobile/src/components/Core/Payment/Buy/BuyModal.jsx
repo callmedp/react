@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 
 const buyModal = (props) => (
     <Modal
-        isOpen={this.state.modalIsOpen}
+        isOpen={false}
         contentLabel="Brijesh"
     >
         <h3>Brijesh</h3>

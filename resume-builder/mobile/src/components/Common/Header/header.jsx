@@ -28,7 +28,7 @@ export default class Header extends Component {
                 {/*<a href="#" className="btn btn__round btn--outline">Change template</a>*/}
 
                 <div className="header--logo">
-                    <img src="/images/logo.png" alt="" />
+                    <img src="/media/static/react/assets/images/mobile/logo.png" alt="" />
                 </div>
                 <div className="header--logo"></div>
 

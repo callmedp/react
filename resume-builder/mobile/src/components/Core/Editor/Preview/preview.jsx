@@ -1,5 +1,5 @@
 import React ,{Component} from 'react';
-import Header from '../../../Common/Header/header';
+import Header from '../../../Common/Header/header.jsx';
 import './preview.scss';
 
 export default class Preview extends Component {
@@ -9,7 +9,7 @@ export default class Preview extends Component {
                <Header />
 
                <div className="preview__resume">
-                    <img src="/images/resume.jpg" alt="Resume"/>
+                    <img src="/media/static/react/assets/images/mobile/resume.jpg" alt="Resume"/>
                </div>
 
                <div className="preview__bottom-btns">
