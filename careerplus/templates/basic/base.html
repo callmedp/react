@@ -15,8 +15,8 @@
     {% block django_meta %}
     {% endblock django_meta %}
     {% block canonical_url %}
-      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
-      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}">
+      <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
+      <link rel="alternate" href="https://{{ MOBILE_SITE_DOMAIN }}{{ request.path }}">
     {% endblock canonical_url %}
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>{% block title %}Shine Learning{%endblock title%}</title>
@@ -157,6 +157,16 @@
         data-client='324ed0abb0694b0c66a6daecb178352d'>
     </script>
 {% endblock johukum %} -->
+
+{%block jsbottom%}
+{%comment%}
+<script>
+  $('.login-dropdown').hover(function(){
+    $('.tt-menu').hide();
+  });
+
+</script>{%endcomment%}
+{%endblock%}
 
 {% block zendesk %}
       <!--Start of Zendesk Chat Script-->
