@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom'
 import './home.scss'
 import * as actions from "../../../store/landingPage/actions";
 import {connect} from "react-redux";

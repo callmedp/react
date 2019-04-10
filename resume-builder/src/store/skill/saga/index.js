@@ -1,10 +1,11 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call, select} from "redux-saga/effects";
+import {takeLatest, put, call} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
+import {proficiencyList} from "../../../Utils/proficiencyList";
 
 
 function* fetchUserSkill(action) {
@@ -16,8 +17,14 @@ function* fetchUserSkill(action) {
             console.log('error');
         }
         const {data: {results}} = result;
-
-        yield put({type: Actions.SAVE_USER_SKILL, data: results[0]})
+        let data = results[0];
+        data = {
+            ...data,
+            ...{
+                proficiency: proficiencyList[data['proficiency'].toString()]
+            }
+        }
+        yield put({type: Actions.SAVE_USER_SKILL, data: data})
     } catch (e) {
         console.log(e);
     }
@@ -50,6 +57,6 @@ function* updateUserSkill(action) {
 
 
 export default function* watchSkill() {
-    yield takeLatest(Actions.FETCH_USER_SKILL, fetchUserSkill)
-    yield takeLatest(Actions.UPDATE_USER_SKILL, updateUserSkill)
+    yield takeLatest(Actions.FETCH_USER_SKILL, fetchUserSkill);
+    yield takeLatest(Actions.UPDATE_USER_SKILL, updateUserSkill);
 }

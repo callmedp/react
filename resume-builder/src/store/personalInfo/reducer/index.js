@@ -9,7 +9,7 @@ const initialState = {
     date_of_birth: '',
     location: '',
     gender: '',
-    extracurricular: [],
+    extracurricular: '',
     extra_info: ''
 
 

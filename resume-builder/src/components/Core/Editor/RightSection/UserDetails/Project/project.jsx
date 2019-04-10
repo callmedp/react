@@ -24,7 +24,7 @@ class Project extends Component {
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, enableReinitialize, project} = this.props;
+        const {handleSubmit, project} = this.props;
 
         return (
             <div>
@@ -123,8 +123,8 @@ const mapDispatchToProps = (dispatch) => {
             userProject = {
                 ...userProject,
                 ...{
-                    start_date: start_date && moment(start_date).format('YYYY-MM-DD') || '',
-                    end_date: end_date && moment(end_date).format('YYYY-MM-DD') || ''
+                    start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
+                    end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || ''
                 }
             };
             return new Promise((resolve, reject) => {

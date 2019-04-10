@@ -24,7 +24,7 @@ class Award extends Component {
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, award, enableReinitialize} = this.props;
+        const {handleSubmit, award} = this.props;
         return (
             <div>
                 <section className="head-section">
@@ -64,7 +64,7 @@ class Award extends Component {
                             <div className="flex-container">
                                 <fieldset>
                                     <label>Summary</label>
-                                    <Field component={renderTextArea} type={"text"} name="summary"
+                                    <Field component={renderTextArea}  type={"textarea"} name="summary"
                                            className="input-control"/>
                                 </fieldset>
                             </div>
@@ -107,7 +107,7 @@ const mapDispatchToProps = (dispatch) => {
             userAward = {
                 ...userAward,
                 ...{
-                    date: date && moment(date).format('YYYY-MM-DD') || '',
+                    date: (date && moment(date).format('YYYY-MM-DD')) || '',
                 }
             };
             return new Promise((resolve, reject) => {

@@ -11,9 +11,6 @@ import {
     renderDynamicSelect
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 
-import {
-    required
-} from "../../../../../FormHandler/formValidations.js";
 
 import moment from 'moment';
 
@@ -83,7 +80,7 @@ export class PersonalInfo extends Component {
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, enableReinitialize, personalInfo} = this.props;
+        const {handleSubmit, personalInfo} = this.props;
         return (
             <div>
                 <section className="head-section">
@@ -214,9 +211,9 @@ export class PersonalInfo extends Component {
 
                                 {
                                     this.state.imageURI || personalInfo.image ?
-                                        <img className='img-responsive'
+                                        <img alt={"User Profile"} className='img-responsive'
                                              src={this.state.imageURI || personalInfo.image}/> :
-                                        <img className="img-responsive"
+                                        <img alt={"User Profile"} className="img-responsive"
                                              src="/media/static/react/assets/images/upload-image.jpg"/>
                                 }
                                 <input accept="image/*" type="file" name="displayPicture"
@@ -263,17 +260,17 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchPersonalInfo())
         },
         "onSubmit": (personalDetails, imageURL) => {
-            const {gender, date_of_birth, extracurricular} = personalDetails
+            const {gender, date_of_birth, extracurricular} = personalDetails;
             personalDetails = {
                 ...personalDetails,
                 ...{
-                    'date_of_birth': date_of_birth && moment(date_of_birth).format('YYYY-MM-DD') || '',
-                    'gender': gender && gender['value'] || '',
+                    'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
+                    'gender': (gender && gender['value']) || '',
                     'image': imageURL,
-                    'extracurricular': (extracurricular || []).map(el => el.value).join(',')
+                    'extracurricular': extracurricular instanceof Array ?
+                        (extracurricular || []).map(el => el.value).join(',') : extracurricular
                 }
             }
-            console.log('---', personalDetails);
             return new Promise((resolve, reject) => {
                 dispatch(actions.updatePersonalInfo({personalDetails, resolve, reject}));
             })

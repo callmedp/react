@@ -23,7 +23,7 @@ class Course extends Component {
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, course, submitting, enableReinitialize} = this.props;
+        const {handleSubmit, course} = this.props;
 
         return (
             <div>
@@ -99,7 +99,7 @@ const mapDispatchToProps = (dispatch) => {
             userCourse = {
                 ...userCourse,
                 ...{
-                    year_of_certification: year_of_certification && moment(year_of_certification).format('YYYY') || '',
+                    year_of_certification: (year_of_certification && moment(year_of_certification).format('YYYY')) || '',
                 }
             };
             return new Promise((resolve, reject) => {

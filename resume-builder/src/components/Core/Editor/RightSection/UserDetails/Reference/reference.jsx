@@ -21,7 +21,7 @@ class Reference extends Component {
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, enableReinitialize, reference} = this.props;
+        const { handleSubmit,reference} = this.props;
 
         return (
             <div>

@@ -1,6 +1,6 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call, select} from "redux-saga/effects";
+import {takeLatest, put, call} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
@@ -39,9 +39,9 @@ function* getPersonalDetails(action) {
         data = {
             ...data,
             ...{
-                date_of_birth: date_of_birth && moment(date_of_birth).format('YYYY-MM-DD') || '',
-                gender: gender && genderDict[gender] || '',
-                extracurricular: extracurricular.split(',').map(key => interestList[key])
+                date_of_birth: (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD'))|| '',
+                gender: (gender && genderDict[gender]) || '',
+                extracurricular: (extracurricular && extracurricular.split(',').map(key => interestList[key])) || ''
             }
         }
         console.log('data');
@@ -76,7 +76,7 @@ function* updatePersonalDetails(action) {
 
 function* fetchImageUrl(action) {
     try {
-        const {payload: {imageFile, resolve, reject}} = action;
+        const {payload: {imageFile, resolve}} = action;
 
         var data = new FormData();
 

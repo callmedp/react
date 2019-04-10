@@ -23,7 +23,7 @@ class Experience extends Component {
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, enableReinitialize, experience} = this.props;
+        const {handleSubmit, experience} = this.props;
 
         return (
             <div>
@@ -148,8 +148,8 @@ const mapDispatchToProps = (dispatch) => {
             userExperience = {
                 ...userExperience,
                 ...{
-                    start_date: start_date && moment(start_date).format('YYYY-MM-DD') || '',
-                    end_date: end_date && moment(end_date).format('YYYY-MM-DD') || ''
+                    start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
+                    end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || ''
                 }
             };
             return new Promise((resolve, reject) => {

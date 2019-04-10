@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './education.scss'
 import {Field, reduxForm} from "redux-form";
-import {renderField, renderTextArea, renderSelect, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
+import {renderField, renderSelect, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
 
 import * as actions from "../../../../../../store/education/actions";
 import {connect} from "react-redux";
@@ -24,7 +24,7 @@ class Education extends Component {
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, enableReinitialize, education} = this.props;
+        const {handleSubmit, education} = this.props;
 
         return (
             <div>
@@ -61,7 +61,7 @@ class Education extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-company"></span>
                                         </div>
-                                        <Field component={renderField}  type={"text"} name="specialization"/>
+                                        <Field component={renderField} type={"text"} name="specialization"/>
                                     </div>
                                 </fieldset>
                             </div>
@@ -96,7 +96,7 @@ class Education extends Component {
                             </div>
 
                             <div className="flex-container">
-                                
+
                                 <fieldset className="custom">
                                     <label>Course Type</label>
                                     <Field component={renderSelect} type={"text"} name="course_type"
@@ -152,8 +152,8 @@ const mapDispatchToProps = (dispatch) => {
             userEducation = {
                 ...userEducation,
                 ...{
-                    start_date: start_date && moment(start_date).format('YYYY-MM-DD') || '',
-                    end_date: end_date && moment(end_date).format('YYYY-MM-DD') || '',
+                    start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
+                    end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || '',
                     course_type: course_type && course_type.value
                 }
             };
