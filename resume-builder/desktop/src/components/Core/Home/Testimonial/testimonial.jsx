@@ -11,12 +11,8 @@ export default class Testimonial extends Component {
                 <ul className="testimonials mt-30">
                     <li className="testimonials--list">
                         <div className="testimonials--image">
-<<<<<<< HEAD:resume-builder/desktop/src/components/Core/Home/Testimonial/testimonial.jsx
-                            <span className="mr-20"><img src="/media/static/react/assets/images/testimonial1.jpg" /></span>
-=======
                             <span className="mr-20"><img alt={"Testimonial 1"}
                                                          src="/media/static/react/assets/images/testimonial1.jpg"/></span>
->>>>>>> 965a2a5ee483958b41faa199ec9653eb6fe0a2ee:resume-builder/src/components/Core/Home/Testimonial/testimonial.jsx
                             <span><strong>Sumit Sharma</strong>
                             Project Manager, Sapient</span>
                         </div>
@@ -28,12 +24,8 @@ export default class Testimonial extends Component {
                     </li>
                     <li className="testimonials--list">
                         <div className="testimonials--image">
-<<<<<<< HEAD:resume-builder/desktop/src/components/Core/Home/Testimonial/testimonial.jsx
-                            <span className="mr-20"><img src="/media/static/react/assets/images/testimonial2.jpg" /></span>
-=======
                             <span className="mr-20"><img alt={"Testimonial 2"}
                                                          src="/media/static/react/assets/images/testimonial2.jpg"/></span>
->>>>>>> 965a2a5ee483958b41faa199ec9653eb6fe0a2ee:resume-builder/src/components/Core/Home/Testimonial/testimonial.jsx
                             <span><strong>Shreya Verma</strong>
                             Associate, Amazon</span>
                         </div>
@@ -45,12 +37,8 @@ export default class Testimonial extends Component {
                     </li>
                     <li className="testimonials--list">
                         <div className="testimonials--image">
-<<<<<<< HEAD:resume-builder/desktop/src/components/Core/Home/Testimonial/testimonial.jsx
-                            <span className="mr-20"><img src="/media/static/react/assets/images/testimonial3.jpg" /></span>
-=======
                             <span className="mr-20"><img alt={"testimonial 3"}
                                                          src="/media/static/react/assets/images/testimonial3.jpg"/></span>
->>>>>>> 965a2a5ee483958b41faa199ec9653eb6fe0a2ee:resume-builder/src/components/Core/Home/Testimonial/testimonial.jsx
                             <span><strong>Amit Sinha</strong>
                             IT Manager, HCL</span>
                         </div>

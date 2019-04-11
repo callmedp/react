@@ -3,7 +3,6 @@ import './banner.scss'
 import { Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 export default class Banner extends Component {
-<<<<<<< HEAD:resume-builder/desktop/src/components/Core/Home/Banner/banner.jsx
 
 
     constructor(props) {
@@ -36,8 +35,6 @@ export default class Banner extends Component {
     }
     
 
-=======
->>>>>>> 965a2a5ee483958b41faa199ec9653eb6fe0a2ee:resume-builder/src/components/Core/Home/Banner/banner.jsx
     render() {
         return (
             <div className="banner-bg">
@@ -56,11 +53,7 @@ export default class Banner extends Component {
                    <button className="orange-button banner-content--button" onClick={() => this.scrollTo('templates')}>Build your resume</button>
                </div>
                <div className="banner-slider">
-<<<<<<< HEAD:resume-builder/desktop/src/components/Core/Home/Banner/banner.jsx
-                    <img src="/media/static/react/assets/images/home-banner-slider.png" className="img-responsive" />
-=======
                     <img alt={"Banner"} src="/media/static/react/assets/images/home-banner-slider.png" className="img-responsive" />
->>>>>>> 965a2a5ee483958b41faa199ec9653eb6fe0a2ee:resume-builder/src/components/Core/Home/Banner/banner.jsx
                </div>
             </div>
         )

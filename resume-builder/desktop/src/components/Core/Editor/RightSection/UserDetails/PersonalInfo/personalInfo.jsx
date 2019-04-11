@@ -11,14 +11,11 @@ import {
     renderDynamicSelect
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 
-<<<<<<< HEAD:resume-builder/desktop/src/components/Core/Editor/RightSection/UserDetails/PersonalInfo/personalInfo.jsx
 import {
     required,
     phoneNumber,
     email
 } from "../../../../../FormHandler/formValidations.js";
-=======
->>>>>>> 965a2a5ee483958b41faa199ec9653eb6fe0a2ee:resume-builder/src/components/Core/Editor/RightSection/UserDetails/PersonalInfo/personalInfo.jsx
 
 import moment from 'moment';
 
