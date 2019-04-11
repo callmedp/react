@@ -121,7 +121,8 @@ class DeliveryServiceAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'active', 'inr_price', 'usd_price', 'aed_price', 'gbp_price']
 
 
-
+class ShineProfileDataAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'type_flow', 'sub_type_flow', 'priority_value']
 
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Attribute, AttributeAdmin)
@@ -131,4 +132,5 @@ admin.site.register(models.ProductClass)
 admin.site.register(models.Product, ProductAdmin)
 admin.site.register(models.AttributeOptionGroup, OptionGroupAdmin)
 admin.site.register(models.DeliveryService, DeliveryServiceAdmin)
+admin.site.register(models.ShineProfileData, ShineProfileDataAdmin)
 # admin.site.register(models.ProductExtraInfo, ProductExtraInfoAdmin)

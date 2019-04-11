@@ -8,7 +8,7 @@ from .choices import MEDIA_PRIVACY_CHOICES
 from rest_framework import serializers
 from django.conf import settings
 from order.models import Order, OrderItem
-from shop.models import Product
+from shop.models import Product, ShineProfileData
 from payment.models import PaymentTxn
 from django.utils.text import slugify
 from core.library.gcloud.custom_cloud_storage import GCPMediaStorage,GCPPrivateMediaStorage
@@ -347,3 +347,14 @@ class ResumeBuilderProductSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     parent = serializers.IntegerField()
     name = serializers.CharField()
+
+class ShineDataFlowDataSerializer(ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ShineProfileData
+        fields = ('id', 'name', 'image_url', 'priority_value')
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url

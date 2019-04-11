@@ -3,9 +3,8 @@
 
 {% block head %}
  {% block canonical_url %}
-      <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
-      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
-      <link rel="amphtml" href="https://learning.shine.com{{ page_obj.get_absolute_url }}?type=amp">
+      <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+      <link rel="alternate" href="https://{{ MOBILE_SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
     {% endblock canonical_url %}
 {% block css_section %}
         <!-- Bootstrap -->
@@ -27,10 +26,11 @@
 
 {% block meta_html %}
  <meta charset="utf-8">
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0"/>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content="Free Resume Format Online - Get Resume Format recommended by experts for experienced professionals or freshers. Download Resume Format samples in pdf or word doc">
     <meta name="keywords" content="E-Learning, Skills, Resume, India">
+    <meta name="description" content="Free Resume Format Online - Get Resume Format recommended by experts for experienced professionals or freshers. Download Resume Format samples in pdf or word doc">
     <meta property="og:title" content="Resume Format - Download CV Samples with Examples - Shine Learning">
     <meta property="og:url" content="https://learning.shine.com/cms/resume-format/1/">
     <meta property="og:description" content="Free Resume Format Online - Get Resume Format recommended by experts for experienced professionals or freshers. Download Resume Format samples in pdf or word doc">
@@ -46,7 +46,7 @@
 
 {% endblock meta_html %}
     <!-- Bootstrap CSS -->
-
+    <link rel="shortcut icon" href="https://static1.shine.com/l/s/shinelearn/images/fav_icon.png">
     <title>{% block title %}Resume Format - Download CV Samples with Examples - Shine Learning {%endblock title%}</title>
 
 {% block GA %}
@@ -108,10 +108,10 @@
                             <div class="media-left">
                                 <div class="img-wrap mr-20">
                                     <div class="img-content">
-                                        <a href="{% static 'shinelearn/static_media/learning_sample_resume.pdf' %}"target="_blank" class="icon-downlod"></a>
+                                        <a aria-label="Sample Resume" href="{% static 'shinelearn/static_media/learning_sample_resume.pdf' %}" target="_blank" class="icon-downlod"></a>
                                         <div class="overlay"></div>
-<img src="{% static 'shinelearn/images/cms/resume-1-thumb.jpg' %}" alt="most targeted resume format" />
-</div>
+                                        <img src="{% static 'shinelearn/images/cms/resume-1-thumb.jpg' %}" alt="most targeted resume format" />
+                                        </div>
                                 </div>
                             </div>
                             <div class="media-body mt-15">
@@ -148,7 +148,7 @@
                             <div class="media-left">
                                 <div class="img-wrap mr-20">
                                     <div class="img-content">
-                                    <a href="{% static 'shinelearn/static_media/chronological-resume-format.docx' %}" class="icon-downlod"></a>
+                                    <a aria-label="Chronological Resume Format" href="{% static 'shinelearn/static_media/chronological-resume-format.docx' %}" class="icon-downlod"></a>
                                     <div class="overlay"></div>
                                     <img src="{% static 'shinelearn/images/cms/chrono-format.jpg' %}" alt="Chronological Resume Format">
                                 </div>
@@ -178,7 +178,7 @@
                             <div class="media-left">
                                 <div class="img-wrap mr-20">
                                     <div class="img-content">
-                                    <a href="{% static 'shinelearn/static_media/functional-resume-format.docx' %}" class="icon-downlod"></a>
+                                    <a aria-label="FUNCTIONAL RESUME FORMAT" href="{% static 'shinelearn/static_media/functional-resume-format.docx' %}" class="icon-downlod"></a>
                                     <div class="overlay"></div>
                                     <img src="{% static 'shinelearn/images/cms/functional.jpg' %}"alt="Functional Resume Format">
                                 </div>
@@ -208,7 +208,7 @@
                             <div class="media-left">
                                 <div class="img-wrap mr-20">
                                     <div class="img-content">
-                                    <a href="{% static 'shinelearn/static_media/combination-resume-format.docx' %}" class="icon-downlod"></a>
+                                    <a aria-label="COMBINATION RESUME FORMAT" href="{% static 'shinelearn/static_media/combination-resume-format.docx' %}" class="icon-downlod"></a>
                                     <div class="overlay"></div>
                                     <img src="{% static 'shinelearn/images/cms/mixed-format.jpg' %}" alt="Combination resumes Format">
                                 </div>
@@ -243,7 +243,8 @@
                                     <div class="overlay">
                                         <a href="#" data-toggle="modal" data-target="#resume-1" class="icon-zoom"></a>
                                     </div>
-<img src="{% static 'shinelearn/images/cms/creative-1-thumb.jpg' %}" alt="Creative and visual resume formats" class="img-responsive" /></div>
+                                    <img src="{% static 'shinelearn/images/cms/creative-1-thumb.jpg' %}" alt="Creative and visual resume formats" class="img-responsive" />
+                                </div>
 
                                 <!-- Modal -->
                                 <div class="modal fade" id="resume-1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -496,14 +497,14 @@
                         <ul>
                             <li>Share on</li>
                             <li class="facebook">
-                                <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{hostname}}{{page_obj.get_absolute_url}}" page-id="{{page_obj.id}}" class="icon-fb"></a>
+                                <a aria-label="Share on Facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{hostname}}{{page_obj.get_absolute_url}}" page-id="{{page_obj.id}}" class="icon-fb"></a>
                             </li>
                             <li class="twitter">
-                                  <a href="https://twitter.com/home?status=https://{{SITE_DOMAIN}}{{page_obj.get_absolute_url}}" target="_blank" class="icon-tw"></a>
+                                  <a aria-label="Share on Twitter" href="https://twitter.com/home?status=https://{{SITE_DOMAIN}}{{page_obj.get_absolute_url}}" target="_blank" class="icon-tw"></a>
 
                             </li>
                             <li class="gPlus">
-                               <a target="_blank" href="https://plus.google.com/share?url={{hostname}}{{page_obj.get_absolute_url}}" class="icon-gPlus"></a>
+                               <a aria-label="Share on Gplus" target="_blank" href="https://plus.google.com/share?url={{hostname}}{{page_obj.get_absolute_url}}" class="icon-gPlus"></a>
                             </li>
                         </ul>
                     </div><!-- /. social-share -->
@@ -513,22 +514,22 @@
                         <p class="pb-15 mb-15 rhs-head uppercase">Request a call</p>
                         <form class="form-group" role="form" id="callback_form">
                             <div class="form-group">
-                            <input type="text" class="form-control" name='name' placeholder="Name" value="{{request.session.full_name|safe}}">
+                            <input aria-label="Name" type="text" class="form-control" name='name' placeholder="Name" value="{{request.session.full_name|safe}}">
                             <span class="error-txt"></span>
                             </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" name="number" id="id_mobile" placeholder="Mobile Number" value="{{request.session.mobile_no|safe}}" maxlength="15">
+                            <input aria-label="Mobile No" type="text" class="form-control" name="number" id="id_mobile" placeholder="Mobile Number" value="{{request.session.mobile_no|safe}}" maxlength="15">
                             <span class="error-txt"></span>
                         </div>
 
                         {% if  page_obj %}
-            <input type="hidden" name="lsource" value="7">
-            <input type="hidden" name="product" value="{{page_obj.pk}}">
-            <input type="hidden" name="prd" value="{{page_obj.heading}}">
-            <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
-          {% endif %}
+                            <input type="hidden" name="lsource" value="7">
+                            <input type="hidden" name="product" value="{{page_obj.pk}}">
+                            <input type="hidden" name="prd" value="{{page_obj.heading}}">
+                            <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
+                        {% endif %}
                         <div class="form-group">
-                            <textarea class="form-control" name='msg' placeholder="Message" rows="3"></textarea>
+                            <textarea aria-label="Message" class="form-control" name='msg' placeholder="Message" rows="3"></textarea>
                             <span class="error-txt"></span>
                         </div>
                         </form>

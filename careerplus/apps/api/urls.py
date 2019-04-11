@@ -3,7 +3,6 @@ from django.conf import settings
 
 from . import views
 
-
 urlpatterns = [
     url(r'^v1/create-order/$',
         views.CreateOrderApiView.as_view(), name='api-createorder'),
@@ -27,6 +26,12 @@ urlpatterns = [
     url(r'^v1/remove-cookie-from-header/$',
         views.RemoveCookieFromHeader.as_view(),
         name='remove-cookie-from-header'),
+    url(r'^v1/shine-data-for-flow/$',
+        views.ShineDataFlowDataApiView.as_view(),
+        name='shine-data-for-flow'),
+    url(r'^v1/login/$',
+        views.APILoginView.as_view(),
+        name='v1.api-login'),
     url(r'^v1/media-upload/$',
         views.MediaUploadView.as_view(),
         name='v1.media-upload'),
@@ -34,9 +39,10 @@ urlpatterns = [
         views.ResumeBuilderProductView.as_view(),
         name='v1.resume-product-id')
 ]
+]
 
 if settings.DEBUG:
     urlpatterns += [
-        url(r'v1/cron/(?P<cron_id>\d+)/$', views.CronInitiateApiView.as_view(),
-            name='api-cron-inititate')
-    ]
+url(r'v1/cron/(?P<cron_id>\d+)/$', views.CronInitiateApiView.as_view(),
+    name='api-cron-inititate')
+]

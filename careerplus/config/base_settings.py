@@ -500,6 +500,7 @@ COURSE_CATALOGUE_CASH_TIME = 24 * 60 * 60  # in seconds
 ROUNDONE_DEFAULT_CP_EMAIL = "learning@shine.com"
 CONSULTANTS_EMAIL = 'Shine.com <learning@shine.com>'
 REPLY_TO = 'resume@shine.com'
+TAG_MAILER = False
 
 ##### CCAVENUE SETTINGS ############
 CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'

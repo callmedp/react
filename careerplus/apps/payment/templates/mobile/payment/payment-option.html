@@ -5,7 +5,7 @@
 
 
 {% block canonical_url %}
-    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
 {% endblock canonical_url %}
 
 {% block title %}Payment Options | Shine Learning{% endblock %}
@@ -190,6 +190,17 @@
           <a href="{% url "payment:ccavenue_request" cart_id 'upi' %}" class="btn btn-slg btn-orange">Make Payment</a>
         </div><!-- /. acc content -->
       </div><!-- /. UPI  -->
+
+      <div class="accordion_in">
+        <div class="acc_head fs-14">Buy Now And Pay Later</div>
+        <div class="acc_content c6">
+          <p>You will be redirected to a secure page where you can fill up some details and pay at a later date.</p>
+
+          <ul class="payment-mode">
+            <li><a href="{% url "payment:epaylater-request" cart_id %}" class="cc"><img width="100px" src="{% static 'shinelearn/images/payments/epaylater-logo.svg' %}" alt="EPayLater" title="EPayLater"></a></li>
+          </ul>
+        </div><!-- /. acc content -->
+      </div>
 
     </div><!-- /. accordion-wrap -->
     <!-- Accordion end -->

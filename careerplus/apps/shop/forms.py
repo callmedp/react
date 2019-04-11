@@ -16,7 +16,7 @@ from shop.models import (
     UniversityCourseDetail)
 from partner.models import Vendor
 from geolocation.models import Country
-from shop.choices import BG_CHOICES
+from shop.choices import BG_CHOICES, SUB_FLOWS
 from shop.utils import FIELD_FACTORIES, PRODUCT_TYPE_FLOW_FIELD_ATTRS
 from faq.models import FAQuestion
 
@@ -228,14 +228,15 @@ class ChangeProductForm(forms.ModelForm):
             'name', 'type_flow',
             'upc', 'image', 'image_bg', 'icon', 'banner', 'video_url',
             'vendor',
-            'no_review', 'buy_count', 'avg_rating', 'num_jobs']
+            'no_review', 'buy_count', 'avg_rating', 'num_jobs', 'sub_type_flow']
 
     def __init__(self, *args, **kwargs):
         super(ChangeProductForm, self).__init__(*args, **kwargs)
         form_class = 'form-control col-md-7 col-xs-12'
         self.fields['type_flow'].widget.attrs['class'] = form_class
         self.fields['type_flow'].widget.attrs['data-parsley-notdefault'] = ''
-        
+        self.fields['sub_type_flow'].widget.attrs['class'] = form_class
+
         self.fields['vendor'].widget.attrs['class'] = form_class
         self.fields['vendor'].empty_label = 'Select Vendor'
         self.fields['vendor'].required = True
@@ -276,7 +277,11 @@ class ChangeProductForm(forms.ModelForm):
         self.fields['buy_count'].widget.attrs['class'] = form_class
         self.fields['num_jobs'].widget.attrs['class'] = form_class
 
-        
+        if self.data and int(self.data['type_flow']) not in list(SUB_FLOWS.keys()):
+            self.fields.pop('sub_type_flow')
+
+        if not self.data and self.initial['type_flow'] in list(SUB_FLOWS.keys()):
+            self.fields['sub_type_flow'].choices = SUB_FLOWS[self.initial['type_flow']]
 
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
@@ -299,6 +304,19 @@ class ChangeProductForm(forms.ModelForm):
             raise forms.ValidationError(
                 "This field is required.")
         return flow
+
+    def clean_sub_type_flow(self):
+        sub_type_flow = self.cleaned_data.get('sub_type_flow', '')
+        flow = self.cleaned_data.get('type_flow', '')
+        if flow in list(SUB_FLOWS.keys()):
+            if not sub_type_flow:
+                raise forms.ValidationError(
+                    "This field is required.")
+            elif int(sub_type_flow) not in [st_flow[0] for st_flow in SUB_FLOWS[flow]]:
+                    raise forms.ValidationError("Invalid Type flow")
+        else:
+            sub_type_flow = None
+        return sub_type_flow
 
     def clean_upc(self):
         upc = self.cleaned_data.get('upc', '')
@@ -366,6 +384,10 @@ class ChangeProductForm(forms.ModelForm):
                     pv.save()
         if product.type_flow == 14:
             UniversityCourseDetail.objects.get_or_create(product=product)
+
+        if product.type_product == 1 and product.type_flow in list(SUB_FLOWS.keys()):
+            child_variation = product.get_variations()
+            child_variation.update(sub_type_flow=product.sub_type_flow)
 
         return product
 

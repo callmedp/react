@@ -3,21 +3,21 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Linkedin</title>
-
-    <!-- Google font link -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700" rel="stylesheet">
+	
+	<!-- Google font link -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700" rel="stylesheet">
 
     <!-- Bootstrap -->
     <link href="{% static 'shinelearn/css/common/bootstrapv3.3.7.css' %}" rel="stylesheet" type="text/css">
-
-    <!-- Bootstrap -->
+	  
+	<!-- Bootstrap -->
     <link href="{% static 'shinelearn/css/marketing/linkedin/custom.css' %}" rel="stylesheet" type="text/css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -26,340 +26,317 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script>
-        /*
-         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-         })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-         <!--ga('create', 'UA-3537905-1', 'auto', {'name': 'a'});-->
-         <!--ga('a.send', 'pageview');-->
-         ga('create', 'UA-3537905-41', 'auto');
-         ga('send', 'pageview');
-         */
+   <script>
+     /*
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      <!--ga('create', 'UA-3537905-1', 'auto', {'name': 'a'});-->
+      <!--ga('a.send', 'pageview');-->
+      ga('create', 'UA-3537905-41', 'auto');
+      ga('send', 'pageview');
+      */
 
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-        ga('create', 'UA-3537905-41', 'auto');
-        ga('send', 'pageview');
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-3537905-41', 'auto');
+      ga('send', 'pageview');
 
     </script>
 
-</head>
-<body>
-<div class="container-fluid banner">
-    <header>
-        <a href="#"><i class="sprite lerninglogo"></i></a>
-    </header>
-    <div class="container">
-        <div class="row pb10">
-            <div class="col-lg-9 col-md-8 col-sm-7 col-xs-12">
-                <div class="create pull-left">
-                    <h1>Create a <span>strong online presence </span>
-                        on Social Media - Linkedin </h1>
-                    <!-- <strong>Get noticed</strong> -->
-                    <ul>
-                        <li>Build a professionally written profile and leave a positive mark on recruiters.</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
-                <div class="form pull-right">
-                    <strong class="formheading">I am Interested</strong>
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="name" id="name" placeholder="Your Full Name"
-                               value={% if alt_name %} "{{ alt_name }}" {% else %} "{{ request.session.full_name }}
-                                   " {% endif %}>
-                        <label class="error-txt js-error"></label>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" class="form-control" name="email" id="email" placeholder="Email Address"
-                               value={% if alt_email %} "{{ alt_email }}" {% else %} "{{ request.session.email }}
-                                   " {% endif %}>
-                        <label class="error-txt js-error"></label>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" maxlength="10" name="number" id="mobile"
-                               placeholder="Mobile Number"
-                               value={% if alt_contact %} "{{ alt_contact }}"{% else %}"{{ request.session.mobile_no }}
-                                   " {% endif %}>
-                        <label class="error-txt js-error"></label>
-                    </div>
-                    <div class="form-group pr">
-                        <i class="sprite arrow"></i>
-                        <select class="form-control" id="product_id">
-                            {% for prd in products_lists %}
-                                <option {% if prd.pk == select %} select="selected" {% endif %} value={{ prd.pk }}>
-                                    Experience : {{ prd.pEX|get_choice_display:"EXP_DICT" }} </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <input type="hidden" id="candidate_id" value="{{ request.session.candidate_id }}">
-                    <button type="button" id="addcart" class="btn btn-default newbtn">Enroll Now</button>
+  </head>
+  <body>
+    <div class="container-fluid banner">
+		<header>
+			<a href="#"><i class="sprite lerninglogo"></i></a>
+		</header>
+		<div class="container">
+				<div class="row pb10">
+					<div class="col-lg-9 col-md-8 col-sm-7 col-xs-12">
+						<div class="create pull-left">
+							<h1>Create a <span>strong online presence </span>
+							on Social Media - Linkedin </h1>
+							<!-- <strong>Get noticed</strong> -->
+							<ul>
+								<li>Build a professionally written profile and leave a positive mark on recruiters.</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+						<div class="form pull-right" >
+							<strong class="formheading">I am Interested</strong>
+						  <div class="form-group">
+						    <input type="text" class="form-control" name="name" id="name" placeholder="Your Full Name" value={% if alt_name %} "{{alt_name}}" {% else %} "{{request.session.full_name}}" {% endif %}>
+							  <label class="error-txt js-error"></label>
+						  </div>
+						  <div class="form-group">
+						    <input type="email" class="form-control" name="email" id="email" placeholder="Email Address"  value={% if alt_email %} "{{alt_email}}" {% else %} "{{request.session.email}}" {% endif %}>
+						  	<label class="error-txt js-error"></label>
+						  </div>
+						  <div class="form-group">
+						    <input type="text" class="form-control" maxlength="10" name="number" id="mobile" placeholder="Mobile Number" value={% if alt_contact %} "{{alt_contact}}"{%else%}"{{request.session.mobile_no}}" {% endif %}>
+						 	<label class="error-txt js-error"></label>
+						   </div>
+						  <div class="form-group pr">
+							<i class="sprite arrow"></i>
+						     <select class="form-control" id="product_id">
+                              {%for prd in products_lists %}
+							 <option {% if prd.pk == select %} select="selected" {% endif %} value={{prd.pk}} >Experience : {{prd.pEX|get_choice_display:"EXP_DICT"}} </option>
+                              {%endfor%}
+							</select>
+						  </div>
+						<input type="hidden" id="candidate_id" value="{{request.session.candidate_id}}" >
+							<button type="button" id="addcart" class="btn btn-default newbtn" >Enroll Now</button>
 
-                    <p class="easy">*Easy EMI option available</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<section class="container-fluid">
-    <div class="container">
-        <div class="hero_band">
-            <div class="row">
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <div class="contron-box ch">
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <i class="media-object sprite man"></i>
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading mh1">Control one of the <strong>top search results</strong> for
-                                    your name.</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <div class="contron-box ch">
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <i class="media-object sprite network"></i>
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading mh">Build and maintain a <strong>broader network of
-                                    professionals</strong>.</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <div class="contron-box">
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <i class="media-object sprite tools"></i>
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading mh">Leverage powerful tools to find and <strong>reach the
-                                    people you need</strong>.</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="container-fluid">
-    <div class="container">
-        <div class="kye-highlights">
-            <div class="row">
-                <div class="col-md-5 col-sm-5 col-xs-12 hidden-xs">
-                    <div class="kye-highlights-image">
-                        <img src="{% static 'shinelearn/images/marketing/linkedin/section_kh.jpg' %}"
-                             class="img-responsive" alt=""/>
-                    </div>
-                </div>
-                <div class="col-md-7 col-sm-7 col-xs-12">
-                    <div class="kye-highlights-list">
-                        <h2>Key Highlights</h2>
-                        <ul>
-                            <li>Profile summary written by industry experts.</li>
-                            <li>Individually assigned executive to give your profile full attention.</li>
-                            <li>Detailed discussion with our experts for highly targeted profile.</li>
-                            <li>Development of document with mandatory sections which will help in making your profile
-                                100% complete.
-                            </li>
-                            <li>Telephonic assistance in uploading the profile online.</li>
-                            <li>Additional tips to optimize your LinkedIn profile.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="container-fluid">
-    <div class="container">
-        <div class="salient-features">
-            <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="salient-features-list">
-                        <h3 class="features">Salient Features</h3>
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <i class="media-object sprite rich"></i>
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <strong class="media-heading digital">Keyword Rich for Digital Screening</strong>
-                                <span class="research">With keyword research for every profile.</span>
-                            </div>
-                        </div>
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <i class="media-object sprite leave"></i>
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <strong class="media-heading digital">Increased Visibility </strong>
-                                <span class="research">To leave no stone unturned in your job search.</span>
-                            </div>
-                        </div>
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <i class="media-object sprite increased"></i>
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <strong class="media-heading digital">Controlling Top Search Results </strong>
-                                <span class="research">Increased visibility in all search results. </span>
-                            </div>
-                        </div>
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <i class="media-object sprite build"></i>
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <strong class="media-heading digital">Broader Network of Professionals </strong>
-                                <span class="research">Build a network of professionals you can trust.</span>
-                            </div>
-                        </div>
-                        <div class="media">
-                            <div class="media-left">
-                                <a href="#">
-                                    <i class="media-object sprite find"></i>
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <strong class="media-heading digital">Leveraging Powerful tools </strong>
-                                <span class="research">To find and reach the people you need.</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="container-fluid ">
-    <div class="container">
-        <div class="competitive">
-            <h4>For the extra competitive edge, we recommend</h4>
-            <div class="row">
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <div class="extra">
-                        <div class="box">
-                            <i class="sprite resume"></i>
-                        </div>
-                        <strong>Resume Writing </strong>
-                        <p>Professionally written resume to leave a positive mark on recruiters.</p>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <div class="extra">
-                        <div class="box">
-                            <i class="sprite letter"></i>
-                        </div>
-                        <strong>Cover Letter </strong>
-                        <p>Unique & customized to your job application requirements.</p>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <div class="extra">
-                        <div class="box">
-                            <i class="sprite visual"></i>
-                        </div>
-                        <strong>Visual Resume </strong>
-                        <p>Designed by professionals for the right appeal.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row pt3">
-                <div class="col-md-2 col-sm-2 col-xs-12"></div>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <div class="extra">
-                        <div class="box">
-                            <i class="sprite booster"></i>
-                        </div>
-                        <strong>Second Regular Resume </strong>
-                        <p>To target different profiles correctly.</p>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <div class="extra">
-                        <div class="box">
-                            <i class="sprite second"></i>
-                        </div>
-                        <strong>Resume Booster </strong>
-                        <p>Increased visibility throughout Shine network and its affiliates.</p>
-                    </div>
-                </div>
-                <div class="col-md-2 col-sm-2 col-xs-12"></div>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="container-fluid expertly">
-    <div class="container">
-        <div class="profile">
-            <h5>Your expertly written LinkedIn Profile is the key to</h5>
-            <ul>
-                <li>Targeting the right applications the right ways to give you a competitive edge over other
-                    candidates.
-                </li>
-                <li>Build a strong network and get recommendation for jobs in different companies.</li>
-                <li>Leave a positive mark on the recruiter before and during the interview process.</li>
-                <li>Clear the screening process, be it digital or manual, to get you the interview calls.</li>
-            </ul>
-            <a href="#" class="bottom-btn">Enquire Now</a>
-        </div>
-    </div>
-</section>
+						   <p class="easy">*Easy EMI option available</p>
+						</div>
+				   </div>
+			   </div>
+		   </div>
+	</div>
+  <section class="container-fluid">
+  	<div class="container">
+  		<div class="hero_band">
+  			<div class="row">
+  				<div class="col-md-4 col-sm-4 col-xs-12">
+  					<div class="contron-box ch">
+  						<div class="media">
+						  <div class="media-left">
+						    <a href="#">
+						      <i class="media-object sprite man"></i>
+						    </a>
+						  </div>
+						  <div class="media-body">
+						    <h4 class="media-heading mh1">Control one of the <strong>top search results</strong> for your name.</h4>
+						  </div>
+						</div>
+  					</div>
+  				</div>
+  				<div class="col-md-4 col-sm-4 col-xs-12">
+  					<div class="contron-box ch">
+  						<div class="media">
+						  <div class="media-left">
+						    <a href="#">
+						      <i class="media-object sprite network"></i>
+						    </a>
+						  </div>
+						  <div class="media-body">
+						    <h4 class="media-heading mh">Build and maintain a <strong>broader network of professionals</strong>.</h4>
+						  </div>
+						</div>
+  					</div>
+  				</div>
+  				<div class="col-md-4 col-sm-4 col-xs-12">
+  					<div class="contron-box">
+  						<div class="media">
+						  <div class="media-left">
+						    <a href="#">
+						      <i class="media-object sprite tools"></i>
+						    </a>
+						  </div>
+						  <div class="media-body">
+						    <h4 class="media-heading mh">Leverage powerful tools to find and <strong>reach the people you need</strong>.</h4>
+						  </div>
+						</div>
+  					</div>
+  				</div>
+  			</div>
+  		</div>
+  	</div>
+  </section>
+  <section class="container-fluid">
+  	<div class="container">
+  		<div class="kye-highlights">
+  			<div class="row">
+  				<div class="col-md-5 col-sm-5 col-xs-12 hidden-xs">
+  					<div class="kye-highlights-image">
+  						<img src="{% static 'shinelearn/images/marketing/linkedin/section_kh.jpg' %}" class="img-responsive" alt="" />
+  					</div>
+  				</div>
+  				<div class="col-md-7 col-sm-7 col-xs-12">
+  					<div class="kye-highlights-list">
+  						<h2>Key Highlights</h2>
+  						<ul>
+  							<li>Profile summary written by industry experts.</li>
+  							<li>Individually assigned executive to give your profile full attention.</li>
+  							<li>Detailed discussion with our experts for highly targeted profile.</li>
+  							<li>Development of document with mandatory sections which will help in making your profile 100% complete.</li>
+  							<li>Telephonic assistance in uploading the profile online.</li>
+  							<li>Additional tips to optimize your LinkedIn profile.</li>
+  						</ul>
+  					</div>
+  				</div>
+  			</div>
+  		</div>
+  	</div>
+  </section>
+  <section class="container-fluid">
+  	<div class="container">
+  		<div class="salient-features">
+  			<div class="row">
+  				<div class="col-md-12 col-sm-12 col-xs-12">
+  					<div class="salient-features-list">
+	  				    <h3 class="features">Salient Features</h3>
+	  					<div class="media">
+						  <div class="media-left">
+						    <a href="#">
+						      <i class="media-object sprite rich"></i>
+						    </a>
+						  </div>
+						  <div class="media-body">
+						    <strong class="media-heading digital">Keyword Rich for Digital Screening</strong>
+						    <span class="research">With keyword research for every profile.</span>
+						  </div>
+						</div>
+						<div class="media">
+						  <div class="media-left">
+						    <a href="#">
+						      <i class="media-object sprite leave"></i>
+						    </a>
+						  </div>
+						  <div class="media-body">
+						    <strong class="media-heading digital">Increased Visibility </strong>
+						    <span class="research">To leave no stone unturned in your job search.</span>
+						  </div>
+						</div>
+						<div class="media">
+						  <div class="media-left">
+						    <a href="#">
+						      <i class="media-object sprite increased"></i>
+						    </a>
+						  </div>
+						  <div class="media-body">
+						    <strong class="media-heading digital">Controlling Top Search Results </strong>
+						    <span class="research">Increased visibility in all search results. </span>
+						  </div>
+						</div>
+						<div class="media">
+						  <div class="media-left">
+						    <a href="#">
+						      <i class="media-object sprite build"></i>
+						    </a>
+						  </div>
+						  <div class="media-body">
+						    <strong class="media-heading digital">Broader Network of Professionals </strong>
+						    <span class="research">Build a network of professionals you can trust.</span>
+						  </div>
+						</div>
+						<div class="media">
+						  <div class="media-left">
+						    <a href="#">
+						      <i class="media-object sprite find"></i>
+						    </a>
+						  </div>
+						  <div class="media-body">
+						    <strong class="media-heading digital">Leveraging Powerful tools  </strong>
+						    <span class="research">To find and reach the people you need.</span>
+						  </div>
+						</div>
+	  				</div>
+  				</div>
+  			</div>
+  		</div>
+  	</div>
+  </section>
+  <section class="container-fluid ">
+  	<div class="container">
+  		<div class="competitive">
+  			<h4>For the extra competitive edge, we recommend</h4>
+  			<div class="row">
+	  			<div class="col-md-4 col-sm-4 col-xs-12">
+	  				<div class="extra">
+	  					<div class="box">
+	  						<i class="sprite resume"></i>
+	  					</div>
+	  					<strong>Resume Writing </strong>
+	  					<p>Professionally written resume to leave a positive mark on recruiters.</p>
+	  				</div>
+	  			</div>
+	  			<div class="col-md-4 col-sm-4 col-xs-12">
+	  				<div class="extra">
+	  					<div class="box">
+	  						<i class="sprite letter"></i>
+	  					</div>
+	  					<strong>Cover Letter  </strong>
+	  					<p>Unique & customized to your job application requirements.</p>
+	  				</div>
+	  			</div>
+	  			<div class="col-md-4 col-sm-4 col-xs-12">
+	  				<div class="extra">
+	  					<div class="box">
+	  						<i class="sprite visual"></i>
+	  					</div>
+	  					<strong>Visual Resume </strong>
+	  					<p>Designed by professionals for the right appeal.</p>
+	  				</div>
+	  			</div>
+  		   </div>
+  		   <div class="row pt3">
+  		   	<div class="col-md-2 col-sm-2 col-xs-12"></div>
+	  			<div class="col-md-4 col-sm-4 col-xs-12">
+	  				<div class="extra">
+	  					<div class="box">
+	  						<i class="sprite booster"></i>
+	  					</div>
+	  					<strong>Second Regular Resume  </strong>
+	  					<p>To target different profiles correctly.</p>
+	  				</div>
+	  			</div>
+	  			<div class="col-md-4 col-sm-4 col-xs-12">
+	  				<div class="extra">
+	  					<div class="box">
+	  						<i class="sprite second"></i>
+	  					</div>
+	  					<strong>Resume Booster   </strong>
+	  					<p>Increased visibility throughout Shine network and its affiliates.</p>
+	  				</div>
+	  			</div>
+	  			<div class="col-md-2 col-sm-2 col-xs-12"></div>
+  		   </div>
+  		</div>
+  	</div>
+  </section>  
+  <section class="container-fluid expertly">
+  	<div class="container">
+  		<div class="profile">
+  			<h5>Your expertly written LinkedIn Profile is the key to</h5>
+  			<ul>
+  				<li>Targeting the right applications the right ways to give you a competitive edge over other candidates.</li>
+  				<li>Build a strong network and get recommendation for jobs in different companies.</li>
+  				<li>Leave a positive mark on the recruiter before and during the interview process.</li>
+  				<li>Clear the screening process, be it digital or manual, to get you the interview calls.</li>
+  			</ul>
+  			<a href="#" class="bottom-btn">Enquire Now</a>
+  		</div>
+  	</div>
+  </section>
 
 
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script type="text/javascript"
-        src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="{% static 'shinelearn/js/marketing/bootstrap.min.js' %}"></script>
-<script type="text/javascript">
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'shinelearn/js/marketing/bootstrap.min.js' %}"></script>
+   <script type="text/javascript">
 
 
-    $(document).ready(function () {
-        var candid_id = $('#candidate_id').val();
-        $('#addcart').click(function (e) {
-            e.preventDefault();
-            google_analyts();
+$(document).ready(function(){
+      var candid_id =$('#candidate_id').val();
+		 $('#addcart').click(function(e){
+		e.preventDefault();
+			google_analyts();
 
-            var prod = $('#product_id').find("option:selected").val();
-            data = {
+			var prod=$('#product_id').find("option:selected").val();
+			data = {
                 "prod_id": prod,
                 "cart_type": 'cart',
                 "cv_id": '',
                 "req_options": [],
-            };
+                };
             var url = "{% url 'crmapi:lead-management' %}";
             var formEmail = $("#email").val();
             var formName = $("#name").val();
@@ -367,16 +344,16 @@
 
             var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
             var isValidEmail = regex.test(formEmail);
-            if (formNumber.length < 5) {
+            if (formNumber.length < 5 ){
                 alert("Please enter atleast 5 digit  number.");
                 return;
             }
 
-            if (!isValidEmail) {
-                alert("Please enter a valid email address.");
-                return;
+            if (!isValidEmail){
+               alert("Please enter a valid email address.");
+               return; 
             }
-            var leadData = {"name": formName, "email": formEmail, "number": formNumber, "lsource": 4};
+            var leadData = {"name":formName,"email":formEmail,"number":formNumber,"lsource":4};
 
             $.ajax({
                 async: true,
@@ -384,34 +361,34 @@
                 type: "POST",
                 data: leadData,
                 headers: {
-                    "X-CSRFToken": "{{csrf_token}}"
+                  "X-CSRFToken":"{{csrf_token}}"
                 },
-                success: function (result) {
-                    $(':input', 'form')
+                success: function(result) {
+                	$(':input','form')
                         .not(':button, :submit, :reset, :hidden')
                         .val('')
                         .prop('checked', false)
                         .prop('selected', false);
 
-                    setTimeout(function () {
-                        $('a.no-click').click(function (e) {
-                            e.preventDefault()
+                	setTimeout(function(){
+                        $('a.no-click').click(function(e) {
+                          e.preventDefault()
                         });
-                    }, 0);
+                        },0);
                 },
-                error: function (result) {
-                    alert("Something went wrong!");
+                error: function(result) {
+                  alert("Something went wrong!");
                 }
             });
 
-            $.ajax({
+			$.ajax({
                 url: '/cart/add-to-cart/',
                 type: 'POST',
                 data: data,
                 dataType: 'json',
-                success: function (json) {
-                    if (json.status == 1) {
-                        var info = 'Added to cart. You have ' + json.cart_count + ' products in cart.'
+                success: function(json) {
+                    if (json.status == 1){
+                        var info = 'Added to cart. You have '+ json.cart_count + ' products in cart.'
                         // $('#id-cart-message').text(info);
                         $('#cart-counter-id').addClass('cart-counter');
                         $('#cart-counter-id').text(json.cart_count);
@@ -419,59 +396,66 @@
                         //     alert("Product added successfully in cart.");
                         // }
                         window.location.href = json.cart_url
-                    } else if (json.status == -1) {
+                    }
+                    else if (json.status == -1){
                         alert("Something went wrong, Please try again.");
                     }
                     $('#add-to-cart').attr('disabled', false);
 
                 },
-                failure: function (response) {
+                failure: function(response){
                     alert("Something went wrong, Please try again");
                     $('#add-to-cart').attr('disabled', false);
                 },
-                error: function (xhr, ajaxOptions, thrownError) {
+                error: function(xhr, ajaxOptions, thrownError) {
                     alert("Something went wrong, Please try again");
                     $('#add-to-cart').attr('disabled', false);
                 }
             });
-        });
+     });
 
-        function google_analyts() {
-            var _gaq = _gaq || [];
-            _gaq.push(['resume._trackEvent', 'Lead', 'submit']);
-            var conversion_id = 991709191;
-            var conversion_label = "ciw9CIetw1gQh5Dx2AM";
-            var ga_code = document.createElement('div');
-            ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="https://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
-            document.body.appendChild(ga_code);
-            return false;
+		function google_analyts(){
+	     var _gaq = _gaq || [];
+	_gaq.push(['resume._trackEvent','Lead','submit']);
+		var conversion_id = 991709191;
+		var conversion_label = "ciw9CIetw1gQh5Dx2AM";
+		var ga_code = document.createElement('div');
+		ga_code.innerHTML = '<img height="1" width="1" style="border-style:none;" alt="" src="https://www.googleadservices.com/pagead/conversion/' + conversion_id + '/?label=' + conversion_label + '&amp;guid=ON&amp;script=0"/>';
+		document.body.appendChild(ga_code);
+		return false;
 
-        }
-    });
-</script>
-{% block zendesk %}
-    <!--Start of Zendesk Chat Script-->
-    <script type="text/javascript">
-        window.$zopim || (function (d, s) {
-            var z = $zopim = function (c) {
-                z._.push(c)
-            }, $ = z.s =
-                d.createElement(s), e = d.getElementsByTagName(s)[0];
-            z.set = function (o) {
-                z.set._.push(o)
-            };
-            z._ = [];
-            z.set._ = [];
-            $.async = !0;
-            $.setAttribute("charset", "utf-8");
-            $.src = "https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";
-            z.t = +new Date;
-            $.type = "text/javascript";
-            e.parentNode.insertBefore($, e)
-        })(document, "script");
+}
+});
     </script>
-    <!--End of Zendesk Chat Script-->
-{% endblock zendesk %}
+      {% block zendesk %}
+    <!--Start of Zendesk Chat Script-->
+      <script type="text/javascript">
+      window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+      d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+      _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+      $.src="https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";z.t=+new Date;$.
+      type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+  const candidateId = '{{ request.session.candidate_id}}';
 
-</body>
+          if (candidateId) {
+              const full_name = '{{ request.session.full_name }}';
+              const  email ='{{ request.session.email }}';
+              const mobile_no = '{{ request.session.mobile_no }}';
+
+
+              console.log('request   ', full_name, email, mobile_no);
+              $zopim(function () {
+                  $zopim.livechat.set({
+                      language: 'en',
+                      name: full_name ? full_name : '',
+                      email: email ? email : '',
+                      phone: mobile_no ? mobile_no : ''
+                  });
+              });
+          }
+      </script>
+      <!--End of Zendesk Chat Script-->
+    {% endblock zendesk %}
+
+  </body>
 </html>

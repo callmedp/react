@@ -27,7 +27,8 @@ PAYMENT_MODE = (
     (7, 'CC-Avenue-International'),
     (8, 'Debit Card'),
     (9, 'Credit Card'),
-    (10, 'Net Banking'),)
+    (10, 'Net Banking'),
+    (11, "PayLater"))
 
 
 OI_OPS_STATUS = (
