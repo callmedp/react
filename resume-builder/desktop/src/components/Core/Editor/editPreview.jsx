@@ -8,9 +8,6 @@ import RightSection from './RightSection/rightSection.jsx'
 import {withRouter} from "react-router-dom";
 
 class EditPreview extends Component {
-    constructor(props) {
-        super(props)
-    }
 
     render() {
         return (

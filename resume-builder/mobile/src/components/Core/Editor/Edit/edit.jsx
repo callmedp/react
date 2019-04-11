@@ -8,7 +8,7 @@ export default class Edit extends Component {
     render() {
         return (
             <div className="edit-section">
-                <Header/>
+                <Header page={'edit'}/>
                 <LeftSideBar/>
                 <RightSection/>
             </div>

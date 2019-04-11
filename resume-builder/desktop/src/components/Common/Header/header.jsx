@@ -36,7 +36,7 @@ export default class Header extends Component {
     
     render(){
         return(
-            <header className="home-nav-fixed">
+            <header className={this.props.getclass+" home-nav-fixed"}>
             	<div className="container">
             		<a className="container--logo"></a>
                     <ul className="home-links">

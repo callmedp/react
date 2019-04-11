@@ -11,11 +11,14 @@ import {
     renderDynamicSelect
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 
+<<<<<<< HEAD:resume-builder/desktop/src/components/Core/Editor/RightSection/UserDetails/PersonalInfo/personalInfo.jsx
 import {
     required,
     phoneNumber,
     email
 } from "../../../../../FormHandler/formValidations.js";
+=======
+>>>>>>> 965a2a5ee483958b41faa199ec9653eb6fe0a2ee:resume-builder/src/components/Core/Editor/RightSection/UserDetails/PersonalInfo/personalInfo.jsx
 
 import moment from 'moment';
 
@@ -85,7 +88,7 @@ export class PersonalInfo extends Component {
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, enableReinitialize, personalInfo} = this.props;
+        const {handleSubmit, personalInfo} = this.props;
         return (
             <div>
                 <section className="head-section">
@@ -104,8 +107,7 @@ export class PersonalInfo extends Component {
                                             <span className="icon-name"></span>
                                         </div>
                                         <Field component={renderField} type={"text"} name="first_name"/>
-                                    </div>
-                                </fieldset>
+                                    </div>                                </fieldset>
                                 <fieldset>
                                     <label>Last Name</label>
                                     <div className="input-group">
@@ -218,9 +220,9 @@ export class PersonalInfo extends Component {
 
                                 {
                                     this.state.imageURI || personalInfo.image ?
-                                        <img className='img-responsive'
+                                        <img alt={"User Profile"} className='img-responsive'
                                              src={this.state.imageURI || personalInfo.image}/> :
-                                        <img className="img-responsive"
+                                        <img alt={"User Profile"} className="img-responsive"
                                              src="/media/static/react/assets/images/upload-image.jpg"/>
                                 }
                                 <input accept="image/*" type="file" name="displayPicture"
@@ -267,17 +269,17 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchPersonalInfo())
         },
         "onSubmit": (personalDetails, imageURL) => {
-            const {gender, date_of_birth, extracurricular} = personalDetails
+            const {gender, date_of_birth, extracurricular} = personalDetails;
             personalDetails = {
                 ...personalDetails,
                 ...{
-                    'date_of_birth': date_of_birth && moment(date_of_birth).format('YYYY-MM-DD') || '',
-                    'gender': gender && gender['value'] || '',
+                    'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
+                    'gender': (gender && gender['value']) || '',
                     'image': imageURL,
-                    'extracurricular': (extracurricular || []).map(el => el.value).join(',')
+                    'extracurricular': extracurricular instanceof Array ?
+                        (extracurricular || []).map(el => el.value).join(',') : extracurricular
                 }
             }
-            console.log('---', personalDetails);
             return new Promise((resolve, reject) => {
                 dispatch(actions.updatePersonalInfo({personalDetails, resolve, reject}));
             })

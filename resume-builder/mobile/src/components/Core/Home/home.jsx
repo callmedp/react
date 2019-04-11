@@ -1,12 +1,19 @@
 import React, {Component} from 'react';
 import Header from '../../Common/Header/header.jsx';
 import Footer from '../../Common/Footer/footer.jsx';
-
+import {connect} from "react-redux";
 import './home.scss'
+import * as actions from "../../../store/landingPage/actions";
 import Banner from './Banner/banner.jsx';
 import ResumeSlider from './ResumeSlider/resumeSlider.jsx';
 import Testimonial from './Testimonial/testimonial.jsx';
-export default class Home extends Component {
+
+class Home extends Component {
+    
+    constructor(props) {
+        super(props);
+    }
+    
     render() {
         return (
             <div className="home">
@@ -277,3 +284,14 @@ export default class Home extends Component {
     }
 
 }
+
+const mapStateToProps = (state) => {
+    return {}
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

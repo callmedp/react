@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
 import './education.scss'
 import {Field, reduxForm} from "redux-form";
+<<<<<<< HEAD:resume-builder/desktop/src/components/Core/Editor/RightSection/UserDetails/Education/education.jsx
 import {renderField, renderTextArea, renderSelect, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
 import {required} from "../../../../../FormHandler/formValidations"
+=======
+import {renderField, renderSelect, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
+
+>>>>>>> 965a2a5ee483958b41faa199ec9653eb6fe0a2ee:resume-builder/src/components/Core/Editor/RightSection/UserDetails/Education/education.jsx
 import * as actions from "../../../../../../store/education/actions";
 import {connect} from "react-redux";
 import moment from "moment";
@@ -24,7 +29,7 @@ class Education extends Component {
     }
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, enableReinitialize, education} = this.props;
+        const {handleSubmit, education} = this.props;
 
         return (
             <div>
@@ -61,7 +66,11 @@ class Education extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-company"></span>
                                         </div>
+<<<<<<< HEAD:resume-builder/desktop/src/components/Core/Editor/RightSection/UserDetails/Education/education.jsx
                                         <Field component={renderField}  type={"text"} validate={required} name="specialization"/>
+=======
+                                        <Field component={renderField} type={"text"} name="specialization"/>
+>>>>>>> 965a2a5ee483958b41faa199ec9653eb6fe0a2ee:resume-builder/src/components/Core/Editor/RightSection/UserDetails/Education/education.jsx
                                     </div>
                                 </fieldset>
                             </div>
@@ -96,7 +105,7 @@ class Education extends Component {
                             </div>
 
                             <div className="flex-container">
-                                
+
                                 <fieldset className="custom">
                                     <label>Course Type</label>
                                     <Field component={renderSelect} validate={required} type={"text"} name="course_type"
@@ -152,8 +161,8 @@ const mapDispatchToProps = (dispatch) => {
             userEducation = {
                 ...userEducation,
                 ...{
-                    start_date: start_date && moment(start_date).format('YYYY-MM-DD') || '',
-                    end_date: end_date && moment(end_date).format('YYYY-MM-DD') || '',
+                    start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
+                    end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || '',
                     course_type: course_type && course_type.value
                 }
             };

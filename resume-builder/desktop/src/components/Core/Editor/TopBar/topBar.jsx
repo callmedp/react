@@ -3,12 +3,6 @@ import './topBar.scss'
 
 export default class TopBar extends Component {
 
-    constructor(props) {
-        super(props);
-
-    }
-
-
     render() {
         const {page} = this.props;
         return (
