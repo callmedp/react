@@ -13,6 +13,10 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
+        this.addclass = this.addclass.bind(this);
+        this.state ={
+            'scrolled':false
+        }
     }
 
     scrollTo(elem) {
@@ -23,6 +27,21 @@ class Home extends Component {
           offset: -63
         })
     }
+
+    addclass(){
+        let scrollpos = window.scrollY;
+        if(scrollpos > 60){
+            this.setState({
+                'scrolled':true
+            })
+        }
+        else {
+            this.setState({
+                'scrolled':false
+            })
+        }
+    }
+
     componentDidMount() {
 
         this.props.getCandidateId()
@@ -33,6 +52,7 @@ class Home extends Component {
         Events.scrollEvent.register('end', function () {
           console.log("end", arguments);
         });
+        window.addEventListener('scroll',this.addclass);
     
     }
 
@@ -47,7 +67,7 @@ class Home extends Component {
             <div class="nav-fixed">
                 
                 {/* <Link to={'/resume-builder/edit/'}>Customize Your Resume</Link> */}
-                <Header/>
+                <Header getclass={this.state.scrolled?'color-change':''}/>
                 <Banner/>
                 <section className="section-container">
                     <h2>Professional advantage</h2>
