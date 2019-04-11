@@ -1,12 +1,7 @@
 import {SAVE_USER_LANGUAGE} from "../actions/actionTypes";
 
 const initialState = {
-    list: [{
-        "candidate_id": '',
-        "id": '',
-        "name": 'Python',
-        "proficiency": 5
-    }]
+    list: []
 };
 
 

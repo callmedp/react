@@ -19,7 +19,7 @@ from shine.core import ShineCandidateDetail
 
 from .education_specialization import educ_list
 # third party imports
-from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateAPIView)
+from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView)
 from rest_framework.views import (APIView)
 from rest_framework.parsers import (FormParser, MultiPartParser)
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -412,7 +412,7 @@ class CandidateLanguageListCreateView(ListCreateAPIView):
         return super(CandidateLanguageListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class CandidateLanguageRetrieveUpdateView(RetrieveUpdateAPIView):
+class CandidateLanguageRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
     authentication_classes = ()
     permission_classes = ()
 
