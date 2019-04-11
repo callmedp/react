@@ -1,2 +1,0 @@
-export const GET_CANDIDATE_ID = 'GET_CANDIDATE_ID'
-
