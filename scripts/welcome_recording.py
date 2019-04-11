@@ -77,7 +77,6 @@ def fetch_call_recording_links():
     current_time = timezone.now() - timedelta(days=1)
     welcome_calls = WelcomeCallOperation.objects.filter(modified__gte=current_time)
     for wc in welcome_calls:
-        print(wc.id)
         order = wc.order
         call_rec_json = order.welcome_call_records
         if not call_rec_json:
