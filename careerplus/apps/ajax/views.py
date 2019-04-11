@@ -1,17 +1,20 @@
 import json
 import logging
 import datetime
-from django.db.models import Sum
-
+import requests
 from decimal import Decimal
+from core.library.haystack.query import SQS
+
+#DJANGO IMPORTS
+from django.db.models import Sum
 from django.views.generic import View, TemplateView
 from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.conf import settings
-from core.library.haystack.query import SQS
 
+#LOCAL IMPORTS
 from cms.models import Page
 from cms.mixins import LoadMoreMixin
 from blog.models import Blog, Comment
@@ -812,3 +815,81 @@ class UniversityCourseLoadMoreView(TemplateView):
             'category_obj': self.cat_obj,
             'PRODUCT_PAGE_SIZE': self.PRODUCT_PAGE_SIZE})
         return context
+
+class WelcomeServiceCallView(View):
+    # permission_classes = (S)
+
+    def post(self, request, *args, **kwargs):
+        data = {'msg': 'Failure', 'status': 0}
+        req_dict = {}
+        order_id = self.request.POST.get('o_id','')
+        url = settings.EXOITEL.get('url', '')
+        token = settings.EXOITEL.get('token', '')
+        sid = settings.EXOITEL.get('sid', '')
+        caller_id = settings.EXOITEL.get('callerid', '')
+        user = request.user
+
+        if not request.is_ajax():
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        order = Order.objects.filter(id=order_id).first()
+        welc = order.welcomecalloperation_set.last()
+
+        if not order or not order.mobile or not user or not user.contact_number or not welc:
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        if not user.is_superuser and order.assigned_to != welc.assigned_to:
+            data.update({'msg':'You are not allowed'})
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        url_to_hit = url.format(sid=sid, token=token)
+        req_dict.update({'To': '0'+str(order.mobile),'From': user.contact_number, 'CallerId': caller_id})
+
+        try:
+            resp = requests.post(url_to_hit, data=req_dict)
+            status = resp.status_code
+            resp_json = resp.json()
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        if not status == 200:
+            logging.getLogger('info_log').info(str(resp_json))
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        call_record = resp_json.get('Call', '')
+        if not call_record:
+            logging.getLogger('info_log').info('{}-Call Record not found'.format(order.id))
+            data.update({'msg': "Connected", 'status': 1})
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        recording_id = call_record.get('Sid', '')
+        if not recording_id:
+            logging.getLogger('info_log').info('{}-Recording id not found'.format(order.id))
+            data.update({'msg': "Connected", 'status': 1})
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        prev_records = order.welcome_call_records
+
+        if prev_records:
+            rec_dict = json.loads(prev_records)
+            rec_dict.update({recording_id: ''})
+            rec_dict = json.dumps(rec_dict)
+        else:
+            rec_dict = json.dumps({recording_id: ''})
+
+        order.welcome_call_records = rec_dict
+        order.save()
+        data.update({'msg': "Connected", 'status': 1})
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+
+
+
+
+
+
+
+
+

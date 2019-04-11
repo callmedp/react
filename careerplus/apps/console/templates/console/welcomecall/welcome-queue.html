@@ -133,9 +133,9 @@
       </div>
     </div>
 
-    
+
     <div class="clearfix"></div>
-    
+
     <div class="row">
 
       <div class="col-md-12 col-sm-12 col-xs-12">
@@ -195,7 +195,7 @@
                     <th class="column-title">#OrderId</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Email</th>
-                    <th class="column-title">Mobile</th>
+                    <th class="column-title">Contact</th>
                     <th class="column-title">Follow Up</th>
                     <th class="column-title">Category</th>
                     <th class="column-title">Sub Category</th>
@@ -221,7 +221,9 @@
                       <td>{{obj.number}}</td>
                       <td>{{obj.first_name}} {{obj.last_name}}</td>
                       <td>{{obj.email}}</td>
-                      <td>{{obj.country_code}} {{obj.mobile}}</td>
+
+                        <td><button id="{{obj.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.id}});"></button></td>
+                      <!--<td>{{obj.country_code}} {{obj.mobile}}</td>-->
                       <td>
                         {% if obj.wc_follow_up %}
                           {{obj.wc_follow_up}}
@@ -249,7 +251,7 @@
               </table>
               </form>
             </div>
-                   
+
             {% block main_pagination %}
                 <div class="main_pagination">
                   {% if page %}
@@ -280,7 +282,7 @@
                             {% for page_number in middle %}
                                 <li class="paginate_button {% ifequal page.number page_number %} active disable {% endifequal %}">
                                     <a href="?page={{ page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}" >{{ page_number }}</a>
-                                    
+
                                 </li>
                             {% endfor %}
                         {% endif %}
@@ -307,8 +309,8 @@
 
       </div><!-- main_pagination end here -->
       {% endblock main_pagination %}
-     
-                
+
+
           </div>
         </div>
       </div>
@@ -320,7 +322,7 @@
 
 {% endblock pagecontent %}
 
-        
+
 {% block js_block %}
   {{ block.super }}
 
@@ -334,4 +336,30 @@
   <script type="text/javascript" src="{% static 'console/js/order/ltv.js' %}"></script>
   {% endcompress %}
 
+<script>
+function makeCallBtn(id) {
+    if (id) {
+        $('#' + id + 'callingBtn').css('color','orange');
+        $.ajax({
+            type: 'post',
+            url: '/ajax/service-call/',
+            data: {
+                'o_id': id
+            },
+            success: function(response) {
+                if (response.status == 1) {
+                    $('#' + id + 'callingBtn').css("color","green");
+                     $('#' + id + 'callingBtn').attr('title',response.msg);
+
+                } else {
+                    $('#' + id + 'callingBtn').css('color','red');
+                       $('#' + id + 'callingBtn').attr('title',response.msg);
+
+                }
+            }
+        })
+    }
+    return false;
+}
+</script>
 {% endblock js_block %}
