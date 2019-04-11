@@ -47,8 +47,13 @@ class Award extends Component {
                             <div className="flex-container">
                                 <fieldset className="error">
                                     <label>Title</label>
-                                    <Field component={renderField} type={"text"} name="title"
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-awards-gr"></span>
+                                        </div>
+                                        <Field component={renderField} type={"text"} name="title"
                                            className="input-control"/>
+                                    </div>
                                 </fieldset>
                                 <fieldset>
                                     <label>Date</label>

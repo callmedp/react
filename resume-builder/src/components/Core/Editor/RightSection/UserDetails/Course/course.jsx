@@ -47,7 +47,12 @@ class Course extends Component {
                             <div className="flex-container">
                                 <fieldset>
                                     <label>Course Name</label>
-                                    <Field component={renderField} type={"text"} name="name_of_certification"/>
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-courses-gr"></span>
+                                        </div>
+                                        <Field component={renderField} type={"text"} name="name_of_certification" className={"input-control"}/>
+                                    </div>
                                 </fieldset>
                                 <fieldset>
                                     <label>Completion Year</label>

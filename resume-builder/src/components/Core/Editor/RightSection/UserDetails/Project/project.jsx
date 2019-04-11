@@ -48,7 +48,13 @@ class Project extends Component {
                             <div className="flex-container">
                                 <fieldset>
                                     <label>Project Name</label>
-                                    <Field component={renderField} type={"text"} name="project_name"/>
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-projects-gr"></span>
+                                        </div>
+                                        <Field component={renderField} type={"text"} name="project_name"
+                                               className={"input-control"}/>
+                                    </div>
                                 </fieldset>
                             </div>
                             <div className="flex-container">

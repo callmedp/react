@@ -103,30 +103,6 @@
     @include icon-inblock (21px, 21px, -441px -75px);
 }
 
-.icon-linkedin {
-    @include icon-inblock (20px, 22px, -151px -37px);
-}
-
-.icon-facebook {
-    @include icon-inblock (14px, 25px, -191px -39px);
-}
-
-.icon-mobile {
-    @include icon-inblock (19px, 19px, -227px -39px);
-}
-
-.icon-address {
-    @include icon-inblock (15px, 21px, -114px -40px);
-}
-
-.icon-email {
-    @include icon-inblock (19px, 14px, -70px -43px);
-}
-
-.icon-date {
-    @include icon-inblock (19px, 19px, -480px -74px);
-}
-
 .icon-plus {
     @include icon-inblock (12px, 12px, -451px 0);
 }
@@ -220,7 +196,7 @@
 }
 
 .icon-name {
-    @include icon-inblock (15px, 19px, -88px -139px);
+    @include icon-inblock (24px, 19px, -85px -139px);
 }
 
 .icon-surname {
@@ -228,33 +204,61 @@
 }
 
 .icon-company {
-    @include icon-inblock (18px, 18px, -145px -139px);
+    @include icon-inblock (24px, 18px, -143px -139px);
 }
 
 .icon-designation {
-    @include icon-inblock (20px, 18px, -172px -139px);
+    @include icon-inblock (24px, 18px, -170px -139px);
+}
+
+.icon-linkedin {
+    @include icon-inblock (24px, 22px, -149px -37px);
+}
+
+.icon-facebook {
+    @include icon-inblock (24px, 25px, -189px -39px);
+}
+
+.icon-mobile {
+    @include icon-inblock (24px, 19px, -225px -39px);
+}
+
+.icon-address {
+    @include icon-inblock (24px, 21px, -111px -40px);
+}
+
+.icon-email {
+    @include icon-inblock (24px, 14px, -67px -43px);
+}
+
+.icon-date {
+    @include icon-inblock (24px, 19px, -477px -74px);
 }
 
 .icon-language-gr {
-    @include icon-inblock (22px, 19px, -88px -165px);
+    @include icon-inblock (24px, 19px, -88px -165px);
 }
 
 .icon-skills-gr {
-    @include icon-inblock (20px, 20px, -198px -139px);
+    @include icon-inblock (24px, 20px, -198px -139px);
 }
 
 .icon-awards-gr {
-    @include icon-inblock (17px, 20px, -118px -165px);
+    @include icon-inblock (24px, 20px, -118px -165px);
 }
 
 .icon-courses-gr {
-    @include icon-inblock (17px, 19px, -144px -165px);
+    @include icon-inblock (24px, 19px, -144px -165px);
 }
 
 .icon-projects-gr {
-    @include icon-inblock (17px, 20px, -170px -165px);
+    @include icon-inblock (24px, 20px, -170px -165px);
 }
 
 .icon-refrences-gr {
-    @include icon-inblock (18px, 18px, -196px -166px);
+    @include icon-inblock (24px, 18px, -196px -166px);
+}
+
+.icon-blank {
+    @include icon-inblock (24px, 18px, -505px -483px);
 }
