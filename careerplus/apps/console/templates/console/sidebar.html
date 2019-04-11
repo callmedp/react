@@ -200,21 +200,21 @@
           {% endif %}
         </ul>
     {% elif request.user|has_group:OPERATION_GROUP_LIST %} 
-        <h3>Product</h3>
-        <ul class="nav side-menu">
-          {% if perms.shop.console_change_product %}
-            <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
-              <ul class="nav child_menu">
-                <li><a href="{% url 'console:product-list' %}">Product</a></li>
-              </ul>
-            </li>
-            
-          {% endif %}
-        </ul>
+        {% if perms.shop.console_change_product %}
+          <h3>Product</h3>
+          <ul class="nav side-menu">
+              <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                  <li><a href="{% url 'console:product-list' %}">Product</a></li>
+                </ul>
+              </li>
+              
+          </ul>
+        {% endif %}
     {% elif request.user|has_group:VENDOR_GROUP_LIST %} 
+        {% if perms.shop.console_change_product %}
         <h3>Product</h3>
         <ul class="nav side-menu">
-          {% if perms.shop.console_change_product %}
             <li><a><i class="fa fa-book"></i> Product <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
                 <li><a href="{% url 'console:screenproduct-list' %}">Product</a></li>
@@ -228,8 +228,8 @@
               </ul>
             </li>
             
-          {% endif %}
         </ul>
+        {% endif %}
     {% elif request.user|has_group:FINANCE_GROUP_LIST %} 
         <h3>Product</h3>
         <ul class="nav side-menu">
@@ -276,18 +276,20 @@
       {% endif %}
 
           <ul class="nav side-menu">
-        <li><a><i class="fa fa-list-alt"></i> Wallet <span class="fa fa-chevron-down"></span></a>
-          <ul class="nav child_menu">
+       
             {% if perms.wallet.console_add_remove_wallet_point %}
-            <li>
-              <a href="{% url 'console:walletrewards' %}"><i class="fa fa-wallet"></i>Add/Remove Points</a>
-            </li>
-            <li>
-              <a href="{% url 'console:wallethistory' %}"><i class="fa fa-wallet"></i>Wallet History</a>
-            </li>
-            {% endif %}
-          </ul>
-        </li>
+             <li><a><i class="fa fa-list-alt"></i> Wallet <span class="fa fa-chevron-down"></span></a>
+            <ul class="nav child_menu">
+              <li>
+                <a href="{% url 'console:walletrewards' %}"><i class="fa fa-wallet"></i>Add/Remove Points</a>
+              </li>
+              <li>
+                <a href="{% url 'console:wallethistory' %}"><i class="fa fa-wallet"></i>Wallet History</a>
+              </li>
+            
+            </ul>
+          </li>
+        {% endif %}
         {% comment %}
         {% if is_admin %}
             <li><a><i class="fa fa-edit"></i> CMS <span class="fa fa-chevron-down"></span></a>
@@ -362,7 +364,8 @@
       </ul>
       </li>
       {% endif %}
-      <li><a><i class="fa fa-list-alt"></i> Queue <span class="fa fa-chevron-down"></span></a>
+      {% if perms.order.can_show_order_queue or perms.order.can_show_midout_queue or perms.order.can_show_inbox_queue or perms.order.can_show_approval_queue or perms.order.can_show_rejectedbyadmin_queue  or perms.order.can_show_rejectedbycandidate_queue or perms.order.can_show_booster_queue or perms.order.can_show_domestic_profile_update_queue or perms.order.can_show_domestic_profile_approval_queue or perms.order.can_show_international_profile_update_queue or perms.order.can_show_international_profile_approval_queue or perms.order.can_show_allocated_queue or perms.order.can_show_closed_oi_queue or perms.order.can_show_partner_inbox_queue or perms.order.can_show_hold_orderitem_queue or perms.order.can_show_varification_report_queue %}
+        <li><a><i class="fa fa-list-alt"></i> Queue <span class="fa fa-chevron-down"></span></a>
         <ul class="nav child_menu">
 
             {% if perms.order.can_show_order_queue %}
@@ -442,9 +445,9 @@
                 <a href="{% url "console:partner:varificationreports" %}">Verification Reports</a>
             </li>
             {% endif %}
-            
         </ul>
       </li>
+      {% endif %}
 
 
       </ul>
