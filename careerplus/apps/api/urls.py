@@ -29,16 +29,13 @@ urlpatterns = [
     url(r'^v1/shine-data-for-flow/$',
         views.ShineDataFlowDataApiView.as_view(),
         name='shine-data-for-flow'),
-    url(r'^v1/login/$',
-        views.APILoginView.as_view(),
-        name='v1.api-login'),
     url(r'^v1/media-upload/$',
         views.MediaUploadView.as_view(),
         name='v1.media-upload'),
     url(r'^v1/resume-product-id/$',
         views.ResumeBuilderProductView.as_view(),
-        name='v1.resume-product-id')
-]
+        name='v1.resume-product-id'),
+    url(r'^v1/candidate-login/$',views.ShineCandidateLoginAPIView.as_view(),name='v1.api-login'),
 ]
 
 if settings.DEBUG:

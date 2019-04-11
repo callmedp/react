@@ -1,5 +1,6 @@
 # python imports
 from datetime import datetime
+
 # django imports
 from django.template.loader import get_template
 
@@ -14,10 +15,13 @@ from resumebuilder.api.core.serializers import (CandidateSerializer, SkillSerial
                                                 CandidateLanguageSerializer)
 
 from resumebuilder.mixins import (SessionManagerMixin)
+
 # inter app imports
 from shine.core import ShineCandidateDetail
-
 from .education_specialization import educ_list
+from shared.rest_addons.authentication import ShineUserAuthentication
+from shared.permissions import IsObjectOwner
+
 # third party imports
 from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView)
 from rest_framework.views import (APIView)
@@ -39,12 +43,14 @@ class CandidateListCreateView(ListCreateAPIView):
 
 
 class CandidateRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
     lookup_field = 'candidate_id'
     lookup_url_kwarg = 'pk'
     serializer_class = CandidateSerializer
     queryset = Candidate.objects.all()
+
+    owner_fields = ['candidate_id']
 
     # def get(self, request, *args, **kwargs):
     #     import ipdb;
@@ -77,10 +83,11 @@ class SkillListCreateView(ListCreateAPIView):
 
 
 class SkillRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
     serializer_class = SkillSerializer
+
+    owner_fields = ['candidate_id']
 
     def get_queryset(self):
         skill_id = int(self.kwargs.get('pk'))
