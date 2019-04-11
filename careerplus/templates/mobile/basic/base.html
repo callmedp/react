@@ -12,13 +12,13 @@
     {% block django_meta %}
     {% endblock django_meta %}
     {% block canonical_url %}
-      <link rel="canonical" href="{{ request.build_absolute_uri }}">
+      <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
    {% endblock canonical_url %}
-        
+
     <title> {% block title %}Shine Learning{% endblock title %}</title>
-    
+
     {% block css_section %}
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
         {% compress css %}
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/global.scss' %}" rel="stylesheet">
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/icons.scss' %}" rel="stylesheet">
@@ -87,11 +87,11 @@
                     <!-- header menu Icon Starts here -->
                    <div class="main-menu w100fl">
                     <div class="pull-left">
-                        <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button" ></a> 
+                        <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button" ></a>
                         {% block back_icon %}
                            <a href="/" class="icon-logo pull-left"></a>
                         {% endblock back_icon %}
-                        
+
                     </div><!-- / Left side Icon ends here -->
 
                    <div class="pull-right">
@@ -144,7 +144,7 @@
             data-client='324ed0abb0694b0c66a6daecb178352d'>
         </script>
         {% endblock johukum %} -->
-        
+
     {% endblock js_section %}
 
     {% block zendesk %}
@@ -155,14 +155,35 @@
           _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
           $.src="https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";z.t=+new Date;$.
           type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
-        </script>  
+
+
+          const candidateId = '{{ request.session.candidate_id}}';
+
+          if (candidateId) {
+              const full_name = '{{ request.session.full_name }}';
+              const  email ='{{ request.session.email }}';
+              const mobile_no = '{{ request.session.mobile_no }}';
+
+
+              console.log('request   ', full_name, email, mobile_no);
+              $zopim(function () {
+                  $zopim.livechat.set({
+                      language: 'en',
+                      name: full_name ? full_name : '',
+                      email: email ? email : '',
+                      phone: mobile_no ? mobile_no : ''
+                  });
+              });
+          }
+        </script>
+
         <!--End of Zendesk Chat Script-->
     {% endblock zendesk %}
     {% block banner_ads_bottom %}
         <!-- /1198510/ShineLearning_1x1_mobile -->
         <div id='div-gpt-ad-1509431552856-0'>
         <script>
-        googletag.cmd.push(function() { googletag.display('div-gpt-ad-1509431552856-0'); });
+        
         {% if marketing_popup_html %}
             $('.marketing-popup').modal();
         {% endif %}

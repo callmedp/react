@@ -4,6 +4,7 @@ import {Field, reduxForm} from "redux-form";
 import * as actions from "../../../../../../store/course/actions";
 import {connect} from "react-redux";
 import {renderField, datepicker} from "../../../../../FormHandler/formFieldRenderer.jsx";
+import {required} from "../../../../../FormHandler/formValidations"
 import moment from "moment";
 
 
@@ -51,7 +52,7 @@ class Course extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-courses-gr"></span>
                                         </div>
-                                        <Field component={renderField} type={"text"} name="name_of_certification" className={"input-control"}/>
+                                        <Field component={renderField} validate={required} type={"text"} name="name_of_certification" className={"input-control"}/>
                                     </div>
                                 </fieldset>
                                 <fieldset>
@@ -60,7 +61,7 @@ class Course extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-date"></span>
                                         </div>
-                                        <Field component={datepicker} type={"date"} name="year_of_certification"
+                                        <Field component={datepicker} validate={required} type={"date"} name="year_of_certification"
                                                className="input-control"/>
 
                                     </div>

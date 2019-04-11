@@ -47,7 +47,6 @@ class CartView(TemplateView, CartMixin, UserMixin):
 
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
-
         cart_obj = self.getCartObject()
         line_items_list = cart_obj.lineitems.filter(parent=None)
         type_flow = -1
@@ -55,7 +54,7 @@ class CartView(TemplateView, CartMixin, UserMixin):
             line_item = line_items_list[0];
             type_flow = int(line_item.product.type_flow)
         #  resume builder flow handle
-        if type_flow == 13:
+        if type_flow == 16:
             cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
         else:
             cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
@@ -78,8 +77,6 @@ class AddToCartView(View, CartMixin):
         return super(AddToCartView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        # import ipdb;
-        # ipdb.set_trace();
         # if not request.is_ajax():
         #     return HttpResponseForbidden()
         data = {"status": -1}
@@ -511,7 +508,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
             line_item = line_item_list[0]
             type_flow = int(line_item.product.type_flow)
         # resume builder flow handle
-        if type_flow == 13:
+        if type_flow == 16:
             cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
         else:
             cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
@@ -601,7 +598,7 @@ class UpdateDeliveryType(View, CartMixin):
                     type_flow = int(line_item.product.type_flow)
 
                 # resume builder flow handle
-                if type_flow == 13:
+                if type_flow == 16:
                     cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
                 else:
                     cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)

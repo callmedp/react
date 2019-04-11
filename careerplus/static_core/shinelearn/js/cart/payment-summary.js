@@ -74,6 +74,7 @@ function JSApplyDiscount() {
 
 function JSApplyPoint() {
   var alert_message = '';
+  debugger
   if ($('#loyalty_point').val().trim()){
     $('#loyalty_point').parent().removeClass('error');
       try {

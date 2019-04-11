@@ -1,5 +1,6 @@
 # python imports
 from datetime import datetime
+
 # django imports
 from django.template.loader import get_template
 
@@ -14,16 +15,20 @@ from resumebuilder.api.core.serializers import (CandidateSerializer, SkillSerial
                                                 CandidateLanguageSerializer)
 
 from resumebuilder.mixins import (SessionManagerMixin)
+
 # inter app imports
 from shine.core import ShineCandidateDetail
-
 from .education_specialization import educ_list
+from shared.rest_addons.authentication import ShineUserAuthentication
+from shared.permissions import IsObjectOwner
+
 # third party imports
-from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateAPIView)
+from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView)
 from rest_framework.views import (APIView)
 from rest_framework.parsers import (FormParser, MultiPartParser)
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 
 class CandidateListCreateView(ListCreateAPIView):
@@ -39,8 +44,8 @@ class CandidateListCreateView(ListCreateAPIView):
 
 
 class CandidateRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
     lookup_field = 'candidate_id'
     lookup_url_kwarg = 'pk'
     serializer_class = CandidateSerializer
@@ -65,8 +70,8 @@ class CandidateRetrieveUpdateView(RetrieveUpdateAPIView):
 
 
 class SkillListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
 
@@ -77,9 +82,8 @@ class SkillListCreateView(ListCreateAPIView):
 
 
 class SkillRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
     serializer_class = SkillSerializer
 
     def get_queryset(self):
@@ -88,14 +92,10 @@ class SkillRetrieveUpdateView(RetrieveUpdateAPIView):
 
 
 class CandidateShineProfileRetrieveUpdateView(APIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
-
-        import ipdb;
-
-        ipdb.set_trace();
         # candidate_email = request.session.get('email', '')
         candidate_email = 'amanpreet1040@gmail.com'
         if not candidate_email:
@@ -251,8 +251,8 @@ class CandidateExperienceListCreateView(ListCreateAPIView):
 
 
 class CandidateExperienceRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
     queryset = CandidateExperience.objects.all()
     serializer_class = CandidateExperienceSerializer
 
@@ -275,9 +275,8 @@ class CandidateEducationListCreateView(ListCreateAPIView):
 
 
 class CandidateEducationRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
     serializer_class = CandidateEducationSerializer
 
     def get_queryset(self):
@@ -298,9 +297,8 @@ class CandidateCertificationListCreateView(ListCreateAPIView):
 
 
 class CandidateCertificationRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
     serializer_class = CandidateCertificationSerializer
 
     def get_queryset(self):
@@ -321,9 +319,8 @@ class CandidateProjectListCreateView(ListCreateAPIView):
 
 
 class CandidateProjectRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
     serializer_class = CandidateProjectSerializer
 
     def get_queryset(self):
@@ -344,9 +341,8 @@ class CandidateReferenceListCreateView(ListCreateAPIView):
 
 
 class CandidateReferenceRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
     serializer_class = CandidateReferenceSerializer
 
     def get_queryset(self):
@@ -367,9 +363,8 @@ class CandidateSocialLinkListCreateView(ListCreateAPIView):
 
 
 class CandidateSocialLinkRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
     serializer_class = CandidateSocialLinkSerializer
 
     def get_queryset(self):
@@ -390,9 +385,8 @@ class CandidateAchievementListCreateView(ListCreateAPIView):
 
 
 class CandidateAchievementRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
     serializer_class = CandidateAchievementSerializer
 
     def get_queryset(self):
@@ -412,10 +406,9 @@ class CandidateLanguageListCreateView(ListCreateAPIView):
         return super(CandidateLanguageListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class CandidateLanguageRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
+class CandidateLanguageRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
     serializer_class = CandidateLanguageSerializer
 
     def get_queryset(self):
@@ -424,8 +417,8 @@ class CandidateLanguageRetrieveUpdateView(RetrieveUpdateAPIView):
 
 
 class CandidateResumePreview(APIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         candidate_id = self.kwargs.get('candidate_id', '')

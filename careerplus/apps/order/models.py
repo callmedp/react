@@ -18,6 +18,8 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     WC_FLOW_STATUS
 from .functions import get_upload_path_order_invoice
 
+#Global Constants
+CURRENCY_SYMBOL_CODE_MAPPING = {0:"INR",1:"USD",2:"AED",3:"GBP"}
 
 class Order(AbstractAutoDate):
     co_id = models.IntegerField(
@@ -166,6 +168,18 @@ class Order(AbstractAutoDate):
         payD = dict(PAYMENT_MODE)
         return payD.get(self.payment_mode)
 
+    def get_first_touch_for_email(self):
+        order_obj = Order.objects.filter(email=self.email).\
+            order_by('id').first()
+        return order_obj.created
+
+    def get_currency_code(self):
+        return CURRENCY_SYMBOL_CODE_MAPPING.get(self.currency)
+
+    def get_past_orders_for_email_and_mobile(self):
+        return Order.objects.filter(email=self.email,mobile=self.mobile,\
+            status__in=[1,2,3]).exclude(id=self.id)
+
     def get_txns(self):
         return self.ordertxns.all()
 
@@ -182,7 +196,6 @@ class Order(AbstractAutoDate):
             return self.alt_email
         else:
             return self.email
-
 
     def get_mobile(self):
         if self.alt_mobile:
@@ -405,6 +418,7 @@ class OrderItem(AbstractAutoDate):
             ("can_show_domestic_profile_update_queue", "Can Show Domestic Profile Update Queue"),
             ("domestic_profile_update_assigner", "Domestic Profile Update Assigner"),
             ("domestic_profile_update_assignee", "Domestic Profile Update Assignee"),
+            ("can_show_domestic_profile_initiated_queue", "Can Show Domestic Profile Initiated Queue"),
 
             # Domestic Profile Approval Queue Permissions
             ("can_show_domestic_profile_approval_queue", "Can Show Domestic Profile Approval Queue"),

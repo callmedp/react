@@ -408,6 +408,9 @@
             {% if perms.order.can_show_domestic_profile_approval_queue %}
                 <li><a href="{% url "console:queue-domesticprofileapproval" %}">Domestic Profile Approval</a></li>
             {% endif %}
+            {% if perms.order.can_show_domestic_profile_initiated_queue %}
+                <li><a href="{% url "console:queue-domesticprofileinitiated" %}">Domestic Profile Initiated</a></li>
+            {% endif %}
             {% if perms.order.can_show_international_profile_update_queue %}
                 <li><a href="{% url "console:queue-internationalprofileupdate" %}">International Profile Update</a></li>
             {% endif %}

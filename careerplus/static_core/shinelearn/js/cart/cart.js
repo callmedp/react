@@ -621,8 +621,6 @@ $(document).ready(function(){
                     cv_id = $(this).attr('data-id');
                 }
             });
-
-
             data = {
                 "prod_id": prod_id,
                 "addons": fbt,

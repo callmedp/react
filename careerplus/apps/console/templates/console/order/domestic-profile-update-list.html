@@ -261,6 +261,7 @@
                     <th class="column-title">Mobile</th>
                     <th class="column-title">Item Name</th>
                     <th class="column-title">Flow Status</th>
+                    <th class="column-title">Product Sub Type</th>
                     <th class="column-title">Actions</th>
                     <th class="column-title">Submit Message</th>
                     <th class="column-title">Payment Date</th>
@@ -303,6 +304,7 @@
                             {% endif %}
                       </td>
                       <td>{{obj.get_oi_status}}</td>
+                      <td>{{obj.product.get_sub_type_flow}}</td>
                       <td><a href="{% url "console:queue-resume-download" %}?path={{obj.oi_resume.name}}&next={{ request.path }}" ><button type="button" class="btn btn-success btn-xs"><i class="fa fa-download"></i> Download Doc</button></a>
                            <hr style=" margin-top: 4px;margin-bottom: 6px;border: 0;border-top: 1px solid #30b38f;">
 

@@ -27,7 +27,7 @@
     {% endblock django_meta %}
 
 {% block canonical_url %}
-<link rel="canonical" href="//learning.shine.com/cms/resume-format/1/">
+<link rel="canonical" href="https://learning.shine.com/cms/resume-format/1/">
 {% endblock canonical_url %}
 
 <title> {% block title %}Resume Format - Download CV Samples with Examples - Shine Learning{% endblock title %}</title>
@@ -46,7 +46,6 @@
 
 {% endcompress %}
 {% endblock css_section %}
-    <link rel="amphtml" href="https://mlearning.shine.com/cms/resume-format/1/?type=amp">
     <link rel="shortcut icon" href="https://static1.shine.com/l/s/shinelearn/images/fav_icon.png">
 
 <script>
@@ -66,18 +65,18 @@
 {% block header %}
 
  <header class="w100fl he-auto">
-    <img src="{% static 'shinelearn/images/mobile/common/header-back-img-thumbnail.png' %}">
+    <img alt="" src="{% static 'shinelearn/images/mobile/common/header-back-img-thumbnail.png' %}">
     <!-- header menu Icon Starts here -->
     <div class="main-menu w100fl">
         <div class="pull-left">
-            <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button" ></a>
-            <a class=" pull-left" role="button" onclick="goBack()"></a>
+            <a id="sidebar-main-trigger" aria-label="sidebar navigation" class="icon-bar pull-left" role="button" ></a>
+            <a class=" pull-left" aria-label="go back" role="button" onclick="goBack()"></a>
         </div><!-- / Left side Icon ends here -->
         <div class="pull-right" style="width:90%;">
                 <a class="icon-cart pull-right" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                 <form method='get' id="search-form">
                     <div class="searchbox">
-                        <input id='id_q' type="text" placeholder="Search here" name="search" class="searchbox-input" autocomplete="off">
+                        <input id='id_q' type="text" aria-label="Search" placeholder="Search here" name="search" class="searchbox-input" autocomplete="off">
                         <span class="searchbox-icon"></span>
                     </div>
                 </form>
@@ -136,7 +135,7 @@
         <p>Chronological resumes are one of the most traditional and accepted format for a resume. Recruiters prefer this format because of its familiar and simple layout. The information is presented in ‘reverse-chronological’ order which lists your experience from the most recent to older ones of your professional and academic history. </p>
         <div class="img-wrap">
             <div class="img-content">
-                <a href="{% static 'shinelearn/static_media/chronological-resume-format.docx' %}" class="jcon-downlod"></a>
+                <a aria-label="CHRONOLOGICAL RESUME FORMAT" href="{% static 'shinelearn/static_media/chronological-resume-format.docx' %}" class="jcon-downlod"></a>
                 <div class="overlay"></div>
                 <img src="{% static 'shinelearn/images/mobile/cms/chrono-format-thumbnail.jpg' %}" alt="Chronological Resume Format" class="img-fluid">
             </div>
@@ -488,7 +487,7 @@ It is important to understand that these resumes are not accepted everywhere and
     <!-- left side menu -->
     {% include 'basic/navigation.html' %}
     <div class="navbar-header" itemscope itemtype="http://schema.org/Organization" >
-    <a class="navbar-brand" href="{% url "homepage" %}"></a>
+    <a aria-label="shinelearning.com" class="navbar-brand" href="{% url 'homepage' %}"></a>
     <meta itemprop="name" content="Shine">
     <meta itemprop="url" content="https://learning.shine.com"/>
 

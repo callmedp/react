@@ -15,6 +15,14 @@ const updateUserLanguage = (data, candidateId, languageId) => {
 
 };
 
+const deleteUserLanguage = ( candidateId, languageId) => {
+
+    const url = `candidate/${candidateId}/languages/${languageId}/`;
+
+    return BaseApiService.deleteMethod(`http://127.0.0.1:8000/api/v1/resume/${url}`);
+
+};
+
 const createUserLanguage = (data, candidateId, languageId = '') => {
 
     delete data['id'];
@@ -25,5 +33,6 @@ const createUserLanguage = (data, candidateId, languageId = '') => {
 export const Api = {
     fetchUserLanguage,
     updateUserLanguage,
-    createUserLanguage
+    createUserLanguage,
+    deleteUserLanguage
 }

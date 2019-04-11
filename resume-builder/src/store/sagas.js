@@ -9,6 +9,7 @@ import watchAward from './award/saga/index'
 import watchCourse from './course/saga/index'
 import watchProject from './project/saga/index'
 import watchReference from './reference/saga/index'
+import watchProductId from './buy/saga/index'
 import watchTemplate from './template/saga/index'
 
 export default function* () {
@@ -23,6 +24,7 @@ export default function* () {
         watchCourse(),
         watchProject(),
         watchReference(),
+        watchProductId(),
         watchTemplate()
     ])
 }

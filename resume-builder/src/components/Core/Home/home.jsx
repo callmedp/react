@@ -7,28 +7,67 @@ import ResumeSlider from "./ResumeSlider/resumeSlider.jsx";
 import Testimonial from "./Testimonial/testimonial.jsx";
 import Footer from "../../Common/Footer/footer.jsx";
 import Header from "../../Common/Header/header.jsx";
+import { Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
 
 class Home extends Component {
     constructor(props) {
         super(props);
-        this.handleScroll = this.handleScroll.bind(this)
+        this.scrollTo = this.scrollTo.bind(this);
+        this.addclass = this.addclass.bind(this);
+        this.state ={
+            'scrolled':false
+        }
+    }
+
+    scrollTo(elem) {
+        scroller.scrollTo(elem, {
+          duration: 800,
+          delay: 0,
+          smooth: 'easeInOutQuad',
+          offset: -63
+        })
+    }
+
+    addclass(){
+        let scrollpos = window.scrollY;
+        if(scrollpos > 60){
+            this.setState({
+                'scrolled':true
+            })
+        }
+        else {
+            this.setState({
+                'scrolled':false
+            })
+        }
     }
 
     componentDidMount() {
-        document.addEventListener('scroll', this.handleScroll);
+
         this.props.getCandidateId()
+        Events.scrollEvent.register('begin', function () {
+          console.log("begin", arguments);
+        });
+    
+        Events.scrollEvent.register('end', function () {
+          console.log("end", arguments);
+        });
+        window.addEventListener('scroll',this.addclass);
+    
     }
 
-    handleScroll() {
-
+    componentWillUnmount() {
+        Events.scrollEvent.remove('begin');
+        Events.scrollEvent.remove('end');
     }
+    
 
     render() {
         return (
             <div class="nav-fixed">
                 
                 {/* <Link to={'/resume-builder/edit/'}>Customize Your Resume</Link> */}
-                <Header/>
+                <Header getclass={this.state.scrolled?'color-change':''}/>
                 <Banner/>
                 <section className="section-container">
                     <h2>Professional advantage</h2>
@@ -172,7 +211,7 @@ class Home extends Component {
                         </li>
                     </ul>
 
-                    <button className="orange-button">Build your resume</button>
+                    <button className="orange-button" onClick={() => this.scrollTo('templates')}>Build your resume</button>
 
                 </section>
 

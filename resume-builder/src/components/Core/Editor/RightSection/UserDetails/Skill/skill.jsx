@@ -5,6 +5,7 @@ import * as actions from "../../../../../../store/skill/actions";
 import {connect} from "react-redux";
 import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
+import {required} from "../../../../../FormHandler/formValidations"
 
 
 class Skill extends Component {
@@ -18,8 +19,9 @@ class Skill extends Component {
     }
 
     async handleSubmit(values) {
-        await this.props.onSubmit(values);
-        this.props.history.push('/resume-builder/edit/?type=language')
+        console.log(values)
+        //await this.props.onSubmit(values);
+        //this.props.history.push('/resume-builder/edit/?type=language')
     }
 
     render() {
@@ -51,7 +53,7 @@ class Skill extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-skills-gr"></span>
                                         </div>
-                                        <Field component={renderField} type={"text"} name="name"
+                                        <Field component={renderField} validate={required} type={"text"} name="name"
                                                className={"input-control"}/>
                                     </div>
                                 </fieldset>
@@ -76,7 +78,8 @@ class Skill extends Component {
                                                    {value: 8, label: '8'},
                                                    {value: 9, label: '9'},
                                                    {value: 10, label: '10'}
-                                               ]}/>
+                                                   ]}
+                                               validate={required}/>
                                     </div>
                                 </fieldset>
                             </div>

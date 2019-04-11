@@ -1,4 +1,4 @@
-import {FETCH_USER_LANGUAGE, UPDATE_USER_LANGUAGE} from './actionTypes'
+import {FETCH_USER_LANGUAGE, UPDATE_USER_LANGUAGE, DELETE_USER_LANGUAGE} from './actionTypes'
 
 
 export const fetchUserLanguage = () => {
@@ -11,5 +11,12 @@ export const updateUserLanguage = (payload) => {
     return {
         type: UPDATE_USER_LANGUAGE,
         payload
+    }
+}
+
+export const deleteLanguage = (languageId) => {
+    return {
+        type: DELETE_USER_LANGUAGE,
+        languageId
     }
 }

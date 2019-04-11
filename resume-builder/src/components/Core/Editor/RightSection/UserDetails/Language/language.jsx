@@ -12,6 +12,7 @@ import {
     AccordionItemButton
 } from 'react-accessible-accordion';
 
+import languageValidation from '../../../../../FormHandler/languageValidation'
 /*
 styles
 * */
@@ -22,8 +23,12 @@ class Language extends Component {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
+        this.handleAddition = this.handleAddition.bind(this);
+        this.deleteLanguage = this.deleteLanguage.bind(this)
+
         this.state = {
-            currentAccordion: 0
+            currentAccordion: 0,
+            openedAccordion: 0
         }
     }
 
@@ -32,49 +37,79 @@ class Language extends Component {
     }
 
 
+    handleAddition(fields) {
+        const listLength = fields.length;
+        fields.push({
+            "candidate_id": '',
+            "id": '',
+            "name": '',
+            "proficiency": {
+                value: 5, 'label': '5'
+            }
+        })
+
+        this.setState({
+           openedAccordion: listLength
+        })
+    }
+
+    deleteLanguage(index, fields, event) {
+        event.stopPropagation();
+        const language = fields.get(index);
+        fields.remove(index);
+        if (language && language.id) {
+            this.props.removeLanguage(language.id)
+        }
+
+
+    }
+
     async handleSubmit(values) {
-        await this.props.onSubmit(values);
+        const {list} = values;
+        await this.props.onSubmit(list[list.length - 1]);
         this.props.history.push('/resume-builder/edit/?type=award')
     }
 
     handleAccordionClick(value) {
-        console.log('0----', value);
+        // if (value.length !== 0) {
+        //     this.setState({
+        //         currentAccordion: value && value[0]
+        //     })
+        // }
     }
+
 
     render() {
         const {handleSubmit, language: {list}} = this.props;
-        const renderMembers = ({fields, list, meta: {error, submitField}}) => {
+        const renderMembers = ({fields, meta: {touched, error, submitFailed}}) => {
             return (
-
                 <ul>
                     <li>
                         <section className="head-section">
                             <span className="icon-box"><i className="icon-languages1"></i></span>
                             <h2>Languages</h2>
                             <span className="icon-edit icon-language__cursor"></span>
-                            <button onClick={() => fields.push({
-                                "candidate_id": '',
-                                "id": '',
-                                "name": '',
-                                "proficiency": 5
-                            })}
+                            <button onClick={this.handleAddition.bind(this, fields)}
                                     type={'button'}
                                     className="add-button add-button__right">Add new
                             </button>
                         </section>
                     </li>
                     <section className="right-sidebar-scroll">
-                        <Accordion onChange={this.handleAccordionClick}>
+                        <Accordion onChange={this.handleAccordionClick} allowZeroExpanded={true}
+                                   preExpanded={[this.state.openedAccordion]}>
                             {fields.map((member, index) => {
                                     return (
                                         <li key={index}>
-                                            <AccordionItem>
+                                            <AccordionItem uuid={index}>
                                                 <AccordionItemHeading>
                                                     <AccordionItemButton>
                                                         <div className="flex-container">
-                                                            <h3 className="add-section-heading">{list[index] && list[index].name || 'Language'}</h3>
+                                                            <h3 className="add-section-heading">{fields.get(index).name || 'Language'}</h3>
                                                             <div className="addon-buttons mr-10">
-                                                                <span className="icon-delete mr-15"></span>
+                                                                <span
+                                                                    onClick={(event) => this.deleteLanguage(index, fields, event)}
+                                                                    className="icon-delete mr-15"></span>
                                                                 <span className="icon-ascend mr-5"></span>
                                                                 <span className="icon-descend"></span>
                                                             </div>
@@ -154,7 +189,9 @@ class Language extends Component {
 
 export const LanguageForm = reduxForm({
     form: 'Language',
-    enableReinitialize: true
+    languageValidation,
+    enableReinitialize: true,
+
 })(Language);
 
 
@@ -168,7 +205,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userLanguage) => {
-            console.log('sybmitt', userLanguage);
             const {proficiency} = userLanguage;
             userLanguage = {
                 ...userLanguage,
@@ -179,6 +215,9 @@ const mapDispatchToProps = (dispatch) => {
             return new Promise((resolve, reject) => {
                 return dispatch(actions.updateUserLanguage({userLanguage, resolve, reject}));
             })
+        },
+        "removeLanguage": (languageId) => {
+            return dispatch(actions.deleteLanguage(languageId))
         },
         "fetchUserLanguage": () => {
             return dispatch(actions.fetchUserLanguage())

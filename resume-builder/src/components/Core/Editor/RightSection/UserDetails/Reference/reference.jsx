@@ -4,6 +4,7 @@ import {Field, reduxForm} from "redux-form";
 import * as actions from "../../../../../../store/reference/actions";
 import {connect} from "react-redux";
 import {renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
+import {required} from "../../../../../FormHandler/formValidations"
 
 
 class Reference extends Component {
@@ -50,7 +51,7 @@ class Reference extends Component {
                                             <span className="icon-refrences-gr"></span>
                                         </div>
                                         <Field component={renderField} type={"text"} name="reference_name"
-                                               className={"input-control"}/>
+                                               className={"input-control"} validate={required} />
                                     </div>
                                 </fieldset>
                                 <fieldset>
@@ -60,7 +61,7 @@ class Reference extends Component {
                                             <span className="icon-designation"></span>
                                         </div>
                                         <Field component={renderField} type={"text"} name="reference_designation" 
-                                               className={"input-control"}/>
+                                               className={"input-control"} validate={required} />
                                     </div>
                                 </fieldset>
                             </div>

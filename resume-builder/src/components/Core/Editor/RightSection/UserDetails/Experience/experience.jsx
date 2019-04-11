@@ -5,6 +5,7 @@ import {Field, reduxForm} from 'redux-form';
 import * as actions from '../../../../../../store/experience/actions/index';
 import {connect} from "react-redux";
 import moment from 'moment';
+import {required} from "../../../../../FormHandler/formValidations"
 
 class Experience extends Component {
     constructor(props) {
@@ -51,7 +52,7 @@ class Experience extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-designation"></span>
                                         </div>
-                                        <Field component={renderField} type={"text"} name="job_profile"/>
+                                        <Field component={renderField} validate={required} type={"text"} name="job_profile"/>
                                     </div>
                                 </fieldset>
                                 <fieldset>
@@ -60,7 +61,7 @@ class Experience extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-company"></span>
                                         </div>
-                                        <Field component={renderField} type={"text"} name="company_name"/>
+                                        <Field component={renderField} validate={required} type={"text"} name="company_name"/>
                                     </div>
                                 </fieldset>
                             </div>
@@ -71,7 +72,7 @@ class Experience extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-date"></span>
                                         </div>
-                                        <Field component={datepicker} type={"date"} className={'input-control'}
+                                        <Field component={datepicker} validate={required} type={"date"} className={'input-control'}
                                                name="start_date"/>
                                     </div>
                                 </fieldset>
@@ -81,7 +82,7 @@ class Experience extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-date"></span>
                                         </div>
-                                        <Field component={datepicker} type={"date"} name="end_date"
+                                        <Field component={datepicker} validate={required} type={"date"} name="end_date"
                                                className={'input-control'}/>
                                     </div>
                                     <span className="till-today">

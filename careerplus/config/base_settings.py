@@ -170,8 +170,12 @@ WSGI_APPLICATION = 'careerplus.wsgi.application'
 # Webpack loader is used to load webpack generated files
 WEBPACK_LOADER = {
     'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'react/dist/',
-        'STATS_FILE': os.path.join(BASE_DIR, '..', 'webpack-stats.json'),
+        'BUNDLE_DIR_NAME': 'react/dist/desktop/',
+        'STATS_FILE': os.path.join(BASE_DIR, '..', 'webpack-desktop-stats.json'),
+    },
+    'MOBILE': {
+        'BUNDLE_DIR_NAME': 'react/dist/mobile/',
+        'STATS_FILE': os.path.join(BASE_DIR, '..', 'webpack-mobile-stats.json'),
     }
 }
 
@@ -496,6 +500,7 @@ COURSE_CATALOGUE_CASH_TIME = 24 * 60 * 60  # in seconds
 ROUNDONE_DEFAULT_CP_EMAIL = "learning@shine.com"
 CONSULTANTS_EMAIL = 'Shine.com <learning@shine.com>'
 REPLY_TO = 'resume@shine.com'
+TAG_MAILER = False
 
 ##### CCAVENUE SETTINGS ############
 CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'

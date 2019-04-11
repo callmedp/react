@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import './education.scss'
 import {Field, reduxForm} from "redux-form";
-import {renderField, renderSelect, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
-
+import {renderField, renderTextArea, renderSelect, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
+import {required} from "../../../../../FormHandler/formValidations"
 import * as actions from "../../../../../../store/education/actions";
 import {connect} from "react-redux";
 import moment from "moment";
@@ -52,7 +52,7 @@ class Education extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-company"></span>
                                         </div>
-                                        <Field component={renderField} type={"text"} name="institution_name"/>
+                                        <Field component={renderField} type={"text"} validate={required} name="institution_name"/>
                                     </div>
                                 </fieldset>
                                 <fieldset>
@@ -61,7 +61,7 @@ class Education extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-designation"></span>
                                         </div>
-                                        <Field component={renderField} type={"text"} name="specialization"/>
+                                        <Field component={renderField}  type={"text"} validate={required} name="specialization"/>
                                     </div>
                                 </fieldset>
                             </div>
@@ -73,7 +73,7 @@ class Education extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-date"></span>
                                         </div>
-                                        <Field component={datepicker} type={"date"} name="start_date"
+                                        <Field component={datepicker} type={"date"} validate={required} name="start_date"
                                                className="input-control"/>
                                     </div>
                                 </fieldset>
@@ -83,7 +83,7 @@ class Education extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-date"></span>
                                         </div>
-                                        <Field component={datepicker} type={"date"} name="end_date"
+                                        <Field component={datepicker} validate={required} type={"date"} name="end_date"
                                                className="input-control"/>
 
                                     </div>
@@ -118,7 +118,7 @@ class Education extends Component {
                                             <span className="icon-blank"></span>
                                         </div>
                                         <Field component={renderField} type={"text"} name="percentage_cgpa"
-                                               className="input-control"/>
+                                               className="input-control" validate={required} />
                                     </div>
                                 </fieldset>
                             </div>

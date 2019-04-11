@@ -11,6 +11,11 @@ import {
     renderDynamicSelect
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 
+import {
+    required,
+    phoneNumber,
+    email
+} from "../../../../../FormHandler/formValidations.js";
 
 import moment from 'moment';
 
@@ -98,8 +103,10 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-name"></span>
                                         </div>
-                                        <Field component={renderField} type={"text"} name="first_name"/>
-                                    </div>                                </fieldset>
+                                        <Field component={renderField} validate={required} type={"text"}
+                                               name="first_name"/>
+                                    </div>
+                                </fieldset>
                                 <fieldset>
                                     <label>Last Name</label>
                                     <div className="input-group">
@@ -136,7 +143,7 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-blank"></span>
                                         </div>
-                                        <Field component={datepicker} name="date_of_birth" className={"input-control"}/>
+                                        <Field component={datepicker} validate={required} name="date_of_birth" className={"input-control"}/>
                                     </div>
                                 </fieldset>
                             </div>
@@ -147,7 +154,7 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-mobile"></span>
                                         </div>
-                                        <Field component={renderField} type={"text"} name="number"
+                                        <Field component={renderField} validate={[required,phoneNumber]} type={"text"} name="number"
                                                className={"input-control"}/>
                                     </div>
                                 </fieldset>
@@ -157,7 +164,7 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-email"></span>
                                         </div>
-                                        <Field component={renderField} type={"text"} name="email"
+                                        <Field component={renderField} validate={[required,email]} type={"text"} name="email"
                                                className={"input-control"}/>
                                     </div>
                                 </fieldset>
