@@ -25,7 +25,10 @@ class Language extends Component {
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
         this.handleAccordionState = this.handleAccordionState.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
-        this.deleteLanguage = this.deleteLanguage.bind(this)
+        this.deleteLanguage = this.deleteLanguage.bind(this);
+        this.changeOrderingUp = this.changeOrderingUp.bind(this);
+        this.changeOrderingDown = this.changeOrderingDown.bind(this);
+
 
         this.state = {
             currentAccordion: 0,
@@ -39,8 +42,21 @@ class Language extends Component {
         this.props.fetchUserLanguage();
     }
 
+    changeOrderingDown(index, fields, event) {
+        event.stopPropagation()
+        console.log('donw pressed');
+        fields.swap(index, index + 1)
+        this.props.handleSubmit()
+    }
 
-    handleAddition(fields) {
+    changeOrderingUp(index, fields, event) {
+        event.stopPropagation();
+        console.log('up pressed')
+        fields.swap(index, index - 1)
+
+    }
+
+    handleAddition(fields, error) {
 
 
         const listLength = fields.length;
@@ -106,14 +122,14 @@ class Language extends Component {
                             <span className="icon-box"><i className="icon-languages1"></i></span>
                             <h2>Languages</h2>
                             <span className="icon-edit icon-language__cursor"></span>
-                            <button onClick={this.handleAddition.bind(this, fields)}
+                            <button onClick={this.handleAddition.bind(this, fields, error)}
                                     type={'button'}
                                     className="add-button add-button__right">Add new
                             </button>
                         </section>
                     </li>
                     <section className="right-sidebar-scroll">
-                        <Accordion onChange={(value) => this.handleAccordionClick(value, fields)}
+                        <Accordion onChange={(value) => this.handleAccordionClick(value, fields, error)}
                                    allowZeroExpanded={true}
                                    preExpanded={[this.state.openedAccordion]}>
                             {fields.map((member, index) => {
@@ -127,9 +143,18 @@ class Language extends Component {
                                                             <div className="addon-buttons mr-10">
                                                                 <span
                                                                     onClick={(event) => this.deleteLanguage(index, fields, event)}
-                                                                    className="icon-delete mr-15"></span>
-                                                                <span className="icon-ascend mr-5"></span>
-                                                                <span className="icon-descend"></span>
+                                                                    className="icon-delete mr-15"/>
+                                                                {index !== 0 &&
+                                                                <span
+                                                                    onClick={(event) => this.changeOrderingUp(index, fields, event)}
+                                                                    className="icon-ascend mr-5"/>
+                                                                }
+                                                                {
+                                                                    index !== fields.length - 1 &&
+                                                                    < span
+                                                                        onClick={(event) => this.changeOrderingDown(index, fields, event)}
+                                                                        className="icon-descend"/>
+                                                                }
                                                             </div>
                                                         </div>
                                                     </AccordionItemButton>
@@ -230,7 +255,11 @@ const mapDispatchToProps = (dispatch) => {
         "fetchUserLanguage": () => {
             return dispatch(actions.fetchUserLanguage())
         },
-        pushArray: arrayPush
+        pushArray: arrayPush,
+        "bulkUpdateUserLanguage": (fields) => {
+            console.log('fields  ', fields.get(1), fields.get(2))
+        }
+
 
     }
 };
