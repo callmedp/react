@@ -23,12 +23,15 @@ class Language extends Component {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
+        this.handleAccordionState = this.handleAccordionState.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteLanguage = this.deleteLanguage.bind(this)
 
         this.state = {
             currentAccordion: 0,
-            openedAccordion: 0
+            previousAccordion: 0,
+            openedAccordion: 0,
+
         }
     }
 
@@ -38,7 +41,11 @@ class Language extends Component {
 
 
     handleAddition(fields) {
+
+
         const listLength = fields.length;
+
+        this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
             "id": '',
@@ -46,10 +53,6 @@ class Language extends Component {
             "proficiency": {
                 value: 5, 'label': '5'
             }
-        })
-
-        this.setState({
-           openedAccordion: listLength
         })
     }
 
@@ -70,12 +73,26 @@ class Language extends Component {
         this.props.history.push('/resume-builder/edit/?type=award')
     }
 
-    handleAccordionClick(value) {
-        // if (value.length !== 0) {
-        //     this.setState({
-        //         currentAccordion: value && value[0]
-        //     })
-        // }
+
+    handleAccordionState(val, fields) {
+        const {currentAccordion} = this.state;
+
+        console.log('--accordion--', currentAccordion);
+        if (currentAccordion !== '') {
+
+            this.props.onSubmit(fields.get(currentAccordion))
+        }
+
+        this.setState((state) => ({
+            previousAccordion: state.currentAccordion,
+            openedAccordion: val,
+            currentAccordion: val
+        }))
+    }
+
+    handleAccordionClick(value, fields) {
+        const val = value.length > 0 ? value[0] : ''
+        this.handleAccordionState(val, fields)
     }
 
 
@@ -96,7 +113,8 @@ class Language extends Component {
                         </section>
                     </li>
                     <section className="right-sidebar-scroll">
-                        <Accordion onChange={this.handleAccordionClick} allowZeroExpanded={true}
+                        <Accordion onChange={(value) => this.handleAccordionClick(value, fields)}
+                                   allowZeroExpanded={true}
                                    preExpanded={[this.state.openedAccordion]}>
                             {fields.map((member, index) => {
                                     return (
