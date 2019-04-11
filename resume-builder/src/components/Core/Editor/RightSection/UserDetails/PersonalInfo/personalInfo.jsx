@@ -103,8 +103,10 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-name"></span>
                                         </div>
-                                        <Field component={renderField} type={"text"} name="first_name"/>
-                                    </div>                                </fieldset>
+                                        <Field component={renderField} validate={required} type={"text"}
+                                               name="first_name"/>
+                                    </div>
+                                </fieldset>
                                 <fieldset>
                                     <label>Last Name</label>
                                     <div className="input-group">

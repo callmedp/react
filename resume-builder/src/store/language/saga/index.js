@@ -47,14 +47,33 @@ function* updateUserLanguage(action) {
         const {id} = userLanguage;
 
         const result = yield call(id ? Api.updateUserLanguage : Api.createUserLanguage, userLanguage, candidateId, id);
-        console.log('---lang ', result);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
-
-        yield put({type: Actions.SAVE_USER_LANGUAGE, data: result['data']});
-
+        yield call(fetchUserLanguage)
         return resolve('User Language  Info saved successfully.');
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+function* deleteUserLanguage(action) {
+    try {
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        // userLanguage['cc_id'] = candidateId;
+        const {languageId} = action;
+
+        const result = yield call(Api.deleteUserLanguage, candidateId, languageId);
+
+
+        if (result['error']) {
+            console.log(result['error'])
+        }
+        yield call(fetchUserLanguage)
+        // yield put({type: Actions.SAVE_USER_LANGUAGE, data: result['data']});
 
     } catch (e) {
         console.log('error', e);
@@ -63,5 +82,6 @@ function* updateUserLanguage(action) {
 
 export default function* watchLanguage() {
     yield takeLatest(Actions.FETCH_USER_LANGUAGE, fetchUserLanguage);
-    yield takeLatest(Actions.UPDATE_USER_LANGUAGE, updateUserLanguage)
+    yield takeLatest(Actions.UPDATE_USER_LANGUAGE, updateUserLanguage);
+    yield takeLatest(Actions.DELETE_USER_LANGUAGE, deleteUserLanguage);
 }
