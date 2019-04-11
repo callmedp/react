@@ -44,11 +44,12 @@ from .serializers import (
     MediaUploadSerializer,
     ResumeBuilderProductSerializer,
     ShineDataFlowDataSerializer)
-from shared.rest_addons.pagination import Learning_custom_pagination
+from shared.rest_addons.pagination import LearningCustomPagination
 
 from django_redis import get_redis_connection
 from shared.utils import ShineCandidate
 from linkedin.autologin import AutoLogin
+from users.mixins import RegistrationLoginApi
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
     authentication_classes = [OAuth2Authentication]
@@ -767,44 +768,87 @@ class ShineDataFlowDataApiView(ListAPIView):
     pagination_class = None
 
 
-from shared.rest_addons.authentication import ShineUserAuthentication
 
-
-class APILoginView(APIView):
+class ShineCandidateLoginAPIView(APIView):
+    """
+    Sample Input Data - <br><br>
+    {
+        "email":"sharma.animesh@hotmail.com",
+        "password":"1234",
+        "alt":"CwcWCBUDCwlIVk8hHwsZCBRIGw4VGk1SHgBJAklXS1RIAkEFSQBMUBkEGQMeAgRTSFdBUUxUSFNIVU9VTxoABwAH"
+    }
+    Constraints - <br><br>
+    Required - email/password or alt
+    """
     serializer_class = None
     authentication_classes = ()
     permission_classes = ()
+    conn = get_redis_connection('token')
 
-    def set_user_in_cache(self, token, candidate_obj):
-        conn = get_redis_connection('token')
-        conn.set(token, pickle.dumps(candidate_obj))
+    def set_user_in_cache(self,token,candidate_obj):
+        self.conn.set(candidate_obj.id,pickle.dumps(token))
+        self.conn.set(token,pickle.dumps(candidate_obj))
 
     def generate_token(self):
         return binascii.hexlify(os.urandom(20)).decode()
 
-    def _dispatch_via_autologin(self, alt):
+    def get_or_create_token(self,candidate_obj):
+        existing_token = self.conn.get(candidate_obj.id)
+        token = pickle.loads(existing_token) if existing_token else self.generate_token()
+        self.set_user_in_cache(token,candidate_obj)
+        return token
+
+    def get_response_for_successful_login(self,candidate_id,login_response):
+        candidate_obj = ShineCandidate(**login_response)
+        candidate_obj.id = candidate_id
+        candidate_obj.candidate_id = candidate_id
+        token = self.get_or_create_token(candidate_obj)
+        data_to_send = {"token":token,"candidate_id":candidate_id,"candidate_profile":login_response}
+        return Response(data_to_send,status=status.HTTP_201_CREATED)
+
+    def _dispatch_via_autologin(self,alt):
         try:
-            email, candidate_id, valid = AutoLogin().decode(alt)
+            email,candidate_id,valid = AutoLogin().decode(alt)
         except Exception as e:
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
-            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
-
+            return Response({"data":"No user record found"},status=status.HTTP_400_BAD_REQUEST)
+        
         if not valid or not candidate_id:
-            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"data":"No user record found"},status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            resp_status = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+            login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
         except Exception as e:
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
-            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"data":"No user record found"},status=status.HTTP_400_BAD_REQUEST)
 
-        candidate_obj = ShineCandidate(**resp_status)
-        token = self.generate_token()
-        self.set_user_in_cache(token, candidate_obj)
-        data_to_send = {"token": token, "candidate_profile": resp_status}
-        return Response(data_to_send, status=status.HTTP_201_CREATED)
+        return self.get_response_for_successful_login(candidate_id,login_response)
 
-    def post(self, request, *args, **kwargs):
+    def _dispatch_via_email_password(self,email,password):
+        login_data = {"email":email.strip(),"password":password}
+        
+        try:
+            login_resp = RegistrationLoginApi.user_login(login_data)
+        except Exception as e:
+            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            return Response({"data":"Invalid credentials"},status=status.HTTP_400_BAD_REQUEST)
+
+        candidate_id = login_resp.get('candidate_id')
+        access_token = login_resp.get('access_token')
+        
+        if not candidate_id and not access_token:
+            logging.getLogger('info_log').info("Login attempt failed - {}".format(login_resp))
+            return Response({"data":"Invalid credentials"},status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+        except Exception as e:
+            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            return Response({"data":"No user record found"},status=status.HTTP_400_BAD_REQUEST)
+
+        return self.get_response_for_successful_login(candidate_id,login_response)
+
+    def post(self,request,*args,**kwargs):
         email = request.data.get('email')
         password = request.data.get('password')
         alt = request.data.get('alt')
@@ -812,5 +856,7 @@ class APILoginView(APIView):
         if alt:
             return self._dispatch_via_autologin(alt)
 
-        return Response({"data": "No credentials provided"}, status=status.HTTP_400_BAD_REQUEST)
+        if email and password:
+            return self._dispatch_via_email_password(email,password)
 
+        return Response({"data":"Invalid credentials"},status=status.HTTP_400_BAD_REQUEST)
