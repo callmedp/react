@@ -722,6 +722,8 @@ class OrderDetailVeiw(DetailView):
         max_limit_draft = settings.DRAFT_MAX_LIMIT
         last_status_object = order.welcomecalloperation_set.exclude(wc_status__in=[0, 1, 2])\
             .order_by('id').last()
+        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
+        show_btn = True if has_permission else False
         if not last_status_object:
             last_status = "Not Done"
         else:
@@ -738,6 +740,7 @@ class OrderDetailVeiw(DetailView):
             "messages": alert,
             "message_form": MessageForm(),
             "draft_form": FileUploadForm(),
+            "show_btn": show_btn,
         })
         return context
 

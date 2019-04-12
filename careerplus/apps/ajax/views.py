@@ -833,12 +833,12 @@ class WelcomeServiceCallView(View):
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         order = Order.objects.filter(id=order_id).first()
-        welc = order.welcomecalloperation_set.last()
+        # welc = order.welcomecalloperation_set.last()
 
-        if not order or not order.mobile or not user or not user.contact_number or not welc:
+        if not order or not order.mobile or not user or not user.contact_number:
             return HttpResponse(json.dumps(data), content_type="application/json")
 
-        if not user.is_superuser and order.assigned_to != welc.assigned_to:
+        if not user.user_permissions.filter(codename='can_do_exotel_call'):
             data.update({'msg':'You are not allowed'})
             return HttpResponse(json.dumps(data), content_type="application/json")
 

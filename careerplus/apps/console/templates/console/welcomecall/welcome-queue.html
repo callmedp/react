@@ -222,10 +222,13 @@
                       <td>{{obj.first_name}} {{obj.last_name}}</td>
                       <td>{{obj.email}}</td>
 
-                        <td>{% if not exoitel_status%}
+                        <td>
+                            {% if not exoitel_status%}
                             {{obj.mobile}}
                             {% endif %}
+                            {% if show_btn %}
                             <button id="{{obj.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.id}});"></button></td>
+                                {% endif %}
                       <!--<td>{{obj.country_code}} {{obj.mobile}}</td>-->
                       <td>
                         {% if obj.wc_follow_up %}
