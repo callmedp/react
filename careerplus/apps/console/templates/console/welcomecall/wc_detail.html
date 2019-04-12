@@ -88,7 +88,7 @@
                     {% if not exoitel_status %}
                         {{order.mobile}}
                         {% endif %}
-                   <button id="{{obj.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.id}});"></button></td>
+                   <button id="{{order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{order.id}});"></button></td>
                       </td>
                       <td>{{order.first_name}} {{order.last_name}}</td>
                       <td>
