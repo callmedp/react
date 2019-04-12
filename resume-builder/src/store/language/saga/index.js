@@ -28,7 +28,6 @@ function* fetchUserLanguage(action) {
                 })
             }
         }
-        console.log('-data-', data);
         yield put({type: Actions.SAVE_USER_LANGUAGE, data: data})
     } catch (e) {
         console.log(e);
@@ -95,8 +94,8 @@ function* deleteUserLanguage(action) {
         if (result['error']) {
             console.log(result['error'])
         }
-        yield call(fetchUserLanguage)
-        // yield put({type: Actions.SAVE_USER_LANGUAGE, data: result['data']});
+        // yield call(fetchUserLanguage)
+        yield put({type: Actions.REMOVE_LANGUAGE, id: languageId});
 
     } catch (e) {
         console.log('error', e);

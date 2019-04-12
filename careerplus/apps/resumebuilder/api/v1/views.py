@@ -70,8 +70,8 @@ class CandidateRetrieveUpdateView(RetrieveUpdateAPIView):
 
 
 class SkillListCreateView(ListCreateAPIView):
-    authentication_classes = (ShineUserAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    authentication_classes = ()
+    permission_classes = ()
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
 

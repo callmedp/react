@@ -1,4 +1,4 @@
-import {FETCH_USER_EDUCATION, UPDATE_USER_EDUCATION} from './actionTypes'
+import {FETCH_USER_EDUCATION, UPDATE_USER_EDUCATION, HANDLE_EDUCATION_SWAP, REMOVE_EDUCATION} from './actionTypes'
 
 
 export const fetchUserEducation = () => {
@@ -13,3 +13,18 @@ export const updateUserEducation = (payload) => {
         payload
     }
 };
+
+
+export const handleEducationSwap = (languageId) => {
+    return {
+        type: HANDLE_EDUCATION_SWAP,
+        languageId
+    }
+}
+
+export const deleteEducation = (payload) => {
+    return {
+        type: REMOVE_EDUCATION,
+        payload
+    }
+}

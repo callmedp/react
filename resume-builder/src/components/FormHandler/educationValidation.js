@@ -1,5 +1,4 @@
 const validate = values => {
-    console.log('--valid1--', values);
     const errors = {};
     if (!values.list || !values.list.length) {
         errors.list = {_error: 'Atleast One Language should be entered.'}
@@ -18,9 +17,6 @@ const validate = values => {
         return errors;
     }
 };
-//
-// const languageVAlidation = {
-//     list: {_error: 'At least One Language Should be Entered'}
-// }
+
 
 export default validate;

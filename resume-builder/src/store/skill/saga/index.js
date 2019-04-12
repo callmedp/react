@@ -17,11 +17,16 @@ function* fetchUserSkill(action) {
             console.log('error');
         }
         const {data: {results}} = result;
-        let data = results[0];
+        let data = {list: results};
         data = {
             ...data,
             ...{
-                proficiency: proficiencyList[data['proficiency'].toString()]
+                list: data['list'].map(el => {
+                    return {
+                        ...el,
+                        proficiency: proficiencyList[el['proficiency'].toString()]
+                    }
+                })
             }
         }
         yield put({type: Actions.SAVE_USER_SKILL, data: data})
@@ -56,7 +61,54 @@ function* updateUserSkill(action) {
 }
 
 
+function* handleSkillSwap(action) {
+    try {
+        let {payload: {list}} = action;
+
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+
+        const result = yield call(Api.updateUserSkill, list, candidateId);
+
+        if (result['error']) {
+            console.log(result['error']);
+        }
+
+        console.log('---', result);
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+
+function* deleteUserSkill(action) {
+    try {
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        // userLanguage['cc_id'] = candidateId;
+        const {skillId} = action;
+
+        const result = yield call(Api.deleteUserSkill, candidateId, skillId);
+
+
+        if (result['error']) {
+            console.log(result['error'])
+        }
+        // yield call(fetchUserSkill)
+        yield put({type: Actions.REMOVE_SKILL, id: skillId});
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+
 export default function* watchSkill() {
     yield takeLatest(Actions.FETCH_USER_SKILL, fetchUserSkill);
     yield takeLatest(Actions.UPDATE_USER_SKILL, updateUserSkill);
+    yield takeLatest(Actions.DELETE_USER_SKILL, deleteUserSkill);
+    yield takeLatest(Actions.HANDLE_SKILL_SWAP, handleSkillSwap);
 }

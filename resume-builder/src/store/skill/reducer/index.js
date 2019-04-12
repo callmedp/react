@@ -1,10 +1,7 @@
 import {SAVE_USER_SKILL} from "../actions/actionTypes";
 
 const initialState = {
-    "id": '',
-    "candidate_id": '',
-    "name": '',
-    "proficiency": ''
+    list: []
 };
 
 
