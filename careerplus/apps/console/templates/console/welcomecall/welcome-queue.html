@@ -222,7 +222,10 @@
                       <td>{{obj.first_name}} {{obj.last_name}}</td>
                       <td>{{obj.email}}</td>
 
-                        <td><button id="{{obj.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.id}});"></button></td>
+                        <td>{% if not exoitel_status%}
+                            {{obj.mobile}}
+                            {% endif %}
+                            <button id="{{obj.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.id}});"></button></td>
                       <!--<td>{{obj.country_code}} {{obj.mobile}}</td>-->
                       <td>
                         {% if obj.wc_follow_up %}
@@ -328,6 +331,7 @@
 
   {% compress js %}
   <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
   <script type="text/javascript" src="{% static "packages/iCheck/icheck.min.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/order/welcome-call.js" %}"></script>
   <script type="text/javascript" src="{% static "console/js/moment/moment.min.js" %}"></script>
@@ -336,30 +340,5 @@
   <script type="text/javascript" src="{% static 'console/js/order/ltv.js' %}"></script>
   {% endcompress %}
 
-<script>
-function makeCallBtn(id) {
-    if (id) {
-        $('#' + id + 'callingBtn').css('color','orange');
-        $.ajax({
-            type: 'post',
-            url: '/ajax/service-call/',
-            data: {
-                'o_id': id
-            },
-            success: function(response) {
-                if (response.status == 1) {
-                    $('#' + id + 'callingBtn').css("color","green");
-                     $('#' + id + 'callingBtn').attr('title',response.msg);
 
-                } else {
-                    $('#' + id + 'callingBtn').css('color','red');
-                       $('#' + id + 'callingBtn').attr('title',response.msg);
-
-                }
-            }
-        })
-    }
-    return false;
-}
-</script>
 {% endblock js_block %}

@@ -110,7 +110,7 @@ class Order(AbstractAutoDate):
         choices=WC_FLOW_STATUS)
     wc_follow_up = models.DateTimeField(null=True, blank=True)
     welcome_call_done = models.BooleanField(default=False)
-    welcome_call_records = models.TextField(_('Call Recording'),blank=True)
+    welcome_call_records = models.TextField(_('Call Recording'),blank=True,null=True)
     midout_sent_on = models.DateTimeField(null=True, blank=True)
 
     # cash or Faild trasnsaction manual paid by..

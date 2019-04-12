@@ -13,8 +13,13 @@ from django.core.paginator import Paginator
 from django.http import (
     HttpResponseRedirect,
     Http404)
+from django.core.exceptions import PermissionDenied
+
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
+from django.core.cache import cache
+from django.shortcuts import render
+
 
 
 from order.models import Order
@@ -883,3 +888,24 @@ class WelcomeCallHistoryView(DetailView, WelcomeCallInfo):
             "ops": ops,
         })
         return context
+
+
+class ShowNumberField(View):
+    template_name = "admin/shownumber.html"
+
+    def get(self, request, *args, **kwargs):
+        has_permission = request.user.is_superuser
+        shownum = cache.get('exoitel_status', '')
+        if not has_permission:
+            return PermissionDenied
+        shownum = 'checked' if shownum else ""
+        return render(request, self.template_name, {'check': shownum})
+
+    def post(self,request,*args,**kwargs):
+        value = self.request.POST.get('switch', '')
+        has_permission = request.user.is_superuser
+        value = True if value == 'on' else False
+        shownum = 'checked' if value else ""
+        cache.set('exoitel_status', value)
+        return render(request, self.template_name, {'has_permission': has_permission,'check': shownum})
+

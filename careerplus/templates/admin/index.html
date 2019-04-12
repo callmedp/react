@@ -45,6 +45,11 @@
             <th scope="row"><a href="autologintoken">AutoLoginToken</a></th>
             </tr>
         {% endif %}
+              {% if app.name == 'Order'%}
+            <tr >
+            <th scope="row"><a href="shownumberfield">shownumbers</a></th>
+            </tr>
+        {% endif %}
         </table>
         </div>
     {% endfor %}
