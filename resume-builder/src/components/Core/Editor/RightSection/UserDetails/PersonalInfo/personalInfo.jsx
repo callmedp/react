@@ -120,22 +120,31 @@ export class PersonalInfo extends Component {
                             <div className="flex-container">
                                 <fieldset className="custom">
                                     <label>Gender</label>
-                                    <Field
-                                        name="gender"
-                                        component={renderSelect}
-                                        label="Gender"
-                                        isMulti={false}
-                                        validate={required}
-                                        options={[
-                                            {value: '1', label: 'Male'},
-                                            {value: '2', label: 'Female'},
-                                            {value: '3', label: 'Other'}
-                                        ]}
-                                    />
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-blank"></span>
+                                        </div>
+                                        <Field
+                                            name="gender"
+                                            component={renderSelect}
+                                            label="Gender"
+                                            isMulti={false}
+                                            options={[
+                                                {value: '1', label: 'Male'},
+                                                {value: '2', label: 'Female'},
+                                                {value: '3', label: 'Other'}
+                                            ]}
+                                        />
+                                    </div>
                                 </fieldset>
                                 <fieldset>
                                     <label>Date Of Birth</label>
-                                    <Field component={datepicker} validate={required} name="date_of_birth" className={"input-control"}/>
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-blank"></span>
+                                        </div>
+                                        <Field component={datepicker} validate={required} name="date_of_birth" className={"input-control"}/>
+                                    </div>
                                 </fieldset>
                             </div>
                             <div className="flex-container">
@@ -176,11 +185,16 @@ export class PersonalInfo extends Component {
                             <div className="flex-container">
                                 <fieldset className="custom">
                                     <label>Interest</label>
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-blank"></span>
+                                        </div>
                                     <Field name="extracurricular" component={renderDynamicSelect}
                                         // loadOptions={this.fetchInterestList.bind(this)}
                                            defaultOptions={Object.keys(interestList).map(key => interestList[key])}
                                            value={personalInfo.extracurricular}
                                            label="Select Interest"/>
+                                    </div>
                                 </fieldset>
                             </div>
                             {/*<div className="flex-container">*/}

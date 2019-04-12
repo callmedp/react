@@ -46,11 +46,23 @@ class Reference extends Component {
                             <div className="flex-container">
                                 <fieldset className="error">
                                     <label>Reference name</label>
-                                    <Field component={renderField} validate={required} type={"text"} name="reference_name"/>
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-refrences-gr"></span>
+                                        </div>
+                                        <Field component={renderField} type={"text"} name="reference_name"
+                                               className={"input-control"} validate={required} />
+                                    </div>
                                 </fieldset>
                                 <fieldset>
                                     <label>Designation</label>
-                                    <Field component={renderField} validate={required} type={"text"} name="reference_designation"/>
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-designation"></span>
+                                        </div>
+                                        <Field component={renderField} type={"text"} name="reference_designation" 
+                                               className={"input-control"} validate={required} />
+                                    </div>
                                 </fieldset>
                             </div>
 

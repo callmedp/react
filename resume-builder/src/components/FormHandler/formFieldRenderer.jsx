@@ -29,7 +29,7 @@ export const datepicker =
          onDateChange,
          meta: {touched, error, warning}
      }) => (
-        <div>
+        <div className="Error">
             <DatePicker {...input} dateFormat="yyyy-MM-dd"
                         selected={input.value ? new Date(input.value) : null}
                         onChange={date => input.onChange(date)}
@@ -50,7 +50,7 @@ export const renderSelect = ({
                                  options,
                                  isMulti
                              }) => (
-    <div>
+    <div className="Error">
         <Select {...input}
                 placeholder={label}
                 options={options}
@@ -73,7 +73,7 @@ export const renderDynamicSelect = ({
                                         defaultOptions,
                                         meta: {touched, error, warning}
                                     }) => (
-    <div>
+    <div className="Error">
         <AsyncSelect {...input}
                      loadOptions={loadOptions}
                      defaultOptions={defaultOptions}
@@ -96,7 +96,7 @@ export const renderTextArea = ({
                                    meta: {touched, error, warning}
 
                                }) => (
-    <div>
+    <div className="Error">
         <textarea {...input} placeholder={label} type={type}/>
         {touched &&
         ((error && <span className={'Error-message'}>{error}</span>) ||

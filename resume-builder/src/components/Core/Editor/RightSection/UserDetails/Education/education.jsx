@@ -59,7 +59,7 @@ class Education extends Component {
                                     <label>Specialization</label>
                                     <div className="input-group">
                                         <div className="input-group--input-group-icon">
-                                            <span className="icon-company"></span>
+                                            <span className="icon-designation"></span>
                                         </div>
                                         <Field component={renderField}  type={"text"} validate={required} name="specialization"/>
                                     </div>
@@ -99,17 +99,27 @@ class Education extends Component {
 
                                 <fieldset className="custom">
                                     <label>Course Type</label>
-                                    <Field component={renderSelect} validate={required} type={"text"} name="course_type"
-                                           options={[
-                                               {value: 'FT', label: 'FULL TIME'},
-                                               {value: 'PT', label: 'PART TIME'},
-                                           ]}
-                                           className="input-control"/>
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-blank"></span>
+                                        </div>
+                                        <Field component={renderSelect} type={"text"} name="course_type"
+                                               options={[
+                                                   {value: 'FT', label: 'FULL TIME'},
+                                                   {value: 'PT', label: 'PART TIME'},
+                                               ]}
+                                               className="input-control"/>
+                                    </div>
                                 </fieldset>
                                 <fieldset>
                                     <label>Percentage/CGPA</label>
-                                    <Field component={renderField} validate={required} type={"text"} name="percentage_cgpa"
-                                           className="input-control"/>
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-blank"></span>
+                                        </div>
+                                        <Field component={renderField} type={"text"} name="percentage_cgpa"
+                                               className="input-control" validate={required} />
+                                    </div>
                                 </fieldset>
                             </div>
 

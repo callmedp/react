@@ -49,27 +49,38 @@ class Skill extends Component {
                             <div className="flex-container">
                                 <fieldset>
                                     <label>Skill name</label>
-                                    <Field component={renderField} validate={required} type={"text"} name="name"/>
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-skills-gr"></span>
+                                        </div>
+                                        <Field component={renderField} validate={required} type={"text"} name="name"
+                                               className={"input-control"}/>
+                                    </div>
                                 </fieldset>
 
                                 <fieldset className="custom">
                                     <label>Skill rating (out of 10)</label>
-				        			<Field name="proficiency"
-                                           component={renderSelect}
-                                           isMulti={false}
-                                           options={[
-                                               {value: 1, label: '1'},
-                                               {value: 2, label: '2'},
-                                               {value: 3, label: '3'},
-                                               {value: 4, label: '4'},
-                                               {value: 5, label: '5'},
-                                               {value: 6, label: '6'},
-                                               {value: 7, label: '7'},
-                                               {value: 8, label: '8'},
-                                               {value: 9, label: '9'},
-                                               {value: 10, label: '10'}
-                                           ]}
-                                           validate={required}/>
+                                    <div className="input-group">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-blank"></span>
+                                        </div>
+    				        			<Field name="proficiency"
+                                               component={renderSelect}
+                                               isMulti={false}
+                                               options={[
+                                                   {value: 1, label: '1'},
+                                                   {value: 2, label: '2'},
+                                                   {value: 3, label: '3'},
+                                                   {value: 4, label: '4'},
+                                                   {value: 5, label: '5'},
+                                                   {value: 6, label: '6'},
+                                                   {value: 7, label: '7'},
+                                                   {value: 8, label: '8'},
+                                                   {value: 9, label: '9'},
+                                                   {value: 10, label: '10'}
+                                                   ]}
+                                               validate={required}/>
+                                    </div>
                                 </fieldset>
                             </div>
 
