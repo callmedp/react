@@ -30,10 +30,7 @@ class IsObjectOwner(BasePermission):
         return True
 
     def has_object_permission(self,request,view,obj):
-        lookup_field = view.lookup_field
-        lookup_url_kwarg = view.kwargs.get(view.lookup_url_kwarg)
-        owner_fields = getattr(view,'owner_fields',['created_by','candidate_id'])
-        model_object = obj
+        owner_fields = getattr(view,'owner_fields',['owner_id','candidate_id'])
         permission_granted = False
 
         user = request.user
@@ -42,7 +39,7 @@ class IsObjectOwner(BasePermission):
             return False
 
         for field in owner_fields:
-            object_data = getattr(model_object,field,'')
+            object_data = getattr(obj,field,'')
             if object_data == str(user.id):
                 permission_granted = True
                 break

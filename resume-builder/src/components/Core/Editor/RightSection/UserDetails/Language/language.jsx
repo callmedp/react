@@ -45,20 +45,22 @@ class Language extends Component {
     changeOrderingDown(index, fields, event) {
         event.stopPropagation()
         console.log('donw pressed');
-        fields.swap(index, index + 1)
-        this.props.handleSubmit()
+        fields.swap(index, index + 1);
     }
 
     changeOrderingUp(index, fields, event) {
         event.stopPropagation();
-        console.log('up pressed')
+        console.log('up pressed');
+        let currentItem = fields.get(index);
+        let prevItem = fields.get(index - 1);
+        currentItem['order'] = index - 1;
+        prevItem['order'] = index;
         fields.swap(index, index - 1)
+        this.props.handleSwap([currentItem, prevItem])
 
     }
 
     handleAddition(fields, error) {
-
-
         const listLength = fields.length;
 
         this.handleAccordionState(listLength, fields);
@@ -256,8 +258,9 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchUserLanguage())
         },
         pushArray: arrayPush,
-        "bulkUpdateUserLanguage": (fields) => {
-            console.log('fields  ', fields.get(1), fields.get(2))
+
+        "handleSwap": (listItems) => {
+            return dispatch(actions.handleLanguageSwap({list: listItems}))
         }
 
 

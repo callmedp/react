@@ -90,6 +90,10 @@ class CandidateEducation(models.Model):
     end_date = models.DateField('End Date', blank=True, null=True)
     is_pursuing = models.BooleanField('Still Pursuing')
 
+    @property
+    def owner_id(self):
+        return self.candidate.candidate_id
+
     def __str__(self):
         return self.specialization
 
@@ -150,6 +154,11 @@ class CandidateLanguage(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     name = models.CharField('Language Name', max_length=100)
     proficiency = models.IntegerField('Proficiency', default=3)
+    order = models.IntegerField('Order', default=0)
+
+    @property
+    def owner_id(self):
+        return self.candidate.candidate_id
 
     def __str__(self):
         return self.name

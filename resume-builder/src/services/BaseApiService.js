@@ -1,6 +1,12 @@
 const defaultHeaders = {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
 };
+
+const rudDefaultHeaders = {
+    "Content-Type": "application/json",
+    'authorization': "0c05804dcb70a3ce4e08f95a545bce120ee370ab"
+
+}
 
 // todo make seperate function for fetch request
 
@@ -19,7 +25,7 @@ const handleParams = (data) => Object.keys(data).map((key) => {
     return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
 }).join('&');
 
-const post = (url, data, headers = defaultHeaders, isStringify = true, isUpload = false) => {
+const post = (url, data, headers = rudDefaultHeaders, isStringify = true, isUpload = false) => {
     return fetch(url, {
         headers,
         method: 'POST',
@@ -28,7 +34,7 @@ const post = (url, data, headers = defaultHeaders, isStringify = true, isUpload 
         .then(handleResponse)
 };
 
-const deleteMethod = (url, headers = defaultHeaders, isStringify = true, isUpload = false) => {
+const deleteMethod = (url, headers = rudDefaultHeaders, isStringify = true, isUpload = false) => {
     return fetch(url, {
         headers,
         method: 'DELETE',
@@ -36,7 +42,7 @@ const deleteMethod = (url, headers = defaultHeaders, isStringify = true, isUploa
         .then(handleResponse)
 };
 
-const put = (url, data, headers = defaultHeaders, isStringify = true) => {
+const put = (url, data, headers = rudDefaultHeaders, isStringify = true) => {
     return fetch(url, {
         headers,
         method: 'PUT',

@@ -744,6 +744,7 @@ class RemoveCookieFromHeader(APIView):
 
         return response
 
+
 class MediaUploadView(CreateAPIView):
     authentication_classes = ()
     permission_classes = ()
@@ -757,7 +758,8 @@ class ResumeBuilderProductView(ListAPIView):
 
     def get_queryset(self):
         type_flow = self.request.query_params.get('type_flow')
-        return Product.objects.filter(type_flow=type_flow,type_product=2).annotate(parent=F  ('siblingproduct__main')).values('id','parent','name')
+        return Product.objects.filter(type_flow=type_flow, type_product=2).annotate(
+            parent=F('siblingproduct__main')).values('id', 'parent', 'name')
 
 
 class ShineDataFlowDataApiView(ListAPIView):
@@ -766,7 +768,6 @@ class ShineDataFlowDataApiView(ListAPIView):
     queryset = ShineProfileData.objects.all()
     serializer_class = ShineDataFlowDataSerializer
     pagination_class = None
-
 
 
 class ShineCandidateLoginAPIView(APIView):
@@ -785,70 +786,70 @@ class ShineCandidateLoginAPIView(APIView):
     permission_classes = ()
     conn = get_redis_connection('token')
 
-    def set_user_in_cache(self,token,candidate_obj):
-        self.conn.set(candidate_obj.id,pickle.dumps(token))
-        self.conn.set(token,pickle.dumps(candidate_obj))
+    def set_user_in_cache(self, token, candidate_obj):
+        self.conn.set(candidate_obj.id, pickle.dumps(token))
+        self.conn.set(token, pickle.dumps(candidate_obj))
 
     def generate_token(self):
         return binascii.hexlify(os.urandom(20)).decode()
 
-    def get_or_create_token(self,candidate_obj):
+    def get_or_create_token(self, candidate_obj):
         existing_token = self.conn.get(candidate_obj.id)
         token = pickle.loads(existing_token) if existing_token else self.generate_token()
-        self.set_user_in_cache(token,candidate_obj)
+        self.set_user_in_cache(token, candidate_obj)
         return token
 
-    def get_response_for_successful_login(self,candidate_id,login_response):
+    def get_response_for_successful_login(self, candidate_id, login_response):
         candidate_obj = ShineCandidate(**login_response)
         candidate_obj.id = candidate_id
         candidate_obj.candidate_id = candidate_id
         token = self.get_or_create_token(candidate_obj)
-        data_to_send = {"token":token,"candidate_id":candidate_id,"candidate_profile":login_response}
-        return Response(data_to_send,status=status.HTTP_201_CREATED)
+        data_to_send = {"token": token, "candidate_id": candidate_id, "candidate_profile": login_response}
+        return Response(data_to_send, status=status.HTTP_201_CREATED)
 
-    def _dispatch_via_autologin(self,alt):
+    def _dispatch_via_autologin(self, alt):
         try:
-            email,candidate_id,valid = AutoLogin().decode(alt)
+            email, candidate_id, valid = AutoLogin().decode(alt)
         except Exception as e:
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
-            return Response({"data":"No user record found"},status=status.HTTP_400_BAD_REQUEST)
-        
+            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
+
         if not valid or not candidate_id:
-            return Response({"data":"No user record found"},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
         except Exception as e:
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
-            return Response({"data":"No user record found"},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
-        return self.get_response_for_successful_login(candidate_id,login_response)
+        return self.get_response_for_successful_login(candidate_id, login_response)
 
-    def _dispatch_via_email_password(self,email,password):
-        login_data = {"email":email.strip(),"password":password}
-        
+    def _dispatch_via_email_password(self, email, password):
+        login_data = {"email": email.strip(), "password": password}
+
         try:
             login_resp = RegistrationLoginApi.user_login(login_data)
         except Exception as e:
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
-            return Response({"data":"Invalid credentials"},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
         candidate_id = login_resp.get('candidate_id')
         access_token = login_resp.get('access_token')
-        
+
         if not candidate_id and not access_token:
             logging.getLogger('info_log').info("Login attempt failed - {}".format(login_resp))
-            return Response({"data":"Invalid credentials"},status=status.HTTP_400_BAD_REQUEST)
-        
+            return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
             login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
         except Exception as e:
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
-            return Response({"data":"No user record found"},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
-        return self.get_response_for_successful_login(candidate_id,login_response)
+        return self.get_response_for_successful_login(candidate_id, login_response)
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         email = request.data.get('email')
         password = request.data.get('password')
         alt = request.data.get('alt')
@@ -857,6 +858,6 @@ class ShineCandidateLoginAPIView(APIView):
             return self._dispatch_via_autologin(alt)
 
         if email and password:
-            return self._dispatch_via_email_password(email,password)
+            return self._dispatch_via_email_password(email, password)
 
-        return Response({"data":"Invalid credentials"},status=status.HTTP_400_BAD_REQUEST)
+        return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)

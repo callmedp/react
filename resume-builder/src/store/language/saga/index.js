@@ -43,7 +43,6 @@ function* updateUserLanguage(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        userLanguage['cc_id'] = candidateId;
         const {id} = userLanguage;
 
         const result = yield call(id ? Api.updateUserLanguage : Api.createUserLanguage, userLanguage, candidateId, id);
@@ -57,6 +56,30 @@ function* updateUserLanguage(action) {
         console.log('error', e);
     }
 }
+
+
+function* handleLanguageSwap(action) {
+    try {
+        let {payload: {list}} = action;
+
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+
+        const result = yield call(Api.updateUserLanguage, list, candidateId);
+
+        if (result['error']) {
+            console.log(result['error']);
+        }
+
+        console.log('---', result);
+        // yield call(fetchUserLanguage)
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
 
 function* deleteUserLanguage(action) {
     try {
@@ -84,4 +107,6 @@ export default function* watchLanguage() {
     yield takeLatest(Actions.FETCH_USER_LANGUAGE, fetchUserLanguage);
     yield takeLatest(Actions.UPDATE_USER_LANGUAGE, updateUserLanguage);
     yield takeLatest(Actions.DELETE_USER_LANGUAGE, deleteUserLanguage);
+    yield takeLatest(Actions.HANDLE_LANGUAGE_SWAP, handleLanguageSwap);
+
 }

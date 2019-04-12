@@ -195,31 +195,23 @@ class CandidateSocialLinkSerializer(serializers.ModelSerializer):
 
 
 class CandidateLanguageSerializer(serializers.ModelSerializer):
-    cc_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
-        cc_id = self.initial_data.get('cc_id', '')
-        if not cc_id:
-            return candidate_id
-        candidate = Candidate.objects.filter(candidate_id=cc_id).first()
+        if not self.instance:
+            return self.context['request'].user.id
 
-        if not candidate:
-            return candidate_id
-
-        return candidate.id
+        return self.instance.candidate.id
 
     def create(self, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateLanguageSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateLanguageSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = CandidateLanguage
-        fields = ('id', 'candidate_id', 'cc_id', 'proficiency', 'name')
+        fields = ('id', 'candidate_id', 'proficiency', 'name')
 
 
 class CandidateAchievementSerializer(serializers.ModelSerializer):
