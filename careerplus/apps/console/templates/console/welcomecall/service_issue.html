@@ -168,19 +168,19 @@
                       <td class="a-center ">
                           <input autocomplete="off" type="checkbox" class="flat" name="table_records" value="{{obj.pk}}" >
                       </td>
-                      <td>    {% if not exoitel_status%}
+                      <td> {{obj.number}} </td>
+
+                      <!--<td>{{obj.country_code}} {{obj.mobile}}</td>--></td>
+                      <td>{{obj.first_name}} {{obj.last_name}}</td>
+                      <td>{{obj.email}}</td>
+                      <td> {% if not exoitel_status%}
                             {{obj.mobile}}
                             {% endif %}
                             {% if show_btn %}
                             <button id="{{obj.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.id}});"></button>
                             <div style="height:100px; overflow-y: auto; overflow-x: hidden;" id="callingbtn-error"></div>
                                 {% endif %}
-                                                  </td>
-
-                      <!--<td>{{obj.country_code}} {{obj.mobile}}</td>--></td>
-                      <td>{{obj.first_name}} {{obj.last_name}}</td>
-                      <td>{{obj.email}}</td>
-                      <td>{{obj.country_code}} {{obj.mobile}}</td>
+                                              </td>
                       <td>
                         {% if obj.wc_follow_up %}
                           {{obj.wc_follow_up}}
