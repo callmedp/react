@@ -1,6 +1,6 @@
 function makeCallBtn(id) {
  $('#' + id + 'callingBtn').attr('disabled',true)
-$('#callingbtn-error').css('visibility','hidden');
+$('#' + id +'callingbtn-error').css('visibility','hidden');
 $('#' + id + 'callingBtn').attr('title','');
 
 
@@ -16,9 +16,9 @@ $('#' + id + 'callingBtn').attr('title','');
                 if (response.status == 1) {
                     $('#' + id + 'callingBtn').css("color",'#008000');
                     $('#' + id + 'callingBtn').attr('disabled',true)
-                    $('#callingbtn-error').text(response.msg);
-                    $('#callingbtn-error').css('color','green');
-                    $('#callingbtn-error').css('visibility','visible');
+                    $('#' + id +'callingbtn-error').text(response.msg);
+                    $('#' + id +'callingbtn-error').css('color','green');
+                    $('#' + id +'callingbtn-error').css('visibility','visible');
                     $('#' + id + 'callingBtn').attr('title',response.msg);
 
                 } else {
@@ -26,15 +26,15 @@ $('#' + id + 'callingBtn').attr('title','');
                     $('#' + id + 'callingBtn').attr('disabled',true)
                      $('#' + id + 'callingBtn').attr('title',response.msg);
                       $('#' + id + 'callingBtn').css('color','red');
-                      $('#callingbtn-error').text(response.msg);
-                        $('#callingbtn-error').css('visibility','visible');
-                         $('#callingbtn-error').css('color','red');
+                      $('#' + id +'callingbtn-error').text(response.msg);
+                        $('#' + id +'callingbtn-error').css('visibility','visible');
+                         $('#' + id +'callingbtn-error').css('color','red');
                         fetchReason(id);
                     }
                     else{
                      $('#' + id + 'callingBtn').removeAttr('disabled')
                     $('#' + id + 'callingBtn').css('color','red');
-                        $('#callingbtn-error').css('visibility','visible');
+                        $('#' + id +'callingbtn-error').css('visibility','visible');
 
                        $('#' + id + 'callingBtn').attr('title',response.msg);
                        }
@@ -56,8 +56,8 @@ function fetchReason(id){
             },      success: function(response) {
                  $('#' + id + 'callingBtn').removeAttr('disabled')
                  $('#' + id + 'callingBtn').attr('title',response.msg);
-                 $('#callingbtn-error').text(response.msg);
-                 $('#callingbtn-error').css('color','red');
+                 $('#' + id +'callingbtn-error').text(response.msg);
+                 $('#' + id +'callingbtn-error').css('color','red');
                  $('#' + id + 'callingBtn').css('color','red');
             }
         })

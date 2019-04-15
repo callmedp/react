@@ -72,8 +72,10 @@
                               {{order.alt_mobile}}
                               {% endif %}
                           </div>
-                           {% if show_btn %}
-                            <button id="{{order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{order.id}});"></button></td>
+                            {{order.mobile}}
+                            {% if show_btn %}
+                            <button id="{{order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{order.id}});"></button>
+                            <div style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{order.id}}callingbtn-error"></div>
                                 {% endif %}
                           </td>
                           <td>{{order.first_name}} {{order.last_name}}</td>
