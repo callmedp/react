@@ -23,6 +23,7 @@ from shared.rest_addons.authentication import ShineUserAuthentication
 from shared.permissions import IsObjectOwner
 
 # third party imports
+from rest_framework import status
 from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView)
 from rest_framework.views import (APIView)
 from rest_framework.parsers import (FormParser, MultiPartParser)
@@ -449,3 +450,126 @@ class CandidateResumePreview(APIView):
         return Response({
             'html': rendered_template
         })
+
+
+class ProfileEntityBulkUpdateView(APIView):
+    """
+    Expected behaviour - 
+
+    http://127.0.0.1:8000/api/v1/resume/candidate/5c4ede4da4d7330573d8c79b/bulk-update/skill/
+
+    Sample input data - 
+
+    [{
+        "candidate_id": "1",
+        "cc_id": null,
+        "name": "Java",
+        "proficiency": 2
+    },
+
+    {   "id":1,
+        "candidate_id": "1",
+        "cc_id": null,
+        "name": "Django",
+        "proficiency": 2
+    }]
+
+    Output - 
+
+    [{  "id":2,
+        "candidate_id": "1",
+        "cc_id": null,
+        "name": "Java",
+        "proficiency": 2
+    },
+
+    {   "id":1,
+        "candidate_id": "1",
+        "cc_id": null,
+        "name": "Django",
+        "proficiency": 2
+    }]
+    """
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    entity_slug_serializer_mapping = {'skill':SkillSerializer,
+                                    'experience':CandidateExperienceSerializer,
+                                    'education':CandidateEducationSerializer,
+                                    'certification':CandidateCertificationSerializer,
+                                    'project':CandidateProjectSerializer,
+                                    'reference':CandidateReferenceSerializer,
+                                    'social-link':CandidateSocialLinkSerializer,
+                                    'language':CandidateLanguageSerializer,
+                                    'achievement':CandidateAchievementSerializer}
+
+    entity_slug_model_mapping = {'skill':Skill,
+                                'experience':CandidateExperience,
+                                'education':CandidateEducation,
+                                'certification':CandidateCertification,
+                                'project':CandidateProject,
+                                'reference':CandidateReference,
+                                'social-link':CandidateSocialLink,
+                                'language':CandidateLanguage,
+                                'achievement':CandidateAchievement}
+
+    def get_serializer_class(self,entity_slug):
+        return self.entity_slug_serializer_mapping.get(entity_slug)
+
+    def get_model_class(self,entity_slug):
+        return self.entity_slug_model_mapping.get(entity_slug)
+
+    def post(self,request,*args,**kwargs):
+        entity_slug = kwargs.get('entity_slug')
+        data = request.data
+        serializer_class = self.get_serializer_class(entity_slug)
+        model_class = self.get_model_class(entity_slug)
+        
+        if not serializer_class:
+            return Response({"detail":"Invalid parameters"},status=status.HTTP_400_BAD_REQUEST)
+
+        invalid_data = False
+        serializer_objs_list = []
+
+        if not isinstance(data,list):
+            return Response({"detail":"Invalid data format"},status=status.HTTP_400_BAD_REQUEST)
+
+        for record in data:
+            obj_id = str(record.get('id',0))
+            
+            if obj_id and not obj_id.isdigit():
+                invalid_data = True
+                break
+            obj_id = int(obj_id)
+
+            instance = model_class.objects.filter(id=obj_id).first()
+            
+            if not instance and obj_id != 0:
+                invalid_data = True
+                break
+
+            if instance and instance.candidate.candidate_id != request.user.id:
+                invalid_data = True
+                break
+
+            context = {'request':request}
+            serializer_obj = serializer_class(data=record,instance=instance,context=context) if \
+                                instance else serializer_class(data=record,context=context)
+
+            if not serializer_obj.is_valid():
+                invalid_data = True
+                break
+
+            serializer_objs_list.append(serializer_obj)
+
+        if invalid_data:
+            return Response({"detail":"Invalid data"},status=status.HTTP_400_BAD_REQUEST)
+
+        for obj in serializer_objs_list:
+            obj.save()
+
+        return Response([x.data for x in serializer_objs_list],status=status.HTTP_200_OK)
+
+        
+
+
+

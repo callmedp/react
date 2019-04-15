@@ -20,15 +20,10 @@ class SkillSerializer(serializers.ModelSerializer):
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
-        cc_id = self.initial_data.get('cc_id', '')
-        if not cc_id:
-            return candidate_id
-        candidate = Candidate.objects.filter(candidate_id=cc_id).first()
+        if not self.instance:
+            return self.context['request'].user.id
 
-        if not candidate:
-            return candidate_id
-
-        return candidate.id
+        return self.instance.candidate.id
 
     def create(self, validated_data):
         validated_data.pop('cc_id', '')
@@ -48,15 +43,10 @@ class CandidateExperienceSerializer(serializers.ModelSerializer):
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
-        cc_id = self.initial_data.get('cc_id', '')
-        if not cc_id:
-            return candidate_id
-        candidate = Candidate.objects.filter(candidate_id=cc_id).first()
+        if not self.instance:
+            return self.context['request'].user.id
 
-        if not candidate:
-            return candidate_id
-
-        return candidate.id
+        return self.instance.candidate.id
 
     def create(self, validated_data):
         validated_data.pop('cc_id', '')
@@ -78,15 +68,10 @@ class CandidateEducationSerializer(serializers.ModelSerializer):
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
-        cc_id = self.initial_data.get('cc_id', '')
-        if not cc_id:
-            return candidate_id
-        candidate = Candidate.objects.filter(candidate_id=cc_id).first()
+        if not self.instance:
+            return self.context['request'].user.id
 
-        if not candidate:
-            return candidate_id
-
-        return candidate.id
+        return self.instance.candidate.id
 
     def create(self, validated_data):
         validated_data.pop('cc_id', '')
@@ -109,15 +94,10 @@ class CandidateCertificationSerializer(serializers.ModelSerializer):
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
-        cc_id = self.initial_data.get('cc_id', '')
-        if not cc_id:
-            return candidate_id
-        candidate = Candidate.objects.filter(candidate_id=cc_id).first()
+        if not self.instance:
+            return self.context['request'].user.id
 
-        if not candidate:
-            return candidate_id
-
-        return candidate.id
+        return self.instance.candidate.id
 
     def create(self, validated_data):
         validated_data.pop('cc_id', '')
@@ -137,15 +117,10 @@ class CandidateProjectSerializer(serializers.ModelSerializer):
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
-        cc_id = self.initial_data.get('cc_id', '')
-        if not cc_id:
-            return candidate_id
-        candidate = Candidate.objects.filter(candidate_id=cc_id).first()
+        if not self.instance:
+            return self.context['request'].user.id
 
-        if not candidate:
-            return candidate_id
-
-        return candidate.id
+        return self.instance.candidate.id
 
     def create(self, validated_data):
         validated_data.pop('cc_id', '')
@@ -165,15 +140,10 @@ class CandidateReferenceSerializer(serializers.ModelSerializer):
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
-        cc_id = self.initial_data.get('cc_id', '')
-        if not cc_id:
-            return candidate_id
-        candidate = Candidate.objects.filter(candidate_id=cc_id).first()
+        if not self.instance:
+            return self.context['request'].user.id
 
-        if not candidate:
-            return candidate_id
-
-        return candidate.id
+        return self.instance.candidate.id
 
     def create(self, validated_data):
         validated_data.pop('cc_id', '')
@@ -189,6 +159,7 @@ class CandidateReferenceSerializer(serializers.ModelSerializer):
 
 
 class CandidateSocialLinkSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = CandidateSocialLink
         fields = ('id', 'candidate', 'reference_name', 'about_candidate', 'reference_designation')
