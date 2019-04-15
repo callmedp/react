@@ -17,7 +17,8 @@ function* fetchUserCourse(action) {
         }
         const {data: {results}} = result;
 
-        yield put({type: Actions.SAVE_USER_COURSE, data: results[0]})
+        let data = {list: results}
+        yield put({type: Actions.SAVE_USER_COURSE, data: data})
     } catch (e) {
         console.log(e);
     }
@@ -47,7 +48,56 @@ function* updateUserCourse(action) {
     }
 }
 
+
+function* handleCourseSwap(action) {
+    try {
+        let {payload: {list}} = action;
+
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+
+        const result = yield call(Api.updateUserCourse, list, candidateId);
+
+        if (result['error']) {
+            console.log(result['error']);
+        }
+
+        console.log('---', result);
+        // yield call(fetchUserLanguage)
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+
+function* deleteUserCourse(action) {
+    try {
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        // userLanguage['cc_id'] = candidateId;
+        const {courseId} = action;
+
+        const result = yield call(Api.deleteUserCourse, candidateId, courseId);
+
+
+        if (result['error']) {
+            console.log(result['error'])
+        }
+        // yield call(fetchUserLanguage)
+        yield put({type: Actions.REMOVE_COURSE, id: courseId});
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+
 export default function* watchCourse() {
-    yield takeLatest(Actions.FETCH_USER_COURSE, fetchUserCourse)
-    yield takeLatest(Actions.UPDATE_USER_COURSE, updateUserCourse)
+    yield takeLatest(Actions.FETCH_USER_COURSE, fetchUserCourse);
+    yield takeLatest(Actions.UPDATE_USER_COURSE, updateUserCourse);
+    yield takeLatest(Actions.DELETE_USER_COURSE, deleteUserCourse);
+    yield takeLatest(Actions.HANDLE_COURSE_SWAP, handleCourseSwap);
 }

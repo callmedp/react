@@ -46,7 +46,56 @@ function* updateUserExperience(action) {
     }
 }
 
+
+
+function* handleExperienceSwap(action) {
+    try {
+        let {payload: {list}} = action;
+
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+
+        const result = yield call(Api.updateUserExperience, list, candidateId);
+
+        if (result['error']) {
+            console.log(result['error']);
+        }
+
+        console.log('---', result);
+        // yield call(fetchUserLanguage)
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+
+function* deleteUserExperience(action) {
+    try {
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        // userLanguage['cc_id'] = candidateId;
+        const {experienceId} = action;
+
+        const result = yield call(Api.deleteUserExperience, candidateId, experienceId);
+
+
+        if (result['error']) {
+            console.log(result['error'])
+        }
+        // yield call(fetchUserLanguage)
+        yield put({type: Actions.REMOVE_EXPERIENCE, id: experienceId});
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
 export default function* watchExperience() {
-    yield takeLatest(Actions.FETCH_USER_EXPERIENCE, fetchUserExperience)
-    yield takeLatest(Actions.UPDATE_USER_EXPERIENCE, updateUserExperience)
+    yield takeLatest(Actions.FETCH_USER_EXPERIENCE, fetchUserExperience);
+    yield takeLatest(Actions.UPDATE_USER_EXPERIENCE, updateUserExperience);
+    yield takeLatest(Actions.DELETE_USER_EXPERIENCE, deleteUserExperience);
+    yield takeLatest(Actions.HANDLE_EXPERIENCE_SWAP, handleExperienceSwap);
 }

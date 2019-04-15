@@ -128,7 +128,6 @@ class Language extends Component {
                                 className="add-button add-button__right">Add new
                         </button>
                         {(touched || submitFailed) && error && <span>{error}</span>}
-
                     </section>
                     <section className="right-sidebar-scroll">
                         <ul>

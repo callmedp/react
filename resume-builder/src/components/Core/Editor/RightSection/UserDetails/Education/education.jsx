@@ -138,7 +138,7 @@ class Education extends Component {
                                                         <AccordionItemHeading>
                                                             <AccordionItemButton>
                                                                 <div className="flex-container">
-                                                                    <h3 className="add-section-heading">{fields.get(index).name || 'Education'}</h3>
+                                                                    <h3 className="add-section-heading">{fields.get(index).specialization || 'Education'}</h3>
                                                                     <div className="addon-buttons mr-10">
                                                                 <span
                                                                     onClick={(event) => this.deleteLanguage(index, fields, event)}

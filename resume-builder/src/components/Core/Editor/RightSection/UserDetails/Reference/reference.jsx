@@ -1,16 +1,35 @@
 import React, {Component} from 'react';
 import './reference.scss'
-import {Field, reduxForm} from "redux-form";
+import {Field, reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../../../../../store/reference/actions";
 import {connect} from "react-redux";
 import {renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import {required} from "../../../../../FormHandler/formValidations"
-
+import {
+    Accordion,
+    AccordionItem,
+    AccordionItemHeading,
+    AccordionItemPanel,
+    AccordionItemButton
+} from 'react-accessible-accordion';
 
 class Reference extends Component {
     constructor(props) {
         super(props)
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleAccordionClick = this.handleAccordionClick.bind(this);
+        this.handleAccordionState = this.handleAccordionState.bind(this);
+        this.handleAddition = this.handleAddition.bind(this);
+        this.deleteReference = this.deleteReference.bind(this);
+        this.changeOrderingUp = this.changeOrderingUp.bind(this);
+        this.changeOrderingDown = this.changeOrderingDown.bind(this);
+
+        this.state = {
+            currentAccordion: 0,
+            previousAccordion: 0,
+            openedAccordion: 0,
+
+        }
     }
 
     async handleSubmit(values) {
@@ -21,67 +40,190 @@ class Reference extends Component {
         this.props.fetchUserReference()
     }
 
-    render() {
-        const { handleSubmit,reference} = this.props;
 
+    changeOrderingDown(index, fields, event) {
+        event.stopPropagation()
+        console.log('donw pressed');
+        fields.swap(index, index + 1);
+    }
+
+    changeOrderingUp(index, fields, event) {
+        event.stopPropagation();
+        console.log('up pressed');
+        let currentItem = fields.get(index);
+        let prevItem = fields.get(index - 1);
+        currentItem['order'] = index - 1;
+        prevItem['order'] = index;
+        fields.swap(index, index - 1)
+        this.props.handleSwap([currentItem, prevItem])
+
+    }
+
+    handleAddition(fields, error) {
+        const listLength = fields.length;
+
+        this.handleAccordionState(listLength, fields);
+        fields.push({
+            "candidate_id": '',
+            "id": '',
+            "name": '',
+            "proficiency": {
+                value: 5, 'label': '5'
+            }
+        })
+    }
+
+    deleteReference(index, fields, event) {
+        event.stopPropagation();
+        const reference = fields.get(index);
+        fields.remove(index);
+        if (reference && reference.id) {
+            this.props.removeReference(reference.id)
+        }
+
+
+    }
+
+
+    handleAccordionState(val, fields) {
+        const {currentAccordion} = this.state;
+
+        console.log('--accordion--', currentAccordion);
+        if (currentAccordion !== '') {
+
+            this.props.onSubmit(fields.get(currentAccordion))
+        }
+
+        this.setState((state) => ({
+            previousAccordion: state.currentAccordion,
+            openedAccordion: val,
+            currentAccordion: val
+        }))
+    }
+
+    handleAccordionClick(value, fields) {
+        const val = value.length > 0 ? value[0] : ''
+        this.handleAccordionState(val, fields)
+    }
+
+
+    render() {
+        const {handleSubmit, reference} = this.props;
+        const renderReferences = ({fields, meta: {touched, error, submitFailed}}) => {
+            return (
+                <div>
+                    <section className="head-section">
+                        <span className="icon-box"><i className="icon-references1"></i></span>
+                        <h2>References</h2>
+                        <span className="icon-edit icon-references__cursor"></span>
+                        <button
+                            onClick={this.handleAddition.bind(this, fields, error)}
+                            type={'button'}
+                            className="add-button add-button__right">Add new
+                        </button>
+                        {(touched || submitFailed) && error && <span>{error}</span>}
+                    </section>
+                    <section>
+                        <section className="right-sidebar-scroll">
+                            <ul>
+                                <Accordion
+                                    onChange={(value) => this.handleAccordionClick(value, fields, error)}
+                                    allowZeroExpanded={true}
+                                    preExpanded={[this.state.openedAccordion]}>
+                                    {
+                                        fields.map((member, index) => {
+                                            return (
+                                                <li key={index}>
+                                                    <section className="info-section">
+                                                        <AccordionItem uuid={index}>
+                                                            <AccordionItemHeading>
+                                                                <AccordionItemButton>
+                                                                    <div className="flex-container">
+                                                                        <h3 className="add-section-heading">{fields.get(index).reference_name || 'Reference'}</h3>
+                                                                        <div className="addon-buttons mr-10">
+                                                                <span
+                                                                    onClick={(event) => this.deleteReference(index, fields, event)}
+                                                                    className="icon-delete mr-15"/>
+                                                                            {index !== 0 &&
+                                                                            <span
+                                                                                onClick={(event) => this.changeOrderingUp(index, fields, event)}
+                                                                                className="icon-ascend mr-5"/>
+                                                                            }
+                                                                            {
+                                                                                index !== fields.length - 1 &&
+                                                                                < span
+                                                                                    onClick={(event) => this.changeOrderingDown(index, fields, event)}
+                                                                                    className="icon-descend"/>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                </AccordionItemButton>
+                                                            </AccordionItemHeading>
+                                                            <AccordionItemPanel>
+
+                                                                <div className="flex-container">
+                                                                    <fieldset className="error">
+                                                                        <label>Reference name</label>
+                                                                        <div className="input-group">
+                                                                            <div
+                                                                                className="input-group--input-group-icon">
+                                                                                <span
+                                                                                    className="icon-refrences-gr"/>
+                                                                            </div>
+                                                                            <Field component={renderField} type={"text"}
+                                                                                   name={`${member}.reference_name`}
+                                                                                   className={"input-control"}
+                                                                            />
+                                                                        </div>
+                                                                    </fieldset>
+                                                                    <fieldset>
+                                                                        <label>Designation</label>
+                                                                        <div className="input-group">
+                                                                            <div
+                                                                                className="input-group--input-group-icon">
+                                                                                <span
+                                                                                    className="icon-designation"/>
+                                                                            </div>
+                                                                            <Field component={renderField} type={"text"}
+                                                                                   name={`${member}.reference_designation`}
+                                                                                   className={"input-control"}
+                                                                            />
+                                                                        </div>
+                                                                    </fieldset>
+                                                                </div>
+
+                                                                <div className="flex-container">
+                                                                    <fieldset>
+                                                                        <label>Description</label>
+                                                                        <Field component={renderTextArea}
+                                                                               type={"textarea"}
+                                                                               name={`${member}.about_candidate`}/>
+                                                                    </fieldset>
+                                                                </div>
+
+                                                            </AccordionItemPanel>
+                                                        </AccordionItem>
+                                                    </section>
+                                                </li>
+                                            )
+                                        })
+                                    }
+                                </Accordion>
+                            </ul>
+                        </section>
+                    </section>
+                </div>
+            )
+        };
         return (
             <div>
-                <section className="head-section">
-                    <span className="icon-box"><i className="icon-references1"></i></span>
-                    <h2>References</h2>
-                    <span className="icon-edit icon-references__cursor"></span>
-                    <button className="add-button add-button__right">Add new</button>
-                </section>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
-                    <section className="right-sidebar-scroll">
-                        <section className="info-section">
-                            <div className="flex-container">
-                                <h3 className="add-section-heading">{reference.reference_name}</h3>
-                                <div className="addon-buttons mr-10">
-                                    <span className="icon-delete mr-15"></span>
-                                    <span className="icon-ascend mr-5"></span>
-                                    <span className="icon-descend"></span>
-                                </div>
-                            </div>
-                            <div className="flex-container">
-                                <fieldset className="error">
-                                    <label>Reference name</label>
-                                    <div className="input-group">
-                                        <div className="input-group--input-group-icon">
-                                            <span className="icon-refrences-gr"></span>
-                                        </div>
-                                        <Field component={renderField} type={"text"} name="reference_name"
-                                               className={"input-control"} validate={required} />
-                                    </div>
-                                </fieldset>
-                                <fieldset>
-                                    <label>Designation</label>
-                                    <div className="input-group">
-                                        <div className="input-group--input-group-icon">
-                                            <span className="icon-designation"></span>
-                                        </div>
-                                        <Field component={renderField} type={"text"} name="reference_designation" 
-                                               className={"input-control"} validate={required} />
-                                    </div>
-                                </fieldset>
-                            </div>
-
-                            <div className="flex-container">
-                                <fieldset>
-                                    <label>Description</label>
-                                    <Field component={renderTextArea} type={"textarea"} name="about_candidate"/>
-                                </fieldset>
-                            </div>
-
-                        </section>
-
-
-                    </section>
-
+                    <FieldArray name={"list"} component={renderReferences}/>
                     <div className="flex-container items-right mr-20 mb-30">
                         <button className="blue-button mr-10">Preview</button>
                         <button className="orange-button" type={'submit'}>Save & Continue</button>
                     </div>
+
                 </form>
 
             </div>
@@ -113,6 +255,13 @@ const mapDispatchToProps = (dispatch) => {
         "fetchUserReference": () => {
             return dispatch(actions.fetchUserReference())
         },
+        "removeReference": (referenceId) => {
+            return dispatch(actions.deleteReference(referenceId))
+        },
+
+        "handleSwap": (listItems) => {
+            return dispatch(actions.handleReferenceSwap({list: listItems}))
+        }
     }
 };
 

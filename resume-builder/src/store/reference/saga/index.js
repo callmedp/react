@@ -17,7 +17,8 @@ function* fetchUserReference(action) {
         }
         const {data: {results}} = result;
 
-        yield put({type: Actions.SAVE_USER_REFERENCE, data: results[0]})
+        let data = {list: results};
+        yield put({type: Actions.SAVE_USER_REFERENCE, data: data})
     } catch (e) {
         console.log(e);
     }
@@ -48,8 +49,57 @@ function* updateUserReference(action) {
     }
 }
 
+
+function* handleReferenceSwap(action) {
+    try {
+        let {payload: {list}} = action;
+
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+
+        const result = yield call(Api.updateUserReference, list, candidateId);
+
+        if (result['error']) {
+            console.log(result['error']);
+        }
+
+        console.log('---', result);
+        // yield call(fetchUserLanguage)
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+
+function* deleteUserReference(action) {
+    try {
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        // userLanguage['cc_id'] = candidateId;
+        const {projectId} = action;
+
+        const result = yield call(Api.deleteUserReference, candidateId, projectId);
+
+
+        if (result['error']) {
+            console.log(result['error'])
+        }
+        // yield call(fetchUserLanguage)
+        yield put({type: Actions.REMOVE_REFERENCE, id: projectId});
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+
 export default function* watchReference() {
     yield takeLatest(Actions.FETCH_USER_REFERENCE, fetchUserReference);
     yield takeLatest(Actions.UPDATE_USER_REFERENCE, updateUserReference);
+    yield takeLatest(Actions.DELETE_USER_REFERENCE, deleteUserReference);
+    yield takeLatest(Actions.HANDLE_REFERENCE_SWAP, handleReferenceSwap);
 
 }

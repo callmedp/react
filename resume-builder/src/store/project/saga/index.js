@@ -16,8 +16,10 @@ function* fetchUserProject(action) {
             console.log('error');
         }
         const {data: {results}} = result;
+        let data = {list: results}
 
-        yield put({type: Actions.SAVE_USER_PROJECT, data: results[0]})
+
+        yield put({type: Actions.SAVE_USER_PROJECT, data: data})
     } catch (e) {
         console.log(e);
     }
@@ -48,7 +50,57 @@ function* updateUserProject(action) {
     }
 }
 
+
+function* handleProjectSwap(action) {
+    try {
+        let {payload: {list}} = action;
+
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+
+        const result = yield call(Api.updateUserProject, list, candidateId);
+
+        if (result['error']) {
+            console.log(result['error']);
+        }
+
+        console.log('---', result);
+        // yield call(fetchUserLanguage)
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+
+function* deleteUserProject(action) {
+    try {
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        // userLanguage['cc_id'] = candidateId;
+        const {projectId} = action;
+
+        const result = yield call(Api.deleteUserProject, candidateId, projectId);
+
+
+        if (result['error']) {
+            console.log(result['error'])
+        }
+        // yield call(fetchUserLanguage)
+        yield put({type: Actions.REMOVE_PROJECT, id: projectId});
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+
 export default function* watchProject() {
-    yield takeLatest(Actions.FETCH_USER_PROJECT, fetchUserProject)
-    yield takeLatest(Actions.UPDATE_USER_PROJECT, updateUserProject)
+    yield takeLatest(Actions.FETCH_USER_PROJECT, fetchUserProject);
+    yield takeLatest(Actions.UPDATE_USER_PROJECT, updateUserProject);
+    yield takeLatest(Actions.DELETE_USER_PROJECT, deleteUserProject);
+    yield takeLatest(Actions.HANDLE_PROJECT_SWAP, handleProjectSwap);
+
 }

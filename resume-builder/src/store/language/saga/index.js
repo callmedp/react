@@ -88,7 +88,7 @@ function* deleteUserLanguage(action) {
         // userLanguage['cc_id'] = candidateId;
         const {languageId} = action;
 
-        const result = yield call(Api.deleteUserLanguage, candidateId, languageId);
+        const result = yield call(Api.deleteUserProject, candidateId, languageId);
 
 
         if (result['error']) {

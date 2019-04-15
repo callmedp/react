@@ -1,4 +1,4 @@
-import {FETCH_USER_COURSE, UPDATE_USER_COURSE} from './actionTypes'
+import {FETCH_USER_COURSE, UPDATE_USER_COURSE, DELETE_USER_COURSE, HANDLE_COURSE_SWAP} from './actionTypes'
 
 
 export const fetchUserCourse = () => {
