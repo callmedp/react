@@ -20,6 +20,7 @@
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/blog/blog.scss' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 
@@ -32,9 +33,14 @@
             <a href="/" class="icon-logo pull-left"></a>
         </div>
 
-        <div class="pull-right">
-            <!-- <a class="icon-search pull-left " href="#">search</a> -->
-            <a class="icon-cart pull-left" href="{% url "cart:cart-product-list" %}" >cart</a>
+        <div class="pull-right" style="width:30%;">       
+          <a class="icon-cart pull-right" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+          <form method='get' id="search-form">
+            <div class="searchbox">
+              <input id='id_q' type="text" placeholder="Search here" name="search" class="searchbox-input" autocomplete="off">
+              <span class="searchbox-icon"></span>
+            </div>
+          </form>
         </div>
     </div>
 </header>

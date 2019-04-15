@@ -1,12 +1,12 @@
 {% load static %}
 <div class="sidebar hide" id="main-sidebar">
-    <div class="main-sidebar-wrapper" id="main-sidebar-wrapper">
+    <div class="main-sidebar-wrapper h-100" id="main-sidebar-wrapper">
         <div class="login_wrap non_login w100fl" style="display:block;">
             <div class="login_content">
                 <div class="user_details">
                     <div class="media">
                         <div class="media-left">
-                            <span><img src="{% static 'shinelearn/images/user-loggedin.jpg' %}"></span>
+                            <span><img alt="user loggedin" src="{% static 'shinelearn/images/user-loggedin.jpg' %}"></span>
                         </div>
                         <div class="media-body rel">
                             <h3 class="media-heading">{% if request.session.candidate_id %}{{ request.session.full_name|title }}{% else %}Welcome Guest{% endif %}</h3>
@@ -21,12 +21,12 @@
                         </div>
                     </div>
                 </div><!-- User after login Ends here -->
-            </div><img src="{% static 'shinelearn/images/mobile/common/nonlogin.jpg' %}">
+            </div><img alt="user non loggedin" src="{% static 'shinelearn/images/mobile/common/nonlogin.jpg' %}">
 
         </div><!-- Login widgets Ends here -->
 
-        <nav itemscope itemtype="http://schema.org/Organization">
-            <ul class="sb-menu">
+        <nav itemscope itemtype="http://schema.org/Organization" class="h-100">
+            <ul class="sb-menu h-100">
 
                 <li><a href="/"><span class="icon-home"></span>Home</a></li>
                 <meta itemprop="name" content="Shine">

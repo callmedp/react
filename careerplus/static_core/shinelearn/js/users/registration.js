@@ -29,16 +29,8 @@ $().ready(function() {
 
     $("#register_form").validate({
         submitHandler: function(form) {
-            e.preventDefault();
 
-            if($(this).val() != '')
-                {
-                    $('button[type="submit"]').attr('disabled' , false); 
-                }
-            else
-                {
-                    $('button[type="submit"]').attr('disabled' , true);
-                }     
+            form.submit();    
         },
         rules: {
                 email:{

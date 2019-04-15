@@ -3,10 +3,11 @@ from rest_framework.serializers import (
     SerializerMethodField,
     Serializer
 )
+from django.conf import settings
 from rest_framework import serializers
 
 from order.models import Order, OrderItem
-from shop.models import Product
+from shop.models import Product, ShineProfileData
 from payment.models import PaymentTxn
 
 import logging
@@ -292,3 +293,15 @@ class RecommendedProductSerializerSolr(Serializer):
         max_digits=8, decimal_places=2)
     # pSkilln = serializers.ListField(
     #     child=serializers.CharField())
+
+class  ShineDataFlowDataSerializer(ModelSerializer):
+
+    image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ShineProfileData
+        fields = ('id', 'name', 'image_url', 'priority_value')
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url

@@ -15,7 +15,7 @@
      {%  endblock django_meta %}
     {% block canonical_url %}
       <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">
-      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ object.get_absolute_url }}">
+      {% comment %} <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ object.get_absolute_url }}"> {% endcomment %}
     {% endblock canonical_url %}
 
      {% block title %}

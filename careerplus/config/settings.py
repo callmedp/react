@@ -169,6 +169,15 @@ ROUNDONE_PRODUCT_ID = 2129
 CCAVENUE_ACCESS_CODE = 'AVEX73EI34CC49XECC'
 CCAVENUE_WORKING_KEY = 'DE002F3C615C11E7FB7D333050103230'
 
+####### EPAYLATER SETTINGS ###########################
+EPAYLATER_INFO = {"payment_url":"https://payment-sandbox.epaylater.in/web/process-transaction",
+                "apiKey": "secret_31f23758-6325-442c-a98c-9eaf1d41a188",
+                "aeskey": "698042ECAE38D843A166AEFADD109687",
+                "iv": "D58C8D87960088FF",
+                "mCode": "SHINELEARNING",
+                "category" : "LEARNING",
+                "base_url":"https://api-sandbox.epaylater.in/"}
+
 # Shine settings
 
 SHINE_SITE = 'https://www.shine.com'
