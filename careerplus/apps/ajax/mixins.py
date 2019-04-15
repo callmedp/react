@@ -26,6 +26,7 @@ class ExotelMixin(object):
     def get_dnd_info(self,number):
         url_to_hit = DND_CHECK_URL.format(sid=SID,token=TOKEN,number=number)
         value = False
+        resp = None
         try:
             resp = requests.get(url_to_hit)
         except Exception as e:
