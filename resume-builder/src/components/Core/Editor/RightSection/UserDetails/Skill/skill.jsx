@@ -5,7 +5,6 @@ import * as actions from "../../../../../../store/skill/actions";
 import {connect} from "react-redux";
 import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
-import {required} from "../../../../../FormHandler/formValidations"
 
 import {
     Accordion,
@@ -15,7 +14,7 @@ import {
     AccordionItemButton
 } from 'react-accessible-accordion';
 
-import validate from '../../../../../FormHandler/skillValidation.js'
+import validate from '../../../../../FormHandler/validations/skillValidation.js'
 
 
 /*

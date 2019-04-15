@@ -31,7 +31,6 @@ function* updateUserCourse(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        userCourse['cc_id'] = candidateId;
         const {id} = userCourse;
 
         const result = yield call(id ? Api.updateUserCourse : Api.createUserCourse, userCourse, candidateId, id);
@@ -77,7 +76,6 @@ function* deleteUserCourse(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        // userLanguage['cc_id'] = candidateId;
         const {courseId} = action;
 
         const result = yield call(Api.deleteUserCourse, candidateId, courseId);

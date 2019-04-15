@@ -12,7 +12,7 @@ import {
     AccordionItemButton
 } from 'react-accessible-accordion';
 
-import validate from '../../../../../FormHandler/languageValidation'
+import validate from '../../../../../FormHandler/validations/languageValidation'
 /*
 styles
 * */
@@ -51,7 +51,12 @@ class Language extends Component {
     changeOrderingDown(index, fields, event) {
         event.stopPropagation()
         console.log('donw pressed');
+        let currentItem = fields.get(index);
+        let nextItem = fields.get(index + 1);
+        currentItem['order'] = index + 1;
+        nextItem['order'] = index;
         fields.swap(index, index + 1);
+        this.props.handleSwap([currentItem, nextItem])
     }
 
     changeOrderingUp(index, fields, event) {
@@ -68,6 +73,7 @@ class Language extends Component {
 
     handleAddition(fields, error) {
         const listLength = fields.length;
+        console.log('======', fields.length);
 
         this.handleAccordionState(listLength, fields);
         fields.push({
@@ -76,7 +82,8 @@ class Language extends Component {
             "name": '',
             "proficiency": {
                 value: 5, 'label': '5'
-            }
+            },
+            order: fields.length
         })
     }
 
@@ -273,6 +280,18 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         "handleSwap": (listItems) => {
+            listItems = (listItems || []).map(item => {
+                const {proficiency} = item;
+                if (!item['id']) delete item['id'];
+                item = {
+                    ...item,
+                    ...{
+                        proficiency: (proficiency && proficiency.value) || 5
+
+                    }
+                }
+                return item;
+            })
             return dispatch(actions.handleLanguageSwap({list: listItems}))
         }
     }

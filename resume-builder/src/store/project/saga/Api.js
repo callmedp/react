@@ -21,7 +21,7 @@ const updateUserProject = (data, candidateId, userProjectId) => {
 
 const deleteUserProject = (candidateId, projectId) => {
 
-    const url = `candidate/${candidateId}/languages/${projectId}/`;
+    const url = `candidate/${candidateId}/projects/${projectId}/`;
 
     return BaseApiService.deleteMethod(`http://127.0.0.1:8000/api/v1/resume/${url}`);
 

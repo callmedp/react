@@ -5,7 +5,7 @@ import * as actions from "../../../../../../store/project/actions";
 import {connect} from "react-redux";
 import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
-import validate from "../../../../../FormHandler/projectValidation"
+import validate from "../../../../../FormHandler/validations/projectValidation"
 import {
     Accordion,
     AccordionItem,
@@ -21,7 +21,7 @@ class Project extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
-        this.changeOrderingDown = this.changeOrderingDown.bind(this);
+        this.deleteProject = this.deleteProject.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
         this.handleAccordionState = this.handleAccordionState.bind(this);
@@ -70,10 +70,11 @@ class Project extends Component {
         fields.push({
             "candidate_id": '',
             "id": '',
-            "name": '',
-            "proficiency": {
-                value: 5, 'label': '5'
-            }
+            "project_name": '',
+            "start_date": '',
+            "end_date": '',
+            "skills": '',
+            "description": ''
         })
     }
 
@@ -197,8 +198,8 @@ class Project extends Component {
                                                                                className={'input-control'}
                                                                                name={`${member}.end_date`}/></div>
                                                                     <span className="till-today">
-                                    <Field type="radio" name="currently_working" component="input"
-                                           value={project.currently_working}/>
+                                    <Field type="radio" name={`${member}.currently_working`} component="input"
+                                           value={`${member}.currently_working`} />
                                     Till Today
                                     </span>
                                                                 </fieldset>
@@ -210,7 +211,7 @@ class Project extends Component {
                                                                     <Field component={renderTextArea} rows={"3"}
                                                                            type={"text"}
                                                                            name={`${member}.description`}
-                                                                           value={project.description}/>
+                                                                           value={`${member}.description`}/>
                                                                 </fieldset>
                                                             </div>
 

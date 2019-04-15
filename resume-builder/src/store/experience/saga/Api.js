@@ -26,7 +26,7 @@ const updateUserExperience = (data, candidateId, experienceId = '') => {
 
 const deleteUserExperience = (candidateId, experienceId) => {
 
-    const url = `candidate/${candidateId}/certifications/${experienceId}/`;
+    const url = `candidate/${candidateId}/experiences/${experienceId}/`;
 
     return BaseApiService.deleteMethod(`http://127.0.0.1:8000/api/v1/resume/${url}`);
 

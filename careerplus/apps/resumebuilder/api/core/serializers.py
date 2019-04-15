@@ -16,7 +16,6 @@ class CandidateSerializer(serializers.ModelSerializer):
 
 
 class SkillSerializer(serializers.ModelSerializer):
-    cc_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
@@ -26,20 +25,17 @@ class SkillSerializer(serializers.ModelSerializer):
         return self.instance.candidate.id
 
     def create(self, validated_data):
-        validated_data.pop('cc_id', '')
         return super(SkillSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop('cc_id', '')
         return super(SkillSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = Skill
-        fields = ('id', 'candidate_id', 'cc_id', 'name', 'proficiency')
+        fields = ('id', 'candidate_id', 'name', 'proficiency')
 
 
 class CandidateExperienceSerializer(serializers.ModelSerializer):
-    cc_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
@@ -49,22 +45,19 @@ class CandidateExperienceSerializer(serializers.ModelSerializer):
         return self.instance.candidate.id
 
     def create(self, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateExperienceSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateExperienceSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = CandidateExperience
         fields = (
-            'id', 'candidate_id', 'cc_id', 'job_profile', 'company_name', 'start_date', 'end_date', 'is_working',
+            'id', 'candidate_id', 'job_profile', 'company_name', 'start_date', 'end_date', 'is_working',
             'job_location', 'work_description')
 
 
 class CandidateEducationSerializer(serializers.ModelSerializer):
-    cc_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
@@ -74,23 +67,20 @@ class CandidateEducationSerializer(serializers.ModelSerializer):
         return self.instance.candidate.id
 
     def create(self, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateEducationSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateEducationSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = CandidateEducation
         fields = (
-            'id', 'candidate_id', 'cc_id', 'specialization', 'institution_name', 'course_type', 'percentage_cgpa',
+            'id', 'candidate_id', 'specialization', 'institution_name', 'course_type', 'percentage_cgpa',
             'start_date',
             'end_date', 'is_pursuing')
 
 
 class CandidateCertificationSerializer(serializers.ModelSerializer):
-    cc_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
@@ -100,20 +90,17 @@ class CandidateCertificationSerializer(serializers.ModelSerializer):
         return self.instance.candidate.id
 
     def create(self, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateCertificationSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateCertificationSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = CandidateCertification
-        fields = ('id', 'candidate_id', 'cc_id', 'name_of_certification', 'year_of_certification')
+        fields = ('id', 'candidate_id', 'name_of_certification', 'year_of_certification')
 
 
 class CandidateProjectSerializer(serializers.ModelSerializer):
-    cc_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
@@ -123,20 +110,17 @@ class CandidateProjectSerializer(serializers.ModelSerializer):
         return self.instance.candidate.id
 
     def create(self, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateProjectSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateProjectSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = CandidateProject
-        fields = ('id', 'candidate_id', 'cc_id', 'project_name', 'start_date', 'end_date', 'skills', 'description')
+        fields = ('id', 'candidate_id', 'project_name', 'start_date', 'end_date', 'skills', 'description')
 
 
 class CandidateReferenceSerializer(serializers.ModelSerializer):
-    cc_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
@@ -146,20 +130,17 @@ class CandidateReferenceSerializer(serializers.ModelSerializer):
         return self.instance.candidate.id
 
     def create(self, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateReferenceSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateReferenceSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = CandidateReference
-        fields = ('id', 'candidate_id', 'cc_id', 'reference_name', 'about_candidate', 'reference_designation')
+        fields = ('id', 'candidate_id', 'reference_name', 'about_candidate', 'reference_designation')
 
 
 class CandidateSocialLinkSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = CandidateSocialLink
         fields = ('id', 'candidate', 'reference_name', 'about_candidate', 'reference_designation')
@@ -170,8 +151,11 @@ class CandidateLanguageSerializer(serializers.ModelSerializer):
 
     def validate_candidate_id(self, candidate_id):
         if not self.instance:
-            return self.context['request'].user.id
-
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
         return self.instance.candidate.id
 
     def create(self, validated_data):
@@ -182,32 +166,24 @@ class CandidateLanguageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CandidateLanguage
-        fields = ('id', 'candidate_id', 'proficiency', 'name')
+        fields = ('id', 'candidate_id', 'proficiency', 'name', 'order')
 
 
 class CandidateAchievementSerializer(serializers.ModelSerializer):
-    cc_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
-        cc_id = self.initial_data.get('cc_id', '')
-        if not cc_id:
-            return candidate_id
-        candidate = Candidate.objects.filter(candidate_id=cc_id).first()
+        if not self.instance:
+            return self.context['request'].user.id
 
-        if not candidate:
-            return candidate_id
-
-        return candidate.id
+        return self.instance.candidate.id
 
     def create(self, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateAchievementSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateAchievementSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = CandidateAchievement
-        fields = ('id', 'candidate_id', 'cc_id', 'title', 'date', 'summary')
+        fields = ('id', 'candidate_id', 'title', 'date', 'summary')

@@ -32,7 +32,6 @@ function* updateUserReference(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        userReference['cc_id'] = candidateId;
         const {id} = userReference;
 
         const result = yield call(id ? Api.updateUserReference : Api.createUserReference, userReference, candidateId, id);
@@ -78,17 +77,16 @@ function* deleteUserReference(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        // userLanguage['cc_id'] = candidateId;
-        const {projectId} = action;
+        const {referenceId} = action;
 
-        const result = yield call(Api.deleteUserReference, candidateId, projectId);
+        const result = yield call(Api.deleteUserReference, candidateId, referenceId);
 
 
         if (result['error']) {
             console.log(result['error'])
         }
         // yield call(fetchUserLanguage)
-        yield put({type: Actions.REMOVE_REFERENCE, id: projectId});
+        yield put({type: Actions.REMOVE_REFERENCE, id: referenceId});
 
     } catch (e) {
         console.log('error', e);

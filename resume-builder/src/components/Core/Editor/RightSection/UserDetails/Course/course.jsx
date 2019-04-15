@@ -4,7 +4,7 @@ import {Field, reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../../../../../store/course/actions";
 import {connect} from "react-redux";
 import {renderField, datepicker} from "../../../../../FormHandler/formFieldRenderer.jsx";
-import validate from "../../../../../FormHandler/courseValidation"
+import validate from "../../../../../FormHandler/validations/courseValidation"
 import moment from "moment";
 
 import {
@@ -26,6 +26,12 @@ class Course extends Component {
         this.deleteCourse = this.deleteCourse.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
+        this.state = {
+            currentAccordion: 0,
+            previousAccordion: 0,
+            openedAccordion: 0,
+
+        }
     }
 
     componentDidMount() {
@@ -63,10 +69,8 @@ class Course extends Component {
         fields.push({
             "candidate_id": '',
             "id": '',
-            "name": '',
-            "proficiency": {
-                value: 5, 'label': '5'
-            }
+            "name_of_certification": '',
+            "year_of_certification": '',
         })
     }
 
@@ -120,7 +124,11 @@ class Course extends Component {
                     </section>
                     <section className="right-sidebar-scroll">
                         <ul>
-                            <Accordion>
+                            <Accordion
+                                onChange={(value) => this.handleAccordionClick(value, fields, error)}
+                                allowZeroExpanded={true}
+                                preExpanded={[this.state.openedAccordion]}
+                            >
                                 {
                                     fields.map((member, index) => {
                                         return (
@@ -130,7 +138,7 @@ class Course extends Component {
                                                         <AccordionItemHeading>
                                                             <AccordionItemButton>
                                                                 <div className="flex-container">
-                                                                    <h3 className="add-section-heading">{fields.get(index).name_of_certification || 'Language'}</h3>
+                                                                    <h3 className="add-section-heading">{fields.get(index).name_of_certification || 'Course'}</h3>
                                                                     <div className="addon-buttons mr-10">
                                                                 <span
                                                                     onClick={(event) => this.deleteCourse(index, fields, event)}
@@ -240,6 +248,13 @@ const
             "fetchUserCourse": () => {
                 return dispatch(actions.fetchUserCourse())
             },
+            "removeCourse": (courseId) => {
+                return dispatch(actions.deleteCourse(courseId))
+            },
+
+            "handleSwap": (listItems) => {
+                return dispatch(actions.handleCourseSwap({list: listItems}))
+            }
         }
     };
 

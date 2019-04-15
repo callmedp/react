@@ -5,7 +5,7 @@ import * as actions from "../../../../../../store/award/actions";
 import {connect} from "react-redux";
 import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
-import validate from "../../../../../FormHandler/awardValidation";
+import validate from "../../../../../FormHandler/validations/awardValidation";
 import {
     Accordion,
     AccordionItem,
@@ -69,10 +69,9 @@ class Award extends Component {
         fields.push({
             "candidate_id": '',
             "id": '',
-            "name": '',
-            "proficiency": {
-                value: 5, 'label': '5'
-            }
+            "title": '',
+            "date": '',
+            "summary": '',
         })
     }
 
@@ -115,9 +114,9 @@ class Award extends Component {
             return (
                 <div>
                     <section className="head-section">
-                        <span className="icon-box"><i className="icon-languages1"></i></span>
+                        <span className="icon-box"><i className="icon-awards1"></i></span>
                         <h2>Awards</h2>
-                        <span className="icon-edit icon-language__cursor"></span>
+                        <span className="icon-edit icon-awards__cursor"></span>
                         <button onClick={this.handleAddition.bind(this, fields, error)}
                                 type={'button'}
                                 className="add-button add-button__right">Add new
@@ -127,7 +126,11 @@ class Award extends Component {
                     </section>
                     <section className="right-sidebar-scroll">
                         <ul>
-                            <Accordion>
+                            <Accordion
+                                onChange={(value) => this.handleAccordionClick(value, fields, error)}
+                                allowZeroExpanded={true}
+                                preExpanded={[this.state.openedAccordion]}
+                            >
                                 {
                                     fields.map((member, index) => {
                                         return (
@@ -179,22 +182,22 @@ class Award extends Component {
                                                                         <Field component={datepicker} type={"date"}
                                                                                className={'input-control'}
                                                                                name={`${member}.date`}/>
+                                                                    </div>
+                                                                </fieldset>
                                                             </div>
-                                                        </fieldset>
-                                                    </div>
-                                                    <div className="flex-container">
-                                                        <fieldset>
-                                                            <label>Summary</label>
-                                                            <Field component={renderTextArea} type={"textarea"}
-                                                                   name={`${member}.summary`}
-                                                                   className="input-control"/>
-                                                        </fieldset>
-                                                    </div>
-                                                </AccordionItemPanel>
-                                            </AccordionItem>
-                                    </section>
-                                    </li>
-                                    )
+                                                            <div className="flex-container">
+                                                                <fieldset>
+                                                                    <label>Summary</label>
+                                                                    <Field component={renderTextArea} type={"textarea"}
+                                                                           name={`${member}.summary`}
+                                                                           className="input-control"/>
+                                                                </fieldset>
+                                                            </div>
+                                                        </AccordionItemPanel>
+                                                    </AccordionItem>
+                                                </section>
+                                            </li>
+                                        )
                                     })
                                 }
                             </Accordion>
@@ -253,7 +256,7 @@ const mapDispatchToProps = (dispatch) => {
         "fetchUserAward": () => {
             return dispatch(actions.fetchUserAward())
         },
-        "removeLanguage": (awardId) => {
+        "removeAward": (awardId) => {
             return dispatch(actions.deleteAward(awardId))
         },
 

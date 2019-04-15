@@ -43,7 +43,6 @@ function* updateUserSkill(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        userSkill['cc_id'] = candidateId;
         const {id} = userSkill;
 
         const result = yield call(id ? Api.updateUserSkill : Api.createUserSkill, userSkill, candidateId, id);
@@ -88,7 +87,6 @@ function* deleteUserSkill(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        // userLanguage['cc_id'] = candidateId;
         const {skillId} = action;
 
         const result = yield call(Api.deleteUserSkill, candidateId, skillId);

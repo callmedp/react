@@ -15,10 +15,10 @@ export const updateUserEducation = (payload) => {
 };
 
 
-export const handleEducationSwap = (languageId) => {
+export const handleEducationSwap = (educationId) => {
     return {
         type: HANDLE_EDUCATION_SWAP,
-        languageId
+        educationId
     }
 }
 

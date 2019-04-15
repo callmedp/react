@@ -1,4 +1,4 @@
-import {SAVE_USER_EXPERIENCE} from "../actions/actionTypes";
+import {SAVE_USER_EXPERIENCE, REMOVE_EXPERIENCE} from "../actions/actionTypes";
 
 const initialState = {
     list: []
@@ -13,6 +13,14 @@ export const experienceReducer = (state = initialState, action) => {
                 ...state,
                 ...action.data
             };
+        }
+        case REMOVE_EXPERIENCE: {
+            return {
+                ...state,
+                ...{
+                    list: state.filter(item => item.id !== action.id)
+                }
+            }
         }
         default: {
             return state;

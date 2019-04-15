@@ -15,8 +15,10 @@ function* fetchUserLanguage(action) {
         if (result['error']) {
             console.log('error');
         }
-        const {data: {results}} = result;
+        let {data: {results}} = result;
+
         let data = {list: results};
+
         data = {
             ...data,
             ...{
@@ -65,13 +67,13 @@ function* handleLanguageSwap(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
 
-        const result = yield call(Api.updateUserLanguage, list, candidateId);
+        const result = yield call(Api.bulkUpdateUserLanguage, list, candidateId);
 
         if (result['error']) {
             console.log(result['error']);
         }
 
-        console.log('---', result);
+        console.log('-language swap result--', result);
         // yield call(fetchUserLanguage)
 
     } catch (e) {
@@ -88,7 +90,7 @@ function* deleteUserLanguage(action) {
         // userLanguage['cc_id'] = candidateId;
         const {languageId} = action;
 
-        const result = yield call(Api.deleteUserProject, candidateId, languageId);
+        const result = yield call(Api.deleteUserLanguage, candidateId, languageId);
 
 
         if (result['error']) {

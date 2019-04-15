@@ -33,7 +33,6 @@ function* updateUserProject(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        userProject['cc_id'] = candidateId;
         const {id} = userProject;
 
         const result = yield call(id ? Api.updateUserProject : Api.createUserProject, userProject, candidateId, id);
@@ -79,7 +78,6 @@ function* deleteUserProject(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        // userLanguage['cc_id'] = candidateId;
         const {projectId} = action;
 
         const result = yield call(Api.deleteUserProject, candidateId, projectId);

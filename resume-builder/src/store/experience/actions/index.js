@@ -28,7 +28,7 @@ export const deleteExperience = (experienceId) => {
     }
 }
 
-export const handleExpereinceSwap = (payload) => {
+export const handleExperienceSwap = (payload) => {
     return {
         type: HANDLE_EXPERIENCE_SWAP,
         payload

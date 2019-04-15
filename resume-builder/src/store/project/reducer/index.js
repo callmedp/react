@@ -1,7 +1,7 @@
-import {SAVE_USER_PROJECT} from "../actions/actionTypes";
+import {SAVE_USER_PROJECT, REMOVE_PROJECT} from "../actions/actionTypes";
 
 const initialState = {
-    list:[]
+    list: []
 };
 
 
@@ -12,6 +12,14 @@ export const projectReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.data
+            };
+        }
+        case REMOVE_PROJECT: {
+            return {
+                ...state,
+                ...{
+                    list: state.filter(item => item.id !== action.id)
+                }
             };
         }
         default: {

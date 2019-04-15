@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import './education.scss'
 import {Field, reduxForm, FieldArray} from "redux-form";
 import {renderField, renderTextArea, renderSelect, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
-import {required} from "../../../../../FormHandler/formValidations"
 import * as actions from "../../../../../../store/education/actions";
 import {connect} from "react-redux";
 import moment from "moment";
@@ -14,7 +13,7 @@ import {
     AccordionItemButton
 } from 'react-accessible-accordion';
 
-import validate from '../../../../../FormHandler/educationValidation'
+import validate from '../../../../../FormHandler/validations/educationValidation'
 
 class Education extends Component {
     constructor(props) {
@@ -63,17 +62,20 @@ class Education extends Component {
 
     }
 
-    handleAddition(fields, error) {
+    handleAddition(fields, error,event) {
+        event.stopPropagation();
         const listLength = fields.length;
-
         this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
             "id": '',
-            "name": '',
-            "proficiency": {
-                value: 5, 'label': '5'
-            }
+            "specialization": '',
+            "institution_name": '',
+            "course_type": '',
+            "start_date": '',
+            "percentage_cgpa": '',
+            "end_date": '',
+            "is_pursuing": false,
         })
     }
 
@@ -116,10 +118,10 @@ class Education extends Component {
             return (
                 <div>
                     <section className="head-section">
-                        <span className="icon-box"><i className="icon-languages1"></i></span>
+                        <span className="icon-box"><i className="icon-education1"></i></span>
                         <h2>Education</h2>
-                        <span className="icon-edit icon-language__cursor"></span>
-                        <button onClick={this.handleAddition.bind(this, fields, error)}
+                        <span className="icon-edit icon-education__cursor"></span>
+                        <button onClick={(event) => this.handleAddition(fields, error, event)}
                                 type={'button'}
                                 className="add-button add-button__right">Add new
                         </button>
@@ -128,11 +130,15 @@ class Education extends Component {
                     </section>
                     <section className="right-sidebar-scroll">
                         <ul>
-                            <Accordion>
+                            <Accordion
+                                onChange={(value) => this.handleAccordionClick(value, fields, error)}
+                                allowZeroExpanded={true}
+                                preExpanded={[this.state.openedAccordion]}
+                            >
                                 {
                                     fields.map((member, index) => {
                                         return (
-                                            <li key={'index'}>
+                                            <li key={index}>
                                                 <section className="info-section">
                                                     <AccordionItem uuid={index}>
                                                         <AccordionItemHeading>
@@ -141,7 +147,7 @@ class Education extends Component {
                                                                     <h3 className="add-section-heading">{fields.get(index).specialization || 'Education'}</h3>
                                                                     <div className="addon-buttons mr-10">
                                                                 <span
-                                                                    onClick={(event) => this.deleteLanguage(index, fields, event)}
+                                                                    onClick={(event) => this.deleteEducation(index, fields, event)}
                                                                     className="icon-delete mr-15"/>
                                                                         {index !== 0 &&
                                                                         <span
@@ -211,7 +217,7 @@ class Education extends Component {
                                                                     </div>
                                                                     <span className="till-today">
                                     <Field type="radio" name={`${member}.is_pursuing`} component={'input'}
-                                           value={education.is_pursuing}/>
+                                           value={`${member}.is_pursuing`}/>
                                     Till Today
                                 </span>
                                                                 </fieldset>
@@ -292,6 +298,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userEducation) => {
+            console.log('--',userEducation);
             const {start_date, end_date, course_type} = userEducation;
 
             userEducation = {

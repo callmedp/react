@@ -23,7 +23,7 @@ const updateUserAward = (data, candidateId, userAwardId) => {
 
 const deleteUserAward = (candidateId, awardId) => {
 
-    const url = `candidate/${candidateId}/awards/${awardId}/`;
+    const url = `candidate/${candidateId}/achievements/${awardId}/`;
 
     return BaseApiService.deleteMethod(`http://127.0.0.1:8000/api/v1/resume/${url}`);
 

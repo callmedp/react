@@ -16,7 +16,8 @@ function* fetchUserExperience(action) {
             console.log('error');
         }
         const {data: {results}} = result;
-        yield put({type: Actions.SAVE_USER_EXPERIENCE, data: results[0]})
+        let data = {list: results}
+        yield put({type: Actions.SAVE_USER_EXPERIENCE, data: data})
     } catch (e) {
         console.log(e);
     }
@@ -29,7 +30,6 @@ function* updateUserExperience(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        userExperience['cc_id'] = candidateId;
         const {id} = userExperience;
 
         const result = yield call(id ? Api.updateUserExperience : Api.createUserExperience, userExperience, candidateId, userExperience.id);
@@ -45,7 +45,6 @@ function* updateUserExperience(action) {
         console.log('error', e);
     }
 }
-
 
 
 function* handleExperienceSwap(action) {
@@ -76,7 +75,6 @@ function* deleteUserExperience(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        // userLanguage['cc_id'] = candidateId;
         const {experienceId} = action;
 
         const result = yield call(Api.deleteUserExperience, candidateId, experienceId);

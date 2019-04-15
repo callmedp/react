@@ -5,7 +5,6 @@ import {Field, reduxForm, FieldArray} from 'redux-form';
 import * as actions from '../../../../../../store/experience/actions/index';
 import {connect} from "react-redux";
 import moment from 'moment';
-import {required} from "../../../../../FormHandler/formValidations"
 import {
     Accordion,
     AccordionItem,
@@ -13,6 +12,9 @@ import {
     AccordionItemPanel,
     AccordionItemButton
 } from 'react-accessible-accordion';
+
+import validate from '../../../../../FormHandler/validations/experienceValidation'
+
 
 class Experience extends Component {
     constructor(props) {
@@ -69,10 +71,13 @@ class Experience extends Component {
         fields.push({
             "candidate_id": '',
             "id": '',
-            "name": '',
-            "proficiency": {
-                value: 5, 'label': '5'
-            }
+            "job_profile": '',
+            "company_name": '',
+            "start_date": '',
+            "end_date": '',
+            "is_working": '',
+            "job_location": '',
+            "work_description": '',
         })
     }
 
@@ -272,7 +277,8 @@ class Experience extends Component {
 
 export const ExperienceForm = reduxForm({
     form: 'experience',
-    enableReinitialize: true
+    enableReinitialize: true,
+    validate
 })(Experience);
 
 
@@ -302,11 +308,11 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchUserExperience())
         },
         "removeExperience": (experienceId) => {
-            return dispatch(actions.deleteExperience(languageId))
+            return dispatch(actions.deleteExperience(experienceId))
         },
 
         "handleSwap": (listItems) => {
-            return dispatch(actions.handleLanguageSwap({list: listItems}))
+            return dispatch(actions.handleExperienceSwap({list: listItems}))
         }
     }
 };

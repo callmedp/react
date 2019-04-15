@@ -31,6 +31,7 @@ function* fetchUserEducation(action) {
                 })
             }
         }
+
         yield put({type: Actions.SAVE_USER_EDUCATION, data: data})
     } catch (e) {
         console.log(e);
@@ -43,7 +44,6 @@ function* updateUserEducation(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        userEducation['cc_id'] = candidateId;
         const {id} = userEducation;
         console.log('--user Education-');
         const result = yield call(id ? Api.updateUserEducation : Api.createUserEducation, userEducation, candidateId, id);
@@ -90,7 +90,6 @@ function* deleteUserEducation(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        // userLanguage['cc_id'] = candidateId;
         const {educationId} = action;
 
         const result = yield call(Api.deleteUserEducation, candidateId, educationId);

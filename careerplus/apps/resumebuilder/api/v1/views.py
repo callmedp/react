@@ -254,13 +254,11 @@ class CandidateExperienceListCreateView(ListCreateAPIView):
 class CandidateExperienceRetrieveUpdateView(RetrieveUpdateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
-    queryset = CandidateExperience.objects.all()
     serializer_class = CandidateExperienceSerializer
 
-    # def get_queryset(self):
-    #     candidate_experience_id = int(self.kwargs.get('pk'))
-    #     return CandidateExperience.objects.filter(id=candidate_experience_id)
-    #
+    def get_queryset(self):
+        candidate_experience_id = int(self.kwargs.get('pk'))
+        return CandidateExperience.objects.filter(id=candidate_experience_id)
 
 
 class CandidateEducationListCreateView(ListCreateAPIView):
@@ -396,10 +394,14 @@ class CandidateAchievementRetrieveUpdateView(RetrieveUpdateAPIView):
 
 
 class CandidateLanguageListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-    queryset = CandidateLanguage.objects.all()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = CandidateLanguageSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
+
+    def get_queryset(self):
+        return CandidateLanguage.objects.all().order_by('order')
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -492,57 +494,57 @@ class ProfileEntityBulkUpdateView(APIView):
     """
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    entity_slug_serializer_mapping = {'skill':SkillSerializer,
-                                    'experience':CandidateExperienceSerializer,
-                                    'education':CandidateEducationSerializer,
-                                    'certification':CandidateCertificationSerializer,
-                                    'project':CandidateProjectSerializer,
-                                    'reference':CandidateReferenceSerializer,
-                                    'social-link':CandidateSocialLinkSerializer,
-                                    'language':CandidateLanguageSerializer,
-                                    'achievement':CandidateAchievementSerializer}
+    entity_slug_serializer_mapping = {'skill': SkillSerializer,
+                                      'experience': CandidateExperienceSerializer,
+                                      'education': CandidateEducationSerializer,
+                                      'certification': CandidateCertificationSerializer,
+                                      'project': CandidateProjectSerializer,
+                                      'reference': CandidateReferenceSerializer,
+                                      'social-link': CandidateSocialLinkSerializer,
+                                      'language': CandidateLanguageSerializer,
+                                      'achievement': CandidateAchievementSerializer}
 
-    entity_slug_model_mapping = {'skill':Skill,
-                                'experience':CandidateExperience,
-                                'education':CandidateEducation,
-                                'certification':CandidateCertification,
-                                'project':CandidateProject,
-                                'reference':CandidateReference,
-                                'social-link':CandidateSocialLink,
-                                'language':CandidateLanguage,
-                                'achievement':CandidateAchievement}
+    entity_slug_model_mapping = {'skill': Skill,
+                                 'experience': CandidateExperience,
+                                 'education': CandidateEducation,
+                                 'certification': CandidateCertification,
+                                 'project': CandidateProject,
+                                 'reference': CandidateReference,
+                                 'social-link': CandidateSocialLink,
+                                 'language': CandidateLanguage,
+                                 'achievement': CandidateAchievement}
 
-    def get_serializer_class(self,entity_slug):
+    def get_serializer_class(self, entity_slug):
         return self.entity_slug_serializer_mapping.get(entity_slug)
 
-    def get_model_class(self,entity_slug):
+    def get_model_class(self, entity_slug):
         return self.entity_slug_model_mapping.get(entity_slug)
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         entity_slug = kwargs.get('entity_slug')
         data = request.data
         serializer_class = self.get_serializer_class(entity_slug)
         model_class = self.get_model_class(entity_slug)
-        
+
         if not serializer_class:
-            return Response({"detail":"Invalid parameters"},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "Invalid parameters"}, status=status.HTTP_400_BAD_REQUEST)
 
         invalid_data = False
         serializer_objs_list = []
 
-        if not isinstance(data,list):
-            return Response({"detail":"Invalid data format"},status=status.HTTP_400_BAD_REQUEST)
+        if not isinstance(data, list):
+            return Response({"detail": "Invalid data format"}, status=status.HTTP_400_BAD_REQUEST)
 
         for record in data:
-            obj_id = str(record.get('id',0))
-            
+            obj_id = str(record.get('id', 0))
+
             if obj_id and not obj_id.isdigit():
                 invalid_data = True
                 break
             obj_id = int(obj_id)
 
             instance = model_class.objects.filter(id=obj_id).first()
-            
+
             if not instance and obj_id != 0:
                 invalid_data = True
                 break
@@ -551,9 +553,9 @@ class ProfileEntityBulkUpdateView(APIView):
                 invalid_data = True
                 break
 
-            context = {'request':request}
-            serializer_obj = serializer_class(data=record,instance=instance,context=context) if \
-                                instance else serializer_class(data=record,context=context)
+            context = {'request': request}
+            serializer_obj = serializer_class(data=record, instance=instance, context=context) if \
+                instance else serializer_class(data=record, context=context)
 
             if not serializer_obj.is_valid():
                 invalid_data = True
@@ -562,14 +564,9 @@ class ProfileEntityBulkUpdateView(APIView):
             serializer_objs_list.append(serializer_obj)
 
         if invalid_data:
-            return Response({"detail":"Invalid data"},status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)
 
         for obj in serializer_objs_list:
             obj.save()
 
-        return Response([x.data for x in serializer_objs_list],status=status.HTTP_200_OK)
-
-        
-
-
-
+        return Response([x.data for x in serializer_objs_list], status=status.HTTP_200_OK)

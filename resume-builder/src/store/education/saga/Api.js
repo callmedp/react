@@ -23,7 +23,7 @@ const updateUserEducation = (data, candidateId, educationId) => {
 
 const deleteUserEducation = (candidateId, educationId) => {
 
-    const url = `candidate/${candidateId}/languages/${educationId}/`;
+    const url = `candidate/${candidateId}/educations/${educationId}/`;
 
     return BaseApiService.deleteMethod(`http://127.0.0.1:8000/api/v1/resume/${url}`);
 

@@ -4,7 +4,6 @@ import {Field, reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../../../../../store/reference/actions";
 import {connect} from "react-redux";
 import {renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
-import {required} from "../../../../../FormHandler/formValidations"
 import {
     Accordion,
     AccordionItem,
@@ -13,9 +12,12 @@ import {
     AccordionItemButton
 } from 'react-accessible-accordion';
 
+import validate from '../../../../../FormHandler/validations/referenceValidation'
+
+
 class Reference extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
         this.handleAccordionState = this.handleAccordionState.bind(this);
@@ -66,10 +68,9 @@ class Reference extends Component {
         fields.push({
             "candidate_id": '',
             "id": '',
-            "name": '',
-            "proficiency": {
-                value: 5, 'label': '5'
-            }
+            "reference_name": '',
+            "reference_designation": '',
+            "about_user": "",
         })
     }
 
@@ -234,7 +235,8 @@ class Reference extends Component {
 
 export const ReferenceForm = reduxForm({
     form: 'reference',
-    enableReinitialize: true
+    enableReinitialize: true,
+    validate
 })(Reference);
 
 

@@ -31,10 +31,18 @@ const deleteUserLanguage = (candidateId, languageId) => {
 
 };
 
+const bulkUpdateUserLanguage = (data, candidateId) => {
+
+    const url = `candidate/${candidateId}/bulk-update/language/`;
+    return BaseApiService.post(`http://127.0.0.1:8000/api/v1/resume/${url}`,data);
+
+
+}
 
 export const Api = {
     fetchUserLanguage,
     updateUserLanguage,
     createUserLanguage,
-    deleteUserLanguage
+    deleteUserLanguage,
+    bulkUpdateUserLanguage
 }

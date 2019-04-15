@@ -32,7 +32,6 @@ function* updateUserAward(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        userAward['cc_id'] = candidateId;
         const {id} = userAward;
         const result = yield call(id ? Api.updateUserAward : Api.createUserAward, userAward, candidateId, id);
         console.log('---', result);
@@ -77,7 +76,6 @@ function* deleteUserAward(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        // userLanguage['cc_id'] = candidateId;
         const {awardId} = action;
 
         const result = yield call(Api.deleteUserAward, candidateId, awardId);
@@ -96,7 +94,7 @@ function* deleteUserAward(action) {
 
 
 export default function* watchAward() {
-    yield takeLatest(Actions.FETCH_USER_AWARD, fetchUserAward); 
+    yield takeLatest(Actions.FETCH_USER_AWARD, fetchUserAward);
     yield takeLatest(Actions.UPDATE_USER_AWARD, updateUserAward);
     yield takeLatest(Actions.DELETE_USER_AWARD, deleteUserAward);
     yield takeLatest(Actions.HANDLE_AWARD_SWAP, handleAwardSwap);

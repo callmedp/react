@@ -13,3 +13,18 @@ export const updateUserCourse = (payload) => {
         payload
     }
 }
+
+
+export const deleteCourse = (courseId) => {
+    return {
+        type: DELETE_USER_COURSE,
+        courseId
+    }
+}
+
+export const handleCourseSwap = (payload) => {
+    return {
+        type: HANDLE_COURSE_SWAP,
+        payload
+    }
+};

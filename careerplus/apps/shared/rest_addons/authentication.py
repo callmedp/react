@@ -38,7 +38,6 @@ class ShineUserAuthentication(SessionAuthentication):
             return (shine_candidate_obj, None)
 
         auth = get_authorization_header(request).split()
-
         if not auth:
             return None
 
