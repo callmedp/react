@@ -25,12 +25,12 @@ class ExotelMixin(object):
 
     def get_dnd_info(self,number):
         url_to_hit = DND_CHECK_URL.format(sid=SID,token=TOKEN,number=number)
-        value = False
         resp = None
         try:
             resp = requests.get(url_to_hit)
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
+            return
         if resp.status_code == 200:
             res_in_json = resp.json()
             number = res_in_json.get('Numbers',None)
