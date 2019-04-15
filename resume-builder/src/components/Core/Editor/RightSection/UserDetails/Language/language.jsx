@@ -73,8 +73,6 @@ class Language extends Component {
 
     handleAddition(fields, error) {
         const listLength = fields.length;
-        console.log('======', fields.length);
-
         this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',

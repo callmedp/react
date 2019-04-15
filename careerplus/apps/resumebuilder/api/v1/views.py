@@ -33,8 +33,8 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class CandidateListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
     queryset = Candidate.objects.all()
     serializer_class = CandidateSerializer
 
@@ -71,8 +71,8 @@ class CandidateRetrieveUpdateView(RetrieveUpdateAPIView):
 
 
 class SkillListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
 
@@ -234,8 +234,8 @@ class CandidateShineProfileRetrieveUpdateView(APIView):
 
 
 class CandidateExperienceListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
     queryset = CandidateExperience.objects.all()
     serializer_class = CandidateExperienceSerializer
 
@@ -262,8 +262,8 @@ class CandidateExperienceRetrieveUpdateView(RetrieveUpdateAPIView):
 
 
 class CandidateEducationListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
     queryset = CandidateEducation.objects.all()
     serializer_class = CandidateEducationSerializer
 
@@ -284,8 +284,8 @@ class CandidateEducationRetrieveUpdateView(RetrieveUpdateAPIView):
 
 
 class CandidateCertificationListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
     queryset = CandidateCertification.objects.all()
     serializer_class = CandidateCertificationSerializer
 
@@ -306,8 +306,8 @@ class CandidateCertificationRetrieveUpdateView(RetrieveUpdateAPIView):
 
 
 class CandidateProjectListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
     queryset = CandidateProject.objects.all()
     serializer_class = CandidateProjectSerializer
 
@@ -328,8 +328,8 @@ class CandidateProjectRetrieveUpdateView(RetrieveUpdateAPIView):
 
 
 class CandidateReferenceListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
     queryset = CandidateReference.objects.all()
     serializer_class = CandidateReferenceSerializer
 
@@ -350,8 +350,8 @@ class CandidateReferenceRetrieveUpdateView(RetrieveUpdateAPIView):
 
 
 class CandidateSocialLinkListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
     queryset = CandidateSocialLink.objects.all()
     serializer_class = CandidateSocialLinkSerializer
 
@@ -372,8 +372,8 @@ class CandidateSocialLinkRetrieveUpdateView(RetrieveUpdateAPIView):
 
 
 class CandidateAchievementListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
     queryset = CandidateAchievement.objects.all()
     serializer_class = CandidateAchievementSerializer
 

@@ -62,7 +62,7 @@ class Education extends Component {
 
     }
 
-    handleAddition(fields, error,event) {
+    handleAddition(fields, error, event) {
         event.stopPropagation();
         const listLength = fields.length;
         this.handleAccordionState(listLength, fields);
@@ -298,7 +298,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userEducation) => {
-            console.log('--',userEducation);
+            console.log('--', userEducation);
             const {start_date, end_date, course_type} = userEducation;
 
             userEducation = {

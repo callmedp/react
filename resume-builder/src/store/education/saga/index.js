@@ -30,7 +30,7 @@ function* fetchUserEducation(action) {
                     }
                 })
             }
-        }
+        };
 
         yield put({type: Actions.SAVE_USER_EDUCATION, data: data})
     } catch (e) {

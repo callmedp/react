@@ -20,8 +20,11 @@ class SkillSerializer(serializers.ModelSerializer):
 
     def validate_candidate_id(self, candidate_id):
         if not self.instance:
-            return self.context['request'].user.id
-
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
         return self.instance.candidate.id
 
     def create(self, validated_data):
@@ -40,8 +43,11 @@ class CandidateExperienceSerializer(serializers.ModelSerializer):
 
     def validate_candidate_id(self, candidate_id):
         if not self.instance:
-            return self.context['request'].user.id
-
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
         return self.instance.candidate.id
 
     def create(self, validated_data):
@@ -62,8 +68,11 @@ class CandidateEducationSerializer(serializers.ModelSerializer):
 
     def validate_candidate_id(self, candidate_id):
         if not self.instance:
-            return self.context['request'].user.id
-
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
         return self.instance.candidate.id
 
     def create(self, validated_data):
@@ -85,8 +94,11 @@ class CandidateCertificationSerializer(serializers.ModelSerializer):
 
     def validate_candidate_id(self, candidate_id):
         if not self.instance:
-            return self.context['request'].user.id
-
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
         return self.instance.candidate.id
 
     def create(self, validated_data):
@@ -105,8 +117,11 @@ class CandidateProjectSerializer(serializers.ModelSerializer):
 
     def validate_candidate_id(self, candidate_id):
         if not self.instance:
-            return self.context['request'].user.id
-
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
         return self.instance.candidate.id
 
     def create(self, validated_data):
@@ -125,8 +140,11 @@ class CandidateReferenceSerializer(serializers.ModelSerializer):
 
     def validate_candidate_id(self, candidate_id):
         if not self.instance:
-            return self.context['request'].user.id
-
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
         return self.instance.candidate.id
 
     def create(self, validated_data):
@@ -174,8 +192,11 @@ class CandidateAchievementSerializer(serializers.ModelSerializer):
 
     def validate_candidate_id(self, candidate_id):
         if not self.instance:
-            return self.context['request'].user.id
-
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
         return self.instance.candidate.id
 
     def create(self, validated_data):
