@@ -100,7 +100,16 @@ def mail_report():
     send_dict['subject'] = "Welcome Call Recording Report " + timezone.now().strftime("%Y-%m-%d ")
     send_dict['to'] = ["vishal.gupta@hindustantimes.com", "animesh.sharma@hindustantimes.com"]
     send_dict['cc'] = ["gaurav.chopra1@hindustantimes.com"]
-    send_dict['body'] = 'Total Count = ' + str(TOTAL) + "-Success = " + str(SUCCESS) + "Fails- " + str(FAILS)
+
+    send_dict['body'] = '<html><head></head><body>' \
+                        '<table  style="border: 1px solid black;"> <tr  style="border: 1px solid black;">' \
+                        '<th style="border: 1px solid black;">Total Count</th><th  style="border: 1px solid black;">' \
+                        'Success</th><th style="border: 1px solid black;">Fails</th></tr>' \
+                        '<tr style="border: 1px solid black;"><td style="border: 1px solid black;">' \
+                        ''+str(TOTAL)+'</td><td style="border: 1px solid black;">'+str(SUCCESS)+\
+                        '</td><td style="border: 1px solid black;">'+str(FAILS) +\
+                        '</td></table></body></html>'
+
     send_dict['from_email'] = settings.DEFAULT_FROM_EMAIL
     SendMail().base_send_mail(subject=send_dict['subject'], body=send_dict['body'], to=send_dict['to'],\
                               cc=send_dict['cc'], from_email=send_dict['from_email'], mimetype='text')

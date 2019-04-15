@@ -15,6 +15,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.conf import settings
 
 #LOCAL IMPORTS
+from.mixins import  ExotelMixin
 from cms.models import Page
 from cms.mixins import LoadMoreMixin
 from blog.models import Blog, Comment
@@ -823,38 +824,53 @@ class WelcomeServiceCallView(View):
         data = {'msg': 'Failure', 'status': 0}
         req_dict = {}
         order_id = self.request.POST.get('o_id','')
+        action = self.request.POST.get('action',None)
         url = settings.EXOITEL.get('url', '')
         token = settings.EXOITEL.get('token', '')
         sid = settings.EXOITEL.get('sid', '')
         caller_id = settings.EXOITEL.get('callerid', '')
+        dnd_check_url = settings.EXOITEL.get('check_dnd_url', '')
         user = request.user
 
         if not request.is_ajax():
             return HttpResponse(json.dumps(data), content_type="application/json")
 
+        exotel_object = ExotelMixin()
+
         order = Order.objects.filter(id=order_id).first()
-        # welc = order.welcomecalloperation_set.last()
+
+        if action:
+            number = order.mobile
+            is_dnd = exotel_object.get_dnd_info(number)
+            if is_dnd:
+                data.update({'msg': 'This number is on DND. Please whitelist to call this number '
+                                    'in click to call for DND numbers.', 'status': 0})
+            else:
+                data.update({'msg': 'Something went wrong', 'status': 0})
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
 
         if not order or not order.mobile or not user or not user.contact_number:
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         if not user.user_permissions.filter(codename='can_do_exotel_call'):
-            data.update({'msg':'You are not allowed'})
+            data.update({'msg': 'You are not allowed'})
             return HttpResponse(json.dumps(data), content_type="application/json")
 
-        url_to_hit = url.format(sid=sid, token=token)
-        req_dict.update({'To': '0'+str(order.mobile),'From': user.contact_number, 'CallerId': caller_id})
+        resp = exotel_object.make_call(order.mobile, user.contact_number)
 
-        try:
-            resp = requests.post(url_to_hit, data=req_dict)
-            status = resp.status_code
-            resp_json = resp.json()
-        except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+        status = resp.status_code
+        resp_json = resp.json()
+
+        if status == 403:
+            data.update({'msg': "Call Failed Fetching Reason", 'status': 2})
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         if not status == 200:
             logging.getLogger('info_log').info(str(resp_json))
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        if not resp:
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         call_record = resp_json.get('Call', '')

@@ -227,8 +227,11 @@
                             {{obj.mobile}}
                             {% endif %}
                             {% if show_btn %}
-                            <button id="{{obj.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.id}});"></button></td>
+                            <button id="{{obj.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{obj.id}});"></button>
+                            <div style="height:100px; overflow-y: auto; overflow-x: hidden;" id="callingbtn-error"></div>
                                 {% endif %}
+                                                    </td>
+
                       <!--<td>{{obj.country_code}} {{obj.mobile}}</td>-->
                       <td>
                         {% if obj.wc_follow_up %}
