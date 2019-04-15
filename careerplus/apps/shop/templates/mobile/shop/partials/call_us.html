@@ -1,7 +1,7 @@
 <div class="stick_bottom call-us">
     <div class="ui-grid-a block-3 text-center">
         <div class="ui-block-a">
-            <a href="mailto:resume@shine.com"><span></span>Mail Us</a>
+            <a href="javascript:void(0)" id="enquire_btn"><span></span>Enquire</a>
         </div>
         <div class="ui-block-b">
             <a href="tel:{{ggn_contact_full}}"><span></span>Call Us</a>
@@ -10,4 +10,51 @@
         <div class="ui-block-c"><a href="JavaScript:void(0);"> <span></span>Chat </a></div>
         {% endif %}
     </div><!-- call us and chat widget ends here -->
+</div>
+
+
+<div class="enquire" id="enquire">
+    <header>
+        <a class="icon-back pull-left" id="back_btn"></a>
+    </header>
+    <div class="enquire__wrap">
+        <h2 class="enquire__wrap--head">Enquire now</h2>
+        <p class="enquire__wrap--subhead">Share your query, our experts will help you take your career forward!</p>
+        <div class="content-box login-form">
+            <form action="">
+                <div class="form-group ">
+                    <input type="text" name="name" placeholder="Name" class="form-control" maxlength="60" inputmode="name" required="" id="id_name" aria-required="true">
+                    <span class="error-txt" style="bottom:-25px"></span>
+                </div>
+
+                <div class="form-group enquire__flex">
+                    <div class="code">
+                        <select name="country_code" class="form-control" id="id_country_code">
+                            <option value="91">+91</option>
+                            <option value="93">93</option>
+                            <option value="358-18">358-18</option>
+                            <option value="355">355</option>
+                            <option value="213">213</option>
+                            <option value="1-684">1-684</option>
+                            <option value="376">376</option>
+                            <option value="244">244</option>
+                            <option value="1-264">1-264</option>
+                            <option value="1-268">1-268</option>
+                        </select>
+                    </div>
+                    <input type="tel" name="cell_phone" class="form-control number" inputmode="numeric" required="" id="id_cell_phone" aria-required="true" placeholder="Mobile">
+                </div>
+
+                <div class="form-group mb-30">
+                    <textarea class="form-control" rows="2" placeholder="Message"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-blue w100 btn-round">Submit</button>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
 </div>
