@@ -4,6 +4,7 @@ import {Field, reduxForm, FieldArray, arrayPush} from "redux-form";
 import * as actions from "../../../../../../store/language/actions";
 import {connect} from "react-redux";
 import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer.jsx";
+import {required} from "../../../../../FormHandler/formValidations"
 
 class Language extends Component {
     constructor(props) {
@@ -92,3 +93,38 @@ class Language extends Component {
         )
     }
 }
+
+export const LanguageForm = reduxForm({
+    form: 'Language',
+    enableReinitialize: true
+})(Language);
+
+
+const mapStateToProps = (state) => {
+    return {
+        initialValues: state.language,
+        language: state.language
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "onSubmit": (userLanguage) => {
+            const {proficiency} = userLanguage;
+            userLanguage = {
+                ...userLanguage,
+                ...{
+                    proficiency: proficiency && proficiency.value || 5
+                }
+            }
+            return new Promise((resolve, reject) => {
+                return dispatch(actions.updateUserLanguage({userLanguage, resolve, reject}));
+            })
+        },
+        "fetchUserLanguage": () => {
+            return dispatch(actions.fetchUserLanguage())
+        },
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LanguageForm);
