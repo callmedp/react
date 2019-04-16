@@ -27,7 +27,7 @@ const genderDict = {
 
 function* getPersonalDetails(action) {
     try {
-        const candidateId = localStorage.getItem('candidateId') || '';
+        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
 
         const result = yield call(Api.fetchPersonalInfo, candidateId);
         if (result['error']) {
@@ -55,7 +55,7 @@ function* updatePersonalDetails(action) {
     try {
         const {payload: {personalDetails, resolve, reject}} = action;
 
-        const candidateId = localStorage.getItem('candidateId') || '';
+        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
 
         const result = yield call(Api.updatePersonalData, personalDetails, candidateId);
         if (result['error']) {
@@ -90,7 +90,7 @@ function* fetchImageUrl(action) {
             data.append(key, imageInfo[key]);
         }
 
-        const candidateId = localStorage.getItem('candidateId') || '';
+        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
 
         const result = yield call(Api.fetchImageUrl, data, candidateId);
 

@@ -9,7 +9,7 @@ import {SubmissionError} from 'redux-form'
 
 function* fetchUserCourse(action) {
     try {
-        const candidateId = localStorage.getItem('candidateId') || '';
+        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
 
         const result = yield call(Api.fetchUserCourse, candidateId);
         if (result['error']) {
@@ -28,7 +28,7 @@ function* updateUserCourse(action) {
     try {
         const {payload: {userCourse, resolve, reject}} = action;
 
-        const candidateId = localStorage.getItem('candidateId') || '';
+        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
 
         userCourse['cc_id'] = candidateId;
         const {id} = userCourse;

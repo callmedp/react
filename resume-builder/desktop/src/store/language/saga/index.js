@@ -9,8 +9,8 @@ import {SubmissionError} from 'redux-form'
 
 function* fetchUserLanguage(action) {
     try {
-        const candidateId = localStorage.getItem('candidateId') || '';
-
+        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
+        console.log(candidateId)
         const result = yield call(Api.fetchUserLanguage, candidateId);
         if (result['error']) {
             console.log('error');
@@ -41,7 +41,7 @@ function* updateUserLanguage(action) {
         let {payload: {userLanguage, resolve, reject}} = action;
 
 
-        const candidateId = localStorage.getItem('candidateId') || '';
+        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
 
         userLanguage['cc_id'] = candidateId;
         const {id} = userLanguage;

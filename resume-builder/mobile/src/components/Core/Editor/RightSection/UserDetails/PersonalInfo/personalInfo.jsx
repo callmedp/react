@@ -1,7 +1,91 @@
 import React, {Component} from 'react';
+import {connect} from "react-redux";
+import * as actions from '../../../../../../store/personalInfo/actions/index';
+import {Field, reduxForm} from 'redux-form';
+import {interestList} from '../../../../../../Utils/interestList'
+import {
+    renderField,
+    datepicker,
+    renderSelect,
+    renderTextArea,
+    renderDynamicSelect
+} from "../../../../../FormHandler/formFieldRenderer.jsx";
 
-export default class PersonalInfo extends Component {
+import {
+    required,
+    phoneNumber,
+    email
+} from "../../../../../FormHandler/formValidations.js";
+
+import moment from 'moment';
+
+class PersonalInfo extends Component {
+    constructor(props) {
+        super(props);
+        this.getImageURI = this.getImageURI.bind(this);
+        this.removeImage = this.removeImage.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handlePreview = this.handlePreview.bind(this);
+        this.fetchInterestList = this.fetchInterestList.bind(this);
+        this.state = {
+            'imageURI': '',
+            'imageURL': ''
+        }
+
+    }
+
+    componentDidMount() {
+        this.props.fetchPersonalInfo()
+    }
+
+    async handleSubmit(values) {
+        await this.props.onSubmit(values, this.state.imageURL);
+        this.props.history.push('/resume-builder/edit/?type=summary')
+    }
+
+    handlePreview() {
+        this.props.history.push('/resume-builder/preview/');
+    }
+
+    removeImage() {
+        this.setState({
+            imageURI: '',
+            imageURL: ''
+        })
+    }
+
+    async fetchInterestList(inputValue, callback) {
+        // try {
+        //     const interests = await this.props.fetchInterest(inputValue);
+        //     const listData = (skills && skills.results || []).map(skill => ({value: skill.id, label: skill.name}))
+        //     callback(listData);
+        // } catch (e) {
+        //     console.log('--error-', e);
+        // }
+        console.log('---', inputValue)
+        return [];
+    }
+
+    async getImageURI(event) {
+        let reader = new FileReader();
+        reader.onload = (event) => {
+
+            this.setState({
+                imageURI: event.target.result
+            })
+
+        };
+        reader.readAsDataURL(event.target.files[0]);
+
+        let url = await this.props.fetchImageUrl(event.target.files[0]);
+
+        this.setState({
+            'imageURL': url
+        })
+    }
+
     render() {
+        const {handleSubmit, personalInfo} = this.props;
         return (
         <div className="buildResume">
             <div className="buildResume__wrap">
@@ -9,143 +93,206 @@ export default class PersonalInfo extends Component {
                     <h2>Personal Info</h2>
                     <i className="sprite icon--edit"></i>
                 </div>
+                <form onSubmit={handleSubmit(this.handleSubmit)}>
+                    <ul className="form">
+                        <li className="form__group">
+                            <label className="form__label" for="first_name">First Name</label>
+                            <div className="input-group">
+                                <div className="input-group__prepend">
+                                    <span className="input-group__text">
+                                        <i className="sprite icon--firstName"></i>
+                                    </span>
+                                </div>
+                                <Field component={renderField} type={"text"} name="first_name" validate={required}
+                                    className="form__input" aria-label="first_name" id="first_name"/>
+                            </div>
+                        </li>
 
-                <ul className="form">
-                    <li className="form__group">
-                        <label className="form__label" for="firstName">First Name</label>
-                        <div className="input-group">
-                            <div className="input-group__prepend">
-                            <span className="input-group__text">
-                                <i className="sprite icon--firstName"></i>
-                            </span>
+                        <li className="form__group">
+                            <label className="form__label" for="last_name">Last Name</label>
+                            <div className="input-group">
+                                <div className="input-group__prepend">
+                                    <span className="input-group__text">
+                                        <i className="sprite icon--lastName"></i>
+                                    </span>
+                                </div>
+                                <Field component={renderField} type={"text"} name="last_name" validate={required}
+                                    className="form__input" aria-label="last_name" id="last_name"/>
                             </div>
-                            <input type="text" name="firstName" className="form__input" placeholder="Amit" aria-label="firstName" id="firstName" />
-                        </div>
-                    </li>
-                    
-                    <li className="form__group">
-                        <label className="form__label" for="lastName">Last Name</label>
-                        <div className="input-group">
-                            <div className="input-group__prepend">
-                            <span className="input-group__text">
-                                <i className="sprite icon--lastName"></i>
-                            </span>
-                            </div>
-                            <input type="text" name="lastName" className="form__input" placeholder="Sinha" aria-label="lastName" id="lastName" />
-                        </div>
-                    </li>
-                    
-                    <li className="form__group">
-                        <label className="form__label" for="designation">Designation</label>
-                        <div className="input-group">
-                            <div className="input-group__prepend">
-                            <span className="input-group__text">
-                                <i className="sprite icon--designation"></i>
-                            </span>
-                            </div>
-                            <input type="text" name="designation" className="form__input" placeholder="IT Project Manager" aria-label="designation" id="designation" />
-                        </div>
-                    </li>
-                    
-                    <li className="form__group">
-                        <label className="form__label" for="company">Company</label>
-                        <div className="input-group">
-                            <div className="input-group__prepend">
-                            <span className="input-group__text">
-                                <i className="sprite icon--company"></i>
-                            </span>
-                            </div>
-                            <input type="text" name="company" className="form__input" placeholder="Sapient" aria-label="company" id="company" />
-                        </div>
-                    </li>
-                    
-                    <li className="form__group">
-                        <label className="form__label" for="mobile">Mobile</label>
-                        <div className="input-group">
-                            <div className="input-group__prepend">
-                            <span className="input-group__text">
-                                <i className="sprite icon--mobile"></i>
-                            </span>
-                            </div>
-                            <input type="tel" name="mobile" className="form__input" placeholder="" aria-label="Mobile" id="mobile" />
-                        </div>
-                    </li>
-                    
-                    <li className="form__group">
-                        <label className="form__label" for="email">Email</label>
-                        <div className="input-group">
-                            <div className="input-group__prepend">
-                            <span className="input-group__text">
-                                <i className="sprite icon--mail"></i>
-                            </span>
-                            </div>
-                            <input type="email" name="email" className="form__input" placeholder="amit.sinha@gmail.com" aria-label="email" id="email" />
-                        </div>
-                    </li>
-                    
-                    <li className="form__group">
-                        <label className="form__label" for="address">Address</label>
-                        <div className="input-group">
-                            <div className="input-group__prepend">
-                                <span className="input-group__text">
-                                    <i className="sprite icon--address"></i>
-                                </span>
-                            </div>
+                        </li>
 
-                            <textarea row="4" name="address" className="form__input" placeholder="Address" aria-label="address" id="address" ></textarea>
-                        </div>
-                    </li>
-                    
-                    <li className="form__group">
-                        <label className="form__label" for="linkedin">Linkedin</label>
-                        <div className="input-group">
-                            <div className="input-group__prepend">
-                            <span className="input-group__text">
-                                <i className="sprite icon--linkedin"></i>
-                            </span>
+                        <li className="form__group">
+                            <label className="form__label" for="gender">Gender</label>
+                            <div className="input-group">
+                                <div className="input-group__prepend">
+                                    <span className="input-group__text">
+                                        <i className="sprite icon--designation"></i>
+                                    </span>
+                                </div>
+                                <Field
+                                        name="gender"
+                                        component={renderSelect}
+                                        label="Gender"
+                                        isMulti={false}
+                                        validate={required}
+                                        className="form__input"
+                                        options={[
+                                            {value: '1', label: 'Male'},
+                                            {value: '2', label: 'Female'},
+                                            {value: '3', label: 'Other'}
+                                        ]}
+                                />
                             </div>
-                            <input type="text" name="linkedin" className="form__input" placeholder="amit.sinha@gmail.com" aria-label="linkedin" id="linkedin" />
-                        </div>
-                    </li>
-                    
-                    <li className="form__group">
-                        <label className="form__label" for="facebook">Facebook</label>
-                        <div className="input-group">
-                            <div className="input-group__prepend">
-                            <span className="input-group__text">
-                                <i className="sprite icon--facebook"></i>
-                            </span>
+                        </li>
+                        
+                        <li className="form__group">
+                            <label className="form__label" for="date_of_birth">Date Of Birth</label>
+                            <div className="input-group">
+                                <div className="input-group__prepend">
+                                    <span className="input-group__text">
+                                        <i className="sprite icon--date"></i>
+                                    </span>
+                                </div>
+                                <Field component={datepicker} validate={required} type={"date"} 
+                                className="form__input" name="date_of_birth" aria-label="date_of_birth" id="date_of_birth"/>
                             </div>
-                            <input type="text" name="facebook" className="form__input" placeholder="amit.sinha@gmail.com" aria-label="facebook" id="facebook" />
-                        </div>
-                    </li>
-                    
-                    <li className="form__group">
-                        <div class="upload-btn-wrapper">
-                            
-                            <button class="upload-btn-wrapper__btn">
-                                <i className="sprite icon--camera"></i>
-                                Upload a file
-                            </button>
-                            <input type="file" name="myfile" />
-                        </div>
-                    </li>
-                    
-                    <li className="form__group">
-                        <span className="upload--image">
-                            <img src="/media/static/react/assets/images/mobile/default-user.jpg" />  
-                        </span>
-                    </li>
+                        </li>
+                        
+                        <li className="form__group">
+                            <label className="form__label" for="number">Mobile</label>
+                            <div className="input-group">
+                                <div className="input-group__prepend">
+                                    <span className="input-group__text">
+                                        <i className="sprite icon--mobile"></i>
+                                    </span>
+                                </div>
+                                <Field component={renderField} validate={[required,phoneNumber]} type={"text"} name="number"
+                                        className="form__input" aria-label="number" id="number"/>
+                            </div>
+                        </li>
 
-                    <li className="form__group">
-                        <div className="btn-wrap">
-                            <button className="btn btn__round btn--outline">Preview</button>
-                            <button className="btn btn__round btn__primary">Save &amp; Continue</button>
-                        </div>
-                    </li>
-                </ul>
+                        <li className="form__group">
+                            <label className="form__label" for="email">Email</label>
+                            <div className="input-group">
+                                <div className="input-group__prepend">
+                                    <span className="input-group__text">
+                                        <i className="sprite icon--mail"></i>
+                                    </span>
+                                </div>
+                                <Field component={renderField} validate={[required,email]} type={"email"} name="email"
+                                    className="form__input" aria-label="email" id="email"/>
+                            </div>
+                        </li>
+
+                        <li className="form__group">
+                            <label className="form__label" for="location">Address</label>
+                            <div className="input-group">
+                                <div className="input-group__prepend">
+                                    <span className="input-group__text">
+                                        <i className="sprite icon--address"></i>
+                                    </span>
+                                </div>
+                                <Field component={renderTextArea} type={"text"} name="location" row="4"
+                                    aria-label="address" id="address" className="form__input"/>
+                            </div>
+                        </li>
+
+
+                        <li className="form__group">
+                            <label className="form__label" for="extracurricular">Interest</label>
+                            <div className="input-group">
+                                <div className="input-group__prepend">
+                                    <span className="input-group__text">
+                                        <i className="sprite icon--facebook"></i>
+                                    </span>
+                                </div>
+                                <Field name="extracurricular" component={renderDynamicSelect}
+                                            className="form__input"
+                                           defaultOptions={Object.keys(interestList).map(key => interestList[key])}
+                                           value={personalInfo.extracurricular}
+                                           aria-label="extracurricular" id="extracurricular"
+                                           label="Select Interest"/>
+                            </div>
+                        </li>
+
+                        <li className="form__group">
+                            <div class="upload-btn-wrapper">
+
+                                <button class="upload-btn-wrapper__btn">
+                                    <i className="sprite icon--camera"></i>
+                                    Upload a file
+                        </button>
+                                <input type="file" accept="image/*" name="displayPicture"
+                                       onChange={this.getImageURI.bind(this)} />
+                            </div>
+                        </li>
+
+                        <li className="form__group">
+                            <span className="upload--image">
+                            {
+                                this.state.imageURI || personalInfo.image ?
+                                    <img alt={"User Profile"}
+                                            src={this.state.imageURI || personalInfo.image}/> :
+                                    <img alt={"User Profile"}
+                                            src="/media/static/react/assets/images/mobile/default-user.jpg"/>
+                            }
+                            </span>
+                        </li>
+
+                        <li className="form__group">
+                            <div className="btn-wrap">
+                                <button className="btn btn__round btn--outline">Preview</button>
+                                <button className="btn btn__round btn__primary">Save &amp; Continue</button>
+                            </div>
+                        </li>
+                    </ul>
+                </form>
             </div>
         </div>
         )
     }
 }
+
+export const PersonalInfoForm = reduxForm({
+    form: 'personalInfo',
+    enableReinitialize: true
+})(PersonalInfo);
+
+
+const mapStateToProps = (state) => {
+    return {
+        initialValues: state.personalInfo,
+        personalInfo: state.personalInfo
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "fetchPersonalInfo": () => {
+            return dispatch(actions.fetchPersonalInfo())
+        },
+        "onSubmit": (personalDetails, imageURL) => {
+            const {gender, date_of_birth, extracurricular} = personalDetails;
+            personalDetails = {
+                ...personalDetails,
+                ...{
+                    'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
+                    'gender': (gender && gender['value']) || '',
+                    'image': imageURL,
+                    'extracurricular': extracurricular instanceof Array ?
+                        (extracurricular || []).map(el => el.value).join(',') : extracurricular
+                }
+            }
+            return new Promise((resolve, reject) => {
+                dispatch(actions.updatePersonalInfo({personalDetails, resolve, reject}));
+            })
+        },
+        "fetchImageUrl": (imageFile) => {
+            return new Promise((resolve, reject) => {
+                dispatch(actions.fetchImageUrl({imageFile, resolve, reject}));
+            })
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PersonalInfoForm);

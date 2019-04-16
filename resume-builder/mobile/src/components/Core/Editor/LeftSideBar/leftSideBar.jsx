@@ -1,9 +1,39 @@
 import React, {Component} from 'react';
 import './leftSideBar.scss'
+import queryString from "query-string";
+import { Link} from 'react-router-dom';
 export default class LeftSideBar extends Component {
-    render() {
-        return (
 
+    constructor(props) {
+        super(props);
+        this.handleSpanClick = this.handleSpanClick.bind(this);
+        const values = queryString.parse(this.props.location.search);
+
+        this.state = {
+            type: (values && values.type) || ''
+        };
+        if (!(values && values.type)) {
+            this.props.history.push('/resume-builder/edit/?type=profile')
+        }
+    }
+
+
+    handleSpanClick(e) {
+        e.stopPropagation();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location) {
+            const values = queryString.parse(this.props.location.search);
+            this.setState({
+                type: (values && values.type) || ''
+            })
+        }
+    }
+    render() {
+        const {type} = this.state;
+        return (
+            
             <section className="left-sidebar sidebar">
                 <div className="sidebar__menuWrap">
                     <ul className="sidebar__items">
@@ -14,8 +44,8 @@ export default class LeftSideBar extends Component {
                             <span className="user__name">Hello Amit</span>
                         </li>
 
-                        <li className="sidebar__item sidebar--active">
-                            <a href="#" className="sidebar__anchor">
+                        <li className={"sidebar__item " + (type === 'profile' ? 'sidebar--active' : '')}>
+                            <Link to="/resume-builder/edit/?type=profile" className="sidebar__anchor">
                                 <div className="sidebar__wrap">
                                     <i className="sprite icon--personal"></i>
                                     <span className="sidebar__link" href="#">Personal</span>
@@ -25,11 +55,11 @@ export default class LeftSideBar extends Component {
                                     <span className="sidebar-open__link" href="#">Personal</span>
                                     <i className="sprite icon--delete"></i>
                                 </div>
-                            </a>
+                            </Link>
                         </li>
                         
-                        <li className="sidebar__item">
-                            <a href="#" className="sidebar__anchor">
+                        <li className={"sidebar__item " + (type === 'summary' ? 'sidebar--active' : '')}>
+                            <Link to="/resume-builder/edit/?type=summary" className="sidebar__anchor">
                                 <div className="sidebar__wrap">
                                     <i className="sprite icon--summary"></i>
                                     <span className="sidebar__link" href="#">Summary</span>
@@ -39,11 +69,11 @@ export default class LeftSideBar extends Component {
                                     <span className="sidebar-open__link" href="#">Summary</span>
                                     <i className="sprite icon--delete"></i>
                                 </div>
-                            </a>
+                            </Link>
                         </li>
                         
-                        <li className="sidebar__item">
-                            <a href="#" className="sidebar__anchor">
+                        <li className={"sidebar__item " + (type === 'experience' ? 'sidebar--active' : '')}>
+                            <Link to="/resume-builder/edit/?type=experience" className="sidebar__anchor">
                                 <div className="sidebar__wrap">
                                     <i className="sprite icon--experience"></i>
                                     <span className="sidebar__link" href="#">Experience</span>
@@ -53,11 +83,11 @@ export default class LeftSideBar extends Component {
                                     <span className="sidebar-open__link" href="#">Experience</span>
                                     <i className="sprite icon--delete"></i>
                                 </div>
-                            </a>
+                            </Link>
                         </li>
                     
-                        <li className="sidebar__item">
-                            <a href="#" className="sidebar__anchor">
+                        <li className={"sidebar__item " + (type === 'education' ? 'sidebar--active' : '')}>
+                            <Link to="/resume-builder/edit/?type=education" className="sidebar__anchor">
                                 <div className="sidebar__wrap">
                                     <i className="sprite icon--education"></i>
                                     <span className="sidebar__link" href="#">Education </span>
@@ -67,11 +97,11 @@ export default class LeftSideBar extends Component {
                                     <span className="sidebar-open__link" href="#">Education </span>
                                     <i className="sprite icon--delete"></i>
                                 </div>
-                            </a>
+                            </Link>
                         </li>
                         
-                        <li className="sidebar__item">
-                            <a href="#" className="sidebar__anchor">
+                        <li className={"sidebar__item " + (type === 'skill' ? 'sidebar--active' : '')}>
+                            <Link to="/resume-builder/edit/?type=skill" className="sidebar__anchor">
                                 <div className="sidebar__wrap">
                                     <i className="sprite icon--skills"></i>
                                     <span className="sidebar__link" href="#">Skills </span>
@@ -81,10 +111,10 @@ export default class LeftSideBar extends Component {
                                     <span className="sidebar-open__link" href="#">Skills </span>
                                     <i className="sprite icon--delete"></i>
                                 </div>
-                            </a>
+                            </Link>
                         </li>
 
-                        <li className="sidebar__item">
+                        <li className="sidebar__item ">
                             <a href="#" className="sidebar__anchor">
                                 <div className="sidebar__wrap">
                                     <i className="sprite icon--add-more"></i>
@@ -99,8 +129,8 @@ export default class LeftSideBar extends Component {
                     </ul>
 
                     <ul className="sidebar__items hide">
-                        <li className="sidebar__item">
-                            <a href="#" className="sidebar__anchor">
+                        <li className={"sidebar__item " + (type === 'language' ? 'sidebar--active' : '')}>
+                            <Link to="/resume-builder/edit/?type=language" className="sidebar__anchor">
                                 <div className="sidebar__wrap">
                                     <i className="sprite icon--language"></i>
                                     <span className="sidebar__link" href="#">Languages</span>
@@ -110,11 +140,11 @@ export default class LeftSideBar extends Component {
                                     <span className="sidebar-open__link" href="#">Languages</span>
                                     <i className="sprite icon--add-more"></i>
                                 </div>
-                            </a>
+                            </Link>
                         </li>
                         
-                        <li className="sidebar__item">
-                            <a href="#" className="sidebar__anchor">
+                        <li className={"sidebar__item " + (type === 'award' ? 'sidebar--active' : '')}>
+                            <Link to="/resume-builder/edit/?type=award" className="sidebar__anchor">
                                 <div className="sidebar__wrap">
                                     <i className="sprite icon--award"></i>
                                     <span className="sidebar__link" href="#">Awards </span>
@@ -124,11 +154,11 @@ export default class LeftSideBar extends Component {
                                     <span className="sidebar-open__link" href="#">Awards </span>
                                     <i className="sprite icon--add-more"></i>
                                 </div>
-                            </a>
+                            </Link>
                         </li>
                         
-                        <li className="sidebar__item">
-                            <a href="#" className="sidebar__anchor">
+                        <li className={"sidebar__item " + (type === 'course' ? 'sidebar--active' : '')}>
+                            <Link to="/resume-builder/edit/?type=course" className="sidebar__anchor">
                                 <div className="sidebar__wrap">
                                     <i className="sprite icon--course"></i>
                                     <span className="sidebar__link" href="#">Courses </span>
@@ -138,11 +168,11 @@ export default class LeftSideBar extends Component {
                                     <span className="sidebar-open__link" href="#">Courses </span>
                                     <i className="sprite icon--add-more"></i>
                                 </div>
-                            </a>
+                            </Link>
                         </li>
                         
-                        <li className="sidebar__item">
-                            <a href="#" className="sidebar__anchor">
+                        <li className={"sidebar__item " + (type === 'project' ? 'sidebar--active' : '')}>
+                            <Link to="/resume-builder/edit/?type=project" className="sidebar__anchor">
                                 <div className="sidebar__wrap">
                                     <i className="sprite icon--project"></i>
                                     <span className="sidebar__link" href="#">Projects </span>
@@ -152,11 +182,11 @@ export default class LeftSideBar extends Component {
                                     <span className="sidebar-open__link" href="#">Projects </span>
                                     <i className="sprite icon--add-more"></i>
                                 </div>
-                            </a>
+                            </Link>
                         </li>
                         
-                        <li className="sidebar__item">
-                            <a href="#" className="sidebar__anchor">
+                        <li className={"sidebar__item " + (type === 'reference' ? 'sidebar--active' : '')}>
+                            <Link to="/resume-builder/edit/?type=reference" className="sidebar__anchor">
                                 <div className="sidebar__wrap">
                                     <i className="sprite icon--reference"></i>
                                     <span className="sidebar__link" href="#">References </span>
@@ -166,7 +196,7 @@ export default class LeftSideBar extends Component {
                                     <span className="sidebar-open__link" href="#">References </span>
                                     <i className="sprite icon--add-more"></i>
                                 </div>
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>

@@ -1,7 +1,7 @@
 import BaseApiService from '../../../services/BaseApiService'
 
 const fetchUserLanguage = (candidateId) => {
-
+    console.log(candidateId)
     const url = `candidate/${candidateId}/languages/`;
     return BaseApiService.get(`http://127.0.0.1:8000/api/v1/resume/${url}`);
 };

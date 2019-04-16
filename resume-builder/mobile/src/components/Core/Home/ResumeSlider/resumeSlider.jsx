@@ -24,7 +24,7 @@ export default class ResumeSlider extends Component {
                         </li>
                     </ul>
 
-                    <a href="#" className="btn btn__shadow btn__round btn__primary">Customise</a>
+                    <a className="btn btn__shadow btn__round btn__primary">Customise</a>
                 </div>
             </section>
         )

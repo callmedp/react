@@ -10,21 +10,76 @@ import Course from './UserDetails/Course/course.jsx';
 import Project from './UserDetails/Project/project.jsx';
 import Reference from './UserDetails/Reference/references.jsx';
 import './rightSection.scss'
+import queryString from 'query-string'
 
 
 export default class RightSection extends Component {
 
+    constructor(props) {
+        super(props);
+        const values = queryString.parse(this.props.location.search)
+        this.renderSwitch = this.renderSwitch.bind(this);
+        this.state = {
+            type: (values && values.type) || ''
+        }
+    }
+
+
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location) {
+            const values = queryString.parse(this.props.location.search)
+            this.setState({
+                type: (values && values.type) || ''
+            })
+        }
+    }
+
+    renderSwitch() {
+
+        switch (this.state.type) {
+            case 'education': {
+                return <Education {...this.props}/>
+            }
+            case 'skill': {
+                return <Skills {...this.props}/>
+            }
+            case 'experience': {
+                return <Experience {...this.props}/>
+            }
+            case 'language': {
+                return <Language {...this.props}/>
+            }
+            case 'award': {
+                return <Award {...this.props}/>
+            }
+            case 'project': {
+                return <Project {...this.props}/>
+            }
+            case 'course': {
+                return <Course {...this.props}/>
+            }
+            case 'reference': {
+                return <Reference {...this.props}/>
+            }
+            case 'summary': {
+                return <Summary {...this.props}/>
+            }
+            default: {
+                return <PersonalInfo {...this.props}/>
+            }
+
+        }
+
+    }
+
     render() {
+        const {type} = this.state;
         return (
-            <div className="right-panel">
-                <PersonalInfo/>
-                {/*<Summary />*/}
-                {/*<Education />*/}
-                {/*<Experience />*/}
-                {/*<Skills/>*/}
-                {/*<Language/>*/}
-                
-            </div>
+            <section className="right-panel">
+                {
+                    this.renderSwitch()
+                }
+            </section>
         )
     }
 

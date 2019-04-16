@@ -11,7 +11,7 @@ import {courseTypeList} from "../../../Utils/courseTypeList";
 
 function* fetchUserEducation(action) {
     try {
-        const candidateId = localStorage.getItem('candidateId') || '';
+        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
 
         const result = yield call(Api.fetchUserEducation, candidateId);
         if (result['error']) {
@@ -35,7 +35,7 @@ function* updateUserEducation(action) {
     try {
         const {payload: {userEducation, resolve, reject}} = action;
 
-        const candidateId = localStorage.getItem('candidateId') || '';
+        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
 
         userEducation['cc_id'] = candidateId;
         const {id} = userEducation;
