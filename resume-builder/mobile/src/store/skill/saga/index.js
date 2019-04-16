@@ -9,7 +9,7 @@ import {SubmissionError} from 'redux-form'
 
 function* fetchUserSkill(action) {
     try {
-        const candidateId = localStorage.getItem('candidateId') || '';
+        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
 
         const result = yield call(Api.fetchUserSkill, candidateId);
         if (result['error']) {
@@ -29,7 +29,7 @@ function* updateUserSkill(action) {
         let {payload: {userSkill, resolve, reject}} = action;
 
 
-        const candidateId = localStorage.getItem('candidateId') || '';
+        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
 
         userSkill['cc_id'] = candidateId;
         const {id} = userSkill;

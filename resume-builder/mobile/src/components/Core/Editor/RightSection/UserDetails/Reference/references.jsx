@@ -4,7 +4,7 @@ import * as actions from "../../../../../../store/reference/actions";
 import {connect} from "react-redux";
 import {renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import {required} from "../../../../../FormHandler/formValidations"
-export default class references extends Component {
+class References extends Component {
     constructor(props) {
         super(props)
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -55,38 +55,28 @@ export default class references extends Component {
                                         <i className="sprite icon--project-gray"></i>
                                     </span>
                                     </div>
-                                    <Field component={renderField} validate={required} type={"text"} 
+                                    <Field component={renderField} validate={required} type={"text"} className="form__input"
                                         name="reference_name" aria-label="reference_name" id="actireference_namevity"/>
                                 </div>
                             </li>
                             
                             <li className="form__group">
-                                <label className="form__label" for="activity">Reference company name</label>
-                                <div className="input-group">
-                                    <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--company"></i>
-                                    </span>
-                                    </div>
-                                    <input type="text" name="activity" className="form__input" placeholder="" aria-label="activity" id="activity" />
-                                </div>
-                            </li>
-                            
-                            <li className="form__group">
-                                <label className="form__label" for="designation">Designation</label>
+                                <label className="form__label" for="reference_designation">Designation</label>
                                 <div className="input-group">
                                     <div className="input-group__prepend">
                                     <span className="input-group__text">
                                         <i className="sprite icon--designation"></i>
                                     </span>
                                     </div>
-                                    <input type="text" name="designation" className="form__input" placeholder="IT Project Manager" aria-label="designation" id="designation" />
+                                    <Field component={renderField} validate={required} type={"text"} name="reference_designation"
+                                        className="form__input" aria-label="reference_designation" id="reference_designation"/>
                                 </div>
                             </li>
 
                             <li className="form__group">
-                                <label className="form__label" for="description">Description</label>
-                                <textarea rows="3" cols="30" name="description" className="form__input" aria-label="description" id="description" ></textarea>
+                                <label className="form__label" for="about_candidate">Description</label>
+                                <Field component={renderTextArea} rows="3" type={"textarea"} name="about_candidate"
+                                    className="form__input" aria-label="about_candidate" id="about_candidate"/>
                             </li>
                             
                         </ul>
@@ -95,7 +85,7 @@ export default class references extends Component {
                         <li className="form__group">
                             <div className="btn-wrap">
                                 <button className="btn btn__round btn--outline">Preview</button>
-                                <button className="btn btn__round btn__primary">Save &amp; Continue</button>
+                                <button className="btn btn__round btn__primary" type={'submit'}>Save &amp; Continue</button>
                             </div>
                         </li>
                     </ul>
@@ -105,3 +95,32 @@ export default class references extends Component {
         )
     }
 }
+
+
+export const ReferenceForm = reduxForm({
+    form: 'reference',
+    enableReinitialize: true
+})(References);
+
+
+const mapStateToProps = (state) => {
+    return {
+        initialValues: state.reference,
+        reference: state.reference
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "onSubmit": (userReference) => {
+            return new Promise((resolve, reject) => {
+                return dispatch(actions.updateUserReference({userReference, resolve, reject}));
+            })
+        },
+        "fetchUserReference": () => {
+            return dispatch(actions.fetchUserReference())
+        },
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReferenceForm);

@@ -9,7 +9,7 @@ import {SubmissionError} from 'redux-form'
 
 function* fetchUserReference(action) {
     try {
-        const candidateId = localStorage.getItem('candidateId') || '';
+        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
 
         const result = yield call(Api.fetchUserReference, candidateId);
         if (result['error']) {
@@ -29,7 +29,7 @@ function* updateUserReference(action) {
         let {payload: {userReference, resolve, reject}} = action;
 
 
-        const candidateId = localStorage.getItem('candidateId') || '';
+        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
 
         userReference['cc_id'] = candidateId;
         const {id} = userReference;

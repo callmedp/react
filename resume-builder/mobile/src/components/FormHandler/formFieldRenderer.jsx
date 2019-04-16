@@ -103,12 +103,13 @@ export const renderTextArea = ({
                                    input,
                                    label,
                                    type,
+                                   rows,
                                    className,
                                    meta: {touched, error, warning}
 
                                }) => (
     <React.Fragment>
-        <textarea {...input} placeholder={label} type={type} className={className}/>
+        <textarea {...input} placeholder={label} type={type} className={className} rows={rows}/>
         <div>
             {touched &&
             ((error && <span className={'Error-message'}>{error}</span>) ||
