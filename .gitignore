@@ -129,6 +129,7 @@ careerplus/static_core/react/dist/
 
 # Webpack Stats
 
-webpack-stats.json
+webpack-mobile-stats.json
+webpack-desktop-stats.json
 
 dump.rdb
