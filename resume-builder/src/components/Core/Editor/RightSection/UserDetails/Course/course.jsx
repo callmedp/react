@@ -46,8 +46,13 @@ class Course extends Component {
 
     changeOrderingDown(index, fields, event) {
         event.stopPropagation();
-        console.log('donw pressed');
+        console.log('down pressed');
+        let currentItem = fields.get(index);
+        let nextItem = fields.get(index + 1);
+        currentItem['order'] = index + 1;
+        nextItem['order'] = index;
         fields.swap(index, index + 1);
+        this.props.handleSwap([currentItem, nextItem]);
     }
 
     changeOrderingUp(index, fields, event) {
@@ -65,12 +70,13 @@ class Course extends Component {
     handleAddition(fields, error) {
         const listLength = fields.length;
 
-        this.handleAccordionState(listLength, fields);
+        if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
             "id": '',
             "name_of_certification": '',
             "year_of_certification": '',
+            order: fields.length
         })
     }
 
@@ -81,17 +87,12 @@ class Course extends Component {
         if (course && course.id) {
             this.props.removeCourse(course.id)
         }
-
-
     }
-
 
     handleAccordionState(val, fields) {
         const {currentAccordion} = this.state;
 
-        console.log('--accordion--', currentAccordion);
         if (currentAccordion !== '') {
-
             this.props.onSubmit(fields.get(currentAccordion))
         }
 
@@ -103,7 +104,7 @@ class Course extends Component {
     }
 
     handleAccordionClick(value, fields) {
-        const val = value.length > 0 ? value[0] : ''
+        const val = value.length > 0 ? value[0] : '';
         this.handleAccordionState(val, fields)
     }
 
@@ -253,6 +254,17 @@ const
             },
 
             "handleSwap": (listItems) => {
+                listItems = (listItems || []).map(userCourse => {
+                    const {year_of_certification} = userCourse;
+                    if (!userCourse['id']) delete userCourse['id'];
+                    userCourse = {
+                        ...userCourse,
+                        ...{
+                            year_of_certification: (year_of_certification && moment(year_of_certification).format('YYYY')) || '',
+                        }
+                    };
+                    return userCourse;
+                })
                 return dispatch(actions.handleCourseSwap({list: listItems}))
             }
         }

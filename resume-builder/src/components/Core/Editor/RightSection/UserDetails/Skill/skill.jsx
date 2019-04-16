@@ -52,9 +52,14 @@ class Skill extends Component {
     }
 
     changeOrderingDown(index, fields, event) {
-        event.stopPropagation()
+        event.stopPropagation();
         console.log('donw pressed');
+        let currentItem = fields.get(index);
+        let nextItem = fields.get(index + 1);
+        currentItem['order'] = index + 1;
+        nextItem['order'] = index;
         fields.swap(index, index + 1);
+        this.props.handleSwap([currentItem, nextItem])
     }
 
     changeOrderingUp(index, fields, event) {
@@ -64,7 +69,7 @@ class Skill extends Component {
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
         prevItem['order'] = index;
-        fields.swap(index, index - 1)
+        fields.swap(index, index - 1);
         this.props.handleSwap([currentItem, prevItem])
 
     }
@@ -72,15 +77,17 @@ class Skill extends Component {
     handleAddition(fields, error) {
         const listLength = fields.length;
 
-        this.handleAccordionState(listLength, fields);
+        if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
             "id": '',
             "name": '',
             "proficiency": {
                 value: 5, 'label': '5'
-            }
+            },
+            order: listLength
         })
+
     }
 
     deleteSkill(index, fields, event) {
@@ -97,7 +104,6 @@ class Skill extends Component {
     handleAccordionState(val, fields) {
         const {currentAccordion} = this.state;
 
-        console.log('--accordion--', currentAccordion);
         if (currentAccordion !== '') {
 
             this.props.onSubmit(fields.get(currentAccordion))
@@ -111,7 +117,7 @@ class Skill extends Component {
     }
 
     handleAccordionClick(value, fields) {
-        const val = value.length > 0 ? value[0] : ''
+        const val = value.length > 0 ? value[0] : '';
         this.handleAccordionState(val, fields)
     }
 
@@ -256,7 +262,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userSkill) => {
-            const {proficiency} = userSkill
+            const {proficiency} = userSkill;
             userSkill = {
                 ...userSkill,
                 ...{
@@ -274,6 +280,17 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.deleteSkill(skillId))
         },
         "handleSwap": (listItems) => {
+            listItems = (listItems || []).map(userSkill => {
+                const {proficiency} = userSkill;
+                if (!userSkill['id']) delete userSkill['id'];
+                userSkill = {
+                    ...userSkill,
+                    ...{
+                        proficiency: proficiency && proficiency.value
+                    }
+                };
+                return userSkill;
+            })
             return dispatch(actions.handleSkillSwap({list: listItems}))
         }
     }

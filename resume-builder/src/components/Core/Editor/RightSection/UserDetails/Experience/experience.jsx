@@ -48,8 +48,13 @@ class Experience extends Component {
 
     changeOrderingDown(index, fields, event) {
         event.stopPropagation()
-        console.log('donw pressed');
+        console.log('down pressed');
+        let currentItem = fields.get(index);
+        let nextItem = fields.get(index + 1);
+        currentItem['order'] = index + 1;
+        nextItem['order'] = index;
         fields.swap(index, index + 1);
+        this.props.handleSwap([currentItem, nextItem]);
     }
 
     changeOrderingUp(index, fields, event) {
@@ -67,7 +72,7 @@ class Experience extends Component {
     handleAddition(fields, error) {
         const listLength = fields.length;
 
-        this.handleAccordionState(listLength, fields);
+        if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
             "id": '',
@@ -78,6 +83,7 @@ class Experience extends Component {
             "is_working": '',
             "job_location": '',
             "work_description": '',
+            order: fields.length
         })
     }
 
@@ -88,17 +94,13 @@ class Experience extends Component {
         if (experience && experience.id) {
             this.props.removeExperience(experience.id)
         }
-
-
     }
 
 
     handleAccordionState(val, fields) {
         const {currentAccordion} = this.state;
 
-        console.log('--accordion--', currentAccordion);
         if (currentAccordion !== '') {
-
             this.props.onSubmit(fields.get(currentAccordion))
         }
 
@@ -110,7 +112,7 @@ class Experience extends Component {
     }
 
     handleAccordionClick(value, fields) {
-        const val = value.length > 0 ? value[0] : ''
+        const val = value.length > 0 ? value[0] : '';
         this.handleAccordionState(val, fields)
     }
 
@@ -312,6 +314,18 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         "handleSwap": (listItems) => {
+            listItems = (listItems || []).map(userExperience => {
+                const {start_date, end_date} = userExperience;
+                if (!userExperience['id']) delete userExperience['id'];
+                userExperience = {
+                    ...userExperience,
+                    ...{
+                        start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
+                        end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || ''
+                    }
+                };
+                return userExperience;
+            });
             return dispatch(actions.handleExperienceSwap({list: listItems}))
         }
     }

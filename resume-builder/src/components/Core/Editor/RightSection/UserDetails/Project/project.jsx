@@ -46,9 +46,14 @@ class Project extends Component {
 
 
     changeOrderingDown(index, fields, event) {
-        event.stopPropagation()
+        event.stopPropagation();
         console.log('donw pressed');
+        let currentItem = fields.get(index);
+        let nextItem = fields.get(index + 1);
+        currentItem['order'] = index + 1;
+        nextItem['order'] = index;
         fields.swap(index, index + 1);
+        this.props.handleSwap([currentItem, nextItem])
     }
 
     changeOrderingUp(index, fields, event) {
@@ -58,7 +63,7 @@ class Project extends Component {
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
         prevItem['order'] = index;
-        fields.swap(index, index - 1)
+        fields.swap(index, index - 1);
         this.props.handleSwap([currentItem, prevItem])
 
     }
@@ -66,7 +71,7 @@ class Project extends Component {
     handleAddition(fields, error) {
         const listLength = fields.length;
 
-        this.handleAccordionState(listLength, fields);
+        if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
             "id": '',
@@ -74,7 +79,8 @@ class Project extends Component {
             "start_date": '',
             "end_date": '',
             "skills": '',
-            "description": ''
+            "description": '',
+            order: listLength
         })
     }
 
@@ -93,7 +99,6 @@ class Project extends Component {
     handleAccordionState(val, fields) {
         const {currentAccordion} = this.state;
 
-        console.log('--accordion--', currentAccordion);
         if (currentAccordion !== '') {
 
             this.props.onSubmit(fields.get(currentAccordion))
@@ -199,7 +204,7 @@ class Project extends Component {
                                                                                name={`${member}.end_date`}/></div>
                                                                     <span className="till-today">
                                     <Field type="radio" name={`${member}.currently_working`} component="input"
-                                           value={`${member}.currently_working`} />
+                                           value={`${member}.currently_working`}/>
                                     Till Today
                                     </span>
                                                                 </fieldset>
@@ -284,6 +289,18 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         "handleSwap": (listItems) => {
+            listItems = (listItems || []).map(userProject => {
+                const {start_date, end_date} = userProject;
+                if (!userProject['id']) delete userProject['id'];
+                userProject = {
+                    ...userProject,
+                    ...{
+                        start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
+                        end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || ''
+                    }
+                };
+                return userProject;
+            });
             return dispatch(actions.handleProjectSwap({list: listItems}))
         }
     }

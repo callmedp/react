@@ -49,7 +49,7 @@ class Language extends Component {
 
 
     changeOrderingDown(index, fields, event) {
-        event.stopPropagation()
+        event.stopPropagation();
         console.log('donw pressed');
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
@@ -66,14 +66,14 @@ class Language extends Component {
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
         prevItem['order'] = index;
-        fields.swap(index, index - 1)
+        fields.swap(index, index - 1);
         this.props.handleSwap([currentItem, prevItem])
-
     }
 
     handleAddition(fields, error) {
         const listLength = fields.length;
-        this.handleAccordionState(listLength, fields);
+
+        if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
             "id": '',
@@ -92,15 +92,12 @@ class Language extends Component {
         if (language && language.id) {
             this.props.removeLanguage(language.id)
         }
-
-
     }
 
 
     handleAccordionState(val, fields) {
         const {currentAccordion} = this.state;
 
-        console.log('--accordion--', currentAccordion);
         if (currentAccordion !== '') {
 
             this.props.onSubmit(fields.get(currentAccordion))
@@ -114,7 +111,7 @@ class Language extends Component {
     }
 
     handleAccordionClick(value, fields) {
-        const val = value.length > 0 ? value[0] : ''
+        const val = value.length > 0 ? value[0] : '';
         this.handleAccordionState(val, fields)
     }
 
@@ -143,7 +140,6 @@ class Language extends Component {
                                         return (
                                             <li key={index}>
                                                 <section className="info-section">
-
                                                     <AccordionItem uuid={index}>
                                                         <AccordionItemHeading>
                                                             <AccordionItemButton>
@@ -250,6 +246,7 @@ export const LanguageForm = reduxForm({
 
 
 const mapStateToProps = (state) => {
+    console.log('---', state.language)
     return {
         initialValues: state.language,
         language: state.language

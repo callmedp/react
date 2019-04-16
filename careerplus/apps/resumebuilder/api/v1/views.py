@@ -52,29 +52,14 @@ class CandidateRetrieveUpdateView(RetrieveUpdateAPIView):
     serializer_class = CandidateSerializer
     queryset = Candidate.objects.all()
 
-    # def get(self, request, *args, **kwargs):
-    #     import ipdb;
-    #     ipdb.set_trace();
-    #     if 'personal_info' not in self.request.session:
-    #         candidate_id = self.kwargs.get('pk')
-    #         candidate = Candidate.objects.filter(candidate_id=candidate_id).values().first()
-    #         return Response(candidate)
-    #
-    #     else:
-    #         personal_info = self.request.session.get('personal_info')
-    #         del request.session['personal_info']
-    #         candidate = Candidate.objects.get_or_create(candidate_id=personal_info['candidate_id'],
-    #                                                     defaults=personal_info)
-    #         if candidate[1]:
-    #             candidate.save()
-    #         return Response(personal_info)
-
 
 class SkillListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -238,6 +223,8 @@ class CandidateExperienceListCreateView(ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = CandidateExperience.objects.all()
     serializer_class = CandidateExperienceSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
 
     # def get_queryset(self):
     #     candidate_id = self.request.GET.get('c_id', '')
@@ -266,6 +253,8 @@ class CandidateEducationListCreateView(ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = CandidateEducation.objects.all()
     serializer_class = CandidateEducationSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -288,6 +277,8 @@ class CandidateCertificationListCreateView(ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = CandidateCertification.objects.all()
     serializer_class = CandidateCertificationSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -310,6 +301,8 @@ class CandidateProjectListCreateView(ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = CandidateProject.objects.all()
     serializer_class = CandidateProjectSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -332,6 +325,8 @@ class CandidateReferenceListCreateView(ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = CandidateReference.objects.all()
     serializer_class = CandidateReferenceSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -354,6 +349,8 @@ class CandidateSocialLinkListCreateView(ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = CandidateSocialLink.objects.all()
     serializer_class = CandidateSocialLinkSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -376,6 +373,8 @@ class CandidateAchievementListCreateView(ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = CandidateAchievement.objects.all()
     serializer_class = CandidateAchievementSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):

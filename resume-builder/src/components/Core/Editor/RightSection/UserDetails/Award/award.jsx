@@ -45,9 +45,14 @@ class Award extends Component {
 
 
     changeOrderingDown(index, fields, event) {
-        event.stopPropagation()
-        console.log('donw pressed');
+        event.stopPropagation();
+        console.log('down pressed');
+        let currentItem = fields.get(index);
+        let nextItem = fields.get(index + 1);
+        currentItem['order'] = index + 1;
+        nextItem['order'] = index;
         fields.swap(index, index + 1);
+        this.props.handleSwap([currentItem, nextItem]);
     }
 
     changeOrderingUp(index, fields, event) {
@@ -57,21 +62,21 @@ class Award extends Component {
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
         prevItem['order'] = index;
-        fields.swap(index, index - 1)
+        fields.swap(index, index - 1);
         this.props.handleSwap([currentItem, prevItem])
-
     }
 
     handleAddition(fields, error) {
         const listLength = fields.length;
 
-        this.handleAccordionState(listLength, fields);
+        if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
             "id": '',
             "title": '',
             "date": '',
             "summary": '',
+            order: fields.length
         })
     }
 
@@ -82,16 +87,12 @@ class Award extends Component {
         if (award && award.id) {
             this.props.removeAward(award.id)
         }
-
-
     }
 
     handleAccordionState(val, fields) {
         const {currentAccordion} = this.state;
 
-        console.log('--accordion--', currentAccordion);
         if (currentAccordion !== '') {
-
             this.props.onSubmit(fields.get(currentAccordion))
         }
 
@@ -103,7 +104,7 @@ class Award extends Component {
     }
 
     handleAccordionClick(value, fields) {
-        const val = value.length > 0 ? value[0] : ''
+        const val = value.length > 0 ? value[0] : '';
         this.handleAccordionState(val, fields)
     }
 
@@ -203,7 +204,6 @@ class Award extends Component {
                             </Accordion>
                         </ul>
                     </section>
-
                 </div>
             )
         };
@@ -261,6 +261,17 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         "handleSwap": (listItems) => {
+            listItems = (listItems || []).map(userAward => {
+                const {date} = userAward;
+                if (!userAward['id']) delete userAward['id'];
+                userAward = {
+                    ...userAward,
+                    ...{
+                        date: (date && moment(date).format('YYYY-MM-DD')) || '',
+                    }
+                };
+                return userAward;
+            })
             return dispatch(actions.handleAwardSwap({list: listItems}))
         }
     }

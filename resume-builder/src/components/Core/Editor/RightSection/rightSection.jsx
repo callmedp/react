@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+    import React, {Component} from 'react';
 import './rightSection.scss'
 import PersonalInfo from './UserDetails/PersonalInfo/personalInfo.jsx'
 import Education from './UserDetails/Education/education.jsx'

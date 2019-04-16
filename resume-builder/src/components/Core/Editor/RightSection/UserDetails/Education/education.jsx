@@ -47,7 +47,12 @@ class Education extends Component {
     changeOrderingDown(index, fields, event) {
         event.stopPropagation()
         console.log('donw pressed');
+        let currentItem = fields.get(index);
+        let nextItem = fields.get(index + 1);
+        currentItem['order'] = index + 1;
+        nextItem['order'] = index;
         fields.swap(index, index + 1);
+        this.props.handleSwap([currentItem, nextItem]);
     }
 
     changeOrderingUp(index, fields, event) {
@@ -65,7 +70,7 @@ class Education extends Component {
     handleAddition(fields, error, event) {
         event.stopPropagation();
         const listLength = fields.length;
-        this.handleAccordionState(listLength, fields);
+        if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
             "id": '',
@@ -76,6 +81,7 @@ class Education extends Component {
             "percentage_cgpa": '',
             "end_date": '',
             "is_pursuing": false,
+            order: fields.length
         })
     }
 
@@ -86,16 +92,12 @@ class Education extends Component {
         if (education && education.id) {
             this.props.removeEducation(education.id)
         }
-
-
     }
 
     handleAccordionState(val, fields) {
         const {currentAccordion} = this.state;
 
-        console.log('--accordion--', currentAccordion);
         if (currentAccordion !== '') {
-
             this.props.onSubmit(fields.get(currentAccordion))
         }
 
@@ -107,7 +109,7 @@ class Education extends Component {
     }
 
     handleAccordionClick(value, fields) {
-        const val = value.length > 0 ? value[0] : ''
+        const val = value.length > 0 ? value[0] : '';
         this.handleAccordionState(val, fields)
     }
 
@@ -298,7 +300,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (userEducation) => {
-            console.log('--', userEducation);
             const {start_date, end_date, course_type} = userEducation;
 
             userEducation = {
@@ -321,6 +322,20 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         "handleSwap": (listItems) => {
+            listItems = (listItems || []).map(userEducation => {
+                    const {start_date, end_date, course_type} = userEducation;
+                    if (!userEducation['id']) delete userEducation['id'];
+                    userEducation = {
+                        ...userEducation,
+                        ...{
+                            start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
+                            end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || '',
+                            course_type: course_type && course_type.value
+                        }
+                    };
+                    return userEducation;
+                }
+            );
             return dispatch(actions.handleEducationSwap({list: listItems}))
         }
     }

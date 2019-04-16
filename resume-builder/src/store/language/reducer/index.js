@@ -1,7 +1,16 @@
 import {SAVE_USER_LANGUAGE, REMOVE_LANGUAGE} from "../actions/actionTypes";
 
 const initialState = {
-    list: []
+    list: [{
+            "candidate_id": '',
+            "id": '',
+            "name": '',
+            "proficiency": {
+                value: 5, 'label': '5'
+            },
+            order: 0
+        }
+    ]
 };
 
 
