@@ -29,9 +29,20 @@ const deleteUserAward = (candidateId, awardId) => {
 
 };
 
+
+const bulkUpdateUserAward = (data, candidateId) => {
+
+    const url = `candidate/${candidateId}/bulk-update/award/`;
+    return BaseApiService.post(`http://127.0.0.1:8000/api/v1/resume/${url}`,data);
+
+
+}
+
+
 export const Api = {
     fetchUserAward,
     updateUserAward,
     createUserAward,
-    deleteUserAward
+    deleteUserAward,
+    bulkUpdateUserAward
 }

@@ -58,7 +58,7 @@ function* handleProjectSwap(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
 
-        const result = yield call(Api.updateUserProject, list, candidateId);
+        const result = yield call(Api.bulkUpdateUserProject, list, candidateId);
 
         if (result['error']) {
             console.log(result['error']);

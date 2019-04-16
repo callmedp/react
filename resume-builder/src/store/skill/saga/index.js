@@ -68,7 +68,7 @@ function* handleSkillSwap(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
 
-        const result = yield call(Api.updateUserSkill, list, candidateId);
+        const result = yield call(Api.bulkUpdateUserSkill, list, candidateId);
 
         if (result['error']) {
             console.log(result['error']);

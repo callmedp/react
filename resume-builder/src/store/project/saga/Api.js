@@ -27,9 +27,20 @@ const deleteUserProject = (candidateId, projectId) => {
 
 };
 
+
+const bulkUpdateUserProject = (data, candidateId) => {
+
+    const url = `candidate/${candidateId}/bulk-update/project/`;
+    return BaseApiService.post(`http://127.0.0.1:8000/api/v1/resume/${url}`,data);
+
+
+}
+
+
 export const Api = {
     fetchUserProject,
     createUserProject,
     updateUserProject,
-    deleteUserProject
+    deleteUserProject,
+    bulkUpdateUserProject
 }

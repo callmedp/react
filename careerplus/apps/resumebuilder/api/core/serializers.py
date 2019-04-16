@@ -35,7 +35,7 @@ class SkillSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Skill
-        fields = ('id', 'candidate_id', 'name', 'proficiency')
+        fields = ('id', 'candidate_id', 'name', 'proficiency', 'order')
 
 
 class CandidateExperienceSerializer(serializers.ModelSerializer):
@@ -60,7 +60,7 @@ class CandidateExperienceSerializer(serializers.ModelSerializer):
         model = CandidateExperience
         fields = (
             'id', 'candidate_id', 'job_profile', 'company_name', 'start_date', 'end_date', 'is_working',
-            'job_location', 'work_description')
+            'job_location', 'work_description', 'order')
 
 
 class CandidateEducationSerializer(serializers.ModelSerializer):
@@ -86,7 +86,7 @@ class CandidateEducationSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'candidate_id', 'specialization', 'institution_name', 'course_type', 'percentage_cgpa',
             'start_date',
-            'end_date', 'is_pursuing')
+            'end_date', 'is_pursuing', 'order')
 
 
 class CandidateCertificationSerializer(serializers.ModelSerializer):
@@ -109,7 +109,7 @@ class CandidateCertificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CandidateCertification
-        fields = ('id', 'candidate_id', 'name_of_certification', 'year_of_certification')
+        fields = ('id', 'candidate_id', 'name_of_certification', 'year_of_certification', 'order')
 
 
 class CandidateProjectSerializer(serializers.ModelSerializer):
@@ -132,7 +132,7 @@ class CandidateProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CandidateProject
-        fields = ('id', 'candidate_id', 'project_name', 'start_date', 'end_date', 'skills', 'description')
+        fields = ('id', 'candidate_id', 'project_name', 'start_date', 'end_date', 'skills', 'description', 'order')
 
 
 class CandidateReferenceSerializer(serializers.ModelSerializer):
@@ -155,7 +155,7 @@ class CandidateReferenceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CandidateReference
-        fields = ('id', 'candidate_id', 'reference_name', 'about_candidate', 'reference_designation')
+        fields = ('id', 'candidate_id', 'reference_name', 'about_candidate', 'reference_designation', 'order')
 
 
 class CandidateSocialLinkSerializer(serializers.ModelSerializer):
@@ -207,4 +207,4 @@ class CandidateAchievementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CandidateAchievement
-        fields = ('id', 'candidate_id', 'title', 'date', 'summary')
+        fields = ('id', 'candidate_id', 'title', 'date', 'summary', 'order')

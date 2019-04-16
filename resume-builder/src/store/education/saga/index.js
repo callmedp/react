@@ -51,9 +51,6 @@ function* updateUserEducation(action) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
-
-        yield put({type: Actions.SAVE_USER_EDUCATION, data: result['data']});
-
         return resolve('User Education  Info saved successfully.');
 
     } catch (e) {
@@ -70,7 +67,7 @@ function* handleEducationSwap(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
 
-        const result = yield call(Api.updateUserEducation, list, candidateId);
+        const result = yield call(Api.bulkUpdateUserEducation, list, candidateId);
 
         if (result['error']) {
             console.log(result['error']);

@@ -33,9 +33,19 @@ const deleteUserExperience = (candidateId, experienceId) => {
 };
 
 
+const bulkUpdateUserExperience = (data, candidateId) => {
+
+    const url = `candidate/${candidateId}/bulk-update/experience/`;
+    return BaseApiService.post(`http://127.0.0.1:8000/api/v1/resume/${url}`,data);
+
+
+}
+
+
 export const Api = {
     fetchUserExperience,
     updateUserExperience,
     createUserExperience,
-    deleteUserExperience
+    deleteUserExperience,
+    bulkUpdateUserExperience
 }

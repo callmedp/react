@@ -55,7 +55,7 @@ function* handleExperienceSwap(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
 
-        const result = yield call(Api.updateUserExperience, list, candidateId);
+        const result = yield call(Api.bulkUpdateUserExperience, list, candidateId);
 
         if (result['error']) {
             console.log(result['error']);

@@ -56,7 +56,7 @@ function* handleAwardSwap(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
 
-        const result = yield call(Api.updateUserAward, list, candidateId);
+        const result = yield call(Api.bulkUpdateUserAward, list, candidateId);
 
         if (result['error']) {
             console.log(result['error']);

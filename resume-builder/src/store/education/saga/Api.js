@@ -29,9 +29,19 @@ const deleteUserEducation = (candidateId, educationId) => {
 
 };
 
+const bulkUpdateUserEducation = (data, candidateId) => {
+
+    const url = `candidate/${candidateId}/bulk-update/education/`;
+    return BaseApiService.post(`http://127.0.0.1:8000/api/v1/resume/${url}`,data);
+
+
+}
+
+
 export const Api = {
     fetchUserEducation,
     createUserEducation,
     updateUserEducation,
-    deleteUserEducation
+    deleteUserEducation,
+    bulkUpdateUserEducation
 }

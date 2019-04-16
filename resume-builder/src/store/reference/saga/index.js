@@ -57,7 +57,7 @@ function* handleReferenceSwap(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
 
-        const result = yield call(Api.updateUserReference, list, candidateId);
+        const result = yield call(Api.bulkUpdateUserReference, list, candidateId);
 
         if (result['error']) {
             console.log(result['error']);

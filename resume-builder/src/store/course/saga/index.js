@@ -56,7 +56,7 @@ function* handleCourseSwap(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
 
-        const result = yield call(Api.updateUserCourse, list, candidateId);
+        const result = yield call(Api.bulkUpdateUserCourse, list, candidateId);
 
         if (result['error']) {
             console.log(result['error']);

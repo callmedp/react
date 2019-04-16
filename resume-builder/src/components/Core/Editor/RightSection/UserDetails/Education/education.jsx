@@ -219,7 +219,7 @@ class Education extends Component {
                                                                     </div>
                                                                     <span className="till-today">
                                     <Field type="radio" name={`${member}.is_pursuing`} component={'input'}
-                                           value={`${member}.is_pursuing`}/>
+                                           checked={`${member}.is_pursuing` === 'true' ? true : false}/>
                                     Till Today
                                 </span>
                                                                 </fieldset>

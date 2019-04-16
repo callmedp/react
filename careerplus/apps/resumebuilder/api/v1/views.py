@@ -24,7 +24,7 @@ from shared.permissions import IsObjectOwner
 
 # third party imports
 from rest_framework import status
-from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView)
+from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView)
 from rest_framework.views import (APIView)
 from rest_framework.parsers import (FormParser, MultiPartParser)
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -44,7 +44,7 @@ class CandidateListCreateView(ListCreateAPIView):
         return super(CandidateListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class CandidateRetrieveUpdateView(RetrieveUpdateAPIView):
+class CandidateRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
     lookup_field = 'candidate_id'
@@ -56,7 +56,7 @@ class CandidateRetrieveUpdateView(RetrieveUpdateAPIView):
 class SkillListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = Skill.objects.all()
+    queryset = Skill.objects.all().order_by('order')
     serializer_class = SkillSerializer
     ordering_fields = ('order',)
     ordering = ('order',)
@@ -67,7 +67,7 @@ class SkillListCreateView(ListCreateAPIView):
         return super(SkillListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class SkillRetrieveUpdateView(RetrieveUpdateAPIView):
+class SkillRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
     serializer_class = SkillSerializer
@@ -221,7 +221,7 @@ class CandidateShineProfileRetrieveUpdateView(APIView):
 class CandidateExperienceListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = CandidateExperience.objects.all()
+    queryset = CandidateExperience.objects.all().order_by('order')
     serializer_class = CandidateExperienceSerializer
     ordering_fields = ('order',)
     ordering = ('order',)
@@ -238,7 +238,7 @@ class CandidateExperienceListCreateView(ListCreateAPIView):
         return super(CandidateExperienceListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class CandidateExperienceRetrieveUpdateView(RetrieveUpdateAPIView):
+class CandidateExperienceRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
     serializer_class = CandidateExperienceSerializer
@@ -251,7 +251,7 @@ class CandidateExperienceRetrieveUpdateView(RetrieveUpdateAPIView):
 class CandidateEducationListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = CandidateEducation.objects.all()
+    queryset = CandidateEducation.objects.all().order_by('order')
     serializer_class = CandidateEducationSerializer
     ordering_fields = ('order',)
     ordering = ('order',)
@@ -262,7 +262,7 @@ class CandidateEducationListCreateView(ListCreateAPIView):
         return super(CandidateEducationListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class CandidateEducationRetrieveUpdateView(RetrieveUpdateAPIView):
+class CandidateEducationRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
     serializer_class = CandidateEducationSerializer
@@ -275,7 +275,7 @@ class CandidateEducationRetrieveUpdateView(RetrieveUpdateAPIView):
 class CandidateCertificationListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = CandidateCertification.objects.all()
+    queryset = CandidateCertification.objects.all().order_by('order')
     serializer_class = CandidateCertificationSerializer
     ordering_fields = ('order',)
     ordering = ('order',)
@@ -286,7 +286,7 @@ class CandidateCertificationListCreateView(ListCreateAPIView):
         return super(CandidateCertificationListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class CandidateCertificationRetrieveUpdateView(RetrieveUpdateAPIView):
+class CandidateCertificationRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
     serializer_class = CandidateCertificationSerializer
@@ -299,7 +299,7 @@ class CandidateCertificationRetrieveUpdateView(RetrieveUpdateAPIView):
 class CandidateProjectListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = CandidateProject.objects.all()
+    queryset = CandidateProject.objects.all().order_by('order')
     serializer_class = CandidateProjectSerializer
     ordering_fields = ('order',)
     ordering = ('order',)
@@ -310,7 +310,7 @@ class CandidateProjectListCreateView(ListCreateAPIView):
         return super(CandidateProjectListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class CandidateProjectRetrieveUpdateView(RetrieveUpdateAPIView):
+class CandidateProjectRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
     serializer_class = CandidateProjectSerializer
@@ -323,7 +323,7 @@ class CandidateProjectRetrieveUpdateView(RetrieveUpdateAPIView):
 class CandidateReferenceListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = CandidateReference.objects.all()
+    queryset = CandidateReference.objects.all().order_by('order')
     serializer_class = CandidateReferenceSerializer
     ordering_fields = ('order',)
     ordering = ('order',)
@@ -334,7 +334,7 @@ class CandidateReferenceListCreateView(ListCreateAPIView):
         return super(CandidateReferenceListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class CandidateReferenceRetrieveUpdateView(RetrieveUpdateAPIView):
+class CandidateReferenceRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
     serializer_class = CandidateReferenceSerializer
@@ -347,7 +347,7 @@ class CandidateReferenceRetrieveUpdateView(RetrieveUpdateAPIView):
 class CandidateSocialLinkListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = CandidateSocialLink.objects.all()
+    queryset = CandidateSocialLink.objects.all().order_by('order')
     serializer_class = CandidateSocialLinkSerializer
     ordering_fields = ('order',)
     ordering = ('order',)
@@ -358,7 +358,7 @@ class CandidateSocialLinkListCreateView(ListCreateAPIView):
         return super(CandidateSocialLinkListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class CandidateSocialLinkRetrieveUpdateView(RetrieveUpdateAPIView):
+class CandidateSocialLinkRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
     serializer_class = CandidateSocialLinkSerializer
@@ -371,7 +371,7 @@ class CandidateSocialLinkRetrieveUpdateView(RetrieveUpdateAPIView):
 class CandidateAchievementListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = CandidateAchievement.objects.all()
+    queryset = CandidateAchievement.objects.all().order_by('order')
     serializer_class = CandidateAchievementSerializer
     ordering_fields = ('order',)
     ordering = ('order',)
@@ -382,7 +382,7 @@ class CandidateAchievementListCreateView(ListCreateAPIView):
         return super(CandidateAchievementListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class CandidateAchievementRetrieveUpdateView(RetrieveUpdateAPIView):
+class CandidateAchievementRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
     serializer_class = CandidateAchievementSerializer

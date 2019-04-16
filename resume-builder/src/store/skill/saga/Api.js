@@ -31,9 +31,19 @@ const deleteUserSkill = (candidateId, skillId) => {
 };
 
 
+const bulkUpdateUserSkill = (data, candidateId) => {
+
+    const url = `candidate/${candidateId}/bulk-update/skill/`;
+    return BaseApiService.post(`http://127.0.0.1:8000/api/v1/resume/${url}`,data);
+
+
+}
+
+
 export const Api = {
     fetchUserSkill,
     createUserSkill,
     updateUserSkill,
-    deleteUserSkill
+    deleteUserSkill,
+    bulkUpdateUserSkill
 }
