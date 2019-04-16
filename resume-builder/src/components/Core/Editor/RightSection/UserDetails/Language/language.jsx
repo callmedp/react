@@ -246,7 +246,6 @@ export const LanguageForm = reduxForm({
 
 
 const mapStateToProps = (state) => {
-    console.log('---', state.language)
     return {
         initialValues: state.language,
         language: state.language

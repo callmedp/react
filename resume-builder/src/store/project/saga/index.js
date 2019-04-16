@@ -26,7 +26,7 @@ function* fetchUserProject(action) {
 }
 
 
-function* updateUserProject(action) {
+ function* updateUserProject(action) {
     try {
         let {payload: {userProject, resolve, reject}} = action;
 

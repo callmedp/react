@@ -2,14 +2,14 @@ import {SAVE_USER_LANGUAGE, REMOVE_LANGUAGE} from "../actions/actionTypes";
 
 const initialState = {
     list: [{
-            "candidate_id": '',
-            "id": '',
-            "name": '',
-            "proficiency": {
-                value: 5, 'label': '5'
-            },
-            order: 0
-        }
+        "candidate_id": '',
+        "id": '',
+        "name": '',
+        "proficiency": {
+            value: 5, 'label': '5'
+        },
+        order: 0
+    }
     ]
 };
 
@@ -26,7 +26,7 @@ export const languageReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...{
-                    list: state.filter(item => item.id !== action.id)
+                    list: state['list'].filter(item => item.id !== action.id)
                 }
             }
         }

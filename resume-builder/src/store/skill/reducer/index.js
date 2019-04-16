@@ -17,7 +17,7 @@ export const skillReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...{
-                    list: state.filter(item => item.id !== action.id)
+                    list: state['list'].filter(item => item.id !== action.id)
                 }
             }
         }
