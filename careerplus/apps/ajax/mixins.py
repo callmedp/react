@@ -1,49 +1,46 @@
 import requests
 import json
 import logging
+from requests import Response
 from django.conf import settings
 
-
-URL = settings.EXOITEL.get('url', '')
-TOKEN = settings.EXOITEL.get('token', '')
-SID = settings.EXOITEL.get('sid', '')
-CALLER_ID = settings.EXOITEL.get('callerid', '')
-DND_CHECK_URL = settings.EXOITEL.get('check_dnd_url', '')
-
 class ExotelMixin(object):
+    url = settings.EXOTEL_DICT.get('url', '')
+    token = settings.EXOTEL_DICT.get('token', '')
+    sid = settings.EXOTEL_DICT.get('sid', '')
+    caller_id = settings.EXOTEL_DICT.get('callerid', '')
+    dnd_check_url = settings.EXOTEL_DICT.get('check_dnd_url', '')
 
     def make_call(self, to, agent_number):
         req_dict = {}
         resp = None
-        url_to_hit = URL.format(sid=SID, token=TOKEN)
-        req_dict.update({'To': '0' + str(to), 'From': str(agent_number), 'CallerId': CALLER_ID})
+        url_to_hit = self.url.format(sid=self.sid, token=self.token)
+        req_dict.update({'To': '0' + str(to), 'From': str(agent_number), 'CallerId': self.caller_id})
         try:
             resp = requests.post(url_to_hit, data=req_dict)
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('response for {} - {}'.format(to, str(e)))
+            return Response()
         return resp
 
-    def get_dnd_info(self,number):
-        url_to_hit = DND_CHECK_URL.format(sid=SID,token=TOKEN,number=number)
+    def is_number_dnd(self,number):
+        url_to_hit = self.dnd_check_url.format(sid=self.sid,token=self.token,number=number)
         resp = None
         try:
             resp = requests.get(url_to_hit)
         except Exception as e:
-            logging.getLogger('error_log').error(str(e))
+            logging.getLogger('error_log').error('response for {} - {}'.format(number, str(e)))
             return
-        if resp.status_code == 200:
-            res_in_json = resp.json()
-            number = res_in_json.get('Numbers',None)
-            if not number:
-                return
-            dnd = number.get('DND','')
-            if not dnd:
-                return
-            return dnd
+        if not resp.status_code == 200:
+            logging.getLogger('info_log').info('response for {} - {}'.format(number, resp.text))
+            return
 
-        else:
-            logging.getLogger('info_log').info('dnd for {} - {}'.format(number, str(e)))
-            return
+        res_in_json = resp.json()
+        return bool(res_in_json.get('Numbers', {}).get('DND',"").lower() == "yes")
+
+
+
+
 
 
 

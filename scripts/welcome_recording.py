@@ -23,9 +23,9 @@ from emailers.email import SendMail
 
 #GLOBAL CONSTANTS
 
-URL = settings.EXOITEL.get('record_url')
-SID = settings.EXOITEL.get('sid')
-TOKEN = settings.EXOITEL.get('token')
+URL = settings.EXOTEL_DICT.get('record_url')
+SID = settings.EXOTEL_DICT.get('sid')
+TOKEN = settings.EXOTEL_DICT.get('token')
 FAILS, SUCCESS,TOTAL = 0, 0, 0
 
 def get_call_recording_request(callid):
@@ -87,6 +87,7 @@ def fetch_call_recording_links():
             continue
         json_value_to_storedb = get_call_record_link(call_rec_dict)
         if not json_value_to_storedb:
+            FAILS += 1
             continue
         order.welcome_call_records = json_value_to_storedb
         order.save()

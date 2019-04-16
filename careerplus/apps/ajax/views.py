@@ -21,7 +21,7 @@ from cms.mixins import LoadMoreMixin
 from blog.models import Blog, Comment
 from geolocation.models import Country
 from review.models import Review
-from users.mixins import RegistrationLoginApi
+from users.mixins import RegistrationLoginApi,UserPermissionMixin
 from order.models import Order, OrderItem, RefundRequest
 from order.choices import  SMS_DRAFT_OI_MAPPING
 from console.order_form import FileUploadForm, VendorFileUploadForm,emailupdateform,mobileupdateform
@@ -817,60 +817,36 @@ class UniversityCourseLoadMoreView(TemplateView):
             'PRODUCT_PAGE_SIZE': self.PRODUCT_PAGE_SIZE})
         return context
 
-class WelcomeServiceCallView(View):
-    # permission_classes = (S)
 
-    def post(self, request, *args, **kwargs):
-        data = {'msg': 'Failure', 'status': 0}
-        req_dict = {}
-        order_id = self.request.POST.get('o_id','')
-        action = self.request.POST.get('action',None)
-        url = settings.EXOITEL.get('url', '')
-        token = settings.EXOITEL.get('token', '')
-        sid = settings.EXOITEL.get('sid', '')
-        caller_id = settings.EXOITEL.get('callerid', '')
-        dnd_check_url = settings.EXOITEL.get('check_dnd_url', '')
-        user = request.user
+class WelcomeServiceCallView(UserPermissionMixin,View):
+    permission_to_check = ['can do exotel call']
 
-        if not request.is_ajax():
-            return HttpResponse(json.dumps(data), content_type="application/json")
+    def get_response_for_failure_reason(self,order, exotel_object):
+        number = order.mobile
+        is_dnd = exotel_object.is_number_dnd(number)
+        data = {}
+        if is_dnd:
+            data.update({'msg': 'This number is on DND. Please whitelist to call this number '
+                                'in click to call for DND numbers.', 'status': 0})
+        else:
+            data.update({'msg': 'Something went wrong', 'status': 0})
+        return HttpResponse(json.dumps(data), content_type="application/json")
 
-        exotel_object = ExotelMixin()
-
-        order = Order.objects.filter(id=order_id).first()
-
-        if action:
-            number = order.mobile
-            is_dnd = exotel_object.get_dnd_info(number)
-            if is_dnd:
-                data.update({'msg': 'This number is on DND. Please whitelist to call this number '
-                                    'in click to call for DND numbers.', 'status': 0})
-            else:
-                data.update({'msg': 'Something went wrong', 'status': 0})
-            return HttpResponse(json.dumps(data), content_type="application/json")
-
-
-        if not order or not order.mobile or not user or not user.contact_number:
-            return HttpResponse(json.dumps(data), content_type="application/json")
-
-        if not user.user_permissions.filter(codename='can_do_exotel_call'):
-            data.update({'msg': 'You are not allowed'})
-            return HttpResponse(json.dumps(data), content_type="application/json")
-
+    def make_call_to_user(self, order, user, exotel_object):
+        data = {'msg': "Failure", 'status': 0}
         resp = exotel_object.make_call(order.mobile, user.contact_number)
-
         status = resp.status_code
-        resp_json = resp.json()
+        if not status:
+            return HttpResponse(json.dumps(data), content_type="application/json")
 
         if status == 403:
             data.update({'msg': "Call Failed Fetching Reason", 'status': 2})
             return HttpResponse(json.dumps(data), content_type="application/json")
 
+        resp_json = resp.json()
+
         if not status == 200:
             logging.getLogger('info_log').info(str(resp_json))
-            return HttpResponse(json.dumps(data), content_type="application/json")
-
-        if not resp:
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         call_record = resp_json.get('Call', '')
@@ -880,24 +856,43 @@ class WelcomeServiceCallView(View):
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         recording_id = call_record.get('Sid', '')
+
         if not recording_id:
             logging.getLogger('info_log').info('{}-Recording id not found'.format(order.id))
             data.update({'msg': "Connected", 'status': 1})
             return HttpResponse(json.dumps(data), content_type="application/json")
 
-        prev_records = order.welcome_call_records
-
-        if prev_records:
-            rec_dict = json.loads(prev_records)
-            rec_dict.update({recording_id: ''})
-            rec_dict = json.dumps(rec_dict)
-        else:
-            rec_dict = json.dumps({recording_id: ''})
-
-        order.welcome_call_records = rec_dict
+        order.welcome_call_records = json.dumps(json.loads(getattr(order, "welcome_call_records", {})) \
+                                                           .update({recording_id: ""}))
         order.save()
         data.update({'msg': "Connected", 'status': 1})
         return HttpResponse(json.dumps(data), content_type="application/json")
+
+    def post(self, request, *args, **kwargs):
+
+        data = {'msg': 'Failure', 'status': 0}
+        order_id = self.request.POST.get('o_id', '')
+        action = self.request.POST.get('action', None)
+        user = request.user
+
+        if not request.is_ajax():
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        exotel_object = ExotelMixin()
+
+        order = Order.objects.filter(id=order_id).first()
+        if not order or not order.mobile or not user or not user.contact_number:
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        if action:
+            return self.get_response_for_failure_reason(order, exotel_object)
+        else:
+            return self.make_call_to_user(order, user, exotel_object)
+
+
+
+
+
 
 
 
