@@ -93,11 +93,13 @@ export const renderTextArea = ({
                                    input,
                                    label,
                                    type,
+                                   rows,
+
                                    meta: {touched, error, warning}
 
                                }) => (
     <div className="Error">
-        <textarea {...input} placeholder={label} type={type}/>
+        <textarea {...input} placeholder={label} rows={rows} type={type}/>
         {touched &&
         ((error && <span className={'Error-message'}>{error}</span>) ||
             (warning && <span className={'Warn-Message'}>{warning}</span>))}

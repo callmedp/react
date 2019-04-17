@@ -40,7 +40,7 @@ class Summary extends Component {
                         <div className="summary-box">
                             <h3>Summary</h3>
                             <Field component={renderTextArea} type={"textarea"} name="extra_info"
-                                   className="summary-box--summary-txt" value={extra_info}/>
+                                   className="summary-box--summary-txt" rows="10" value={extra_info}/>
 
 
                         </div>
