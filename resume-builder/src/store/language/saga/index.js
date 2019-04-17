@@ -47,10 +47,10 @@ function* updateUserLanguage(action) {
         const {id} = userLanguage;
 
         const result = yield call(id ? Api.updateUserLanguage : Api.createUserLanguage, userLanguage, candidateId, id);
-        if (result['error']) {
-            return reject(new SubmissionError({_error: result['errorMessage']}));
-        }
-        yield call(fetchUserLanguage)
+        // if (result['error']) {
+        //     return reject(new SubmissionError({_error: result['errorMessage']}));
+        // }
+        // yield call(fetchUserLanguage)
         return resolve('User Language  Info saved successfully.');
 
     } catch (e) {
