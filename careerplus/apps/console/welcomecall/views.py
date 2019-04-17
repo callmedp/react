@@ -807,11 +807,21 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
                     oi.save()
                     if oi_category in [63, 64, 65]:
                         ct += 1
+                        for oi_cmb in oi_data.get('combos', []):
+                            oi_cmb.wc_cat = cat
+                            oi_cmb.wc_sub_cat = oi_category
+                            oi_cmb.wc_status = oi_category
+                            oi_cmb.save()
+                            if oi_cmb.wc_sub_cat == 65:
+                                replace_order_id = 'replacement_order_id' + str(oi.pk)
+                                replace_order_id = request.POST.get(replace_order_id, None)
+                                oi.replacement_order_id = replace_order_id.strip()
+                                oi.save()
                         if oi_category == 65:
-                            replace_order_id = 'replacement_order_id' + str(oi.pk)
-                            replace_order_id = request.POST.get(replace_order_id, None)
-                            oi.replacement_order_id = replace_order_id.strip()
-                            oi.save()
+                                replace_order_id = 'replacement_order_id' + str(oi.pk)
+                                replace_order_id = request.POST.get(replace_order_id, None)
+                                oi.replacement_order_id = replace_order_id.strip()
+                                oi.save()
 
                 if ct == len(wc_items):
                     order.welcome_call_done = True

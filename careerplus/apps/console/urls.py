@@ -275,6 +275,9 @@ urlpatterns += [
     url(r'^queue/inbox/$',
         order_view.InboxQueueVeiw.as_view(), name='queue-inbox'),
 
+    url(r'^queue/replaced-order/$',
+        order_view.ReplacedOrderListView.as_view(), name='replaced-order'),
+
     url(r'^queue/approval/$',
         order_view.ApprovalQueueVeiw.as_view(), name='queue-approval'),
 
