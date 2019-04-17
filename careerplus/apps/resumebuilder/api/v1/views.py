@@ -15,10 +15,10 @@ from resumebuilder.api.core.serializers import (CandidateSerializer, SkillSerial
                                                 CandidateLanguageSerializer)
 
 from resumebuilder.mixins import (SessionManagerMixin)
+from resumebuilder.constants import EDUCATION_PARENT_CHILD_HEIRARCHY_LIST
 
 # inter app imports
 from shine.core import ShineCandidateDetail
-from .education_specialization import educ_list
 from shared.rest_addons.authentication import ShineUserAuthentication
 from shared.permissions import IsObjectOwner
 

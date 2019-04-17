@@ -1,4 +1,14 @@
-educ_list = [{'child': [{'cdesc': 'Arts and Humanities', 'cid': 501},
+#python imports
+
+#django imports
+
+#local imports
+
+#inter app imports
+
+#third party imports
+
+EDUCATION_PARENT_CHILD_HEIRARCHY_LIST = [{'child': [{'cdesc': 'Arts and Humanities', 'cid': 501},
                    {'cdesc': 'Commerce', 'cid': 502},
                    {'cdesc': 'Science', 'cid': 507},
                    {'cdesc': 'Other', 'cid': 506}],

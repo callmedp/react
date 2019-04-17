@@ -45,6 +45,7 @@ class CandidateProfile(AbstractAutoDate):
                               blank=True, null=True)
     extracurricular = models.CharField('Extra Curricular', max_length=200, blank=True, null=True)
     extra_info = models.TextField('Extra Information', blank=True, null=True)
+    entity_preference_data = models.TextField(blank=True, null=True)
 
     class Meta:
         abstract = True
