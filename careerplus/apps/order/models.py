@@ -485,7 +485,7 @@ class OrderItem(AbstractAutoDate):
             replacement_order_id = self.replacement_order_id.upper()
             if 'CP' in replacement_order_id:
                 return replacement_order_id.replace('CP', '')
-        return self.get_replacement_order_id
+            return self.replacement_order_id
 
     def get_oi_communications(self):
         communications = self.message_set.all().select_related('added_by')
