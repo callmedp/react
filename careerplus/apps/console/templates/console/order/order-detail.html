@@ -71,7 +71,12 @@
                                   -</b>{{order.country_code}}
                               {{order.alt_mobile}}
                               {% endif %}
-                          </div></td>
+                          </div>
+                            {% if show_btn %}
+                            <button id="{{order.id}}callingBtn" class="fa fa-phone-square" style="font-size:30px;color:orange;border-width:0px;background:transparent;" type="button" title = "click to call" onclick="makeCallBtn({{order.id}});"></button>
+                            <div style="height:100px; overflow-y: auto; overflow-x: hidden;" id="{{order.id}}callingbtn-error"></div>
+                                {% endif %}
+                          </td>
                           <td>{{order.first_name}} {{order.last_name}}</td>
                           <td>{{order.get_status}}</td>
                           <td>{{order.payment_date}}</td>
@@ -350,6 +355,7 @@
 
   {% compress js %}
   <!-- Parsley Validate Scripts -->
+  <script type="text/javascript" src="{% static 'console/js/order/exotelCall.js' %}"></script>
   <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'console/js/order/draft-upload.js' %}"></script>
   {% endcompress %}

@@ -388,6 +388,17 @@ except:
 
 
 
+
+EXOTEL_DICT = {
+           'token': '9e4df38c0c3bd1009ca142da306d827e71e74737',
+           'sid': 'hindustantimes3',
+           'callerid': '08047105151',
+           'url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Calls/connect.json',
+           'record_url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Calls/{callid}.json',
+           'check_dnd_url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Numbers/{number}.json',
+            }
+
+
 try:
     from .settings_local import *
 except:

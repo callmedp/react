@@ -1,23 +1,27 @@
 import json
 import logging
 import datetime
-from django.db.models import Sum
-
+import requests
 from decimal import Decimal
+from core.library.haystack.query import SQS
+
+#DJANGO IMPORTS
+from django.db.models import Sum
 from django.views.generic import View, TemplateView
 from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.conf import settings
-from core.library.haystack.query import SQS
 
+#LOCAL IMPORTS
+from.mixins import ExotelInteraction
 from cms.models import Page
 from cms.mixins import LoadMoreMixin
 from blog.models import Blog, Comment
 from geolocation.models import Country
 from review.models import Review
-from users.mixins import RegistrationLoginApi
+from users.mixins import RegistrationLoginApi,UserPermissionMixin
 from order.models import Order, OrderItem, RefundRequest
 from order.choices import  SMS_DRAFT_OI_MAPPING
 from console.order_form import FileUploadForm, VendorFileUploadForm,emailupdateform,mobileupdateform
@@ -812,3 +816,92 @@ class UniversityCourseLoadMoreView(TemplateView):
             'category_obj': self.cat_obj,
             'PRODUCT_PAGE_SIZE': self.PRODUCT_PAGE_SIZE})
         return context
+
+
+class WelcomeServiceCallView(UserPermissionMixin,View):
+    permission_to_check = ['can do exotel call']
+    exotel_object = ExotelInteraction()
+
+    def get_response_for_failure_reason(self,order):
+        is_dnd = self.exotel_object.is_number_dnd(order.mobile)
+        data = {}
+        if is_dnd:
+            data.update({'msg': 'This number is on DND. Please whitelist to call this number '
+                                'in click to call for DND numbers.', 'status': 0})
+        else:
+            data.update({'msg': 'Something went wrong', 'status': 0})
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+    def make_call_to_user(self, order, user):
+        data = {'msg': "Failure", 'status': 0}
+        prev_records = None
+        resp = self.exotel_object.make_call(order.mobile, user.contact_number)
+        status = resp.status_code
+        if not status:
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        if status == 403:
+            data.update({'msg': "Call Failed Fetching Reason", 'status': 2})
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        resp_json = resp.json()
+
+        if not status == 200:
+            logging.getLogger('info_log').info(str(resp_json))
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        call_record = resp_json.get('Call', '')
+        if not call_record:
+            logging.getLogger('info_log').info('{}-Call Record not found'.format(order.id))
+            data.update({'msg': "Connected", 'status': 1})
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        recording_id = call_record.get('Sid', '')
+
+        if not recording_id:
+            logging.getLogger('info_log').info('{}-Recording id not found'.format(order.id))
+            data.update({'msg': "Connected", 'status': 1})
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        prev_records = getattr(order,'welcome_call_records') if getattr(order,'welcome_call_records') else '{}'
+        json_records = json.loads(prev_records)
+        json_records.update({recording_id: ""})
+        order.welcome_call_records = json.dumps(json_records)
+        order.save()
+        data.update({'msg': "Connected", 'status': 1})
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+    def post(self, request, *args, **kwargs):
+
+        data = {'msg': 'Failure', 'status': 0}
+        order_id = self.request.POST.get('o_id', '')
+        action = self.request.POST.get('action', None)
+        user = request.user
+
+        if not request.is_ajax():
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        order = Order.objects.filter(id=order_id).first()
+        if not order or not order.mobile or not user or not user.contact_number:
+            return HttpResponse(json.dumps(data), content_type="application/json")
+
+        if action:
+            return self.get_response_for_failure_reason(order)
+        else:
+            return self.make_call_to_user(order, user)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
