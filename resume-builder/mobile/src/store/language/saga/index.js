@@ -1,6 +1,6 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call, select} from "redux-saga/effects";
+import {takeLatest, put, call} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 import {proficiencyList} from "../../../Utils/proficiencyList";
@@ -15,12 +15,19 @@ function* fetchUserLanguage(action) {
         if (result['error']) {
             console.log('error');
         }
-        const {data: {results}} = result;
-        let data = results[0];
+        let {data: {results}} = result;
+
+        let data = {list: results};
+
         data = {
             ...data,
             ...{
-                proficiency: proficiencyList[data['proficiency'].toString()]
+                list: data['list'].map(el => {
+                    return {
+                        ...el,
+                        proficiency: proficiencyList[el['proficiency'].toString()]
+                    }
+                })
             }
         }
         yield put({type: Actions.SAVE_USER_LANGUAGE, data: data})
@@ -37,18 +44,60 @@ function* updateUserLanguage(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        userLanguage['cc_id'] = candidateId;
         const {id} = userLanguage;
 
         const result = yield call(id ? Api.updateUserLanguage : Api.createUserLanguage, userLanguage, candidateId, id);
-        console.log('---lang ',result);
+        // if (result['error']) {
+        //     return reject(new SubmissionError({_error: result['errorMessage']}));
+        // }
+        // yield call(fetchUserLanguage)
+        return resolve('User Language  Info saved successfully.');
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+
+function* bulkUpdateUserLanguage(action) {
+    try {
+        let {payload: {list}} = action;
+
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+
+        const result = yield call(Api.bulkUpdateUserLanguage, list, candidateId);
+
         if (result['error']) {
-            return reject(new SubmissionError({_error: result['errorMessage']}));
+            console.log(result['error']);
         }
 
-        yield put({type: Actions.SAVE_USER_LANGUAGE, data: result['data']});
+        console.log('-language swap result--', result);
+        // yield call(fetchUserLanguage)
 
-        return resolve('User Language  Info saved successfully.');
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+
+function* deleteUserLanguage(action) {
+    try {
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        // userLanguage['cc_id'] = candidateId;
+        const {languageId} = action;
+
+        const result = yield call(Api.deleteUserLanguage, candidateId, languageId);
+
+
+        if (result['error']) {
+            console.log(result['error'])
+        }
+        // yield call(fetchUserLanguage)
+        yield put({type: Actions.REMOVE_LANGUAGE, id: languageId});
 
     } catch (e) {
         console.log('error', e);
@@ -57,5 +106,8 @@ function* updateUserLanguage(action) {
 
 export default function* watchLanguage() {
     yield takeLatest(Actions.FETCH_USER_LANGUAGE, fetchUserLanguage);
-    yield takeLatest(Actions.UPDATE_USER_LANGUAGE, updateUserLanguage)
+    yield takeLatest(Actions.UPDATE_USER_LANGUAGE, updateUserLanguage);
+    yield takeLatest(Actions.DELETE_USER_LANGUAGE, deleteUserLanguage);
+    yield takeLatest(Actions.BULK_UPDATE_USER_LANGUAGE, bulkUpdateUserLanguage);
+
 }

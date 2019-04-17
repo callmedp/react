@@ -1,15 +1,7 @@
-import {SAVE_USER_EDUCATION} from "../actions/actionTypes";
+import {SAVE_USER_EDUCATION, REMOVE_EDUCATION} from "../actions/actionTypes";
 
 const initialState = {
-    candidate_id: '',
-    id: '',
-    specialization: '',
-    institution_name: '',
-    course_type: '',
-    start_date: '',
-    percentage_cgpa: '',
-    end_date: '',
-    is_pursuing: false,
+    list: []
 };
 
 
@@ -21,6 +13,14 @@ export const educationReducer = (state = initialState, action) => {
                 ...state,
                 ...action.data
             };
+        }
+        case REMOVE_EDUCATION: {
+            return {
+                ...state,
+                ...{
+                    list: state['list'].filter(item => item.id !== action.id)
+                }
+            }
         }
         default: {
             return state;

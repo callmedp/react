@@ -20,7 +20,7 @@ class Course extends Component {
     }
 
     async handleSubmit(values) {
-        await this.props.onSubmit(values);
+        await this.props.bulkUpdateUserCourse(values.list);
         this.props.history.push('/resume-builder/edit/?type=project')
     }
     
@@ -89,7 +89,7 @@ class Course extends Component {
                                                 <i className="sprite icon--course-grey"></i>
                                             </span>
                                         </div>
-                                        <Field component={renderField} validate={required} className="form__input"
+                                        <Field component={renderField} className="form__input"
                                             type={"text"} name={`${member}.name_of_certification`}/>
                                     </div>
                                 </li>
@@ -102,7 +102,7 @@ class Course extends Component {
                                                 <i className="sprite icon--date"></i>
                                             </span>
                                         </div>
-                                        <Field component={datepicker} validate={required} type={"date"} 
+                                        <Field component={datepicker} type={"date"} 
                                         name={`${member}.year_of_certification`} className="form__input" />
                                     </div>
                                 </li>
@@ -165,7 +165,7 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.deleteCourse(courseId))
         },
 
-        "handleSwap": (listItems) => {
+        "bulkUpdateUserCourse": (listItems) => {
             listItems = (listItems || []).map(userCourse => {
                 const {year_of_certification} = userCourse;
                 if (!userCourse['id']) delete userCourse['id'];
@@ -177,7 +177,7 @@ const mapDispatchToProps = (dispatch) => {
                 };
                 return userCourse;
             })
-            return dispatch(actions.handleCourseSwap({list: listItems}))
+            return dispatch(actions.bulkUpdateUserCourse({list: listItems}))
         }
     }
 };

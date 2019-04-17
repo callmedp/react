@@ -8,80 +8,119 @@ class References extends Component {
     constructor(props) {
         super(props)
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleAddition = this.handleAddition.bind(this);
+        this.deleteReference = this.deleteReference.bind(this);
     }
 
     async handleSubmit(values) {
-        await this.props.onSubmit(values);
+        await this.props.bulkUpdateUserReference(values.list);
     }
 
     componentDidMount() {
         this.props.fetchUserReference()
     }
 
+    handleAddition(fields, error) {
+        fields.push({
+            "candidate_id": '',
+            "id": '',
+            "reference_name": '',
+            "reference_designation": '',
+            "about_user": "",
+            order: listLength
+        })
+    }
+
+    deleteReference(index, fields, event) {
+        event.stopPropagation();
+        const reference = fields.get(index);
+        fields.remove(index);
+        if (reference && reference.id) {
+            this.props.removeReference(reference.id)
+        }
+
+
+    }
+
     render () {
         const { handleSubmit,reference} = this.props;
-        return (
-            <div className="buildResume">
+        const renderReferences = ({fields, meta: {touched, error, submitFailed}}) => {
+            return (
+                
                 <div className="buildResume__wrap">
                     <div className="buildResume__heading heading">
                         <div className="heading__info">
                             <h1>References</h1>
                             <i className="sprite icon--edit"></i>
                         </div>
-                        <button role="button" className="btn btn__round btn--outline">+ Add new</button>
+                        <button role="button" className="btn btn__round btn--outline"
+                            onClick={this.handleAddition.bind(this, fields, error)}
+                            type={'button'}>+ Add new</button>
                     </div>
-                    <form onSubmit={handleSubmit(this.handleSubmit)}>
-                        <div className="subHeading pb-0">
-                            <h2>{reference.reference_name}</h2>
-                            <ul className="subHeading__control">
-                                <li className="subHeading__delete">
-                                    <span className="sprite icon--delete" role="button"></span>
-                                </li>
-                                <li className="subHeading__btn">
-                                    <i className="sprite icon--upArrow"></i>
-                                </li>
-                                <li className="subHeading__btn">
-                                    <i className="sprite icon--downArrow"></i>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <ul className="form pb-0">
-                            <li className="form__group">
-                                <label className="form__label" htmlFor="reference_name">Reference name</label>
-                                <div className="input-group">
-                                    <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--project-gray"></i>
-                                    </span>
-                                    </div>
-                                    <Field component={renderField} validate={required} type={"text"} className="form__input"
-                                        name="reference_name" aria-label="reference_name" id="actireference_namevity"/>
+                    {fields.map((member, index) => {
+                        return (
+                            <React.Fragment key={index}>
+                                <div className="subHeading pb-0">
+                                    <h2>{reference.reference_name}</h2>
+                                    <ul className="subHeading__control">
+                                        <li className="subHeading__delete">
+                                            <span className="sprite icon--delete" role="button"
+                                            onClick={(event) => this.deleteReference(index, fields, event)}></span>
+                                        </li>
+                                        <li className="subHeading__btn">
+                                            <i className="sprite icon--upArrow"></i>
+                                        </li>
+                                        <li className="subHeading__btn">
+                                            <i className="sprite icon--downArrow"></i>
+                                        </li>
+                                    </ul>
                                 </div>
-                            </li>
-                            
-                            <li className="form__group">
-                                <label className="form__label" htmlFor="reference_designation">Designation</label>
-                                <div className="input-group">
-                                    <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--designation"></i>
-                                    </span>
-                                    </div>
-                                    <Field component={renderField} validate={required} type={"text"} name="reference_designation"
-                                        className="form__input" aria-label="reference_designation" id="reference_designation"/>
-                                </div>
-                            </li>
 
-                            <li className="form__group">
-                                <label className="form__label" htmlFor="about_candidate">Description</label>
-                                <Field component={renderTextArea} rows="3" type={"textarea"} name="about_candidate"
-                                    className="form__input" aria-label="about_candidate" id="about_candidate"/>
-                            </li>
-                            
-                        </ul>
+                                <ul className="form pb-0">
+                                    <li className="form__group">
+                                        <label className="form__label" htmlFor="reference_name">Reference name</label>
+                                        <div className="input-group">
+                                            <div className="input-group__prepend">
+                                            <span className="input-group__text">
+                                                <i className="sprite icon--project-gray"></i>
+                                            </span>
+                                            </div>
+                                            <Field component={renderField} validate={required} type={"text"} className="form__input"
+                                                name={`${member}.reference_name`}/>
+                                        </div>
+                                    </li>
+                                    
+                                    <li className="form__group">
+                                        <label className="form__label" htmlFor="reference_designation">Designation</label>
+                                        <div className="input-group">
+                                            <div className="input-group__prepend">
+                                            <span className="input-group__text">
+                                                <i className="sprite icon--designation"></i>
+                                            </span>
+                                            </div>
+                                            <Field component={renderField} validate={required} type={"text"} 
+                                                name={`${member}.reference_designation`} className="form__input"/>
+                                        </div>
+                                    </li>
 
-                        <ul className="form">
+                                    <li className="form__group">
+                                        <label className="form__label" htmlFor="about_candidate">Description</label>
+                                        <Field component={renderTextArea} rows="3" type={"textarea"}
+                                            className="form__input" name={`${member}.about_candidate`}/>
+                                    </li>
+                                    
+                                </ul>
+                            </React.Fragment>
+                        )})}
+                </div>
+    
+            )
+        }
+        return(
+            <div className="buildResume">
+                <form onSubmit={handleSubmit(this.handleSubmit)}>
+                    <FieldArray name={"list"} component={renderReferences}/>
+                    <ul className="form">
                         <li className="form__group">
                             <div className="btn-wrap">
                                 <button className="btn btn__round btn--outline">Preview</button>
@@ -89,8 +128,7 @@ class References extends Component {
                             </div>
                         </li>
                     </ul>
-                    </form>
-                </div>
+                </form>
             </div>
         )
     }
@@ -120,6 +158,17 @@ const mapDispatchToProps = (dispatch) => {
         "fetchUserReference": () => {
             return dispatch(actions.fetchUserReference())
         },
+        "removeReference": (referenceId) => {
+            return dispatch(actions.deleteReference(referenceId))
+        },
+
+        "bulkUpdateUserReference": (listItems) => {
+            listItems = (listItems || []).map(userReference => {
+                if (!userReference['id']) delete userReference['id'];
+                return userReference;
+            })
+            return dispatch(actions.bulkUpdateUserReference({list: listItems}))
+        }
     }
 };
 

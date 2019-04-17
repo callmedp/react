@@ -21,7 +21,7 @@ class Award extends Component {
 
     async handleSubmit(values) {
         //console.log(this.props)
-        await this.props.bulkUpdateUserAward(values);
+        await this.props.bulkUpdateUserAward(values.list);
         this.props.history.push('/resume-builder/edit/?type=course')
     }
 
@@ -89,7 +89,7 @@ class Award extends Component {
                                         </span>
                                     </div>
                                         <Field component={renderField} type={"text"} name={`${member}.title`}
-                                            className="form__input" validate={required}/>
+                                            className="form__input" />
                                     </div>
                                 </li>
                             
@@ -102,7 +102,7 @@ class Award extends Component {
                                             </span>
                                         </div>
                                         <Field component={datepicker} type={"date"} className={'form__input'}
-                                                validate={required} name={`${member}.date`}/>
+                                            name={`${member}.date`}/>
                                     </div>
                                 </li>
         

@@ -48,7 +48,7 @@ function* updateUserCourse(action) {
 }
 
 
-function* handleCourseSwap(action) {
+function* bulkUpdateUserCourse(action) {
     try {
         let {payload: {list}} = action;
 
@@ -97,5 +97,5 @@ export default function* watchCourse() {
     yield takeLatest(Actions.FETCH_USER_COURSE, fetchUserCourse);
     yield takeLatest(Actions.UPDATE_USER_COURSE, updateUserCourse);
     yield takeLatest(Actions.DELETE_USER_COURSE, deleteUserCourse);
-    yield takeLatest(Actions.HANDLE_COURSE_SWAP, handleCourseSwap);
+    yield takeLatest(Actions.BULK_UPDATE_USER_COURSE, bulkUpdateUserCourse);
 }

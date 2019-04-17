@@ -94,7 +94,7 @@ class Experience extends Component {
                                                 <i className="sprite icon--designation"></i>
                                             </span>
                                         </div>
-                                        <Field component={renderField} validate={required} type={"text"} 
+                                        <Field component={renderField} type={"text"} 
                                         name={`${member}.job_profile`} className="form__input"  />
                                     </div>
                                 </li>
@@ -107,7 +107,7 @@ class Experience extends Component {
                                                 <i className="sprite icon--company"></i>
                                             </span>
                                         </div>
-                                        <Field component={renderField} validate={required} type={"text"} 
+                                        <Field component={renderField} type={"text"} 
                                         name={`${member}.company_name`} className="form__input"/>
                                     </div>
                                 </li>
@@ -120,7 +120,7 @@ class Experience extends Component {
                                                 <i className="sprite icon--date"></i>
                                             </span>
                                         </div>
-                                        <Field component={datepicker} validate={required} type={"date"} 
+                                        <Field component={datepicker} type={"date"} 
                                         className="form__input" name={`${member}.start_date`}/>
                                     </div>
                                 </li>
@@ -133,7 +133,7 @@ class Experience extends Component {
                                                 <i className="sprite icon--date"></i>
                                             </span>
                                         </div>
-                                        <Field component={datepicker} validate={required} type={"date"} 
+                                        <Field component={datepicker} type={"date"} 
                                         className="form__input" name={`${member}.end_date`}/>
                                     </div>
                                 </li>
@@ -235,7 +235,7 @@ const mapDispatchToProps = (dispatch) => {
                 };
                 return userExperience;
             });
-            return dispatch(actions.handleExperienceSwap({list: listItems}))
+            return dispatch(actions.bulkUpdateUserExperience({list: listItems}))
         }
     }
 };

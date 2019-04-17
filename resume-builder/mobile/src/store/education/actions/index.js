@@ -1,4 +1,4 @@
-import {FETCH_USER_EDUCATION, UPDATE_USER_EDUCATION} from './actionTypes'
+import {FETCH_USER_EDUCATION, UPDATE_USER_EDUCATION, BULK_UPDATE_USER_EDUCATION , DELETE_USER_EDUCATION} from './actionTypes'
 
 
 export const fetchUserEducation = () => {
@@ -13,3 +13,18 @@ export const updateUserEducation = (payload) => {
         payload
     }
 };
+
+
+export const deleteEducation = (educationId) => {
+    return {
+        type: DELETE_USER_EDUCATION,
+        educationId
+    }
+}
+
+export const bulkUpdateUserEducation = (payload) => {
+    return {
+        type: BULK_UPDATE_USER_EDUCATION ,
+        payload
+    }
+}

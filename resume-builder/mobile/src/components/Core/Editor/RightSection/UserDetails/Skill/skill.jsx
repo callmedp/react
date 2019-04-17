@@ -46,8 +46,6 @@ class Skill extends Component {
 
 
     async handleSubmit(values) {
-        console.log("Yes")
-        console.log(values)
         this.props.bulkSaveUserSkill(values.list);
         this.props.history.push('/resume-builder/edit/?type=language')
     }

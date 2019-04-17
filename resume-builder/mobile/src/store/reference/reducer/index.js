@@ -1,11 +1,7 @@
-import {SAVE_USER_REFERENCE} from "../actions/actionTypes";
+import {SAVE_USER_REFERENCE, REMOVE_REFERENCE} from "../actions/actionTypes";
 
 const initialState = {
-    'id': '',
-    'candidate_id': '',
-    "reference_name": '',
-    "reference_designation": '',
-    "about_user": "",
+    list: []
 };
 
 
@@ -18,6 +14,15 @@ export const referenceReducer = (state = initialState, action) => {
                 ...action.data
             };
         }
+        case REMOVE_REFERENCE: {
+            return {
+                ...state,
+                ...{
+                    list: state['list'].filter(item => item.id !== action.id)
+                }
+            }
+        }
+
         default: {
             return state;
         }
