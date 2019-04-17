@@ -1,0 +1,2 @@
+export const FETCH_TEMPLATE = 'FETCH_TEMPLATE'
+export const SAVE_TEMPLATE = 'SAVE_TEMPLATE'

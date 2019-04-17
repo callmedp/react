@@ -1,0 +1,110 @@
+@import '../../../../../styles/variables/vars.scss';
+@import '../../../../../styles/variables/mixins.scss';
+
+.edit-section {
+	padding: 20px 0;
+	font-weight: 600;
+	color: $txt1;
+
+	strong {
+		margin: 0 20px;
+	}
+
+	ul {
+		margin: 20px 0 0 0;
+		display: block;
+		flex: 1 1 auto;
+		overflow-y: auto;
+		height: 450px;
+
+		li {
+			color: $blue1;
+			display: block;
+			padding: 15px 20px;
+
+			a {
+				display: inline-block;
+				width: 90%;
+				color: $blue1;
+			}
+
+			&:hover {
+				cursor: pointer;
+			}
+		}
+	}
+
+	&--active {
+		background-color: $blue1;
+		color: $white !important;
+
+		a {
+			color: $white !important;
+		}
+
+		.icon-delete {
+			background-position: -139px -1px;
+		}
+
+		.icon-info {
+			background-position: -273px -1px;
+		}
+
+		.icon-summary {
+			background-position: -355px -38px;
+		}
+
+		.icon-experience {
+			background-position: -397px -39px;
+		}
+
+		.icon-education {
+			background-position: -339px 0;
+		}
+
+		.icon-skills {
+			background-position: -382px -1px;
+		}
+
+		.icon-languages {
+			background-position: -111px -74px;
+		}
+
+		.icon-awards {
+			background-position: -194px -75px;
+		}
+
+		.icon-courses {
+			background-position: -277px -75px;
+		}
+
+		.icon-projects {
+			background-position: -362px -75px;
+		}
+
+		.icon-references {
+			background-position: -441px -75px;
+		}
+
+		.icon-add {
+			background-position: -478px -13px;
+
+			&:hover {
+				background-position: -478px -13px !important;
+			}
+		}
+	}
+
+	&--addmore {
+		font-weight: 400;
+		text-align: center;
+	}
+
+	.icon-add {
+		&:hover {
+			background-position: -478px -40px;
+		}
+	}
+}
+
+

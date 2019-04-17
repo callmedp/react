@@ -1,0 +1,42 @@
+@import '../../../../../../styles/variables/vars.scss';
+@import '../../../../../../styles/variables/mixins.scss';
+
+h2 {
+	margin: 0 10px !important;
+	font-weight: 1.8rem;
+	font-weight: 700;
+}
+
+.icon-summary__cursor {
+	cursor: pointer;
+}
+
+.p3p {
+	padding: 3%;
+}
+
+.info-section {
+	flex: 1;
+	flex-direction: column;
+	margin: 20px 10px 20px 20px;
+}
+
+.summary-box {
+	h3 {
+		display: block;
+		font-size: 1.3rem;
+		font-weight: 600;
+		margin-bottom: 5px;
+	}
+
+	&--summary-txt {
+		padding: 20px;
+		border: 1px solid $border1;
+		box-shadow: inset 0 3px 8px 0 rgba(214,214,214,0.50);
+		@include border-radius(3px);
+		line-height: 2rem;
+		color: $txt1;
+		font-weight: 400;
+		min-height: 400px;
+	}
+}

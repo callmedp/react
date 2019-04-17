@@ -1,0 +1,94 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.ml0 {
+	margin-left: 0;
+}
+
+.order-complete {
+	padding: 25px;
+
+	strong {
+			font-weight: 400;
+			display: block;
+			font-size: 1.4rem;
+
+			b {
+				font-weight: 600;
+			}
+		}
+
+		p {
+			color: $txt1;
+			margin-bottom: 10px;
+		}
+
+		span {
+			display: block;
+			color: $txt1;
+		}
+
+	h1 {
+		font-weight: 700;
+		font-size: 1.8rem;
+		color: $black;
+	}
+
+	ul {
+		list-style-type: none;
+		@include border-radius(5px);
+		border: 1px solid $grey2;
+
+		li {
+			font-size: 1.8rem;
+			color: $black;
+			display: block;
+			padding: 10px 25px;
+		}
+	}
+
+	&--orange-button-change {
+		padding: 12px 5% !important;
+	}
+}
+
+.carousel-box {
+
+	&--carousel {
+		list-style-type: none;
+		margin: 0 !important;
+		padding: 0;
+		border: none !important;
+	}
+
+	&--slide {
+		font-size: 1.6rem;
+		color: $txt1;
+		display: block;
+		padding: 0 10px 0  0 !important;
+		display: flex !important;
+		justify-content: space-between;
+		flex-wrap: wrap;
+
+		&__content {
+			width: 144px;
+			height: 149px;
+			display: inline-block;
+			@include border-radius(5px);
+			box-shadow: 1px 4px 9px 0 rgba(172,172,172,0.50);
+			margin-top: 25px;
+		}
+	}
+}
+
+.links {
+	margin: 20px 0 0 0;
+	@include flexbox();
+	color: $txt1;
+
+	a {
+		color: $blue1;
+		display: inline-block;
+		margin-left: 5px;
+	}
+}

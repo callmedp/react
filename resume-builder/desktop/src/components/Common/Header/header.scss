@@ -1,0 +1,67 @@
+@import '../../../styles/variables/vars.scss';
+@import '../../../styles/variables/mixins.scss';
+
+header {
+	background: #2A3C86;
+	height: 63px;
+}
+
+.container {
+	@include flexbox();
+	flex-direction: row;
+
+	&--logo {
+		width: 270px;
+		height: 55px;
+		position: relative;
+
+		&:after {
+			content: '';
+			width: 287px;
+			height: 90px;
+			background: url(/media/static/react/assets/images/logo.png) 0 0;
+			display: inline-block;
+			position: absolute;
+			left: -15px;
+			top: -3px;
+		}
+	}
+}
+
+.signin {
+	@include flexbox();
+	justify-content: flex-end;
+	color: $white;
+	vertical-align: middle;
+	align-items: center;
+	height: 63px;
+	margin-left: auto;
+
+	&--user-pic {
+		width: 23px;
+		height: 23px;
+		display: inline-block;
+		@include border-radius(50%);
+		margin: 0 10px 0 0;
+
+		img {
+			@include border-radius(50%);
+			display: inline-block;
+			vertical-align: middle;
+		}
+	}
+
+	@media (max-width: 991px) {
+		.white-button {
+			margin-right: 10px;
+			margin-left: 10px;
+		}
+	}
+}
+a{
+	cursor:pointer;
+}
+
+
+        
+

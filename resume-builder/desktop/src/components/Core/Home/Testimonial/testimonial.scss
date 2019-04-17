@@ -1,0 +1,101 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.testimonials {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    position: relative;
+
+    &--list {
+        box-shadow: 0px 3px 25px 0px rgba(0, 0, 0, 0.16);
+        @include border-radius(4px);
+        @include flexbox();
+        align-items: flex-start;
+        justify-content: flex-start;
+        position: relative;
+        flex-direction: column;
+        flex: 0 0 30%;
+        padding: 15px 30px 30px 30px;
+        margin: 15px;
+        background-color: $white;
+
+        @media (max-width: 991px) {
+            flex: 0 0 29%;
+            padding: 15px;
+        }
+    }
+
+    &--image {
+    	flex-direction: row;
+    	align-items: center;
+        justify-content: center;
+        @include flexbox();
+        margin: 0 20px 15px 0;
+        flex: 0 0 100px;
+        font-size: 1.3rem;
+        color: $txt2;
+
+         img {
+         	width: 70px;
+	        height: 70px;
+	        @include border-radius(100%);
+	        box-shadow: 3px 5.196px 12px 0px rgba(0, 0, 0, 0.16);	
+         }
+
+         strong {
+        	font-size: 1.6rem;
+        	font-weight: 600;
+        	color: $black;
+        	display: block;
+        }
+    }
+
+    &--intro {
+    	font-size: 1.3rem;
+        color: $txt2;
+        flex: 1;
+        @include flexbox();
+        flex-direction: row;
+
+    	strong {
+        	font-size: 1.6rem;
+        	font-weight: 600;
+        	color: $black;
+        	display: block;
+        }
+    }
+
+    &--content {
+        display: block;
+        @include flexbox();
+        flex-direction: column;
+        justify-content: flex-start;
+        font-size: 1.3rem;
+    }
+
+
+    &--indicators {
+    	@include flexbox();
+    	justify-content: center;
+    	align-items: center;
+
+    	span {
+    		width: 15px;
+    		height: 15px;
+    		@include border-radius(100%);
+    		border: 1px solid $blue1;
+    		margin: 15px 5px 0 5px;
+    		cursor: pointer;
+
+    		&.active {
+    			background: $blue1;
+    		}
+    	}
+    }
+
+}
