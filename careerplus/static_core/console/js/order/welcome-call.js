@@ -65,6 +65,8 @@ $(function(){
         var select = $('#id-subcat');
         select.empty();
         select.append("<option value=''>Select SubCategory</option>");
+        $("#replace_order_td").css("display","none")
+        $("#replacement_order_title").css("display", "none")
         var parent = $(this).val();
 
         if (parent == '21'){
@@ -182,6 +184,18 @@ $(function(){
         else{
             $followdiv.hide();
             $follow.attr('required', false);
+        }
+    });
+
+    $(document).on("change", ".sub_cat_item", function() {
+        var sub_cat_value = $(this).val();
+        if(sub_cat_value == 65) {
+            $("#replace_order_td").css("display","")
+            $("#replacement_order_title").css("display", "")
+        }
+        else{
+            $("#replace_order_td").css("display","none")
+            $("#replacement_order_title").css("display", "none")
         }
     });
 
