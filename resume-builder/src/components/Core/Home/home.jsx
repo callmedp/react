@@ -7,6 +7,7 @@ import ResumeSlider from "./ResumeSlider/resumeSlider.jsx";
 import Testimonial from "./Testimonial/testimonial.jsx";
 import Footer from "../../Common/Footer/footer.jsx";
 import Header from "../../Common/Header/header.jsx";
+import {Link} from 'react-router-dom'
 import { Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
 
 class Home extends Component {
@@ -65,9 +66,8 @@ class Home extends Component {
     render() {
         return (
             <div class="nav-fixed">
-                
-                {/* <Link to={'/resume-builder/edit/'}>Customize Your Resume</Link> */}
-                <Header getclass={this.state.scrolled?'color-change':''}/>
+                 {/*<Link to={'/resume-builder/edit/'}>Customize Your Resume</Link> */}
+                <Header page={'home'} getclass={this.state.scrolled?'color-change':''}/>
                 <Banner/>
                 <section className="section-container">
                     <h2>Professional advantage</h2>

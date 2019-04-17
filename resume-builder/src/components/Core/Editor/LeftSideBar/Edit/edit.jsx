@@ -1,17 +1,104 @@
 import React, {Component} from 'react';
-import { Link} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import './edit.scss'
 import queryString from "query-string";
+
+let visibleList = [
+    {
+        name: 'Personal Info',
+        link: '/resume-builder/edit/?type=profile',
+        icon: 'icon-info',
+        itemType: 'profile'
+    },
+    {
+        name: 'Summary',
+        link: '/resume-builder/edit/?type=summary',
+        icon: 'icon-summary',
+        itemType: 'summary'
+
+
+    },
+    {
+        name: 'Experience',
+        link: '/resume-builder/edit/?type=experience',
+        icon: 'icon-experience',
+        itemType: 'experience'
+
+
+    },
+    {
+        name: 'Education',
+        link: '/resume-builder/edit/?type=education',
+        icon: 'icon-education',
+        itemType: 'education'
+
+    },
+    {
+        name: 'Skills',
+        link: '/resume-builder/edit/?type=skill',
+        icon: 'icon-skills',
+        itemType: 'skill'
+
+
+    },
+
+];
+
+let hiddenList = [
+    {
+        name: 'Languages',
+        link: '/resume-builder/edit/?type=language',
+        icon: 'icon-languages',
+        itemType: 'language'
+    },
+    {
+        name: 'Awards',
+        link: '/resume-builder/edit/?type=award',
+        icon: 'icon-awards',
+        itemType: 'award'
+
+
+    },
+    {
+        name: 'Courses',
+        link: '/resume-builder/edit/?type=course',
+        icon: 'icon-courses',
+        itemType: 'course'
+
+
+    },
+    {
+        name: 'Projects',
+        link: '/resume-builder/edit/?type=project',
+        icon: 'icon-projects',
+        itemType: 'project'
+
+    },
+    {
+        name: 'References',
+        link: '/resume-builder/edit/?type=reference',
+        icon: 'icon-references',
+        itemType: 'reference'
+
+
+    },
+];
 
 export default class Edit extends Component {
     constructor(props) {
         super(props);
         this.handleSpanClick = this.handleSpanClick.bind(this);
+        this.addMoreClick = this.addMoreClick.bind(this);
+        this.deleteFromVisibleList = this.deleteFromVisibleList.bind(this);
+        this.addIntoVisibleList = this.addIntoVisibleList.bind(this);
         const values = queryString.parse(this.props.location.search);
-
         this.state = {
-            type: (values && values.type) || ''
+            type: (values && values.type) || '',
+            show: false,
+            hiddenList: hiddenList,
+            visibleList: visibleList
         };
+
         if (!(values && values.type)) {
             this.props.history.push('/resume-builder/edit/?type=profile')
         }
@@ -20,6 +107,33 @@ export default class Edit extends Component {
 
     handleSpanClick(e) {
         e.stopPropagation();
+    }
+
+    addMoreClick() {
+        this.setState({
+            show: true
+        })
+    }
+
+    addIntoVisibleList(addedElem) {
+        let visList = this.state.visibleList;
+        visList.push(addedElem);
+        let hidList = this.state.hiddenList.filter(elem => elem.itemType !== addedElem.itemType)
+        console.log('----', visList, hidList)
+        this.setState({
+            visibleList: visList,
+            hiddenList: hidList
+        })
+    }
+
+    deleteFromVisibleList(deletedElem) {
+        let hidList = this.state.hiddenList;
+        hidList.push(deletedElem)
+        let visList = this.state.visibleList.filter(elem => elem.itemType !== deletedElem.itemType)
+        this.setState({
+            visibleList: visList,
+            hiddenList: hidList
+        })
     }
 
     componentDidUpdate(prevProps) {
@@ -32,83 +146,48 @@ export default class Edit extends Component {
     }
 
     render() {
-        const {type} = this.state;
+        const {type, show, visibleList, hiddenList} = this.state;
         return (
             <div className="edit-section">
                 <strong>Complete your information</strong>
                 <ul>
-                    <li className={type === 'profile' ? 'edit-section--active' : ''}>
-                        <Link to="/resume-builder/edit/?type=profile"> <span className="icon-info mr-20"></span>
-                            Personal Info
-                        </Link>
-                    </li>
-                    <li className={type === 'summary' ? 'edit-section--active' : ''}>
-                        <Link to="/resume-builder/edit/?type=summary">
-                            <span className="icon-summary mr-20"></span>
-                            Summary
-                        </Link>
-                        <span onClick={this.handleSpanClick} className="icon-delete pull-right">
+                    {
+                        (visibleList || []).map((elem, index) => {
+                            const {name, link, icon, itemType} = elem;
+                            return (
+                                <li key={index} className={type === itemType ? 'edit-section--active' : ''}>
+                                    <Link to={link}>
+                                        <span className={'mr-20 ' + icon}></span>
+                                        {name}
+                                    </Link>
+                                    <span onClick={() => this.deleteFromVisibleList(elem)}
+                                          className="icon-delete pull-right"/>
+                                </li>
+                            )
+                        })
+                    }
+                    {
+                        !!(!show) &&
+                        <li className="edit-section--addmore mt-30" onClick={this.addMoreClick}>
+                            + Add more sections
+                        </li>
+                    }
+                    {!!(show) &&
+                    (hiddenList || []).map((elem, index) => {
+                        const {name, link, icon, itemType} = elem;
+                        return (
+                            <li key={index} className={type === itemType ? 'edit-section--active' : ''}>
+                                <Link to={link}>
+                                    <span className={'mr-20 ' + icon}></span>
+                                    {name}
+                                </Link>
+                                <span onClick={() => this.addIntoVisibleList(elem)}
+                                      className="icon-add pull-right"/>
+                            </li>
+                        )
+                    })
+                    }
 
-                        </span>
-                    </li>
-                    <li className={type === 'experience' ? 'edit-section--active' : ''}>
-                        <Link to="/resume-builder/edit/?type=experience"><span className="icon-experience mr-20"></span>
-                            Experience
-                        </Link>
-                        <span className="icon-delete pull-right"></span>
-                    </li>
-                    <li className={type === 'education' ? 'edit-section--active' : ''}>
-                        <Link to="/resume-builder/edit/?type=education">
-                            <span className="icon-education mr-20"></span>
-                            Education
-                        </Link>
-                        <span className="icon-delete pull-right"></span>
-                    </li>
-                    <li className={type === 'skill' ? 'edit-section--active' : ''}>
-                        <Link to="/resume-builder/edit/?type=skill">
-                            <span className="icon-skills mr-20"></span>
-                            Skills
-                        </Link>
-                        <span className="icon-delete pull-right"></span>
-                    </li>
-                    <li className="edit-section--addmore mt-30">
-                        + Add more sections
-                    </li>
-                    <li className={type === 'language' ? 'edit-section--active' : ''}>
-                        <Link to="/resume-builder/edit/?type=language">
-                            <span className="icon-languages mr-20"></span>
-                            Languages
-                        </Link>
-                        <span className="icon-add pull-right"></span>
-                    </li>
-                    <li className={type === 'award' ? 'edit-section--active' : ''}>
-                        <Link to="/resume-builder/edit/?type=award">
-                            <span className="icon-awards mr-20"></span>
-                            Awards
-                        </Link>
-                        <span className="icon-add pull-right"></span>
-                    </li>
-                    <li className={type === 'course' ? 'edit-section--active' : ''}>
-                        <Link to="/resume-builder/edit/?type=course">
-                            <span className="icon-courses mr-20"></span>
-                            Courses
-                        </Link>
-                        <span className="icon-add pull-right"></span>
-                    </li>
-                    <li className={type === 'project' ? 'edit-section--active' : ''}>
-                        <Link to="/resume-builder/edit/?type=project">
-                            <span className="icon-projects mr-20"></span>
-                            Projects
-                        </Link>
-                        <span className="icon-add pull-right"></span>
-                    </li>
-                    <li className={type === 'reference' ? 'edit-section--active' : ''}>
-                        <Link to="/resume-builder/edit/?type=reference">
-                            <span className="icon-references mr-20"></span>
-                            References
-                        </Link>
-                        <span className="icon-add pull-right"></span>
-                    </li>
 
                 </ul>
             </div>
