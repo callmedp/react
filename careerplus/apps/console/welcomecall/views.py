@@ -618,12 +618,14 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
             order = Order.objects.filter(number=order_id).first()
         else:
             order = Order.objects.filter(id=order_id).first()
+        if curr_order.id == order.id:
+            return (False, 'Replacing order cannot be same as current order.')
         if not order:
             return (False, 'Order Does Not Exist')
         elif order.status != 1:
             return (False, 'Order is not Paid')
         elif order.ordertxns.exists() and order.ordertxns.first().payment_mode !=1:
-            return (False, "This Order is Paid by Cash")
+            return (False, "Replacing Order is Not Paid by Cash")
 
         current_order_price = curr_order.total_incl_tax
         new_order_price = order.total_incl_tax
