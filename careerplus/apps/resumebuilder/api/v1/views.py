@@ -1,5 +1,6 @@
 # python imports
 from datetime import datetime
+
 # django imports
 from django.template.loader import get_template
 
@@ -14,21 +15,26 @@ from resumebuilder.api.core.serializers import (CandidateSerializer, SkillSerial
                                                 CandidateLanguageSerializer)
 
 from resumebuilder.mixins import (SessionManagerMixin)
+
 # inter app imports
 from shine.core import ShineCandidateDetail
-
 from .education_specialization import educ_list
+from shared.rest_addons.authentication import ShineUserAuthentication
+from shared.permissions import IsObjectOwner
+
 # third party imports
-from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateAPIView)
+from rest_framework import status
+from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView)
 from rest_framework.views import (APIView)
 from rest_framework.parsers import (FormParser, MultiPartParser)
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 
 class CandidateListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
     queryset = Candidate.objects.all()
     serializer_class = CandidateSerializer
 
@@ -38,37 +44,22 @@ class CandidateListCreateView(ListCreateAPIView):
         return super(CandidateListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class CandidateRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
+class CandidateRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
     lookup_field = 'candidate_id'
     lookup_url_kwarg = 'pk'
     serializer_class = CandidateSerializer
     queryset = Candidate.objects.all()
 
-    # def get(self, request, *args, **kwargs):
-    #     import ipdb;
-    #     ipdb.set_trace();
-    #     if 'personal_info' not in self.request.session:
-    #         candidate_id = self.kwargs.get('pk')
-    #         candidate = Candidate.objects.filter(candidate_id=candidate_id).values().first()
-    #         return Response(candidate)
-    #
-    #     else:
-    #         personal_info = self.request.session.get('personal_info')
-    #         del request.session['personal_info']
-    #         candidate = Candidate.objects.get_or_create(candidate_id=personal_info['candidate_id'],
-    #                                                     defaults=personal_info)
-    #         if candidate[1]:
-    #             candidate.save()
-    #         return Response(personal_info)
-
 
 class SkillListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-    queryset = Skill.objects.all()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    queryset = Skill.objects.all().order_by('order')
     serializer_class = SkillSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -76,10 +67,9 @@ class SkillListCreateView(ListCreateAPIView):
         return super(SkillListCreateView, self).get_serializer(*args, **kwargs)
 
 
-class SkillRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
+class SkillRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
     serializer_class = SkillSerializer
 
     def get_queryset(self):
@@ -87,9 +77,362 @@ class SkillRetrieveUpdateView(RetrieveUpdateAPIView):
         return Skill.objects.filter(id=skill_id)
 
 
+class CandidateExperienceListCreateView(ListCreateAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    queryset = CandidateExperience.objects.all().order_by('order')
+    serializer_class = CandidateExperienceSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
+
+    # def get_queryset(self):
+    #     candidate_id = self.request.GET.get('c_id', '')
+    #     if 'candidate_experience' not in self.request.session:
+    #         candidate = Candidate.objects.get(candidate_id=candidate_id)
+    #         return candidate.candidateexperience_set.all()
+
+    def get_serializer(self, *args, **kwargs):
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+        return super(CandidateExperienceListCreateView, self).get_serializer(*args, **kwargs)
+
+
+class CandidateExperienceRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
+    serializer_class = CandidateExperienceSerializer
+
+    def get_queryset(self):
+        candidate_experience_id = int(self.kwargs.get('pk'))
+        return CandidateExperience.objects.filter(id=candidate_experience_id)
+
+
+class CandidateEducationListCreateView(ListCreateAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    queryset = CandidateEducation.objects.all().order_by('order')
+    serializer_class = CandidateEducationSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
+
+    def get_serializer(self, *args, **kwargs):
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+        return super(CandidateEducationListCreateView, self).get_serializer(*args, **kwargs)
+
+
+class CandidateEducationRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
+    serializer_class = CandidateEducationSerializer
+
+    def get_queryset(self):
+        candidate_education_id = int(self.kwargs.get('pk'))
+        return CandidateEducation.objects.filter(id=candidate_education_id)
+
+
+class CandidateCertificationListCreateView(ListCreateAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    queryset = CandidateCertification.objects.all().order_by('order')
+    serializer_class = CandidateCertificationSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
+
+    def get_serializer(self, *args, **kwargs):
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+        return super(CandidateCertificationListCreateView, self).get_serializer(*args, **kwargs)
+
+
+class CandidateCertificationRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
+    serializer_class = CandidateCertificationSerializer
+
+    def get_queryset(self):
+        candidate_certification_id = int(self.kwargs.get('pk'))
+        return CandidateCertification.objects.filter(id=candidate_certification_id)
+
+
+class CandidateProjectListCreateView(ListCreateAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    queryset = CandidateProject.objects.all().order_by('order')
+    serializer_class = CandidateProjectSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
+
+    def get_serializer(self, *args, **kwargs):
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+        return super(CandidateProjectListCreateView, self).get_serializer(*args, **kwargs)
+
+
+class CandidateProjectRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
+    serializer_class = CandidateProjectSerializer
+
+    def get_queryset(self):
+        candidate_project_id = int(self.kwargs.get('pk'))
+        return CandidateProject.objects.filter(id=candidate_project_id)
+
+
+class CandidateReferenceListCreateView(ListCreateAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    queryset = CandidateReference.objects.all().order_by('order')
+    serializer_class = CandidateReferenceSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
+
+    def get_serializer(self, *args, **kwargs):
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+        return super(CandidateReferenceListCreateView, self).get_serializer(*args, **kwargs)
+
+
+class CandidateReferenceRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
+    serializer_class = CandidateReferenceSerializer
+
+    def get_queryset(self):
+        candidate_reference_id = int(self.kwargs.get('pk'))
+        return CandidateReference.objects.filter(id=candidate_reference_id)
+
+
+class CandidateSocialLinkListCreateView(ListCreateAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    queryset = CandidateSocialLink.objects.all().order_by('order')
+    serializer_class = CandidateSocialLinkSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
+
+    def get_serializer(self, *args, **kwargs):
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+        return super(CandidateSocialLinkListCreateView, self).get_serializer(*args, **kwargs)
+
+
+class CandidateSocialLinkRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
+    serializer_class = CandidateSocialLinkSerializer
+
+    def get_queryset(self):
+        external_link_id = int(self.kwargs.get('pk'))
+        return CandidateSocialLink.objects.filter(id=external_link_id)
+
+
+class CandidateAchievementListCreateView(ListCreateAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    queryset = CandidateAchievement.objects.all().order_by('order')
+    serializer_class = CandidateAchievementSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
+
+    def get_serializer(self, *args, **kwargs):
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+        return super(CandidateAchievementListCreateView, self).get_serializer(*args, **kwargs)
+
+
+class CandidateAchievementRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
+    serializer_class = CandidateAchievementSerializer
+
+    def get_queryset(self):
+        external_link_id = int(self.kwargs.get('pk'))
+        return CandidateAchievement.objects.filter(id=external_link_id)
+
+
+class CandidateLanguageListCreateView(ListCreateAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CandidateLanguageSerializer
+    ordering_fields = ('order',)
+    ordering = ('order',)
+
+    def get_queryset(self):
+        return CandidateLanguage.objects.all().order_by('order')
+
+    def get_serializer(self, *args, **kwargs):
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+        return super(CandidateLanguageListCreateView, self).get_serializer(*args, **kwargs)
+
+
+class CandidateLanguageRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsObjectOwner,)
+    serializer_class = CandidateLanguageSerializer
+
+    def get_queryset(self):
+        external_link_id = int(self.kwargs.get('pk'))
+        return CandidateLanguage.objects.filter(id=external_link_id)
+
+
+class CandidateResumePreview(APIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        candidate_id = self.kwargs.get('candidate_id', '')
+        template_id = self.kwargs.get('pk', '');
+
+        candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
+        if not candidate:
+            return {}
+
+        # extracurricular = candidate.extracurricular.split(',')
+        education = candidate.candidateeducation_set.all()
+        experience = candidate.candidateexperience_set.all()
+        skills = candidate.skill_set.all()
+        achievements = candidate.candidateachievement_set.all()
+        references = candidate.candidatereference_set.all()
+        projects = candidate.candidateproject_set.all()
+        certifications = candidate.candidatecertification_set.all()
+        languages = candidate.candidatelanguage_set.all()
+        current_exp = experience.filter(is_working=True).order_by('-start_date').first()
+
+        template = get_template('resume{}.html'.format(template_id))
+        rendered_template = template.render(
+            {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
+             'achievements': achievements, 'references': references, 'projects': projects,
+             'certifications': certifications, 'extracurricular': '', 'languages': languages,
+             'current_exp': current_exp}).encode(encoding='UTF-8')
+
+        return Response({
+            'html': rendered_template
+        })
+
+
+class ProfileEntityBulkUpdateView(APIView):
+    """
+    Expected behaviour - 
+
+    http://127.0.0.1:8000/api/v1/resume/candidate/5c4ede4da4d7330573d8c79b/bulk-update/skill/
+
+    Sample input data - 
+
+    [{
+        "candidate_id": "1",
+        "cc_id": null,
+        "name": "Java",
+        "proficiency": 2
+    },
+
+    {   "id":1,
+        "candidate_id": "1",
+        "cc_id": null,
+        "name": "Django",
+        "proficiency": 2
+    }]
+
+    Output - 
+
+    [{  "id":2,
+        "candidate_id": "1",
+        "cc_id": null,
+        "name": "Java",
+        "proficiency": 2
+    },
+
+    {   "id":1,
+        "candidate_id": "1",
+        "cc_id": null,
+        "name": "Django",
+        "proficiency": 2
+    }]
+    """
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    entity_slug_serializer_mapping = {'skill': SkillSerializer,
+                                      'experience': CandidateExperienceSerializer,
+                                      'education': CandidateEducationSerializer,
+                                      'certification': CandidateCertificationSerializer,
+                                      'project': CandidateProjectSerializer,
+                                      'reference': CandidateReferenceSerializer,
+                                      'social-link': CandidateSocialLinkSerializer,
+                                      'language': CandidateLanguageSerializer,
+                                      'achievement': CandidateAchievementSerializer}
+
+    entity_slug_model_mapping = {'skill': Skill,
+                                 'experience': CandidateExperience,
+                                 'education': CandidateEducation,
+                                 'certification': CandidateCertification,
+                                 'project': CandidateProject,
+                                 'reference': CandidateReference,
+                                 'social-link': CandidateSocialLink,
+                                 'language': CandidateLanguage,
+                                 'achievement': CandidateAchievement}
+
+    def get_serializer_class(self, entity_slug):
+        return self.entity_slug_serializer_mapping.get(entity_slug)
+
+    def get_model_class(self, entity_slug):
+        return self.entity_slug_model_mapping.get(entity_slug)
+
+    def post(self, request, *args, **kwargs):
+        entity_slug = kwargs.get('entity_slug')
+        data = request.data
+        serializer_class = self.get_serializer_class(entity_slug)
+        model_class = self.get_model_class(entity_slug)
+
+        if not serializer_class:
+            return Response({"detail": "Invalid parameters"}, status=status.HTTP_400_BAD_REQUEST)
+
+        invalid_data = False
+        serializer_objs_list = []
+
+        if not isinstance(data, list):
+            return Response({"detail": "Invalid data format"}, status=status.HTTP_400_BAD_REQUEST)
+
+        for record in data:
+            obj_id = str(record.get('id', 0))
+
+            if obj_id and not obj_id.isdigit():
+                invalid_data = True
+                break
+            obj_id = int(obj_id)
+
+            instance = model_class.objects.filter(id=obj_id).first()
+
+            if not instance and obj_id != 0:
+                invalid_data = True
+                break
+
+            if instance and instance.candidate.candidate_id != request.user.id:
+                invalid_data = True
+                break
+
+            context = {'request': request}
+            serializer_obj = serializer_class(data=record, instance=instance, context=context) if \
+                instance else serializer_class(data=record, context=context)
+
+            if not serializer_obj.is_valid():
+                invalid_data = True
+                break
+
+            serializer_objs_list.append(serializer_obj)
+
+        if invalid_data:
+            return Response({"detail": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)
+
+        for obj in serializer_objs_list:
+            obj.save()
+
+        return Response([x.data for x in serializer_objs_list], status=status.HTTP_200_OK)
+
+
 class CandidateShineProfileRetrieveUpdateView(APIView):
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         # candidate_email = request.session.get('email', '')
@@ -227,228 +570,3 @@ class CandidateShineProfileRetrieveUpdateView(APIView):
             "candidate_id": candidate_profile['candidate_id']
         })
 
-
-class CandidateExperienceListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-    queryset = CandidateExperience.objects.all()
-    serializer_class = CandidateExperienceSerializer
-
-    # def get_queryset(self):
-    #     candidate_id = self.request.GET.get('c_id', '')
-    #     if 'candidate_experience' not in self.request.session:
-    #         candidate = Candidate.objects.get(candidate_id=candidate_id)
-    #         return candidate.candidateexperience_set.all()
-
-    def get_serializer(self, *args, **kwargs):
-        if isinstance(kwargs.get('data', {}), list):
-            kwargs['many'] = True
-        return super(CandidateExperienceListCreateView, self).get_serializer(*args, **kwargs)
-
-
-class CandidateExperienceRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-    queryset = CandidateExperience.objects.all()
-    serializer_class = CandidateExperienceSerializer
-
-    # def get_queryset(self):
-    #     candidate_experience_id = int(self.kwargs.get('pk'))
-    #     return CandidateExperience.objects.filter(id=candidate_experience_id)
-    #
-
-
-class CandidateEducationListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-    queryset = CandidateEducation.objects.all()
-    serializer_class = CandidateEducationSerializer
-
-    def get_serializer(self, *args, **kwargs):
-        if isinstance(kwargs.get('data', {}), list):
-            kwargs['many'] = True
-        return super(CandidateEducationListCreateView, self).get_serializer(*args, **kwargs)
-
-
-class CandidateEducationRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
-    serializer_class = CandidateEducationSerializer
-
-    def get_queryset(self):
-        candidate_education_id = int(self.kwargs.get('pk'))
-        return CandidateEducation.objects.filter(id=candidate_education_id)
-
-
-class CandidateCertificationListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-    queryset = CandidateCertification.objects.all()
-    serializer_class = CandidateCertificationSerializer
-
-    def get_serializer(self, *args, **kwargs):
-        if isinstance(kwargs.get('data', {}), list):
-            kwargs['many'] = True
-        return super(CandidateCertificationListCreateView, self).get_serializer(*args, **kwargs)
-
-
-class CandidateCertificationRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
-    serializer_class = CandidateCertificationSerializer
-
-    def get_queryset(self):
-        candidate_certification_id = int(self.kwargs.get('pk'))
-        return CandidateCertification.objects.filter(id=candidate_certification_id)
-
-
-class CandidateProjectListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-    queryset = CandidateProject.objects.all()
-    serializer_class = CandidateProjectSerializer
-
-    def get_serializer(self, *args, **kwargs):
-        if isinstance(kwargs.get('data', {}), list):
-            kwargs['many'] = True
-        return super(CandidateProjectListCreateView, self).get_serializer(*args, **kwargs)
-
-
-class CandidateProjectRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
-    serializer_class = CandidateProjectSerializer
-
-    def get_queryset(self):
-        candidate_project_id = int(self.kwargs.get('pk'))
-        return CandidateProject.objects.filter(id=candidate_project_id)
-
-
-class CandidateReferenceListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-    queryset = CandidateReference.objects.all()
-    serializer_class = CandidateReferenceSerializer
-
-    def get_serializer(self, *args, **kwargs):
-        if isinstance(kwargs.get('data', {}), list):
-            kwargs['many'] = True
-        return super(CandidateReferenceListCreateView, self).get_serializer(*args, **kwargs)
-
-
-class CandidateReferenceRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
-    serializer_class = CandidateReferenceSerializer
-
-    def get_queryset(self):
-        candidate_reference_id = int(self.kwargs.get('pk'))
-        return CandidateReference.objects.filter(id=candidate_reference_id)
-
-
-class CandidateSocialLinkListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-    queryset = CandidateSocialLink.objects.all()
-    serializer_class = CandidateSocialLinkSerializer
-
-    def get_serializer(self, *args, **kwargs):
-        if isinstance(kwargs.get('data', {}), list):
-            kwargs['many'] = True
-        return super(CandidateSocialLinkListCreateView, self).get_serializer(*args, **kwargs)
-
-
-class CandidateSocialLinkRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
-    serializer_class = CandidateSocialLinkSerializer
-
-    def get_queryset(self):
-        external_link_id = int(self.kwargs.get('pk'))
-        return CandidateSocialLink.objects.filter(id=external_link_id)
-
-
-class CandidateAchievementListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-    queryset = CandidateAchievement.objects.all()
-    serializer_class = CandidateAchievementSerializer
-
-    def get_serializer(self, *args, **kwargs):
-        if isinstance(kwargs.get('data', {}), list):
-            kwargs['many'] = True
-        return super(CandidateAchievementListCreateView, self).get_serializer(*args, **kwargs)
-
-
-class CandidateAchievementRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
-    serializer_class = CandidateAchievementSerializer
-
-    def get_queryset(self):
-        external_link_id = int(self.kwargs.get('pk'))
-        return CandidateAchievement.objects.filter(id=external_link_id)
-
-
-class CandidateLanguageListCreateView(ListCreateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-    queryset = CandidateLanguage.objects.all()
-    serializer_class = CandidateLanguageSerializer
-
-    def get_serializer(self, *args, **kwargs):
-        if isinstance(kwargs.get('data', {}), list):
-            kwargs['many'] = True
-        return super(CandidateLanguageListCreateView, self).get_serializer(*args, **kwargs)
-
-
-class CandidateLanguageRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = ()
-    permission_classes = ()
-
-    serializer_class = CandidateLanguageSerializer
-
-    def get_queryset(self):
-        external_link_id = int(self.kwargs.get('pk'))
-        return CandidateLanguage.objects.filter(id=external_link_id)
-
-
-class CandidateResumePreview(APIView):
-    authentication_classes = ()
-    permission_classes = ()
-
-    def get(self, request, *args, **kwargs):
-        candidate_id = self.kwargs.get('candidate_id', '')
-        template_id = self.kwargs.get('pk', '');
-
-        candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
-        if not candidate:
-            return {}
-
-        # extracurricular = candidate.extracurricular.split(',')
-        education = candidate.candidateeducation_set.all()
-        experience = candidate.candidateexperience_set.all()
-        skills = candidate.skill_set.all()
-        achievements = candidate.candidateachievement_set.all()
-        references = candidate.candidatereference_set.all()
-        projects = candidate.candidateproject_set.all()
-        certifications = candidate.candidatecertification_set.all()
-        languages = candidate.candidatelanguage_set.all()
-        current_exp = experience.filter(is_working=True).order_by('-start_date').first()
-
-        template = get_template('resume{}.html'.format(template_id))
-        rendered_template = template.render(
-            {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
-             'achievements': achievements, 'references': references, 'projects': projects,
-             'certifications': certifications, 'extracurricular': '', 'languages': languages,
-             'current_exp': current_exp}).encode(encoding='UTF-8')
-
-        return Response({
-            'html': rendered_template
-        })

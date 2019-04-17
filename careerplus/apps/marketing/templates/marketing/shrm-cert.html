@@ -67,14 +67,14 @@
 <div class="container-full top-head-sec">
   <div class="container">
     <!-- header start -->
-    <div class=""> 
+    <div class="">
      <a href="#" class="sprite logo-main"></a>
     </div>
     <!-- header end -->
     <div class="clear-fix"></div>
-    
+
     <div class="">
-     
+
      <!-- banner right section start -->
       <div class="top-baner-rgt">
         <div class="register-bx-sec pull-right">
@@ -105,7 +105,7 @@
                 <textarea id="message" name="msg" class="message_input" placeholder="Message" rows="1"></textarea>
                 <span class="error" for="message" style="color: rgb(255, 0, 0); font-size: 11px; width:100%; " ></span>
             </div> -->
-   
+
               <!-- <div style="clear:both; height:77px; overflow:hidden; display:block; position: relative;">
                 <div id="captcha1" class="input-field" style="width:45%; margin: 0px;" ></div>
                 <p style="color: rgb(255, 0, 0); display: none; font-size: 11px; margin: 0px; padding: 0px;  position: absolute; top: 58px;" id="hiddenrecaptcha"> Captcha Validation is required</p>
@@ -116,7 +116,7 @@
 
           <span class="error" for="name" style="color: rgb(255, 0, 0);font-size: 11px;width:100%; " ></span>
          </div>
-            
+
               <input type="hidden" name="product" value="{% if is_product_page and object %}{{ object.pk }}{% endif %}">
               <input type="hidden" name="prd" value="shrm certification">
               <input type="hidden" name="source" value="{% if source %}{{ source }}{% endif %}">
@@ -126,30 +126,30 @@
           </form>
         </div>
       </div><!-- banner right section start -->
-     
+
      <!-- banner left section start -->
       <div class="top-baner-left">
-        <h1><span>Become a </span>SHRM Certified Professional</h1>   
-             
-        <h3>Course Benefits</h3>        
+        <h1><span>Become a </span>SHRM Certified Professional</h1>
+
+        <h3>Course Benefits</h3>
         <ul class="career">
           <li>Get a 12% salary hike as compared to your peers.</li>
           <li>Certification by a Government Body (ICSIL).</li>
           <li>Globally Recognized Certification.</li>
           <li>Increased chances of job opportunities.</li>
           <li>Expert faculty.</li>
-          <li>High quality course materials.</li>      
-        </ul>        
+          <li>High quality course materials.</li>
+        </ul>
       </div> <!-- banner left section end -->
-      
-      
+
+
     </div>
   </div>
   <div class="clear-fix"></div>
 </div>
 <div class="clear-fix"></div>
-<div class="container"> 
-  
+<div class="container">
+
 <!--white box first section start here -->
   <div class="main-bx box-padding">
     <h4>Why should one take SHRM certification?</h4>
@@ -182,43 +182,43 @@
 <div class="container">
 <div class="row">
   <h2>Course Highlights</h2>
-  
+
   <div class="col-md-4 col-sm-4">
     <div class="course-bx"><a href="#">HR Competencies</a></div>
   </div>
-  
+
   <div class="col-md-4 col-sm-4">
     <div class="course-bx"><a href="#">People Management</a></div>
   </div>
-  
+
   <div class="col-md-4 col-sm-4">
     <div class="course-bx"><a href="#">Organization and HR</a></div>
   </div>
-  
+
   <div class="col-md-4 col-sm-4">
     <div class="course-bx"><a href="#">Workplace Management</a></div>
   </div>
-  
+
   <div class="col-md-4 col-sm-4">
     <div class="course-bx"><a href="#">Employment Laws and Regulations</a></div>
   </div>
-  
+
   <div class="col-md-4 col-sm-4">
     <div class="course-bx"><a href="#">Human Resource Strategy Management</a></div>
-  </div>  
-  
+  </div>
+
   <div class="clear-fix"></div>
   </div>
 </div>
-  
-  
-  
+
+
+
 </div>
 <div class="clear-fix"></div>
 <div class="container-full wht-atnd">
 <div class="container">
   <h3>Who should attend?</h3>
-  
+
     <ul>
         <li>Junior or senior level human resource professionals.</li>
         <li>Compensation and benefits analysts.</li>
@@ -226,9 +226,9 @@
         <li>Staffing managers and Recruiters .</li>
         <li>Undergraduates, Graduates and Post Graduates.</li>
     </ul>
-  
-</div>  
-  
+
+</div>
+
 </div><br>
 
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -277,7 +277,7 @@
                 }
             );
 
-            
+
             $("#lead").validate({
                 submitHandler:function (form) {
                     if(grecaptcha.getResponse(recaptcha1) == '') {
@@ -300,11 +300,11 @@
                                 document.body.appendChild(ga_code);
                                 window.location.href ='thankyou-for-query'
                                 return false;
-                                    
+
                                 } else {
                                     alert("Error! Something went wrong. Please try again");
                                     grecaptcha.reset(recaptcha1);
-                                    
+
                                 }
                             }
                             else{
@@ -355,15 +355,15 @@
                     $(element).siblings('.error').removeClass('noerror');
                 },
                 unhighlight:function(element, errorClass) {
-                    $(element).siblings('.error').addClass('noerror');    
+                    $(element).siblings('.error').addClass('noerror');
                 },
                 errorPlacement: function(error, element){
                     element.siblings('.error').text(error.text());
-                    
+
                 },
                 });
             });
-            
+
         </script>
 
 
@@ -386,7 +386,7 @@
 
                 if (!isValidEmail){
                    alert("Please enter a valid email address.");
-                   return; 
+                   return;
                 }
                 createLead();
             });
@@ -471,6 +471,25 @@
       _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
       $.src="https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";z.t=+new Date;$.
       type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+
+          const candidateId = '{{ request.session.candidate_id}}';
+
+          if (candidateId) {
+              const full_name = '{{ request.session.full_name }}';
+              const  email ='{{ request.session.email }}';
+              const mobile_no = '{{ request.session.mobile_no }}';
+
+
+              console.log('request   ', full_name, email, mobile_no);
+              $zopim(function () {
+                  $zopim.livechat.set({
+                      language: 'en',
+                      name: full_name ? full_name : '',
+                      email: email ? email : '',
+                      phone: mobile_no ? mobile_no : ''
+                  });
+              });
+          }
       </script>
       <!--End of Zendesk Chat Script-->
     {% endblock zendesk %}

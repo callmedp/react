@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <!-- saved from url=(0095)file:///C:/Users/ft0734/Documents/Six%20Sigma%20Green%20Belt%20Page%20-%20Shine%20Learning.html -->
 <html lang="en" class="gr__learning_shine_com"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
@@ -103,9 +103,9 @@
 
                 <input type="hidden" value="{{request.session.candidate_id}}" id="candidate_id">
 
-                
+
                 <div class="tnc">
-                  By registering with us you agree to our 
+                  By registering with us you agree to our
                   <a href="/tnc">Terms &amp; Conditions</a>
                 </div>
                 <button type="button" class="btn btn-default" id="addcart" >Enroll Now</button>
@@ -151,7 +151,7 @@
           </div>
 
           <!-- Who should attend? -->
-          
+
         </div>
 
         <!-- Course Preview -->
@@ -168,10 +168,10 @@
                 <div class="panel-body">
                   <ul>
                     <li>For the unique demands of every profile</li>
-                    
-                    
-                    
-                    
+
+
+
+
                   </ul>
                 </div>
               </div>
@@ -200,14 +200,14 @@
                 <div class="panel-body">
                   <ul>
                     <li>With keyword research for every profile</li>
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+
+
+
+
+
+
+
+
                   </ul>
                 </div>
               </div>
@@ -222,16 +222,16 @@
                 <div class="panel-body">
                   <ul>
                     <li>To give the competitive edge during screening and interview</li>
-                    
-                     
-                    
-                    
+
+
+
+
                   </ul>
                 </div>
               </div>
             </div>
-            
-            
+
+
             <div class="panel panel-default">
               <div class="panel-heading" role="tab" id="headingSeven">
                 <h4 class="panel-title">
@@ -267,12 +267,12 @@
               <div class="why-buy">
                 <strong>Visual Resume for Freshers </strong>Designed by professionals for the right appeal</div>
             </div>
-            
+
             <div class="col-xs-12 col-sm-4">
               <div class="why-buy">
                 <strong>Resume Booster</strong>Increased visibility throughout the Shine network and its affiliates</div>
             </div>
-            
+
             <div class="col-xs-12 col-sm-4">
               <div class="why-buy">
                 <strong>Second Regular Resume</strong>To target different profiles correctly</div>
@@ -342,7 +342,7 @@ $(document).ready(function(){
 
       if (!isValidEmail){
          alert("Please enter a valid email address.");
-         return; 
+         return;
       }
       var leadData = {"name":formName,"email":formEmail,"number":formNumber,"lsource":4};
 
@@ -429,6 +429,25 @@ $(document).ready(function(){
       _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
       $.src="https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";z.t=+new Date;$.
       type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+
+          const candidateId = '{{ request.session.candidate_id}}';
+
+          if (candidateId) {
+              const full_name = '{{ request.session.full_name }}';
+              const  email ='{{ request.session.email }}';
+              const mobile_no = '{{ request.session.mobile_no }}';
+
+
+              console.log('request   ', full_name, email, mobile_no);
+              $zopim(function () {
+                  $zopim.livechat.set({
+                      language: 'en',
+                      name: full_name ? full_name : '',
+                      email: email ? email : '',
+                      phone: mobile_no ? mobile_no : ''
+                  });
+              });
+          }
       </script>
       <!--End of Zendesk Chat Script-->
     {% endblock zendesk %}

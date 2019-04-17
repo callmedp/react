@@ -1,0 +1,22 @@
+<html>
+<head>
+    <title>Redirecting to EPayLater for Payment</title>
+
+    <script type="text/javascript">
+        function redirect_for_payment_at_epaylater() {
+            var epaylater_form = document.forms.epaylater_form;
+            epaylater_form.submit();
+        }
+    </script>
+</head>
+
+<body onload="redirect_for_payment_at_epaylater();">
+    <h3>Redirecting to Payment gateway. Please do not Refresh or close this window.</h3>
+    <form action="{{ action }}" method="post" name="epaylater_form" style="display: none">
+        <input type="hidden" name="mcode" value="{{mcode}}"></input>
+        <input type="hidden" name="checksum" value="{{checksum}}"></input>
+        <input type="hidden" name="encdata" value="{{encdata}}"></input>
+    </form>
+</body>
+
+</html>

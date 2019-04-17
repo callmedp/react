@@ -94,6 +94,22 @@ $(document).ready(function($) {
         });
     
     });
+    $('#search-form').on( "click",()=>{
+      if($('.icon-logo').length){
+        if($('.searchbox').hasClass('searchbox-open')){
+          $('.icon-logo').css("width","0px")
+          $('#search-form').parent().css("width","90%")
+        }
+        else{
+          $('#search-form').parent().css({"width":"30%","transition":"all 0.3s"})
+          setTimeout(()=>{
+            $('.icon-logo').css({"width":"162px","transition":"all 0.3s"})
+          }, 100);
+          
+        }
+      }
+      
+    });
 
     
 });

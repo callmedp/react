@@ -6,7 +6,7 @@
         {{block.super}}
         <meta name="description" content="Pick up the Best Resume Services - Check out the Latest Resume Format or Templates - Online Professional Certification Courses">
         {% block canonical %}
-            <link rel="canonical" href="{{ request.build_absolute_uri }}">
+            <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
         {% endblock canonical %}
 
     {% endblock meta_html %}

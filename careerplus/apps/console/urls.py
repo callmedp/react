@@ -304,6 +304,10 @@ urlpatterns += [
         order_view.DomesticProfileUpdateQueueView.as_view(),
         name='queue-domesticprofileupdate'),
 
+    url(r'^queue/domesticprofileinitiated/$',
+        order_view.DomesticProfileInitiatedQueueView.as_view(),
+        name='queue-domesticprofileinitiated'),
+
     url(r'^queue/domesticprofileapproval/$',
         order_view.DomesticProfileApprovalQueue.as_view(),
         name='queue-domesticprofileapproval'),

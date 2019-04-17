@@ -27,8 +27,7 @@
   {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
 {% endblock title %}
 {% block canonical_url %}
-  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{request.get_full_path}}">
-  <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{request.get_full_path}}?type=amp">
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{request.path}}">
 {% endblock canonical_url %}
 
         {% block django_meta %}

@@ -1,0 +1,210 @@
+@import './variables/vars.scss';
+@import './variables/mixins.scss';
+
+form { 
+  margin: 0;
+  padding: 0;
+}
+
+input, select, textarea {outline:none;}
+label {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 400;
+  margin-bottom: 5px;
+  color: $txt1;
+}
+
+
+/* Text Input */
+input[type='text'] {
+  width:100%;
+  border: 1px solid $border1;
+  height: 45px;
+  @include border-radius(3px);
+  @extend %inner-shadow;
+  padding: 0 10px;
+  font-weight: 400;
+}
+
+.input-group {
+  @include flexbox();
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+  &--input-group-icon {
+    flex-direction: column;
+    flex: 0 1 45px;
+    background-color: $grey1;
+    align-items: center;
+    justify-content: center;
+    @include flexbox();
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
+  
+  input {
+    flex: 1;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}
+
+.Error {
+  position: relative;
+  flex: 1;
+  
+  .Error-message {
+    color: $red;
+    font-size: 1.2rem;
+    display: inline-block;
+    position: absolute;
+    bottom: -13px;
+    left: 0;
+  }
+}
+
+::-webkit-input-placeholder {color: $txt1;}
+:-moz-placeholder {color: $txt1;} /* FF 18 */
+::-moz-placeholder {color: $txt1; font-weight: 400;} /* FF 19+ */
+:-ms-input-placeholder {color: $txt1; font-weight: 400;}
+
+
+/* Radio Buttons */
+fieldset {
+  flex-grow: 1;
+  
+  margin: 10px;
+  color: $txt1;
+
+  &.custom {
+    flex: 0 0 47.5%;
+  }
+}
+
+input[type='radio'] {
+  /*appearance:none;*/
+  cursor:pointer;
+}
+
+input[type="radio"]:checked:after {
+
+}
+
+/* Dropdown Box */
+.styled-select {
+  position: relative;
+  border: 1px solid $border1;
+  height: 45px;
+  @include border-radius(3px);
+  @extend %inner-shadow;
+  padding: 0 10px;
+  font-weight: 400;  
+  display: block;
+}
+
+.styled-select:after {
+  content: '';
+  width: 10px;
+  height: 6px;
+  background: $sprite -472px 0;
+  display: block;
+  position: absolute;
+  right: 10px;
+  top: 20px; 
+  z-index: 999;
+}
+
+select {
+    appearance:none;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    background-color:transparent;
+    width:100%;
+    border: none;
+    height: 45px;
+    font-size: 1.2rem;
+
+    option {
+      font-size: 1.2rem;
+    }
+}
+
+/* Text Area */
+textarea {
+  width:100%;
+  border: 1px solid $border1;
+  @include border-radius(3px);
+  @extend %inner-shadow;
+  padding: 5px 10px;
+  font-weight: 400;
+}
+
+/* Checkbox */
+input[type='checkbox'] {
+  appearance:none;
+  cursor:pointer;
+}
+
+input[type='checkbox']:checked:after {
+  border-width:0 4px 4px 0;
+  content:"\00a0";
+  display:block;
+  height:1em; width:.5em;
+  margin-top:-.9em;
+  position:relative;
+  transform:rotate(45deg); 
+}
+
+
+/* Submit Button */
+input[type='submit'] {
+  
+}
+input[type='submit']:hover {
+  
+}
+
+.react-datepicker-wrapper {
+  display: block;
+  flex: 1;
+}
+.react-datepicker__input-container {
+  display: block ;
+}
+.css-d8oujb {
+  display: none;
+}
+.css-vj8t7z {
+  height: 45px;
+  min-height: auto !important;
+  border-color: $border1 !important;
+  @extend %inner-shadow;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+.css-1hwfws3 {
+  padding: 0 8px !important;
+}
+.css-1g6gooi {
+  margin: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+
+  input {
+    box-shadow: none !important;
+  }
+}
+.css-2o5izw {
+  border-color: $border1 !important;
+  box-shadow: inset 0 3px 8px 0 rgba(214,214,214,0.40) !important;
+  min-height: auto !important;
+  height: 45px;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+.css-15k3avv {
+  border: 1px solid #ebebeb !important;
+  box-shadow: inset 0 3px 8px 0 rgba(214,214,214,0.40) !important;
+  margin-top: 5px !important;
+  font-size: 12px !important;
+}

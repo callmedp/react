@@ -1,0 +1,264 @@
+@import './variables/vars.scss';
+@import './variables/mixins.scss';
+
+[class^="icon-"] {
+    text-indent: 200%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.icon-edit {
+    @include icon-inblock (15px, 15px, -76px -1px);
+}
+
+.icon-preview {
+    @include icon-inblock (15px, 22px, -107px -1px);
+}
+
+.icon-delete {
+    @include icon-inblock (14px, 18px, -312px -1px);
+}
+
+.icon-add {
+    @include icon-inblock (20px, 19px, -437px -40px);
+}
+
+.icon-info {
+    @include icon-inblock (27px, 20px, -423px -1px);
+}
+
+.icon-summary {
+    @include icon-inblock (27px, 25px, -267px -38px);
+}
+
+.icon-experience {
+    @include icon-inblock (27px, 19px, -309px -39px);
+}
+
+.icon-education {
+    @include icon-inblock (27px, 24px, -189px 0);
+}
+
+.icon-skills {
+    @include icon-inblock (27px, 25px, -232px -1px);
+}
+
+.icon-languages {
+    @include icon-inblock (27px, 23px, -69px -74px);
+}
+
+.icon-awards {
+    @include icon-inblock (27px, 25px, -154px -75px);
+}
+
+.icon-courses {
+    @include icon-inblock (27px, 23px, -234px -75px);
+}
+
+.icon-projects {
+    @include icon-inblock (27px, 25px, -320px -75px);
+}
+
+.icon-references {
+    @include icon-inblock (27px, 21px, -400px -75px);
+}
+
+.icon-info1 {
+    @include icon-inblock (20px, 20px, -273px -1px);
+}
+
+.icon-summary1 {
+    @include icon-inblock (19px, 25px, -355px -38px);
+}
+
+.icon-experience1 {
+    @include icon-inblock (21px, 19px, -397px -39px);
+}
+
+.icon-education1 {
+    @include icon-inblock (27px, 24px, -339px 0);
+}
+
+.icon-skills1 {
+    @include icon-inblock (25px, 25px, -382px -1px);
+}
+
+.icon-languages1 {
+    @include icon-inblock (26px, 23px, -111px -74px);
+}
+
+.icon-awards1 {
+    @include icon-inblock (21px, 25px, -194px -75px);
+}
+
+.icon-courses1 {
+    @include icon-inblock (21px, 23px, -277px -75px);
+}
+
+.icon-projects1 {
+    @include icon-inblock (21px, 25px, -362px -75px);
+}
+
+.icon-references1 {
+    @include icon-inblock (21px, 21px, -441px -75px);
+}
+
+.icon-plus {
+    @include icon-inblock (12px, 12px, -451px 0);
+}
+
+.icon-ascend {
+    @include icon-inblock (26px, 25px, 0 -75px);
+}
+
+.icon-descend {
+    @include icon-inblock (26px, 25px, -31px -75px);
+}
+
+.icon-change-theme {
+    @include icon-inblock (20px, 24px, -25px -107px);
+}
+
+.icon-change-font {
+    @include icon-inblock (20px, 20px, -79px -107px);
+}
+
+.icon-change-reorder {
+    @include icon-inblock (20px, 18px, -135px -107px);
+}
+
+.icon-zoon {
+    @include icon-inblock (24px, 24px, -201px -109px);
+}
+
+.icon-ribbon {
+    @include icon-inblock (142px, 35px, -233px -108px);
+}
+
+.icon-payment-done {
+    @include icon-inblock (70px, 88px, -1px -139px);
+}
+
+.icon-advantage1 {
+    @include icon-inblock (51px, 51px, -1px -243px);
+}
+
+.icon-advantage2 {
+    @include icon-inblock (56px, 56px, -76px -244px);
+}
+
+.icon-advantage3 {
+    @include icon-inblock (54px, 52px, -155px -244px);
+}
+
+.icon-advantage4 {
+    @include icon-inblock (40px, 53px, -236px -244px);
+}
+
+.icon-works1 {
+    @include icon-inblock (119px, 122px, -1px -359px);
+}
+
+.icon-works2 {
+    @include icon-inblock (113px, 115px, -129px -354px);
+}
+
+.icon-works3 {
+    @include icon-inblock (113px, 112px, -251px -354px);
+}
+
+.icon-features1 {
+    @include icon-inblock (39px, 47px, -362px -240px);
+}
+
+.icon-features2 {
+    @include icon-inblock (35px, 35px, -410px -240px);
+}
+
+.icon-features3 {
+    @include icon-inblock (34px, 45px, -459px -240px);
+}
+
+.icon-features4 {
+    @include icon-inblock (41px, 42px, 0 -306px);
+}
+
+.icon-features5 {
+    @include icon-inblock (38px, 40px, -52px -306px);
+}
+
+.icon-features6 {
+    @include icon-inblock (42px, 42px, -105px -306px);
+}
+
+.icon-close {
+    @include icon-inblock (10px, 10px, -412px -110px);
+}
+
+.icon-name {
+    @include icon-inblock (24px, 19px, -85px -139px);
+}
+
+.icon-surname {
+    @include icon-inblock (24px, 18px, -113px -139px);
+}
+
+.icon-company {
+    @include icon-inblock (24px, 18px, -143px -139px);
+}
+
+.icon-designation {
+    @include icon-inblock (24px, 18px, -170px -139px);
+}
+
+.icon-linkedin {
+    @include icon-inblock (24px, 22px, -149px -37px);
+}
+
+.icon-facebook {
+    @include icon-inblock (24px, 25px, -189px -39px);
+}
+
+.icon-mobile {
+    @include icon-inblock (24px, 19px, -225px -39px);
+}
+
+.icon-address {
+    @include icon-inblock (24px, 21px, -111px -40px);
+}
+
+.icon-email {
+    @include icon-inblock (24px, 14px, -67px -43px);
+}
+
+.icon-date {
+    @include icon-inblock (24px, 19px, -477px -74px);
+}
+
+.icon-language-gr {
+    @include icon-inblock (24px, 19px, -88px -165px);
+}
+
+.icon-skills-gr {
+    @include icon-inblock (24px, 20px, -198px -139px);
+}
+
+.icon-awards-gr {
+    @include icon-inblock (24px, 20px, -118px -165px);
+}
+
+.icon-courses-gr {
+    @include icon-inblock (24px, 19px, -144px -165px);
+}
+
+.icon-projects-gr {
+    @include icon-inblock (24px, 20px, -170px -165px);
+}
+
+.icon-refrences-gr {
+    @include icon-inblock (24px, 18px, -196px -166px);
+}
+
+.icon-blank {
+    @include icon-inblock (24px, 18px, -505px -483px);
+}

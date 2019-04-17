@@ -1,0 +1,30 @@
+@import '../../../../../../styles/variables/vars.scss';
+@import '../../../../../../styles/variables/mixins.scss';
+
+h2 {
+  margin: 0 10px !important;
+}
+
+.info-section {
+  flex: 1;
+  flex-direction: column;
+  margin: 20px;
+}
+
+.icon-edit__cursor {
+  cursor: pointer;
+}
+
+.zero-opacity {
+  opacity: 0;
+}
+
+.upper-cross {
+	position: relative;
+
+	.icon-close {
+		position: absolute;
+		right: 20px;
+		top: 0px;
+	}
+}

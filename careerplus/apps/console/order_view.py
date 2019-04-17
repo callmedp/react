@@ -1364,7 +1364,6 @@ class AllocatedQueueVeiw(ListView, PaginationMixin):
         # else:
         #     queryset = queryset.none()
 
-
         try:
             if self.query:
                 if self.sel_opt == 'id':
@@ -1597,8 +1596,9 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
             order__status__in=[1, 3],
             product__type_flow=5, no_process=False,
             oi_status__in=[5, 25, 61],
+            product__sub_type_flow__in=[501, 503],
             order__welcome_call_done=True).exclude(
-            wc_sub_cat__in=[64, 65]).exclude(product_id__in=settings.FEATURE_PROFILE_EXCLUDE)
+            wc_sub_cat__in=[64, 65])
         # queryset = queryset.exclude(oi_resume__isnull=True).exclude(oi_resume__exact='')
         user = self.request.user
 
@@ -1624,7 +1624,6 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
                 exclude_list.append(oi.pk)
 
         queryset = queryset.exclude(id__in=exclude_list)
-
         if user.is_superuser:
             pass
         elif user.has_perm('order.domestic_profile_update_assigner'):
@@ -1687,6 +1686,147 @@ class DomesticProfileUpdateQueueView(ListView, PaginationMixin):
 
         return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
 
+@Decorate(stop_browser_cache())
+@method_decorator(permission_required('order.can_show_domestic_profile_initiated_queue', login_url='/console/login/'), name='dispatch')
+class DomesticProfileInitiatedQueueView(ListView, PaginationMixin):
+    context_object_name = 'object_list'
+    template_name = 'console/order/domestic-profile-initiated-list.html'
+    model = OrderItem
+    http_method_names = [u'get', u'post']
+
+    def __init__(self):
+        self.page = 1
+        self.paginated_by = 20
+        self.query = ''
+        self.payment_date, self.modified = '', ''
+        self.sel_opt = 'number'
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '')
+        self.payment_date = request.GET.get('payment_date', '')
+        self.sel_opt = request.GET.get('rad_search','number')
+        self.modified = request.GET.get('modified', '')
+        self.status = request.GET.get('status', '')
+        return super(DomesticProfileInitiatedQueueView, self).get(request, args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(DomesticProfileInitiatedQueueView, self).get_context_data(**kwargs)
+        paginator = Paginator(context['object_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        var = self.sel_opt
+        alert = messages.get_messages(self.request)
+        initial = {
+            "payment_date": self.payment_date,
+            "modified": self.modified, }
+        filter_form = OIFilterForm(initial)
+        context.update({
+            "messages": alert,
+            "query": self.query,
+            "filter_form": filter_form,
+            var: 'checked',
+        })
+
+        return context
+
+    def get_queryset(self):
+        queryset = super(DomesticProfileInitiatedQueueView, self).get_queryset()
+        queryset = queryset.filter(
+            order__status__in=[1, 3],
+            product__type_flow=5, no_process=False,
+            oi_status__in=[28, 4],
+            product__sub_type_flow__in=[501, 503],
+            order__welcome_call_done=True).exclude(
+            wc_sub_cat__in=[64, 65])
+        # queryset = queryset.exclude(oi_resume__isnull=True).exclude(oi_resume__exact='')
+        user = self.request.user
+
+        q1 = queryset.filter(oi_status=61)
+        exclude_list = []
+        for oi in q1:
+            closed_ois = oi.order.orderitems.filter(product__type_flow=1, oi_status=4, no_process=False)
+            if closed_ois.exists():
+                last_oi_status = oi.oi_status
+                oi.oi_status = 5
+                oi.last_oi_status = last_oi_status
+                oi.oi_draft = closed_ois[0].oi_draft
+                oi.draft_counter += 1
+                oi.draft_added_on = timezone.now()
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=oi.last_oi_status,
+                    oi_draft=oi.oi_draft,
+                    draft_counter=oi.draft_counter,
+                    assigned_to=oi.assigned_to)
+            else:
+                exclude_list.append(oi.pk)
+
+        queryset = queryset.exclude(id__in=exclude_list)
+
+        if not user.is_superuser:
+            queryset = queryset.filter(assigned_to=user)
+
+        try:
+            if self.query:
+                if self.sel_opt == 'number':
+                    if self.query[:2] == 'cp' or self.query[:2] == 'CP':
+                        queryset = queryset.filter(order__number__iexact=self.query)
+                    else:
+                        queryset = queryset.none()
+                elif self.sel_opt == 'id':
+                        queryset = queryset.filter(id__iexact=self.query)
+                elif self.sel_opt == 'mobile':
+                    queryset = queryset.filter(order__mobile=self.query)
+                elif self.sel_opt == 'email':
+                    queryset = queryset.filter(order__email__iexact=self.query)
+                elif self.sel_opt == 'product':
+                    queryset = queryset.select_related('parent')
+                    queryset = queryset.filter(Q(product__name__icontains=self.query) |
+                                               Q(parent__isnull=False, parent__product__name__icontains=self.query))
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            pass
+
+        try:
+            if self.payment_date:
+                date_range = self.payment_date.split('-')
+                start_date = date_range[0].strip()
+                start_date = datetime.datetime.strptime(
+                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+                end_date = date_range[1].strip()
+                end_date = datetime.datetime.strptime(
+                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+                queryset = queryset.filter(
+                    order__payment_date__range=[start_date, end_date])
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            pass
+
+        try:
+            if self.modified:
+                date_range = self.modified.split('-')
+                start_date = date_range[0].strip()
+                start_date = datetime.datetime.strptime(
+                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+                end_date = date_range[1].strip()
+                end_date = datetime.datetime.strptime(
+                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+                queryset = queryset.filter(
+                    modified__range=[start_date, end_date])
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            pass
+        try:
+            if self.status:
+                queryset = queryset.filter(
+                    oi_status=int(self.status))
+        except Exception as e:
+            logging.getLogger('error_log').error("%s " % str(e))
+            pass
+
+        return queryset.select_related('order', 'product', 'assigned_to', 'assigned_by').order_by('-modified')
+
 
 @Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_domestic_profile_approval_queue', login_url='/console/login/'), name='dispatch')
@@ -1736,6 +1876,7 @@ class DomesticProfileApprovalQueue(ListView, PaginationMixin):
         queryset = super(DomesticProfileApprovalQueue, self).get_queryset()
         queryset = queryset.filter(
             order__status=1, product__type_flow=5,
+            product__sub_type_flow__in=[501,503],
             oi_status=23, no_process=False,
             order__welcome_call_done=True).exclude(
             wc_sub_cat__in=[64, 65])
@@ -2744,7 +2885,7 @@ class WhatsappListQueueView(ListView, PaginationMixin):
         query_filters_exclude = dict()
         queryset = super(WhatsappListQueueView, self).get_queryset()
         query_filters.update({'order__status__in': [1, 2, 3], 'product__type_flow': 5, 'no_process': False,
-          'product_id__in': settings.FEATURE_PROFILE_EXCLUDE, 'order__welcome_call_done': True})
+          'product__sub_type_flow': 502, 'order__welcome_call_done': True})
         query_filters_exclude.update({'wc_sub_cat__in': [64, 65]})
         user = self.request.user
         if user.is_superuser:

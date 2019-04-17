@@ -1,4 +1,4 @@
-import logging
+import logging, binascii, os, pickle
 import datetime
 import requests
 from decimal import Decimal
@@ -6,6 +6,7 @@ from decimal import Decimal
 from django.db.models import Sum, Count, Subquery, OuterRef, F
 from django.utils import timezone
 from django.conf import settings
+from django.http import JsonResponse
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -13,7 +14,7 @@ from rest_framework import status
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser, )
-from rest_framework.generics import ListAPIView,CreateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.authentication import SessionAuthentication
 from haystack import connections
 from haystack.query import SearchQuerySet
@@ -34,16 +35,21 @@ from order.tasks import (
     process_mailer,
     invoice_generation_order
 )
-from shop.models import Skill, DeliveryService
+from shop.models import Skill, DeliveryService, ShineProfileData
 
 from .serializers import (
     OrderListHistorySerializer,
     RecommendedProductSerializer,
     RecommendedProductSerializerSolr,
     MediaUploadSerializer,
-    ResumeBuilderProductSerializer)
-from shared.rest_addons.pagination import Learning_custom_pagination
+    ResumeBuilderProductSerializer,
+    ShineDataFlowDataSerializer)
+from shared.rest_addons.pagination import LearningCustomPagination
 
+from django_redis import get_redis_connection
+from shared.utils import ShineCandidate
+from linkedin.autologin import AutoLogin
+from users.mixins import RegistrationLoginApi
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
     authentication_classes = [OAuth2Authentication]
@@ -419,19 +425,19 @@ class EmailLTValueApiView(APIView):
             return Response(
                 {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
                 status=status.HTTP_400_BAD_REQUEST)
-        
+
         ltv_pks = list(Order.objects.filter(
             candidate_id=candidate_id,
-            status__in=[1,2,3]).values_list('pk', flat=True))
+            status__in=[1, 2, 3]).values_list('pk', flat=True))
         if ltv_pks:
             ltv_order_sum = Order.objects.filter(
                 pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
-            last_order = OrderItem.objects.select_related('order').filter(order__in = ltv_pks)\
+            last_order = OrderItem.objects.select_related('order').filter(order__in=ltv_pks) \
                 .exclude(oi_status=163).order_by('-order__payment_date').first()
             if last_order:
-                last_order =last_order.order.payment_date.strftime('%Y-%m-%d %H:%M:%S')
+                last_order = last_order.order.payment_date.strftime('%Y-%m-%d %H:%M:%S')
             else:
-                last_order=""
+                last_order = ""
 
             ltv = ltv_order_sum.get('ltv_price') if ltv_order_sum.get('ltv_price') else Decimal(0)
             rf_ois = list(OrderItem.objects.filter(
@@ -446,13 +452,13 @@ class EmailLTValueApiView(APIView):
         return Response(
             {"status": "SUCCESS", "ltv_price": str(ltv), "name": name, "last_order": str(last_order)},
             status=status.HTTP_200_OK)
-                            
 
 
 class OrderHistoryAPIView(ListAPIView):
     serializer_class = OrderListHistorySerializer
     authentication_classes = [OAuth2Authentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
+
     # permission_classes = []
 
     def get_queryset(self, *args, **kwargs):
@@ -547,7 +553,8 @@ class ValidateCouponApiView(APIView):
                             "msg": 'This code is not valid for your account.'},
                             status=status.HTTP_400_BAD_REQUEST)
 
-                    if coupon.user_limit is coupon.users.filter(redeemed_at__isnull=False).count():  # all coupons redeemed
+                    if coupon.user_limit is coupon.users.filter(
+                            redeemed_at__isnull=False).count():  # all coupons redeemed
                         return Response({
                             "status": "FAIL",
                             "msg": 'This code has already been used.'},
@@ -658,7 +665,7 @@ class RecommendedProductsApiView(ListAPIView):
     authentication_classes = []
     permission_classes = []
     serializer_class = RecommendedProductSerializerSolr
-    pagination_class = Learning_custom_pagination
+    pagination_class = LearningCustomPagination
 
     def get_queryset(self, *args, **kwargs):
         skills = self.request.GET.get('skills', [])
@@ -751,4 +758,106 @@ class ResumeBuilderProductView(ListAPIView):
 
     def get_queryset(self):
         type_flow = self.request.query_params.get('type_flow')
-        return Product.objects.filter(type_flow=type_flow,type_product=2).annotate(parent=F  ('siblingproduct__main')).values('id','parent','name')
+        return Product.objects.filter(type_flow=type_flow, type_product=2).annotate(
+            parent=F('siblingproduct__main')).values('id', 'parent', 'name')
+
+
+class ShineDataFlowDataApiView(ListAPIView):
+    permission_classes = []
+    authentication_classes = []
+    queryset = ShineProfileData.objects.all()
+    serializer_class = ShineDataFlowDataSerializer
+    pagination_class = None
+
+
+class ShineCandidateLoginAPIView(APIView):
+    """
+    Sample Input Data - <br><br>
+    {
+        "email":"sharma.animesh@hotmail.com",
+        "password":"1234",
+        "alt":"CwcWCBUDCwlIVk8hHwsZCBRIGw4VGk1SHgBJAklXS1RIAkEFSQBMUBkEGQMeAgRTSFdBUUxUSFNIVU9VTxoABwAH"
+    }
+    Constraints - <br><br>
+    Required - email/password or alt
+    """
+    serializer_class = None
+    authentication_classes = ()
+    permission_classes = ()
+    conn = get_redis_connection('token')
+
+    def set_user_in_cache(self, token, candidate_obj):
+        self.conn.set(candidate_obj.id, pickle.dumps(token))
+        self.conn.set(token, pickle.dumps(candidate_obj))
+
+    def generate_token(self):
+        return binascii.hexlify(os.urandom(20)).decode()
+
+    def get_or_create_token(self, candidate_obj):
+        existing_token = self.conn.get(candidate_obj.id)
+        token = pickle.loads(existing_token) if existing_token else self.generate_token()
+        self.set_user_in_cache(token, candidate_obj)
+        return token
+
+    def get_response_for_successful_login(self, candidate_id, login_response):
+        candidate_obj = ShineCandidate(**login_response)
+        candidate_obj.id = candidate_id
+        candidate_obj.candidate_id = candidate_id
+        token = self.get_or_create_token(candidate_obj)
+        data_to_send = {"token": token, "candidate_id": candidate_id, "candidate_profile": login_response}
+        return Response(data_to_send, status=status.HTTP_201_CREATED)
+
+    def _dispatch_via_autologin(self, alt):
+        try:
+            email, candidate_id, valid = AutoLogin().decode(alt)
+        except Exception as e:
+            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not valid or not candidate_id:
+            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+        except Exception as e:
+            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return self.get_response_for_successful_login(candidate_id, login_response)
+
+    def _dispatch_via_email_password(self, email, password):
+        login_data = {"email": email.strip(), "password": password}
+
+        try:
+            login_resp = RegistrationLoginApi.user_login(login_data)
+        except Exception as e:
+            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+        candidate_id = login_resp.get('candidate_id')
+        access_token = login_resp.get('access_token')
+
+        if not candidate_id and not access_token:
+            logging.getLogger('info_log').info("Login attempt failed - {}".format(login_resp))
+            return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+        except Exception as e:
+            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return self.get_response_for_successful_login(candidate_id, login_response)
+
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        password = request.data.get('password')
+        alt = request.data.get('alt')
+
+        if alt:
+            return self._dispatch_via_autologin(alt)
+
+        if email and password:
+            return self._dispatch_via_email_password(email, password)
+
+        return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)

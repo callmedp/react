@@ -527,7 +527,8 @@ class WriterInvoiceMixin(object):
                     combo_discount = 0
                     product_pk = oi.product.pk
                     resuem_writing_ois = oi.order.orderitems.filter(
-                        product__type_flow__in=[1, 12])
+                        product__type_flow__in=[1,12],assigned_to=user)
+                    
                     if product_pk in VISUAL_RESUME_PRODUCT_LIST and resuem_writing_ois.exists():
                         amount = VISUAL_RESUME
                         # combo discount calculation

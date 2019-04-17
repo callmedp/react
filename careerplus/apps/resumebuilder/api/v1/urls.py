@@ -1,6 +1,9 @@
+#python imports
+
+#django imports
 from django.conf.urls import url
 
-# internal imports
+# local imports
 from .views import (CandidateListCreateView, CandidateRetrieveUpdateView, SkillRetrieveUpdateView, SkillListCreateView,
                     CandidateShineProfileRetrieveUpdateView,
                     CandidateExperienceListCreateView, CandidateExperienceRetrieveUpdateView,
@@ -13,7 +16,10 @@ from .views import (CandidateListCreateView, CandidateRetrieveUpdateView, SkillR
                     CandidateSocialLinkRetrieveUpdateView, CandidateAchievementListCreateView,
                     CandidateAchievementRetrieveUpdateView, CandidateLanguageListCreateView,
                     CandidateLanguageRetrieveUpdateView,
-                    CandidateResumePreview)
+                    CandidateResumePreview,ProfileEntityBulkUpdateView)
+
+#inter app imports
+
 # third party imports
 from rest_framework import routers
 
@@ -45,6 +51,8 @@ urlpatterns = [
     url(r'^candidate/(?P<candidate_id>.+)/languages/(?P<pk>\d+)/$',
         CandidateLanguageRetrieveUpdateView.as_view()),
     url(r'^candidate/(?P<candidate_id>.+)/languages/$', CandidateLanguageListCreateView.as_view()),
-    url(r'^candidate/(?P<candidate_id>.+)/preview/(?P<pk>\d+)/$', CandidateResumePreview.as_view()),  # (?P<pk>\d+)/
+    url(r'^candidate/(?P<candidate_id>.+)/preview/(?P<pk>\d+)/$', CandidateResumePreview.as_view()),
+    url(r'^candidate/(?P<candidate_id>.+)/bulk-update/(?P<entity_slug>[a-z\-]+)/$', ProfileEntityBulkUpdateView.as_view()),
+
 
 ]

@@ -1,5 +1,15 @@
-from geolocation.models import Country
+#python imports
 import logging
+
+#django imports
+
+#local imports
+
+#inter app imports
+
+#third party imports
+from geolocation.models import Country
+
 
 def get_country_obj(country_code2):
     try:
@@ -34,3 +44,23 @@ def set_session_country(country_obj, request):
         request.session['country_code2'] = country_obj.code2
 
     set_session_currency(country_obj, request)
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+def get_client_device_type(request):
+    agent_data = request.META.get('HTTP_USER_AGENT','').lower()
+    device_type = "DESKTOP"
+    if "android" in agent_data or "ios" in agent_data:
+         device_type = "MOBILE"
+    return device_type
+
+
+
+    

@@ -8,6 +8,7 @@ from django.conf import settings
 from order.models import OrderItem, Order
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
+from emailers.utils import get_featured_profile_data_for_candidate
 from users.tasks import user_register
 from core.api_mixin import FeatureProfileUpdate
 from shop.choices import S_ATTR_DICT
@@ -23,9 +24,8 @@ def featured_updated():
     ''' featured profile cron for feature updation on shine.com'''
 
     featured_orderitems = OrderItem.objects.filter(
-        order__status__in=[1, 3], product__type_flow=5, oi_status=30).\
-        exclude(product_id__in=settings.FEATURE_PROFILE_EXCLUDE)
-
+        order__status__in=[1, 3], product__type_flow=5, oi_status=30,
+        product__sub_type_flow__in=[501, 503])
     featured_orderitems = featured_orderitems.select_related('order')
 
     featured_count = 0
@@ -43,16 +43,14 @@ def featured_updated():
 
         if candidate_id:
             try:
-                data = {}
-                data.update({
-                    "ShineCareerPlus": {"xfr": 1},
-                    # Temporary commented because of shine profile muddling
-                    # "is_email_verified": 1,
-                    # "is_cell_phone_verified": 1
-                })
+                data = get_featured_profile_data_for_candidate(
+                    candidate_id=candidate_id, curr_order_item=obj, feature=True)
                 flag = FeatureProfileUpdate().update_feature_profile(
                     candidate_id=candidate_id, data=data)
                 if flag:
+                    logging.getLogger('info_log').info(
+                        'Feature:- Data sent to shine for order item %s is %s' % (str(obj.id), str(data))
+                    )
                     featured_count += 1
                     last_oi_status = obj.oi_status
                     obj.oi_status = 28
@@ -70,7 +68,10 @@ def featured_updated():
 
                     # Send mail and sms with subject line as Your Profile updated
                     try:
-                        mail_type = "FEATURED_PROFILE_UPDATED"
+                        if obj.product.sub_type_flow == 501:
+                            mail_type = "FEATURED_PROFILE_UPDATED"
+                        elif obj.product.sub_type_flow == 503:
+                            mail_type = "PRIORITY_APPLICANT_MAIL"
                         email_sets = list(
                             obj.emailorderitemoperation_set.all().values_list(
                                 'email_oi_status', flat=True).distinct())
@@ -102,7 +103,7 @@ def unfeature():
     ''' featured profile cron for closing updated orderitem '''
 
     featured_orderitems = OrderItem.objects.filter(
-        order__status__in=[1, 3], product__type_flow=5, oi_status=28)
+        order__status__in=[1, 3], product__type_flow=5, oi_status=28, product__sub_type_flow__in=[501, 503])
     featured_orderitems = featured_orderitems.select_related('order')
 
     unfeature_count = 0
@@ -135,14 +136,14 @@ def unfeature():
         if candidate_id and delta_time < timezone.now():
             try:
                 data = {}
-                data.update({
-                    "ShineCareerPlus": {"xfr": 0},
-                    # "is_email_verified": 1,
-                    # "is_cell_phone_verified": 1
-                })
+                data = get_featured_profile_data_for_candidate(
+                    candidate_id=candidate_id, curr_order_item=obj, feature=False)
                 flag = FeatureProfileUpdate().update_feature_profile(
                     candidate_id=candidate_id, data=data)
                 if flag:
+                    logging.getLogger('info_log').info(
+                        'Unfeature:- Data sent to shine for order item %s is %s' % (str(obj.id), str(data))
+                    )
                     unfeature_count += 1
                     last_oi_status = obj.oi_status
                     obj.oi_status = 4

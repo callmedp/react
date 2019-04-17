@@ -16,176 +16,146 @@ class CandidateSerializer(serializers.ModelSerializer):
 
 
 class SkillSerializer(serializers.ModelSerializer):
-    cc_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
-        cc_id = self.initial_data.get('cc_id', '')
-        if not cc_id:
-            return candidate_id
-        candidate = Candidate.objects.filter(candidate_id=cc_id).first()
-
-        if not candidate:
-            return candidate_id
-
-        return candidate.id
+        if not self.instance:
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
+        return self.instance.candidate.id
 
     def create(self, validated_data):
-        validated_data.pop('cc_id', '')
         return super(SkillSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop('cc_id', '')
         return super(SkillSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = Skill
-        fields = ('id', 'candidate_id', 'cc_id', 'name', 'proficiency')
+        fields = ('id', 'candidate_id', 'name', 'proficiency', 'order')
 
 
 class CandidateExperienceSerializer(serializers.ModelSerializer):
-    cc_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
-        cc_id = self.initial_data.get('cc_id', '')
-        if not cc_id:
-            return candidate_id
-        candidate = Candidate.objects.filter(candidate_id=cc_id).first()
-
-        if not candidate:
-            return candidate_id
-
-        return candidate.id
+        if not self.instance:
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
+        return self.instance.candidate.id
 
     def create(self, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateExperienceSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateExperienceSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = CandidateExperience
         fields = (
-            'id', 'candidate_id', 'cc_id', 'job_profile', 'company_name', 'start_date', 'end_date', 'is_working',
-            'job_location', 'work_description')
+            'id', 'candidate_id', 'job_profile', 'company_name', 'start_date', 'end_date', 'is_working',
+            'job_location', 'work_description', 'order')
 
 
 class CandidateEducationSerializer(serializers.ModelSerializer):
-    cc_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
-        cc_id = self.initial_data.get('cc_id', '')
-        if not cc_id:
-            return candidate_id
-        candidate = Candidate.objects.filter(candidate_id=cc_id).first()
-
-        if not candidate:
-            return candidate_id
-
-        return candidate.id
+        if not self.instance:
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
+        return self.instance.candidate.id
 
     def create(self, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateEducationSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateEducationSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = CandidateEducation
         fields = (
-            'id', 'candidate_id', 'cc_id', 'specialization', 'institution_name', 'course_type', 'percentage_cgpa',
+            'id', 'candidate_id', 'specialization', 'institution_name', 'course_type', 'percentage_cgpa',
             'start_date',
-            'end_date', 'is_pursuing')
+            'end_date', 'is_pursuing', 'order')
 
 
 class CandidateCertificationSerializer(serializers.ModelSerializer):
-    cc_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
-        cc_id = self.initial_data.get('cc_id', '')
-        if not cc_id:
-            return candidate_id
-        candidate = Candidate.objects.filter(candidate_id=cc_id).first()
-
-        if not candidate:
-            return candidate_id
-
-        return candidate.id
+        if not self.instance:
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
+        return self.instance.candidate.id
 
     def create(self, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateCertificationSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateCertificationSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = CandidateCertification
-        fields = ('id', 'candidate_id', 'cc_id', 'name_of_certification', 'year_of_certification')
+        fields = ('id', 'candidate_id', 'name_of_certification', 'year_of_certification', 'order')
 
 
 class CandidateProjectSerializer(serializers.ModelSerializer):
-    cc_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
-        cc_id = self.initial_data.get('cc_id', '')
-        if not cc_id:
-            return candidate_id
-        candidate = Candidate.objects.filter(candidate_id=cc_id).first()
-
-        if not candidate:
-            return candidate_id
-
-        return candidate.id
+        if not self.instance:
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
+        return self.instance.candidate.id
 
     def create(self, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateProjectSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateProjectSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = CandidateProject
-        fields = ('id', 'candidate_id', 'cc_id', 'project_name', 'start_date', 'end_date', 'skills', 'description')
+        fields = ('id', 'candidate_id', 'project_name', 'start_date', 'end_date', 'skills', 'description', 'order')
 
 
 class CandidateReferenceSerializer(serializers.ModelSerializer):
-    cc_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
-        cc_id = self.initial_data.get('cc_id', '')
-        if not cc_id:
-            return candidate_id
-        candidate = Candidate.objects.filter(candidate_id=cc_id).first()
-
-        if not candidate:
-            return candidate_id
-
-        return candidate.id
+        if not self.instance:
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
+        return self.instance.candidate.id
 
     def create(self, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateReferenceSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateReferenceSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = CandidateReference
-        fields = ('id', 'candidate_id', 'cc_id', 'reference_name', 'about_candidate', 'reference_designation')
+        fields = ('id', 'candidate_id', 'reference_name', 'about_candidate', 'reference_designation', 'order')
 
 
 class CandidateSocialLinkSerializer(serializers.ModelSerializer):
@@ -195,56 +165,46 @@ class CandidateSocialLinkSerializer(serializers.ModelSerializer):
 
 
 class CandidateLanguageSerializer(serializers.ModelSerializer):
-    cc_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
-        cc_id = self.initial_data.get('cc_id', '')
-        if not cc_id:
-            return candidate_id
-        candidate = Candidate.objects.filter(candidate_id=cc_id).first()
-
-        if not candidate:
-            return candidate_id
-
-        return candidate.id
+        if not self.instance:
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
+        return self.instance.candidate.id
 
     def create(self, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateLanguageSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateLanguageSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = CandidateLanguage
-        fields = ('id', 'candidate_id', 'cc_id', 'proficiency', 'name')
+        fields = ('id', 'candidate_id', 'proficiency', 'name', 'order')
 
 
 class CandidateAchievementSerializer(serializers.ModelSerializer):
-    cc_id = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
 
     def validate_candidate_id(self, candidate_id):
-        cc_id = self.initial_data.get('cc_id', '')
-        if not cc_id:
-            return candidate_id
-        candidate = Candidate.objects.filter(candidate_id=cc_id).first()
-
-        if not candidate:
-            return candidate_id
-
-        return candidate.id
+        if not self.instance:
+            user_id = self.context['request'].user.id
+            candidate = Candidate.objects.filter(candidate_id=user_id).first()
+            if candidate is None:
+                raise serializers.ValidationError("User with given id does not exits.")
+            return candidate.id
+        return self.instance.candidate.id
 
     def create(self, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateAchievementSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop('cc_id', '')
         return super(CandidateAchievementSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = CandidateAchievement
-        fields = ('id', 'candidate_id', 'cc_id', 'title', 'date', 'summary')
+        fields = ('id', 'candidate_id', 'title', 'date', 'summary', 'order')

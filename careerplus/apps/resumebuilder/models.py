@@ -60,6 +60,7 @@ class Skill(AbstractAutoDate):
     name = models.CharField('Skill Name', max_length=100)
     proficiency = models.IntegerField('Proficiency', default=5)
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
+    order = models.IntegerField('Order', default=0)
 
     def __str__(self):
         return self.name
@@ -74,6 +75,7 @@ class CandidateExperience(models.Model):
     is_working = models.BooleanField('Present')
     job_location = models.CharField('Job Location', max_length=100)
     work_description = models.TextField('Job Description')
+    order = models.IntegerField('Order', default=0)
 
     def __str__(self):
         return self.company_name
@@ -89,6 +91,11 @@ class CandidateEducation(models.Model):
     start_date = models.DateField('Start Date', blank=True, null=True)
     end_date = models.DateField('End Date', blank=True, null=True)
     is_pursuing = models.BooleanField('Still Pursuing')
+    order = models.IntegerField('Order', default=0)
+
+    @property
+    def owner_id(self):
+        return self.candidate.candidate_id
 
     def __str__(self):
         return self.specialization
@@ -98,6 +105,7 @@ class CandidateCertification(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     name_of_certification = models.CharField('Certification Name', max_length=250)
     year_of_certification = models.IntegerField('Year of Certification')
+    order = models.IntegerField('Order', default=0)
 
     def __str__(self):
         return self.name_of_certification
@@ -111,6 +119,7 @@ class CandidateProject(models.Model):
     skills = models.ManyToManyField(Skill, verbose_name='List of Skills', null=True, blank=True)
     currently_working = models.BooleanField('Currently Working', default=False)
     description = models.TextField('Project Description')
+    order = models.IntegerField('Order', default=0)
 
     def __str__(self):
         return self.project_name
@@ -121,6 +130,7 @@ class CandidateReference(models.Model):
     reference_name = models.CharField('Reference Name', max_length=150)
     reference_designation = models.CharField('Reference Designation', max_length=150)
     about_candidate = models.TextField('About Candidate')
+    order = models.IntegerField('Order', default=0)
 
     def __str__(self):
         return self.reference_name
@@ -131,9 +141,11 @@ class CandidateSocialLink(models.Model):
     link_name = models.CharField('Link Name', max_length=10,
                                  choices=SOCIAL_LINKS)
     link = models.CharField('Link', max_length=200)
+    order = models.IntegerField('Order', default=0)
 
-    def __str__(self):
-        return self.link_name
+
+def __str__(self):
+    return self.link_name
 
 
 class CandidateAchievement(models.Model):
@@ -141,6 +153,7 @@ class CandidateAchievement(models.Model):
     title = models.CharField('Title', max_length=100)
     date = models.DateField('Date')
     summary = models.TextField('Summary')
+    order = models.IntegerField('Order', default=0)
 
     def __str__(self):
         return self.title
@@ -150,6 +163,11 @@ class CandidateLanguage(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     name = models.CharField('Language Name', max_length=100)
     proficiency = models.IntegerField('Proficiency', default=3)
+    order = models.IntegerField('Order', default=0)
+
+    @property
+    def owner_id(self):
+        return self.candidate.candidate_id
 
     def __str__(self):
         return self.name

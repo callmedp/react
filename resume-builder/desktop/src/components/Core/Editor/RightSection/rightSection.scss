@@ -1,0 +1,92 @@
+@import '../../../../styles/variables/vars.scss';
+@import '../../../../styles/variables/mixins.scss';
+
+.right-sidebar {
+	flex: 1;
+	background-color: rgb(255, 255, 255);
+  	@extend %shadow;
+  	margin: 0 0 0 20px;
+  	flex-direction: column;
+  	@include border-radius(4px);
+  	height: 570px;
+}
+
+.right-sidebar-scroll {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: 450px;
+}
+
+.right-sidebar-scroll-main {
+	display: block;
+	height: 570px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.head-section {
+	@include flexbox();
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	align-content: center;
+	border-bottom: 1px solid $grey2;
+	width: 100%;
+	flex-wrap: nowrap;
+}
+
+.pic-section {
+	flex: 0 1 180px;
+	flex-direction: column;
+
+	label {
+		width: 140px;
+		margin: 18px 25px 0 15px;
+	}
+
+	img {
+		cursor: pointer;
+		box-shadow: 0 5px 16px 0 rgba(190,187,187,0.50);
+	}
+
+	@media (max-width: 1190px) {
+		flex: 0 1 120px;
+	}
+}
+
+.addon-buttons {
+	margin-left: auto;
+
+	span {
+		vertical-align: middle;
+		cursor: pointer;
+	}
+}
+
+.add-section-heading {
+	font-size: 1.8rem;
+	font-weight: 400;
+	margin-left: 10px;
+}
+
+.accordion {
+    border: none !important;
+    border-radius: 2px !important;
+}
+.accordion__button {
+	padding: 0 0 20px 0 !important;
+	background: #fff !important;
+}
+
+.accordion__panel {
+	padding: 20px 0 !important;
+}
+
+.accordion__button:before {
+	display: none !important;
+}
+
+.accordion__item {
+	border-bottom: 1px solid #f4f4f4 !important;
+}
