@@ -631,26 +631,34 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
             raise Http404
         return obj
 
-    def is_order_valid_for_replacement(self, curr_order, order_id):
-        order_id = order_id.upper()
-        if 'CP' in order_id:
-            order = Order.objects.filter(number=order_id).first()
-        else:
-            if order_id.isdigit():
-                order = Order.objects.filter(id=order_id).first()
+    def is_order_valid_for_replacement(self, curr_order, order_ids, replacement_amount):
+        msg = None
+        for order_id in order_ids:
+            order_id = order_id.upper()
+            if 'CP' in order_id:
+                order = Order.objects.filter(number=order_id).first()
             else:
-                return (False, 'Please Enter correct Order id')
-        if not order:
-            return (False, 'Order Does Not Exist')
-        if curr_order.id == order.id:
-            return (False, 'Replacing order cannot be same as current order.')
-        elif order.status != 1:
-            return (False, 'Order is not Paid')
-        elif order.ordertxns.exists() and order.ordertxns.first().payment_mode !=1:
-            return (False, "Replacing Order is Not Paid by Cash")
-
-        current_order_price = curr_order.total_incl_tax
-        new_order_price = order.total_incl_tax
+                if order_id.isdigit():
+                    order = Order.objects.filter(id=order_id).first()
+                else:
+                    msg = (False, 'Please Enter correct Order id')
+                    break
+            if not order:
+                msg = (False, 'Order {} Does Not Exist'.format(order_id))
+                break
+            if curr_order.id == order.id:
+                msg = (False, 'Replacing Order {} cannot be same as current order.'.format(order_id))
+                break
+            elif order.status != 1:
+                msg = (False, 'Order {} is not Paid'.format(order_id))
+            elif order.ordertxns.exists() and order.ordertxns.first().payment_mode !=1:
+                msg = (False, "Replacing Order {} is Not Paid by Cash".format(order_id))
+                break
+        if msg:
+            return msg
+        order_ids = set([o.replace('CP', '') for o in order_ids])
+        new_order_price = sum(list(Order.objects.filter(id__in=order_ids).values_list('total_incl_tax', flat=True)))
+        current_order_price = replacement_amount
         difference = abs(current_order_price - new_order_price)
         percentage_difference = (difference * 100) / current_order_price
         if percentage_difference > 10:
@@ -678,7 +686,8 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
         sub_cat2_dict = dict(WC_SUB_CATEGORY2)
         sub_cat3_dict = dict(WC_SUB_CATEGORY3)
         wc_sub_cat2_dict = dict(WC_SUB_CAT2)
-
+        replace_order_ids = []
+        replacement_amount = 0
         order_items = InvoiceGenerate().get_order_item_list(
             order=self.object)
         wc_items = self.get_welcome_list(
@@ -756,7 +765,10 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
                             valid = False
                             error = 'Please Provide Replace Order Id'
                             break
-                        valid, error = self.is_order_valid_for_replacement(order, replace_order_id)
+                        replacement_amount += oi.selling_price
+                        replace_order_ids.append(replace_order_id.strip())
+                if valid:
+                    valid, error = self.is_order_valid_for_replacement(order, replace_order_ids, replacement_amount)
             elif cat == 23 and subcat in list(sub_cat3_dict.keys()):
                 for oi_data in wc_items:
                     oi = oi_data.get('oi')
