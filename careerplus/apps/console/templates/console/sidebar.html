@@ -379,6 +379,9 @@
             {% if perms.order.can_show_inbox_queue %}
                 <li><a href="{% url "console:queue-inbox" %}">Inbox</a></li>
             {% endif %}
+             {% if perms.order.can_show_replaced_order_queue %}
+                <li><a href="{% url "console:replaced-order" %}">Replaced Order</a></li>
+            {% endif %}
 
             {% if perms.order.can_show_approval_queue %}
                 <li><a href="{% url "console:queue-approval" %}">Approval</a></li>

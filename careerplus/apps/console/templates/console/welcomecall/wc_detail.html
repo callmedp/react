@@ -159,7 +159,7 @@
                     <th class="column-title">Sub-Category</th>
                     <th class="column-title">Status</th>
                     <th class="column-title">Sub Category</th>
-                    <th class="column-title" style="display:none" id="replacement_order_title">Replacement Order ID</th>
+                    <th class="column-title" id="replacement_order_title" style="display:none">Replacement Order ID</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -189,14 +189,14 @@
                           <td>{{oi.get_wc_status}}</td>
                           <td>
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <select class="form-control sub_cat_item" id="id-subcategory{{oi.pk}}" name="subcategory{{oi.pk}}" required>
+                              <select class="form-control sub_cat_item" id="id-subcategory{{oi.pk}}" data-target="replace_order_td{{oi.pk}}" name="subcategory{{oi.pk}}" required>
                                 <option value="">Select SubCategory</option>
                               </select>
                               <span class="error"></span>
 
                             </div>
                           </td>
-                          <td style="display:none" id="replace_order_td">
+                          <td style="display:none" id="replace_order_td{{oi.pk}}" class="replace_order_class">
                             <div class="col-md-9 col-sm-9 col-xs-12">
                               <input type="text" class="form-control" name="replacement_order_id{{oi.pk}}">
                             </div>
