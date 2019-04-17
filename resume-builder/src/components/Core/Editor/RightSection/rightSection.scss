@@ -69,3 +69,24 @@
 	font-weight: 400;
 	margin-left: 10px;
 }
+
+.accordion {
+    border: none !important;
+    border-radius: 2px !important;
+}
+.accordion__button {
+	padding: 0 0 20px 0 !important;
+	background: #fff !important;
+}
+
+.accordion__panel {
+	padding: 20px 0 !important;
+}
+
+.accordion__button:before {
+	display: none !important;
+}
+
+.accordion__item {
+	border-bottom: 1px solid #f4f4f4 !important;
+}
