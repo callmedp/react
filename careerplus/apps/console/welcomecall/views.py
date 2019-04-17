@@ -617,11 +617,14 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
         if 'CP' in order_id:
             order = Order.objects.filter(number=order_id).first()
         else:
-            order = Order.objects.filter(id=order_id).first()
-        if curr_order.id == order.id:
-            return (False, 'Replacing order cannot be same as current order.')
+            if order.isdigit():
+                order = Order.objects.filter(id=order_id).first()
+            else:
+                return (False, 'Please Enter correct Order id')
         if not order:
             return (False, 'Order Does Not Exist')
+        if curr_order.id == order.id:
+            return (False, 'Replacing order cannot be same as current order.')
         elif order.status != 1:
             return (False, 'Order is not Paid')
         elif order.ordertxns.exists() and order.ordertxns.first().payment_mode !=1:
