@@ -1,17 +1,17 @@
 import BaseApiService from '../../../services/BaseApiService'
 
-const fetchUserAward = (candidateId) => {
-
-    const url = `candidate/${candidateId}/achievements/`;
-    return BaseApiService.get(`http://127.0.0.1:8000/api/v1/resume/${url}`);
-};
-
 
 const createUserAward = (data, candidateId, userAwardId = '') => {
     delete data['id'];
 
     const url = `candidate/${candidateId}/achievements/`;
     return BaseApiService.post(`http://127.0.0.1:8000/api/v1/resume/${url}`, data);
+};
+
+const fetchUserAward = (candidateId) => {
+
+    const url = `candidate/${candidateId}/achievements/`;
+    return BaseApiService.get(`http://127.0.0.1:8000/api/v1/resume/${url}`);
 };
 
 const updateUserAward = (data, candidateId, userAwardId) => {
@@ -21,8 +21,28 @@ const updateUserAward = (data, candidateId, userAwardId) => {
 };
 
 
+const deleteUserAward = (candidateId, awardId) => {
+
+    const url = `candidate/${candidateId}/achievements/${awardId}/`;
+
+    return BaseApiService.deleteMethod(`http://127.0.0.1:8000/api/v1/resume/${url}`);
+
+};
+
+
+const bulkUpdateUserAward = (data, candidateId) => {
+
+    const url = `candidate/${candidateId}/bulk-update/award/`;
+    return BaseApiService.post(`http://127.0.0.1:8000/api/v1/resume/${url}`,data);
+
+
+}
+
+
 export const Api = {
     fetchUserAward,
     updateUserAward,
-    createUserAward
+    createUserAward,
+    deleteUserAward,
+    bulkUpdateUserAward
 }

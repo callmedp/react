@@ -96,7 +96,7 @@ class PersonalInfo extends Component {
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <ul className="form">
                         <li className="form__group">
-                            <label className="form__label" for="first_name">First Name</label>
+                            <label className="form__label" htmlFor="first_name">First Name</label>
                             <div className="input-group">
                                 <div className="input-group__prepend">
                                     <span className="input-group__text">
@@ -109,7 +109,7 @@ class PersonalInfo extends Component {
                         </li>
 
                         <li className="form__group">
-                            <label className="form__label" for="last_name">Last Name</label>
+                            <label className="form__label" htmlFor="last_name">Last Name</label>
                             <div className="input-group">
                                 <div className="input-group__prepend">
                                     <span className="input-group__text">
@@ -122,7 +122,7 @@ class PersonalInfo extends Component {
                         </li>
 
                         <li className="form__group">
-                            <label className="form__label" for="gender">Gender</label>
+                            <label className="form__label" htmlFor="gender">Gender</label>
                             <div className="input-group">
                                 <div className="input-group__prepend">
                                     <span className="input-group__text">
@@ -146,7 +146,7 @@ class PersonalInfo extends Component {
                         </li>
                         
                         <li className="form__group">
-                            <label className="form__label" for="date_of_birth">Date Of Birth</label>
+                            <label className="form__label" htmlFor="date_of_birth">Date Of Birth</label>
                             <div className="input-group">
                                 <div className="input-group__prepend">
                                     <span className="input-group__text">
@@ -159,7 +159,7 @@ class PersonalInfo extends Component {
                         </li>
                         
                         <li className="form__group">
-                            <label className="form__label" for="number">Mobile</label>
+                            <label className="form__label" htmlFor="number">Mobile</label>
                             <div className="input-group">
                                 <div className="input-group__prepend">
                                     <span className="input-group__text">
@@ -172,7 +172,7 @@ class PersonalInfo extends Component {
                         </li>
 
                         <li className="form__group">
-                            <label className="form__label" for="email">Email</label>
+                            <label className="form__label" htmlFor="email">Email</label>
                             <div className="input-group">
                                 <div className="input-group__prepend">
                                     <span className="input-group__text">
@@ -185,7 +185,7 @@ class PersonalInfo extends Component {
                         </li>
 
                         <li className="form__group">
-                            <label className="form__label" for="location">Address</label>
+                            <label className="form__label" htmlFor="location">Address</label>
                             <div className="input-group">
                                 <div className="input-group__prepend">
                                     <span className="input-group__text">
@@ -199,7 +199,7 @@ class PersonalInfo extends Component {
 
 
                         <li className="form__group">
-                            <label className="form__label" for="extracurricular">Interest</label>
+                            <label className="form__label" htmlFor="extracurricular">Interest</label>
                             <div className="input-group">
                                 <div className="input-group__prepend">
                                     <span className="input-group__text">

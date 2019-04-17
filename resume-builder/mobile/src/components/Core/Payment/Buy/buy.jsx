@@ -80,7 +80,7 @@ class Buy extends Component {
                                 <input className="buy__item--input form__radio-input" type="radio" id="your-resume" name="product-1"
                                     checked={this.state.checked === 'product1' ? true : false}
                                     onChange={this.handleOnChange.bind(this, 'product1')}></input>
-                                <label  className="buy__item--label form__radio-label" for="your-resume">
+                                <label  className="buy__item--label form__radio-label" htmlFor="your-resume">
                                     <span className="form__radio-button"></span>
                                     Buy your <br />customised resume
                                     <strong>Rs. 999/-</strong>
@@ -101,7 +101,7 @@ class Buy extends Component {
                                 <input className="buy__item--input form__radio-input" type="radio" id="all-resumes" name="product2"
                                                        checked={this.state.checked === 'product2' ? true : false}
                                                        onChange={this.handleOnChange.bind(this, 'product2')}></input>
-                                <label  className="buy__item--label form__radio-label" for="all-resumes">
+                                <label  className="buy__item--label form__radio-label" htmlFor="all-resumes">
                                     <span className="form__radio-button"></span>
                                     Buy all 6 customised resumes
                                     <div className="buy__item--price">

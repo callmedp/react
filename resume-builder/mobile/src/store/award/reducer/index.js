@@ -1,11 +1,7 @@
-import {SAVE_USER_AWARD} from "../actions/actionTypes";
+import {SAVE_USER_AWARD, REMOVE_AWARD} from "../actions/actionTypes";
 
 const initialState = {
-    "candidate_id": '',
-    "id": '',
-    "title": '',
-    "date": '',
-    "summary": '',
+    list: []
 };
 
 
@@ -17,6 +13,14 @@ export const awardReducer = (state = initialState, action) => {
                 ...state,
                 ...action.data
             };
+        }
+        case REMOVE_AWARD: {
+            return {
+                ...state,
+                ...{
+                    list: state['list'].filter(item => item.id !== action.id)
+                }
+            }
         }
         default: {
             return state;

@@ -38,7 +38,7 @@ class Summary extends Component {
                     <ul className="form">
                     
                         <li className="form__group">
-                            <label className="form__label" for="extra_info">Summary</label>
+                            <label className="form__label" htmlFor="extra_info">Summary</label>
                             <Field component={renderTextArea} type={"textarea"} name="extra_info"
                                 className="form__input h-300" value={extra_info}
                                 aria-label="extra_info" id="extra_info"/>

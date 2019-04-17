@@ -27,12 +27,6 @@ class SkillSerializer(serializers.ModelSerializer):
             return candidate.id
         return self.instance.candidate.id
 
-    def create(self, validated_data):
-        return super(SkillSerializer, self).create(validated_data)
-
-    def update(self, instance, validated_data):
-        return super(SkillSerializer, self).update(instance, validated_data)
-
     class Meta:
         model = Skill
         fields = ('id', 'candidate_id', 'name', 'proficiency', 'order')

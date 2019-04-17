@@ -1,15 +1,7 @@
-import {SAVE_USER_EXPERIENCE} from "../actions/actionTypes";
+import {SAVE_USER_EXPERIENCE, REMOVE_EXPERIENCE} from "../actions/actionTypes";
 
 const initialState = {
-    candidate_id: '',
-    id: '',
-    job_profile: '',
-    company_name: '',
-    start_date: '',
-    end_date: '',
-    is_working: false,
-    job_location: '',
-    work_description: '',
+    list: []
 };
 
 
@@ -21,6 +13,14 @@ export const experienceReducer = (state = initialState, action) => {
                 ...state,
                 ...action.data
             };
+        }
+        case REMOVE_EXPERIENCE: {
+            return {
+                ...state,
+                ...{
+                    list: state['list'].filter(item => item.id !== action.id)
+                }
+            }
         }
         default: {
             return state;

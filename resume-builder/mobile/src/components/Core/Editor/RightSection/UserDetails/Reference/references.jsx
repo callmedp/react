@@ -48,7 +48,7 @@ class References extends Component {
 
                         <ul className="form pb-0">
                             <li className="form__group">
-                                <label className="form__label" for="reference_name">Reference name</label>
+                                <label className="form__label" htmlFor="reference_name">Reference name</label>
                                 <div className="input-group">
                                     <div className="input-group__prepend">
                                     <span className="input-group__text">
@@ -61,7 +61,7 @@ class References extends Component {
                             </li>
                             
                             <li className="form__group">
-                                <label className="form__label" for="reference_designation">Designation</label>
+                                <label className="form__label" htmlFor="reference_designation">Designation</label>
                                 <div className="input-group">
                                     <div className="input-group__prepend">
                                     <span className="input-group__text">
@@ -74,7 +74,7 @@ class References extends Component {
                             </li>
 
                             <li className="form__group">
-                                <label className="form__label" for="about_candidate">Description</label>
+                                <label className="form__label" htmlFor="about_candidate">Description</label>
                                 <Field component={renderTextArea} rows="3" type={"textarea"} name="about_candidate"
                                     className="form__input" aria-label="about_candidate" id="about_candidate"/>
                             </li>

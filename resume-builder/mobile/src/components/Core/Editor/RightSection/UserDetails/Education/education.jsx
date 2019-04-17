@@ -52,7 +52,7 @@ class Education extends Component {
 
                         <ul className="form pb-0">
                             <li className="form__group">
-                                <label className="form__label" for="institution_name">Institution Name </label>
+                                <label className="form__label" htmlFor="institution_name">Institution Name </label>
                                 <div className="input-group">
                                     <div className="input-group__prepend">
                                         <span className="input-group__text">
@@ -65,7 +65,7 @@ class Education extends Component {
                             </li>
 
                             <li className="form__group">
-                                <label className="form__label" for="specialization">Specialization</label>
+                                <label className="form__label" htmlFor="specialization">Specialization</label>
                                 <div className="input-group">
                                     <div className="input-group__prepend">
                                         <span className="input-group__text">
@@ -78,7 +78,7 @@ class Education extends Component {
                             </li>
 
                             <li className="form__group">
-                                <label className="form__label" for="start_date">Date from</label>
+                                <label className="form__label" htmlFor="start_date">Date from</label>
                                 <div className="input-group">
                                     <div className="input-group__prepend">
                                         <span className="input-group__text">
@@ -91,7 +91,7 @@ class Education extends Component {
                             </li>
 
                             <li className="form__group">
-                                <label className="form__label" for="end_date">Date to</label>
+                                <label className="form__label" htmlFor="end_date">Date to</label>
                                 <div className="input-group">
                                     <div className="input-group__prepend">
                                         <span className="input-group__text">
@@ -105,14 +105,14 @@ class Education extends Component {
 
                             <li className="form__radio-group d-flex justify-content-end fs-14">
                                 <input class="form__radio-input" type="radio" name="tillToday" id="tillToday" value="option2" />
-                                <label class="form__radio-label" for="tillToday">
+                                <label class="form__radio-label" htmlFor="tillToday">
                                     <span className="form__radio-button"></span>
                                     Till today
                             </label>
                             </li>
 
                             <li className="form__group">
-                                <label className="form__label" for="course_type">Course Type</label>
+                                <label className="form__label" htmlFor="course_type">Course Type</label>
                                 <div className="input-group">
                                     <div className="input-group__prepend">
                                         <span className="input-group__text">
@@ -130,7 +130,7 @@ class Education extends Component {
                             </li>
 
                             <li className="form__group">
-                                <label className="form__label" for="percentage_cgpa">Percentage/CGPA</label>
+                                <label className="form__label" htmlFor="percentage_cgpa">Percentage/CGPA</label>
                                 <div className="input-group">
                                     <div className="input-group__prepend">
                                         <span className="input-group__text">

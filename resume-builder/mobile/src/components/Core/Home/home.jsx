@@ -247,7 +247,7 @@ class Home extends Component {
                         <ul className="line-form p-0 mt-10">
                             <li className="line-form__group">
                                 <input type="text" id="name" className="line-form__input" placeholder="Full name" />
-                                <label for="name" className="line-form__label">Full name</label>
+                                <label htmlFor="name" className="line-form__label">Full name</label>
                             </li>
 
                             <li>
@@ -262,14 +262,14 @@ class Home extends Component {
 
                                     <li className="line-form__group number">
                                         <input type="text" id="name" className="line-form__input" placeholder="Mobile" />
-                                        <label for="name" className="line-form__label">Mobile</label>
+                                        <label htmlFor="name" className="line-form__label">Mobile</label>
                                     </li>
                                 </ul>
                             </li>
 
                             <li className="line-form__group">
                                 <input type="text" id="name" className="line-form__input" placeholder="Message" />
-                                <label for="name" className="line-form__label">Message</label>
+                                <label htmlFor="name" className="line-form__label">Message</label>
                             </li>
 
                             <li className="d-flex justify-content-center">

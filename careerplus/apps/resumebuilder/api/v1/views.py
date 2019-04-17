@@ -70,11 +70,10 @@ class SkillListCreateView(ListCreateAPIView):
 class SkillRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
-    serializer_class = SkillSerializer
-
-    def get_queryset(self):
-        skill_id = int(self.kwargs.get('pk'))
-        return Skill.objects.filter(id=skill_id)
+    serializer_class = SkillSerializer 
+    queryset = Skill.objects.all()
+    lookup_field = "id"
+    lookup_url_kwarg = "pk"
 
 
 class CandidateExperienceListCreateView(ListCreateAPIView):

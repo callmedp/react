@@ -40,42 +40,42 @@ export default class Preview extends Component {
                                     <ul className="resume-color-theme">
                                         <li className="resume-color-theme__item">
                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="green" value="green" />
-                                            <label for="green" className="resume-color-theme__item__label">
+                                            <label htmlFor="green" className="resume-color-theme__item__label">
                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--green"></span>
                                             </label>
                                         </li>
 
                                         <li className="resume-color-theme__item">
                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="blue" value="blue" />
-                                            <label for="blue" className="resume-color-theme__item__label">
+                                            <label htmlFor="blue" className="resume-color-theme__item__label">
                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--blue"></span>
                                             </label>
                                         </li>
                                         
                                         <li className="resume-color-theme__item">
                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="red" value="red"/>
-                                            <label for="red" className="resume-color-theme__item__label">
+                                            <label htmlFor="red" className="resume-color-theme__item__label">
                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--red"></span>
                                             </label>
                                         </li>
                                         
                                         <li className="resume-color-theme__item">
                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="black" value="black" />
-                                            <label for="black" className="resume-color-theme__item__label">
+                                            <label htmlFor="black" className="resume-color-theme__item__label">
                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--black"></span>
                                             </label>
                                         </li>
                                         
                                         <li className="resume-color-theme__item">
                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="brown" value="brown"/>
-                                            <label for="brown" className="resume-color-theme__item__label">
+                                            <label htmlFor="brown" className="resume-color-theme__item__label">
                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--brown"></span>
                                             </label>
                                         </li>
                                         
                                         <li className="resume-color-theme__item">
                                             <input className="resume-color-theme__item--input" type="radio" name="radio1" id="violet" value="violet" />
-                                            <label for="violet" className="resume-color-theme__item__label">
+                                            <label htmlFor="violet" className="resume-color-theme__item__label">
                                                 <span className="resume-color-theme__item__theme resume-color-theme__item--violet"></span>
                                             </label>
                                         </li>

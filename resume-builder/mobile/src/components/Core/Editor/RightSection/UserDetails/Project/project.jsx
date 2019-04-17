@@ -52,7 +52,7 @@ class Project extends Component {
 
                         <ul className="form pb-0">
                             <li className="form__group">
-                                <label className="form__label" for="project_name">Project name </label>
+                                <label className="form__label" htmlFor="project_name">Project name </label>
                                 <div className="input-group">
                                     <div className="input-group__prepend">
                                     <span className="input-group__text">
@@ -65,7 +65,7 @@ class Project extends Component {
                             </li>
                             
                             <li className="form__group">
-                                <label className="form__label" for="start_date">Date from</label>
+                                <label className="form__label" htmlFor="start_date">Date from</label>
                                 <div className="input-group">
                                     <div className="input-group__prepend">
                                     <span className="input-group__text">
@@ -78,7 +78,7 @@ class Project extends Component {
                             </li>
                             
                             <li className="form__group">
-                                <label className="form__label" for="end_date">Date to</label>
+                                <label className="form__label" htmlFor="end_date">Date to</label>
                                 <div className="input-group">
                                     <div className="input-group__prepend">
                                     <span className="input-group__text">
@@ -94,14 +94,14 @@ class Project extends Component {
                             <li className="form__radio-group d-flex justify-content-end fs-14">
                                 <Field type="radio" name="currently_working" component="input" id="currently_working"
                                     className="form__radio-input" value={project.currently_working}/>
-                                <label class="form__radio-label" for="currently_working">
+                                <label class="form__radio-label" htmlFor="currently_working">
                                     <span className="form__radio-button"></span>
                                     Till today
                                 </label>
                             </li>
 
                             <li className="form__group">
-                                <label className="form__label" for="description">Description</label>
+                                <label className="form__label" htmlFor="description">Description</label>
                                 <div className="input-group">
                                     <div className="input-group__prepend">
                                         <span className="input-group__text">

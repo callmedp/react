@@ -46,6 +46,10 @@ class CandidateProfile(AbstractAutoDate):
     extracurricular = models.CharField('Extra Curricular', max_length=200, blank=True, null=True)
     extra_info = models.TextField('Extra Information', blank=True, null=True)
 
+    @property
+    def owner_id(self):
+        return self.candidate.candidate_id
+
     class Meta:
         abstract = True
 
@@ -62,6 +66,10 @@ class Skill(AbstractAutoDate):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     order = models.IntegerField('Order', default=0)
 
+    @property
+    def owner_id(self):
+        return self.candidate.candidate_id
+
     def __str__(self):
         return self.name
 
@@ -76,6 +84,10 @@ class CandidateExperience(models.Model):
     job_location = models.CharField('Job Location', max_length=100)
     work_description = models.TextField('Job Description')
     order = models.IntegerField('Order', default=0)
+
+    @property
+    def owner_id(self):
+        return self.candidate.candidate_id
 
     def __str__(self):
         return self.company_name
@@ -107,6 +119,10 @@ class CandidateCertification(models.Model):
     year_of_certification = models.IntegerField('Year of Certification')
     order = models.IntegerField('Order', default=0)
 
+    @property
+    def owner_id(self):
+        return self.candidate.candidate_id
+
     def __str__(self):
         return self.name_of_certification
 
@@ -121,6 +137,10 @@ class CandidateProject(models.Model):
     description = models.TextField('Project Description')
     order = models.IntegerField('Order', default=0)
 
+    @property
+    def owner_id(self):
+        return self.candidate.candidate_id
+
     def __str__(self):
         return self.project_name
 
@@ -131,6 +151,10 @@ class CandidateReference(models.Model):
     reference_designation = models.CharField('Reference Designation', max_length=150)
     about_candidate = models.TextField('About Candidate')
     order = models.IntegerField('Order', default=0)
+
+    @property
+    def owner_id(self):
+        return self.candidate.candidate_id
 
     def __str__(self):
         return self.reference_name
@@ -144,8 +168,12 @@ class CandidateSocialLink(models.Model):
     order = models.IntegerField('Order', default=0)
 
 
-def __str__(self):
-    return self.link_name
+    @property
+    def owner_id(self):
+        return self.candidate.candidate_id
+
+    def __str__(self):
+        return self.link_name
 
 
 class CandidateAchievement(models.Model):
@@ -155,6 +183,10 @@ class CandidateAchievement(models.Model):
     summary = models.TextField('Summary')
     order = models.IntegerField('Order', default=0)
 
+    @property
+    def owner_id(self):
+        return self.candidate.candidate_id
+        
     def __str__(self):
         return self.title
 

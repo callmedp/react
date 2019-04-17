@@ -1,4 +1,4 @@
-import {FETCH_USER_AWARD, UPDATE_USER_AWARD} from './actionTypes'
+import {FETCH_USER_AWARD, UPDATE_USER_AWARD, DELETE_USER_AWARD, BULK_UPDTATE_USER_AWARD} from './actionTypes'
 
 
 export const fetchUserAward = () => {
@@ -9,6 +9,20 @@ export const fetchUserAward = () => {
 export const updateUserAward = (payload) => {
     return {
         type: UPDATE_USER_AWARD,
+        payload
+    }
+}
+
+export const deleteAward = (languageId) => {
+    return {
+        type: DELETE_USER_AWARD,
+        languageId
+    }
+}
+
+export const bulkUpdateUserAward = (payload) => {
+    return {
+        type: BULK_UPDTATE_USER_AWARD,
         payload
     }
 }

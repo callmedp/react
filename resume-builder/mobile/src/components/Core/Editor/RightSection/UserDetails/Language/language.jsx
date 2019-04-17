@@ -52,13 +52,13 @@ class Language extends Component {
 
                         <ul className="form pb-0">
                             <li className="form__group">
-                                <label className="form__label" for="name">Language name</label>
+                                <label className="form__label" htmlFor="name">Language name</label>
                                 <Field component={renderField} validate={required} type={"text"} name="name"
                                         className="form__input" aria-label="name" id="name"/>
                             </li>
                             
                             <li className="form__group">
-                                <label className="form__label" for="proficiency">Skill rating (out of 10)</label>
+                                <label className="form__label" htmlFor="proficiency">Skill rating (out of 10)</label>
                                 <Field name="proficiency" id="proficiency"
                                            component={renderSelect}
                                            className="form__select"

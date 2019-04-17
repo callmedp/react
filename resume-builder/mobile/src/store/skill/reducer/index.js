@@ -1,10 +1,7 @@
-import {SAVE_USER_SKILL} from "../actions/actionTypes";
+import {SAVE_USER_SKILL, REMOVE_SKILL} from "../actions/actionTypes";
 
 const initialState = {
-    "id": '',
-    "candidate_id": '',
-    "name": '',
-    "proficiency": ''
+    list: []
 };
 
 
@@ -14,6 +11,14 @@ export const skillReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.data
+            }
+        }
+        case REMOVE_SKILL: {
+            return {
+                ...state,
+                ...{
+                    list: state['list'].filter(item => item.id !== action.id)
+                }
             }
         }
 

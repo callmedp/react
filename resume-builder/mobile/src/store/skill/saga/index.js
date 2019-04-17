@@ -1,23 +1,35 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call, select} from "redux-saga/effects";
+import {takeLatest, put, call} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
+import {proficiencyList} from "../../../Utils/proficiencyList";
 
 
 function* fetchUserSkill(action) {
     try {
-        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
+        const candidateId = localStorage.getItem('candidateId') || '';
 
         const result = yield call(Api.fetchUserSkill, candidateId);
         if (result['error']) {
             console.log('error');
         }
         const {data: {results}} = result;
-
-        yield put({type: Actions.SAVE_USER_SKILL, data: results[0]})
+        let data = {list: results};
+        data = {
+            ...data,
+            ...{
+                list: data['list'].map(el => {
+                    return {
+                        ...el,
+                        proficiency: proficiencyList[el['proficiency'].toString()]
+                    }
+                })
+            }
+        }
+        yield put({type: Actions.SAVE_USER_SKILL, data: data})
     } catch (e) {
         console.log(e);
     }
@@ -29,9 +41,8 @@ function* updateUserSkill(action) {
         let {payload: {userSkill, resolve, reject}} = action;
 
 
-        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
+        const candidateId = localStorage.getItem('candidateId') || '';
 
-        userSkill['cc_id'] = candidateId;
         const {id} = userSkill;
 
         const result = yield call(id ? Api.updateUserSkill : Api.createUserSkill, userSkill, candidateId, id);
@@ -49,7 +60,53 @@ function* updateUserSkill(action) {
 }
 
 
+function* bulkSaveUserSkill(action) {
+    try {
+        let {payload: {list}} = action;
+
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+
+        const result = yield call(Api.bulkSaveUserSkill, list, candidateId);
+
+        if (result['error']) {
+            console.log(result['error']);
+        }
+
+        console.log('---', result);
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+
+function* deleteUserSkill(action) {
+    try {
+
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        const {skillId} = action;
+
+        const result = yield call(Api.deleteUserSkill, candidateId, skillId);
+
+
+        if (result['error']) {
+            console.log(result['error'])
+        }
+        // yield call(fetchUserSkill)
+        yield put({type: Actions.REMOVE_SKILL, id: skillId});
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
+
+
 export default function* watchSkill() {
-    yield takeLatest(Actions.FETCH_USER_SKILL, fetchUserSkill)
-    yield takeLatest(Actions.UPDATE_USER_SKILL, updateUserSkill)
+    yield takeLatest(Actions.FETCH_USER_SKILL, fetchUserSkill);
+    yield takeLatest(Actions.UPDATE_USER_SKILL, updateUserSkill);
+    yield takeLatest(Actions.DELETE_USER_SKILL, deleteUserSkill);
+    yield takeLatest(Actions.BULK_SAVE_USER_SKILL, bulkSaveUserSkill);
 }

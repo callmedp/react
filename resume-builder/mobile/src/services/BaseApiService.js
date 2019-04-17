@@ -1,5 +1,6 @@
 const defaultHeaders = {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "Authorization":"c11c438d7be2635c16ccc5b2a1de48950399962c"
 }
 
 // todo make seperate function for fetch request
@@ -28,6 +29,14 @@ const post = (url, data, headers = defaultHeaders, isStringify = true, isUpload 
         .then(handleResponse)
 };
 
+const deleteMethod = (url, headers = defaultHeaders, isStringify = true, isUpload = false) => {
+    return fetch(url, {
+        headers,
+        method: 'DELETE',
+    })
+        .then(handleResponse)
+};
+
 const put = (url, data, headers = defaultHeaders, isStringify = true) => {
     return fetch(url, {
         headers,
@@ -51,6 +60,8 @@ async function handleResponse(response, isFetchingHTML) {
             errorMessage: message,
             status: response['status'],
         }
+    } else if (response['status'] === 204) {
+        return {data: {}};
     } else {
         let result = isFetchingHTML ? await response.text() : await response.json();
         return {data: result};
@@ -61,5 +72,6 @@ async function handleResponse(response, isFetchingHTML) {
 export default {
     get,
     post,
-    put
+    put,
+    deleteMethod
 }

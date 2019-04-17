@@ -6,7 +6,7 @@ import App from './App';
 import './styles/main.scss';
 
 
-const rootElement = document.getElementById('react-app');
+const rootElement = document.getElementById('root');
 
 
 ReactDOM.render( <Provider store={store}>

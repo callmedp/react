@@ -1,6 +1,6 @@
 const defaultHeaders = {
     "Content-Type": "application/json",
-    'Authorization': "329b41b2381e84389e106a9e43374667b16c62c8"
+    "Authorization":"c11c438d7be2635c16ccc5b2a1de48950399962c"
 };
 
 // todo make seperate function for fetch request

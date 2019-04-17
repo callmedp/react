@@ -1,10 +1,7 @@
-import {SAVE_USER_COURSE} from "../actions/actionTypes";
+import {SAVE_USER_COURSE, REMOVE_COURSE} from "../actions/actionTypes";
 
 const initialState = {
-    'id': '',
-    'candidate_id': '',
-    "name_of_certification": '',
-    "year_of_certification": '',
+    list: []
 };
 
 
@@ -16,6 +13,14 @@ export const courseReducer = (state = initialState, action) => {
                 ...state,
                 ...action.data
             };
+        }
+        case REMOVE_COURSE: {
+            return {
+                ...state,
+                ...{
+                    list: state['list'].filter(item => item.id !== action.id)
+                }
+            }
         }
         default: {
             return state;
