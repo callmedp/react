@@ -631,7 +631,7 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
         new_order_price = order.total_incl_tax
         difference = abs(current_order_price - new_order_price)
         percentage_difference = (difference * 100) / current_order_price
-        if percentage_difference > 90:
+        if percentage_difference > 10:
             return (False, 'New Order Differ by more than 10 percent from previous order')
 
         return (True, 'Valid Order')
