@@ -617,7 +617,7 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
         if 'CP' in order_id:
             order = Order.objects.filter(number=order_id).first()
         else:
-            if order.isdigit():
+            if order_id.isdigit():
                 order = Order.objects.filter(id=order_id).first()
             else:
                 return (False, 'Please Enter correct Order id')
@@ -810,7 +810,7 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
                         if oi_category == 65:
                             replace_order_id = 'replacement_order_id' + str(oi.pk)
                             replace_order_id = request.POST.get(replace_order_id, None)
-                            oi.replacement_order_id = replace_order_id
+                            oi.replacement_order_id = replace_order_id.strip()
                             oi.save()
 
                 if ct == len(wc_items):
