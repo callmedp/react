@@ -846,8 +846,8 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
                             if oi_cmb.wc_sub_cat == 65:
                                 replace_order_id = 'replacement_order_id' + str(oi.pk)
                                 replace_order_id = request.POST.get(replace_order_id, None)
-                                oi.replacement_order_id = replace_order_id.strip()
-                                oi.save()
+                                oi_cmb.replacement_order_id = replace_order_id.strip()
+                                oi_cmb.save()
                         if oi_category == 65:
                                 replace_order_id = 'replacement_order_id' + str(oi.pk)
                                 replace_order_id = request.POST.get(replace_order_id, None)
