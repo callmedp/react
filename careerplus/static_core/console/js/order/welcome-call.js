@@ -1,5 +1,4 @@
 $(function(){
-    replaced_order_items = 0
 	$('#action_button_go').click(function(){
 		var action_type = $('#id_action').val();
         console.log(action_type);
@@ -66,7 +65,6 @@ $(function(){
         select.empty();
         select.append("<option value=''>Select SubCategory</option>");
         $(".replace_order_class").css("display","none")
-        $("#replacement_order_title").css("display", "none")
         replaced_order_items = 0
         var parent = $(this).val();
 
@@ -192,20 +190,12 @@ $(function(){
 
         var sub_cat_value = $(this).val();
         if(sub_cat_value == 65) {
-            replaced_order_items += 1
             temp_id = $(this).attr('data-target')
             $("#"+temp_id).css("display","")
         }
         else{
-            replaced_order_items -= 1
             temp_id = $(this).attr('data-target')
             $("#"+temp_id).css("display","none")
-        }
-        if(replaced_order_items == 0) {
-            $("#replacement_order_title").css("display", "none")
-        }
-        else {
-             $("#replacement_order_title").css("display", "")
         }
     });
 
