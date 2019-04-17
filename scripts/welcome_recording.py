@@ -92,11 +92,9 @@ def fetch_call_recording_links():
         order.save()
         SUCCESS += 1
 
+
 def mail_report():
-
-    global TOTAL, SUCCESS, FAILS
     send_dict = {}
-
     send_dict['subject'] = "Welcome Call Recording Report " + timezone.now().strftime("%Y-%m-%d ")
     send_dict['to'] = ["vishal.gupta@hindustantimes.com", "animesh.sharma@hindustantimes.com"]
     send_dict['cc'] = ["gaurav.chopra1@hindustantimes.com"]

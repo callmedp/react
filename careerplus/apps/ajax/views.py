@@ -15,7 +15,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.conf import settings
 
 #LOCAL IMPORTS
-from.mixins import  ExotelMixin
+from.mixins import ExotelInteraction
 from cms.models import Page
 from cms.mixins import LoadMoreMixin
 from blog.models import Blog, Comment
@@ -820,7 +820,7 @@ class UniversityCourseLoadMoreView(TemplateView):
 
 class WelcomeServiceCallView(UserPermissionMixin,View):
     permission_to_check = ['can do exotel call']
-    exotel_object = ExotelMixin()
+    exotel_object = ExotelInteraction()
 
     def get_response_for_failure_reason(self,order):
         is_dnd = self.exotel_object.is_number_dnd(order.mobile)

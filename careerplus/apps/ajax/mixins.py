@@ -4,7 +4,7 @@ import logging
 from requests import Response
 from django.conf import settings
 
-class ExotelMixin(object):
+class ExotelInteraction(object):
     url = settings.EXOTEL_DICT.get('url', '')
     token = settings.EXOTEL_DICT.get('token', '')
     sid = settings.EXOTEL_DICT.get('sid', '')
