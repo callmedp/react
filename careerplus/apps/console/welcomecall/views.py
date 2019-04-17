@@ -514,6 +514,9 @@ class WelcomeCallDoneView(ListView, PaginationMixin):
         context = super(WelcomeCallDoneView, self).get_context_data(**kwargs)
         paginator = Paginator(context['object_list'], self.paginated_by)
         context.update(self.pagination(paginator, self.page))
+        has_permission = self.request.user.user_permissions.filter(codename='can_do_exotel_call')
+        show_btn = True if has_permission else False
+        context.update({'show_btn': show_btn})
         alert = messages.get_messages(self.request)
         initial = {
             "payment_date": self.payment_date,
