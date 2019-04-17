@@ -1009,11 +1009,7 @@ class UserPermissionMixin(object):
         if user.is_superuser:
             return True
         user_perms = user.user_permissions.values_list('name', flat=True)
-
-        for perms in self.permission_to_check:
-            if perms not in user_perms:
-                return False
-        return True
+        return all([perm in user_perms for perm in self.permission_to_check])
 
     def dispatch(self, request, *args, **kwargs):
         if not self.check_permission(request.user):

@@ -820,10 +820,10 @@ class UniversityCourseLoadMoreView(TemplateView):
 
 class WelcomeServiceCallView(UserPermissionMixin,View):
     permission_to_check = ['can do exotel call']
+    exotel_object = ExotelMixin()
 
-    def get_response_for_failure_reason(self,order, exotel_object):
-        number = order.mobile
-        is_dnd = exotel_object.is_number_dnd(number)
+    def get_response_for_failure_reason(self,order):
+        is_dnd = self.exotel_object.is_number_dnd(order.mobile)
         data = {}
         if is_dnd:
             data.update({'msg': 'This number is on DND. Please whitelist to call this number '
@@ -832,9 +832,10 @@ class WelcomeServiceCallView(UserPermissionMixin,View):
             data.update({'msg': 'Something went wrong', 'status': 0})
         return HttpResponse(json.dumps(data), content_type="application/json")
 
-    def make_call_to_user(self, order, user, exotel_object):
+    def make_call_to_user(self, order, user):
         data = {'msg': "Failure", 'status': 0}
-        resp = exotel_object.make_call(order.mobile, user.contact_number)
+        prev_records = None
+        resp = self.exotel_object.make_call(order.mobile, user.contact_number)
         status = resp.status_code
         if not status:
             return HttpResponse(json.dumps(data), content_type="application/json")
@@ -862,8 +863,10 @@ class WelcomeServiceCallView(UserPermissionMixin,View):
             data.update({'msg': "Connected", 'status': 1})
             return HttpResponse(json.dumps(data), content_type="application/json")
 
-        order.welcome_call_records = json.dumps(json.loads(getattr(order, "welcome_call_records", {})) \
-                                                           .update({recording_id: ""}))
+        prev_records = getattr(order,'welcome_call_records') if getattr(order,'welcome_call_records') else '{}'
+        json_records = json.loads(prev_records)
+        json_records.update({recording_id: ""})
+        order.welcome_call_records = json.dumps(json_records)
         order.save()
         data.update({'msg': "Connected", 'status': 1})
         return HttpResponse(json.dumps(data), content_type="application/json")
@@ -878,16 +881,14 @@ class WelcomeServiceCallView(UserPermissionMixin,View):
         if not request.is_ajax():
             return HttpResponse(json.dumps(data), content_type="application/json")
 
-        exotel_object = ExotelMixin()
-
         order = Order.objects.filter(id=order_id).first()
         if not order or not order.mobile or not user or not user.contact_number:
             return HttpResponse(json.dumps(data), content_type="application/json")
 
         if action:
-            return self.get_response_for_failure_reason(order, exotel_object)
+            return self.get_response_for_failure_reason(order)
         else:
-            return self.make_call_to_user(order, user, exotel_object)
+            return self.make_call_to_user(order, user)
 
 
 

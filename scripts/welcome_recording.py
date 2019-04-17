@@ -29,7 +29,6 @@ TOKEN = settings.EXOTEL_DICT.get('token')
 FAILS, SUCCESS,TOTAL = 0, 0, 0
 
 def get_call_recording_request(callid):
-
     url_to_hit = URL.format(sid=SID,token=TOKEN,callid=callid)
     try:
         response = requests.get(url_to_hit)
