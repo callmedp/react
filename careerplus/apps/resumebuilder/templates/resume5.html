@@ -15,9 +15,9 @@
         <div style="width: 44%; background: #ffffff; padding: 3%; display: table-cell; vertical-align: top; float: left;">
             <div style="display: block; text-align: center; margin-bottom: 10%;">
                 <h1 style="margin: 0; color: #000000; font-size: 32px; font-weight: bold; text-transform: uppercase;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
-                <strong style="display: block; font-style: italic; font-size: 18px; color: #777777; font-weight: normal; text-transform: uppercase; margin: 0 0 20px 0;">{{ 'FULL STACK DEVELOPER' }}</strong>
+                <strong style="display: block; font-style: italic; font-size: 18px; color: #777777; font-weight: normal; text-transform: uppercase; margin: 0 0 20px 0;">{{ latest_exp }}</strong>
                 <span style="display: block; text-align: center;">
-              <img src="{% static 'resumebuilder/images/resume5/resume-pic.png' %}" width="205" height="205"
+              <img src={{candidate.image}} width="205" height="205"
                    alt="Resume"
                    style="border-radius: 100%; margin: 0 auto; text-align: center; width: 205px; height: 205px;">
             </span>
@@ -53,18 +53,18 @@
                             alt="Location"
                             style="vertical-align: middle;"></span>{{ candidate.location }}
                     </li>
-                    <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img
-                            src="{% static 'resumebuilder/images/resume5/linkedin-icon.png' %}"
-                            alt="Linkedin"
-                            style="vertical-align: text-top;"></span>linkedin.com/candidatename
-                    </li>
-                    <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img
-                            src="{% static 'resumebuilder/images/resume5/facebook-icon.png' %}"
-                            alt="Facebook"
-                            style="vertical-align: middle;"></span>Facebook.com/candidatename
-                    </li>
+                    {#                    <li style="display: table; margin-bottom: 15px;"><span#}
+                    {#                            style="display: table-cell; padding-right: 10px;"><img#}
+                    {#                            src="{% static 'resumebuilder/images/resume5/linkedin-icon.png' %}"#}
+                    {#                            alt="Linkedin"#}
+                    {#                            style="vertical-align: text-top;"></span>linkedin.com/candidatename#}
+                    {#                    </li>#}
+                    {#                    <li style="display: table; margin-bottom: 15px;"><span#}
+                    {#                            style="display: table-cell; padding-right: 10px;"><img#}
+                    {#                            src="{% static 'resumebuilder/images/resume5/facebook-icon.png' %}"#}
+                    {#                            alt="Facebook"#}
+                    {#                            style="vertical-align: middle;"></span>Facebook.com/candidatename#}
+                    {#                    </li>#}
                 </ul>
             </div>
 
@@ -330,8 +330,8 @@
 
     </div>
 </div>
-<div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;"><img
-        src="{% static 'resumebuilder/images/watermark.png' %}" alt="shinelearning.com" style="width: 100%;"></div>
+{#<div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;"><img#}
+{#        src="{% static 'resumebuilder/images/watermark.png' %}" alt="shinelearning.com" style="width: 100%;"></div>#}
 
 </body>
 </html>

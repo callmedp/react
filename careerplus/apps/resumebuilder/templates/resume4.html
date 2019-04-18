@@ -14,11 +14,12 @@
     <div style="display: table; width: 100%; vertical-align: top; background: #5a8d50; overflow: hidden;">
         <!--top left column-->
         <div style="width: 44%; background: #649f58; padding: 3%; display: table-cell; vertical-align: top; float: left; min-height: 275px;">
-            <img src="{% static 'resumebuilder/images/resume4/resume-pic.png' %}" alt="Resume" width="150" height="150"
+            <img src={{ candidate.image }} alt="Resume" width="150" height="150"
                  style="border-radius: 100%; margin-bottom: 10px; width: 150px; height: 150px;">
             <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: bold; text-transform: uppercase; display: block;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
             <span style="display: block; width: 15%; border-top: 1px solid #a2c59b; margin: 10px 0 15px 0;"></span>
-            <strong style="display: block; font-size: 18px; color: #ffffff; font-weight: normal; text-transform: uppercase; margin-bottom: 1px;">{{ 'FULL STACK DEVELOPER' }}</strong>
+            <strong style="display: block; font-size: 18px; color: #ffffff; font-weight: normal; text-transform: uppercase; margin-bottom: 1px;">
+                {{ latest_exp }}</strong>
         </div>
 
         <!--top right column-->
@@ -43,16 +44,16 @@
                             src="{% static 'resumebuilder/images/resume4/location-icon.png' %}" alt="Location"
                             style="vertical-align: middle;"></span>{{ candidate.location }}
                     </li>
-                    <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img
-                            src="{% static 'resumebuilder/images/resume4/linkedin-icon.png' %}" alt="Linkedin"
-                            style="vertical-align: text-top;"></span>linkedin.com/candidatename
-                    </li>
-                    <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img
-                            src="{% static 'resumebuilder/images/resume4/facebook-icon.png' %}" alt="Facebook"
-                            style="vertical-align: middle;"></span>Facebook.com/candidatename
-                    </li>
+                    {#                    <li style="display: table; margin-bottom: 15px;"><span#}
+                    {#                            style="display: table-cell; padding-right: 10px;"><img#}
+                    {#                            src="{% static 'resumebuilder/images/resume4/linkedin-icon.png' %}" alt="Linkedin"#}
+                    {#                            style="vertical-align: text-top;"></span>linkedin.com/candidatename#}
+                    {#                    </li>#}
+                    {#                    <li style="display: table; margin-bottom: 15px;"><span#}
+                    {#                            style="display: table-cell; padding-right: 10px;"><img#}
+                    {#                            src="{% static 'resumebuilder/images/resume4/facebook-icon.png' %}" alt="Facebook"#}
+                    {#                            style="vertical-align: middle;"></span>Facebook.com/candidatename#}
+                    {#                    </li>#}
                 </ul>
             </div>
         </div>
@@ -67,20 +68,6 @@
                 <strong style="display: block; text-transform: uppercase; color: #000000; font-weight: normal; font-size: 18px; margin: 0">Professional
                     profile</strong>
                 <p style="color: #555555">{{ candidate.extra_info }}</p>
-                <ul style="padding: 5px 0 0 0; margin: 0; list-style-type: none;">
-                    <li style="vertical-align: top; margin: 10px 0;">
-                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #5a8d50; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
-                        <span style="display: inline-block; width: 93%; vertical-align: top;">
-                  <p style="font-size: 14px; color: #555555; margin: 0;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p>
-                </span>
-                    </li>
-                    <li style="vertical-align: top; margin: 10px 0;">
-                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #5a8d50; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
-                        <span style="display: inline-block; width: 93%; vertical-align: top;">
-                  <p style="font-size: 14px; color: #555555; margin: 0;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p>
-                </span>
-                    </li>
-                </ul>
             </div>
 
             <!--Skills-->
@@ -406,9 +393,9 @@
     </div>
 
 </div>
-<div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;"><img
-        src="{% static 'resumebuilder/images/watermark.png' %}" alt="shinelearning.com" style="width: 100%;">
-</div>
+{#<div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;"><img#}
+{#        src="{% static 'resumebuilder/images/watermark.png' %}" alt="shinelearning.com" style="width: 100%;">#}
+{#</div>#}
 
 </body>
 </html>

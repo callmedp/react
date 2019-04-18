@@ -299,13 +299,14 @@ class CandidateResumePreview(APIView):
         certifications = candidate.candidatecertification_set.all()
         languages = candidate.candidatelanguage_set.all()
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
+        latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
 
         template = get_template('resume{}.html'.format(template_id))
         rendered_template = template.render(
             {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
              'achievements': achievements, 'references': references, 'projects': projects,
              'certifications': certifications, 'extracurricular': '', 'languages': languages,
-             'current_exp': current_exp}).encode(encoding='UTF-8')
+             'current_exp': current_exp, 'latest_exp': latest_experience}).encode(encoding='UTF-8')
 
         return Response({
             'html': rendered_template
@@ -569,4 +570,3 @@ class CandidateShineProfileRetrieveUpdateView(APIView):
         return Response({
             "candidate_id": candidate_profile['candidate_id']
         })
-

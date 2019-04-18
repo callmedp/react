@@ -1,6 +1,6 @@
 const defaultHeaders = {
     "Content-Type": "application/json",
-    'Authorization': "5ab9b90da69bd53cec4cf20559f9052b24325c7e"
+    'Authorization': localStorage.getItem('token') || ''
 };
 
 // todo make seperate function for fetch request
