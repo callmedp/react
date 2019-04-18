@@ -122,9 +122,9 @@ class Language extends Component {
             return (
                 <div>
                     <section className="head-section">
-                        <span className="icon-box"><i className="icon-languages1"></i></span>
+                        <span className="icon-box"><i className="icon-languages1"/></span>
                         <h2>Languages</h2>
-                        <span className="icon-edit icon-language__cursor"></span>
+                        {/*<span className="icon-edit icon-language__cursor"></span>*/}
                         <button onClick={this.handleAddition.bind(this, fields, error)}
                                 type={'button'}
                                 className="add-button add-button__right">Add new
@@ -239,8 +239,9 @@ class Language extends Component {
 
 export const LanguageForm = reduxForm({
     form: 'Language',
-    validate,
     enableReinitialize: true,
+    validate,
+
 
 })(Language);
 

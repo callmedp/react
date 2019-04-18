@@ -39,7 +39,7 @@ function* updateUserReference(action) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
-        yield put({type: Actions.SAVE_USER_REFERENCE, data: result['data']});
+        // yield put({type: Actions.SAVE_USER_REFERENCE, data: result['data']});
 
         return resolve('User Reference have saved successfully.');
 

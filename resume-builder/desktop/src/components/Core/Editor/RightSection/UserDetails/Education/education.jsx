@@ -122,7 +122,7 @@ class Education extends Component {
                     <section className="head-section">
                         <span className="icon-box"><i className="icon-education1"></i></span>
                         <h2>Education</h2>
-                        <span className="icon-edit icon-education__cursor"></span>
+                        {/*<span className="icon-edit icon-education__cursor"></span>*/}
                         <button onClick={(event) => this.handleAddition(fields, error, event)}
                                 type={'button'}
                                 className="add-button add-button__right">Add new

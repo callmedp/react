@@ -116,7 +116,7 @@ class Course extends Component {
                     <section className="head-section">
                         <span className="icon-box"><i className="icon-courses1"></i></span>
                         <h2>Courses</h2>
-                        <span className="icon-edit icon-courses__cursor"></span>
+                        {/*<span className="icon-edit icon-courses__cursor"></span>*/}
                         <button onClick={this.handleAddition.bind(this, fields, error)}
                                 type={'button'}
                                 className="add-button add-button__right">Add new

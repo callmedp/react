@@ -117,7 +117,7 @@ class Award extends Component {
                     <section className="head-section">
                         <span className="icon-box"><i className="icon-awards1"></i></span>
                         <h2>Awards</h2>
-                        <span className="icon-edit icon-awards__cursor"></span>
+                        {/*<span className="icon-edit icon-awards__cursor"></span>*/}
                         <button onClick={this.handleAddition.bind(this, fields, error)}
                                 type={'button'}
                                 className="add-button add-button__right">Add new

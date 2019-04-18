@@ -123,9 +123,9 @@ class Project extends Component {
             return (
                 <div>
                     <section className="head-section">
-                        <span className="icon-box"><i className="icon-projects1"></i></span>
+                        <span className="icon-box"><i className="icon-projects1"/></span>
                         <h2>Projects</h2>
-                        <span className="icon-edit icon-projects__cursor"></span>
+                        {/*<span className="icon-edit icon-projects__cursor"></span>*/}
                         <button
                             onClick={() => this.handleAddition(fields, error)}
                             type={'button'}

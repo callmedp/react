@@ -8,70 +8,76 @@ import Testimonial from "./Testimonial/testimonial.jsx";
 import Footer from "../../Common/Footer/footer.jsx";
 import Header from "../../Common/Header/header.jsx";
 import {Link} from 'react-router-dom'
-import { Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
+import {Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll';
+import queryString from "query-string";
+
 
 class Home extends Component {
     constructor(props) {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
         this.addclass = this.addclass.bind(this);
-        this.state ={
-            'scrolled':false
+        this.state = {
+            'scrolled': false,
+            'token': ''
         }
+
+        const values = queryString.parse(this.props.location.search);
+        const token = (values && values.token) || '';
+        this.state.token = token;
     }
 
     scrollTo(elem) {
         scroller.scrollTo(elem, {
-          duration: 800,
-          delay: 0,
-          smooth: 'easeInOutQuad',
-          offset: -63
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: -63
         })
     }
 
-    addclass(){
+    addclass() {
         let scrollpos = window.scrollY;
-        if(scrollpos > 60){
+        if (scrollpos > 60) {
             this.setState({
-                'scrolled':true
+                'scrolled': true
             })
-        }
-        else {
+        } else {
             this.setState({
-                'scrolled':false
+                'scrolled': false
             })
         }
     }
 
     componentDidMount() {
 
-        this.props.getCandidateId()
+        this.props.loginCandidate(this.state.token)
         Events.scrollEvent.register('begin', function () {
-          console.log("begin", arguments);
+            console.log("begin", arguments);
         });
-    
+
         Events.scrollEvent.register('end', function () {
-          console.log("end", arguments);
+            console.log("end", arguments);
         });
-        window.addEventListener('scroll',this.addclass);
-    
+        window.addEventListener('scroll', this.addclass);
+
     }
 
     componentWillUnmount() {
         Events.scrollEvent.remove('begin');
         Events.scrollEvent.remove('end');
     }
-    
+
 
     render() {
         return (
-            <div class="nav-fixed">
-                 {/*<Link to={'/resume-builder/edit/'}>Customize Your Resume</Link> */}
-                <Header page={'home'} getclass={this.state.scrolled?'color-change':''}/>
+            <div className="nav-fixed">
+                <Header page={'home'} getclass={this.state.scrolled ? 'color-change' : ''}/>
                 <Banner/>
                 <section className="section-container">
                     <h2>Professional advantage</h2>
-                    <strong className="section-container--sub-head">Resume builder advantages which will make your career brighter</strong>
+                    <strong className="section-container--sub-head">Resume builder advantages which will make your
+                        career brighter</strong>
                     <ul className="advantages mt-30">
                         <li className="advantages--list">
                             <div className="advantages--image">
@@ -79,7 +85,8 @@ class Home extends Component {
                             </div>
                             <div className="advantages--content">
                                 <h3>A resume layout hat stands out </h3>
-                                <p>Our resume layout optimizer makes sure all your content is aligned and organized so your resume looks like a work of art.</p>
+                                <p>Our resume layout optimizer makes sure all your content is aligned and organized so
+                                    your resume looks like a work of art.</p>
                             </div>
                         </li>
                         <li className="advantages--list">
@@ -88,7 +95,8 @@ class Home extends Component {
                             </div>
                             <div className="advantages--content">
                                 <h3>Create a great first impression to recruiters </h3>
-                                <p>Our resume has the capability to catch recruiter’s attention fast as you just have 6 secs to catch recruiter’s attention.</p>
+                                <p>Our resume has the capability to catch recruiter’s attention fast as you just have 6
+                                    secs to catch recruiter’s attention.</p>
                             </div>
                         </li>
                         <li className="advantages--list">
@@ -97,7 +105,8 @@ class Home extends Component {
                             </div>
                             <div className="advantages--content">
                                 <h3>Increased recruiter views </h3>
-                                <p>A creative, professional layout can grab a recruiter's attention. Each job has on an average of 500 applicants with 95% of resume never read. </p>
+                                <p>A creative, professional layout can grab a recruiter's attention. Each job has on an
+                                    average of 500 applicants with 95% of resume never read. </p>
                             </div>
                         </li>
                         <li className="advantages--list">
@@ -106,7 +115,8 @@ class Home extends Component {
                             </div>
                             <div className="advantages--content">
                                 <h3>Application Tracking Software (ATS) Friendly </h3>
-                                <p>Most of the resume filtering is done by machine. So, it becomes very important to design your CV as per the ATS</p>
+                                <p>Most of the resume filtering is done by machine. So, it becomes very important to
+                                    design your CV as per the ATS</p>
                             </div>
                         </li>
                     </ul>
@@ -123,7 +133,8 @@ class Home extends Component {
                             </div>
                             <div className="works--content">
                                 <h3>Choose your resume template</h3>
-                                <p>Our professional resume templates are designed strictly following all industry guidelines and best practices employers are looking for.</p>
+                                <p>Our professional resume templates are designed strictly following all industry
+                                    guidelines and best practices employers are looking for.</p>
                             </div>
                         </li>
                         <li className="works--list">
@@ -133,7 +144,8 @@ class Home extends Component {
                             </div>
                             <div className="works--content">
                                 <h3>Verify your profile imported from Shine</h3>
-                                <p>We import your Shine Profile to create your resume automatically. You may edit the details, if required</p>
+                                <p>We import your Shine Profile to create your resume automatically. You may edit the
+                                    details, if required</p>
                             </div>
                         </li>
                         <li className="works--list">
@@ -143,7 +155,8 @@ class Home extends Component {
                             </div>
                             <div className="works--content">
                                 <h3>Download your Resume</h3>
-                                <p>Start impressing employers. Download your awesome resume and land the job you are looking for, effortlessly.</p>
+                                <p>Start impressing employers. Download your awesome resume and land the job you are
+                                    looking for, effortlessly.</p>
                             </div>
                         </li>
                     </ul>
@@ -211,7 +224,8 @@ class Home extends Component {
                         </li>
                     </ul>
 
-                    <button className="orange-button" onClick={() => this.scrollTo('templates')}>Build your resume</button>
+                    <button className="orange-button" onClick={() => this.scrollTo('templates')}>Build your resume
+                    </button>
 
                 </section>
 
@@ -232,6 +246,9 @@ const mapDispatchToProps = (dispatch) => {
         "getCandidateId": () => {
             return dispatch(actions.getCandidateId())
         },
+        "loginCandidate": (token) => {
+            return dispatch(actions.loginCandidate({alt: token}))
+        }
 
     }
 };

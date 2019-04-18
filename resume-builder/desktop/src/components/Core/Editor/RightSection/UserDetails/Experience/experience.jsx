@@ -124,7 +124,7 @@ class Experience extends Component {
                     <section className="head-section">
                         <span className="icon-box"><i className="icon-experience1"></i></span>
                         <h2>Experience</h2>
-                        <span className="icon-edit icon-experience__cursor"></span>
+                        {/*<span className="icon-edit icon-experience__cursor"></span>*/}
                         <button
                             onClick={this.handleAddition.bind(this, fields, error)}
                             type={'button'}

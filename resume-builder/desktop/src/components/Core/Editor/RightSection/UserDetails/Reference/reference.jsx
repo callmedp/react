@@ -115,25 +115,26 @@ class Reference extends Component {
 
     render() {
         const {handleSubmit, reference} = this.props;
-        const renderReferences = ({fields, meta: {touched, error, submitFailed}}) => {
+        const renderReferences = ({fields, meta}) => {
+            console.log('-----',meta);
             return (
                 <div>
                     <section className="head-section">
-                        <span className="icon-box"><i className="icon-references1"></i></span>
+                        <span className="icon-box"><i className="icon-references1"/></span>
                         <h2>References</h2>
-                        <span className="icon-edit icon-references__cursor"></span>
+                        {/*<span className="icon-edit icon-references__cursor"></span>*/}
                         <button
-                            onClick={this.handleAddition.bind(this, fields, error)}
+                            onClick={this.handleAddition.bind(this, fields)}
                             type={'button'}
                             className="add-button add-button__right">Add new
                         </button>
-                        {(touched || submitFailed) && error && <span>{error}</span>}
+                        {/*{(touched || submitFailed) && error && <span>{error}</span>}*/}
                     </section>
                     <section>
                         <section className="right-sidebar-scroll">
                             <ul>
                                 <Accordion
-                                    onChange={(value) => this.handleAccordionClick(value, fields, error)}
+                                    onChange={(value) => this.handleAccordionClick(value, fields)}
                                     allowZeroExpanded={true}
                                     preExpanded={[this.state.openedAccordion]}>
                                     {

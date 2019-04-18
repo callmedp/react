@@ -130,9 +130,9 @@ class Skill extends Component {
 
                 <div>
                     <section className="head-section">
-                        <span className="icon-box"><i className="icon-skills1"></i></span>
+                        <span className="icon-box"><i className="icon-skills1"/></span>
                         <h2>Skills</h2>
-                        <span className="icon-edit icon-education__cursor"></span>
+                        {/*<span className="icon-edit icon-education__cursor"></span>*/}
                         <button onClick={this.handleAddition.bind(this, fields, error)}
                                 type={'button'}
                                 className="add-button add-button__right">Add new

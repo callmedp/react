@@ -1,5 +1,6 @@
 import logging, binascii, os, pickle
 import datetime
+
 import requests
 from decimal import Decimal
 
@@ -50,6 +51,8 @@ from django_redis import get_redis_connection
 from shared.utils import ShineCandidate
 from linkedin.autologin import AutoLogin
 from users.mixins import RegistrationLoginApi
+from .education_specialization import educ_list
+
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
     authentication_classes = [OAuth2Authentication]
@@ -807,6 +810,131 @@ class ShineCandidateLoginAPIView(APIView):
         data_to_send = {"token": token, "candidate_id": candidate_id, "candidate_profile": login_response}
         return Response(data_to_send, status=status.HTTP_201_CREATED)
 
+    def get_profile_info(self, profile):
+        candidate_profile_keys = ['first_name', 'last_name', 'email', 'number', 'date_of_birth', 'location', 'gender',
+                                  'candidate_id']
+        candidate_profile_values = [profile['first_name'], profile['last_name'], profile['email'],
+                                    profile['cell_phone'], profile['date_of_birth'],
+                                    profile['candidate_location'], profile['gender'], profile['id']]
+        candidate_profile = dict(zip(candidate_profile_keys, candidate_profile_values))
+
+        return candidate_profile
+
+    def get_education_info(self, education):
+        candidate_education_keys = ['candidate_id', 'specialization', 'institution_name', 'course_type',
+                                    'percentage_cgpa',
+                                    'start_date',
+                                    'end_date', 'is_pursuing']
+        candidate_education = []
+
+        for edu in education:
+            course_type = ""
+            if edu['course_type'] == 1:
+                course_type = "FT"
+            elif edu['course_type'] == 2:
+                course_type = "PT"
+            else:
+                course_type = "CR"
+
+            degree_index = next((index for (index, d) in enumerate(educ_list) if d["pid"] == edu['education_level']),
+                                None)
+
+            degree_name = educ_list[degree_index]['pdesc'];
+
+            child = educ_list[degree_index]['child']
+
+            specialization_index = next((index for (index, d) in enumerate(child)
+                                         if d['cid'] == edu['education_specialization']), None)
+            specialization_name = child[specialization_index]['cdesc']
+
+            candidate_education_values = ['', '{}({})'.format(degree_name, specialization_name),
+                                          edu['institute_name'],
+                                          course_type,
+                                          '',
+                                          None, None, True]
+            education_dict = dict(zip(candidate_education_keys, candidate_education_values))
+            candidate_education.append(education_dict)
+
+        return candidate_education
+
+    def get_experience_info(self, experience):
+
+        candidate_experience_keys = ['candidate_id', 'job_profile', 'company_name', 'start_date', 'end_date',
+                                     'is_working',
+                                     'job_location',
+                                     'work_description']
+        candidate_experience = []
+
+        for exp in experience:
+            start_date = datetime.datetime.strptime(exp['start_date'], '%Y-%m-%dT%H:%M:%S').date() \
+                if exp['start_date'] is not None else \
+                exp['start_date']
+            end_date = datetime.datetime.strptime(exp['end_date'], '%Y-%m-%dT%H:%M:%S').date() \
+                if exp['end_date'] is not None else \
+                exp['end_date']
+            candidate_experience_values = ['', exp['job_title'], exp['company_name'],
+                                           start_date, end_date,
+                                           exp['is_current'], '', exp['description']]
+            experience_dict = dict(zip(candidate_experience_keys, candidate_experience_values))
+            candidate_experience.append(experience_dict)
+
+        return candidate_experience
+
+    def get_skill_info(self, skills):
+        skill_keys = ['candidate_id', 'name', 'proficiency']
+        candidate_skill = []
+
+        for skill in skills:
+            candidate_skill_values = ['', skill['value'], 5]
+        skill_dict = dict(zip(skill_keys, candidate_skill_values))
+        candidate_skill.append(skill_dict)
+
+        return candidate_skill
+
+    def get_certification_info(self, certifications):
+        candidate_certification_keys = ['candidate_id', 'name_of_certification', 'year_of_certification']
+        candidate_certification = []
+
+        for certi in certifications:
+            candidate_certification_values = ['', certi['certification_name'], certi['certification_year']]
+            certification_dict = dict(zip(candidate_certification_keys, candidate_certification_values))
+            candidate_certification.append(certification_dict)
+
+        return candidate_certification
+
+    def customize_user_profile(self, login_response):
+
+        # get personal info
+        profile = login_response and login_response['personal_detail'][0]
+        candidate_info = dict()
+        candidate_info['personalInfo'] = self.get_profile_info(profile)
+
+        # get education info
+        candidate_info['education'] = self.get_education_info(login_response and login_response['education'])
+
+        #  get experience info
+        candidate_info['experience'] = self.get_experience_info(login_response and login_response['jobs'])
+
+        #  get skills
+        candidate_info['skill'] = self.get_skill_info(login_response and login_response['skills'])
+
+        #  get language
+        candidate_info['language'] = []
+
+        #  get courses
+        candidate_info['course'] = self.get_certification_info(login_response and login_response['certifications'])
+
+        #   get award
+        candidate_info['award'] = []
+
+        #  get reference
+        candidate_info['reference'] = []
+
+        #  get projects
+        candidate_info['project'] = []
+
+        return candidate_info
+
     def _dispatch_via_autologin(self, alt):
         try:
             email, candidate_id, valid = AutoLogin().decode(alt)
@@ -819,35 +947,37 @@ class ShineCandidateLoginAPIView(APIView):
 
         try:
             login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+            candidate_info = self.customize_user_profile(login_response)
         except Exception as e:
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
             return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
-        return self.get_response_for_successful_login(candidate_id, login_response)
+        return self.get_response_for_successful_login(candidate_id, candidate_info)
 
-    def _dispatch_via_email_password(self, email, password):
-        login_data = {"email": email.strip(), "password": password}
+        def _dispatch_via_email_password(self, email, password):
+            login_data = {"email": email.strip(), "password": password}
 
-        try:
-            login_resp = RegistrationLoginApi.user_login(login_data)
-        except Exception as e:
-            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
-            return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                login_resp = RegistrationLoginApi.user_login(login_data)
+            except Exception as e:
+                logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+                return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
-        candidate_id = login_resp.get('candidate_id')
-        access_token = login_resp.get('access_token')
+            candidate_id = login_resp.get('candidate_id')
+            access_token = login_resp.get('access_token')
 
-        if not candidate_id and not access_token:
-            logging.getLogger('info_log').info("Login attempt failed - {}".format(login_resp))
-            return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+            if not candidate_id and not access_token:
+                logging.getLogger('info_log').info("Login attempt failed - {}".format(login_resp))
+                return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
-        except Exception as e:
-            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
-            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+            except Exception as e:
+                logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+                return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
-        return self.get_response_for_successful_login(candidate_id, login_response)
+            return self.get_response_for_successful_login(candidate_id, login_response)
+
 
     def post(self, request, *args, **kwargs):
         email = request.data.get('email')
