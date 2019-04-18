@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Field, reduxForm} from "redux-form";
+import {Field, reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../.../../../../../../store/award/actions";
 import {connect} from "react-redux";
 import {required} from "../../../../../FormHandler/formValidations"
@@ -13,6 +13,8 @@ class Award extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteAward = this.deleteAward.bind(this);
+        this.changeOrderingUp = this.changeOrderingUp.bind(this);
+        this.changeOrderingDown = this.changeOrderingDown.bind(this);
     }
 
     componentDidMount() {
@@ -26,7 +28,7 @@ class Award extends Component {
     }
 
     handleAddition(fields, error) {
-        const listLength = fields.length;
+        
         fields.push({
             "candidate_id": '',
             "id": '',
@@ -40,10 +42,39 @@ class Award extends Component {
     deleteAward(index, fields, event) {
         event.stopPropagation();
         const award = fields.get(index);
+        console.log(award)
         fields.remove(index);
         if (award && award.id) {
             this.props.removeAward(award.id)
         }
+    }
+
+    changeOrderingUp(index,fields,event){
+        event.stopPropagation();
+        console.log("Clicked Up")
+        let currentItem = fields.get(index);
+        let prevItem = fields.get(index - 1);
+        currentItem['order'] = index - 1;
+        prevItem['order'] = index;
+        fields.remove(index)
+        fields.insert(index, currentItem)
+        fields.remove(index - 1)
+        fields.insert(index - 1, prevItem)
+        fields.swap(index, index - 1)
+    }
+
+    changeOrderingDown(index,fields,event){
+        event.stopPropagation();
+        console.log("Clicked Down")
+        let currentItem = fields.get(index);
+        let nextItem = fields.get(index + 1);
+        currentItem['order'] = index + 1;
+        nextItem['order'] = index;
+        fields.remove(index)
+        fields.insert(index, currentItem)
+        fields.remove(index+1)
+        fields.insert(index + 1, nextItem)
+        fields.swap(index, index + 1);
     }
 
     render () {
@@ -60,22 +91,29 @@ class Award extends Component {
                         <button role="button" onClick={this.handleAddition.bind(this, fields, error)}
                             type={'button'} className="btn btn__round btn--outline">+ Add new</button>
                     </div>
+
                     {fields.map((member, index) => {
                     return(
-                        <React.Fragment>
+                        <React.Fragment key={index}>
                             <div className="subHeading pb-0">
-                                <h2>{award.title}</h2>
+                                <h2>{fields.get(index).title || 'Award'}</h2>
                                 <ul className="subHeading__control">
                                     <li className="subHeading__delete">
                                         <span className="sprite icon--delete" role="button"
                                             onClick={(event) => this.deleteAward(index, fields, event)}></span>
                                     </li>
-                                    <li className="subHeading__btn">
-                                        <i className="sprite icon--upArrow"></i>
-                                    </li>
-                                    <li className="subHeading__btn">
-                                        <i className="sprite icon--downArrow"></i>
-                                    </li>
+                                    {index == 0 ? '':
+                                        <li className="subHeading__btn"
+                                            onClick={(event) => this.changeOrderingUp(index, fields, event)}>
+                                            <i className="sprite icon--upArrow"></i>
+                                        </li>
+                                    }
+                                    {index == fields.length-1 ? '':
+                                        <li className="subHeading__btn"
+                                            onClick={(event) => this.changeOrderingDown(index, fields, event)}>
+                                            <i className="sprite icon--downArrow"></i>
+                                        </li>
+                                    }
                                 </ul>
                             </div>
 
@@ -178,6 +216,7 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchUserAward())
         },
         "removeAward": (awardId) => {
+            console.log("Award iD   "+awardId)
             return dispatch(actions.deleteAward(awardId))
         },
         "bulkUpdateUserAward": (listItems) => {
@@ -192,6 +231,7 @@ const mapDispatchToProps = (dispatch) => {
                 };
                 return userAward;
             })
+            console.log(listItems)
             return dispatch(actions.bulkUpdateUserAward({list: listItems}))
         }
     }

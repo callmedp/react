@@ -16,7 +16,7 @@ function* fetchUserLanguage(action) {
             console.log('error');
         }
         let {data: {results}} = result;
-
+        results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
         let data = {list: results};
 
         data = {

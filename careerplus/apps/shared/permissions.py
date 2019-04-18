@@ -30,7 +30,6 @@ class IsObjectOwner(BasePermission):
         return True
 
     def has_object_permission(self,request,view,obj):
-        import ipdb;ipdb.set_trace();
         owner_fields = getattr(view,'owner_fields',['owner_id','candidate_id'])
         permission_granted = False
 

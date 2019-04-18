@@ -33,13 +33,13 @@ class Skill extends Component {
     }
 
     handleAddition(fields, error) {
-        const listLength = fields.length;
+        
         fields.push({
             "candidate_id": '',
             "id": '',
             "name": '',
             "proficiency": '',
-            "order": listLength
+            "order": fields.length
         })
 
     }

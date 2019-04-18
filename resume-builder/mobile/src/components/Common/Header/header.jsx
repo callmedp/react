@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './header.scss'
+import { Link} from 'react-router-dom';
 
 
 export default class Header extends Component {
@@ -18,7 +19,7 @@ export default class Header extends Component {
                                 <i className="sprite icon--menu-bar"></i>
                             </button>
                         </div>
-                        <a href="#" className="btn btn__round btn--outline">Back to home</a>
+                        <Link to={'/resume-builder'} className="btn btn__round btn--outline">Back to home</Link>
                     </React.Fragment>
                 :   <React.Fragment>
                         <div className="header--logo">

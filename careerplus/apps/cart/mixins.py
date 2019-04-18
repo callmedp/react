@@ -503,7 +503,6 @@ class CartMixin(object):
 
     # use local db not solar for fetching items in case of resume builder
     def get_local_cart_items(self, cart_obj: object = None) -> object:
-        import ipdb; ipdb.set_trace()
         cart_items = []
         total_amount = Decimal(0)
         if not cart_obj:

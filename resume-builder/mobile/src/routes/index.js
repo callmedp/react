@@ -20,6 +20,7 @@ export const RouteWithSubRoutes = route => (
 const AppRouter = () => (
     <Router>
         <div>
+        <div className="overlay"></div>
             {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
         </div>
     </Router>

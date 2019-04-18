@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Field, reduxForm} from "redux-form";
+import {Field, reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../../../../../store/project/actions";
 import {connect} from "react-redux";
 import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
@@ -11,6 +11,8 @@ class Project extends Component {
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteProject = this.deleteProject.bind(this);
+        this.changeOrderingUp = this.changeOrderingUp.bind(this);
+        this.changeOrderingDown = this.changeOrderingDown.bind(this);
     }
 
     componentDidMount() {
@@ -30,9 +32,9 @@ class Project extends Component {
             "project_name": '',
             "start_date": '',
             "end_date": '',
-            "skills": '',
+            "skills": [],
             "description": '',
-            order: listLength
+            order: fields.length
         })
     }
 
@@ -45,6 +47,34 @@ class Project extends Component {
         }
 
 
+    }
+
+    changeOrderingUp(index,fields,event){
+        event.stopPropagation();
+        console.log("Clicked Up")
+        let currentItem = fields.get(index);
+        let prevItem = fields.get(index - 1);
+        currentItem['order'] = index - 1;
+        prevItem['order'] = index;
+        fields.remove(index)
+        fields.insert(index, currentItem)
+        fields.remove(index - 1)
+        fields.insert(index - 1, prevItem)
+        fields.swap(index, index - 1)
+    }
+
+    changeOrderingDown(index,fields,event){
+        event.stopPropagation();
+        console.log("Clicked Down")
+        let currentItem = fields.get(index);
+        let nextItem = fields.get(index + 1);
+        currentItem['order'] = index + 1;
+        nextItem['order'] = index;
+        fields.remove(index)
+        fields.insert(index, currentItem)
+        fields.remove(index+1)
+        fields.insert(index + 1, nextItem)
+        fields.swap(index, index + 1);
     }
 
     render () {
@@ -64,21 +94,27 @@ class Project extends Component {
                     </div>
                     {fields.map((member, index) => {
                         return (
-                            <React.Fragment>
+                            <React.Fragment key={index}>
                                 <div className="subHeading pb-0">
-                                    <h2>{project.project_name}</h2>
+                                    <h2>{fields.get(index).project_name || 'Project'}</h2>
                                     <ul className="subHeading__control">
                                         <li className="subHeading__delete">
                                             <span className="sprite icon--delete" 
                                             onClick={(event) => this.deleteProject(index, fields, event)}
                                             role="button"></span>
                                         </li>
-                                        <li className="subHeading__btn">
-                                            <i className="sprite icon--upArrow"></i>
-                                        </li>
-                                        <li className="subHeading__btn">
-                                            <i className="sprite icon--downArrow"></i>
-                                        </li>
+                                        {index == 0 ? '':
+                                            <li className="subHeading__btn"
+                                                onClick={(event) => this.changeOrderingUp(index, fields, event)}>
+                                                <i className="sprite icon--upArrow"></i>
+                                            </li>
+                                        }
+                                        {index == fields.length-1 ? '':
+                                            <li className="subHeading__btn"
+                                                onClick={(event) => this.changeOrderingDown(index, fields, event)}>
+                                                <i className="sprite icon--downArrow"></i>
+                                            </li>
+                                        }
                                     </ul>
                                 </div>
 
@@ -91,7 +127,7 @@ class Project extends Component {
                                                 <i className="sprite icon--project-gray"></i>
                                             </span>
                                             </div>
-                                            <Field component={renderField} validate={required} type={"text"} 
+                                            <Field component={renderField}  type={"text"} 
                                             name={`${member}.project_name`} className="form__input"/>
                                         </div>
                                     </li>
@@ -104,7 +140,7 @@ class Project extends Component {
                                                 <i className="sprite icon--date"></i>
                                             </span>
                                             </div>
-                                            <Field component={datepicker} validate={required} type={"date"} 
+                                            <Field component={datepicker} type={"date"} 
                                                 className="form__input" name={`${member}.start_date`}/>
                                         </div>
                                     </li>
@@ -117,7 +153,7 @@ class Project extends Component {
                                                 <i className="sprite icon--date"></i>
                                             </span>
                                             </div>
-                                            <Field component={datepicker} validate={required} type={"date"} 
+                                            <Field component={datepicker} type={"date"} 
                                                 className="form__input" name={`${member}.end_date`}/>
                                         </div>
                                     </li>
@@ -126,7 +162,7 @@ class Project extends Component {
                                     <li className="form__radio-group d-flex justify-content-end fs-14">
                                         <Field type="radio" name={`${member}.currently_working`} component="input"
                                             className="form__radio-input" value={`${member}.currently_working`}/>
-                                        <label class="form__radio-label" htmlFor="currently_working">
+                                        <label className="form__radio-label" htmlFor="currently_working">
                                             <span className="form__radio-button"></span>
                                             Till today
                                         </label>

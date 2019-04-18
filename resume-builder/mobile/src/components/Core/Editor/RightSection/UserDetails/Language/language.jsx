@@ -12,6 +12,8 @@ class Language extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteLanguage = this.deleteLanguage.bind(this);
+        this.changeOrderingUp = this.changeOrderingUp.bind(this);
+        this.changeOrderingDown = this.changeOrderingDown.bind(this);
     }
 
     componentDidMount() {
@@ -46,6 +48,34 @@ class Language extends Component {
         }
     }
 
+    changeOrderingUp(index,fields,event){
+        event.stopPropagation();
+        console.log("Clicked Up")
+        let currentItem = fields.get(index);
+        let prevItem = fields.get(index - 1);
+        currentItem['order'] = index - 1;
+        prevItem['order'] = index;
+        fields.remove(index)
+        fields.insert(index, currentItem)
+        fields.remove(index - 1)
+        fields.insert(index - 1, prevItem)
+        fields.swap(index, index - 1)
+    }
+
+    changeOrderingDown(index,fields,event){
+        event.stopPropagation();
+        console.log("Clicked Down")
+        let currentItem = fields.get(index);
+        let nextItem = fields.get(index + 1);
+        currentItem['order'] = index + 1;
+        nextItem['order'] = index;
+        fields.remove(index)
+        fields.insert(index, currentItem)
+        fields.remove(index+1)
+        fields.insert(index + 1, nextItem)
+        fields.swap(index, index + 1);
+    }
+
 
     render() {
         const {handleSubmit, language} = this.props;
@@ -64,21 +94,27 @@ class Language extends Component {
                     </div>
                     {fields.map((member, index) => {
                         return (
-                            <React.Fragment>
+                            <React.Fragment key={index}>
                                 <div className="subHeading pb-0">
-                                    <h2>{language.name}</h2>
+                                    <h2>{fields.get(index).name || 'Language'}</h2>
                                     <ul className="subHeading__control">
                                         <li className="subHeading__delete">
                                             <span className="sprite icon--delete" 
                                              onClick={(event) => this.deleteLanguage(index, fields, event)}
                                              role="button"></span>
                                         </li>
-                                        <li className="subHeading__btn">
-                                            <i className="sprite icon--upArrow"></i>
-                                        </li>
-                                        <li className="subHeading__btn">
-                                            <i className="sprite icon--downArrow"></i>
-                                        </li>
+                                        {index == 0 ? '':
+                                            <li className="subHeading__btn"
+                                                onClick={(event) => this.changeOrderingUp(index, fields, event)}>
+                                                <i className="sprite icon--upArrow"></i>
+                                            </li>
+                                        }
+                                        {index == fields.length-1 ? '':
+                                            <li className="subHeading__btn"
+                                                onClick={(event) => this.changeOrderingDown(index, fields, event)}>
+                                                <i className="sprite icon--downArrow"></i>
+                                            </li>
+                                        }
                                     </ul>
                                 </div>
 

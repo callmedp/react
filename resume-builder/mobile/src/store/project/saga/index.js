@@ -16,6 +16,7 @@ function* fetchUserProject(action) {
             console.log('error');
         }
         const {data: {results}} = result;
+        results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
         let data = {list: results}
 
 

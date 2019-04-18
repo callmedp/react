@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Field, reduxForm} from "redux-form";
+import {Field, reduxForm, FieldArray} from "redux-form";
 import {renderField, renderTextArea, renderSelect, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
 import {required} from "../../../../../FormHandler/formValidations"
 import * as actions from "../../../../../../store/education/actions";
@@ -13,11 +13,17 @@ class Education extends Component {
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteEducation = this.deleteEducation.bind(this);
+        this.changeOrderingUp = this.changeOrderingUp.bind(this);
+        this.changeOrderingDown = this.changeOrderingDown.bind(this);
     }
 
     async handleSubmit(values) {
+         values.list.map((data)=>{
+            data.course_type = {value: 'FT', label: 'FULL TIME'}
+         })
+        console.log(values.list[0])
         await this.props.bulkUpdateUserEducation(values.list);
-        this.props.history.push('/resume-builder/edit/?type=skill')
+        //this.props.history.push('/resume-builder/edit/?type=skill')
     }
 
     componentDidMount() {
@@ -49,6 +55,34 @@ class Education extends Component {
         }
     }
 
+    changeOrderingUp(index,fields,event){
+        event.stopPropagation();
+        console.log("Clicked Up")
+        let currentItem = fields.get(index);
+        let prevItem = fields.get(index - 1);
+        currentItem['order'] = index - 1;
+        prevItem['order'] = index;
+        fields.remove(index)
+        fields.insert(index, currentItem)
+        fields.remove(index - 1)
+        fields.insert(index - 1, prevItem)
+        fields.swap(index, index - 1)
+    }
+
+    changeOrderingDown(index,fields,event){
+        event.stopPropagation();
+        console.log("Clicked Down")
+        let currentItem = fields.get(index);
+        let nextItem = fields.get(index + 1);
+        currentItem['order'] = index + 1;
+        nextItem['order'] = index;
+        fields.remove(index)
+        fields.insert(index, currentItem)
+        fields.remove(index+1)
+        fields.insert(index + 1, nextItem)
+        fields.swap(index, index + 1);
+    }
+
     render() {
         const {handleSubmit, education} = this.props;
         const renderEducation = ({fields, meta: {touched, error, submitFailed}}) => {
@@ -68,19 +102,25 @@ class Education extends Component {
                         return(
                             <React.Fragment key={index}>
                                 <div className="subHeading pb-0">
-                                    <h2>{education.specialization}</h2>
+                                    <h2>{fields.get(index).institution_name || 'Education'}</h2>
                                     <ul className="subHeading__control">
                                         <li className="subHeading__delete">
                                             <span className="sprite icon--delete" 
                                             onClick={(event) => this.deleteEducation(index, fields, event)}
                                             role="button"></span>
                                         </li>
-                                        <li className="subHeading__btn">
-                                            <i className="sprite icon--upArrow"></i>
-                                        </li>
-                                        <li className="subHeading__btn">
-                                            <i className="sprite icon--downArrow"></i>
-                                        </li>
+                                        {index == 0 ? '':
+                                            <li className="subHeading__btn"
+                                                onClick={(event) => this.changeOrderingUp(index, fields, event)}>
+                                                <i className="sprite icon--upArrow"></i>
+                                            </li>
+                                        }
+                                        {index == fields.length-1 ? '':
+                                            <li className="subHeading__btn"
+                                                onClick={(event) => this.changeOrderingDown(index, fields, event)}>
+                                                <i className="sprite icon--downArrow"></i>
+                                            </li>
+                                        }
                                     </ul>
                                 </div>
 
@@ -138,9 +178,9 @@ class Education extends Component {
                                     </li>
 
                                     <li className="form__radio-group d-flex justify-content-end fs-14">
-                                        <input class="form__radio-input" type="radio" name={`${member}.is_pursuing`}
-                                            checked={`${member}.is_pursuing` === 'true' ? true : false}  />
-                                        <label class="form__radio-label" htmlFor="tillToday">
+                                        <Field type="radio" name={`${member}.is_pursuing`} component="input" 
+                                            className="form__radio-input" value={`${member}.is_pursuing`}/>
+                                        <label className="form__radio-label" htmlFor="tillToday">
                                             <span className="form__radio-button"></span>
                                             Till today
                                     </label>
@@ -154,14 +194,16 @@ class Education extends Component {
                                                     <i className="sprite icon--date"></i>
                                                 </span>
                                             </div>
-                                            <Field component={renderSelect} type={"text"}
+                                            <Field component={renderSelect}
                                                 name={`${member}.course_type`}
+                                                isMulti={false}
+                                                type={"text"}
                                                 options={[
                                                     {value: 'FT', label: 'FULL TIME'},
                                                     {value: 'PT', label: 'PART TIME'},
                                                 ]}
-                                                className="form__input"  id="course_type" 
-                                                aria-label="course_type"/>
+                                                 
+                                                />
                                         </div>
                                     </li>
 

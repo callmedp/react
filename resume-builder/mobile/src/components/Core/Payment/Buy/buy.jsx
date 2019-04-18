@@ -10,7 +10,8 @@ class Buy extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            'checked': 'product1'
+            'checked': 'product1',
+            'pay_button_clicked': true
         }
 
     }
@@ -70,7 +71,8 @@ class Buy extends Component {
                         <span className="fs-26 color-333 semi-bold">Rs. {this.state.checked === 'product1' ? 999 : 1249}/-</span>
                     </div>
 
-                    <button className="btn btn__round btn__primary fs-" onClick={this.redirectToCart.bind(this)}>Pay Now</button>
+                    <button className="btn btn__round btn__primary fs-" disabled={this.state.pay_button_clicked}
+                    onClick={this.redirectToCart.bind(this)}>Pay Now</button>
                 </div>
 
                 <div className="buy">

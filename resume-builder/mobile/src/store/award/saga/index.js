@@ -17,7 +17,9 @@ function* fetchUserAward(action) {
             console.log('error');
         }
         const {data: {results}} = result;
-        console.log('-resum', results);
+        results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
+        console.log("Sorted list ")
+        console.log(results)
         let data = {list: results};
         console.log('---', data);
         yield put({type: Actions.SAVE_USER_AWARD, data: data})

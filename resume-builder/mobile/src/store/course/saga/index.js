@@ -16,7 +16,11 @@ function* fetchUserCourse(action) {
             console.log('error');
         }
         const {data: {results}} = result;
-
+        results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
+        results.map((data)=>{
+            data.year_of_certification =`${data.year_of_certification}-01-01`
+        })
+        console.log(results)
         let data = {list: results}
         yield put({type: Actions.SAVE_USER_COURSE, data: data})
     } catch (e) {

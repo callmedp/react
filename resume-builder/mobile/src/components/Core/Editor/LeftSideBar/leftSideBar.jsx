@@ -10,7 +10,14 @@ export default class LeftSideBar extends Component {
         const values = queryString.parse(this.props.location.search);
 
         this.state = {
-            type: (values && values.type) || ''
+            type: (values && values.type) || '',
+            addmore:{
+                'language':false,
+                "award":false,
+                "course":false,
+                "project":false,
+                "reference":false
+            }
         };
         if (!(values && values.type)) {
             this.props.history.push('/resume-builder/edit/?type=profile')
@@ -31,10 +38,12 @@ export default class LeftSideBar extends Component {
         }
     }
     render() {
-        const {type} = this.state;
+        const {type,addmore} = this.state;
         return (
             
+
             <section className="left-sidebar sidebar">
+                
                 <div className="sidebar__menuWrap">
                     <ul className="sidebar__items">
                         <li className="sidebar__item user">
@@ -126,10 +135,8 @@ export default class LeftSideBar extends Component {
                                 </div>
                             </a>
                         </li>
-                    </ul>
-
-                    <ul className="sidebar__items hide">
-                        <li className={"sidebar__item " + (type === 'language' ? 'sidebar--active' : '')}>
+                        <li className={"sidebar__item " + (type === 'language' ? 'sidebar--active' : '')
+                            + (addmore.language?'':'hide')}>
                             <Link to="/resume-builder/edit/?type=language" className="sidebar__anchor">
                                 <div className="sidebar__wrap">
                                     <i className="sprite icon--language"></i>
@@ -143,7 +150,8 @@ export default class LeftSideBar extends Component {
                             </Link>
                         </li>
                         
-                        <li className={"sidebar__item " + (type === 'award' ? 'sidebar--active' : '')}>
+                        <li className={"sidebar__item " + (type === 'award' ? 'sidebar--active' : '')
+                            + (addmore.award?'':'hide')}>
                             <Link to="/resume-builder/edit/?type=award" className="sidebar__anchor">
                                 <div className="sidebar__wrap">
                                     <i className="sprite icon--award"></i>
@@ -157,7 +165,8 @@ export default class LeftSideBar extends Component {
                             </Link>
                         </li>
                         
-                        <li className={"sidebar__item " + (type === 'course' ? 'sidebar--active' : '')}>
+                        <li className={"sidebar__item " + (type === 'course' ? 'sidebar--active' : '')
+                            + (addmore.course?'':'hide')}>
                             <Link to="/resume-builder/edit/?type=course" className="sidebar__anchor">
                                 <div className="sidebar__wrap">
                                     <i className="sprite icon--course"></i>
@@ -171,7 +180,8 @@ export default class LeftSideBar extends Component {
                             </Link>
                         </li>
                         
-                        <li className={"sidebar__item " + (type === 'project' ? 'sidebar--active' : '')}>
+                        <li className={"sidebar__item " + (type === 'project' ? 'sidebar--active' : '')
+                                + (addmore.project?'':'hide')}>
                             <Link to="/resume-builder/edit/?type=project" className="sidebar__anchor">
                                 <div className="sidebar__wrap">
                                     <i className="sprite icon--project"></i>
@@ -185,7 +195,8 @@ export default class LeftSideBar extends Component {
                             </Link>
                         </li>
                         
-                        <li className={"sidebar__item " + (type === 'reference' ? 'sidebar--active' : '')}>
+                        <li className={"sidebar__item " + (type === 'reference' ? 'sidebar--active' : '')
+                            + (addmore.reference?'':'hide')}>
                             <Link to="/resume-builder/edit/?type=reference" className="sidebar__anchor">
                                 <div className="sidebar__wrap">
                                     <i className="sprite icon--reference"></i>
@@ -198,7 +209,7 @@ export default class LeftSideBar extends Component {
                                 </div>
                             </Link>
                         </li>
-                    </ul>
+                    </ul>   
                 </div>
 
                 <ul className="companyMenu">

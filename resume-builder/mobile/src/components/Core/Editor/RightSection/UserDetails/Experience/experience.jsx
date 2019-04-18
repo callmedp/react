@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './experience.scss'
 import {renderField, renderTextArea, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
-import {Field, reduxForm} from 'redux-form';
+import {Field, reduxForm, FieldArray} from 'redux-form';
 import * as actions from '../../../../../../store/experience/actions';
 import {connect} from "react-redux";
 import moment from 'moment';
@@ -14,6 +14,8 @@ class Experience extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteExperience = this.deleteExperience.bind(this);
+        this.changeOrderingUp = this.changeOrderingUp.bind(this);
+        this.changeOrderingDown = this.changeOrderingDown.bind(this);
 
     }
     componentDidMount() {
@@ -26,7 +28,7 @@ class Experience extends Component {
     }
 
     handleAddition(fields, error) {
-        const listLength = fields.length;
+        
         fields.push({
             "candidate_id": '',
             "id": '',
@@ -34,7 +36,7 @@ class Experience extends Component {
             "company_name": '',
             "start_date": '',
             "end_date": '',
-            "is_working": '',
+            "is_working": false,
             "job_location": '',
             "work_description": '',
             order: fields.length
@@ -48,6 +50,34 @@ class Experience extends Component {
         if (experience && experience.id) {
             this.props.removeExperience(experience.id)
         }
+    }
+
+    changeOrderingUp(index,fields,event){
+        event.stopPropagation();
+        console.log("Clicked Up")
+        let currentItem = fields.get(index);
+        let prevItem = fields.get(index - 1);
+        currentItem['order'] = index - 1;
+        prevItem['order'] = index;
+        fields.remove(index)
+        fields.insert(index, currentItem)
+        fields.remove(index - 1)
+        fields.insert(index - 1, prevItem)
+        fields.swap(index, index - 1)
+    }
+
+    changeOrderingDown(index,fields,event){
+        event.stopPropagation();
+        console.log("Clicked Down")
+        let currentItem = fields.get(index);
+        let nextItem = fields.get(index + 1);
+        currentItem['order'] = index + 1;
+        nextItem['order'] = index;
+        fields.remove(index)
+        fields.insert(index, currentItem)
+        fields.remove(index+1)
+        fields.insert(index + 1, nextItem)
+        fields.swap(index, index + 1);
     }
 
     render() {
@@ -67,21 +97,27 @@ class Experience extends Component {
                     </div>
                     {fields.map((member, index) => {
                         return (
-                        <React.Fragment>
+                        <React.Fragment key={index}>
                             <div className="subHeading pb-0">
-                                <h2>{experience.company_name}</h2>
+                                <h2>{fields.get(index).company_name || 'Experience'}</h2>
                                 <ul className="subHeading__control">
                                     <li className="subHeading__delete">
                                         <span className="sprite icon--delete"
                                         onClick={(event) => this.deleteExperience(index, fields, event)}
                                         role="button"></span>
                                     </li>
-                                    <li className="subHeading__btn">
-                                        <i className="sprite icon--upArrow"></i>
-                                    </li>
-                                    <li className="subHeading__btn">
-                                        <i className="sprite icon--downArrow"></i>
-                                    </li>
+                                    {index == 0 ? '':
+                                        <li className="subHeading__btn"
+                                            onClick={(event) => this.changeOrderingUp(index, fields, event)}>
+                                            <i className="sprite icon--upArrow"></i>
+                                        </li>
+                                    }
+                                    {index == fields.length-1 ? '':
+                                        <li className="subHeading__btn"
+                                            onClick={(event) => this.changeOrderingDown(index, fields, event)}>
+                                            <i className="sprite icon--downArrow"></i>
+                                        </li>
+                                    }
                                 </ul>
                             </div>
 
@@ -158,6 +194,13 @@ class Experience extends Component {
                                         <Field component={renderField} type={"text"} 
                                         name={`${member}.job_location`} className="form__input"/>
                                     </div>
+                                </li>
+
+                                <li className="form__group">
+                                    <label className="form__label" htmlFor="work_description">Description</label>
+                                    <Field component={renderTextArea} type={"textarea"} name={`${member}.work_description`}
+                                        className="form__input h-300" rows="5" 
+                                    />
                                 </li>
 
                             </ul>

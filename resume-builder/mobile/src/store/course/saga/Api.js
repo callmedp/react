@@ -32,7 +32,7 @@ const deleteUserCourse = (candidateId, courseId) => {
 
 const bulkUpdateUserCourse = (data, candidateId) => {
 
-    const url = `candidate/${candidateId}/bulk-update/course/`;
+    const url = `candidate/${candidateId}/bulk-update/certification/`;
     return BaseApiService.post(`http://127.0.0.1:8000/api/v1/resume/${url}`,data);
 
 
