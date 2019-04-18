@@ -14,7 +14,6 @@ from geolocation.models import (
     City,)
 from order.choices import BOOSTER_RECRUITER_TYPE
 
-
 class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     name = models.CharField(
         _('Name'), max_length=100,
@@ -160,6 +159,10 @@ class UserCertificate(models.Model):
         _('Candidate ID'), blank=True,
         max_length=30, help_text=_('Candidate ID'))
     certificate_file_url = models.URLField(max_length=500, blank=True, null=True)
+    expiry_date = models.DateTimeField(null=True, blank=True)
+    order = models.ForeignKey(
+        'order.Order', related_name='user_certificates',
+        verbose_name=_("Order"), blank=True, null=True)
 
     def __str__(self):
         return '{}'.format(self.certificate.name)
