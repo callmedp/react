@@ -1337,3 +1337,20 @@ header {
 .article-detail-content ol li, .article-detail-content ul li .parsley-errors-list {
 	font-size: $font-size+1 !important;
 } 
+
+
+.look-interesting {
+	.register {
+		padding: 0;
+
+		.country-code .form-control {
+			width: 77%;
+		}
+
+		textarea.form-control {
+			padding: 0;
+		}
+	}
+
+	
+}
