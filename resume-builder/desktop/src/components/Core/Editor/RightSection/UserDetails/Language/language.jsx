@@ -43,8 +43,11 @@ class Language extends Component {
 
     async handleSubmit(values) {
         const {list} = values;
-        await this.props.onSubmit(list[list.length - 1]);
-        this.props.history.push('/resume-builder/edit/?type=award')
+        if (list.length) {
+            await this.props.onSubmit(list[list.length - 1]);
+            this.props.history.push('/resume-builder/edit/?type=award')
+        }
+
     }
 
 

@@ -12,6 +12,10 @@ function* fetchUserAward(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        if (localStorage.getItem('award')) {
+            yield put({type: Actions.SAVE_USER_AWARD, data: data})
+            return;
+        }
         const result = yield call(Api.fetchUserAward, candidateId);
         if (result['error']) {
             console.log('error');
@@ -38,6 +42,8 @@ function* updateUserAward(action) {
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+        //delete the award
+        localStorage.deleteItem('award');
         yield put({type: Actions.SAVE_USER_AWARD, data: result['data']});
 
         return resolve('User Award  Info saved successfully.');

@@ -1,7 +1,11 @@
 import {SAVE_USER_REFERENCE, REMOVE_REFERENCE} from "../actions/actionTypes";
 
 const initialState = {
-    list: []
+    list: [{
+        "reference_name": '',
+        "reference_designation": '',
+        "about_user": "",
+    }]
 };
 
 

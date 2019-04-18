@@ -1,7 +1,13 @@
 import {SAVE_USER_PROJECT, REMOVE_PROJECT} from "../actions/actionTypes";
 
 const initialState = {
-    list: []
+    list: [{
+        "project_name": '',
+        "start_date": '',
+        "end_date": '',
+        "skills": '',
+        "description": ''
+    }]
 };
 
 

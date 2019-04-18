@@ -35,7 +35,10 @@ class Reference extends Component {
     }
 
     async handleSubmit(values) {
-        await this.props.onSubmit(values);
+        const {list} = values;
+        if (list.length) {
+            await this.props.onSubmit(list[list.length - 1]);
+        }
     }
 
     componentDidMount() {
@@ -116,7 +119,7 @@ class Reference extends Component {
     render() {
         const {handleSubmit, reference} = this.props;
         const renderReferences = ({fields, meta}) => {
-            console.log('-----',meta);
+            console.log('-----', meta);
             return (
                 <div>
                     <section className="head-section">

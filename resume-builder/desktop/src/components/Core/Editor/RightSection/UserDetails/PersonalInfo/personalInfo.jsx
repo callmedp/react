@@ -84,7 +84,7 @@ export class PersonalInfo extends Component {
     }
 
     render() {
-        const {handleSubmit, personalInfo} = this.props;
+        const {handleSubmit, personalInfo, enableReinitialize} = this.props;
         return (
             <div>
                 <section className="head-section">

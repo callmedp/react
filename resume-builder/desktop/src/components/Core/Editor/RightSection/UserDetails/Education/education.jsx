@@ -35,8 +35,12 @@ class Education extends Component {
     }
 
     async handleSubmit(values) {
-        await this.props.onSubmit(values);
-        this.props.history.push('/resume-builder/edit/?type=skill')
+        const {list} = values;
+        if (list.length) {
+            await this.props.onSubmit(list[list.length - 1]);
+            this.props.history.push('/resume-builder/edit/?type=skill')
+        }
+
     }
 
     componentDidMount() {
