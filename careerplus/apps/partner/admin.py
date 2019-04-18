@@ -21,7 +21,7 @@ class VendorAdmin(admin.ModelAdmin):
 
 
 class CeritficateAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'skill', "vendor_provider")
+    list_display = ('id', 'name', 'skill', "vendor_provider", "vendor_text")
     model = models.Certificate
 
 
@@ -106,7 +106,23 @@ class BoosterRecruiterAdmin(admin.ModelAdmin):
         extra_context['booster_recruiter_type'] = BOOSTER_RECRUITER_TYPE
         return super(BoosterRecruiterAdmin, self).changelist_view(request, extra_context=extra_context)
 
+
+class AssesmentAdmin(admin.ModelAdmin):
+    list_display = ('candidate_email', "assesment_name", "report")
+    model = models.Assesment
+
+
+class ScoreAdmin(admin.ModelAdmin):
+    list_display = ('assesment', 'subject', "score_obtained")
+    model = models.Score
+
+
 admin.site.register(models.Vendor, VendorAdmin)
 admin.site.register(models.Certificate, CeritficateAdmin)
 admin.site.register(models.UserCertificate, UserCertificateAdmin)
 admin.site.register(models.BoosterRecruiter, BoosterRecruiterAdmin)
+admin.site.register(models.Assesment, AssesmentAdmin)
+admin.site.register(models.Score, ScoreAdmin)
+
+
+

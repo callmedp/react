@@ -14,11 +14,14 @@ from partner.models import Vendor
 from partner.models import Certificate, UserCertificate
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from core.api_mixin import ShineCandidateDetail, ShineToken
+from order.models import Order
+
 User = get_user_model()
 
 
 @task(name="upload_certificate_task")
 def upload_certificate_task(task=None, user=None, vendor=None, vendor_text=None):
+    import ipdb; ipdb.set_trace();
     f = False
     try:
         up_task = Scheduler.objects.get(pk=task)
@@ -104,7 +107,6 @@ def upload_certificate_task(task=None, user=None, vendor=None, vendor_text=None)
             next(uploader, None)  # skip the headers
             for row in uploader:
                 try:
-                    import ipdb; ipdb.set_trace();
                     name = row.get('name', '')
                     skill = row.get('skill', '')
                     certi_file_url = row.get('certificate_file_url')
@@ -123,10 +125,10 @@ def upload_certificate_task(task=None, user=None, vendor=None, vendor_text=None)
                         else:
                             all_skills = list(existing_certificates.exclude(skill="").values_list('skill', flat=True))
                             processed_all_skills = []
-                            for skill in all_skills:
-                                skill = sorted(map(lambda s: s.strip(), skill.split(',')))
-                                skill = "|".join(skill)
-                                processed_all_skills.append(skill)
+                            for skl in all_skills:
+                                skl = sorted(map(lambda s: s.strip(), skl.split(',')))
+                                skl = "|".join(skl)
+                                processed_all_skills.append(skl)
 
                             new_skill = list(sorted(map(lambda s: s.strip(), skill.split(','))))
                             new_skill = "|".join(new_skill)
@@ -145,6 +147,7 @@ def upload_certificate_task(task=None, user=None, vendor=None, vendor_text=None)
                                 obj.certificate_file_url = certi_file_url
                             if vendor_image_url:
                                 obj.vendor_image_url = vendor_image_url
+                            skill = ','.join(sorted(skill.split(',')))
                             obj.skill = skill
                             obj.save()
 
@@ -180,7 +183,8 @@ def upload_certificate_task(task=None, user=None, vendor=None, vendor_text=None)
 
 
 @task(name="upload_candidate_certificate_task")
-def upload_candidate_certificate_task(task=None, user=None, vendor=None):
+def upload_candidate_certificate_task(task=None, user=None, vendor=None,  vendor_text=None):
+    import ipdb; ipdb.set_trace();
     f = False
     try:
         up_task = Scheduler.objects.get(pk=task)
@@ -188,14 +192,15 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
         logging.getLogger('error_log').error(
             "%(err)s" % {'err': str(e)})
         return f
-    try:
-        vendor = Vendor.objects.get(pk=vendor)
-    except Vendor.DoesNotExist as e:
-        logging.getLogger('error_log').error(
-            "%(err)s" % {'err': str(e)})
-        up_task.status = 1
-        up_task.save()
-        return f
+    if vendor:
+        try:
+            vendor = Vendor.objects.get(pk=vendor)
+        except Vendor.DoesNotExist as e:
+            logging.getLogger('error_log').error(
+                "%(err)s" % {'err': str(e)})
+            up_task.status = 1
+            up_task.save()
+            return f
     up_task.status = 3
     up_task.save()
     upload_path = up_task.file_uploaded.name
@@ -215,7 +220,7 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
             upload_path)
     if exist_file:
         f = True
-        fieldnames = ['year', 'candidate_email', 'candidate_mobile', 'certificate_name', 'certificate_file_url']
+        fieldnames = ['year', 'candidate_email', 'candidate_mobile', 'certificate_name', 'certificate_file_url' , 'order']
         if not settings.IS_GCP:
             with open(
                 settings.MEDIA_ROOT + '/' + upload_path,
@@ -278,6 +283,9 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                 certificate_name = row.get('certificate_name')
                 certi_yr_passing = row.get('year')
                 certi_file_url = row.get('certificate_file_url')
+                order = row.get('order')
+                if order:
+                    order = Order.objects.filter(id=order).first()
                 headers = ShineToken().get_api_headers()
                 shineid = ShineCandidateDetail().get_shine_id(
                     email=email, headers=headers)
@@ -286,8 +294,14 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                     row['status'] = "Failure"
                 if shineid and certificate_name:
                     try:
-                        certificate = Certificate.objects.get(
-                            name__iexact=certificate_name, vendor_provider=vendor)
+                        if vendor:
+                            certificate = Certificate.objects.get(
+                                name__iexact=certificate_name,
+                                vendor_provider=vendor)
+                        elif vendor_text:
+                            certificate = Certificate.objects.get(
+                                name__iexact=certificate_name,
+                                vendor_text=vendor_text)
                     except Certificate.DoesNotExist:
                         logging.getLogger("error_log").error("Certificate not found,{}".format(certificate_name))
                         row['reason_for_failure'] = "Certificate not found"
