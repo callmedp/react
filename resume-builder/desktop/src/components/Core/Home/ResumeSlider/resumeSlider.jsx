@@ -10,6 +10,8 @@ export default class ResumeSlider extends Component {
                 <ul className="slider">
                     <li><img alt={'Slider'} src="/media/static/react/assets/images/slider.jpg" className="img-responsive" /></li>
                 </ul>
+                <button className="orange-button orange-button--custom" onClick={() => this.scrollTo('templates')}>Customise
+                </button>
             </section>
         )
     }

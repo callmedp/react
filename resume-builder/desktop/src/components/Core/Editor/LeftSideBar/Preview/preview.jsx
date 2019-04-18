@@ -93,8 +93,8 @@ export default class Preview extends Component {
                             <li className="reorder-content--select-box reorder-content--select-box__select">
                                 Personal Info
                                 <span className="addon-buttons">
-	                				<span className="icon-ascend mr-5 ml-0"></span>
-	                				<span className="icon-descend ml-0"></span>
+	                				<span className="icon-ascend1 mr-5 ml-0"></span>
+	                				<span className="icon-descend1 ml-0"></span>
 	                			</span>
                             </li>
                             <li className="reorder-content--select-box">Summary</li>
