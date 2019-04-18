@@ -92,7 +92,7 @@ class References extends Component {
                         return (
                             <React.Fragment key={index}>
                                 <div className="subHeading pb-0">
-                                    <h2>{reference.reference_name}</h2>
+                                    <h2>{fields.get(index).reference_name || 'Refrence'}</h2>
                                     <ul className="subHeading__control">
                                         <li className="subHeading__delete">
                                             <span className="sprite icon--delete" role="button"
@@ -122,7 +122,7 @@ class References extends Component {
                                                 <i className="sprite icon--project-gray"></i>
                                             </span>
                                             </div>
-                                            <Field component={renderField} validate={required} type={"text"} className="form__input"
+                                            <Field component={renderField} type={"text"} className="form__input"
                                                 name={`${member}.reference_name`}/>
                                         </div>
                                     </li>
@@ -135,7 +135,7 @@ class References extends Component {
                                                 <i className="sprite icon--designation"></i>
                                             </span>
                                             </div>
-                                            <Field component={renderField} validate={required} type={"text"} 
+                                            <Field component={renderField} type={"text"} 
                                                 name={`${member}.reference_designation`} className="form__input"/>
                                         </div>
                                     </li>
