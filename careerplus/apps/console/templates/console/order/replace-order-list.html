@@ -107,6 +107,7 @@
                     <th class="column-title">How Old</th>
                     <th class="column-title">Assigned</th>
                     <th class="column-title">Added On</th>
+                    <th class="column-title">Replaced With</th>
 
                   </tr>
                 </thead>
@@ -146,6 +147,11 @@
                        <td>{% if obj.assigned_to %}{{obj.assigned_to.name}} {% else %} Not Assigned{% endif %}</td>
 
                        <td>{{obj.created}}</td>
+                       <td>
+                        {% if obj.get_replacement_order_id%}
+                            <a target="_blank" style="color:#1583c7;" href="{% url "console:order-detail"  obj.get_replacement_order_id %}"><b style="text-decoration: underline;">CP{{ obj.get_replacement_order_id }}</b></a>
+                        {% endif %}
+                       </td>
                     </tr>
                   {% endfor %}
                 </tbody>
