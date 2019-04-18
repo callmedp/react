@@ -64,6 +64,8 @@
   width: 100%;
   background-color: $bg-white;
   z-index: 999;
+  height: 100vh;
+  display: none;
 
   &::after {
     content: '';
@@ -77,6 +79,7 @@
 
   &__wrap {
     padding: 15px;
+    height: 100%;
 
     &--head {
       font-weight: 600;
@@ -95,4 +98,12 @@
   &__flex {
     display: flex;
   }
+}
+
+.show {
+  display: block !important;
+}
+
+.hide {
+  display: none !important;
 }
