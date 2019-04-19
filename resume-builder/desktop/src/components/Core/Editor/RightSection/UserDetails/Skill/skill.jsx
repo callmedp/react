@@ -15,6 +15,7 @@ import {
 } from 'react-accessible-accordion';
 
 import validate from '../../../../../FormHandler/validations/skillValidation.js'
+import Loader from "../../../../../Loader/loader.jsx";
 
 
 /*
@@ -125,12 +126,15 @@ class Skill extends Component {
 
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, enableReinitialize, skill} = this.props;
+        const {error, handleSubmit, pristine, reset, submitting, enableReinitialize, skill, ui: {loader}} = this.props;
 
-        const renderSkills = ({fields, meta: {touched, error, submitFailed}}) => {
+        const renderSkills = ({fields, loader, meta: {touched, error, submitFailed}}) => {
             return (
 
                 <div>
+                    {!!loader &&
+                    <Loader/>
+                    }
                     <section className="head-section">
                         <span className="icon-box"><i className="icon-skills1"/></span>
                         <h2>Skills</h2>
@@ -234,7 +238,7 @@ class Skill extends Component {
         return (
             <div>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
-                    <FieldArray name="list" component={renderSkills}/>
+                    <FieldArray name="list" loader={loader} component={renderSkills}/>
                     <div className="flex-container items-right mr-20 mb-30">
                         <button className="blue-button mr-10">Preview</button>
                         <button className="orange-button" type={'submit'}>Save & Continue</button>
@@ -257,7 +261,8 @@ export const SkillForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.skill,
-        skill: state.skill
+        skill: state.skill,
+        ui:state.ui
     }
 };
 

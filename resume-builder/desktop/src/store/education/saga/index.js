@@ -9,15 +9,22 @@ import {SubmissionError} from 'redux-form'
 import {courseTypeList} from "../../../Utils/courseTypeList";
 import {proficiencyList} from "../../../Utils/proficiencyList";
 
+import {UPDATE_UI} from '../../ui/actions/actionTypes'
 
 function* fetchUserEducation(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+
+        yield put({type: UPDATE_UI, data: {loader: true}})
+
         const result = yield call(Api.fetchUserEducation, candidateId);
         if (result['error']) {
             console.log('error');
         }
+
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
         const {data: {results}} = result;
         let data = {list: results};
         data = {
@@ -46,7 +53,13 @@ function* updateUserEducation(action) {
 
         const {id} = userEducation;
         console.log('--user Education-');
+
+        yield put({type: UPDATE_UI, data: {loader: true}})
+
         const result = yield call(id ? Api.updateUserEducation : Api.createUserEducation, userEducation, candidateId, id);
+
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }

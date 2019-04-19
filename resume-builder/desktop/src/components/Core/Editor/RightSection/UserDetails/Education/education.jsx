@@ -14,6 +14,7 @@ import {
 } from 'react-accessible-accordion';
 
 import validate from '../../../../../FormHandler/validations/educationValidation'
+import Loader from "../../../../../Loader/loader.jsx";
 
 class Education extends Component {
     constructor(props) {
@@ -119,10 +120,13 @@ class Education extends Component {
 
 
     render() {
-        const {handleSubmit, education} = this.props;
-        const renderEducation = ({fields, meta: {touched, error, submitFailed}}) => {
+        const {handleSubmit, education, ui: {loader}} = this.props;
+        const renderEducation = ({fields, loader, meta: {touched, error, submitFailed}}) => {
             return (
                 <div>
+                    {!!loader &&
+                    <Loader/>
+                    }
                     <section className="head-section">
                         <span className="icon-box"><i className="icon-education1"></i></span>
                         <h2>Education</h2>
@@ -274,7 +278,7 @@ class Education extends Component {
         return (
             <div>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
-                    <FieldArray name={'list'} component={renderEducation}/>
+                    <FieldArray name={'list'} loader={loader} component={renderEducation}/>
                     <div className="flex-container items-right mr-20 mb-30">
                         <button className="blue-button mr-10">Preview</button>
                         <button className="orange-button" type={'submit'}>Save & Continue</button>
@@ -297,7 +301,8 @@ export const EducationForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.education,
-        education: state.education
+        education: state.education,
+        ui: state.ui
     }
 };
 

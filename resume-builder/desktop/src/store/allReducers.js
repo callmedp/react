@@ -13,6 +13,7 @@ import {projectReducer} from './project/reducer/index'
 import {referenceReducer} from './reference/reducer/index'
 import {getProductIdsReducer} from './buy/reducer/index'
 import {templateReducer} from './template/reducer/index'
+import {uiReducer} from './ui/reducer/index'
 
 const allReducer = combineReducers({
         form: formReducer,
@@ -27,7 +28,8 @@ const allReducer = combineReducers({
         project: projectReducer,
         reference: referenceReducer,
         productIds: getProductIdsReducer,
-        template: templateReducer
+        template: templateReducer,
+        ui: uiReducer
     })
 ;
 

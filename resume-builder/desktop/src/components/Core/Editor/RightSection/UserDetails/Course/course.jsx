@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import {renderField, datepicker} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import validate from "../../../../../FormHandler/validations/courseValidation"
 import moment from "moment";
+import Loader from "../../../../../Loader/loader.jsx";
 
 import {
     Accordion,
@@ -109,10 +110,13 @@ class Course extends Component {
     }
 
     render() {
-        const {handleSubmit, course} = this.props;
-        const renderCourse = ({fields, meta: {touched, error, submitFailed}}) => {
+        const {handleSubmit, course, ui:{loader}} = this.props;
+        const renderCourse = ({fields, meta: {touched,loader, error, submitFailed}}) => {
             return (
                 <div>
+                     {!!loader &&
+                <Loader/>
+                }
                     <section className="head-section">
                         <span className="icon-box"><i className="icon-courses1"></i></span>
                         <h2>Courses</h2>
@@ -203,7 +207,7 @@ class Course extends Component {
         return (
             <div>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
-                    <FieldArray name={'list'} component={renderCourse}/>
+                    <FieldArray name={'list'} loader={loader} component={renderCourse}/>
                     <div className="flex-container items-right mr-20 mb-30">
                         <button className="blue-button mr-10">Preview</button>
                         <button className="orange-button" type={'submit'}>Save & Continue</button>
@@ -227,7 +231,8 @@ const
     mapStateToProps = (state) => {
         return {
             initialValues: state.course,
-            course: state.course
+            course: state.course,
+            ui:state.ui
         }
     };
 

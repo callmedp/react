@@ -6,15 +6,20 @@ import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 
+import {UPDATE_UI} from '../../ui/actions/actionTypes'
 
 function* fetchUserExperience(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        yield put({type: UPDATE_UI, data: {loader: true}})
+
         const result = yield call(Api.fetchUserExperience, candidateId);
         if (result['error']) {
             console.log('error');
         }
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
         const {data: {results}} = result;
         let data = {list: results}
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: data})
@@ -32,10 +37,16 @@ function* updateUserExperience(action) {
 
         const {id} = userExperience;
 
+        yield put({type: UPDATE_UI, data: {loader: true}})
+
         const result = yield call(id ? Api.updateUserExperience : Api.createUserExperience, userExperience, candidateId, userExperience.id);
+
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+
 
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: result['data']});
 

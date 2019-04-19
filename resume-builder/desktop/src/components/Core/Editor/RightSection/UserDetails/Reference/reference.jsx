@@ -13,6 +13,7 @@ import {
 } from 'react-accessible-accordion';
 
 import validate from '../../../../../FormHandler/validations/referenceValidation'
+import Loader from "../../../../../Loader/loader.jsx";
 
 
 class Reference extends Component {
@@ -117,11 +118,14 @@ class Reference extends Component {
 
 
     render() {
-        const {handleSubmit, reference} = this.props;
-        const renderReferences = ({fields, meta}) => {
+        const {handleSubmit, reference, ui:{loader}} = this.props;
+        const renderReferences = ({fields,loader, meta}) => {
             console.log('-----', meta);
             return (
                 <div>
+                    {!!loader &&
+                    <Loader/>
+                    }
                     <section className="head-section">
                         <span className="icon-box"><i className="icon-references1"/></span>
                         <h2>References</h2>
@@ -228,7 +232,7 @@ class Reference extends Component {
         return (
             <div>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
-                    <FieldArray name={"list"} component={renderReferences}/>
+                    <FieldArray name={"list"} loader={loader} component={renderReferences}/>
                     <div className="flex-container items-right mr-20 mb-30">
                         <button className="blue-button mr-10">Preview</button>
                         <button className="orange-button" type={'submit'}>Save & Continue</button>
@@ -252,7 +256,8 @@ export const ReferenceForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.reference,
-        reference: state.reference
+        reference: state.reference,
+        ui:state.ui
     }
 };
 

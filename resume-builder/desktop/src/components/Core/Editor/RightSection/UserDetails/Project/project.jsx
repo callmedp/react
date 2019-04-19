@@ -13,6 +13,7 @@ import {
     AccordionItemPanel,
     AccordionItemButton
 } from 'react-accessible-accordion';
+import Loader from "../../../../../Loader/loader.jsx";
 
 
 class Project extends Component {
@@ -42,7 +43,7 @@ class Project extends Component {
     async handleSubmit(values) {
         const {list} = values;
         if (list.length) {
-            await this.props.onSubmit(list[list.length -1]);
+            await this.props.onSubmit(list[list.length - 1]);
             this.props.history.push('/resume-builder/edit/?type=reference');
         }
 
@@ -122,10 +123,13 @@ class Project extends Component {
 
 
     render() {
-        const {handleSubmit, project} = this.props;
-        const renderProjects = ({fields, meta: {touched, error, submitFailed}}) => {
+        const {handleSubmit, project, ui: {loader}} = this.props;
+        const renderProjects = ({fields, loader, meta: {touched, error, submitFailed}}) => {
             return (
                 <div>
+                    {!!loader &&
+                    <Loader/>
+                    }
                     <section className="head-section">
                         <span className="icon-box"><i className="icon-projects1"/></span>
                         <h2>Projects</h2>
@@ -243,7 +247,7 @@ class Project extends Component {
             <div>
 
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
-                    <FieldArray name="list" component={renderProjects}/>
+                    <FieldArray name="list" loader={loader} component={renderProjects}/>
                     <div className="flex-container items-right mr-20 mb-30">
                         <button className="blue-button mr-10">Preview</button>
                         <button className="orange-button" type={'submit'}>Save & Continue</button>
@@ -265,7 +269,8 @@ export const ProjectForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.project,
-        project: state.project
+        project: state.project,
+        ui: state.ui
     }
 };
 

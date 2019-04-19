@@ -5,16 +5,23 @@ import {takeLatest, put, call} from "redux-saga/effects";
 import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
+import {UPDATE_UI} from "../../ui/actions/actionTypes";
 
 
 function* fetchUserProject(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+
+        yield put({type: UPDATE_UI, data: {loader: true}})
+
         const result = yield call(Api.fetchUserProject, candidateId);
         if (result['error']) {
             console.log('error');
         }
+
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
         const {data: {results}} = result;
         let data = {list: results}
 
@@ -26,7 +33,7 @@ function* fetchUserProject(action) {
 }
 
 
- function* updateUserProject(action) {
+function* updateUserProject(action) {
     try {
         let {payload: {userProject, resolve, reject}} = action;
 
@@ -35,10 +42,17 @@ function* fetchUserProject(action) {
 
         const {id} = userProject;
 
+        yield put({type: UPDATE_UI, data: {loader: true}})
+
+
         const result = yield call(id ? Api.updateUserProject : Api.createUserProject, userProject, candidateId, id);
+
+
+        yield put({type: UPDATE_UI, data: {loader: false}})
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+
 
         yield put({type: Actions.SAVE_USER_PROJECT, data: result['data']});
 

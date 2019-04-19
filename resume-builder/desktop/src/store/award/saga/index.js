@@ -3,6 +3,7 @@ import {Api} from './Api';
 import {takeLatest, put, call} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
+import {UPDATE_UI} from '../../ui/actions/actionTypes'
 
 import {SubmissionError} from 'redux-form'
 import {proficiencyList} from "../../../Utils/proficiencyList";
@@ -12,14 +13,18 @@ function* fetchUserAward(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        if (localStorage.getItem('award')) {
-            yield put({type: Actions.SAVE_USER_AWARD, data: data})
-            return;
-        }
+        // if (localStorage.getItem('award')) {
+        //     yield put({type: Actions.SAVE_USER_AWARD, data: data})
+        //     return;
+        // }
+
+        yield put({type: UPDATE_UI, data: {loader: true}})
         const result = yield call(Api.fetchUserAward, candidateId);
         if (result['error']) {
             console.log('error');
         }
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
         const {data: {results}} = result;
         console.log('-resum', results);
         let data = {list: results};
@@ -37,8 +42,10 @@ function* updateUserAward(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
         const {id} = userAward;
+        yield put({type: UPDATE_UI, data: {loader: true}})
         const result = yield call(id ? Api.updateUserAward : Api.createUserAward, userAward, candidateId, id);
-        console.log('---', result);
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }

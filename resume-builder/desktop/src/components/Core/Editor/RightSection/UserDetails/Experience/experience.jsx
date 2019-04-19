@@ -14,6 +14,7 @@ import {
 } from 'react-accessible-accordion';
 
 import validate from '../../../../../FormHandler/validations/experienceValidation'
+import Loader from "../../../../../Loader/loader.jsx";
 
 
 class Experience extends Component {
@@ -121,10 +122,13 @@ class Experience extends Component {
     }
 
     render() {
-        const {handleSubmit, experience} = this.props;
-        const renderExperiences = ({fields, meta: {touched, error, submitFailed}}) => {
+        const {handleSubmit, experience, ui: {loader}} = this.props;
+        const renderExperiences = ({fields, loader, meta: {touched, error, submitFailed}}) => {
             return (
                 <div>
+                    {!!loader &&
+                    <Loader/>
+                    }
                     <section className="head-section">
                         <span className="icon-box"><i className="icon-experience1"></i></span>
                         <h2>Experience</h2>
@@ -269,7 +273,7 @@ class Experience extends Component {
             <div>
 
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
-                    <FieldArray name={"list"} component={renderExperiences}/>
+                    <FieldArray name={"list"} loader={loader} component={renderExperiences}/>
                     <div className="flex-container items-right mr-20 mb-30">
                         <button className="blue-button mr-10">Preview</button>
                         <button className="orange-button" type="submit">Save & Continue</button>
@@ -291,7 +295,8 @@ export const ExperienceForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.experience,
-        experience: state.experience
+        experience: state.experience,
+        ui: state.ui
     }
 };
 

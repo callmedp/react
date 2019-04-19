@@ -9,6 +9,7 @@ import moment from 'moment'
 import {SubmissionError} from 'redux-form'
 
 import {interestList} from '../../../Utils/interestList'
+import {UPDATE_UI} from "../../ui/actions/actionTypes";
 
 const genderDict = {
     '1': {
@@ -29,17 +30,21 @@ function* getPersonalDetails(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        yield put({type: UPDATE_UI, data: {loader: true}})
+
         const result = yield call(Api.fetchPersonalInfo, candidateId);
         if (result['error']) {
             console.log('error');
         }
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
         let {data} = result;
         const {date_of_birth, gender, extracurricular} = data;
 
         data = {
             ...data,
             ...{
-                date_of_birth: (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD'))|| '',
+                date_of_birth: (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
                 gender: (gender && genderDict[gender]) || '',
                 extracurricular: (extracurricular && extracurricular.split(',').map(key => interestList[key])) || ''
             }
@@ -57,10 +62,13 @@ function* updatePersonalDetails(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
         const result = yield call(Api.updatePersonalData, personalDetails, candidateId);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+        yield put({type: UPDATE_UI, data: {loader: true}})
 
 
         yield put({type: Actions.SAVE_USER_INFO, data: result['data']});

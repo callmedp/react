@@ -6,16 +6,22 @@ import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 import {proficiencyList} from "../../../Utils/proficiencyList";
+import {UPDATE_UI} from "../../ui/actions/actionTypes";
 
 
 function* fetchUserSkill(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        yield put({type: UPDATE_UI, data: {loader: true}})
+
         const result = yield call(Api.fetchUserSkill, candidateId);
         if (result['error']) {
             console.log('error');
         }
+
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
         const {data: {results}} = result;
         let data = {list: results};
         data = {
@@ -45,7 +51,12 @@ function* updateUserSkill(action) {
 
         const {id} = userSkill;
 
+
+        yield put({type: UPDATE_UI, data: {loader: true}})
+
         const result = yield call(id ? Api.updateUserSkill : Api.createUserSkill, userSkill, candidateId, id);
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }

@@ -17,6 +17,7 @@ import validate from '../../../../../FormHandler/validations/languageValidation'
 styles
 * */
 import 'react-accessible-accordion/dist/fancy-example.css';
+import Loader from "../../../../../Loader/loader.jsx";
 
 class Language extends Component {
     constructor(props) {
@@ -120,10 +121,13 @@ class Language extends Component {
 
 
     render() {
-        const {handleSubmit, language: {list}} = this.props;
-        const renderMembers = ({fields, meta: {touched, error, submitFailed}}) => {
+        const {handleSubmit, language: {list}, ui:{loader}} = this.props;
+        const renderMembers = ({fields,loader, meta: {touched, error, submitFailed}}) => {
             return (
                 <div>
+                    {!!loader &&
+                    <Loader/>
+                    }
                     <section className="head-section">
                         <span className="icon-box"><i className="icon-languages1"/></span>
                         <h2>Languages</h2>
@@ -228,7 +232,7 @@ class Language extends Component {
             <div>
 
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
-                    <FieldArray name="list" component={renderMembers}/>
+                    <FieldArray name="list" loader={loader} component={renderMembers}/>
                     <div className="flex-container items-right mr-20 mb-30">
                         <button className="blue-button mr-10">Preview</button>
                         <button className="orange-button" type={'submit'}>Save & Continue</button>
@@ -252,7 +256,8 @@ export const LanguageForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.language,
-        language: state.language
+        language: state.language,
+        ui: state.ui
     }
 };
 

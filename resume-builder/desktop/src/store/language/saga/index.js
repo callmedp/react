@@ -5,16 +5,23 @@ import {takeLatest, put, call} from "redux-saga/effects";
 import * as Actions from '../actions/actionTypes';
 import {proficiencyList} from "../../../Utils/proficiencyList";
 import {SubmissionError} from 'redux-form'
+import {UPDATE_UI} from "../../ui/actions/actionTypes";
 
 
 function* fetchUserLanguage(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+
+        yield put({type: UPDATE_UI, data: {loader: true}})
+
         const result = yield call(Api.fetchUserLanguage, candidateId);
         if (result['error']) {
             console.log('error');
         }
+
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
         let {data: {results}} = result;
 
         let data = {list: results};
@@ -45,8 +52,13 @@ function* updateUserLanguage(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
         const {id} = userLanguage;
+        yield put({type: UPDATE_UI, data: {loader: true}})
 
         const result = yield call(id ? Api.updateUserLanguage : Api.createUserLanguage, userLanguage, candidateId, id);
+
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
+
         // if (result['error']) {
         //     return reject(new SubmissionError({_error: result['errorMessage']}));
         // }

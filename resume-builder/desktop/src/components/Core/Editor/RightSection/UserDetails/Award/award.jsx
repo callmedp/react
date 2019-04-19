@@ -13,6 +13,7 @@ import {
     AccordionItemPanel,
     AccordionItemButton
 } from 'react-accessible-accordion';
+import Loader from "../../../../../Loader/loader.jsx";
 
 
 class Award extends Component {
@@ -110,10 +111,13 @@ class Award extends Component {
 
 
     render() {
-        const {handleSubmit, award} = this.props;
-        const renderAwards = ({fields, meta: {touched, error, submitFailed}}) => {
+        const {handleSubmit, award, ui: {loader}} = this.props;
+        const renderAwards = ({fields, loader, meta: {touched, error, submitFailed}}) => {
             return (
                 <div>
+                    {!!(loader) &&
+                    <Loader/>
+                    }
                     <section className="head-section">
                         <span className="icon-box"><i className="icon-awards1"></i></span>
                         <h2>Awards</h2>
@@ -211,7 +215,7 @@ class Award extends Component {
             <div>
 
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
-                    <FieldArray name="list" component={renderAwards}/>
+                    <FieldArray name="list" loader={loader} component={renderAwards}/>
                     <div className="flex-container items-right mr-20 mb-30">
                         <button className="blue-button mr-10">Preview</button>
                         <button className="orange-button" type={'submit'}>Save & Continue</button>
@@ -234,7 +238,8 @@ export const AwardForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.award,
-        award: state.award
+        award: state.award,
+        ui: state.ui
     }
 };
 
