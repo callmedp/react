@@ -21,7 +21,7 @@ function* fetchUserCourse(action) {
 
         const {data: {results}} = result;
 
-        let data = {list: results}
+        let data = {list: results};
         yield put({type: Actions.SAVE_USER_COURSE, data: data})
     } catch (e) {
         console.log(e);
@@ -68,7 +68,6 @@ function* handleCourseSwap(action) {
             console.log(result['error']);
         }
 
-        console.log('---', result);
         // yield call(fetchUserLanguage)
 
     } catch (e) {

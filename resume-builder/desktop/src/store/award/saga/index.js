@@ -26,9 +26,7 @@ function* fetchUserAward(action) {
         yield put({type: UPDATE_UI, data: {loader: false}})
 
         const {data: {results}} = result;
-        console.log('-resum', results);
         let data = {list: results};
-        console.log('---', data);
         yield put({type: Actions.SAVE_USER_AWARD, data: data})
     } catch (e) {
         console.log(e);
@@ -75,7 +73,6 @@ function* handleAwardSwap(action) {
             console.log(result['error']);
         }
 
-        console.log('---', result);
         // yield call(fetchUserLanguage)
 
     } catch (e) {

@@ -86,7 +86,6 @@ function* handleEducationSwap(action) {
             console.log(result['error']);
         }
 
-        console.log('---', result);
         // yield call(fetchUserLanguage)
 
     } catch (e) {

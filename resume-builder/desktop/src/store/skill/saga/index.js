@@ -85,8 +85,6 @@ function* handleSkillSwap(action) {
             console.log(result['error']);
         }
 
-        console.log('---', result);
-
     } catch (e) {
         console.log('error', e);
     }
