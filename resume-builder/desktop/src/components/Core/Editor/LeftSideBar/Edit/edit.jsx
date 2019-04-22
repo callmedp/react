@@ -17,7 +17,7 @@ class Edit extends Component {
         this.state = {
             type: (values && values.type) || '',
             show: false,
-            preferenceList: entityList
+            preferenceList: this.props.entityList
         };
 
         if (!(values && values.type)) {
@@ -41,7 +41,7 @@ class Edit extends Component {
     }
 
     addIntoVisibleList(addedElem) {
-        const updatedList = (this.props.entityList || []).map(elem => {
+        const updatedList = (this.state.preferenceList || []).map(elem => {
             if (elem['entity_id'] === addedElem['entity_id']) {
                 return {
                     ...elem,
@@ -51,14 +51,13 @@ class Edit extends Component {
             return elem;
         });
         this.props.updateCategoryEntity(updatedList);
-        console.log('---added--', updatedList);
         this.setState({
             preferenceList: updatedList
         })
     }
 
     deleteFromVisibleList(deletedElem) {
-        const updatedList = (this.props.entityList || []).map(elem => {
+        const updatedList = (this.state.preferenceList || []).map(elem => {
             if (elem['entity_id'] === deletedElem['entity_id']) {
                 return {
                     ...elem,
@@ -68,7 +67,6 @@ class Edit extends Component {
             return elem;
         })
         this.props.updateCategoryEntity(updatedList);
-        console.log('--updatedList---', updatedList)
         this.setState({
             preferenceList: updatedList
         })
@@ -81,19 +79,24 @@ class Edit extends Component {
                 type: (values && values.type) || ''
             })
         }
+
+        if (this.props.entityList !== prevProps.entityList) {
+            this.setState({
+                preferenceList: this.props.entityList
+
+            })
+
+        }
     }
 
     render() {
         const {type, show, preferenceList} = this.state;
-        const {entityList} = this.props;
-        console.log('---entity===', entityList);
-
         return (
             <div className="edit-section">
                 <strong>Complete your information</strong>
                 <ul>
                     {
-                        (entityList || []).filter(elem => elem.active === true).map((elem, index) => {
+                        (preferenceList || []).filter(elem => elem.active === true).map((elem, index) => {
                             const {name, link, icon, itemType} = formCategoryList[elem['entity_id']];
                             return (
                                 <li key={index} className={type === itemType ? 'edit-section--active' : ''}>
@@ -108,13 +111,13 @@ class Edit extends Component {
                         })
                     }
                     {
-                        !!(!show) && !!(entityList.filter(elem => elem.active !== true).length) &&
+                        !!(!show) && !!(preferenceList.filter(elem => elem.active !== true).length) &&
                         <li className="edit-section--addmore mt-30" onClick={this.addMoreClick}>
                             + Add more sections
                         </li>
                     }
                     {!!(show) &&
-                    (entityList || []).filter(elem => elem.active !== true).map((elem, index) => {
+                    (preferenceList || []).filter(elem => elem.active !== true).map((elem, index) => {
                         const {name, link, icon, itemType} = formCategoryList[elem['entity_id']];
                         return (
                             <li key={index} className={type === itemType ? 'edit-section--active' : ''}>
