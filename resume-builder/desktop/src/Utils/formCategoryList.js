@@ -107,7 +107,7 @@ export const entityList = [
         "entity_id": 4,
         "entity_text": "Projects",
         "active": true,
-        "priority": 4
+            "priority": 4
     },
     {
         "entity_id": 5,

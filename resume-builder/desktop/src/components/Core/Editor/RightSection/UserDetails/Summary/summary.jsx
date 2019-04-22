@@ -26,6 +26,11 @@ class Summary extends Component {
         this.props.history.push('/resume-builder/edit/?type=experience')
     }
 
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        console.log('----update----', nextProps);
+        return true;
+    }
+
 
     render() {
         const {personalInfo: {extra_info}, ui: {loader}, handleSubmit} = this.props;
@@ -64,7 +69,7 @@ class Summary extends Component {
 
 
 export const SummaryForm = reduxForm({
-    form: 'personalInfo',
+    form: 'summary',
     enableReinitialize: true
 })(Summary);
 
