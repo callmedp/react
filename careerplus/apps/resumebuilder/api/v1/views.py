@@ -45,6 +45,26 @@ class CandidateListCreateView(ListCreateAPIView):
 
 
 class CandidateRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
+    """
+    PATCH for entity update - <br><br>
+
+    {"entity_preference_data":
+        [
+            {
+                "entity_id":2,
+                "entity_text":"Type 2",
+                "active":true,
+                "priority":1
+            },
+            {
+                "entity_id":3,
+                "entity_text":"Entity 3",
+                "active":true,
+                "priority":2
+            }
+        ]
+    }
+    """
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
     lookup_field = 'candidate_id'
