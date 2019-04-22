@@ -10,7 +10,8 @@ const initialState = {
     location: '',
     gender: '',
     extracurricular: '',
-    extra_info: ''
+    extra_info: '',
+    entity_preference_data: []
 
 
 };

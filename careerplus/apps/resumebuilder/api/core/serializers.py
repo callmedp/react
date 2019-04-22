@@ -14,6 +14,7 @@ from resumebuilder.models import (Candidate, Skill, CandidateExperience, Candida
 # third party imports
 from rest_framework import serializers
 
+
 class CandidateEntityPreferenceSerializer(serializers.Serializer):
     entity_id = serializers.ChoiceField(choices=BUILDER_ENTITY_MAPPING)
     entity_text = serializers.CharField(allow_null=True,allow_blank=True)

@@ -2,87 +2,7 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import './edit.scss'
 import queryString from "query-string";
-
-let visibleList = [
-    {
-        name: 'Personal Info',
-        link: '/resume-builder/edit/?type=profile',
-        icon: 'icon-info',
-        itemType: 'profile'
-    },
-    {
-        name: 'Summary',
-        link: '/resume-builder/edit/?type=summary',
-        icon: 'icon-summary',
-        itemType: 'summary'
-
-
-    },
-    {
-        name: 'Experience',
-        link: '/resume-builder/edit/?type=experience',
-        icon: 'icon-experience',
-        itemType: 'experience'
-
-
-    },
-    {
-        name: 'Education',
-        link: '/resume-builder/edit/?type=education',
-        icon: 'icon-education',
-        itemType: 'education'
-
-    },
-    {
-        name: 'Skills',
-        link: '/resume-builder/edit/?type=skill',
-        icon: 'icon-skills',
-        itemType: 'skill'
-
-
-    },
-
-];
-
-let hiddenList = [
-    {
-        name: 'Languages',
-        link: '/resume-builder/edit/?type=language',
-        icon: 'icon-languages',
-        itemType: 'language'
-    },
-    {
-        name: 'Awards',
-        link: '/resume-builder/edit/?type=award',
-        icon: 'icon-awards',
-        itemType: 'award'
-
-
-    },
-    {
-        name: 'Courses',
-        link: '/resume-builder/edit/?type=course',
-        icon: 'icon-courses',
-        itemType: 'course'
-
-
-    },
-    {
-        name: 'Projects',
-        link: '/resume-builder/edit/?type=project',
-        icon: 'icon-projects',
-        itemType: 'project'
-
-    },
-    {
-        name: 'References',
-        link: '/resume-builder/edit/?type=reference',
-        icon: 'icon-references',
-        itemType: 'reference'
-
-
-    },
-];
+import {formCategoryList, entityList} from "../../../../../Utils/formCategoryList";
 
 export default class Edit extends Component {
     constructor(props) {
@@ -95,8 +15,8 @@ export default class Edit extends Component {
         this.state = {
             type: (values && values.type) || '',
             show: false,
-            hiddenList: hiddenList,
-            visibleList: visibleList
+            hiddenList: [],
+            visibleList: []
         };
 
         if (!(values && values.type)) {
@@ -128,7 +48,7 @@ export default class Edit extends Component {
 
     deleteFromVisibleList(deletedElem) {
         let hidList = this.state.hiddenList;
-        hidList.push(deletedElem)
+        hidList.push(deletedElem);
         let visList = this.state.visibleList.filter(elem => elem.itemType !== deletedElem.itemType)
         this.setState({
             visibleList: visList,
@@ -147,13 +67,15 @@ export default class Edit extends Component {
 
     render() {
         const {type, show, visibleList, hiddenList} = this.state;
+        console.log('---entity===', entityList);
+
         return (
             <div className="edit-section">
                 <strong>Complete your information</strong>
                 <ul>
                     {
-                        (visibleList || []).map((elem, index) => {
-                            const {name, link, icon, itemType} = elem;
+                        (entityList || []).filter(elem => elem.active === true).map((elem, index) => {
+                            const {name, link, icon, itemType} = formCategoryList[elem['entity_id']];
                             return (
                                 <li key={index} className={type === itemType ? 'edit-section--active' : ''}>
                                     <Link to={link}>
@@ -173,8 +95,8 @@ export default class Edit extends Component {
                         </li>
                     }
                     {!!(show) &&
-                    (hiddenList || []).map((elem, index) => {
-                        const {name, link, icon, itemType} = elem;
+                    (entityList || []).filter(elem => elem.active !== true).map((elem, index) => {
+                        const {name, link, icon, itemType} = formCategoryList[elem['entity_id']];
                         return (
                             <li key={index} className={type === itemType ? 'edit-section--active' : ''}>
                                 <Link to={link}>
@@ -187,8 +109,6 @@ export default class Edit extends Component {
                         )
                     })
                     }
-
-
                 </ul>
             </div>
         )
