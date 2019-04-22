@@ -7,6 +7,14 @@ import {withRouter} from "react-router-dom";
 
 class EditPreview extends Component {
 
+    constructor(props){
+        super(props);
+    }
+
+    sideBarStatus = (value) => {
+        this.setState({sidebar_open: value});
+    }
+
     render() {
         return (
             <div className="edit-section">

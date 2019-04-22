@@ -11,9 +11,11 @@ import Project from './UserDetails/Project/project.jsx';
 import Reference from './UserDetails/Reference/references.jsx';
 import './rightSection.scss'
 import queryString from 'query-string'
+import * as actions from "../../../../store/sidenav/actions";
+import {connect} from "react-redux";
 
 
-export default class RightSection extends Component {
+class RightSection extends Component {
 
     constructor(props) {
         super(props);
@@ -32,6 +34,10 @@ export default class RightSection extends Component {
                 type: (values && values.type) || ''
             })
         }
+    }
+
+    componentDidMount() {
+        this.props.fetchListOfLink()
     }
 
     renderSwitch() {
@@ -84,3 +90,20 @@ export default class RightSection extends Component {
     }
 
 }
+
+const mapStateToProps = (state) => {
+    return {
+        initialValues: state.sidenav,
+        sidenav: state.sidenav
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "fetchListOfLink": () => {
+            return dispatch(actions.fetchListOfLink())
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RightSection);

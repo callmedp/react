@@ -21,8 +21,13 @@ class Summary extends Component {
     }
 
     async handleSubmit(values) {
+        const {listOfLinks,currentLinkPos} = this.props.sidenav
+        currentLinkPos++
+        if(currentLinkPos > listOfLinks.length){
+            currentLinkPos = 0
+        }
         await this.props.onSubmit(values);
-        this.props.history.push('/resume-builder/edit/?type=experience')
+        this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
     }
 
     render() {

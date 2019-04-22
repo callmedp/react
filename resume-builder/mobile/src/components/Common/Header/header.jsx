@@ -1,12 +1,24 @@
 import React, {Component} from 'react';
 import './header.scss'
+import * as actions from "../../../store/sidenav/actions";
+import {connect} from "react-redux";
 import { Link} from 'react-router-dom';
 
 
-export default class Header extends Component {
+class Header extends Component {
     constructor(props){
         super(props)
+        this.openMenu = this.openMenu.bind(this);
     }
+
+    openMenu(){
+        this.props.updateSidenavStatus(true)
+    }
+
+    componentDidMount() {
+        this.props.fetchSideNavStatus()
+    }
+
     render() {
         const {page} = this.props;
         return (
@@ -16,7 +28,7 @@ export default class Header extends Component {
                     <React.Fragment>
                         <div className="header__left">
                             <button role="button" className="menu">
-                                <i className="sprite icon--menu-bar"></i>
+                                <i className="sprite icon--menu-bar" onClick={this.openMenu}></i>
                             </button>
                         </div>
                         <Link to={'/resume-builder'} className="btn btn__round btn--outline">Back to home</Link>
@@ -47,3 +59,24 @@ export default class Header extends Component {
     }
 
 }
+
+const mapStateToProps = (state) => {
+    return {
+        initialValues: state.sidenav,
+        sidenav: state.sidenav
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "fetchSideNavStatus": () => {
+            return dispatch(actions.fetchSideNavStatus())
+        },
+        "updateSidenavStatus": (status) => {
+            console.log(status)
+            return dispatch(actions.updateSidenavStatus(status))
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

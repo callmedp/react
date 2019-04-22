@@ -22,8 +22,13 @@ class Course extends Component {
     }
 
     async handleSubmit(values) {
+        const {listOfLinks,currentLinkPos} = this.props.sidenav
+        currentLinkPos++
+        if(currentLinkPos > listOfLinks.length){
+            currentLinkPos = 0
+        }
         await this.props.bulkUpdateUserCourse(values.list);
-        this.props.history.push('/resume-builder/edit/?type=project')
+        this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
     }
     
     handleAddition(fields, error) {

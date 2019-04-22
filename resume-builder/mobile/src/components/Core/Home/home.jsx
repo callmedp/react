@@ -253,7 +253,7 @@ class Home extends Component {
                             <li>
                                 <ul className="d-flex line-form__mobile">
                                     <li className="line-form__group code">
-                                        <select class="line-form__select" id="skillRating">
+                                        <select className="line-form__select" id="skillRating">
                                             <option>+91</option>
                                             <option>+92</option>
                                             <option>+93</option>

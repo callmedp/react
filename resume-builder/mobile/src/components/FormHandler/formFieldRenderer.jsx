@@ -15,7 +15,7 @@ export const renderField = ({
         <React.Fragment>
             <input {...input} className={className} placeholder={label} type={type}/>
             <div className="Error">
-            {
+            {touched &&
                 ((<span className={'Error-message'}>{error}</span>) ||
                     (warning && <span className={'Warn-Message'}>{warning}</span>))
             }
@@ -37,12 +37,9 @@ export const datepicker =
             <DatePicker {...input} dateFormat="yyyy-MM-dd" className={className}
                         selected={input.value ? new Date(input.value) : null}
                         onChange={date => input.onChange(date)}
-
-
             />
-            <div>
-            {touched &&
-            ((error && <span className={'Error-message'}>{error}</span>) ||
+            <div className="Error">
+            {  ((error && <span className={'Error-message'}>{error}</span>) ||
                 (warning && <span className={'Warn-Message'}>{warning}</span>))}
             </div>
         </React.Fragment>

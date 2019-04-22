@@ -18,12 +18,16 @@ class Education extends Component {
     }
 
     async handleSubmit(values) {
-         values.list.map((data)=>{
+        values.list.map((data)=>{
             data.course_type = {value: 'FT', label: 'FULL TIME'}
          })
-        console.log(values.list[0])
+        const {listOfLinks,currentLinkPos} = this.props.sidenav
+        currentLinkPos++
+        if(currentLinkPos > listOfLinks.length){
+            currentLinkPos = 0
+        }
         await this.props.bulkUpdateUserEducation(values.list);
-        //this.props.history.push('/resume-builder/edit/?type=skill')
+        this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
     }
 
     componentDidMount() {

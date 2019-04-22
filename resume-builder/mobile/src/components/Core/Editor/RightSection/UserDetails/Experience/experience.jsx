@@ -23,8 +23,13 @@ class Experience extends Component {
     }
 
     async handleSubmit(values) {
+        const {listOfLinks,currentLinkPos} = this.props.sidenav
+        currentLinkPos++
+        if(currentLinkPos > listOfLinks.length){
+            currentLinkPos = 0
+        }
         await this.props.bulkUpdateUserExperience(values.list);
-        this.props.history.push('/resume-builder/edit/?type=education')
+        this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
     }
 
     handleAddition(fields, error) {
@@ -177,7 +182,7 @@ class Experience extends Component {
                                 <li className="form__radio-group d-flex justify-content-end fs-14">
                                     <Field type="radio" name={`${member}.is_working`}component="input" 
                                         className="form__radio-input" value={`${member}.is_working`}/>
-                                    <label class="form__radio-label" htmlFor="is_working">
+                                    <label className="form__radio-label" htmlFor="is_working">
                                         <span className="form__radio-button"></span>
                                         Till today
                                     </label>

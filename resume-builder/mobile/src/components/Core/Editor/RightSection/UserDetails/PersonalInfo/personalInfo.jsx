@@ -39,8 +39,13 @@ class PersonalInfo extends Component {
     }
 
     async handleSubmit(values) {
+        const {listOfLinks,currentLinkPos} = this.props.sidenav
+        currentLinkPos++
+        if(currentLinkPos > listOfLinks.length){
+            currentLinkPos = 0
+        }
         await this.props.onSubmit(values, this.state.imageURL);
-        this.props.history.push('/resume-builder/edit/?type=summary')
+        this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
     }
 
     handlePreview() {
@@ -216,9 +221,9 @@ class PersonalInfo extends Component {
                         </li>
 
                         <li className="form__group">
-                            <div class="upload-btn-wrapper">
+                            <div className="upload-btn-wrapper">
 
-                                <button class="upload-btn-wrapper__btn">
+                                <button className="upload-btn-wrapper__btn">
                                     <i className="sprite icon--camera"></i>
                                     Upload a file
                         </button>

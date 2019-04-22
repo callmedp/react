@@ -22,8 +22,13 @@ class Language extends Component {
 
 
     async handleSubmit(values) {
+        const {listOfLinks,currentLinkPos} = this.props.sidenav
+        currentLinkPos++
+        if(currentLinkPos > listOfLinks.length){
+            currentLinkPos = 0
+        }
         await this.props.bulkUpdateUserLanguage(values.list);
-        this.props.history.push('/resume-builder/edit/?type=award')
+        this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
     }
 
     handleAddition(fields, error) {

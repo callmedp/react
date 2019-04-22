@@ -4,7 +4,7 @@ import * as actions from "../../../../../../store/skill/actions";
 import {connect} from "react-redux";
 import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
-import {required} from "../../../../../FormHandler/formValidations"
+import validate from "../../../../../FormHandler/validtaions/skill/validate"
 
 class Skill extends Component {
 
@@ -47,8 +47,13 @@ class Skill extends Component {
     }
 
     async handleSubmit(values) {
-        this.props.bulkSaveUserSkill(values.list);
-        this.props.history.push('/resume-builder/edit/?type=language')
+        const {listOfLinks,currentLinkPos} = this.props.sidenav
+        currentLinkPos++
+        if(currentLinkPos > listOfLinks.length){
+            currentLinkPos = 0
+        }
+        await this.props.bulkUpdateUserSkill(values.list);
+        this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
     }
 
     changeOrderingUp(index,fields,event){
@@ -156,6 +161,7 @@ class Skill extends Component {
                                 </ul>
                             </React.Fragment>
                     )})}
+                    {error && <li>{error}</li>}
              
                 </React.Fragment>         
             )
@@ -168,7 +174,7 @@ class Skill extends Component {
                         <li className="form__group">
                             <div className="btn-wrap">
                                 <button className="btn btn__round btn--outline">Preview</button>
-                                <button className="btn btn__round btn__primary" type={'submit'}>Save &amp; Continue</button>
+                                <button className="btn btn__round btn__primary" disabled={!submitting} type={'submit'}>Save &amp; Continue</button>
                             </div>
                         </li>
                     </ul>
@@ -181,6 +187,7 @@ class Skill extends Component {
 
 export const SkillForm = reduxForm({
     form: 'Skill',
+    validate,
     enableReinitialize: true
 })(Skill);
 
@@ -224,7 +231,6 @@ const mapDispatchToProps = (dispatch) => {
                 };
                 return userSkill;
             })
-            console.log(listItems)
             return dispatch(actions.bulkSaveUserSkill({list: listItems}))
         }
     }

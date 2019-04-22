@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Field, reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../.../../../../../../store/award/actions";
 import {connect} from "react-redux";
-import {required} from "../../../../../FormHandler/formValidations"
+import validate from "../../../../../FormHandler/validtaions/award/validate"
 import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
 
@@ -18,16 +18,22 @@ class Award extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchUserAward()
+        //this.props.fetchUserAward()
+        console.log(this.props.sidenav)
     }
 
     async handleSubmit(values) {
-        //console.log(this.props)
+        const {listOfLinks,currentLinkPos} = this.props.sidenav
+        currentLinkPos++
+        if(currentLinkPos > listOfLinks.length){
+            currentLinkPos = 0
+        }
         await this.props.bulkUpdateUserAward(values.list);
-        this.props.history.push('/resume-builder/edit/?type=course')
+        this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
     }
 
     handleAddition(fields, error) {
+        console.log(error)
         
         fields.push({
             "candidate_id": '',
@@ -77,8 +83,12 @@ class Award extends Component {
         fields.swap(index, index + 1);
     }
 
+    blurFunction(error){
+        console.log(error)
+    }
+
     render () {
-        const {handleSubmit, award} = this.props;
+        const {handleSubmit, award,  error, submitting, pristine, invalid} = this.props;
         const renderAwards = ({fields, meta: {touched, error, submitFailed}}) => {
             return (
                 
@@ -127,7 +137,7 @@ class Award extends Component {
                                         </span>
                                     </div>
                                         <Field component={renderField} type={"text"} name={`${member}.title`}
-                                            className="form__input" />
+                                            onBlur={() => {this.blurFunction.bind(this,error)}}   className="form__input" />
                                     </div>
                                 </li>
                             
@@ -159,6 +169,7 @@ class Award extends Component {
                             </ul>
                         </React.Fragment>
                     )})}
+                    {error && <li>{error}</li>}
                 </div>
                     
             )
@@ -171,7 +182,7 @@ class Award extends Component {
                         <li className="form__group">
                             <div className="btn-wrap">
                                 <button className="btn btn__round btn--outline">Preview</button>
-                                <button className="btn btn__round btn__primary" type={'submit'}>Save &amp; Continue</button>
+                                <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>Save &amp; Continue</button>
                             </div>
                         </li>
                     </ul>
@@ -184,6 +195,7 @@ class Award extends Component {
 
 export const AwardForm = reduxForm({
     form: 'award',
+    validate,
     enableReinitialize: true
 })(Award);
 
