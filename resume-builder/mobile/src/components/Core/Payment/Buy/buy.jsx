@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Header from '../../../Common/Header/header.jsx';
 import './buy.scss';
-import BuyModal from '../Buy/BuyModal.jsx';
 import * as action from '../../../../store/buy/actions';
 import {connect} from "react-redux";
 
@@ -62,9 +61,6 @@ class Buy extends Component {
             
             <div className="buy-container">
                 <Header />
-                <BuyModal 
-                BuyOption={''}
-                />
                 <div className="pay-now">
                     <div className="pay-now__price">
                         <span className="fs-14 pay-now__price--pay">You pay</span>

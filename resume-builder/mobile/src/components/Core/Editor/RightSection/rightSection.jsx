@@ -37,7 +37,7 @@ class RightSection extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchListOfLink()
+        console.log(this.props)
     }
 
     renderSwitch() {

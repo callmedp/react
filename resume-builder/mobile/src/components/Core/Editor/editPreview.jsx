@@ -3,6 +3,8 @@ import './editPreview.scss'
 import LeftSideBar from './LeftSideBar/leftSideBar.jsx';
 import RightSection from './RightSection/rightSection.jsx';
 import Header from '../../Common/Header/header.jsx';
+import * as actions from "../../../store/template/actions";
+import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 
 class EditPreview extends Component {
@@ -11,8 +13,8 @@ class EditPreview extends Component {
         super(props);
     }
 
-    sideBarStatus = (value) => {
-        this.setState({sidebar_open: value});
+    componentDidMount() {
+        this.props.fetchTemplate()
     }
 
     render() {
@@ -26,5 +28,22 @@ class EditPreview extends Component {
         )
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        initialValues: state.template,
+        template: state.template
+    }
+};
 
-export default withRouter(props => <EditPreview {...props}/>)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "fetchTemplate": () => {
+            return dispatch(actions.fetchTemplate())
+        },
+        "updateModalStatus": (data) => {
+            return dispatch(actions.updateModalStatus(data))
+        }
+    }
+};
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditPreview))
+

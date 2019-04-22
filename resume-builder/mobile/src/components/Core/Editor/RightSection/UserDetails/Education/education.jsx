@@ -5,6 +5,7 @@ import {required} from "../../../../../FormHandler/formValidations"
 import * as actions from "../../../../../../store/education/actions";
 import {connect} from "react-redux";
 import moment from "moment";
+import PreviewModal from "../../../Preview/previewModal";
 
 class Education extends Component {
 
@@ -238,11 +239,14 @@ class Education extends Component {
         return(
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}> 
+                    <PreviewModal {...this.props}/>
                     <FieldArray name={'list'} component={renderEducation}/> 
                     <ul className="form">
                         <li className="form__group">
                             <div className="btn-wrap">
-                                <button className="btn btn__round btn--outline">Preview</button>
+                                <button className="btn btn__round btn--outline" 
+                                    onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
+                                    type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" type={'submit'}>Save &amp; Continue</button>
                             </div>
                         </li>

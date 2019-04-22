@@ -18,6 +18,7 @@ import {
 } from "../../../../../FormHandler/formValidations.js";
 
 import moment from 'moment';
+import PreviewModal from "../../../Preview/previewModal";
 
 class PersonalInfo extends Component {
     constructor(props) {
@@ -93,6 +94,7 @@ class PersonalInfo extends Component {
         const {handleSubmit, personalInfo} = this.props;
         return (
         <div className="buildResume">
+            <PreviewModal {...this.props}/>
             <div className="buildResume__wrap">
                 <div className="buildResume__heading">
                     <h2>Personal Info</h2>
@@ -246,7 +248,9 @@ class PersonalInfo extends Component {
 
                         <li className="form__group">
                             <div className="btn-wrap">
-                                <button className="btn btn__round btn--outline">Preview</button>
+                                <button className="btn btn__round btn--outline" 
+                                    onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
+                                    type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary">Save &amp; Continue</button>
                             </div>
                         </li>

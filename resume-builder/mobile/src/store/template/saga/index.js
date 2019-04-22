@@ -12,6 +12,7 @@ function* fetchTemplate(action) {
         if (result['error']) {
             console.log('error');
         }
+        console.log(result)
 
         yield put({type: Actions.SAVE_TEMPLATE, data: result['data']})
     } catch (e) {

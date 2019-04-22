@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
 import validate from "../../../../../FormHandler/validtaions/skill/validate"
+import PreviewModal from "../../../Preview/previewModal";
 
 class Skill extends Component {
 
@@ -169,11 +170,14 @@ class Skill extends Component {
         return (
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
+                    <PreviewModal {...this.props}/>
                     <FieldArray name="list" component={renderSkills}/>
                     <ul className="form">
                         <li className="form__group">
                             <div className="btn-wrap">
-                                <button className="btn btn__round btn--outline">Preview</button>
+                                <button className="btn btn__round btn--outline" 
+                                    onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
+                                    type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={!submitting} type={'submit'}>Save &amp; Continue</button>
                             </div>
                         </li>

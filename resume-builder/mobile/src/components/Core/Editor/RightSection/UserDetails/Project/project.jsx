@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
 import {required} from "../../../../../FormHandler/formValidations"
+import PreviewModal from "../../../Preview/previewModal";
 class Project extends Component {
     constructor(props) {
         super(props);
@@ -196,11 +197,14 @@ class Project extends Component {
         return(
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
+                    <PreviewModal {...this.props}/>
                     <FieldArray name="list" component={renderProjects}/>
                     <ul className="form">
                         <li className="form__group">
                             <div className="btn-wrap">
-                                <button className="btn btn__round btn--outline">Preview</button>
+                                <button className="btn btn__round btn--outline" 
+                                    onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
+                                    type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" type={'submit'}>Save &amp; Continue</button>
                             </div>
                         </li>

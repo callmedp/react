@@ -4,6 +4,7 @@ import * as actions from "../../../../../../store/reference/actions";
 import {connect} from "react-redux";
 import {renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import {required} from "../../../../../FormHandler/formValidations"
+import PreviewModal from "../../../Preview/previewModal";
 class References extends Component {
     constructor(props) {
         super(props)
@@ -162,11 +163,14 @@ class References extends Component {
         return(
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
+                    <PreviewModal {...this.props}/>
                     <FieldArray name={"list"} component={renderReferences}/>
                     <ul className="form">
                         <li className="form__group">
                             <div className="btn-wrap">
-                                <button className="btn btn__round btn--outline">Preview</button>
+                                <button className="btn btn__round btn--outline" 
+                                    onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
+                                    type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" type={'submit'}>Save &amp; Continue</button>
                             </div>
                         </li>

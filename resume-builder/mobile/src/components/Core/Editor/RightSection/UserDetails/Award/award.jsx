@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import validate from "../../../../../FormHandler/validtaions/award/validate"
 import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
+import PreviewModal from "../../../Preview/previewModal";
 
 class Award extends Component {
 
@@ -176,12 +177,15 @@ class Award extends Component {
         }
         return(
             <div className="buildResume">
+                <PreviewModal {...this.props}/>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <FieldArray name="list" component={renderAwards}/>
                     <ul className="form">
                         <li className="form__group">
                             <div className="btn-wrap">
-                                <button className="btn btn__round btn--outline">Preview</button>
+                                <button className="btn btn__round btn--outline" 
+                                    onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
+                                    type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>Save &amp; Continue</button>
                             </div>
                         </li>

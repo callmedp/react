@@ -6,6 +6,7 @@ import {Field, reduxForm} from 'redux-form';
 import {
     renderTextArea
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
+import PreviewModal from "../../../Preview/previewModal";
 
 
 class Summary extends Component {
@@ -34,6 +35,7 @@ class Summary extends Component {
         const {personalInfo: {extra_info}, handleSubmit} = this.props;
         return (
         <div className="buildResume">
+            <PreviewModal {...this.props}/>
             <div className="buildResume__wrap pb-0">
                 <div className="buildResume__heading">
                     <h2>Summary</h2>
@@ -52,7 +54,9 @@ class Summary extends Component {
 
                         <li className="form__group">
                             <div className="btn-wrap">
-                                <button className="btn btn__round btn--outline">Preview</button>
+                                <button className="btn btn__round btn--outline" 
+                                    onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
+                                    type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" type={'submit'}>Save &amp; Continue</button>
                             </div>
                         </li>
