@@ -25,10 +25,9 @@
             <form id="enquireform">
                 <div class="form-group">
                     <input type="text" name="name" placeholder="Name" class="form-control" maxlength="60" inputmode="name" value="{{request.session.full_name}}" required="" id="id_name" aria-required="true">
-                    <span class="error-txt" style="bottom:-25px"></span>
                 </div>
-
                 <div class="form-group enquire__flex">
+
                     <div class="code">
                         <select name="country_code" class="form-control" id="id_country_code">
                           {% for country in country_choices %}
@@ -36,8 +35,12 @@
                           {% endfor %}
                         </select>
                     </div>
+                    <span>
                     <input type="tel" name="number" class="form-control number" inputmode="numeric" required="" id="id_cell_phone" aria-required="true" placeholder="Mobile" value="{{request.session.mobile_no|safe}}">
+                </span>
+
                 </div>
+
 
                 <div class="form-group mb-30">
                     <textarea class="form-control" rows="2" name="msg" required placeholder="Message"></textarea>
