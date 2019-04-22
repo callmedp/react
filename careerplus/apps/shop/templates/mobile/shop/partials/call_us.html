@@ -17,42 +17,43 @@
     <header>
         <a class="icon-back pull-left" id="back_btn"></a>
     </header>
+    <div id="snackbar"></div>
     <div class="enquire__wrap">
         <h2 class="enquire__wrap--head">Enquire now</h2>
         <p class="enquire__wrap--subhead">Share your query, our experts will help you take your career forward!</p>
         <div class="content-box login-form">
-            <form action="">
-                <div class="form-group ">
-                    <input type="text" name="name" placeholder="Name" class="form-control" maxlength="60" inputmode="name" required="" id="id_name" aria-required="true">
+            <form id="enquireform">
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Name" class="form-control" maxlength="60" inputmode="name" value="{{request.session.full_name}}" required="" id="id_name" aria-required="true">
                     <span class="error-txt" style="bottom:-25px"></span>
                 </div>
 
                 <div class="form-group enquire__flex">
                     <div class="code">
                         <select name="country_code" class="form-control" id="id_country_code">
-                            <option value="91">+91</option>
-                            <option value="93">93</option>
-                            <option value="358-18">358-18</option>
-                            <option value="355">355</option>
-                            <option value="213">213</option>
-                            <option value="1-684">1-684</option>
-                            <option value="376">376</option>
-                            <option value="244">244</option>
-                            <option value="1-264">1-264</option>
-                            <option value="1-268">1-268</option>
+                          {% for country in country_choices %}
+                            <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}</option>
+                          {% endfor %}
                         </select>
                     </div>
-                    <input type="tel" name="cell_phone" class="form-control number" inputmode="numeric" required="" id="id_cell_phone" aria-required="true" placeholder="Mobile">
+                    <input type="tel" name="number" class="form-control number" inputmode="numeric" required="" id="id_cell_phone" aria-required="true" placeholder="Mobile" value="{{request.session.mobile_no|safe}}">
                 </div>
 
                 <div class="form-group mb-30">
-                    <textarea class="form-control" rows="2" placeholder="Message"></textarea>
+                    <textarea class="form-control" rows="2" name="msg" required placeholder="Message"></textarea>
                 </div>
-
-                <div class="form-group">
-                    <button type="submit" class="btn btn-blue w100 btn-round">Submit</button>
-                </div>
-
+                 {% if  prd_service == 'course' %}
+              <input type="hidden" name="lsource" value="2">
+            {% else %}
+              <input type="hidden" name="lsource" value="8">
+            {% endif %}
+            <input type="hidden" name="product" value="{{product.pk}}">
+            <input type="hidden" name="prd" value="{{product.heading}}">
+            <input type="hidden" name="path" value="{{product.get_absolute_url}}">
+            <input type="hidden" name="email" class="form-control" value="{{request.session.email}}">
+            <div class="form-group">
+                <button type="button" id="enquire_form" class="btn btn-blue w100 btn-round">Submit</button>
+            </div>
 
             </form>
         </div>
