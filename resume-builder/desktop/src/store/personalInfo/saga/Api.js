@@ -18,8 +18,15 @@ const fetchImageUrl = (data) => {
 };
 
 
+const updateEntityPreference = (data, candidateId) => {
+    const url = `candidates/${candidateId}/`;
+    return BaseApiService.patch(`http://127.0.0.1:8000/api/v1/resume/${url}`, data);
+};
+
+
 export const Api = {
     fetchPersonalInfo,
     updatePersonalData,
-    fetchImageUrl
+    fetchImageUrl,
+    updateEntityPreference
 }

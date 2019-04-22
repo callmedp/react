@@ -76,7 +76,6 @@ function* updatePersonalDetails(action) {
         return resolve('User Personal  Info saved successfully.');
 
     } catch (e) {
-
         console.log('error', e);
     }
 }
@@ -111,10 +110,23 @@ function* fetchImageUrl(action) {
     }
 }
 
+function* updateEntityPreference(action) {
+    try {
+        const {payload} = action;
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        const result = yield call(Api.updateEntityPreference, payload, candidateId);
+        yield put({type: Actions.SAVE_USER_INFO, data: result['data']});
+
+    } catch (e) {
+        console.log('error', e);
+    }
+}
 
 export default function* watchPersonalInfo() {
-    yield takeLatest(Actions.FETCH_PERSONAL_INFO, getPersonalDetails)
-    yield takeLatest(Actions.UPDATE_PERSONAL_INFO, updatePersonalDetails)
-    yield takeLatest(Actions.FETCH_IMAGE_URL, fetchImageUrl)
+    yield takeLatest(Actions.FETCH_PERSONAL_INFO, getPersonalDetails);
+    yield takeLatest(Actions.UPDATE_PERSONAL_INFO, updatePersonalDetails);
+    yield takeLatest(Actions.FETCH_IMAGE_URL, fetchImageUrl);
+    yield takeLatest(Actions.UPDATE_ENTITY_PREFERENCE, updateEntityPreference);
 
 }

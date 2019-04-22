@@ -3,8 +3,10 @@ import {Link} from 'react-router-dom';
 import './edit.scss'
 import queryString from "query-string";
 import {formCategoryList, entityList} from "../../../../../Utils/formCategoryList";
+import {connect} from 'react-redux'
+import * as actions from '../../../../../store/personalInfo/actions/index'
 
-export default class Edit extends Component {
+class Edit extends Component {
     constructor(props) {
         super(props);
         this.handleSpanClick = this.handleSpanClick.bind(this);
@@ -15,8 +17,7 @@ export default class Edit extends Component {
         this.state = {
             type: (values && values.type) || '',
             show: false,
-            hiddenList: [],
-            visibleList: []
+            preferenceList: entityList
         };
 
         if (!(values && values.type)) {
@@ -35,24 +36,41 @@ export default class Edit extends Component {
         })
     }
 
+    componentDidMount() {
+        this.props.fetchEntityInfo()
+    }
+
     addIntoVisibleList(addedElem) {
-        let visList = this.state.visibleList;
-        visList.push(addedElem);
-        let hidList = this.state.hiddenList.filter(elem => elem.itemType !== addedElem.itemType)
-        console.log('----', visList, hidList)
+        const updatedList = (this.props.entityList || []).map(elem => {
+            if (elem['entity_id'] === addedElem['entity_id']) {
+                return {
+                    ...elem,
+                    ...{active: true}
+                }
+            }
+            return elem;
+        });
+        this.props.updateCategoryEntity(updatedList);
+        console.log('---added--', updatedList);
         this.setState({
-            visibleList: visList,
-            hiddenList: hidList
+            preferenceList: updatedList
         })
     }
 
     deleteFromVisibleList(deletedElem) {
-        let hidList = this.state.hiddenList;
-        hidList.push(deletedElem);
-        let visList = this.state.visibleList.filter(elem => elem.itemType !== deletedElem.itemType)
+        const updatedList = (this.props.entityList || []).map(elem => {
+            if (elem['entity_id'] === deletedElem['entity_id']) {
+                return {
+                    ...elem,
+                    ...{active: false}
+                }
+            }
+            return elem;
+        })
+        this.props.updateCategoryEntity(updatedList);
+        console.log('--updatedList---', updatedList)
         this.setState({
-            visibleList: visList,
-            hiddenList: hidList
+            preferenceList: updatedList
         })
     }
 
@@ -66,7 +84,8 @@ export default class Edit extends Component {
     }
 
     render() {
-        const {type, show, visibleList, hiddenList} = this.state;
+        const {type, show, preferenceList} = this.state;
+        const {entityList} = this.props;
         console.log('---entity===', entityList);
 
         return (
@@ -89,7 +108,7 @@ export default class Edit extends Component {
                         })
                     }
                     {
-                        !!(!show) &&
+                        !!(!show) && !!(entityList.filter(elem => elem.active !== true).length) &&
                         <li className="edit-section--addmore mt-30" onClick={this.addMoreClick}>
                             + Add more sections
                         </li>
@@ -115,3 +134,24 @@ export default class Edit extends Component {
     }
 
 }
+
+const mapStateToProps = (state) => {
+    return {
+        entityList: state.personalInfo && state.personalInfo.entity_preference_data || []
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+
+        "fetchEntityInfo": () => {
+            return dispatch(actions.fetchPersonalInfo())
+        },
+        'updateCategoryEntity': (entity) => {
+            return dispatch(actions.updateEntityPreference({"entity_preference_data": entity}))
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Edit)
+
