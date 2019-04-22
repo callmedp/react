@@ -93,10 +93,23 @@
 
   .content-box {
     padding: 0;
+
+    .number {
+      margin-left: 0;
+    }
   }
 
   &__flex {
     display: flex;
+  }
+
+  .mobile_input {
+    width: 83%;
+    padding-left: 15px;
+
+    .form-control {
+      width: 100%;
+    }
   }
 }
 

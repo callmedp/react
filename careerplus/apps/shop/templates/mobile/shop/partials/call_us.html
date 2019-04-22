@@ -35,9 +35,9 @@
                           {% endfor %}
                         </select>
                     </div>
-                    <span>
-                    <input type="tel" name="number" class="form-control number" inputmode="numeric" required="" id="id_cell_phone" aria-required="true" placeholder="Mobile" value="{{request.session.mobile_no|safe}}">
-                </span>
+                    <span class="mobile_input">
+                        <input type="tel" name="number" class="form-control number" inputmode="numeric" required="" id="id_cell_phone" aria-required="true" placeholder="Mobile" value="{{request.session.mobile_no|safe}}">
+                    </span>
 
                 </div>
 
