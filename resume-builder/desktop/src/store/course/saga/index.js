@@ -6,18 +6,22 @@ import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 
+import {UPDATE_UI} from '../../ui/actions/actionTypes'
 
 function* fetchUserCourse(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
+        yield put({type: UPDATE_UI, data: {loader: true}})
 
         const result = yield call(Api.fetchUserCourse, candidateId);
         if (result['error']) {
             console.log('error');
         }
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
         const {data: {results}} = result;
 
-        let data = {list: results}
+        let data = {list: results};
         yield put({type: Actions.SAVE_USER_COURSE, data: data})
     } catch (e) {
         console.log(e);
@@ -32,11 +36,13 @@ function* updateUserCourse(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
         const {id} = userCourse;
+        yield put({type: UPDATE_UI, data: {loader: true}})
 
         const result = yield call(id ? Api.updateUserCourse : Api.createUserCourse, userCourse, candidateId, id);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+        yield put({type: UPDATE_UI, data: {loader: false}})
 
         yield put({type: Actions.SAVE_USER_COURSE, data: result['data']});
 
@@ -62,7 +68,6 @@ function* handleCourseSwap(action) {
             console.log(result['error']);
         }
 
-        console.log('---', result);
         // yield call(fetchUserLanguage)
 
     } catch (e) {

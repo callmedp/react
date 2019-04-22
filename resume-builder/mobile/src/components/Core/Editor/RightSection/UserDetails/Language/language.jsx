@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import './language.scss'
-import {Field, reduxForm, FieldArray, arrayPush} from "redux-form";
+import {reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../../../../../store/language/actions";
 import {connect} from "react-redux";
-import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer.jsx";
-import {required} from "../../../../../FormHandler/formValidations"
 import PreviewModal from "../../../Preview/previewModal";
+import renderLanguage from "./renderLanguage";
+import validate from "../../../../../FormHandler/validtaions/language/validate"
 
 class Language extends Component {
     constructor(props) {
@@ -85,85 +85,16 @@ class Language extends Component {
 
     render() {
         const {handleSubmit, language} = this.props;
-        const renderMembers = ({fields, meta: {touched, error, submitFailed}}) => {
-            return (
-                
-                <div className="buildResume__wrap pb-0">
-                    <div className="buildResume__heading heading">
-                        <div className="heading__info">
-                            <h1>Language</h1>
-                            <i className="sprite icon--edit"></i>
-                        </div>
-                        <button role="button" className="btn btn__round btn--outline"
-                        onClick={this.handleAddition.bind(this, fields, error)}
-                        type={'button'} >+ Add new</button>
-                    </div>
-                    {fields.map((member, index) => {
-                        return (
-                            <React.Fragment key={index}>
-                                <div className="subHeading pb-0">
-                                    <h2>{fields.get(index).name || 'Language'}</h2>
-                                    <ul className="subHeading__control">
-                                        <li className="subHeading__delete">
-                                            <span className="sprite icon--delete" 
-                                             onClick={(event) => this.deleteLanguage(index, fields, event)}
-                                             role="button"></span>
-                                        </li>
-                                        {index == 0 ? '':
-                                            <li className="subHeading__btn"
-                                                onClick={(event) => this.changeOrderingUp(index, fields, event)}>
-                                                <i className="sprite icon--upArrow"></i>
-                                            </li>
-                                        }
-                                        {index == fields.length-1 ? '':
-                                            <li className="subHeading__btn"
-                                                onClick={(event) => this.changeOrderingDown(index, fields, event)}>
-                                                <i className="sprite icon--downArrow"></i>
-                                            </li>
-                                        }
-                                    </ul>
-                                </div>
-
-                                <ul className="form pb-0">
-                                    <li className="form__group">
-                                        <label className="form__label" htmlFor="name">Language name</label>
-                                        <Field component={renderField} type={"text"} 
-                                        name={`${member}.name`} className="form__input"/>
-                                    </li>
-                                    
-                                    <li className="form__group">
-                                        <label className="form__label" htmlFor="proficiency">Skill rating (out of 10)</label>
-                                        <Field name={`${member}.proficiency`}
-                                                    component={renderSelect}
-                                                    className="form__select"
-                                                    isMulti={false}
-                                                    options={[
-                                                        {value: 1, label: '1'},
-                                                        {value: 2, label: '2'},
-                                                        {value: 3, label: '3'},
-                                                        {value: 4, label: '4'},
-                                                        {value: 5, label: '5'},
-                                                        {value: 6, label: '6'},
-                                                        {value: 7, label: '7'},
-                                                        {value: 8, label: '8'},
-                                                        {value: 9, label: '9'},
-                                                        {value: 10, label: '10'}
-                                                    ]}
-                                                   />
-                                    </li>
-                                </ul>
-
-                            </React.Fragment>
-                    )})}
-                </div>
-            
-            )
-        }
         return(
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <PreviewModal {...this.props}/>
-                    <FieldArray name="list" component={renderMembers}/>
+                    <FieldArray name="list" 
+                                handleAddition={this.handleAddition}
+                                deleteLanguage={this.deleteLanguage}
+                                changeOrderingUp={this.changeOrderingUp}
+                                changeOrderingDown={this.changeOrderingDown}
+                                component={renderLanguage}/>
                     <ul className="form">
                         <li className="form__group">
                             <div className="btn-wrap">
@@ -182,7 +113,8 @@ class Language extends Component {
 
 export const LanguageForm = reduxForm({
     form: 'Language',
-    enableReinitialize: true
+    enableReinitialize: true,
+    validate
 })(Language);
 
 

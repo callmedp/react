@@ -2,7 +2,7 @@ import {UPDATE_SIDENAV_STATUS,UPDATE_LIST_LINK,UPDATE_CURRENT_LINK_POS} from "..
 
 const initialState = {
     sidenavStatus : false,
-    listOfLinks : ['profile','summary','experience','education','skill','award'],
+    listOfLinks : ['profile','summary','experience','education','skill','award','course','language','project','reference'],
     currentLinkPos : 0
 };
 

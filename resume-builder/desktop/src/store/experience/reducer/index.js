@@ -1,7 +1,15 @@
 import {SAVE_USER_EXPERIENCE, REMOVE_EXPERIENCE} from "../actions/actionTypes";
 
 const initialState = {
-    list: []
+    list: [{
+        job_profile: '',
+        company_name: '',
+        start_date: '',
+        end_date: '',
+        is_working: '',
+        job_location: '',
+        work_description: '',
+    }]
 };
 
 

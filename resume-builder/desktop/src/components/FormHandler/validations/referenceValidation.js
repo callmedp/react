@@ -7,12 +7,16 @@ const validate = values => {
     const listErrors = []
     values.list.forEach((obj, objIndex) => {
         const objErrors = {}
-        objErrors.name = !obj || !obj.name ? 'Required' : undefined;
-        objErrors.proficiency = !obj || !obj.proficiency ? 'Required' : undefined;
+        objErrors.reference_name = !obj || !(obj.reference_name) ? 'Required' : null;
+        objErrors.proficiency = !obj || !obj.proficiency ? 'Required' : null;
+        objErrors.newError = 'Required';
+        console.log('object value is ', obj, !obj, !obj.reference_name, objErrors);
+
         listErrors[objIndex] = objErrors
     });
     if (listErrors.length) {
-        errors.list = listErrors;
+        console.log('errors list', listErrors);
+        errors.list = {_error: listErrors};
         console.log(errors);
         return errors;
     }

@@ -1,7 +1,11 @@
 import {SAVE_USER_AWARD, REMOVE_AWARD} from "../actions/actionTypes";
 
 const initialState = {
-    list: []
+    list: [{
+        "title": '',
+        "date": '',
+        "summary": '',
+    }]
 };
 
 

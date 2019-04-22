@@ -8,18 +8,12 @@ const validate = values => {
         const listErrors = []
         values.list.forEach((obj, objIndex) => {
             const objErrors = {}
-            if (!obj || !obj.title ||obj.title.length === 0) {
-                objErrors.title = 'Required';
-                listErrors[objIndex] = objErrors;
-            }
-            if (!obj || !obj.date ||obj.date.length === 0) {
-                objErrors.date = 'Required';
-                listErrors[objIndex] = objErrors;
-            }
+            objErrors.title = !obj || !obj.title ? 'Required' : undefined;
+            objErrors.date = !obj || !obj.date ? 'Required' : undefined;
+            listErrors[objIndex] = objErrors
         });
         if (listErrors.length) {
             errors.list = listErrors;
-            console.log(errors);
             return errors;
         }
     }

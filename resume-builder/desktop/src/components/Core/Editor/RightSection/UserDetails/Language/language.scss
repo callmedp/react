@@ -1,16 +1,10 @@
-@import '../../../../../../styles/variables/vars.scss';
+	@import '../../../../../../styles/variables/vars.scss';
 @import '../../../../../../styles/variables/mixins.scss';
 
 h2 {
 	margin: 0 10px !important;
 	font-weight: 1.8rem;
 	font-weight: 700;
-}
-
-.info-section {
-	flex: 100%;
-	flex-direction: row;
-	margin: 20px 10px 20px 20px;
 }
 
 .icon-language__cursor {

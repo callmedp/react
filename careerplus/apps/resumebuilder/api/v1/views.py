@@ -15,10 +15,10 @@ from resumebuilder.api.core.serializers import (CandidateSerializer, SkillSerial
                                                 CandidateLanguageSerializer)
 
 from resumebuilder.mixins import (SessionManagerMixin)
+from resumebuilder.constants import EDUCATION_PARENT_CHILD_HEIRARCHY_LIST
 
 # inter app imports
 from shine.core import ShineCandidateDetail
-from .education_specialization import educ_list
 from shared.rest_addons.authentication import ShineUserAuthentication
 from shared.permissions import IsObjectOwner
 
@@ -45,6 +45,26 @@ class CandidateListCreateView(ListCreateAPIView):
 
 
 class CandidateRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
+    """
+    PATCH for entity update - <br><br>
+
+    {"entity_preference_data":
+        [
+            {
+                "entity_id":2,
+                "entity_text":"Type 2",
+                "active":true,
+                "priority":1
+            },
+            {
+                "entity_id":3,
+                "entity_text":"Entity 3",
+                "active":true,
+                "priority":2
+            }
+        ]
+    }
+    """
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
     lookup_field = 'candidate_id'
@@ -298,13 +318,14 @@ class CandidateResumePreview(APIView):
         certifications = candidate.candidatecertification_set.all()
         languages = candidate.candidatelanguage_set.all()
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
+        latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
 
         template = get_template('resume{}.html'.format(template_id))
         rendered_template = template.render(
             {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
              'achievements': achievements, 'references': references, 'projects': projects,
              'certifications': certifications, 'extracurricular': '', 'languages': languages,
-             'current_exp': current_exp}).encode(encoding='UTF-8')
+             'current_exp': current_exp, 'latest_exp': latest_experience}).encode(encoding='UTF-8')
 
         return Response({
             'html': rendered_template
@@ -568,4 +589,3 @@ class CandidateShineProfileRetrieveUpdateView(APIView):
         return Response({
             "candidate_id": candidate_profile['candidate_id']
         })
-

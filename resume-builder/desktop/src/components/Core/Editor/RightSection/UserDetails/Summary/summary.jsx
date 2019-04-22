@@ -7,6 +7,7 @@ import {Field, reduxForm} from 'redux-form';
 import {
     renderTextArea
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
+import Loader from "../../../../../Loader/loader.jsx";
 
 
 class Summary extends Component {
@@ -27,20 +28,23 @@ class Summary extends Component {
 
 
     render() {
-        const {personalInfo: {extra_info}, handleSubmit} = this.props;
+        const {personalInfo: {extra_info}, ui: {loader}, handleSubmit} = this.props;
         return (
             <div>
+                {!!loader &&
+                <Loader/>
+                }
                 <section className="head-section">
-                    <span className="icon-box"><i className="icon-summary1"></i></span>
+                    <span className="icon-box"><i className="icon-summary1"/></span>
                     <h2>Summary</h2>
-                    <span className="icon-edit icon-summary__cursor"></span>
+                    {/*<span className="icon-edit icon-summary__cursor"></span>*/}
                 </section>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <section className="right-sidebar-scroll p3p">
                         <div className="summary-box">
                             <h3>Summary</h3>
                             <Field component={renderTextArea} type={"textarea"} name="extra_info"
-                                   className="summary-box--summary-txt" value={extra_info}/>
+                                   className="summary-box--summary-txt" rows="10" value={extra_info}/>
 
 
                         </div>
@@ -68,7 +72,8 @@ export const SummaryForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.personalInfo,
-        personalInfo: state.personalInfo
+        personalInfo: state.personalInfo,
+        ui: state.ui
     }
 };
 

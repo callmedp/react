@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import * as actions from '../../../../../../store/personalInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
 import {interestList} from '../../../../../../Utils/interestList'
+import Loader from '../../../../../Loader/loader'
 import {
     renderField,
     datepicker,
@@ -78,20 +79,22 @@ export class PersonalInfo extends Component {
         reader.readAsDataURL(event.target.files[0]);
 
         let url = await this.props.fetchImageUrl(event.target.files[0]);
-
         this.setState({
             'imageURL': url
         })
     }
 
     render() {
-        const {handleSubmit, personalInfo} = this.props;
+        const {handleSubmit, personalInfo, enableReinitialize, ui:{loader}} = this.props;
         return (
             <div>
+                {!!loader &&
+                <Loader/>
+                }
                 <section className="head-section">
-                    <span className="icon-box"><i className="icon-info1"></i></span>
+                    <span className="icon-box"><i className="icon-info1"/></span>
                     <h2>Personal Info</h2>
-                    <span className="icon-edit icon-edit__cursor"></span>
+                    {/*<span className="icon-edit icon-edit__cursor"></span>*/}
                 </section>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <section className="flex-container right-sidebar-scroll">
@@ -143,7 +146,8 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-blank"></span>
                                         </div>
-                                        <Field component={datepicker} validate={required} name="date_of_birth" className={"input-control"}/>
+                                        <Field component={datepicker} validate={required} name="date_of_birth"
+                                               className={"input-control"}/>
                                     </div>
                                 </fieldset>
                             </div>
@@ -154,7 +158,8 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-mobile"></span>
                                         </div>
-                                        <Field component={renderField} validate={[required,phoneNumber]} type={"text"} name="number"
+                                        <Field component={renderField} validate={[required, phoneNumber]} type={"text"}
+                                               name="number"
                                                className={"input-control"}/>
                                     </div>
                                 </fieldset>
@@ -164,7 +169,8 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-email"></span>
                                         </div>
-                                        <Field component={renderField} validate={[required,email]} type={"text"} name="email"
+                                        <Field component={renderField} validate={[required, email]} type={"text"}
+                                               name="email"
                                                className={"input-control"}/>
                                     </div>
                                 </fieldset>
@@ -189,11 +195,11 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-blank"></span>
                                         </div>
-                                    <Field name="extracurricular" component={renderDynamicSelect}
-                                        // loadOptions={this.fetchInterestList.bind(this)}
-                                           defaultOptions={Object.keys(interestList).map(key => interestList[key])}
-                                           value={personalInfo.extracurricular}
-                                           label="Select Interest"/>
+                                        <Field name="extracurricular" component={renderDynamicSelect}
+                                            // loadOptions={this.fetchInterestList.bind(this)}
+                                               defaultOptions={Object.keys(interestList).map(key => interestList[key])}
+                                               value={personalInfo.extracurricular}
+                                               label="Select Interest"/>
                                     </div>
                                 </fieldset>
                             </div>
@@ -272,7 +278,8 @@ export const PersonalInfoForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.personalInfo,
-        personalInfo: state.personalInfo
+        personalInfo: state.personalInfo,
+        ui:state.ui
     }
 };
 

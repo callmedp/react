@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {Field, reduxForm, FieldArray} from "redux-form";
+import {reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../../../../../store/course/actions";
 import {connect} from "react-redux";
-import {renderField, datepicker} from "../../../../../FormHandler/formFieldRenderer.jsx";
-import {required} from "../../../../../FormHandler/formValidations"
 import moment from "moment";
 import PreviewModal from "../../../Preview/previewModal";
+import renderCourse from "./renderCourse";
+import validate from "../../../../../FormHandler/validtaions/course/validate"
 
 class Course extends Component {
 
@@ -82,84 +82,16 @@ class Course extends Component {
 
     render () {
         const {handleSubmit, course} = this.props;
-        const renderCourse = ({fields, meta: {touched, error, submitFailed}}) => {
-            return (
-                
-                <div className="buildResume__wrap">
-                    <div className="buildResume__heading heading">
-                        <div className="heading__info">
-                            <h1>Courses</h1>
-                            <i className="sprite icon--edit"></i>
-                        </div>
-                        <button role="button" className="btn btn__round btn--outline"
-                        onClick={this.handleAddition.bind(this, fields, error)}
-                        type={'button'}>+ Add new</button>
-                    </div>
-                    {fields.map((member, index) => {
-                    return (
-                        <React.Fragment key={index}>
-                            <div className="subHeading pb-0">
-                                <h2>{fields.get(index).name_of_certification || 'New Course'}</h2>
-                                <ul className="subHeading__control">
-                                    <li className="subHeading__delete">
-                                        <span className="sprite icon--delete" 
-                                        onClick={(event) => this.deleteCourse(index, fields, event)}
-                                        role="button"></span>
-                                    </li>
-                                    {index == 0 ? '':
-                                        <li className="subHeading__btn"
-                                            onClick={(event) => this.changeOrderingUp(index, fields, event)}>
-                                            <i className="sprite icon--upArrow"></i>
-                                        </li>
-                                    }
-                                    {index == fields.length-1 ? '':
-                                        <li className="subHeading__btn"
-                                            onClick={(event) => this.changeOrderingDown(index, fields, event)}>
-                                            <i className="sprite icon--downArrow"></i>
-                                        </li>
-                                    }
-                                </ul>
-                            </div>
-
-                            <ul className="form pb-0">
-
-                                <li className="form__group">
-                                    <label className="form__label" htmlFor="name_of_certification">Course name</label>
-                                    <div className="input-group">
-                                        <div className="input-group__prepend">
-                                            <span className="input-group__text">
-                                                <i className="sprite icon--course-grey"></i>
-                                            </span>
-                                        </div>
-                                        <Field component={renderField} className="form__input"
-                                            type={"text"} name={`${member}.name_of_certification`}/>
-                                    </div>
-                                </li>
-
-                                <li className="form__group">
-                                    <label className="form__label" htmlFor="year_of_certification">Completion Year</label>
-                                    <div className="input-group">
-                                        <div className="input-group__prepend">
-                                            <span className="input-group__text">
-                                                <i className="sprite icon--date"></i>
-                                            </span>
-                                        </div>
-                                        <Field component={datepicker} type={"date"} 
-                                        name={`${member}.year_of_certification`} className="form__input" />
-                                    </div>
-                                </li>
-                            </ul>
-                        </React.Fragment>
-                    )})}
-                </div>
-
-            )
-        }
         return(
             <div className="buildResume">
                 <PreviewModal {...this.props}/>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
-                    <FieldArray name="list" component={renderCourse}/>
+                    <FieldArray name="list" 
+                                handleAddition={this.handleAddition}
+                                deleteCourse={this.deleteCourse}
+                                changeOrderingUp={this.changeOrderingUp}
+                                changeOrderingDown={this.changeOrderingDown}
+                                component={renderCourse}/>
                     <ul className="form">
                         <li className="form__group">
                             <div className="btn-wrap">
@@ -178,7 +110,8 @@ class Course extends Component {
 
 export const CourseForm = reduxForm({
     form: 'course',
-    enableReinitialize: true
+    enableReinitialize: true,
+    validate
 })(Course);
 
 

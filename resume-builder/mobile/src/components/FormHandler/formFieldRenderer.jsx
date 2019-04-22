@@ -39,7 +39,7 @@ export const datepicker =
                         onChange={date => input.onChange(date)}
             />
             <div className="Error">
-            {  ((error && <span className={'Error-message'}>{error}</span>) ||
+            {touched &&  ((error && <span className={'Error-message'}>{error}</span>) ||
                 (warning && <span className={'Warn-Message'}>{warning}</span>))}
             </div>
         </React.Fragment>

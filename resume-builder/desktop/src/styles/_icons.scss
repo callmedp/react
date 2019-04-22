@@ -115,6 +115,14 @@
     @include icon-inblock (26px, 25px, -31px -75px);
 }
 
+.icon-ascend1 {
+    @include icon-inblock (26px, 25px, -88px -196px);
+}
+
+.icon-descend1 {
+    @include icon-inblock (26px, 25px, -119px -196px);
+}
+
 .icon-change-theme {
     @include icon-inblock (20px, 24px, -25px -107px);
 }

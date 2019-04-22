@@ -5,16 +5,22 @@ import {takeLatest, put, call} from "redux-saga/effects";
 import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
+import {UPDATE_UI} from "../../ui/actions/actionTypes";
 
 
 function* fetchUserReference(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        yield put({type: UPDATE_UI, data: {loader: true}})
+
         const result = yield call(Api.fetchUserReference, candidateId);
         if (result['error']) {
             console.log('error');
         }
+
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
         const {data: {results}} = result;
 
         let data = {list: results};
@@ -34,12 +40,17 @@ function* updateUserReference(action) {
 
         const {id} = userReference;
 
+        yield put({type: UPDATE_UI, data: {loader: true}})
+
         const result = yield call(id ? Api.updateUserReference : Api.createUserReference, userReference, candidateId, id);
+
+        yield put({type: UPDATE_UI, data: {loader: false}})
+
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
-        yield put({type: Actions.SAVE_USER_REFERENCE, data: result['data']});
+        // yield put({type: Actions.SAVE_USER_REFERENCE, data: result['data']});
 
         return resolve('User Reference have saved successfully.');
 
@@ -63,7 +74,6 @@ function* handleReferenceSwap(action) {
             console.log(result['error']);
         }
 
-        console.log('---', result);
         // yield call(fetchUserLanguage)
 
     } catch (e) {

@@ -45,6 +45,7 @@ class CandidateProfile(AbstractAutoDate):
                               blank=True, null=True)
     extracurricular = models.CharField('Extra Curricular', max_length=200, blank=True, null=True)
     extra_info = models.TextField('Extra Information', blank=True, null=True)
+    entity_preference_data = models.TextField(blank=True, null=True)
 
     @property
     def owner_id(self):
@@ -167,6 +168,9 @@ class CandidateSocialLink(models.Model):
     link = models.CharField('Link', max_length=200)
     order = models.IntegerField('Order', default=0)
 
+    @property
+    def owner_id(self):
+        return self.candidate.candidate_id
 
     @property
     def owner_id(self):
@@ -186,7 +190,6 @@ class CandidateAchievement(models.Model):
     @property
     def owner_id(self):
         return self.candidate.candidate_id
-        
     def __str__(self):
         return self.title
 

@@ -1,7 +1,10 @@
 import {SAVE_USER_SKILL, REMOVE_SKILL} from "../actions/actionTypes";
 
 const initialState = {
-    list: []
+    list: [{
+        "name": '',
+        "proficiency": 5
+    }]
 };
 
 
