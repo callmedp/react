@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+    import React, {Component} from 'react';
 import './editPreview.scss'
 import TopBar from './TopBar/topBar.jsx'
 import LeftSideBar from './LeftSideBar/leftSideBar.jsx'
