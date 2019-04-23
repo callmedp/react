@@ -1,9 +1,17 @@
-from django.db import models
+# inbuilt imports
 from datetime import datetime
+
+# framework imports
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from seo.models import AbstractSEO, AbstractAutoDate
 from django.conf import settings
 from django.forms import ValidationError
+
+# local imports
+from .choices import USER_CERTITIFICATE_STATUS
+
+# inter apps imports
+from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
 from shop.functions import (
     get_upload_path_vendor,
@@ -13,6 +21,8 @@ from geolocation.models import (
     State,
     City,)
 from order.choices import BOOSTER_RECRUITER_TYPE
+
+# third party imports
 
 class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     name = models.CharField(
@@ -163,6 +173,7 @@ class UserCertificate(models.Model):
     order = models.ForeignKey(
         'order.Order', related_name='user_certificates',
         verbose_name=_("Order"), blank=True, null=True)
+    status = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
 
     def __str__(self):
         return '{}'.format(self.certificate.name)
@@ -182,3 +193,10 @@ class BoosterRecruiter(AbstractAutoDate):
 
     def __str__(self):
         return '<' + self.get_type_recruiter_display() + '>'
+
+
+class UserCertificateOperations(AbstractAutoDate):
+    user_certificate = models.ForeignKey(UserCertificate)
+    op_type = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
+    last_op_type = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
+

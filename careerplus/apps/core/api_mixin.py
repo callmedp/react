@@ -201,6 +201,34 @@ class FeatureProfileUpdate(ShineToken):
         return False
 
 
+class ShineCertificateUpdate(ShineToken):
+
+    def update_shine_certificate_data(self, candidate_id=None, data={}, headers=None):
+        try:
+            if candidate_id:
+                if not headers:
+                    headers = self.get_api_headers()
+                if data and headers:
+
+                    certificate_api_url = settings.SHINE_API_URL + "/candidate/" + candidate_id + "/certifications/?format=json"
+                    certification_response = requests.post(
+                        certificate_api_url, data=data,
+                        headers=headers)
+                    if certification_response.status_code == 201:
+                        jsonrsp = certification_response.json()
+                        logging.getLogger('info_log').info(
+                            "api response:{}".format(jsonrsp))
+                        return True, jsonrsp
+
+                    elif certification_response.status_code != 201:
+                        jsonrsp = certification_response.json()
+                        logging.getLogger('error_log').error(
+                            "api fail:{}".format(jsonrsp))
+                        return False, jsonrsp
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to update certificate %s'%str(e))
+        return False, None
+
 class ShineProfileDataUpdate(ShineToken):
 
     def update_shine_profile_data(self):

@@ -11,9 +11,9 @@ from django.urls import reverse
 from celery.decorators import task
 from scheduler.models import Scheduler
 from partner.models import Vendor
-from partner.models import Certificate, UserCertificate
+from partner.models import Certificate, UserCertificate, UserCertificateOperations
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
-from core.api_mixin import ShineCandidateDetail, ShineToken
+from core.api_mixin import ShineCandidateDetail, ShineToken, ShineCertificateUpdate
 from order.models import Order
 
 User = get_user_model()
@@ -315,25 +315,30 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None,  vendor
                             obj.candidate_email = email
                             if certi_file_url:
                                 obj.certificate_file_url = certi_file_url
+                            obj.status = 0
                             obj.save()
+                            UserCertificateOperations.objects.create(
+                                user_certificate=obj
+                            )
                             post_data = {
                                 'certification_name': certificate_name,
                                 'certification_year': certi_yr_passing
                             }
-                            certification_url = settings.SHINE_API_URL + "/candidate/" +shineid + "/certifications/?format=json"
-                            certification_response = requests.post(
-                                certification_url, data=post_data,
-                                headers=headers)
-                            if certification_response.status_code == 201:
-                                jsonrsp = certification_response.json()
-                                logging.getLogger('info_log').info(
-                                    "api response:{}".format(jsonrsp))
-                            elif certification_response.status_code != 201:
-                                jsonrsp = certification_response.json()
-                                logging.getLogger('error_log').error(
-                                    "api fail:{}".format(jsonrsp))
+                            flag, jsonrsp = ShineCertificateUpdate().update_shine_certificate_data(
+                                candidate_id=shineid, data=post_data, headers=headers
+                            )
+                            if flag:
+                                last_op_type = obj.status
+                                obj.status = 1
+                                obj.save()
+                                UserCertificateOperations.objects.create(
+                                    user_certificate=obj,
+                                    op_type=1,
+                                    last_op_type=last_op_type)
+                            else:
                                 row['reason_for_failure'] = jsonrsp
                                 row['status'] = 'Failure'
+
                         else:
                             row['reason_for_failure'] = "duplicate entry"
                             row['status'] = "Success"
