@@ -44,18 +44,21 @@ from .functions import (
     get_upload_path_product_icon,
     get_upload_path_product_image,
     get_upload_path_product_file,
+    get_upload_path_feature_profile_file,
     get_upload_path_for_sample_certicate)
 from .choices import (
     SERVICE_CHOICES, FACULTY_CHOICES,
     CATEGORY_CHOICES,
     PRODUCT_CHOICES,
     FLOW_CHOICES,
+    SUB_FLOW_CHOICES,
     RELATION_CHOICES,
     BG_CHOICES,
     C_ATTR_DICT,
     R_ATTR_DICT,
     S_ATTR_DICT,
     CITY_CHOICES,
+    SHINE_FLOW_ACTION,
     convert_to_month,
     convert_inr,
     convert_usd,
@@ -803,6 +806,7 @@ class AbstractProduct(AbstractAutoDate, AbstractSEO):
         _('Type'), choices=PRODUCT_CHOICES, default=0)
     type_flow = models.PositiveSmallIntegerField(
         _('Flow'), choices=FLOW_CHOICES, default=0)
+    sub_type_flow = models.IntegerField(choices=SUB_FLOW_CHOICES, default=-1)
     upc = models.CharField(
         _('Universal Product Code'), max_length=100,
         help_text=_('To be filled by vendor'))
@@ -1165,6 +1169,13 @@ class Product(AbstractProduct, ModelMeta):
     def get_name(self):
         # display name
         return self.heading if self.heading else self.name
+
+    @property
+    def get_sub_type_flow(self):
+        if self.sub_type_flow > 0:
+            return self.get_sub_type_flow_display()
+        return ''
+
 
     def get_heading(self,no_cache=False):
         if self.is_course:
@@ -2921,7 +2932,6 @@ class FacultyProduct(AbstractAutoDate):
             self.product.heading, self.product_id,
             self.faculty.name)
 
-
 class SubCategory(AbstractAutoDate,AbstractSEO,ModelMeta):
 
     location = models.PositiveSmallIntegerField(
@@ -3103,3 +3113,14 @@ class SubCategory(AbstractAutoDate,AbstractSEO,ModelMeta):
             self.slug = slug_value
         super(SubCategory, self).save(*args, **kwargs)
 
+
+class ShineProfileData(AbstractAutoDate):
+    name = models.CharField(max_length=255)
+    image = models.ImageField(
+        _('Image'), upload_to=get_upload_path_feature_profile_file,
+        blank=True, null=True)
+    type_flow = models.PositiveSmallIntegerField(
+        _('Flow'), choices=FLOW_CHOICES)
+    sub_type_flow = models.IntegerField(choices=SUB_FLOW_CHOICES, unique=True)
+    priority_value = models.PositiveIntegerField(default=1)
+    action = models.IntegerField(choices=SHINE_FLOW_ACTION, default=-1)

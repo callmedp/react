@@ -71,4 +71,9 @@ urlpatterns = [
     url(r'^get-ltv/$',
         csrf_exempt(views.GetLTVAjaxView.as_view()), name='bulk-ltv-view'),
 
+
+    #welcome call direct
+
+    url(r'^service-call/$', csrf_exempt(views.WelcomeServiceCallView.as_view()), name='wcservice-call'),
+
 ]

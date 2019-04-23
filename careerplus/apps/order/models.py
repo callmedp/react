@@ -109,8 +109,8 @@ class Order(AbstractAutoDate):
         _("Welcome Call Status"), default=0,
         choices=WC_FLOW_STATUS)
     wc_follow_up = models.DateTimeField(null=True, blank=True)
-
     welcome_call_done = models.BooleanField(default=False)
+    welcome_call_records = models.TextField(_('Call Recording'),blank=True,null=True)
     midout_sent_on = models.DateTimeField(null=True, blank=True)
 
     # cash or Faild trasnsaction manual paid by..
@@ -418,6 +418,7 @@ class OrderItem(AbstractAutoDate):
             ("can_show_domestic_profile_update_queue", "Can Show Domestic Profile Update Queue"),
             ("domestic_profile_update_assigner", "Domestic Profile Update Assigner"),
             ("domestic_profile_update_assignee", "Domestic Profile Update Assignee"),
+            ("can_show_domestic_profile_initiated_queue", "Can Show Domestic Profile Initiated Queue"),
 
             # Domestic Profile Approval Queue Permissions
             ("can_show_domestic_profile_approval_queue", "Can Show Domestic Profile Approval Queue"),

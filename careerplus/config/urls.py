@@ -26,6 +26,9 @@ from ckeditor_uploader import views as ckeditor_views
 
 from users.views import (
     RegistrationApiView, LoginApiView, LogoutApiView)
+
+from console.welcomecall.views import ShowNumberField
+
 from homepage import views as homepage_view
 from linkedin.views import AutoLoginView
 from shop.views import ProductDetailView, CourseCatalogueView
@@ -134,7 +137,8 @@ def get_urls():
     urls = _admin_site_get_urls()
     urls += [
         url(r'^autologintoken/$',
-            admin.site.admin_view(UserLoginTokenView.as_view()))
+            admin.site.admin_view(UserLoginTokenView.as_view())),
+        url(r'^shownumberfield/$',admin.site.admin_view(ShowNumberField.as_view()))
     ]
     return urls
 

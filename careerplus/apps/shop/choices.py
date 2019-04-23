@@ -59,6 +59,20 @@ FLOW_CHOICES = (
     (15, 'Resume Booster International')
 )
 
+SUB_FLOWS = {
+    5: (
+        (501, "Featured Profile"),
+        (502, "Jobs on the Move"),
+        (503, "Priority Applicant")
+    ),
+}
+
+SUB_FLOW_CHOICES = ()
+
+for key, value in list(SUB_FLOWS.items()):
+    k = [(item[0], item[1]) for item in value]
+    SUB_FLOW_CHOICES += tuple(k)
+
 BG_COLOR = {0: "#c8b98d", 1: "#cfbabd", 2: "#75dac2", 3: "#d2db86",
     4: "#a69cba", 5: "#8cb3f6", 6: "#9ac7e5", 7: "#ad9c7f",
     8: "#80d7ff", 9: "#a48e96", 10: "#b4e4fc", 11: "#d7ccc8",
@@ -245,4 +259,9 @@ CITY_CHOICES = (
     (3, 'Hyderabad'),
     (4, 'Kolkata'),
 
+)
+
+SHINE_FLOW_ACTION = (
+    (1, 'Highlight'),
+    (2, 'Booster')
 )

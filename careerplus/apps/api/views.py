@@ -6,6 +6,7 @@ from decimal import Decimal
 from django.db.models import Sum, Count
 from django.utils import timezone
 from django.conf import settings
+from django.http import JsonResponse
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -34,12 +35,13 @@ from order.tasks import (
     process_mailer,
     invoice_generation_order
 )
-from shop.models import Skill, DeliveryService
+from shop.models import Skill, DeliveryService, ShineProfileData
 
 from .serializers import (
     OrderListHistorySerializer,
     RecommendedProductSerializer,
-    RecommendedProductSerializerSolr)
+    RecommendedProductSerializerSolr,
+    ShineDataFlowDataSerializer)
 from shared.rest_addons.pagination import Learning_custom_pagination
 
 
@@ -748,3 +750,11 @@ class UpdateCertificateAndAssesment(APIView):
             "msg": "Certificate Updated"},
             status=status.HTTP_201_CREATED
         )
+
+class ShineDataFlowDataApiView(ListAPIView):
+    permission_classes = []
+    authentication_classes = []
+    queryset = ShineProfileData.objects.all()
+    serializer_class = ShineDataFlowDataSerializer
+    pagination_class = None
+

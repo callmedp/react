@@ -9,3 +9,5 @@
 /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py update_product_buy_count --settings=careerplus.config.settings_live
 /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py update_autocomplete --settings=careerplus.config.settings_live
 /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py course_catalogue_cache_set --settings=careerplus.config.settings_live
+/var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py featured_profile --settings=careerplus.config.settings_live
+export DJANGO_SETTINGS_MODULE="careerplus.config.settings_live" && /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/scripts/welcome_recording.py

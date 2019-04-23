@@ -347,7 +347,16 @@
                   </div>
                   <div class="alert">{{form.type_flow.errors}}</div>
                 </div>
-
+                {% if form.sub_type_flow %}
+                <div class="item form-group {% if form.sub_type_flow.errors %}bad{% endif %}" id="sub_type_flow_div">
+                  <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.sub_type_flow.id_for_label }}">Sub Type Flow <span class="required">*</span>
+                  </label>
+                  <div class="col-md-7 col-sm-7 col-xs-12">
+                    {{form.sub_type_flow}}
+                  </div>
+                  <div class="alert">{{form.sub_type_flow.errors}}</div>
+                </div>
+                {% endif %}
                 <div class="item form-group {% if form.upc.errors %}bad{% endif %}">
                   <label class="control-label col-md-2 col-sm-2 col-xs-12" for="{{ form.upc.id_for_label }}">UPC <span class="required"></span>
                   </label>
@@ -2011,9 +2020,38 @@
         
 {% block js_block %}
   {{ block.super }}
+   <script  type="text/javascript">
+    var sub_type_flow_choices =  {{ sub_type_flow_choices|safe }}
+    var present_keys = Object.keys(sub_type_flow_choices)
+    var type_flow = $("select[name='type_flow']").val()
+    if (present_keys.indexOf(type_flow) == -1){
+      $("#sub_type_flow_div").hide();
+    }
+    $("select[name='type_flow']").on('change', function(){
+      var select = $("select[name='sub_type_flow']")
+      var type_flow = $(this).val()
+      if(sub_type_flow_choices[type_flow]){
+        $("#sub_type_flow_div").show();
+        options = sub_type_flow_choices[type_flow]
+        options_string = ''
+        options.forEach(function(ele){
+          options_string += '<option value="' +ele[0] + '">' + ele[1] + '</option>';
+        })
+        select.find('option').remove()
+        select.append(options_string)
+
+      }
+      else {
+        $("#sub_type_flow_div").hide();
+      }
+         
+    });
+
+  </script>
 <script type="text/javascript">
  application_process_order =[]
   benefits_order = []
+
   {% for x , y, z in prd_university_form.fields.selected_process_choices.choices %}
     k = {{x}}
     application_process_order.push(k.toString())
@@ -2127,6 +2165,7 @@
 
 });
   </script>
+
     {% endcompress %}
 
     {{prdskill_formset.media}}

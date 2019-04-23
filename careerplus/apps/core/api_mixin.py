@@ -201,6 +201,20 @@ class FeatureProfileUpdate(ShineToken):
         return False
 
 
+class ShineProfileDataUpdate(ShineToken):
+
+    def update_shine_profile_data(self):
+        headers = self.get_api_headers()
+        headers.update({
+            "Content-Type": 'application/json',
+            "Accept": 'application/json',
+        })
+        api_url = settings.SHINE_SITE + '/api/v2/career-plus/profile_badge_cache_reset/'
+        response = requests.post(api_url, headers=headers)
+        if response.status_code == 200:
+            return True
+
+
 class UploadResumeToShine(ShineToken):
 
     def sync_candidate_resume_to_shine(self, candidate_id=None, files={}, data={}, headers=None):
