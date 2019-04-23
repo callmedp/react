@@ -37,33 +37,7 @@
     z-index: 9;
     box-shadow: 0 0 10px rgba(0,0,0, .3);
 }
-.error{
-    color:red;
-}
 
-#snackbar {
-    visibility: hidden;
-    min-width: 250px;
-    margin-left: -125px;
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    border-radius: 2px;
-    padding: 16px;
-    bottom: 740px;
-    position: fixed;
-    left: 43%;
-    font-size: 17px;
-    top: 5%;
-    height: 50px;
-
-}
-
-#snackbar.show {
-    visibility: visible;
-    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
 
 
         </style>
@@ -105,7 +79,7 @@
                     <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button"></a>
                 </div>
                 <div class="pull-right" style="width:90%;">
-                    
+
                    <a class="icon-cart pull-right" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                    <form method='get' id="search-form">
                     <div class="searchbox">
@@ -130,7 +104,7 @@
               {% endblock breadcrumbs %}
         <div class="clearfix"></div>
         {% include "shop/partials/packagediv.html" %}
-    </header><!-- header ends here -->    
+    </header><!-- header ends here -->
 {% endblock header %}
 
 {% block container %}
@@ -177,7 +151,7 @@
                     {% endif  %}
                 </ul>
             </div><!-- end of icons wrapper -->
-        
+
         <hr class="row">
         <article class="mt-20">
         {% if prd_about %}
@@ -195,7 +169,7 @@
             </p>
             <!--<p><a href="#">know more</a></p>-->
         {% endif %}
-        
+
             {% include "mobile/shop/partials/prd_cart.html" %}
             {% include "mobile/shop/partials/product_child.html" %}
             {% include "mobile/shop/partials/frequentlybought.html" %}
@@ -207,7 +181,7 @@
             <!-- Accordion begin -->
                 <div class="accordion_example1 accordion-wrap row">
                     <!-- Section 1 -->
-                    {% if prd_desc %}    
+                    {% if prd_desc %}
                         <div class="accordion_in">
                             <div class="acc_head">About Product</div>
                             <div class="acc_content">
@@ -215,7 +189,7 @@
                             </div>
                         </div>
                     {% endif %}
-                    
+
                     {% if prd_uget %}
                         <!-- What’ll you get starts here  -->
                         <div class="accordion_in">
@@ -281,7 +255,7 @@
             {% for package in pop_list|slice:"0:4"  %}
                 <li>
                     <a href="{{package.url}}">
-                    {% if package.duration %} 
+                    {% if package.duration %}
                         <strong>
                             {{ package.duration }} days
                         </strong>
@@ -301,7 +275,7 @@
         {% for package in pop_list|slice:"0:4"  %}
             <li>
                 <a href="{{package.url}}{% if sqs.id in linkedin_resume_services %}?token={{request.GET.token}}{% endif %}" class="blue-link pb-0">
-                {% if package.experience %} 
+                {% if package.experience %}
                     <strong>
                         {{package.experience|get_choice_display:"EXP_DICT"}}
                     </strong>
@@ -330,7 +304,7 @@
                 {% endfor %}
                 </ul>
                 <div class="bottom-btn">
-                    <a href="#" class="btn-slg btn-blue btn-round w100fl text-center" 
+                    <a href="#" class="btn-slg btn-blue btn-round w100fl text-center"
                     id="done_click">
                         DONE
                     </a>
@@ -346,7 +320,7 @@
 {% endblock container %}
 
 {% block js_section %}
-    
+
     {{block.super}}
     {% compress js %}
     <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
@@ -355,7 +329,7 @@
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     {% endcompress %}
-    
+
 <script type="text/javascript">
 
 
@@ -375,18 +349,56 @@ function gaEvent(event_cat,event_lab,event_action){
  function gaEventFunc(typeOfProduct,status){
     var event_cat='Form Interactions';
 
-    var type = ""
-    if(typeOfProduct == 2){
+    var type = "" ;
+    if(typeOfProduct == "2"){
         type= 'Course Enquiry';
     }
     else{
         type= 'Service Enquiry';
     }
-    gaEvent(event_cat,type,status);
+    gaEvent(event_cat,status,type);
  }
 
 
-$('#enquire_form').click(function() {
+
+$(function() {
+  // Initialize form validation on the registration form.
+  // It has the name attribute "registration"
+  $("form[name='enq']").validate({
+    // Specify validation rules
+    rules: {
+      number: {
+        required: true,
+        minlength: 8,
+        maxlength: 15,
+      },
+      msg: {
+        maxlength:250,
+      }
+    },
+    // Specify validation error messages
+    messages: {
+      number: {
+            required: "Please enter your number",
+            minlength: "please enter atleast 8 digit number",
+      },
+
+      msg: {
+        maxlength: "Message should be within 250 characters",
+      },
+
+    },
+    // Make sure the form is submitted to the destination defined
+    // in the "action" attribute of the form when valid
+
+  });
+});
+
+
+
+$('#enquire_form').click(function(event) {
+    event.preventDefault();
+        $('#enquire_form').attr("disabled", true);
     var $enquireform = $("#enquireform");
         var typeOfProduct = document.getElementsByName("lsource")[0].value;
 
@@ -400,10 +412,15 @@ $('#enquire_form').click(function() {
             success: function(data, textStatus, jqXHR) {
                 gaEventFunc(typeOfProduct,'success');
             pop('Your Query Submitted Successfully.');
+                            $('#enquire_form').removeAttr("disabled");
+
                 $('#enquireform')[0].reset();
+
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 gaEventFunc(typeOfProduct,'failure');
+                                $('#enquire_form').removeAttr("disabled");
+
 
                 pop('Something went wrong. Try again later.');
             }

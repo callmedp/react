@@ -1,37 +1,34 @@
 <div class="popular-courses box-panel col-sm-6 col-md-12 mb-40 look-interesting">
-    <h2 class="heading-right-talent">Look interestinf?</h2>
+    <h2 class="heading-right-talent">Looks interesting?</h2>
     <p class="mt-15">Know more about our services, just fill the details below!</p>
 
-    <form action="" class="mt-15 register">
+    <form id="enquireform" name="enq" class="mt-15 register">
         <div class="form-group">
-            <input type="text" name="name" placeholder="Name" class="form-control" maxlength="60" required="" id="id_name" aria-required="true" aria-invalid="true">
-            <span class="error-txt">Please enter a name.</span>
+                    <input type="text" name="name" placeholder="Name" class="form-control" maxlength="60" inputmode="name" value="{{request.session.full_name}}"  id="id_name" aria-required="true">
         </div>
 
         <div class="form-group ">
             <div class="country-code">
                 <div class="custom-select">
                     <select name="country_code" class="form-control" id="id_country_code">
-                        <option value="93">93</option>
-                        <option value="358-18">358-18</option>
-                        <option value="355">355</option>
-                        <option value="213">213</option>
-                        <option value="1-684">1-684</option>
-                        <option value="376">376</option>
-                        <option value="244">244</option>
+                  {% for country in country_choices %}
+                            <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}</option>
+                          {% endfor %}
+
                         </select>
                     </div>
-                    <input type="text" name="cell_phone" class="form-control" placeholder="Mobile" maxlength="15" required="" id="id_cell_phone" aria-required="true">
-                    <span class="error-txt"></span>
-            </div>
+  <span class="mobile_input">
+                        <input type="tel" name="number" class="form-control number" inputmode="numeric" required="" id="id_cell_phone" aria-required="true" placeholder="Mobile" value="{{request.session.mobile_no|safe}}">
+                    </span>            </div>
         </div>
 
         <div class="form-group">
-            <textarea class="form-control" placeholder="Message"></textarea>
+       <textarea class="form-control" rows="2" name="msg" placeholder="Message"></textarea>
             <span class="error-txt">Please enter a valid email address.</span>
         </div>
+        <input type="hidden" name="email" class="form-control" value="{{request.session.email}}">
 
-        <button type="submit" class="btn btn-primary submit">Submit</button>
+                <button type="button" id="enquire_form" class="btn btn-primary submit">Submit</button>
     </form>
 	
 </div>

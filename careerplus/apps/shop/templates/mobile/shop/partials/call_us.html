@@ -22,9 +22,9 @@
         <h2 class="enquire__wrap--head">Enquire now</h2>
         <p class="enquire__wrap--subhead">Share your query, our experts will help you take your career forward!</p>
         <div class="content-box login-form">
-            <form id="enquireform">
+            <form id="enquireform" name="enq">
                 <div class="form-group">
-                    <input type="text" name="name" placeholder="Name" class="form-control" maxlength="60" inputmode="name" value="{{request.session.full_name}}" required="" id="id_name" aria-required="true">
+                    <input type="text" name="name" placeholder="Name" class="form-control" maxlength="60" inputmode="name" value="{{request.session.full_name}}" id="id_name" aria-required="true">
                 </div>
                 <div class="form-group enquire__flex">
 
@@ -43,7 +43,7 @@
 
 
                 <div class="form-group mb-30">
-                    <textarea class="form-control" rows="2" name="msg" required placeholder="Message"></textarea>
+                    <textarea class="form-control" rows="2" name="msg" placeholder="Message"></textarea>
                 </div>
                  {% if  prd_service == 'course' %}
               <input type="hidden" name="lsource" value="2">
@@ -55,7 +55,7 @@
             <input type="hidden" name="path" value="{{product.get_absolute_url}}">
             <input type="hidden" name="email" class="form-control" value="{{request.session.email}}">
             <div class="form-group">
-                <button type="button" id="enquire_form" class="btn btn-blue w100 btn-round">Submit</button>
+                <button type="submit" id="enquire_form" class="btn btn-blue w100 btn-round">Submit</button>
             </div>
 
             </form>

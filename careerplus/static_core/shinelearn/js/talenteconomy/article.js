@@ -1,4 +1,4 @@
-;(function($, Article){
+(function($, Article){
 	function init() {
 
 	/*	$('#myCarousel1').carousel({
@@ -106,3 +106,80 @@
 	Article.init = init;
 
 }($, (window.Article = window.Article || {} )))
+
+
+
+$(function() {
+  // Initialize form validation on the registration form.
+  // It has the name attribute "registration"
+  $("form[name='enq']").validate({
+    // Specify validation rules
+    rules: {
+      number: {
+        required: true,
+        minlength: 8,
+        maxlength: 15,
+      },
+      msg: {
+        maxlength:250,
+      }
+    },
+    // Specify validation error messages
+    messages: {
+      number: {
+            required: "Please enter your number",
+            minlength: "please enter atleast 8 digit number",
+      },
+
+      msg: {
+        maxlength: "Message should be within 250 characters",
+      },
+
+    },
+    // Make sure the form is submitted to the destination defined
+    // in the "action" attribute of the form when valid
+  });
+});
+
+
+$('#enquire_form').click(function(event) {
+    event.preventDefault();
+    $('#enquire_form').attr("disabled", true);
+
+    var $enquireform = $("#enquireform");
+        var typeOfProduct = 'Talent Enquiry';
+    var flag = $enquireform.valid();
+    if (flag) {
+        var formData = $enquireform.serialize();
+        $.ajax({
+            url: "/lead/lead-management/",
+            type: "POST",
+            data: formData,
+            success: function(data, textStatus, jqXHR) {
+                gaEventFunc(typeOfProduct,'success');
+            pop('Your Query Submitted Successfully.');
+                $('#enquireform')[0].reset();
+                $('#enquire_form').removeAttr("disabled");
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                gaEventFunc(typeOfProduct,'failure');
+                $('#enquire_form').removeAttr("disabled");
+                pop('Something went wrong. Try again later.');
+            }
+        });
+    }
+});
+
+
+function pop(param) {
+    // Get the snackbar DIV
+    var x = document.getElementById("snackbar");
+    x.innerHTML=param;
+
+    // Add the "show" class to DIV
+    x.className = "show";
+
+    // After 3 seconds, remove the show class from DIV
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3500);
+}
+
