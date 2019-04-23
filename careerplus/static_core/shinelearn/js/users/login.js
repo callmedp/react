@@ -187,21 +187,22 @@ $(document).ready(function() {
     );
     $("#login_form").validate({
         submitHandler: function(form) {
+            form.submit();
             // e.preventDefault();
-            if($(this).val() != '')
+            /*if($(this).val() != '')
             {
               $('button[type="submit"]').prop('disabled', false);  
             }
             else
             {
               $('button[type="submit"]').prop('disabled', true);
-            }   
+            } */  
         },
         rules: {
                 email:{
                     required:true,
-                    email:true,
-                    emailDoesNotExist:true
+                    email:true/*,
+                    emailDoesNotExist:true*/
 
                 },
                 password:{

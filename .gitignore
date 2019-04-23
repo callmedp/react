@@ -119,6 +119,10 @@ code-learning-key.json
 # Settings files
 careerplus/config/settings_live.py
 
+
+# ignore dupm.rdb
+
+dump.rdb
 # Node modules
 node_modules/
 

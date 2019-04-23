@@ -8,6 +8,7 @@ from cart.mixins import CartMixin
 from cart.models import Subscription
 from marketing.data import UTM_CAMPAIGN_HTML_MAPPING
 from django_redis import get_redis_connection
+from django.core.cache import cache
 from ast import literal_eval
 from json import loads
 
@@ -92,6 +93,7 @@ def common_context_processor(request):
         "ggn_contact": settings.GGN_CONTACT,
         "IS_MAINTENANCE": settings.IS_MAINTENANCE,
         "MAINTENANCE_MESSAGE": settings.MAINTENANCE_MESSAGE,
+        "exoitel_status": cache.get('exoitel_status',False)
     })
     return context
 
