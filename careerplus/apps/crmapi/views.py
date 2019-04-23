@@ -91,7 +91,7 @@ class LeadManagement(View):
                 country = Country.objects.get(phone='91')
 
             utm = request.session.get('utm', {})
-            campaign_slug = utm.get('utm_campaign', '')
+            campaign_slug = request.POST.get('campaign',utm.get('utm_campaign'))
             sub_campaign_slug = utm.get('sub_campaign_slug')
             utm_parameter = json.dumps(utm)
             

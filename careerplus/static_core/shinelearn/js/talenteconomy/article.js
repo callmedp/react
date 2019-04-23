@@ -108,6 +108,19 @@
 }($, (window.Article = window.Article || {} )))
 
 
+$.validator.addMethod("numbercheck", function (value, element) {
+    if( $('#id_country_code').val() == "91" && $('#id_cell_phone').val().length != 10){
+         $('#enquire_form').removeAttr("disabled");
+        return false;
+    }
+    else if($('#id_cell_phone').val().length >= 8 && $('#id_cell_phone').val().length <= 15){
+        return true
+    }
+}, 'please enter valid mobile number');
+
+
+
+
 
 $(function() {
   // Initialize form validation on the registration form.
@@ -116,9 +129,7 @@ $(function() {
     // Specify validation rules
     rules: {
       number: {
-        required: true,
-        minlength: 8,
-        maxlength: 15,
+        numbercheck : true,
       },
       msg: {
         maxlength:250,
