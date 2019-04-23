@@ -53,12 +53,15 @@ ul, li {
 }
 
 .overlay{
-    height: 100%;
-    width: 100%;  
+    @include square(100%);
     background-color: rgba($black, .6);
     position: fixed;
     z-index: 2;
     display: none;
     transition: all .3s;
+    top: 0;
+}
 
+.sto-body-scroll {
+    overflow: hidden;
 }
