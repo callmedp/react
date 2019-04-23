@@ -5,9 +5,9 @@ var ExtractText = require('extract-text-webpack-plugin');
 
 
 module.exports = [{
-    entry: path.join(__dirname, 'resume-builder/src/index'),
+    entry: path.join(__dirname, 'resume-builder/desktop/src/index'),
     output: {
-        path: path.join(__dirname, 'careerplus/static_core/react/dist/mobile'),
+        path: path.join(__dirname, 'careerplus/static_core/react/dist/desktop'),
         filename: '[name].js'
     },
     plugins: [

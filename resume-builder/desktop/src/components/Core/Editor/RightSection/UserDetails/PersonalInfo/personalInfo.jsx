@@ -4,7 +4,6 @@ import {connect} from "react-redux";
 import * as actions from '../../../../../../store/personalInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
 import {interestList} from '../../../../../../Utils/interestList'
-import Loader from '../../../../../Loader/loader'
 import {
     renderField,
     datepicker,
@@ -87,9 +86,6 @@ export class PersonalInfo extends Component {
         const {handleSubmit, personalInfo, ui: {loader}} = this.props;
         return (
             <div>
-                {!!loader &&
-                <Loader/>
-                }
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-info1"/></span>
                     <h2>Personal Info</h2>

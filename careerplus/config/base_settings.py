@@ -128,7 +128,6 @@ MIDDLEWARE = [
     'core.middleware.TrackingMiddleware',
     'core.middleware.AmpMiddleware',
     'core.middleware.LocalIPDetectionMiddleware',
-
 ]
 
 ROOT_URLCONF = 'careerplus.config.urls'
