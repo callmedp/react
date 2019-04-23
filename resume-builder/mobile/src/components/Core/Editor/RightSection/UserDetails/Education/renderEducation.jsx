@@ -24,7 +24,7 @@ const renderEducation = ({
             </div>
             {fields.map((member, index) => {
                 return(
-                    <React.Fragment key={index}>
+                    <div className="form-wrap" key={index}>
                         <div className="subHeading pb-0">
                             <h2>{fields.get(index).institution_name || 'Education'}</h2>
                             <ul className="subHeading__control">
@@ -84,7 +84,7 @@ const renderEducation = ({
                                         </span>
                                     </div>
                                     <Field component={datepicker} type={"date"} 
-                                    name={`${member}.start_date`} className="form__input"/>
+                                    name={`${member}.start_date`}/>
                                 </div>
                             </li>
 
@@ -97,7 +97,7 @@ const renderEducation = ({
                                         </span>
                                     </div>
                                     <Field component={datepicker} type={"date"} 
-                                    name={`${member}.end_date`} className="form__input"/>
+                                    name={`${member}.end_date`}/>
                                 </div>
                             </li>
 
@@ -141,7 +141,7 @@ const renderEducation = ({
                             </li>
 
                         </ul>
-                    </React.Fragment>
+                    </div>
                 )
                 
             })}

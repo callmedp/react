@@ -72,7 +72,7 @@ export const renderSelect = ({
             >
             {children}
         </select>
-        <div>
+        <div className="select-error">
             {touched &&
             ((error && <span className={'Error-message'}>{error}</span>) ||
                 (warning && <span className={'Warn-Message'}>{warning}</span>))}

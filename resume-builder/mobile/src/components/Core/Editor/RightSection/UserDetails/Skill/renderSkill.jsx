@@ -22,10 +22,10 @@ const renderSkills = ({
                     <button type={'button'} onClick={handleAddition.bind(this, fields, error)} 
                         className="btn btn__round btn--outline">+ Add new</button>
                 </div>
-            </div>
+            
             {fields.map((member, index) => {
                 return(
-                    <React.Fragment key={index}>
+                    <div className="form-wrap" key={index}>
                         <div className="subHeading pb-0">
                             <h2>{fields.get(index).name || 'Skill'}</h2>
                             <ul className="subHeading__control">
@@ -80,9 +80,10 @@ const renderSkills = ({
                                 </Field>
                             </li>
                         </ul>
-                    </React.Fragment>
+                    </div>
             )})}
             {error && <li>{error}</li>}
+            </div>
      
         </React.Fragment>         
     )

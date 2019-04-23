@@ -138,7 +138,7 @@ class PersonalInfo extends Component {
                                     </span>
                                 </div>
                                 <Field name="gender" validate={required} component={renderSelect} 
-                                    className="form__input">
+                                    className="form__input form__select">
                                     <option value="">Gender</option>
                                     <option value="1" >Male</option>
                                     <option value="2" >Female</option>
