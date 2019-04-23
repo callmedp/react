@@ -25,7 +25,7 @@ const renderExperiences = ({
             </div>
             {fields.map((member, index) => {
                 return (
-                <React.Fragment key={index}>
+                <div className="form-wrap" key={index}>
                     <div className="subHeading pb-0">
                         <h2>{fields.get(index).company_name || 'Experience'}</h2>
                         <ul className="subHeading__control">
@@ -85,7 +85,7 @@ const renderExperiences = ({
                                     </span>
                                 </div>
                                 <Field component={datepicker} type={"date"} 
-                                className="form__input" name={`${member}.start_date`}/>
+                                 name={`${member}.start_date`}/>
                             </div>
                         </li>
 
@@ -98,14 +98,14 @@ const renderExperiences = ({
                                     </span>
                                 </div>
                                 <Field component={datepicker} type={"date"} 
-                                className="form__input" name={`${member}.end_date`}/>
+                                name={`${member}.end_date`}/>
                             </div>
                         </li>
 
                         <li className="form__radio-group d-flex justify-content-end fs-14">
-                            <Field type="radio" name={`${member}.is_working`}component="input" 
-                                className="form__radio-input" value={`${member}.is_working`}/>
-                            <label className="form__radio-label" htmlFor="is_working">
+                            <Field type="checkbox" name={`${member}.is_working`}component="input" 
+                                className="form__radio-input" id={`${member}.is_working`} value={`${member}.is_working`}/>
+                            <label className="form__radio-label" htmlFor={`${member}.is_working`}>
                                 <span className="form__radio-button"></span>
                                 Till today
                             </label>
@@ -132,7 +132,7 @@ const renderExperiences = ({
                         </li>
 
                     </ul>
-                </React.Fragment>
+                </div>
                 )
             })}
             

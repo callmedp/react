@@ -108,209 +108,212 @@ class LeftSideBar extends Component {
         const {type,addmore,current_page} = this.state;
         return (
             
-
-            <section className={"left-sidebar sidebar " + (this.props.sidenav.sidenavStatus ? "sidebar-open" : "")}>
+            <div>
+                <div className="overlay"></div>
                 
-                <div className="sidebar__menuWrap">
-                    <ul className="sidebar__items">
-                        <li className="sidebar__item user">
-                            <span className="user__image">
-                                <img src="/media/static/react/assets/images/mobile/default-user.jpg" alt="" />
-                            </span>
-                            <span className="user__name">Hello Amit</span>
-                        </li>
-
-                        <li className={"sidebar__item " + (type === 'profile' ? 'sidebar--active' : '')
-                            + (addmore.profile || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
-                            <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "profile"  : current_page)} 
-                                className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'profile') : ()=>{}}>
-                                <div className="sidebar__wrap">
-                                    <i className="sprite icon--personal"></i>
-                                    <span className="sidebar__link" href="#">Personal</span>
-                                </div>
-
-                                <div className="sidebar-open__wrap">
-                                    <span className="sidebar-open__link" href="#">Personal</span>
-                                    <i className={"sprite " + (addmore.profile ? "icon--delete" : "icon--add-more")}
-                                       onClick={addmore.profile ? this.removeItem.bind(this,"profile") : this.addItem.bind(this,"profile")}></i>
-                                </div>
-                            </Link>
-                        </li>
-                        
-                        <li className={"sidebar__item " + (type === 'summary' ? 'sidebar--active' : '')
-                            + (addmore.summary || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
-                            <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "summary" : current_page)} 
-                                className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'summary') : ()=>{}}>
-                                <div className="sidebar__wrap">
-                                    <i className="sprite icon--summary"></i>
-                                    <span className="sidebar__link" href="#">Summary</span>
-                                </div>
-
-                                <div className="sidebar-open__wrap">
-                                    <span className="sidebar-open__link" href="#">Summary</span>
-                                    <i className={"sprite " + (addmore.summary ? "icon--delete" : "icon--add-more")}
-                                     onClick={addmore.summary ? this.removeItem.bind(this,"summary") : this.addItem.bind(this,"summary")}></i>
-                                </div>
-                            </Link>
-                        </li>
-                        
-                        <li className={"sidebar__item " + (type === 'experience' ? 'sidebar--active' : '')
-                            + (addmore.experience || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
-                            <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "experience" : current_page)} 
-                                className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'experience') : ()=>{}}>
-                                <div className="sidebar__wrap">
-                                    <i className="sprite icon--experience"></i>
-                                    <span className="sidebar__link" href="#">Experience</span>
-                                </div>
-
-                                <div className="sidebar-open__wrap">
-                                    <span className="sidebar-open__link" href="#">Experience</span>
-                                    <i className={"sprite " + (addmore.experience ? "icon--delete" : "icon--add-more")}
-                                     onClick={addmore.experience ? this.removeItem.bind(this,"experience") : this.addItem.bind(this,"experience")}></i>
-                                </div>
-                            </Link>
-                        </li>
+                <section className={"left-sidebar sidebar " + (this.props.sidenav.sidenavStatus ? "sidebar-open" : "")}>
                     
-                        <li className={"sidebar__item " + (type === 'education' ? 'sidebar--active' : '')
-                            + (addmore.education || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
-                            <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "education" : current_page)} 
-                                className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'education') : ()=>{}}>
-                                <div className="sidebar__wrap">
-                                    <i className="sprite icon--education"></i>
-                                    <span className="sidebar__link" href="#">Education </span>
-                                </div>
+                    <div className="sidebar__menuWrap">
+                        <ul className="sidebar__items">
+                            <li className="sidebar__item user">
+                                <span className="user__image">
+                                    <img src="/media/static/react/assets/images/mobile/default-user.jpg" alt="" />
+                                </span>
+                                <span className="user__name">Hello Amit</span>
+                            </li>
 
-                                <div className="sidebar-open__wrap">
-                                    <span className="sidebar-open__link" href="#">Education </span>
-                                    <i className={"sprite " + (addmore.education ? "icon--delete" : "icon--add-more")}
-                                     onClick={addmore.education ? this.removeItem.bind(this,"education") : this.addItem.bind(this,"education")}></i>
-                                </div>
-                            </Link>
-                        </li>
+                            <li className={"sidebar__item " + (type === 'profile' ? 'sidebar--active' : '')
+                                + (addmore.profile || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
+                                <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "profile"  : current_page)} 
+                                    className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'profile') : ()=>{}}>
+                                    <div className="sidebar__wrap">
+                                        <i className="sprite icon--personal"></i>
+                                        <span className="sidebar__link" href="#">Personal</span>
+                                    </div>
+
+                                    <div className="sidebar-open__wrap">
+                                        <span className="sidebar-open__link" href="#">Personal</span>
+                                        <i className={"sprite " + (addmore.profile ? "icon--delete" : "icon--add-more")}
+                                        onClick={addmore.profile ? this.removeItem.bind(this,"profile") : this.addItem.bind(this,"profile")}></i>
+                                    </div>
+                                </Link>
+                            </li>
+                            
+                            <li className={"sidebar__item " + (type === 'summary' ? 'sidebar--active' : '')
+                                + (addmore.summary || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
+                                <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "summary" : current_page)} 
+                                    className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'summary') : ()=>{}}>
+                                    <div className="sidebar__wrap">
+                                        <i className="sprite icon--summary"></i>
+                                        <span className="sidebar__link" href="#">Summary</span>
+                                    </div>
+
+                                    <div className="sidebar-open__wrap">
+                                        <span className="sidebar-open__link" href="#">Summary</span>
+                                        <i className={"sprite " + (addmore.summary ? "icon--delete" : "icon--add-more")}
+                                        onClick={addmore.summary ? this.removeItem.bind(this,"summary") : this.addItem.bind(this,"summary")}></i>
+                                    </div>
+                                </Link>
+                            </li>
+                            
+                            <li className={"sidebar__item " + (type === 'experience' ? 'sidebar--active' : '')
+                                + (addmore.experience || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
+                                <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "experience" : current_page)} 
+                                    className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'experience') : ()=>{}}>
+                                    <div className="sidebar__wrap">
+                                        <i className="sprite icon--experience"></i>
+                                        <span className="sidebar__link" href="#">Experience</span>
+                                    </div>
+
+                                    <div className="sidebar-open__wrap">
+                                        <span className="sidebar-open__link" href="#">Experience</span>
+                                        <i className={"sprite " + (addmore.experience ? "icon--delete" : "icon--add-more")}
+                                        onClick={addmore.experience ? this.removeItem.bind(this,"experience") : this.addItem.bind(this,"experience")}></i>
+                                    </div>
+                                </Link>
+                            </li>
                         
-                        <li className={"sidebar__item " + (type === 'skill' ? 'sidebar--active' : '')
-                            + (addmore.skill || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
-                            <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "skill" : current_page)} 
-                                className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'skill') : ()=>{}}>
-                                <div className="sidebar__wrap">
-                                    <i className="sprite icon--skills"></i>
-                                    <span className="sidebar__link" href="#">Skills </span>
-                                </div>
+                            <li className={"sidebar__item " + (type === 'education' ? 'sidebar--active' : '')
+                                + (addmore.education || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
+                                <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "education" : current_page)} 
+                                    className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'education') : ()=>{}}>
+                                    <div className="sidebar__wrap">
+                                        <i className="sprite icon--education"></i>
+                                        <span className="sidebar__link" href="#">Education </span>
+                                    </div>
 
-                                <div className="sidebar-open__wrap">
-                                    <span className="sidebar-open__link" href="#">Skills </span>
-                                    <i className={"sprite " + (addmore.skill ? "icon--delete" : "icon--add-more")}
-                                     onClick={addmore.skill ? this.removeItem.bind(this,"skill") : this.addItem.bind(this,"skill")}></i>
-                                </div>
-                            </Link>
-                        </li>
-                        <li className={"sidebar__item " + (type === 'language' ? 'sidebar--active' : '')
-                            + (addmore.language || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
-                            <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "language" : current_page)} 
-                                className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'language') : ()=>{}}>
-                                <div className="sidebar__wrap">
-                                    <i className="sprite icon--language"></i>
-                                    <span className="sidebar__link" href="#">Languages</span>
-                                </div>
+                                    <div className="sidebar-open__wrap">
+                                        <span className="sidebar-open__link" href="#">Education </span>
+                                        <i className={"sprite " + (addmore.education ? "icon--delete" : "icon--add-more")}
+                                        onClick={addmore.education ? this.removeItem.bind(this,"education") : this.addItem.bind(this,"education")}></i>
+                                    </div>
+                                </Link>
+                            </li>
+                            
+                            <li className={"sidebar__item " + (type === 'skill' ? 'sidebar--active' : '')
+                                + (addmore.skill || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
+                                <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "skill" : current_page)} 
+                                    className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'skill') : ()=>{}}>
+                                    <div className="sidebar__wrap">
+                                        <i className="sprite icon--skills"></i>
+                                        <span className="sidebar__link" href="#">Skills </span>
+                                    </div>
 
-                                <div className="sidebar-open__wrap">
-                                    <span className="sidebar-open__link" href="#">Languages</span>
-                                    <i className={"sprite " + (addmore.language ? "icon--delete" : "icon--add-more")}
-                                     onClick={addmore.language ? this.removeItem.bind(this,"language") : this.addItem.bind(this,"language")}></i>
-                                </div>
-                            </Link>
-                        </li>
-                        
-                        <li className={"sidebar__item " + (type === 'award' ? 'sidebar--active' : '')
-                            + (addmore.award || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
-                            <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "award" : current_page)} 
-                                className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'award') : ()=>{}}>
-                                <div className="sidebar__wrap">
-                                    <i className="sprite icon--award"></i>
-                                    <span className="sidebar__link" href="#">Awards </span>
-                                </div>
+                                    <div className="sidebar-open__wrap">
+                                        <span className="sidebar-open__link" href="#">Skills </span>
+                                        <i className={"sprite " + (addmore.skill ? "icon--delete" : "icon--add-more")}
+                                        onClick={addmore.skill ? this.removeItem.bind(this,"skill") : this.addItem.bind(this,"skill")}></i>
+                                    </div>
+                                </Link>
+                            </li>
+                            <li className={"sidebar__item " + (type === 'language' ? 'sidebar--active' : '')
+                                + (addmore.language || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
+                                <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "language" : current_page)} 
+                                    className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'language') : ()=>{}}>
+                                    <div className="sidebar__wrap">
+                                        <i className="sprite icon--language"></i>
+                                        <span className="sidebar__link" href="#">Languages</span>
+                                    </div>
 
-                                <div className="sidebar-open__wrap">
-                                    <span className="sidebar-open__link" href="#">Awards </span>
-                                    <i className={"sprite " + (addmore.award ? "icon--delete" : "icon--add-more")}
-                                     onClick={addmore.award ? this.removeItem.bind(this,"award") : this.addItem.bind(this,"award")}></i>
-                                </div>
-                            </Link>
-                        </li>
-                        
-                        <li className={"sidebar__item " + (type === 'course' ? 'sidebar--active' : '')
-                            + (addmore.course || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
-                            <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "course" : current_page)} 
-                                className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'course') : ()=>{}}>
-                                <div className="sidebar__wrap">
-                                    <i className="sprite icon--course"></i>
-                                    <span className="sidebar__link" href="#">Courses </span>
-                                </div>
+                                    <div className="sidebar-open__wrap">
+                                        <span className="sidebar-open__link" href="#">Languages</span>
+                                        <i className={"sprite " + (addmore.language ? "icon--delete" : "icon--add-more")}
+                                        onClick={addmore.language ? this.removeItem.bind(this,"language") : this.addItem.bind(this,"language")}></i>
+                                    </div>
+                                </Link>
+                            </li>
+                            
+                            <li className={"sidebar__item " + (type === 'award' ? 'sidebar--active' : '')
+                                + (addmore.award || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
+                                <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "award" : current_page)} 
+                                    className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'award') : ()=>{}}>
+                                    <div className="sidebar__wrap">
+                                        <i className="sprite icon--award"></i>
+                                        <span className="sidebar__link" href="#">Awards </span>
+                                    </div>
 
-                                <div className="sidebar-open__wrap">
-                                    <span className="sidebar-open__link" href="#">Courses </span>
-                                    <i className={"sprite " + (addmore.course ? "icon--delete" : "icon--add-more")}
-                                     onClick={addmore.course ? this.removeItem.bind(this,"course") : this.addItem.bind(this,"course")}></i>
-                                </div>
-                            </Link>
-                        </li>
-                        
-                        <li className={"sidebar__item " + (type === 'project' ? 'sidebar--active' : '')
-                                + (addmore.project || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
-                            <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "project" : current_page)} 
-                                className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'project') : ()=>{}}>
-                                <div className="sidebar__wrap">
-                                    <i className="sprite icon--project"></i>
-                                    <span className="sidebar__link" href="#">Projects </span>
-                                </div>
+                                    <div className="sidebar-open__wrap">
+                                        <span className="sidebar-open__link" href="#">Awards </span>
+                                        <i className={"sprite " + (addmore.award ? "icon--delete" : "icon--add-more")}
+                                        onClick={addmore.award ? this.removeItem.bind(this,"award") : this.addItem.bind(this,"award")}></i>
+                                    </div>
+                                </Link>
+                            </li>
+                            
+                            <li className={"sidebar__item " + (type === 'course' ? 'sidebar--active' : '')
+                                + (addmore.course || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
+                                <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "course" : current_page)} 
+                                    className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'course') : ()=>{}}>
+                                    <div className="sidebar__wrap">
+                                        <i className="sprite icon--course"></i>
+                                        <span className="sidebar__link" href="#">Courses </span>
+                                    </div>
 
-                                <div className="sidebar-open__wrap">
-                                    <span className="sidebar-open__link" href="#">Projects </span>
-                                    <i className={"sprite " + (addmore.project ? "icon--delete" : "icon--add-more")}
-                                     onClick={addmore.project ? this.removeItem.bind(this,"project") : this.addItem.bind(this,"project")}></i>
-                                </div>
-                            </Link>
-                        </li>
-                        
-                        <li className={"sidebar__item " + (type === 'reference' ? 'sidebar--active' : '')
-                            + (addmore.reference || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
-                            <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "reference" : current_page)} 
-                                className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'reference') : ()=>{}}>
-                                <div className="sidebar__wrap">
-                                    <i className="sprite icon--reference"></i>
-                                    <span className="sidebar__link" href="#">References </span>
-                                </div>
+                                    <div className="sidebar-open__wrap">
+                                        <span className="sidebar-open__link" href="#">Courses </span>
+                                        <i className={"sprite " + (addmore.course ? "icon--delete" : "icon--add-more")}
+                                        onClick={addmore.course ? this.removeItem.bind(this,"course") : this.addItem.bind(this,"course")}></i>
+                                    </div>
+                                </Link>
+                            </li>
+                            
+                            <li className={"sidebar__item " + (type === 'project' ? 'sidebar--active' : '')
+                                    + (addmore.project || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
+                                <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "project" : current_page)} 
+                                    className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'project') : ()=>{}}>
+                                    <div className="sidebar__wrap">
+                                        <i className="sprite icon--project"></i>
+                                        <span className="sidebar__link" href="#">Projects </span>
+                                    </div>
 
-                                <div className="sidebar-open__wrap">
-                                    <span className="sidebar-open__link" href="#">References </span>
-                                    <i className={"sprite " + (addmore.reference ? "icon--delete" : "icon--add-more")}
-                                     onClick={(event) => addmore.reference ? this.removeItem.bind(this,"reference",event) : this.addItem.bind(this,"reference",event)}></i>
-                                </div>
-                            </Link>
-                        </li>
-                        <li className={"sidebar__item " + (this.props.sidenav.sidenavStatus ? "hide" : "")}>
-                            <a href="#" className="sidebar__anchor">
-                                <div className="sidebar__wrap">
-                                    <i className="sprite icon--add-more"></i>
-                                    <span className="sidebar__link" onClick={this.addMore}>Add more</span>
-                                </div>
+                                    <div className="sidebar-open__wrap">
+                                        <span className="sidebar-open__link" href="#">Projects </span>
+                                        <i className={"sprite " + (addmore.project ? "icon--delete" : "icon--add-more")}
+                                        onClick={addmore.project ? this.removeItem.bind(this,"project") : this.addItem.bind(this,"project")}></i>
+                                    </div>
+                                </Link>
+                            </li>
+                            
+                            <li className={"sidebar__item " + (type === 'reference' ? 'sidebar--active' : '')
+                                + (addmore.reference || this.props.sidenav.sidenavStatus ? '' : 'hide')}>
+                                <Link to={"/resume-builder/edit/?type=" +(!this.props.sidenav.sidenavStatus ? "reference" : current_page)} 
+                                    className="sidebar__anchor" onClick={!this.props.sidenav.sidenavStatus ? this.changeLink.bind(this,'reference') : ()=>{}}>
+                                    <div className="sidebar__wrap">
+                                        <i className="sprite icon--reference"></i>
+                                        <span className="sidebar__link" href="#">References </span>
+                                    </div>
 
-                                <div className="sidebar-open__wrap">
-                                    <span className="sidebar-open__link" href="#">Add more sections</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>   
-                </div>
+                                    <div className="sidebar-open__wrap">
+                                        <span className="sidebar-open__link" href="#">References </span>
+                                        <i className={"sprite " + (addmore.reference ? "icon--delete" : "icon--add-more")}
+                                        onClick={(event) => addmore.reference ? this.removeItem.bind(this,"reference",event) : this.addItem.bind(this,"reference",event)}></i>
+                                    </div>
+                                </Link>
+                            </li>
+                            <li className={"sidebar__item " + (this.props.sidenav.sidenavStatus ? "hide" : "")}>
+                                <a href="#" className="sidebar__anchor">
+                                    <div className="sidebar__wrap">
+                                        <i className="sprite icon--add-more"></i>
+                                        <span className="sidebar__link" onClick={this.addMore}>Add more</span>
+                                    </div>
 
-                <ul className="companyMenu">
-                    <li className="companyMenu__link"><a href="#">About us</a></li>
-                    <li className="companyMenu__link"><a href="#">Privacy Policy</a></li>
-                    <li className="companyMenu__link"><a href="#">Terms & Conditions</a></li>
-                    <li className="companyMenu__link"><a href="#">Contact Us</a></li>
-                    <li className="companyMenu__link mt-20">Copyright © 2019 HT Media Limited.</li>
-                </ul>
-            </section>
+                                    <div className="sidebar-open__wrap">
+                                        <span className="sidebar-open__link" href="#">Add more sections</span>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>   
+                    </div>
+
+                    <ul className="companyMenu">
+                        <li className="companyMenu__link"><a href="#">About us</a></li>
+                        <li className="companyMenu__link"><a href="#">Privacy Policy</a></li>
+                        <li className="companyMenu__link"><a href="#">Terms & Conditions</a></li>
+                        <li className="companyMenu__link"><a href="#">Contact Us</a></li>
+                        <li className="companyMenu__link mt-20">Copyright © 2019 HT Media Limited.</li>
+                    </ul>
+                </section>
+            </div>
         )
     }
 }

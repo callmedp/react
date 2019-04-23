@@ -98,7 +98,7 @@ class Experience extends Component {
                                 changeOrderingUp={this.changeOrderingUp}
                                 changeOrderingDown={this.changeOrderingDown}
                                 component={renderExperiences}/>
-                    <ul className="form">
+                    <ul className="form mt-15">
                         <li className="form__group">
                             <div className="btn-wrap">
                                 <button className="btn btn__round btn--outline" 

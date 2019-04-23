@@ -80,7 +80,7 @@
 
     &__radio-label {
         position: relative;
-        padding-left: 3.0rem;
+        padding-left: 2.5rem;
 
     }
 
@@ -89,18 +89,18 @@
     }
 
     &__radio-button {
-        @include square(2.0rem);
+        @include square(1.7rem);
         border-radius: 50%;
         border: 2px solid $grey-a7;
         display: inline-block;
         position: absolute;
-        top: 0.2rem;
+        top: 0.1rem;
         left: 0;
 
         &::after {
             content: '';
             display: block;
-            @include square(1.0rem);
+            @include square(.875rem);
             border-radius: 50%;
             position: absolute;
             top: 50%;

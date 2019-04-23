@@ -13,13 +13,19 @@
 	padding: 1.5rem;
 	
 	&__wrap {
-		box-shadow: 0 0 15px rgba($black, .2);
+		box-shadow: 0 0 10px rgba($black, .1);
 		border-radius: .5rem;
 		height: 100%;
 		overflow-y: auto; /* has to be scroll, not auto */
 		  -webkit-overflow-scrolling: touch;
-		  padding-bottom: 5.5rem;
-		
+			// padding-bottom: 5.5rem;
+
+			// .form-wrap {
+			// 	&:not(:last-child) {
+			// 		margin-top: 50px;
+			// 		border-bottom: 1px solid #000; 
+			// 	}
+			// }
 	}
 
 	&__heading {

@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import * as actions from '../../../../../../store/personalInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
-import {interestList} from '../../../../../../Utils/interestList'
+import {interestList} from '../../../../../../Utils/interestList';
+import './personalInfo.scss';
 import {
     renderField,
     datepicker,
@@ -161,7 +162,7 @@ class PersonalInfo extends Component {
                                     </span>
                                 </div>
                                 <Field component={datepicker} validate={required} type={"date"} 
-                                className="form__input" name="date_of_birth" aria-label="date_of_birth" id="date_of_birth"/>
+                                 name="date_of_birth" aria-label="date_of_birth" id="date_of_birth"/>
                             </div>
                         </li>
                         
