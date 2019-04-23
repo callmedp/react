@@ -69,7 +69,7 @@ class Summary extends Component {
 }
 
 export const SummaryForm = reduxForm({
-    form: 'personalInfo',
+    form: 'summary',
     enableReinitialize: true
 })(Summary);
 

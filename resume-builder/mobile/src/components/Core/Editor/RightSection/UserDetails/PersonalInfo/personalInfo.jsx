@@ -85,6 +85,7 @@ class PersonalInfo extends Component {
         reader.readAsDataURL(event.target.files[0]);
 
         let url = await this.props.fetchImageUrl(event.target.files[0]);
+        console.log(url)
 
         this.setState({
             'imageURL': url
