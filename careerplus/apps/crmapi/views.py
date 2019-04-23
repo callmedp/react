@@ -129,7 +129,8 @@ class LeadManagement(View):
                 sub_campaign_slug=sub_campaign_slug
             )
             created = True
-            create_lead_crm.delay(pk=lead.pk, validate=True)
+            validate = True if lead.email else False
+            create_lead_crm.delay(pk=lead.pk, validate=validate)
         except Exception as e:
             logging.getLogger('error_log').error('lead creation is failed%s'%str(e))
 
