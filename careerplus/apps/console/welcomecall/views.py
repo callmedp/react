@@ -847,12 +847,24 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
                                 replace_order_id = 'replacement_order_id' + str(oi.pk)
                                 replace_order_id = request.POST.get(replace_order_id, None)
                                 oi_cmb.replacement_order_id = replace_order_id.strip()
+                                oi_cmb.oi_status = 164
                                 oi_cmb.save()
+                                oi_cmb.orderitemoperation_set.create(
+                                    oi_status=oi_cmb.oi_status,
+                                    last_oi_status=oi_cmb.last_oi_status,
+                                    assigned_to=oi_cmb.assigned_to,
+                                    added_by=request.user)
                         if oi_category == 65:
-                                replace_order_id = 'replacement_order_id' + str(oi.pk)
-                                replace_order_id = request.POST.get(replace_order_id, None)
-                                oi.replacement_order_id = replace_order_id.strip()
-                                oi.save()
+                            replace_order_id = 'replacement_order_id' + str(oi.pk)
+                            replace_order_id = request.POST.get(replace_order_id, None)
+                            oi.replacement_order_id = replace_order_id.strip()
+                            oi.oi_status = 164
+                            oi.save()
+                            oi.orderitemoperation_set.create(
+                                oi_status=oi.oi_status,
+                                last_oi_status=oi.last_oi_status,
+                                assigned_to=oi.assigned_to,
+                                added_by=request.user)
 
                 if ct == len(wc_items):
                     order.welcome_call_done = True
