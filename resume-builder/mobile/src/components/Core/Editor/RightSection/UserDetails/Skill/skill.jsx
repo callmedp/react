@@ -48,12 +48,13 @@ class Skill extends Component {
     }
 
     async handleSubmit(values) {
-        const {listOfLinks,currentLinkPos} = this.props.sidenav
+        let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         if(currentLinkPos > listOfLinks.length){
             currentLinkPos = 0
         }
-        await this.props.bulkUpdateUserSkill(values.list);
+        console.log(this.props)
+        await this.props.bulkSaveUserSkill(values.list);
         this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
     }
 
@@ -103,7 +104,7 @@ class Skill extends Component {
                                 <button className="btn btn__round btn--outline" 
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
                                     type={'button'}>Preview</button>
-                                <button className="btn btn__round btn__primary" disabled={!submitting} type={'submit'}>Save &amp; Continue</button>
+                                <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>Save &amp; Continue</button>
                             </div>
                         </li>
                     </ul>
