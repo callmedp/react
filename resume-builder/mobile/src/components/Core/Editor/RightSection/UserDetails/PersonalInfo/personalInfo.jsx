@@ -41,7 +41,7 @@ class PersonalInfo extends Component {
     }
 
     async handleSubmit(values) {
-        const {listOfLinks,currentLinkPos} = this.props.sidenav
+        let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         if(currentLinkPos > listOfLinks.length){
             currentLinkPos = 0
@@ -137,19 +137,13 @@ class PersonalInfo extends Component {
                                         <i className="sprite icon--designation"></i>
                                     </span>
                                 </div>
-                                <Field
-                                        name="gender"
-                                        component={renderSelect}
-                                        label="Gender"
-                                        isMulti={false}
-                                        validate={required}
-                                        className="form__input"
-                                        options={[
-                                            {value: '1', label: 'Male'},
-                                            {value: '2', label: 'Female'},
-                                            {value: '3', label: 'Other'}
-                                        ]}
-                                />
+                                <Field name="gender" validate={required} component={renderSelect} 
+                                    className="form__input">
+                                    <option value="">Gender</option>
+                                    <option value="1" >Male</option>
+                                    <option value="2" >Female</option>
+                                    <option value="3">Others</option>
+                                </Field>
                             </div>
                         </li>
                         
@@ -287,10 +281,10 @@ const mapDispatchToProps = (dispatch) => {
                 ...personalDetails,
                 ...{
                     'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
-                    'gender': (gender && gender['value']) || '',
                     'image': imageURL,
-                    'extracurricular': extracurricular instanceof Array ?
-                        (extracurricular || []).map(el => el.value).join(',') : extracurricular
+                    'extracurricular' : ''
+                    // 'extracurricular': extracurricular instanceof Array ?
+                    //     (extracurricular || []).map(el => el.value).join(',') : extracurricular
                 }
             }
             return new Promise((resolve, reject) => {

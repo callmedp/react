@@ -10,20 +10,6 @@ import {SubmissionError} from 'redux-form'
 
 import {interestList} from '../../../Utils/interestList'
 
-const genderDict = {
-    '1': {
-        value: '1',
-        'label': 'Male'
-    },
-    '2': {
-        value: '2',
-        'label': 'Female'
-    },
-    '3': {
-        value: '3',
-        'label': 'Other'
-    }
-}
 
 function* getPersonalDetails(action) {
     try {
@@ -40,7 +26,6 @@ function* getPersonalDetails(action) {
             ...data,
             ...{
                 date_of_birth: date_of_birth && moment(date_of_birth).format('YYYY-MM-DD') || '',
-                gender: gender && genderDict[gender] || '',
                 extracurricular: extracurricular.split(',').map(key => interestList[key])
             }
         }

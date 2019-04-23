@@ -22,7 +22,7 @@ class Education extends Component {
         values.list.map((data)=>{
             data.course_type = {value: 'FT', label: 'FULL TIME'}
          })
-        const {listOfLinks,currentLinkPos} = this.props.sidenav
+        let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         if(currentLinkPos > listOfLinks.length){
             currentLinkPos = 0
@@ -133,21 +133,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        "onSubmit": (userEducation) => {
-            const {start_date, end_date, course_type} = userEducation;
-
-            userEducation = {
-                ...userEducation,
-                ...{
-                    start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
-                    end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || '',
-                    course_type: course_type && course_type.value
-                }
-            };
-            return new Promise((resolve, reject) => {
-                return dispatch(actions.updateUserEducation({userEducation, resolve, reject}));
-            })
-        },
         "fetchUserEducation": () => {
             return dispatch(actions.fetchUserEducation())
         },
@@ -164,7 +149,6 @@ const mapDispatchToProps = (dispatch) => {
                         ...{
                             start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
                             end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || '',
-                            course_type: course_type && course_type.value
                         }
                     };
                     return userEducation;

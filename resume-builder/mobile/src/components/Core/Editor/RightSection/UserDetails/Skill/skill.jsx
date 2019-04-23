@@ -131,18 +131,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        "onSubmit": (userSkill) => {
-            const {proficiency} = userSkill
-            userSkill = {
-                ...userSkill,
-                ...{
-                    proficiency: proficiency && proficiency.value
-                }
-            };
-            return new Promise((resolve, reject) => {
-                return dispatch(actions.updateUserSkill({userSkill, resolve, reject}));
-            })
-        },
         "fetchUserSkill": () => {
             return dispatch(actions.fetchUserSkill())
         },
@@ -153,12 +141,6 @@ const mapDispatchToProps = (dispatch) => {
             listItems = (listItems || []).map(userSkill => {
                 const {proficiency} = userSkill;
                 if (!userSkill['id']) delete userSkill['id'];
-                userSkill = {
-                    ...userSkill,
-                    ...{
-                        proficiency: proficiency && proficiency.value
-                    }
-                };
                 return userSkill;
             })
             return dispatch(actions.bulkSaveUserSkill({list: listItems}))

@@ -24,7 +24,7 @@ const renderLanguage = ({
             </div>
             {fields.map((member, index) => {
                 return (
-                    <React.Fragment key={index}>
+                    <div key={index}>
                         <div className="subHeading pb-0">
                             <h2>{fields.get(index).name || 'Language'}</h2>
                             <ul className="subHeading__control">
@@ -57,27 +57,24 @@ const renderLanguage = ({
                             
                             <li className="form__group">
                                 <label className="form__label" htmlFor="proficiency">Skill rating (out of 10)</label>
-                                <Field name={`${member}.proficiency`}
-                                            component={renderSelect}
-                                            className="form__select"
-                                            isMulti={false}
-                                            options={[
-                                                {value: 1, label: '1'},
-                                                {value: 2, label: '2'},
-                                                {value: 3, label: '3'},
-                                                {value: 4, label: '4'},
-                                                {value: 5, label: '5'},
-                                                {value: 6, label: '6'},
-                                                {value: 7, label: '7'},
-                                                {value: 8, label: '8'},
-                                                {value: 9, label: '9'},
-                                                {value: 10, label: '10'}
-                                            ]}
-                                           />
+                                <Field name={`${member}.proficiency`} component={renderSelect} 
+                                        className="form__input">
+                                    <option value="">Choose</option>
+                                    <option value="1" >1</option>
+                                    <option value="2" >2</option>
+                                    <option value="3" >3</option>
+                                    <option value="4" >4</option>
+                                    <option value="5" >5</option>
+                                    <option value="6" >6</option>
+                                    <option value="7" >7</option>
+                                    <option value="8" >8</option>
+                                    <option value="9" >9</option>
+                                    <option value="10">10</option>
+                                </Field>
                             </li>
                         </ul>
 
-                    </React.Fragment>
+                    </div>
             )})}
         </div>
     

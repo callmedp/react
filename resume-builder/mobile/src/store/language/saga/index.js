@@ -3,7 +3,6 @@ import {Api} from './Api';
 import {takeLatest, put, call} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
-import {proficiencyList} from "../../../Utils/proficiencyList";
 import {SubmissionError} from 'redux-form'
 
 
@@ -22,12 +21,7 @@ function* fetchUserLanguage(action) {
         data = {
             ...data,
             ...{
-                list: data['list'].map(el => {
-                    return {
-                        ...el,
-                        proficiency: proficiencyList[el['proficiency'].toString()]
-                    }
-                })
+                list: data['list']
             }
         }
         yield put({type: Actions.SAVE_USER_LANGUAGE, data: data})

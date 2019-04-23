@@ -4,8 +4,12 @@ import './resumeSlider.scss'
 export default class ResumeSlider extends Component {
     constructor(props) {
         super(props)
+        this.customise = this.customise.bind(this)
     }
 
+    customise(){
+        window.location = '/resume-builder/edit/?type=profile'
+    }
 
     render() {
         return (
@@ -24,7 +28,7 @@ export default class ResumeSlider extends Component {
                         </li>
                     </ul>
 
-                    <a className="btn btn__shadow btn__round btn__primary">Customise</a>
+                    <a className="btn btn__shadow btn__round btn__primary" onClick={this.customise}>Customise</a>
                 </div>
             </section>
         )

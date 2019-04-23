@@ -23,7 +23,7 @@ class Course extends Component {
     }
 
     async handleSubmit(values) {
-        const {listOfLinks,currentLinkPos} = this.props.sidenav
+        let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         if(currentLinkPos > listOfLinks.length){
             currentLinkPos = 0

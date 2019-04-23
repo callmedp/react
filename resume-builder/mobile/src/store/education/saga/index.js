@@ -6,8 +6,6 @@ import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 
-import {courseTypeList} from "../../../Utils/courseTypeList";
-import {proficiencyList} from "../../../Utils/proficiencyList";
 
 
 function* fetchUserEducation(action) {
@@ -24,12 +22,7 @@ function* fetchUserEducation(action) {
         data = {
             ...data,
             ...{
-                list: data['list'].map(el => {
-                    return {
-                        ...el,
-                        course_type: courseTypeList[el['course_type']]
-                    }
-                })
+                list: data['list']
             }
         };
 

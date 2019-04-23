@@ -48,26 +48,30 @@ export const datepicker =
 
 export const renderSelect = ({
                                  input,
-                                 name,
                                  label,
                                  meta: {touched, error, warning},
                                  options,
+                                 children,
                                  className,
                                  isMulti
                              }) => (
     <React.Fragment>
-        <Select {...input}
+        {/* <Select {...input}
                 placeholder={label}
-                name={name}
                 options={options}
-                className={className}
                 isMulti={isMulti}
-                value={input.value.label}
-                onChange={(value) => input.onChange(value)}
                 onBlur={() => {
                     input.onBlur(input.value)
                 }}
-        />
+        /> */}
+        <select {...input} className={className}
+            onBlur={() => {
+                input.onBlur(input.value)
+                console.log(input.label)
+            }}
+            >
+            {children}
+        </select>
         <div>
             {touched &&
             ((error && <span className={'Error-message'}>{error}</span>) ||

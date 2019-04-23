@@ -22,7 +22,7 @@ class Summary extends Component {
     }
 
     async handleSubmit(values) {
-        const {listOfLinks,currentLinkPos} = this.props.sidenav
+        let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         if(currentLinkPos > listOfLinks.length){
             currentLinkPos = 0
@@ -92,7 +92,8 @@ const mapDispatchToProps = (dispatch) => {
                 ...personalDetails,
                 ...{
                     'gender': gender && gender['value'] || '',
-                    'extracurricular': (extracurricular || []).map(el => el.value).join(',')
+                    'extracurricular':''
+                    // 'extracurricular': (extracurricular || []).map(el => el.value).join(',')
                 }
             }
             return new Promise((resolve, reject) => {

@@ -5,7 +5,6 @@ import {takeLatest, put, call} from "redux-saga/effects";
 import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
-import {proficiencyList} from "../../../Utils/proficiencyList";
 
 
 function* fetchUserAward(action) {

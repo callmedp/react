@@ -118,16 +118,12 @@ const renderEducation = ({
                                             <i className="sprite icon--date"></i>
                                         </span>
                                     </div>
-                                    <Field component={renderSelect}
-                                        name={`${member}.course_type`}
-                                        isMulti={false}
-                                        type={"text"}
-                                        options={[
-                                            {value: 'FT', label: 'FULL TIME'},
-                                            {value: 'PT', label: 'PART TIME'},
-                                        ]}
-                                         
-                                        />
+                                    <Field name={`${member}.course_type`}
+                                            component={renderSelect} className="form__input">
+                                        <option value="">Choose</option>
+                                        <option value="FT" >FULL TIME</option>
+                                        <option value="PT" >PART TIME</option>
+                                    </Field>
                                 </div>
                             </li>
 

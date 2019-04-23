@@ -9,7 +9,9 @@ export default class PreviewModal extends Component{
     render(){
         return(
             <Modal isOpen={this.props.template.modal_status} contentLabel="Preview">
-                <div dangerouslySetInnerHTML={{__html: this.props.template.html}}></div>
+            <iframe srcdoc={this.props.template.html} style={{width:"90vh",height:"90vh"}}
+            ></iframe>
+                
             </Modal>
         )
     }

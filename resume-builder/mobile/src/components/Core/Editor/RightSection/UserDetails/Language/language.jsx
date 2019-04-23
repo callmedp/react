@@ -23,7 +23,7 @@ class Language extends Component {
 
 
     async handleSubmit(values) {
-        const {listOfLinks,currentLinkPos} = this.props.sidenav
+        let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         if(currentLinkPos > listOfLinks.length){
             currentLinkPos = 0
@@ -127,18 +127,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        "onSubmit": (userLanguage) => {
-            const {proficiency} = userLanguage;
-            userLanguage = {
-                ...userLanguage,
-                ...{
-                    proficiency: proficiency && proficiency.value || 5
-                }
-            }
-            return new Promise((resolve, reject) => {
-                return dispatch(actions.updateUserLanguage({userLanguage, resolve, reject}));
-            })
-        },
         "fetchUserLanguage": () => {
             return dispatch(actions.fetchUserLanguage())
         },
@@ -150,13 +138,6 @@ const mapDispatchToProps = (dispatch) => {
             listItems = (listItems || []).map(item => {
                 const {proficiency} = item;
                 if (!item['id']) delete item['id'];
-                item = {
-                    ...item,
-                    ...{
-                        proficiency: (proficiency && proficiency.value) || 5
-
-                    }
-                }
                 return item;
             })
             return dispatch(actions.bulkUpdateUserLanguage({list: listItems}))

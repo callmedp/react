@@ -5,7 +5,6 @@ import {takeLatest, put, call} from "redux-saga/effects";
 import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
-import {proficiencyList} from "../../../Utils/proficiencyList";
 
 
 function* fetchUserSkill(action) {
@@ -22,12 +21,7 @@ function* fetchUserSkill(action) {
         data = {
             ...data,
             ...{
-                list: data['list'].map(el => {
-                    return {
-                        ...el,
-                        proficiency: proficiencyList[el['proficiency'].toString()]
-                    }
-                })
+                list: data['list']
             }
         }
         yield put({type: Actions.SAVE_USER_SKILL, data: data})
