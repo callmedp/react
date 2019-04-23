@@ -64,7 +64,6 @@ $(function(){
         var select = $('#id-subcat');
         select.empty();
         select.append("<option value=''>Select SubCategory</option>");
-        $(".replace_order_class").css("display","none")
         replaced_order_items = 0
         var parent = $(this).val();
 
@@ -104,16 +103,17 @@ $(function(){
     });
 
     $(document).on('change', '#id-subcat', function(){
-
         var parent = $(this).val(); 
         var parent_this = $(this);
-
         switch(parent){ 
             case '41':{
                 $(".sub_cat_item").each(function() {
-                    var select = $(this);
-                    select.empty();
-                    select.append("<option value="+ parent_this.val() + ">" + parent_this.find('option:selected').text() + "</option>");
+                    debugger
+                    if($(this).is(':enabled')) {
+                        var select = $(this);
+                        select.empty();
+                        select.append("<option value="+ parent_this.val() + ">" + parent_this.find('option:selected').text() + "</option>");
+                    }
                 });
                 
                 break;

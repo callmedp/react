@@ -17,7 +17,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 
 
-from order.models import Order
+from order.models import Order, OrderItem
 from blog.mixins import PaginationMixin
 from console.decorators import (
     Decorate,
@@ -627,6 +627,11 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
             if not order:
                 msg = (False, 'Order {} Does Not Exist'.format(order_id))
                 break
+
+            if OrderItem.objects.filter(Q(replacement_order_id=order.id) | Q(replacement_order_id=order.number)).first():
+                msg = (False, 'Order {} Already used as replacement for another order'.format(order_id))
+                break
+
             if curr_order.id == order.id:
                 msg = (False, 'Replacing Order {} cannot be same as current order.'.format(order_id))
                 break
@@ -739,7 +744,7 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
                         error = 'Enter valid item level sub-category'
                         break
 
-                    if oi_category == 65:
+                    if oi_category == 65 and oi.wc_sub_cat != 65:
                         replace_order_id = 'replacement_order_id' + str(oi.pk)
                         replace_order_id = request.POST.get(replace_order_id, None)
                         if not replace_order_id:
@@ -748,7 +753,7 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
                             break
                         replacement_amount += oi.selling_price
                         replace_order_ids.append(replace_order_id.strip())
-                if valid:
+                if valid and replace_order_ids:
                     valid, error = self.is_order_valid_for_replacement(order, replace_order_ids, replacement_amount)
             elif cat == 23 and subcat in list(sub_cat3_dict.keys()):
                 for oi_data in wc_items:
