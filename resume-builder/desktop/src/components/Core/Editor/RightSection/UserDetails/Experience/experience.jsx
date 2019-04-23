@@ -140,7 +140,7 @@ const ExperienceRenderer = ({
 									                                    <Field type="radio"
                                                                                name={`${member}.is_working`}
                                                                                component="input"
-                                                                               value={`${member}.is_working`}/>
+                                                                               checked={`${member}.is_working` === 'true' ? true : false}/>
 								                                	Till Today
 							                                    	</span>
                                                                 </fieldset>
@@ -253,7 +253,7 @@ class Experience extends Component {
             "company_name": '',
             "start_date": '',
             "end_date": '',
-            "is_working": '',
+            "is_working": false,
             "job_location": '',
             "work_description": '',
             order: fields.length
