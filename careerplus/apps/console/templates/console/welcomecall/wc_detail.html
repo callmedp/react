@@ -188,6 +188,7 @@
                           <td>{{oi.get_wc_sub_cat}}</td>
                           <td>{{oi.get_wc_status}}</td>
                           <td>
+                            {% if not oi.replacement_order_id %}
                             <div class="col-md-9 col-sm-9 col-xs-12">
                               <select class="form-control sub_cat_item" id="id-subcategory{{oi.pk}}" data-target="replace_order_td{{oi.pk}}" name="subcategory{{oi.pk}}" required>
                                 <option value="">Select SubCategory</option>
@@ -195,10 +196,22 @@
                               <span class="error"></span>
 
                             </div>
+                            {% else %}
+                              <div class="col-md-9 col-sm-9 col-xs-12">
+                                <select class="form-control" id="id-subcategory{{oi.pk}}" disabled data-target="replace_order_td{{oi.pk}}" name="subcategory{{oi.pk}}" required>
+                                  <option value="">Select SubCategory</option>
+                                  <option value="65" selected> Replace Item</option>
+                                </select>
+                                <input type="hidden" name="subcategory{{oi.pk}}" value="65" />
+                                
+                                <span class="error"></span>
+
+                              </div>
+                            {% endif %}
                           </td>
-                          <td style="display:none" id="replace_order_td{{oi.pk}}" class="replace_order_class">
+                          <td  {% if oi.replacement_order_id %} readonly="readonly"  style="display:''" {% else %} style="display: none;" {% endif %} id="replace_order_td{{oi.pk}}" class="replace_order_class">
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input type="text" class="form-control" name="replacement_order_id{{oi.pk}}">
+                              <input type="text" class="form-control" name="replacement_order_id{{oi.pk}}"  {% if oi.replacement_order_id %} readonly="readonly" style="display:''"  value={{oi.replacement_order_id}} {% endif %}>
                             </div>
                           </td>
                         </tr>    
