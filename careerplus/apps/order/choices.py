@@ -403,7 +403,7 @@ WC_SUB_CATEGORY2 = (
     (62, 'On Hold'),
     (63, 'Process order'),
     (64, 'Refund'),
-    (65, 'Replacement Order'),
+    (65, 'Replace Item'),
 )
 
 WC_SUB_CAT2 = (
