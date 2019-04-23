@@ -29,7 +29,8 @@ const LanguageRenderer = ({
                               handleAccordionClick,
                               changeOrderingUp,
                               changeOrderingDown,
-                              openedAccordion
+                              openedAccordion,
+                              entity
                           }) => {
     return (
         <div>
@@ -40,98 +41,105 @@ const LanguageRenderer = ({
                 <span className="icon-box"><i className="icon-languages1"/></span>
                 <h2>Languages</h2>
                 {/*<span className="icon-edit icon-language__cursor"></span>*/}
-                <button onClick={() => handleAddition(fields, error)}
-                        type={'button'}
-                        className="add-button add-button__right">Add new
-                </button>
-                {(touched || submitFailed) && error && <span>{error}</span>}
+                {
+                    !!(!(entity && entity.active)) ? "" :
+                        <button onClick={() => handleAddition(fields, error)}
+                                type={'button'}
+                                className="add-button add-button__right">Add new
+                        </button>
+                }
             </section>
-            <section className="right-sidebar-scroll">
-                <ul>
-                    <Accordion onChange={(value) => handleAccordionClick(value, fields, submitFailed)}
-                               allowZeroExpanded={true}
-                               preExpanded={[openedAccordion]}>
-                        {fields.map((member, index) => {
-                                return (
-                                    <li key={index}>
-                                        <section className="info-section">
-                                            <AccordionItem uuid={index}>
-                                                <AccordionItemHeading>
-                                                    <AccordionItemButton>
-                                                        <div className="flex-container">
-                                                            <h3 className="add-section-heading">{fields.get(index).name || 'Language'}</h3>
-                                                            <div className="addon-buttons mr-10">
+            {
+                !!(!(entity && entity.active)) ? <div>
+                    Click Plus Icon to Add This Section
+                </div> : <section className="right-sidebar-scroll">
+                    <ul>
+                        <Accordion onChange={(value) => handleAccordionClick(value, fields, submitFailed)}
+                                   allowZeroExpanded={true}
+                                   preExpanded={[openedAccordion]}>
+                            {fields.map((member, index) => {
+                                    return (
+                                        <li key={index}>
+                                            <section className="info-section">
+                                                <AccordionItem uuid={index}>
+                                                    <AccordionItemHeading>
+                                                        <AccordionItemButton>
+                                                            <div className="flex-container">
+                                                                <h3 className="add-section-heading">{fields.get(index).name || 'Language'}</h3>
+                                                                <div className="addon-buttons mr-10">
                                                                 <span
                                                                     onClick={(event) => deleteLanguage(index, fields, event)}
                                                                     className="icon-delete mr-15"/>
-                                                                {index !== 0 &&
-                                                                <span
-                                                                    onClick={(event) => changeOrderingUp(index, fields, event)}
-                                                                    className="icon-ascend mr-5"/>
-                                                                }
-                                                                {
-                                                                    index !== fields.length - 1 &&
-                                                                    < span
-                                                                        onClick={(event) => changeOrderingDown(index, fields, event)}
-                                                                        className="icon-descend"/>
-                                                                }
+                                                                    {index !== 0 &&
+                                                                    <span
+                                                                        onClick={(event) => changeOrderingUp(index, fields, event)}
+                                                                        className="icon-ascend mr-5"/>
+                                                                    }
+                                                                    {
+                                                                        index !== fields.length - 1 &&
+                                                                        < span
+                                                                            onClick={(event) => changeOrderingDown(index, fields, event)}
+                                                                            className="icon-descend"/>
+                                                                    }
+                                                                </div>
                                                             </div>
+                                                        </AccordionItemButton>
+                                                    </AccordionItemHeading>
+                                                    <AccordionItemPanel>
+                                                        <div className="flex-container">
+                                                            <fieldset className="width-half">
+                                                                <label>Language name</label>
+                                                                <div className="input-group">
+                                                                    <div className="input-group--input-group-icon">
+                                                                        <span className="icon-language-gr"></span>
+                                                                    </div>
+                                                                    <Field component={renderField} type={"text"}
+                                                                           name={`${member}.name`}
+                                                                           className={"input-control"}/>
+                                                                </div>
+                                                            </fieldset>
+
+                                                            <fieldset className="width-half">
+                                                                <label>Language rating (out of 10)</label>
+                                                                <div className="input-group">
+                                                                    <div className="input-group--input-group-icon">
+                                                                        <span className="icon-blank"></span>
+                                                                    </div>
+                                                                    <Field name={`${member}.proficiency`}
+                                                                           component={renderSelect}
+                                                                           isMulti={false}
+                                                                           options={[
+                                                                               {value: 1, label: '1'},
+                                                                               {value: 2, label: '2'},
+                                                                               {value: 3, label: '3'},
+                                                                               {value: 4, label: '4'},
+                                                                               {value: 5, label: '5'},
+                                                                               {value: 6, label: '6'},
+                                                                               {value: 7, label: '7'},
+                                                                               {value: 8, label: '8'},
+                                                                               {value: 9, label: '9'},
+                                                                               {value: 10, label: '10'}
+                                                                           ]}/>
+                                                                </div>
+                                                            </fieldset>
+                                                            <Field component={'input'} name={`${member}.id`}
+                                                                   type={'text'}
+                                                                   hidden={true}/>
+
                                                         </div>
-                                                    </AccordionItemButton>
-                                                </AccordionItemHeading>
-                                                <AccordionItemPanel>
-                                                    <div className="flex-container">
-                                                        <fieldset className="width-half">
-                                                            <label>Language name</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-language-gr"></span>
-                                                                </div>
-                                                                <Field component={renderField} type={"text"}
-                                                                       name={`${member}.name`}
-                                                                       className={"input-control"}/>
-                                                            </div>
-                                                        </fieldset>
 
-                                                        <fieldset className="width-half">
-                                                            <label>Language rating (out of 10)</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-blank"></span>
-                                                                </div>
-                                                                <Field name={`${member}.proficiency`}
-                                                                       component={renderSelect}
-                                                                       isMulti={false}
-                                                                       options={[
-                                                                           {value: 1, label: '1'},
-                                                                           {value: 2, label: '2'},
-                                                                           {value: 3, label: '3'},
-                                                                           {value: 4, label: '4'},
-                                                                           {value: 5, label: '5'},
-                                                                           {value: 6, label: '6'},
-                                                                           {value: 7, label: '7'},
-                                                                           {value: 8, label: '8'},
-                                                                           {value: 9, label: '9'},
-                                                                           {value: 10, label: '10'}
-                                                                       ]}/>
-                                                            </div>
-                                                        </fieldset>
-                                                        <Field component={'input'} name={`${member}.id`}
-                                                               type={'text'}
-                                                               hidden={true}/>
+                                                    </AccordionItemPanel>
+                                                </AccordionItem>
+                                            </section>
+                                        </li>
+                                    )
+                                }
+                            )}
+                        </Accordion>
+                    </ul>
+                </section>
 
-                                                    </div>
-
-                                                </AccordionItemPanel>
-                                            </AccordionItem>
-                                        </section>
-                                    </li>
-                                )
-                            }
-                        )}
-                    </Accordion>
-                </ul>
-            </section>
+            }
 
         </div>
     )
@@ -235,7 +243,9 @@ class Language extends Component {
     }
 
     render() {
-        const {handleSubmit, ui: {loader}} = this.props;
+        const {handleSubmit, ui: {loader}, entityList} = this.props;
+        const entity = entityList.find(entity => entity.entity_id === 9);
+
         return (
             <div>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -250,12 +260,16 @@ class Language extends Component {
                         changeOrderingUp={this.changeOrderingUp}
                         changeOrderingDown={this.changeOrderingDown}
                         openedAccordion={this.state.openedAccordion}
+                        entity={entity}
                         component={LanguageRenderer}
                     />
-                    <div className="flex-container items-right mr-20 mb-30">
-                        <button className="blue-button mr-10">Preview</button>
-                        <button className="orange-button" type={'submit'}>Save & Continue</button>
-                    </div>
+                    {
+                        !!(!(entity && entity.active)) ? "" : <div className="flex-container items-right mr-20 mb-30">
+                            <button className="blue-button mr-10">Preview</button>
+                            <button className="orange-button" type={'submit'}>Save & Continue</button>
+                        </div>
+                    }
+
                 </form>
             </div>
         )
@@ -275,6 +289,7 @@ export const LanguageForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.language,
+        entityList: state.personalInfo && state.personalInfo.entity_preference_data,
         ui: state.ui
     }
 };

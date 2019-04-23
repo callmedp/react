@@ -34,7 +34,8 @@ const SkillRenderer = ({
                            handleAccordionClick,
                            changeOrderingUp,
                            changeOrderingDown,
-                           openedAccordion
+                           openedAccordion,
+                           entity
                        }) => {
     return (
         <div>
@@ -45,97 +46,108 @@ const SkillRenderer = ({
                 <span className="icon-box"><i className="icon-skills1"/></span>
                 <h2>Skills</h2>
                 {/*<span className="icon-edit icon-education__cursor"></span>*/}
-                <button onClick={() => handleAddition(fields, error)}
-                        type={'button'}
-                        className="add-button add-button__right">Add new
-                </button>
+                {
+                    !!(!(entity && entity.active)) ? "" : <button onClick={() => handleAddition(fields, error)}
+                                                                  type={'button'}
+                                                                  className="add-button add-button__right">Add new
+                    </button>
+                }
+
             </section>
-            <section className="right-sidebar-scroll">
-                <ul>
-                    <Accordion onChange={(value) => handleAccordionClick(value, fields, error)}
-                               allowZeroExpanded={true}
-                               preExpanded={[openedAccordion]}>
-                        {fields.map((member, index) => {
-                            return (
-                                <li key={index}>
-                                    <section className="info-section">
-                                        <AccordionItem uuid={index}>
-                                            <AccordionItemHeading>
-                                                <AccordionItemButton>
-                                                    <div className="flex-container">
-                                                        <h3 className="add-section-heading">{fields.get(index).name || 'Skill'}</h3>
-                                                        <div className="addon-buttons mr-10">
+            {
+                !!(!(entity && entity.active)) ?
+                    <div>
+                        Click Plus Icon to Add This Section
+                    </div>
+                    :
+                    <section className="right-sidebar-scroll">
+                        <ul>
+                            <Accordion onChange={(value) => handleAccordionClick(value, fields, error)}
+                                       allowZeroExpanded={true}
+                                       preExpanded={[openedAccordion]}>
+                                {fields.map((member, index) => {
+                                    return (
+                                        <li key={index}>
+                                            <section className="info-section">
+                                                <AccordionItem uuid={index}>
+                                                    <AccordionItemHeading>
+                                                        <AccordionItemButton>
+                                                            <div className="flex-container">
+                                                                <h3 className="add-section-heading">{fields.get(index).name || 'Skill'}</h3>
+                                                                <div className="addon-buttons mr-10">
                                                                 <span
                                                                     onClick={(event) => deleteSkill(index, fields, event)}
                                                                     className="icon-delete mr-15"/>
-                                                            {index !== 0 &&
-                                                            <span
-                                                                onClick={(event) => changeOrderingUp(index, fields, event)}
-                                                                className="icon-ascend mr-5"/>
-                                                            }
-                                                            {
-                                                                index !== fields.length - 1 &&
-                                                                < span
-                                                                    onClick={(event) => changeOrderingDown(index, fields, event)}
-                                                                    className="icon-descend"/>
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </AccordionItemButton>
-                                            </AccordionItemHeading>
-                                            <AccordionItemPanel>
-                                                <div className="flex-container">
-                                                    <fieldset>
-                                                        <label>Skill name</label>
-                                                        <div className="input-group">
-                                                            <div className="input-group--input-group-icon">
-                                                                <span className="icon-skills-gr"/>
+                                                                    {index !== 0 &&
+                                                                    <span
+                                                                        onClick={(event) => changeOrderingUp(index, fields, event)}
+                                                                        className="icon-ascend mr-5"/>
+                                                                    }
+                                                                    {
+                                                                        index !== fields.length - 1 &&
+                                                                        < span
+                                                                            onClick={(event) => changeOrderingDown(index, fields, event)}
+                                                                            className="icon-descend"/>
+                                                                    }
+                                                                </div>
                                                             </div>
-                                                            <Field component={renderField}
-                                                                   type={"text"} name={`${member}.name`}
-                                                                   className={"input-control"}/>
+                                                        </AccordionItemButton>
+                                                    </AccordionItemHeading>
+                                                    <AccordionItemPanel>
+                                                        <div className="flex-container">
+                                                            <fieldset>
+                                                                <label>Skill name</label>
+                                                                <div className="input-group">
+                                                                    <div className="input-group--input-group-icon">
+                                                                        <span className="icon-skills-gr"/>
+                                                                    </div>
+                                                                    <Field component={renderField}
+                                                                           type={"text"} name={`${member}.name`}
+                                                                           className={"input-control"}/>
+                                                                </div>
+                                                            </fieldset>
+
+                                                            <fieldset className="custom">
+                                                                <label>Skill rating (out of 10)</label>
+                                                                <div className="input-group">
+                                                                    <div className="input-group--input-group-icon">
+                                                                        <span className="icon-blank"/>
+                                                                    </div>
+                                                                    <Field name={`${member}.proficiency`}
+                                                                           component={renderSelect}
+                                                                           isMulti={false}
+                                                                           options={[
+                                                                               {value: 1, label: '1'},
+                                                                               {value: 2, label: '2'},
+                                                                               {value: 3, label: '3'},
+                                                                               {value: 4, label: '4'},
+                                                                               {value: 5, label: '5'},
+                                                                               {value: 6, label: '6'},
+                                                                               {value: 7, label: '7'},
+                                                                               {value: 8, label: '8'},
+                                                                               {value: 9, label: '9'},
+                                                                               {value: 10, label: '10'}
+                                                                           ]}
+                                                                    />
+                                                                </div>
+                                                            </fieldset>
+                                                            <Field component={'input'} name={`${member}.id`}
+                                                                   type={'text'}
+                                                                   hidden={true}/>
+
                                                         </div>
-                                                    </fieldset>
 
-                                                    <fieldset className="custom">
-                                                        <label>Skill rating (out of 10)</label>
-                                                        <div className="input-group">
-                                                            <div className="input-group--input-group-icon">
-                                                                <span className="icon-blank"/>
-                                                            </div>
-                                                            <Field name={`${member}.proficiency`}
-                                                                   component={renderSelect}
-                                                                   isMulti={false}
-                                                                   options={[
-                                                                       {value: 1, label: '1'},
-                                                                       {value: 2, label: '2'},
-                                                                       {value: 3, label: '3'},
-                                                                       {value: 4, label: '4'},
-                                                                       {value: 5, label: '5'},
-                                                                       {value: 6, label: '6'},
-                                                                       {value: 7, label: '7'},
-                                                                       {value: 8, label: '8'},
-                                                                       {value: 9, label: '9'},
-                                                                       {value: 10, label: '10'}
-                                                                   ]}
-                                                            />
-                                                        </div>
-                                                    </fieldset>
-                                                    <Field component={'input'} name={`${member}.id`}
-                                                           type={'text'}
-                                                           hidden={true}/>
+                                                    </AccordionItemPanel>
+                                                </AccordionItem>
+                                            </section>
+                                        </li>
+                                    )
+                                })}
+                            </Accordion>
+                        </ul>
+                    </section>
+            }
 
-                                                </div>
-
-                                            </AccordionItemPanel>
-                                        </AccordionItem>
-                                    </section>
-                                </li>
-                            )
-                        })}
-                    </Accordion>
-                </ul>
-            </section>
         </div>
 
     );
@@ -245,7 +257,8 @@ class Skill extends Component {
 
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, enableReinitialize, skill, ui: {loader}} = this.props;
+        const {error, handleSubmit, pristine, reset, submitting, entityList, ui: {loader}} = this.props;
+        const entity = entityList.find(entity => entity.entity_id === 8);
         return (
             <div>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -261,11 +274,16 @@ class Skill extends Component {
                         openedAccordion={this.state.openedAccordion}
                         loader={loader}
                         component={SkillRenderer}
+                        entity={entity}
                     />
-                    <div className="flex-container items-right mr-20 mb-30">
-                        <button className="blue-button mr-10">Preview</button>
-                        <button className="orange-button" type={'submit'}>Save & Continue</button>
-                    </div>
+                    {
+                        !!(!(entity && entity.active)) ? "" : <div className="flex-container items-right mr-20 mb-30">
+                            <button className="blue-button mr-10">Preview</button>
+                            <button className="orange-button" type={'submit'}>Save & Continue</button>
+                        </div>
+                    }
+
+
                 </form>
             </div>
         )
@@ -284,7 +302,8 @@ export const SkillForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.skill,
-        skill: state.skill,
+        entityList: state.personalInfo && state.personalInfo.entity_preference_data,
+
         ui: state.ui
     }
 };

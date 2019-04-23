@@ -79,7 +79,7 @@ class Edit extends Component {
                 type: (values && values.type) || ''
             })
         }
-
+        console.log('--props---', prevProps.entityList, this.props.entityList);
         if (this.props.entityList !== prevProps.entityList) {
             this.setState({
                 preferenceList: this.props.entityList

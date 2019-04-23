@@ -32,7 +32,6 @@ export class PersonalInfo extends Component {
             'imageURI': '',
             'imageURL': ''
         }
-
     }
 
     componentDidMount() {
@@ -85,7 +84,9 @@ export class PersonalInfo extends Component {
     }
 
     render() {
-        const {handleSubmit, personalInfo, enableReinitialize, ui:{loader}} = this.props;
+        const {handleSubmit, personalInfo, ui: {loader}} = this.props;
+        const {entity_preference_data} = personalInfo;
+        const entity = entity_preference_data.find(entity => entity.entity_id === 1);
         return (
             <div>
                 {!!loader &&
@@ -96,174 +97,178 @@ export class PersonalInfo extends Component {
                     <h2>Personal Info</h2>
                     {/*<span className="icon-edit icon-edit__cursor"></span>*/}
                 </section>
-                <form onSubmit={handleSubmit(this.handleSubmit)}>
-                    <section className="flex-container right-sidebar-scroll">
-                        <section className="info-section">
-                            <div className="flex-container">
-                                <fieldset className="error">
-                                    <label>First Name</label>
-                                    <div className="input-group">
-                                        <div className="input-group--input-group-icon">
-                                            <span className="icon-name"></span>
+                {
+                   !!(entity && entity.active === false) ? <div>
+                         Click Plus Icon to Add This Section
+                    </div> : <form onSubmit={handleSubmit(this.handleSubmit)}>
+                        <section className="flex-container right-sidebar-scroll">
+                            <section className="info-section">
+                                <div className="flex-container">
+                                    <fieldset className="error">
+                                        <label>First Name</label>
+                                        <div className="input-group">
+                                            <div className="input-group--input-group-icon">
+                                                <span className="icon-name"></span>
+                                            </div>
+                                            <Field component={renderField} validate={required} type={"text"}
+                                                   name="first_name"/>
                                         </div>
-                                        <Field component={renderField} validate={required} type={"text"}
-                                               name="first_name"/>
-                                    </div>
-                                </fieldset>
-                                <fieldset>
-                                    <label>Last Name</label>
-                                    <div className="input-group">
-                                        <div className="input-group--input-group-icon">
-                                            <span className="icon-surname"></span>
+                                    </fieldset>
+                                    <fieldset>
+                                        <label>Last Name</label>
+                                        <div className="input-group">
+                                            <div className="input-group--input-group-icon">
+                                                <span className="icon-surname"></span>
+                                            </div>
+                                            <Field component={renderField} type={"text"} name="last_name"/>
                                         </div>
-                                        <Field component={renderField} type={"text"} name="last_name"/>
-                                    </div>
-                                </fieldset>
-                            </div>
-                            <div className="flex-container">
-                                <fieldset className="custom">
-                                    <label>Gender</label>
-                                    <div className="input-group">
-                                        <div className="input-group--input-group-icon">
-                                            <span className="icon-blank"></span>
+                                    </fieldset>
+                                </div>
+                                <div className="flex-container">
+                                    <fieldset className="custom">
+                                        <label>Gender</label>
+                                        <div className="input-group">
+                                            <div className="input-group--input-group-icon">
+                                                <span className="icon-blank"></span>
+                                            </div>
+                                            <Field
+                                                name="gender"
+                                                component={renderSelect}
+                                                label="Gender"
+                                                isMulti={false}
+                                                options={[
+                                                    {value: '1', label: 'Male'},
+                                                    {value: '2', label: 'Female'},
+                                                    {value: '3', label: 'Other'}
+                                                ]}
+                                            />
                                         </div>
-                                        <Field
-                                            name="gender"
-                                            component={renderSelect}
-                                            label="Gender"
-                                            isMulti={false}
-                                            options={[
-                                                {value: '1', label: 'Male'},
-                                                {value: '2', label: 'Female'},
-                                                {value: '3', label: 'Other'}
-                                            ]}
-                                        />
-                                    </div>
-                                </fieldset>
-                                <fieldset>
-                                    <label>Date Of Birth</label>
-                                    <div className="input-group">
-                                        <div className="input-group--input-group-icon">
-                                            <span className="icon-blank"></span>
+                                    </fieldset>
+                                    <fieldset>
+                                        <label>Date Of Birth</label>
+                                        <div className="input-group">
+                                            <div className="input-group--input-group-icon">
+                                                <span className="icon-blank"></span>
+                                            </div>
+                                            <Field component={datepicker} validate={required} name="date_of_birth"
+                                                   className={"input-control"}/>
                                         </div>
-                                        <Field component={datepicker} validate={required} name="date_of_birth"
-                                               className={"input-control"}/>
-                                    </div>
-                                </fieldset>
-                            </div>
-                            <div className="flex-container">
-                                <fieldset>
-                                    <label>Mobile</label>
-                                    <div className="input-group">
-                                        <div className="input-group--input-group-icon">
-                                            <span className="icon-mobile"></span>
+                                    </fieldset>
+                                </div>
+                                <div className="flex-container">
+                                    <fieldset>
+                                        <label>Mobile</label>
+                                        <div className="input-group">
+                                            <div className="input-group--input-group-icon">
+                                                <span className="icon-mobile"></span>
+                                            </div>
+                                            <Field component={renderField} validate={[required, phoneNumber]}
+                                                   type={"text"}
+                                                   name="number"
+                                                   className={"input-control"}/>
                                         </div>
-                                        <Field component={renderField} validate={[required, phoneNumber]} type={"text"}
-                                               name="number"
-                                               className={"input-control"}/>
-                                    </div>
-                                </fieldset>
-                                <fieldset>
-                                    <label>Email</label>
-                                    <div className="input-group">
-                                        <div className="input-group--input-group-icon">
-                                            <span className="icon-email"></span>
+                                    </fieldset>
+                                    <fieldset>
+                                        <label>Email</label>
+                                        <div className="input-group">
+                                            <div className="input-group--input-group-icon">
+                                                <span className="icon-email"></span>
+                                            </div>
+                                            <Field component={renderField} validate={[required, email]} type={"text"}
+                                                   name="email"
+                                                   className={"input-control"}/>
                                         </div>
-                                        <Field component={renderField} validate={[required, email]} type={"text"}
-                                               name="email"
-                                               className={"input-control"}/>
-                                    </div>
-                                </fieldset>
+                                    </fieldset>
 
-                            </div>
-                            <div className="flex-container">
-                                <fieldset>
-                                    <label>Address</label>
-                                    <div className="input-group">
-                                        <div className="input-group--input-group-icon">
-                                            <span className="icon-address"></span>
+                                </div>
+                                <div className="flex-container">
+                                    <fieldset>
+                                        <label>Address</label>
+                                        <div className="input-group">
+                                            <div className="input-group--input-group-icon">
+                                                <span className="icon-address"></span>
+                                            </div>
+                                            <Field component={renderField} type={"text"} name="location"
+                                                   className={"input-control"}/>
                                         </div>
-                                        <Field component={renderField} type={"text"} name="location"
-                                               className={"input-control"}/>
-                                    </div>
-                                </fieldset>
-                            </div>
-                            <div className="flex-container">
-                                <fieldset className="custom">
-                                    <label>Interest</label>
-                                    <div className="input-group">
-                                        <div className="input-group--input-group-icon">
-                                            <span className="icon-blank"></span>
+                                    </fieldset>
+                                </div>
+                                <div className="flex-container">
+                                    <fieldset className="custom">
+                                        <label>Interest</label>
+                                        <div className="input-group">
+                                            <div className="input-group--input-group-icon">
+                                                <span className="icon-blank"></span>
+                                            </div>
+                                            <Field name="extracurricular" component={renderDynamicSelect}
+                                                // loadOptions={this.fetchInterestList.bind(this)}
+                                                   defaultOptions={Object.keys(interestList).map(key => interestList[key])}
+                                                   value={personalInfo.extracurricular}
+                                                   label="Select Interest"/>
                                         </div>
-                                        <Field name="extracurricular" component={renderDynamicSelect}
-                                            // loadOptions={this.fetchInterestList.bind(this)}
-                                               defaultOptions={Object.keys(interestList).map(key => interestList[key])}
-                                               value={personalInfo.extracurricular}
-                                               label="Select Interest"/>
-                                    </div>
-                                </fieldset>
-                            </div>
-                            {/*<div className="flex-container">*/}
-                            {/*<fieldset>*/}
-                            {/*<label>Linkedin</label>*/}
-                            {/*<div className="input-group">*/}
-                            {/*<div className="input-group--input-group-icon">*/}
-                            {/*<span className="icon-linkedin"></span>*/}
-                            {/*</div>*/}
-                            {/*<Field component={renderField} type={"text"} name="linkedIn"*/}
-                            {/*className={"input-control"}/>*/}
-                            {/*</div>*/}
-                            {/*</fieldset>*/}
-                            {/*<fieldset>*/}
-                            {/*<label>Facebook</label>*/}
-                            {/*<div className="input-group">*/}
-                            {/*<div className="input-group--input-group-icon">*/}
-                            {/*<span className="icon-facebook"></span>*/}
-                            {/*</div>*/}
-                            {/*<Field component={renderField} type={"text"} name="facebook"*/}
-                            {/*className={"input-control"}/>*/}
-                            {/*</div>*/}
-                            {/*</fieldset>*/}
-                            {/*</div>*/}
+                                    </fieldset>
+                                </div>
+                                {/*<div className="flex-container">*/}
+                                {/*<fieldset>*/}
+                                {/*<label>Linkedin</label>*/}
+                                {/*<div className="input-group">*/}
+                                {/*<div className="input-group--input-group-icon">*/}
+                                {/*<span className="icon-linkedin"></span>*/}
+                                {/*</div>*/}
+                                {/*<Field component={renderField} type={"text"} name="linkedIn"*/}
+                                {/*className={"input-control"}/>*/}
+                                {/*</div>*/}
+                                {/*</fieldset>*/}
+                                {/*<fieldset>*/}
+                                {/*<label>Facebook</label>*/}
+                                {/*<div className="input-group">*/}
+                                {/*<div className="input-group--input-group-icon">*/}
+                                {/*<span className="icon-facebook"></span>*/}
+                                {/*</div>*/}
+                                {/*<Field component={renderField} type={"text"} name="facebook"*/}
+                                {/*className={"input-control"}/>*/}
+                                {/*</div>*/}
+                                {/*</fieldset>*/}
+                                {/*</div>*/}
 
-                        </section>
-                        <section className="pic-section mt-30">
-                            {
-                                this.state.imageURI || personalInfo.image ?
-                                    <div className='upper-cross' onClick={this.removeImage.bind(this)}>
-                                        <i className='icon-close'></i>
-                                    </div> : ''
-                            }
-
-                            <label>
-
+                            </section>
+                            <section className="pic-section mt-30">
                                 {
                                     this.state.imageURI || personalInfo.image ?
-                                        <img alt={"User Profile"} className='img-responsive'
-                                             src={this.state.imageURI || personalInfo.image}/> :
-                                        <img alt={"User Profile"} className="img-responsive"
-                                             src="/media/static/react/assets/images/upload-image.jpg"/>
+                                        <div className='upper-cross' onClick={this.removeImage.bind(this)}>
+                                            <i className='icon-close'></i>
+                                        </div> : ''
                                 }
-                                <input accept="image/*" type="file" name="displayPicture"
-                                       onChange={this.getImageURI.bind(this)}
-                                       style={{opacity: 0}}/>
-                                <Field type={"text"} name={"image"} component={renderField}
-                                       value={this.state.imageURL} className={'zero-opacity'}/>
-                            </label>
 
+                                <label>
+
+                                    {
+                                        this.state.imageURI || personalInfo.image ?
+                                            <img alt={"User Profile"} className='img-responsive'
+                                                 src={this.state.imageURI || personalInfo.image}/> :
+                                            <img alt={"User Profile"} className="img-responsive"
+                                                 src="/media/static/react/assets/images/upload-image.jpg"/>
+                                    }
+                                    <input accept="image/*" type="file" name="displayPicture"
+                                           onChange={this.getImageURI.bind(this)}
+                                           style={{opacity: 0}}/>
+                                    <Field type={"text"} name={"image"} component={renderField}
+                                           value={this.state.imageURL} className={'zero-opacity'}/>
+                                </label>
+
+                            </section>
                         </section>
-                    </section>
 
 
-                    <div className="flex-container items-right mr-20 mb-30">
-                        <button className="blue-button mr-10" onClick={this.handlePreview}>Preview</button>
-                        <button className="orange-button" type="submit">Save &
-                            Continue
-                        </button>
-                    </div>
-                </form>
+                        <div className="flex-container items-right mr-20 mb-30">
+                            <button className="blue-button mr-10" onClick={this.handlePreview}>Preview</button>
+                            <button className="orange-button" type="submit">Save &
+                                Continue
+                            </button>
+                        </div>
+                    </form>
 
-
+                }
             </div>
         )
     }
@@ -279,7 +284,7 @@ const mapStateToProps = (state) => {
     return {
         initialValues: state.personalInfo,
         personalInfo: state.personalInfo,
-        ui:state.ui
+        ui: state.ui
     }
 };
 

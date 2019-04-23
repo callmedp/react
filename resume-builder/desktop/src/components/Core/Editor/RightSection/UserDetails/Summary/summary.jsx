@@ -33,7 +33,10 @@ class Summary extends Component {
 
 
     render() {
-        const {personalInfo: {extra_info}, ui: {loader}, handleSubmit} = this.props;
+        const {personalInfo, ui: {loader}, handleSubmit} = this.props;
+        const {entity_preference_data, extra_info} = personalInfo;
+        const entity = entity_preference_data.find(entity => entity.entity_id === 6);
+
         return (
             <div>
                 {!!loader &&
@@ -44,23 +47,27 @@ class Summary extends Component {
                     <h2>Summary</h2>
                     {/*<span className="icon-edit icon-summary__cursor"></span>*/}
                 </section>
-                <form onSubmit={handleSubmit(this.handleSubmit)}>
-                    <section className="right-sidebar-scroll p3p">
-                        <div className="summary-box">
-                            <h3>Summary</h3>
-                            <Field component={renderTextArea} type={"textarea"} name="extra_info"
-                                   className="summary-box--summary-txt" rows="10" value={extra_info}/>
-
-
+                {
+                    !!(entity && entity.active === false) ? <div>
+                            Click Plus Icon to Add This Section
                         </div>
+                        :
+                        <form onSubmit={handleSubmit(this.handleSubmit)}>
+                            <section className="right-sidebar-scroll p3p">
+                                <div className="summary-box">
+                                    <h3>Summary</h3>
+                                    <Field component={renderTextArea} type={"textarea"} name="extra_info"
+                                           className="summary-box--summary-txt" rows="10" value={extra_info}/>
+                                </div>
+                            </section>
 
-                    </section>
+                            <div className="flex-container items-right mr-20 mb-30">
+                                <button className="blue-button mr-20">Preview</button>
+                                <button className="orange-button" type={'submit'}>Save & Continue</button>
+                            </div>
+                        </form>
+                }
 
-                    <div className="flex-container items-right mr-20 mb-30">
-                        <button className="blue-button mr-20">Preview</button>
-                        <button className="orange-button" type={'submit'}>Save & Continue</button>
-                    </div>
-                </form>
 
             </div>
         )
