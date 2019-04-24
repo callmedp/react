@@ -5,6 +5,8 @@ import {connect} from "react-redux";
 import renderReferences from "./renderReference"
 import validate from "../../../../../FormHandler/validtaions/reference/validate"
 import PreviewModal from "../../../Preview/previewModal";
+import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+
 class References extends Component {
     constructor(props) {
         super(props)
@@ -39,6 +41,12 @@ class References extends Component {
             "about_user": "",
             order: fields.length
         })
+        scroller.scrollTo(`references${fields.length -1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 150
+        })
     }
 
     deleteReference(index, fields, event) {
@@ -52,7 +60,7 @@ class References extends Component {
 
     }
 
-    changeOrderingUp(index,fields,event){
+    async changeOrderingUp(index,fields,event){
         event.stopPropagation();
         console.log("Clicked Up")
         let currentItem = fields.get(index);
@@ -64,9 +72,10 @@ class References extends Component {
         fields.remove(index - 1)
         fields.insert(index - 1, prevItem)
         fields.swap(index, index - 1)
+        await this.props.bulkUpdateUserReference(fields.getAll());
     }
 
-    changeOrderingDown(index,fields,event){
+    async changeOrderingDown(index,fields,event){
         event.stopPropagation();
         console.log("Clicked Down")
         let currentItem = fields.get(index);
@@ -78,6 +87,7 @@ class References extends Component {
         fields.remove(index+1)
         fields.insert(index + 1, nextItem)
         fields.swap(index, index + 1);
+        await this.props.bulkUpdateUserReference(fields.getAll());
     }
 
     render () {
@@ -87,6 +97,7 @@ class References extends Component {
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <PreviewModal {...this.props}/>
                     <FieldArray name={"list"} 
+                                handleSubmit={handleSubmit}
                                 handleAddition={this.handleAddition}
                                 deleteReference={this.deleteReference}
                                 changeOrderingUp={this.changeOrderingUp}

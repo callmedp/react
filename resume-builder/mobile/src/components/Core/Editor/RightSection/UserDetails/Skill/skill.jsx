@@ -6,6 +6,7 @@ import moment from "moment";
 import validate from "../../../../../FormHandler/validtaions/skill/validate"
 import PreviewModal from "../../../Preview/previewModal";
 import renderSkills from "./renderSkill"
+import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 class Skill extends Component {
 
@@ -31,18 +32,21 @@ class Skill extends Component {
         if (skill && skill.id) {
             this.props.removeSkill(skill.id)
         }
-
-
     }
 
-    handleAddition(fields, error) {
-        
+    handleAddition(fields) {
         fields.push({
             "candidate_id": '',
             "id": '',
             "name": '',
             "proficiency": '',
             "order": fields.length
+        })
+        
+        scroller.scrollTo(`skill${fields.length -1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
         })
 
     }
@@ -58,7 +62,7 @@ class Skill extends Component {
         this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
     }
 
-    changeOrderingUp(index,fields,event){
+    async changeOrderingUp(index,fields,event){
         event.stopPropagation();
         console.log("Clicked Up")
         let currentItem = fields.get(index);
@@ -70,9 +74,10 @@ class Skill extends Component {
         fields.remove(index - 1)
         fields.insert(index - 1, prevItem)
         fields.swap(index, index - 1)
+        await this.props.bulkSaveUserSkill(fields.getAll());
     }
 
-    changeOrderingDown(index,fields,event){
+    async changeOrderingDown(index,fields,event){
         event.stopPropagation();
         console.log("Clicked Down")
         let currentItem = fields.get(index);
@@ -84,6 +89,7 @@ class Skill extends Component {
         fields.remove(index+1)
         fields.insert(index + 1, nextItem)
         fields.swap(index, index + 1);
+        await this.props.bulkSaveUserSkill(fields.getAll());
     }
 
     render() {
@@ -91,8 +97,10 @@ class Skill extends Component {
         return (
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
+                    {error}
                     <PreviewModal {...this.props}/>
                     <FieldArray name="list" 
+                                handleSubmit={handleSubmit}
                                 handleAddition={this.handleAddition}
                                 deleteSkill={this.deleteSkill}
                                 changeOrderingUp={this.changeOrderingUp}

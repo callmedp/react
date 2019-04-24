@@ -6,6 +6,7 @@ import moment from "moment";
 import PreviewModal from "../../../Preview/previewModal";
 import renderCourse from "./renderCourse";
 import validate from "../../../../../FormHandler/validtaions/course/validate"
+import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 class Course extends Component {
 
@@ -41,6 +42,13 @@ class Course extends Component {
             "year_of_certification": '',
             order: fields.length
         })
+
+        scroller.scrollTo(`course${fields.length -1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 0
+        })
     }
 
     deleteCourse(index, fields, event) {
@@ -52,7 +60,7 @@ class Course extends Component {
         }
     }
 
-    changeOrderingUp(index,fields,event){
+    async changeOrderingUp(index,fields,event){
         event.stopPropagation();
         console.log("Clicked Up")
         let currentItem = fields.get(index);
@@ -64,9 +72,10 @@ class Course extends Component {
         fields.remove(index - 1)
         fields.insert(index - 1, prevItem)
         fields.swap(index, index - 1)
+        await this.props.bulkUpdateUserCourse(fields.getAll());
     }
 
-    changeOrderingDown(index,fields,event){
+    async changeOrderingDown(index,fields,event){
         event.stopPropagation();
         console.log("Clicked Down")
         let currentItem = fields.get(index);
@@ -78,6 +87,7 @@ class Course extends Component {
         fields.remove(index+1)
         fields.insert(index + 1, nextItem)
         fields.swap(index, index + 1);
+        await this.props.bulkUpdateUserCourse(fields.getAll());
     }
 
     render () {
@@ -87,6 +97,7 @@ class Course extends Component {
                 <PreviewModal {...this.props}/>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <FieldArray name="list" 
+                                handleSubmit={handleSubmit}
                                 handleAddition={this.handleAddition}
                                 deleteCourse={this.deleteCourse}
                                 changeOrderingUp={this.changeOrderingUp}

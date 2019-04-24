@@ -6,6 +6,7 @@ import {Field} from 'redux-form';
 const renderExperiences = ({
                             fields, 
                             meta: {touched, error, submitFailed},
+                            handleSubmit,
                             handleAddition,
                             deleteExperience,
                             changeOrderingUp,
@@ -20,12 +21,12 @@ const renderExperiences = ({
                     <i className="sprite icon--edit"></i>
                 </div>
                 <button role="button"
-                onClick={handleAddition.bind(this, fields, error)}
+                onClick={handleSubmit(handleAddition.bind(this, fields, error))}
                 type={'button'} className="btn btn__round btn--outline">+ Add new</button>
             </div>
             {fields.map((member, index) => {
                 return (
-                <div className="form-wrap" key={index}>
+                <div className="form-wrap" key={index} id={`experience${index}`} >
                     <div className="subHeading pb-0">
                         <h2>{fields.get(index).company_name || 'Experience'}</h2>
                         <ul className="subHeading__control">

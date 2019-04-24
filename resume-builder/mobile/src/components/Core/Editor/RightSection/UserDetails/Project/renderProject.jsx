@@ -5,6 +5,7 @@ import {datepicker, renderField, renderTextArea} from "../../../../../FormHandle
 const renderProjects = ({
                             fields, 
                             meta: {touched, error, submitFailed},
+                            handleSubmit,
                             handleAddition,
                             deleteProject,
                             changeOrderingUp,
@@ -19,12 +20,12 @@ const renderProjects = ({
                     <i className="sprite icon--edit"></i>
                 </div>
                 <button role="button" className="btn btn__round btn--outline"
-                    onClick={() => handleAddition(fields, error)}
+                    onClick={handleSubmit(handleAddition.bind(this,fields, error))}
                     type={'button'}>+ Add new</button>
             </div>
             {fields.map((member, index) => {
                 return (
-                    <React.Fragment key={index}>
+                    <div key={index} id={`project${index}`}>
                         <div className="subHeading pb-0">
                             <h2>{fields.get(index).project_name || 'Project'}</h2>
                             <ul className="subHeading__control">
@@ -88,7 +89,7 @@ const renderProjects = ({
                                 </div>
                             </li>
                         </ul>
-                    </React.Fragment>
+                    </div>
                 )})}      
         </div>
     

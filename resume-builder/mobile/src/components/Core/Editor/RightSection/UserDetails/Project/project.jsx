@@ -6,6 +6,8 @@ import moment from "moment";
 import PreviewModal from "../../../Preview/previewModal";
 import validate from "../../../../../FormHandler/validtaions/project/validate"
 import renderProjects from "./renderProject"
+import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+
 class Project extends Component {
     constructor(props) {
         super(props);
@@ -42,6 +44,12 @@ class Project extends Component {
             "description": '',
             order: fields.length
         })
+        scroller.scrollTo(`project${fields.length -1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 200
+        })
     }
 
     deleteProject(index, fields, event) {
@@ -55,7 +63,7 @@ class Project extends Component {
 
     }
 
-    changeOrderingUp(index,fields,event){
+    async changeOrderingUp(index,fields,event){
         event.stopPropagation();
         console.log("Clicked Up")
         let currentItem = fields.get(index);
@@ -67,9 +75,10 @@ class Project extends Component {
         fields.remove(index - 1)
         fields.insert(index - 1, prevItem)
         fields.swap(index, index - 1)
+        await this.props.bulkUpdateUserProject(fields.getAll());
     }
 
-    changeOrderingDown(index,fields,event){
+    async changeOrderingDown(index,fields,event){
         event.stopPropagation();
         console.log("Clicked Down")
         let currentItem = fields.get(index);
@@ -81,6 +90,7 @@ class Project extends Component {
         fields.remove(index+1)
         fields.insert(index + 1, nextItem)
         fields.swap(index, index + 1);
+        await this.props.bulkUpdateUserProject(fields.getAll());
     }
 
     render () {
@@ -90,6 +100,7 @@ class Project extends Component {
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <PreviewModal {...this.props}/>
                     <FieldArray name="list" 
+                                handleSubmit={handleSubmit}
                                 handleAddition={this.handleAddition}
                                 deleteProject={this.deleteAward}
                                 changeOrderingUp={this.changeOrderingUp}

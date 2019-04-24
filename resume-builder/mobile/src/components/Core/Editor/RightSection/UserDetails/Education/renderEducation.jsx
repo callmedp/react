@@ -5,6 +5,7 @@ import {Field} from "redux-form";
 const renderEducation = ({
                             fields, 
                             meta: {touched, error, submitFailed},
+                            handleSubmit,
                             handleAddition,
                             deleteEducation,
                             changeOrderingDown,
@@ -19,12 +20,12 @@ const renderEducation = ({
                     <i className="sprite icon--edit"></i>
                 </div>
                 <button role="button" className="btn btn__round btn--outline"
-                    onClick={(event) => handleAddition(fields, error, event)}
+                    onClick={handleSubmit(handleAddition.bind(this,fields, error))}
                     type={'button'}>+ Add new</button>
             </div>
             {fields.map((member, index) => {
                 return(
-                    <div className="form-wrap" key={index}>
+                    <div className="form-wrap" key={index} id={`education${index}`}>
                         <div className="subHeading pb-0">
                             <h2>{fields.get(index).institution_name || 'Education'}</h2>
                             <ul className="subHeading__control">

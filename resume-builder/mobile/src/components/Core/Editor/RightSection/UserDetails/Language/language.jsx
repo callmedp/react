@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import PreviewModal from "../../../Preview/previewModal";
 import renderLanguage from "./renderLanguage";
 import validate from "../../../../../FormHandler/validtaions/language/validate"
+import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 class Language extends Component {
     constructor(props) {
@@ -43,6 +44,12 @@ class Language extends Component {
             },
             order: fields.length
         })
+        scroller.scrollTo(`language${fields.length -1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 0
+        })
     }
 
     deleteLanguage(index, fields, event) {
@@ -54,7 +61,7 @@ class Language extends Component {
         }
     }
 
-    changeOrderingUp(index,fields,event){
+    async changeOrderingUp(index,fields,event){
         event.stopPropagation();
         console.log("Clicked Up")
         let currentItem = fields.get(index);
@@ -66,9 +73,10 @@ class Language extends Component {
         fields.remove(index - 1)
         fields.insert(index - 1, prevItem)
         fields.swap(index, index - 1)
+        await this.props.bulkUpdateUserLanguage(fields.getAll());
     }
 
-    changeOrderingDown(index,fields,event){
+    async changeOrderingDown(index,fields,event){
         event.stopPropagation();
         console.log("Clicked Down")
         let currentItem = fields.get(index);
@@ -80,6 +88,7 @@ class Language extends Component {
         fields.remove(index+1)
         fields.insert(index + 1, nextItem)
         fields.swap(index, index + 1);
+        await this.props.bulkUpdateUserLanguage(fields.getAll());
     }
 
 
@@ -90,6 +99,7 @@ class Language extends Component {
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <PreviewModal {...this.props}/>
                     <FieldArray name="list" 
+                                handleSubmit={handleSubmit}
                                 handleAddition={this.handleAddition}
                                 deleteLanguage={this.deleteLanguage}
                                 changeOrderingUp={this.changeOrderingUp}

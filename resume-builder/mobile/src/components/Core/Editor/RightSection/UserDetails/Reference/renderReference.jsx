@@ -5,6 +5,7 @@ import {renderField, renderTextArea} from "../../../../../FormHandler/formFieldR
 const renderReferences = ({
                             fields, 
                             meta: {touched, error, submitFailed},
+                            handleSubmit,
                             handleAddition,
                             deleteReference,
                             changeOrderingUp,
@@ -19,12 +20,12 @@ const renderReferences = ({
                     <i className="sprite icon--edit"></i>
                 </div>
                 <button role="button" className="btn btn__round btn--outline"
-                    onClick={handleAddition.bind(this, fields, error)}
+                    onClick={handleSubmit(handleAddition.bind(this, fields, error))}
                     type={'button'}>+ Add new</button>
             </div>
             {fields.map((member, index) => {
                 return (
-                    <React.Fragment key={index}>
+                    <div key={index} id={`references${index}`}>
                         <div className="subHeading pb-0">
                             <h2>{fields.get(index).reference_name || 'Refrence'}</h2>
                             <ul className="subHeading__control">
@@ -72,7 +73,7 @@ const renderReferences = ({
                             </li>
                             
                         </ul>
-                    </React.Fragment>
+                    </div>
                 )})}
         </div>
 

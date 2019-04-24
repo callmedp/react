@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import moment from "moment";
 import PreviewModal from "../../../Preview/previewModal";
 import renderEducation from "./renderEducation"
+import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 class Education extends Component {
 
@@ -19,9 +20,6 @@ class Education extends Component {
     }
 
     async handleSubmit(values) {
-        values.list.map((data)=>{
-            data.course_type = {value: 'FT', label: 'FULL TIME'}
-         })
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         if(currentLinkPos > listOfLinks.length){
@@ -35,8 +33,7 @@ class Education extends Component {
         this.props.fetchUserEducation()
     }
 
-    handleAddition(fields, error, event) {
-        event.stopPropagation();
+    handleAddition(fields, error) {
         fields.push({
             "candidate_id": '',
             "id": '',
@@ -49,6 +46,12 @@ class Education extends Component {
             "is_pursuing": false,
             order: fields.length
         })
+        scroller.scrollTo(`education${fields.length -1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 450
+        })
     }
 
     deleteEducation(index, fields, event) {
@@ -60,7 +63,7 @@ class Education extends Component {
         }
     }
 
-    changeOrderingUp(index,fields,event){
+    async changeOrderingUp(index,fields,event){
         event.stopPropagation();
         console.log("Clicked Up")
         let currentItem = fields.get(index);
@@ -72,9 +75,10 @@ class Education extends Component {
         fields.remove(index - 1)
         fields.insert(index - 1, prevItem)
         fields.swap(index, index - 1)
+        await this.props.bulkUpdateUserEducation(fields.getAll());
     }
 
-    changeOrderingDown(index,fields,event){
+    async changeOrderingDown(index,fields,event){
         event.stopPropagation();
         console.log("Clicked Down")
         let currentItem = fields.get(index);
@@ -86,6 +90,7 @@ class Education extends Component {
         fields.remove(index+1)
         fields.insert(index + 1, nextItem)
         fields.swap(index, index + 1);
+        await this.props.bulkUpdateUserEducation(fields.getAll());
     }
 
     render() {
@@ -96,6 +101,7 @@ class Education extends Component {
                 <form onSubmit={handleSubmit(this.handleSubmit)}> 
                     <PreviewModal {...this.props}/>
                     <FieldArray name={'list'}
+                                handleSubmit={handleSubmit}
                                 handleAddition={this.handleAddition}
                                 deleteEducation={this.deleteEducation}
                                 changeOrderingUp={this.changeOrderingUp}

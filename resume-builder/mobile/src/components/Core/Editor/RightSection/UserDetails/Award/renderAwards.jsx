@@ -5,6 +5,7 @@ import {Field} from "redux-form";
 export const renderAwards = ({
                                 fields, 
                                 meta: {touched, error, submitFailed},
+                                handleSubmit,
                                 handleAddition,
                                 deleteAward,
                                 changeOrderingUp,
@@ -18,13 +19,13 @@ export const renderAwards = ({
                     <h1>Award</h1>
                     <i className="sprite icon--edit"></i>
                 </div>
-                <button role="button" onClick={handleAddition.bind(this, fields, error)}
+                <button role="button" onClick={handleSubmit(handleAddition.bind(this, fields, error))}
                     type={'button'} className="btn btn__round btn--outline">+ Add new</button>
             </div>
 
             {fields.map((member, index) => {
             return(
-                <React.Fragment key={index}>
+                <div key={index} id={`award${index}`}>
                     <div className="subHeading pb-0">
                         <h2>{fields.get(index).title || 'Award'}</h2>
                         <ul className="subHeading__control">
@@ -72,7 +73,7 @@ export const renderAwards = ({
                             </div>
                         </li>
                     </ul>
-                </React.Fragment>
+                </div>
             )})}
             {error && <li>{error}</li>}
         </div>

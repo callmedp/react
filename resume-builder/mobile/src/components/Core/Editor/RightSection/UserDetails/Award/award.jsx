@@ -7,6 +7,7 @@ import {datepicker, renderField, renderTextArea} from "../../../../../FormHandle
 import moment from "moment";
 import PreviewModal from "../../../Preview/previewModal";
 import renderAwards from "./renderAwards"
+import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 
 class Award extends Component {
@@ -46,6 +47,13 @@ class Award extends Component {
             "summary": '',
             order: fields.length
         })
+
+        scroller.scrollTo(`award${fields.length -1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 100
+        })
     }
 
     deleteAward(index, fields, event) {
@@ -58,7 +66,7 @@ class Award extends Component {
         }
     }
 
-    changeOrderingUp(index,fields,event){
+    async changeOrderingUp(index,fields,event){
         event.stopPropagation();
         console.log("Clicked Up")
         let currentItem = fields.get(index);
@@ -70,9 +78,10 @@ class Award extends Component {
         fields.remove(index - 1)
         fields.insert(index - 1, prevItem)
         fields.swap(index, index - 1)
+        await this.props.bulkUpdateUserAward(fields.getAll());
     }
 
-    changeOrderingDown(index,fields,event){
+    async changeOrderingDown(index,fields,event){
         event.stopPropagation();
         console.log("Clicked Down")
         let currentItem = fields.get(index);
@@ -84,6 +93,7 @@ class Award extends Component {
         fields.remove(index+1)
         fields.insert(index + 1, nextItem)
         fields.swap(index, index + 1);
+        await this.props.bulkUpdateUserAward(fields.getAll());
     }
 
     render () {
@@ -94,6 +104,7 @@ class Award extends Component {
                 <PreviewModal {...this.props}/>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <FieldArray name="list" 
+                                handleSubmit={handleSubmit}
                                 handleAddition={this.handleAddition}
                                 deleteAward={this.deleteAward}
                                 changeOrderingUp={this.changeOrderingUp}

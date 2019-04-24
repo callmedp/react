@@ -7,6 +7,7 @@ import moment from 'moment';
 import validate from "../../../../../FormHandler/validtaions/experience/validate"
 import PreviewModal from "../../../Preview/previewModal";
 import renderExperiences from "./renderExperience"
+import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 class Experience extends Component {
 
@@ -47,6 +48,12 @@ class Experience extends Component {
             "work_description": '',
             order: fields.length
         })
+        scroller.scrollTo(`experience${fields.length -1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 780
+        })
     }
 
     deleteExperience(index, fields, event) {
@@ -58,7 +65,7 @@ class Experience extends Component {
         }
     }
 
-    changeOrderingUp(index,fields,event){
+  async changeOrderingUp(index,fields,event){
         event.stopPropagation();
         console.log("Clicked Up")
         let currentItem = fields.get(index);
@@ -70,9 +77,10 @@ class Experience extends Component {
         fields.remove(index - 1)
         fields.insert(index - 1, prevItem)
         fields.swap(index, index - 1)
+        await this.props.bulkUpdateUserExperience(fields.getAll());
     }
 
-    changeOrderingDown(index,fields,event){
+    async changeOrderingDown(index,fields,event){
         event.stopPropagation();
         console.log("Clicked Down")
         let currentItem = fields.get(index);
@@ -84,6 +92,7 @@ class Experience extends Component {
         fields.remove(index+1)
         fields.insert(index + 1, nextItem)
         fields.swap(index, index + 1);
+        await this.props.bulkUpdateUserExperience(fields.getAll());
     }
 
     render() {
@@ -93,6 +102,7 @@ class Experience extends Component {
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <PreviewModal {...this.props}/>
                     <FieldArray name="list" 
+                                handleSubmit={handleSubmit}
                                 handleAddition={this.handleAddition}
                                 deleteExperience={this.deleteExperience}
                                 changeOrderingUp={this.changeOrderingUp}

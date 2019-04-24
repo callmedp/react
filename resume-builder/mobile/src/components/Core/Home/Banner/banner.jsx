@@ -19,19 +19,12 @@ export default class Banner extends Component {
         })
     }
     componentDidMount() {
-        Events.scrollEvent.register('begin', function () {
-          console.log("begin", arguments);
-        });
-    
-        Events.scrollEvent.register('end', function () {
-          console.log("end", arguments);
-        });
+        
     
     }
 
     componentWillUnmount() {
-        Events.scrollEvent.remove('begin');
-        Events.scrollEvent.remove('end');
+        
     }
     
 

@@ -4,6 +4,7 @@ import * as actions from "../../../../store/sidenav/actions";
 import {connect} from "react-redux";
 import queryString from "query-string";
 import { Link} from 'react-router-dom';
+import RenderNavItem from './renderNavItem';
 class LeftSideBar extends Component {
 
     constructor(props) {
@@ -128,6 +129,15 @@ class LeftSideBar extends Component {
                                 </span>
                                 <span className="user__name">Hello Amit</span>
                             </li>
+                            {/* <RenderNavItem label={'Personal'}
+                                           type={type}
+                                           sidenavStatus={sidenavStatus}
+                                           title={'profile'}
+                                           exist={addmore.profile}
+                                           current_page={current_page}
+                                           changeLink={this.changeLink}
+                                           iconClass={'sprite icon--personal'}
+                                           deleteIconExist={false}/> */}
 
                             <li className={"sidebar__item " + (type === 'profile' ? 'sidebar--active' : '')
                                 + (addmore.profile || sidenavStatus ? '' : 'hide')}>
@@ -140,11 +150,40 @@ class LeftSideBar extends Component {
 
                                     <div className="sidebar-open__wrap">
                                         <span className="sidebar-open__link" href="#">Personal</span>
-                                        <i className={"sprite " + (addmore.profile ? "icon--delete" : "icon--add-more")}
-                                        onClick={addmore.profile ? this.removeItem.bind(this,"profile") : this.addItem.bind(this,"profile")}></i>
                                     </div>
                                 </Link>
                             </li>
+
+                            <li className={"sidebar__item " + (type === 'education' ? 'sidebar--active' : '')
+                                + (addmore.education || sidenavStatus ? '' : 'hide')}>
+                                <Link to={"/resume-builder/edit/?type=" +(!sidenavStatus ? "education" : current_page)} 
+                                    className="sidebar__anchor" onClick={!sidenavStatus ? this.changeLink.bind(this,'education') : ()=>{}}>
+                                    <div className="sidebar__wrap">
+                                        <i className="sprite icon--education"></i>
+                                        <span className="sidebar__link" href="#">Education </span>
+                                    </div>
+
+                                    <div className="sidebar-open__wrap">
+                                        <span className="sidebar-open__link" href="#">Education </span>
+                                    </div>
+                                </Link>
+                            </li>
+                            
+                            <li className={"sidebar__item " + (type === 'skill' ? 'sidebar--active' : '')
+                                + (addmore.skill || sidenavStatus ? '' : 'hide')}>
+                                <Link to={"/resume-builder/edit/?type=" +(!sidenavStatus ? "skill" : current_page)} 
+                                    className="sidebar__anchor" onClick={!sidenavStatus ? this.changeLink.bind(this,'skill') : ()=>{}}>
+                                    <div className="sidebar__wrap">
+                                        <i className="sprite icon--skills"></i>
+                                        <span className="sidebar__link" href="#">Skills </span>
+                                    </div>
+
+                                    <div className="sidebar-open__wrap">
+                                        <span className="sidebar-open__link" href="#">Skills </span>
+                                    </div>
+                                </Link>
+                            </li>
+                            
                             
                             <li className={"sidebar__item " + (type === 'summary' ? 'sidebar--active' : '')
                                 + (addmore.summary || sidenavStatus ? '' : 'hide')}>
@@ -180,39 +219,6 @@ class LeftSideBar extends Component {
                                 </Link>
                             </li>
                         
-                            <li className={"sidebar__item " + (type === 'education' ? 'sidebar--active' : '')
-                                + (addmore.education || sidenavStatus ? '' : 'hide')}>
-                                <Link to={"/resume-builder/edit/?type=" +(!sidenavStatus ? "education" : current_page)} 
-                                    className="sidebar__anchor" onClick={!sidenavStatus ? this.changeLink.bind(this,'education') : ()=>{}}>
-                                    <div className="sidebar__wrap">
-                                        <i className="sprite icon--education"></i>
-                                        <span className="sidebar__link" href="#">Education </span>
-                                    </div>
-
-                                    <div className="sidebar-open__wrap">
-                                        <span className="sidebar-open__link" href="#">Education </span>
-                                        <i className={"sprite " + (addmore.education ? "icon--delete" : "icon--add-more")}
-                                        onClick={addmore.education ? this.removeItem.bind(this,"education") : this.addItem.bind(this,"education")}></i>
-                                    </div>
-                                </Link>
-                            </li>
-                            
-                            <li className={"sidebar__item " + (type === 'skill' ? 'sidebar--active' : '')
-                                + (addmore.skill || sidenavStatus ? '' : 'hide')}>
-                                <Link to={"/resume-builder/edit/?type=" +(!sidenavStatus ? "skill" : current_page)} 
-                                    className="sidebar__anchor" onClick={!sidenavStatus ? this.changeLink.bind(this,'skill') : ()=>{}}>
-                                    <div className="sidebar__wrap">
-                                        <i className="sprite icon--skills"></i>
-                                        <span className="sidebar__link" href="#">Skills </span>
-                                    </div>
-
-                                    <div className="sidebar-open__wrap">
-                                        <span className="sidebar-open__link" href="#">Skills </span>
-                                        <i className={"sprite " + (addmore.skill ? "icon--delete" : "icon--add-more")}
-                                        onClick={addmore.skill ? this.removeItem.bind(this,"skill") : this.addItem.bind(this,"skill")}></i>
-                                    </div>
-                                </Link>
-                            </li>
                             <li className={"sidebar__item " + (type === 'language' ? 'sidebar--active' : '')
                                 + (addmore.language || sidenavStatus ? '' : 'hide')}>
                                 <Link to={"/resume-builder/edit/?type=" +(!sidenavStatus ? "language" : current_page)} 

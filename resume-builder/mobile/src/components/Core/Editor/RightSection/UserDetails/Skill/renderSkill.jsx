@@ -6,6 +6,7 @@ import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRen
 const renderSkills = ({
                         fields, 
                         meta: {touched, error, submitFailed},
+                        handleSubmit,
                         handleAddition,
                         deleteSkill,
                         changeOrderingUp,
@@ -14,18 +15,19 @@ const renderSkills = ({
     return (
         <React.Fragment>
             <div className="buildResume__wrap pb-0">
+            {console.log(submitFailed)}
                 <div className="buildResume__heading heading">
                     <div className="heading__info">
-                        <h1>Skills</h1>
+                        <h1>Skills {error}</h1>
                         <i className="sprite icon--edit"></i>
                     </div>
-                    <button type={'button'} onClick={handleAddition.bind(this, fields, error)} 
+                    <button type={'button'} onClick={handleSubmit(handleAddition.bind(this,fields))} 
                         className="btn btn__round btn--outline">+ Add new</button>
                 </div>
             
             {fields.map((member, index) => {
                 return(
-                    <div className="form-wrap" key={index}>
+                    <div className="form-wrap" key={index} id={`skill${index}`}>
                         <div className="subHeading pb-0">
                             <h2>{fields.get(index).name || 'Skill'}</h2>
                             <ul className="subHeading__control">
@@ -71,7 +73,7 @@ const renderSkills = ({
                                     <option value="10">10</option>
                                 </Field>
                             </li>
-                            
+
                         </ul>
                     </div>
             )})}

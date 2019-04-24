@@ -5,6 +5,7 @@ import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRen
 const renderLanguage = ({
                             fields, 
                             meta: {touched, error, submitFailed},
+                            handleSubmit,
                             handleAddition,
                             deleteLanguage,
                             changeOrderingUp,
@@ -19,12 +20,12 @@ const renderLanguage = ({
                     <i className="sprite icon--edit"></i>
                 </div>
                 <button role="button" className="btn btn__round btn--outline"
-                onClick={handleAddition.bind(this, fields, error)}
+                onClick={handleSubmit(handleAddition.bind(this, fields, error))}
                 type={'button'} >+ Add new</button>
             </div>
             {fields.map((member, index) => {
                 return (
-                    <div key={index}>
+                    <div key={index} id={`language${index}`}>
                         <div className="subHeading pb-0">
                             <h2>{fields.get(index).name || 'Language'}</h2>
                             <ul className="subHeading__control">

@@ -5,6 +5,7 @@ import {renderField, datepicker} from "../../../../../FormHandler/formFieldRende
 const renderCourse = ({
                         fields, 
                         meta: {touched, error, submitFailed},
+                        handleSubmit,
                         handleAddition,
                         deleteCourse,
                         changeOrderingUp,
@@ -19,12 +20,12 @@ const renderCourse = ({
                     <i className="sprite icon--edit"></i>
                 </div>
                 <button role="button" className="btn btn__round btn--outline"
-                onClick={handleAddition.bind(this, fields, error)}
+                onClick={handleSubmit(handleAddition.bind(this, fields, error))}
                 type={'button'}>+ Add new</button>
             </div>
             {fields.map((member, index) => {
             return (
-                <React.Fragment key={index}>
+                <div key={index} id={`course${index}`}>
                     <div className="subHeading pb-0">
                         <h2>{fields.get(index).name_of_certification || 'New Course'}</h2>
                         <ul className="subHeading__control">
@@ -59,9 +60,9 @@ const renderCourse = ({
                             <Field component={datepicker} label={"Completion Year"}  type={"date"} 
                                 name={`${member}.year_of_certification`} id={`${member}.year_of_certification`}/>
                         </li>
-                        
+
                     </ul>
-                </React.Fragment>
+                </div>
             )})}
         </div>
 
