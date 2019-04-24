@@ -11,6 +11,7 @@ from django.utils import timezone
 from shine.core import ShineCandidateDetail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import HttpResponseRedirect
+from django.core.exceptions import PermissionDenied
 
 from geolocation.models import Country
 from order.models import OrderItem
@@ -527,7 +528,8 @@ class WriterInvoiceMixin(object):
                     combo_discount = 0
                     product_pk = oi.product.pk
                     resuem_writing_ois = oi.order.orderitems.filter(
-                        product__type_flow__in=[1, 12])
+                        product__type_flow__in=[1,12],assigned_to=user)
+                    
                     if product_pk in VISUAL_RESUME_PRODUCT_LIST and resuem_writing_ois.exists():
                         amount = VISUAL_RESUME
                         # combo discount calculation
@@ -1000,5 +1002,16 @@ class UserGroupMixin(object):
             return self.user_check_failed(request, *args, **kwargs)
         return super(UserGroupMixin, self).dispatch(request, *args, **kwargs)
 
+class UserPermissionMixin(object):
+    permission_to_check = []
 
-        
+    def check_permission(self, user):
+        if user.is_superuser:
+            return True
+        user_perms = user.user_permissions.values_list('name', flat=True)
+        return all([perm in user_perms for perm in self.permission_to_check])
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.check_permission(request.user):
+            raise PermissionDenied()
+        return super(UserPermissionMixin, self).dispatch(request, *args, **kwargs)
