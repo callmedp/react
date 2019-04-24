@@ -3003,27 +3003,23 @@ class ComplianceReport(TemplateView):
         return context
 
 
-
-@Decorate(stop_browser_cache())
 @method_decorator(permission_required('order.can_show_inbox_queue', login_url='/console/login/'), name='dispatch')
-class ReplacedOrderListView(ListView, PaginationMixin):
+class ReplacedOrderListView(PaginationMixin, ListView):
     context_object_name = 'inbox_list'
     template_name = 'console/order/replace-order-list.html'
     model = OrderItem
     http_method_names = [u'get', u'post']
-
-    def __init__(self):
-        self.page = 1
-        self.paginated_by = 50
-        self.query = ''
-        self.writer, self.created = '', ''
-        self.delivery_type = ''
-        self.sel_opt = 'number'
+    page = 1
+    paginated_by = 50
+    query = ''
+    sel_opt = 'number'
+    created = ''
 
     def get(self, request, *args, **kwargs):
         self.page = request.GET.get('page', 1)
         self.query = request.GET.get('query', '').strip()
-        self.sel_opt = request.GET.get('rad_search','number')
+        self.sel_opt = request.GET.get('rad_search', 'number')
+        self.created = request.GET.get('created', '')
         return super(ReplacedOrderListView, self).get(request, args, **kwargs)
 
 
@@ -3033,10 +3029,12 @@ class ReplacedOrderListView(ListView, PaginationMixin):
         context.update(self.pagination(paginator, self.page))
         var = self.sel_opt
         alert = messages.get_messages(self.request)
-       
+        filter_form = OIFilterForm()
+
         context.update({
             "messages": alert,
             "query": self.query,
+            "filter_form": filter_form,
             var: "checked",
         })
         return context
@@ -3047,50 +3045,30 @@ class ReplacedOrderListView(ListView, PaginationMixin):
             order__status=1, no_process=False,
             wc_sub_cat__in=[64, 65])
 
-        user = self.request.user
-        if user.is_superuser:
-            pass
-        elif user.has_perm('order.writer_inbox_assigner'):
-            queryset = queryset.filter(assigned_to__isnull=True)
-        elif user.has_perm('order.writer_inbox_assignee'):
-            queryset = queryset.filter(assigned_to=user)
-        else:
-            queryset = queryset.none()
-        try:
-            if self.query:
-                if self.sel_opt == 'id':
-                        queryset = queryset.filter(id__iexact=self.query)
-                elif self.sel_opt == 'number':
-                        queryset = queryset.filter(order__number__iexact=self.query)
-                elif self.sel_opt == 'mobile':
-                    queryset = queryset.filter(order__mobile__iexact=self.query)
-                elif self.sel_opt == 'email':
-                    queryset = queryset.filter(order__email__iexact=self.query)
-                elif self.sel_opt == 'product':
-                    queryset = queryset.select_related('parent')
-                    queryset = queryset.filter(
-                        Q(product__name__icontains=self.query) |
-                        Q(parent__isnull=False, parent__product__name__icontains=self.query)
-                    )
-        except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
-            pass
-
-        try:
-            if self.created:
-                date_range = self.created.split('-')
-                start_date = date_range[0].strip()
-                start_date = datetime.datetime.strptime(
-                    start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
-                end_date = date_range[1].strip()
-                end_date = datetime.datetime.strptime(
-                    end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+        if self.query:
+            if self.sel_opt == 'id':
+                    queryset = queryset.filter(id__iexact=self.query)
+            elif self.sel_opt == 'number':
+                    queryset = queryset.filter(order__number__iexact=self.query)
+            elif self.sel_opt == 'mobile':
+                queryset = queryset.filter(order__mobile__iexact=self.query)
+            elif self.sel_opt == 'email':
+                queryset = queryset.filter(order__email__iexact=self.query)
+            elif self.sel_opt == 'product':
+                queryset = queryset.select_related('parent')
                 queryset = queryset.filter(
-                    created__range=[start_date, end_date])
-        except Exception as e:
-            logging.getLogger('error_log').error("%s " % str(e))
-            pass
+                    Q(product__name__icontains=self.query) |
+                    Q(parent__isnull=False, parent__product__name__icontains=self.query)
+                )
 
+        if self.created:
+            date_range = self.created.split('-')
+            start_date = date_range[0].strip()
+            start_date = datetime.datetime.strptime(
+                start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+            end_date = date_range[1].strip()
+            end_date = datetime.datetime.strptime(
+                end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+            queryset = queryset.filter(
+                created__range=[start_date, end_date])
         return queryset.select_related('order').order_by('-modified')
-
-
