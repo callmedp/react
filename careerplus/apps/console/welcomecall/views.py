@@ -654,9 +654,8 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
             if curr_order.id == order.id:
                 msg = (False, 'Replacing Order {} cannot be same as current order.'.format(order_id))
                 break
-            elif order.status != 1:
-                msg = (False, 'Order {} is not Paid'.format(order_id))
-            elif order.ordertxns.exists() and order.ordertxns.first().payment_mode !=1:
+
+            if order.ordertxns.exists() and order.ordertxns.first().payment_mode !=1:
                 msg = (False, "Replacing Order {} is Not Paid by Cash".format(order_id))
                 break
         if msg:

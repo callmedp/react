@@ -108,7 +108,6 @@ $(function(){
         switch(parent){ 
             case '41':{
                 $(".sub_cat_item").each(function() {
-                    debugger
                     if($(this).is(':enabled')) {
                         var select = $(this);
                         select.empty();
