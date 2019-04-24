@@ -25,10 +25,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "sh -ac '. .env.${REACT_APP_ENV}; node ./scripts/build-non-split.js'",
+    "build": "sh -ac '. .env.${REACT_APP_ENV}.local; node ./scripts/build-non-split.js'",
     "build:staging": "REACT_APP_ENV=staging npm run build",
     "build:production": "REACT_APP_ENV=production npm run build",
-    "build": "",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

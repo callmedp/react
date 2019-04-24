@@ -11,6 +11,6 @@ config.optimization.splitChunks = {
 config.optimization.runtimeChunk = false;
 
 // JS
-config.output.filename = 'static/js/main.js';
+config.output.filename = '../../../careerplus/static_core/react/dist/desktop/main.js';
 // CSS. "5" is MiniCssPlugin
-config.plugins[5].options.filename = 'static/css/main.css';
+config.plugins[5].options.filename = '../../../careerplus/static_core/react/dist/desktop/main.css';
