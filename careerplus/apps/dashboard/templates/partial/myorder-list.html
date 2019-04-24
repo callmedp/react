@@ -105,7 +105,7 @@
                   <datalist class="col-sm-3">
                     {% if obj.oi_status == 4 %}
                         Closed
-                    {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
+                    {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 or obj.oi_status == 164 %}
                       {{obj.get_user_oi_status}}
                     {% elif order.status == 0 %}
                         Unpaid
@@ -115,6 +115,7 @@
                         Service in progress
                     {% elif order.status == 5%}
                         Cancelled
+
                     {% endif %}
                   </datalist>
                 </li>

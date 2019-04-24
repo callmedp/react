@@ -3,6 +3,7 @@ import datetime
 from decimal import Decimal
 
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
@@ -172,6 +173,13 @@ class Order(AbstractAutoDate):
         order_obj = Order.objects.filter(email=self.email).\
             order_by('id').first()
         return order_obj.created
+
+    @property
+    def replaced_order(self):
+        oi = OrderItem.objects.filter(Q(replacement_order_id=self.id) | Q(replacement_order_id=self.number)).first()
+        if oi:
+            return oi.order.id
+        return None
 
     def get_currency_code(self):
         return CURRENCY_SYMBOL_CODE_MAPPING.get(self.currency)
@@ -353,6 +361,10 @@ class OrderItem(AbstractAutoDate):
         choices=WC_FLOW_STATUS)
     wc_follow_up = models.DateTimeField(null=True, blank=True)
 
+    # replacement_order_id
+    replacement_order_id = models.CharField(
+        _("Replacement Order number"), null=True, blank=True, max_length=20)
+
     class Meta:
         app_label = 'order'
         # Enforce sorting in order of creation.
@@ -466,6 +478,14 @@ class OrderItem(AbstractAutoDate):
     def get_user_oi_status(self):
         dict_status = dict(OI_USER_STATUS)
         return dict_status.get(self.oi_status)
+
+    @property
+    def get_replacement_order_id(self):
+        if self.replacement_order_id:
+            replacement_order_id = self.replacement_order_id.upper()
+            if 'CP' in replacement_order_id:
+                return replacement_order_id.replace('CP', '')
+            return self.replacement_order_id
 
     def get_oi_communications(self):
         communications = self.message_set.all().select_related('added_by')

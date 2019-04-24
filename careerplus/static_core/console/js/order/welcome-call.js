@@ -1,5 +1,4 @@
 $(function(){
-
 	$('#action_button_go').click(function(){
 		var action_type = $('#id_action').val();
         console.log(action_type);
@@ -65,6 +64,7 @@ $(function(){
         var select = $('#id-subcat');
         select.empty();
         select.append("<option value=''>Select SubCategory</option>");
+        replaced_order_items = 0
         var parent = $(this).val();
 
         if (parent == '21'){
@@ -103,16 +103,17 @@ $(function(){
     });
 
     $(document).on('change', '#id-subcat', function(){
-
         var parent = $(this).val(); 
         var parent_this = $(this);
-
         switch(parent){ 
             case '41':{
                 $(".sub_cat_item").each(function() {
-                    var select = $(this);
-                    select.empty();
-                    select.append("<option value="+ parent_this.val() + ">" + parent_this.find('option:selected').text() + "</option>");
+                    debugger
+                    if($(this).is(':enabled')) {
+                        var select = $(this);
+                        select.empty();
+                        select.append("<option value="+ parent_this.val() + ">" + parent_this.find('option:selected').text() + "</option>");
+                    }
                 });
                 
                 break;
@@ -182,6 +183,19 @@ $(function(){
         else{
             $followdiv.hide();
             $follow.attr('required', false);
+        }
+    });
+
+    $(document).on("change", ".sub_cat_item", function() {
+
+        var sub_cat_value = $(this).val();
+        if(sub_cat_value == 65) {
+            temp_id = $(this).attr('data-target')
+            $("#"+temp_id).css("display","")
+        }
+        else{
+            temp_id = $(this).attr('data-target')
+            $("#"+temp_id).css("display","none")
         }
     });
 
