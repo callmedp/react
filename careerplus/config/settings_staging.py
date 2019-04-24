@@ -149,16 +149,14 @@ CCAVENUE_MOBILE_ACCESS_CODE = 'AVYX74EK04AB50XYBA'
 CCAVENUE_MOBILE_WORKING_KEY = 'A081DDE3B5B50F269F8980EB2ADEC9F3'
 CCAVENUE_URL = 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction'
 
-
 ####### EPAYLATER SETTINGS ###########################
-EPAYLATER_INFO = {"payment_url":"https://payment-sandbox.epaylater.in/web/process-transaction",
-                "apiKey": "secret_31f23758-6325-442c-a98c-9eaf1d41a188",
-                "aeskey": "698042ECAE38D843A166AEFADD109687",
-                "iv": "D58C8D87960088FF",
-                "mCode": "SHINELEARNING",
-                "category" : "LEARNING",
-                "base_url":"https://api-sandbox.epaylater.in/"}
-
+EPAYLATER_INFO = {"payment_url": "https://payment-sandbox.epaylater.in/web/process-transaction",
+                  "apiKey": "secret_31f23758-6325-442c-a98c-9eaf1d41a188",
+                  "aeskey": "698042ECAE38D843A166AEFADD109687",
+                  "iv": "D58C8D87960088FF",
+                  "mCode": "SHINELEARNING",
+                  "category": "LEARNING",
+                  "base_url": "https://api-sandbox.epaylater.in/"}
 
 ###### CACHE SETTINGS #################
 SITEMAP_CACHING_TIME = 86400
@@ -197,6 +195,15 @@ CACHES = {
     'job_title_lookup': {
         "BACKEND": "django_red.cache.RedisCache",
         "LOCATION": "redis://172.22.67.223:6379/13",
+    },
+    'token': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/2",
+        "TIMEOUT": 30 * 86400,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            'CONNECTION_POOL_KWARGS': {'max_connections': 100},
+        }
     }
 }
 
@@ -289,7 +296,6 @@ PRIVATE_MEDIA_FILE_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPPrivat
 GCP_PRIVATE_MEDIA_BUCKET = 'learning--misc-staging-189607'
 CRM_PRIVATE_MEDIA_BUCKET = 'learningcrm-misc-staging-189607'
 
-
 COMPRESS_STORAGE = STATICFILES_STORAGE = 'core.library.gcloud.custom_cloud_storage.GCPStaticStorage'
 GS_PROJECT_ID = 'shine-staging-189607'
 GCP_STATIC_BUCKET = 'learning-static-staging-189607'
@@ -374,40 +380,29 @@ SERVICE_PAGE_ID_SLUG_MAPPING = {"45": "resume-writing"}
 IS_MAINTENANCE = False
 MAINTENANCE_MESSAGE = "This site will be under maintenance from 9 pm to 12 pm on Friday, 11 Jan, 2019."
 
-
-
-
 ############### VIRTUAL_ENV PATH
 VENV_PATH = "/root/virtualenvs/careerplus3.6/bin/python3"
 
-CODE_PATH ="/code/careerplus/"
+CODE_PATH = "/code/careerplus/"
 
 try:
     from .settings_local import *
 except:
     pass
-
-
-
 
 EXOTEL_DICT = {
-           'token': '9e4df38c0c3bd1009ca142da306d827e71e74737',
-           'sid': 'hindustantimes3',
-           'callerid': '08047105151',
-           'url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Calls/connect.json',
-           'record_url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Calls/{callid}.json',
-           'check_dnd_url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Numbers/{number}.json',
-            }
-
+    'token': '9e4df38c0c3bd1009ca142da306d827e71e74737',
+    'sid': 'hindustantimes3',
+    'callerid': '08047105151',
+    'url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Calls/connect.json',
+    'record_url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Calls/{callid}.json',
+    'check_dnd_url': 'https://{sid}:{token}@api.exotel.com/v1/Accounts/{sid}/Numbers/{number}.json',
+}
 
 try:
     from .settings_local import *
 except:
     pass
-
-
-
-
 
 ##for testing purpose using live working key
 
