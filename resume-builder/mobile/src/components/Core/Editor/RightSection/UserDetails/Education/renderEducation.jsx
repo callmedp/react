@@ -49,56 +49,25 @@ const renderEducation = ({
                         </div>
 
                         <ul className="form pb-0">
+
                             <li className="form__group">
-                                <label className="form__label" htmlFor="institution_name">Institution Name </label>
-                                <div className="input-group">
-                                    <div className="input-group__prepend">
-                                        <span className="input-group__text">
-                                            <i className="sprite icon--education-grey"></i>
-                                        </span>
-                                    </div>
-                                    <Field component={renderField} type={"text"} name={`${member}.institution_name`}
-                                    className="form__input"/>
-                                </div>
+                                <Field component={renderField} label={"Institution Name"}  type={"text"} name={`${member}.institution_name`} prepend={true} 
+                                    id={`${member}.institution_name`} iconClass={"sprite icon--education-grey"} className="form__input"/>
                             </li>
 
                             <li className="form__group">
-                                <label className="form__label" htmlFor="specialization">Specialization</label>
-                                <div className="input-group">
-                                    <div className="input-group__prepend">
-                                        <span className="input-group__text">
-                                            <i className="sprite icon--date"></i>
-                                        </span>
-                                    </div>
-                                    <Field component={renderField} type={"text"}
-                                    name={`${member}.specialization`} className="form__input"/>
-                                </div>
+                                <Field component={renderField} label={"Specialization"}  type={"text"} name={`${member}.specialization`} prepend={true} 
+                                    id={`${member}.specialization`} iconClass={"sprite icon--date"} className="form__input"/>
+                            </li>
+                            
+                            <li className="form__group">
+                                <Field component={datepicker} label={"Date from"}  type={"date"} 
+                                    name={`${member}.start_date`} id={`${member}.start_date`}/>
                             </li>
 
                             <li className="form__group">
-                                <label className="form__label" htmlFor="start_date">Date from</label>
-                                <div className="input-group">
-                                    <div className="input-group__prepend">
-                                        <span className="input-group__text">
-                                            <i className="sprite icon--date"></i>
-                                        </span>
-                                    </div>
-                                    <Field component={datepicker} type={"date"} 
-                                    name={`${member}.start_date`}/>
-                                </div>
-                            </li>
-
-                            <li className="form__group">
-                                <label className="form__label" htmlFor="end_date">Date to</label>
-                                <div className="input-group">
-                                    <div className="input-group__prepend">
-                                        <span className="input-group__text">
-                                            <i className="sprite icon--date"></i>
-                                        </span>
-                                    </div>
-                                    <Field component={datepicker} type={"date"} 
-                                    name={`${member}.end_date`}/>
-                                </div>
+                                <Field component={datepicker} label={"Date to"}  type={"date"} 
+                                    name={`${member}.end_date`} id={`${member}.end_date`}/>
                             </li>
 
                             <li className="form__radio-group d-flex justify-content-end fs-14">
@@ -111,33 +80,17 @@ const renderEducation = ({
                             </li>
 
                             <li className="form__group">
-                                <label className="form__label" htmlFor="course_type">Course Type</label>
-                                <div className="input-group">
-                                    <div className="input-group__prepend">
-                                        <span className="input-group__text">
-                                            <i className="sprite icon--date"></i>
-                                        </span>
-                                    </div>
-                                    <Field name={`${member}.course_type`}
-                                            component={renderSelect} className="form__input">
-                                        <option value="">Choose</option>
-                                        <option value="FT" >FULL TIME</option>
-                                        <option value="PT" >PART TIME</option>
-                                    </Field>
-                                </div>
+                                <Field component={renderSelect} label={"Course Type"} name={`${member}.course_type`} prepend={true} 
+                                    id={`${member}.course_type`} iconClass={"sprite icon--date"} className="form__input">
+                                    <option value="">Choose</option>
+                                    <option value="FT" >FULL TIME</option>
+                                    <option value="PT" >PART TIME</option>
+                                </Field>
                             </li>
-
+                            
                             <li className="form__group">
-                                <label className="form__label" htmlFor="percentage_cgpa">Percentage/CGPA</label>
-                                <div className="input-group">
-                                    <div className="input-group__prepend">
-                                        <span className="input-group__text">
-                                            <i className="sprite icon--date"></i>
-                                        </span>
-                                    </div>
-                                    <Field component={renderField} type={"text"} 
-                                    name={`${member}.percentage_cgpa`} className="form__input"/>
-                                </div>
+                                <Field component={renderField} label={"Percentage/CGPA"}  type={"text"} name={`${member}.percentage_cgpa`} 
+                                    id={`${member}.percentage_cgpa`} iconClass={"sprite icon--date"} className="form__input" prepend={true}/>
                             </li>
 
                         </ul>

@@ -24,11 +24,11 @@ class LeftSideBar extends Component {
                 "experience":true,
                 "education":true,
                 "skill":true,
-                'language':false,
-                "award":false,
-                "course":false,
-                "project":false,
-                "reference":false
+                'language':true,
+                "award":true,
+                "course":true,
+                "project":true,
+                "reference":true
             },
             current_page: ''
         };

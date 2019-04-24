@@ -50,56 +50,25 @@ const renderExperiences = ({
                     </div>
 
                     <ul className="form pb-0">
+
                         <li className="form__group">
-                            <label className="form__label" htmlFor="job_profile">Designation</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--designation"></i>
-                                    </span>
-                                </div>
-                                <Field component={renderField} type={"text"} 
-                                name={`${member}.job_profile`} className="form__input"  />
-                            </div>
+                            <Field component={renderField} label={"Designation"}  type={"text"} name={`${member}.job_profile`} prepend={true} 
+                                id={`${member}.job_profile`} iconClass={"sprite icon--designation"} className="form__input"/>
                         </li>
 
                         <li className="form__group">
-                            <label className="form__label" htmlFor="company_name">Company name</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--company"></i>
-                                    </span>
-                                </div>
-                                <Field component={renderField} type={"text"} 
-                                name={`${member}.company_name`} className="form__input"/>
-                            </div>
+                            <Field component={renderField} label={"Company name"}  type={"text"} name={`${member}.company_name`} 
+                                id={`${member}.company_name`} iconClass={"sprite icon--company"} className="form__input" prepend={true}/>
                         </li>
 
                         <li className="form__group">
-                            <label className="form__label" htmlFor="start_date">Date from</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--date"></i>
-                                    </span>
-                                </div>
-                                <Field component={datepicker} type={"date"} 
-                                 name={`${member}.start_date`}/>
-                            </div>
+                            <Field component={datepicker} label={"Date from"}  type={"date"} 
+                                name={`${member}.start_date`} id={`${member}.start_date`}/>
                         </li>
 
                         <li className="form__group">
-                            <label className="form__label" htmlFor="end_date">Date to</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--date"></i>
-                                    </span>
-                                </div>
-                                <Field component={datepicker} type={"date"} 
-                                name={`${member}.end_date`}/>
-                            </div>
+                            <Field component={datepicker} label={"Date to"}  type={"date"} 
+                                name={`${member}.end_date`} id={`${member}.end_date`}/>
                         </li>
 
                         <li className="form__radio-group d-flex justify-content-end fs-14">
@@ -110,18 +79,10 @@ const renderExperiences = ({
                                 Till today
                             </label>
                         </li>
-
+                        
                         <li className="form__group">
-                            <label className="form__label" htmlFor="job_location">Job Location</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--company"></i>
-                                    </span>
-                                </div>
-                                <Field component={renderField} type={"text"} 
-                                name={`${member}.job_location`} className="form__input"/>
-                            </div>
+                            <Field component={renderField} label={"Job Location"}  type={"text"} name={`${member}.job_location`} 
+                                id={`${member}.job_location`} iconClass={"sprite icon--company"} className="form__input" prepend={true}/>
                         </li>
 
                         <li className="form__group">

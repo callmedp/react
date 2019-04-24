@@ -48,30 +48,15 @@ export const renderAwards = ({
                     </div>
 
                     <ul className="form pb-0">
+
                         <li className="form__group">
-                            <label className="form__label" htmlFor="title">Title</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                <span className="input-group__text">
-                                    <i className="sprite icon--education-grey"></i>
-                                </span>
-                            </div>
-                                <Field component={renderField} type={"text"} name={`${member}.title`}
-                                    className="form__input" />
-                            </div>
+                            <Field component={renderField} label={"Title"}  type={"text"} name={`${member}.title`} prepend={true}
+                                id={`${member}.title`} iconClass={"sprite icon--education-grey"} className="form__input"/>
                         </li>
-                    
+
                         <li className="form__group">
-                            <label className="form__label" htmlFor="date">Date</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--date"></i>
-                                    </span>
-                                </div>
-                                <Field component={datepicker} type={"date"} className={'form__input'}
-                                    name={`${member}.date`}/>
-                            </div>
+                            <Field component={datepicker} label={"Date"}  type={"date"} 
+                                name={`${member}.date`} id={`${member}.date`}/>
                         </li>
 
                         <li className="form__group">

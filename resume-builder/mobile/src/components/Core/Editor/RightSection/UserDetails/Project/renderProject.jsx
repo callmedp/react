@@ -49,45 +49,21 @@ const renderProjects = ({
                         </div>
 
                         <ul className="form pb-0">
-                            <li className="form__group">
-                                <label className="form__label" htmlFor="project_name">Project name </label>
-                                <div className="input-group">
-                                    <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--project-gray"></i>
-                                    </span>
-                                    </div>
-                                    <Field component={renderField}  type={"text"} 
-                                    name={`${member}.project_name`} className="form__input"/>
-                                </div>
-                            </li>
                             
                             <li className="form__group">
-                                <label className="form__label" htmlFor="start_date">Date from</label>
-                                <div className="input-group">
-                                    <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--date"></i>
-                                    </span>
-                                    </div>
-                                    <Field component={datepicker} type={"date"} 
-                                        className="form__input" name={`${member}.start_date`}/>
-                                </div>
+                                <Field component={renderField} label={"Project name"}  type={"text"} name={`${member}.project_name`} prepend={true} 
+                                    id={`${member}.project_name`} iconClass={"sprite icon--project-gray"} className="form__input"/>
                             </li>
-                            
+    
                             <li className="form__group">
-                                <label className="form__label" htmlFor="end_date">Date to</label>
-                                <div className="input-group">
-                                    <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--date"></i>
-                                    </span>
-                                    </div>
-                                    <Field component={datepicker} type={"date"} 
-                                        className="form__input" name={`${member}.end_date`}/>
-                                </div>
+                                <Field component={datepicker} label={"Date from"}  type={"date"} 
+                                    name={`${member}.start_date`} id={`${member}.start_date`}/>
                             </li>
-                            
+
+                            <li className="form__group">
+                                <Field component={datepicker} label={"Date to"}  type={"date"} 
+                                    name={`${member}.end_date`} id={`${member}.end_date`}/>
+                            </li>
 
                             <li className="form__radio-group d-flex justify-content-end fs-14">
                                 <Field type="radio" name={`${member}.currently_working`} component="input"

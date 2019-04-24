@@ -104,102 +104,46 @@ class PersonalInfo extends Component {
                 </div>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <ul className="form">
+
                         <li className="form__group">
-                            <label className="form__label" htmlFor="first_name">First Name</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--firstName"></i>
-                                    </span>
-                                </div>
-                                <Field component={renderField} type={"text"} name="first_name" validate={required}
-                                    className="form__input" aria-label="first_name" id="first_name"/>
-                            </div>
+                            <Field component={renderField} label={"First Name"}  type={"text"} name="first_name" id="first_name"
+                                iconClass={"sprite icon--firstName"} validate={required} className="form__input" prepend={true}/>
                         </li>
 
                         <li className="form__group">
-                            <label className="form__label" htmlFor="last_name">Last Name</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--lastName"></i>
-                                    </span>
-                                </div>
-                                <Field component={renderField} type={"text"} name="last_name" validate={required}
-                                    className="form__input" aria-label="last_name" id="last_name"/>
-                            </div>
+                            <Field component={renderField} label={"Last Name"}  type={"text"} name="last_name" id="last_name"
+                                iconClass={"sprite icon--lastName"} validate={required} className="form__input" prepend={true}/>
                         </li>
 
                         <li className="form__group">
-                            <label className="form__label" htmlFor="gender">Gender</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--designation"></i>
-                                    </span>
-                                </div>
-                                <Field name="gender" validate={required} component={renderSelect} 
-                                    className="form__input form__select">
-                                    <option value="">Gender</option>
-                                    <option value="1" >Male</option>
-                                    <option value="2" >Female</option>
-                                    <option value="3">Others</option>
-                                </Field>
-                            </div>
+                            <Field component={renderSelect} label={"Gender"} name="gender" name="gender" prepend={true}
+                                iconClass={"sprite icon--designation"} validate={required} className="form__input form__select">
+                                <option value="">Gender</option>
+                                <option value="1" >Male</option>
+                                <option value="2" >Female</option>
+                                <option value="3">Others</option>
+                            </Field>
                         </li>
                         
                         <li className="form__group">
-                            <label className="form__label" htmlFor="date_of_birth">Date Of Birth</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--date"></i>
-                                    </span>
-                                </div>
-                                <Field component={datepicker} validate={required} type={"date"} 
-                                 name="date_of_birth" aria-label="date_of_birth" id="date_of_birth"/>
-                            </div>
-                        </li>
-                        
-                        <li className="form__group">
-                            <label className="form__label" htmlFor="number">Mobile</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--mobile"></i>
-                                    </span>
-                                </div>
-                                <Field component={renderField} validate={[required,phoneNumber]} type={"text"} name="number"
-                                        className="form__input" aria-label="number" id="number"/>
-                            </div>
+                            <Field component={datepicker} label={"Date Of Birth"}  type={"date"} name="date_of_birth" id="date_of_birth"
+                             validate={required}/>
                         </li>
 
                         <li className="form__group">
-                            <label className="form__label" htmlFor="email">Email</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--mail"></i>
-                                    </span>
-                                </div>
-                                <Field component={renderField} validate={[required,email]} type={"email"} name="email"
-                                    className="form__input" aria-label="email" id="email"/>
-                            </div>
+                            <Field component={renderField} label={"Mobile"}  type={"text"} name="number" id="number" prepend={true}
+                                iconClass={"sprite icon--mobile"} validate={[required,phoneNumber]} className="form__input"/>
                         </li>
 
                         <li className="form__group">
-                            <label className="form__label" htmlFor="location">Address</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--address"></i>
-                                    </span>
-                                </div>
-                                <Field component={renderTextArea} type={"text"} name="location" row="4"
-                                    aria-label="address" id="address" className="form__input"/>
-                            </div>
+                            <Field component={renderField} label={"Email"}  type={"email"} name="email" id="email" prepend={true}
+                                iconClass={"sprite icon--mail"} validate={[required,email]} className="form__input"/>
                         </li>
 
+                        <li className="form__group">
+                            <Field component={renderTextArea} label={"Address"}  type={"text"} name="location" id="location" 
+                                prepend={true} iconClass={"sprite icon--address"} className="form__input" rows="4"/>
+                        </li>
 
                         <li className="form__group">
                             <label className="form__label" htmlFor="extracurricular">Interest</label>

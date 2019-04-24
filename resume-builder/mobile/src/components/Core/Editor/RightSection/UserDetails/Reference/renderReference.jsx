@@ -48,31 +48,22 @@ const renderReferences = ({
                         </div>
 
                         <ul className="form pb-0">
+
                             <li className="form__group">
-                                <label className="form__label" htmlFor="reference_name">Reference name</label>
-                                <div className="input-group">
-                                    <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--project-gray"></i>
-                                    </span>
-                                    </div>
-                                    <Field component={renderField} type={"text"} className="form__input"
-                                        name={`${member}.reference_name`}/>
-                                </div>
+                                <Field component={renderField} label={"Reference name"}  type={"text"} name={`${member}.reference_name`} prepend={true}
+                                    id={`${member}.reference_name`} iconClass={"sprite icon--project-gray"} className="form__input"/>
+                            </li>
+
+                            <li className="form__group">
+                                <Field component={renderField} label={"Reference name"}  type={"text"} name={`${member}.reference_name`} prepend={true}
+                                    id={`${member}.reference_name`} iconClass={"sprite icon--project-gray"} className="form__input"/>
+                            </li>
+
+                            <li className="form__group">
+                                <Field component={renderField} label={"Designation"}  type={"text"} name={`${member}.reference_designation`} prepend={true}
+                                    id={`${member}.reference_designation`} iconClass={"sprite icon--designation"} className="form__input"/>
                             </li>
                             
-                            <li className="form__group">
-                                <label className="form__label" htmlFor="reference_designation">Designation</label>
-                                <div className="input-group">
-                                    <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--designation"></i>
-                                    </span>
-                                    </div>
-                                    <Field component={renderField} type={"text"} 
-                                        name={`${member}.reference_designation`} className="form__input"/>
-                                </div>
-                            </li>
 
                             <li className="form__group">
                                 <label className="form__label" htmlFor="about_candidate">Description</label>

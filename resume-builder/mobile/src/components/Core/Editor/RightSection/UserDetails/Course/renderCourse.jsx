@@ -49,32 +49,17 @@ const renderCourse = ({
                     </div>
 
                     <ul className="form pb-0">
-
+                            
                         <li className="form__group">
-                            <label className="form__label" htmlFor="name_of_certification">Course name</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--course-grey"></i>
-                                    </span>
-                                </div>
-                                <Field component={renderField} className="form__input"
-                                    type={"text"} name={`${member}.name_of_certification`}/>
-                            </div>
+                            <Field component={renderField} label={"Course name"}  type={"text"} name={`${member}.name_of_certification`} prepend={true}
+                                id={`${member}.name_of_certification`} iconClass={"sprite icon--course-grey"} className="form__input"/>
                         </li>
 
                         <li className="form__group">
-                            <label className="form__label" htmlFor="year_of_certification">Completion Year</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--date"></i>
-                                    </span>
-                                </div>
-                                <Field component={datepicker} type={"date"} 
-                                name={`${member}.year_of_certification`} className="form__input" />
-                            </div>
+                            <Field component={datepicker} label={"Completion Year"}  type={"date"} 
+                                name={`${member}.year_of_certification`} id={`${member}.year_of_certification`}/>
                         </li>
+                        
                     </ul>
                 </React.Fragment>
             )})}

@@ -50,15 +50,13 @@ const renderLanguage = ({
 
                         <ul className="form pb-0">
                             <li className="form__group">
-                                <label className="form__label" htmlFor="name">Language name</label>
-                                <Field component={renderField} type={"text"} 
-                                name={`${member}.name`} className="form__input"/>
+                                <Field component={renderField} label={"Language name"}  type={"text"} name={`${member}.name`}
+                                    id={`${member}.name`} prepend={false} className="form__input"/>
                             </li>
                             
                             <li className="form__group">
-                                <label className="form__label" htmlFor="proficiency">Skill rating (out of 10)</label>
-                                <Field name={`${member}.proficiency`} component={renderSelect} 
-                                        className="form__input">
+                                <Field component={renderSelect} label={"Skill rating (out of 10)"} name={`${member}.proficiency`} 
+                                    id={`${member}.proficiency`} className="form__input" prepend={false}>
                                     <option value="">Choose</option>
                                     <option value="1" >1</option>
                                     <option value="2" >2</option>

@@ -49,23 +49,15 @@ const renderSkills = ({
                         </div>
 
                         <ul className="form pb-0">
+
                             <li className="form__group">
-                                <label className="form__label" htmlFor="name">Skill name</label>
-                                <div className="input-group">
-                                    <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--skills-grey"></i>
-                                    </span>
-                                    </div>
-                                    <Field component={renderField}  type={"text"} name={`${member}.name`}
-                                        className="form__input"/>
-                                </div>
+                                <Field component={renderField} label={"Skill name"}  type={"text"} name={`${member}.name`}
+                                    id={`${member}.name`} iconClass={"sprite icon--skills-grey"} className="form__input" prepend={true}/>
                             </li>
-                            
+
                             <li className="form__group">
-                                <label className="form__label" htmlFor="proficiency">Skill rating (out of 10)</label>
-                                <Field name={`${member}.proficiency`} component={renderSelect} 
-                                        className="form__select">
+                                <Field component={renderSelect} label={"Skill rating (out of 10)"} name={`${member}.proficiency`} 
+                                    id={`${member}.proficiency`} className="form__select" prepend={false}>
                                     <option value="">Choose</option>
                                     <option value="1" >1</option>
                                     <option value="2" >2</option>
@@ -79,6 +71,7 @@ const renderSkills = ({
                                     <option value="10">10</option>
                                 </Field>
                             </li>
+                            
                         </ul>
                     </div>
             )})}
