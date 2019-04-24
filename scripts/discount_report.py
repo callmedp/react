@@ -56,7 +56,7 @@ if __name__=="__main__":
                 "Actual collection of order","Effective collection per item",\
                 "Price of item on site","Transaction_Amount","coupon_id",\
                 "Payment_mode","Combo", "Combo Parent","Variation","Refunded","Refund Amount",\
-                "No Process", "Replaced", "Replacement ID"])
+                "No Process", "Replaced", "Replaced With", "Replacement Of"])
 
     transactions = PaymentTxn.objects.filter(status=1,payment_date__gte=sdt,payment_date__lte=edt)
     order_ids = list(transactions.values_list('order_id',flat=True))
@@ -174,7 +174,8 @@ if __name__=="__main__":
                     item_cost_price,order_discount,price_without_wallet_discount,order.total_incl_tax,\
                     item_selling_price,item_cost_price,order.total_incl_tax,\
                     coupon_code,txn_obj.get_payment_mode(),item.is_combo, combo_parent,item.is_variation,\
-                    bool(item_refund_request_list),refund_amount,item.no_process, replaced, replacement_id
+                    bool(item_refund_request_list),refund_amount,item.no_process, replaced, replacement_id,\
+                    order.replaced_order
                 ]
 
                 csv_writer.writerow(row_data)
