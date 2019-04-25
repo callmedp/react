@@ -35,7 +35,10 @@ urlpatterns = [
     url(r'^v1/resume-product-id/$',
         views.ResumeBuilderProductView.as_view(),
         name='v1.resume-product-id'),
-    url(r'^v1/candidate-login/$',views.ShineCandidateLoginAPIView.as_view(),name='v1.api-login'),
+    url(r'^v1/candidate-login/$', views.ShineCandidateLoginAPIView.as_view(), name='v1.api-login'),
+    url(r'^v1/update-certificate-assesment/(?P<vendor_name>[\w\-]+)/$',
+        views.UpdateCertificateAndAssesment.as_view(),
+        name='remove-cookie-from-header')
 ]
 
 if settings.DEBUG:
