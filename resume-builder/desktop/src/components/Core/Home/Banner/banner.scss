@@ -2,7 +2,7 @@
 @import '../../../../styles/variables/mixins.scss';
 
 .banner-bg {
-	background: url(/media/static/react/assets/images/home-bg.jpg);
+	background: get('banner-bg');
 	background-size: cover;
 	/*min-height: 549px;*/
 	margin-bottom: 40px;

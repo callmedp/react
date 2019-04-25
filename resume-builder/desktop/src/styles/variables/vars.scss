@@ -23,7 +23,7 @@ $grey-bg1: #F3F3F3;
 
 //$sprite: url(/media/static/react/assets/images/sprite.svg);
 
-$sprite: get('sprite-url');
+$sprite: get('sprite-url') or url(/media/static/react/assets/images/sprite.svg) ;
 
 
 %icon-block {

@@ -19,27 +19,27 @@ config.output.filename = '../../../careerplus/static_core/react/dist/desktop/mai
 config.plugins[5].options.filename = '../../../careerplus/static_core/react/dist/desktop/main.css';
 
 
-console.log('-----config======', config.module.rules[2]['oneOf'][5]['use'][3]['options']);
+const result = {
+    'sprite': process.env.REACT_APP_ENV === 'staging' ?
+        'url(https://learning-static-staging-189607.storage.googleapis.com/l/s/react/assets/images/sprite.svg)' : '',
+    'top-banner': process.env.REACT_APP_ENV === 'staging' ?
+        'url(https://learning-static-staging-189607.storage.googleapis.com/l/s/react/assets/images/banner-bg.jpg)' : '',
+    'banner-bg': process.env.REACT_APP_ENV === 'staging' ?
+        'url(https://learning-static-staging-189607.storage.googleapis.com/l/s/react/assets/images/home-bg.jpg)' : '',
+    'logo': process.env.REACT_APP_ENV === 'staging' ?
+        'url(https://learning-static-staging-189607.storage.googleapis.com/l/s/react/assets/images/logo.png)' : '',
 
+}
 
 config.module.rules[2]['oneOf'][5]['use'][3]['options'] = {
     ...config.module.rules[2]['oneOf'][5]['use'][3]['options'],
     ...{
         functions: {
             "get($keys)": function (keys) {
-                console.log('---keys----', keys.getValue());
-                keys = keys.getValue().split(".");
-                console.log('--dot keys---', keys);
-                // let i;
-                // for (i = 0; i < keys.length; i++) {
-                //     result = result[keys[i]];
-                // }
-                // result = sassUtils.castToSass(result);
-                // return result;
-                let result = 'url(/media/static/react/assets/images/sprite1.svg)'
-                result = sassUtils.castToSass(result);
-
-                return result;
+                keys = keys.getValue();
+                let output = result[keys];
+                output = sassUtils.castToSass(output);
+                return output;
 
             }
         }

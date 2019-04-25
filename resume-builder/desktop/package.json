@@ -25,8 +25,9 @@
     "sweetalert2": "^8.6.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "sh -ac '. .env.${REACT_APP_ENV}.local; node ./scripts/build-non-split.js'",
+    "start:dev": "REACT_APP_ENV=development npm run start",
+    "start": "react-app-rewired start",
+    "build": "sh -ac '. .env.${REACT_APP_ENV}; node ./scripts/build-non-split.js'",
     "build:staging": "REACT_APP_ENV=staging npm run build",
     "build:production": "REACT_APP_ENV=production npm run build",
     "test": "react-scripts test",
@@ -40,5 +41,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "react-app-rewired": "^2.1.3"
+  }
 }
