@@ -35,7 +35,6 @@ const SkillRenderer = ({
                            changeOrderingUp,
                            changeOrderingDown,
                            openedAccordion,
-                           entity
                        }) => {
     return (
         <div>
@@ -264,7 +263,6 @@ class Skill extends Component {
                     openedAccordion={this.state.openedAccordion}
                     loader={loader}
                     component={SkillRenderer}
-                    entity={entity}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
