@@ -28,7 +28,6 @@ const ExperienceRenderer = ({
                                 changeOrderingUp,
                                 changeOrderingDown,
                                 openedAccordion,
-                                entity
                             }) => {
     return (
         <div>
@@ -39,147 +38,143 @@ const ExperienceRenderer = ({
                 <span className="icon-box"><i className="icon-experience1"/></span>
                 <h2>Experience</h2>
                 {/*<span className="icon-edit icon-experience__cursor"></span>*/}
-                {
-                    !!(!(entity && entity.active)) ? "" :
-                        <button
-                            onClick={() => handleAddition(fields, error)}
-                            type={'button'}
-                            className="add-button add-button__right">Add new
-                        </button>
-                }
+
+                <button
+                    onClick={() => handleAddition(fields, error)}
+                    type={'button'}
+                    className="add-button add-button__right">Add new
+                </button>
+
             </section>
-            {
-                !!(!(entity && entity.active)) ?
-                    <div>
-                        Click Plus Icon to Add This Section
-                    </div> :
-                    <section className="right-sidebar-scroll">
-                        <ul>
-                            <Accordion onChange={(value) => handleAccordionClick(value, fields, error)}
-                                       allowZeroExpanded={true}
-                                       preExpanded={[openedAccordion]}>
-                                {
-                                    fields.map((member, index) => {
-                                        return (
-                                            <li key={index}>
-                                                <section className="info-section">
-                                                    <AccordionItem uuid={index}>
-                                                        <AccordionItemHeading>
-                                                            <AccordionItemButton>
-                                                                <div className="flex-container">
-                                                                    <h3 className="add-section-heading">{fields.get(index).company_name || 'Experience'}</h3>
-                                                                    <div className="addon-buttons mr-10">
+
+
+            <section className="right-sidebar-scroll">
+                <ul>
+                    <Accordion onChange={(value) => handleAccordionClick(value, fields, error)}
+                               allowZeroExpanded={true}
+                               preExpanded={[openedAccordion]}>
+                        {
+                            fields.map((member, index) => {
+                                return (
+                                    <li key={index}>
+                                        <section className="info-section">
+                                            <AccordionItem uuid={index}>
+                                                <AccordionItemHeading>
+                                                    <AccordionItemButton>
+                                                        <div className="flex-container">
+                                                            <h3 className="add-section-heading">{fields.get(index).company_name || 'Experience'}</h3>
+                                                            <div className="addon-buttons mr-10">
                                                                 <span
                                                                     onClick={(event) => deleteExperience(index, fields, event)}
                                                                     className="icon-delete mr-15"/>
-                                                                        {index !== 0 &&
-                                                                        <span
-                                                                            onClick={(event) => changeOrderingUp(index, fields, event)}
-                                                                            className="icon-ascend mr-5"/>
-                                                                        }
-                                                                        {
-                                                                            index !== fields.length - 1 &&
-                                                                            < span
-                                                                                onClick={(event) => changeOrderingDown(index, fields, event)}
-                                                                                className="icon-descend"/>
-                                                                        }
-                                                                    </div>
-                                                                </div>
-                                                            </AccordionItemButton>
-                                                        </AccordionItemHeading>
-                                                        <AccordionItemPanel>
-                                                            <div className="flex-container">
-                                                                <fieldset className="error">
-                                                                    <label>Designation</label>
-                                                                    <div className="input-group">
-                                                                        <div className="input-group--input-group-icon">
-                                                                            <span className="icon-designation"/>
-                                                                        </div>
-                                                                        <Field component={renderField}
-                                                                               type={"text"}
-                                                                               name={`${member}.job_profile`}/>
-                                                                    </div>
-                                                                </fieldset>
-                                                                <fieldset>
-                                                                    <label>Company Name</label>
-                                                                    <div className="input-group">
-                                                                        <div className="input-group--input-group-icon">
-                                                                            <span className="icon-company"/>
-                                                                        </div>
-                                                                        <Field component={renderField}
-                                                                               type={"text"}
-                                                                               name={`${member}.company_name`}/>
-                                                                    </div>
-                                                                </fieldset>
+                                                                {index !== 0 &&
+                                                                <span
+                                                                    onClick={(event) => changeOrderingUp(index, fields, event)}
+                                                                    className="icon-ascend mr-5"/>
+                                                                }
+                                                                {
+                                                                    index !== fields.length - 1 &&
+                                                                    < span
+                                                                        onClick={(event) => changeOrderingDown(index, fields, event)}
+                                                                        className="icon-descend"/>
+                                                                }
                                                             </div>
-                                                            <div className="flex-container">
-                                                                <fieldset>
-                                                                    <label>Date from</label>
-                                                                    <div className="input-group">
-                                                                        <div className="input-group--input-group-icon">
-                                                                            <span className="icon-date"/>
-                                                                        </div>
-                                                                        <Field component={datepicker}
-                                                                               type={"date"}
-                                                                               className={'input-control'}
-                                                                               name={`${member}.start_date`}/>
-                                                                    </div>
-                                                                </fieldset>
-                                                                <fieldset>
-                                                                    <label>Date to</label>
-                                                                    <div className="input-group">
-                                                                        <div className="input-group--input-group-icon">
-                                                                            <span className="icon-date"/>
-                                                                        </div>
-                                                                        <Field component={datepicker}
-                                                                               type={"date"}
-                                                                               name={`${member}.end_date`}
-                                                                               className={'input-control'}/>
-                                                                    </div>
-                                                                    <span className="till-today">
+                                                        </div>
+                                                    </AccordionItemButton>
+                                                </AccordionItemHeading>
+                                                <AccordionItemPanel>
+                                                    <div className="flex-container">
+                                                        <fieldset className="error">
+                                                            <label>Designation</label>
+                                                            <div className="input-group">
+                                                                <div className="input-group--input-group-icon">
+                                                                    <span className="icon-designation"/>
+                                                                </div>
+                                                                <Field component={renderField}
+                                                                       type={"text"}
+                                                                       name={`${member}.job_profile`}/>
+                                                            </div>
+                                                        </fieldset>
+                                                        <fieldset>
+                                                            <label>Company Name</label>
+                                                            <div className="input-group">
+                                                                <div className="input-group--input-group-icon">
+                                                                    <span className="icon-company"/>
+                                                                </div>
+                                                                <Field component={renderField}
+                                                                       type={"text"}
+                                                                       name={`${member}.company_name`}/>
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+                                                    <div className="flex-container">
+                                                        <fieldset>
+                                                            <label>Date from</label>
+                                                            <div className="input-group">
+                                                                <div className="input-group--input-group-icon">
+                                                                    <span className="icon-date"/>
+                                                                </div>
+                                                                <Field component={datepicker}
+                                                                       type={"date"}
+                                                                       className={'input-control'}
+                                                                       name={`${member}.start_date`}/>
+                                                            </div>
+                                                        </fieldset>
+                                                        <fieldset>
+                                                            <label>Date to</label>
+                                                            <div className="input-group">
+                                                                <div className="input-group--input-group-icon">
+                                                                    <span className="icon-date"/>
+                                                                </div>
+                                                                <Field component={datepicker}
+                                                                       type={"date"}
+                                                                       name={`${member}.end_date`}
+                                                                       className={'input-control'}/>
+                                                            </div>
+                                                            <span className="till-today">
 									                                    <Field type="radio"
                                                                                name={`${member}.is_working`}
                                                                                component="input"
                                                                                checked={`${member}.is_working` === 'true' ? true : false}/>
 								                                	Till Today
 							                                    	</span>
-                                                                </fieldset>
-                                                            </div>
+                                                        </fieldset>
+                                                    </div>
 
-                                                            <div className="flex-container">
-                                                                <fieldset>
-                                                                    <label>Job Location</label>
-                                                                    <div className="input-group">
-                                                                        <div className="input-group--input-group-icon">
-                                                                            <span className="icon-address"/>
-                                                                        </div>
-                                                                        <Field component={renderField} type={"text"}
-                                                                               name={`${member}.job_location`}
-                                                                               className={"input-control"}/>
-                                                                    </div>
-                                                                </fieldset>
+                                                    <div className="flex-container">
+                                                        <fieldset>
+                                                            <label>Job Location</label>
+                                                            <div className="input-group">
+                                                                <div className="input-group--input-group-icon">
+                                                                    <span className="icon-address"/>
+                                                                </div>
+                                                                <Field component={renderField} type={"text"}
+                                                                       name={`${member}.job_location`}
+                                                                       className={"input-control"}/>
                                                             </div>
+                                                        </fieldset>
+                                                    </div>
 
-                                                            <div className="flex-container">
-                                                                <fieldset>
-                                                                    <label>Description</label>
-                                                                    <Field component={renderTextArea} rows={"3"}
-                                                                           type={"text"}
-                                                                           name={`${member}.work_description`}/>
-                                                                </fieldset>
-                                                            </div>
+                                                    <div className="flex-container">
+                                                        <fieldset>
+                                                            <label>Description</label>
+                                                            <Field component={renderTextArea} rows={"3"}
+                                                                   type={"text"}
+                                                                   name={`${member}.work_description`}/>
+                                                        </fieldset>
+                                                    </div>
 
-                                                        </AccordionItemPanel>
-                                                    </AccordionItem>
-                                                </section>
-                                            </li>
-                                        )
-                                    })
-                                }
-                            </Accordion>
-                        </ul>
-                    </section>
-            }
+                                                </AccordionItemPanel>
+                                            </AccordionItem>
+                                        </section>
+                                    </li>
+                                )
+                            })
+                        }
+                    </Accordion>
+                </ul>
+            </section>
+
         </div>
     )
 
@@ -295,30 +290,28 @@ class Experience extends Component {
 
         return (
             <div>
+                {
+                    !!(!(entity && entity.active)) ? "" : <form onSubmit={handleSubmit(this.handleSubmit)}>
+                        <FieldArray name={"list"}
+                                    loader={loader}
+                                    handleSubmit={this.handleSubmit}
+                                    handleAccordionClick={this.handleAccordionClick}
+                                    handleAccordionState={this.handleAccordionState}
+                                    handleAddition={this.handleAddition}
+                                    deleteExperience={this.deleteExperience}
+                                    changeOrderingUp={this.changeOrderingUp}
+                                    changeOrderingDown={this.changeOrderingDown}
+                                    openedAccordion={this.state.openedAccordion}
+                                    component={ExperienceRenderer}
+                        />
 
-                <form onSubmit={handleSubmit(this.handleSubmit)}>
-                    <FieldArray name={"list"}
-                                loader={loader}
-                                handleSubmit={this.handleSubmit}
-                                handleAccordionClick={this.handleAccordionClick}
-                                handleAccordionState={this.handleAccordionState}
-                                handleAddition={this.handleAddition}
-                                deleteExperience={this.deleteExperience}
-                                changeOrderingUp={this.changeOrderingUp}
-                                changeOrderingDown={this.changeOrderingDown}
-                                openedAccordion={this.state.openedAccordion}
-                                entity={entity}
-                                component={ExperienceRenderer}
-                    />
-                    {
-                        !!(!(entity && entity.active)) ? "" :
-                            <div className="flex-container items-right mr-20 mb-30">
-                                <button className="blue-button mr-10">Preview</button>
-                                <button className="orange-button" type="submit">Save & Continue</button>
-                            </div>
-                    }
+                        <div className="flex-container items-right mr-20 mb-30">
+                            <button className="blue-button mr-10">Preview</button>
+                            <button className="orange-button" type="submit">Save & Continue</button>
+                        </div>
+                    </form>
 
-                </form>
+                }
 
             </div>
         )
