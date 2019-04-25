@@ -46,47 +46,92 @@ class RightSection extends Component {
 
             case 'education': {
                 entity = entityList && entityList[1];
-                return !!(!(entity && entity.active)) ? "Hello 1" : <Education {...this.props}/>
+                return !!(!(entity && entity.active)) ? 
+                <div className="backtoedit">
+                    <p>Add more section in your resume from left panel</p>
+                    <button className="orange-button">Back to Edit</button>
+                </div>
+                 : <Education {...this.props}/>
             }
 
             case 'experience': {
                 entity = entityList && entityList[2];
 
-                return !!(!(entity && entity.active)) ? "Hello 2" : <Experience {...this.props}/>
+                return !!(!(entity && entity.active)) ? 
+                <div className="backtoedit">
+                    <p>Add more section in your resume from left panel</p>
+                    <button className="orange-button">Back to Edit</button>
+                </div>
+                 : <Experience {...this.props}/>
             }
 
             case 'project': {
                 entity = entityList && entityList[3];
 
-                return !!(!(entity && entity.active)) ? "Hello 3" : <Project {...this.props}/>
+                return !!(!(entity && entity.active)) ? 
+                <div className="backtoedit">
+                    <p>Add more section in your resume from left panel</p>
+                    <button className="orange-button">Back to Edit</button>
+                </div>
+                 : <Project {...this.props}/>
             }
             case 'skill': {
                 entity = entityList && entityList[4];
 
-                return !!(!(entity && entity.active)) ? "Hello" : <Skill {...this.props}/>
+                return !!(!(entity && entity.active)) ? 
+                <div className="backtoedit">
+                    <p>Add more section in your resume from left panel</p>
+                    <button className="orange-button">Back to Edit</button>
+                </div>
+                 : <Skill {...this.props}/>
             }
             case 'summary': {
                 entity = entityList && entityList[5];
 
-                return !!(!(entity && entity.active)) ? "Hello" : <Summary {...this.props}/>
+                return !!(!(entity && entity.active)) ? 
+                <div className="backtoedit">
+                    <p>Add more section in your resume from left panel</p>
+                    <button className="orange-button">Back to Edit</button>
+                </div>
+                 : <Summary {...this.props}/>
             }
             case 'award': {
                 entity = entityList && entityList[6];
-                return !!(!(entity && entity.active)) ? "Hello" : <Award {...this.props}/>
+                return !!(!(entity && entity.active)) ? 
+                <div className="backtoedit">
+                    <p>Add more section in your resume from left panel</p>
+                    <button className="orange-button">Back to Edit</button>
+                </div>
+                 : <Award {...this.props}/>
             }
             case 'course': {
                 entity = entityList && entityList[7];
 
-                return !!(!(entity && entity.active)) ? "Hello" : <Course {...this.props}/>
+                return !!(!(entity && entity.active)) ? 
+                <div className="backtoedit">
+                    <p>Add more section in your resume from left panel</p>
+                    <button className="orange-button">Back to Edit</button>
+                </div>
+                 : <Course {...this.props}/>
             }
             case 'language': {
                 entity = entityList && entityList[8];
 
-                return !!(!(entity && entity.active)) ? "Hello" : <Language {...this.props}/>
+                return !!(!(entity && entity.active)) ? 
+                <div className="backtoedit">
+                    <p>Add more section in your resume from left panel</p>
+                    <button className="orange-button">Back to Edit</button>
+                </div>
+                 : <Language {...this.props}/>
             }
             case 'reference': {
                 entity = entityList && entityList[9];
-                return !!(!(entity && entity.active)) ? "Hello" : <Reference {...this.props}/>
+                return !!(!(entity && entity.active)) ? 
+                <div className="backtoedit">
+                    <p>Add more section in your resume from left panel</p>
+                    <button className="orange-button">Back to Edit</button>
+                </div>
+                 : <Reference {...this.props}/>
             }
             default: {
                 return <Template {...this.props} />
