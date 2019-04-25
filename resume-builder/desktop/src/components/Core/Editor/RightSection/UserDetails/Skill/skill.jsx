@@ -249,8 +249,7 @@ class Skill extends Component {
 
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, entityList, ui: {loader}} = this.props;
-        const entity = entityList.find(entity => entity.entity_id === 8);
+        const {error, handleSubmit, pristine, reset, submitting, ui: {loader}} = this.props;
         return (
             <form onSubmit={handleSubmit(this.handleSubmit)}>
                 <FieldArray
@@ -291,8 +290,6 @@ export const SkillForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.skill,
-        entityList: state.personalInfo && state.personalInfo.entity_preference_data,
-
         ui: state.ui
     }
 };

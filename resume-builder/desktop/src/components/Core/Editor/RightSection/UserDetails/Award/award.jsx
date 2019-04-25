@@ -223,8 +223,7 @@ class Award extends Component {
 
 
     render() {
-        const {handleSubmit, ui: {loader}, entityList} = this.props;
-        const entity = entityList.find(entity => entity.entity_id === 7);
+        const {handleSubmit, ui: {loader}} = this.props;
 
         return (
             <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -261,8 +260,6 @@ export const AwardForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.award,
-        entityList: state.personalInfo && state.personalInfo.entity_preference_data,
-
         ui: state.ui
     }
 };

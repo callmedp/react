@@ -285,8 +285,7 @@ class Experience extends Component {
     }
 
     render() {
-        const {handleSubmit, entityList, ui: {loader}} = this.props;
-        const entity = entityList.find(entity => entity.entity_id === 3);
+        const {handleSubmit, ui: {loader}} = this.props;
 
         return (
             <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -322,7 +321,6 @@ export const ExperienceForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.experience,
-        entityList: state.personalInfo && state.personalInfo.entity_preference_data,
         ui: state.ui
     }
 };

@@ -244,8 +244,7 @@ class Reference extends Component {
 
 
     render() {
-        const {handleSubmit, ui: {loader}, entityList} = this.props;
-        const entity = entityList.find(entity => entity.entity_id === 10);
+        const {handleSubmit, ui: {loader}} = this.props;
         return (
             <form onSubmit={handleSubmit(this.handleSubmit)}>
                 <FieldArray
@@ -282,8 +281,6 @@ export const ReferenceForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.reference,
-        entityList: state.personalInfo && state.personalInfo.entity_preference_data,
-
         ui: state.ui
     }
 };

@@ -34,9 +34,6 @@ class Summary extends Component {
 
     render() {
         const {personalInfo, ui: {loader}, handleSubmit} = this.props;
-        const {entity_preference_data, extra_info} = personalInfo;
-        const entity = entity_preference_data.find(entity => entity.entity_id === 6);
-
         return (
             <div>
                 <section className="head-section">
