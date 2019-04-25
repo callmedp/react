@@ -37,8 +37,8 @@ const CourseRenderer = ({
             }
             <section className="head-section">
                 <span className="icon-box"><i className="icon-courses1"></i></span>
-                <h2>Courses</h2>
-                {/*<span className="icon-edit icon-courses__cursor"></span>*/}
+                <h2 contenteditable="true">Courses</h2>
+                <span className="icon-edit icon-edit__cursor"></span>
 
                 <button onClick={() => handleAddition(fields, error)}
                         type={'button'}

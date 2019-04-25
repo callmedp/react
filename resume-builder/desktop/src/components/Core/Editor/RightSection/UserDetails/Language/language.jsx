@@ -39,8 +39,8 @@ const LanguageRenderer = ({
             }
             <section className="head-section">
                 <span className="icon-box"><i className="icon-languages1"/></span>
-                <h2>Languages</h2>
-                {/*<span className="icon-edit icon-language__cursor"></span>*/}
+                <h2 contenteditable="true">Languages</h2>
+                <span className="icon-edit icon-language__cursor"></span>
 
                 <button onClick={() => handleAddition(fields, error)}
                         type={'button'}

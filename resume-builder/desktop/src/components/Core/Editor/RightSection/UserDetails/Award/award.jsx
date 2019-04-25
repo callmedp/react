@@ -225,6 +225,7 @@ class Award extends Component {
     render() {
         const {handleSubmit, ui: {loader}} = this.props;
 
+
         return (
             <form onSubmit={handleSubmit(this.handleSubmit)}>
                 <FieldArray name="list"

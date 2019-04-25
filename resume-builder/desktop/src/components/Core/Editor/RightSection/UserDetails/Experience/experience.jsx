@@ -36,8 +36,8 @@ const ExperienceRenderer = ({
             }
             <section className="head-section">
                 <span className="icon-box"><i className="icon-experience1"/></span>
-                <h2>Experience</h2>
-                {/*<span className="icon-edit icon-experience__cursor"></span>*/}
+                <h2 contenteditable="true">Experience</h2>
+                <span className="icon-edit icon-experience__cursor"></span>
 
                 <button
                     onClick={() => handleAddition(fields, error)}

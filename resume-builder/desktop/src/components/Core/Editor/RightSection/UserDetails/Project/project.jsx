@@ -34,33 +34,32 @@ const ProjectRenderer = ({
             }
             <section className="head-section">
                 <span className="icon-box"><i className="icon-projects1"/></span>
-                <h2>Projects</h2>
-                {/*<span className="icon-edit icon-projects__cursor"></span>*/}
-
-                <button
-                    onClick={() => handleAddition(fields, error)}
-                    type={'button'}
-                    className="add-button add-button__right">Add new
-                </button>
-
+                <h2 contenteditable="true">Projects</h2>
+                <span className="icon-edit icon-edit__cursor"></span>
+                
+                        <button
+                            onClick={() => handleAddition(fields, error)}
+                            type={'button'}
+                            className="add-button add-button__right">Add new
+                        </button>
+                
             </section>
-
-            <section className="right-sidebar-scroll">
-                <ul>
-                    <Accordion onChange={(value) => handleAccordionClick(value, fields, error)}
-                               allowZeroExpanded={true}
-                               preExpanded={[openedAccordion]}>
-                        {
-                            fields.map((member, index) => {
-                                return (
-                                    <li key={index}>
-                                        <section className="info-section">
-                                            <AccordionItem uuid={index}>
-                                                <AccordionItemHeading>
-                                                    <AccordionItemButton>
-                                                        <div className="flex-container">
-                                                            <h3 className="add-section-heading">{fields.get(index).project_name || 'Project'}</h3>
-                                                            <div className="addon-buttons mr-10">
+                    <section className="right-sidebar-scroll">
+                        <ul>
+                            <Accordion onChange={(value) => handleAccordionClick(value, fields, error)}
+                                       allowZeroExpanded={true}
+                                       preExpanded={[openedAccordion]}>
+                                {
+                                    fields.map((member, index) => {
+                                        return (
+                                            <li key={index}>
+                                                <section className="info-section">
+                                                    <AccordionItem uuid={index}>
+                                                        <AccordionItemHeading>
+                                                            <AccordionItemButton>
+                                                                <div className="flex-container">
+                                                                    <h3 className="add-section-heading">{fields.get(index).project_name || 'Project'} <strong>1</strong></h3>
+                                                                    <div className="addon-buttons mr-10">
                                                                     <span
                                                                         onClick={(event) => deleteProject(index, fields, event)}
                                                                         className="icon-delete mr-15"/>
@@ -144,6 +143,7 @@ const ProjectRenderer = ({
                     </Accordion>
                 </ul>
             </section>
+            
         </div>
     )
 }

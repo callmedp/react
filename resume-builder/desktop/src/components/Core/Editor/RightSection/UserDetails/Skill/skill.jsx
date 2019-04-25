@@ -43,8 +43,8 @@ const SkillRenderer = ({
             }
             <section className="head-section">
                 <span className="icon-box"><i className="icon-skills1"/></span>
-                <h2>Skills</h2>
-                {/*<span className="icon-edit icon-education__cursor"></span>*/}
+                <h2 contenteditable="true">Skills</h2>
+                <span className="icon-edit icon-education__cursor"></span>
                 <button onClick={() => handleAddition(fields, error)}
                         type={'button'}
                         className="add-button add-button__right">Add new

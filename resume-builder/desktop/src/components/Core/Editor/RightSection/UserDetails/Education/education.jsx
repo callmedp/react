@@ -36,8 +36,8 @@ const EducationRenderer = ({
             }
             <section className="head-section">
                 <span className="icon-box"><i className="icon-education1"></i></span>
-                <h2>Education</h2>
-                {/*<span className="icon-edit icon-education__cursor"></span>*/}
+                <h2 contenteditable="true">Education</h2>
+                <span className="icon-edit icon-education__cursor"></span>
 
 
                 <button onClick={(event) => handleAddition(fields, error, event)}

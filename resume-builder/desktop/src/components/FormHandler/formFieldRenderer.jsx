@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import AsyncSelect from 'react-select/lib/Async';
 import Select from 'react-select';
+import makeAnimated from 'react-select/lib/animated'
 
 
 export const renderField = ({
@@ -58,6 +59,8 @@ export const renderSelect = ({
                 placeholder={label}
                 options={options}
                 isMulti={isMulti}
+                closeMenuOnSelect={false}
+                components={makeAnimated()}
                 onBlur={() => {
                     input.onBlur(input.value)
                 }}
