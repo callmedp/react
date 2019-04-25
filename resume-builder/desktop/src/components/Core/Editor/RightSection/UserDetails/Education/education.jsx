@@ -308,7 +308,6 @@ class Education extends Component {
                             changeOrderingUp={this.changeOrderingUp}
                             changeOrderingDown={this.changeOrderingDown}
                             openedAccordion={this.state.openedAccordion}
-                            entity={entity}
                             component={EducationRenderer}
                 />
 

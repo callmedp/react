@@ -33,7 +33,7 @@ class Summary extends Component {
 
 
     render() {
-        const {personalInfo, ui: {loader}, handleSubmit} = this.props;
+        const {personalInfo: {extra_info}, ui: {loader}, handleSubmit} = this.props;
         return (
             <div>
                 <section className="head-section">
