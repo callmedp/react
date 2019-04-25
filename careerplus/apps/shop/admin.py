@@ -123,7 +123,7 @@ class DeliveryServiceAdmin(admin.ModelAdmin):
 
 
 class ShineProfileDataAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'type_flow', 'sub_type_flow', 'priority_value']
+    list_display = ['id', 'name', 'type_flow', 'sub_type_flow', 'priority_value', 'vendor']
 
     def save_model(self, request, obj, form, change):
         resp = ShineProfileDataUpdate().update_shine_profile_data()

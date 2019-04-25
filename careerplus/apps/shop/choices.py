@@ -56,7 +56,9 @@ FLOW_CHOICES = (
     (12, 'Country Specific Resume'),  # flow 12
     (13, 'Executive Bio,Portfolio,Visual Resume,Cover Letter,Second Regular Resume'),  # flow 13
     (14, 'University Courses'),
-    (15, 'Resume Booster International')
+    (15, 'Resume Booster International'),
+    (16, 'Assessment and Certifications'),
+
 )
 
 SUB_FLOWS = {
@@ -65,6 +67,11 @@ SUB_FLOWS = {
         (502, "Jobs on the Move"),
         (503, "Priority Applicant")
     ),
+    16: (
+        (1601, "Free Test"),
+        (1602, "Paid Test")
+    )
+
 }
 
 SUB_FLOW_CHOICES = ()

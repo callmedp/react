@@ -299,6 +299,9 @@ urlpatterns += [
         order_view.WhatsappListQueueView.as_view(),
         name='queue-whatsappjoblist'),
 
+    url(r'^queue/certification-queue/$',
+        order_view.CertficationProductQueueView.as_view(),
+        name='queue-certification'),
 
     url(r'^queue/domesticprofileupdate/$',
         order_view.DomesticProfileUpdateQueueView.as_view(),
