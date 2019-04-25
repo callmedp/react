@@ -4,7 +4,6 @@ import {connect} from "react-redux";
 import * as actions from '../../../../../../store/personalInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
 import {interestList} from '../../../../../../Utils/interestList'
-import Loader from '../../../../../Loader/loader'
 import {
     renderField,
     datepicker,
@@ -32,7 +31,7 @@ export class PersonalInfo extends Component {
             'imageURI': '',
             'imageURL': ''
         }
-
+        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
     }
 
     componentDidMount() {
@@ -85,12 +84,10 @@ export class PersonalInfo extends Component {
     }
 
     render() {
-        const {handleSubmit, personalInfo, enableReinitialize, ui:{loader}} = this.props;
+        const {handleSubmit, personalInfo, ui: {loader}} = this.props;
+        console.log('window   ', window);
         return (
             <div>
-                {!!loader &&
-                <Loader/>
-                }
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-info1"/></span>
                     <h2>Personal Info</h2>
@@ -158,7 +155,8 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-mobile"></span>
                                         </div>
-                                        <Field component={renderField} validate={[required, phoneNumber]} type={"text"}
+                                        <Field component={renderField} validate={[required, phoneNumber]}
+                                               type={"text"}
                                                name="number"
                                                className={"input-control"}/>
                                     </div>
@@ -242,7 +240,7 @@ export class PersonalInfo extends Component {
                                         <img alt={"User Profile"} className='img-responsive'
                                              src={this.state.imageURI || personalInfo.image}/> :
                                         <img alt={"User Profile"} className="img-responsive"
-                                             src="/media/static/react/assets/images/upload-image.jpg"/>
+                                             src={`${this.staticUrl}react/assets/images/upload-image.jpg`}/>
                                 }
                                 <input accept="image/*" type="file" name="displayPicture"
                                        onChange={this.getImageURI.bind(this)}
@@ -262,8 +260,6 @@ export class PersonalInfo extends Component {
                         </button>
                     </div>
                 </form>
-
-
             </div>
         )
     }
@@ -279,7 +275,7 @@ const mapStateToProps = (state) => {
     return {
         initialValues: state.personalInfo,
         personalInfo: state.personalInfo,
-        ui:state.ui
+        ui: state.ui
     }
 };
 

@@ -4,7 +4,9 @@ import './resumeSlider.scss'
 export default class ResumeSlider extends Component {
     constructor(props) {
         super(props);
+        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
     }
+
     render() {
         return (
             <section id="templates" className="section-container">
@@ -13,7 +15,8 @@ export default class ResumeSlider extends Component {
                     new job</strong>
                 <ul className="slider">
                     <li><img onClick={() => this.props.history.push('/resume-builder/edit/')} alt={'Slider'}
-                             src="/media/static/react/assets/images/slider.jpg" className="img-responsive"/></li>
+                             src={`${this.staticUrl}react/assets/images/slider.jpg`}
+                             className="img-responsive"/></li>
                 </ul>
                 {/*<button className="orange-button orange-button--custom" onClick={() => this.scrollTo('templates')}>Customise*/}
                 {/*</button>*/}

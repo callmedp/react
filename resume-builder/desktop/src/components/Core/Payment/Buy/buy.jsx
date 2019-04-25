@@ -13,12 +13,14 @@ export class Buy extends Component {
         this.state = {
             'checked': 'product1'
         }
+        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+
 
     }
 
     async redirectToCart() {
-        
-        if(!this.props.productIds[0])
+
+        if (!this.props.productIds[0])
             return;
         let product;
         if (this.state.checked === 'product1') {
@@ -291,15 +293,18 @@ export class Buy extends Component {
                                             <ul className="carousel-box--carousel">
                                                 <li className="carousel-box--slide">
                                                     <div className="carousel-box--slide__content">
-                                                        <img src="/images/resume1.jpg" className="img-responsive"
+                                                        <img src={`${this.staticUrl}react/assets/images/resume1.jpg`}
+                                                             className="img-responsive"
                                                              alt=""/>
                                                     </div>
                                                     <div className="carousel-box--slide__content">
-                                                        <img src="/images/resume2.jpg" className="img-responsive"
+                                                        <img src={`${this.staticUrl}react/assets/images/resume2.jpg`}
+                                                             className="img-responsive"
                                                              alt=""/>
                                                     </div>
                                                     <div className="carousel-box--slide__content">
-                                                        <img src="/images/resume3.jpg" className="img-responsive"
+                                                        <img src={`${this.staticUrl}react/assets/images/resume3.jpg`}
+                                                             className="img-responsive"
                                                              alt=""/>
                                                     </div>
                                                 </li>

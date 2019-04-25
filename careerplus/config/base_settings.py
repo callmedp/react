@@ -128,7 +128,6 @@ MIDDLEWARE = [
     'core.middleware.TrackingMiddleware',
     'core.middleware.AmpMiddleware',
     'core.middleware.LocalIPDetectionMiddleware',
-
 ]
 
 ROOT_URLCONF = 'careerplus.config.urls'
@@ -142,6 +141,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.static',
                 'django.contrib.messages.context_processors.messages',
                 'core.context_processors.common_context_processor',
                 'django_mobile.context_processors.flavour',
@@ -171,7 +171,7 @@ WSGI_APPLICATION = 'careerplus.wsgi.application'
 WEBPACK_LOADER = {
     'DEFAULT': {
         'BUNDLE_DIR_NAME': 'react/dist/desktop/',
-        'STATS_FILE': os.path.join(BASE_DIR, '..', 'webpack-desktop-stats.json'),
+        'STATS_FILE': os.path.join(BASE_DIR, '..', 'webpack-mobile-stats.json'),
     },
     'MOBILE': {
         'BUNDLE_DIR_NAME': 'react/dist/mobile/',

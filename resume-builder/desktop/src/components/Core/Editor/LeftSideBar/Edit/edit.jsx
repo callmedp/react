@@ -2,89 +2,11 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import './edit.scss'
 import queryString from "query-string";
+import {formCategoryList, entityList} from "../../../../../Utils/formCategoryList";
+import {connect} from 'react-redux'
+import * as actions from '../../../../../store/personalInfo/actions/index'
 
-let visibleList = [
-    {
-        name: 'Personal Info',
-        link: '/resume-builder/edit/?type=profile',
-        icon: 'icon-info',
-        itemType: 'profile'
-    },
-    {
-        name: 'Summary',
-        link: '/resume-builder/edit/?type=summary',
-        icon: 'icon-summary',
-        itemType: 'summary'
-
-
-    },
-    {
-        name: 'Experience',
-        link: '/resume-builder/edit/?type=experience',
-        icon: 'icon-experience',
-        itemType: 'experience'
-
-
-    },
-    {
-        name: 'Education',
-        link: '/resume-builder/edit/?type=education',
-        icon: 'icon-education',
-        itemType: 'education'
-
-    },
-    {
-        name: 'Skills',
-        link: '/resume-builder/edit/?type=skill',
-        icon: 'icon-skills',
-        itemType: 'skill'
-
-
-    },
-
-];
-
-let hiddenList = [
-    {
-        name: 'Languages',
-        link: '/resume-builder/edit/?type=language',
-        icon: 'icon-languages',
-        itemType: 'language'
-    },
-    {
-        name: 'Awards',
-        link: '/resume-builder/edit/?type=award',
-        icon: 'icon-awards',
-        itemType: 'award'
-
-
-    },
-    {
-        name: 'Courses',
-        link: '/resume-builder/edit/?type=course',
-        icon: 'icon-courses',
-        itemType: 'course'
-
-
-    },
-    {
-        name: 'Projects',
-        link: '/resume-builder/edit/?type=project',
-        icon: 'icon-projects',
-        itemType: 'project'
-
-    },
-    {
-        name: 'References',
-        link: '/resume-builder/edit/?type=reference',
-        icon: 'icon-references',
-        itemType: 'reference'
-
-
-    },
-];
-
-export default class Edit extends Component {
+class Edit extends Component {
     constructor(props) {
         super(props);
         this.handleSpanClick = this.handleSpanClick.bind(this);
@@ -95,8 +17,7 @@ export default class Edit extends Component {
         this.state = {
             type: (values && values.type) || '',
             show: false,
-            hiddenList: hiddenList,
-            visibleList: visibleList
+            preferenceList: this.props.entityList
         };
 
         if (!(values && values.type)) {
@@ -115,24 +36,39 @@ export default class Edit extends Component {
         })
     }
 
+    componentDidMount() {
+        this.props.fetchEntityInfo()
+    }
+
     addIntoVisibleList(addedElem) {
-        let visList = this.state.visibleList;
-        visList.push(addedElem);
-        let hidList = this.state.hiddenList.filter(elem => elem.itemType !== addedElem.itemType)
-        console.log('----', visList, hidList)
+        const updatedList = (this.state.preferenceList || []).map(elem => {
+            if (elem['entity_id'] === addedElem['entity_id']) {
+                return {
+                    ...elem,
+                    ...{active: true}
+                }
+            }
+            return elem;
+        });
+        this.props.updateCategoryEntity(updatedList);
         this.setState({
-            visibleList: visList,
-            hiddenList: hidList
+            preferenceList: updatedList
         })
     }
 
     deleteFromVisibleList(deletedElem) {
-        let hidList = this.state.hiddenList;
-        hidList.push(deletedElem)
-        let visList = this.state.visibleList.filter(elem => elem.itemType !== deletedElem.itemType)
+        const updatedList = (this.state.preferenceList || []).map(elem => {
+            if (elem['entity_id'] === deletedElem['entity_id']) {
+                return {
+                    ...elem,
+                    ...{active: false}
+                }
+            }
+            return elem;
+        })
+        this.props.updateCategoryEntity(updatedList);
         this.setState({
-            visibleList: visList,
-            hiddenList: hidList
+            preferenceList: updatedList
         })
     }
 
@@ -143,38 +79,50 @@ export default class Edit extends Component {
                 type: (values && values.type) || ''
             })
         }
+        console.log('--props---', prevProps.entityList, this.props.entityList);
+        if (this.props.entityList !== prevProps.entityList) {
+            this.setState({
+                preferenceList: this.props.entityList
+
+            })
+
+        }
     }
 
     render() {
-        const {type, show, visibleList, hiddenList} = this.state;
+        const {type, show, preferenceList} = this.state;
         return (
             <div className="edit-section">
                 <strong>Complete your information</strong>
                 <ul>
                     {
-                        (visibleList || []).map((elem, index) => {
-                            const {name, link, icon, itemType} = elem;
+                        (preferenceList || []).filter(elem => elem.active === true).map((elem, index) => {
+                            const {name, link, icon, itemType} = formCategoryList[elem['entity_id']];
+                            console.log('-truesss---', elem['entity_id'] !== 1 || elem['entity_id'] !== 6);
                             return (
                                 <li key={index} className={type === itemType ? 'edit-section--active' : ''}>
                                     <Link to={link}>
                                         <span className={'mr-20 ' + icon}></span>
                                         {name}
                                     </Link>
-                                    <span onClick={() => this.deleteFromVisibleList(elem)}
-                                          className="icon-delete pull-right"/>
+                                    {
+                                        !!(elem['entity_id'] !== 1 && elem['entity_id'] !== 6) ?
+                                            <span onClick={() => this.deleteFromVisibleList(elem)}
+                                                  className="icon-delete pull-right"/> : ''
+                                    }
                                 </li>
                             )
                         })
                     }
                     {
-                        !!(!show) &&
+                        !!(!show) && !!(preferenceList.filter(elem => elem.active !== true).length) &&
                         <li className="edit-section--addmore mt-30" onClick={this.addMoreClick}>
                             + Add more sections
                         </li>
                     }
                     {!!(show) &&
-                    (hiddenList || []).map((elem, index) => {
-                        const {name, link, icon, itemType} = elem;
+                    (preferenceList || []).filter(elem => elem.active !== true).map((elem, index) => {
+                        const {name, link, icon, itemType} = formCategoryList[elem['entity_id']];
                         return (
                             <li key={index} className={type === itemType ? 'edit-section--active' : ''}>
                                 <Link to={link}>
@@ -187,11 +135,30 @@ export default class Edit extends Component {
                         )
                     })
                     }
-
-
                 </ul>
             </div>
         )
     }
 
 }
+
+const mapStateToProps = (state) => {
+    return {
+        entityList: state.personalInfo && state.personalInfo.entity_preference_data || []
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+
+        "fetchEntityInfo": () => {
+            return dispatch(actions.fetchPersonalInfo())
+        },
+        'updateCategoryEntity': (entity) => {
+            return dispatch(actions.updateEntityPreference({"entity_preference_data": entity}))
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Edit)
+

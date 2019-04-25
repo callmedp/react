@@ -18,13 +18,16 @@
     "react-scroll": "^1.7.11",
     "react-select": "^2.4.2",
     "redux": "^4.0.1",
-    "redux-form": "7.0.4",
+    "redux-form": "^8.2.0",
     "redux-saga": "^1.0.2",
+    "rewire": "^4.0.1",
     "sweetalert2": "^8.6.0"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "sh -ac '. .env.${REACT_APP_ENV}.local; node ./scripts/build-non-split.js'",
+    "build:staging": "REACT_APP_ENV=staging npm run build",
+    "build:production": "REACT_APP_ENV=production npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

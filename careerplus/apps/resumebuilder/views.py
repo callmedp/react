@@ -9,3 +9,4 @@ from .mixins import SessionManagerMixin
 
 class WriteResumeView(TemplateView):
     template_name = 'frontend/index.html'
+

@@ -3,10 +3,12 @@
 
 {% block head %}
     {% block css_section %}
-        {% render_bundle 'main' 'css' 'DEFAULT'%}
+        {% render_bundle 'main' 'css' 'DEFAULT' %}
     {% endblock css_section %}
     <script>
-        profileInfo = 'info is requeired';
+        window.config = {}
+        config.staticUrl = "{{STATIC_URL}}"
+
     </script>
 {% endblock head %}
 
@@ -17,5 +19,5 @@
 {% endblock container %}
 
 {% block js_section %}
-    {% render_bundle 'main' 'js' 'DEFAULT'%}
+    {% render_bundle 'main' 'js' 'DEFAULT' %}
 {% endblock js_section %}
