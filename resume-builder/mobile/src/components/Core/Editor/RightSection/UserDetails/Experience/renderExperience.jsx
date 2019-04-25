@@ -18,6 +18,7 @@ const renderExperiences = ({
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                     <h1>Experience</h1>
+                    <input className="hide" type="text" placeholder="Experience"/>
                     <i className="sprite icon--edit"></i>
                 </div>
                 <button role="button"

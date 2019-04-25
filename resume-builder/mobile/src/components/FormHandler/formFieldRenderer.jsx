@@ -20,14 +20,13 @@ export const renderField = ({
             <label className="form__label" htmlFor={input.name}>{label}</label>
             {!prepend ?
                 <React.Fragment>
-                    <input {...input} className={className} id={id} type={type}/>
-                    <div className="Error">
+                    <input {...input} className={className +(error ? " error" : "")} id={id} type={type}/>
                     {touched &&
-                        ((<span className={'Error-message'}>{error}</span>) ||
-                            (warning && <span className={'Warn-Message'}>{warning}</span>))
+                        ((<span className={'error-message'}>{error}</span>) ||
+                            (warning && <span className={'warn-Message'}>{warning}</span>))
                     }
-                    </div>
                 </React.Fragment> :
+                
             <div className={"input-group " + (error ? "error" : "")} >
                 <div className="input-group__prepend">
                 <span className="input-group__text">
@@ -35,12 +34,11 @@ export const renderField = ({
                 </span>
                 </div>
                 <input {...input} className={className} id={id} type={type}/>
-                <div className="Error">
                 {touched &&
-                    ((<span className={'Error-message'}>{error}</span>) ||
-                        (warning && <span className={'Warn-Message'}>{warning}</span>))
+                    ((<span className={'error-message'}>{error}</span>) ||
+                        (warning && <span className={'warn-Message'}>{warning}</span>))
                 }
-                </div>
+            
             </div>
             }
         </React.Fragment>
@@ -57,7 +55,7 @@ export const datepicker =
      }) => (
         <React.Fragment>
             <label className="form__label" htmlFor={input.name}>{label}</label>
-            <div className="input-group">
+            <div className={"input-group " + (error ? "error" : "")}>
                 <div className="input-group__prepend">
                     <span className="input-group__text">
                         <i className="sprite icon--date"></i>
@@ -67,10 +65,8 @@ export const datepicker =
                         selected={input.value ? new Date(input.value) : null}
                         onChange={date => input.onChange(date)} id={id}
                 />
-                <div className="Error">
-                {touched &&  ((error && <span className={'Error-message'}>{error}</span>) ||
-                    (warning && <span className={'Warn-Message'}>{warning}</span>))}
-                </div>
+                {touched &&  ((error && <span className={'error-message'}>{error}</span>) ||
+                (warning && <span className={'warn-Message'}>{warning}</span>))}
             </div>
             
         </React.Fragment>
@@ -89,7 +85,7 @@ export const renderSelect = ({
     <React.Fragment>
         <label className="form__label" htmlFor={input.name}>{label}</label>
         {prepend ?
-        <div className="input-group">
+        <div className={"input-group " +(error ? "error" : "")}>
             <div className="input-group__prepend">
                 <span className="input-group__text">
                     <i className={iconClass}></i>
@@ -105,12 +101,15 @@ export const renderSelect = ({
             </select>
             <div className="select-error">
                 {touched &&
-                ((error && <span className={'Error-message'}>{error}</span>) ||
-                    (warning && <span className={'Warn-Message'}>{warning}</span>))}
+                ((error && <span className={'error-message'}>{error}</span>) ||
+                    (warning && <span className={'warn-Message'}>{warning}</span>))}
             </div>
         </div> :
         <React.Fragment>
-            <select {...input} className={className}
+
+
+
+            <select {...input} className={className +(error ? " error" : "")}
                 onBlur={() => {
                     input.onBlur(input.value)
                     console.log(input.label)
@@ -118,11 +117,9 @@ export const renderSelect = ({
                 >
                 {children}
             </select>
-            <div className="select-error">
                 {touched &&
-                ((error && <span className={'Error-message'}>{error}</span>) ||
-                    (warning && <span className={'Warn-Message'}>{warning}</span>))}
-            </div>
+                ((error && <span className={'error-message'}>{error}</span>) ||
+                    (warning && <span className={'warn-Message'}>{warning}</span>))}
         </React.Fragment>
         }
         
@@ -137,7 +134,7 @@ export const renderDynamicSelect = ({
                                         defaultOptions,
                                         meta: {touched, error, warning}
                                     }) => (
-    <div>
+    <div className="flex-auto">
         <AsyncSelect {...input}
                      loadOptions={loadOptions}
                      defaultOptions={defaultOptions}
@@ -148,8 +145,8 @@ export const renderDynamicSelect = ({
                      }}
         />
         {touched &&
-        ((error && <span className={'Error-message'}>{error}</span>) ||
-            (warning && <span className={'Warn-Message'}>{warning}</span>))}
+        ((error && <span className={'error-message'}>{error}</span>) ||
+            (warning && <span className={'warn-Message'}>{warning}</span>))}
     </div>
 )
 
@@ -176,16 +173,16 @@ export const renderTextArea = ({
             <textarea {...input} placeholder={label} type={type} className={className} rows={rows}/>
             <div>
                 {touched &&
-                ((error && <span className={'Error-message'}>{error}</span>) ||
-                    (warning && <span className={'Warn-Message'}>{warning}</span>))}
+                ((error && <span className={'error-message'}>{error}</span>) ||
+                    (warning && <span className={'warn-Message'}>{warning}</span>))}
             </div>
         </div>:
         <React.Fragment>
             <textarea {...input} placeholder={label} type={type} className={className} rows={rows}/>
             <div>
                 {touched &&
-                ((error && <span className={'Error-message'}>{error}</span>) ||
-                    (warning && <span className={'Warn-Message'}>{warning}</span>))}
+                ((error && <span className={'error-message'}>{error}</span>) ||
+                    (warning && <span className={'warn-Message'}>{warning}</span>))}
             </div>
         </React.Fragment>
         }

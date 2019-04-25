@@ -38,7 +38,8 @@ class Summary extends Component {
             <PreviewModal {...this.props}/>
             <div className="buildResume__wrap pb-0">
                 <div className="buildResume__heading">
-                    <h2>Summary</h2>
+                    <h1>Summary</h1>
+                    <input className="hide" type="text" placeholder="Summary"/>
                     <i className="sprite icon--edit"></i>
                 </div>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>

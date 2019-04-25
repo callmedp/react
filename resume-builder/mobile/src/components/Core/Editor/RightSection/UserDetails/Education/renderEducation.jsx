@@ -17,8 +17,10 @@ const renderEducation = ({
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                     <h1>Education</h1>
+                    <input className="hide" type="text" placeholder="Education"/>
                     <i className="sprite icon--edit"></i>
                 </div>
+                
                 <button role="button" className="btn btn__round btn--outline"
                     onClick={handleSubmit(handleAddition.bind(this,fields, error))}
                     type={'button'}>+ Add new</button>

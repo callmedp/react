@@ -1,3 +1,26 @@
-.select-error {
+.error {
+    .select-error,
+    .error-message {
+        display: block;
+        width: 100%;
+        font-size: 12px;
+        color: $theme-red;
+    } 
+    
+    .input-group__text,
+    .form__input,
+    .react-datepicker-wrapper {
+        border-color: $theme-red;
+    }
+
+    &.form__select {
+        border-color: $theme-red;
+    }
+}
+
+.error-message {
     display: block;
+    width: 100%;
+    font-size: 12px;
+    color: $theme-red;
 }

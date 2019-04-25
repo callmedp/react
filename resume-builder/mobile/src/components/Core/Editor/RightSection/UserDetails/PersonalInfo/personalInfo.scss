@@ -20,3 +20,28 @@
         }
     }
 }
+
+.flex-auto {
+    flex: 1 1 auto;
+
+    .css-bg1rzq-control {
+        border-left: 0 none;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-color: $grey-light;
+    }
+}
+
+input:focus {
+    outline: 0;
+}
+
+input:disabled,
+input::placeholder {
+    color: $grey-333 !important;
+}
+
+.react-datepicker-wrapper .react-datepicker__input-container input {
+    color: $grey-333;
+    font-size: 14px;
+}

@@ -17,6 +17,7 @@ const renderLanguage = ({
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                     <h1>Language</h1>
+                    <input className="hide" type="text" placeholder="Language"/>
                     <i className="sprite icon--edit"></i>
                 </div>
                 <button role="button" className="btn btn__round btn--outline"
