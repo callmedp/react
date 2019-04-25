@@ -11,7 +11,7 @@ from emailers.sms import SendSMS
 from emailers.utils import get_featured_profile_data_for_candidate
 from users.tasks import user_register
 from core.api_mixin import FeatureProfileUpdate
-from shop.choices import S_ATTR_DICT
+from shop.choices import S_ATTR_DICT, A_ATTR_DICT
 
 
 class Command(BaseCommand):
@@ -128,11 +128,12 @@ def unfeature():
         except Exception as e:
             logging.getLogger('error_log').error("unable to create activation date%s" % (str(e)))
             continue
+        duration_dict = {
+            'service': getattr(obj.product.attr, S_ATTR_DICT.get('FD'), 180),
+            'assesment': getattr(obj.product.attr, A_ATTR_DICT.get('AD'), 365)
+        }
 
-        if getattr(obj.product.attr, S_ATTR_DICT.get('FD'), None):
-            duration_days = getattr(obj.product.attr, S_ATTR_DICT.get('FD'))
-        else:
-            duration_days = 180  # 6 months
+        duration_days = duration_dict.get(obj.product.product_class.name)
 
         delta_time = activation_date + datetime.timedelta(days=duration_days)
 

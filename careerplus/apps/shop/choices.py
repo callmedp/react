@@ -21,7 +21,8 @@ SERVICE_CHOICES = (
     (1, 'Writing Services'),
     (2, 'Job Assistance Services'),
     (3, 'Courses'),
-    (4, 'Other Services'),)
+    (4, 'Other Services'),
+    (5, 'Assesment/Certification'))
 
 CATEGORY_CHOICES = (
     (0, 'Default'),
@@ -144,6 +145,10 @@ S_ATTR_DICT = {
     'FD': 'featured_duration',
     'SD': 'service_doc',
     'SI': 'service_im',
+}
+
+A_ATTR_DICT = {
+    'AD': 'assesment_duration'
 }
 
 ##DO NOT CHANGE#
