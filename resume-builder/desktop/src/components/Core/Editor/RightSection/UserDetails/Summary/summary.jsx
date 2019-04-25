@@ -38,8 +38,8 @@ class Summary extends Component {
             <div>
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-summary1"/></span>
-                    <h2>Summary</h2>
-                    {/*<span className="icon-edit icon-summary__cursor"></span>*/}
+                    <h2 contenteditable="true">Summary</h2>
+                    <span className="icon-edit icon-edit__cursor"></span>
                 </section>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <section className="right-sidebar-scroll p3p">

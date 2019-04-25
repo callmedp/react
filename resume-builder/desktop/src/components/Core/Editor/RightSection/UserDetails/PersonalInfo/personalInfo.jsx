@@ -8,6 +8,7 @@ import {
     renderField,
     datepicker,
     renderSelect,
+    renderTextArea,
     renderDynamicSelect
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 
@@ -90,8 +91,8 @@ export class PersonalInfo extends Component {
             <div>
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-info1"/></span>
-                    <h2>Personal Info</h2>
-                    {/*<span className="icon-edit icon-edit__cursor"></span>*/}
+                    <h2 contenteditable="true">Personal Info</h2>
+                    <span className="icon-edit icon-edit__cursor"></span>
                 </section>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <section className="flex-container right-sidebar-scroll">
@@ -117,6 +118,7 @@ export class PersonalInfo extends Component {
                                     </div>
                                 </fieldset>
                             </div>
+
                             <div className="flex-container">
                                 <fieldset className="custom">
                                     <label>Gender</label>
@@ -141,7 +143,7 @@ export class PersonalInfo extends Component {
                                     <label>Date Of Birth</label>
                                     <div className="input-group">
                                         <div className="input-group--input-group-icon">
-                                            <span className="icon-blank"></span>
+                                            <span className="icon-date"></span>
                                         </div>
                                         <Field component={datepicker} validate={required} name="date_of_birth"
                                                className={"input-control"}/>
@@ -174,18 +176,7 @@ export class PersonalInfo extends Component {
                                 </fieldset>
 
                             </div>
-                            <div className="flex-container">
-                                <fieldset>
-                                    <label>Address</label>
-                                    <div className="input-group">
-                                        <div className="input-group--input-group-icon">
-                                            <span className="icon-address"></span>
-                                        </div>
-                                        <Field component={renderField} type={"text"} name="location"
-                                               className={"input-control"}/>
-                                    </div>
-                                </fieldset>
-                            </div>
+                            
                             <div className="flex-container">
                                 <fieldset className="custom">
                                     <label>Interest</label>
@@ -201,6 +192,20 @@ export class PersonalInfo extends Component {
                                     </div>
                                 </fieldset>
                             </div>
+
+                            <div className="flex-container">
+                                <fieldset>
+                                    <label>Address</label>
+                                    <div className="input-group address">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-address"></span>
+                                        </div>
+                                        <Field component={renderTextArea} type={"textarea"} name="location"
+                                               className={"input-control"} rows="3"/>
+                                    </div>
+                                </fieldset>
+                            </div>
+
                             {/*<div className="flex-container">*/}
                             {/*<fieldset>*/}
                             {/*<label>Linkedin</label>*/}

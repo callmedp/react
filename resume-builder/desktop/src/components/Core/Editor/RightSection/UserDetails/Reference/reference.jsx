@@ -35,8 +35,8 @@ const ReferenceRenderer = ({
             }
             <section className="head-section">
                 <span className="icon-box"><i className="icon-references1"/></span>
-                <h2>References</h2>
-                {/*<span className="icon-edit icon-references__cursor"></span>*/}
+                <h2 contenteditable="true">References</h2>
+                <span className="icon-edit icon-edit__cursor"></span>
 
                 <button
                     onClick={() => handleAddition(fields)}
