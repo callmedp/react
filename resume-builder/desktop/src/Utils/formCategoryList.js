@@ -13,7 +13,6 @@ export const formCategoryList = {
         icon: 'icon-education',
         itemType: 'education',
         default: true
-
     },
     '3': {
         name: 'Experience',
