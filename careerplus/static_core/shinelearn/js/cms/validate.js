@@ -73,6 +73,7 @@ $('#callback_form').validate({
 
     },
     highlight: function(element, errorClass) {
+         $('#id_callback').removeAttr('disabled');
         // $(element).siblings('.error').removeClass('hide_error');
         $(element).closest('.form-group').addClass('error');
     },
@@ -89,6 +90,7 @@ $('#callback_form').validate({
 
 $('#id_callback').click(function() {
     var $callbackForm = $("#callback_form");
+        $('#id_callback').attr('disabled','true');
     var flag = $callbackForm.valid();
     if (flag) {
          if(document.getElementById('myModal' )){
@@ -101,15 +103,19 @@ $('#id_callback').click(function() {
             data: formData,
             success: function(data, textStatus, jqXHR) {
             pop('Your Query Submitted Successfully.');
+            $('#id_callback').removeAttr('disabled');
 
 
                 $('#callback_form')[0].reset();
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 pop('Something went wrong. Try again later.');
+                $('#id_callback').removeAttr('disabled');
+
             }
         });
     }
+
 });
 
 
