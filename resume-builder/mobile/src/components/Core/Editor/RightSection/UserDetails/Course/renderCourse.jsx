@@ -16,8 +16,8 @@ const renderCourse = ({
         <div className="buildResume__wrap">
             <div className="buildResume__heading heading">
                 <div className="heading__info">
-                    <h1>Award</h1>
-                    <input className="hide" type="text" placeholder="Award"/>
+                    <h1>Courses</h1>
+                    <input className="hide" type="text" placeholder="Courses"/>
                     <i className="sprite icon--edit"></i>
                 </div>
                 <button role="button" className="btn btn__round btn--outline"

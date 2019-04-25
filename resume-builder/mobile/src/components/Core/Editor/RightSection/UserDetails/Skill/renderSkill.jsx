@@ -15,7 +15,6 @@ const renderSkills = ({
     return (
         <React.Fragment>
             <div className="buildResume__wrap pb-0">
-            {console.log(submitFailed)}
                 <div className="buildResume__heading heading">
                     <div className="heading__info">
                         <h1>Skills {error}</h1>

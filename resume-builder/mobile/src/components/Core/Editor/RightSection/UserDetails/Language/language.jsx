@@ -26,11 +26,16 @@ class Language extends Component {
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
-        if(currentLinkPos > listOfLinks.length){
+        if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
+            //console.log("Came Here")
         }
-        await this.props.bulkUpdateUserLanguage(values.list);
-        this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
+        else{
+            await this.props.bulkUpdateUserLanguage(values.list);
+            this.props.updateCurrentLinkPos({currentLinkPos})
+            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
+        }
+        
     }
 
     handleAddition(fields, error) {
@@ -63,7 +68,7 @@ class Language extends Component {
 
     async changeOrderingUp(index,fields,event){
         event.stopPropagation();
-        console.log("Clicked Up")
+        ////console.log("Clicked Up")
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
@@ -78,7 +83,7 @@ class Language extends Component {
 
     async changeOrderingDown(index,fields,event){
         event.stopPropagation();
-        console.log("Clicked Down")
+        ////console.log("Clicked Down")
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;
@@ -93,7 +98,9 @@ class Language extends Component {
 
 
     render() {
-        const {handleSubmit, language} = this.props;
+        const length = parseInt(this.props.sidenav.listOfLinks.length)
+        const pos = parseInt(this.props.sidenav.currentLinkPos)
+        const {handleSubmit, language,submitting,submitSucceeded} = this.props;
         return(
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -111,7 +118,10 @@ class Language extends Component {
                                 <button className="btn btn__round btn--outline" 
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
                                     type={'button'}>Preview</button>
-                                <button className="btn btn__round btn__primary" type={'submit'}>Save &amp; Continue</button>
+                                <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={(length === pos +1) ?'button' :'submit'}
+                                    onClick={(length === pos +1) ? ()=>{this.props.history.push(`/resume-builder/buy`)} : ()=>{}}>
+                                    {(length === pos +1) ?"Buy" :"Save &amp; Continue"}
+                                </button>
                             </div>
                         </li>
                     </ul>

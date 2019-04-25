@@ -73,7 +73,7 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchSideNavStatus())
         },
         "updateSidenavStatus": (status) => {
-            console.log(status)
+            ////console.log(status)
             return dispatch(actions.updateSidenavStatus(status))
         }
     }

@@ -2,7 +2,7 @@ import {UPDATE_SIDENAV_STATUS,UPDATE_LIST_LINK,UPDATE_CURRENT_LINK_POS} from "..
 
 const initialState = {
     sidenavStatus : false,
-    listOfLinks : ['profile','summary','experience','education','skill','award','course','language','project','reference'],
+    listOfLinks : ['profile','education','skill'],
     currentLinkPos : 0
 };
 
@@ -17,14 +17,14 @@ export const sidenavReducer = (state = initialState, action) => {
             };
         }
         case UPDATE_LIST_LINK: {
-            console.log(action)
+            ////console.log(action)
             return {
                 ...state,
                 ...action.payload
             }
         }
         case UPDATE_CURRENT_LINK_POS: {
-            console.log(action)
+            //console.log(action)
             return {
                 ...state,
                 ...action.payload

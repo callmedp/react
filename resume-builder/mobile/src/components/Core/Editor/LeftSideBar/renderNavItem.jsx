@@ -7,6 +7,11 @@ export default class  RenderNavItem extends Component {
         const {label,type,sidenavStatus,title,exist,current_page,changeLink,iconClass,
             removeItem,addItem,deleteIconExist,pos} = this.props
         return( 
+            <React.Fragment>
+            {/* {//console.log("rendering Started")}
+            {//console.log("label",label)}{//console.log("type",type)}{//console.log("sidenavStatus",sidenavStatus)}{//console.log("title",title)}
+            {//console.log("exist",exist)}{//console.log("cur_page",current_page)}{//console.log("iconClass",iconClass)}
+            {//console.log("rendering End")} */}
             <li className={"sidebar__item " + (type === title ? 'sidebar--active' : '')
                 + (exist || sidenavStatus ? '' : 'hide')}>
                 <Link to={"/resume-builder/edit/?type=" +(!sidenavStatus ? title  : current_page)} 
@@ -26,6 +31,7 @@ export default class  RenderNavItem extends Component {
                     </div>
                 </Link>
             </li>
+            </React.Fragment>
         )
         
     }

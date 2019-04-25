@@ -37,7 +37,7 @@ class RightSection extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props)
+        ////console.log(this.props)
     }
 
     renderSwitch() {
@@ -102,7 +102,10 @@ const mapDispatchToProps = (dispatch) => {
     return {
         "fetchListOfLink": () => {
             return dispatch(actions.fetchListOfLink())
-        }
+        },
+        "updateCurrentLinkPos": (data) => {
+            return dispatch(actions.updateCurrentLinkPos(data))
+        },
     }
 };
 

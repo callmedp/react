@@ -8,13 +8,13 @@ function* getCandidateId() {
     try {
         const result = yield call(Api.getCandidateId);
         if (result['error']) {
-            console.log('error');
+            ////console.log('error');
 
         }
         localStorage.setItem('candidateId', result.data && result.data['candidate_id'] || '');
 
     } catch (e) {
-        console.log(e);
+        ////console.log(e);
     }
 }
 

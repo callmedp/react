@@ -14,7 +14,7 @@ function* fetchUserEducation(action) {
 
         const result = yield call(Api.fetchUserEducation, candidateId);
         if (result['error']) {
-            console.log('error');
+            ////console.log('error');
         }
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
@@ -28,7 +28,7 @@ function* fetchUserEducation(action) {
 
         yield put({type: Actions.SAVE_USER_EDUCATION, data: data})
     } catch (e) {
-        console.log(e);
+        ////console.log(e);
     }
 }
 
@@ -39,7 +39,7 @@ function* updateUserEducation(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
         const {id} = userEducation;
-        console.log('--user Education-');
+        ////console.log('--user Education-');
         const result = yield call(id ? Api.updateUserEducation : Api.createUserEducation, userEducation, candidateId, id);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
@@ -48,7 +48,7 @@ function* updateUserEducation(action) {
         return resolve('User Education  Info saved successfully.');
 
     } catch (e) {
-        console.log('error', e);
+        ////console.log('error', e);
     }
 }
 
@@ -64,14 +64,14 @@ function* bulkUpdateUserEducation(action) {
         const result = yield call(Api.bulkUpdateUserEducation, list, candidateId);
 
         if (result['error']) {
-            console.log(result['error']);
+            ////console.log(result['error']);
         }
 
-        console.log('---', result);
+        ////console.log('---', result);
         // yield call(fetchUserLanguage)
 
     } catch (e) {
-        console.log('error', e);
+        ////console.log('error', e);
     }
 }
 
@@ -87,13 +87,13 @@ function* deleteUserEducation(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            ////console.log(result['error'])
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_EDUCATION, id: educationId});
 
     } catch (e) {
-        console.log('error', e);
+        ////console.log('error', e);
     }
 }
 

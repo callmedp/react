@@ -42,7 +42,7 @@ class Buy extends Component {
 
     componentDidMount() {
         this.props.getProductIds();
-        console.log(this.props.productIds[0])
+        ////console.log(this.props.productIds[0])
 
     }
 

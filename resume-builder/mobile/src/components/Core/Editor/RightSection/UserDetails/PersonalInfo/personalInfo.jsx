@@ -45,11 +45,16 @@ class PersonalInfo extends Component {
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
-        if(currentLinkPos > listOfLinks.length){
+        if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
+            //console.log("Came Here")
         }
-        await this.props.onSubmit(values, this.state.imageURL);
-        this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
+        else{
+            await this.props.onSubmit(values, this.state.imageURL);
+            this.props.updateCurrentLinkPos({currentLinkPos})
+            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
+        }
+        
     }
 
     handlePreview() {
@@ -69,9 +74,9 @@ class PersonalInfo extends Component {
         //     const listData = (skills && skills.results || []).map(skill => ({value: skill.id, label: skill.name}))
         //     callback(listData);
         // } catch (e) {
-        //     console.log('--error-', e);
+        //     ////console.log('--error-', e);
         // }
-        console.log('---', inputValue)
+        ////console.log('---', inputValue)
         return [];
     }
 
@@ -87,7 +92,7 @@ class PersonalInfo extends Component {
         reader.readAsDataURL(event.target.files[0]);
 
         let url = await this.props.fetchImageUrl(event.target.files[0]);
-        console.log(url)
+        ////console.log(url)
 
         this.setState({
             'imageURL': url
@@ -95,7 +100,9 @@ class PersonalInfo extends Component {
     }
 
     render() {
-        const {handleSubmit, personalInfo} = this.props;
+        const length = parseInt(this.props.sidenav.listOfLinks.length)
+        const pos = parseInt(this.props.sidenav.currentLinkPos)
+        const {handleSubmit, personalInfo,submitting,submitSucceeded} = this.props;
         const {editHeading} =this.state;
         return (
         <div className="buildResume">
@@ -198,7 +205,10 @@ class PersonalInfo extends Component {
                                 <button className="btn btn__round btn--outline" 
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
                                     type={'button'}>Preview</button>
-                                <button className="btn btn__round btn__primary">Save &amp; Continue</button>
+                                <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={(length === pos +1) ?'button' :'submit'}
+                                    onClick={(length === pos +1) ? ()=>{this.props.history.push(`/resume-builder/buy`)} : ()=>{}}>
+                                    {(length === pos +1) ?"Buy" :"Save &amp; Continue"}
+                                </button>
                             </div>
                         </li>
                     </ul>

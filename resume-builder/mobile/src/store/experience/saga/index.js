@@ -13,14 +13,14 @@ function* fetchUserExperience(action) {
 
         const result = yield call(Api.fetchUserExperience, candidateId);
         if (result['error']) {
-            console.log('error');
+            ////console.log('error');
         }
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
         let data = {list: results}
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: data})
     } catch (e) {
-        console.log(e);
+        ////console.log(e);
     }
 }
 
@@ -43,7 +43,7 @@ function* updateUserExperience(action) {
         return resolve('User Experience  Info saved successfully.');
 
     } catch (e) {
-        console.log('error', e);
+        ////console.log('error', e);
     }
 }
 
@@ -59,14 +59,14 @@ function* bulkUserExperienceUpdate(action) {
         const result = yield call(Api.bulkUpdateUserExperience, list, candidateId);
 
         if (result['error']) {
-            console.log(result['error']);
+            ////console.log(result['error']);
         }
 
-        console.log('---', result);
+        ////console.log('---', result);
         // yield call(fetchUserLanguage)
 
     } catch (e) {
-        console.log('error', e);
+        ////console.log('error', e);
     }
 }
 
@@ -82,13 +82,13 @@ function* deleteUserExperience(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            ////console.log(result['error'])
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_EXPERIENCE, id: experienceId});
 
     } catch (e) {
-        console.log('error', e);
+        ////console.log('error', e);
     }
 }
 

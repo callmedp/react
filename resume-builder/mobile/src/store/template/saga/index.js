@@ -10,13 +10,13 @@ function* fetchTemplate(action) {
 
         const result = yield call(Api.fetchTemplate, candidateId);
         if (result['error']) {
-            console.log('error');
+            ////console.log('error');
         }
-        console.log(result)
+        ////console.log(result)
 
         yield put({type: Actions.SAVE_TEMPLATE, data: result['data']})
     } catch (e) {
-        console.log(e);
+        ////console.log(e);
     }
 }
 

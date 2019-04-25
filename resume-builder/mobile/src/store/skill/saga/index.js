@@ -13,7 +13,7 @@ function* fetchUserSkill(action) {
 
         const result = yield call(Api.fetchUserSkill, candidateId);
         if (result['error']) {
-            console.log('error');
+            ////console.log('error');
         }
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
@@ -26,7 +26,7 @@ function* fetchUserSkill(action) {
         }
         yield put({type: Actions.SAVE_USER_SKILL, data: data})
     } catch (e) {
-        console.log(e);
+        ////console.log(e);
     }
 }
 
@@ -50,7 +50,7 @@ function* updateUserSkill(action) {
         return resolve('User Skill  Info saved successfully.');
 
     } catch (e) {
-        console.log('error', e);
+        ////console.log('error', e);
     }
 }
 
@@ -66,13 +66,13 @@ function* bulkSaveUserSkill(action) {
         const result = yield call(Api.bulkSaveUserSkill, list, candidateId);
 
         if (result['error']) {
-            console.log(result['error']);
+            ////console.log(result['error']);
         }
 
-        console.log('---', result);
+        ////console.log('---', result);
 
     } catch (e) {
-        console.log('error', e);
+        ////console.log('error', e);
     }
 }
 
@@ -88,13 +88,13 @@ function* deleteUserSkill(action) {
 
 
         if (result['error']) {
-            console.log(result['error'])
+            ////console.log(result['error'])
         }
         // yield call(fetchUserSkill)
         yield put({type: Actions.REMOVE_SKILL, id: skillId});
 
     } catch (e) {
-        console.log('error', e);
+        ////console.log('error', e);
     }
 }
 

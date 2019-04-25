@@ -18,7 +18,7 @@ function* getPersonalDetails(action) {
 
         const result = yield call(Api.fetchPersonalInfo, candidateId);
         if (result['error']) {
-            console.log('error');
+            ////console.log('error');
         }
         let {data} = result;
         const {date_of_birth, gender, extracurricular ,entity_preference_data} = data;
@@ -29,20 +29,20 @@ function* getPersonalDetails(action) {
                 date_of_birth: date_of_birth && moment(date_of_birth).format('YYYY-MM-DD') || '',
                 extracurricular: extracurricular.split(',').map(key => interestList[key]),
                 entity_preference_data :entity_preference_data.map((obj,key) => {
-                                                    obj.entity_link = entityLinkNameLink[key];
-                                                    obj.icon_class = iconClassList[key];
-                                                    obj.delete_icon = delete_icon[key];
-                                                    if(key ===1 || key == 4){
+                                                    obj.entity_link = entityLinkNameLink[obj.entity_id];
+                                                    obj.icon_class = iconClassList[obj.entity_id];
+                                                    obj.delete_icon = delete_icon[obj.entity_id];
+                                                    if(obj.entity_id ===1 || obj.entity_id == 4){
                                                         obj.active =true
                                                     }
                                                     return obj;
                                                 }).sort((a,b)=>b.active -a.active )
             }
         }
-        console.log('data');
+        ////console.log('data');
         yield put({type: Actions.SAVE_USER_INFO, data: data})
     } catch (e) {
-        console.log(e);
+        ////console.log(e);
     }
 }
 
@@ -64,7 +64,7 @@ function* updatePersonalDetails(action) {
 
     } catch (e) {
 
-        console.log('error', e);
+        ////console.log('error', e);
     }
 }
 
@@ -94,7 +94,7 @@ function* fetchImageUrl(action) {
 
     } catch (e) {
 
-        console.log('error', e);
+        ////console.log('error', e);
     }
 }
 

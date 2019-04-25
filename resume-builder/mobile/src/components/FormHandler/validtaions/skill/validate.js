@@ -1,9 +1,9 @@
 const validate = values => {
-  console.log('--valid1--', values);
+  ////console.log('--valid1--', values);
   const errors = {};
   if (!values.list || !values.list.length) {
       errors.list = {_error: 'Atleast One Language should be entered.'}
-      console.log(errors)
+      ////console.log(errors)
       return errors;
   }
   const listErrors = []
@@ -15,7 +15,7 @@ const validate = values => {
   });
   if (listErrors.length) {
       errors.list = listErrors;
-      console.log(errors);
+      ////console.log(errors);
       return errors;
   }
 }

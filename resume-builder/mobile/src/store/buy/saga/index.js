@@ -11,12 +11,12 @@ function* fetchProductIds(action) {
     try {
         const result = yield call(Api.fetchProductIds);
         if (result['error']) {
-            console.log('error');
+            ////console.log('error');
         }
         const {data: {results}} = result;
         yield put({type: Actions.SAVE_PRODUCT_IDS, data: results})
     } catch (e) {
-        console.log(e);
+        ////console.log(e);
     }
 }
 
@@ -30,7 +30,7 @@ function* addToCart(action) {
         return resolve('Product added to cart successfully.');
 
     } catch (e) {
-        console.log(e);
+        ////console.log(e);
     }
 }
 

@@ -17,7 +17,7 @@ export default class PreviewModal extends Component{
                 overlayClassName="Overlay">
                 
                 <div className="Modal--iframe">
-                    <iframe srcdoc={this.props.template.html}></iframe>
+                    <iframe srcDoc={this.props.template.html}></iframe>
                 </div>
                 <button className="Modal--close" onClick={this.handleCloseModal}>+</button>
             </Modal>

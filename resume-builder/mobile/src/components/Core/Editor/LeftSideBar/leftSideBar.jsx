@@ -16,6 +16,7 @@ class LeftSideBar extends Component {
         this.removeItem = this.removeItem.bind(this);
         this.changeLink = this.changeLink.bind(this);
         this.closeSideNav = this.closeSideNav.bind(this);
+        this.updateLink =this.updateLink.bind(this);
         const values = queryString.parse(this.props.location.search);
 
         this.state = {
@@ -41,13 +42,16 @@ class LeftSideBar extends Component {
     }
 
     changeLink(page){
-        console.log(page)
+        ////console.log(page)
         this.setState({
             current_page : page
         })
-        for(let i in this.props.sidenav.listOfLinks){
-            if (page === this.props.sidenav.listOfLinks[i]){
+        const {listOfLinks} = this.props.sidenav
+        //console.log(listOfLinks)
+        for(let i in listOfLinks){
+            if (page === listOfLinks[i]){
                 this.props.updateCurrentLinkPos({currentLinkPos: i})
+                ////console.log("Change pos")
             }
         }
 
@@ -68,24 +72,23 @@ class LeftSideBar extends Component {
     }
 
     closeSideNav(){
-       
-        // const {current_page,addmore} =this.state
-        // for(let i=0;i<addmore.length;i++){
-        //     if(current_page === addmore[i].entity_link){
-        //         if(addmore[i].active === false){
-        //             this.props.history.push(`/resume-builder/edit/?type=profile`)
-        //         }
-        //     }
-        // }
         this.props.onSubmit(this.state.addmore,this.props.personalInfo)
-        
+        this.updateLink()
         this.props.updateSidenavStatus(false)
         document.body.classList.remove('sto-body-scroll')
+        const {current_page,addmore} =this.state
+        for(let i=0;i<addmore.length;i++){
+            if(current_page === addmore[i].entity_link){
+                if(addmore[i].active === false){
+                    this.props.history.push(`/resume-builder/edit/?type=profile`)
+                }
+            }
+        }
 
     }
 
     componentDidMount() {
-        console.log("mount")
+        ////console.log("mount")
         this.props.fetchPersonalInfo()
         let current_page = this.props.location.search.split('=')[1]
         this.setState({
@@ -113,11 +116,27 @@ class LeftSideBar extends Component {
             })
         }
         if (this.props.personalInfo.entity_preference_data != prevProps.personalInfo.entity_preference_data && !this.state.loaded){
-            this.setState({addmore:this.props.personalInfo.entity_preference_data,loaded:true})
-            console.log("I am here")
+
+            this.setState({addmore:this.props.personalInfo.entity_preference_data,loaded:true},this.updateLink)
+            //console.log("UpdateMount here")
+            
         }
+        // this.updateLink()
 
 
+    }
+
+    updateLink(){
+        //console.log("came here")
+        let links = []
+        for(let i of this.state.addmore){
+            if(i.active){
+                links.push(i.entity_link)
+                ////console.log(i.entity_link)
+            }
+        }
+        this.props.updateListOfLink({listOfLinks:links})
+        ////console.log("I am here")
     }
 
     render() {
@@ -126,7 +145,6 @@ class LeftSideBar extends Component {
         
         return (
             <React.Fragment>
-                {console.log("Rendered")}
             { (addmore.length) ?
                 <div>
                     <div className={"overlay"} style={sidenavStatus ? {visibility : "visible",opacity : 1} : {}}

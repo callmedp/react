@@ -23,21 +23,25 @@ class Award extends Component {
 
     componentDidMount() {
         this.props.fetchUserAward()
-        console.log(this.props.sidenav)
+        ////console.log(this.props.sidenav)
     }
 
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
-        if(currentLinkPos > listOfLinks.length){
+        if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
+            //console.log("Came Here")
         }
-        await this.props.bulkUpdateUserAward(values.list);
-        this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
+        else{
+            await this.props.bulkUpdateUserAward(values.list);
+            this.props.updateCurrentLinkPos({currentLinkPos})
+            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
+        }
     }
 
     handleAddition(fields, error) {
-        console.log(error)
+        ////console.log(error)
         
         fields.push({
             "candidate_id": '',
@@ -59,7 +63,7 @@ class Award extends Component {
     deleteAward(index, fields, event) {
         event.stopPropagation();
         const award = fields.get(index);
-        console.log(award)
+        ////console.log(award)
         fields.remove(index);
         if (award && award.id) {
             this.props.removeAward(award.id)
@@ -68,7 +72,7 @@ class Award extends Component {
 
     async changeOrderingUp(index,fields,event){
         event.stopPropagation();
-        console.log("Clicked Up")
+        ////console.log("Clicked Up")
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
@@ -83,7 +87,7 @@ class Award extends Component {
 
     async changeOrderingDown(index,fields,event){
         event.stopPropagation();
-        console.log("Clicked Down")
+        ////console.log("Clicked Down")
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;
@@ -97,7 +101,9 @@ class Award extends Component {
     }
 
     render () {
-        const {handleSubmit, award,  error, submitting, pristine, invalid} = this.props;
+        const {handleSubmit, award,  error, submitting, submitSucceeded, invalid} = this.props;
+        const length = parseInt(this.props.sidenav.listOfLinks.length)
+        const pos = parseInt(this.props.sidenav.currentLinkPos)
         
         return(
             <div className="buildResume">
@@ -116,7 +122,10 @@ class Award extends Component {
                                 <button className="btn btn__round btn--outline" 
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
                                     type={'button'}>Preview</button>
-                                <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>Save &amp; Continue</button>
+                                <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={(length === pos +1) ?'button' :'submit'}
+                                    onClick={(length === pos +1) ? ()=>{this.props.history.push(`/resume-builder/buy`)} : ()=>{}}>
+                                    {(length === pos +1) ?"Buy" :"Save &amp; Continue"}
+                                </button>
                             </div>
                         </li>
                     </ul>
@@ -152,7 +161,7 @@ const mapDispatchToProps = (dispatch) => {
                     date: (date && moment(date).format('YYYY-MM-DD')) || '',
                 }
             };
-            console.log(userAward)
+            ////console.log(userAward)
             //return "yes"
             return new Promise((resolve, reject) => {
                 return dispatch(actions.updateUserAward({userAward, resolve, reject}));
@@ -162,7 +171,7 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchUserAward())
         },
         "removeAward": (awardId) => {
-            console.log("Award iD   "+awardId)
+            ////console.log("Award iD   "+awardId)
             return dispatch(actions.deleteAward(awardId))
         },
         "bulkUpdateUserAward": (listItems) => {
@@ -177,7 +186,7 @@ const mapDispatchToProps = (dispatch) => {
                 };
                 return userAward;
             })
-            console.log(listItems)
+            ////console.log(listItems)
             return dispatch(actions.bulkUpdateUserAward({list: listItems}))
         }
     }
