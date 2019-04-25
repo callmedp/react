@@ -8,7 +8,7 @@ import {withRouter} from "react-router-dom";
 export default class DownloadResume extends Component {
     constructor(props) {
         super(props);
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static'
+        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
     }
 
     render() {
@@ -35,27 +35,27 @@ export default class DownloadResume extends Component {
                                             <ul className="carousel-box--carousel">
                                                 <li className="carousel-box--slide">
                                                     <div className="carousel-box--slide__content">
-                                                        <img src={`${this.staticUrl}/react/assets/images/resume1.jpg`}
+                                                        <img src={`${this.staticUrl}react/assets/images/resume1.jpg`}
                                                              className="img-responsive" alt=""/>
                                                     </div>
                                                     <div className="carousel-box--slide__content">
-                                                        <img src={`${this.staticUrl}/react/assets/images/resume2.jpg`}
+                                                        <img src={`${this.staticUrl}react/assets/images/resume2.jpg`}
                                                              className="img-responsive" alt=""/>
                                                     </div>
                                                     <div className="carousel-box--slide__content">
-                                                        <img src={`${this.staticUrl}/react/assets/images/resume3.jpg`}
+                                                        <img src={`${this.staticUrl}react/assets/images/resume3.jpg`}
                                                              className="img-responsive" alt=""/>
                                                     </div>
                                                     <div className="carousel-box--slide__content">
-                                                        <img src={`${this.staticUrl}/react/assets/images/resume4.jpg`}
+                                                        <img src={`${this.staticUrl}react/assets/images/resume4.jpg`}
                                                              className="img-responsive" alt=""/>
                                                     </div>
                                                     <div className="carousel-box--slide__content">
-                                                        <img src={`${this.staticUrl}/react/assets/images/resume5.jpg`}
+                                                        <img src={`${this.staticUrl}react/assets/images/resume5.jpg`}
                                                              className="img-responsive" alt=""/>
                                                     </div>
                                                     <div className="carousel-box--slide__content">
-                                                        <img src={`${this.staticUrl}/react/assets/images/resume2.jpg`}
+                                                        <img src={`${this.staticUrl}react/assets/images/resume2.jpg`}
                                                              className="img-responsive" alt=""/>
                                                     </div>
                                                 </li>

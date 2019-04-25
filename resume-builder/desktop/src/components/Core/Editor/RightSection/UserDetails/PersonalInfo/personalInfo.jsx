@@ -31,7 +31,7 @@ export class PersonalInfo extends Component {
             'imageURI': '',
             'imageURL': ''
         }
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static'
+        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
     }
 
     componentDidMount() {
@@ -240,7 +240,7 @@ export class PersonalInfo extends Component {
                                         <img alt={"User Profile"} className='img-responsive'
                                              src={this.state.imageURI || personalInfo.image}/> :
                                         <img alt={"User Profile"} className="img-responsive"
-                                             src={`${this.staticUrl}/react/assets/images/upload-image.jpg`}/>
+                                             src={`${this.staticUrl}react/assets/images/upload-image.jpg`}/>
                                 }
                                 <input accept="image/*" type="file" name="displayPicture"
                                        onChange={this.getImageURI.bind(this)}

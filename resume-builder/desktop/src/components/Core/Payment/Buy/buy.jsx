@@ -13,7 +13,7 @@ export class Buy extends Component {
         this.state = {
             'checked': 'product1'
         }
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static'
+        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
 
 
     }
@@ -293,17 +293,17 @@ export class Buy extends Component {
                                             <ul className="carousel-box--carousel">
                                                 <li className="carousel-box--slide">
                                                     <div className="carousel-box--slide__content">
-                                                        <img src={`${this.staticUrl}/react/assets/images/resume1.jpg`}
+                                                        <img src={`${this.staticUrl}react/assets/images/resume1.jpg`}
                                                              className="img-responsive"
                                                              alt=""/>
                                                     </div>
                                                     <div className="carousel-box--slide__content">
-                                                        <img src={`${this.staticUrl}/react/assets/images/resume2.jpg`}
+                                                        <img src={`${this.staticUrl}react/assets/images/resume2.jpg`}
                                                              className="img-responsive"
                                                              alt=""/>
                                                     </div>
                                                     <div className="carousel-box--slide__content">
-                                                        <img src={`${this.staticUrl}/react/assets/images/resume3.jpg`}
+                                                        <img src={`${this.staticUrl}react/assets/images/resume3.jpg`}
                                                              className="img-responsive"
                                                              alt=""/>
                                                     </div>

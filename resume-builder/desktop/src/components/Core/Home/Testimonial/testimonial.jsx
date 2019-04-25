@@ -4,7 +4,7 @@ import './testimonial.scss'
 export default class Testimonial extends Component {
     constructor(props) {
         super(props);
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static'
+        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
 
     }
 
@@ -18,7 +18,7 @@ export default class Testimonial extends Component {
                     <li className="testimonials--list">
                         <div className="testimonials--image">
                             <span className="mr-20"><img alt={"Testimonial 1"}
-                                                         src={`${this.staticUrl}/react/assets/images/testimonial1.jpg`}/></span>
+                                                         src={`${this.staticUrl}react/assets/images/testimonial1.jpg`}/></span>
                             <span><strong>Sumit Sharma</strong>
                             Project Manager, Sapient</span>
                         </div>
@@ -31,7 +31,7 @@ export default class Testimonial extends Component {
                     <li className="testimonials--list">
                         <div className="testimonials--image">
                             <span className="mr-20"><img alt={"Testimonial 2"}
-                                                         src={`${this.staticUrl}/react/assets/images/testimonial2.jpg`}/></span>
+                                                         src={`${this.staticUrl}react/assets/images/testimonial2.jpg`}/></span>
                             <span><strong>Shreya Verma</strong>
                             Associate, Amazon</span>
                         </div>
@@ -44,7 +44,7 @@ export default class Testimonial extends Component {
                     <li className="testimonials--list">
                         <div className="testimonials--image">
                             <span className="mr-20"><img alt={"testimonial 3"}
-                                                         src={`${this.staticUrl}/react/assets/images/testimonial3.jpg`}/></span>
+                                                         src={`${this.staticUrl}react/assets/images/testimonial3.jpg`}/></span>
                             <span><strong>Amit Sinha</strong>
                             IT Manager, HCL</span>
                         </div>

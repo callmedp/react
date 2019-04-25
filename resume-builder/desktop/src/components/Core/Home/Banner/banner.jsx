@@ -8,7 +8,7 @@ export default class Banner extends Component {
     constructor(props) {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
-        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static'
+        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
 
     }
 
@@ -59,7 +59,7 @@ export default class Banner extends Component {
                 </div>
                 <div className="banner-slider">
                     <img alt={"Banner"}
-                         src={`${this.staticUrl}/react/assets/images/home-banner-slider.png`}
+                         src={`${this.staticUrl}react/assets/images/home-banner-slider.png`}
                          className="img-responsive"/>
                 </div>
             </div>
