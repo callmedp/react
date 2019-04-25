@@ -17,6 +17,7 @@ export const renderAwards = ({
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                     <h1>Award</h1>
+                    <input className="hide" type="text" placeholder="Award"/>
                     <i className="sprite icon--edit"></i>
                 </div>
                 <button role="button" onClick={handleSubmit(handleAddition.bind(this, fields, error))}
@@ -28,6 +29,8 @@ export const renderAwards = ({
                 <div className="form-wrap" key={index} id={`award${index}`}>
                     <div className="subHeading pb-0">
                         <h2>{fields.get(index).title || 'Award'}</h2>
+
+                        
                         <ul className="subHeading__control">
                             <li className="subHeading__delete">
                                 <span className="sprite icon--delete" role="button"

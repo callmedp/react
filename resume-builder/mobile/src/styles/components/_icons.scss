@@ -74,8 +74,8 @@
 
     &--edit {
 		@include size(20px, 20px, block);
-		background-position: 5px -13px;  
-		margin-left: .5rem;
+		background-position: 5px -13px;
+        float: left;
     }
     
     &--mobile {

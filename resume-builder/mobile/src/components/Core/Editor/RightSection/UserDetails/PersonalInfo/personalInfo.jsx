@@ -99,9 +99,11 @@ class PersonalInfo extends Component {
             <PreviewModal {...this.props}/>
             <div className="buildResume__wrap">
                 <div className="buildResume__heading">
-                    <h2>Personal Info</h2>
+                    <h1 className="hide">Personal Info</h1>
+                    <input type="text" placeholder="Please enter"/>
                     <i className="sprite icon--edit"></i>
                 </div>
+                
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <ul className="form">
 

@@ -19,6 +19,7 @@ const renderSkills = ({
                 <div className="buildResume__heading heading">
                     <div className="heading__info">
                         <h1>Skills {error}</h1>
+                        <input className="hide" type="text" placeholder="Skills"/>
                         <i className="sprite icon--edit"></i>
                     </div>
                     <button type={'button'} onClick={handleSubmit(handleAddition.bind(this,fields))} 
