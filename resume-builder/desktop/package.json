@@ -7,6 +7,7 @@
     "dotenv": "^7.0.0",
     "moment": "^2.24.0",
     "node-sass": "^4.11.0",
+    "node-sass-utils": "^1.1.2",
     "query-string": "^6.4.0",
     "react": "^16.8.4",
     "react-accessible-accordion": "^3.0.0",
