@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import Modal from 'react-modal';
+import './preview.scss'
 
 export default class PreviewModal extends Component{
     constructor(props){
@@ -8,10 +9,17 @@ export default class PreviewModal extends Component{
 
     render(){
         return(
-            <Modal isOpen={this.props.template.modal_status} contentLabel="Preview">
-            <iframe srcdoc={this.props.template.html} style={{width:"90vh",height:"90vh"}}
-            ></iframe>
+            <Modal 
+                isOpen={this.props.template.modal_status} 
+                contentLabel="onRequestClose Preview"
+                onRequestClose={this.handleCloseModal}
+                className="Modal"
+                overlayClassName="Overlay">
                 
+                <div className="Modal--iframe">
+                    <iframe srcdoc={this.props.template.html}></iframe>
+                </div>
+                <button className="Modal--close" onClick={this.handleCloseModal}>+</button>
             </Modal>
         )
     }
