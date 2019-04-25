@@ -68,7 +68,7 @@
     }
     
     &--add-more {
-        @include size(20px, 19px, block);
+        @include size(12px, 28px, block);
         background-position: -25px -345px;
     }
 
@@ -390,6 +390,26 @@
         
         &--add-more {
             background-position: -26px -154px;
+        }
+
+        &--language {
+            background-position: -82px -128px;
+        }
+        
+        &--award {
+            background-position: -84px -155px;
+        }
+        
+        &--course {
+            background-position: -84px -182px;
+        }
+        
+        &--project {
+            background-position: -83px -210px;
+        }
+        
+        &--reference {
+            background-position: -83px -238px;
         }
     }
 }

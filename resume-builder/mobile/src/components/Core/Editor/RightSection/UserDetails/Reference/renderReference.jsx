@@ -25,7 +25,7 @@ const renderReferences = ({
             </div>
             {fields.map((member, index) => {
                 return (
-                    <div key={index} id={`references${index}`}>
+                    <div className="form-wrap" key={index} id={`references${index}`}>
                         <div className="subHeading pb-0">
                             <h2>{fields.get(index).reference_name || 'Refrence'}</h2>
                             <ul className="subHeading__control">

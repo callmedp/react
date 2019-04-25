@@ -25,7 +25,7 @@ const renderProjects = ({
             </div>
             {fields.map((member, index) => {
                 return (
-                    <div key={index} id={`project${index}`}>
+                    <div className="form-wrap" key={index} id={`project${index}`}>
                         <div className="subHeading pb-0">
                             <h2>{fields.get(index).project_name || 'Project'}</h2>
                             <ul className="subHeading__control">

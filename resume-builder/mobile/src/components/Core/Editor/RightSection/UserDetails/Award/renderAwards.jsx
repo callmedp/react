@@ -25,7 +25,7 @@ export const renderAwards = ({
 
             {fields.map((member, index) => {
             return(
-                <div key={index} id={`award${index}`}>
+                <div className="form-wrap" key={index} id={`award${index}`}>
                     <div className="subHeading pb-0">
                         <h2>{fields.get(index).title || 'Award'}</h2>
                         <ul className="subHeading__control">

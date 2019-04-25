@@ -34,7 +34,7 @@
 }
 
 .sidebar {
-    transition: all .3s;
+    transition: all .2s;
 
     &__item {
         height: 55px;
@@ -168,4 +168,13 @@
     .user {
         opacity: 1;
     }
+}
+
+.sidebar-close{
+    background-color: $white;
+    width: 55px;
+    z-index: 2;
+    top: 50px;
+    height: 100%;
+    overflow: auto;
 }

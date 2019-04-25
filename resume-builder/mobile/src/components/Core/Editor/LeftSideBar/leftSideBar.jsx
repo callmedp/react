@@ -116,10 +116,10 @@ class LeftSideBar extends Component {
         const {sidenavStatus} = this.props.sidenav
         return (
             <div>
-                <div className={"overlay"} style={sidenavStatus ? {display : "block"} : {}}
+                <div className={"overlay"} style={sidenavStatus ? {visibility : "visible", opacity : "1"} : {}}
                     onClick={this.closeSideNav}></div>
                 
-                <section className={"left-sidebar sidebar " + (sidenavStatus ? "sidebar-open" : "")}>
+                <section className={"left-sidebar sidebar " + (sidenavStatus ? "sidebar-open" : "sidebar-close")}>
                     
                     <div className="sidebar__menuWrap">
                         <ul className="sidebar__items">
