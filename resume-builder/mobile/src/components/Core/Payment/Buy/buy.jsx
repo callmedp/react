@@ -3,6 +3,8 @@ import Header from '../../../Common/Header/header.jsx';
 import './buy.scss';
 import * as action from '../../../../store/buy/actions';
 import {connect} from "react-redux";
+import ImageGallery from 'react-image-gallery';
+import { Slide } from 'react-slideshow-image';
 
 class Buy extends Component {
 
@@ -12,8 +14,8 @@ class Buy extends Component {
             'checked': 'product1',
             'pay_button_clicked': true
         }
-
     }
+    
 
     async redirectToCart() {
         
@@ -57,10 +59,25 @@ class Buy extends Component {
     }
 
     render() {
+        const slideImages = [
+            '/media/static/react/assets/images/mobile/resume-1.png',
+            '/media/static/react/assets/images/mobile/resume-2.png',
+            '/media/static/react/assets/images/mobile/resume-2.png'
+          ];
+           
+          const properties = {
+            duration: 5000,
+            transitionDuration: 500,
+            infinite: true,
+            indicators: true,
+            arrows: true
+          }
+
         return(
             
             <div className="buy-container">
                 <Header />
+                
                 <div className="pay-now">
                     <div className="pay-now__price">
                         <span className="fs-14 pay-now__price--pay">You pay</span>
@@ -70,7 +87,7 @@ class Buy extends Component {
                     <button className="btn btn__round btn__primary fs-" disabled={this.state.pay_button_clicked}
                     onClick={this.redirectToCart.bind(this)}>Pay Now</button>
                 </div>
-
+                
                 <div className="buy">
                     <div className="buy__wrap">
                         <div className="buy__item">
@@ -109,18 +126,19 @@ class Buy extends Component {
                                     </div>
                                 </label>
                             </div>
+                            
                             <div className="buy__item--right">
                                 <div className="buy__item--right__sliderWrap mt-20">
-                                    <div className="buy__item--right__sliderWrap__controls">
+                                    {/* <div className="buy__item--right__sliderWrap__controls">
                                         <span className="buy__item--right__sliderWrap__controls--next">
                                             <i className="sprite icon--control"></i>
                                         </span>
                                         <span className="buy__item--right__sliderWrap__controls--prev hide">
                                             <i className="sprite icon--control"></i>
                                         </span>
-                                    </div>
-                                    <ul className="buy__recommended__items">
-                                        <li className="buy__recommended__item" onClick={this.openModal}>
+                                    </div> */}
+                                    {/* <ul className="buy__recommended__items">
+                                        <li className="buy__recommended__item">
                                             <span className="buy__recommended__image">
                                                 <span className="sprite icon--zoom"></span>
                                                 <img src="/media/static/react/assets/images/mobile/resume-1.png" alt="Custom resume" />
@@ -140,12 +158,30 @@ class Buy extends Component {
                                                 <img src="/media/static/react/assets/images/mobile/resume-2.png" alt="Custom resume" />
                                             </span>
                                         </li>
-                                    </ul>
+                                    </ul> */}
+                                    <Slide {...properties} className="slider">
+                                        <div className="each-slide">
+                                        <div style={{'backgroundImage': `url(${slideImages[0]})`}}>
+                                            <span></span>
+                                        </div>
+                                        </div>
+                                        <div className="each-slide">
+                                        <div style={{'backgroundImage': `url(${slideImages[1]})`}}>
+                                            <span></span>
+                                        </div>
+                                        </div>
+                                        <div className="each-slide">
+                                        <div style={{'backgroundImage': `url(${slideImages[2]})`}}>
+                                            <span></span>
+                                        </div>
+                                        </div>
+                                    </Slide>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
 
         )

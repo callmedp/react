@@ -9,6 +9,7 @@ import moment from 'moment'
 import {SubmissionError} from 'redux-form'
 
 import {interestList} from '../../../Utils/interestList'
+import {entityLinkNameLink ,iconClassList,delete_icon} from '../../../Utils/entitydata'
 
 
 function* getPersonalDetails(action) {
@@ -20,13 +21,22 @@ function* getPersonalDetails(action) {
             console.log('error');
         }
         let {data} = result;
-        const {date_of_birth, gender, extracurricular} = data;
+        const {date_of_birth, gender, extracurricular ,entity_preference_data} = data;
 
         data = {
             ...data,
             ...{
                 date_of_birth: date_of_birth && moment(date_of_birth).format('YYYY-MM-DD') || '',
-                extracurricular: extracurricular.split(',').map(key => interestList[key])
+                extracurricular: extracurricular.split(',').map(key => interestList[key]),
+                entity_preference_data :entity_preference_data.map((obj,key) => {
+                                                    obj.entity_link = entityLinkNameLink[key];
+                                                    obj.icon_class = iconClassList[key];
+                                                    obj.delete_icon = delete_icon[key];
+                                                    if(key ===1 || key == 4){
+                                                        obj.active =true
+                                                    }
+                                                    return obj;
+                                                }).sort((a,b)=>b.active -a.active )
             }
         }
         console.log('data');

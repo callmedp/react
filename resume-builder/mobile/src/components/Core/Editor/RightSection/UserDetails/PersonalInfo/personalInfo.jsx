@@ -31,7 +31,9 @@ class PersonalInfo extends Component {
         this.fetchInterestList = this.fetchInterestList.bind(this);
         this.state = {
             'imageURI': '',
-            'imageURL': ''
+            'imageURL': '',
+            'editHeading': true,
+            'heading' : ''
         }
 
     }
@@ -94,14 +96,17 @@ class PersonalInfo extends Component {
 
     render() {
         const {handleSubmit, personalInfo} = this.props;
+        const {editHeading} =this.state;
         return (
         <div className="buildResume">
             <PreviewModal {...this.props}/>
             <div className="buildResume__wrap">
                 <div className="buildResume__heading">
-                    <h1 className="hide">Personal Info</h1>
-                    <input type="text" placeholder="Please enter"/>
-                    <i className="sprite icon--edit"></i>
+                    {!editHeading ?
+                        <h1>Personal Info</h1>:
+                        <input type="text" placeholder="Please enter"/>
+                    }
+                    <i className="sprite icon--edit" ></i>
                 </div>
                 
                 <form onSubmit={handleSubmit(this.handleSubmit)}>

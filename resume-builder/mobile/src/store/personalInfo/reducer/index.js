@@ -1,4 +1,4 @@
-import {SAVE_USER_INFO} from "../actions/actionTypes";
+import {SAVE_USER_INFO,UPDATE_PERSONAL_INFO} from "../actions/actionTypes";
 
 const initialState = {
     first_name: '',
@@ -9,6 +9,7 @@ const initialState = {
     date_of_birth: '',
     location: '',
     gender: '',
+    entity_preference_data : [],
     extracurricular: [],
     extra_info: ''
 
@@ -17,8 +18,8 @@ const initialState = {
 
 
 export const personalInfoReducer = (state = initialState, action) => {
+    console.log(action)
     switch (action.type) {
-
         case SAVE_USER_INFO: {
             return {
                 ...state,
