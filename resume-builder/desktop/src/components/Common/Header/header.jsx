@@ -8,7 +8,7 @@ export default class Header extends Component {
     constructor(props) {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
-
+        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static'
     }
 
     scrollTo(elem) {
@@ -61,7 +61,7 @@ export default class Header extends Component {
                         </button>
                         }
                         <span className="signin--user-pic">
-            				<img src="/media/static/react/assets/images/user-pic.jpg"/>
+            				<img src={`${this.staticUrl}/react/assets/images/user-pic.jpg`}/>
             			</span>
                         Hello Amit
                     </div>

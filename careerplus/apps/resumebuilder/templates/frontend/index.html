@@ -6,6 +6,9 @@
         {% render_bundle 'main' 'css' 'DEFAULT' %}
     {% endblock css_section %}
     <script>
+        window.config = {}
+        config.staticUrl = "{{STATIC_URL}}"
+
     </script>
 {% endblock head %}
 

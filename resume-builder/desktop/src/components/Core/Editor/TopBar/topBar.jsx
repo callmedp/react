@@ -2,9 +2,14 @@ import React, {Component} from 'react'
 import './topBar.scss'
 
 export default class TopBar extends Component {
+    constructor(props) {
+        super(props);
+        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static'
+    }
 
     render() {
         const {page} = this.props;
+
         return (
             <section className="flex-container">
                 <div className="top-banner">
@@ -37,7 +42,8 @@ export default class TopBar extends Component {
                                 <div className="top-banner--banner-right">
                                     <button className="white-button mr-20" href="#">Change template</button>
                                     <span className="top-banner--banner-right--banner-thumb">
-                                    <img src="/media/static/react/assets/images/resume-thumb.jpg" alt=""/>
+                                    <img src={`${this.staticUrl}/react/assets/images/resume-thumb.jpg`}
+                                         alt=""/>
                 		            </span>
                                 </div>
                     }

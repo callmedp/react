@@ -31,6 +31,7 @@ export class PersonalInfo extends Component {
             'imageURI': '',
             'imageURL': ''
         }
+        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static'
     }
 
     componentDidMount() {
@@ -84,6 +85,7 @@ export class PersonalInfo extends Component {
 
     render() {
         const {handleSubmit, personalInfo, ui: {loader}} = this.props;
+        console.log('window   ', window);
         return (
             <div>
                 <section className="head-section">
@@ -238,7 +240,7 @@ export class PersonalInfo extends Component {
                                         <img alt={"User Profile"} className='img-responsive'
                                              src={this.state.imageURI || personalInfo.image}/> :
                                         <img alt={"User Profile"} className="img-responsive"
-                                             src="/media/static/react/assets/images/upload-image.jpg"/>
+                                             src={`${this.staticUrl}/react/assets/images/upload-image.jpg`}/>
                                 }
                                 <input accept="image/*" type="file" name="displayPicture"
                                        onChange={this.getImageURI.bind(this)}
