@@ -247,31 +247,26 @@ class Reference extends Component {
         const {handleSubmit, ui: {loader}, entityList} = this.props;
         const entity = entityList.find(entity => entity.entity_id === 10);
         return (
-            <div>
-                {
-                    !!(!(entity && entity.active)) ? "" : <form onSubmit={handleSubmit(this.handleSubmit)}>
-                        <FieldArray
-                            name={"list"}
-                            handleSubmit={this.handleSubmit}
-                            handleAccordionClick={this.handleAccordionClick}
-                            handleAccordionState={this.handleAccordionState}
-                            handleAddition={this.handleAddition}
-                            deleteReference={this.deleteReference}
-                            changeOrderingUp={this.changeOrderingUp}
-                            changeOrderingDown={this.changeOrderingDown}
-                            openedAccordion={this.state.openedAccordion}
-                            loader={loader}
-                            component={ReferenceRenderer}
-                        />
+            <form onSubmit={handleSubmit(this.handleSubmit)}>
+                <FieldArray
+                    name={"list"}
+                    handleSubmit={this.handleSubmit}
+                    handleAccordionClick={this.handleAccordionClick}
+                    handleAccordionState={this.handleAccordionState}
+                    handleAddition={this.handleAddition}
+                    deleteReference={this.deleteReference}
+                    changeOrderingUp={this.changeOrderingUp}
+                    changeOrderingDown={this.changeOrderingDown}
+                    openedAccordion={this.state.openedAccordion}
+                    loader={loader}
+                    component={ReferenceRenderer}
+                />
 
-                        <div className="flex-container items-right mr-20 mb-30">
-                            <button className="blue-button mr-10">Preview</button>
-                            <button className="orange-button" type={'submit'}>Save & Continue</button>
-                        </div>
-                    </form>
-                }
-
-            </div>
+                <div className="flex-container items-right mr-20 mb-30">
+                    <button className="blue-button mr-10">Preview</button>
+                    <button className="orange-button" type={'submit'}>Save & Continue</button>
+                </div>
+            </form>
         )
     }
 }

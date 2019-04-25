@@ -223,29 +223,25 @@ class Course extends Component {
         const entity = entityList.find(entity => entity.entity_id === 5);
 
         return (
-            <div>
-                {
-                    !!(!(entity && entity.active)) ? "" : <form onSubmit={handleSubmit(this.handleSubmit)}>
-                        <FieldArray name={'list'}
-                                    loader={loader}
-                                    handleSubmit={this.handleSubmit}
-                                    handleAccordionClick={this.handleAccordionClick}
-                                    handleAccordionState={this.handleAccordionState}
-                                    handleAddition={this.handleAddition}
-                                    deleteCourse={this.deleteCourse}
-                                    changeOrderingUp={this.changeOrderingUp}
-                                    changeOrderingDown={this.changeOrderingDown}
-                                    openedAccordion={this.state.openedAccordion}
-                                    component={CourseRenderer}
-                        />
-                        <div className="flex-container items-right mr-20 mb-30">
-                            <button className="blue-button mr-10">Preview</button>
-                            <button className="orange-button" type={'submit'}>Save & Continue</button>
-                        </div>
+            <form onSubmit={handleSubmit(this.handleSubmit)}>
+                <FieldArray name={'list'}
+                            loader={loader}
+                            handleSubmit={this.handleSubmit}
+                            handleAccordionClick={this.handleAccordionClick}
+                            handleAccordionState={this.handleAccordionState}
+                            handleAddition={this.handleAddition}
+                            deleteCourse={this.deleteCourse}
+                            changeOrderingUp={this.changeOrderingUp}
+                            changeOrderingDown={this.changeOrderingDown}
+                            openedAccordion={this.state.openedAccordion}
+                            component={CourseRenderer}
+                />
+                <div className="flex-container items-right mr-20 mb-30">
+                    <button className="blue-button mr-10">Preview</button>
+                    <button className="orange-button" type={'submit'}>Save & Continue</button>
+                </div>
+            </form>
 
-                    </form>
-                }
-            </div>
         )
     }
 }

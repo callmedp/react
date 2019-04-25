@@ -1,4 +1,5 @@
-    import React, {Component} from 'react';
+import React, {Component} from 'react';
+import {connect} from "react-redux";
 import './rightSection.scss'
 import PersonalInfo from './UserDetails/PersonalInfo/personalInfo.jsx'
 import Education from './UserDetails/Education/education.jsx'
@@ -14,7 +15,7 @@ import Template from './Template/template.jsx'
 import queryString from 'query-string'
 
 
-export default class RightSection extends Component {
+class RightSection extends Component {
     constructor(props) {
         super(props);
         const values = queryString.parse(this.props.location.search)
@@ -35,6 +36,8 @@ export default class RightSection extends Component {
     }
 
     renderSwitch() {
+        const {entityList} = this.props;
+        let entity;
 
         switch (this.state.type) {
             case 'profile': {
@@ -42,31 +45,48 @@ export default class RightSection extends Component {
             }
 
             case 'education': {
-                return <Education {...this.props}/>
+                entity = entityList && entityList[1];
+                return !!(!(entity && entity.active)) ? "Hello 1" : <Education {...this.props}/>
+            }
+
+            case 'experience': {
+                entity = entityList && entityList[2];
+
+                return !!(!(entity && entity.active)) ? "Hello 2" : <Experience {...this.props}/>
+            }
+
+            case 'project': {
+                entity = entityList && entityList[3];
+
+                return !!(!(entity && entity.active)) ? "Hello 3" : <Project {...this.props}/>
             }
             case 'skill': {
-                return <Skill {...this.props}/>
-            }
-            case 'experience': {
-                return <Experience {...this.props}/>
-            }
-            case 'language': {
-                return <Language {...this.props}/>
-            }
-            case 'award': {
-                return <Award {...this.props}/>
-            }
-            case 'project': {
-                return <Project {...this.props}/>
-            }
-            case 'course': {
-                return <Course {...this.props}/>
-            }
-            case 'reference': {
-                return <Reference {...this.props}/>
+                entity = entityList && entityList[4];
+
+                return !!(!(entity && entity.active)) ? "Hello" : <Skill {...this.props}/>
             }
             case 'summary': {
-                return <Summary {...this.props}/>
+                entity = entityList && entityList[5];
+
+                return !!(!(entity && entity.active)) ? "Hello" : <Summary {...this.props}/>
+            }
+            case 'award': {
+                entity = entityList && entityList[6];
+                return !!(!(entity && entity.active)) ? "Hello" : <Award {...this.props}/>
+            }
+            case 'course': {
+                entity = entityList && entityList[7];
+
+                return !!(!(entity && entity.active)) ? "Hello" : <Course {...this.props}/>
+            }
+            case 'language': {
+                entity = entityList && entityList[8];
+
+                return !!(!(entity && entity.active)) ? "Hello" : <Language {...this.props}/>
+            }
+            case 'reference': {
+                entity = entityList && entityList[9];
+                return !!(!(entity && entity.active)) ? "Hello" : <Reference {...this.props}/>
             }
             default: {
                 return <Template {...this.props} />
@@ -88,3 +108,12 @@ export default class RightSection extends Component {
     }
 
 }
+
+
+const mapStateToProps = (state) => {
+    return {
+        entityList: state.personalInfo && state.personalInfo.entity_preference_data,
+    }
+}
+
+export default connect(mapStateToProps, null)(RightSection)
