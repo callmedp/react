@@ -30,6 +30,10 @@ urlpatterns = [
     url(r'^v1/shine-data-for-flow/$',
         views.ShineDataFlowDataApiView.as_view(),
         name='shine-data-for-flow'),
+    url(r'^v1/talent-economy-blogs/$',
+        views.TalentEconomyApiView.as_view(),
+        name='talent-economy-blogs'),
+
 ]
 
 if settings.DEBUG:
