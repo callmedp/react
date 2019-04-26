@@ -48,7 +48,7 @@ MediaUploadSerializer,
     ShineDataFlowDataSerializer,TalentEconomySerializer)
 
 
-from shared.rest_addons.pagination import Learning_custom_pagination
+from shared.rest_addons.pagination import LearningCustomPagination
 
 from shared.rest_addons.mixins import (SerializerFieldsMixin,FieldFilterMixin)
 
