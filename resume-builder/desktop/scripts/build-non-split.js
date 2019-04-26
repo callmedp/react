@@ -20,14 +20,8 @@ config.plugins[5].options.filename = '../../../careerplus/static_core/react/dist
 
 
 const result = {
-    'sprite': process.env.REACT_APP_ENV === 'staging' ?
-        'url(https://learning-static-staging-189607.storage.googleapis.com/l/s/react/assets/images/sprite.svg)' : '',
-    'top-banner': process.env.REACT_APP_ENV === 'staging' ?
-        'url(https://learning-static-staging-189607.storage.googleapis.com/l/s/react/assets/images/banner-bg.jpg)' : '',
-    'banner-bg': process.env.REACT_APP_ENV === 'staging' ?
-        'url(https://learning-static-staging-189607.storage.googleapis.com/l/s/react/assets/images/home-bg.jpg)' : '',
-    'logo': process.env.REACT_APP_ENV === 'staging' ?
-        'url(https://learning-static-staging-189607.storage.googleapis.com/l/s/react/assets/images/logo.png)' : '',
+    'staticUrl': process.env.REACT_APP_ENV === 'staging' ?
+        'https://learning-static-staging-189607.storage.googleapis.com/l/s/' : '',
 
 }
 
