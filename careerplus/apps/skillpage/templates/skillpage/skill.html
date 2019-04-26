@@ -185,92 +185,102 @@
 
 		    <!-- certification programs listing -->
 		    {% if products %}
-		    <div id="programs" class="listing-box mb-40" itemscope itemtype="http://schema.org/ItemList">
-		    	<h2 itemprop="name">{{category_obj.name}} Programs</h2>
-		    	<ul class="listing1" id="product_list">
-		    		{% for product in products %}
-				        <li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-				        	<meta itemprop="position" content="{{forloop.counter}}" />
-				        	<a itemprop="url" title="{{product.pNm}}" 
-				        	href="{{product.pURL}}">
+		    <div id="programs" class="listing-box assessments-box mb-40" itemscope itemtype="http://schema.org/ItemList">
+		    	<ul class="nav nav-tabs" role="tablist">
+				    <li role="presentation" class="active"><h2 itemprop="name"><a href="#courses-tab" aria-controls="courses-tab" role="tab" data-toggle="tab">{{category_obj.name}} Programs</a></h2></li>
+				    <li role="presentation"><h2 itemprop="name"><a href="#assessments-tab" aria-controls="assessments-tab" role="tab" data-toggle="tab">Assessments</a></h2><span>New</span></li>
+				</ul>
+				<div class="tab-content">
+				    <div role="tabpanel" class="tab-pane active" id="courses-tab">
+				    	<ul class="listing1" id="product_list">
+				    		{% for product in products %}
+						        <li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+						        	<meta itemprop="position" content="{{forloop.counter}}" />
+						        	<a itemprop="url" title="{{product.pNm}}" 
+						        	href="{{product.pURL}}">
 
-					            <div class="media" >
-					            	<div class="media-left">
-					                	<img class="media-object" 
-					                	src="{{product.pImg}}" 
-					                	alt="{{product.pNm}}" height="130px" width="130px">
-					            	</div>
-					            	<div class="media-body">
-					                	<div class="certification-jobs-box">
-					                	{% if "true" in product.pCert %}
-					                  		<span class="certification-jobs"><figure class="certification-icon">
-					                  		</figure> Certification</span>
-					                  	{% endif %}
-					                  	{% if product.pNJ %}
-					                  		<span class="certification-jobs"><figure class="jobs-icon"></figure> 
-					                  		<span class="jobs-number">
-					                  		{{product.pNJ}}
-					                  		</span>jobs available</span>
-					                  	{% endif %}
-					                	</div>
-					                	<h3 itemprop="name" class="listing-heading">{{product.pNm}}</h3>
+							            <div class="media" >
+							            	<div class="media-left">
+							                	<img class="media-object" 
+							                	src="{{product.pImg}}" 
+							                	alt="{{product.pNm}}" height="130px" width="130px">
+							            	</div>
+							            	<div class="media-body">
+							                	<div class="certification-jobs-box">
+							                	{% if "true" in product.pCert %}
+							                  		<span class="certification-jobs"><figure class="certification-icon">
+							                  		</figure> Certification</span>
+							                  	{% endif %}
+							                  	{% if product.pNJ %}
+							                  		<span class="certification-jobs"><figure class="jobs-icon"></figure> 
+							                  		<span class="jobs-number">
+							                  		{{product.pNJ}}
+							                  		</span>jobs available</span>
+							                  	{% endif %}
+							                	</div>
+							                	<h3 itemprop="name" class="listing-heading">{{product.pNm}}</h3>
 
-						                <div class="rating-review-box">
-						                {% for rating in product.pStar %}
-						                    {% if rating == "*" %}
-						                    	<figure class="full-star">
-						                    	</figure>
-						                    {% endif %}
-						                    {% if rating == "+" %}
-						                    	<figure class="half-star">	
-						                    	</figure>
-						                    {% endif %}
-						                    {% if rating == "-" %}
-						                    	<figure class="blank-star">	
-						                    	</figure>
-						                    {% endif %}
-						                {% endfor %}
-						                    <strong >{{product.pARx |floatformat:1}}/5</strong>{% if product.pRC %} | {{ product.pRC }} ratings{% endif %} <b>{{product.pRC}} reviews</b>
-						                    {% comment %}
-						                    <meta itemprop="ratingValue" content="{{product.pARx}}">
-						                     <meta itemprop="reviewCount" content="{% if product.pRC > 0 %}
-						                      {{product.pRC}}
-						                      {% else %}
-						                        1      
-						                      {% endif %}" />
-						                    {% endcomment %}
+								                <div class="rating-review-box">
+								                {% for rating in product.pStar %}
+								                    {% if rating == "*" %}
+								                    	<figure class="full-star">
+								                    	</figure>
+								                    {% endif %}
+								                    {% if rating == "+" %}
+								                    	<figure class="half-star">	
+								                    	</figure>
+								                    {% endif %}
+								                    {% if rating == "-" %}
+								                    	<figure class="blank-star">	
+								                    	</figure>
+								                    {% endif %}
+								                {% endfor %}
+								                    <strong >{{product.pARx |floatformat:1}}/5</strong>{% if product.pRC %} | {{ product.pRC }} ratings{% endif %} <b>{{product.pRC}} reviews</b>
+								                    {% comment %}
+								                    <meta itemprop="ratingValue" content="{{product.pARx}}">
+								                     <meta itemprop="reviewCount" content="{% if product.pRC > 0 %}
+								                      {{product.pRC}}
+								                      {% else %}
+								                        1      
+								                      {% endif %}" />
+								                    {% endcomment %}
 
-						                </div>
+								                </div>
 
-						                <!--meta itemprop="position" content="{{forloop.counter}}" /--> 
+								                <!--meta itemprop="position" content="{{forloop.counter}}" /--> 
 
 
-						                <div class="providers">
-						                   Providers
-						                   <span>{{product.pPvn}}</span>
-						                </div>
+								                <div class="providers">
+								                   Providers
+								                   <span>{{product.pPvn}}</span>
+								                </div>
 
-						                <div class="pricing-box">
-						                	Starting at <strong>Rs. {{ product.pPin |floatformat:'0' }}/-</strong>{% if product.pPfin|floatformat:0|add:"0" %}<strike>Rs. {{ product.pPfin|floatformat:"0" }}/-</strike> <span class="discount">{{ product.discount }}% OFF</span>{% endif %}
-						                </div>
+								                <div class="pricing-box">
+								                	Starting at <strong>Rs. {{ product.pPin |floatformat:'0' }}/-</strong>{% if product.pPfin|floatformat:0|add:"0" %}<strike>Rs. {{ product.pPfin|floatformat:"0" }}/-</strike> <span class="discount">{{ product.discount }}% OFF</span>{% endif %}
+								                </div>
 
-					              	</div>
-					            </div>
-				          	</a>
-				        </li>
-			    	{% endfor %}
-			    	{% if products.has_next %}
-				        <a href="javascript:void(0)" 
-				        id="product_load_more" class="load-more loadmore"> 
-				        Load more</a>
-	            		<div id="prod_load_more">
-		      				<input type="hidden" name="page" 
-		      				value="{{products.next_page_number}}" id="page_id">
-		      				<input type="hidden" name="slug" value="{{category_obj.pk}}" 
-		      				id="slug_id">
-			    		</div>
-				    {% endif %}
-		      	</ul>
+							              	</div>
+							            </div>
+						          	</a>
+						        </li>
+					    	{% endfor %}
+					    	{% if products.has_next %}
+						        <a href="javascript:void(0)" 
+						        id="product_load_more" class="load-more loadmore"> 
+						        Load more</a>
+			            		<div id="prod_load_more">
+				      				<input type="hidden" name="page" 
+				      				value="{{products.next_page_number}}" id="page_id">
+				      				<input type="hidden" name="slug" value="{{category_obj.pk}}" 
+				      				id="slug_id">
+					    		</div>
+						    {% endif %}
+				      	</ul>
+				    </div>
+				    <div role="tabpanel" class="tab-pane" id="assessments-tab">
+				    	Assessments Content
+				    </div>
+				</div>
 		    </div>
 		    {% endif %}
 		    <!-- Reviews -->
