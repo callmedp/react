@@ -1,5 +1,9 @@
 const rewire = require('rewire');
+var sass = require("node-sass");
+var sassUtils = require("node-sass-utils")(sass);
 const defaults = rewire('react-scripts/scripts/build.js');
+
+
 let config = defaults.__get__('config');
 
 config.optimization.splitChunks = {
