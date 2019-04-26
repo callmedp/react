@@ -29,6 +29,9 @@ urlpatterns = [
     url(r'^v1/shine-data-for-flow/$',
         views.ShineDataFlowDataApiView.as_view(),
         name='shine-data-for-flow'),
+    url(r'^v1/talent-economy-blogs/$',
+        views.TalentEconomyApiView.as_view(),
+        name='talent-economy-blogs'),
     url(r'^v1/media-upload/$',
         views.MediaUploadView.as_view(),
         name='v1.media-upload'),
@@ -43,6 +46,6 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += [
-url(r'v1/cron/(?P<cron_id>\d+)/$', views.CronInitiateApiView.as_view(),
-    name='api-cron-inititate')
-]
+        url(r'v1/cron/(?P<cron_id>\d+)/$', views.CronInitiateApiView.as_view(),
+            name='api-cron-inititate')
+    ]

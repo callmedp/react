@@ -56,7 +56,7 @@ if __name__=="__main__":
                 "Actual collection of order","Effective collection per item",\
                 "Price of item on site","Transaction_Amount","coupon_id",\
                 "Payment_mode","Combo", "Combo Parent","Variation","Refunded","Refund Amount",\
-                "No Process"])
+                "No Process", "Replaced", "Replaced With", "Replacement Of"])
 
     transactions = PaymentTxn.objects.filter(status=1,payment_date__gte=sdt,payment_date__lte=edt)
     order_ids = list(transactions.values_list('order_id',flat=True))
@@ -76,7 +76,8 @@ if __name__=="__main__":
         transaction_ids = ", ".join([x.txn for x in txn_obj_list])
         coupon_order = CouponOrder.objects.filter(order=order).first()
         coupon_code = coupon_order.coupon_code if coupon_order else ""
-
+        replaced = False
+        replacement_id = None
         order_discount = sum(order_items.values_list('discount_amount',flat=True))
         order_cost_price = sum(order_items.values_list('cost_price',flat=True))
         order_selling_price = sum(order_items.values_list('selling_price',flat=True))
@@ -151,7 +152,11 @@ if __name__=="__main__":
                 combo_parent = True
                 item_selling_price = 0
                 refund_amount = 0
-            
+
+            if item.wc_sub_cat == 65:
+                replaced = True
+                replacement_id = item.get_replacement_order_id
+
             total_items = item.order.orderitems.count()
             if total_items == 1 and item_selling_price == 0:
                 item_selling_price = float(float(order.total_excl_tax) - forced_coupon_amount)*1.18
@@ -169,7 +174,8 @@ if __name__=="__main__":
                     item_cost_price,order_discount,price_without_wallet_discount,order.total_incl_tax,\
                     item_selling_price,item_cost_price,order.total_incl_tax,\
                     coupon_code,txn_obj.get_payment_mode(),item.is_combo, combo_parent,item.is_variation,\
-                    bool(item_refund_request_list),refund_amount,item.no_process
+                    bool(item_refund_request_list),refund_amount,item.no_process, replaced, replacement_id,\
+                    order.replaced_order
                 ]
 
                 csv_writer.writerow(row_data)

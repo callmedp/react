@@ -25,7 +25,7 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from users.tasks import user_register
 from order.models import Order, OrderItem, RefundRequest
 from shop.views import ProductInformationMixin
-from shop.models import Product
+from shop.models import Product,Category
 from coupon.models import Coupon, CouponUser
 from core.api_mixin import ShineCandidateDetail
 from payment.tasks import add_reward_point_in_wallet
@@ -37,21 +37,29 @@ from order.tasks import (
     invoice_generation_order
 )
 from shop.models import Skill, DeliveryService, ShineProfileData
+from blog.models import Blog
 
 from .serializers import (
     OrderListHistorySerializer,
     RecommendedProductSerializer,
     RecommendedProductSerializerSolr,
-    MediaUploadSerializer,
+MediaUploadSerializer,
     ResumeBuilderProductSerializer,
-    ShineDataFlowDataSerializer)
-from shared.rest_addons.pagination import LearningCustomPagination
+    ShineDataFlowDataSerializer,TalentEconomySerializer)
+
+
+from shared.rest_addons.pagination import Learning_custom_pagination
+
+from shared.rest_addons.mixins import (SerializerFieldsMixin,FieldFilterMixin)
+
 
 from django_redis import get_redis_connection
 from shared.utils import ShineCandidate
 from linkedin.autologin import AutoLogin
 from users.mixins import RegistrationLoginApi
 from .education_specialization import educ_list
+
+
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -428,19 +436,19 @@ class EmailLTValueApiView(APIView):
             return Response(
                 {"status": "FAIL", "msg": "Email or User Doesn't Exists"},
                 status=status.HTTP_400_BAD_REQUEST)
-
+        
         ltv_pks = list(Order.objects.filter(
             candidate_id=candidate_id,
-            status__in=[1, 2, 3]).values_list('pk', flat=True))
+            status__in=[1,2,3]).values_list('pk', flat=True))
         if ltv_pks:
             ltv_order_sum = Order.objects.filter(
                 pk__in=ltv_pks).aggregate(ltv_price=Sum('total_incl_tax'))
-            last_order = OrderItem.objects.select_related('order').filter(order__in=ltv_pks) \
+            last_order = OrderItem.objects.select_related('order').filter(order__in = ltv_pks)\
                 .exclude(oi_status=163).order_by('-order__payment_date').first()
             if last_order:
-                last_order = last_order.order.payment_date.strftime('%Y-%m-%d %H:%M:%S')
+                last_order =last_order.order.payment_date.strftime('%Y-%m-%d %H:%M:%S')
             else:
-                last_order = ""
+                last_order=""
 
             ltv = ltv_order_sum.get('ltv_price') if ltv_order_sum.get('ltv_price') else Decimal(0)
             rf_ois = list(OrderItem.objects.filter(
@@ -765,12 +773,15 @@ class ResumeBuilderProductView(ListAPIView):
             parent=F('siblingproduct__main')).values('id', 'parent', 'name')
 
 
+
+
 class ShineDataFlowDataApiView(ListAPIView):
     permission_classes = []
     authentication_classes = []
     queryset = ShineProfileData.objects.all()
     serializer_class = ShineDataFlowDataSerializer
     pagination_class = None
+
 
 
 class ShineCandidateLoginAPIView(APIView):
@@ -1004,3 +1015,66 @@ class UpdateCertificateAndAssesment(APIView):
             "msg": "Certificate Updated"},
             status=status.HTTP_201_CREATED
         )
+
+
+class TalentEconomyApiView(FieldFilterMixin,ListAPIView):
+    """
+    Include params -
+
+    include_p_cat_id - Get data related to parent category
+    include_p_user_id -Get data related to User
+
+
+    Filter params-
+    status -{ 0 for articles which are draft
+             1 for articles which are published
+             }
+
+    visibility -{ 1 for ShineLearning
+                 2 for TalentEconomy
+                 3 for HR-Blogger
+                 4 for HR-Conclave
+                 5 for HR-Jobfair
+                 }
+    To view particular Fields only:
+        include fl= id,title, (include fields with ',' separated)
+    To view all articles do not include status and visibility in parameter
+
+    pagination params-
+            nopage -  get all results(unpaginated)
+            page_size  - to get the how many result to be display per page
+
+    Example:-
+
+    {
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 15,
+            "title": "Questions To Ask During Job Interview - Learning.Shine"
+        }
+    ]
+}
+
+    """
+    permission_classes = []
+    authentication_classes = []
+    serializer_class = TalentEconomySerializer
+    pagination_class = LearningCustomPagination
+
+
+
+
+    def get_queryset(self,*args, **kwargs):
+        status = self.request.GET.get('status',)
+        visibility = self.request.GET.get('visibility')
+        filter_dict = {}
+        if status:
+            filter_dict.update({'status': status})
+        if visibility:
+            filter_dict.update({'visibility': visibility})
+        return Blog.objects.filter(**filter_dict)
+
+
