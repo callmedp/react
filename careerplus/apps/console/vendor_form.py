@@ -26,7 +26,7 @@ from faq.models import ScreenFAQ, FAQuestion
 from shop.utils import ProductAttributesContainer
 from shop.choices import (
     APPLICATION_PROCESS_CHOICES, APPLICATION_PROCESS,
-    BENEFITS_CHOICES, BENEFITS
+    BENEFITS_CHOICES, BENEFITS, SUB_FLOWS
 )
 from shop.choices import (
     BG_CHOICES,
@@ -139,7 +139,7 @@ class AddScreenProductForm(forms.ModelForm):
         model = ProductScreen
         fields = [
             'name', 'product_class',
-            'type_product', 'upc', 'inr_price', 'type_flow']
+            'type_product', 'upc', 'inr_price', 'type_flow', 'sub_type_flow']
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
@@ -151,6 +151,7 @@ class AddScreenProductForm(forms.ModelForm):
         self.fields['product_class'].required = True
         self.fields['type_product'].widget.attrs['class'] = form_class
         self.fields['type_flow'].widget.attrs['class'] = form_class
+        self.fields['sub_type_flow'].widget.attrs['class'] = form_class
         if has_group(user=self.user, grp_list=settings.PRODUCT_GROUP_LIST):
             self.fields['type_product'].choices = PRODUCT_VENDOR_CHOICES + ((3, 'Combo'),
                 (4, 'No-Direct-Sell/Virtual'),
@@ -162,7 +163,6 @@ class AddScreenProductForm(forms.ModelForm):
             self.fields['type_flow'].choices = (
                 (0, 'Default'), (14, 'University Courses')
             )
-
 
         if not vendor:
             if has_group(user=self.user, grp_list=settings.PRODUCT_GROUP_LIST):
@@ -190,6 +190,10 @@ class AddScreenProductForm(forms.ModelForm):
         self.fields['upc'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
         self.fields['upc'].widget.attrs['data-parsley-length'] = "[2, 100]"
         self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-100 characters.'
+
+        if self.data and int(self.data['type_flow']) not in list(SUB_FLOWS.keys()):
+            self.fields.pop('sub_type_flow')
+
 
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
@@ -238,7 +242,20 @@ class AddScreenProductForm(forms.ModelForm):
             raise forms.ValidationError(
                 "This value cannot be negative.")
         return inr_price
-    
+
+    def clean_sub_type_flow(self):
+        sub_type_flow = self.cleaned_data.get('sub_type_flow', '')
+        flow = self.cleaned_data.get('type_flow', '')
+        if flow in list(SUB_FLOWS.keys()):
+            if not sub_type_flow:
+                raise forms.ValidationError(
+                    "This field is required.")
+            elif int(sub_type_flow) not in [st_flow[0] for st_flow in SUB_FLOWS[flow]]:
+                    raise forms.ValidationError("Invalid Type flow")
+        else:
+            sub_type_flow = None
+        return sub_type_flow
+
     def save(self, commit=True, *args, **kwargs):
         productscreen = super(AddScreenProductForm, self).save(
             commit=True, *args, **kwargs)

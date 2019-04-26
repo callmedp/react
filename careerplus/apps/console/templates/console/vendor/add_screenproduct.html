@@ -130,7 +130,15 @@
                 </div>
                 <div class="alert">{{form.type_flow.errors}}</div>
               </div>
-
+              <div class="item form-group {% if form.type_flow.errors %}bad{% endif %}" id="sub_type_flow_div">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.flow.id_for_label }}">Sub type Flow <span class="required"></span>
+                </label>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  {{form.sub_type_flow}}
+                </div>
+                <div class="alert">{{form.sub_type_flow.errors}}</div>
+              </div>
+             
               <div class="item form-group {% if form.upc.errors %}bad{% endif %}">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ form.upc.id_for_label }}">UPC <span class="required">*</span>
                 </label>
@@ -172,6 +180,34 @@
         
 {% block js_block %}
   {{ block.super }}
+   <script  type="text/javascript">
+    var sub_type_flow_choices =  {{ sub_type_flow_choices|safe }}
+    var present_keys = Object.keys(sub_type_flow_choices)
+    var type_flow = $("select[name='type_flow']").val()
+    if (present_keys.indexOf(type_flow) == -1){
+      $("#sub_type_flow_div").hide();
+    }
+    $("select[name='type_flow']").on('change', function(){
+      var select = $("select[name='sub_type_flow']")
+      var type_flow = $(this).val()
+      if(sub_type_flow_choices[type_flow]){
+        $("#sub_type_flow_div").show();
+        options = sub_type_flow_choices[type_flow]
+        options_string = ''
+        options.forEach(function(ele){
+          options_string += '<option value="' +ele[0] + '">' + ele[1] + '</option>';
+        })
+        select.find('option').remove()
+        select.append(options_string)
+
+      }
+      else {
+        $("#sub_type_flow_div").hide();
+      }
+         
+    });
+  $("select[name='type_flow']").change()
+  </script>
 
   {% compress js %}
   <!-- Parsley Validate Scripts -->
