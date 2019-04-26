@@ -954,30 +954,29 @@ class ShineCandidateLoginAPIView(APIView):
 
         return self.get_response_for_successful_login(candidate_id, candidate_info)
 
-        def _dispatch_via_email_password(self, email, password):
-            login_data = {"email": email.strip(), "password": password}
+    def _dispatch_via_email_password(self, email, password):
+        login_data = {"email": email.strip(), "password": password}
 
-            try:
-                login_resp = RegistrationLoginApi.user_login(login_data)
-            except Exception as e:
-                logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
-                return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            login_resp = RegistrationLoginApi.user_login(login_data)
+        except Exception as e:
+            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
-            candidate_id = login_resp.get('candidate_id')
-            access_token = login_resp.get('access_token')
+        candidate_id = login_resp.get('candidate_id')
+        access_token = login_resp.get('access_token')
 
-            if not candidate_id and not access_token:
-                logging.getLogger('info_log').info("Login attempt failed - {}".format(login_resp))
-                return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+        if not candidate_id and not access_token:
+            logging.getLogger('info_log').info("Login attempt failed - {}".format(login_resp))
+            return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
-            try:
-                login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
-            except Exception as e:
-                logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
-                return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+        except Exception as e:
+            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
-            return self.get_response_for_successful_login(candidate_id, login_response)
-
+        return self.get_response_for_successful_login(candidate_id, login_response)
 
     def post(self, request, *args, **kwargs):
         email = request.data.get('email')
@@ -994,7 +993,6 @@ class ShineCandidateLoginAPIView(APIView):
 
 
 class UpdateCertificateAndAssesment(APIView):
-
     authentication_classes = [OAuth2Authentication]
     permission_classes = [IsAuthenticated]
 
