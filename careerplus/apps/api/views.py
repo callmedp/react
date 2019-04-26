@@ -991,3 +991,18 @@ class ShineCandidateLoginAPIView(APIView):
             return self._dispatch_via_email_password(email, password)
 
         return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UpdateCertificateAndAssesment(APIView):
+
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        self.vendor_name = self.kwargs.get('vendor_name')
+
+        return Response({
+            "status": 1,
+            "msg": "Certificate Updated"},
+            status=status.HTTP_201_CREATED
+        )

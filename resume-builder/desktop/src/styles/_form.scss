@@ -139,6 +139,17 @@ textarea {
   font-weight: 400;
 }
 
+.address textarea {
+  width:100%;
+  border: 1px solid $border1;
+  @include border-radius(3px);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  @extend %inner-shadow;
+  padding: 5px 10px;
+  font-weight: 400;
+}
+
 /* Checkbox */
 input[type='checkbox'] {
   appearance:none;
@@ -175,8 +186,8 @@ input[type='submit']:hover {
   display: none;
 }
 .css-vj8t7z {
-  height: 45px;
-  min-height: auto !important;
+  /*height: 45px;*/
+  min-height: 45px !important;
   border-color: $border1 !important;
   @extend %inner-shadow;
   border-top-left-radius: 0 !important;
@@ -184,9 +195,10 @@ input[type='submit']:hover {
 }
 .css-1hwfws3 {
   padding: 0 8px !important;
-  height: 40px;
+  min-height: 45px;
+  /*height: 40px;
   overflow-y: auto !important;
-  overflow-x: hidden !important;
+  overflow-x: hidden !important;*/
   align-items: flex-start !important;
 }
 .css-1g6gooi {
@@ -201,8 +213,8 @@ input[type='submit']:hover {
 .css-2o5izw {
   border-color: $border1 !important;
   box-shadow: inset 0 3px 8px 0 rgba(214,214,214,0.40) !important;
-  min-height: auto !important;
-  height: 45px;
+  /*min-height: auto !important;
+  height: 45px;*/
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }

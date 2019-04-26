@@ -19,7 +19,7 @@ header {
 			content: '';
 			width: 287px;
 			height: 90px;
-			background: url(/media/static/react/assets/images/logo.png) 0 0;
+			background: url(#{$static-url}react/assets/images/logo.png) 0 0;
 			display: inline-block;
 			position: absolute;
 			left: -15px;

@@ -6,7 +6,7 @@
 }
 
 .top-banner {
-	background: url(/media/static/react/assets/images/banner-bg.jpg) 0 0 no-repeat;
+	background: url(#{$static-url}react/assets/images/banner-bg.jpg) 0 0 no-repeat;
 	background-size: cover;
 	@include border-radius(4px);
 	display: inline-block;
