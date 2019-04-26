@@ -1,0 +1,24 @@
+{% load render_bundle from webpack_loader %}
+{% load static humanize compress %}
+
+{% block head %}
+    {% block css_section %}
+        {% render_bundle 'main' 'css' 'DEFAULT' %}
+    {% endblock css_section %}
+    <script>
+        window.config = {}
+        config.staticUrl = "{{STATIC_URL}}"
+        config.siteDomain ="{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN }}"
+    </script>
+
+{% endblock head %}
+
+
+{% block container %}
+    <div id="react-app"></div>
+    <!-- Webpack rendered JS -->
+{% endblock container %}
+
+{% block js_section %}
+    {% render_bundle 'main' 'js' 'DEFAULT' %}
+{% endblock js_section %}

@@ -2,16 +2,18 @@
 {% load static humanize compress %}
 
 {% block head %}
-    <meta charset="utf-8" />
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-    <meta name="theme-color" content="#000000" />
+    <meta charset="utf-8"/>
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="theme-color" content="#000000"/>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
     {% block css_section %}
         {% render_bundle 'main' 'css' 'MOBILE' %}
     {% endblock css_section %}
     <script>
-        profileInfo = 'info is requeired';
+        window.config = {}
+        config.staticUrl = "{{STATIC_URL}}"
+        config.siteDomain = "{{ SITE_PROTOCOL }}://{{ MOBILE_SITE_DOMAIN }}"
     </script>
 {% endblock head %}
 

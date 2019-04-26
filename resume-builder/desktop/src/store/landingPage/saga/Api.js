@@ -1,17 +1,18 @@
 import BaseApiService from '../../../services/BaseApiService'
+import {siteDomain} from "../../../Utils/domains";
 
 const getCandidateId = () => {
     const url = `user-profile/`;
-    return BaseApiService.get(`http://127.0.0.1:8000/api/v1/resume/${url}`);
+    return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
 };
 
 
 const loginCandidate = (data) => {
     const url = `candidate-login/`;
-    return BaseApiService.post(`http://127.0.0.1:8000/api/v1/${url}`, data, {
+    return BaseApiService.post(`${siteDomain}/api/v1/${url}`, data, {
         "Content-Type": "application/json",
     });
-}
+};
 
 
 export const Api = {

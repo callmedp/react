@@ -1,11 +1,12 @@
 import BaseApiService from '../../../services/BaseApiService'
 
+import {siteDomain} from "../../../Utils/domains";
 
 const createUserExperience = (data, candidateId, experienceId = '') => {
     delete data['id'];
     const url = `candidate/${candidateId}/experiences/`;
 
-    return BaseApiService.post(`http://127.0.0.1:8000/api/v1/resume/${url}`, data);
+    return BaseApiService.post(`${siteDomain}/api/v1/resume/${url}`, data);
 
 };
 
@@ -13,14 +14,14 @@ const createUserExperience = (data, candidateId, experienceId = '') => {
 const fetchUserExperience = (candidateId) => {
 
     const url = `candidate/${candidateId}/experiences/`;
-    return BaseApiService.get(`http://127.0.0.1:8000/api/v1/resume/${url}`);
+    return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
 };
 
 const updateUserExperience = (data, candidateId, experienceId = '') => {
 
     const url = `candidate/${candidateId}/experiences/${experienceId}/`;
 
-    return BaseApiService.put(`http://127.0.0.1:8000/api/v1/resume/${url}`, data);
+    return BaseApiService.put(`${siteDomain}/api/v1/resume/${url}`, data);
 };
 
 
@@ -28,7 +29,7 @@ const deleteUserExperience = (candidateId, experienceId) => {
 
     const url = `candidate/${candidateId}/experiences/${experienceId}/`;
 
-    return BaseApiService.deleteMethod(`http://127.0.0.1:8000/api/v1/resume/${url}`);
+    return BaseApiService.deleteMethod(`${siteDomain}/api/v1/resume/${url}`);
 
 };
 
@@ -36,7 +37,7 @@ const deleteUserExperience = (candidateId, experienceId) => {
 const bulkUpdateUserExperience = (data, candidateId) => {
 
     const url = `candidate/${candidateId}/bulk-update/experience/`;
-    return BaseApiService.post(`http://127.0.0.1:8000/api/v1/resume/${url}`,data);
+    return BaseApiService.post(`${siteDomain}/api/v1/resume/${url}`,data);
 
 
 }

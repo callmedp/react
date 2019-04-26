@@ -133,6 +133,6 @@ package-lock.json
 # Webpack Stats
 
 # webpack-mobile-stats.json
-webpack-desktop-stats.json
+# webpack-desktop-stats.json
 
 dump.rdb
