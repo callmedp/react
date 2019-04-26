@@ -7,6 +7,7 @@
     "dotenv": "^7.0.0",
     "moment": "^2.24.0",
     "node-sass": "^4.11.0",
+    "node-sass-utils": "^1.1.2",
     "query-string": "^6.4.0",
     "react": "^16.8.4",
     "react-accessible-accordion": "^3.0.0",
@@ -23,11 +24,14 @@
     "redux": "^4.0.1",
     "redux-form": "^8.2.0",
     "redux-saga": "^1.0.2",
+    "rewire": "^4.0.1",
     "sweetalert2": "^8.6.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-app-rewired start",
+    "build": "sh -ac '. .env.${REACT_APP_ENV}; node ./scripts/build-non-split.js'",
+    "build:staging": "REACT_APP_ENV=staging npm run build",
+    "build:production": "REACT_APP_ENV=production npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -41,6 +45,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "redux-devtools-extension": "^2.13.8"
+    "redux-devtools-extension": "^2.13.8",
+    "react-app-rewired": "^2.1.3"
   }
 }

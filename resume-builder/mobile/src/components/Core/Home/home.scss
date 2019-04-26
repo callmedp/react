@@ -95,7 +95,7 @@
 
         span {
             @include size(80px, 83px, block);
-            background-image: url('/media/static/react/assets/images/mobile/how-it-works.png');
+            background-image: url('#{$path}/how-it-works.png');
             background-repeat: no-repeat;
             position: relative;
 
@@ -154,7 +154,7 @@
 .shine-learning {
     &--logo {
         @include size(200px, 47px, block);
-        background: url('/media/static/react/assets/images/mobile/shine-logo-big.jpg');
+        background: url('#{$path}/shine-logo-big.jpg');
         margin: 0 auto 2.0rem;
     }
 

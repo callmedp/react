@@ -4,22 +4,23 @@ import './buy.scss';
 import * as action from '../../../../store/buy/actions';
 import {connect} from "react-redux";
 import ImageGallery from 'react-image-gallery';
-import { Slide } from 'react-slideshow-image';
+import {Slide} from 'react-slideshow-image';
 
 class Buy extends Component {
 
     constructor(props) {
         super(props);
+        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
         this.state = {
             'checked': 'product1',
             'pay_button_clicked': true
         }
     }
-    
+
 
     async redirectToCart() {
-        
-        if(!this.props.productIds[0])
+
+        if (!this.props.productIds[0])
             return;
         let product;
         if (this.state.checked === 'product1') {
@@ -63,60 +64,64 @@ class Buy extends Component {
             '/media/static/react/assets/images/mobile/resume-1.png',
             '/media/static/react/assets/images/mobile/resume-2.png',
             '/media/static/react/assets/images/mobile/resume-2.png'
-          ];
-           
-          const properties = {
+        ];
+
+        const properties = {
             duration: 5000,
             transitionDuration: 500,
             infinite: true,
             indicators: true,
             arrows: true
-          }
+        }
 
-        return(
-            
+        return (
+
             <div className="buy-container">
-                <Header />
-                
+                <Header/>
+
                 <div className="pay-now">
                     <div className="pay-now__price">
                         <span className="fs-14 pay-now__price--pay">You pay</span>
-                        <span className="fs-26 color-333 semi-bold">Rs. {this.state.checked === 'product1' ? 999 : 1249}/-</span>
+                        <span
+                            className="fs-26 color-333 semi-bold">Rs. {this.state.checked === 'product1' ? 999 : 1249}/-</span>
                     </div>
 
                     <button className="btn btn__round btn__primary fs-" disabled={this.state.pay_button_clicked}
-                    onClick={this.redirectToCart.bind(this)}>Pay Now</button>
+                            onClick={this.redirectToCart.bind(this)}>Pay Now
+                    </button>
                 </div>
-                
+
                 <div className="buy">
                     <div className="buy__wrap">
                         <div className="buy__item">
                             <div className="buy__item--left form__radio-group">
-                                <input className="buy__item--input form__radio-input" type="radio" id="your-resume" name="product-1"
-                                    checked={this.state.checked === 'product1' ? true : false}
-                                    onChange={this.handleOnChange.bind(this, 'product1')}></input>
-                                <label  className="buy__item--label form__radio-label" htmlFor="your-resume">
+                                <input className="buy__item--input form__radio-input" type="radio" id="your-resume"
+                                       name="product-1"
+                                       checked={this.state.checked === 'product1' ? true : false}
+                                       onChange={this.handleOnChange.bind(this, 'product1')}></input>
+                                <label className="buy__item--label form__radio-label" htmlFor="your-resume">
                                     <span className="form__radio-button"></span>
-                                    Buy your <br />customised resume
+                                    Buy your <br/>customised resume
                                     <strong>Rs. 999/-</strong>
                                 </label>
                             </div>
                             <div className="buy__item--right">
                                 <span className="buy__item--image">
-                                    <img src="/media/static/react/assets/images/mobile/Resume4.png" alt="Resume"/>
+                                    <img src={`${this.staticUrl}react/assets/images/mobile/Resume4.png`} alt="Resume"/>
                                 </span>
                                 <a href="#" className="fs-12 mt-5">Edit</a>
                             </div>
                         </div>
-                        
-                        
+
+
                         <div className="buy__item buy__recommended">
                             <div className="buy__recommended--tag">Recommended</div>
                             <div className="buy__item--left form__radio-group">
-                                <input className="buy__item--input form__radio-input" type="radio" id="all-resumes" name="product2"
-                                                       checked={this.state.checked === 'product2' ? true : false}
-                                                       onChange={this.handleOnChange.bind(this, 'product2')}></input>
-                                <label  className="buy__item--label form__radio-label" htmlFor="all-resumes">
+                                <input className="buy__item--input form__radio-input" type="radio" id="all-resumes"
+                                       name="product2"
+                                       checked={this.state.checked === 'product2' ? true : false}
+                                       onChange={this.handleOnChange.bind(this, 'product2')}></input>
+                                <label className="buy__item--label form__radio-label" htmlFor="all-resumes">
                                     <span className="form__radio-button"></span>
                                     Buy all 6 customised resumes
                                     <div className="buy__item--price">
@@ -126,7 +131,7 @@ class Buy extends Component {
                                     </div>
                                 </label>
                             </div>
-                            
+
                             <div className="buy__item--right">
                                 <div className="buy__item--right__sliderWrap mt-20">
                                     {/* <div className="buy__item--right__sliderWrap__controls">
@@ -161,19 +166,19 @@ class Buy extends Component {
                                     </ul> */}
                                     <Slide {...properties} className="slider">
                                         <div className="each-slide">
-                                        <div style={{'backgroundImage': `url(${slideImages[0]})`}}>
-                                            <span></span>
-                                        </div>
-                                        </div>
-                                        <div className="each-slide">
-                                        <div style={{'backgroundImage': `url(${slideImages[1]})`}}>
-                                            <span></span>
-                                        </div>
+                                            <div style={{'backgroundImage': `url(${slideImages[0]})`}}>
+                                                <span></span>
+                                            </div>
                                         </div>
                                         <div className="each-slide">
-                                        <div style={{'backgroundImage': `url(${slideImages[2]})`}}>
-                                            <span></span>
+                                            <div style={{'backgroundImage': `url(${slideImages[1]})`}}>
+                                                <span></span>
+                                            </div>
                                         </div>
+                                        <div className="each-slide">
+                                            <div style={{'backgroundImage': `url(${slideImages[2]})`}}>
+                                                <span></span>
+                                            </div>
                                         </div>
                                     </Slide>
                                 </div>

@@ -2,16 +2,18 @@ import React, {Component} from 'react';
 import './header.scss'
 import * as actions from "../../../store/sidenav/actions";
 import {connect} from "react-redux";
-import { Link} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 
 class Header extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.openMenu = this.openMenu.bind(this);
+        this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
+
     }
 
-    openMenu(){
+    openMenu() {
         this.props.updateSidenavStatus(true)
     }
 
@@ -23,8 +25,8 @@ class Header extends Component {
         const {page} = this.props;
         return (
             <header className="header">
-            
-                { page === 'edit' ?
+
+                {page === 'edit' ?
                     <React.Fragment>
                         <div className="header__left">
                             <button role="button" className="menu">
@@ -33,13 +35,13 @@ class Header extends Component {
                         </div>
                         <Link to={'/resume-builder'} className="btn btn__round btn--outline">Back to home</Link>
                     </React.Fragment>
-                :   <React.Fragment>
+                    : <React.Fragment>
                         <div className="header--logo">
-                            <img src="/media/static/react/assets/images/mobile/logo.png" alt="" />
+                            <img src={`${this.staticUrl}react/assets/images/mobile/logo.png`} alt=""/>
                         </div>
                         <div className="header--logo"></div>
                     </React.Fragment>}
-            
+
 
                 {/*<div className="header__left">
                     <button role="button" className="header__menu">
@@ -51,8 +53,7 @@ class Header extends Component {
         </div>*/}
 
                 {/*<a href="#" className="btn btn__round btn--outline">Change template</a>*/}
-                
-                
+
 
             </header>
         )

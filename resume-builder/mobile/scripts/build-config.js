@@ -14,3 +14,25 @@ config.optimization.runtimeChunk = false;
 config.output.filename = '../../../careerplus/static_core/react/dist/mobile/main.js';
 // CSS. "5" is MiniCssPlugin
 config.plugins[5].options.filename = '../../../careerplus/static_core/react/dist/mobile/main.css';
+
+
+const result = {
+    'staticUrl': process.env.REACT_APP_ENV === 'staging' ?
+        'https://learning-static-staging-189607.storage.googleapis.com/l/s/' : '',
+
+}
+
+config.module.rules[2]['oneOf'][5]['use'][3]['options'] = {
+    ...config.module.rules[2]['oneOf'][5]['use'][3]['options'],
+    ...{
+        functions: {
+            "get($keys)": function (keys) {
+                keys = keys.getValue();
+                let output = result[keys];
+                output = sassUtils.castToSass(output);
+                return output;
+
+            }
+        }
+    }
+}
