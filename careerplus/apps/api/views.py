@@ -48,7 +48,7 @@ from .serializers import (
     ShineDataFlowDataSerializer, TalentEconomySerializer)
 
 from shared.rest_addons.pagination import LearningCustomPagination
-
+from shared.rest_addons.authentication import ShineUserAuthentication
 from shared.rest_addons.mixins import (SerializerFieldsMixin, FieldFilterMixin)
 
 from django_redis import get_redis_connection
@@ -789,7 +789,7 @@ class ShineCandidateLoginAPIView(APIView):
     Required - email/password or alt
     """
     serializer_class = None
-    authentication_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
     permission_classes = ()
     conn = get_redis_connection('token')
 
@@ -1009,6 +1009,24 @@ class ShineCandidateLoginAPIView(APIView):
             return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
         return self.get_response_for_successful_login(candidate_id, login_response)
+
+    def get(self,request,*args,**kwargs):
+        user = request.user
+        candidate_id = request.session.get('candidate_id')
+        if not user.is_authenticated() and not candidate_id:
+            return Response({"detail":"Not Authorised"},status=status.HTTP_401_UNAUTHORIZED)
+
+        if not candidate_id:
+            candidate_id = user.candidate_id
+
+        try:
+            login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+        except Exception as e:
+            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return self.get_response_for_successful_login(candidate_id, login_response)
+
 
     def post(self, request, *args, **kwargs):
         email = request.data.get('email')
