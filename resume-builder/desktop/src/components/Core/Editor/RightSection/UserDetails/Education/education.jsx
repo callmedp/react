@@ -28,7 +28,11 @@ const EducationRenderer = ({
                                changeOrderingUp,
                                changeOrderingDown,
                                openedAccordion,
+                               editHeading,
+                               saveTitle,
+                               isEditable,
                            }) => {
+    let elem = null;
     return (
         <div>
             {!!loader &&
@@ -36,9 +40,12 @@ const EducationRenderer = ({
             }
             <section className="head-section">
                 <span className="icon-box"><i className="icon-education1"></i></span>
-                <h2 contenteditable="true">Education</h2>
-                <span className="icon-edit icon-education__cursor"></span>
-
+                <h2 ref={(value) => {
+                    elem = value
+                }} onKeyUp={(event) => saveTitle(event)}
+                    contenteditable={isEditable ? "true" : "false"}>Education</h2>
+                <span onClick={() => editHeading(elem)}
+                      className={!!(!isEditable) ? "icon-edit icon-education__cursor" : ''}/>
 
                 <button onClick={(event) => handleAddition(fields, error, event)}
                         type={'button'}
@@ -200,12 +207,13 @@ class Education extends Component {
         this.deleteEducation = this.deleteEducation.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
-
+        this.saveTitle = this.saveTitle.bind(this);
+        this.editHeading = this.editHeading.bind(this);
         this.state = {
             currentAccordion: 0,
             previousAccordion: 0,
             openedAccordion: 0,
-
+            isEditable: false
         }
     }
 
@@ -222,6 +230,25 @@ class Education extends Component {
         this.props.fetchUserEducation()
     }
 
+    editHeading(elem) {
+        this.setState({
+            'isEditable': true
+        });
+        setTimeout(() => {
+            elem.focus()
+        }, 0)
+
+
+    }
+
+    saveTitle(event) {
+        event.stopPropagation();
+        if (event.keyCode === 13) {
+            this.setState({
+                'isEditable': false
+            })
+        }
+    }
 
     changeOrderingDown(index, fields, event) {
         event.stopPropagation()
@@ -309,6 +336,9 @@ class Education extends Component {
                             changeOrderingDown={this.changeOrderingDown}
                             openedAccordion={this.state.openedAccordion}
                             component={EducationRenderer}
+                            saveTitle={(event) => this.saveTitle(event)}
+                            editHeading={(value) => this.editHeading(value)}
+                            isEditable={this.state.isEditable}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">

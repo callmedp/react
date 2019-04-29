@@ -26,7 +26,12 @@ const ProjectRenderer = ({
                              changeOrderingUp,
                              changeOrderingDown,
                              openedAccordion,
+                             editHeading,
+                             saveTitle,
+                             isEditable,
                          }) => {
+    let elem = null;
+
     return (
         <div>
             {!!loader &&
@@ -34,32 +39,38 @@ const ProjectRenderer = ({
             }
             <section className="head-section">
                 <span className="icon-box"><i className="icon-projects1"/></span>
-                <h2 contenteditable="true">Projects</h2>
-                <span className="icon-edit icon-edit__cursor"></span>
-                
-                        <button
-                            onClick={() => handleAddition(fields, error)}
-                            type={'button'}
-                            className="add-button add-button__right">Add new
-                        </button>
-                
+                <h2 ref={(value) => {
+                    elem = value
+                }} onKeyUp={(event) => saveTitle(event)}
+                    contenteditable={isEditable ? "true" : "false"}>Projects
+                </h2>
+                <span onClick={() => editHeading(elem)}
+                      className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ""}></span>
+
+                <button
+                    onClick={() => handleAddition(fields, error)}
+                    type={'button'}
+                    className="add-button add-button__right">Add new
+                </button>
+
             </section>
-                    <section className="right-sidebar-scroll">
-                        <ul>
-                            <Accordion onChange={(value) => handleAccordionClick(value, fields, error)}
-                                       allowZeroExpanded={true}
-                                       preExpanded={[openedAccordion]}>
-                                {
-                                    fields.map((member, index) => {
-                                        return (
-                                            <li key={index}>
-                                                <section className="info-section">
-                                                    <AccordionItem uuid={index}>
-                                                        <AccordionItemHeading>
-                                                            <AccordionItemButton>
-                                                                <div className="flex-container">
-                                                                    <h3 className="add-section-heading">{fields.get(index).project_name || 'Project'} <strong>1</strong></h3>
-                                                                    <div className="addon-buttons mr-10">
+            <section className="right-sidebar-scroll">
+                <ul>
+                    <Accordion onChange={(value) => handleAccordionClick(value, fields, error)}
+                               allowZeroExpanded={true}
+                               preExpanded={[openedAccordion]}>
+                        {
+                            fields.map((member, index) => {
+                                return (
+                                    <li key={index}>
+                                        <section className="info-section">
+                                            <AccordionItem uuid={index}>
+                                                <AccordionItemHeading>
+                                                    <AccordionItemButton>
+                                                        <div className="flex-container">
+                                                            <h3 className="add-section-heading">{fields.get(index).project_name || 'Project'}
+                                                                <strong>1</strong></h3>
+                                                            <div className="addon-buttons mr-10">
                                                                     <span
                                                                         onClick={(event) => deleteProject(index, fields, event)}
                                                                         className="icon-delete mr-15"/>
@@ -143,7 +154,7 @@ const ProjectRenderer = ({
                     </Accordion>
                 </ul>
             </section>
-            
+
         </div>
     )
 }
@@ -159,12 +170,14 @@ class Project extends Component {
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
         this.handleAccordionState = this.handleAccordionState.bind(this);
+        this.saveTitle = this.saveTitle.bind(this);
+        this.editHeading = this.editHeading.bind(this);
 
         this.state = {
             currentAccordion: 0,
             previousAccordion: 0,
             openedAccordion: 0,
-
+            isEditable: false
         }
     }
 
@@ -182,6 +195,26 @@ class Project extends Component {
 
     }
 
+
+    editHeading(elem) {
+        this.setState({
+            'isEditable': true
+        });
+        setTimeout(() => {
+            elem.focus()
+        }, 0)
+
+
+    }
+
+    saveTitle(event) {
+        event.stopPropagation();
+        if (event.keyCode === 13) {
+            this.setState({
+                'isEditable': false
+            })
+        }
+    }
 
     changeOrderingDown(index, fields, event) {
         event.stopPropagation();
@@ -271,6 +304,9 @@ class Project extends Component {
                     openedAccordion={this.state.openedAccordion}
                     loader={loader}
                     component={ProjectRenderer}
+                    saveTitle={(event) => this.saveTitle(event)}
+                    editHeading={(value) => this.editHeading(value)}
+                    isEditable={this.state.isEditable}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">

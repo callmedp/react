@@ -28,17 +28,26 @@ const CourseRenderer = ({
                             changeOrderingUp,
                             changeOrderingDown,
                             openedAccordion,
-                            entity
+                            isEditable,
+                            editHeading,
+                            saveTitle,
                         }) => {
+    let elem = null;
     return (
         <div>
-            {!!loader &&
-            <Loader/>
-            }
+            {/*{!!loader &&*/}
+            {/*<Loader/>*/}
+            {/*}*/}
             <section className="head-section">
-                <span className="icon-box"><i className="icon-courses1"></i></span>
-                <h2 contenteditable="true">Courses</h2>
-                <span className="icon-edit icon-edit__cursor"></span>
+                <span className="icon-box"><i className="icon-courses1"/></span>
+                <h2 ref={(value) => {
+                    elem = value
+                }} onKeyUp={(event) => saveTitle(event)}
+                    contenteditable={isEditable ? "true" : "false"}
+                >Courses
+                </h2>
+                <span onClick={() => editHeading(elem)}
+                      className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ""}/>
 
                 <button onClick={() => handleAddition(fields, error)}
                         type={'button'}
@@ -136,10 +145,13 @@ class Course extends Component {
         this.deleteCourse = this.deleteCourse.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
+        this.saveTitle = this.saveTitle.bind(this);
+        this.editHeading = this.editHeading.bind(this);
         this.state = {
             currentAccordion: 0,
             previousAccordion: 0,
             openedAccordion: 0,
+            isEditable: false
 
         }
     }
@@ -194,6 +206,28 @@ class Course extends Component {
         })
     }
 
+
+    editHeading(elem) {
+        this.setState({
+            'isEditable': true
+        });
+        setTimeout(() => {
+            elem.focus()
+        }, 0)
+
+
+    }
+
+    saveTitle(event) {
+        event.stopPropagation();
+        if (event.keyCode === 13) {
+            this.setState({
+                'isEditable': false
+            })
+        }
+    }
+
+
     deleteCourse(index, fields, event) {
         event.stopPropagation();
         const course = fields.get(index);
@@ -238,6 +272,9 @@ class Course extends Component {
                             changeOrderingDown={this.changeOrderingDown}
                             openedAccordion={this.state.openedAccordion}
                             component={CourseRenderer}
+                            saveTitle={(event) => this.saveTitle(event)}
+                            editHeading={(value) => this.editHeading(value)}
+                            isEditable={this.state.isEditable}
                 />
                 <div className="flex-container items-right mr-20 mb-30">
                     <button className="blue-button mr-10">Preview</button>

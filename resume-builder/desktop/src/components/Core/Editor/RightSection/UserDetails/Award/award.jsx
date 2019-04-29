@@ -26,7 +26,11 @@ const AwardRenderer = ({
                            changeOrderingUp,
                            changeOrderingDown,
                            openedAccordion,
+                           isEditable,
+                           editHeading,
+                           saveTitle,
                        }) => {
+    let elem = null;
     return (
         <div>
             {!!(loader) &&
@@ -34,8 +38,13 @@ const AwardRenderer = ({
             }
             <section className="head-section">
                 <span className="icon-box"><i className="icon-awards1"/></span>
-                <h2>Awards</h2>
-                {/*<span className="icon-edit icon-awards__cursor"></span>*/}
+                <h2 ref={(value) => {
+                    elem = value
+                }} onKeyUp={(event) => saveTitle(event)}
+                    contenteditable={isEditable ? "true" : "false"}
+                >Awards</h2>
+                <span onClick={() => editHeading(elem)}
+                      className={!!(!isEditable) ? "icon-edit icon-awards__cursor" : ""}/>
 
                 <button onClick={() => handleAddition(fields, error)}
                         type={'button'}
@@ -138,11 +147,15 @@ class Award extends Component {
         this.deleteAward = this.deleteAward.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
+        this.saveTitle = this.saveTitle.bind(this);
+        this.editHeading = this.editHeading.bind(this);
 
         this.state = {
             currentAccordion: 0,
             previousAccordion: 0,
             openedAccordion: 0,
+            isEditable: false
+
 
         }
     }
@@ -151,8 +164,29 @@ class Award extends Component {
         this.props.fetchUserAward()
     }
 
+
+    editHeading(elem) {
+        this.setState({
+            'isEditable': true
+        });
+        setTimeout(() => {
+            elem.focus()
+        }, 0)
+
+
+    }
+
+    saveTitle(event) {
+        event.stopPropagation();
+        if (event.keyCode === 13) {
+            this.setState({
+                'isEditable': false
+            })
+        }
+    }
+
     async handleSubmit(values) {
-          const {list} = values;
+        const {list} = values;
         if (list.length) {
             await this.props.onSubmit(list[list.length - 1]);
             this.props.history.push('/resume-builder/edit/?type=course')
@@ -242,6 +276,9 @@ class Award extends Component {
                             changeOrderingDown={this.changeOrderingDown}
                             openedAccordion={this.state.openedAccordion}
                             component={AwardRenderer}
+                            saveTitle={(event) => this.saveTitle(event)}
+                            editHeading={(value) => this.editHeading(value)}
+                            isEditable={this.state.isEditable}
                 />
                 <div className="flex-container items-right mr-20 mb-30">
                     <button className="blue-button mr-10">Preview</button>
