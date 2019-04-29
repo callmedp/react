@@ -32,9 +32,10 @@ class PersonalInfo extends Component {
         this.state = {
             'imageURI': '',
             'imageURL': '',
-            'editHeading': true,
+            'editHeading': false,
             'heading' : ''
         }
+        this.updateInputValue =this.updateInputValue.bind(this);
 
     }
 
@@ -80,6 +81,25 @@ class PersonalInfo extends Component {
         return [];
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
+            this.setState({heading : this.props.personalInfo.entity_preference_data[0].entity_text})
+        }
+    }
+
+    updateInputValue(key,e) {
+        if(e.keyCode === 13){
+            this.props.headingChange(this.props.personalInfo,0,e.target.value)
+            this.setState({editHeading:false,heading:e.target.value})
+        }
+        if(key === 'blur'){
+            this.props.headingChange(this.props.personalInfo,0,e.target.value)
+            this.setState({editHeading:false,heading:e.target.value})
+        }
+        
+    }
+
+
     async getImageURI(event) {
         let reader = new FileReader();
         reader.onload = (event) => {
@@ -98,22 +118,23 @@ class PersonalInfo extends Component {
             'imageURL': url
         })
     }
-
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {handleSubmit, personalInfo,submitting,submitSucceeded} = this.props;
-        const {editHeading} =this.state;
+        const {editHeading,heading} =this.state;
         return (
+            
         <div className="buildResume">
             <PreviewModal {...this.props}/>
             <div className="buildResume__wrap">
                 <div className="buildResume__heading">
                     {!editHeading ?
-                        <h1>Personal Info</h1>:
-                        <input type="text" placeholder="Please enter"/>
+                        <h1>{heading}</h1>:
+                        <input type="text" placeholder={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
+                         onKeyDown={(e)=>this.updateInputValue('keyPress',e)}/>
                     }
-                    <i className="sprite icon--edit" ></i>
+                    <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
                 </div>
                 
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -126,7 +147,7 @@ class PersonalInfo extends Component {
 
                         <li className="form__group">
                             <Field component={renderField} label={"Last Name"}  type={"text"} name="last_name" id="last_name"
-                                iconClass={"sprite icon--lastName"} validate={required} className="form__input" prepend={true}/>
+                                iconClass={"sprite icon--lastName"} className="form__input" prepend={true}/>
                         </li>
 
                         <li className="form__group">
@@ -227,32 +248,12 @@ export const PersonalInfoForm = reduxForm({
 
 const mapStateToProps = (state) => {
     return {
-        initialValues: state.personalInfo,
-        personalInfo: state.personalInfo
+        initialValues: state.personalInfo
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        "fetchPersonalInfo": () => {
-            return dispatch(actions.fetchPersonalInfo())
-        },
-        "onSubmit": (personalDetails, imageURL) => {
-            const {gender, date_of_birth, extracurricular} = personalDetails;
-            personalDetails = {
-                ...personalDetails,
-                ...{
-                    'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
-                    'image': imageURL,
-                    'extracurricular' : ''
-                    // 'extracurricular': extracurricular instanceof Array ?
-                    //     (extracurricular || []).map(el => el.value).join(',') : extracurricular
-                }
-            }
-            return new Promise((resolve, reject) => {
-                dispatch(actions.updatePersonalInfo({personalDetails, resolve, reject}));
-            })
-        },
         "fetchImageUrl": (imageFile) => {
             return new Promise((resolve, reject) => {
                 dispatch(actions.fetchImageUrl({imageFile, resolve, reject}));

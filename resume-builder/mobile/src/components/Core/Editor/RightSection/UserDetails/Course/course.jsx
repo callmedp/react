@@ -17,10 +17,19 @@ class Course extends Component {
         this.deleteCourse = this.deleteCourse.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
+        this.state = {
+            'editHeading': false,
+            'heading' : ''
+        }
+        this.updateInputValue =this.updateInputValue.bind(this);
+        this.editHeadingClick = this.editHeadingClick.bind(this);
     }
     
     componentDidMount() {
         this.props.fetchUserCourse()
+        if (this.props.personalInfo.entity_preference_data.length) {
+            this.setState({heading : this.props.personalInfo.entity_preference_data[8].entity_text})
+        }
     }
 
     async handleSubmit(values) {
@@ -80,6 +89,31 @@ class Course extends Component {
         await this.props.bulkUpdateUserCourse(fields.getAll());
     }
 
+    updateInputValue(key,e) {
+        console.log(key,e.target.value)
+        if(e.keyCode === 13){
+            console.log("I ma here")
+            this.props.headingChange(this.props.personalInfo,7,e.target.value)
+            this.setState({editHeading:false,heading:e.target.value})
+        }
+        if(key === 'blur'){
+            console.log("I ma here")
+            this.props.headingChange(this.props.personalInfo,7,e.target.value)
+            this.setState({editHeading:false,heading:e.target.value})
+        }
+        
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
+            this.setState({heading : this.props.personalInfo.entity_preference_data[7].entity_text})
+        }
+    }
+
+    editHeadingClick(){
+        this.setState({editHeading:true})
+    }
+
     async changeOrderingDown(index,fields,event){
         event.stopPropagation();
         ////console.log("Clicked Down")
@@ -99,7 +133,9 @@ class Course extends Component {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {handleSubmit, course,submitting,submitSucceeded} = this.props;
+        const {editHeading,heading} =this.state;
         return(
+
             <div className="buildResume">
                 <PreviewModal {...this.props}/>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -109,7 +145,11 @@ class Course extends Component {
                                 deleteCourse={this.deleteCourse}
                                 changeOrderingUp={this.changeOrderingUp}
                                 changeOrderingDown={this.changeOrderingDown}
-                                component={renderCourse}/>
+                                component={renderCourse}
+                                updateInputValue={this.updateInputValue}
+                                editHeading={editHeading}
+                                editHeadingClick={this.editHeadingClick}
+                                heading ={heading}/>
                     <ul className="form">
                         <li className="form__group">
                             <div className="btn-wrap">

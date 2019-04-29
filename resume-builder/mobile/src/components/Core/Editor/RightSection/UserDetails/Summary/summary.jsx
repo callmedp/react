@@ -14,11 +14,37 @@ class Summary extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.state = {
+            'editHeading': false,
+            'heading' : ''
+        }
+        this.updateInputValue =this.updateInputValue.bind(this);
     }
 
     componentDidMount() {
         this.props.fetchPersonalInfo()
+        if (this.props.personalInfo.entity_preference_data.length) {
+            this.setState({heading : this.props.personalInfo.entity_preference_data[5].entity_text})
+        }
 
+    }
+
+    updateInputValue(key,e) {
+        if(e.keyCode === 13){
+            this.props.headingChange(this.props.personalInfo,5,e.target.value)
+            this.setState({editHeading:false,heading:e.target.value})
+        }
+        if(key === 'blur'){
+            this.props.headingChange(this.props.personalInfo,5,e.target.value)
+            this.setState({editHeading:false,heading:e.target.value})
+        }
+        
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
+            this.setState({heading : this.props.personalInfo.entity_preference_data[5].entity_text})
+        }
     }
 
     async handleSubmit(values) {
@@ -40,14 +66,18 @@ class Summary extends Component {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {personalInfo: {extra_info}, handleSubmit,submitting,submitSucceeded} = this.props;
+        const {editHeading,heading} =this.state;
         return (
         <div className="buildResume">
             <PreviewModal {...this.props}/>
             <div className="buildResume__wrap pb-0">
                 <div className="buildResume__heading">
-                    <h1>Summary</h1>
-                    <input className="hide" type="text" placeholder="Summary"/>
-                    <i className="sprite icon--edit"></i>
+                    {!editHeading ?
+                        <h1>{heading}</h1>:
+                        <input type="text" placeholder={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
+                         onKeyDown={(e)=>this.updateInputValue('keyPress',e)}/>
+                    }
+                    <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
                 </div>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <ul className="form">

@@ -11,15 +11,22 @@ const renderExperiences = ({
                             deleteExperience,
                             changeOrderingUp,
                             changeOrderingDown,
+                            editHeading,
+                            heading,
+                            updateInputValue,
+                            editHeadingClick
                             }) => {
     return (
         
         <div className="buildResume__wrap">
             <div className="buildResume__heading heading">
                 <div className="heading__info">
-                    <h1>Experience</h1>
-                    <input className="hide" type="text" placeholder="Experience"/>
-                    <i className="sprite icon--edit"></i>
+                    {!editHeading ?
+                        <h1>{heading}</h1>:
+                        <input type="text" placeholder={heading} onBlur={(e)=>updateInputValue('blur',e)}
+                         onKeyDown={(e)=>updateInputValue('keyPress',e)}/>
+                    }
+                    <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
                 </div>
                 <button role="button"
                 onClick={handleSubmit(handleAddition.bind(this, fields, error))}

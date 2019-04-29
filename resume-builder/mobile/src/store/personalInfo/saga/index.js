@@ -9,7 +9,6 @@ import moment from 'moment'
 import {SubmissionError} from 'redux-form'
 
 import {interestList} from '../../../Utils/interestList'
-import {entityLinkNameLink ,iconClassList,delete_icon} from '../../../Utils/entitydata'
 
 
 function* getPersonalDetails(action) {
@@ -29,14 +28,11 @@ function* getPersonalDetails(action) {
                 date_of_birth: date_of_birth && moment(date_of_birth).format('YYYY-MM-DD') || '',
                 extracurricular: extracurricular.split(',').map(key => interestList[key]),
                 entity_preference_data :entity_preference_data.map((obj,key) => {
-                                                    obj.entity_link = entityLinkNameLink[obj.entity_id];
-                                                    obj.icon_class = iconClassList[obj.entity_id];
-                                                    obj.delete_icon = delete_icon[obj.entity_id];
-                                                    if(obj.entity_id ===1 || obj.entity_id == 4){
+                                                    if(obj.entity_id ===1 || obj.entity_id === 2 || obj.entity_id === 5){
                                                         obj.active =true
                                                     }
                                                     return obj;
-                                                }).sort((a,b)=>b.active -a.active )
+                                                })
             }
         }
         ////console.log('data');
@@ -49,16 +45,29 @@ function* getPersonalDetails(action) {
 function* updatePersonalDetails(action) {
     try {
         const {payload: {personalDetails, resolve, reject}} = action;
+        let details = {
+            ...personalDetails,
+            ...{
+                entity_preference_data:(personalDetails.entity_preference_data).map((item,key)=>{
+                    delete item.entity_link;
+                    delete item.delete_icon;
+                    delete item.icon_class;
+                    return item
+                })
+            ,
+                'extracurricular': ''
+            }
+        }
 
         const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
 
-        const result = yield call(Api.updatePersonalData, personalDetails, candidateId);
+        const result = yield call(Api.updatePersonalData, details, candidateId);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
 
-        yield put({type: Actions.SAVE_USER_INFO, data: result['data']});
+        yield put({type: Actions.SAVE_USER_INFO, data:result['data']});
 
         return resolve('User Personal  Info saved successfully.');
 

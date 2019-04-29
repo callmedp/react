@@ -18,10 +18,37 @@ class Experience extends Component {
         this.deleteExperience = this.deleteExperience.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
+        this.state = {
+            'editHeading': false,
+            'heading' : ''
+        }
+        this.updateInputValue =this.updateInputValue.bind(this);
+        this.editHeadingClick = this.editHeadingClick.bind(this);
 
     }
     componentDidMount() {
         this.props.fetchUserExperience()
+        if (this.props.personalInfo.entity_preference_data.length) {
+            this.setState({heading : this.props.personalInfo.entity_preference_data[2].entity_text})
+        }
+    }
+
+    updateInputValue(key,e) {
+        if(e.keyCode === 13){
+            console.log("I ma here")
+            this.props.headingChange(this.props.personalInfo,2,e.target.value)
+            this.setState({editHeading:false,heading:e.target.value})
+        }
+        if(key === 'blur'){
+            console.log("I ma here")
+            this.props.headingChange(this.props.personalInfo,2,e.target.value)
+            this.setState({editHeading:false,heading:e.target.value})
+        }
+        
+    }
+
+    editHeadingClick(){
+        this.setState({editHeading:true})
     }
 
     async handleSubmit(values) {
@@ -37,6 +64,12 @@ class Experience extends Component {
             this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
         }
         
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
+            this.setState({heading : this.props.personalInfo.entity_preference_data[2].entity_text})
+        }
     }
 
     handleAddition(fields, error) {
@@ -104,6 +137,7 @@ class Experience extends Component {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {handleSubmit, experience,submitting,submitSucceeded} = this.props;
+        const {editHeading,heading} =this.state;
         return(
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -114,7 +148,11 @@ class Experience extends Component {
                                 deleteExperience={this.deleteExperience}
                                 changeOrderingUp={this.changeOrderingUp}
                                 changeOrderingDown={this.changeOrderingDown}
-                                component={renderExperiences}/>
+                                component={renderExperiences}
+                                updateInputValue={this.updateInputValue}
+                                editHeading={editHeading}
+                                editHeadingClick={this.editHeadingClick}
+                                heading ={heading}/>
                     <ul className="form mt-15">
                         <li className="form__group">
                             <div className="btn-wrap">

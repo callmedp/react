@@ -17,6 +17,12 @@ class Education extends Component {
         this.deleteEducation = this.deleteEducation.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
+        this.state = {
+            'editHeading': false,
+            'heading' : ''
+        }
+        this.updateInputValue =this.updateInputValue.bind(this);
+        this.editHeadingClick = this.editHeadingClick.bind(this);
     }
 
     async handleSubmit(values) {
@@ -34,8 +40,35 @@ class Education extends Component {
         
     }
 
+    updateInputValue(key,e) {
+        if(e.keyCode === 13){
+            console.log("I ma here")
+            this.props.headingChange(this.props.personalInfo,1,e.target.value)
+            this.setState({editHeading:false,heading:e.target.value})
+        }
+        if(key === 'blur'){
+            console.log("I ma here")
+            this.props.headingChange(this.props.personalInfo,1,e.target.value)
+            this.setState({editHeading:false,heading:e.target.value})
+        }
+        
+    }
+
+    editHeadingClick(){
+        this.setState({editHeading:true})
+    }
+
     componentDidMount() {
         this.props.fetchUserEducation()
+        if (this.props.personalInfo.entity_preference_data.length) {
+            this.setState({heading : this.props.personalInfo.entity_preference_data[1].entity_text})
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
+            this.setState({heading : this.props.personalInfo.entity_preference_data[1].entity_text})
+        }
     }
 
     handleAddition(fields, error) {
@@ -102,6 +135,7 @@ class Education extends Component {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {handleSubmit, education,submitting,submitSucceeded} = this.props;
+        const {editHeading,heading} =this.state;
         
         return(
             <div className="buildResume">
@@ -113,7 +147,11 @@ class Education extends Component {
                                 deleteEducation={this.deleteEducation}
                                 changeOrderingUp={this.changeOrderingUp}
                                 changeOrderingDown={this.changeOrderingDown}
-                                component={renderEducation}/> 
+                                component={renderEducation}
+                                updateInputValue={this.updateInputValue}
+                                editHeading={editHeading}
+                                editHeadingClick={this.editHeadingClick}
+                                heading ={heading}/> 
                     <ul className="form">
                         <li className="form__group">
                             <div className="btn-wrap">
