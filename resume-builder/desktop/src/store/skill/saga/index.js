@@ -7,11 +7,35 @@ import * as Actions from '../actions/actionTypes';
 import {SubmissionError} from 'redux-form'
 import {proficiencyList} from "../../../Utils/proficiencyList";
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
+import {courseTypeList} from "../../../Utils/courseTypeList";
 
+
+function modifySkill(data) {
+    data = {
+        ...data,
+        ...{
+            list: data['list'].map(el => {
+                return {
+                    ...el,
+                    proficiency: proficiencyList[el['proficiency'].toString()]
+                }
+            })
+        }
+    };
+    return data;
+}
 
 function* fetchUserSkill(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
+
+        if (localStorage.getItem('skill')) {
+            yield put({
+                type: Actions.SAVE_USER_SKILL,
+                data: modifySkill({list: JSON.parse(localStorage.getItem('skill')) || []})
+            });
+            return;
+        }
 
         yield put({type: UPDATE_UI, data: {loader: true}})
 
@@ -24,17 +48,7 @@ function* fetchUserSkill(action) {
 
         const {data: {results}} = result;
         let data = {list: results};
-        data = {
-            ...data,
-            ...{
-                list: data['list'].map(el => {
-                    return {
-                        ...el,
-                        proficiency: proficiencyList[el['proficiency'].toString()]
-                    }
-                })
-            }
-        }
+        data = modifySkill(data);
         yield put({type: Actions.SAVE_USER_SKILL, data: data})
     } catch (e) {
         console.log(e);
@@ -55,11 +69,12 @@ function* updateUserSkill(action) {
         yield put({type: UPDATE_UI, data: {loader: true}})
 
         const result = yield call(id ? Api.updateUserSkill : Api.createUserSkill, userSkill, candidateId, id);
-        yield put({type: UPDATE_UI, data: {loader: false}})
+        yield put({type: UPDATE_UI, data: {loader: false}});
 
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+        localStorage.removeItem('skill');
 
         yield put({type: Actions.SAVE_USER_SKILL, data: result['data']});
 
@@ -104,6 +119,10 @@ function* deleteUserSkill(action) {
         if (result['error']) {
             console.log(result['error'])
         }
+
+
+        localStorage.deleteItem('skill');
+
         // yield call(fetchUserSkill)
         yield put({type: Actions.REMOVE_SKILL, id: skillId});
 

@@ -2,10 +2,12 @@ import {SAVE_USER_PROJECT, REMOVE_PROJECT} from "../actions/actionTypes";
 
 const initialState = {
     list: [{
+        "candidate_id": '',
+        "id": '',
         "project_name": '',
         "start_date": '',
         "end_date": '',
-        "skills": '',
+        "skills": [],
         "description": ''
     }]
 };

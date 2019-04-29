@@ -2,6 +2,8 @@ import {SAVE_USER_SKILL, REMOVE_SKILL} from "../actions/actionTypes";
 
 const initialState = {
     list: [{
+        "candidate_id": '',
+        "id": '',
         "name": '',
         "proficiency": 5
     }]

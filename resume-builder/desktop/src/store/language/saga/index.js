@@ -6,13 +6,37 @@ import * as Actions from '../actions/actionTypes';
 import {proficiencyList} from "../../../Utils/proficiencyList";
 import {SubmissionError} from 'redux-form'
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
+import {courseTypeList} from "../../../Utils/courseTypeList";
 
+
+function modifyLanguage(data) {
+    data = {
+        ...data,
+        ...{
+            list: data['list'].map(el => {
+                return {
+                    ...el,
+                    proficiency: proficiencyList[el['proficiency'].toString()]
+                }
+            })
+        }
+    };
+    return data;
+}
 
 function* fetchUserLanguage(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
 
+        if (localStorage.getItem('language')) {
+
+            yield put({
+                type: Actions.SAVE_USER_LANGUAGE,
+                data: modifyLanguage({list: JSON.parse(localStorage.getItem('language')) || []})
+            });
+            return;
+        }
         yield put({type: UPDATE_UI, data: {loader: true}})
 
         const result = yield call(Api.fetchUserLanguage, candidateId);
@@ -26,17 +50,7 @@ function* fetchUserLanguage(action) {
 
         let data = {list: results};
 
-        data = {
-            ...data,
-            ...{
-                list: data['list'].map(el => {
-                    return {
-                        ...el,
-                        proficiency: proficiencyList[el['proficiency'].toString()]
-                    }
-                })
-            }
-        }
+        data = modifyLanguage(data)
         yield put({type: Actions.SAVE_USER_LANGUAGE, data: data})
     } catch (e) {
         console.log(e);
@@ -58,10 +72,15 @@ function* updateUserLanguage(action) {
 
         yield put({type: UPDATE_UI, data: {loader: false}})
 
+        if (result['error']) {
+            return reject(new SubmissionError({_error: result['errorMessage']}));
+        }
 
-        // if (result['error']) {
-        //     return reject(new SubmissionError({_error: result['errorMessage']}));
-        // }
+        localStorage.removeItem('language');
+
+
+        yield put({type: Actions.SAVE_USER_LANGUAGE, data: result['data']});
+
         // yield call(fetchUserLanguage)
         return resolve('User Language  Info saved successfully.');
 

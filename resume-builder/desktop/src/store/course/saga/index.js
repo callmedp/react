@@ -11,6 +11,12 @@ import {UPDATE_UI} from '../../ui/actions/actionTypes'
 function* fetchUserCourse(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
+
+        if (localStorage.getItem('course')) {
+
+            yield put({type: Actions.SAVE_USER_COURSE, data: JSON.parse(localStorage.getItem('course')) || []})
+            return;
+        }
         yield put({type: UPDATE_UI, data: {loader: true}})
 
         const result = yield call(Api.fetchUserCourse, candidateId);
@@ -42,6 +48,8 @@ function* updateUserCourse(action) {
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+        localStorage.removeItem('course');
+
         yield put({type: UPDATE_UI, data: {loader: false}})
 
         yield put({type: Actions.SAVE_USER_COURSE, data: result['data']});

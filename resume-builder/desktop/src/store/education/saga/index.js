@@ -11,11 +11,34 @@ import {proficiencyList} from "../../../Utils/proficiencyList";
 
 import {UPDATE_UI} from '../../ui/actions/actionTypes'
 
+function modifyEducation(data) {
+    data = {
+        ...data,
+        ...{
+            list: data['list'].map(el => {
+                return {
+                    ...el,
+                    course_type: courseTypeList[el['course_type']]
+                }
+            })
+        }
+    };
+    return data;
+}
+
 function* fetchUserEducation(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
 
+        if (localStorage.getItem('education')) {
+
+            yield put({
+                type: Actions.SAVE_USER_EDUCATION,
+                data: modifyEducation({list: JSON.parse(localStorage.getItem('education')) || []})
+            })
+            return;
+        }
         yield put({type: UPDATE_UI, data: {loader: true}})
 
         const result = yield call(Api.fetchUserEducation, candidateId);
@@ -27,17 +50,8 @@ function* fetchUserEducation(action) {
 
         const {data: {results}} = result;
         let data = {list: results};
-        data = {
-            ...data,
-            ...{
-                list: data['list'].map(el => {
-                    return {
-                        ...el,
-                        course_type: courseTypeList[el['course_type']]
-                    }
-                })
-            }
-        };
+
+        data = modifyEducation(data);
 
         yield put({type: Actions.SAVE_USER_EDUCATION, data: data})
     } catch (e) {
@@ -63,6 +77,9 @@ function* updateUserEducation(action) {
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+
+        localStorage.removeItem('education');
+
 
         return resolve('User Education  Info saved successfully.');
 

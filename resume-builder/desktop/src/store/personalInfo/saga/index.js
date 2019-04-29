@@ -26,11 +26,34 @@ const genderDict = {
     }
 }
 
+function modifyPersonalInfo(data) {
+    const {date_of_birth, gender, extracurricular} = data;
+    data = {
+        ...data,
+        ...{
+            date_of_birth: (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
+            gender: (gender && genderDict[gender]) || '',
+            extracurricular: (extracurricular && extracurricular.split(',').map(key => interestList[key])) || ''
+        }
+    }
+    return data;
+}
+
 function* getPersonalDetails(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
         yield put({type: UPDATE_UI, data: {loader: true}})
+
+
+        if (localStorage.getItem('personalInfo')) {
+
+            yield put({
+                type: Actions.SAVE_USER_INFO,
+                data: modifyPersonalInfo(JSON.parse(localStorage.getItem('personalInfo')) || [])
+            })
+            return;
+        }
 
         const result = yield call(Api.fetchPersonalInfo, candidateId);
         if (result['error']) {
@@ -39,16 +62,7 @@ function* getPersonalDetails(action) {
         yield put({type: UPDATE_UI, data: {loader: false}})
 
         let {data} = result;
-        const {date_of_birth, gender, extracurricular} = data;
-
-        data = {
-            ...data,
-            ...{
-                date_of_birth: (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
-                gender: (gender && genderDict[gender]) || '',
-                extracurricular: (extracurricular && extracurricular.split(',').map(key => interestList[key])) || ''
-            }
-        }
+        data = modifyPersonalInfo(data)
         console.log('data');
         yield put({type: Actions.SAVE_USER_INFO, data: data})
     } catch (e) {
@@ -68,6 +82,9 @@ function* updatePersonalDetails(action) {
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+
+        localStorage.removeItem('personalInfo');
+
         yield put({type: UPDATE_UI, data: {loader: true}})
 
 

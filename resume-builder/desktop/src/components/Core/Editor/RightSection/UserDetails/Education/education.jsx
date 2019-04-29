@@ -138,7 +138,7 @@ const EducationRenderer = ({
                                                             </div>
                                                             <span className="till-today">
                                     <Field type="radio" name={`${member}.is_pursuing`} component={'input'}
-                                           checked={`${member}.is_pursuing` === 'true' ? true : false}/>
+                                           checked={`${member}.is_pursuing` === 'true'}/>
                                     Till Today
                                 </span>
                                                         </fieldset>
