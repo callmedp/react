@@ -1,6 +1,6 @@
 import {Api} from './Api';
 import {takeLatest, call} from "redux-saga/effects";
-
+import {siteDomain} from "../../../Utils/domains";
 import * as Actions from '../actions/actionTypes';
 import {LOGIN_CANDIDATE} from "../actions/actionTypes";
 
@@ -31,7 +31,7 @@ function* loginCandidate(action) {
         console.log('---login state-', result);
         if (result['error']) {
             console.log('error here and now returning');
-            window.location.href = "http://127.0.0.1:8000/login/?next=/resume-builder/"
+            window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
             return;
             //redirect code here
         }
