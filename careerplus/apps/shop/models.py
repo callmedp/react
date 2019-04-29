@@ -3107,8 +3107,9 @@ class SubCategory(AbstractAutoDate,AbstractSEO,ModelMeta):
             self.meta_desc = self.get_description()
 
         if self.category and self.get_location_display():
+            value = self.slug if self.slug else self.category.name + '-' + str(self.get_location_display())
             self.url = self.get_absolute_url()
-            value = self.category.name + '-' + str(self.get_location_display())
+            # value = self.category.name + '-' + str(self.get_location_display())
             slug_value = slugify(value)
             self.slug = slug_value
         super(SubCategory, self).save(*args, **kwargs)
