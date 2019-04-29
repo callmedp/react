@@ -176,7 +176,7 @@ export class PersonalInfo extends Component {
                                 </fieldset>
 
                             </div>
-                            
+
                             <div className="flex-container">
                                 <fieldset className="custom">
                                     <label>Interest</label>

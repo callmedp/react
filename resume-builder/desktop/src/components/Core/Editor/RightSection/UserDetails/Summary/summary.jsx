@@ -48,6 +48,7 @@ class Summary extends Component {
                             <Field component={renderTextArea} type={"textarea"} name="extra_info"
                                    className="summary-box--summary-txt" rows="10" value={extra_info}/>
                         </div>
+
                     </section>
 
                     <div className="flex-container items-right mr-20 mb-30">
