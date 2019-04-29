@@ -25,11 +25,11 @@ function* loginCandidate(action) {
     try {
         let {payload} = action;
 
-        // handle token already present in there
-        // if (localStorage.getItem('token')) {
-        //     console.log('--token available-');
-        //     return;
-        // }
+        //handle token already present in there
+        if (localStorage.getItem('token')) {
+            console.log('--token available-');
+            return;
+        }
         const result = yield call(Api.loginCandidate, payload);
         if (result['error']) {
             console.log('error here and now returning');

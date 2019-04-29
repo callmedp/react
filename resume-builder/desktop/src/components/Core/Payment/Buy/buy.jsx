@@ -5,6 +5,7 @@ import Header from '../../../Common/Header/header.jsx'
 import Footer from '../../../Common/Footer/footer.jsx'
 import * as action from '../../../../store/buy/actions'
 import {connect} from "react-redux";
+import {siteDomain} from "../../../../Utils/domains";
 
 export class Buy extends Component {
 
@@ -16,6 +17,13 @@ export class Buy extends Component {
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
 
 
+    }
+
+    componentWillMount() {
+        if (!localStorage.getItem('token')) {
+            window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
+            return;
+        }
     }
 
     async redirectToCart() {
