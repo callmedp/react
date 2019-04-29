@@ -99,7 +99,7 @@ const LanguageRenderer = ({
                                                             <label>Language rating (out of 10)</label>
                                                             <div className="input-group">
                                                                 <div className="input-group--input-group-icon">
-                                                                    <span className="icon-blank"></span>
+                                                                    <span className="icon-rating"></span>
                                                                 </div>
                                                                 <Field name={`${member}.proficiency`}
                                                                        component={renderSelect}

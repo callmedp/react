@@ -270,3 +270,23 @@
 .icon-blank {
     @include icon-inblock (24px, 18px, -505px -483px);
 }
+
+.icon-percentage {
+    @include icon-inblock (16px, 16px, -231px -149px);
+}
+
+.icon-interest {
+    @include icon-inblock (20px, 19px, -260px -149px);
+}
+
+.icon-course-type {
+    @include icon-inblock (17px, 20px, -294px -148px);
+}
+
+.icon-rating {
+    @include icon-inblock (19px, 20px, -324px -149px);
+}
+
+.icon-gender {
+    @include icon-inblock (20px, 20px, -357px -150px);
+}

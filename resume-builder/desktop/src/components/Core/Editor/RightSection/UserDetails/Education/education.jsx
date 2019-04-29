@@ -150,7 +150,7 @@ const EducationRenderer = ({
                                                             <label>Course Type</label>
                                                             <div className="input-group">
                                                                 <div className="input-group--input-group-icon">
-                                                                    <span className="icon-blank"></span>
+                                                                    <span className="icon-course-type"></span>
                                                                 </div>
                                                                 <Field component={renderSelect} type={"text"}
                                                                        name={`${member}.course_type`}
@@ -165,7 +165,7 @@ const EducationRenderer = ({
                                                             <label>Percentage/CGPA</label>
                                                             <div className="input-group">
                                                                 <div className="input-group--input-group-icon">
-                                                                    <span className="icon-blank"></span>
+                                                                    <span className="icon-percentage"></span>
                                                                 </div>
                                                                 <Field component={renderField} type={"text"}
                                                                        name={`${member}.percentage_cgpa`}

@@ -124,7 +124,7 @@ export class PersonalInfo extends Component {
                                     <label>Gender</label>
                                     <div className="input-group">
                                         <div className="input-group--input-group-icon">
-                                            <span className="icon-blank"></span>
+                                            <span className="icon-gender"></span>
                                         </div>
                                         <Field
                                             name="gender"
@@ -182,7 +182,7 @@ export class PersonalInfo extends Component {
                                     <label>Interest</label>
                                     <div className="input-group">
                                         <div className="input-group--input-group-icon">
-                                            <span className="icon-blank"></span>
+                                            <span className="icon-interest"></span>
                                         </div>
                                         <Field name="extracurricular" component={renderDynamicSelect}
                                             // loadOptions={this.fetchInterestList.bind(this)}
