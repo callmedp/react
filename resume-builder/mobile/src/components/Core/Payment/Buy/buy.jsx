@@ -3,8 +3,9 @@ import Header from '../../../Common/Header/header.jsx';
 import './buy.scss';
 import * as action from '../../../../store/buy/actions';
 import {connect} from "react-redux";
-import ImageGallery from 'react-image-gallery';
-import {Slide} from 'react-slideshow-image';
+import {siteDomain} from "../../../../Utils/domains";
+import Slider from "react-slick";
+
 
 class Buy extends Component {
 
@@ -13,12 +14,13 @@ class Buy extends Component {
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
         this.state = {
             'checked': 'product1',
-            'pay_button_clicked': true
+            'pay_button_clicked': false
         }
     }
 
 
-    async redirectToCart() {
+     redirectToCart() {
+        console.log("Here")
 
         if (!this.props.productIds[0])
             return;
@@ -37,8 +39,10 @@ class Buy extends Component {
             'add_resume': true
 
         }
-        await this.props.addToCart(data);
-        window.location.href = '/cart'
+        console.log(data)
+         this.props.addToCart(data);
+        this.setState({pay_button_clicked:true})
+        //window.location.href = `${siteDomain}/cart`
     }
 
     componentDidMount() {
@@ -66,13 +70,12 @@ class Buy extends Component {
             '/media/static/react/assets/images/mobile/resume-2.png'
         ];
 
-        const properties = {
-            duration: 5000,
-            transitionDuration: 500,
+        const settings = {
+            dots: true,
             infinite: true,
-            indicators: true,
-            arrows: true
-        }
+            speed: 500,
+            slidesToShow: 2,
+          };
 
         return (
 
@@ -141,8 +144,8 @@ class Buy extends Component {
                                         <span className="buy__item--right__sliderWrap__controls--prev hide">
                                             <i className="sprite icon--control"></i>
                                         </span>
-                                    </div> */}
-                                    {/* <ul className="buy__recommended__items">
+                                    </div> 
+                                    <ul className="buy__recommended__items">
                                         <li className="buy__recommended__item">
                                             <span className="buy__recommended__image">
                                                 <span className="sprite icon--zoom"></span>
@@ -164,29 +167,36 @@ class Buy extends Component {
                                             </span>
                                         </li>
                                     </ul> */}
-                                    <Slide {...properties} className="slider">
-                                        <div className="each-slide">
-                                            <div style={{'backgroundImage': `url(${slideImages[0]})`}}>
-                                                <span></span>
-                                            </div>
+                                    <Slider {...settings}>
+                                        <div className="buy__recommended__item">
+                                            <span className="buy__recommended__image">
+                                                <span className="sprite icon--zoom"></span>
+                                                <img src="/media/static/react/assets/images/mobile/resume-2.png" alt="Custom resume" />
+                                            </span>
                                         </div>
-                                        <div className="each-slide">
-                                            <div style={{'backgroundImage': `url(${slideImages[1]})`}}>
-                                                <span></span>
-                                            </div>
+                                        
+                                        <div className="buy__recommended__item">
+                                            <span className="buy__recommended__image">
+                                                <span className="sprite icon--zoom"></span>
+                                                <img src="/media/static/react/assets/images/mobile/resume-1.png" alt="Custom resume" />
+                                            </span>
                                         </div>
-                                        <div className="each-slide">
-                                            <div style={{'backgroundImage': `url(${slideImages[2]})`}}>
-                                                <span></span>
-                                            </div>
+                                       
+                                        <div className="buy__recommended__item">
+                                            <span className="buy__recommended__image">
+                                                <span className="sprite icon--zoom"></span>
+                                                <img src="/media/static/react/assets/images/mobile/resume-2.png" alt="Custom resume" />
+                                            </span>
                                         </div>
-                                    </Slide>
+                                    </Slider>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+
+                                        
             </div>
 
         )
@@ -203,9 +213,10 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(action.getProductIds())
         },
         'addToCart': (data) => {
-            return new Promise((resolve, reject) => {
-                dispatch(action.addToCart({data, resolve, reject}));
-            })
+            console.log(data)
+            // return new Promise((resolve, reject) => {
+            //     dispatch(action.addToCart({data, resolve, reject}));
+            // })
         }
     }
 };

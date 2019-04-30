@@ -158,7 +158,7 @@ class Course extends Component {
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={(length === pos +1) ?'button' :'submit'}
                                     onClick={(length === pos +1) ? ()=>{this.props.history.push(`/resume-builder/buy`)} : ()=>{}}>
-                                    {(length === pos +1) ?"Buy" :"Save &amp; Continue"}
+                                    {(length === pos +1) ?"Buy" :"Save & Continue"}
                                 </button>
                             </div>
                         </li>

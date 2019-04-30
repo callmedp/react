@@ -135,10 +135,11 @@ class LeftSideBar extends Component {
         let links = []
         for (let i of this.state.addmore) {
             if (i.active) {
-                links.push(i.entity_link)
+                links.push(entityLinkNameLink[i.entity_id])
                 ////console.log(i.entity_link)
             }
         }
+        console.log(links)
         this.props.updateListOfLink({listOfLinks: links})
         ////console.log("I am here")
     }
