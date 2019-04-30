@@ -97,13 +97,13 @@ class Edit extends Component {
                 <ul>
                     {
                         (preferenceList || []).filter(elem => elem.active === true).map((elem, index) => {
-                            const {name, link, icon, itemType} = formCategoryList[elem['entity_id']];
+                            const {link, icon, itemType} = formCategoryList[elem['entity_id']];
                             console.log('-truesss---', elem['entity_id'] !== 1 || elem['entity_id'] !== 6);
                             return (
                                 <li key={index} className={type === itemType ? 'edit-section--active' : ''}>
                                     <Link to={link}>
                                         <span className={'mr-20 ' + icon}></span>
-                                        {name}
+                                        {elem['entity_text']}
                                     </Link>
                                     {
                                         !!(elem['entity_id'] !== 1 && elem['entity_id'] !== 6) ?
@@ -122,12 +122,12 @@ class Edit extends Component {
                     }
                     {!!(show) &&
                     (preferenceList || []).filter(elem => elem.active !== true).map((elem, index) => {
-                        const {name, link, icon, itemType} = formCategoryList[elem['entity_id']];
+                        const {link, icon, itemType} = formCategoryList[elem['entity_id']];
                         return (
                             <li key={index} className={type === itemType ? 'edit-section--active' : ''}>
                                 <Link to={link}>
                                     <span className={'mr-20 ' + icon}></span>
-                                    {name}
+                                    {elem['entity_text']}
                                 </Link>
                                 <span onClick={() => this.addIntoVisibleList(elem)}
                                       className="icon-add pull-right"/>

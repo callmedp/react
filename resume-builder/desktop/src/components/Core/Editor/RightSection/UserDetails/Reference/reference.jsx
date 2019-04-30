@@ -30,6 +30,7 @@ const ReferenceRenderer = ({
                                isEditable,
                                editHeading,
                                saveTitle,
+                               entityName
                            }) => {
     let elem = null;
 
@@ -44,7 +45,7 @@ const ReferenceRenderer = ({
                     elem = value
                 }} onKeyUp={(event) => saveTitle(event)}
                     contenteditable={isEditable ? "true" : "false"}
-                >References</h2>
+                >{entityName}</h2>
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ""}/>
 
@@ -163,15 +164,11 @@ class Reference extends Component {
         this.deleteReference = this.deleteReference.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
-        this.saveTitle = this.saveTitle.bind(this);
-        this.editHeading = this.editHeading.bind(this);
 
         this.state = {
             currentAccordion: 0,
             previousAccordion: 0,
             openedAccordion: 0,
-            isEditable: false
-
         }
     }
 
@@ -224,27 +221,6 @@ class Reference extends Component {
         })
     }
 
-
-    editHeading(elem) {
-        this.setState({
-            'isEditable': true
-        });
-        setTimeout(() => {
-            elem.focus()
-        }, 0)
-
-
-    }
-
-    saveTitle(event) {
-        event.stopPropagation();
-        if (event.keyCode === 13) {
-            this.setState({
-                'isEditable': false
-            })
-        }
-    }
-
     deleteReference(index, fields, event) {
         event.stopPropagation();
         const reference = fields.get(index);
@@ -279,7 +255,7 @@ class Reference extends Component {
 
 
     render() {
-        const {handleSubmit, ui: {loader}} = this.props;
+        const {handleSubmit, ui: {loader}, isEditable, editHeading, saveTitle,entityName} = this.props;
         return (
             <form onSubmit={handleSubmit(this.handleSubmit)}>
                 <FieldArray
@@ -294,9 +270,10 @@ class Reference extends Component {
                     openedAccordion={this.state.openedAccordion}
                     loader={loader}
                     component={ReferenceRenderer}
-                    saveTitle={(event) => this.saveTitle(event)}
-                    editHeading={(value) => this.editHeading(value)}
-                    isEditable={this.state.isEditable}
+                    saveTitle={(event) => saveTitle(event, 9)}
+                    editHeading={(value) => editHeading(value)}
+                    isEditable={isEditable}
+                    entityName={entityName}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">

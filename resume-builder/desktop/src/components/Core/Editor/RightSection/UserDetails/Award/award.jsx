@@ -29,6 +29,7 @@ const AwardRenderer = ({
                            isEditable,
                            editHeading,
                            saveTitle,
+                           entityName
                        }) => {
     let elem = null;
     return (
@@ -42,7 +43,7 @@ const AwardRenderer = ({
                     elem = value
                 }} onKeyUp={(event) => saveTitle(event)}
                     contenteditable={isEditable ? "true" : "false"}
-                >Awards</h2>
+                >{entityName}</h2>
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit icon-awards__cursor" : ""}/>
 
@@ -147,16 +148,12 @@ class Award extends Component {
         this.deleteAward = this.deleteAward.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
-        this.saveTitle = this.saveTitle.bind(this);
-        this.editHeading = this.editHeading.bind(this);
+
 
         this.state = {
             currentAccordion: 0,
             previousAccordion: 0,
             openedAccordion: 0,
-            isEditable: false
-
-
         }
     }
 
@@ -164,26 +161,6 @@ class Award extends Component {
         this.props.fetchUserAward()
     }
 
-
-    editHeading(elem) {
-        this.setState({
-            'isEditable': true
-        });
-        setTimeout(() => {
-            elem.focus()
-        }, 0)
-
-
-    }
-
-    saveTitle(event) {
-        event.stopPropagation();
-        if (event.keyCode === 13) {
-            this.setState({
-                'isEditable': false
-            })
-        }
-    }
 
     async handleSubmit(values) {
         const {list} = values;
@@ -260,7 +237,7 @@ class Award extends Component {
 
 
     render() {
-        const {handleSubmit, ui: {loader}} = this.props;
+        const {handleSubmit, ui: {loader}, saveTitle, editHeading, isEditable, entityName} = this.props;
 
 
         return (
@@ -276,9 +253,10 @@ class Award extends Component {
                             changeOrderingDown={this.changeOrderingDown}
                             openedAccordion={this.state.openedAccordion}
                             component={AwardRenderer}
-                            saveTitle={(event) => this.saveTitle(event)}
-                            editHeading={(value) => this.editHeading(value)}
-                            isEditable={this.state.isEditable}
+                            saveTitle={(event) => saveTitle(event, 6)}
+                            editHeading={(value) => editHeading(value)}
+                            entityName={entityName}
+                            isEditable={isEditable}
                 />
                 <div className="flex-container items-right mr-20 mb-30">
                     <button className="blue-button mr-10">Preview</button>

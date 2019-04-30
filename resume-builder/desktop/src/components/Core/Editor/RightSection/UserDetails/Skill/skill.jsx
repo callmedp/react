@@ -35,16 +35,27 @@ const SkillRenderer = ({
                            changeOrderingUp,
                            changeOrderingDown,
                            openedAccordion,
+                           isEditable,
+                           editHeading,
+                           saveTitle,
+                           entityName
                        }) => {
+    let elem = null;
     return (
         <div>
-            {!!loader &&
-            <Loader/>
-            }
+            {/*{!!loader &&*/}
+            {/*<Loader/>*/}
+            {/*}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-skills1"/></span>
-                <h2 contenteditable="true">Skills</h2>
-                <span className="icon-edit icon-education__cursor"></span>
+                <h2 ref={(value) => {
+                    elem = value
+                }} onKeyUp={(event) => saveTitle(event)}
+                    contenteditable={isEditable ? "true" : "false"}
+                >{entityName}</h2>
+                <span onClick={() => editHeading(elem)}
+                      className={!!(!isEditable) ? "icon-edit icon-education__cursor" : ""}
+                />
                 <button onClick={() => handleAddition(fields, error)}
                         type={'button'}
                         className="add-button add-button__right">Add new
@@ -160,7 +171,6 @@ class Skill extends Component {
             currentAccordion: 0,
             previousAccordion: 0,
             openedAccordion: 0,
-
         }
     }
 
@@ -248,7 +258,7 @@ class Skill extends Component {
 
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, ui: {loader}} = this.props;
+        const {error, handleSubmit, pristine, reset, submitting, ui: {loader}, isEditable, editHeading, saveTitle, entityName} = this.props;
         return (
             <form onSubmit={handleSubmit(this.handleSubmit)}>
                 <FieldArray
@@ -263,6 +273,10 @@ class Skill extends Component {
                     openedAccordion={this.state.openedAccordion}
                     loader={loader}
                     component={SkillRenderer}
+                    saveTitle={(event) => saveTitle(event, 4)}
+                    editHeading={(value) => editHeading(value)}
+                    isEditable={isEditable}
+                    entityName={entityName}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">

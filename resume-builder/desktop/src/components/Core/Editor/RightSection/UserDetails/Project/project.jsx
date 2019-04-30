@@ -29,6 +29,7 @@ const ProjectRenderer = ({
                              editHeading,
                              saveTitle,
                              isEditable,
+                             entityName
                          }) => {
     let elem = null;
 
@@ -42,7 +43,7 @@ const ProjectRenderer = ({
                 <h2 ref={(value) => {
                     elem = value
                 }} onKeyUp={(event) => saveTitle(event)}
-                    contenteditable={isEditable ? "true" : "false"}>Projects
+                    contenteditable={isEditable ? "true" : "false"}>{entityName}
                 </h2>
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ""}></span>
@@ -170,8 +171,6 @@ class Project extends Component {
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
         this.handleAccordionState = this.handleAccordionState.bind(this);
-        this.saveTitle = this.saveTitle.bind(this);
-        this.editHeading = this.editHeading.bind(this);
 
         this.state = {
             currentAccordion: 0,
@@ -195,26 +194,6 @@ class Project extends Component {
 
     }
 
-
-    editHeading(elem) {
-        this.setState({
-            'isEditable': true
-        });
-        setTimeout(() => {
-            elem.focus()
-        }, 0)
-
-
-    }
-
-    saveTitle(event) {
-        event.stopPropagation();
-        if (event.keyCode === 13) {
-            this.setState({
-                'isEditable': false
-            })
-        }
-    }
 
     changeOrderingDown(index, fields, event) {
         event.stopPropagation();
@@ -289,7 +268,7 @@ class Project extends Component {
 
 
     render() {
-        const {handleSubmit, ui: {loader}} = this.props;
+        const {handleSubmit, ui: {loader}, saveTitle, editHeading, isEditable, entityName} = this.props;
         return (
             <form onSubmit={handleSubmit(this.handleSubmit)}>
                 <FieldArray
@@ -304,9 +283,10 @@ class Project extends Component {
                     openedAccordion={this.state.openedAccordion}
                     loader={loader}
                     component={ProjectRenderer}
-                    saveTitle={(event) => this.saveTitle(event)}
-                    editHeading={(value) => this.editHeading(value)}
-                    isEditable={this.state.isEditable}
+                    saveTitle={(event) => saveTitle(event, 3)}
+                    editHeading={(value) => editHeading(value)}
+                    isEditable={isEditable}
+                    entityName={entityName}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
@@ -330,7 +310,7 @@ export const ProjectForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.project,
-        ui: state.ui
+        ui: state.ui,
     }
 };
 

@@ -28,37 +28,15 @@ export class PersonalInfo extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handlePreview = this.handlePreview.bind(this);
         this.fetchInterestList = this.fetchInterestList.bind(this);
-        this.editHeading = this.editHeading.bind(this);
-        this.saveTitle = this.saveTitle.bind(this);
 
 
         this.state = {
             'imageURI': '',
             'imageURL': '',
-            'isEditable': false
         }
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
     }
 
-    editHeading() {
-        this.setState({
-            'isEditable': true
-        })
-        setTimeout(() => {
-            this.refs.personalInfo.focus();
-        }, 0)
-
-
-    }
-
-    saveTitle(event) {
-        event.stopPropagation()
-        if (event.keyCode === 13) {
-            this.setState({
-                'isEditable': false
-            })
-        }
-    }
 
     componentDidMount() {
         this.props.fetchPersonalInfo();
@@ -88,7 +66,7 @@ export class PersonalInfo extends Component {
         // } catch (e) {
         //     console.log('--error-', e);
         // }
-        console.log('---', inputValue)
+        console.log('---', inputValue);
         return [];
     }
 
@@ -110,16 +88,18 @@ export class PersonalInfo extends Component {
     }
 
     render() {
-        const {handleSubmit, personalInfo, ui: {loader}} = this.props;
-        const {isEditable} = this.state;
-        console.log('staticUrl -----', `${this.staticUrl}react/assets/images/upload-image.jpg`)
+        const {handleSubmit, personalInfo, ui: {loader}, isEditable, editHeading, saveTitle, entityName} = this.props;
+        let elem = null;
         return (
             <div>
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-info1"/></span>
-                    <h2  ref={"personalInfo"} onKeyUp={(event) => this.saveTitle(event)}
-                        contenteditable={!!(isEditable) ? "true" : "false"}>Personal Info</h2>
-                    <span onClick={this.editHeading} className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ''}/>
+                    <h2 ref={(value) => {
+                        elem = value
+                    }} onKeyUp={(event) => saveTitle(event, 0)}
+                        contenteditable={!!(isEditable) ? "true" : "false"}>{entityName}</h2>
+                    <span onClick={() => editHeading(elem)}
+                          className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ''}/>
                 </section>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <section className="flex-container right-sidebar-scroll">

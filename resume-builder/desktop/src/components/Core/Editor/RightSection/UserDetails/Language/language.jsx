@@ -34,6 +34,7 @@ const LanguageRenderer = ({
                               isEditable,
                               editHeading,
                               saveTitle,
+                              entityName
                           }) => {
     let elem = null;
 
@@ -48,7 +49,7 @@ const LanguageRenderer = ({
                     elem = value
                 }} onKeyUp={(event) => saveTitle(event)}
                     contenteditable={isEditable ? "true" : "false"}
-                >Languages</h2>
+                >{entityName}</h2>
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit icon-language__cursor" : ""}/>
 
@@ -160,13 +161,11 @@ class Language extends Component {
         this.deleteLanguage = this.deleteLanguage.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
-        this.saveTitle = this.saveTitle.bind(this);
-        this.editHeading = this.editHeading.bind(this);
+
         this.state = {
             currentAccordion: 0,
             previousAccordion: 0,
             openedAccordion: 0,
-            isEditable: false
         }
     }
 
@@ -219,25 +218,6 @@ class Language extends Component {
         })
     }
 
-    editHeading(elem) {
-        this.setState({
-            'isEditable': true
-        });
-        setTimeout(() => {
-            elem.focus()
-        }, 0)
-
-
-    }
-
-    saveTitle(event) {
-        event.stopPropagation();
-        if (event.keyCode === 13) {
-            this.setState({
-                'isEditable': false
-            })
-        }
-    }
 
     deleteLanguage(index, fields, event) {
         event.stopPropagation();
@@ -270,7 +250,7 @@ class Language extends Component {
     }
 
     render() {
-        const {handleSubmit, ui: {loader}} = this.props;
+        const {handleSubmit, ui: {loader}, isEditable, editHeading, saveTitle, entityName} = this.props;
         return (
             <form onSubmit={handleSubmit(this.handleSubmit)}>
                 <FieldArray
@@ -285,9 +265,10 @@ class Language extends Component {
                     changeOrderingDown={this.changeOrderingDown}
                     openedAccordion={this.state.openedAccordion}
                     component={LanguageRenderer}
-                    saveTitle={(event) => this.saveTitle(event)}
-                    editHeading={(value) => this.editHeading(value)}
-                    isEditable={this.state.isEditable}
+                    saveTitle={(event) => saveTitle(event, 8)}
+                    editHeading={(value) => editHeading(value)}
+                    isEditable={isEditable}
+                    entityName={entityName}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
