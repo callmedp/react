@@ -213,7 +213,7 @@
 .listing1 {
 	list-style-type: none;
 	padding: 0;
-	margin: 0;	
+	margin: 30px 0 0;	
 
 	li {
 		display: block;
@@ -224,6 +224,8 @@
 			box-shadow: 0 0 40px rgba(0, 0, 0, 0.10);
 		}
 	}
+
+	
 
 	.media {
 		margin-top: 0;
@@ -335,6 +337,27 @@
 
 		.discount {
 			color: #45b34e;
+		}
+
+		&__lists {
+			width: 43%;
+			text-align: right;
+			margin-top: 8px;
+			
+			li {
+				display: inline-block;
+				margin: 0 15px 0 0;
+				padding: 0;
+
+				&:not(:last-child) {
+					border-right: 1px solid #ddd;
+					padding-right: 15px;
+				}
+
+				span {
+					font-weight: 700;
+				}
+			}
 		}
 	}
 }
