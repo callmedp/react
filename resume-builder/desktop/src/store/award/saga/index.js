@@ -13,10 +13,11 @@ function* fetchUserAward(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        // if (localStorage.getItem('award')) {
-        //     yield put({type: Actions.SAVE_USER_AWARD, data: data})
-        //     return;
-        // }
+        if (localStorage.getItem('award')) {
+
+            yield put({type: Actions.SAVE_USER_AWARD, data: JSON.parse(localStorage.getItem('award')) || []})
+            return;
+        }
 
         yield put({type: UPDATE_UI, data: {loader: true}})
         const result = yield call(Api.fetchUserAward, candidateId);
@@ -39,16 +40,21 @@ function* updateUserAward(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
+
         const {id} = userAward;
-        yield put({type: UPDATE_UI, data: {loader: true}})
+        yield put({type: UPDATE_UI, data: {loader: true}});
+
         const result = yield call(id ? Api.updateUserAward : Api.createUserAward, userAward, candidateId, id);
+
         yield put({type: UPDATE_UI, data: {loader: false}})
 
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+
+
         //delete the award
-        localStorage.deleteItem('award');
+        localStorage.removeItem('award');
         yield put({type: Actions.SAVE_USER_AWARD, data: result['data']});
 
         return resolve('User Award  Info saved successfully.');

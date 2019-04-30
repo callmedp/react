@@ -3006,6 +3006,72 @@ class ComplianceReport(TemplateView):
         return context
 
 
+@method_decorator(permission_required('order.can_show_inbox_queue', login_url='/console/login/'), name='dispatch')
+class ReplacedOrderListView(PaginationMixin, ListView):
+    context_object_name = 'inbox_list'
+    template_name = 'console/order/replace-order-list.html'
+    model = OrderItem
+    http_method_names = [u'get', u'post']
+    page = 1
+    paginated_by = 50
+    query = ''
+    sel_opt = 'number'
+    created = ''
+
+    def get(self, request, *args, **kwargs):
+        self.page = request.GET.get('page', 1)
+        self.query = request.GET.get('query', '').strip()
+        self.sel_opt = request.GET.get('rad_search', 'number')
+        self.created = request.GET.get('created', '')
+        return super(ReplacedOrderListView, self).get(request, args, **kwargs)
 
 
+    def get_context_data(self, **kwargs):
+        context = super(ReplacedOrderListView, self).get_context_data(**kwargs)
+        paginator = Paginator(context['inbox_list'], self.paginated_by)
+        context.update(self.pagination(paginator, self.page))
+        var = self.sel_opt
+        alert = messages.get_messages(self.request)
+        filter_form = OIFilterForm()
 
+        context.update({
+            "messages": alert,
+            "query": self.query,
+            "filter_form": filter_form,
+            var: "checked",
+        })
+        return context
+
+    def get_queryset(self):
+        queryset = super(ReplacedOrderListView, self).get_queryset()
+        queryset = queryset.filter(
+            order__status=1, no_process=False,
+            wc_sub_cat__in=[64, 65])
+
+        if self.query:
+            if self.sel_opt == 'id':
+                    queryset = queryset.filter(id__iexact=self.query)
+            elif self.sel_opt == 'number':
+                    queryset = queryset.filter(order__number__iexact=self.query)
+            elif self.sel_opt == 'mobile':
+                queryset = queryset.filter(order__mobile__iexact=self.query)
+            elif self.sel_opt == 'email':
+                queryset = queryset.filter(order__email__iexact=self.query)
+            elif self.sel_opt == 'product':
+                queryset = queryset.select_related('parent')
+                queryset = queryset.filter(
+                    Q(product__name__icontains=self.query) |
+                    Q(parent__isnull=False, parent__product__name__icontains=self.query)
+                )
+
+        if self.created:
+            date_range = self.created.split('-')
+            start_date = date_range[0].strip()
+            start_date = datetime.datetime.strptime(
+                start_date + " 00:00:00", "%d/%m/%Y %H:%M:%S")
+            end_date = date_range[1].strip()
+            end_date = datetime.datetime.strptime(
+                end_date + " 23:59:59", "%d/%m/%Y %H:%M:%S")
+            queryset = queryset.filter(
+                created__range=[start_date, end_date])
+        return queryset.select_related('order').order_by('-modified')

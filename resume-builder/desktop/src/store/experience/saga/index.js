@@ -7,12 +7,23 @@ import * as Actions from '../actions/actionTypes';
 import {SubmissionError} from 'redux-form'
 
 import {UPDATE_UI} from '../../ui/actions/actionTypes'
+import {courseTypeList} from "../../../Utils/courseTypeList";
+
 
 function* fetchUserExperience(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        yield put({type: UPDATE_UI, data: {loader: true}})
+
+        if (localStorage.getItem('experience')) {
+
+            yield put({
+                type: Actions.SAVE_USER_EXPERIENCE,
+                data: {list: JSON.parse(localStorage.getItem('experience')) || []}
+            })
+            return;
+        }
+        yield put({type: UPDATE_UI, data: {loader: true}});
 
         const result = yield call(Api.fetchUserExperience, candidateId);
         if (result['error']) {
@@ -46,6 +57,8 @@ function* updateUserExperience(action) {
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+
+        localStorage.removeItem('experience');
 
 
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: result['data']});

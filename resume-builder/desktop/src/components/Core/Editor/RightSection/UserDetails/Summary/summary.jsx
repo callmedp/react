@@ -14,6 +14,11 @@ class Summary extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.editHeading = this.editHeading.bind(this);
+        this.saveTitle = this.saveTitle.bind(this);
+        this.state = {
+            'isEditable': false
+        }
     }
 
     componentDidMount() {
@@ -31,15 +36,38 @@ class Summary extends Component {
         return true;
     }
 
+    editHeading() {
+        this.setState({
+            'isEditable': true
+        })
+        setTimeout(() => {
+            this.refs.summary.focus();
+        }, 0)
+
+
+    }
+
+    saveTitle(event) {
+        event.stopPropagation()
+        if (event.keyCode === 13) {
+            this.setState({
+                'isEditable': false
+            })
+        }
+    }
 
     render() {
         const {personalInfo: {extra_info}, ui: {loader}, handleSubmit} = this.props;
+        const {isEditable} = this.state;
+
         return (
             <div>
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-summary1"/></span>
-                    <h2 contenteditable="true">Summary</h2>
-                    <span className="icon-edit icon-edit__cursor"></span>
+                    <h2 ref={"summary"} onKeyUp={(event) => this.saveTitle(event)}
+                        contenteditable={!!(isEditable) ? "true" : "false"}>Summary</h2>
+                    <span onClick={this.editHeading}
+                          className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ''}/>
                 </section>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <section className="right-sidebar-scroll p3p">

@@ -104,7 +104,7 @@ const SkillRenderer = ({
                                                         <label>Skill rating (out of 10)</label>
                                                         <div className="input-group">
                                                             <div className="input-group--input-group-icon">
-                                                                <span className="icon-blank"/>
+                                                                <span className="icon-rating"/>
                                                             </div>
                                                             <Field name={`${member}.proficiency`}
                                                                    component={renderSelect}

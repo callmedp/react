@@ -14,7 +14,6 @@ import {
 } from 'react-accessible-accordion';
 
 import validate from '../../../../../FormHandler/validations/experienceValidation'
-import Loader from "../../../../../Loader/loader.jsx";
 
 
 const ExperienceRenderer = ({
@@ -28,16 +27,21 @@ const ExperienceRenderer = ({
                                 changeOrderingUp,
                                 changeOrderingDown,
                                 openedAccordion,
+                                editHeading,
+                                saveTitle,
+                                isEditable,
                             }) => {
+    let elem = null;
+
     return (
         <div>
-            {!!loader &&
-            <Loader/>
-            }
             <section className="head-section">
                 <span className="icon-box"><i className="icon-experience1"/></span>
-                <h2 contenteditable="true">Experience</h2>
-                <span className="icon-edit icon-experience__cursor"></span>
+                <h2 ref={(value) => {
+                    elem = value
+                }} onKeyUp={(event) => saveTitle(event)}
+                    contenteditable={isEditable ? "true" : "false"}>Experience</h2>
+                <span onClick={()=>editHeading(elem)} className={!!(!isEditable) ? "icon-edit icon-experience__cursor" : ''}/>
 
                 <button
                     onClick={() => handleAddition(fields, error)}
@@ -190,18 +194,39 @@ class Experience extends Component {
         this.deleteExperience = this.deleteExperience.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
-
+        this.saveTitle = this.saveTitle.bind(this);
+        this.editHeading = this.editHeading.bind(this);
         this.state = {
             currentAccordion: 0,
             previousAccordion: 0,
             openedAccordion: 0,
-
+            isEditable: false
         }
-
     }
 
     componentDidMount() {
         this.props.fetchUserExperience()
+    }
+
+
+    editHeading(elem) {
+        this.setState({
+            'isEditable': true
+        });
+        setTimeout(() => {
+            elem.focus()
+        }, 0)
+
+
+    }
+
+    saveTitle(event) {
+        event.stopPropagation();
+        if (event.keyCode === 13) {
+            this.setState({
+                'isEditable': false
+            })
+        }
     }
 
     async handleSubmit(values) {
@@ -300,6 +325,9 @@ class Experience extends Component {
                             changeOrderingDown={this.changeOrderingDown}
                             openedAccordion={this.state.openedAccordion}
                             component={ExperienceRenderer}
+                            saveTitle={(event) => this.saveTitle(event)}
+                            editHeading={(value) => this.editHeading(value)}
+                            isEditable={this.state.isEditable}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">

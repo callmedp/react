@@ -12,6 +12,12 @@ function* fetchUserReference(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        if (localStorage.getItem('reference')) {
+
+            yield put({type: Actions.SAVE_USER_REFERENCE, data: {list:JSON.parse(localStorage.getItem('reference')) || []}})
+            return;
+        }
+
         yield put({type: UPDATE_UI, data: {loader: true}})
 
         const result = yield call(Api.fetchUserReference, candidateId);
@@ -50,7 +56,9 @@ function* updateUserReference(action) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
-        // yield put({type: Actions.SAVE_USER_REFERENCE, data: result['data']});
+        localStorage.removeItem('reference');
+
+        yield put({type: Actions.SAVE_USER_REFERENCE, data: result['data']});
 
         return resolve('User Reference have saved successfully.');
 

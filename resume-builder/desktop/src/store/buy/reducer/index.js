@@ -1,6 +1,7 @@
 import {SAVE_PRODUCT_IDS} from "../actions/actionTypes";
 
 const initialState = {
+
     "ids":[],
 };
 

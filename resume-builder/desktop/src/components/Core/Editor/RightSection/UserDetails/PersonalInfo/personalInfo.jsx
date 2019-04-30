@@ -28,20 +28,45 @@ export class PersonalInfo extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handlePreview = this.handlePreview.bind(this);
         this.fetchInterestList = this.fetchInterestList.bind(this);
+        this.editHeading = this.editHeading.bind(this);
+        this.saveTitle = this.saveTitle.bind(this);
+
+
         this.state = {
             'imageURI': '',
-            'imageURL': ''
+            'imageURL': '',
+            'isEditable': false
         }
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
     }
 
+    editHeading() {
+        this.setState({
+            'isEditable': true
+        })
+        setTimeout(() => {
+            this.refs.personalInfo.focus();
+        }, 0)
+
+
+    }
+
+    saveTitle(event) {
+        event.stopPropagation()
+        if (event.keyCode === 13) {
+            this.setState({
+                'isEditable': false
+            })
+        }
+    }
+
     componentDidMount() {
-        this.props.fetchPersonalInfo()
+        this.props.fetchPersonalInfo();
     }
 
     async handleSubmit(values) {
         await this.props.onSubmit(values, this.state.imageURL);
-        this.props.history.push('/resume-builder/edit/?type=summary')
+        this.props.history.push('/resume-builder/edit/?type=summary');
     }
 
     handlePreview() {
@@ -86,13 +111,15 @@ export class PersonalInfo extends Component {
 
     render() {
         const {handleSubmit, personalInfo, ui: {loader}} = this.props;
+        const {isEditable} = this.state;
         console.log('staticUrl -----', `${this.staticUrl}react/assets/images/upload-image.jpg`)
         return (
             <div>
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-info1"/></span>
-                    <h2 contenteditable="true">Personal Info</h2>
-                    <span className="icon-edit icon-edit__cursor"></span>
+                    <h2  ref={"personalInfo"} onKeyUp={(event) => this.saveTitle(event)}
+                        contenteditable={!!(isEditable) ? "true" : "false"}>Personal Info</h2>
+                    <span onClick={this.editHeading} className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ''}/>
                 </section>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <section className="flex-container right-sidebar-scroll">
@@ -124,7 +151,7 @@ export class PersonalInfo extends Component {
                                     <label>Gender</label>
                                     <div className="input-group">
                                         <div className="input-group--input-group-icon">
-                                            <span className="icon-blank"></span>
+                                            <span className="icon-gender"></span>
                                         </div>
                                         <Field
                                             name="gender"
@@ -176,13 +203,13 @@ export class PersonalInfo extends Component {
                                 </fieldset>
 
                             </div>
-                            
+
                             <div className="flex-container">
                                 <fieldset className="custom">
                                     <label>Interest</label>
                                     <div className="input-group">
                                         <div className="input-group--input-group-icon">
-                                            <span className="icon-blank"></span>
+                                            <span className="icon-interest"></span>
                                         </div>
                                         <Field name="extracurricular" component={renderDynamicSelect}
                                             // loadOptions={this.fetchInterestList.bind(this)}

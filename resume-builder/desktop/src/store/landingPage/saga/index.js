@@ -1,8 +1,9 @@
 import {Api} from './Api';
 import {takeLatest, call} from "redux-saga/effects";
-
+import {siteDomain} from "../../../Utils/domains";
 import * as Actions from '../actions/actionTypes';
 import {LOGIN_CANDIDATE} from "../actions/actionTypes";
+import {entityList} from "../../../Utils/formCategoryList";
 
 
 function* getCandidateId() {
@@ -13,7 +14,7 @@ function* getCandidateId() {
 
         }
 
-        localStorage.setItem('candidateId', (result.data && result.data['candidate_id']) || '');
+        localStorage.setItem('candidateId', JSON.parse((result.data && result.data['candidate_id'])) || '');
 
     } catch (e) {
         console.log(e);
@@ -23,22 +24,32 @@ function* getCandidateId() {
 function* loginCandidate(action) {
     try {
         let {payload} = action;
-        // handle token already present in there
+
+        //handle token already present in there
         if (localStorage.getItem('token')) {
+            console.log('--token available-');
             return;
         }
         const result = yield call(Api.loginCandidate, payload);
-        console.log('---login state-', result);
         if (result['error']) {
             console.log('error here and now returning');
-            window.location.href = "http://127.0.0.1:8000/login/?next=/resume-builder/"
+            window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
             return;
             //redirect code here
         }
         const {data: {candidate_id, candidate_profile, token}} = result;
         localStorage.setItem('candidateId', (candidate_id) || '');
         for (const key in candidate_profile) {
-            localStorage.setItem(key, (candidate_profile[key]) || '');
+            if (key == 'personalInfo') {
+                candidate_profile[key] = {
+                    ...candidate_profile[key],
+                    ...{
+                        "entity_preference_data": entityList
+                    }
+                }
+                localStorage.setItem(key, (JSON.stringify(candidate_profile[key])) || '')
+
+            } else localStorage.setItem(key, (JSON.stringify(candidate_profile[key])) || '');
         }
         localStorage.setItem('token', (token) || '');
     } catch (e) {

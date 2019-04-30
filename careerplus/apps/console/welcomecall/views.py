@@ -21,7 +21,7 @@ from django.shortcuts import render
 
 
 
-from order.models import Order
+from order.models import Order, OrderItem
 from blog.mixins import PaginationMixin
 from console.decorators import (
     Decorate,
@@ -631,6 +631,45 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
             raise Http404
         return obj
 
+    def is_order_valid_for_replacement(self, curr_order, order_ids, replacement_amount):
+        msg = None
+        for order_id in order_ids:
+            order_id = order_id.upper()
+            if 'CP' in order_id:
+                order = Order.objects.filter(number=order_id).first()
+            else:
+                if order_id.isdigit():
+                    order = Order.objects.filter(id=order_id).first()
+                else:
+                    msg = (False, 'Please Enter correct Order id')
+                    break
+            if not order:
+                msg = (False, 'Order {} Does Not Exist'.format(order_id))
+                break
+
+            if OrderItem.objects.filter(Q(replacement_order_id=order.id) | Q(replacement_order_id=order.number)).first():
+                msg = (False, 'Order {} Already used as replacement for another order'.format(order_id))
+                break
+
+            if curr_order.id == order.id:
+                msg = (False, 'Replacing Order {} cannot be same as current order.'.format(order_id))
+                break
+
+            if order.ordertxns.exists() and order.ordertxns.first().payment_mode !=1:
+                msg = (False, "Replacing Order {} is Not Paid by Cash".format(order_id))
+                break
+        if msg:
+            return msg
+        order_ids = set([o.replace('CP', '') for o in order_ids])
+        new_order_price = sum(list(Order.objects.filter(id__in=order_ids).values_list('total_incl_tax', flat=True)))
+        current_order_price = replacement_amount
+        difference = abs(current_order_price - new_order_price)
+        percentage_difference = (difference * 100) / current_order_price
+        if percentage_difference > 10:
+            return (False, 'New Order Differ by more than 10 percent from previous order')
+
+        return (True, 'Valid Order')
+
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = super(WelcomeCallUpdateView, self).get(request, *args, **kwargs)
@@ -651,7 +690,8 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
         sub_cat2_dict = dict(WC_SUB_CATEGORY2)
         sub_cat3_dict = dict(WC_SUB_CATEGORY3)
         wc_sub_cat2_dict = dict(WC_SUB_CAT2)
-
+        replace_order_ids = []
+        replacement_amount = 0
         order_items = InvoiceGenerate().get_order_item_list(
             order=self.object)
         wc_items = self.get_welcome_list(
@@ -721,6 +761,18 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
                         valid = False
                         error = 'Enter valid item level sub-category'
                         break
+
+                    if oi_category == 65 and oi.wc_sub_cat != 65:
+                        replace_order_id = 'replacement_order_id' + str(oi.pk)
+                        replace_order_id = request.POST.get(replace_order_id, None)
+                        if not replace_order_id:
+                            valid = False
+                            error = 'Please Provide Replace Order Id'
+                            break
+                        replacement_amount += oi.selling_price
+                        replace_order_ids.append(replace_order_id.strip())
+                if valid and replace_order_ids:
+                    valid, error = self.is_order_valid_for_replacement(order, replace_order_ids, replacement_amount)
             elif cat == 23 and subcat in list(sub_cat3_dict.keys()):
                 for oi_data in wc_items:
                     oi = oi_data.get('oi')
@@ -760,6 +812,7 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
                 for oi_data in wc_items:
                     oi = oi_data.get('oi')
                     name = 'subcategory' + str(oi.pk)
+
                     oi_category = int(data.get(name))
                     oi.wc_cat = cat
                     oi.wc_sub_cat = oi_category
@@ -789,6 +842,33 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
                     oi.save()
                     if oi_category in [63, 64, 65]:
                         ct += 1
+                        for oi_cmb in oi_data.get('combos', []):
+                            oi_cmb.wc_cat = cat
+                            oi_cmb.wc_sub_cat = oi_category
+                            oi_cmb.wc_status = oi_category
+                            oi_cmb.save()
+                            if oi_cmb.wc_sub_cat == 65:
+                                replace_order_id = 'replacement_order_id' + str(oi.pk)
+                                replace_order_id = request.POST.get(replace_order_id, None)
+                                oi_cmb.replacement_order_id = replace_order_id.strip()
+                                oi_cmb.oi_status = 164
+                                oi_cmb.save()
+                                oi_cmb.orderitemoperation_set.create(
+                                    oi_status=oi_cmb.oi_status,
+                                    last_oi_status=oi_cmb.last_oi_status,
+                                    assigned_to=oi_cmb.assigned_to,
+                                    added_by=request.user)
+                        if oi_category == 65:
+                            replace_order_id = 'replacement_order_id' + str(oi.pk)
+                            replace_order_id = request.POST.get(replace_order_id, None)
+                            oi.replacement_order_id = replace_order_id.strip()
+                            oi.oi_status = 164
+                            oi.save()
+                            oi.orderitemoperation_set.create(
+                                oi_status=oi.oi_status,
+                                last_oi_status=oi.last_oi_status,
+                                assigned_to=oi.assigned_to,
+                                added_by=request.user)
 
                 if ct == len(wc_items):
                     order.welcome_call_done = True

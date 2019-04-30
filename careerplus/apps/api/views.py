@@ -25,7 +25,7 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from users.tasks import user_register
 from order.models import Order, OrderItem, RefundRequest
 from shop.views import ProductInformationMixin
-from shop.models import Product
+from shop.models import Product, Category
 from coupon.models import Coupon, CouponUser
 from core.api_mixin import ShineCandidateDetail
 from payment.tasks import add_reward_point_in_wallet
@@ -37,6 +37,7 @@ from order.tasks import (
     invoice_generation_order
 )
 from shop.models import Skill, DeliveryService, ShineProfileData
+from blog.models import Blog
 
 from .serializers import (
     OrderListHistorySerializer,
@@ -44,8 +45,11 @@ from .serializers import (
     RecommendedProductSerializerSolr,
     MediaUploadSerializer,
     ResumeBuilderProductSerializer,
-    ShineDataFlowDataSerializer)
+    ShineDataFlowDataSerializer, TalentEconomySerializer)
+
 from shared.rest_addons.pagination import LearningCustomPagination
+from shared.rest_addons.authentication import ShineUserAuthentication
+from shared.rest_addons.mixins import (SerializerFieldsMixin, FieldFilterMixin)
 
 from django_redis import get_redis_connection
 from shared.utils import ShineCandidate
@@ -785,7 +789,7 @@ class ShineCandidateLoginAPIView(APIView):
     Required - email/password or alt
     """
     serializer_class = None
-    authentication_classes = ()
+    authentication_classes = (ShineUserAuthentication,)
     permission_classes = ()
     conn = get_redis_connection('token')
 
@@ -919,19 +923,47 @@ class ShineCandidateLoginAPIView(APIView):
         candidate_info['skill'] = self.get_skill_info(login_response and login_response['skills'])
 
         #  get language
-        candidate_info['language'] = []
+        candidate_info['language'] = [{
+            "candidate_id": '',
+            "id": '',
+            "name": '',
+            "proficiency": {
+                'value': 5, 'label': '5'
+            },
+            'order': 0
+        }]
 
         #  get courses
         candidate_info['course'] = self.get_certification_info(login_response and login_response['certifications'])
 
         #   get award
-        candidate_info['award'] = []
+        candidate_info['award'] = [{
+            "candidate_id": '',
+            "id": '',
+            "title": '',
+            "date": '',
+            "summary": '',
+        }]
 
         #  get reference
-        candidate_info['reference'] = []
+        candidate_info['reference'] = [{
+            "candidate_id": '',
+            "id": '',
+            "reference_name": '',
+            "reference_designation": '',
+            "about_user": "",
+        }]
 
         #  get projects
-        candidate_info['project'] = []
+        candidate_info['project'] = [{
+            "candidate_id": '',
+            "id": '',
+            "project_name": '',
+            "start_date": '',
+            "end_date": '',
+            "skills": [],
+            "description": ''
+        }]
 
         return candidate_info
 
@@ -979,6 +1011,24 @@ class ShineCandidateLoginAPIView(APIView):
 
         return self.get_response_for_successful_login(candidate_id, login_response)
 
+    def get(self,request,*args,**kwargs):
+        user = request.user
+        candidate_id = request.session.get('candidate_id')
+        if not user.is_authenticated() and not candidate_id:
+            return Response({"detail":"Not Authorised"},status=status.HTTP_401_UNAUTHORIZED)
+
+        if not candidate_id:
+            candidate_id = user.candidate_id
+
+        try:
+            login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+        except Exception as e:
+            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return self.get_response_for_successful_login(candidate_id, login_response)
+
+
     def post(self, request, *args, **kwargs):
         email = request.data.get('email')
         password = request.data.get('password')
@@ -1005,3 +1055,61 @@ class UpdateCertificateAndAssesment(APIView):
             "msg": "Certificate Updated"},
             status=status.HTTP_201_CREATED
         )
+
+
+class TalentEconomyApiView(FieldFilterMixin, ListAPIView):
+    """
+    Include params -
+
+    include_p_cat_id - Get data related to parent category
+    include_p_user_id -Get data related to User
+
+
+    Filter params-
+    status -{ 0 for articles which are draft
+             1 for articles which are published
+             }
+
+    visibility -{ 1 for ShineLearning
+                 2 for TalentEconomy
+                 3 for HR-Blogger
+                 4 for HR-Conclave
+                 5 for HR-Jobfair
+                 }
+    To view particular Fields only:
+        include fl= id,title, (include fields with ',' separated)
+    To view all articles do not include status and visibility in parameter
+
+    pagination params-
+            nopage -  get all results(unpaginated)
+            page_size  - to get the how many result to be display per page
+
+    Example:-
+
+    {
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 15,
+            "title": "Questions To Ask During Job Interview - Learning.Shine"
+        }
+    ]
+}
+
+    """
+    permission_classes = []
+    authentication_classes = []
+    serializer_class = TalentEconomySerializer
+    pagination_class = LearningCustomPagination
+
+    def get_queryset(self, *args, **kwargs):
+        status = self.request.GET.get('status', )
+        visibility = self.request.GET.get('visibility')
+        filter_dict = {}
+        if status:
+            filter_dict.update({'status': status})
+        if visibility:
+            filter_dict.update({'visibility': visibility})
+        return Blog.objects.filter(**filter_dict)

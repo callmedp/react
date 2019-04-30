@@ -2,13 +2,15 @@ import {SAVE_USER_EDUCATION, REMOVE_EDUCATION} from "../actions/actionTypes";
 
 const initialState = {
     list: [{
+        "candidate_id": '',
+        "id": '',
         "specialization": '',
         "institution_name": '',
         "course_type": '',
         "start_date": '',
         "percentage_cgpa": '',
         "end_date": '',
-        "is_pursuing": '',
+        "is_pursuing": false,
     }]
 };
 

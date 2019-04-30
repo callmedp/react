@@ -30,8 +30,13 @@ const LanguageRenderer = ({
                               changeOrderingUp,
                               changeOrderingDown,
                               openedAccordion,
-                              entity
+                              entity,
+                              isEditable,
+                              editHeading,
+                              saveTitle,
                           }) => {
+    let elem = null;
+
     return (
         <div>
             {!!loader &&
@@ -39,8 +44,13 @@ const LanguageRenderer = ({
             }
             <section className="head-section">
                 <span className="icon-box"><i className="icon-languages1"/></span>
-                <h2 contenteditable="true">Languages</h2>
-                <span className="icon-edit icon-language__cursor"></span>
+                <h2 ref={(value) => {
+                    elem = value
+                }} onKeyUp={(event) => saveTitle(event)}
+                    contenteditable={isEditable ? "true" : "false"}
+                >Languages</h2>
+                <span onClick={() => editHeading(elem)}
+                      className={!!(!isEditable) ? "icon-edit icon-language__cursor" : ""}/>
 
                 <button onClick={() => handleAddition(fields, error)}
                         type={'button'}
@@ -99,7 +109,7 @@ const LanguageRenderer = ({
                                                             <label>Language rating (out of 10)</label>
                                                             <div className="input-group">
                                                                 <div className="input-group--input-group-icon">
-                                                                    <span className="icon-blank"></span>
+                                                                    <span className="icon-rating"></span>
                                                                 </div>
                                                                 <Field name={`${member}.proficiency`}
                                                                        component={renderSelect}
@@ -150,11 +160,13 @@ class Language extends Component {
         this.deleteLanguage = this.deleteLanguage.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
+        this.saveTitle = this.saveTitle.bind(this);
+        this.editHeading = this.editHeading.bind(this);
         this.state = {
             currentAccordion: 0,
             previousAccordion: 0,
             openedAccordion: 0,
-
+            isEditable: false
         }
     }
 
@@ -207,6 +219,26 @@ class Language extends Component {
         })
     }
 
+    editHeading(elem) {
+        this.setState({
+            'isEditable': true
+        });
+        setTimeout(() => {
+            elem.focus()
+        }, 0)
+
+
+    }
+
+    saveTitle(event) {
+        event.stopPropagation();
+        if (event.keyCode === 13) {
+            this.setState({
+                'isEditable': false
+            })
+        }
+    }
+
     deleteLanguage(index, fields, event) {
         event.stopPropagation();
         const language = fields.get(index);
@@ -253,6 +285,9 @@ class Language extends Component {
                     changeOrderingDown={this.changeOrderingDown}
                     openedAccordion={this.state.openedAccordion}
                     component={LanguageRenderer}
+                    saveTitle={(event) => this.saveTitle(event)}
+                    editHeading={(value) => this.editHeading(value)}
+                    isEditable={this.state.isEditable}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">

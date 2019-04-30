@@ -2,6 +2,8 @@ import {SAVE_USER_COURSE, REMOVE_COURSE} from "../actions/actionTypes";
 
 const initialState = {
     list: [{
+        "candidate_id": '',
+        "id": '',
         "name_of_certification": '',
         "year_of_certification": '',
     }]
