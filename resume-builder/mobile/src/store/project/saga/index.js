@@ -11,6 +11,15 @@ function* fetchUserProject(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        if (localStorage.getItem('project')) {
+
+            yield put({
+                type: Actions.SAVE_USER_PROJECT,
+                data: {list: JSON.parse(localStorage.getItem('project')) || []}
+            })
+            return;
+        }
+
         const result = yield call(Api.fetchUserProject, candidateId);
         if (result['error']) {
             ////console.log('error');
@@ -40,6 +49,8 @@ function* fetchUserProject(action) {
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+
+        localStorage.removeItem('project');
 
         yield put({type: Actions.SAVE_USER_PROJECT, data: result['data']});
 

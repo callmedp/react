@@ -5,10 +5,18 @@ import {takeLatest, put, call} from "redux-saga/effects";
 import * as Actions from '../actions/actionTypes';
 import {SubmissionError} from 'redux-form'
 
-
 function* fetchUserLanguage(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
+
+        if (localStorage.getItem('language')) {
+
+            yield put({
+                type: Actions.SAVE_USER_LANGUAGE,
+                data: {list: JSON.parse(localStorage.getItem('language')) || []}
+            });
+            return;
+        }
 
         const result = yield call(Api.fetchUserLanguage, candidateId);
         if (result['error']) {
@@ -45,6 +53,7 @@ function* updateUserLanguage(action) {
         //     return reject(new SubmissionError({_error: result['errorMessage']}));
         // }
         // yield call(fetchUserLanguage)
+        localStorage.removeItem('language');
         return resolve('User Language  Info saved successfully.');
 
     } catch (e) {

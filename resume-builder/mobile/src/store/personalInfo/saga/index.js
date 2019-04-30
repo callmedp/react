@@ -10,17 +10,8 @@ import {SubmissionError} from 'redux-form'
 
 import {interestList} from '../../../Utils/interestList'
 
-
-function* getPersonalDetails(action) {
-    try {
-        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
-
-        const result = yield call(Api.fetchPersonalInfo, candidateId);
-        if (result['error']) {
-            ////console.log('error');
-        }
-        let {data} = result;
-        const {date_of_birth, gender, extracurricular ,entity_preference_data} = data;
+function modifyPersonalInfo(data) {
+    const {date_of_birth, gender, extracurricular ,entity_preference_data} = data;
 
         data = {
             ...data,
@@ -35,6 +26,28 @@ function* getPersonalDetails(action) {
                                                 })
             }
         }
+    return data;
+}
+
+function* getPersonalDetails(action) {
+    try {
+        const candidateId = localStorage.getItem('candidateId') || '';
+
+        if (localStorage.getItem('personalInfo')) {
+
+            yield put({
+                type: Actions.SAVE_USER_INFO,
+                data: modifyPersonalInfo(JSON.parse(localStorage.getItem('personalInfo')) || [])
+            })
+            return;
+        }
+
+        const result = yield call(Api.fetchPersonalInfo, candidateId);
+        if (result['error']) {
+            ////console.log('error');
+        }
+        let {data} = result;
+        data =modifyPersonalInfo(data)
         ////console.log('data');
         yield put({type: Actions.SAVE_USER_INFO, data: data})
     } catch (e) {
@@ -45,27 +58,15 @@ function* getPersonalDetails(action) {
 function* updatePersonalDetails(action) {
     try {
         const {payload: {personalDetails, resolve, reject}} = action;
-        let details = {
-            ...personalDetails,
-            ...{
-                entity_preference_data:(personalDetails.entity_preference_data).map((item,key)=>{
-                    delete item.entity_link;
-                    delete item.delete_icon;
-                    delete item.icon_class;
-                    return item
-                })
-            ,
-                'extracurricular': ''
-            }
-        }
 
-        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
+        const candidateId = localStorage.getItem('candidateId') || '';
 
-        const result = yield call(Api.updatePersonalData, details, candidateId);
+        const result = yield call(Api.updatePersonalData, personalDetails, candidateId);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
+        localStorage.removeItem('personalInfo');
 
         yield put({type: Actions.SAVE_USER_INFO, data:result['data']});
 
@@ -94,7 +95,7 @@ function* fetchImageUrl(action) {
             data.append(key, imageInfo[key]);
         }
 
-        const candidateId = localStorage.getItem('candidateId') || '5c4ede4da4d7330573d8c79b';
+        const candidateId = localStorage.getItem('candidateId') || '';
 
         const result = yield call(Api.fetchImageUrl, data, candidateId);
 

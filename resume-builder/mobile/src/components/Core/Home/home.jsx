@@ -7,11 +7,21 @@ import * as actions from "../../../store/landingPage/actions";
 import Banner from './Banner/banner.jsx';
 import ResumeSlider from './ResumeSlider/resumeSlider.jsx';
 import Testimonial from './Testimonial/testimonial.jsx';
+import queryString from "query-string";
 
 class Home extends Component {
     
     constructor(props) {
         super(props);
+        this.state = {
+            'token': ''
+        }
+        const values = queryString.parse(this.props.location.search);
+        const token = (values && values.token) || '';
+        this.state.token = token;
+    }
+    componentDidMount() {
+        this.props.loginCandidate(this.state.token);
     }
     
     render() {
@@ -192,6 +202,13 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        "getCandidateId": () => {
+            return dispatch(actions.getCandidateId())
+        },
+        "loginCandidate": (token) => {
+            return dispatch(actions.loginCandidate({alt: token}))
+        }
+
     }
 };
 
