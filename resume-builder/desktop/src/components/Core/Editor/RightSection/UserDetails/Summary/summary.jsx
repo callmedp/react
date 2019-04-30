@@ -21,9 +21,10 @@ class Summary extends Component {
 
     }
 
-    async handleSubmit(values) {
+    async handleSubmit(values, entityLink) {
         await this.props.onSubmit(values);
-        this.props.history.push('/resume-builder/edit/?type=experience')
+        if (entityLink) this.props.history.push(entityLink);
+        else this.props.history.push('/resume-builder/buy/')
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
@@ -33,7 +34,7 @@ class Summary extends Component {
 
 
     render() {
-        const {personalInfo: {extra_info}, ui: {loader}, handleSubmit, isEditable, editHeading, saveTitle,entityName} = this.props;
+        const {personalInfo: {extra_info}, ui: {loader}, handleSubmit, isEditable, editHeading, saveTitle, entityName, nextEntity} = this.props;
         let elem = null;
         return (
             <div>
@@ -46,7 +47,7 @@ class Summary extends Component {
                     <span onClick={() => editHeading(elem)}
                           className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ''}/>
                 </section>
-                <form onSubmit={handleSubmit(this.handleSubmit)}>
+                <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                     <section className="right-sidebar-scroll p3p">
                         <div className="summary-box">
                             <h3>Summary</h3>

@@ -42,9 +42,10 @@ export class PersonalInfo extends Component {
         this.props.fetchPersonalInfo();
     }
 
-    async handleSubmit(values) {
+    async handleSubmit(values, entityLink) {
         await this.props.onSubmit(values, this.state.imageURL);
-        this.props.history.push('/resume-builder/edit/?type=summary');
+        if (entityLink) this.props.history.push(entityLink);
+        else this.props.history.push('/resume-builder/buy/')
     }
 
     handlePreview() {
@@ -88,7 +89,7 @@ export class PersonalInfo extends Component {
     }
 
     render() {
-        const {handleSubmit, personalInfo, ui: {loader}, isEditable, editHeading, saveTitle, entityName} = this.props;
+        const {handleSubmit, personalInfo, ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity} = this.props;
         let elem = null;
         return (
             <div>
@@ -101,7 +102,7 @@ export class PersonalInfo extends Component {
                     <span onClick={() => editHeading(elem)}
                           className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ''}/>
                 </section>
-                <form onSubmit={handleSubmit(this.handleSubmit)}>
+                <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                     <section className="flex-container right-sidebar-scroll">
                         <section className="info-section">
                             <div className="flex-container">

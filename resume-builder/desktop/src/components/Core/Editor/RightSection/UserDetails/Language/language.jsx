@@ -173,11 +173,12 @@ class Language extends Component {
         this.props.fetchUserLanguage();
     }
 
-    async handleSubmit(values) {
+    async handleSubmit(values, entityLink) {
         const {list} = values;
         if (list.length) {
             await this.props.onSubmit(list[list.length - 1]);
-            this.props.history.push('/resume-builder/edit/?type=award')
+            if (entityLink) this.props.history.push(entityLink);
+            else this.props.history.push('/resume-builder/buy/')
         }
     }
 
@@ -250,9 +251,10 @@ class Language extends Component {
     }
 
     render() {
-        const {handleSubmit, ui: {loader}, isEditable, editHeading, saveTitle, entityName} = this.props;
+        const {handleSubmit, ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity} = this.props;
+        console.log('---', nextEntity);
         return (
-            <form onSubmit={handleSubmit(this.handleSubmit)}>
+            <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray
                     name="list"
                     loader={loader}

@@ -30,7 +30,7 @@ const ExperienceRenderer = ({
                                 editHeading,
                                 saveTitle,
                                 isEditable,
-    entityName
+                                entityName
                             }) => {
     let elem = null;
 
@@ -208,11 +208,12 @@ class Experience extends Component {
         this.props.fetchUserExperience()
     }
 
-    async handleSubmit(values) {
+    async handleSubmit(values, entityLink) {
         const {list} = values;
         if (list.length) {
             await this.props.onSubmit(list[list.length - 1]);
-            this.props.history.push('/resume-builder/edit/?type=education')
+            if (entityLink) this.props.history.push(entityLink);
+            else this.props.history.push('/resume-builder/buy/')
         }
 
     }
@@ -289,10 +290,10 @@ class Experience extends Component {
     }
 
     render() {
-        const {handleSubmit, ui: {loader}, isEditable, editHeading, saveTitle,entityName} = this.props;
+        const {handleSubmit, ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity} = this.props;
 
         return (
-            <form onSubmit={handleSubmit(this.handleSubmit)}>
+            <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray name={"list"}
                             loader={loader}
                             handleSubmit={this.handleSubmit}
@@ -304,7 +305,7 @@ class Experience extends Component {
                             changeOrderingDown={this.changeOrderingDown}
                             openedAccordion={this.state.openedAccordion}
                             component={ExperienceRenderer}
-                            saveTitle={(event) => saveTitle(event,2)}
+                            saveTitle={(event) => saveTitle(event, 2)}
                             editHeading={(value) => editHeading(value)}
                             isEditable={isEditable}
                             entityName={entityName}

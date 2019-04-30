@@ -158,11 +158,12 @@ class Course extends Component {
         this.props.fetchUserCourse()
     }
 
-    async handleSubmit(values) {
+    async handleSubmit(values, entityLink) {
         const {list} = values;
         if (list.length) {
             await this.props.onSubmit(list[list.length - 1]);
-            this.props.history.push('/resume-builder/edit/?type=project')
+            if (entityLink) this.props.history.push(entityLink);
+            else this.props.history.push('/resume-builder/buy/')
         }
 
     }
@@ -233,10 +234,10 @@ class Course extends Component {
     }
 
     render() {
-        const {handleSubmit, ui: {loader}, editHeading, saveTitle, isEditable, entityName} = this.props;
+        const {handleSubmit, ui: {loader}, editHeading, saveTitle, isEditable, entityName, nextEntity} = this.props;
 
         return (
-            <form onSubmit={handleSubmit(this.handleSubmit)}>
+            <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray name={'list'}
                             loader={loader}
                             handleSubmit={this.handleSubmit}
