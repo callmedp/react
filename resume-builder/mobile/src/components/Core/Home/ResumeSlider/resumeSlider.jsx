@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import './resumeSlider.scss'
+import Slider from "react-slick";
+
 
 export default class ResumeSlider extends Component {
     constructor(props) {
@@ -13,6 +15,14 @@ export default class ResumeSlider extends Component {
     }
 
     render() {
+        const settings = {
+            dots: false,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 1,
+            slidesToScroll: 1
+        };
+
         return (
             <section className="section proven-resume pt-30" id="templates">
                 <div className="text-center">
@@ -22,13 +32,17 @@ export default class ResumeSlider extends Component {
                 </div>
 
                 <div className="proven-resume__slideWrap">
-                    <ul>
-                        <li>
-                            <div className="proven-resume__imageWrap">
-                                <img src={`${this.staticUrl}react/assets/images/mobile/resume.jpg`} alt=""/>
-                            </div>
-                        </li>
-                    </ul>
+                    <Slider {...settings}>
+                        <div className="proven-resume__imageWrap">
+                            <img src={`${this.staticUrl}react/assets/images/mobile/resume.jpg`} alt=""/>
+                        </div>
+                        <div className="proven-resume__imageWrap">
+                            <img src={`${this.staticUrl}react/assets/images/mobile/resume.jpg`} alt=""/>
+                        </div>
+                        <div className="proven-resume__imageWrap">
+                            <img src={`${this.staticUrl}react/assets/images/mobile/resume.jpg`} alt=""/>
+                        </div>
+                    </Slider>
 
                     <a className="btn btn__shadow btn__round btn__primary" onClick={this.customise}>Customise</a>
                 </div>

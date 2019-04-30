@@ -42,7 +42,7 @@ class Buy extends Component {
         console.log(data)
          this.props.addToCart(data);
         this.setState({pay_button_clicked:true})
-        //window.location.href = `${siteDomain}/cart`
+        window.location.href = `${siteDomain}/cart`
     }
 
     componentDidMount() {
