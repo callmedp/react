@@ -8,6 +8,11 @@ const fetchPersonalInfo = (candidateId) => {
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
 };
 
+const createPersonalInfo = (data) => {
+    const url = `candidates/`;
+    return BaseApiService.post(`${siteDomain}/api/v1/resume/${url}`, data);
+}
+
 const updatePersonalData = (data, candidateId) => {
     const url = `candidates/${candidateId}/`;
     return BaseApiService.put(`${siteDomain}/api/v1/resume/${url}`, data);
@@ -30,5 +35,6 @@ export const Api = {
     fetchPersonalInfo,
     updatePersonalData,
     fetchImageUrl,
-    updateEntityPreference
+    updateEntityPreference,
+    createPersonalInfo
 }

@@ -78,7 +78,10 @@ function* updatePersonalDetails(action) {
 
         yield put({type: UPDATE_UI, data: {loader: false}})
 
-        const result = yield call(Api.updatePersonalData, personalDetails, candidateId);
+        let result = null;
+        if (localStorage.getItem('personalInfo')) result = yield call(Api.createPersonalInfo, personalDetails);
+        else result = yield call(Api.updatePersonalData, personalDetails, candidateId);
+
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
