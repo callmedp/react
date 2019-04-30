@@ -806,12 +806,47 @@ class ShineCandidateLoginAPIView(APIView):
         self.set_user_in_cache(token, candidate_obj)
         return token
 
+    def get_entity_status_for_candidate(self,candidate_id):
+        from resumebuilder.models import Candidate,Skill,CandidateExperience,\
+            CandidateEducation,CandidateCertification,CandidateProject,\
+            CandidateReference,CandidateSocialLink,CandidateLanguage,CandidateAchievement
+
+        from resumebuilder.choices import BUILDER_ENTITY_MAPPING
+        entity_mapping = dict(BUILDER_ENTITY_MAPPING)
+
+        entity_slug_model_mapping = {1:(Candidate,"candidate_id"),
+                                 2: (Skill,"candidate__candidate_id"),
+                                 3: (CandidateExperience,"candidate__candidate_id"),
+                                 4: (CandidateEducation,"candidate__candidate_id"),
+                                 5: (CandidateCertification,"candidate__candidate_id"),
+                                 6: (CandidateProject,"candidate__candidate_id"),
+                                 7: (CandidateReference,"candidate__candidate_id"),
+                                 8: (CandidateSocialLink,"candidate__candidate_id"),
+                                 9: (CandidateLanguage,"candidate__candidate_id"),
+                                 10: (CandidateAchievement,"candidate__candidate_id")
+                                 }
+
+        data = []
+        for key,value_tuple in entity_slug_model_mapping.items():
+            model = value_tuple[0]
+            objects_count = model.objects.filter(**{value_tuple[1]:candidate_id}).count()
+            d = {"id":key,"set":bool(objects_count),"display_value":entity_mapping.get(key)}
+            data.append(d)
+
+        return data
+
+
     def get_response_for_successful_login(self, candidate_id, login_response):
         candidate_obj = ShineCandidate(**login_response)
         candidate_obj.id = candidate_id
         candidate_obj.candidate_id = candidate_id
         token = self.get_or_create_token(candidate_obj)
-        data_to_send = {"token": token, "candidate_id": candidate_id, "candidate_profile": login_response}
+
+        data_to_send = {"token": token, 
+                "candidate_id": candidate_id, 
+                "candidate_profile": self.customize_user_profile(login_response),
+                "entity_status":self.get_entity_status_for_candidate(candidate_id) #TODO make param configurable
+                }
         return Response(data_to_send, status=status.HTTP_201_CREATED)
 
     def get_profile_info(self, profile):
@@ -862,11 +897,8 @@ class ShineCandidateLoginAPIView(APIView):
         return candidate_education
 
     def get_experience_info(self, experience):
-
         candidate_experience_keys = ['candidate_id', 'job_profile', 'company_name', 'start_date', 'end_date',
-                                     'is_working',
-                                     'job_location',
-                                     'work_description']
+                                     'is_working','job_location','work_description']
         candidate_experience = []
 
         for exp in experience:
@@ -979,12 +1011,11 @@ class ShineCandidateLoginAPIView(APIView):
 
         try:
             login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
-            candidate_info = self.customize_user_profile(login_response)
         except Exception as e:
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
             return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
-        return self.get_response_for_successful_login(candidate_id, candidate_info)
+        return self.get_response_for_successful_login(candidate_id, login_response)
 
     def _dispatch_via_email_password(self, email, password):
         login_data = {"email": email.strip(), "password": password}
@@ -1086,16 +1117,16 @@ class TalentEconomyApiView(FieldFilterMixin, ListAPIView):
     Example:-
 
     {
-    "count": 1,
-    "next": null,
-    "previous": null,
-    "results": [
-        {
-            "id": 15,
-            "title": "Questions To Ask During Job Interview - Learning.Shine"
-        }
-    ]
-}
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+            {
+                "id": 15,
+                "title": "Questions To Ask During Job Interview - Learning.Shine"
+            }
+        ]
+    }
 
     """
     permission_classes = []
