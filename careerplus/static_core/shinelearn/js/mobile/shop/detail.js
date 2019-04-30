@@ -16,6 +16,14 @@ jQuery(document).ready(function($){
       $("#sidebar-countries-trigger").click(function(){
           $("#sidebar-countries").show();
       });
+
+      $("#enquire_btn").on('click', function() {
+        $('#enquire').addClass('show');
+      });
+      
+      $("#back_btn").on('click', function() {
+        $('#enquire').removeClass('show');
+      });
   });
 
 $("#feedback-form").validate({
@@ -237,3 +245,5 @@ function openPopup() {
 function closePopup() {
     $('.modal').fadeOut(300);
 }
+
+

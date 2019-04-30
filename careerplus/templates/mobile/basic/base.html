@@ -14,9 +14,9 @@
     {% block canonical_url %}
       <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
    {% endblock canonical_url %}
-
+        
     <title> {% block title %}Shine Learning{% endblock title %}</title>
-
+    
     {% block css_section %}
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
         {% compress css %}
@@ -144,7 +144,7 @@
             data-client='324ed0abb0694b0c66a6daecb178352d'>
         </script>
         {% endblock johukum %} -->
-
+        
     {% endblock js_section %}
 
     {% block zendesk %}
@@ -182,7 +182,7 @@
         <!-- /1198510/ShineLearning_1x1_mobile -->
         <div id='div-gpt-ad-1509431552856-0'>
         <script>
-        
+
         {% if marketing_popup_html %}
             $('.marketing-popup').modal();
         {% endif %}
