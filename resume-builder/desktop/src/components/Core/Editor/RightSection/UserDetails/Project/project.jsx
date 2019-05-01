@@ -62,7 +62,7 @@ const ProjectRenderer = ({
                 <ul>
                     <Accordion onChange={(value) => handleAccordionClick(value, fields, error)}
                                allowZeroExpanded={true}
-                               preExpanded={[openedAccordion]}>
+                               preExpanded={[0,1,2,3,4,5,6,7,8,9,10]}>
                         {
                             fields.map((member, index) => {
                                 return (
@@ -223,7 +223,7 @@ class Project extends Component {
     handleAddition(fields, error) {
         const listLength = fields.length;
 
-        if (listLength) this.handleAccordionState(listLength, fields);
+        // if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
             "id": '',

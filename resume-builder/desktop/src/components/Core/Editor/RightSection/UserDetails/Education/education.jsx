@@ -15,6 +15,7 @@ import {
 
 import validate from '../../../../../FormHandler/validations/education/validate';
 import LoaderSection from "../../../../../Loader/loaderSection.jsx";
+import {animateScroll as scroll, scrollSpy, scroller} from 'react-scroll'
 
 
 const EducationRenderer = ({
@@ -64,12 +65,12 @@ const EducationRenderer = ({
                     <Accordion
                         onChange={(value) => handleAccordionClick(value, fields, error)}
                         allowZeroExpanded={true}
-                        preExpanded={[openedAccordion]}
+                        preExpanded={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
                     >
                         {
                             fields.map((member, index) => {
                                 return (
-                                    <li key={index}>
+                                    <li key={index} id={`education${index}`}>
                                         <section className="info-section">
                                             <AccordionItem uuid={index}>
                                                 <AccordionItemHeading>
@@ -255,9 +256,8 @@ class Education extends Component {
     }
 
     handleAddition(fields, error, event) {
-        event.stopPropagation();
         const listLength = fields.length;
-        if (listLength) this.handleAccordionState(listLength, fields);
+        // if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
             "id": '',
@@ -270,6 +270,16 @@ class Education extends Component {
             "is_pursuing": false,
             order: fields.length
         })
+        console.log('-fields--', fields.length);
+
+        scroller.scrollTo(`education1`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 1000
+        })
+
+
     }
 
     deleteEducation(index, fields, event) {
@@ -302,8 +312,10 @@ class Education extends Component {
 
 
     render() {
-        const {handleSubmit, ui: {loader}, saveTitle, isEditable,
-            editHeading, entityName, nextEntity, handlePreview} = this.props;
+        const {
+            handleSubmit, ui: {loader}, saveTitle, isEditable,
+            editHeading, entityName, nextEntity, handlePreview
+        } = this.props;
 
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>

@@ -66,7 +66,7 @@ const LanguageRenderer = ({
                 <ul>
                     <Accordion onChange={(value) => handleAccordionClick(value, fields, submitFailed)}
                                allowZeroExpanded={true}
-                               preExpanded={[openedAccordion]}>
+                               preExpanded={[0,1,2,3,4,5,6,7,8,9,10]}>
                         {fields.map((member, index) => {
                                 return (
                                     <li key={index}>
@@ -207,7 +207,7 @@ class Language extends Component {
 
     async handleAddition(fields, error) {
         const listLength = fields.length;
-        if (listLength) this.handleAccordionState(listLength, fields);
+        // if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
             "id": '',

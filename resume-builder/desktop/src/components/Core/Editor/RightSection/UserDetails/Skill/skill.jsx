@@ -39,7 +39,8 @@ const SkillRenderer = ({
                            isEditable,
                            editHeading,
                            saveTitle,
-                           entityName
+                           entityName,
+                           arrayList
                        }) => {
     let elem = null;
     return (
@@ -59,6 +60,7 @@ const SkillRenderer = ({
                 />
                 <button
                     onClick={handleSubmit((values) => {
+                        console.log('---clicked--')
                         handleAddition(fields, error)
                     })}
                     type={'button'}
@@ -70,11 +72,13 @@ const SkillRenderer = ({
 
             <section className="right-sidebar-scroll">
                 <ul>
-                    <Accordion onChange={(value) => {
-                        handleSubmit((values) => handleAccordionClick(value, fields, error))
-                    }}
-                               allowZeroExpanded={true}
-                               preExpanded={openedAccordion}>
+                    <Accordion
+                        //     onChange={(value) => {
+                        //     handleSubmit((values) => handleAccordionClick(value, fields, error))
+                        // }}
+                        allowZeroExpanded={false}
+                        allowMultipleExpanded={true}
+                        preExpanded={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}>
                         {fields.map((member, index) => {
                             return (
                                 <li key={index}>
@@ -177,6 +181,7 @@ class Skill extends Component {
             currentAccordion: 0,
             previousAccordion: [0],
             openedAccordion: [0],
+            arrayList: []
         }
     }
 
@@ -192,7 +197,7 @@ class Skill extends Component {
     async handleSubmit(values, entityLink) {
         const {list} = values;
         if (list.length) {
-            await this.props.onSubmit(list[list.length - 1]);
+            await this.props.bulkUpdateOrCreate(list);
             if (entityLink) this.props.history.push(entityLink);
             else this.props.history.push('/resume-builder/buy/')
         }
@@ -205,17 +210,18 @@ class Skill extends Component {
         currentItem['order'] = index + 1;
         nextItem['order'] = index;
         fields.swap(index, index + 1);
-        this.props.handleSwap([currentItem, nextItem])
+        // this.props.handleSwap([currentItem, nextItem])
     }
 
     changeOrderingUp(index, fields, event) {
         event.stopPropagation();
+        console.log('----', fields.get(index), index)
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
         prevItem['order'] = index;
         fields.swap(index, index - 1);
-        this.props.handleSwap([currentItem, prevItem])
+        //this.props.handleSwap([currentItem, prevItem])
 
     }
 
@@ -284,6 +290,7 @@ class Skill extends Component {
                 <FieldArray
                     name="list"
                     handleSubmit={handleSubmit}
+                    arrayList={this.state.arrayList}
                     handleAccordionClick={this.handleAccordionClick}
                     handleAccordionState={this.handleAccordionState}
                     handleAddition={this.handleAddition}
@@ -340,6 +347,22 @@ const mapDispatchToProps = (dispatch) => {
                 return dispatch(actions.updateUserSkill({userSkill, resolve, reject}));
             })
         },
+        "bulkUpdateOrCreate": (userSkills) => {
+            userSkills = (userSkills || []).map((userSkill) => {
+                const {proficiency} = userSkill;
+                if (!userSkill['id']) delete userSkill['id'];
+                return {
+                    ...userSkill,
+                    ...{
+                        proficiency: proficiency && proficiency.value
+                    }
+                }
+                    ;
+            });
+            return new Promise((resolve, reject) => {
+                return dispatch(actions.bulkUpdateOrCreateUserSkill({list: userSkills, resolve, reject}));
+            })
+        },
         "fetchUserSkill": () => {
             return dispatch(actions.fetchUserSkill())
         },
@@ -358,7 +381,11 @@ const mapDispatchToProps = (dispatch) => {
                 };
                 return userSkill;
             })
-            return dispatch(actions.handleSkillSwap({list: listItems}))
+            return new Promise((resolve, reject) => {
+
+                return dispatch(actions.handleSkillSwap({list: listItems, resolve, reject}))
+            })
+
         }
     }
 };

@@ -1,11 +1,17 @@
-import {FETCH_USER_SKILL, UPDATE_USER_SKILL, HANDLE_SKILL_SWAP, DELETE_USER_SKILL} from './actionTypes'
+import {
+    FETCH_USER_SKILL,
+    UPDATE_USER_SKILL,
+    HANDLE_SKILL_SWAP,
+    DELETE_USER_SKILL,
+    BULK_U_C_USER_SKILL
+} from './actionTypes'
 
 
 export const fetchUserSkill = () => {
     return {
         type: FETCH_USER_SKILL
     }
-}
+};
 
 export const updateUserSkill = (payload) => {
     return {
@@ -15,6 +21,12 @@ export const updateUserSkill = (payload) => {
     }
 }
 
+export const bulkUpdateOrCreateUserSkill = (payload) => {
+    return {
+        type: BULK_U_C_USER_SKILL,
+        payload
+    }
+}
 
 export const deleteSkill = (skillId) => {
     return {

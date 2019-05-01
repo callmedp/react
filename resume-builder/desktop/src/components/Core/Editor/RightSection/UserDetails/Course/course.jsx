@@ -67,7 +67,7 @@ const CourseRenderer = ({
                     <Accordion
                         onChange={(value) => handleAccordionClick(value, fields, error)}
                         allowZeroExpanded={true}
-                        preExpanded={[openedAccordion]}
+                        preExpanded={[0,1,2,3,4,5,6,7,8,9,10]}
                     >
                         {
                             fields.map((member, index) => {
