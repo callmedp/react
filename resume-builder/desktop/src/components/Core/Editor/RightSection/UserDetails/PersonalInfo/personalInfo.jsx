@@ -113,7 +113,7 @@ export class PersonalInfo extends Component {
                                             <span className="icon-name"></span>
                                         </div>
                                         <Field component={renderField} validate={required} type={"text"}
-                                               name="first_name"/>
+                                               name="first_name" />
                                     </div>
                                 </fieldset>
                                 <fieldset>
