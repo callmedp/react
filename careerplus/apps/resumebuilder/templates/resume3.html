@@ -43,18 +43,6 @@
                             alt="Location"
                             style="vertical-align: middle;"></span>{{ candidate.location }}
                     </li>
-{#                    <li style="display: table; margin-bottom: 15px;"><span#}
-{#                            style="display: table-cell; padding-right: 10px;"><img#}
-{#                            src="{% static 'resumebuilder/images/resume3/linkedin-icon.png' %}"#}
-{#                            alt="Linkedin"#}
-{#                            style="vertical-align: text-top;"></span>linkedin.com/candidatename#}
-{#                    </li>#}
-{#                    <li style="display: table; margin-bottom: 15px;"><span#}
-{#                            style="display: table-cell; padding-right: 10px;"><img#}
-{#                            src="{% static 'resumebuilder/images/resume3/facebook-icon.png' %}"#}
-{#                            alt="Facebook"#}
-{#                            style="vertical-align: middle;"></span>Facebook.com/candidatename#}
-{#                    </li>#}
                 </ul>
             </div>
 
@@ -76,42 +64,7 @@
                 </span>
                         </li>
                     {% endfor %}
-                    {% comment %} <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 46.3%;">
-                <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top;">MS windows server</span> 
-              </li>
-              <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 51.3%; text-align: right;">
-                <span style="color: #333333; display: block; vertical-align: top; text-align: right;">
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #ffffff; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                </span>
-              </li>
-              <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 46.3%;">
-                <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top;">Linux server</span> 
-              </li>
-              <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 51.3%; text-align: right;">
-                <span style="color: #333333; display: block; vertical-align: top; text-align: right;">
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #ffffff; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #ffffff; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                </span>
-              </li>
-              <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 46.3%;">
-                <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top;">Power point presentation</span> 
-              </li>
-              <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 51.3%; text-align: right;">
-                <span style="color: #333333; display: block; vertical-align: top; text-align: right;">
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #ffffff; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span> 
-                </span>
-              </li>{% endcomment %}
+
                 </ul>
                 <p style="margin-top: 0; margin-bottom: 30px; padding: 0; color: #000000; line-height: 20px;">
                     {% for skill in skills|slice:"5:" %} {{ skill }}  |  {% endfor %}</p>
@@ -124,12 +77,6 @@
                     {% for achievement in achievements %}
                         <li style="display: table; margin-bottom: 15px;">{{ achievement.summary }}</li>
                     {% endfor %}
-                    {% comment %}                      <li style="display: table; margin-bottom: 15px;">Algorithm</li>
-                                        <li style="display: table; margin-bottom: 15px;">Neural Networks</li>
-                                        <li style="display: table; margin-bottom: 15px;">Discrete Mathematics</li>
-                                        <li style="display: table; margin-bottom: 15px;">Operating Systems</li>
-                                        <li style="display: table; margin-bottom: 15px;">MySQL</li>
-                                        <li style="display: table; margin-bottom: 15px;">Data Analysis</li>{% endcomment %}
                 </ul>
             </div>
 
@@ -151,30 +98,6 @@
                 </span>
                         </li>
                     {% endfor %}
-                    {% comment %} <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 46.3%;">
-                        <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top;">English</span>
-                    </li>
-                    <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 51.3%; text-align: right;">
-                <span style="color: #333333; display: block; vertical-align: top; text-align: right;">
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #ffffff; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
-                </span>
-                    </li>
-                    <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 46.3%;">
-                        <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top;">Marathi</span>
-                    </li>
-                    <li style="vertical-align: top; display: inline-block; margin-bottom: 15px; width: 51.3%; text-align: right;">
-                <span style="color: #333333; display: block; vertical-align: top; text-align: right;">
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #484848; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #ffffff; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
-                  <span style="width: 10px; height: 10px; border-radius: 100%; background: #ffffff; display: inline-block; vertical-align: baseline; margin-left: 5px;"></span>
-                </span>
-                    </li>{% endcomment %}
                 </ul>
             </div>
 
@@ -190,21 +113,6 @@
                                 style="vertical-align: middle;"></span>{{ interest }}
                         </li>
                     {% endfor %}
-                    {% comment %}  <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img src="images/books-icon.png"
-                                                                                   alt="Mobile"
-                                                                                   style="vertical-align: middle;"></span>Books
-                    </li>
-                    <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img src="images/travel-icon.png"
-                                                                                   alt="Mobile"
-                                                                                   style="vertical-align: middle;"></span>Travelling
-                    </li>
-                    <li style="display: table; margin-bottom: 15px;"><span
-                            style="display: table-cell; padding-right: 10px;"><img src="images/movies-icon.png"
-                                                                                   alt="Mobile"
-                                                                                   style="vertical-align: middle;"></span>Movies
-                    </li>{% endcomment %}
                 </ul>
             </div>
 
@@ -242,24 +150,6 @@
                             <span style="font-style: italic; color: #333333; width: 20%; display: inline-block; vertical-align: top;">({{ exp.start_date|date:"M Y" }} - Current)</span>
                         </li>
                     {% endfor %}
-                    {% comment %} <li style="vertical-align: top; margin: 10px 0;">
-                        <span style="width: 13px; height: 13px; border-radius: 100%; background: #f2cc79; display: inline-block; margin-right: 10px; vertical-align: middle;"></span>
-                        <span style="display: inline-block; width: 73%; vertical-align: top;">
-                  <strong style="display: block; font-size: 16px; color: #333333;">IT Project Manager</strong>
-                  Infocom Network Pvt. Ltd
-                  <p style="font-size: 14px; color: #777777; margin-top: 5px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
-                </span>
-                        <span style="font-style: italic; color: #333333; width: 20%; display: inline-block; vertical-align: top;">(Aug 2012 - Sep 2016)</span>
-                    </li>
-                    <li style="vertical-align: top; margin: 10px 0;">
-                        <span style="width: 13px; height: 13px; border-radius: 100%; background: #f2cc79; display: inline-block; margin-right: 10px; vertical-align: middle;"></span>
-                        <span style="display: inline-block; width: 73%; vertical-align: top;">
-                  <strong style="display: block; font-size: 16px; color: #333333;">IT Project Manager</strong>
-                  Infocom Network Pvt. Ltd
-                  <p style="font-size: 14px; color: #777777; margin-top: 5px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
-                </span>
-                        <span style="font-style: italic; color: #333333; width: 20%; display: inline-block; vertical-align: top;">(April 2010 - July 2012)</span>
-                    </li>{% endcomment %}
                 </ul>
             </div>
 
@@ -280,23 +170,6 @@
                               vertical-align: top;">({{ edu.start_date|date:"Y" }} - {{ edu.end_date|date:"Y" }})</span>
                         </li>
                     {% endfor %}
-                    {% comment %} <li style="vertical-align: top; margin: 10px 0;">
-                        <span style="width: 13px; height: 13px; border-radius: 100%; background: #f2cc79; display: inline-block; margin-right: 10px; vertical-align: middle;"></span>
-                        <span style="display: inline-block; width: 73%; vertical-align: top;">
-                  <strong style="display: block; font-size: 16px; color: #333333;">I.Sc (PCM)</strong>
-                  Munshi Singh College
-                  <p style="font-size: 14px; color: #777777; margin-top: 5px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
-                </span>
-                        <span style="font-style: italic; color: #333333; width: 20%; display: inline-block; vertical-align: top;">(2014 - 2016)</span>
-                    </li>
-                    <li style="vertical-align: top; margin: 10px 0;">
-                        <span style="width: 13px; height: 13px; border-radius: 100%; background: #f2cc79; display: inline-block; margin-right: 10px; vertical-align: middle;"></span>
-                        <span style="display: inline-block; width: 73%; vertical-align: top;">
-                  <strong style="display: block; font-size: 16px; color: #333333;">Visual designing</strong>
-                  Arena Multimedia
-                  <p style="font-size: 14px; color: #777777; margin-top: 5px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
-                </span>
-                    </li>{% endcomment %}
                 </ul>
             </div>
 
@@ -313,13 +186,6 @@
                 </span>
                         </li>
                     {% endfor %}
-                    {% comment %}<li style="vertical-align: top; margin: 10px 0;">
-                        <span style="width: 13px; height: 13px; border-radius: 100%; background: #f2cc79; display: inline-block; margin-right: 10px; vertical-align: middle;"></span>
-                        <span style="display: inline-block; width: 94%; vertical-align: top;">
-                  <strong style="display: block; font-size: 16px; color: #333333;">Project 2</strong>
-                  <p style="font-size: 14px; color: #777777; margin-top: 5px;">Small Project Android, Data Analysis, Image Processing Result Portal, Voice Calci, Cubic Bispline, Image Compression, smoothing, Fitng Curve.</p>
-                </span>
-                    </li>{% endcomment %}
                 </ul>
             </div>
 
@@ -343,9 +209,5 @@
 
     </div>
 </div>
-{#<div style="position: fixed; left: 0; right: 0; top: 2%; margin: 0 auto;"><img#}
-{#        src="{% static 'resumebuilder/images/watermark.png' %}" alt="shinelearning.com" style="width: 100%;">#}
-{#</div>#}
-
 </body>
 </html>

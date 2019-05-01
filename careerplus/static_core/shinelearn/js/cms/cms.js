@@ -294,6 +294,8 @@ $(function() {
 
         },
         highlight: function(element, errorClass) {
+         $('#id_callback').removeAttr('disabled');
+
             // $(element).siblings('.error').removeClass('hide_error');
             $(element).closest('.form-group').addClass('error');
         },
@@ -310,6 +312,7 @@ $(function() {
 
     $('#id_callback').click(function() {
         var $callbackForm = $("#callback_form");
+    $('#id_callback').attr('disabled','true');
         var flag = $callbackForm.valid();
         if (flag) {
             var formData = $callbackForm.serialize();
@@ -320,11 +323,15 @@ $(function() {
                 success: function(data, textStatus, jqXHR) {
                     MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'success');
                     alert('Your Query Submitted Successfully.');
+                        $('#id_callback').removeAttr('disabled');
+
                     $('#callback_form')[0].reset();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'Failure');
                     alert('Something went wrong. Try again later.');
+                                                $('#id_callback').removeAttr('disabled');
+
                 }
             });
         }

@@ -15,7 +15,7 @@ import {
 } from 'react-accessible-accordion';
 
 import validate from '../../../../../FormHandler/validations/skill/validate'
-import Loader from "../../../../../Loader/loader.jsx";
+import LoaderSection from "../../../../../Loader/loaderSection.jsx";
 
 
 /*
@@ -29,25 +29,40 @@ const SkillRenderer = ({
                            loader,
                            meta: {touched, error, submitFailed},
                            deleteSkill,
+                           handleSubmit,
                            handleAddition,
                            handleAccordionState,
                            handleAccordionClick,
                            changeOrderingUp,
                            changeOrderingDown,
                            openedAccordion,
+                           isEditable,
+                           editHeading,
+                           saveTitle,
+                           entityName
                        }) => {
+    let elem = null;
     return (
         <div>
             {/*{!!loader &&*/}
-            {/*<Loader/>*/}
+            {/*<LoaderSection/>*/}
             {/*}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-skills1"/></span>
-                <h2 contenteditable="true">Skills</h2>
-                <span className="icon-edit icon-education__cursor"></span>
-                <button onClick={() => handleAddition(fields, error)}
-                        type={'button'}
-                        className="add-button add-button__right">Add new
+                <h2 ref={(value) => {
+                    elem = value
+                }} onKeyUp={(event) => saveTitle(event)}
+                    contenteditable={isEditable ? "true" : "false"}
+                >{entityName}</h2>
+                <span onClick={() => editHeading(elem)}
+                      className={!!(!isEditable) ? "icon-edit icon-education__cursor" : ""}
+                />
+                <button
+                    onClick={handleSubmit((values) => {
+                        handleAddition(fields, error)
+                    })}
+                    type={'button'}
+                    className="add-button add-button__right">Add new
                 </button>
 
 
@@ -55,7 +70,9 @@ const SkillRenderer = ({
 
             <section className="right-sidebar-scroll">
                 <ul>
-                    <Accordion onChange={(value) => handleAccordionClick(value, fields, error)}
+                    <Accordion onChange={handleSubmit((values) => {
+                        console.log('values---', values);
+                    })}
                                allowZeroExpanded={true}
                                preExpanded={[openedAccordion]}>
                         {fields.map((member, index) => {
@@ -160,7 +177,6 @@ class Skill extends Component {
             currentAccordion: 0,
             previousAccordion: 0,
             openedAccordion: 0,
-
         }
     }
 
@@ -168,11 +184,12 @@ class Skill extends Component {
         this.props.fetchUserSkill();
     }
 
-    async handleSubmit(values) {
+    async handleSubmit(values, entityLink) {
         const {list} = values;
         if (list.length) {
             await this.props.onSubmit(list[list.length - 1]);
-            this.props.history.push('/resume-builder/edit/?type=language')
+            if (entityLink) this.props.history.push(entityLink);
+            else this.props.history.push('/resume-builder/buy/')
         }
     }
 
@@ -199,7 +216,6 @@ class Skill extends Component {
 
     handleAddition(fields, error) {
         const listLength = fields.length;
-
         if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
@@ -246,12 +262,15 @@ class Skill extends Component {
 
 
     render() {
-        const {error, handleSubmit, pristine, reset, submitting, ui: {loader}} = this.props;
+        const {
+            error, handleSubmit, pristine, reset, submitting, handlePreview,
+            ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity
+        } = this.props;
         return (
-            <form onSubmit={handleSubmit(this.handleSubmit)}>
+            <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray
                     name="list"
-                    handleSubmit={this.handleSubmit}
+                    handleSubmit={handleSubmit}
                     handleAccordionClick={this.handleAccordionClick}
                     handleAccordionState={this.handleAccordionState}
                     handleAddition={this.handleAddition}
@@ -261,10 +280,14 @@ class Skill extends Component {
                     openedAccordion={this.state.openedAccordion}
                     loader={loader}
                     component={SkillRenderer}
+                    saveTitle={(event) => saveTitle(event, 4)}
+                    editHeading={(value) => editHeading(value)}
+                    isEditable={isEditable}
+                    entityName={entityName}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10">Preview</button>
+                    <button className="blue-button mr-10" type={'button'} onClick={handlePreview}>Preview</button>
                     <button className="orange-button" type={'submit'}>Save & Continue</button>
                 </div>
 

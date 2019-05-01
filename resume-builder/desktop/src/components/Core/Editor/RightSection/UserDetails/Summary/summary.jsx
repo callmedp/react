@@ -7,18 +7,13 @@ import {Field, reduxForm} from 'redux-form';
 import {
     renderTextArea
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
-import Loader from "../../../../../Loader/loader.jsx";
+import LoaderSection from "../../../../../Loader/loaderSection.jsx";
 
 
 class Summary extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.editHeading = this.editHeading.bind(this);
-        this.saveTitle = this.saveTitle.bind(this);
-        this.state = {
-            'isEditable': false
-        }
     }
 
     componentDidMount() {
@@ -26,49 +21,32 @@ class Summary extends Component {
 
     }
 
-    async handleSubmit(values) {
+    async handleSubmit(values, entityLink) {
         await this.props.onSubmit(values);
-        this.props.history.push('/resume-builder/edit/?type=experience')
+        if (entityLink) this.props.history.push(entityLink);
+        else this.props.history.push('/resume-builder/buy/')
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
         return true;
     }
 
-    editHeading() {
-        this.setState({
-            'isEditable': true
-        })
-        setTimeout(() => {
-            this.refs.summary.focus();
-        }, 0)
-
-
-    }
-
-    saveTitle(event) {
-        event.stopPropagation()
-        if (event.keyCode === 13) {
-            this.setState({
-                'isEditable': false
-            })
-        }
-    }
 
     render() {
-        const {personalInfo: {extra_info}, ui: {loader}, handleSubmit} = this.props;
-        const {isEditable} = this.state;
-
+        const {personalInfo: {extra_info}, ui: {loader}, handleSubmit, handlePreview, isEditable, editHeading, saveTitle, entityName, nextEntity} = this.props;
+        let elem = null;
         return (
             <div>
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-summary1"/></span>
-                    <h2 ref={"summary"} onKeyUp={(event) => this.saveTitle(event)}
-                        contenteditable={!!(isEditable) ? "true" : "false"}>Summary</h2>
-                    <span onClick={this.editHeading}
+                    <h2 ref={(value) => {
+                        elem = value
+                    }} onKeyUp={(event) => saveTitle(event, 5)}
+                        contenteditable={!!(isEditable) ? "true" : "false"}>{entityName}</h2>
+                    <span onClick={() => editHeading(elem)}
                           className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ''}/>
                 </section>
-                <form onSubmit={handleSubmit(this.handleSubmit)}>
+                <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                     <section className="right-sidebar-scroll p3p">
                         <div className="summary-box">
                             <h3>Summary</h3>
@@ -78,7 +56,7 @@ class Summary extends Component {
                     </section>
 
                     <div className="flex-container items-right mr-20 mb-30">
-                        <button className="blue-button mr-20">Preview</button>
+                        <button className="blue-button mr-20" type={'button'} onClick={handlePreview}>Preview</button>
                         <button className="orange-button" type={'submit'}>Save & Continue</button>
                     </div>
                 </form>

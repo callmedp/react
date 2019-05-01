@@ -19,6 +19,7 @@ import {
 } from "../../../../../FormHandler/validations/personalInfo/validate";
 
 import moment from 'moment';
+import LoaderSection from "../../../../../Loader/loaderSection.jsx";
 
 export class PersonalInfo extends Component {
     constructor(props) {
@@ -26,52 +27,27 @@ export class PersonalInfo extends Component {
         this.getImageURI = this.getImageURI.bind(this);
         this.removeImage = this.removeImage.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handlePreview = this.handlePreview.bind(this);
         this.fetchInterestList = this.fetchInterestList.bind(this);
-        this.editHeading = this.editHeading.bind(this);
-        this.saveTitle = this.saveTitle.bind(this);
 
 
         this.state = {
             'imageURI': '',
             'imageURL': '',
-            'isEditable': false
         }
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
     }
 
-    editHeading() {
-        this.setState({
-            'isEditable': true
-        })
-        setTimeout(() => {
-            this.refs.personalInfo.focus();
-        }, 0)
-
-
-    }
-
-    saveTitle(event) {
-        event.stopPropagation()
-        if (event.keyCode === 13) {
-            this.setState({
-                'isEditable': false
-            })
-        }
-    }
 
     componentDidMount() {
         this.props.fetchPersonalInfo();
     }
 
-    async handleSubmit(values) {
+    async handleSubmit(values, entityLink) {
         await this.props.onSubmit(values, this.state.imageURL);
-        this.props.history.push('/resume-builder/edit/?type=summary');
+        if (entityLink) this.props.history.push(entityLink);
+        else this.props.history.push('/resume-builder/buy/')
     }
 
-    handlePreview() {
-        this.props.history.push('/resume-builder/preview/');
-    }
 
     removeImage() {
         this.setState({
@@ -88,7 +64,7 @@ export class PersonalInfo extends Component {
         // } catch (e) {
         //     console.log('--error-', e);
         // }
-        console.log('---', inputValue)
+        console.log('---', inputValue);
         return [];
     }
 
@@ -110,17 +86,23 @@ export class PersonalInfo extends Component {
     }
 
     render() {
-        const {handleSubmit, personalInfo, ui: {loader}} = this.props;
-        const {isEditable} = this.state;
+        const {
+            handleSubmit, personalInfo, ui: {loader}, isEditable,
+            editHeading, saveTitle, entityName, nextEntity, handlePreview
+        } = this.props;
+        let elem = null;
         return (
             <div>
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-info1"/></span>
-                    <h2 ref={"personalInfo"} onKeyUp={(event) => this.saveTitle(event)}
-                        contenteditable={!!(isEditable) ? "true" : "false"}>Personal Info</h2>
-                    <span onClick={this.editHeading} className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ''}/>
+                    <h2 ref={(value) => {
+                        elem = value
+                    }} onKeyUp={(event) => saveTitle(event, 0)}
+                        contenteditable={!!(isEditable) ? "true" : "false"}>{entityName}</h2>
+                    <span onClick={() => editHeading(elem)}
+                          className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ''}/>
                 </section>
-                <form onSubmit={handleSubmit(this.handleSubmit)}>
+                <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                     <section className="flex-container right-sidebar-scroll">
                         <section className="info-section">
                             <div className="flex-container">
@@ -285,7 +267,7 @@ export class PersonalInfo extends Component {
 
 
                     <div className="flex-container items-right mr-20 mb-30">
-                        <button className="blue-button mr-10" onClick={this.handlePreview}>Preview</button>
+                        <button className="blue-button mr-10" type={"button"} onClick={handlePreview}>Preview</button>
                         <button className="orange-button" type="submit">Save &
                             Continue
                         </button>

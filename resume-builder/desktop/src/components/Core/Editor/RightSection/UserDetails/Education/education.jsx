@@ -13,8 +13,8 @@ import {
     AccordionItemButton
 } from 'react-accessible-accordion';
 
-import validate from '../../../../../FormHandler/validations/education/validate'
-import Loader from "../../../../../Loader/loader.jsx";
+import validate from '../../../../../FormHandler/validations/education/validate';
+import LoaderSection from "../../../../../Loader/loaderSection.jsx";
 
 
 const EducationRenderer = ({
@@ -23,6 +23,7 @@ const EducationRenderer = ({
                                meta: {touched, error, submitFailed},
                                deleteEducation,
                                handleAddition,
+                               handleSubmit,
                                handleAccordionState,
                                handleAccordionClick,
                                changeOrderingUp,
@@ -31,25 +32,27 @@ const EducationRenderer = ({
                                editHeading,
                                saveTitle,
                                isEditable,
+                               entityName
                            }) => {
     let elem = null;
     return (
-        <div>
-            {!!loader &&
-            <Loader/>
-            }
+        <div className="pr">
+            {<LoaderSection/>}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-education1"></i></span>
                 <h2 ref={(value) => {
                     elem = value
                 }} onKeyUp={(event) => saveTitle(event)}
-                    contenteditable={isEditable ? "true" : "false"}>Education</h2>
+                    contenteditable={isEditable ? "true" : "false"}>{entityName}</h2>
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit icon-education__cursor" : ''}/>
 
-                <button onClick={(event) => handleAddition(fields, error, event)}
-                        type={'button'}
-                        className="add-button add-button__right">Add new
+                <button
+                    onClick={handleSubmit((values) => {
+                        handleAddition(fields, error)
+                    })}
+                    type={'button'}
+                    className="add-button add-button__right">Add new
                 </button>
 
 
@@ -144,7 +147,7 @@ const EducationRenderer = ({
 
                                                             </div>
                                                             <span className="till-today">
-                                    <Field type="radio" name={`${member}.is_pursuing`} component={'input'}
+                                    <Field type="checkbox" name={`${member}.is_pursuing`} component={'input'}
                                            checked={`${member}.is_pursuing` === 'true'}/>
                                     Till Today
                                 </span>
@@ -207,8 +210,7 @@ class Education extends Component {
         this.deleteEducation = this.deleteEducation.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
-        this.saveTitle = this.saveTitle.bind(this);
-        this.editHeading = this.editHeading.bind(this);
+
         this.state = {
             currentAccordion: 0,
             previousAccordion: 0,
@@ -217,37 +219,18 @@ class Education extends Component {
         }
     }
 
-    async handleSubmit(values) {
+    async handleSubmit(values, entityLink) {
         const {list} = values;
         if (list.length) {
             await this.props.onSubmit(list[list.length - 1]);
-            this.props.history.push('/resume-builder/edit/?type=skill')
+            if (entityLink) this.props.history.push(entityLink);
+            else this.props.history.push('/resume-builder/buy/')
         }
 
     }
 
     componentDidMount() {
         this.props.fetchUserEducation()
-    }
-
-    editHeading(elem) {
-        this.setState({
-            'isEditable': true
-        });
-        setTimeout(() => {
-            elem.focus()
-        }, 0)
-
-
-    }
-
-    saveTitle(event) {
-        event.stopPropagation();
-        if (event.keyCode === 13) {
-            this.setState({
-                'isEditable': false
-            })
-        }
     }
 
     changeOrderingDown(index, fields, event) {
@@ -319,13 +302,14 @@ class Education extends Component {
 
 
     render() {
-        const {handleSubmit, ui: {loader}} = this.props;
+        const {handleSubmit, ui: {loader}, saveTitle, isEditable,
+            editHeading, entityName, nextEntity, handlePreview} = this.props;
 
         return (
-            <form onSubmit={handleSubmit(this.handleSubmit)}>
+            <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray name={'list'}
                             loader={loader}
-                            handleSubmit={this.handleSubmit}
+                            handleSubmit={handleSubmit}
                             handleAccordionClick={this.handleAccordionClick}
                             handleAccordionState={this.handleAccordionState}
                             handleAddition={this.handleAddition}
@@ -334,13 +318,14 @@ class Education extends Component {
                             changeOrderingDown={this.changeOrderingDown}
                             openedAccordion={this.state.openedAccordion}
                             component={EducationRenderer}
-                            saveTitle={(event) => this.saveTitle(event)}
-                            editHeading={(value) => this.editHeading(value)}
-                            isEditable={this.state.isEditable}
+                            saveTitle={(event) => saveTitle(event, 1)}
+                            editHeading={(value) => editHeading(value)}
+                            isEditable={isEditable}
+                            entityName={entityName}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10">Preview</button>
+                    <button className="blue-button mr-10" onClick={handlePreview}>Preview</button>
                     <button className="orange-button" type={'submit'}>Save & Continue</button>
                 </div>
 
@@ -360,7 +345,7 @@ export const EducationForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.education,
-        ui: state.ui
+        ui: state.ui,
     }
 };
 

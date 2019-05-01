@@ -152,18 +152,18 @@ textarea {
 
 /* Checkbox */
 input[type='checkbox'] {
-  appearance:none;
+  /*appearance:none;*/
   cursor:pointer;
 }
 
 input[type='checkbox']:checked:after {
-  border-width:0 4px 4px 0;
+  /*border-width:0 4px 4px 0;
   content:"\00a0";
   display:block;
   height:1em; width:.5em;
   margin-top:-.9em;
   position:relative;
-  transform:rotate(45deg); 
+  transform:rotate(45deg); */
 }
 
 

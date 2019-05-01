@@ -13,7 +13,7 @@ import {
 } from 'react-accessible-accordion';
 
 import validate from '../../../../../FormHandler/validations/reference/validate'
-import Loader from "../../../../../Loader/loader.jsx";
+import LoaderSection from "../../../../../Loader/loaderSection.jsx";
 
 
 const ReferenceRenderer = ({
@@ -22,6 +22,7 @@ const ReferenceRenderer = ({
                                meta: {touched, error, submitFailed},
                                deleteReference,
                                handleAddition,
+                               handleSubmit,
                                handleAccordionState,
                                handleAccordionClick,
                                changeOrderingUp,
@@ -30,13 +31,14 @@ const ReferenceRenderer = ({
                                isEditable,
                                editHeading,
                                saveTitle,
+                               entityName
                            }) => {
     let elem = null;
 
     return (
         <div>
             {/*{!!loader &&*/}
-            {/*<Loader/>*/}
+            {/*<LoaderSection/>*/}
             {/*}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-references1"/></span>
@@ -44,13 +46,14 @@ const ReferenceRenderer = ({
                     elem = value
                 }} onKeyUp={(event) => saveTitle(event)}
                     contenteditable={isEditable ? "true" : "false"}
-                >References</h2>
+                >{entityName}</h2>
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ""}/>
 
                 <button
-                    onClick={() => handleAddition(fields)}
-                    type={'button'}
+                    onClick={handleSubmit((values) => {
+                        handleAddition(fields, error)
+                    })} type={'button'}
                     className="add-button add-button__right">Add new
                 </button>
 
@@ -163,22 +166,20 @@ class Reference extends Component {
         this.deleteReference = this.deleteReference.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
-        this.saveTitle = this.saveTitle.bind(this);
-        this.editHeading = this.editHeading.bind(this);
 
         this.state = {
             currentAccordion: 0,
             previousAccordion: 0,
             openedAccordion: 0,
-            isEditable: false
-
         }
     }
 
-    async handleSubmit(values) {
+    async handleSubmit(values, entityLink) {
         const {list} = values;
         if (list.length) {
             await this.props.onSubmit(list[list.length - 1]);
+            if (entityLink) this.props.history.push(entityLink);
+            else this.props.history.push('/resume-builder/buy/')
         }
     }
 
@@ -222,27 +223,6 @@ class Reference extends Component {
         })
     }
 
-
-    editHeading(elem) {
-        this.setState({
-            'isEditable': true
-        });
-        setTimeout(() => {
-            elem.focus()
-        }, 0)
-
-
-    }
-
-    saveTitle(event) {
-        event.stopPropagation();
-        if (event.keyCode === 13) {
-            this.setState({
-                'isEditable': false
-            })
-        }
-    }
-
     deleteReference(index, fields, event) {
         event.stopPropagation();
         const reference = fields.get(index);
@@ -277,12 +257,15 @@ class Reference extends Component {
 
 
     render() {
-        const {handleSubmit, ui: {loader}} = this.props;
+        const {
+            handleSubmit, ui: {loader}, isEditable,
+            editHeading, saveTitle, entityName, nextEntity, handlePreview
+        } = this.props;
         return (
-            <form onSubmit={handleSubmit(this.handleSubmit)}>
+            <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray
                     name={"list"}
-                    handleSubmit={this.handleSubmit}
+                    handleSubmit={handleSubmit}
                     handleAccordionClick={this.handleAccordionClick}
                     handleAccordionState={this.handleAccordionState}
                     handleAddition={this.handleAddition}
@@ -292,13 +275,14 @@ class Reference extends Component {
                     openedAccordion={this.state.openedAccordion}
                     loader={loader}
                     component={ReferenceRenderer}
-                    saveTitle={(event) => this.saveTitle(event)}
-                    editHeading={(value) => this.editHeading(value)}
-                    isEditable={this.state.isEditable}
+                    saveTitle={(event) => saveTitle(event, 9)}
+                    editHeading={(value) => editHeading(value)}
+                    isEditable={isEditable}
+                    entityName={entityName}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10">Preview</button>
+                    <button className="blue-button mr-10" type={'button'} onClick={handlePreview}>Preview</button>
                     <button className="orange-button" type={'submit'}>Save & Continue</button>
                 </div>
             </form>

@@ -13,13 +13,14 @@ import {
     AccordionItemPanel,
     AccordionItemButton
 } from 'react-accessible-accordion';
-import Loader from "../../../../../Loader/loader.jsx";
+import LoaderSection from "../../../../../Loader/loaderSection.jsx";
 
 const ProjectRenderer = ({
                              fields,
                              loader,
                              meta: {touched, error, submitFailed},
                              deleteProject,
+                             handleSubmit,
                              handleAddition,
                              handleAccordionState,
                              handleAccordionClick,
@@ -29,26 +30,29 @@ const ProjectRenderer = ({
                              editHeading,
                              saveTitle,
                              isEditable,
+                             entityName
                          }) => {
     let elem = null;
 
     return (
         <div>
             {!!loader &&
-            <Loader/>
+            <LoaderSection/>
             }
             <section className="head-section">
                 <span className="icon-box"><i className="icon-projects1"/></span>
                 <h2 ref={(value) => {
                     elem = value
                 }} onKeyUp={(event) => saveTitle(event)}
-                    contenteditable={isEditable ? "true" : "false"}>Projects
+                    contenteditable={isEditable ? "true" : "false"}>{entityName}
                 </h2>
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ""}></span>
 
                 <button
-                    onClick={() => handleAddition(fields, error)}
+                    onClick={handleSubmit((values) => {
+                        handleAddition(fields, error)
+                    })}
                     type={'button'}
                     className="add-button add-button__right">Add new
                 </button>
@@ -170,8 +174,6 @@ class Project extends Component {
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
         this.handleAccordionState = this.handleAccordionState.bind(this);
-        this.saveTitle = this.saveTitle.bind(this);
-        this.editHeading = this.editHeading.bind(this);
 
         this.state = {
             currentAccordion: 0,
@@ -186,35 +188,16 @@ class Project extends Component {
 
     }
 
-    async handleSubmit(values) {
+    async handleSubmit(values, entityLink) {
         const {list} = values;
         if (list.length) {
             await this.props.onSubmit(list[list.length - 1]);
-            this.props.history.push('/resume-builder/edit/?type=reference');
+            if (entityLink) this.props.history.push(entityLink);
+            else this.props.history.push('/resume-builder/buy/')
         }
 
     }
 
-
-    editHeading(elem) {
-        this.setState({
-            'isEditable': true
-        });
-        setTimeout(() => {
-            elem.focus()
-        }, 0)
-
-
-    }
-
-    saveTitle(event) {
-        event.stopPropagation();
-        if (event.keyCode === 13) {
-            this.setState({
-                'isEditable': false
-            })
-        }
-    }
 
     changeOrderingDown(index, fields, event) {
         event.stopPropagation();
@@ -287,12 +270,15 @@ class Project extends Component {
 
 
     render() {
-        const {handleSubmit, ui: {loader}} = this.props;
+        const {
+            handleSubmit, ui: {loader}, saveTitle,
+            editHeading, isEditable, entityName, nextEntity, handlePreview
+        } = this.props;
         return (
-            <form onSubmit={handleSubmit(this.handleSubmit)}>
+            <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray
                     name="list"
-                    handleSubmit={this.handleSubmit}
+                    handleSubmit={handleSubmit}
                     handleAccordionClick={this.handleAccordionClick}
                     handleAccordionState={this.handleAccordionState}
                     handleAddition={this.handleAddition}
@@ -302,13 +288,14 @@ class Project extends Component {
                     openedAccordion={this.state.openedAccordion}
                     loader={loader}
                     component={ProjectRenderer}
-                    saveTitle={(event) => this.saveTitle(event)}
-                    editHeading={(value) => this.editHeading(value)}
-                    isEditable={this.state.isEditable}
+                    saveTitle={(event) => saveTitle(event, 3)}
+                    editHeading={(value) => editHeading(value)}
+                    isEditable={isEditable}
+                    entityName={entityName}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10">Preview</button>
+                    <button className="blue-button mr-10" type={'button'} onClick={handlePreview}>Preview</button>
                     <button className="orange-button" type={'submit'}>Save & Continue</button>
                 </div>
             </form>
@@ -328,7 +315,7 @@ export const ProjectForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.project,
-        ui: state.ui
+        ui: state.ui,
     }
 };
 

@@ -14,6 +14,7 @@ import {
 } from 'react-accessible-accordion';
 
 import validate from '../../../../../FormHandler/validations/experience/validate'
+import LoaderSection from "../../../../../Loader/loaderSection.jsx";
 
 
 const ExperienceRenderer = ({
@@ -22,6 +23,7 @@ const ExperienceRenderer = ({
                                 meta: {touched, error, submitFailed},
                                 deleteExperience,
                                 handleAddition,
+                                handleSubmit,
                                 handleAccordionState,
                                 handleAccordionClick,
                                 changeOrderingUp,
@@ -30,6 +32,7 @@ const ExperienceRenderer = ({
                                 editHeading,
                                 saveTitle,
                                 isEditable,
+                                entityName
                             }) => {
     let elem = null;
 
@@ -40,11 +43,14 @@ const ExperienceRenderer = ({
                 <h2 ref={(value) => {
                     elem = value
                 }} onKeyUp={(event) => saveTitle(event)}
-                    contenteditable={isEditable ? "true" : "false"}>Experience</h2>
-                <span onClick={()=>editHeading(elem)} className={!!(!isEditable) ? "icon-edit icon-experience__cursor" : ''}/>
+                    contenteditable={isEditable ? "true" : "false"}>{entityName}</h2>
+                <span onClick={() => editHeading(elem)}
+                      className={!!(!isEditable) ? "icon-edit icon-experience__cursor" : ''}/>
 
                 <button
-                    onClick={() => handleAddition(fields, error)}
+                    onClick={handleSubmit((values) => {
+                        handleAddition(fields, error)
+                    })}
                     type={'button'}
                     className="add-button add-button__right">Add new
                 </button>
@@ -136,7 +142,7 @@ const ExperienceRenderer = ({
                                                                        className={'input-control'}/>
                                                             </div>
                                                             <span className="till-today">
-									                                    <Field type="radio"
+									                                    <Field type="checkbox"
                                                                                name={`${member}.is_working`}
                                                                                component="input"
                                                                                checked={`${member}.is_working` === 'true' ? true : false}/>
@@ -194,13 +200,11 @@ class Experience extends Component {
         this.deleteExperience = this.deleteExperience.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
-        this.saveTitle = this.saveTitle.bind(this);
-        this.editHeading = this.editHeading.bind(this);
+
         this.state = {
             currentAccordion: 0,
             previousAccordion: 0,
             openedAccordion: 0,
-            isEditable: false
         }
     }
 
@@ -208,32 +212,12 @@ class Experience extends Component {
         this.props.fetchUserExperience()
     }
 
-
-    editHeading(elem) {
-        this.setState({
-            'isEditable': true
-        });
-        setTimeout(() => {
-            elem.focus()
-        }, 0)
-
-
-    }
-
-    saveTitle(event) {
-        event.stopPropagation();
-        if (event.keyCode === 13) {
-            this.setState({
-                'isEditable': false
-            })
-        }
-    }
-
-    async handleSubmit(values) {
+    async handleSubmit(values, entityLink) {
         const {list} = values;
         if (list.length) {
             await this.props.onSubmit(list[list.length - 1]);
-            this.props.history.push('/resume-builder/edit/?type=education')
+            if (entityLink) this.props.history.push(entityLink);
+            else this.props.history.push('/resume-builder/buy/')
         }
 
     }
@@ -308,13 +292,14 @@ class Experience extends Component {
     }
 
     render() {
-        const {handleSubmit, ui: {loader}} = this.props;
+        const {handleSubmit, ui: {loader}, isEditable,
+            editHeading, saveTitle, entityName, nextEntity,handlePreview} = this.props;
 
         return (
-            <form onSubmit={handleSubmit(this.handleSubmit)}>
+            <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray name={"list"}
                             loader={loader}
-                            handleSubmit={this.handleSubmit}
+                            handleSubmit={handleSubmit}
                             handleAccordionClick={this.handleAccordionClick}
                             handleAccordionState={this.handleAccordionState}
                             handleAddition={this.handleAddition}
@@ -323,13 +308,14 @@ class Experience extends Component {
                             changeOrderingDown={this.changeOrderingDown}
                             openedAccordion={this.state.openedAccordion}
                             component={ExperienceRenderer}
-                            saveTitle={(event) => this.saveTitle(event)}
-                            editHeading={(value) => this.editHeading(value)}
-                            isEditable={this.state.isEditable}
+                            saveTitle={(event) => saveTitle(event, 2)}
+                            editHeading={(value) => editHeading(value)}
+                            isEditable={isEditable}
+                            entityName={entityName}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10">Preview</button>
+                    <button className="blue-button mr-10" type="button" onClick={handlePreview}>Preview</button>
                     <button className="orange-button" type="submit">Save & Continue</button>
                 </div>
             </form>
@@ -347,7 +333,7 @@ export const ExperienceForm = reduxForm({
 const mapStateToProps = (state) => {
     return {
         initialValues: state.experience,
-        ui: state.ui
+        ui: state.ui,
     }
 };
 

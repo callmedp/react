@@ -251,12 +251,12 @@
                           <b>Updated On: {{obj.modified}}</b>
                       </td>
                       <td>
-                        <form autocomplete="off" data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="resume-upload-form">{% csrf_token %}
+                        <form autocomplete="off" data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="resume-upload-form{{obj.pk}}">{% csrf_token %}
                           {{form.oi_resume}}
                           <div style="display:none">
                           <input type="hidden" name="oi_pk" value="{{obj.pk}}"></div>
                           </br>
-                          <button type="button" id="uploadbutton"  class="btn btn-primary btn-xs"><i class="fa fa-upload"> Upload Document</i></button>
+                          <button type="button" id="uploadbutton{{obj.pk}}" onclick="upload_click({{obj.pk}});" class="btn btn-primary btn-xs"><i class="fa fa-upload"> Upload Document</i></button>
                         </form>
                       </td>
                       
@@ -341,12 +341,10 @@
   {{ block.super }}
 <script>
 
-
-
-$("#uploadbutton").click(function(e){
-   $('#uploadbutton').attr('disabled','true');
-   $('#resume-upload-form').submit();
-});
+function upload_click(pk){
+   $("#uploadbutton"+pk).attr('disabled','true');
+   $("#resume-upload-form"+ pk).submit();
+}
 
 </script>
   {% compress js %}
