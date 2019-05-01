@@ -12,7 +12,7 @@ $(function(){
             $('#body-table-comment input[name="table_records"]:checked').each(function() {
                 selected.push($(this).prop('name'));
             });
-            console.log(selected.length);
+//            console.log(selected.length);
             if (selected.length > 0){
             	$('#myModalbody').html('<div class="alert alert-success"> Are you sure to selected '+ selected.length + ' comments' +' to do action' + ' ?</div>');
                 $('#action_comment').show();

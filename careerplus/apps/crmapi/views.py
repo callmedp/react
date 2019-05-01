@@ -91,7 +91,7 @@ class LeadManagement(View):
                 country = Country.objects.get(phone='91')
 
             utm = request.session.get('utm', {})
-            campaign_slug = utm.get('utm_campaign', '')
+            campaign_slug = request.POST.get('campaign',utm.get('utm_campaign'))
             sub_campaign_slug = utm.get('sub_campaign_slug')
             utm_parameter = json.dumps(utm)
             
@@ -129,7 +129,8 @@ class LeadManagement(View):
                 sub_campaign_slug=sub_campaign_slug
             )
             created = True
-            create_lead_crm.delay(pk=lead.pk, validate=True)
+            validate = True if lead.email else False
+            create_lead_crm.delay(pk=lead.pk, validate=validate)
         except Exception as e:
             logging.getLogger('error_log').error('lead creation is failed%s'%str(e))
 

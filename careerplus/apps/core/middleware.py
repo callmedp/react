@@ -104,7 +104,14 @@ class LoginMiddleware(object):
                     shine_id=candidate_id)
             if candidate_detail:
                 skills = [skill['value'] for skill in candidate_detail['skills']]
-                skills_obj = Skill.objects.filter(name__in=skills)[:15]
+                skills_in_ascii = []
+                for skill in skills:
+                    try:
+                        skills_in_ascii.append(skill.encode('ascii','replace').decode('ascii','replace'))
+                    except Exception as e:
+                        logging.getLogger('error_log').error('error in decrypting skills into ascii {}'.format(str(e)))
+                        skills_in_ascii.append("")
+                skills_obj = Skill.objects.filter(name__in=skills_in_ascii)[:15]
                 skills_ids = [str(s.id) for s in skills_obj]
                 request.session.update({
                     'skills': skills_ids,
