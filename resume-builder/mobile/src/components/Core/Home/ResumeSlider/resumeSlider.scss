@@ -4,7 +4,7 @@
 .proven-resume {
 
     &__slideWrap {
-        margin-top: 3.0rem;
+        margin: 3.0rem -1.5rem 0;
         position: relative;
 
         .btn {
@@ -13,6 +13,56 @@
             left: 50%;
             transform: translateX(-50%);
         }
+
+        .slick-slide {
+            padding: 1.5rem;
+        }
+
+        .slick-arrow {
+            @include size(50px, 60px);
+            box-shadow: 0 0 15px rgba($black, .1);
+            border: 0 none;
+            background-color: $white;
+            position: absolute;
+            top: 50%;
+            margin-top: -25px;
+            z-index: 1;
+            text-indent: -99999px;
+
+            &::after {
+                content: '';
+                @include size(18px, 17px);
+                background-image: url($sprite);
+                display: block;
+                position: absolute;
+                top: 50%;
+                margin-top: -6px;
+            }
+        }
+
+        .slick-prev {
+            left: 0;
+            @include border-radius(0 50px 50px 0);
+            
+            &::after {
+                content: '';
+                background-position: -12px 0;
+                left: 14px;
+            }
+            
+        }
+
+        .slick-next {
+            right: 0;
+            @include border-radius(50px 0 0 50px);
+            
+
+            &::after {
+                content: '';
+                background-position: -32px 0;
+                right: 14px;
+            }
+        }
     }
 
     &__imageWrap {
@@ -20,5 +70,6 @@
         overflow: hidden;
         border: 3px solid $white;
         box-shadow: 0 0 10px rgba($black, .3);
+        margin-right: 15px;
     }
 }

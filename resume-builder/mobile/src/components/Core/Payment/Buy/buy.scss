@@ -1,7 +1,6 @@
 @import '../../../../styles/variables/vars';
 @import '../../../../styles/variables/mixins';
 @import "~slick-carousel/slick/slick.css"; 
-@import "~slick-carousel/slick/slick-theme.css";
 
 .buy-container {
     padding-top: 60px;
@@ -59,6 +58,9 @@
         }
 
         &--right {
+            margin-right: -15px;
+            margin-left: -15px;
+
             display: flex;
             align-items: center;
             justify-content: center;
@@ -68,39 +70,61 @@
                 display: block;
                 overflow: hidden;
                 width: 100%;
-                margin-right: -29px;
                 padding-bottom: 10px;
                 position: relative;
 
-                &__controls {
-                
-                    span {
-                        @include size(30px, 44px, block);
+                .slick-slide {
+                    padding: 1rem;
+                }
+        
+                .slick-arrow {
+                    @include size(30px, 40px);
+                    box-shadow: 0 0 15px rgba($black, .1);
+                    border: 0 none;
+                    background-color: $white;
+                    position: absolute;
+                    top: 50%;
+                    margin-top: -25px;
+                    z-index: 1;
+                    text-indent: -99999px;
+        
+                    &::after {
+                        content: '';
+                        @include size(8px, 14px);
+                        background-image: url($sprite);
+                        display: block;
                         position: absolute;
-                        background-color: $white;
-                        box-shadow: 0 0 10px rgba($black, .3);
                         top: 50%;
-                        transform: translateY(-50%);
-                        z-index: 9;
-                        border-radius: 4px;
-
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                    }
-            
-                    &--next {
-                        right: -4px;   
-                    }
-                    
-                    &--prev {
-                        left: -4px;
-
-                        i {
-                            transform: rotateY(180deg);
-                        }
+                        margin-top: -7px;
                     }
                 }
+        
+                .slick-prev {
+                    left: 0;
+                    @include border-radius(0 4px 4px 0);
+                    
+                    &::after {
+                        content: '';
+                        background-position: -61px -288px;
+                        transform: rotateY(180deg);
+                        left: 10px;
+                    }
+                    
+                }
+        
+                .slick-next {
+                    right: 0;
+                    @include border-radius(4px 0 0 4px);
+                    
+        
+                    &::after {
+                        content: '';
+                        background-position: -61px -288px;
+                        right: 10px;
+                    }
+                }
+
+
             }
         }
 
@@ -149,7 +173,7 @@
                 @include size(12px, 20px, block);
                 content: '';
                 background-position: -82px -287px;
-                background-image: $sprite;
+                background-image: url($sprite);
                 position: absolute;
                 left: -11px;
             }
@@ -249,3 +273,6 @@
     align-items: center;
     margin: 0;
   }
+
+
+

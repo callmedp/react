@@ -49,5 +49,4 @@ export default class ResumeSlider extends Component {
             </section>
         )
     }
-
 }
