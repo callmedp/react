@@ -37,7 +37,7 @@ const EducationRenderer = ({
     let elem = null;
     return (
         <div className="pr">
-            {<LoaderSection/>}
+            {/*{<LoaderSection/>}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-education1"></i></span>
                 <h2 ref={(value) => {

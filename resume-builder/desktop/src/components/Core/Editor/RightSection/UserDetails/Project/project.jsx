@@ -36,9 +36,9 @@ const ProjectRenderer = ({
 
     return (
         <div>
-            {!!loader &&
-            <LoaderSection/>
-            }
+            {/*{!!loader &&*/}
+            {/*<LoaderSection/>*/}
+            {/*}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-projects1"/></span>
                 <h2 ref={(value) => {

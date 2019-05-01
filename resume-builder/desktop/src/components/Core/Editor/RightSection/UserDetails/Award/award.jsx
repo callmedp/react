@@ -35,9 +35,9 @@ const AwardRenderer = ({
     let elem = null;
     return (
         <div>
-            {!!(loader) &&
-            <LoaderSection/>
-            }
+            {/*{!!(loader) &&*/}
+            {/*<LoaderSection/>*/}
+            {/*}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-awards1"/></span>
                 <h2 ref={(value) => {

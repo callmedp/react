@@ -4,6 +4,7 @@ import TopBar from './TopBar/topBar.jsx'
 import LeftSideBar from './LeftSideBar/leftSideBar.jsx'
 import Header from '../../Common/Header/header.jsx'
 import Footer from '../../Common/Footer/footer.jsx'
+import {connect} from 'react-redux';
 import RightSection from './RightSection/rightSection.jsx'
 import {withRouter} from "react-router-dom";
 import {siteDomain} from "../../../Utils/domains";
@@ -18,14 +19,18 @@ class EditPreview extends Component {
     }
 
     render() {
+        const {ui: {loader}} = this.props;
+        console.log('-laoder--',loader)
         return (
             /*
             * @desc Top Bar component
             * */
             <div>
-          {/*      {
-            <LoaderPage/>
-            }*/}
+                {
+                    !!(loader) &&
+                     <LoaderPage/>
+                }
+
                 <Header/>
                 <div className="page-container">
                     <TopBar/>
@@ -42,5 +47,10 @@ class EditPreview extends Component {
 
 }
 
-export default withRouter(props => <EditPreview {...props}/>)
+const mapStateToProps = (state) => {
+    return {
+        ui: state.ui
+    }
+}
+export default withRouter(connect(mapStateToProps, null)(EditPreview))
 
