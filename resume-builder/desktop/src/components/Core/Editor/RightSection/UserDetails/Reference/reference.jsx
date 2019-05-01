@@ -22,6 +22,7 @@ const ReferenceRenderer = ({
                                meta: {touched, error, submitFailed},
                                deleteReference,
                                handleAddition,
+                               handleSubmit,
                                handleAccordionState,
                                handleAccordionClick,
                                changeOrderingUp,
@@ -50,8 +51,9 @@ const ReferenceRenderer = ({
                       className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ""}/>
 
                 <button
-                    onClick={() => handleAddition(fields)}
-                    type={'button'}
+                    onClick={handleSubmit((values) => {
+                        handleAddition(fields, error)
+                    })} type={'button'}
                     className="add-button add-button__right">Add new
                 </button>
 
@@ -260,7 +262,7 @@ class Reference extends Component {
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray
                     name={"list"}
-                    handleSubmit={this.handleSubmit}
+                    handleSubmit={handleSubmit}
                     handleAccordionClick={this.handleAccordionClick}
                     handleAccordionState={this.handleAccordionState}
                     handleAddition={this.handleAddition}

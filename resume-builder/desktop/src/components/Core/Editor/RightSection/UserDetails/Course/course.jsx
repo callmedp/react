@@ -21,6 +21,7 @@ const CourseRenderer = ({
                             fields,
                             loader,
                             meta: {touched, error, submitFailed},
+                            handleSubmit,
                             deleteCourse,
                             handleAddition,
                             handleAccordionState,
@@ -50,9 +51,13 @@ const CourseRenderer = ({
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ""}/>
 
-                <button onClick={() => handleAddition(fields, error)}
-                        type={'button'}
-                        className="add-button add-button__right">Add new
+                <button
+                    onClick={handleSubmit((values) => {
+                        handleAddition(fields, error)
+                    })}
+
+                    type={'button'}
+                    className="add-button add-button__right">Add new
                 </button>
 
 
@@ -238,7 +243,7 @@ class Course extends Component {
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray name={'list'}
                             loader={loader}
-                            handleSubmit={this.handleSubmit}
+                            handleSubmit={handleSubmit}
                             handleAccordionClick={this.handleAccordionClick}
                             handleAccordionState={this.handleAccordionState}
                             handleAddition={this.handleAddition}

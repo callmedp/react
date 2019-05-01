@@ -23,6 +23,7 @@ const EducationRenderer = ({
                                meta: {touched, error, submitFailed},
                                deleteEducation,
                                handleAddition,
+                               handleSubmit,
                                handleAccordionState,
                                handleAccordionClick,
                                changeOrderingUp,
@@ -36,7 +37,7 @@ const EducationRenderer = ({
     let elem = null;
     return (
         <div>
-            
+
             <section className="head-section">
                 <span className="icon-box"><i className="icon-education1"></i></span>
                 <h2 ref={(value) => {
@@ -46,7 +47,10 @@ const EducationRenderer = ({
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit icon-education__cursor" : ''}/>
 
-                <button onClick={(event) => handleAddition(fields, error, event)}
+                <button
+                    onClick={handleSubmit((values) => {
+                    handleAddition(fields, error)
+                })}
                         type={'button'}
                         className="add-button add-button__right">Add new
                 </button>
@@ -304,7 +308,7 @@ class Education extends Component {
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray name={'list'}
                             loader={loader}
-                            handleSubmit={this.handleSubmit}
+                            handleSubmit={handleSubmit}
                             handleAccordionClick={this.handleAccordionClick}
                             handleAccordionState={this.handleAccordionState}
                             handleAddition={this.handleAddition}

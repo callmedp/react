@@ -20,6 +20,7 @@ const ProjectRenderer = ({
                              loader,
                              meta: {touched, error, submitFailed},
                              deleteProject,
+                             handleSubmit,
                              handleAddition,
                              handleAccordionState,
                              handleAccordionClick,
@@ -49,7 +50,9 @@ const ProjectRenderer = ({
                       className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ""}></span>
 
                 <button
-                    onClick={() => handleAddition(fields, error)}
+                    onClick={handleSubmit((values) => {
+                        handleAddition(fields, error)
+                    })}
                     type={'button'}
                     className="add-button add-button__right">Add new
                 </button>
@@ -272,7 +275,7 @@ class Project extends Component {
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray
                     name="list"
-                    handleSubmit={this.handleSubmit}
+                    handleSubmit={handleSubmit}
                     handleAccordionClick={this.handleAccordionClick}
                     handleAccordionState={this.handleAccordionState}
                     handleAddition={this.handleAddition}
