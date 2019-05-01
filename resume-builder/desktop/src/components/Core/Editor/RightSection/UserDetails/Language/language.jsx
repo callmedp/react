@@ -54,7 +54,6 @@ const LanguageRenderer = ({
                       className={!!(!isEditable) ? "icon-edit icon-language__cursor" : ""}/>
 
                 <button onClick={handleSubmit((values) => {
-                    console.log('values', values);
                     handleAddition(fields, error)
                 })}
                         type={'button'}
@@ -188,7 +187,6 @@ class Language extends Component {
 
     changeOrderingDown(index, fields, event) {
         event.stopPropagation();
-        console.log('donw pressed');
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;
@@ -199,7 +197,6 @@ class Language extends Component {
 
     changeOrderingUp(index, fields, event) {
         event.stopPropagation();
-        console.log('up pressed');
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
@@ -209,7 +206,6 @@ class Language extends Component {
     }
 
     handleAddition(fields, error) {
-        console.log('--submit error-', error);
         const listLength = fields.length;
         if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({

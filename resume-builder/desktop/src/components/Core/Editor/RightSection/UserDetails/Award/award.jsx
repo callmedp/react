@@ -48,7 +48,6 @@ const AwardRenderer = ({
                       className={!!(!isEditable) ? "icon-edit icon-awards__cursor" : ""}/>
 
                 <button onClick={handleSubmit((values) => {
-                    console.log('values', values);
                     handleAddition(fields, error)
                 })}
                         type={'button'}
@@ -200,7 +199,6 @@ class Award extends Component {
 
     changeOrderingDown(index, fields, event) {
         event.stopPropagation();
-        console.log('down pressed');
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;
@@ -211,7 +209,6 @@ class Award extends Component {
 
     changeOrderingUp(index, fields, event) {
         event.stopPropagation();
-        console.log('up pressed');
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;

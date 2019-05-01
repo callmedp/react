@@ -112,7 +112,6 @@ export class PersonalInfo extends Component {
     render() {
         const {handleSubmit, personalInfo, ui: {loader}} = this.props;
         const {isEditable} = this.state;
-        console.log('staticUrl -----', `${this.staticUrl}react/assets/images/upload-image.jpg`)
         return (
             <div>
                 <section className="head-section">
