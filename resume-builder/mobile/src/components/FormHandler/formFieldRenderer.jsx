@@ -20,14 +20,14 @@ export const renderField = ({
             <label className="form__label" htmlFor={input.name}>{label}</label>
             {!prepend ?
                 <React.Fragment>
-                    <input {...input} className={className +(error ? " error" : "")} id={id} type={type}/>
+                    <input {...input} className={className +(touched && error ? " error" : "")} id={id} type={type}/>
                     {touched &&
                         ((<span className={'error-message'}>{error}</span>) ||
                             (warning && <span className={'warn-Message'}>{warning}</span>))
                     }
                 </React.Fragment> :
                 
-            <div className={"input-group " + (error ? "error" : "")} >
+            <div className={"input-group " + (touched && error ? "error" : "")} >
                 <div className="input-group__prepend">
                 <span className="input-group__text">
                     <i className={iconClass}></i>
@@ -55,7 +55,7 @@ export const datepicker =
      }) => (
         <React.Fragment>
             <label className="form__label" htmlFor={input.name}>{label}</label>
-            <div className={"input-group " + (error ? "error" : "")}>
+            <div className={"input-group " + (touched && error ? "error" : "")}>
                 <div className="input-group__prepend">
                     <span className="input-group__text">
                         <i className="sprite icon--date"></i>
@@ -85,7 +85,7 @@ export const renderSelect = ({
     <React.Fragment>
         <label className="form__label" htmlFor={input.name}>{label}</label>
         {prepend ?
-        <div className={"input-group " +(error ? "error" : "")}>
+        <div className={"input-group " +(touched && error ? "error" : "")}>
             <div className="input-group__prepend">
                 <span className="input-group__text">
                     <i className={iconClass}></i>
@@ -109,7 +109,7 @@ export const renderSelect = ({
 
 
 
-            <select {...input} className={className +(error ? " error" : "")}
+            <select {...input} className={className +(touched && error ? " error" : "")}
                 onBlur={() => {
                     input.onBlur(input.value)
                     ////console.log(input.label)

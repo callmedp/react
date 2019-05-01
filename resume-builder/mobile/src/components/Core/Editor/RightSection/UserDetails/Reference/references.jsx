@@ -26,12 +26,12 @@ class References extends Component {
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
+        await this.props.bulkUpdateUserReference(values.list);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            //console.log("Came Here")
+            this.props.history.push(`/resume-builder/buy`)  
         }
         else{
-            await this.props.bulkUpdateUserReference(values.list);
             this.props.updateCurrentLinkPos({currentLinkPos})
             this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
         }
@@ -40,6 +40,8 @@ class References extends Component {
 
     componentDidMount() {
         this.props.fetchUserReference()
+        console.log("Here")
+        console.log("----",this.props.sidenav.currentLinkPos)
         if (this.props.personalInfo.entity_preference_data.length) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[9].entity_text})
         }
@@ -162,8 +164,7 @@ class References extends Component {
                                 <button className="btn btn__round btn--outline" 
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
                                     type={'button'}>Preview</button>
-                                <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={(length === pos +1) ?'button' :'submit'}
-                                    onClick={(length === pos +1) ? ()=>{this.props.history.push(`/resume-builder/buy`)} : ()=>{}}>
+                                <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={'submit'}>
                                     {(length === pos +1) ?"Buy" :"Save & Continue"}
                                 </button>
                             </div>

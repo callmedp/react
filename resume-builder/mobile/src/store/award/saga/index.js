@@ -26,6 +26,23 @@ function* fetchUserAward(action) {
         ////console.log("Sorted list ")
         ////console.log(results)
         let data = {list: results};
+        if(! data.list.length){
+            data = {
+                ...data,
+                ...{
+                    list: [
+                        {
+                            "candidate_id": '',
+                            "id": '',
+                            "title": '',
+                            "date": '',
+                            "summary": '',
+                            "order": 0
+                        }
+                    ]
+                }
+            };
+        }
         ////console.log('---', data);
         yield put({type: Actions.SAVE_USER_AWARD, data: data})
     } catch (e) {
@@ -94,6 +111,8 @@ function* deleteUserAward(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_AWARD, id: awardId});
+        yield call(fetchUserAward)
+        
 
     } catch (e) {
         ////console.log('error', e);

@@ -28,14 +28,14 @@ class Education extends Component {
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
+        await this.props.bulkUpdateUserEducation(values.list);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            //console.log("Came Here")
+            this.props.history.push(`/resume-builder/buy`)
         }
         else{
-            await this.props.bulkUpdateUserEducation(values.list);
             this.props.updateCurrentLinkPos({currentLinkPos})
-            //this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
+            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
         }
         
     }
@@ -80,18 +80,25 @@ class Education extends Component {
     }
 
     handleAddition(fields, error) {
-        console.log("Here")
-        console.log(fields, fields instanceof Array)
 
-        fields.push({})
-        // console.log(fields)
-        // console.log(fields.get(0))
-        // scroller.scrollTo(`education${fields.length -1}`, {
-        //     duration: 800,
-        //     delay: 0,
-        //     smooth: 'easeInOutQuad',
-        //     offset: 450
-        // })
+        fields.push({
+            "candidate_id": '',
+            "id": '',
+            "specialization": '',
+            "institution_name": '',
+            "course_type": '',
+            "start_date": '',
+            "percentage_cgpa": '',
+            "end_date": '',
+            "is_pursuing": false,
+            order: fields.length
+        })
+        scroller.scrollTo(`education${fields.length -1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 450
+        })
     }
 
     deleteEducation(index, fields, event) {
@@ -99,6 +106,7 @@ class Education extends Component {
         const education = fields.get(index);
         fields.remove(index);
         if (education && education.id) {
+            
             this.props.removeEducation(education.id)
         }
     }
@@ -160,8 +168,7 @@ class Education extends Component {
                                 <button className="btn btn__round btn--outline" 
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
                                     type={'button'}>Preview</button>
-                                <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={(length === pos +1) ?'button' :'submit'}
-                                    onClick={(length === pos +1) ? ()=>{this.props.history.push(`/resume-builder/buy`)} : ()=>{}}>
+                                <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={'submit'}>
                                     {(length === pos +1) ?"Buy" :"Save & Continue"}
                                 </button>
                             </div>

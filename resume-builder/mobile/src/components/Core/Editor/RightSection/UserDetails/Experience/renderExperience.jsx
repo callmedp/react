@@ -39,7 +39,7 @@ const renderExperiences = ({
                         <h2>{fields.get(index).company_name || 'Experience'}</h2>
                         <ul className="subHeading__control">
                             <li className="subHeading__delete">
-                                <span className="sprite icon--delete"
+                                <span className={"sprite icon--delete " +(fields.get(index).id ? "":"hide")}
                                 onClick={(event) => deleteExperience(index, fields, event)}
                                 role="button"></span>
                             </li>

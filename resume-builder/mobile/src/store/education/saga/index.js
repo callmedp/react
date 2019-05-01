@@ -34,6 +34,27 @@ function* fetchUserEducation(action) {
             }
         };
 
+
+        if(! data.list.length){
+            data = {
+                ...data,
+                ...{
+                    list: [
+                            {
+                            "candidate_id": '',
+                            "id": '',
+                            "specialization": '',
+                            "institution_name": '',
+                            "course_type": '',
+                            "start_date": '',
+                            "percentage_cgpa": '',
+                            "end_date": '',
+                            "is_pursuing": false,
+                            "order": 0}
+                    ]
+                }
+            };
+        }
         yield put({type: Actions.SAVE_USER_EDUCATION, data: data})
     } catch (e) {
         ////console.log(e);
@@ -100,6 +121,8 @@ function* deleteUserEducation(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_EDUCATION, id: educationId});
+        yield call(fetchUserEducation)
+        
 
     } catch (e) {
         ////console.log('error', e);

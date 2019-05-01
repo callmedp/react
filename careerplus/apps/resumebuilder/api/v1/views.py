@@ -433,7 +433,6 @@ class ProfileEntityBulkUpdateView(APIView):
         return self.entity_slug_model_mapping.get(entity_slug)
 
     def post(self, request, *args, **kwargs):
-        import ipdb ; ipdb.set_trace()
         entity_slug = kwargs.get('entity_slug')
         data = request.data
         serializer_class = self.get_serializer_class(entity_slug)

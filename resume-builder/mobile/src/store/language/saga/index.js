@@ -32,6 +32,22 @@ function* fetchUserLanguage(action) {
                 list: data['list']
             }
         }
+        if(! data.list.length){
+            data = {
+                ...data,
+                ...{
+                    list: [
+                            {
+                                "candidate_id": '',
+                                "id": '',
+                                "name": '',
+                                "proficiency": '',
+                                "order": 0
+                            }
+                        ]
+                }
+            };
+        }
         yield put({type: Actions.SAVE_USER_LANGUAGE, data: data})
     } catch (e) {
         ////console.log(e);
@@ -101,6 +117,7 @@ function* deleteUserLanguage(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_LANGUAGE, id: languageId});
+        yield call(fetchUserLanguage)
 
     } catch (e) {
         ////console.log('error', e);

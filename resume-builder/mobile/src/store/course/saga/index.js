@@ -28,6 +28,22 @@ function* fetchUserCourse(action) {
         })
         ////console.log(results)
         let data = {list: results}
+        if(! data.list.length){
+            data = {
+                ...data,
+                ...{
+                    list: [
+                        {
+                            "candidate_id": '',
+                            "id": '',
+                            "name_of_certification": '',
+                            "year_of_certification": '',
+                            "order": 0
+                        }
+                    ]
+                }
+            };
+        }
         yield put({type: Actions.SAVE_USER_COURSE, data: data})
     } catch (e) {
         ////console.log(e);
@@ -97,6 +113,7 @@ function* deleteUserCourse(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_COURSE, id: courseId});
+        yield call(fetchUserCourse)
 
     } catch (e) {
         ////console.log('error', e);

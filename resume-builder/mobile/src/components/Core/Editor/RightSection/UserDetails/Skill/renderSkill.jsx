@@ -40,7 +40,7 @@ const renderSkills = ({
                             <ul className="subHeading__control">
                                 <li className="subHeading__delete">
                                     <span onClick={(event) => deleteSkill(index, fields, event)}
-                                     className="sprite icon--delete" role="button"></span>
+                                     className={"sprite icon--delete " +(fields.get(index).id ? "":"hide")} role="button"></span>
                                 </li>
                                 {index == 0 ? '':
                                     <li className="subHeading__btn"

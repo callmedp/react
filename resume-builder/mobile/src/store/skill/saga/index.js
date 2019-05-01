@@ -32,6 +32,22 @@ function* fetchUserSkill(action) {
                 list: data['list']
             }
         }
+        if(! data.list.length){
+            data = {
+                ...data,
+                ...{
+                    list: [
+                            {
+                                "candidate_id": '',
+                                "id": '',
+                                "name": '',
+                                "proficiency": '',
+                                "order": 0
+                            }
+                        ]
+                }
+            };
+        }
         yield put({type: Actions.SAVE_USER_SKILL, data: data})
     } catch (e) {
         ////console.log(e);
@@ -102,6 +118,7 @@ function* deleteUserSkill(action) {
         localStorage.deleteItem('skill');
         // yield call(fetchUserSkill)
         yield put({type: Actions.REMOVE_SKILL, id: skillId});
+        yield call(fetchUserSkill)
 
     } catch (e) {
         ////console.log('error', e);

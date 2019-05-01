@@ -24,6 +24,23 @@ function* fetchUserReference(action) {
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
         let data = {list: results};
+        if(! data.list.length){
+            data = {
+                ...data,
+                ...{
+                    list: [
+                            {
+                                "candidate_id": '',
+                                "id": '',
+                                "reference_name": '',
+                                "reference_designation": '',
+                                "about_user": "",
+                                "order": 0
+                            }
+                        ]
+                }
+            };
+        }
         yield put({type: Actions.SAVE_USER_REFERENCE, data: data})
     } catch (e) {
         ////console.log(e);
@@ -95,6 +112,7 @@ function* deleteUserReference(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_REFERENCE, id: referenceId});
+        yield call(fetchUserReference)
 
     } catch (e) {
         ////console.log('error', e);

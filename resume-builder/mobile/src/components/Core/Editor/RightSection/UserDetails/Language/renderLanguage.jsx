@@ -38,7 +38,7 @@ const renderLanguage = ({
                             <h2>{fields.get(index).name || 'Language'}</h2>
                             <ul className="subHeading__control">
                                 <li className="subHeading__delete">
-                                    <span className="sprite icon--delete" 
+                                    <span  className={"sprite icon--delete " +(fields.get(index).id ? "":"hide")}
                                      onClick={(event) => deleteLanguage(index, fields, event)}
                                      role="button"></span>
                                 </li>

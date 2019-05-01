@@ -27,6 +27,27 @@ function* fetchUserExperience(action) {
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
         let data = {list: results}
+        if(! data.list.length){
+            data = {
+                ...data,
+                ...{
+                    list: [
+                            {
+                                "candidate_id": '',
+                                "id": '',
+                                "job_profile": '',
+                                "company_name": '',
+                                "start_date": '',
+                                "end_date": '',
+                                "is_working": false,
+                                "job_location": '',
+                                "work_description": '',
+                                "order": 0
+                            }
+                        ]
+                }
+            };
+        }
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: data})
     } catch (e) {
         ////console.log(e);
@@ -97,6 +118,8 @@ function* deleteUserExperience(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_EXPERIENCE, id: experienceId});
+        yield call(fetchUserExperience)
+        
 
     } catch (e) {
         ////console.log('error', e);

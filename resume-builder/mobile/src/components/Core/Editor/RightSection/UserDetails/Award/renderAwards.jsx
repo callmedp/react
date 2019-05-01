@@ -40,7 +40,7 @@ export const renderAwards = ({
                         
                         <ul className="subHeading__control">
                             <li className="subHeading__delete">
-                                <span className="sprite icon--delete" role="button"
+                                <span className={"sprite icon--delete " +(fields.get(index).id ? "":"hide")}  role="button"
                                     onClick={(event) => deleteAward(index, fields, event)}></span>
                             </li>
                             {index == 0 ? '':

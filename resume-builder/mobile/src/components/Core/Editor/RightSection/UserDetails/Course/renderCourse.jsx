@@ -38,7 +38,7 @@ const renderCourse = ({
                         <h2>{fields.get(index).name_of_certification || 'New Course'}</h2>
                         <ul className="subHeading__control">
                             <li className="subHeading__delete">
-                                <span className="sprite icon--delete" 
+                                <span className={"sprite icon--delete " +(fields.get(index).id ? "":"hide")}
                                 onClick={(event) => deleteCourse(index, fields, event)}
                                 role="button"></span>
                             </li>

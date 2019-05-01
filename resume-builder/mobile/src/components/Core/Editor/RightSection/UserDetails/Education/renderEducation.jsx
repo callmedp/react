@@ -39,7 +39,7 @@ const renderEducation = ({
                             <h2>{fields.get(index).institution_name || 'Education'}</h2>
                             <ul className="subHeading__control">
                                 <li className="subHeading__delete">
-                                    <span className="sprite icon--delete" 
+                                    <span className={"sprite icon--delete " +(fields.get(index).id ? "":"hide")} 
                                     onClick={(event) => deleteEducation(index, fields, event)}
                                     role="button"></span>
                                 </li>

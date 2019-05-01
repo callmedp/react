@@ -27,6 +27,25 @@ function* fetchUserProject(action) {
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
         let data = {list: results}
+        if(! data.list.length){
+            data = {
+                ...data,
+                ...{
+                    list: [
+                            {
+                                "candidate_id": '',
+                                "id": '',
+                                "project_name": '',
+                                "start_date": '',
+                                "end_date": '',
+                                "skills": [],
+                                "description": '',
+                                "order": 0
+                            }
+                        ]
+                }
+            };
+        }
 
 
         yield put({type: Actions.SAVE_USER_PROJECT, data: data})
@@ -100,6 +119,7 @@ function* deleteUserProject(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_PROJECT, id: projectId});
+        yield call(fetchUserProject)
 
     } catch (e) {
         ////console.log('error', e);
