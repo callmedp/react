@@ -23,9 +23,9 @@ class EditPreview extends Component {
             * @desc Top Bar component
             * */
             <div>
-        {/*        {
+                {
             <Loader/>
-            }*/}
+            }
                 <Header/>
                 <div className="page-container">
                     <TopBar/>
