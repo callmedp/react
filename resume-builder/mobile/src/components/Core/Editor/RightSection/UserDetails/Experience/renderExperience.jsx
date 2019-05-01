@@ -1,5 +1,5 @@
 import React from 'react';
-import {renderField, renderTextArea, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
+import {renderField, renderTextArea, datepicker,checkbox} from '../../../../../FormHandler/formFieldRenderer.jsx'
 import {Field} from 'redux-form';
 
 
@@ -23,7 +23,7 @@ const renderExperiences = ({
                 <div className="heading__info">
                     {!editHeading ?
                         <h1>{heading}</h1>:
-                        <input type="text" placeholder={heading} onBlur={(e)=>updateInputValue('blur',e)}
+                        <input type="text" autoFocus placeholder={heading} onBlur={(e)=>updateInputValue('blur',e)}
                          onKeyDown={(e)=>updateInputValue('keyPress',e)}/>
                     }
                     <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
@@ -81,12 +81,13 @@ const renderExperiences = ({
                         </li>
 
                         <li className="form__radio-group d-flex justify-content-end fs-14">
-                            <Field type="checkbox" name={`${member}.is_working`}component="input" 
-                                className="form__radio-input" id={`${member}.is_working`} value={`${member}.is_working`}/>
+                            <Field type="checkbox" name={`${member}.is_working`} component={"input"} 
+                                className="form__radio-input" id={`${member}.is_working`}  />
                             <label className="form__radio-label" htmlFor={`${member}.is_working`}>
                                 <span className="form__radio-button"></span>
                                 Till today
                             </label>
+                            
                         </li>
                         
                         <li className="form__group">

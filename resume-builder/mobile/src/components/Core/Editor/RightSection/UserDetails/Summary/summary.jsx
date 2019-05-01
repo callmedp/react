@@ -31,12 +31,23 @@ class Summary extends Component {
 
     updateInputValue(key,e) {
         if(e.keyCode === 13){
-            this.props.headingChange(this.props.personalInfo,5,e.target.value)
-            this.setState({editHeading:false,heading:e.target.value})
+            if(e.target.value.length){
+                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.setState({editHeading:false,heading:e.target.value})
+            }
+            else{
+                console.log("came here")
+                this.setState({editHeading:false})
+            }
         }
         if(key === 'blur'){
-            this.props.headingChange(this.props.personalInfo,5,e.target.value)
-            this.setState({editHeading:false,heading:e.target.value})
+            if(e.target.value.length){
+                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.setState({editHeading:false,heading:e.target.value})
+            }
+            else{
+                this.setState({editHeading:false})
+            }
         }
         
     }
@@ -74,7 +85,7 @@ class Summary extends Component {
                 <div className="buildResume__heading">
                     {!editHeading ?
                         <h1>{heading}</h1>:
-                        <input type="text" placeholder={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
+                        <input autoFocus type="text" id="heading" placeholder={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
                          onKeyDown={(e)=>this.updateInputValue('keyPress',e)}/>
                     }
                     <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>

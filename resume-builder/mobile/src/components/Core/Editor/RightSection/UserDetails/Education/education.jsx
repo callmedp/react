@@ -35,21 +35,29 @@ class Education extends Component {
         else{
             await this.props.bulkUpdateUserEducation(values.list);
             this.props.updateCurrentLinkPos({currentLinkPos})
-            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
+            //this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
         }
         
     }
 
     updateInputValue(key,e) {
         if(e.keyCode === 13){
-            console.log("I ma here")
-            this.props.headingChange(this.props.personalInfo,1,e.target.value)
-            this.setState({editHeading:false,heading:e.target.value})
+            if(e.target.value.length){
+                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.setState({editHeading:false,heading:e.target.value})
+            }
+            else{
+                this.setState({editHeading:false})
+            }
         }
         if(key === 'blur'){
-            console.log("I ma here")
-            this.props.headingChange(this.props.personalInfo,1,e.target.value)
-            this.setState({editHeading:false,heading:e.target.value})
+            if(e.target.value.length){
+                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.setState({editHeading:false,heading:e.target.value})
+            }
+            else{
+                this.setState({editHeading:false})
+            }
         }
         
     }
@@ -72,24 +80,18 @@ class Education extends Component {
     }
 
     handleAddition(fields, error) {
-        fields.push({
-            "candidate_id": '',
-            "id": '',
-            "specialization": '',
-            "institution_name": '',
-            "course_type": '',
-            "start_date": '',
-            "percentage_cgpa": '',
-            "end_date": '',
-            "is_pursuing": false,
-            order: fields.length
-        })
-        scroller.scrollTo(`education${fields.length -1}`, {
-            duration: 800,
-            delay: 0,
-            smooth: 'easeInOutQuad',
-            offset: 450
-        })
+        console.log("Here")
+        console.log(fields, fields instanceof Array)
+
+        fields.push({})
+        // console.log(fields)
+        // console.log(fields.get(0))
+        // scroller.scrollTo(`education${fields.length -1}`, {
+        //     duration: 800,
+        //     delay: 0,
+        //     smooth: 'easeInOutQuad',
+        //     offset: 450
+        // })
     }
 
     deleteEducation(index, fields, event) {

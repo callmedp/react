@@ -126,6 +126,31 @@ export const renderSelect = ({
     </React.Fragment>
 );
 
+export const checkbox = ({
+                            input,
+                            className,
+                            id,
+                            value,
+                            meta: {touched, error, warning}
+                        }) => {
+    return (
+      <div className="flex items-center mv4 w-100">
+      {console.log(value)}
+        <input
+          {...input}
+          className={className}
+          type="checkbox"
+          checked={input.value}
+          id={id}
+        />
+        <label className="form__radio-label" htmlFor={input.name}>
+            <span className="form__radio-button"></span>
+            Till today
+        </label>
+      </div>
+    );
+  }
+
 
 export const renderDynamicSelect = ({
                                         input,

@@ -34,14 +34,22 @@ class Project extends Component {
 
     updateInputValue(key,e) {
         if(e.keyCode === 13){
-            console.log("I ma here")
-            this.props.headingChange(this.props.personalInfo,3,e.target.value)
-            this.setState({editHeading:false,heading:e.target.value})
+            if(e.target.value.length){
+                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.setState({editHeading:false,heading:e.target.value})
+            }
+            else{
+                this.setState({editHeading:false})
+            }
         }
         if(key === 'blur'){
-            console.log("I ma here")
-            this.props.headingChange(this.props.personalInfo,3,e.target.value)
-            this.setState({editHeading:false,heading:e.target.value})
+            if(e.target.value.length){
+                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.setState({editHeading:false,heading:e.target.value})
+            }
+            else{
+                this.setState({editHeading:false})
+            }
         }
         
     }

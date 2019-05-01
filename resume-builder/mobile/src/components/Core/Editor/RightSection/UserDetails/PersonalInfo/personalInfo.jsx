@@ -89,12 +89,22 @@ class PersonalInfo extends Component {
 
     updateInputValue(key,e) {
         if(e.keyCode === 13){
-            this.props.headingChange(this.props.personalInfo,0,e.target.value)
-            this.setState({editHeading:false,heading:e.target.value})
+            if(e.target.value.length){
+                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.setState({editHeading:false,heading:e.target.value})
+            }
+            else{
+                this.setState({editHeading:false})
+            }
         }
         if(key === 'blur'){
-            this.props.headingChange(this.props.personalInfo,0,e.target.value)
-            this.setState({editHeading:false,heading:e.target.value})
+            if(e.target.value.length){
+                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.setState({editHeading:false,heading:e.target.value})
+            }
+            else{
+                this.setState({editHeading:false})
+            }
         }
         
     }
@@ -131,7 +141,7 @@ class PersonalInfo extends Component {
                 <div className="buildResume__heading">
                     {!editHeading ?
                         <h1>{heading}</h1>:
-                        <input type="text" placeholder={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
+                        <input type="text" autoFocus placeholder={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
                          onKeyDown={(e)=>this.updateInputValue('keyPress',e)}/>
                     }
                     <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
@@ -152,7 +162,7 @@ class PersonalInfo extends Component {
 
                         <li className="form__group">
                             <Field component={renderSelect} label={"Gender"} name="gender" name="gender" prepend={true}
-                                iconClass={"sprite icon--designation"} validate={required} className="form__input form__select">
+                                iconClass={"sprite icon--designation"}  className="form__input form__select">
                                 <option value="">Gender</option>
                                 <option value="1" >Male</option>
                                 <option value="2" >Female</option>
@@ -254,6 +264,20 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        "onSubmit": (personalDetails, imageURL) => {
+            const { date_of_birth, extracurricular} = personalDetails;
+            personalDetails = {
+                ...personalDetails,
+                ...{
+                    'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
+                    'image': imageURL,
+                    'extracurricular': ''
+                }
+            }
+            return new Promise((resolve, reject) => {
+                dispatch(actions.updatePersonalInfo({personalDetails, resolve, reject}));
+            })
+        },
         "fetchImageUrl": (imageFile) => {
             return new Promise((resolve, reject) => {
                 dispatch(actions.fetchImageUrl({imageFile, resolve, reject}));

@@ -22,7 +22,7 @@ const renderEducation = ({
                 <div className="heading__info">
                     {!editHeading ?
                             <h1>{heading}</h1>:
-                            <input type="text" placeholder={heading} onBlur={(e)=>updateInputValue('blur',e)}
+                            <input type="text" autoFocus placeholder={heading} onBlur={(e)=>updateInputValue('blur',e)}
                             onKeyDown={(e)=>updateInputValue('keyPress',e)}/>
                         }
                         <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
@@ -81,12 +81,12 @@ const renderEducation = ({
                             </li>
 
                             <li className="form__radio-group d-flex justify-content-end fs-14">
-                                <Field type="radio" name={`${member}.is_pursuing`} component="input" 
-                                    className="form__radio-input" value={`${member}.is_pursuing`}/>
-                                <label className="form__radio-label" htmlFor="tillToday">
+                                <Field type="checkbox" name={`${member}.is_pursuing`} component="input" 
+                                    className="form__radio-input" id={`${member}.is_pursuing`}/>
+                                <label className="form__radio-label" htmlFor={`${member}.is_pursuing`}>
                                     <span className="form__radio-button"></span>
                                     Till today
-                            </label>
+                                </label>
                             </li>
 
                             <li className="form__group">

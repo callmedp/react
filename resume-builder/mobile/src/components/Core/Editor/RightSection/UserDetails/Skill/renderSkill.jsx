@@ -23,7 +23,7 @@ const renderSkills = ({
                     <div className="heading__info">
                         {!editHeading ?
                             <h1>{heading}</h1>:
-                            <input type="text" placeholder={heading} onBlur={(e)=>updateInputValue('blur',e)}
+                            <input type="text" autoFocus placeholder={heading} onBlur={(e)=>updateInputValue('blur',e)}
                             onKeyDown={(e)=>updateInputValue('keyPress',e)}/>
                         }
                         <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
