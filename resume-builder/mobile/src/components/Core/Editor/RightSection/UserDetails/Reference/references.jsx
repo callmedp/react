@@ -50,7 +50,7 @@ class References extends Component {
     updateInputValue(key,e) {
         if(e.keyCode === 13){
             if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.props.headingChange(this.props.personalInfo,9,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
             }
             else{
@@ -59,7 +59,7 @@ class References extends Component {
         }
         if(key === 'blur'){
             if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.props.headingChange(this.props.personalInfo,9,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
             }
             else{
@@ -164,7 +164,7 @@ class References extends Component {
                                 <button className="btn btn__round btn--outline" 
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
                                     type={'button'}>Preview</button>
-                                <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={'submit'}>
+                                <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                     {(length === pos +1) ?"Buy" :"Save & Continue"}
                                 </button>
                             </div>

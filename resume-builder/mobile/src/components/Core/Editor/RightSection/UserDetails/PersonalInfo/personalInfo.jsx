@@ -40,7 +40,10 @@ class PersonalInfo extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchPersonalInfo()
+        if (this.props.personalInfo.entity_preference_data.length) {
+            this.setState({heading : this.props.personalInfo.entity_preference_data[0].entity_text})
+            console.log("Came Inside")
+        }
         
     }
 
@@ -85,6 +88,7 @@ class PersonalInfo extends Component {
     componentDidUpdate(prevProps) {
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[0].entity_text})
+            console.log("Came Inside")
         }
     }
 
@@ -93,6 +97,7 @@ class PersonalInfo extends Component {
             if(e.target.value.length){
                 this.props.headingChange(this.props.personalInfo,0,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
+                console.log("update value")
             }
             else{
                 this.setState({editHeading:false})
@@ -102,6 +107,7 @@ class PersonalInfo extends Component {
             if(e.target.value.length){
                 this.props.headingChange(this.props.personalInfo,0,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
+                console.log("blur value")
             }
             else{
                 this.setState({editHeading:false})
@@ -134,6 +140,7 @@ class PersonalInfo extends Component {
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {handleSubmit, personalInfo,submitting,submitSucceeded} = this.props;
         const {editHeading,heading} =this.state;
+        console.log("heading",heading)
         return (
             
         <div className="buildResume">
@@ -237,7 +244,7 @@ class PersonalInfo extends Component {
                                 <button className="btn btn__round btn--outline" 
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
                                     type={'button'}>Preview</button>
-                                <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={'submit'}>
+                                <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                     {(length === pos +1) ?"Buy" :"Save & Continue"}
                                 </button>
                             </div>

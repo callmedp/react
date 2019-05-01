@@ -35,7 +35,7 @@ class Skill extends Component {
     updateInputValue(key,e) {
         if(e.keyCode === 13){
             if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.props.headingChange(this.props.personalInfo,4,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
             }
             else{
@@ -44,7 +44,7 @@ class Skill extends Component {
         }
         if(key === 'blur'){
             if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.props.headingChange(this.props.personalInfo,4,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
             }
             else{
@@ -93,6 +93,7 @@ class Skill extends Component {
     }
 
     async handleSubmit(values) {
+        console.log("In Submit")
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         await this.props.bulkSaveUserSkill(values.list);
@@ -145,7 +146,7 @@ class Skill extends Component {
         return (
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
-                    {error}
+                    
                     <PreviewModal {...this.props}/>
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}
@@ -164,7 +165,7 @@ class Skill extends Component {
                                 <button className="btn btn__round btn--outline" 
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
                                     type={'button'}>Preview</button>
-                                <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={'submit'}>
+                                <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                     {(length === pos +1) ?"Buy" :"Save & Continue"}
                                 </button>
                             </div>

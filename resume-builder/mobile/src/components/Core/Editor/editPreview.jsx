@@ -7,6 +7,7 @@ import * as actions from "../../../store/template/actions";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import * as profileActions from '../../../store/personalInfo/actions/index';
+import Loader from '../../Common/Loader/loader'
 
 class EditPreview extends Component {
 
@@ -26,6 +27,7 @@ class EditPreview extends Component {
     render() {
         return (
             <div className="edit-section">
+                {/* <Loader/> */}
                 <Header page={'edit'}/>
                 <LeftSideBar {...this.props}/>
                 <RightSection {...this.props} changeLink={this.changeLink}/>

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Header from '../../Common/Header/header.jsx';
 import Footer from '../../Common/Footer/footer.jsx';
-import Loader from '../../Common/Loader/loader.jsx';
 import {connect} from "react-redux";
 import './home.scss'
 import * as actions from "../../../store/landingPage/actions";
@@ -31,7 +30,6 @@ class Home extends Component {
             <div className="home">
                 <Header />
                 <Banner/>
-                <Loader/>
                 
                 <section className="info">
                     <ul className="info__items">
