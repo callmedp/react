@@ -15,7 +15,7 @@ import {
 } from 'react-accessible-accordion';
 
 import validate from '../../../../../FormHandler/validations/skill/validate'
-import Loader from "../../../../../Loader/loader.jsx";
+import LoaderSection from "../../../../../Loader/loaderSection.jsx";
 
 
 /*
@@ -45,7 +45,7 @@ const SkillRenderer = ({
     return (
         <div>
             {/*{!!loader &&*/}
-            {/*<Loader/>*/}
+            {/*<LoaderSection/>*/}
             {/*}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-skills1"/></span>

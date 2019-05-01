@@ -7,7 +7,7 @@ import Footer from '../../Common/Footer/footer.jsx'
 import RightSection from './RightSection/rightSection.jsx'
 import {withRouter} from "react-router-dom";
 import {siteDomain} from "../../../Utils/domains";
-import Loader from "../../Loader/loader";
+import LoaderPage from "../../Loader/loaderPage.jsx";
 
 class EditPreview extends Component {
     componentWillMount() {
@@ -24,7 +24,7 @@ class EditPreview extends Component {
             * */
             <div>
           {/*      {
-            <Loader/>
+            <LoaderPage/>
             }*/}
                 <Header/>
                 <div className="page-container">

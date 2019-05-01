@@ -17,7 +17,7 @@ import validate from '../../../../../FormHandler/validations/language/validate'
 styles
 * */
 import 'react-accessible-accordion/dist/fancy-example.css';
-import Loader from "../../../../../Loader/loader.jsx";
+import LoaderSection from "../../../../../Loader/loaderSection.jsx";
 
 const LanguageRenderer = ({
                               fields,
@@ -42,7 +42,7 @@ const LanguageRenderer = ({
     return (
         <div>
             {/*{!!loader &&*/}
-            {/*<Loader/>*/}
+            {/*<LoaderSection/>*/}
             {/*}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-languages1"/></span>

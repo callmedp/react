@@ -19,6 +19,7 @@ import {
 } from "../../../../../FormHandler/validations/personalInfo/validate";
 
 import moment from 'moment';
+import LoaderSection from "../../../../../Loader/loaderSection.jsx";
 
 export class PersonalInfo extends Component {
     constructor(props) {

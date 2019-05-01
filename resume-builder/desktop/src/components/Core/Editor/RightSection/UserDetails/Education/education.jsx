@@ -13,8 +13,8 @@ import {
     AccordionItemButton
 } from 'react-accessible-accordion';
 
-import validate from '../../../../../FormHandler/validations/education/validate'
-import Loader from "../../../../../Loader/loader.jsx";
+import validate from '../../../../../FormHandler/validations/education/validate';
+import LoaderSection from "../../../../../Loader/loaderSection.jsx";
 
 
 const EducationRenderer = ({
@@ -36,8 +36,8 @@ const EducationRenderer = ({
                            }) => {
     let elem = null;
     return (
-        <div>
-
+        <div className="pr">
+            {<LoaderSection/>}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-education1"></i></span>
                 <h2 ref={(value) => {

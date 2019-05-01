@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './loader.scss'
 
-export default class  extends Component {
+export default class LoaderPage  extends Component {
     constructor(props) {
         super(props);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
@@ -11,7 +11,7 @@ export default class  extends Component {
         return (
             <div className="">
 
-                <div className="loader">
+                <div className="loader-page">
                     <img class="" src={`${this.staticUrl}react/assets/images/loader.gif`}/>
                     
                 </div>

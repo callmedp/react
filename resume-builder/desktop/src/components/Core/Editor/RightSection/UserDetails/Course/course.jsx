@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 import {renderField, datepicker} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import validate from "../../../../../FormHandler/validations/course/validate"
 import moment from "moment";
-import Loader from "../../../../../Loader/loader.jsx";
+import Loader from "../../../../../Loader/loaderSection.jsx";
 
 import {
     Accordion,

@@ -7,7 +7,7 @@ import {Field, reduxForm} from 'redux-form';
 import {
     renderTextArea
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
-import Loader from "../../../../../Loader/loader.jsx";
+import LoaderSection from "../../../../../Loader/loaderSection.jsx";
 
 
 class Summary extends Component {

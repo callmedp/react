@@ -13,7 +13,7 @@ import {
     AccordionItemPanel,
     AccordionItemButton
 } from 'react-accessible-accordion';
-import Loader from "../../../../../Loader/loader.jsx";
+import LoaderSection from "../../../../../Loader/loaderSection.jsx";
 
 const AwardRenderer = ({
                            fields,
@@ -36,7 +36,7 @@ const AwardRenderer = ({
     return (
         <div>
             {!!(loader) &&
-            <Loader/>
+            <LoaderSection/>
             }
             <section className="head-section">
                 <span className="icon-box"><i className="icon-awards1"/></span>
