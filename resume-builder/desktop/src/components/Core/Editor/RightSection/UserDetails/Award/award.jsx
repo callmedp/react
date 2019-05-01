@@ -5,7 +5,7 @@ import * as actions from "../../../../../../store/award/actions";
 import {connect} from "react-redux";
 import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
-import validate from "../../../../../FormHandler/validations/awardValidation";
+import validate from "../../../../../FormHandler/validations/award/validate";
 import {
     Accordion,
     AccordionItem,
@@ -19,6 +19,7 @@ const AwardRenderer = ({
                            fields,
                            loader,
                            meta: {touched, error, submitFailed},
+                           handleSubmit,
                            deleteAward,
                            handleAddition,
                            handleAccordionState,
@@ -46,7 +47,9 @@ const AwardRenderer = ({
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit icon-awards__cursor" : ""}/>
 
-                <button onClick={() => handleAddition(fields, error)}
+                <button onClick={handleSubmit((values) => {
+                    handleAddition(fields, error)
+                })}
                         type={'button'}
                         className="add-button add-button__right">Add new
                 </button>
@@ -196,7 +199,6 @@ class Award extends Component {
 
     changeOrderingDown(index, fields, event) {
         event.stopPropagation();
-        console.log('down pressed');
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;
@@ -207,7 +209,6 @@ class Award extends Component {
 
     changeOrderingUp(index, fields, event) {
         event.stopPropagation();
-        console.log('up pressed');
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
@@ -267,7 +268,7 @@ class Award extends Component {
             <form onSubmit={handleSubmit(this.handleSubmit)}>
                 <FieldArray name="list"
                             loader={loader}
-                            handleSubmit={this.handleSubmit}
+                            handleSubmit={handleSubmit}
                             handleAccordionClick={this.handleAccordionClick}
                             handleAccordionState={this.handleAccordionState}
                             handleAddition={this.handleAddition}

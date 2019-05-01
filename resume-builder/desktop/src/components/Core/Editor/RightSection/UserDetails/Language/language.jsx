@@ -12,7 +12,7 @@ import {
     AccordionItemButton
 } from 'react-accessible-accordion';
 
-import validate from '../../../../../FormHandler/validations/languageValidation'
+import validate from '../../../../../FormHandler/validations/language/validate'
 /*
 styles
 * */
@@ -24,6 +24,7 @@ const LanguageRenderer = ({
                               loader,
                               meta: {touched, error, submitFailed},
                               deleteLanguage,
+                              handleSubmit,
                               handleAddition,
                               handleAccordionState,
                               handleAccordionClick,
@@ -39,9 +40,9 @@ const LanguageRenderer = ({
 
     return (
         <div>
-            {!!loader &&
-            <Loader/>
-            }
+            {/*{!!loader &&*/}
+            {/*<Loader/>*/}
+            {/*}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-languages1"/></span>
                 <h2 ref={(value) => {
@@ -52,7 +53,9 @@ const LanguageRenderer = ({
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit icon-language__cursor" : ""}/>
 
-                <button onClick={() => handleAddition(fields, error)}
+                <button onClick={handleSubmit((values) => {
+                    handleAddition(fields, error)
+                })}
                         type={'button'}
                         className="add-button add-button__right">Add new
                 </button>
@@ -184,7 +187,6 @@ class Language extends Component {
 
     changeOrderingDown(index, fields, event) {
         event.stopPropagation();
-        console.log('donw pressed');
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;
@@ -195,7 +197,6 @@ class Language extends Component {
 
     changeOrderingUp(index, fields, event) {
         event.stopPropagation();
-        console.log('up pressed');
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
@@ -205,7 +206,6 @@ class Language extends Component {
     }
 
     handleAddition(fields, error) {
-        console.log('--submit error-', error);
         const listLength = fields.length;
         if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
@@ -276,7 +276,7 @@ class Language extends Component {
                 <FieldArray
                     name="list"
                     loader={loader}
-                    handleSubmit={this.handleSubmit}
+                    handleSubmit={handleSubmit}
                     handleAccordionClick={this.handleAccordionClick}
                     handleAccordionState={this.handleAccordionState}
                     handleAddition={this.handleAddition}

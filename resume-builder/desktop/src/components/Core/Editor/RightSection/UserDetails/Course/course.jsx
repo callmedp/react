@@ -4,7 +4,7 @@ import {Field, reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../../../../../store/course/actions";
 import {connect} from "react-redux";
 import {renderField, datepicker} from "../../../../../FormHandler/formFieldRenderer.jsx";
-import validate from "../../../../../FormHandler/validations/courseValidation"
+import validate from "../../../../../FormHandler/validations/course/validate"
 import moment from "moment";
 import Loader from "../../../../../Loader/loader.jsx";
 
@@ -172,7 +172,6 @@ class Course extends Component {
 
     changeOrderingDown(index, fields, event) {
         event.stopPropagation();
-        console.log('down pressed');
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;
@@ -183,7 +182,6 @@ class Course extends Component {
 
     changeOrderingUp(index, fields, event) {
         event.stopPropagation();
-        console.log('up pressed');
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;

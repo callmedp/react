@@ -1,6 +1,6 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call} from "redux-saga/effects";
+import {takeLatest, put, call, select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
@@ -36,10 +36,10 @@ function* fetchUserEducation(action) {
             yield put({
                 type: Actions.SAVE_USER_EDUCATION,
                 data: modifyEducation({list: JSON.parse(localStorage.getItem('education')) || []})
-            })
+            });
             return;
         }
-        yield put({type: UPDATE_UI, data: {loader: true}})
+        yield put({type: UPDATE_UI, data: {loader: true}});
 
         const result = yield call(Api.fetchUserEducation, candidateId);
         if (result['error']) {
@@ -48,7 +48,12 @@ function* fetchUserEducation(action) {
 
         yield put({type: UPDATE_UI, data: {loader: false}})
 
-        const {data: {results}} = result;
+        let {data: {results}} = result;
+        if (!results.length) {
+            const state = yield select();
+            let {education: {list}} = state;
+            results = list
+        }
         let data = {list: results};
 
         data = modifyEducation(data);

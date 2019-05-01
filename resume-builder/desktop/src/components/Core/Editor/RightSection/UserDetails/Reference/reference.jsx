@@ -12,7 +12,7 @@ import {
     AccordionItemButton
 } from 'react-accessible-accordion';
 
-import validate from '../../../../../FormHandler/validations/referenceValidation'
+import validate from '../../../../../FormHandler/validations/reference/validate'
 import Loader from "../../../../../Loader/loader.jsx";
 
 
@@ -189,7 +189,6 @@ class Reference extends Component {
 
     changeOrderingDown(index, fields, event) {
         event.stopPropagation();
-        console.log('donw pressed');
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;
@@ -200,7 +199,6 @@ class Reference extends Component {
 
     changeOrderingUp(index, fields, event) {
         event.stopPropagation();
-        console.log('up pressed');
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;

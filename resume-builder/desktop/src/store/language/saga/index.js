@@ -1,6 +1,6 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call} from "redux-saga/effects";
+import {takeLatest, put, call, select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 import {proficiencyList} from "../../../Utils/proficiencyList";
@@ -47,6 +47,12 @@ function* fetchUserLanguage(action) {
         yield put({type: UPDATE_UI, data: {loader: false}})
 
         let {data: {results}} = result;
+
+        if (!results.length) {
+            const state = yield select();
+            let {language: {list}} = state;
+            results = list
+        }
 
         let data = {list: results};
 

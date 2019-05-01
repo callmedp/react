@@ -32,7 +32,6 @@ class Summary extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
-        console.log('----update----', nextProps);
         return true;
     }
 

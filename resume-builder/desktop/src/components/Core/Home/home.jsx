@@ -53,11 +53,9 @@ class Home extends Component {
 
         this.props.loginCandidate(this.state.token);
         Events.scrollEvent.register('begin', function () {
-            console.log("begin", arguments);
         });
 
         Events.scrollEvent.register('end', function () {
-            console.log("end", arguments);
         });
         window.addEventListener('scroll', this.addclass);
 

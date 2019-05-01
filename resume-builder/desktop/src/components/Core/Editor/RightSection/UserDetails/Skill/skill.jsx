@@ -14,7 +14,7 @@ import {
     AccordionItemButton
 } from 'react-accessible-accordion';
 
-import validate from '../../../../../FormHandler/validations/skillValidation.js'
+import validate from '../../../../../FormHandler/validations/skill/validate'
 import Loader from "../../../../../Loader/loader.jsx";
 
 
@@ -38,9 +38,9 @@ const SkillRenderer = ({
                        }) => {
     return (
         <div>
-            {!!loader &&
-            <Loader/>
-            }
+            {/*{!!loader &&*/}
+            {/*<Loader/>*/}
+            {/*}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-skills1"/></span>
                 <h2 contenteditable="true">Skills</h2>
@@ -178,7 +178,6 @@ class Skill extends Component {
 
     changeOrderingDown(index, fields, event) {
         event.stopPropagation();
-        console.log('donw pressed');
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;
@@ -189,7 +188,6 @@ class Skill extends Component {
 
     changeOrderingUp(index, fields, event) {
         event.stopPropagation();
-        console.log('up pressed');
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
