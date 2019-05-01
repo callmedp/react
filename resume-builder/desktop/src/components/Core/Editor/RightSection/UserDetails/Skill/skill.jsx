@@ -70,11 +70,11 @@ const SkillRenderer = ({
 
             <section className="right-sidebar-scroll">
                 <ul>
-                    <Accordion onChange={handleSubmit((values) => {
-                        console.log('values---', values);
-                    })}
+                    <Accordion onChange={(value) => {
+                        handleSubmit((values) => handleAccordionClick(value, fields, error))
+                    }}
                                allowZeroExpanded={true}
-                               preExpanded={[openedAccordion]}>
+                               preExpanded={openedAccordion}>
                         {fields.map((member, index) => {
                             return (
                                 <li key={index}>
@@ -175,14 +175,19 @@ class Skill extends Component {
 
         this.state = {
             currentAccordion: 0,
-            previousAccordion: 0,
-            openedAccordion: 0,
+            previousAccordion: [0],
+            openedAccordion: [0],
         }
     }
 
     componentDidMount() {
         this.props.fetchUserSkill();
     }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        console.log('in here');
+    }
+
 
     async handleSubmit(values, entityLink) {
         const {list} = values;
@@ -216,7 +221,7 @@ class Skill extends Component {
 
     handleAddition(fields, error) {
         const listLength = fields.length;
-        if (listLength) this.handleAccordionState(listLength, fields);
+        // if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
             "id": '',
@@ -226,6 +231,12 @@ class Skill extends Component {
             },
             order: listLength
         })
+
+        this.setState((state) => ({
+            previousAccordion: state.currentAccordion,
+            openedAccordion: [listLength],
+            currentAccordion: listLength
+        }))
 
     }
 
@@ -250,13 +261,15 @@ class Skill extends Component {
 
         this.setState((state) => ({
             previousAccordion: state.currentAccordion,
-            openedAccordion: val,
+            openedAccordion: [val],
             currentAccordion: val
         }))
     }
 
     handleAccordionClick(value, fields) {
+        console.log('---', value);
         const val = value.length > 0 ? value[0] : '';
+        return;
         this.handleAccordionState(val, fields)
     }
 

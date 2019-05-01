@@ -207,7 +207,7 @@ class Language extends Component {
 
     async handleAddition(fields, error) {
         const listLength = fields.length;
-        if (listLength) await this.handleAccordionState(listLength, fields);
+        if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
             "id": '',
@@ -230,12 +230,12 @@ class Language extends Component {
     }
 
 
-    async handleAccordionState(val, fields) {
+    handleAccordionState(val, fields) {
         const {currentAccordion} = this.state;
 
         if (currentAccordion !== '') {
 
-            await this.props.onSubmit(fields.get(currentAccordion))
+            this.props.onSubmit(fields.get(currentAccordion))
         }
 
         this.setState((state) => ({
