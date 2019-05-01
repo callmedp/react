@@ -13,7 +13,7 @@ import {
     AccordionItemButton
 } from 'react-accessible-accordion';
 
-import validate from '../../../../../FormHandler/validations/educationValidation'
+import validate from '../../../../../FormHandler/validations/education/validate'
 import Loader from "../../../../../Loader/loader.jsx";
 
 

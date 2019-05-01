@@ -16,7 +16,7 @@ import {
     required,
     phoneNumber,
     email
-} from "../../../../../FormHandler/validations/formValidations.js";
+} from "../../../../../FormHandler/validations/personalInfo/validate";
 
 import moment from 'moment';
 
@@ -117,7 +117,7 @@ export class PersonalInfo extends Component {
             <div>
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-info1"/></span>
-                    <h2  ref={"personalInfo"} onKeyUp={(event) => this.saveTitle(event)}
+                    <h2 ref={"personalInfo"} onKeyUp={(event) => this.saveTitle(event)}
                         contenteditable={!!(isEditable) ? "true" : "false"}>Personal Info</h2>
                     <span onClick={this.editHeading} className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ''}/>
                 </section>

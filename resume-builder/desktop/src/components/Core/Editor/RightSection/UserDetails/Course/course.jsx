@@ -4,7 +4,7 @@ import {Field, reduxForm, FieldArray} from "redux-form";
 import * as actions from "../../../../../../store/course/actions";
 import {connect} from "react-redux";
 import {renderField, datepicker} from "../../../../../FormHandler/formFieldRenderer.jsx";
-import validate from "../../../../../FormHandler/validations/courseValidation"
+import validate from "../../../../../FormHandler/validations/course/validate"
 import moment from "moment";
 import Loader from "../../../../../Loader/loader.jsx";
 

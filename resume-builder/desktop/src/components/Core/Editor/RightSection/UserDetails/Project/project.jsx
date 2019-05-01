@@ -5,7 +5,7 @@ import * as actions from "../../../../../../store/project/actions";
 import {connect} from "react-redux";
 import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
-import validate from "../../../../../FormHandler/validations/projectValidation"
+import validate from "../../../../../FormHandler/validations/project/validate"
 import {
     Accordion,
     AccordionItem,

@@ -5,7 +5,7 @@ import * as actions from "../../../../../../store/award/actions";
 import {connect} from "react-redux";
 import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import moment from "moment";
-import validate from "../../../../../FormHandler/validations/awardValidation";
+import validate from "../../../../../FormHandler/validations/award/validate";
 import {
     Accordion,
     AccordionItem,
@@ -19,6 +19,7 @@ const AwardRenderer = ({
                            fields,
                            loader,
                            meta: {touched, error, submitFailed},
+                           handleSubmit,
                            deleteAward,
                            handleAddition,
                            handleAccordionState,
@@ -46,7 +47,10 @@ const AwardRenderer = ({
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit icon-awards__cursor" : ""}/>
 
-                <button onClick={() => handleAddition(fields, error)}
+                <button onClick={handleSubmit((values) => {
+                    console.log('values', values);
+                    handleAddition(fields, error)
+                })}
                         type={'button'}
                         className="add-button add-button__right">Add new
                 </button>
@@ -267,7 +271,7 @@ class Award extends Component {
             <form onSubmit={handleSubmit(this.handleSubmit)}>
                 <FieldArray name="list"
                             loader={loader}
-                            handleSubmit={this.handleSubmit}
+                            handleSubmit={handleSubmit}
                             handleAccordionClick={this.handleAccordionClick}
                             handleAccordionState={this.handleAccordionState}
                             handleAddition={this.handleAddition}

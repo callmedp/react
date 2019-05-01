@@ -1,6 +1,6 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call} from "redux-saga/effects";
+import {takeLatest, put, call,select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
@@ -46,7 +46,13 @@ function* fetchUserSkill(action) {
 
         yield put({type: UPDATE_UI, data: {loader: false}})
 
-        const {data: {results}} = result;
+        let {data: {results}} = result;
+
+        if (!results.length) {
+            const state = yield select();
+            let {skill: {list}} = state;
+            results = list
+        }
         let data = {list: results};
         data = modifySkill(data);
         yield put({type: Actions.SAVE_USER_SKILL, data: data})

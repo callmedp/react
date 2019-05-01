@@ -12,7 +12,7 @@ import {
     AccordionItemButton
 } from 'react-accessible-accordion';
 
-import validate from '../../../../../FormHandler/validations/languageValidation'
+import validate from '../../../../../FormHandler/validations/language/validate'
 /*
 styles
 * */
@@ -24,6 +24,7 @@ const LanguageRenderer = ({
                               loader,
                               meta: {touched, error, submitFailed},
                               deleteLanguage,
+                              handleSubmit,
                               handleAddition,
                               handleAccordionState,
                               handleAccordionClick,
@@ -39,9 +40,9 @@ const LanguageRenderer = ({
 
     return (
         <div>
-            {!!loader &&
-            <Loader/>
-            }
+            {/*{!!loader &&*/}
+            {/*<Loader/>*/}
+            {/*}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-languages1"/></span>
                 <h2 ref={(value) => {
@@ -52,7 +53,10 @@ const LanguageRenderer = ({
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit icon-language__cursor" : ""}/>
 
-                <button onClick={() => handleAddition(fields, error)}
+                <button onClick={handleSubmit((values) => {
+                    console.log('values', values);
+                    handleAddition(fields, error)
+                })}
                         type={'button'}
                         className="add-button add-button__right">Add new
                 </button>
@@ -276,7 +280,7 @@ class Language extends Component {
                 <FieldArray
                     name="list"
                     loader={loader}
-                    handleSubmit={this.handleSubmit}
+                    handleSubmit={handleSubmit}
                     handleAccordionClick={this.handleAccordionClick}
                     handleAccordionState={this.handleAccordionState}
                     handleAddition={this.handleAddition}

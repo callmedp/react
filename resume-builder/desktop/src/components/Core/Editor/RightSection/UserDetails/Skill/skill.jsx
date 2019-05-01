@@ -14,7 +14,7 @@ import {
     AccordionItemButton
 } from 'react-accessible-accordion';
 
-import validate from '../../../../../FormHandler/validations/skillValidation.js'
+import validate from '../../../../../FormHandler/validations/skill/validate'
 import Loader from "../../../../../Loader/loader.jsx";
 
 
@@ -38,9 +38,9 @@ const SkillRenderer = ({
                        }) => {
     return (
         <div>
-            {!!loader &&
-            <Loader/>
-            }
+            {/*{!!loader &&*/}
+            {/*<Loader/>*/}
+            {/*}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-skills1"/></span>
                 <h2 contenteditable="true">Skills</h2>
