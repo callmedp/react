@@ -17,7 +17,7 @@ from rest_framework.permissions import (
 from haystack import connections
 from haystack.query import SearchQuerySet
 from core.library.haystack.query import SQS
-
+from partner.utils import parse_data
 from rest_framework.generics import ListAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 
@@ -744,13 +744,22 @@ class UpdateCertificateAndAssesment(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        self.vendor_name = self.kwargs.get('vendor_name')
-
-        return Response({
-            "status": 1,
-            "msg": "Certificate Updated"},
-            status=status.HTTP_201_CREATED
-        )
+        vendor_name = self.kwargs.get('vendor_name')
+        data = request.data
+        data['vendor'] = vendor_name.lower()
+        flag = parse_data(data)
+        if flag:
+            return Response({
+                "status": 1,
+                "msg": "Certificate Updated"},
+                status=status.HTTP_201_CREATED
+            )
+        else:
+            return Response({
+                "status": 0,
+                "msg": "Error Occured"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 class ShineDataFlowDataApiView(ListAPIView):
     permission_classes = []

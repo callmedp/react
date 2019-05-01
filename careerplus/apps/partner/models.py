@@ -21,12 +21,8 @@ from geolocation.models import (
     State,
     City,)
 from order.choices import BOOSTER_RECRUITER_TYPE
-<<<<<<< HEAD
 from .choices import SCORE_TYPE_CHOICES
-=======
 
-# third party imports
->>>>>>> SHLEARN-18-Vksills-candidate-badging
 
 class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     name = models.CharField(

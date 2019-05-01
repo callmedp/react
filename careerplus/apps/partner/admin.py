@@ -116,6 +116,9 @@ class ScoreAdmin(admin.ModelAdmin):
     list_display = ('assesment', 'subject', "score_obtained")
     model = models.Score
 
+class UserCertificateOperationsAdmin(admin.ModelAdmin):
+    model = models.UserCertificateOperations
+
 
 admin.site.register(models.Vendor, VendorAdmin)
 admin.site.register(models.Certificate, CeritficateAdmin)
@@ -123,6 +126,6 @@ admin.site.register(models.UserCertificate, UserCertificateAdmin)
 admin.site.register(models.BoosterRecruiter, BoosterRecruiterAdmin)
 admin.site.register(models.Assesment, AssesmentAdmin)
 admin.site.register(models.Score, ScoreAdmin)
-
+admin.site.register(models.UserCertificateOperations, UserCertificateOperationsAdmin)
 
 
