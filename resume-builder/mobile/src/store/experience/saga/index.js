@@ -11,6 +11,15 @@ function* fetchUserExperience(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        if (localStorage.getItem('experience')) {
+
+            yield put({
+                type: Actions.SAVE_USER_EXPERIENCE,
+                data: {list: JSON.parse(localStorage.getItem('experience')) || []}
+            })
+            return;
+        }
+
         const result = yield call(Api.fetchUserExperience, candidateId);
         if (result['error']) {
             ////console.log('error');
@@ -37,6 +46,8 @@ function* updateUserExperience(action) {
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+
+        localStorage.removeItem('experience');
 
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: result['data']});
 

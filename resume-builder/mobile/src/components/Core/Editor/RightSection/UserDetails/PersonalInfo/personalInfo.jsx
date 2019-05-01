@@ -32,9 +32,10 @@ class PersonalInfo extends Component {
         this.state = {
             'imageURI': '',
             'imageURL': '',
-            'editHeading': true,
+            'editHeading': false,
             'heading' : ''
         }
+        this.updateInputValue =this.updateInputValue.bind(this);
 
     }
 
@@ -80,6 +81,35 @@ class PersonalInfo extends Component {
         return [];
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
+            this.setState({heading : this.props.personalInfo.entity_preference_data[0].entity_text})
+        }
+    }
+
+    updateInputValue(key,e) {
+        if(e.keyCode === 13){
+            if(e.target.value.length){
+                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.setState({editHeading:false,heading:e.target.value})
+            }
+            else{
+                this.setState({editHeading:false})
+            }
+        }
+        if(key === 'blur'){
+            if(e.target.value.length){
+                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.setState({editHeading:false,heading:e.target.value})
+            }
+            else{
+                this.setState({editHeading:false})
+            }
+        }
+        
+    }
+
+
     async getImageURI(event) {
         let reader = new FileReader();
         reader.onload = (event) => {
@@ -98,22 +128,23 @@ class PersonalInfo extends Component {
             'imageURL': url
         })
     }
-
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {handleSubmit, personalInfo,submitting,submitSucceeded} = this.props;
-        const {editHeading} =this.state;
+        const {editHeading,heading} =this.state;
         return (
+            
         <div className="buildResume">
             <PreviewModal {...this.props}/>
             <div className="buildResume__wrap">
                 <div className="buildResume__heading">
                     {!editHeading ?
-                        <h1>Personal Info</h1>:
-                        <input type="text" placeholder="Please enter"/>
+                        <h1>{heading}</h1>:
+                        <input type="text" autoFocus placeholder={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
+                         onKeyDown={(e)=>this.updateInputValue('keyPress',e)}/>
                     }
-                    <i className="sprite icon--edit" ></i>
+                    <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
                 </div>
                 
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -126,12 +157,12 @@ class PersonalInfo extends Component {
 
                         <li className="form__group">
                             <Field component={renderField} label={"Last Name"}  type={"text"} name="last_name" id="last_name"
-                                iconClass={"sprite icon--lastName"} validate={required} className="form__input" prepend={true}/>
+                                iconClass={"sprite icon--lastName"} className="form__input" prepend={true}/>
                         </li>
 
                         <li className="form__group">
                             <Field component={renderSelect} label={"Gender"} name="gender" name="gender" prepend={true}
-                                iconClass={"sprite icon--designation"} validate={required} className="form__input form__select">
+                                iconClass={"sprite icon--designation"}  className="form__input form__select">
                                 <option value="">Gender</option>
                                 <option value="1" >Male</option>
                                 <option value="2" >Female</option>
@@ -207,7 +238,7 @@ class PersonalInfo extends Component {
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={(length === pos +1) ?'button' :'submit'}
                                     onClick={(length === pos +1) ? ()=>{this.props.history.push(`/resume-builder/buy`)} : ()=>{}}>
-                                    {(length === pos +1) ?"Buy" :"Save &amp; Continue"}
+                                    {(length === pos +1) ?"Buy" :"Save & Continue"}
                                 </button>
                             </div>
                         </li>
@@ -227,26 +258,20 @@ export const PersonalInfoForm = reduxForm({
 
 const mapStateToProps = (state) => {
     return {
-        initialValues: state.personalInfo,
-        personalInfo: state.personalInfo
+        initialValues: state.personalInfo
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        "fetchPersonalInfo": () => {
-            return dispatch(actions.fetchPersonalInfo())
-        },
         "onSubmit": (personalDetails, imageURL) => {
-            const {gender, date_of_birth, extracurricular} = personalDetails;
+            const { date_of_birth, extracurricular} = personalDetails;
             personalDetails = {
                 ...personalDetails,
                 ...{
                     'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
                     'image': imageURL,
-                    'extracurricular' : ''
-                    // 'extracurricular': extracurricular instanceof Array ?
-                    //     (extracurricular || []).map(el => el.value).join(',') : extracurricular
+                    'extracurricular': ''
                 }
             }
             return new Promise((resolve, reject) => {

@@ -13,7 +13,7 @@ import {
     AccordionItemButton
 } from 'react-accessible-accordion';
 
-import validate from '../../../../../FormHandler/validations/experienceValidation'
+import validate from '../../../../../FormHandler/validations/experience/validate'
 
 
 const ExperienceRenderer = ({
@@ -221,7 +221,6 @@ class Experience extends Component {
 
     changeOrderingDown(index, fields, event) {
         event.stopPropagation()
-        console.log('down pressed');
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;
@@ -232,7 +231,6 @@ class Experience extends Component {
 
     changeOrderingUp(index, fields, event) {
         event.stopPropagation();
-        console.log('up pressed');
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;

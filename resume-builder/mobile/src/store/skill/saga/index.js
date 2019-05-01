@@ -11,6 +11,14 @@ function* fetchUserSkill(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        if (localStorage.getItem('skill')) {
+            yield put({
+                type: Actions.SAVE_USER_SKILL,
+                data: {list: JSON.parse(localStorage.getItem('skill')) || []}
+            });
+            return;
+        }
+
         const result = yield call(Api.fetchUserSkill, candidateId);
         if (result['error']) {
             ////console.log('error');
@@ -44,6 +52,7 @@ function* updateUserSkill(action) {
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+        localStorage.removeItem('skill');
 
         yield put({type: Actions.SAVE_USER_SKILL, data: result['data']});
 
@@ -90,6 +99,7 @@ function* deleteUserSkill(action) {
         if (result['error']) {
             ////console.log(result['error'])
         }
+        localStorage.deleteItem('skill');
         // yield call(fetchUserSkill)
         yield put({type: Actions.REMOVE_SKILL, id: skillId});
 

@@ -11,6 +11,14 @@ import {SubmissionError} from 'redux-form'
 function* fetchUserEducation(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
+        if (localStorage.getItem('education')) {
+
+            yield put({
+                type: Actions.SAVE_USER_EDUCATION,
+                data:{list: JSON.parse(localStorage.getItem('education')) || []}
+            })
+            return;
+        }
 
         const result = yield call(Api.fetchUserEducation, candidateId);
         if (result['error']) {
@@ -44,6 +52,7 @@ function* updateUserEducation(action) {
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+        localStorage.removeItem('education');
 
         return resolve('User Education  Info saved successfully.');
 

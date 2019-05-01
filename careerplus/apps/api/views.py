@@ -1000,6 +1000,7 @@ class ShineCandidateLoginAPIView(APIView):
         return candidate_info
 
     def _dispatch_via_autologin(self, alt):
+        import ipdb ; ipdb.set_trace()
         try:
             email, candidate_id, valid = AutoLogin().decode(alt)
         except Exception as e:

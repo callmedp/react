@@ -1,6 +1,6 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call} from "redux-saga/effects";
+import {takeLatest, put, call, select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
@@ -25,8 +25,14 @@ function* fetchUserCourse(action) {
         }
         yield put({type: UPDATE_UI, data: {loader: false}})
 
-        const {data: {results}} = result;
 
+        let {data: {results}} = result;
+
+        if (!results.length) {
+            const state = yield select();
+            let {course: {list}} = state;
+            results = list
+        }
         let data = {list: results};
         yield put({type: Actions.SAVE_USER_COURSE, data: data})
     } catch (e) {

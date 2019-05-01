@@ -19,7 +19,7 @@ export default class PreviewModal extends Component{
                 <div className="Modal--iframe">
                     <iframe srcDoc={this.props.template.html}></iframe>
                 </div>
-                <button className="Modal--close" onClick={this.handleCloseModal}>+</button>
+                <button className="Modal--close" onClick={()=>{this.props.updateModalStatus({modal_status:false})}}>+</button>
             </Modal>
         )
     }

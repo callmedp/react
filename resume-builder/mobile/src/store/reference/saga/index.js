@@ -11,6 +11,12 @@ function* fetchUserReference(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+        if (localStorage.getItem('reference')) {
+
+            yield put({type: Actions.SAVE_USER_REFERENCE, data: {list:JSON.parse(localStorage.getItem('reference')) || []}})
+            return;
+        }
+
         const result = yield call(Api.fetchUserReference, candidateId);
         if (result['error']) {
             ////console.log('error');
@@ -38,6 +44,8 @@ function* updateUserReference(action) {
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+
+        localStorage.removeItem('reference');
 
         yield put({type: Actions.SAVE_USER_REFERENCE, data: result['data']});
 

@@ -14,11 +14,48 @@ class Summary extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.state = {
+            'editHeading': false,
+            'heading' : ''
+        }
+        this.updateInputValue =this.updateInputValue.bind(this);
     }
 
     componentDidMount() {
         this.props.fetchPersonalInfo()
+        if (this.props.personalInfo.entity_preference_data.length) {
+            this.setState({heading : this.props.personalInfo.entity_preference_data[5].entity_text})
+        }
 
+    }
+
+    updateInputValue(key,e) {
+        if(e.keyCode === 13){
+            if(e.target.value.length){
+                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.setState({editHeading:false,heading:e.target.value})
+            }
+            else{
+                console.log("came here")
+                this.setState({editHeading:false})
+            }
+        }
+        if(key === 'blur'){
+            if(e.target.value.length){
+                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.setState({editHeading:false,heading:e.target.value})
+            }
+            else{
+                this.setState({editHeading:false})
+            }
+        }
+        
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
+            this.setState({heading : this.props.personalInfo.entity_preference_data[5].entity_text})
+        }
     }
 
     async handleSubmit(values) {
@@ -40,14 +77,18 @@ class Summary extends Component {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {personalInfo: {extra_info}, handleSubmit,submitting,submitSucceeded} = this.props;
+        const {editHeading,heading} =this.state;
         return (
         <div className="buildResume">
             <PreviewModal {...this.props}/>
             <div className="buildResume__wrap pb-0">
                 <div className="buildResume__heading">
-                    <h1>Summary</h1>
-                    <input className="hide" type="text" placeholder="Summary"/>
-                    <i className="sprite icon--edit"></i>
+                    {!editHeading ?
+                        <h1>{heading}</h1>:
+                        <input autoFocus type="text" id="heading" placeholder={heading} onBlur={(e)=>this.updateInputValue('blur',e)}
+                         onKeyDown={(e)=>this.updateInputValue('keyPress',e)}/>
+                    }
+                    <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
                 </div>
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <ul className="form">
@@ -64,7 +105,7 @@ class Summary extends Component {
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={(length === pos +1) ?'button' :'submit'}
                                     onClick={(length === pos +1) ? ()=>{this.props.history.push(`/resume-builder/buy`)} : ()=>{}}>
-                                    {(length === pos +1) ?"Buy" :"Save &amp; Continue"}
+                                    {(length === pos +1) ?"Buy" :"Save & Continue"}
                                 </button>
                             </div>
                         </li>

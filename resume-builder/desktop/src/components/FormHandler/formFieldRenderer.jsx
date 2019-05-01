@@ -13,7 +13,6 @@ export const renderField = ({
                                 className,
                                 meta: {touched, error, warning}
                             }) => {
-    console.log('eroor in render', error, touched)
     return (
         <div className="Error">
             <input {...input} className={className} placeholder={label} type={type}/>

@@ -9,16 +9,23 @@ const renderEducation = ({
                             handleAddition,
                             deleteEducation,
                             changeOrderingDown,
-                            changeOrderingUp
+                            changeOrderingUp,
+                            editHeading,
+                            heading,
+                            updateInputValue,
+                            editHeadingClick
                         }) => {
     return (
         
         <div className="buildResume__wrap">
             <div className="buildResume__heading heading">
                 <div className="heading__info">
-                    <h1>Education</h1>
-                    <input className="hide" type="text" placeholder="Education"/>
-                    <i className="sprite icon--edit"></i>
+                    {!editHeading ?
+                            <h1>{heading}</h1>:
+                            <input type="text" autoFocus placeholder={heading} onBlur={(e)=>updateInputValue('blur',e)}
+                            onKeyDown={(e)=>updateInputValue('keyPress',e)}/>
+                        }
+                        <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
                 </div>
                 
                 <button role="button" className="btn btn__round btn--outline"
@@ -74,12 +81,12 @@ const renderEducation = ({
                             </li>
 
                             <li className="form__radio-group d-flex justify-content-end fs-14">
-                                <Field type="radio" name={`${member}.is_pursuing`} component="input" 
-                                    className="form__radio-input" value={`${member}.is_pursuing`}/>
-                                <label className="form__radio-label" htmlFor="tillToday">
+                                <Field type="checkbox" name={`${member}.is_pursuing`} component="input" 
+                                    className="form__radio-input" id={`${member}.is_pursuing`}/>
+                                <label className="form__radio-label" htmlFor={`${member}.is_pursuing`}>
                                     <span className="form__radio-button"></span>
                                     Till today
-                            </label>
+                                </label>
                             </li>
 
                             <li className="form__group">

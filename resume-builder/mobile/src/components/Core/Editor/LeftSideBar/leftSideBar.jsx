@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import './leftSideBar.scss'
 import * as actions from "../../../../store/sidenav/actions";
-import * as profileActions from '../../../../store/personalInfo/actions/index';
 import {connect} from "react-redux";
 import queryString from "query-string";
 import {Link} from 'react-router-dom';
 import RenderNavItem from './renderNavItem';
+import * as profileActions from '../../../../store/personalInfo/actions/index';
+import {entityLinkNameLink ,iconClassList,delete_icon} from '../../../../Utils/entitydata.js'
 
 class LeftSideBar extends Component {
 
@@ -60,20 +61,22 @@ class LeftSideBar extends Component {
 
     addItem(item) {
         let addmore = {...this.state.addmore};
-        addmore[item].active = true
-        const addmore_sorted = [].concat(this.state.addmore).sort((a, b) => b.active - a.active)
-        this.setState({addmore: addmore_sorted})
+        addmore[item -1].active = true;
+        //this.setState({addMore: addMore})
+        console.log(addmore[item -1])
+        // const addmore_sorted = [].concat(this.state.addmore).sort((a, b) => b.active - a.active)
+        // this.setState({addmore: addmore_sorted})
     }
 
     removeItem(item) {
         let addmore = {...this.state.addmore};
-        addmore[item].active = false
-        const addmore_sorted = [].concat(this.state.addmore).sort((a, b) => b.active - a.active)
-        this.setState({addmore: addmore_sorted})
+        addmore[item -1].active = false
+        // const addmore_sorted = [].concat(this.state.addmore).sort((a, b) => b.active - a.active)
+        // this.setState({addmore: addmore_sorted})
     }
 
     closeSideNav() {
-        this.props.onSubmit(this.state.addmore, this.props.personalInfo)
+        this.props.updateSideNav(this.state.addmore, this.props.personalInfo)
         this.updateLink()
         this.props.updateSidenavStatus(false)
         document.body.classList.remove('sto-body-scroll')
@@ -103,10 +106,10 @@ class LeftSideBar extends Component {
                 this.props.updateCurrentLinkPos({currentLinkPos: i})
             }
         }
-        if (!found_link) {
-            this.props.history.push(`/resume-builder/edit/?type=${this.props.sidenav.listOfLinks[0]}`)
-            this.props.updateCurrentLinkPos({currentLinkPos: 0})
-        }
+        // if (!found_link) {
+        //     this.props.history.push(`/resume-builder/edit/?type=${this.props.sidenav.listOfLinks[0]}`)
+        //     this.props.updateCurrentLinkPos({currentLinkPos: 0})
+        // }
     }
 
     componentDidUpdate(prevProps) {
@@ -116,9 +119,9 @@ class LeftSideBar extends Component {
                 type: (values && values.type) || ''
             })
         }
-        if (this.props.personalInfo.entity_preference_data != prevProps.personalInfo.entity_preference_data && !this.state.loaded) {
-
-            this.setState({addmore: this.props.personalInfo.entity_preference_data, loaded: true}, this.updateLink)
+        if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data && !this.state.loaded) {
+            
+            this.setState({addmore: this.props.personalInfo.entity_preference_data},this.updateLink)
             //console.log("UpdateMount here")
 
         }
@@ -132,10 +135,11 @@ class LeftSideBar extends Component {
         let links = []
         for (let i of this.state.addmore) {
             if (i.active) {
-                links.push(i.entity_link)
+                links.push(entityLinkNameLink[i.entity_id])
                 ////console.log(i.entity_link)
             }
         }
+        console.log(links)
         this.props.updateListOfLink({listOfLinks: links})
         ////console.log("I am here")
     }
@@ -143,7 +147,6 @@ class LeftSideBar extends Component {
     render() {
         const {type, addmore, current_page} = this.state;
         const {sidenavStatus} = this.props.sidenav
-
         return (
             <React.Fragment>
                 {(addmore.length) ?
@@ -163,21 +166,41 @@ class LeftSideBar extends Component {
                                     </span>
                                         <span className="user__name">Hello Amit</span>
                                     </li>
-                                    {addmore.map((item, key) =>
-
-                                        <RenderNavItem label={item.entity_text}
-                                                       key={key}
-                                                       pos={key}
-                                                       type={type}
-                                                       sidenavStatus={sidenavStatus}
-                                                       title={item.entity_link}
-                                                       exist={item.active}
-                                                       current_page={current_page}
-                                                       changeLink={this.changeLink}
-                                                       iconClass={item.icon_class}
-                                                       removeItem={this.removeItem}
-                                                       addItem={this.addItem}
-                                                       deleteIconExist={item.delete_icon}/>
+                                    {addmore.filter(item =>item.active ===true).map((item, key) =>
+                                        {
+                                            return(<RenderNavItem label={item.entity_text}
+                                                        key={key}
+                                                        pos={item.entity_id}
+                                                        type={type}
+                                                        sidenavStatus={sidenavStatus}
+                                                        title={entityLinkNameLink[item.entity_id]}
+                                                        exist={item.active}
+                                                        current_page={current_page}
+                                                        changeLink={this.changeLink}
+                                                        iconClass={iconClassList[item.entity_id]}
+                                                        removeItem={this.removeItem}
+                                                        addItem={this.addItem}
+                                                        deleteIconExist={delete_icon[item.entity_id]}/>)
+                                        }
+                                        
+                                    )}
+                                    {addmore.filter(item =>item.active !==true).map((item, key) =>
+                                        {
+                                            return(<RenderNavItem label={item.entity_text}
+                                                        key={key}
+                                                        pos={item.entity_id}
+                                                        type={type}
+                                                        sidenavStatus={sidenavStatus}
+                                                        title={entityLinkNameLink[item.entity_id]}
+                                                        exist={item.active}
+                                                        current_page={current_page}
+                                                        changeLink={this.changeLink}
+                                                        iconClass={iconClassList[item.entity_id]}
+                                                        removeItem={this.removeItem}
+                                                        addItem={this.addItem}
+                                                        deleteIconExist={delete_icon[item.entity_id]}/>)
+                                        }
+                                        
                                     )}
 
                                     <li className={"sidebar__item " + (sidenavStatus ? "hide" : "")}>
@@ -214,7 +237,6 @@ const mapStateToProps = (state) => {
     return {
         initialValues: state.sidenav,
         sidenav: state.sidenav,
-        personalInfo: state.personalInfo
     }
 };
 
@@ -235,14 +257,11 @@ const mapDispatchToProps = (dispatch) => {
         "updateCurrentLinkPos": (data) => {
             return dispatch(actions.updateCurrentLinkPos(data))
         },
-        "fetchPersonalInfo": () => {
-            return dispatch(profileActions.fetchPersonalInfo())
-        },
-        "onSubmit": (entity_data, personalInfo) => {
+        "updateSideNav": (addmore,personalInfo) => {
             let personalDetails = {
                 ...personalInfo,
                 ...{
-                    'entity_preference_data': entity_data,
+                    entity_preference_data: addmore,
                     'extracurricular': ''
                 }
             }

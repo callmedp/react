@@ -11,15 +11,22 @@ const renderSkills = ({
                         deleteSkill,
                         changeOrderingUp,
                         changeOrderingDown,
+                        editHeading,
+                        heading,
+                        updateInputValue,
+                        editHeadingClick
                     }) => {
     return (
         <React.Fragment>
             <div className="buildResume__wrap pb-0">
                 <div className="buildResume__heading heading">
                     <div className="heading__info">
-                        <h1>Skills {error}</h1>
-                        <input className="hide" type="text" placeholder="Skills"/>
-                        <i className="sprite icon--edit"></i>
+                        {!editHeading ?
+                            <h1>{heading}</h1>:
+                            <input type="text" autoFocus placeholder={heading} onBlur={(e)=>updateInputValue('blur',e)}
+                            onKeyDown={(e)=>updateInputValue('keyPress',e)}/>
+                        }
+                        <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
                     </div>
                     <button type={'button'} onClick={handleSubmit(handleAddition.bind(this,fields))} 
                         className="btn btn__round btn--outline">+ Add new</button>

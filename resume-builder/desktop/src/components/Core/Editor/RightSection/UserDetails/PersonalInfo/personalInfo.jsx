@@ -16,7 +16,7 @@ import {
     required,
     phoneNumber,
     email
-} from "../../../../../FormHandler/validations/formValidations.js";
+} from "../../../../../FormHandler/validations/personalInfo/validate";
 
 import moment from 'moment';
 

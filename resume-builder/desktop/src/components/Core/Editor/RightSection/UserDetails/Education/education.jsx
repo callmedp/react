@@ -13,7 +13,7 @@ import {
     AccordionItemButton
 } from 'react-accessible-accordion';
 
-import validate from '../../../../../FormHandler/validations/educationValidation'
+import validate from '../../../../../FormHandler/validations/education/validate'
 import Loader from "../../../../../Loader/loader.jsx";
 
 
@@ -231,7 +231,6 @@ class Education extends Component {
 
     changeOrderingDown(index, fields, event) {
         event.stopPropagation()
-        console.log('donw pressed');
         let currentItem = fields.get(index);
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;
@@ -242,7 +241,6 @@ class Education extends Component {
 
     changeOrderingUp(index, fields, event) {
         event.stopPropagation();
-        console.log('up pressed');
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;

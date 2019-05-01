@@ -76,10 +76,14 @@ class CandidateRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
 class SkillListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = Skill.objects.all().order_by('order')
     serializer_class = SkillSerializer
     ordering_fields = ('order',)
     ordering = ('order',)
+
+    def get_queryset(self):
+        candidate_id = self.kwargs.get('candidate_id')
+        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        return Skill.objects.filter(candidate=candidate_obj).order_by('order')
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -99,7 +103,6 @@ class SkillRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
 class CandidateExperienceListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = CandidateExperience.objects.all().order_by('order')
     serializer_class = CandidateExperienceSerializer
     ordering_fields = ('order',)
     ordering = ('order',)
@@ -109,6 +112,11 @@ class CandidateExperienceListCreateView(ListCreateAPIView):
     #     if 'candidate_experience' not in self.request.session:
     #         candidate = Candidate.objects.get(candidate_id=candidate_id)
     #         return candidate.candidateexperience_set.all()
+
+    def get_queryset(self):
+        candidate_id = self.kwargs.get('candidate_id')
+        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        return CandidateExperience.objects.filter(candidate=candidate_obj).order_by('order')
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -129,10 +137,14 @@ class CandidateExperienceRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
 class CandidateEducationListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = CandidateEducation.objects.all().order_by('order')
     serializer_class = CandidateEducationSerializer
     ordering_fields = ('order',)
     ordering = ('order',)
+
+    def get_queryset(self):
+        candidate_id = self.kwargs.get('candidate_id')
+        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        return CandidateEducation.objects.filter(candidate=candidate_obj)
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -153,10 +165,14 @@ class CandidateEducationRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
 class CandidateCertificationListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = CandidateCertification.objects.all().order_by('order')
     serializer_class = CandidateCertificationSerializer
     ordering_fields = ('order',)
     ordering = ('order',)
+
+    def get_queryset(self):
+        candidate_id = self.kwargs.get('candidate_id')
+        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        return CandidateCertification.objects.filter(candidate=candidate_obj).order_by('order')
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -177,7 +193,6 @@ class CandidateCertificationRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
 class CandidateProjectListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = CandidateProject.objects.all().order_by('order')
     serializer_class = CandidateProjectSerializer
     ordering_fields = ('order',)
     ordering = ('order',)
@@ -186,6 +201,11 @@ class CandidateProjectListCreateView(ListCreateAPIView):
         if isinstance(kwargs.get('data', {}), list):
             kwargs['many'] = True
         return super(CandidateProjectListCreateView, self).get_serializer(*args, **kwargs)
+
+    def get_queryset(self):
+        candidate_id = self.kwargs.get('candidate_id')
+        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        return CandidateProject.objects.filter(candidate=candidate_obj).order_by('order')
 
 
 class CandidateProjectRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
@@ -201,7 +221,6 @@ class CandidateProjectRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
 class CandidateReferenceListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = CandidateReference.objects.all().order_by('order')
     serializer_class = CandidateReferenceSerializer
     ordering_fields = ('order',)
     ordering = ('order',)
@@ -210,6 +229,11 @@ class CandidateReferenceListCreateView(ListCreateAPIView):
         if isinstance(kwargs.get('data', {}), list):
             kwargs['many'] = True
         return super(CandidateReferenceListCreateView, self).get_serializer(*args, **kwargs)
+
+    def get_queryset(self):
+        candidate_id = self.kwargs.get('candidate_id')
+        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        return CandidateReference.objects.filter(candidate=candidate_obj).order_by('order')
 
 
 class CandidateReferenceRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
@@ -225,7 +249,6 @@ class CandidateReferenceRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
 class CandidateSocialLinkListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = CandidateSocialLink.objects.all().order_by('order')
     serializer_class = CandidateSocialLinkSerializer
     ordering_fields = ('order',)
     ordering = ('order',)
@@ -234,6 +257,11 @@ class CandidateSocialLinkListCreateView(ListCreateAPIView):
         if isinstance(kwargs.get('data', {}), list):
             kwargs['many'] = True
         return super(CandidateSocialLinkListCreateView, self).get_serializer(*args, **kwargs)
+
+    def get_queryset(self):
+        candidate_id = self.kwargs.get('candidate_id')
+        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        return CandidateSocialLink.objects.filter(candidate=candidate_obj).order_by('order')
 
 
 class CandidateSocialLinkRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
@@ -249,7 +277,6 @@ class CandidateSocialLinkRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
 class CandidateAchievementListCreateView(ListCreateAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)
-    queryset = CandidateAchievement.objects.all().order_by('order')
     serializer_class = CandidateAchievementSerializer
     ordering_fields = ('order',)
     ordering = ('order',)
@@ -258,6 +285,11 @@ class CandidateAchievementListCreateView(ListCreateAPIView):
         if isinstance(kwargs.get('data', {}), list):
             kwargs['many'] = True
         return super(CandidateAchievementListCreateView, self).get_serializer(*args, **kwargs)
+
+    def get_queryset(self):
+        candidate_id = self.kwargs.get('candidate_id')
+        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        return CandidateAchievement.objects.filter(candidate=candidate_obj).order_by('order')
 
 
 class CandidateAchievementRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
@@ -278,7 +310,9 @@ class CandidateLanguageListCreateView(ListCreateAPIView):
     ordering = ('order',)
 
     def get_queryset(self):
-        return CandidateLanguage.objects.all().order_by('order')
+        candidate_id = self.kwargs.get('candidate_id')
+        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        return CandidateLanguage.objects.filter(candidate=candidate_obj).order_by('order')
 
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
@@ -399,6 +433,7 @@ class ProfileEntityBulkUpdateView(APIView):
         return self.entity_slug_model_mapping.get(entity_slug)
 
     def post(self, request, *args, **kwargs):
+        import ipdb ; ipdb.set_trace()
         entity_slug = kwargs.get('entity_slug')
         data = request.data
         serializer_class = self.get_serializer_class(entity_slug)
