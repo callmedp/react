@@ -76,7 +76,7 @@ function* updatePersonalDetails(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        yield put({type: UPDATE_UI, data: {loader: false}})
+        yield put({type: UPDATE_UI, data: {loader: false}});
 
         let result = null;
         if (localStorage.getItem('personalInfo')) result = yield call(Api.createPersonalInfo, personalDetails);
