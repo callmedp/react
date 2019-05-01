@@ -1,4 +1,4 @@
-import {UPDATE_MAIN_PAGE_LOADER,UPDATE_DATA_LOADER} from './actionTypes'
+import {UPDATE_MAIN_PAGE_LOADER,UPDATE_DATA_LOADER,FETCH_LOADER_STATUS} from './actionTypes'
 
 
 export const updateMainLoader = (payload) => {
@@ -12,5 +12,11 @@ export const updateDataLoader = (payload) => {
     return {
         type: UPDATE_DATA_LOADER,
         payload
+    }
+}
+
+export const fetchLoaderStatus = () => {
+    return {
+        type: FETCH_LOADER_STATUS,
     }
 }

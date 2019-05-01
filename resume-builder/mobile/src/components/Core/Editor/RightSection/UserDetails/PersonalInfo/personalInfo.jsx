@@ -20,6 +20,7 @@ import {
 
 import moment from 'moment';
 import PreviewModal from "../../../Preview/previewModal";
+import DataLoader from "../../../../../Common/DataLoader/dataloader"
 
 class PersonalInfo extends Component {
     constructor(props) {
@@ -40,6 +41,7 @@ class PersonalInfo extends Component {
     }
 
     componentDidMount() {
+        console.log(this.props.loader)
         if (this.props.personalInfo.entity_preference_data.length) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[0].entity_text})
             console.log("Came Inside")
@@ -57,7 +59,7 @@ class PersonalInfo extends Component {
         }
         else{
             this.props.updateCurrentLinkPos({currentLinkPos})
-            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
+            //this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
         }
         
     }
@@ -146,6 +148,7 @@ class PersonalInfo extends Component {
         <div className="buildResume">
             <PreviewModal {...this.props}/>
             <div className="buildResume__wrap">
+            {this.props.loader.dataloader ? {/* <DataLoader/> */} :""}
                 <div className="buildResume__heading">
                     {!editHeading ?
                         <h1>{heading}</h1>:
@@ -155,7 +158,9 @@ class PersonalInfo extends Component {
                     <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
                 </div>
                 
+                
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
+                    
                     <ul className="form">
 
                         <li className="form__group">

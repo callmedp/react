@@ -7,6 +7,7 @@ import {
     renderTextArea
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 import PreviewModal from "../../../Preview/previewModal";
+import DataLoader from "../../../../../Common/DataLoader/dataloader"
 
 
 class Summary extends Component {
@@ -82,6 +83,7 @@ class Summary extends Component {
         <div className="buildResume">
             <PreviewModal {...this.props}/>
             <div className="buildResume__wrap pb-0">
+                {/* <DataLoader/> */}
                 <div className="buildResume__heading">
                     {!editHeading ?
                         <h1>{heading}</h1>:

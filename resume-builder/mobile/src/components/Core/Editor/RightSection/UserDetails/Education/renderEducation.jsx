@@ -1,6 +1,7 @@
 import {renderField, renderTextArea, renderSelect, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
 import React from 'react';
 import {Field} from "redux-form";
+import DataLoader from "../../../../../Common/DataLoader/dataloader"
 
 const renderEducation = ({
                             fields, 
@@ -18,6 +19,7 @@ const renderEducation = ({
     return (
         
         <div className="buildResume__wrap">
+                {/* <DataLoader/> */}
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                     {!editHeading ?

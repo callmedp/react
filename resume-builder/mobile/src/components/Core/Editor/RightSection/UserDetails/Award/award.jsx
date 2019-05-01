@@ -161,6 +161,7 @@ class Award extends Component {
                                 updateInputValue={this.updateInputValue}
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
+                                loader={this.props.loader.datloader}
                                 heading ={heading}/>
                     <ul className="form">
                         <li className="form__group">

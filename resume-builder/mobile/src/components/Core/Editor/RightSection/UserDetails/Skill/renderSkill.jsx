@@ -1,6 +1,7 @@
 import React from 'react';
 import {Field} from "redux-form"
 import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer.jsx";
+import DataLoader from "../../../../../Common/DataLoader/dataloader"
 
 
 const renderSkills = ({
@@ -19,6 +20,7 @@ const renderSkills = ({
     return (
         <React.Fragment>
             <div className="buildResume__wrap pb-0">
+                {/* <DataLoader/> */}
                 <div className="buildResume__heading heading">
                     <div className="heading__info">
                         {!editHeading ?
