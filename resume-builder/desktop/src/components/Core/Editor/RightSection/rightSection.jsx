@@ -24,6 +24,8 @@ class RightSection extends Component {
         this.renderSwitch = this.renderSwitch.bind(this);
         this.saveTitle = this.saveTitle.bind(this);
         this.editHeading = this.editHeading.bind(this);
+        this.handlePreview = this.handlePreview.bind(this);
+
 
         this.state = {
             type: (values && values.type) || '',
@@ -40,6 +42,11 @@ class RightSection extends Component {
                 'isEditable': false
             })
         }
+    }
+
+
+    handlePreview() {
+        this.props.history.push('/resume-builder/preview/');
     }
 
 
@@ -82,6 +89,7 @@ class RightSection extends Component {
                 return <PersonalInfo {...this.props}
                                      isEditable={isEditable}
                                      saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                                     handlePreview={this.handlePreview}
                                      entityName={entity && entity['entity_text'] || 'Personal Info'}
                                      nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                                      editHeading={(elem) => this.editHeading(elem)}
@@ -100,6 +108,7 @@ class RightSection extends Component {
                     </div>
                     : <Education {...this.props}
                                  isEditable={isEditable}
+                                 handlePreview={this.handlePreview}
                                  editHeading={(elem) => this.editHeading(elem)}
                                  entityName={entity && entity['entity_text'] || 'Education'}
                                  nextEntity={nextEntity && nextEntity['link'] || nextEntity}
@@ -118,6 +127,7 @@ class RightSection extends Component {
                     </div>
                     : <Experience {...this.props}
                                   isEditable={isEditable}
+                                  handlePreview={this.handlePreview}
                                   nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                                   entityName={entity && entity['entity_text'] || 'Experience'}
                                   saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
@@ -136,6 +146,7 @@ class RightSection extends Component {
                     </div>
                     : <Project {...this.props}
                                isEditable={isEditable}
+                               handlePreview={this.handlePreview}
                                nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                                entityName={entity && entity['entity_text'] || 'Project'}
                                saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
@@ -154,6 +165,7 @@ class RightSection extends Component {
                     </div>
                     : <Skill {...this.props}
                              isEditable={isEditable}
+                             handlePreview={this.handlePreview}
                              nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                              entityName={entity && entity['entity_text'] || 'Skill'}
                              saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
@@ -172,6 +184,7 @@ class RightSection extends Component {
                     </div>
                     : <Summary {...this.props}
                                isEditable={isEditable}
+                               handlePreview={this.handlePreview}
                                nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                                entityName={entity && entity['entity_text'] || 'Summary'}
                                saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
@@ -190,6 +203,7 @@ class RightSection extends Component {
                     </div>
                     : <Award {...this.props}
                              isEditable={isEditable}
+                             handlePreview={this.handlePreview}
                              nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                              entityName={entity && entity['entity_text'] || 'Award'}
                              saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
@@ -208,6 +222,7 @@ class RightSection extends Component {
                     </div>
                     : <Course {...this.props}
                               isEditable={isEditable}
+                              handlePreview={this.handlePreview}
                               nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                               entityName={entity && entity['entity_text'] || 'Course'}
                               saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
@@ -226,6 +241,7 @@ class RightSection extends Component {
                     </div>
                     : <Language {...this.props}
                                 isEditable={isEditable}
+                                handlePreview={this.handlePreview}
                                 nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                                 entityName={entity && entity['entity_text'] || 'Language'}
                                 saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
@@ -243,6 +259,7 @@ class RightSection extends Component {
                     </div>
                     : <Reference {...this.props}
                                  isEditable={isEditable}
+                                 handlePreview={this.handlePreview}
                                  nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                                  entityName={entity && entity['entity_text'] || 'Reference'}
                                  saveTitle={(event, entityId) => this.saveTitle(event, entityId)}

@@ -22,6 +22,7 @@ const ExperienceRenderer = ({
                                 meta: {touched, error, submitFailed},
                                 deleteExperience,
                                 handleAddition,
+                                handleSubmit,
                                 handleAccordionState,
                                 handleAccordionClick,
                                 changeOrderingUp,
@@ -46,7 +47,9 @@ const ExperienceRenderer = ({
                       className={!!(!isEditable) ? "icon-edit icon-experience__cursor" : ''}/>
 
                 <button
-                    onClick={() => handleAddition(fields, error)}
+                    onClick={handleSubmit((values) => {
+                        handleAddition(fields, error)
+                    })}
                     type={'button'}
                     className="add-button add-button__right">Add new
                 </button>
@@ -288,13 +291,14 @@ class Experience extends Component {
     }
 
     render() {
-        const {handleSubmit, ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity} = this.props;
+        const {handleSubmit, ui: {loader}, isEditable,
+            editHeading, saveTitle, entityName, nextEntity,handlePreview} = this.props;
 
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray name={"list"}
                             loader={loader}
-                            handleSubmit={this.handleSubmit}
+                            handleSubmit={handleSubmit}
                             handleAccordionClick={this.handleAccordionClick}
                             handleAccordionState={this.handleAccordionState}
                             handleAddition={this.handleAddition}
@@ -310,7 +314,7 @@ class Experience extends Component {
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10">Preview</button>
+                    <button className="blue-button mr-10" type="button" onClick={handlePreview}>Preview</button>
                     <button className="orange-button" type="submit">Save & Continue</button>
                 </div>
             </form>

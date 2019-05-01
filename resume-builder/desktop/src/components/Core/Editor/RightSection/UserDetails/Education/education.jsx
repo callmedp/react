@@ -23,6 +23,7 @@ const EducationRenderer = ({
                                meta: {touched, error, submitFailed},
                                deleteEducation,
                                handleAddition,
+                               handleSubmit,
                                handleAccordionState,
                                handleAccordionClick,
                                changeOrderingUp,
@@ -36,7 +37,7 @@ const EducationRenderer = ({
     let elem = null;
     return (
         <div>
-            
+
             <section className="head-section">
                 <span className="icon-box"><i className="icon-education1"></i></span>
                 <h2 ref={(value) => {
@@ -46,9 +47,12 @@ const EducationRenderer = ({
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit icon-education__cursor" : ''}/>
 
-                <button onClick={(event) => handleAddition(fields, error, event)}
-                        type={'button'}
-                        className="add-button add-button__right">Add new
+                <button
+                    onClick={handleSubmit((values) => {
+                        handleAddition(fields, error)
+                    })}
+                    type={'button'}
+                    className="add-button add-button__right">Add new
                 </button>
 
 
@@ -298,13 +302,14 @@ class Education extends Component {
 
 
     render() {
-        const {handleSubmit, ui: {loader}, saveTitle, isEditable, editHeading, entityName, nextEntity} = this.props;
+        const {handleSubmit, ui: {loader}, saveTitle, isEditable,
+            editHeading, entityName, nextEntity, handlePreview} = this.props;
 
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray name={'list'}
                             loader={loader}
-                            handleSubmit={this.handleSubmit}
+                            handleSubmit={handleSubmit}
                             handleAccordionClick={this.handleAccordionClick}
                             handleAccordionState={this.handleAccordionState}
                             handleAddition={this.handleAddition}
@@ -320,7 +325,7 @@ class Education extends Component {
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10">Preview</button>
+                    <button className="blue-button mr-10" onClick={handlePreview}>Preview</button>
                     <button className="orange-button" type={'submit'}>Save & Continue</button>
                 </div>
 

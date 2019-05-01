@@ -29,6 +29,7 @@ const SkillRenderer = ({
                            loader,
                            meta: {touched, error, submitFailed},
                            deleteSkill,
+                           handleSubmit,
                            handleAddition,
                            handleAccordionState,
                            handleAccordionClick,
@@ -56,9 +57,12 @@ const SkillRenderer = ({
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit icon-education__cursor" : ""}
                 />
-                <button onClick={() => handleAddition(fields, error)}
-                        type={'button'}
-                        className="add-button add-button__right">Add new
+                <button
+                    onClick={handleSubmit((values) => {
+                        handleAddition(fields, error)
+                    })}
+                    type={'button'}
+                    className="add-button add-button__right">Add new
                 </button>
 
 
@@ -66,7 +70,9 @@ const SkillRenderer = ({
 
             <section className="right-sidebar-scroll">
                 <ul>
-                    <Accordion onChange={(value) => handleAccordionClick(value, fields, error)}
+                    <Accordion onChange={handleSubmit((values) => {
+                        console.log('values---', values);
+                    })}
                                allowZeroExpanded={true}
                                preExpanded={[openedAccordion]}>
                         {fields.map((member, index) => {
@@ -210,7 +216,6 @@ class Skill extends Component {
 
     handleAddition(fields, error) {
         const listLength = fields.length;
-
         if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
@@ -258,14 +263,14 @@ class Skill extends Component {
 
     render() {
         const {
-            error, handleSubmit, pristine, reset, submitting,
+            error, handleSubmit, pristine, reset, submitting, handlePreview,
             ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity
         } = this.props;
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray
                     name="list"
-                    handleSubmit={this.handleSubmit}
+                    handleSubmit={handleSubmit}
                     handleAccordionClick={this.handleAccordionClick}
                     handleAccordionState={this.handleAccordionState}
                     handleAddition={this.handleAddition}
@@ -282,7 +287,7 @@ class Skill extends Component {
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10">Preview</button>
+                    <button className="blue-button mr-10" type={'button'} onClick={handlePreview}>Preview</button>
                     <button className="orange-button" type={'submit'}>Save & Continue</button>
                 </div>
 

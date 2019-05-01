@@ -20,6 +20,7 @@ const ProjectRenderer = ({
                              loader,
                              meta: {touched, error, submitFailed},
                              deleteProject,
+                             handleSubmit,
                              handleAddition,
                              handleAccordionState,
                              handleAccordionClick,
@@ -49,7 +50,9 @@ const ProjectRenderer = ({
                       className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ""}></span>
 
                 <button
-                    onClick={() => handleAddition(fields, error)}
+                    onClick={handleSubmit((values) => {
+                        handleAddition(fields, error)
+                    })}
                     type={'button'}
                     className="add-button add-button__right">Add new
                 </button>
@@ -267,12 +270,15 @@ class Project extends Component {
 
 
     render() {
-        const {handleSubmit, ui: {loader}, saveTitle, editHeading, isEditable, entityName, nextEntity} = this.props;
+        const {
+            handleSubmit, ui: {loader}, saveTitle,
+            editHeading, isEditable, entityName, nextEntity, handlePreview
+        } = this.props;
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray
                     name="list"
-                    handleSubmit={this.handleSubmit}
+                    handleSubmit={handleSubmit}
                     handleAccordionClick={this.handleAccordionClick}
                     handleAccordionState={this.handleAccordionState}
                     handleAddition={this.handleAddition}
@@ -289,7 +295,7 @@ class Project extends Component {
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10">Preview</button>
+                    <button className="blue-button mr-10" type={'button'} onClick={handlePreview}>Preview</button>
                     <button className="orange-button" type={'submit'}>Save & Continue</button>
                 </div>
             </form>

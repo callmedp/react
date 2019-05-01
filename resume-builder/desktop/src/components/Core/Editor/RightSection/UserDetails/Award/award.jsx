@@ -239,7 +239,8 @@ class Award extends Component {
 
 
     render() {
-        const {handleSubmit, ui: {loader}, saveTitle, editHeading, isEditable, entityName, nextEntity} = this.props;
+        const {handleSubmit, ui: {loader}, saveTitle, editHeading,
+            isEditable, entityName, nextEntity, handlePreview} = this.props;
 
 
         return (
@@ -261,7 +262,7 @@ class Award extends Component {
                             isEditable={isEditable}
                 />
                 <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10">Preview</button>
+                    <button className="blue-button mr-10" type={'button'} onClick={handlePreview}>Preview</button>
                     <button className="orange-button" type={'submit'}>Save & Continue</button>
                 </div>
 

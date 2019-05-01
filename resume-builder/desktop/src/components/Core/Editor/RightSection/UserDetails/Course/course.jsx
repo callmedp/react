@@ -21,6 +21,7 @@ const CourseRenderer = ({
                             fields,
                             loader,
                             meta: {touched, error, submitFailed},
+                            handleSubmit,
                             deleteCourse,
                             handleAddition,
                             handleAccordionState,
@@ -50,9 +51,13 @@ const CourseRenderer = ({
                 <span onClick={() => editHeading(elem)}
                       className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ""}/>
 
-                <button onClick={() => handleAddition(fields, error)}
-                        type={'button'}
-                        className="add-button add-button__right">Add new
+                <button
+                    onClick={handleSubmit((values) => {
+                        handleAddition(fields, error)
+                    })}
+
+                    type={'button'}
+                    className="add-button add-button__right">Add new
                 </button>
 
 
@@ -232,13 +237,13 @@ class Course extends Component {
     }
 
     render() {
-        const {handleSubmit, ui: {loader}, editHeading, saveTitle, isEditable, entityName, nextEntity} = this.props;
+        const {handleSubmit, ui: {loader}, editHeading, saveTitle, isEditable, entityName, nextEntity, handlePreview} = this.props;
 
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray name={'list'}
                             loader={loader}
-                            handleSubmit={this.handleSubmit}
+                            handleSubmit={handleSubmit}
                             handleAccordionClick={this.handleAccordionClick}
                             handleAccordionState={this.handleAccordionState}
                             handleAddition={this.handleAddition}
@@ -253,7 +258,7 @@ class Course extends Component {
                             entityName={entityName}
                 />
                 <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10">Preview</button>
+                    <button className="blue-button mr-10" type={'button'} onClick={handlePreview}>Preview</button>
                     <button className="orange-button" type={'submit'}>Save & Continue</button>
                 </div>
             </form>

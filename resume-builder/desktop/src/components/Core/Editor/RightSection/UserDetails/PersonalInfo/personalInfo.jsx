@@ -26,7 +26,6 @@ export class PersonalInfo extends Component {
         this.getImageURI = this.getImageURI.bind(this);
         this.removeImage = this.removeImage.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handlePreview = this.handlePreview.bind(this);
         this.fetchInterestList = this.fetchInterestList.bind(this);
 
 
@@ -48,9 +47,6 @@ export class PersonalInfo extends Component {
         else this.props.history.push('/resume-builder/buy/')
     }
 
-    handlePreview() {
-        this.props.history.push('/resume-builder/preview/');
-    }
 
     removeImage() {
         this.setState({
@@ -89,7 +85,10 @@ export class PersonalInfo extends Component {
     }
 
     render() {
-        const {handleSubmit, personalInfo, ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity} = this.props;
+        const {
+            handleSubmit, personalInfo, ui: {loader}, isEditable,
+            editHeading, saveTitle, entityName, nextEntity, handlePreview
+        } = this.props;
         let elem = null;
         return (
             <div>
@@ -113,7 +112,7 @@ export class PersonalInfo extends Component {
                                             <span className="icon-name"></span>
                                         </div>
                                         <Field component={renderField} validate={required} type={"text"}
-                                               name="first_name" />
+                                               name="first_name"/>
                                     </div>
                                 </fieldset>
                                 <fieldset>
@@ -267,7 +266,7 @@ export class PersonalInfo extends Component {
 
 
                     <div className="flex-container items-right mr-20 mb-30">
-                        <button className="blue-button mr-10" onClick={this.handlePreview}>Preview</button>
+                        <button className="blue-button mr-10" type={"button"} onClick={handlePreview}>Preview</button>
                         <button className="orange-button" type="submit">Save &
                             Continue
                         </button>
