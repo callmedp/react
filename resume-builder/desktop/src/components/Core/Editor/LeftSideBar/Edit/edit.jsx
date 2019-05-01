@@ -108,7 +108,7 @@ class Edit extends Component {
                                     {
                                         !!(elem['entity_id'] !== 1 && elem['entity_id'] !== 6) ?
                                             <span onClick={() => this.deleteFromVisibleList(elem)}
-                                                  className="icon-delete pull-right"/> : ''
+                                                  className="icon-delete pull-right mt-20"/> : ''
                                     }
                                 </li>
                             )
@@ -130,7 +130,7 @@ class Edit extends Component {
                                     {elem['entity_text']}
                                 </Link>
                                 <span onClick={() => this.addIntoVisibleList(elem)}
-                                      className="icon-add pull-right"/>
+                                      className="icon-add pull-right mt-20"/>
                             </li>
                         )
                     })

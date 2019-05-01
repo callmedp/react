@@ -138,7 +138,7 @@ const ExperienceRenderer = ({
                                                                        className={'input-control'}/>
                                                             </div>
                                                             <span className="till-today">
-									                                    <Field type="radio"
+									                                    <Field type="checkbox"
                                                                                name={`${member}.is_working`}
                                                                                component="input"
                                                                                checked={`${member}.is_working` === 'true' ? true : false}/>
