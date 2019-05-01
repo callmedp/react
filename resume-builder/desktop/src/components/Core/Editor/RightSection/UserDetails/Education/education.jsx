@@ -49,10 +49,10 @@ const EducationRenderer = ({
 
                 <button
                     onClick={handleSubmit((values) => {
-                    handleAddition(fields, error)
-                })}
-                        type={'button'}
-                        className="add-button add-button__right">Add new
+                        handleAddition(fields, error)
+                    })}
+                    type={'button'}
+                    className="add-button add-button__right">Add new
                 </button>
 
 
@@ -302,7 +302,8 @@ class Education extends Component {
 
 
     render() {
-        const {handleSubmit, ui: {loader}, saveTitle, isEditable, editHeading, entityName, nextEntity} = this.props;
+        const {handleSubmit, ui: {loader}, saveTitle, isEditable,
+            editHeading, entityName, nextEntity, handlePreview} = this.props;
 
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -324,7 +325,7 @@ class Education extends Component {
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10">Preview</button>
+                    <button className="blue-button mr-10" onClick={handlePreview}>Preview</button>
                     <button className="orange-button" type={'submit'}>Save & Continue</button>
                 </div>
 

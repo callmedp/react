@@ -70,7 +70,9 @@ const SkillRenderer = ({
 
             <section className="right-sidebar-scroll">
                 <ul>
-                    <Accordion onChange={handleSubmit((values) => {console.log('values---',values);} )}
+                    <Accordion onChange={handleSubmit((values) => {
+                        console.log('values---', values);
+                    })}
                                allowZeroExpanded={true}
                                preExpanded={[openedAccordion]}>
                         {fields.map((member, index) => {
@@ -214,7 +216,6 @@ class Skill extends Component {
 
     handleAddition(fields, error) {
         const listLength = fields.length;
-
         if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
@@ -262,7 +263,7 @@ class Skill extends Component {
 
     render() {
         const {
-            error, handleSubmit, pristine, reset, submitting,
+            error, handleSubmit, pristine, reset, submitting, handlePreview,
             ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity
         } = this.props;
         return (
@@ -286,7 +287,7 @@ class Skill extends Component {
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10">Preview</button>
+                    <button className="blue-button mr-10" type={'button'} onClick={handlePreview}>Preview</button>
                     <button className="orange-button" type={'submit'}>Save & Continue</button>
                 </div>
 

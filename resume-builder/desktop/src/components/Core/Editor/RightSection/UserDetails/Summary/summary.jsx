@@ -33,7 +33,7 @@ class Summary extends Component {
 
 
     render() {
-        const {personalInfo: {extra_info}, ui: {loader}, handleSubmit, isEditable, editHeading, saveTitle, entityName, nextEntity} = this.props;
+        const {personalInfo: {extra_info}, ui: {loader}, handleSubmit, handlePreview, isEditable, editHeading, saveTitle, entityName, nextEntity} = this.props;
         let elem = null;
         return (
             <div>
@@ -56,7 +56,7 @@ class Summary extends Component {
                     </section>
 
                     <div className="flex-container items-right mr-20 mb-30">
-                        <button className="blue-button mr-20">Preview</button>
+                        <button className="blue-button mr-20" type={'button'} onClick={handlePreview}>Preview</button>
                         <button className="orange-button" type={'submit'}>Save & Continue</button>
                     </div>
                 </form>

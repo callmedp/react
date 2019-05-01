@@ -291,7 +291,8 @@ class Experience extends Component {
     }
 
     render() {
-        const {handleSubmit, ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity} = this.props;
+        const {handleSubmit, ui: {loader}, isEditable,
+            editHeading, saveTitle, entityName, nextEntity,handlePreview} = this.props;
 
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -313,7 +314,7 @@ class Experience extends Component {
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10">Preview</button>
+                    <button className="blue-button mr-10" type="button" onClick={handlePreview}>Preview</button>
                     <button className="orange-button" type="submit">Save & Continue</button>
                 </div>
             </form>
