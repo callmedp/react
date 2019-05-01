@@ -9,10 +9,11 @@ export default class  extends Component {
 
     render() {
         return (
-            <div className="pr">
+            <div className="">
 
                 <div className="loader">
-                    <img class="img-responsive" src={`${this.staticUrl}react/assets/images/loader.gif`}/>
+                    <img class="" src={`${this.staticUrl}react/assets/images/loader.gif`}/>
+                    
                 </div>
 
             </div>
