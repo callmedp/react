@@ -35,7 +35,7 @@ class Project extends Component {
     updateInputValue(key,e) {
         if(e.keyCode === 13){
             if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.props.headingChange(this.props.personalInfo,3,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
             }
             else{
@@ -44,7 +44,7 @@ class Project extends Component {
         }
         if(key === 'blur'){
             if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.props.headingChange(this.props.personalInfo,3,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
             }
             else{
@@ -67,12 +67,12 @@ class Project extends Component {
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
+        await this.props.bulkUpdateUserProject(values.list);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            //console.log("Came Here")
+            this.props.history.push(`/resume-builder/buy`)
         }
         else{
-            await this.props.bulkUpdateUserProject(values.list);
             this.props.updateCurrentLinkPos({currentLinkPos})
             this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
         }
@@ -150,13 +150,14 @@ class Project extends Component {
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}
                                 handleAddition={this.handleAddition}
-                                deleteProject={this.deleteAward}
+                                deleteProject={this.deleteProject}
                                 changeOrderingUp={this.changeOrderingUp}
                                 changeOrderingDown={this.changeOrderingDown}
                                 component={renderProjects}
                                 updateInputValue={this.updateInputValue}
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
+                                loader={this.props.loader.dataloader}
                                 heading ={heading}/>
                     <ul className="form">
                         <li className="form__group">
@@ -164,8 +165,7 @@ class Project extends Component {
                                 <button className="btn btn__round btn--outline" 
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
                                     type={'button'}>Preview</button>
-                                <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={(length === pos +1) ?'button' :'submit'}
-                                    onClick={(length === pos +1) ? ()=>{this.props.history.push(`/resume-builder/buy`)} : ()=>{}}>
+                                <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                     {(length === pos +1) ?"Buy" :"Save & Continue"}
                                 </button>
                             </div>

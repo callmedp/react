@@ -36,7 +36,7 @@ class Experience extends Component {
     updateInputValue(key,e) {
         if(e.keyCode === 13){
             if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.props.headingChange(this.props.personalInfo,2,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
             }
             else{
@@ -45,7 +45,7 @@ class Experience extends Component {
         }
         if(key === 'blur'){
             if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.props.headingChange(this.props.personalInfo,2,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
             }
             else{
@@ -62,12 +62,12 @@ class Experience extends Component {
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
+        await this.props.bulkUpdateUserExperience(values.list);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            //console.log("Came Here")
+            this.props.history.push(`/resume-builder/buy`)
         }
         else{
-            await this.props.bulkUpdateUserExperience(values.list);
             this.props.updateCurrentLinkPos({currentLinkPos})
             this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
         }
@@ -82,18 +82,18 @@ class Experience extends Component {
 
     handleAddition(fields, error) {
         console.log("-----",fields instanceof Array)
-        // fields.push({
-        //     "candidate_id": '',
-        //     "id": '',
-        //     "job_profile": '',
-        //     "company_name": '',
-        //     "start_date": '',
-        //     "end_date": '',
-        //     "is_working": false,
-        //     "job_location": '',
-        //     "work_description": '',
-        //     order: fields.length
-        // })
+        fields.push({
+            "candidate_id": '',
+            "id": '',
+            "job_profile": '',
+            "company_name": '',
+            "start_date": '',
+            "end_date": '',
+            "is_working": false,
+            "job_location": '',
+            "work_description": '',
+            order: fields.length
+        })
         fields.push({})
         scroller.scrollTo(`experience${fields.length -1}`, {
             duration: 800,
@@ -161,6 +161,7 @@ class Experience extends Component {
                                 updateInputValue={this.updateInputValue}
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
+                                loader={this.props.loader.dataloader}
                                 heading ={heading}/>
                     <ul className="form mt-15">
                         <li className="form__group">
@@ -168,8 +169,7 @@ class Experience extends Component {
                                 <button className="btn btn__round btn--outline" 
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
                                     type={'button'}>Preview</button>
-                                <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={(length === pos +1) ?'button' :'submit'}
-                                    onClick={(length === pos +1) ? ()=>{this.props.history.push(`/resume-builder/buy`)} : ()=>{}}>
+                                <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                     {(length === pos +1) ?"Buy" :"Save & Continue"}
                                 </button>
                             </div>

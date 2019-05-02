@@ -7,6 +7,8 @@ import * as actions from "../../../store/template/actions";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import * as profileActions from '../../../store/personalInfo/actions/index';
+import * as loaderActions from '../../../store/loader/actions/index';
+import Loader from '../../Common/Loader/loader'
 
 class EditPreview extends Component {
 
@@ -17,6 +19,7 @@ class EditPreview extends Component {
 
     componentDidMount() {
         this.props.fetchTemplate()
+        this.props.fetchLoaderStatus()
     }
 
     changeLink(id,heading){
@@ -26,6 +29,7 @@ class EditPreview extends Component {
     render() {
         return (
             <div className="edit-section">
+                {this.props.loader.mainloader ? <Loader/> :""}
                 <Header page={'edit'}/>
                 <LeftSideBar {...this.props}/>
                 <RightSection {...this.props} changeLink={this.changeLink}/>
@@ -38,7 +42,8 @@ const mapStateToProps = (state) => {
     return {
         initialValues: state.template,
         template: state.template,
-        personalInfo: state.personalInfo
+        personalInfo: state.personalInfo,
+        loader:state.loader,
     }
 };
 
@@ -71,6 +76,9 @@ const mapDispatchToProps = (dispatch) => {
             return new Promise((resolve, reject) => {
                 dispatch(profileActions.updatePersonalInfo({personalDetails, resolve, reject}));
             })
+        },
+        "fetchLoaderStatus": () => {
+            return dispatch(loaderActions.fetchLoaderStatus())
         },
     }
 };

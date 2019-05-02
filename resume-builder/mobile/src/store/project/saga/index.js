@@ -1,15 +1,22 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call} from "redux-saga/effects";
+import {takeLatest, put, call,select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
+import * as LoaderAction from '../../loader/actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 
+const getLoaderStatus = state => state.loader;
 
 function* fetchUserProject(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
+        const loader = yield select(getLoaderStatus)
+        if(!loader.mainloader){
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        }
+        
 
         if (localStorage.getItem('project')) {
 
@@ -17,6 +24,7 @@ function* fetchUserProject(action) {
                 type: Actions.SAVE_USER_PROJECT,
                 data: {list: JSON.parse(localStorage.getItem('project')) || []}
             })
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
             return;
         }
 
@@ -27,9 +35,28 @@ function* fetchUserProject(action) {
         const {data: {results}} = result;
         results.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0));
         let data = {list: results}
-
+        if(! data.list.length){
+            data = {
+                ...data,
+                ...{
+                    list: [
+                            {
+                                "candidate_id": '',
+                                "id": '',
+                                "project_name": '',
+                                "start_date": '',
+                                "end_date": '',
+                                "skills": [],
+                                "description": '',
+                                "order": 0
+                            }
+                        ]
+                }
+            };
+        }
 
         yield put({type: Actions.SAVE_USER_PROJECT, data: data})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
     } catch (e) {
         ////console.log(e);
     }
@@ -64,6 +91,7 @@ function* fetchUserProject(action) {
 
 function* bulkUpdateUserProject(action) {
     try {
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
         let {payload: {list}} = action;
 
 
@@ -74,6 +102,9 @@ function* bulkUpdateUserProject(action) {
 
         if (result['error']) {
             ////console.log(result['error']);
+        }
+        else{
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
         }
 
         ////console.log('---', result);
@@ -89,6 +120,7 @@ function* deleteUserProject(action) {
     try {
 
         const candidateId = localStorage.getItem('candidateId') || '';
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
 
         const {projectId} = action;
 
@@ -100,6 +132,9 @@ function* deleteUserProject(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_PROJECT, id: projectId});
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        
+        yield call(fetchUserProject)
 
     } catch (e) {
         ////console.log('error', e);

@@ -7,6 +7,7 @@ import {
     renderTextArea
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 import PreviewModal from "../../../Preview/previewModal";
+import DataLoader from "../../../../../Common/DataLoader/dataloader"
 
 
 class Summary extends Component {
@@ -22,7 +23,6 @@ class Summary extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchPersonalInfo()
         if (this.props.personalInfo.entity_preference_data.length) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[5].entity_text})
         }
@@ -32,7 +32,7 @@ class Summary extends Component {
     updateInputValue(key,e) {
         if(e.keyCode === 13){
             if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.props.headingChange(this.props.personalInfo,5,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
             }
             else{
@@ -42,7 +42,7 @@ class Summary extends Component {
         }
         if(key === 'blur'){
             if(e.target.value.length){
-                this.props.headingChange(this.props.personalInfo,0,e.target.value)
+                this.props.headingChange(this.props.personalInfo,5,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
             }
             else{
@@ -61,12 +61,12 @@ class Summary extends Component {
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
+        await this.props.onSubmit(values);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            //console.log("Came Here")
+            this.props.history.push(`/resume-builder/buy`)
         }
         else{
-            await this.props.onSubmit(values);
             this.props.updateCurrentLinkPos({currentLinkPos})
             this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
         }
@@ -103,8 +103,7 @@ class Summary extends Component {
                                 <button className="btn btn__round btn--outline" 
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
                                     type={'button'}>Preview</button>
-                                <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={(length === pos +1) ?'button' :'submit'}
-                                    onClick={(length === pos +1) ? ()=>{this.props.history.push(`/resume-builder/buy`)} : ()=>{}}>
+                                <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                     {(length === pos +1) ?"Buy" :"Save & Continue"}
                                 </button>
                             </div>

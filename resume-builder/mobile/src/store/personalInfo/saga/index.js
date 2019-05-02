@@ -3,6 +3,7 @@ import {Api} from './Api';
 import {takeLatest, put, call, select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
+import * as LoaderAction from '../../loader/actions/actionTypes';
 
 import moment from 'moment'
 
@@ -49,7 +50,11 @@ function* getPersonalDetails(action) {
         let {data} = result;
         data =modifyPersonalInfo(data)
         ////console.log('data');
-        yield put({type: Actions.SAVE_USER_INFO, data: data})
+        yield put({type: Actions.SAVE_USER_INFO, data: data});
+
+        yield put({type:LoaderAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
+        // yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+
     } catch (e) {
         ////console.log(e);
     }
@@ -60,7 +65,7 @@ function* updatePersonalDetails(action) {
         const {payload: {personalDetails, resolve, reject}} = action;
 
         const candidateId = localStorage.getItem('candidateId') || '';
-
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
         const result = yield call(Api.updatePersonalData, personalDetails, candidateId);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
@@ -69,6 +74,7 @@ function* updatePersonalDetails(action) {
         localStorage.removeItem('personalInfo');
 
         yield put({type: Actions.SAVE_USER_INFO, data:result['data']});
+        // yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
 
         return resolve('User Personal  Info saved successfully.');
 

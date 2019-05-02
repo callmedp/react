@@ -1,6 +1,7 @@
 import React from 'react';
 import {Field} from "redux-form";
 import {renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
+import DataLoader from "../../../../../Common/DataLoader/dataloader"
 
 const renderReferences = ({
                             fields, 
@@ -13,11 +14,13 @@ const renderReferences = ({
                             editHeading,
                             heading,
                             updateInputValue,
-                            editHeadingClick
+                            editHeadingClick,
+                            loader
                         }) => {
     return (
         
         <div className="buildResume__wrap">
+                {loader ? <DataLoader/> :""}
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                     {!editHeading ?
@@ -35,10 +38,10 @@ const renderReferences = ({
                 return (
                     <div className="form-wrap" key={index} id={`references${index}`}>
                         <div className="subHeading pb-0">
-                            <h2>{fields.get(index).reference_name || 'Refrence'}</h2>
+                            <h2>{fields.get(index).reference_name || 'Reference'}</h2>
                             <ul className="subHeading__control">
                                 <li className="subHeading__delete">
-                                    <span className="sprite icon--delete" role="button"
+                                    <span className={"sprite icon--delete " +(fields.length === 1 && !fields.get(index).id ? "hide":"")} role="button"
                                     onClick={(event) => deleteReference(index, fields, event)}></span>
                                 </li>
                                 {index == 0 ? '':
@@ -57,11 +60,6 @@ const renderReferences = ({
                         </div>
 
                         <ul className="form pb-0">
-
-                            <li className="form__group">
-                                <Field component={renderField} label={"Reference name"}  type={"text"} name={`${member}.reference_name`} prepend={true}
-                                    id={`${member}.reference_name`} iconClass={"sprite icon--project-gray"} className="form__input"/>
-                            </li>
 
                             <li className="form__group">
                                 <Field component={renderField} label={"Reference name"}  type={"text"} name={`${member}.reference_name`} prepend={true}

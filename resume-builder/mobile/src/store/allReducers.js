@@ -14,6 +14,7 @@ import {referenceReducer} from './reference/reducer/index'
 import {getProductIdsReducer} from './buy/reducer/index'
 import {templateReducer} from './template/reducer/index'
 import {sidenavReducer} from './sidenav/reducer/index'
+import {loaderReducer} from './loader/reducer/index'
 
 const allReducer = combineReducers({
         form: formReducer,
@@ -29,7 +30,8 @@ const allReducer = combineReducers({
         reference: referenceReducer,
         productIds: getProductIdsReducer,
         template: templateReducer,
-        sidenav : sidenavReducer
+        sidenav : sidenavReducer,
+        loader : loaderReducer
     })
 ;
 

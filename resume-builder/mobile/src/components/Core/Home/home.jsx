@@ -30,7 +30,7 @@ class Home extends Component {
             <div className="home">
                 <Header />
                 <Banner/>
-
+                
                 <section className="info">
                     <ul className="info__items">
                         <li className="icon--expertise"><strong>10 years</strong> of expertise in resume building</li>

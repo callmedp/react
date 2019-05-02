@@ -13,7 +13,7 @@ import './rightSection.scss'
 import queryString from 'query-string'
 import * as actions from "../../../../store/sidenav/actions";
 import {connect} from "react-redux";
-
+import DataLoader from "../../../Common/DataLoader/dataloader"
 
 class RightSection extends Component {
 
@@ -41,7 +41,6 @@ class RightSection extends Component {
     }
 
     renderSwitch() {
-
         switch (this.state.type) {
             case 'education': {
                 return <Education {...this.props}/>
@@ -81,11 +80,13 @@ class RightSection extends Component {
     render() {
         const {type} = this.state;
         return (
-            <section className="right-panel">
-                {
-                    this.renderSwitch()
-                }
-            </section>
+            <React.Fragment>
+                <section className="right-panel">
+                    {
+                        this.renderSwitch()
+                    }
+                </section>
+            </React.Fragment>
         )
     }
 

@@ -1,22 +1,28 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call} from "redux-saga/effects";
+import {takeLatest, put, call,select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
+import * as LoaderAction from '../../loader/actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 
-
+const getLoaderStatus = state => state.loader;
 
 function* fetchUserEducation(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
+        const loader = yield select(getLoaderStatus)
+        if(!loader.mainloader){
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        }
         if (localStorage.getItem('education')) {
 
             yield put({
                 type: Actions.SAVE_USER_EDUCATION,
                 data:{list: JSON.parse(localStorage.getItem('education')) || []}
             })
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
             return;
         }
 
@@ -34,7 +40,29 @@ function* fetchUserEducation(action) {
             }
         };
 
+
+        if(! data.list.length){
+            data = {
+                ...data,
+                ...{
+                    list: [
+                            {
+                            "candidate_id": '',
+                            "id": '',
+                            "specialization": '',
+                            "institution_name": '',
+                            "course_type": '',
+                            "start_date": '',
+                            "percentage_cgpa": '',
+                            "end_date": '',
+                            "is_pursuing": false,
+                            "order": 0}
+                    ]
+                }
+            };
+        }
         yield put({type: Actions.SAVE_USER_EDUCATION, data: data})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
     } catch (e) {
         ////console.log(e);
     }
@@ -64,6 +92,7 @@ function* updateUserEducation(action) {
 
 function* bulkUpdateUserEducation(action) {
     try {
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
         let {payload: {list}} = action;
 
 
@@ -74,6 +103,9 @@ function* bulkUpdateUserEducation(action) {
 
         if (result['error']) {
             ////console.log(result['error']);
+        }
+        else{
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
         }
 
         ////console.log('---', result);
@@ -89,6 +121,7 @@ function* deleteUserEducation(action) {
     try {
 
         const candidateId = localStorage.getItem('candidateId') || '';
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
 
         const {educationId} = action;
 
@@ -100,6 +133,9 @@ function* deleteUserEducation(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_EDUCATION, id: educationId});
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        yield call(fetchUserEducation)
+        
 
     } catch (e) {
         ////console.log('error', e);

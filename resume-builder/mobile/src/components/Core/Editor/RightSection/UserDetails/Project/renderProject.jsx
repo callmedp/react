@@ -1,6 +1,7 @@
 import React from 'react';
 import {Field} from "redux-form";
 import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
+import DataLoader from "../../../../../Common/DataLoader/dataloader"
 
 const renderProjects = ({
                             fields, 
@@ -13,11 +14,13 @@ const renderProjects = ({
                             editHeading,
                             heading,
                             updateInputValue,
-                            editHeadingClick
+                            editHeadingClick,
+                            loader
                         }) => {
     return (
         
         <div className="buildResume__wrap">
+                {loader ? <DataLoader/> :""}
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                     {!editHeading ?
@@ -38,7 +41,7 @@ const renderProjects = ({
                             <h2>{fields.get(index).project_name || 'Project'}</h2>
                             <ul className="subHeading__control">
                                 <li className="subHeading__delete">
-                                    <span className="sprite icon--delete" 
+                                    <span className={"sprite icon--delete " +(fields.length === 1 && !fields.get(index).id ? "hide":"")} 
                                     onClick={(event) => deleteProject(index, fields, event)}
                                     role="button"></span>
                                 </li>
@@ -72,15 +75,6 @@ const renderProjects = ({
                             <li className="form__group">
                                 <Field component={datepicker} label={"Date to"}  type={"date"} 
                                     name={`${member}.end_date`} id={`${member}.end_date`}/>
-                            </li>
-
-                            <li className="form__radio-group d-flex justify-content-end fs-14">
-                                <Field type="radio" name={`${member}.currently_working`} component="input"
-                                    className="form__radio-input" value={`${member}.currently_working`}/>
-                                <label className="form__radio-label" htmlFor="currently_working">
-                                    <span className="form__radio-button"></span>
-                                    Till today
-                                </label>
                             </li>
 
                             <li className="form__group">

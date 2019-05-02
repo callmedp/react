@@ -20,6 +20,7 @@ import {
 
 import moment from 'moment';
 import PreviewModal from "../../../Preview/previewModal";
+import DataLoader from "../../../../../Common/DataLoader/dataloader"
 
 class PersonalInfo extends Component {
     constructor(props) {
@@ -40,20 +41,25 @@ class PersonalInfo extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchPersonalInfo()
+        console.log(this.props.loader)
+        if (this.props.personalInfo.entity_preference_data.length) {
+            this.setState({heading : this.props.personalInfo.entity_preference_data[0].entity_text})
+            console.log("Came Inside")
+        }
+        
     }
 
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
+        await this.props.onSubmit(values, this.state.imageURL);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            //console.log("Came Here")
+            this.props.history.push(`/resume-builder/buy`)
         }
         else{
-            await this.props.onSubmit(values, this.state.imageURL);
             this.props.updateCurrentLinkPos({currentLinkPos})
-            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
+            //this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
         }
         
     }
@@ -84,6 +90,7 @@ class PersonalInfo extends Component {
     componentDidUpdate(prevProps) {
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[0].entity_text})
+            console.log("Came Inside")
         }
     }
 
@@ -92,6 +99,7 @@ class PersonalInfo extends Component {
             if(e.target.value.length){
                 this.props.headingChange(this.props.personalInfo,0,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
+                console.log("update value")
             }
             else{
                 this.setState({editHeading:false})
@@ -101,6 +109,7 @@ class PersonalInfo extends Component {
             if(e.target.value.length){
                 this.props.headingChange(this.props.personalInfo,0,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
+                console.log("blur value")
             }
             else{
                 this.setState({editHeading:false})
@@ -133,11 +142,13 @@ class PersonalInfo extends Component {
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {handleSubmit, personalInfo,submitting,submitSucceeded} = this.props;
         const {editHeading,heading} =this.state;
+        console.log("heading",heading)
         return (
             
         <div className="buildResume">
             <PreviewModal {...this.props}/>
             <div className="buildResume__wrap">
+            {/* {this.props.loader.dataloader ?  <DataLoader/> :""} */}
                 <div className="buildResume__heading">
                     {!editHeading ?
                         <h1>{heading}</h1>:
@@ -147,7 +158,9 @@ class PersonalInfo extends Component {
                     <i className="sprite icon--edit" onClick={()=>{this.setState({editHeading:true})}}></i>
                 </div>
                 
+                
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
+                    
                     <ul className="form">
 
                         <li className="form__group">
@@ -236,8 +249,7 @@ class PersonalInfo extends Component {
                                 <button className="btn btn__round btn--outline" 
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
                                     type={'button'}>Preview</button>
-                                <button className="btn btn__round btn__primary" disabled={submitting || submitSucceeded} type={(length === pos +1) ?'button' :'submit'}
-                                    onClick={(length === pos +1) ? ()=>{this.props.history.push(`/resume-builder/buy`)} : ()=>{}}>
+                                <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                     {(length === pos +1) ?"Buy" :"Save & Continue"}
                                 </button>
                             </div>

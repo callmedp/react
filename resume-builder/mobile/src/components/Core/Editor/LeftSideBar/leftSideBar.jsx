@@ -91,6 +91,7 @@ class LeftSideBar extends Component {
 
     }
 
+
     componentDidMount() {
         ////console.log("mount")
         this.props.fetchPersonalInfo()
@@ -103,6 +104,7 @@ class LeftSideBar extends Component {
         for (let i in this.props.sidenav.listOfLinks) {
             if (current_page === this.props.sidenav.listOfLinks[i]) {
                 found_link = true
+                console.log("Here")
                 this.props.updateCurrentLinkPos({currentLinkPos: i})
             }
         }
@@ -119,6 +121,19 @@ class LeftSideBar extends Component {
                 type: (values && values.type) || ''
             })
         }
+        if(this.props.sidenav.listOfLinks !== prevProps.sidenav.listOfLinks){
+            let current_page = this.props.location.search.split('=')[1]
+            this.setState({
+                current_page
+            })
+            for (let i in this.props.sidenav.listOfLinks) {
+                if (current_page === this.props.sidenav.listOfLinks[i]) {
+                    console.log("Here")
+                    this.props.updateCurrentLinkPos({currentLinkPos: i})
+                }
+            }
+        }
+
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data && !this.state.loaded) {
             
             this.setState({addmore: this.props.personalInfo.entity_preference_data},this.updateLink)

@@ -1,6 +1,7 @@
 import React from 'react';
 import {renderField, renderTextArea, datepicker,checkbox} from '../../../../../FormHandler/formFieldRenderer.jsx'
 import {Field} from 'redux-form';
+import DataLoader from "../../../../../Common/DataLoader/dataloader"
 
 
 const renderExperiences = ({
@@ -14,11 +15,13 @@ const renderExperiences = ({
                             editHeading,
                             heading,
                             updateInputValue,
-                            editHeadingClick
+                            editHeadingClick,
+                            loader
                             }) => {
     return (
         
         <div className="buildResume__wrap">
+                {loader ? <DataLoader/> :""}
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                     {!editHeading ?
@@ -39,7 +42,7 @@ const renderExperiences = ({
                         <h2>{fields.get(index).company_name || 'Experience'}</h2>
                         <ul className="subHeading__control">
                             <li className="subHeading__delete">
-                                <span className="sprite icon--delete"
+                                <span className={"sprite icon--delete " +(fields.length === 1 && !fields.get(index).id ? "hide":"")}
                                 onClick={(event) => deleteExperience(index, fields, event)}
                                 role="button"></span>
                             </li>
