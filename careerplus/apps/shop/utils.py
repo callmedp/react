@@ -1210,14 +1210,22 @@ class ProductValidation(object):
 
 
 def get_days_month_year(days_value=0):
-    strformat = "{}days-{}months-{}years"
+
+
+    def get_attr_repr(attr,val):
+        if not val:
+            return ""
+        repr = (attr+"s") if val > 1 else attr
+        return str(val) + repr
+
     if not days_value or not isinstance(days_value,int):
-        return strformat.format(0,0,0)
+        return ""
+
     DAYS_IN_YEAR = 365
     DAYS_IN_MONTH = 30
     years, remain = divmod(days_value, DAYS_IN_YEAR)
     months, days = divmod(remain, DAYS_IN_MONTH)
-    return strformat.format(days,months,years)
+    return get_attr_repr(years,"year") + get_attr_repr(months,"months") + get_attr_repr(days,'days')
 
 
 
