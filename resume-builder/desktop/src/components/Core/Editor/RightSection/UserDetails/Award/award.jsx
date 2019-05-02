@@ -61,7 +61,7 @@ const AwardRenderer = ({
                     <Accordion
                         onChange={(value) => handleAccordionClick(value, fields, error)}
                         allowZeroExpanded={true}
-                        preExpanded={[0,1,2,3,4,5,6,7,8,9,10]}
+                        preExpanded={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
                     >
                         {
                             fields.map((member, index) => {
@@ -149,9 +149,6 @@ class Award extends Component {
         this.handleAccordionState = this.handleAccordionState.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteAward = this.deleteAward.bind(this);
-        this.changeOrderingUp = this.changeOrderingUp.bind(this);
-        this.changeOrderingDown = this.changeOrderingDown.bind(this);
-
 
         this.state = {
             currentAccordion: 0,
@@ -168,31 +165,10 @@ class Award extends Component {
     async handleSubmit(values, entityLink) {
         const {list} = values;
         if (list.length) {
-            await this.props.onSubmit(list[list.length - 1]);
+            await this.props.bulkUpdateOrCreate(list);
             if (entityLink) this.props.history.push(entityLink);
             else this.props.history.push('/resume-builder/buy/')
         }
-    }
-
-
-    changeOrderingDown(index, fields, event) {
-        event.stopPropagation();
-        let currentItem = fields.get(index);
-        let nextItem = fields.get(index + 1);
-        currentItem['order'] = index + 1;
-        nextItem['order'] = index;
-        fields.swap(index, index + 1);
-        this.props.handleSwap([currentItem, nextItem]);
-    }
-
-    changeOrderingUp(index, fields, event) {
-        event.stopPropagation();
-        let currentItem = fields.get(index);
-        let prevItem = fields.get(index - 1);
-        currentItem['order'] = index - 1;
-        prevItem['order'] = index;
-        fields.swap(index, index - 1);
-        this.props.handleSwap([currentItem, prevItem])
     }
 
     handleAddition(fields, error) {
@@ -239,8 +215,10 @@ class Award extends Component {
 
 
     render() {
-        const {handleSubmit, ui: {loader}, saveTitle, editHeading,
-            isEditable, entityName, nextEntity, handlePreview} = this.props;
+        const {
+            handleSubmit, ui: {loader}, saveTitle, editHeading,
+            isEditable, entityName, nextEntity, handlePreview, changeOrderingDown, changeOrderingUp
+        } = this.props;
 
 
         return (
@@ -252,8 +230,8 @@ class Award extends Component {
                             handleAccordionState={this.handleAccordionState}
                             handleAddition={this.handleAddition}
                             deleteAward={this.deleteAward}
-                            changeOrderingUp={this.changeOrderingUp}
-                            changeOrderingDown={this.changeOrderingDown}
+                            changeOrderingUp={changeOrderingUp}
+                            changeOrderingDown={changeOrderingDown}
                             openedAccordion={this.state.openedAccordion}
                             component={AwardRenderer}
                             saveTitle={(event) => saveTitle(event, 6)}
@@ -306,6 +284,24 @@ const mapDispatchToProps = (dispatch) => {
         },
         "removeAward": (awardId) => {
             return dispatch(actions.deleteAward(awardId))
+        },
+
+        "bulkUpdateOrCreate": (listItems) => {
+            listItems = (listItems || []).map(userAward => {
+                const {date} = userAward;
+                if (!userAward['id']) delete userAward['id'];
+                userAward = {
+                    ...userAward,
+                    ...{
+                        date: (date && moment(date).format('YYYY-MM-DD')) || '',
+                    }
+                };
+                return userAward;
+            });
+            return new Promise((resolve, reject) => {
+                return dispatch(actions.bulkUpdateOrCreateUserCourse({list: listItems, resolve, reject}))
+            })
+
         },
 
         "handleSwap": (listItems) => {

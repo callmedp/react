@@ -62,7 +62,7 @@ const ExperienceRenderer = ({
                 <ul>
                     <Accordion onChange={(value) => handleAccordionClick(value, fields, error)}
                                allowZeroExpanded={true}
-                               preExpanded={[0,1,2,3,4,5,6,7,8,9,10]}>
+                               preExpanded={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}>
                         {
                             fields.map((member, index) => {
                                 return (
@@ -198,9 +198,6 @@ class Experience extends Component {
         this.handleAccordionState = this.handleAccordionState.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteExperience = this.deleteExperience.bind(this);
-        this.changeOrderingUp = this.changeOrderingUp.bind(this);
-        this.changeOrderingDown = this.changeOrderingDown.bind(this);
-
         this.state = {
             currentAccordion: 0,
             previousAccordion: 0,
@@ -215,32 +212,10 @@ class Experience extends Component {
     async handleSubmit(values, entityLink) {
         const {list} = values;
         if (list.length) {
-            await this.props.onSubmit(list[list.length - 1]);
+            await this.props.bulkUpdateOrCreate(list);
             if (entityLink) this.props.history.push(entityLink);
             else this.props.history.push('/resume-builder/buy/')
         }
-
-    }
-
-
-    changeOrderingDown(index, fields, event) {
-        event.stopPropagation()
-        let currentItem = fields.get(index);
-        let nextItem = fields.get(index + 1);
-        currentItem['order'] = index + 1;
-        nextItem['order'] = index;
-        fields.swap(index, index + 1);
-        this.props.handleSwap([currentItem, nextItem]);
-    }
-
-    changeOrderingUp(index, fields, event) {
-        event.stopPropagation();
-        let currentItem = fields.get(index);
-        let prevItem = fields.get(index - 1);
-        currentItem['order'] = index - 1;
-        prevItem['order'] = index;
-        fields.swap(index, index - 1)
-        this.props.handleSwap([currentItem, prevItem])
 
     }
 
@@ -292,8 +267,12 @@ class Experience extends Component {
     }
 
     render() {
-        const {handleSubmit, ui: {loader}, isEditable,
-            editHeading, saveTitle, entityName, nextEntity,handlePreview} = this.props;
+        const {
+            handleSubmit, ui: {loader}, isEditable,
+            editHeading, saveTitle, entityName, nextEntity, handlePreview,
+            changeOrderingDown, changeOrderingUp
+
+        } = this.props;
 
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -304,8 +283,8 @@ class Experience extends Component {
                             handleAccordionState={this.handleAccordionState}
                             handleAddition={this.handleAddition}
                             deleteExperience={this.deleteExperience}
-                            changeOrderingUp={this.changeOrderingUp}
-                            changeOrderingDown={this.changeOrderingDown}
+                            changeOrderingUp={changeOrderingUp}
+                            changeOrderingDown={changeOrderingDown}
                             openedAccordion={this.state.openedAccordion}
                             component={ExperienceRenderer}
                             saveTitle={(event) => saveTitle(event, 2)}
@@ -359,6 +338,24 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.deleteExperience(experienceId))
         },
 
+        "bulkUpdateOrCreate": (listItems) => {
+            listItems = (listItems || []).map(userExperience => {
+                const {start_date, end_date} = userExperience;
+                if (!userExperience['id']) delete userExperience['id'];
+                userExperience = {
+                    ...userExperience,
+                    ...{
+                        start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
+                        end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || ''
+                    }
+                };
+                return userExperience;
+            });
+            return new Promise((resolve, reject) => {
+                return dispatch(actions.bulkUpdateOrCreateUserExperience({list: listItems, resolve, reject}))
+            })
+
+        },
         "handleSwap": (listItems) => {
             listItems = (listItems || []).map(userExperience => {
                 const {start_date, end_date} = userExperience;

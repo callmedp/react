@@ -70,7 +70,7 @@ function* updateUserCourse(action) {
 
 function* handleCourseSwap(action) {
     try {
-        let {payload: {list}} = action;
+        let {payload: {list, resolve, reject}} = action;
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -79,8 +79,18 @@ function* handleCourseSwap(action) {
         const result = yield call(Api.bulkUpdateUserCourse, list, candidateId);
 
         if (result['error']) {
-            console.log(result['error']);
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+
+        let {data} = result;
+
+
+        data.sort((a, b) => a.order <= b.order);
+
+        data = {list: data};
+        yield put({type: Actions.SAVE_USER_COURSE, data: data})
+
+        return resolve('User Course  Info saved successfully.');
 
         // yield call(fetchUserLanguage)
 
@@ -117,4 +127,5 @@ export default function* watchCourse() {
     yield takeLatest(Actions.UPDATE_USER_COURSE, updateUserCourse);
     yield takeLatest(Actions.DELETE_USER_COURSE, deleteUserCourse);
     yield takeLatest(Actions.HANDLE_COURSE_SWAP, handleCourseSwap);
+    yield takeLatest(Actions.BULK_U_C_USER_COURSE, handleCourseSwap);
 }

@@ -175,8 +175,6 @@ class Skill extends Component {
         this.handleAccordionState = this.handleAccordionState.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteSkill = this.deleteSkill.bind(this);
-        this.changeOrderingUp = this.changeOrderingUp.bind(this);
-        this.changeOrderingDown = this.changeOrderingDown.bind(this);
 
         this.state = {
             currentAccordion: 0,
@@ -203,37 +201,6 @@ class Skill extends Component {
         }
     }
 
-    changeOrderingDown(index, fields, event) {
-        event.stopPropagation();
-        let currentItem = fields.get(index);
-        let nextItem = fields.get(index + 1);
-        currentItem['order'] = index + 1;
-        nextItem['order'] = index;
-        fields.remove(index)
-        fields.insert(index, currentItem)
-        fields.remove(index + 1)
-        fields.insert(index + 1, nextItem)
-        fields.swap(index, index + 1);
-
-        // this.props.handleSwap([currentItem, nextItem])
-    }
-
-    changeOrderingUp(index, fields, event) {
-        event.stopPropagation();
-        console.log('----', fields.get(index), index)
-        let currentItem = fields.get(index);
-        let prevItem = fields.get(index - 1);
-        currentItem['order'] = index - 1;
-        prevItem['order'] = index;
-        fields.remove(index)
-        fields.insert(index, currentItem)
-        fields.remove(index - 1)
-        fields.insert(index - 1, prevItem)
-        fields.swap(index, index - 1)
-        // this.props.handleSwap([currentItem, prevItem])
-
-    }
-
     handleAddition(fields, error) {
         const listLength = fields.length;
         // if (listLength) this.handleAccordionState(listLength, fields);
@@ -246,13 +213,6 @@ class Skill extends Component {
             },
             order: listLength
         });
-
-        // this.setState((state) => ({
-        //     previousAccordion: state.currentAccordion,
-        //     openedAccordion: [listLength],
-        //     currentAccordion: listLength
-        // }))
-
     }
 
     deleteSkill(index, fields, event) {
@@ -292,7 +252,8 @@ class Skill extends Component {
     render() {
         const {
             error, handleSubmit, pristine, reset, submitting, handlePreview,
-            ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity
+            ui: {loader}, isEditable, editHeading, saveTitle, entityName, nextEntity,
+            changeOrderingUp, changeOrderingDown
         } = this.props;
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -304,8 +265,8 @@ class Skill extends Component {
                     handleAccordionState={this.handleAccordionState}
                     handleAddition={this.handleAddition}
                     deleteSkill={this.deleteSkill}
-                    changeOrderingUp={this.changeOrderingUp}
-                    changeOrderingDown={this.changeOrderingDown}
+                    changeOrderingUp={changeOrderingUp}
+                    changeOrderingDown={changeOrderingDown}
                     openedAccordion={this.state.openedAccordion}
                     loader={loader}
                     component={SkillRenderer}
@@ -357,7 +318,6 @@ const mapDispatchToProps = (dispatch) => {
             })
         },
         "bulkUpdateOrCreate": (userSkills) => {
-            console.log('--s_k_i_l-', userSkills);
             userSkills = (userSkills || []).map((userSkill, index) => {
                 const {proficiency} = userSkill;
                 if (!userSkill['id']) delete userSkill['id'];
@@ -368,7 +328,6 @@ const mapDispatchToProps = (dispatch) => {
                     }
                 };
             });
-            console.log('--skills--', userSkills);
             return new Promise((resolve, reject) => {
                 return dispatch(actions.bulkUpdateOrCreateUserSkill({list: userSkills, resolve, reject}));
             })

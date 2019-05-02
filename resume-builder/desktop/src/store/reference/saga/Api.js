@@ -25,6 +25,7 @@ const updateUserReference = (data, candidateId, userReferenceId) => {
     return BaseApiService.put(`${siteDomain}/api/v1/resume/${url}`, data);
 };
 
+
 const deleteUserReference = (candidateId, referenceId) => {
 
     const url = `candidate/${candidateId}/references/${referenceId}/`;

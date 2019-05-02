@@ -101,14 +101,26 @@ function* handleSkillSwap(action) {
 
         const result = yield call(Api.bulkUpdateUserSkill, list, candidateId);
 
+
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
-        console.log('-result---', result);
-        return resolve('User Skill  Info saved successfully.');
 
-        yield put({type: Actions.SAVE_USER_SKILL, data: {list: result['data']}});
+        localStorage.removeItem('skill');
+
+        let {data: {results}} = result;
+
+        results.sort((a, b) => a.order <= b.order);
+
+        let data = {list: results};
+
+        data = modifySkill(data);
+
+
+        yield put({type: Actions.SAVE_USER_SKILL, data: data});
+
+        return resolve('User Skill  Info saved successfully.');
 
 
     } catch (e) {
@@ -137,6 +149,8 @@ function* deleteUserSkill(action) {
         // yield call(fetchUserSkill)
         yield put({type: Actions.REMOVE_SKILL, id: skillId});
 
+
+
     } catch (e) {
         console.log('error', e);
     }
@@ -146,7 +160,8 @@ function* deleteUserSkill(action) {
 export default function* watchSkill() {
     yield takeLatest(Actions.FETCH_USER_SKILL, fetchUserSkill);
     yield takeLatest(Actions.UPDATE_USER_SKILL, updateUserSkill);
-    yield takeLatest(Actions.BULK_U_C_USER_SKILL, handleSkillSwap);
     yield takeLatest(Actions.DELETE_USER_SKILL, deleteUserSkill);
     yield takeLatest(Actions.HANDLE_SKILL_SWAP, handleSkillSwap);
+        yield takeLatest(Actions.BULK_U_C_USER_SKILL, handleSkillSwap);
+
 }

@@ -2,7 +2,8 @@ import {
     FETCH_USER_EXPERIENCE,
     UPDATE_USER_EXPERIENCE,
     DELETE_USER_EXPERIENCE,
-    HANDLE_EXPERIENCE_SWAP
+    HANDLE_EXPERIENCE_SWAP,
+    BULK_U_C_USER_EXPERIENCE
 } from './actionTypes'
 
 
@@ -27,6 +28,16 @@ export const deleteExperience = (experienceId) => {
         experienceId
     }
 }
+
+
+
+export const bulkUpdateOrCreateUserExperience = (payload) => {
+    return {
+        type: BULK_U_C_USER_EXPERIENCE,
+        payload
+    }
+}
+
 
 export const handleExperienceSwap = (payload) => {
     return {

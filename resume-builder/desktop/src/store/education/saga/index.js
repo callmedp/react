@@ -96,19 +96,29 @@ function* updateUserEducation(action) {
 
 function* handleEducationSwap(action) {
     try {
-        let {payload: {list}} = action;
-
+        let {payload: {list, resolve, reject}} = action;
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
 
         const result = yield call(Api.bulkUpdateUserEducation, list, candidateId);
 
+
         if (result['error']) {
-            console.log(result['error']);
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
-        // yield call(fetchUserLanguage)
+        let {data} = result;
+
+        data.sort((a, b) => a.order <= b.order);
+
+        data = {list: data};
+
+        data = modifyEducation(data);
+
+        yield put({type: Actions.SAVE_USER_EDUCATION, data: data})
+
+        return resolve('User Education  Info saved successfully.');
 
     } catch (e) {
         console.log('error', e);
@@ -143,5 +153,6 @@ export default function* watchEducation() {
     yield takeLatest(Actions.UPDATE_USER_EDUCATION, updateUserEducation);
     yield takeLatest(Actions.DELETE_USER_EDUCATION, deleteUserEducation);
     yield takeLatest(Actions.HANDLE_EDUCATION_SWAP, handleEducationSwap);
+    yield takeLatest(Actions.BULK_U_C_USER_EDUCATION, handleEducationSwap);
 
 }

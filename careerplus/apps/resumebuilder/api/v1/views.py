@@ -336,8 +336,6 @@ class CandidateResumePreview(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
 
         candidate_id = self.kwargs.get('candidate_id', '')
         template_id = self.kwargs.get('pk', '');
@@ -364,10 +362,6 @@ class CandidateResumePreview(APIView):
              'achievements': achievements, 'references': references, 'projects': projects,
              'certifications': certifications, 'extracurricular': '', 'languages': languages,
              'current_exp': current_exp, 'latest_exp': latest_experience}).encode(encoding='UTF-8')
-
-        print('in herer');
-        HTML(string=rendered_template).write_pdf('resume_5_.pdf',
-                                                 stylesheets=[CSS(string='@page {size:A3; margin:0px}')])
 
         return Response({
             'html': rendered_template

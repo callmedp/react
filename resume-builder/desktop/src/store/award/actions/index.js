@@ -1,4 +1,5 @@
 import {FETCH_USER_AWARD, UPDATE_USER_AWARD, DELETE_USER_AWARD, HANDLE_AWARD_SWAP} from './actionTypes'
+import {BULK_U_C_USER_COURSE} from "../../course/actions/actionTypes";
 
 
 export const fetchUserAward = () => {
@@ -19,6 +20,15 @@ export const deleteAward = (languageId) => {
         languageId
     }
 }
+
+
+export const bulkUpdateOrCreateUserCourse = (payload) => {
+    return {
+        type: BULK_U_C_USER_COURSE,
+        payload
+    }
+}
+
 
 export const handleAwardSwap = (payload) => {
     return {

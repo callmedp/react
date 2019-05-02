@@ -19,7 +19,8 @@ function* fetchUserAward(action) {
             return;
         }
 
-        yield put({type: UPDATE_UI, data: {loader: true}})
+        yield put({type: UPDATE_UI, data: {loader: true}});
+
         const result = yield call(Api.fetchUserAward, candidateId);
         if (result['error']) {
             console.log('error');
@@ -72,7 +73,7 @@ function* updateUserAward(action) {
 
 function* handleAwardSwap(action) {
     try {
-        let {payload: {list}} = action;
+        let {payload: {list, resolve, reject}} = action;
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -80,9 +81,22 @@ function* handleAwardSwap(action) {
 
         const result = yield call(Api.bulkUpdateUserAward, list, candidateId);
 
+
         if (result['error']) {
-            console.log(result['error']);
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+
+
+        let {data} = result;
+
+
+        data.sort((a, b) => a.order <= b.order);
+
+        data = {list: data};
+
+        yield put({type: Actions.SAVE_USER_AWARD, data: data})
+
+        return resolve('User Award  Info saved successfully.');
 
         // yield call(fetchUserLanguage)
 
@@ -119,4 +133,5 @@ export default function* watchAward() {
     yield takeLatest(Actions.UPDATE_USER_AWARD, updateUserAward);
     yield takeLatest(Actions.DELETE_USER_AWARD, deleteUserAward);
     yield takeLatest(Actions.HANDLE_AWARD_SWAP, handleAwardSwap);
+    yield takeLatest(Actions.BULK_U_C_USER_AWARD, handleAwardSwap);
 }

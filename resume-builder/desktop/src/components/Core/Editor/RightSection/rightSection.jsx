@@ -76,6 +76,35 @@ class RightSection extends Component {
         }
     }
 
+    changeOrderingUp(index, fields, event) {
+        event.stopPropagation();
+        let currentItem = fields.get(index);
+        let prevItem = fields.get(index - 1);
+        currentItem['order'] = index - 1;
+        prevItem['order'] = index;
+        fields.remove(index)
+        fields.insert(index, currentItem)
+        fields.remove(index - 1)
+        fields.insert(index - 1, prevItem)
+        fields.swap(index, index - 1)
+        // this.props.handleSwap([currentItem, prevItem])
+    }
+
+    changeOrderingDown(index, fields, event) {
+        event.stopPropagation();
+        let currentItem = fields.get(index);
+        let nextItem = fields.get(index + 1);
+        currentItem['order'] = index + 1;
+        nextItem['order'] = index;
+        fields.remove(index)
+        fields.insert(index, currentItem)
+        fields.remove(index + 1)
+        fields.insert(index + 1, nextItem)
+        fields.swap(index, index + 1);
+
+        // this.props.handleSwap([currentItem, nextItem])
+    }
+
     renderSwitch() {
         const {entityList} = this.props;
         let entity, nextEntity;
@@ -112,6 +141,8 @@ class RightSection extends Component {
                                  editHeading={(elem) => this.editHeading(elem)}
                                  entityName={entity && entity['entity_text'] || 'Education'}
                                  nextEntity={nextEntity && nextEntity['link'] || nextEntity}
+                                 changeOrderingUp={this.changeOrderingUp}
+                                 changeOrderingDown={this.changeOrderingDown}
                                  saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
                     />
             }
@@ -131,6 +162,8 @@ class RightSection extends Component {
                                   nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                                   entityName={entity && entity['entity_text'] || 'Experience'}
                                   saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                                  changeOrderingUp={this.changeOrderingUp}
+                                  changeOrderingDown={this.changeOrderingDown}
                                   editHeading={(elem) => this.editHeading(elem)}
                     />
             }
@@ -150,6 +183,8 @@ class RightSection extends Component {
                                nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                                entityName={entity && entity['entity_text'] || 'Project'}
                                saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                               changeOrderingUp={this.changeOrderingUp}
+                               changeOrderingDown={this.changeOrderingDown}
                                editHeading={(elem) => this.editHeading(elem)}
                     />
             }
@@ -169,6 +204,8 @@ class RightSection extends Component {
                              nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                              entityName={entity && entity['entity_text'] || 'Skill'}
                              saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                             changeOrderingUp={this.changeOrderingUp}
+                             changeOrderingDown={this.changeOrderingDown}
                              editHeading={(elem) => this.editHeading(elem)}
                     />
             }
@@ -207,6 +244,8 @@ class RightSection extends Component {
                              nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                              entityName={entity && entity['entity_text'] || 'Award'}
                              saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                             changeOrderingUp={this.changeOrderingUp}
+                             changeOrderingDown={this.changeOrderingDown}
                              editHeading={(elem) => this.editHeading(elem)}
                     />
             }
@@ -226,6 +265,8 @@ class RightSection extends Component {
                               nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                               entityName={entity && entity['entity_text'] || 'Course'}
                               saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                              changeOrderingUp={this.changeOrderingUp}
+                              changeOrderingDown={this.changeOrderingDown}
                               editHeading={(elem) => this.editHeading(elem)}
                     />
             }
@@ -245,6 +286,8 @@ class RightSection extends Component {
                                 nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                                 entityName={entity && entity['entity_text'] || 'Language'}
                                 saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                                changeOrderingUp={this.changeOrderingUp}
+                                changeOrderingDown={this.changeOrderingDown}
                                 editHeading={(elem) => this.editHeading(elem)}
                     />
             }
@@ -263,6 +306,8 @@ class RightSection extends Component {
                                  nextEntity={nextEntity && nextEntity['link'] || nextEntity}
                                  entityName={entity && entity['entity_text'] || 'Reference'}
                                  saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                                 changeOrderingUp={this.changeOrderingUp}
+                                 changeOrderingDown={this.changeOrderingDown}
                                  editHeading={(elem) => this.editHeading(elem)}
                     />
             }

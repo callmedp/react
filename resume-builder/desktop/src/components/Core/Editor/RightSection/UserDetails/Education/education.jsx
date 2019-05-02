@@ -209,8 +209,6 @@ class Education extends Component {
         this.handleAccordionState = this.handleAccordionState.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteEducation = this.deleteEducation.bind(this);
-        this.changeOrderingUp = this.changeOrderingUp.bind(this);
-        this.changeOrderingDown = this.changeOrderingDown.bind(this);
 
         this.state = {
             currentAccordion: 0,
@@ -223,7 +221,7 @@ class Education extends Component {
     async handleSubmit(values, entityLink) {
         const {list} = values;
         if (list.length) {
-            await this.props.onSubmit(list[list.length - 1]);
+            await this.props.bulkUpdateOrCreate(list);
             if (entityLink) this.props.history.push(entityLink);
             else this.props.history.push('/resume-builder/buy/')
         }
@@ -232,27 +230,6 @@ class Education extends Component {
 
     componentDidMount() {
         this.props.fetchUserEducation()
-    }
-
-    changeOrderingDown(index, fields, event) {
-        event.stopPropagation()
-        let currentItem = fields.get(index);
-        let nextItem = fields.get(index + 1);
-        currentItem['order'] = index + 1;
-        nextItem['order'] = index;
-        fields.swap(index, index + 1);
-        this.props.handleSwap([currentItem, nextItem]);
-    }
-
-    changeOrderingUp(index, fields, event) {
-        event.stopPropagation();
-        let currentItem = fields.get(index);
-        let prevItem = fields.get(index - 1);
-        currentItem['order'] = index - 1;
-        prevItem['order'] = index;
-        fields.swap(index, index - 1)
-        this.props.handleSwap([currentItem, prevItem])
-
     }
 
     handleAddition(fields, error, event) {
@@ -314,7 +291,8 @@ class Education extends Component {
     render() {
         const {
             handleSubmit, ui: {loader}, saveTitle, isEditable,
-            editHeading, entityName, nextEntity, handlePreview
+            editHeading, entityName, nextEntity, handlePreview, changeOrderingUp
+            , changeOrderingDown
         } = this.props;
 
         return (
@@ -326,8 +304,8 @@ class Education extends Component {
                             handleAccordionState={this.handleAccordionState}
                             handleAddition={this.handleAddition}
                             deleteEducation={this.deleteEducation}
-                            changeOrderingUp={this.changeOrderingUp}
-                            changeOrderingDown={this.changeOrderingDown}
+                            changeOrderingUp={changeOrderingUp}
+                            changeOrderingDown={changeOrderingDown}
                             openedAccordion={this.state.openedAccordion}
                             component={EducationRenderer}
                             saveTitle={(event) => saveTitle(event, 1)}
@@ -385,7 +363,7 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.deleteEducation(educationId))
         },
 
-        "handleSwap": (listItems) => {
+        "bulkUpdateOrCreate": (listItems) => {
             listItems = (listItems || []).map(userEducation => {
                     const {start_date, end_date, course_type} = userEducation;
                     if (!userEducation['id']) delete userEducation['id'];
@@ -400,8 +378,30 @@ const mapDispatchToProps = (dispatch) => {
                     return userEducation;
                 }
             );
-            return dispatch(actions.handleEducationSwap({list: listItems}))
-        }
+            return new Promise((resolve, reject) => {
+                return dispatch(actions.bulkUpdateOrCreateUserEducation({list: listItems, resolve, reject}))
+            })
+
+        },
+
+        "handleSwap":
+            (listItems) => {
+                listItems = (listItems || []).map(userEducation => {
+                        const {start_date, end_date, course_type} = userEducation;
+                        if (!userEducation['id']) delete userEducation['id'];
+                        userEducation = {
+                            ...userEducation,
+                            ...{
+                                start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
+                                end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || '',
+                                course_type: course_type && course_type.value
+                            }
+                        };
+                        return userEducation;
+                    }
+                );
+                return dispatch(actions.handleEducationSwap({list: listItems}))
+            }
     }
 
 };
