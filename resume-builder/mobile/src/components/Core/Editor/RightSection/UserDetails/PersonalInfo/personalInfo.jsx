@@ -41,10 +41,10 @@ class PersonalInfo extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.loader)
+        // console.log(this.props.loader)
         if (this.props.personalInfo.entity_preference_data.length) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[0].entity_text})
-            console.log("Came Inside")
+            // console.log("Came Inside")
         }
         
     }
@@ -90,7 +90,7 @@ class PersonalInfo extends Component {
     componentDidUpdate(prevProps) {
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[0].entity_text})
-            console.log("Came Inside")
+            // console.log("Came Inside")
         }
     }
 
@@ -99,7 +99,7 @@ class PersonalInfo extends Component {
             if(e.target.value.length){
                 this.props.headingChange(this.props.personalInfo,0,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
-                console.log("update value")
+                // console.log("update value")
             }
             else{
                 this.setState({editHeading:false})
@@ -109,7 +109,7 @@ class PersonalInfo extends Component {
             if(e.target.value.length){
                 this.props.headingChange(this.props.personalInfo,0,e.target.value)
                 this.setState({editHeading:false,heading:e.target.value})
-                console.log("blur value")
+                // console.log("blur value")
             }
             else{
                 this.setState({editHeading:false})
@@ -142,7 +142,7 @@ class PersonalInfo extends Component {
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {handleSubmit, personalInfo,submitting,submitSucceeded} = this.props;
         const {editHeading,heading} =this.state;
-        console.log("heading",heading)
+        // console.log("heading",heading)
         return (
             
         <div className="buildResume">

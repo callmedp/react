@@ -20,7 +20,7 @@ class Buy extends Component {
 
 
      redirectToCart() {
-        console.log("Here")
+        // console.log("Here")
 
         if (!this.props.productIds[0])
             return;
@@ -39,7 +39,7 @@ class Buy extends Component {
             'add_resume': true
 
         }
-        console.log(data)
+        // console.log(data)
          this.props.addToCart(data);
         this.setState({pay_button_clicked:true})
         window.location.href = `${siteDomain}/cart`

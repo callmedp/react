@@ -135,7 +135,7 @@ export const checkbox = ({
                         }) => {
     return (
       <div className="flex items-center mv4 w-100">
-      {console.log(value)}
+      {/* {console.log(value)} */}
         <input
           {...input}
           className={className}
