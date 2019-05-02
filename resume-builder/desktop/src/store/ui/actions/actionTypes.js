@@ -1,1 +1,3 @@
-export const UPDATE_UI = 'UPDATE_UI'
+export const UPDATE_UI = 'UPDATE_UI';
+export const SHOW_TEMPLATE_MODAL = 'SHOW_TEMPLATE_MODAL';
+export const HIDE_TEMPLATE_MODAL = 'HIDE_TEMPLATE_MODAL';

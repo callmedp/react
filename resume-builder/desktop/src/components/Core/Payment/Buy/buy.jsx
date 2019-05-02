@@ -4,8 +4,11 @@ import TopBar from '../../Editor/TopBar/topBar.jsx'
 import Header from '../../../Common/Header/header.jsx'
 import Footer from '../../../Common/Footer/footer.jsx'
 import * as action from '../../../../store/buy/actions'
+import {showModal, hideModal} from "../../../../store/ui/actions"
 import {connect} from "react-redux";
 import {siteDomain} from "../../../../Utils/domains";
+import TemplateModal from '../../../Modal/tempateModal'
+
 
 export class Buy extends Component {
 
@@ -15,8 +18,7 @@ export class Buy extends Component {
             'checked': 'product1'
         }
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
-
-
+        this.showEnlargedTemplate = this.showEnlargedTemplate.bind(this)
     }
 
     componentWillMount() {
@@ -24,6 +26,10 @@ export class Buy extends Component {
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
             return;
         }
+    }
+
+    showEnlargedTemplate() {
+        this.props.showModal()
     }
 
     async redirectToCart() {
@@ -66,6 +72,7 @@ export class Buy extends Component {
         }
     }
 
+
     render() {
         return (
             /*
@@ -73,14 +80,16 @@ export class Buy extends Component {
             * */
             <div>
                 <Header/>
+                <TemplateModal {...this.props} />
                 <div className="page-container">
                     <TopBar page={'buy'}/>
                     <section className={'flex-container mt-30'}>
 
                         <section className="left-sidebar half-width pos-rel">
-                            <span className="zoom"></span>
+                            <span onClick={this.showEnlargedTemplate} className="zoom"/>
                             <div className="right-sidebar-scroll-main">
-                            <img src={`${this.staticUrl}react/assets/images/resume1_Preview.jpg`} className="img-responsive" alt=""/>
+                                <img src={`${this.staticUrl}react/assets/images/resume1_Preview.jpg`}
+                                     className="img-responsive" alt=""/>
                             </div>
 
                         </section>
@@ -91,31 +100,31 @@ export class Buy extends Component {
                                 <ul>
                                     <li>
                                         <div className="flex-container">
-	                    					<span className="choose-plann--child">
-	                    						<input type="radio" name="product1"
-                                                       checked={this.state.checked === 'product1' ? true : false}
-                                                       onChange={this.handleOnChange.bind(this, 'product1')}/>
-	                    					</span>
+            <span className="choose-plann--child">
+            <input type="radio" name="product1"
+                   checked={this.state.checked === 'product1' ? true : false}
+                   onChange={this.handleOnChange.bind(this, 'product1')}/>
+            </span>
                                             <span className="choose-plan--price">
-	                    						<p>Buy your customised resume</p>
-	                    						Rs. <strong>999/-</strong>
-	                    					</span>
+            <p>Buy your customised resume</p>
+            Rs. <strong>999/-</strong>
+            </span>
                                         </div>
                                     </li>
                                     <li className="bdr pos-rel">
                                         <div className="flex-container">
                                             <span className="choose-plan--ribbon">Recommended</span>
                                             <span className="choose-plann--child">
-	                    						<input type="radio" name="product2"
-                                                       checked={this.state.checked === 'product2' ? true : false}
-                                                       onChange={this.handleOnChange.bind(this, 'product2')}/>
-	                    					</span>
+            <input type="radio" name="product2"
+                   checked={this.state.checked === 'product2' ? true : false}
+                   onChange={this.handleOnChange.bind(this, 'product2')}/>
+            </span>
                                             <span className="choose-plan--price">
-	                    						<p>Buy all 6 customised resumes</p>
-	                    						Rs. <strong>1249/-</strong>
-	                    						<strike className="ml-10">Rs. 3499</strike>
-	                    						<span className="choose-plan--off ml-10">63% off</span>
-	                    					</span>
+            <p>Buy all 6 customised resumes</p>
+            Rs. <strong>1249/-</strong>
+            <strike className="ml-10">Rs. 3499</strike>
+            <span className="choose-plan--off ml-10">63% off</span>
+            </span>
                                         </div>
                                         <div className="carousel-box">
                                             <ul className="carousel-box--carousel">
@@ -169,7 +178,10 @@ export class Buy extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {productIds: state.productIds}
+    return {
+        productIds: state.productIds,
+        ui: state.ui
+    }
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -181,6 +193,12 @@ const mapDispatchToProps = (dispatch) => {
             return new Promise((resolve, reject) => {
                 dispatch(action.addToCart({data, resolve, reject}));
             })
+        },
+        'showModal': () => {
+            return dispatch(showModal())
+        },
+        'hideModal': () => {
+            return dispatch(hideModal())
         }
     }
 };
