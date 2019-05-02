@@ -8,7 +8,6 @@ from django.conf import settings
 class AutoLogin(object):
 
     def encode(self, email, candidateid, days=None):
-        import ipdb; ipdb.set_trace()
         key_expires = datetime.datetime.today() + datetime.timedelta(
             settings.LOGIN_TOKEN_EXPIRY if not days else days)
         inp_str = '{email}|{candidateid}|{dt}|{salt}'.format(
