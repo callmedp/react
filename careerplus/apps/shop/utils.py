@@ -371,6 +371,7 @@ class ProductModeration(object):
                 product.upc = screen.upc
                 product.product_class = screen.product_class
                 product.type_product = screen.type_product
+                product.type_flow = screen.type_flow
                 
                 product.about = screen.about
                 product.description = screen.description
@@ -460,7 +461,7 @@ class ProductModeration(object):
                         vproduct.upc = vscreen.upc
                         vproduct.product_class = vscreen.product_class
                         vproduct.type_product = vscreen.type_product
-                        
+                        vproduct.type_flow = vscreen.type_flow
                         vproduct.inr_price = vscreen.inr_price
                         vproduct.fake_inr_price = vscreen.fake_inr_price
                         vproduct.usd_price = vscreen.usd_price
