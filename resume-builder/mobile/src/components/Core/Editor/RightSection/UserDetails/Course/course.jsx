@@ -26,9 +26,10 @@ class Course extends Component {
     }
     
     componentDidMount() {
+        console.log("Inside Course")
         this.props.fetchUserCourse()
         if (this.props.personalInfo.entity_preference_data.length) {
-            this.setState({heading : this.props.personalInfo.entity_preference_data[8].entity_text})
+            this.setState({heading : this.props.personalInfo.entity_preference_data[7].entity_text})
         }
     }
 

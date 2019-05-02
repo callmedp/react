@@ -12,26 +12,20 @@ import {SubmissionError} from 'redux-form'
 import {interestList} from '../../../Utils/interestList'
 
 function modifyPersonalInfo(data) {
-    const {date_of_birth, gender, extracurricular ,entity_preference_data} = data;
-
-        data = {
+    const {date_of_birth, gender, extracurricular} = data;
+    let newData = {
             ...data,
             ...{
-                date_of_birth: date_of_birth && moment(date_of_birth).format('YYYY-MM-DD') || '',
-                extracurricular: extracurricular.split(',').map(key => interestList[key]),
-                entity_preference_data :entity_preference_data.map((obj,key) => {
-                                                    if(obj.entity_id ===1 || obj.entity_id === 2 || obj.entity_id === 5){
-                                                        obj.active =true
-                                                    }
-                                                    return obj;
-                                                })
-            }
+                "date_of_birth": (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
+                "extracurricular": (extracurricular||'').split(',').map(key => interestList[key])
+                }
         }
-    return data;
+    return newData;
 }
 
 function* getPersonalDetails(action) {
     try {
+        console.log("Came inside personal")
         const candidateId = localStorage.getItem('candidateId') || '';
 
         if (localStorage.getItem('personalInfo')) {
@@ -40,6 +34,7 @@ function* getPersonalDetails(action) {
                 type: Actions.SAVE_USER_INFO,
                 data: modifyPersonalInfo(JSON.parse(localStorage.getItem('personalInfo')) || [])
             })
+            yield put({type:LoaderAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
             return;
         }
 
@@ -49,6 +44,7 @@ function* getPersonalDetails(action) {
         }
         let {data} = result;
         data =modifyPersonalInfo(data)
+        console.log('in ehrer');
         ////console.log('data');
         yield put({type: Actions.SAVE_USER_INFO, data: data});
 

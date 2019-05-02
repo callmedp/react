@@ -20,8 +20,20 @@ function* fetchUserEducation(action) {
 
             yield put({
                 type: Actions.SAVE_USER_EDUCATION,
-                data:{list: JSON.parse(localStorage.getItem('education')) || []}
-            })
+                data:{list: JSON.parse(localStorage.getItem('education'))
+                 || [
+                    {
+                    "candidate_id": '',
+                    "id": '',
+                    "specialization": '',
+                    "institution_name": '',
+                    "course_type": '',
+                    "start_date": '',
+                    "percentage_cgpa": '',
+                    "end_date": '',
+                    "is_pursuing": false,
+                    "order": 0}
+            ]}})
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
             return;
         }
