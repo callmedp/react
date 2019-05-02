@@ -372,6 +372,7 @@ class ProductModeration(object):
                 product.product_class = screen.product_class
                 product.type_product = screen.type_product
                 product.type_flow = screen.type_flow
+                product.sub_type_flow = screen.sub_type_flow
                 
                 product.about = screen.about
                 product.description = screen.description
