@@ -105,7 +105,11 @@ function* handleSkillSwap(action) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
+        console.log('-result---', result);
         return resolve('User Skill  Info saved successfully.');
+
+        yield put({type: Actions.SAVE_USER_SKILL, data: {list: result['data']}});
+
 
     } catch (e) {
         console.log('error', e);

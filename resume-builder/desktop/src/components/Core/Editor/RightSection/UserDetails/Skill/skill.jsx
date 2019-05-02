@@ -43,6 +43,7 @@ const SkillRenderer = ({
                            arrayList
                        }) => {
     let elem = null;
+    console.log('--field-', fields.getAll());
     return (
         <div>
             {/*{!!loader &&*/}
@@ -181,7 +182,6 @@ class Skill extends Component {
             currentAccordion: 0,
             previousAccordion: [0],
             openedAccordion: [0],
-            arrayList: []
         }
     }
 
@@ -209,7 +209,12 @@ class Skill extends Component {
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;
         nextItem['order'] = index;
+        fields.remove(index)
+        fields.insert(index, currentItem)
+        fields.remove(index + 1)
+        fields.insert(index + 1, nextItem)
         fields.swap(index, index + 1);
+
         // this.props.handleSwap([currentItem, nextItem])
     }
 
@@ -220,8 +225,12 @@ class Skill extends Component {
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
         prevItem['order'] = index;
-        fields.swap(index, index - 1);
-        //this.props.handleSwap([currentItem, prevItem])
+        fields.remove(index)
+        fields.insert(index, currentItem)
+        fields.remove(index - 1)
+        fields.insert(index - 1, prevItem)
+        fields.swap(index, index - 1)
+        // this.props.handleSwap([currentItem, prevItem])
 
     }
 
@@ -236,13 +245,13 @@ class Skill extends Component {
                 value: 5, 'label': '5'
             },
             order: listLength
-        })
+        });
 
-        this.setState((state) => ({
-            previousAccordion: state.currentAccordion,
-            openedAccordion: [listLength],
-            currentAccordion: listLength
-        }))
+        // this.setState((state) => ({
+        //     previousAccordion: state.currentAccordion,
+        //     openedAccordion: [listLength],
+        //     currentAccordion: listLength
+        // }))
 
     }
 
@@ -348,17 +357,18 @@ const mapDispatchToProps = (dispatch) => {
             })
         },
         "bulkUpdateOrCreate": (userSkills) => {
-            userSkills = (userSkills || []).map((userSkill) => {
+            console.log('--s_k_i_l-', userSkills);
+            userSkills = (userSkills || []).map((userSkill, index) => {
                 const {proficiency} = userSkill;
                 if (!userSkill['id']) delete userSkill['id'];
                 return {
                     ...userSkill,
                     ...{
-                        proficiency: proficiency && proficiency.value
+                        proficiency: proficiency && proficiency.value,
                     }
-                }
-                    ;
+                };
             });
+            console.log('--skills--', userSkills);
             return new Promise((resolve, reject) => {
                 return dispatch(actions.bulkUpdateOrCreateUserSkill({list: userSkills, resolve, reject}));
             })
