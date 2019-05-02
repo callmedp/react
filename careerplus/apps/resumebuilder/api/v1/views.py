@@ -336,7 +336,6 @@ class CandidateResumePreview(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
-
         candidate_id = self.kwargs.get('candidate_id', '')
         template_id = self.kwargs.get('pk', '');
 
@@ -356,11 +355,8 @@ class CandidateResumePreview(APIView):
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
         latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
 
-<<<<<<< HEAD
         template = get_template('resume{}_preview.html'.format(template_id))
-=======
-        template = get_template('resume{}_Preview.html'.format(template_id))
->>>>>>> added preview templates
+
         rendered_template = template.render(
             {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
              'achievements': achievements, 'references': references, 'projects': projects,

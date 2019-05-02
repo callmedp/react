@@ -64,7 +64,8 @@ const LanguageRenderer = ({
             </section>
             <section className="right-sidebar-scroll">
                 <ul>
-                    <Accordion onChange={(value) => handleAccordionClick(value, fields, submitFailed)}
+                    <Accordion
+                        // onChange={(value) => handleAccordionClick(value, fields, submitFailed)}
                                allowZeroExpanded={true}
                                preExpanded={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}>
                         {fields.map((member, index) => {
