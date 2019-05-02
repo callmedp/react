@@ -53,7 +53,7 @@ function* getPersonalDetails(action) {
         yield put({type: Actions.SAVE_USER_INFO, data: data});
 
         yield put({type:LoaderAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        // yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
 
     } catch (e) {
         ////console.log(e);
@@ -74,7 +74,7 @@ function* updatePersonalDetails(action) {
         localStorage.removeItem('personalInfo');
 
         yield put({type: Actions.SAVE_USER_INFO, data:result['data']});
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        // yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
 
         return resolve('User Personal  Info saved successfully.');
 

@@ -148,7 +148,7 @@ class PersonalInfo extends Component {
         <div className="buildResume">
             <PreviewModal {...this.props}/>
             <div className="buildResume__wrap">
-            {this.props.loader.dataloader ? {/* <DataLoader/> */} :""}
+            {/* {this.props.loader.dataloader ?  <DataLoader/> :""} */}
                 <div className="buildResume__heading">
                     {!editHeading ?
                         <h1>{heading}</h1>:

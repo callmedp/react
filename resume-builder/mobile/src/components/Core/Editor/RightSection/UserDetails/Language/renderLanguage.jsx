@@ -14,12 +14,13 @@ const renderLanguage = ({
                             editHeading,
                             heading,
                             updateInputValue,
-                            editHeadingClick
+                            editHeadingClick,
+                            loader
                         }) => {
     return (
         
         <div className="buildResume__wrap pb-0">
-            {/* <DataLoader/> */}
+            {loader ? <DataLoader/> :""}
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                     {!editHeading ?
@@ -40,7 +41,7 @@ const renderLanguage = ({
                             <h2>{fields.get(index).name || 'Language'}</h2>
                             <ul className="subHeading__control">
                                 <li className="subHeading__delete">
-                                    <span  className={"sprite icon--delete " +(fields.get(index).id ? "":"hide")}
+                                    <span  className={"sprite icon--delete " +(fields.length === 1 && !fields.get(index).id ? "hide":"")}
                                      onClick={(event) => deleteLanguage(index, fields, event)}
                                      role="button"></span>
                                 </li>

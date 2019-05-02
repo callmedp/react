@@ -1,19 +1,26 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call} from "redux-saga/effects";
+import {takeLatest, put, call,select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
+import * as LoaderAction from '../../loader/actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 
+const getLoaderStatus = state => state.loader;
 
 function* fetchUserReference(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
+        const loader = yield select(getLoaderStatus)
+        if(!loader.mainloader){
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        }
 
         if (localStorage.getItem('reference')) {
 
             yield put({type: Actions.SAVE_USER_REFERENCE, data: {list:JSON.parse(localStorage.getItem('reference')) || []}})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
             return;
         }
 
@@ -42,6 +49,7 @@ function* fetchUserReference(action) {
             };
         }
         yield put({type: Actions.SAVE_USER_REFERENCE, data: data})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
     } catch (e) {
         ////console.log(e);
     }
@@ -77,6 +85,7 @@ function* updateUserReference(action) {
 function* bulkUpdateUserReference(action) {
     try {
         let {payload: {list}} = action;
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -87,7 +96,9 @@ function* bulkUpdateUserReference(action) {
         if (result['error']) {
             ////console.log(result['error']);
         }
-
+        else{
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        }
         ////console.log('---', result);
         // yield call(fetchUserLanguage)
 
@@ -101,6 +112,7 @@ function* deleteUserReference(action) {
     try {
 
         const candidateId = localStorage.getItem('candidateId') || '';
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
 
         const {referenceId} = action;
 
@@ -112,6 +124,7 @@ function* deleteUserReference(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_REFERENCE, id: referenceId});
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
         yield call(fetchUserReference)
 
     } catch (e) {

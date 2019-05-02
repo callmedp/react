@@ -157,6 +157,7 @@ class References extends Component {
                                 updateInputValue={this.updateInputValue}
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
+                                loader={this.props.loader.dataloader}
                                 heading ={heading}/>
                     <ul className="form">
                         <li className="form__group">

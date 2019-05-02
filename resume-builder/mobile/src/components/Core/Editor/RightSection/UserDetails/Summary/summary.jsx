@@ -23,7 +23,6 @@ class Summary extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchPersonalInfo()
         if (this.props.personalInfo.entity_preference_data.length) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[5].entity_text})
         }
@@ -83,7 +82,6 @@ class Summary extends Component {
         <div className="buildResume">
             <PreviewModal {...this.props}/>
             <div className="buildResume__wrap pb-0">
-                {/* <DataLoader/> */}
                 <div className="buildResume__heading">
                     {!editHeading ?
                         <h1>{heading}</h1>:

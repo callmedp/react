@@ -20,8 +20,8 @@ export const renderAwards = ({
     return (
         
         <div className="buildResume__wrap">
-                {/* {this.props.loader.mainloader ? {/* <DataLoader/> */} :""} */}
-            <div className="buildResume__heading heading">
+            
+            {loader ? <DataLoader/> :""}<div className="buildResume__heading heading">
                 <div className="heading__info">
                     {!editHeading ?
                         <h1>{heading}</h1>:
@@ -43,7 +43,7 @@ export const renderAwards = ({
                         
                         <ul className="subHeading__control">
                             <li className="subHeading__delete">
-                                <span className={"sprite icon--delete " +(fields.get(index).id ? "":"hide")}  role="button"
+                                <span className={"sprite icon--delete " +(fields.length === 1 && !fields.get(index).id ? "hide":"")}  role="button"
                                     onClick={(event) => deleteAward(index, fields, event)}></span>
                             </li>
                             {index == 0 ? '':

@@ -1,19 +1,26 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call} from "redux-saga/effects";
+import {takeLatest, put, call,select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
+import * as LoaderAction from '../../loader/actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 
+const getLoaderStatus = state => state.loader;
 
 function* fetchUserAward(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
+        const loader = yield select(getLoaderStatus)
+        if(!loader.mainloader){
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        }
 
         if (localStorage.getItem('award')) {
 
             yield put({type: Actions.SAVE_USER_AWARD, data: JSON.parse(localStorage.getItem('award')) || []})
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
             return;
         }
         
@@ -45,6 +52,7 @@ function* fetchUserAward(action) {
         }
         ////console.log('---', data);
         yield put({type: Actions.SAVE_USER_AWARD, data: data})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
     } catch (e) {
         ////console.log(e);
     }
@@ -79,14 +87,17 @@ function* bulkUpdateUserAward(action) {
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
-
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
 
         const result = yield call(Api.bulkUpdateUserAward, list, candidateId);
 
         if (result['error']) {
             ////console.log(result['error']);
         }
-
+        else{
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        }
+        
         ////console.log('---', result);
         // yield call(fetchUserLanguage)
 
@@ -100,6 +111,7 @@ function* deleteUserAward(action) {
     try {
 
         const candidateId = localStorage.getItem('candidateId') || '';
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
 
         const {awardId} = action;
 
@@ -111,6 +123,7 @@ function* deleteUserAward(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_AWARD, id: awardId});
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
         yield call(fetchUserAward)
         
 

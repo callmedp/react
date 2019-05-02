@@ -14,12 +14,13 @@ const renderReferences = ({
                             editHeading,
                             heading,
                             updateInputValue,
-                            editHeadingClick
+                            editHeadingClick,
+                            loader
                         }) => {
     return (
         
         <div className="buildResume__wrap">
-                {/* <DataLoader/> */}
+                {loader ? <DataLoader/> :""}
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                     {!editHeading ?
@@ -37,10 +38,10 @@ const renderReferences = ({
                 return (
                     <div className="form-wrap" key={index} id={`references${index}`}>
                         <div className="subHeading pb-0">
-                            <h2>{fields.get(index).reference_name || 'Refrence'}</h2>
+                            <h2>{fields.get(index).reference_name || 'Reference'}</h2>
                             <ul className="subHeading__control">
                                 <li className="subHeading__delete">
-                                    <span className={"sprite icon--delete " +(fields.get(index).id ? "":"hide")} role="button"
+                                    <span className={"sprite icon--delete " +(fields.length === 1 && !fields.get(index).id ? "hide":"")} role="button"
                                     onClick={(event) => deleteReference(index, fields, event)}></span>
                                 </li>
                                 {index == 0 ? '':

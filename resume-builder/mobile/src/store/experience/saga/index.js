@@ -1,22 +1,30 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call} from "redux-saga/effects";
+import {takeLatest, put, call,select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
+import * as LoaderAction from '../../loader/actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 
+const getLoaderStatus = state => state.loader;
 
 function* fetchUserExperience(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
+        const loader = yield select(getLoaderStatus)
+        if(!loader.mainloader){
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
+        }
 
         if (localStorage.getItem('experience')) {
 
             yield put({
                 type: Actions.SAVE_USER_EXPERIENCE,
                 data: {list: JSON.parse(localStorage.getItem('experience')) || []}
+                
             })
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
             return;
         }
 
@@ -49,6 +57,7 @@ function* fetchUserExperience(action) {
             };
         }
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: data})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
     } catch (e) {
         ////console.log(e);
     }
@@ -82,6 +91,7 @@ function* updateUserExperience(action) {
 
 function* bulkUserExperienceUpdate(action) {
     try {
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
         let {payload: {list}} = action;
 
 
@@ -92,6 +102,9 @@ function* bulkUserExperienceUpdate(action) {
 
         if (result['error']) {
             ////console.log(result['error']);
+        }
+        else{
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
         }
 
         ////console.log('---', result);
@@ -107,6 +120,7 @@ function* deleteUserExperience(action) {
     try {
 
         const candidateId = localStorage.getItem('candidateId') || '';
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
 
         const {experienceId} = action;
 
@@ -118,6 +132,7 @@ function* deleteUserExperience(action) {
         }
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_EXPERIENCE, id: experienceId});
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
         yield call(fetchUserExperience)
         
 

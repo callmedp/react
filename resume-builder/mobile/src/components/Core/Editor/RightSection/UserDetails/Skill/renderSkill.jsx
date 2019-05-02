@@ -15,12 +15,13 @@ const renderSkills = ({
                         editHeading,
                         heading,
                         updateInputValue,
-                        editHeadingClick
+                        editHeadingClick,
+                        loader
                     }) => {
     return (
         <React.Fragment>
             <div className="buildResume__wrap pb-0">
-                {/* <DataLoader/> */}
+                {loader ? <DataLoader/> :""}
                 <div className="buildResume__heading heading">
                     <div className="heading__info">
                         {!editHeading ?
@@ -42,7 +43,7 @@ const renderSkills = ({
                             <ul className="subHeading__control">
                                 <li className="subHeading__delete">
                                     <span onClick={(event) => deleteSkill(index, fields, event)}
-                                     className={"sprite icon--delete " +(fields.get(index).id ? "":"hide")} role="button"></span>
+                                     className={"sprite icon--delete " +(fields.length === 1 && !fields.get(index).id ? "hide":"")} role="button"></span>
                                 </li>
                                 {index == 0 ? '':
                                     <li className="subHeading__btn"

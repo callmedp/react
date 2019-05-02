@@ -161,6 +161,7 @@ class Experience extends Component {
                                 updateInputValue={this.updateInputValue}
                                 editHeading={editHeading}
                                 editHeadingClick={this.editHeadingClick}
+                                loader={this.props.loader.dataloader}
                                 heading ={heading}/>
                     <ul className="form mt-15">
                         <li className="form__group">

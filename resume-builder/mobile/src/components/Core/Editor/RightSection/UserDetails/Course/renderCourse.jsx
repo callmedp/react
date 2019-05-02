@@ -14,12 +14,13 @@ const renderCourse = ({
                         editHeading,
                         heading,
                         updateInputValue,
+                        loader,
                         editHeadingClick}) => 
 {
     return (
         
         <div className="buildResume__wrap">
-                {/* <DataLoader/> */}
+                {loader ? <DataLoader/> : ""}
             <div className="buildResume__heading heading">
                 <div className="heading__info">
                     {!editHeading ?
@@ -40,7 +41,7 @@ const renderCourse = ({
                         <h2>{fields.get(index).name_of_certification || 'New Course'}</h2>
                         <ul className="subHeading__control">
                             <li className="subHeading__delete">
-                                <span className={"sprite icon--delete " +(fields.get(index).id ? "":"hide")}
+                                <span className={"sprite icon--delete " +(fields.length === 1 && !fields.get(index).id ? "hide":"")}
                                 onClick={(event) => deleteCourse(index, fields, event)}
                                 role="button"></span>
                             </li>
