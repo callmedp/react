@@ -22,7 +22,19 @@ function* fetchUserProject(action) {
 
             yield put({
                 type: Actions.SAVE_USER_PROJECT,
-                data: {list: JSON.parse(localStorage.getItem('project')) || []}
+                data: {list: JSON.parse(localStorage.getItem('project'))
+                 || [
+                    {
+                        "candidate_id": '',
+                        "id": '',
+                        "project_name": '',
+                        "start_date": '',
+                        "end_date": '',
+                        "skills": [],
+                        "description": '',
+                        "order": 0
+                    }
+                ]}
             })
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
             return;

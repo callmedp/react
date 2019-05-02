@@ -40,8 +40,8 @@ class References extends Component {
 
     componentDidMount() {
         this.props.fetchUserReference()
-        console.log("Here")
-        console.log("----",this.props.sidenav.currentLinkPos)
+        // console.log("Here")
+        // console.log("----",this.props.sidenav.currentLinkPos)
         if (this.props.personalInfo.entity_preference_data.length) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[9].entity_text})
         }

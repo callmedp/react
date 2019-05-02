@@ -93,7 +93,7 @@ class Skill extends Component {
     }
 
     async handleSubmit(values) {
-        console.log("In Submit")
+        // console.log("In Submit")
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
         await this.props.bulkSaveUserSkill(values.list);

@@ -20,7 +20,16 @@ function* fetchUserSkill(action) {
         if (localStorage.getItem('skill')) {
             yield put({
                 type: Actions.SAVE_USER_SKILL,
-                data: {list: JSON.parse(localStorage.getItem('skill')) || []}
+                data: {list: JSON.parse(localStorage.getItem('skill')) 
+                || [
+                    {
+                        "candidate_id": '',
+                        "id": '',
+                        "name": '',
+                        "proficiency": '',
+                        "order": 0
+                    }
+                ]}
             });
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
             return;

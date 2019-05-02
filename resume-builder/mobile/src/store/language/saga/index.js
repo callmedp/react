@@ -20,7 +20,16 @@ function* fetchUserLanguage(action) {
 
             yield put({
                 type: Actions.SAVE_USER_LANGUAGE,
-                data: {list: JSON.parse(localStorage.getItem('language')) || []}
+                data: {list: JSON.parse(localStorage.getItem('language')) || 
+                [
+                    {
+                        "candidate_id": '',
+                        "id": '',
+                        "name": '',
+                        "proficiency": '',
+                        "order": 0
+                    }
+                ]}
             });
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
             return;
