@@ -62,7 +62,7 @@ const ProjectRenderer = ({
                 <ul>
                     <Accordion onChange={(value) => handleAccordionClick(value, fields, error)}
                                allowZeroExpanded={true}
-                               preExpanded={[0,1,2,3,4,5,6,7,8,9,10]}>
+                               preExpanded={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}>
                         {
                             fields.map((member, index) => {
                                 return (
@@ -169,9 +169,7 @@ class Project extends Component {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
-        this.changeOrderingDown = this.changeOrderingDown.bind(this);
         this.deleteProject = this.deleteProject.bind(this);
-        this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
         this.handleAccordionState = this.handleAccordionState.bind(this);
 
@@ -191,32 +189,10 @@ class Project extends Component {
     async handleSubmit(values, entityLink) {
         const {list} = values;
         if (list.length) {
-            await this.props.onSubmit(list[list.length - 1]);
+            await this.props.bulkUpdateOrCreate(list);
             if (entityLink) this.props.history.push(entityLink);
             else this.props.history.push('/resume-builder/buy/')
         }
-
-    }
-
-
-    changeOrderingDown(index, fields, event) {
-        event.stopPropagation();
-        let currentItem = fields.get(index);
-        let nextItem = fields.get(index + 1);
-        currentItem['order'] = index + 1;
-        nextItem['order'] = index;
-        fields.swap(index, index + 1);
-        this.props.handleSwap([currentItem, nextItem])
-    }
-
-    changeOrderingUp(index, fields, event) {
-        event.stopPropagation();
-        let currentItem = fields.get(index);
-        let prevItem = fields.get(index - 1);
-        currentItem['order'] = index - 1;
-        prevItem['order'] = index;
-        fields.swap(index, index - 1);
-        this.props.handleSwap([currentItem, prevItem])
 
     }
 
@@ -272,7 +248,8 @@ class Project extends Component {
     render() {
         const {
             handleSubmit, ui: {loader}, saveTitle,
-            editHeading, isEditable, entityName, nextEntity, handlePreview
+            editHeading, isEditable, entityName, nextEntity,
+            handlePreview, changeOrderingDown, changeOrderingUp
         } = this.props;
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -283,8 +260,8 @@ class Project extends Component {
                     handleAccordionState={this.handleAccordionState}
                     handleAddition={this.handleAddition}
                     deleteProject={this.deleteProject}
-                    changeOrderingUp={this.changeOrderingUp}
-                    changeOrderingDown={this.changeOrderingDown}
+                    changeOrderingUp={changeOrderingUp}
+                    changeOrderingDown={changeOrderingDown}
                     openedAccordion={this.state.openedAccordion}
                     loader={loader}
                     component={ProjectRenderer}
@@ -340,6 +317,26 @@ const mapDispatchToProps = (dispatch) => {
         },
         "removeProject": (projectId) => {
             return dispatch(actions.deleteProject(projectId))
+        },
+
+
+        "bulkUpdateOrCreate": (listItems) => {
+            listItems = (listItems || []).map(userProject => {
+                const {start_date, end_date} = userProject;
+                if (!userProject['id']) delete userProject['id'];
+                userProject = {
+                    ...userProject,
+                    ...{
+                        start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
+                        end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || ''
+                    }
+                };
+                return userProject;
+            });
+            return new Promise((resolve, reject) => {
+                return dispatch(actions.bulkUpdateOrCreateUserProject({list: listItems, resolve, reject}))
+            })
+
         },
 
         "handleSwap": (listItems) => {

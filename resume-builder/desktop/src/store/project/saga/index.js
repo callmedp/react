@@ -81,7 +81,9 @@ function* updateUserProject(action) {
 
 function* handleProjectSwap(action) {
     try {
-        let {payload: {list}} = action;
+
+
+        let {payload: {list, resolve, reject}} = action;
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -89,11 +91,22 @@ function* handleProjectSwap(action) {
 
         const result = yield call(Api.bulkUpdateUserProject, list, candidateId);
 
-        if (result['error']) {
-            console.log(result['error']);
-        }
 
-        // yield call(fetchUserLanguage)
+        if (result['error']) {
+            return reject(new SubmissionError({_error: result['errorMessage']}));
+        }
+        let {data} = result;
+
+        data.sort((a, b) => a.order <= b.order);
+
+        data = {list: data}
+
+
+        yield put({type: Actions.SAVE_USER_PROJECT, data: data})
+
+
+        return resolve('User Education  Info saved successfully.');
+
 
     } catch (e) {
         console.log('error', e);
@@ -128,5 +141,6 @@ export default function* watchProject() {
     yield takeLatest(Actions.UPDATE_USER_PROJECT, updateUserProject);
     yield takeLatest(Actions.DELETE_USER_PROJECT, deleteUserProject);
     yield takeLatest(Actions.HANDLE_PROJECT_SWAP, handleProjectSwap);
+    yield takeLatest(Actions.BULK_U_C_USER_PROJECT, handleProjectSwap);
 
 }

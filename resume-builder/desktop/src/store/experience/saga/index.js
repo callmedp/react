@@ -1,6 +1,6 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call,select} from "redux-saga/effects";
+import {takeLatest, put, call, select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
@@ -79,7 +79,7 @@ function* updateUserExperience(action) {
 
 function* handleExperienceSwap(action) {
     try {
-        let {payload: {list}} = action;
+        let {payload: {list, resolve, reject}} = action;
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -88,10 +88,18 @@ function* handleExperienceSwap(action) {
         const result = yield call(Api.bulkUpdateUserExperience, list, candidateId);
 
         if (result['error']) {
-            console.log(result['error']);
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
-        // yield call(fetchUserLanguage)
+        let {data} = result;
+
+        data.sort((a, b) => a.order <= b.order);
+
+        data = {list: data};
+        yield put({type: Actions.SAVE_USER_EXPERIENCE, data: data})
+
+        return resolve('User Experience  Info saved successfully.');
+
 
     } catch (e) {
         console.log('error', e);
@@ -125,4 +133,5 @@ export default function* watchExperience() {
     yield takeLatest(Actions.UPDATE_USER_EXPERIENCE, updateUserExperience);
     yield takeLatest(Actions.DELETE_USER_EXPERIENCE, deleteUserExperience);
     yield takeLatest(Actions.HANDLE_EXPERIENCE_SWAP, handleExperienceSwap);
+    yield takeLatest(Actions.BULK_U_C_USER_EXPERIENCE, handleExperienceSwap);
 }

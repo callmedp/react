@@ -1,4 +1,7 @@
-import {FETCH_USER_EDUCATION, UPDATE_USER_EDUCATION, HANDLE_EDUCATION_SWAP, DELETE_USER_EDUCATION} from './actionTypes'
+import {
+    FETCH_USER_EDUCATION, UPDATE_USER_EDUCATION, BULK_U_C_USER_EDUCATION,
+    HANDLE_EDUCATION_SWAP, DELETE_USER_EDUCATION
+} from './actionTypes'
 
 
 export const fetchUserEducation = () => {
@@ -21,6 +24,15 @@ export const deleteEducation = (educationId) => {
         educationId
     }
 }
+
+
+export const bulkUpdateOrCreateUserEducation = (payload) => {
+    return {
+        type: BULK_U_C_USER_EDUCATION,
+        payload
+    }
+}
+
 
 export const handleEducationSwap = (payload) => {
     return {

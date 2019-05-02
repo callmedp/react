@@ -66,7 +66,7 @@ const ReferenceRenderer = ({
                         <Accordion
                             onChange={(value) => handleAccordionClick(value, fields)}
                             allowZeroExpanded={true}
-                            preExpanded={[0,1,2,3,4,5,6,7,8,9,10]}>
+                            preExpanded={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}>
                             {
                                 fields.map((member, index) => {
                                     return (
@@ -164,8 +164,6 @@ class Reference extends Component {
         this.handleAccordionState = this.handleAccordionState.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteReference = this.deleteReference.bind(this);
-        this.changeOrderingUp = this.changeOrderingUp.bind(this);
-        this.changeOrderingDown = this.changeOrderingDown.bind(this);
 
         this.state = {
             currentAccordion: 0,
@@ -177,7 +175,7 @@ class Reference extends Component {
     async handleSubmit(values, entityLink) {
         const {list} = values;
         if (list.length) {
-            await this.props.onSubmit(list[list.length - 1]);
+            await this.props.bulkUpdateOrCreate(list);
             if (entityLink) this.props.history.push(entityLink);
             else this.props.history.push('/resume-builder/buy/')
         }
@@ -187,27 +185,6 @@ class Reference extends Component {
         this.props.fetchUserReference()
     }
 
-
-    changeOrderingDown(index, fields, event) {
-        event.stopPropagation();
-        let currentItem = fields.get(index);
-        let nextItem = fields.get(index + 1);
-        currentItem['order'] = index + 1;
-        nextItem['order'] = index;
-        fields.swap(index, index + 1);
-        this.props.handleSwap([currentItem, nextItem]);
-    }
-
-    changeOrderingUp(index, fields, event) {
-        event.stopPropagation();
-        let currentItem = fields.get(index);
-        let prevItem = fields.get(index - 1);
-        currentItem['order'] = index - 1;
-        prevItem['order'] = index;
-        fields.swap(index, index - 1);
-        this.props.handleSwap([currentItem, prevItem])
-
-    }
 
     handleAddition(fields, error) {
         const listLength = fields.length;
@@ -258,8 +235,8 @@ class Reference extends Component {
 
     render() {
         const {
-            handleSubmit, ui: {loader}, isEditable,
-            editHeading, saveTitle, entityName, nextEntity, handlePreview
+            handleSubmit, ui: {loader}, isEditable, changeOrderingDown,
+            editHeading, saveTitle, entityName, nextEntity, handlePreview, changeOrderingUp
         } = this.props;
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -270,8 +247,8 @@ class Reference extends Component {
                     handleAccordionState={this.handleAccordionState}
                     handleAddition={this.handleAddition}
                     deleteReference={this.deleteReference}
-                    changeOrderingUp={this.changeOrderingUp}
-                    changeOrderingDown={this.changeOrderingDown}
+                    changeOrderingUp={changeOrderingUp}
+                    changeOrderingDown={changeOrderingDown}
                     openedAccordion={this.state.openedAccordion}
                     loader={loader}
                     component={ReferenceRenderer}
@@ -319,6 +296,16 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.deleteReference(referenceId))
         },
 
+        "bulkUpdateOrCreate": (listItems) => {
+            listItems = (listItems || []).map(userReference => {
+                if (!userReference['id']) delete userReference['id'];
+                return userReference;
+            });
+            return new Promise((resolve, reject) => {
+                return dispatch(actions.bulkUpdateOrCreateUserReference({list: listItems, resolve, reject}))
+            })
+
+        },
         "handleSwap": (listItems) => {
             listItems = (listItems || []).map(userReference => {
                 if (!userReference['id']) delete userReference['id'];

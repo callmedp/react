@@ -1,4 +1,7 @@
-import {FETCH_USER_COURSE, UPDATE_USER_COURSE, DELETE_USER_COURSE, HANDLE_COURSE_SWAP} from './actionTypes'
+import {
+    FETCH_USER_COURSE, UPDATE_USER_COURSE, BULK_U_C_USER_COURSE,
+    DELETE_USER_COURSE, HANDLE_COURSE_SWAP
+} from './actionTypes'
 
 
 export const fetchUserCourse = () => {
@@ -21,6 +24,15 @@ export const deleteCourse = (courseId) => {
         courseId
     }
 }
+
+
+export const bulkUpdateOrCreateUserCourse = (payload) => {
+    return {
+        type: BULK_U_C_USER_COURSE,
+        payload
+    }
+}
+
 
 export const handleCourseSwap = (payload) => {
     return {
