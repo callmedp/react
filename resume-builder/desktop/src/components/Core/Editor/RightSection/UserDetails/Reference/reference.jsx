@@ -65,7 +65,8 @@ const ReferenceRenderer = ({
                     <ul>
                         <Accordion
                             // onChange={(value) => handleAccordionClick(value, fields)}
-                            allowZeroExpanded={true}
+                            allowZeroExpanded={false}
+                            allowMultipleExpanded={true}
                             preExpanded={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}>
                             {
                                 fields.map((member, index) => {

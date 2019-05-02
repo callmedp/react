@@ -43,7 +43,6 @@ const SkillRenderer = ({
                            arrayList
                        }) => {
     let elem = null;
-    console.log('--field-', fields.getAll());
     return (
         <div>
             {/*{!!loader &&*/}

@@ -66,8 +66,9 @@ const LanguageRenderer = ({
                 <ul>
                     <Accordion
                         // onChange={(value) => handleAccordionClick(value, fields, submitFailed)}
-                               allowZeroExpanded={true}
-                               preExpanded={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}>
+                        allowZeroExpanded={false}
+                        allowMultipleExpanded={true}
+                        preExpanded={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}>
                         {fields.map((member, index) => {
                                 return (
                                     <li key={index}>
