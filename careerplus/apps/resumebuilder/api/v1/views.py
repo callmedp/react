@@ -356,7 +356,6 @@ class CandidateResumePreview(APIView):
         latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
 
         template = get_template('resume{}_preview.html'.format(template_id))
-
         rendered_template = template.render(
             {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
              'achievements': achievements, 'references': references, 'projects': projects,

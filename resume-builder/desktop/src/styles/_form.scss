@@ -224,3 +224,15 @@ input[type='submit']:hover {
   margin-top: 5px !important;
   font-size: 12px !important;
 }
+
+.head-section {
+  h2 {
+    input {
+      border: none;
+      width: auto;
+      box-shadow: none;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+  }
+}
