@@ -95,8 +95,8 @@
                             {% if obj.product.get_coursetype_db %}
                              - {{obj.product.get_coursetype_db}}
                             {% endif %}
-                            {% if obj.product.get_duration_db %}
-                             - {{obj.product.get_duration_db}}
+                            {% if obj.product.get_duration_in_day %}
+                             - {{obj.product.get_duration_in_ddmmyy}}
                             {% endif %}
                           </a>
                       </strong>
