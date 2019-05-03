@@ -171,21 +171,21 @@ class Buy extends Component {
                                         <div className="buy__recommended__item">
                                             <span className="buy__recommended__image">
                                                 <span className="sprite icon--zoom"></span>
-                                                <img src="/media/static/react/assets/images/mobile/resume-2.png" alt="Custom resume" />
+                                                <img src={`${this.staticUrl}react/assets/images/mobile/resume-2.png`} alt="Custom resume" />
                                             </span>
                                         </div>
                                         
                                         <div className="buy__recommended__item">
                                             <span className="buy__recommended__image">
                                                 <span className="sprite icon--zoom"></span>
-                                                <img src="/media/static/react/assets/images/mobile/resume-1.png" alt="Custom resume" />
+                                                <img src={`${this.staticUrl}react/assets/images/mobile/resume-1.png`} alt="Custom resume" />
                                             </span>
                                         </div>
                                        
                                         <div className="buy__recommended__item">
                                             <span className="buy__recommended__image">
                                                 <span className="sprite icon--zoom"></span>
-                                                <img src="/media/static/react/assets/images/mobile/resume-2.png" alt="Custom resume" />
+                                                <img src={`${this.staticUrl}react/assets/images/mobile/resume-2.png`} alt="Custom resume" />
                                             </span>
                                         </div>
                                     </Slider>
