@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
+import './templateModal.scss'
 
 Modal.setAppElement(document.getElementById('react-app'));
 
@@ -38,13 +39,16 @@ export default class TemplateModal extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="pr">
+                { this.state.modalIsOpen && 
+             <i onClick={this.closeModal} className='icon-close icon-close--position'></i>
+}
                 <Modal
                     style={{
                         content: {
                             left: '10%',
                             right: '10%',
-                            bottom: 'auto',
+                            top: '5%',
                         }
                     }}
                     isOpen={this.state.modalIsOpen}
@@ -52,8 +56,7 @@ export default class TemplateModal extends React.Component {
                     contentLabel="Example Modal"
                 >
                     <div>
-                        <i onClick={this.closeModal} className='icon-close'></i>
-                        <img src={`${this.staticUrl}react/assets/images/resume1_Preview.jpg`}/>
+                        <img className="img-responsive" src={`${this.staticUrl}react/assets/images/resume1_Preview.jpg`}/>
                     </div>
                 </Modal>
             </div>
