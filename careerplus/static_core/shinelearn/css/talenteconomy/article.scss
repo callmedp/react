@@ -1337,3 +1337,45 @@ header {
 .article-detail-content ol li, .article-detail-content ul li .parsley-errors-list {
 	font-size: $font-size+1 !important;
 } 
+
+
+.look-interesting {
+	.register {
+		padding: 0;
+
+		.country-code .form-control {
+			width: 77%;
+		}
+
+		textarea.form-control {
+			padding: 0;
+		}
+	}
+
+	
+}
+
+.error{
+    color:red;
+}
+
+#snackbar {
+    visibility: hidden;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    left: 0;
+    font-size: 17px;
+    top: 0;
+    height: 50px;
+    width:100%;
+    z-index:9999;
+}
+
+#snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
