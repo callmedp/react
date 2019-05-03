@@ -451,5 +451,10 @@ var f=d.getElementsByTagName(s)[0],--><!--j=d.createElement(s),dl=l!='dataLayer'
         $('.dropdown').hover(function(){
             $('.dropdown-toggle', this).trigger('click');
           });
+
+                $(document).on('click', '.icon-downlod', function () {
+
+    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms resume Enquiry', 'success');
+});
     </script>
  {% endblock js_section %}
