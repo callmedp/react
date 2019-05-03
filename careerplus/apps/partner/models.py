@@ -21,8 +21,8 @@ from geolocation.models import (
     State,
     City,)
 from order.choices import BOOSTER_RECRUITER_TYPE
+from .choices import SCORE_TYPE_CHOICES
 
-# third party imports
 
 class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     name = models.CharField(
@@ -173,6 +173,7 @@ class UserCertificate(models.Model):
     order = models.ForeignKey(
         'order.Order', related_name='user_certificates',
         verbose_name=_("Order"), blank=True, null=True)
+
     status = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
 
     def __str__(self):
@@ -194,6 +195,52 @@ class BoosterRecruiter(AbstractAutoDate):
     def __str__(self):
         return '<' + self.get_type_recruiter_display() + '>'
 
+
+class Assesment(AbstractAutoDate):
+    vendor_text = models.CharField(max_length=255, blank=True, null=True)
+    vendor_provider = models.ForeignKey(Vendor, null=True, blank=True)
+    assesment_name = models.CharField(max_length=255, blank=True, null=True)
+    certificate = models.ForeignKey('Certificate', null=True, blank=True)
+    candidate_id = models.CharField(
+        _('Candidate_id'), blank=True,
+        max_length=60, help_text=_('Candidate_id'))
+    candidate_email = models.EmailField(
+        _('Email'),
+        max_length=255, help_text=_('Candidate Email Address'))
+    extra_info = models.TextField(
+        _('Extra Info'), blank=True,
+        default='', help_text=_('Extra Info'))
+    report = models.TextField(blank=True)
+
+
+class Report(models.Model):
+
+    assessment_id = models.IntegerField()
+    url = models.URLField(max_length=500, blank=True, null=True)
+    name = models.CharField(max_length=255)
+
+    class Meta:
+        abstract = True
+
+
+class Score(AbstractAutoDate):
+    subject = models.CharField(max_length=255)
+    assesment = models.ForeignKey('Assesment', null=True, blank=True)
+    score_type = models.PositiveSmallIntegerField(choices=SCORE_TYPE_CHOICES, default=0)
+    max_score = models.CharField(max_length=255)
+    score_obtained = models.IntegerField(default=0)
+
+
+class ParsedAssesmentData:
+
+    def __init__(self):
+        self.score = Score
+        self.scores = []
+        self.assesment = Assesment()
+        self.certificate = Certificate()
+        self.user_certificate = UserCertificate()
+        self.report = Report
+        self.reports = []
 
 class UserCertificateOperations(AbstractAutoDate):
     user_certificate = models.ForeignKey(UserCertificate)

@@ -13,6 +13,7 @@ from scheduler.models import Scheduler
 from partner.models import Vendor
 from partner.models import Certificate, UserCertificate, UserCertificateOperations
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
+
 from core.api_mixin import ShineCandidateDetail, ShineToken, ShineCertificateUpdate
 from order.models import Order
 
@@ -21,6 +22,7 @@ User = get_user_model()
 
 @task(name="upload_certificate_task")
 def upload_certificate_task(task=None, user=None, vendor=None, vendor_text=None):
+    import ipdb; ipdb.set_trace();
     f = False
     try:
         up_task = Scheduler.objects.get(pk=task)
@@ -183,6 +185,7 @@ def upload_certificate_task(task=None, user=None, vendor=None, vendor_text=None)
 
 @task(name="upload_candidate_certificate_task")
 def upload_candidate_certificate_task(task=None, user=None, vendor=None,  vendor_text=None):
+
     f = False
     try:
         up_task = Scheduler.objects.get(pk=task)
