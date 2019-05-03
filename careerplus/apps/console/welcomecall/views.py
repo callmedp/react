@@ -1003,6 +1003,6 @@ class ShowNumberField(View):
         value = self.request.POST.get('switch', '')
         value = True if value == 'on' else False
         shownum = 'checked' if value else ""
-        cache.set('exoitel_status', value)
+        cache.set('exoitel_status', value,timeout=None)
         return render(request, self.template_name, {'check': shownum})
 

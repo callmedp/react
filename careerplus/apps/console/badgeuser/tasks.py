@@ -11,18 +11,21 @@ from django.urls import reverse
 from celery.decorators import task
 from scheduler.models import Scheduler
 from partner.models import Vendor
-from partner.models import Certificate, UserCertificate
+from partner.models import Certificate, UserCertificate, UserCertificateOperations
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
-from core.api_mixin import ShineCandidateDetail, ShineToken
+from core.api_mixin import ShineCandidateDetail, ShineToken, ShineCertificateUpdate
+from order.models import Order
+
 User = get_user_model()
 
 
 @task(name="upload_certificate_task")
-def upload_certificate_task(task=None, user=None, vendor=None):
+def upload_certificate_task(task=None, user=None, vendor=None, vendor_text=None):
     f = False
     try:
         up_task = Scheduler.objects.get(pk=task)
-        vendor = Vendor.objects.get(pk=vendor)
+        if vendor:
+            vendor = Vendor.objects.get(pk=vendor)
     except Scheduler.DoesNotExist as e:
         logging.getLogger('error_log').error(
             "%(msg)s : %(err)s" % {'msg': 'upload certificate task', 'err': str(e)})
@@ -51,7 +54,7 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                 upload_path)
         if exist_file:
             f = True
-            fieldnames = ['name', 'skill']
+            fieldnames = ['name', 'skill', 'certificate_file_url', 'vendor_image_url']
             if not settings.IS_GCP:
                 upload = open(
                     settings.MEDIA_ROOT + '/' + upload_path,
@@ -105,15 +108,52 @@ def upload_certificate_task(task=None, user=None, vendor=None):
                 try:
                     name = row.get('name', '')
                     skill = row.get('skill', '')
+                    certi_file_url = row.get('certificate_file_url')
+                    vendor_image_url = row.get('vendor_image_url')
+                    make_entry = False
                     if name:
-                        obj, created = Certificate.objects.get_or_create(
-                        name=name, vendor_provider=vendor)
-                        if created:
+                        if vendor:
+                            existing_certificates = Certificate.objects.filter(
+                                name=name, vendor_provider=vendor)
+                        elif vendor_text:
+                            existing_certificates = Certificate.objects.filter(
+                                name=name, vendor_text=vendor_text)
+
+                        if not existing_certificates.exists():
+                            make_entry = True
+                        else:
+                            all_skills = list(existing_certificates.exclude(skill="").values_list('skill', flat=True))
+                            processed_all_skills = []
+                            for skl in all_skills:
+                                skl = sorted(map(lambda s: s.strip(), skl.split(',')))
+                                skl = "|".join(skl)
+                                processed_all_skills.append(skl)
+
+                            new_skill = list(sorted(map(lambda s: s.strip(), skill.split(','))))
+                            new_skill = "|".join(new_skill)
+
+                            if new_skill not in processed_all_skills:
+                                make_entry = True
+
+                        if make_entry:
+                            if vendor:
+                                obj = Certificate.objects.create(
+                                    name=name, vendor_provider=vendor)
+                            elif vendor_text:
+                                obj = Certificate.objects.create(
+                                    name=name, vendor_text=vendor_text)
+                            if certi_file_url:
+                                obj.certificate_file_url = certi_file_url
+                            if vendor_image_url:
+                                obj.vendor_image_url = vendor_image_url
+                            skill = ','.join(sorted(skill.split(',')))
                             obj.skill = skill
                             obj.save()
+
                         else:
-                            row['error_report'] = "certificate already exist"
+                            row['error_report'] = "certificate already exists"
                     else:
+
                         row['error_report'] = "certificate name missing"
                     csvwriter.writerow(row)
                 except Exception as e:
@@ -142,7 +182,7 @@ def upload_certificate_task(task=None, user=None, vendor=None):
 
 
 @task(name="upload_candidate_certificate_task")
-def upload_candidate_certificate_task(task=None, user=None, vendor=None):
+def upload_candidate_certificate_task(task=None, user=None, vendor=None,  vendor_text=None):
     f = False
     try:
         up_task = Scheduler.objects.get(pk=task)
@@ -150,14 +190,15 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
         logging.getLogger('error_log').error(
             "%(err)s" % {'err': str(e)})
         return f
-    try:
-        vendor = Vendor.objects.get(pk=vendor)
-    except Vendor.DoesNotExist as e:
-        logging.getLogger('error_log').error(
-            "%(err)s" % {'err': str(e)})
-        up_task.status = 1
-        up_task.save()
-        return f
+    if vendor:
+        try:
+            vendor = Vendor.objects.get(pk=vendor)
+        except Vendor.DoesNotExist as e:
+            logging.getLogger('error_log').error(
+                "%(err)s" % {'err': str(e)})
+            up_task.status = 1
+            up_task.save()
+            return f
     up_task.status = 3
     up_task.save()
     upload_path = up_task.file_uploaded.name
@@ -177,7 +218,7 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
             upload_path)
     if exist_file:
         f = True
-        fieldnames = ['year', 'candidate_email', 'candidate_mobile', 'certificate_name']
+        fieldnames = ['year', 'candidate_email', 'candidate_mobile', 'certificate_name', 'certificate_file_url' , 'order']
         if not settings.IS_GCP:
             with open(
                 settings.MEDIA_ROOT + '/' + upload_path,
@@ -239,6 +280,10 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                 mobile = row.get('candidate_mobile', '')
                 certificate_name = row.get('certificate_name')
                 certi_yr_passing = row.get('year')
+                certi_file_url = row.get('certificate_file_url')
+                order = row.get('order')
+                if order:
+                    order = Order.objects.filter(id=order).first()
                 headers = ShineToken().get_api_headers()
                 shineid = ShineCandidateDetail().get_shine_id(
                     email=email, headers=headers)
@@ -247,8 +292,14 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                     row['status'] = "Failure"
                 if shineid and certificate_name:
                     try:
-                        certificate = Certificate.objects.get(
-                            name__iexact=certificate_name, vendor_provider=vendor)
+                        if vendor:
+                            certificate = Certificate.objects.get(
+                                name__iexact=certificate_name,
+                                vendor_provider=vendor)
+                        elif vendor_text:
+                            certificate = Certificate.objects.get(
+                                name__iexact=certificate_name,
+                                vendor_text=vendor_text)
                     except Certificate.DoesNotExist:
                         logging.getLogger("error_log").error("Certificate not found,{}".format(certificate_name))
                         row['reason_for_failure'] = "Certificate not found"
@@ -262,25 +313,32 @@ def upload_candidate_certificate_task(task=None, user=None, vendor=None):
                         if created:
                             obj.candidate_mobile = mobile
                             obj.candidate_email = email
+                            if certi_file_url:
+                                obj.certificate_file_url = certi_file_url
+                            obj.status = 0
                             obj.save()
+                            UserCertificateOperations.objects.create(
+                                user_certificate=obj
+                            )
                             post_data = {
                                 'certification_name': certificate_name,
                                 'certification_year': certi_yr_passing
                             }
-                            certification_url = settings.SHINE_API_URL + "/candidate/" +shineid + "/certifications/?format=json"
-                            certification_response = requests.post(
-                                certification_url, data=post_data,
-                                headers=headers)
-                            if certification_response.status_code == 201:
-                                jsonrsp = certification_response.json()
-                                logging.getLogger('info_log').info(
-                                    "api response:{}".format(jsonrsp))
-                            elif certification_response.status_code != 201:
-                                jsonrsp = certification_response.json()
-                                logging.getLogger('error_log').error(
-                                    "api fail:{}".format(jsonrsp))
+                            flag, jsonrsp = ShineCertificateUpdate().update_shine_certificate_data(
+                                candidate_id=shineid, data=post_data, headers=headers
+                            )
+                            if flag:
+                                last_op_type = obj.status
+                                obj.status = 1
+                                obj.save()
+                                UserCertificateOperations.objects.create(
+                                    user_certificate=obj,
+                                    op_type=1,
+                                    last_op_type=last_op_type)
+                            else:
                                 row['reason_for_failure'] = jsonrsp
                                 row['status'] = 'Failure'
+
                         else:
                             row['reason_for_failure'] = "duplicate entry"
                             row['status'] = "Success"

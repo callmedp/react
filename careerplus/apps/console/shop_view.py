@@ -1564,7 +1564,7 @@ class ChangeProductView(DetailView):
                                 "Product Attributes Change Failed, Changes not Saved")
                             return TemplateResponse(
                                 request, [
-                                    "console/shop/change_screenproduct.html"
+                                    "console/shop/change_product.html"
                                 ], context)
                     elif slug == 'prdcategory':
                         ProductCategoryFormSet = inlineformset_factory(

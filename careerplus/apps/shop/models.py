@@ -3121,6 +3121,15 @@ class ShineProfileData(AbstractAutoDate):
         blank=True, null=True)
     type_flow = models.PositiveSmallIntegerField(
         _('Flow'), choices=FLOW_CHOICES)
-    sub_type_flow = models.IntegerField(choices=SUB_FLOW_CHOICES, unique=True)
+    sub_type_flow = models.IntegerField(choices=SUB_FLOW_CHOICES)
     priority_value = models.PositiveIntegerField(default=1)
     action = models.IntegerField(choices=SHINE_FLOW_ACTION, default=-1)
+    vendor = models.ForeignKey(
+        Vendor,
+        blank=True,
+        null=True,
+        verbose_name=_('Vendor'),
+        related_name='vendor'
+    )
+    class Meta:
+        unique_together = ('type_flow', 'sub_type_flow', 'vendor')

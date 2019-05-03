@@ -1,9 +1,17 @@
-from django.db import models
+# inbuilt imports
 from datetime import datetime
+
+# framework imports
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from seo.models import AbstractSEO, AbstractAutoDate
 from django.conf import settings
 from django.forms import ValidationError
+
+# local imports
+from .choices import USER_CERTITIFICATE_STATUS
+
+# inter apps imports
+from seo.models import AbstractSEO, AbstractAutoDate
 from meta.models import ModelMeta
 from shop.functions import (
     get_upload_path_vendor,
@@ -14,6 +22,7 @@ from geolocation.models import (
     City,)
 from order.choices import BOOSTER_RECRUITER_TYPE
 
+# third party imports
 
 class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     name = models.CharField(
@@ -130,6 +139,9 @@ class Certificate(AbstractAutoDate):
         max_length=255, null=False, blank=False, db_index=True)
     skill = models.CharField(max_length=128, null=False, blank=False)
     vendor_provider = models.ForeignKey(Vendor, null=True, blank=True)
+    vendor_text = models.CharField(max_length=255, null=True, blank=False)
+    certificate_file_url = models.URLField(max_length=500, blank=True, null=True)
+    vendor_image_url = models.URLField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -156,6 +168,12 @@ class UserCertificate(models.Model):
     candidate_id = models.CharField(
         _('Candidate ID'), blank=True,
         max_length=30, help_text=_('Candidate ID'))
+    certificate_file_url = models.URLField(max_length=500, blank=True, null=True)
+    expiry_date = models.DateTimeField(null=True, blank=True)
+    order = models.ForeignKey(
+        'order.Order', related_name='user_certificates',
+        verbose_name=_("Order"), blank=True, null=True)
+    status = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
 
     def __str__(self):
         return '{}'.format(self.certificate.name)
@@ -175,3 +193,10 @@ class BoosterRecruiter(AbstractAutoDate):
 
     def __str__(self):
         return '<' + self.get_type_recruiter_display() + '>'
+
+
+class UserCertificateOperations(AbstractAutoDate):
+    user_certificate = models.ForeignKey(UserCertificate)
+    op_type = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
+    last_op_type = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
+

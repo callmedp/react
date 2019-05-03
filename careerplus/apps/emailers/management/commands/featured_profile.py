@@ -11,7 +11,7 @@ from emailers.sms import SendSMS
 from emailers.utils import get_featured_profile_data_for_candidate
 from users.tasks import user_register
 from core.api_mixin import FeatureProfileUpdate
-from shop.choices import S_ATTR_DICT
+from shop.choices import S_ATTR_DICT, A_ATTR_DICT
 
 
 class Command(BaseCommand):
@@ -24,8 +24,8 @@ def featured_updated():
     ''' featured profile cron for feature updation on shine.com'''
 
     featured_orderitems = OrderItem.objects.filter(
-        order__status__in=[1, 3], product__type_flow=5, oi_status=30,
-        product__sub_type_flow__in=[501, 503])
+        order__status__in=[1, 3], product__type_flow__in=[5, 16], oi_status=30,
+        product__sub_type_flow__in=[501, 503, 1602])
     featured_orderitems = featured_orderitems.select_related('order')
 
     featured_count = 0
@@ -72,6 +72,9 @@ def featured_updated():
                             mail_type = "FEATURED_PROFILE_UPDATED"
                         elif obj.product.sub_type_flow == 503:
                             mail_type = "PRIORITY_APPLICANT_MAIL"
+                        elif obj.product.sub_type_flow == 1602:
+                            mail_type = "BADGING_DONE_MAIL"
+
                         email_sets = list(
                             obj.emailorderitemoperation_set.all().values_list(
                                 'email_oi_status', flat=True).distinct())
@@ -103,7 +106,7 @@ def unfeature():
     ''' featured profile cron for closing updated orderitem '''
 
     featured_orderitems = OrderItem.objects.filter(
-        order__status__in=[1, 3], product__type_flow=5, oi_status=28, product__sub_type_flow__in=[501, 503])
+        order__status__in=[1, 3], product__type_flow=[5, 16], oi_status=28, product__sub_type_flow__in=[501, 503, 1602])
     featured_orderitems = featured_orderitems.select_related('order')
 
     unfeature_count = 0
@@ -125,11 +128,12 @@ def unfeature():
         except Exception as e:
             logging.getLogger('error_log').error("unable to create activation date%s" % (str(e)))
             continue
+        duration_dict = {
+            'service': getattr(obj.product.attr, S_ATTR_DICT.get('FD'), 180),
+            'assesment': getattr(obj.product.attr, A_ATTR_DICT.get('AD'), 365)
+        }
 
-        if getattr(obj.product.attr, S_ATTR_DICT.get('FD'), None):
-            duration_days = getattr(obj.product.attr, S_ATTR_DICT.get('FD'))
-        else:
-            duration_days = 180  # 6 months
+        duration_days = duration_dict.get(obj.product.product_class.name)
 
         delta_time = activation_date + datetime.timedelta(days=duration_days)
 
