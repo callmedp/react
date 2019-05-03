@@ -67,10 +67,10 @@ $(document).on('click', '#id_download_button', function(event) {
             type: "POST",
             data: $("#downloadpdf_form").serialize(),
             success: function(data, textStatus, jqXHR) {
-                MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'success');
+                MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Resume Enquiry', 'success');
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'Failure');
+                MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Resume Enquiry', 'Failure');
                 alert('Something went wrong. Try again later.');
             }
         });
@@ -200,7 +200,7 @@ $(document).on('click', '#cms_share', function(event) {
 $(function() {
 
     $("#id_skip").click(function() {
-        MyGA.SendEvent('QueryForm', 'Form Interactions', 'General Enquiry', 'skip');
+        MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Resume Enquiry', 'skip');
         if (window.CURRENT_FLAVOUR == 'mobile'){
             $('.cls_mask').click(); 
         }
@@ -321,14 +321,14 @@ $(function() {
                 type: "POST",
                 data: formData,
                 success: function(data, textStatus, jqXHR) {
-                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'success');
+                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Enquiry', 'success');
                     alert('Your Query Submitted Successfully.');
                         $('#id_callback').removeAttr('disabled');
 
                     $('#callback_form')[0].reset();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'Failure');
+                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Enquiry', 'Failure');
                     alert('Something went wrong. Try again later.');
                                                 $('#id_callback').removeAttr('disabled');
 
@@ -339,4 +339,9 @@ $(function() {
 
 
 
+});
+
+      $(document).on('click', '.icon-downlod', function () {
+
+    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms resume Enquiry', 'success');
 });
