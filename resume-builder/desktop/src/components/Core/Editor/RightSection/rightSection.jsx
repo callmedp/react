@@ -45,6 +45,8 @@ class RightSection extends Component {
     }
 
 
+
+
     handlePreview() {
         this.props.history.push('/resume-builder/preview/');
     }

@@ -33,7 +33,7 @@ const deleteUserAward = (candidateId, awardId) => {
 
 const bulkUpdateUserAward = (data, candidateId) => {
 
-    const url = `candidate/${candidateId}/bulk-update/award/`;
+    const url = `candidate/${candidateId}/bulk-update/achievement/`;
     return BaseApiService.post(`${siteDomain}/api/v1/resume/${url}`, data);
 
 

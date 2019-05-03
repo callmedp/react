@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import './buy.scss'
+import './buy.scss';
+import {Link} from 'react-router-dom';
 import TopBar from '../../Editor/TopBar/topBar.jsx'
 import Header from '../../../Common/Header/header.jsx'
 import Footer from '../../../Common/Footer/footer.jsx'
@@ -166,7 +167,7 @@ export class Buy extends Component {
                     </section>
 
                     <div className="bottom-links">
-                        <a href="#">Change template</a> | <a href="#">Edit template</a>
+                        <a href="#">Change template</a> | <Link to={'/resume-builder/edit'}>Edit template</Link>
                     </div>
                 </div>
                 <Footer/>

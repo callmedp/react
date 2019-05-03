@@ -1,21 +1,10 @@
 import React, {Component} from 'react';
 import './skill.scss'
-import {Field, reduxForm, FieldArray} from "redux-form"
+import { reduxForm, FieldArray} from "redux-form"
 import * as actions from "../../../../../../store/skill/actions";
 import {connect} from "react-redux";
-import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer.jsx";
-import moment from "moment";
-
-import {
-    Accordion,
-    AccordionItem,
-    AccordionItemHeading,
-    AccordionItemPanel,
-    AccordionItemButton
-} from 'react-accessible-accordion';
-
 import validate from '../../../../../FormHandler/validations/skill/validate'
-import LoaderSection from "../../../../../Loader/loaderSection.jsx";
+import {SkillRenderer} from "./skillRenderer";
 
 
 /*
@@ -23,171 +12,21 @@ styles
 * */
 import 'react-accessible-accordion/dist/fancy-example.css';
 
-
-const SkillRenderer = ({
-                           fields,
-                           loader,
-                           meta: {touched, error, submitFailed},
-                           deleteSkill,
-                           handleSubmit,
-                           handleAddition,
-                           handleAccordionState,
-                           handleAccordionClick,
-                           changeOrderingUp,
-                           changeOrderingDown,
-                           openedAccordion,
-                           isEditable,
-                           editHeading,
-                           saveTitle,
-                           entityName,
-                           arrayList
-                       }) => {
-    let elem = null;
-    return (
-        <div>
-            {/*{!!loader &&*/}
-            {/*<LoaderSection/>*/}
-            {/*}*/}
-            <section className="head-section">
-                <span className="icon-box"><i className="icon-skills1"/></span>
-                <h2 ref={(value) => {
-                    elem = value
-                }} onKeyUp={(event) => saveTitle(event)}
-                    contenteditable={isEditable ? "true" : "false"}
-                >{entityName}</h2>
-                <span onClick={() => editHeading(elem)}
-                      className={!!(!isEditable) ? "icon-edit icon-education__cursor" : ""}
-                />
-                <button
-                    onClick={handleSubmit((values) => {
-                        console.log('---clicked--')
-                        handleAddition(fields, error)
-                    })}
-                    type={'button'}
-                    className="add-button add-button__right">Add new
-                </button>
-
-
-            </section>
-
-            <section className="right-sidebar-scroll">
-                <ul>
-                    <Accordion
-                        //     onChange={(value) => {
-                        //     handleSubmit((values) => handleAccordionClick(value, fields, error))
-                        // }}
-                        allowZeroExpanded={false}
-                        allowMultipleExpanded={true}
-                        preExpanded={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}>
-                        {fields.map((member, index) => {
-                            return (
-                                <li key={index}>
-                                    <section className="info-section">
-                                        <AccordionItem uuid={index}>
-                                            <AccordionItemHeading>
-                                                <AccordionItemButton>
-                                                    <div className="flex-container">
-                                                        <h3 className="add-section-heading">{fields.get(index).name || 'Skill'}</h3>
-                                                        <div className="addon-buttons mr-10">
-                                                                <span
-                                                                    onClick={(event) => deleteSkill(index, fields, event)}
-                                                                    className="icon-delete mr-15"/>
-                                                            {index !== 0 &&
-                                                            <span
-                                                                onClick={(event) => changeOrderingUp(index, fields, event)}
-                                                                className="icon-ascend mr-5"/>
-                                                            }
-                                                            {
-                                                                index !== fields.length - 1 &&
-                                                                < span
-                                                                    onClick={(event) => changeOrderingDown(index, fields, event)}
-                                                                    className="icon-descend"/>
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </AccordionItemButton>
-                                            </AccordionItemHeading>
-                                            <AccordionItemPanel>
-                                                <div className="flex-container">
-                                                    <fieldset>
-                                                        <label>Skill name</label>
-                                                        <div className="input-group">
-                                                            <div className="input-group--input-group-icon">
-                                                                <span className="icon-skills-gr"/>
-                                                            </div>
-                                                            <Field component={renderField}
-                                                                   type={"text"} name={`${member}.name`}
-                                                                   className={"input-control"}/>
-                                                        </div>
-                                                    </fieldset>
-
-                                                    <fieldset className="custom">
-                                                        <label>Skill rating (out of 10)</label>
-                                                        <div className="input-group">
-                                                            <div className="input-group--input-group-icon">
-                                                                <span className="icon-rating"/>
-                                                            </div>
-                                                            <Field name={`${member}.proficiency`}
-                                                                   component={renderSelect}
-                                                                   isMulti={false}
-                                                                   options={[
-                                                                       {value: 1, label: '1'},
-                                                                       {value: 2, label: '2'},
-                                                                       {value: 3, label: '3'},
-                                                                       {value: 4, label: '4'},
-                                                                       {value: 5, label: '5'},
-                                                                       {value: 6, label: '6'},
-                                                                       {value: 7, label: '7'},
-                                                                       {value: 8, label: '8'},
-                                                                       {value: 9, label: '9'},
-                                                                       {value: 10, label: '10'}
-                                                                   ]}
-                                                            />
-                                                        </div>
-                                                    </fieldset>
-                                                    <Field component={'input'} name={`${member}.id`}
-                                                           type={'text'}
-                                                           hidden={true}/>
-
-                                                </div>
-
-                                            </AccordionItemPanel>
-                                        </AccordionItem>
-                                    </section>
-                                </li>
-                            )
-                        })}
-                    </Accordion>
-                </ul>
-            </section>
-        </div>
-
-    );
-
-}
-
 class Skill extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
-        this.handleAccordionState = this.handleAccordionState.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteSkill = this.deleteSkill.bind(this);
 
         this.state = {
-            currentAccordion: 0,
-            previousAccordion: [0],
-            openedAccordion: [0],
+            active: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         }
     }
 
     componentDidMount() {
         this.props.fetchUserSkill();
-    }
-
-    componentWillReceiveProps(nextProps, nextContext) {
-        console.log('in here');
     }
 
 
@@ -200,9 +39,8 @@ class Skill extends Component {
         }
     }
 
-    handleAddition(fields, error) {
+    handleAddition(fields) {
         const listLength = fields.length;
-        // if (listLength) this.handleAccordionState(listLength, fields);
         fields.push({
             "candidate_id": '',
             "id": '',
@@ -225,26 +63,9 @@ class Skill extends Component {
 
     }
 
-    handleAccordionState(val, fields) {
-        const {currentAccordion} = this.state;
 
-        if (currentAccordion !== '') {
-
-            this.props.onSubmit(fields.get(currentAccordion))
-        }
-
-        this.setState((state) => ({
-            previousAccordion: state.currentAccordion,
-            openedAccordion: [val],
-            currentAccordion: val
-        }))
-    }
-
-    handleAccordionClick(value, fields) {
-        console.log('---', value);
-        const val = value.length > 0 ? value[0] : '';
-        return;
-        this.handleAccordionState(val, fields)
+    handleAccordionClick(value) {
+        this.setState({active: value})
     }
 
 
@@ -259,20 +80,19 @@ class Skill extends Component {
                 <FieldArray
                     name="list"
                     handleSubmit={handleSubmit}
-                    arrayList={this.state.arrayList}
                     handleAccordionClick={this.handleAccordionClick}
-                    handleAccordionState={this.handleAccordionState}
                     handleAddition={this.handleAddition}
                     deleteSkill={this.deleteSkill}
                     changeOrderingUp={changeOrderingUp}
                     changeOrderingDown={changeOrderingDown}
-                    openedAccordion={this.state.openedAccordion}
                     loader={loader}
                     component={SkillRenderer}
                     saveTitle={(event) => saveTitle(event, 4)}
                     editHeading={(value) => editHeading(value)}
                     isEditable={isEditable}
                     entityName={entityName}
+                    expanded={this.state.active}
+
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
@@ -337,24 +157,6 @@ const mapDispatchToProps = (dispatch) => {
         "removeSkill": (skillId) => {
             return dispatch(actions.deleteSkill(skillId))
         },
-        "handleSwap": (listItems) => {
-            listItems = (listItems || []).map(userSkill => {
-                const {proficiency} = userSkill;
-                if (!userSkill['id']) delete userSkill['id'];
-                userSkill = {
-                    ...userSkill,
-                    ...{
-                        proficiency: proficiency && proficiency.value
-                    }
-                };
-                return userSkill;
-            })
-            return new Promise((resolve, reject) => {
-
-                return dispatch(actions.handleSkillSwap({list: listItems, resolve, reject}))
-            })
-
-        }
     }
 };
 
