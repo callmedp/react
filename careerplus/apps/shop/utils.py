@@ -1221,11 +1221,10 @@ def get_days_month_year(days_value=0):
     if not days_value or not isinstance(days_value, int):
         return ""
 
-    DAYS_IN_YEAR = 365
-    DAYS_IN_MONTH = 30
-    years, remain = divmod(days_value, DAYS_IN_YEAR)
-    months, days = divmod(remain, DAYS_IN_MONTH)
-    return get_attr_repr(years,"year") + "-" + get_attr_repr(months,"month") + "-"+ get_attr_repr(days,'day')
+    years, remain = divmod(days_value, 365)
+    months, days = divmod(remain, 30)
+    return "-".join(filter(None,[get_attr_repr(years,"year"),\
+                                 get_attr_repr(months,"month"),get_attr_repr(days,'day')]))
 
 
 

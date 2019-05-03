@@ -1,3 +1,5 @@
+from typing import Tuple
+
 CANCELLED = 5
 OI_CANCELLED = 14
 STATUS_CHOICES = (
@@ -88,6 +90,7 @@ OI_OPS_STATUS = (
     (161, 'Refund initiated'),
     (162, 'Refund under progress'),
     (163, 'Refunded'),
+    (164, 'Replaced'),
 
     # extra operation 181 - 190
     (181, "Waiting for input")
@@ -151,6 +154,7 @@ OI_USER_STATUS = (
     (161, 'Refund initiated'),
     (162, 'Refund under progress'),
     (163, 'Refunded'),
+    (164, 'Replaced'),
 )
 
 OI_LINKEDIN_FLOW_STATUS = (
@@ -401,7 +405,7 @@ WC_SUB_CATEGORY2 = (
     (62, 'On Hold'),
     (63, 'Process order'),
     (64, 'Refund'),
-    (65, 'Replacement Order'),
+    (65, 'Replace Item'),
 )
 
 WC_SUB_CAT2 = (
