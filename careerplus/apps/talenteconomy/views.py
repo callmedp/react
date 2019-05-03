@@ -14,11 +14,15 @@ from django.db.models import Count
 from django.core.paginator import Paginator
 from django.urls import reverse
 from django.template.loader import render_to_string
+from django.db.models import Q
+
 
 from django.conf import settings
 from meta.views import Meta
 from blog.mixins import BlogMixin, PaginationMixin
 from blog.models import Category, Blog, Tag, Author
+from geolocation.models import Country
+
 
 from users.forms import (
     ModalLoginApiForm,
@@ -478,6 +482,14 @@ class TEBlogDetailView(DetailView, BlogMixin):
             raise Http404
         return obj
 
+    def get_countries(self):
+        country_choices = [(m.phone, m.name) for m in
+            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        initial_country = Country.objects.filter(phone='91')[0].phone
+        return country_choices,initial_country
+
+
+
     def get_template_names(self):
         if not self.request.amp:
             return ["talenteconomy/article-detail.html"]
@@ -534,6 +546,10 @@ class TEBlogDetailView(DetailView, BlogMixin):
         article_list = list(article_list)
 
         object_list = main_obj_list + article_list
+        country_choices = [(m.phone, m.name) for m in
+                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        country_choices, initial_country = self.get_countries()
+        context.update({'country_choices': country_choices, 'initial_country': initial_country, })
 
         detail_obj = self.scrollPagination(
             paginated_by=self.paginated_by, page=self.page,
@@ -558,6 +574,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
         context.update({
             "detail_article": detail_article,
             "main_article": main_obj[0],
+            'country_choices': country_choices,
         })
 
         context.update({

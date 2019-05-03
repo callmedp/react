@@ -67,10 +67,10 @@ $(document).on('click', '#id_download_button', function(event) {
             type: "POST",
             data: $("#downloadpdf_form").serialize(),
             success: function(data, textStatus, jqXHR) {
-                MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'success');
+                MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Resume Enquiry', 'success');
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'Failure');
+                MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Resume Enquiry', 'Failure');
                 alert('Something went wrong. Try again later.');
             }
         });
@@ -133,7 +133,7 @@ $(document).on('click', '#id_download_button', function(event) {
         unhighlight: unhighlightError,
         errorPlacement: errorPlacement,
         submitHandler: function(form){
-            MyGA.SendEvent('QueryForm', 'Form Interactions', 'General Enquiry', 'success');
+//            MyGA.SendEvent('QueryForm', 'Form Interactions', 'General Enquiry', 'success');
             // $("#id_action").val(1); //action on download button
 
             var formData = $(form).serialize();
@@ -142,7 +142,7 @@ $(document).on('click', '#id_download_button', function(event) {
                 type: "POST",
                 data: formData,
                 success: function(data, textStatus, jqXHR) {
-                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'success');
+                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'CMS Resume Enquiry', 'success');
                     // alert('Your Query Submitted Successfully.');
                     if (window.CURRENT_FLAVOUR == 'mobile'){
                         $('.cls_mask').click();  
@@ -153,7 +153,7 @@ $(document).on('click', '#id_download_button', function(event) {
                     window.open(href, '_blank');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'Failure');
+                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'CMS Resume Enquiry ', 'Failure');
                     alert('Something went wrong. Try again later.');
                 }
             });
@@ -200,7 +200,7 @@ $(document).on('click', '#cms_share', function(event) {
 $(function() {
 
     $("#id_skip").click(function() {
-        MyGA.SendEvent('QueryForm', 'Form Interactions', 'General Enquiry', 'skip');
+        MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Resume Enquiry', 'skip');
         if (window.CURRENT_FLAVOUR == 'mobile'){
             $('.cls_mask').click(); 
         }
@@ -294,6 +294,8 @@ $(function() {
 
         },
         highlight: function(element, errorClass) {
+         $('#id_callback').removeAttr('disabled');
+
             // $(element).siblings('.error').removeClass('hide_error');
             $(element).closest('.form-group').addClass('error');
         },
@@ -310,6 +312,7 @@ $(function() {
 
     $('#id_callback').click(function() {
         var $callbackForm = $("#callback_form");
+    $('#id_callback').attr('disabled','true');
         var flag = $callbackForm.valid();
         if (flag) {
             var formData = $callbackForm.serialize();
@@ -318,13 +321,17 @@ $(function() {
                 type: "POST",
                 data: formData,
                 success: function(data, textStatus, jqXHR) {
-                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'success');
+                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Enquiry', 'success');
                     alert('Your Query Submitted Successfully.');
+                        $('#id_callback').removeAttr('disabled');
+
                     $('#callback_form')[0].reset();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Request Enquiry', 'Failure');
+                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Enquiry', 'Failure');
                     alert('Something went wrong. Try again later.');
+                                                $('#id_callback').removeAttr('disabled');
+
                 }
             });
         }
@@ -332,4 +339,9 @@ $(function() {
 
 
 
+});
+
+      $(document).on('click', '.icon-downlod', function () {
+
+    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms resume Enquiry', 'success');
 });

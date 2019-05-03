@@ -102,9 +102,9 @@
                         <textarea placeholder="Write comments" class="form-control" id="id_message" name="message"></textarea>
                         <span class="error position-error"></span><br/>
                         {% if request.session.candidate_id %}
-                            <input type='submit' class="submit-button btn btn-lg btn-blue btn-round mt-10" id="comment_submit" value="Submit">
+                            <input type='submit' class="btn submit-button btn btn-lg btn-blue btn-round mt-10" id="comment_submit" value="Submit">
                         {% else %}
-                            <input type='button' class="submit-button js_redirect btn btn-lg btn-blue btn-round mt-10" value="Submit">
+                            <input type='button' class="btn submit-button js_redirect btn btn-lg btn-blue btn-round mt-10" value="Submit">
                         {% endif %}
                     </form>
                     <ul class="mt-20" id="page_comment">

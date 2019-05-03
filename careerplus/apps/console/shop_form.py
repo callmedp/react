@@ -1557,7 +1557,7 @@ class ChangeSubCategoryForm(forms.ModelForm):
         self.fields['category'] = forms.TypedChoiceField(choices=query_set)
         self.fields['category'].widget.attrs['class'] = form_class
         self.fields['slug'].widget.attrs['class'] = form_class
-        self.fields['slug'].widget.attrs['readonly'] = True
+        # self.fields['slug'].widget.attrs['readonly'] = True
         self.fields['slug'].required = True
         self.fields['slug'].label = "Slug*"
         self.fields['image'].widget.attrs['class'] = form_class

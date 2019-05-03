@@ -82,10 +82,10 @@
                       <span class="error position-error"></span>
                     </div>
                     {% if request.session.candidate_id %} 
-                       <input type='submit' class="submit-button" id="comment_submit" value="Submit">
+                       <input type='submit' class="btn submit-button" id="comment_submit" value="Submit">
                        
                    {% else %}
-                       <input type='button' class="submit-button" data-toggle="modal" id="cmssubmit" value="Submit">
+                       <input type='button' class="btn submit-button" data-toggle="modal" id="cmssubmit" value="Submit">
                    {% endif %}
                   </form>
                 </div>
@@ -273,6 +273,10 @@
    <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     {% endcompress %}
+    $('.icon-downlod, .download-icon').on('click', function() {
+
+    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms resume Enquiry', 'success');
+};
 
 {% endblock js_section %}
 
