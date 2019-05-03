@@ -9,7 +9,32 @@ import {showModal, hideModal} from "../../../../store/ui/actions"
 import {connect} from "react-redux";
 import {siteDomain} from "../../../../Utils/domains";
 import TemplateModal from '../../../Modal/tempateModal'
+import Slider from "react-slick";
 
+
+
+
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", background: "red" }}
+      onClick={onClick}
+    />
+  );
+}
+
+function SamplePrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", background: "green" }}
+      onClick={onClick}
+    />
+  );
+}
 
 export class Buy extends Component {
 
@@ -74,7 +99,16 @@ export class Buy extends Component {
     }
 
 
+
     render() {
+        const settings = {
+            infinite: true,
+            speed: 500,
+            slidesToShow: 3,
+            slidesToScroll: 3,
+            nextArrow: <SampleNextArrow/>,
+            prevArrow: <SamplePrevArrow/>
+        };
         return (
             /*
             * @desc Top Bar component
@@ -127,28 +161,25 @@ export class Buy extends Component {
             <span className="choose-plan--off ml-10">63% off</span>
             </span>
                                         </div>
-                                        <div className="carousel-box">
-                                            <ul className="carousel-box--carousel">
-                                                <li className="carousel-box--slide">
+                                        <Slider {...settings}>
+                                            {/*<div className="carousel-box">*/}
+                                            {/*<ul className="carousel-box--carousel">*/}
+                                            {/*<li className="carousel-box--slide">*/}
+                                            {
+                                                [1, 2, 3, 4, 5, 6].map(el => (
                                                     <div className="carousel-box--slide__content">
-                                                        <img src={`${this.staticUrl}react/assets/images/resume1.jpg`}
-                                                             className="img-responsive"
-                                                             alt=""/>
+                                                        <img
+                                                            src={`${this.staticUrl}react/assets/images/resume1.jpg`}
+                                                            className="img-responsive"
+                                                            alt=""/>
                                                     </div>
-                                                    <div className="carousel-box--slide__content">
-                                                        <img src={`${this.staticUrl}react/assets/images/resume2.jpg`}
-                                                             className="img-responsive"
-                                                             alt=""/>
-                                                    </div>
-                                                    <div className="carousel-box--slide__content">
-                                                        <img src={`${this.staticUrl}react/assets/images/resume3.jpg`}
-                                                             className="img-responsive"
-                                                             alt=""/>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                            <span className="carousel-box--right"></span>
-                                        </div>
+                                                ))
+                                            }
+                                            {/*</li>*/}
+                                            {/*</ul>*/}
+                                            {/*<span className="carousel-box--right"></span>*/}
+                                            {/*</div>*/}
+                                        </Slider>
                                     </li>
                                 </ul>
                                 <div className="">

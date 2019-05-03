@@ -1,220 +1,221 @@
 @import '../../../../styles/variables/vars.scss';
 @import '../../../../styles/variables/mixins.scss';
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
 
 .half-width {
-	flex: 0 1 49%;
+  flex: 0 1 49%;
 }
 
 .zoom {
-	position: absolute;
-	right: 0;
-	top: 0;
-	width: 0;
-  	height: 0;
-  	border-top: 100px solid $white;
-  	border-left: 100px solid transparent;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-top: 100px solid $white;
+  border-left: 100px solid transparent;
 
-  	&:after {
-  		content: '';
-  		width: 24px;
-  		height: 24px;
-  		display: inline-block;
-  		background: $sprite -201px -109px;
-  		position: absolute;
-  		right: 15px;
-  		top: -77px;
-  		cursor: pointer;
-  	}
+  &:after {
+    content: '';
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    background: $sprite -201px -109px;
+    position: absolute;
+    right: 15px;
+    top: -77px;
+    cursor: pointer;
+  }
 }
 
 .choose-plan {
-	padding: 15px;
+  padding: 15px;
 
-	h2 {
-		font-weight: 700;
-		font-size: 1.8rem;
-		color: $black;
-	}
+  h2 {
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: $black;
+  }
 
-	ul {
-		list-style-type: none;
-		margin: 20px 0;
-		padding: 0;
-		@include border-radius(5px);
-		border: 1px solid $grey2;
+  ul {
+    list-style-type: none;
+    margin: 20px 0;
+    padding: 0;
+    @include border-radius(5px);
+    border: 1px solid $grey2;
 
-		li {
-			font-size: 1.6rem;
-			color: $txt1;
-			display: block;
-			padding: 25px 15px;
+    li {
+      font-size: 1.6rem;
+      color: $txt1;
+      display: block;
+      padding: 25px 15px;
 
-			span {
-				display: inline-block;
-			}
+      span {
+        display: inline-block;
+      }
 
-			
 
-			strike {
-				font-size: 1.6rem;
-				color: $txt2;
-			}
-		}
-	}
+      strike {
+        font-size: 1.6rem;
+        color: $txt2;
+      }
+    }
+  }
 
-	&--child {
-				flex-grow: 0;
-				margin: 10 15px 0 0;
-			}
+  &--child {
+    flex-grow: 0;
+    margin: 10 15px 0 0;
+  }
 
-	&--price {
-		font-size: 3rem;
-		color: $black;
-		margin-left: 10px;
+  &--price {
+    font-size: 3rem;
+    color: $black;
+    margin-left: 10px;
 
-		strong {
-			font-weight: 600;
-		}
+    strong {
+      font-weight: 600;
+    }
 
-		p {
-			font-size: 1.6rem;
-			color: $txt1;
-			margin-bottom: 10px;
-		}
-	}
+    p {
+      font-size: 1.6rem;
+      color: $txt1;
+      margin-bottom: 10px;
+    }
+  }
 
-	&--ribbon {
-		position: absolute;
-		right: -11px;
-		top: 0;
-		background: $sprite -233px -108px;
-		width: 142px;
-		height: 35px; 
-		display: inline-block;
-		text-transform: uppercase;
-		font-size: 1.3rem;
-		font-weight: 600;
-		color: $white;
-		line-height: 29px;
-		padding-left: 25px;
-	}
+  &--ribbon {
+    position: absolute;
+    right: -11px;
+    top: 0;
+    background: $sprite -233px -108px;
+    width: 142px;
+    height: 35px;
+    display: inline-block;
+    text-transform: uppercase;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: $white;
+    line-height: 29px;
+    padding-left: 25px;
+  }
 
-	&--off {
-		font-size: 1.6rem;
-		font-weight: 700;
-	}
+  &--off {
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
 
-	&--pay-price {
-		font-size: 1.6rem;
-		color: $txt2;
-		margin-left: 5px;
-		display: inline-block;
+  &--pay-price {
+    font-size: 1.6rem;
+    color: $txt2;
+    margin-left: 5px;
+    display: inline-block;
 
-		span {
-			font-size: 3.6rem;
-			color: $black;
-			display: block;
-			margin-top: 5px;
+    span {
+      font-size: 3.6rem;
+      color: $black;
+      display: block;
+      margin-top: 5px;
 
-			strong {
-				font-weight: 600;
-				color: $black;
-			}
-		}
-	}
+      strong {
+        font-weight: 600;
+        color: $black;
+      }
+    }
+  }
 
-	&--orange-button-change {
-		padding: 12px 10% !important;
-	}
+  &--orange-button-change {
+    padding: 12px 10% !important;
+  }
 }
 
 .carousel-box {
 
-	&--right {
-		width: 45px;
-		height: 45px;
-		position: absolute;
-		right: 0;
-		top: 55%;
-		box-shadow: 0 2px 9px 1px rgba(194,194,194,0.50);
-		border-top-left-radius: 4px;
-		border-bottom-left-radius: 4px;
-		display: inline-block;
-		z-index: 99;
-		background-color: $white;
-		cursor: pointer;
+  &--right {
+    width: 45px;
+    height: 45px;
+    position: absolute;
+    right: 0;
+    top: 55%;
+    box-shadow: 0 2px 9px 1px rgba(194, 194, 194, 0.50);
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    display: inline-block;
+    z-index: 99;
+    background-color: $white;
+    cursor: pointer;
 
-		&:after {
-			content: '';
-			position: absolute;
-			right: 15px;
-			top: 15px;
-			background: $sprite -386px -110px;
-			width: 8px;
-			height: 14px;
-		}
-	}
+    &:after {
+      content: '';
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      background: $sprite -386px -110px;
+      width: 8px;
+      height: 14px;
+    }
+  }
 
-	&--left {
-		width: 45px;
-		height: 45px;
-		position: absolute;
-		left: 0;
-		top: 55%;
-		box-shadow: 0 2px 9px 1px rgba(194,194,194,0.50);
-		border-top-right-radius: 4px;
-		border-bottom-right-radius: 4px;
-		display: inline-block;
-		z-index: 99;
-		background-color: $white;
-		cursor: pointer;
+  &--left {
+    width: 45px;
+    height: 45px;
+    position: absolute;
+    left: 0;
+    top: 55%;
+    box-shadow: 0 2px 9px 1px rgba(194, 194, 194, 0.50);
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    display: inline-block;
+    z-index: 99;
+    background-color: $white;
+    cursor: pointer;
 
-		&:after {
-			content: '';
-			position: absolute;
-			right: 15px;
-			top: 15px;
-			background: $sprite -397px -110px;
-			width: 8px;
-			height: 14px;
-		}
-	}
+    &:after {
+      content: '';
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      background: $sprite -397px -110px;
+      width: 8px;
+      height: 14px;
+    }
+  }
 
-	&--carousel {
-		list-style-type: none;
-		margin: 0 !important;
-		padding: 0;
-		border: none !important;
-	}
+  &--carousel {
+    list-style-type: none;
+    margin: 0 !important;
+    padding: 0;
+    border: none !important;
+  }
 
-	&--slide {
-		font-size: 1.6rem;
-		color: $txt1;
-		display: block;
-		padding: 15px 10px 0  10px !important;
-		display: flex !important;
-		justify-content: space-between;
-		flex-wrap: wrap;
+  &--slide {
+    font-size: 1.6rem;
+    color: $txt1;
+    display: block;
+    padding: 15px 10px 0 10px !important;
+    display: flex !important;
+    justify-content: space-between;
+    flex-wrap: wrap;
 
-		&__content {
-			width: 144px;
-			height: 149px;
-			display: inline-block;
-			@include border-radius(5px);
-			box-shadow: 1px 4px 9px 0 rgba(172,172,172,0.50);
-			margin-top: 25px;
-		}
-	}
+    &__content {
+      width: 144px;
+      height: 149px;
+      display: inline-block;
+      @include border-radius(5px);
+      box-shadow: 1px 4px 9px 0 rgba(172, 172, 172, 0.50);
+      margin-top: 25px;
+    }
+  }
 }
 
 .bottom-links {
-	margin: 20px 0 0 10%;
-	@include flexbox();
-	color: $blue1;
+  margin: 20px 0 0 10%;
+  @include flexbox();
+  color: $blue1;
 
-	a {
-		margin: 0 15px;
-		color: $blue1;
-		display: inline-block;
-	}
+  a {
+    margin: 0 15px;
+    color: $blue1;
+    display: inline-block;
+  }
 }
