@@ -80,8 +80,6 @@ function* updateUserReference(action) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
-        localStorage.removeItem('reference');
-
         yield put({type: Actions.SAVE_USER_REFERENCE, data: result['data']});
 
         return resolve('User Reference have saved successfully.');
@@ -107,6 +105,10 @@ function* bulkUpdateUserReference(action) {
             ////console.log(result['error']);
         }
         else{
+            if (localStorage.getItem('reference')){
+                localStorage.removeItem('reference')
+                yield call(fetchUserReference)
+            }
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
         }
         ////console.log('---', result);

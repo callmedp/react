@@ -64,11 +64,6 @@ class Buy extends Component {
     }
 
     render() {
-        const slideImages = [
-            '/media/static/react/assets/images/mobile/resume-1.png',
-            '/media/static/react/assets/images/mobile/resume-2.png',
-            '/media/static/react/assets/images/mobile/resume-2.png'
-        ];
 
         const settings = {
             dots: false,

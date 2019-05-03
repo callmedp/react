@@ -78,6 +78,31 @@ class Project extends Component {
         }
     }
 
+    componentWillUnmount() {
+
+        const form_data = this.props.info.form.project;
+        console.log(form_data)
+        let error = false
+        let error_values =form_data["syncErrors"]
+        // console.log(error_values)
+        if(error_values){
+            for(let i of  error_values['list']){
+                for(let j of Object.keys(i)){
+                    if(i[j]){
+                        error =true
+                        break;
+                    }
+                }
+            }
+        }
+        console.log("error",error)
+        if(!error){
+            console.log("Came Here")
+            this.props.bulkUpdateUserProject(form_data['values']['list'])
+        }
+
+    }
+
     handleAddition(fields, error) {
         fields.push({
             "candidate_id": '',

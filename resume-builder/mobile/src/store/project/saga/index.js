@@ -89,8 +89,6 @@ function* fetchUserProject(action) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
-        localStorage.removeItem('project');
-
         yield put({type: Actions.SAVE_USER_PROJECT, data: result['data']});
 
         return resolve('User Project have saved successfully.');
@@ -116,6 +114,10 @@ function* bulkUpdateUserProject(action) {
             ////console.log(result['error']);
         }
         else{
+            if (localStorage.getItem('project')){
+                localStorage.removeItem('project')
+                yield call(fetchUserProject)
+            }
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
         }
 

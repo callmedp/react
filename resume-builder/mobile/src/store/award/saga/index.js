@@ -79,7 +79,7 @@ function* updateUserAward(action) {
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
-        localStorage.removeItem('award');
+        
         yield put({type: Actions.SAVE_USER_AWARD, data: result['data']});
 
         return resolve('User Award  Info saved successfully.');
@@ -104,6 +104,10 @@ function* bulkUpdateUserAward(action) {
             ////console.log(result['error']);
         }
         else{
+            if (localStorage.getItem('award')){
+                localStorage.removeItem('award')
+                yield call(fetchUserAward)
+            }
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
         }
         

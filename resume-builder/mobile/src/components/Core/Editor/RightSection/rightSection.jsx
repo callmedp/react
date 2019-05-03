@@ -24,11 +24,45 @@ class RightSection extends Component {
         this.state = {
             type: (values && values.type) || ''
         }
+        // this.educationRef = React.createRef()
+        // this.skillRef = React.createRef()
     }
 
 
     componentDidUpdate(prevProps) {
         if (this.props.location !== prevProps.location) {
+            // console.log('-pros----', queryString.parse(prevProps.location.search), prevProps);
+            // let form_name =Object.keys(prevProps.info.form)[0]
+            // console.log(form_name)
+            // console.log("---- prev",)
+            // let error = false
+            // let list_values =prevProps.info.form[form_name]["syncErrors"]
+            // if(list_values){
+            //     for(let i of  list_values['list']){
+            //         for(let j in Object.keys(i)){
+            //             if(i[j]){
+            //                 error =true
+            //                 break;
+            //             }
+            //         }
+            //     }
+            // }
+            
+            // console.log("error",error)
+            // if(!error){
+            //     let form_values = prevProps.info.form[form_name]['values']
+            //     form_name =form_name.toLowerCase()
+
+            //     console.log("values",form_values)
+            //     if(this.refs[form_name]){
+            //         let prop = this.refs[form_name]
+            //         console.log(prop)
+            //         prop = prop['selectChildElement']('<Education/>')
+            //         console.log(prop)
+            //     }
+            // }
+            // console.log("info ------",prevProps.info)
+            
             const values = queryString.parse(this.props.location.search)
             this.setState({
                 type: (values && values.type) || ''
@@ -38,39 +72,40 @@ class RightSection extends Component {
 
     componentDidMount() {
         ////console.log(this.props)
+        
     }
 
     renderSwitch() {
         switch (this.state.type) {
             case 'education': {
-                return <Education {...this.props}/>
+                return <Education ref={'education'} {...this.props}/>
             }
             case 'skill': {
-                return <Skills {...this.props}/>
+                return <Skills ref={'skill'} {...this.props}/>
             }
             case 'experience': {
-                return <Experience {...this.props}/>
+                return <Experience ref={'experience'} {...this.props}/>
             }
             case 'language': {
-                return <Language {...this.props}/>
+                return <Language ref={'language'} {...this.props}/>
             }
             case 'award': {
-                return <Award {...this.props}/>
+                return <Award ref={'award'} {...this.props}/>
             }
             case 'project': {
-                return <Project {...this.props}/>
+                return <Project ref={'project'} {...this.props}/>
             }
             case 'course': {
-                return <Course {...this.props}/>
+                return <Course ref={'course'} {...this.props}/>
             }
             case 'reference': {
-                return <Reference {...this.props}/>
+                return <Reference ref={'reference'} {...this.props}/>
             }
             case 'summary': {
-                return <Summary {...this.props}/>
+                return <Summary ref={'summary'} {...this.props}/>
             }
             default: {
-                return <PersonalInfo {...this.props}/>
+                return <PersonalInfo ref={'profile'} {...this.props}/>
             }
 
         }
@@ -95,7 +130,8 @@ class RightSection extends Component {
 const mapStateToProps = (state) => {
     return {
         initialValues: state.sidenav,
-        sidenav: state.sidenav
+        sidenav: state.sidenav,
+        info: state
     }
 };
 
