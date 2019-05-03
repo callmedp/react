@@ -32,6 +32,10 @@ class Education extends Component {
 
     }
 
+    componentWillUnmount() {
+        console.log('----- yeah i am going to get removed from here...');
+    }
+
     componentDidMount() {
         this.props.fetchUserEducation()
     }
