@@ -1,5 +1,3 @@
-from typing import Tuple
-
 CANCELLED = 5
 OI_CANCELLED = 14
 STATUS_CHOICES = (
