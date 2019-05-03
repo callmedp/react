@@ -19,7 +19,7 @@ from .decorators import (
     stop_browser_cache, has_group)
 from django.core.paginator import Paginator
 from django.db.models import Q
-from shop.choices import PRODUCT_VENDOR_CHOICES, APPLICATION_PROCESS
+from shop.choices import PRODUCT_VENDOR_CHOICES, APPLICATION_PROCESS, SUB_FLOWS
 from blog.mixins import PaginationMixin
 from shop.models import (
     Product, ProductScreen, ScreenChapter,
@@ -436,7 +436,8 @@ class AddScreenProductView(FormView):
         context = super(
             AddScreenProductView, self).get_context_data(**kwargs)
         alert = messages.get_messages(self.request)
-        context.update({'messages': alert})
+        context.update({'messages': alert,
+            'sub_type_flow_choices': json.dumps(SUB_FLOWS)})
         return context
 
     def form_valid(self, form):
