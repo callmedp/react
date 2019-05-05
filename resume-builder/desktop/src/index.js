@@ -6,7 +6,6 @@ import App from './App';
 import './styles/main.scss';
 
 
-
 const rootElement = document.getElementById('react-app');
 
 

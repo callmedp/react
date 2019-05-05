@@ -139,8 +139,8 @@ export const ExperienceRenderer = ({
                                                             <span className="till-today">
 									                                    <Field type="checkbox"
                                                                                name={`${member}.is_working`}
-                                                                               component="input"
-                                                                               checked={`${member}.is_working` === 'true' ? true : false}/>
+                                                                               component={renderField}
+                                                                               checked={`${member}.is_working` === true}/>
 								                                	Till Today
 							                                    	</span>
                                                         </fieldset>

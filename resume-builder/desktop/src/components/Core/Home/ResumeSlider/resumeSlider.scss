@@ -2,13 +2,18 @@
 @import '../../../../styles/variables/mixins.scss';
 
 .slider {
-	margin: 20px 0 0 0 !important;
+  margin: 20px 0 0 0 !important;
 }
 
 .orange-button--custom {
-	position: relative;
-	left: 0;
-	right: 0;
-	bottom: 150px;
+  position: relative;
+  left: 0;
+  right: 0;
+  bottom: 150px;
 
+}
+
+.resume-slider {
+	border: solid red 1px;
+    margin: 10px;
 }

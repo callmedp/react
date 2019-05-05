@@ -6,7 +6,6 @@ module.exports = (config, env) => {
     const result = {
         'staticUrl': '/media/static/',
     };
-
     config.module.rules[2]['oneOf'][5]['use'][3]['options'] = {
         ...config.module.rules[2]['oneOf'][5]['use'][3]['options'],
         ...{

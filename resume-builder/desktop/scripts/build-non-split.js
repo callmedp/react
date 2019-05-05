@@ -25,6 +25,7 @@ const result = {
 
 }
 
+console.log('------', JSON.stringify(config));
 config.module.rules[2]['oneOf'][5]['use'][3]['options'] = {
     ...config.module.rules[2]['oneOf'][5]['use'][3]['options'],
     ...{
@@ -39,3 +40,4 @@ config.module.rules[2]['oneOf'][5]['use'][3]['options'] = {
         }
     }
 }
+

@@ -12,28 +12,26 @@ import TemplateModal from '../../../Modal/tempateModal'
 import Slider from "react-slick";
 
 
-
-
 function SampleNextArrow(props) {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={className}
-      style={{ ...style, display: "block", background: "red" }}
-      onClick={onClick}
-    />
-  );
+    const {className, style, onClick} = props;
+    return (
+        <div
+            className={className}
+            style={{...style, display: "block", background: "red"}}
+            onClick={onClick}
+        />
+    );
 }
 
 function SamplePrevArrow(props) {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={className}
-      style={{ ...style, display: "block", background: "green" }}
-      onClick={onClick}
-    />
-  );
+    const {className, style, onClick} = props;
+    return (
+        <div
+            className={className}
+            style={{...style, display: "block", background: "green"}}
+            onClick={onClick}
+        />
+    );
 }
 
 export class Buy extends Component {
@@ -99,7 +97,6 @@ export class Buy extends Component {
     }
 
 
-
     render() {
         const settings = {
             infinite: true,
@@ -109,6 +106,7 @@ export class Buy extends Component {
             nextArrow: <SampleNextArrow/>,
             prevArrow: <SamplePrevArrow/>
         };
+        const {checked} = this.state;
         return (
             /*
             * @desc Top Bar component
@@ -185,7 +183,7 @@ export class Buy extends Component {
                                 <div className="">
                                     <div className="choose-plan--pay-price">
                                         You pay
-                                        <span>Rs. <strong>999/-</strong></span>
+                                        <span>Rs. <strong>{checked === 'product1'? "999" : "1249"}/-</strong></span>
                                     </div>
                                     <button
                                         className="choose-plan--orange-button-change orange-button items-right pull-right mt-10"

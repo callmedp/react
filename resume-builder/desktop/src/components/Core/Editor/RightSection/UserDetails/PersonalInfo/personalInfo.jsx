@@ -48,6 +48,16 @@ export class PersonalInfo extends Component {
         else this.props.history.push('/resume-builder/buy/')
     }
 
+    //
+    // static getDerivedStateFromProps(nextProps, prevState) {
+    //     const {personalInfo: {image}} = nextProps;
+    //     console.log('--image ----', image);
+    //     if (prevState.imageURL !== image && image !== '') {
+    //         return ({
+    //             imageURL: image
+    //         })
+    //     }
+    // }
 
     removeImage() {
         this.setState({
@@ -98,7 +108,8 @@ export class PersonalInfo extends Component {
                     <h2 ref={(value) => {
                         elem = value
                     }} onKeyUp={(event) => saveTitle(event, 0)}
-                        contenteditable={!!(isEditable) ? "true" : "false"}>{entityName} <input type="text" name=""/></h2>
+                        contenteditable={!!(isEditable) ? "true" : "false"}>{entityName} <input type="text" name=""/>
+                    </h2>
                     <span onClick={() => editHeading(elem)}
                           className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ''}/>
                 </section>
@@ -298,13 +309,14 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchPersonalInfo())
         },
         "onSubmit": (personalDetails, imageURL) => {
-            const {gender, date_of_birth, extracurricular} = personalDetails;
+            const {gender, date_of_birth, extracurricular, image} = personalDetails;
+            console.log('--oamge-', image)
             personalDetails = {
                 ...personalDetails,
                 ...{
                     'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
                     'gender': (gender && gender['value']) || '',
-                    'image': imageURL,
+                    'image': imageURL || image,
                     'extracurricular': extracurricular instanceof Array ?
                         (extracurricular || []).map(el => el.value).join(',') : extracurricular
                 }
