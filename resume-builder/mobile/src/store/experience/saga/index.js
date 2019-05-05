@@ -116,6 +116,10 @@ function* bulkUserExperienceUpdate(action) {
             ////console.log(result['error']);
         }
         else{
+            if (localStorage.getItem('experience')){
+                localStorage.removeItem('experience')
+                yield call(fetchUserExperience)
+            }
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
         }
 

@@ -112,6 +112,10 @@ function* bulkSaveUserSkill(action) {
             ////console.log(result['error']);
         }
         else{
+            if (localStorage.getItem('skill')){
+                localStorage.removeItem('skill')
+                yield call(fetchUserSkill)
+            }
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
         }
 

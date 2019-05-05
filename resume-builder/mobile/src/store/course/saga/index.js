@@ -80,7 +80,7 @@ function* updateUserCourse(action) {
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
-        localStorage.removeItem('course');
+        
 
         yield put({type: Actions.SAVE_USER_COURSE, data: result['data']});
 
@@ -107,6 +107,11 @@ function* bulkUpdateUserCourse(action) {
             ////console.log(result['error']);
         }
         else{
+            if (localStorage.getItem('course')){
+                localStorage.removeItem('course')
+                yield call(fetchUserCourse)
+            }
+            
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
         }
 

@@ -92,7 +92,6 @@ function* updateUserEducation(action) {
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
-        localStorage.removeItem('education');
 
         return resolve('User Education  Info saved successfully.');
 
@@ -117,6 +116,10 @@ function* bulkUpdateUserEducation(action) {
             ////console.log(result['error']);
         }
         else{
+            if (localStorage.getItem('education')){
+                localStorage.removeItem('education')
+                yield call(fetchUserEducation)
+            }
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
         }
 

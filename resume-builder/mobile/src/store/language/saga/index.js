@@ -87,7 +87,6 @@ function* updateUserLanguage(action) {
         //     return reject(new SubmissionError({_error: result['errorMessage']}));
         // }
         // yield call(fetchUserLanguage)
-        localStorage.removeItem('language');
         return resolve('User Language  Info saved successfully.');
 
     } catch (e) {
@@ -111,6 +110,10 @@ function* bulkUpdateUserLanguage(action) {
             ////console.log(result['error']);
         }
         else{
+            if (localStorage.getItem('language')){
+                localStorage.removeItem('language')
+                yield call(fetchUserLanguage)
+            }
             yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
         }
 

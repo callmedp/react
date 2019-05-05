@@ -35,6 +35,32 @@ class Award extends Component {
         ////console.log(this.props.sidenav)
     }
 
+    componentWillUnmount() {
+
+        const form_data = this.props.info.form.award;
+        console.log(form_data)
+        let error = false
+        let error_values =form_data["syncErrors"]
+        // console.log(error_values)
+        if(error_values){
+            for(let i of  error_values['list']){
+                for(let j of Object.keys(i)){
+                    if(i[j]){
+                        error =true
+                        break;
+                    }
+                }
+            }
+        }
+        console.log("error",error)
+        if(!error){
+            console.log("Came Here")
+            this.props.bulkUpdateUserAward(form_data['values']['list'])
+        }
+
+    }
+    
+
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
@@ -232,7 +258,8 @@ const mapDispatchToProps = (dispatch) => {
                 };
                 return userAward;
             })
-            ////console.log(listItems)
+
+            console.log(listItems)
             return dispatch(actions.bulkUpdateUserAward({list: listItems}))
         }
     }
