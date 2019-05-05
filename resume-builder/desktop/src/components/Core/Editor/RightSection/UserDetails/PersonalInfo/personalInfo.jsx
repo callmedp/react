@@ -78,6 +78,9 @@ export class PersonalInfo extends Component {
         return [];
     }
 
+
+
+
     async getImageURI(event) {
         let reader = new FileReader();
         reader.onload = (event) => {
@@ -299,7 +302,7 @@ const mapStateToProps = (state) => {
     return {
         initialValues: state.personalInfo,
         personalInfo: state.personalInfo,
-        ui: state.ui
+        ui: state.ui,
     }
 };
 

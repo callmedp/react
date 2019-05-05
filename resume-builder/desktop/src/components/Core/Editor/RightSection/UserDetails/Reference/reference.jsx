@@ -30,6 +30,15 @@ class Reference extends Component {
         }
     }
 
+
+    componentWillUnmount() {
+        let {formData: {reference: {values, syncErrors}}} = this.props;
+        let error = false;
+        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el).map(key => (!!el[key] ? error = true : false)))
+        if (!error) this.props.bulkUpdateOrCreate(values && values['list'])
+
+    }
+
     componentDidMount() {
         this.props.fetchUserReference()
     }

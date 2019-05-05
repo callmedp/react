@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './skill.scss'
-import { reduxForm, FieldArray} from "redux-form"
+import {reduxForm, FieldArray} from "redux-form"
 import * as actions from "../../../../../../store/skill/actions";
 import {connect} from "react-redux";
 import validate from '../../../../../FormHandler/validations/skill/validate'
@@ -29,6 +29,13 @@ class Skill extends Component {
         this.props.fetchUserSkill();
     }
 
+
+    componentWillUnmount() {
+        let {formData: {skill: {values, syncErrors}}} = this.props;
+        let error = false;
+        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el).map(key => (!!el[key] ? error = true : false)))
+        if (!error) this.props.bulkUpdateOrCreate(values && values['list'])
+    }
 
     async handleSubmit(values, entityLink) {
         const {list} = values;

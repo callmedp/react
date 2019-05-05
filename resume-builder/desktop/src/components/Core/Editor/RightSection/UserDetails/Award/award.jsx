@@ -25,6 +25,14 @@ class Award extends Component {
     }
 
 
+    componentWillUnmount() {
+        let {formData: {award: {values, syncErrors}}} = this.props;
+        let error = false;
+        (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el).map(key => (!!el[key] ? error = true : false)));
+        if (!error) this.props.bulkUpdateOrCreate(values && values['list'])
+
+    }
+
     async handleSubmit(values, entityLink) {
         const {list} = values;
         if (list.length) {

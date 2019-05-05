@@ -45,8 +45,6 @@ class RightSection extends Component {
     }
 
 
-
-
     handlePreview() {
         this.props.history.push('/resume-builder/preview/');
     }
@@ -338,6 +336,7 @@ class RightSection extends Component {
 const mapStateToProps = (state) => {
     return {
         entityList: state.personalInfo && state.personalInfo.entity_preference_data,
+        formData: state && state.form
     }
 }
 
