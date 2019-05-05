@@ -2,13 +2,21 @@
 {% load static humanize compress %}
 
 {% block head %}
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     {% block css_section %}
-        {% render_bundle 'main' 'css' 'DEFAULT' %}
-        <link rel="stylesheet" type="text/css" charset="UTF-8" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
+
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+              integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+              crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" charset="UTF-8"
               href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"/>
         <link rel="stylesheet" type="text/css"
               href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"/>
+        {% render_bundle 'main' 'css' 'DEFAULT' %}
+
 
     {% endblock css_section %}
     <script>
@@ -17,8 +25,6 @@
         {#config.siteDomain ="{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN }}"#}
         config.siteDomain = "http://127.0.0.1:8000"
     </script>
-
-
 
 {% endblock head %}
 

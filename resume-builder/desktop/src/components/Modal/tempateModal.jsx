@@ -56,7 +56,7 @@ export default class TemplateModal extends React.Component {
                     contentLabel="Example Modal"
                 >
                     <div>
-                        <img className="img-responsive" src={`${this.staticUrl}react/assets/images/resume1_Preview.jpg`}/>
+                        <img className="img-responsive" src={`${this.staticUrl}react/assets/images/resume1_preview.jpg`}/>
                     </div>
                 </Modal>
             </div>

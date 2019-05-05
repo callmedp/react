@@ -121,7 +121,7 @@ export class Buy extends Component {
                         <section className="left-sidebar half-width pos-rel">
                             <span onClick={this.showEnlargedTemplate} className="zoom"/>
                             <div className="right-sidebar-scroll-main">
-                                <img src={`${this.staticUrl}react/assets/images/resume1_Preview.jpg`}
+                                <img src={`${this.staticUrl}react/assets/images/resume1_preview.jpg`}
                                      className="img-responsive" alt=""/>
                             </div>
 
