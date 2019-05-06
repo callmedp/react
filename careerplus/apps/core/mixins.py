@@ -15,7 +15,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 # from django.http import HttpResponse
 from core.library.gcloud.custom_cloud_storage import (GCPInvoiceStorage, GCPPrivateMediaStorage)
 from pathlib import Path
-from weasyprint import HTML
+from weasyprint import HTML, CSS
 from resumebuilder.models import Candidate
 from PIL import Image
 import zipfile
@@ -328,7 +328,7 @@ class ResumeGenerate(object):
         rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
 
         if file_type == 'pdf':
-            file = HTML(string=rendered_html).write_pdf()
+            file = HTML(string=rendered_html).write_pdf(stylesheets=[CSS(string='@page {size:A3; margin:0px}')])
         elif file_type == 'png':
             file = HTML(string=rendered_html).write_png()
 
@@ -373,8 +373,8 @@ class ResumeGenerate(object):
 
         #  handle for pdf
         if content_type == 'pdf':
-            candidate = Candidate.objects.get(id=95)
-            extracurricular = candidate.extracurricular.split(',')
+            candidate = Candidate.objects.get(candidate_id=order.candidate_id)
+
             education = candidate.candidateeducation_set.all()
             experience = candidate.candidateexperience_set.all()
             skills = candidate.skill_set.all()
@@ -382,17 +382,19 @@ class ResumeGenerate(object):
             references = candidate.candidatereference_set.all()
             projects = candidate.candidateproject_set.all()
             certifications = candidate.candidatecertification_set.all()
+            languages = candidate.candidatelanguage_set.all()
+            current_exp = experience.filter(is_working=True).order_by('-start_date').first()
+            latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
 
             #  handle context here later
-            context_dict = {"STATIC_URL": settings.STATIC_URL, "SITE_DOMAIN": settings.SITE_DOMAIN,
-                            "SITE_PROTOCOL": settings.SITE_PROTOCOL, 'user': candidate, 'education': education,
-                            'experience': experience, 'skills': skills,
+            context_dict = {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
                             'achievements': achievements, 'references': references, 'projects': projects,
-                            'certifications': certifications, 'extracurricular': extracurricular}
+                            'certifications': certifications, 'extracurricular': '', 'languages': languages,
+                            'current_exp': current_exp, 'latest_exp': latest_experience}
 
             pdf_file = self.generate_file(
                 context_dict=context_dict,
-                template_src='emailers/candidate/resume_test.html',
+                template_src='resume{}.html'.format(index),
                 file_type='pdf')
 
             #  pdf file
