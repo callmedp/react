@@ -1,7 +1,7 @@
 import React from 'react'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import AsyncSelect from 'react-select/lib/Async';
+import Multiselect from 'react-widgets/lib/Multiselect'
 
 
 export const renderField = ({
@@ -152,28 +152,29 @@ export const checkbox = ({
   }
 
 
-export const renderDynamicSelect = ({
-                                        input,
-                                        loadOptions,
-                                        label,
-                                        defaultOptions,
-                                        meta: {touched, error, warning}
-                                    }) => (
-    <div className="flex-auto">
-        <AsyncSelect {...input}
-                     loadOptions={loadOptions}
-                     defaultOptions={defaultOptions}
-                     placeholder={label}
-                     isMulti={true}
-                     onBlur={() => {
-                         input.onBlur(input.value)
-                     }}
-        />
-        {touched &&
-        ((error && <span className={'error-message'}>{error}</span>) ||
-            (warning && <span className={'warn-Message'}>{warning}</span>))}
-    </div>
+export const renderMultiselect = ({ input,className, data, valueField, textField,defaultValue }) =>(
+    
+    <React.Fragment>
+        <label className="form__label" htmlFor="extracurricular">Interest</label>
+        <div className="input-group">
+
+            <Multiselect {...input}
+                onBlur={() => input.onBlur()}
+                value={input.value.length ? input.value :defaultValue}
+                data={data}
+                className={className}
+                valueField={valueField}
+                textField={textField}
+                placeholder={'Select Interest'}
+            />
+            
+        </div>
+
+        
+    </React.Fragment>
 )
+ 
+
 
 export const renderTextArea = ({
                                    input,

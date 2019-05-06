@@ -1,5 +1,7 @@
 @import '../../../../../../styles/variables/vars.scss';
 @import '../../../../../../styles/variables/mixins.scss';
+@import '~react-widgets/dist/css/react-widgets.css';
+
 
 .react-datepicker-wrapper {
     @extend %input;
@@ -44,4 +46,8 @@ input::placeholder {
 .react-datepicker-wrapper .react-datepicker__input-container input {
     color: $grey-333;
     font-size: 14px;
+}
+
+.multi-select{
+    width: 100%;
 }

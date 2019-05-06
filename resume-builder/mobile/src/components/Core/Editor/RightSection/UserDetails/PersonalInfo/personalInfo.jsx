@@ -9,18 +9,11 @@ import {
     datepicker,
     renderSelect,
     renderTextArea,
-    renderDynamicSelect
+    renderMultiselect
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
-
-import {
-    required,
-    phoneNumber,
-    email
-} from "../../../../../FormHandler/formValidations.js";
 
 import moment from 'moment';
 import PreviewModal from "../../../Preview/previewModal";
-import DataLoader from "../../../../../Common/DataLoader/dataloader"
 import validate from "../../../../../FormHandler/validtaions/profile/validate"
 
 class PersonalInfo extends Component {
@@ -30,23 +23,22 @@ class PersonalInfo extends Component {
         this.removeImage = this.removeImage.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handlePreview = this.handlePreview.bind(this);
-        this.fetchInterestList = this.fetchInterestList.bind(this);
         this.state = {
             'imageURI': '',
             'imageURL': '',
             'editHeading': false,
-            'heading' : ''
+            'heading' : '',
+            'submit': false
         }
         this.updateInputValue =this.updateInputValue.bind(this);
-        this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this);
+        this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this)
+
 
     }
 
     componentDidMount() {
-        // console.log(this.props.loader)
         if (this.props.personalInfo.entity_preference_data.length) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[0].entity_text})
-            // console.log("Came Inside")
         }
         
     }
@@ -54,6 +46,7 @@ class PersonalInfo extends Component {
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
+        this.setState({submit:true})
         await this.props.onSubmit(values, this.state.imageURL);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
@@ -67,28 +60,33 @@ class PersonalInfo extends Component {
     }
     componentWillUnmount() {
 
-        const form_data = this.props.info.form.personalInfo;
-        console.log(form_data)
-        let error = false
-        let error_values =form_data["syncErrors"]
-        console.log(error_values)
-        if(error_values){
-            for(let i of  Object.keys(error_values)){
-                if(error_values[i]){
-                    error =true;
-                    break;
+        if(!this.state.submit){
+            const form_data = this.props.info.form.personalInfo;
+            // console.log(form_data)
+            let error = false
+            let error_values =form_data["syncErrors"]
+            // console.log(error_values)
+            if(error_values){
+                for(let i of  Object.keys(error_values)){
+                    if(error_values[i]){
+                        error =true;
+                        break;
+                    }
                 }
             }
+            if(!error){
+                this.updateInfoBeforeLoss(form_data)
+            }
         }
-        if(!error){
-            this.updateInfoBeforeLoss(form_data)
-        }
+        
 
     }
 
     async updateInfoBeforeLoss(form_data){
         await this.props.onSubmit(form_data['values'],this.state.imageURL);
     }
+
+    
 
     handlePreview() {
         this.props.history.push('/resume-builder/preview/');
@@ -101,17 +99,6 @@ class PersonalInfo extends Component {
         })
     }
 
-    async fetchInterestList(inputValue, callback) {
-        // try {
-        //     const interests = await this.props.fetchInterest(inputValue);
-        //     const listData = (skills && skills.results || []).map(skill => ({value: skill.id, label: skill.name}))
-        //     callback(listData);
-        // } catch (e) {
-        //     ////console.log('--error-', e);
-        // }
-        ////console.log('---', inputValue)
-        return [];
-    }
 
     componentDidUpdate(prevProps) {
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
@@ -216,7 +203,7 @@ class PersonalInfo extends Component {
 
                         <li className="form__group">
                             <Field component={renderField} label={"Mobile"}  type={"text"} name="number" id="number" prepend={true}
-                                iconClass={"sprite icon--mobile"} vclassName="form__input"/>
+                                iconClass={"sprite icon--mobile"} className="form__input"/>
                         </li>
 
                         <li className="form__group">
@@ -230,20 +217,14 @@ class PersonalInfo extends Component {
                         </li>
 
                         <li className="form__group">
-                            <label className="form__label" htmlFor="extracurricular">Interest</label>
-                            <div className="input-group">
-                                <div className="input-group__prepend">
-                                    <span className="input-group__text">
-                                        <i className="sprite icon--facebook"></i>
-                                    </span>
-                                </div>
-                                <Field name="extracurricular" component={renderDynamicSelect}
-                                            className="form__input"
-                                           defaultOptions={Object.keys(interestList).map(key => interestList[key])}
-                                           value={personalInfo.extracurricular}
-                                           aria-label="extracurricular" id="extracurricular"
-                                           label="Select Interest"/>
-                            </div>
+                            <Field name="extracurricular" 
+                                    component={renderMultiselect}
+                                    data={Object.values(interestList)}
+                                    valueField='value'
+                                    textField='label'
+                                    className={'multi-select'}
+                                    defaultValue={personalInfo.extracurricular}
+                            />
                         </li>
 
                         <li className="form__group">
@@ -304,13 +285,17 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         "onSubmit": (personalDetails, imageURL) => {
-            const { date_of_birth, extracurricular} = personalDetails;
+
+            let { date_of_birth, extracurricular} = personalDetails;
+            console.log("Inter-----" ,extracurricular)
+            let interest = extracurricular
+            interest =  ((interest|| []).map((item)=>item.value)).join(",")
             personalDetails = {
                 ...personalDetails,
                 ...{
                     'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
                     'image': imageURL,
-                    'extracurricular': ''
+                    'extracurricular':interest
                 }
             }
             return new Promise((resolve, reject) => {
