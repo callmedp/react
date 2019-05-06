@@ -217,12 +217,8 @@ class PersonalInfo extends Component {
                         </li>
 
                         <li className="form__group">
-                            <Field name="extracurricular" 
-                                    component={renderMultiselect}
-                                    data={Object.values(interestList)}
-                                    valueField='value'
-                                    textField='label'
-                                    className={'multi-select'}
+                            <Field name="extracurricular" component={renderMultiselect} data={Object.values(interestList)}
+                                    valueField='value' textField='label' className={'multi-select'}
                                     defaultValue={personalInfo.extracurricular}
                             />
                         </li>

@@ -464,8 +464,9 @@ class ResumeGenerate(object):
 
         # check if pack is combo or not
         if not is_combo:
+            print("Came not combo")
             # self.handle_content_type(order, content_type='png')
-            return self.handle_content_type(order, content_type='pdf')
+            return self.handle_content_type(order, content_type='pdf',index='1')
 
         for i in range(1, 6):
             # self.handle_content_type(order, content_type='png', index=str(i))
