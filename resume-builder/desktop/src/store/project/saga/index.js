@@ -62,12 +62,13 @@ function* updateUserProject(action) {
         const result = yield call(id ? Api.updateUserProject : Api.createUserProject, userProject, candidateId, id);
 
 
-        yield put({type: UPDATE_UI, data: {loader: false}})
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
         localStorage.removeItem('project');
+
+        yield put({type: UPDATE_UI, data: {loader: false}})
 
         yield put({type: Actions.SAVE_USER_PROJECT, data: result['data']});
 

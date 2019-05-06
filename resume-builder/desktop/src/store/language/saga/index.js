@@ -16,7 +16,7 @@ function modifyLanguage(data) {
             list: data['list'].map(el => {
                 return {
                     ...el,
-                    proficiency: proficiencyList[el['proficiency'].toString()]
+                    proficiency: proficiencyList[el['proficiency'] && el['proficiency'].toString()]
                 }
             })
         }

@@ -10,7 +10,6 @@ const validate = values => {
     });
     if (listErrors.length) {
         errors.list = listErrors;
-        console.log("2 is ", errors);
         return errors;
     }
     return errors;

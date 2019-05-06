@@ -95,7 +95,6 @@ const mapDispatchToProps = (dispatch) => {
         },
         "onSubmit": (personalDetails) => {
             const {gender, date_of_birth, extracurricular} = personalDetails;
-            console.log('-personal details --', personalDetails);
             personalDetails = {
                 ...personalDetails,
                 ...{

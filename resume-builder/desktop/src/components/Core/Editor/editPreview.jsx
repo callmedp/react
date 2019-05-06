@@ -20,7 +20,6 @@ class EditPreview extends Component {
 
     render() {
         const {ui: {loader}} = this.props;
-        console.log('-laoder--',loader)
         return (
             /*
             * @desc Top Bar component
