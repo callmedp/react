@@ -186,6 +186,7 @@ class DashboardMyorderView(TemplateView):
     template_name = 'dashboard/dashboard-order.html'
 
     def get(self, request, *args, **kwargs):
+
         if request.session.get('candidate_id', None):
             return super(DashboardMyorderView, self).get(request, args, **kwargs)
         return HttpResponseRedirect(reverse('homepage'))
@@ -836,6 +837,8 @@ class DashboardResumeDownload(View):
 class DashboardResumeTemplateDownload(View):
 
     def post(self, request, *args, **kwargs):
+        import ipdb;
+        ipdb.set_trace();
 
         candidate_id = request.session.get('candidate_id', None)
         email = request.session.get('email', None)
@@ -846,7 +849,7 @@ class DashboardResumeTemplateDownload(View):
                     or not (order.candidate_id == candidate_id):
                 return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
-            order, resume_template_full_path, resume_template_name =\
+            order, resume_template_full_path, resume_template_name = \
                 ResumeGenerate().save_order_resume_pdf(order=order, is_combo=True)
 
             if resume_template_full_path:
