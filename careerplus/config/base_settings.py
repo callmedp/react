@@ -170,7 +170,7 @@ WSGI_APPLICATION = 'careerplus.wsgi.application'
 # Webpack loader is used to load webpack generated files
 WEBPACK_LOADER = {
     'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'react/dist/mobile/',
+        'BUNDLE_DIR_NAME': 'react/dist/desktop/',
         'STATS_FILE': os.path.join(BASE_DIR, '..', 'webpack-desktop-stats.json'),
     },
     'MOBILE': {
