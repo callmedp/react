@@ -108,7 +108,7 @@ export class PersonalInfo extends Component {
                         <h2 ref={(value) => {
                             elem = value
                         }} onKeyUp={(event) => saveTitle(event, 0)}
-                            contenteditable={!!(isEditable) ? "true" : "false"}>{entityName} 
+                            contenteditable={!!(isEditable) ? "true" : "false"}>{entityName}
                         </h2>
                     }
                     <span onClick={() => editHeading(elem)}
