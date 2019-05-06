@@ -39,8 +39,8 @@ class Buy extends Component {
             'add_resume': true
 
         }
-        // console.log(data)
-         this.props.addToCart(data);
+        console.log(data)
+        this.props.addToCart(data);
         this.setState({pay_button_clicked:true})
         window.location.href = `${siteDomain}/cart`
     }
@@ -208,10 +208,9 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(action.getProductIds())
         },
         'addToCart': (data) => {
-            console.log(data)
-            // return new Promise((resolve, reject) => {
-            //     dispatch(action.addToCart({data, resolve, reject}));
-            // })
+            return new Promise((resolve, reject) => {
+                dispatch(action.addToCart({data, resolve, reject}));
+            })
         }
     }
 };

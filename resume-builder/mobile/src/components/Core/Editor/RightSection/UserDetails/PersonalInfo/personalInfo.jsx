@@ -21,6 +21,7 @@ import {
 import moment from 'moment';
 import PreviewModal from "../../../Preview/previewModal";
 import DataLoader from "../../../../../Common/DataLoader/dataloader"
+import validate from "../../../../../FormHandler/validtaions/profile/validate"
 
 class PersonalInfo extends Component {
     constructor(props) {
@@ -37,6 +38,7 @@ class PersonalInfo extends Component {
             'heading' : ''
         }
         this.updateInputValue =this.updateInputValue.bind(this);
+        this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this);
 
     }
 
@@ -59,7 +61,7 @@ class PersonalInfo extends Component {
         }
         else{
             this.props.updateCurrentLinkPos({currentLinkPos})
-            //this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
+            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
         }
         
     }
@@ -67,25 +69,25 @@ class PersonalInfo extends Component {
 
         const form_data = this.props.info.form.personalInfo;
         console.log(form_data)
-        // let error = false
-        // let error_values =form_data["syncErrors"]
-        // // console.log(error_values)
-        // if(error_values){
-        //     for(let i of  error_values['list']){
-        //         for(let j of Object.keys(i)){
-        //             if(i[j]){
-        //                 error =true
-        //                 break;
-        //             }
-        //         }
-        //     }
-        // }
-        // console.log("error",error)
-        // if(!error){
-        //     console.log("Came Here")
-        //     this.props.bulkUpdateUserLanguage(form_data['values']['list'])
-        // }
+        let error = false
+        let error_values =form_data["syncErrors"]
+        console.log(error_values)
+        if(error_values){
+            for(let i of  Object.keys(error_values)){
+                if(error_values[i]){
+                    error =true;
+                    break;
+                }
+            }
+        }
+        if(!error){
+            this.updateInfoBeforeLoss(form_data)
+        }
 
+    }
+
+    async updateInfoBeforeLoss(form_data){
+        await this.props.onSubmit(form_data['values'],this.state.imageURL);
     }
 
     handlePreview() {
@@ -189,7 +191,7 @@ class PersonalInfo extends Component {
 
                         <li className="form__group">
                             <Field component={renderField} label={"First Name"}  type={"text"} name="first_name" id="first_name"
-                                iconClass={"sprite icon--firstName"} validate={required} className="form__input" prepend={true}/>
+                                iconClass={"sprite icon--firstName"}  className="form__input" prepend={true}/>
                         </li>
 
                         <li className="form__group">
@@ -209,17 +211,17 @@ class PersonalInfo extends Component {
                         
                         <li className="form__group">
                             <Field component={datepicker} label={"Date Of Birth"}  type={"date"} name="date_of_birth" id="date_of_birth"
-                             validate={required}/>
+                             />
                         </li>
 
                         <li className="form__group">
                             <Field component={renderField} label={"Mobile"}  type={"text"} name="number" id="number" prepend={true}
-                                iconClass={"sprite icon--mobile"} validate={[required,phoneNumber]} className="form__input"/>
+                                iconClass={"sprite icon--mobile"} vclassName="form__input"/>
                         </li>
 
                         <li className="form__group">
                             <Field component={renderField} label={"Email"}  type={"email"} name="email" id="email" prepend={true}
-                                iconClass={"sprite icon--mail"} validate={[required,email]} className="form__input"/>
+                                iconClass={"sprite icon--mail"}  className="form__input"/>
                         </li>
 
                         <li className="form__group">
@@ -288,7 +290,8 @@ class PersonalInfo extends Component {
 
 export const PersonalInfoForm = reduxForm({
     form: 'personalInfo',
-    enableReinitialize: true
+    enableReinitialize: true,
+    validate
 })(PersonalInfo);
 
 

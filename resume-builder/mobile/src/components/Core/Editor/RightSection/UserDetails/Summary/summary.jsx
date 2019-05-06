@@ -7,7 +7,7 @@ import {
     renderTextArea
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 import PreviewModal from "../../../Preview/previewModal";
-import DataLoader from "../../../../../Common/DataLoader/dataloader"
+import validate from "../../../../../FormHandler/validtaions/summary/validate"
 
 
 class Summary extends Component {
@@ -20,6 +20,7 @@ class Summary extends Component {
             'heading' : ''
         }
         this.updateInputValue =this.updateInputValue.bind(this);
+        this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this);
     }
 
     componentDidMount() {
@@ -73,6 +74,31 @@ class Summary extends Component {
         
     }
 
+    componentWillUnmount() {
+
+        const form_data = this.props.info.form.summary;
+        console.log(form_data)
+        let error = false
+        let error_values =form_data["syncErrors"]
+        console.log(error_values)
+        if(error_values){
+            for(let i of  Object.keys(error_values)){
+                if(error_values[i]){
+                    error =true;
+                    break;
+                }
+            }
+        }
+        if(!error){
+            this.updateInfoBeforeLoss(form_data)
+        }
+
+    }
+
+    async updateInfoBeforeLoss(form_data){
+        await this.props.onSubmit(form_data['values']);
+    }
+
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
@@ -118,7 +144,8 @@ class Summary extends Component {
 
 export const SummaryForm = reduxForm({
     form: 'summary',
-    enableReinitialize: true
+    enableReinitialize: true,
+    validate
 })(Summary);
 
 
