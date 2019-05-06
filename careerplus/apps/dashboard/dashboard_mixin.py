@@ -94,6 +94,7 @@ class DashboardInfo(object):
                 "order": obj,
                 "item_count": item_count,
                 'product_type_flow': product_type_flow,
+                'product_id': (item_order and item_order.product and item_order.product.id) or None,
                 "orderitems": orderitems,
             }
             order_list.append(data)

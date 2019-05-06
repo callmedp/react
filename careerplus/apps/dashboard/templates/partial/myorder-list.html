@@ -21,7 +21,7 @@
 </li>
 
 {% for data in order_list %}
-    {% with order=data.order orderitems=data.orderitems item_count=data.item_count product_type_flow=data.product_type_flow %}
+    {% with order=data.order orderitems=data.orderitems item_count=data.item_count product_type_flow=data.product_type_flow product_id=data.product_id %}
         <li>
           <div class="panel-titles" role="tab" id="heading{{order.id}}">
             <div class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{order.id}}" aria-expanded="false" aria-controls="collapse{{order.id}}">
@@ -56,6 +56,7 @@
                           <input type="hidden" name="csrfmiddlewaretoken"
                           value="{{csrf_token}}" />
                           <input type="hidden" name="order_pk" value="{{order.pk}}" />
+                          <input type="hidden" name="product_id" value="{{product_id}}" />
                      </div>
                       <strong><a role="button" onclick="downloadOrderTemplate('{{order.pk}}');event.stopPropagation()">Download Template</a></strong>
                     </form>
