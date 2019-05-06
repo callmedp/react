@@ -12,11 +12,7 @@ import {
     renderDynamicSelect
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 
-import {
-    required,
-    phoneNumber,
-    email
-} from "../../../../../FormHandler/validations/personalInfo/validate";
+import validate from '../../../../../FormHandler/validations/personalInfo/validate'
 
 import moment from 'moment';
 import LoaderSection from "../../../../../Loader/loaderSection.jsx";
@@ -33,6 +29,7 @@ export class PersonalInfo extends Component {
         this.state = {
             'imageURI': '',
             'imageURL': '',
+            flag: true
         }
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
     }
@@ -43,17 +40,27 @@ export class PersonalInfo extends Component {
     }
 
     async handleSubmit(values, entityLink) {
-        await this.props.onSubmit(values, this.state.imageURL);
+        await this.props.onSubmit(values, this.state.imageURL, this.state.flag);
         if (entityLink) this.props.history.push(entityLink);
         else this.props.history.push('/resume-builder/buy/')
     }
 
-
     removeImage() {
+        console.log(' here');
         this.setState({
             imageURI: '',
-            imageURL: ''
-        })
+            imageURL: '',
+            flag: false
+        });
+    }
+
+
+    componentWillUnmount() {
+        let {formData: {personalInfo: {values, syncErrors}}} = this.props;
+        let error = false;
+        Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
+        if (!error) this.props.onSubmit(values, this.state.imageURL, this.state.flag)
+
     }
 
     async fetchInterestList(inputValue, callback) {
@@ -68,12 +75,14 @@ export class PersonalInfo extends Component {
         return [];
     }
 
+
     async getImageURI(event) {
         let reader = new FileReader();
         reader.onload = (event) => {
 
             this.setState({
-                imageURI: event.target.result
+                imageURI: event.target.result,
+                flag: true
             })
 
         };
@@ -81,7 +90,7 @@ export class PersonalInfo extends Component {
 
         let url = await this.props.fetchImageUrl(event.target.files[0]);
         this.setState({
-            'imageURL': url
+            'imageURL': url,
         })
     }
 
@@ -95,10 +104,13 @@ export class PersonalInfo extends Component {
             <div>
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-info1"/></span>
-                    <h2 ref={(value) => {
-                        elem = value
-                    }} onKeyUp={(event) => saveTitle(event, 0)}
-                        contenteditable={!!(isEditable) ? "true" : "false"}>{entityName}</h2>
+                    {
+                        <h2 ref={(value) => {
+                            elem = value
+                        }} onKeyUp={(event) => saveTitle(event, 0)}
+                            contenteditable={!!(isEditable) ? "true" : "false"}>{entityName}
+                        </h2>
+                    }
                     <span onClick={() => editHeading(elem)}
                           className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ''}/>
                 </section>
@@ -112,7 +124,7 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-name"></span>
                                         </div>
-                                        <Field component={renderField} validate={required} type={"text"}
+                                        <Field component={renderField} type={"text"}
                                                name="first_name"/>
                                     </div>
                                 </fieldset>
@@ -153,7 +165,7 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-date"></span>
                                         </div>
-                                        <Field component={datepicker} validate={required} name="date_of_birth"
+                                        <Field component={datepicker} name="date_of_birth"
                                                className={"input-control"}/>
                                     </div>
                                 </fieldset>
@@ -165,7 +177,7 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-mobile"></span>
                                         </div>
-                                        <Field component={renderField} validate={[required, phoneNumber]}
+                                        <Field component={renderField}
                                                type={"text"}
                                                name="number"
                                                className={"input-control"}/>
@@ -177,7 +189,7 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-email"></span>
                                         </div>
-                                        <Field component={renderField} validate={[required, email]} type={"text"}
+                                        <Field component={renderField} type={"text"}
                                                name="email"
                                                className={"input-control"}/>
                                     </div>
@@ -240,7 +252,7 @@ export class PersonalInfo extends Component {
                         </section>
                         <section className="pic-section mt-30">
                             {
-                                this.state.imageURI || personalInfo.image ?
+                                this.state.imageURI || personalInfo.image && this.state.flag ?
                                     <div className='upper-cross' onClick={this.removeImage.bind(this)}>
                                         <i className='icon-close'></i>
                                     </div> : ''
@@ -249,7 +261,7 @@ export class PersonalInfo extends Component {
                             <label>
 
                                 {
-                                    this.state.imageURI || personalInfo.image ?
+                                    this.state.imageURI || personalInfo.image && this.state.flag ?
                                         <img alt={"User Profile"} className='img-responsive'
                                              src={this.state.imageURI || personalInfo.image}/> :
                                         <img alt={"User Profile"} className="img-responsive"
@@ -280,7 +292,8 @@ export class PersonalInfo extends Component {
 
 export const PersonalInfoForm = reduxForm({
     form: 'personalInfo',
-    enableReinitialize: true
+    enableReinitialize: true,
+    validate
 })(PersonalInfo);
 
 
@@ -288,7 +301,7 @@ const mapStateToProps = (state) => {
     return {
         initialValues: state.personalInfo,
         personalInfo: state.personalInfo,
-        ui: state.ui
+        ui: state.ui,
     }
 };
 
@@ -298,13 +311,13 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchPersonalInfo())
         },
         "onSubmit": (personalDetails, imageURL) => {
-            const {gender, date_of_birth, extracurricular} = personalDetails;
+            const {gender, date_of_birth, extracurricular, image, flag} = personalDetails;
             personalDetails = {
                 ...personalDetails,
                 ...{
                     'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
                     'gender': (gender && gender['value']) || '',
-                    'image': imageURL,
+                    'image': imageURL || flag ? image : '',
                     'extracurricular': extracurricular instanceof Array ?
                         (extracurricular || []).map(el => el.value).join(',') : extracurricular
                 }

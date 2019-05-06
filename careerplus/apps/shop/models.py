@@ -35,7 +35,7 @@ from .managers import (
     IndexableProductManager,
     BrowsableProductManager,
     SaleableProductManager, SelectedFieldProductManager)
-from .utils import ProductAttributesContainer
+from .utils import ProductAttributesContainer,get_days_month_year
 from . import choices
 from .functions import (
     get_upload_path_faculty,
@@ -1588,6 +1588,22 @@ class Product(AbstractProduct, ModelMeta):
             return dd
         else:
             return ''
+
+
+
+    def get_duration_in_ddmmyy(self):
+        if self.is_course:
+            dd = getattr(self.attr, C_ATTR_DICT.get('DD')) \
+                if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
+                else 0
+            return get_days_month_year(dd)
+        elif self.is_service and self.type_flow == 5:
+            dd = getattr(self.attr, S_ATTR_DICT.get('FD')) \
+                if getattr(self.attr, S_ATTR_DICT.get('FD'), None) \
+                else 0
+            return get_days_month_year(dd)
+        else:
+            return get_days_month_year()
 
     def get_duration_db(self):
         # return display value

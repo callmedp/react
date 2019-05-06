@@ -76,7 +76,7 @@ function* updatePersonalDetails(action) {
 
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        yield put({type: UPDATE_UI, data: {loader: false}});
+        yield put({type: UPDATE_UI, data: {loader: true}});
 
         let result = null;
         if (localStorage.getItem('personalInfo')) result = yield call(Api.createPersonalInfo, personalDetails);
@@ -88,7 +88,7 @@ function* updatePersonalDetails(action) {
 
         localStorage.removeItem('personalInfo');
 
-        yield put({type: UPDATE_UI, data: {loader: true}})
+        yield put({type: UPDATE_UI, data: {loader: false}})
 
 
         yield put({type: Actions.SAVE_USER_INFO, data: result['data']});

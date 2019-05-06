@@ -1,6 +1,6 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call,select} from "redux-saga/effects";
+import {takeLatest, put, call, select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
@@ -91,10 +91,9 @@ function* updateUserSkill(action) {
     }
 }
 
-
 function* handleSkillSwap(action) {
     try {
-        let {payload: {list}} = action;
+        let {payload: {list, resolve, reject}} = action;
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -102,9 +101,27 @@ function* handleSkillSwap(action) {
 
         const result = yield call(Api.bulkUpdateUserSkill, list, candidateId);
 
+
         if (result['error']) {
-            console.log(result['error']);
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
+
+
+        localStorage.removeItem('skill');
+
+        let {data: {results}} = result;
+
+        results.sort((a, b) => a.order <= b.order);
+
+        let data = {list: results};
+
+        data = modifySkill(data);
+
+
+        yield put({type: Actions.SAVE_USER_SKILL, data: data});
+
+        return resolve('User Skill  Info saved successfully.');
+
 
     } catch (e) {
         console.log('error', e);
@@ -132,6 +149,8 @@ function* deleteUserSkill(action) {
         // yield call(fetchUserSkill)
         yield put({type: Actions.REMOVE_SKILL, id: skillId});
 
+
+
     } catch (e) {
         console.log('error', e);
     }
@@ -143,4 +162,6 @@ export default function* watchSkill() {
     yield takeLatest(Actions.UPDATE_USER_SKILL, updateUserSkill);
     yield takeLatest(Actions.DELETE_USER_SKILL, deleteUserSkill);
     yield takeLatest(Actions.HANDLE_SKILL_SWAP, handleSkillSwap);
+        yield takeLatest(Actions.BULK_U_C_USER_SKILL, handleSkillSwap);
+
 }

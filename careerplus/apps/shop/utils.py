@@ -1207,3 +1207,27 @@ class ProductValidation(object):
             messages.error(request, (
                 ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
+
+
+def get_days_month_year(days_value=0):
+
+
+    def get_attr_repr(val,attr):
+        if not val:
+            return ""
+        repr = (str(attr)+"s") if val > 1 else attr
+        return str(val) + repr
+
+    if not days_value or not isinstance(days_value, int):
+        return ""
+
+    DAYS_IN_YEAR = 365
+    DAYS_IN_MONTH = 30
+    years, remain = divmod(days_value, DAYS_IN_YEAR)
+    months, days = divmod(remain, DAYS_IN_MONTH)
+    return get_attr_repr(years,"year") + "-" + get_attr_repr(months,"month") + "-"+ get_attr_repr(days,'day')
+
+
+
+
+

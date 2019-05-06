@@ -30,6 +30,7 @@ from rest_framework.parsers import (FormParser, MultiPartParser)
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from weasyprint import HTML, CSS
 
 
 class CandidateListCreateView(ListCreateAPIView):
@@ -82,7 +83,7 @@ class SkillListCreateView(ListCreateAPIView):
 
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
-        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
         return Skill.objects.filter(candidate=candidate_obj).order_by('order')
 
     def get_serializer(self, *args, **kwargs):
@@ -94,7 +95,7 @@ class SkillListCreateView(ListCreateAPIView):
 class SkillRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
-    serializer_class = SkillSerializer 
+    serializer_class = SkillSerializer
     queryset = Skill.objects.all()
     lookup_field = "id"
     lookup_url_kwarg = "pk"
@@ -115,7 +116,7 @@ class CandidateExperienceListCreateView(ListCreateAPIView):
 
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
-        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
         return CandidateExperience.objects.filter(candidate=candidate_obj).order_by('order')
 
     def get_serializer(self, *args, **kwargs):
@@ -143,7 +144,7 @@ class CandidateEducationListCreateView(ListCreateAPIView):
 
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
-        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
         return CandidateEducation.objects.filter(candidate=candidate_obj)
 
     def get_serializer(self, *args, **kwargs):
@@ -171,7 +172,7 @@ class CandidateCertificationListCreateView(ListCreateAPIView):
 
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
-        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
         return CandidateCertification.objects.filter(candidate=candidate_obj).order_by('order')
 
     def get_serializer(self, *args, **kwargs):
@@ -204,7 +205,7 @@ class CandidateProjectListCreateView(ListCreateAPIView):
 
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
-        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
         return CandidateProject.objects.filter(candidate=candidate_obj).order_by('order')
 
 
@@ -232,7 +233,7 @@ class CandidateReferenceListCreateView(ListCreateAPIView):
 
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
-        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
         return CandidateReference.objects.filter(candidate=candidate_obj).order_by('order')
 
 
@@ -260,7 +261,7 @@ class CandidateSocialLinkListCreateView(ListCreateAPIView):
 
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
-        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
         return CandidateSocialLink.objects.filter(candidate=candidate_obj).order_by('order')
 
 
@@ -288,7 +289,7 @@ class CandidateAchievementListCreateView(ListCreateAPIView):
 
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
-        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
         return CandidateAchievement.objects.filter(candidate=candidate_obj).order_by('order')
 
 
@@ -311,7 +312,7 @@ class CandidateLanguageListCreateView(ListCreateAPIView):
 
     def get_queryset(self):
         candidate_id = self.kwargs.get('candidate_id')
-        candidate_obj = Candidate.objects.filter(candidate_id = candidate_id)
+        candidate_obj = Candidate.objects.filter(candidate_id=candidate_id)
         return CandidateLanguage.objects.filter(candidate=candidate_obj).order_by('order')
 
     def get_serializer(self, *args, **kwargs):
@@ -354,7 +355,7 @@ class CandidateResumePreview(APIView):
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
         latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
 
-        template = get_template('resume{}.html'.format(template_id))
+        template = get_template('resume{}_preview.html'.format(template_id))
         rendered_template = template.render(
             {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
              'achievements': achievements, 'references': references, 'projects': projects,

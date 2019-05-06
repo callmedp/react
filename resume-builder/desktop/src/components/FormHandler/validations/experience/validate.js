@@ -1,12 +1,8 @@
 const validate = values => {
-    const errors = {};
-    if (!values.list || !values.list.length) {
-        errors.list = {_error: 'Atleast One Education should be entered.'}
-        return errors;
-    }
-    else{
+        const errors = {};
         const listErrors = []
-        values.list.forEach((obj, objIndex) => {
+        values = values && values.list || [];
+        values.forEach((obj, objIndex) => {
             const objErrors = {}
             objErrors.job_profile = !obj || !obj.job_profile ? 'Required' : undefined;
             objErrors.company_name = !obj || !obj.company_name ? 'Required' : undefined;
@@ -19,9 +15,10 @@ const validate = values => {
             ////console.log(errors)
             return errors;
         }
+        return errors;
+
     }
-    
-};
+;
 
 
 export default validate;

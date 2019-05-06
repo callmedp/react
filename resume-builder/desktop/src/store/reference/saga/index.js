@@ -1,6 +1,6 @@
 import {Api} from './Api';
 
-import {takeLatest, put, call,select} from "redux-saga/effects";
+import {takeLatest, put, call, select} from "redux-saga/effects";
 
 import * as Actions from '../actions/actionTypes';
 
@@ -79,7 +79,7 @@ function* updateUserReference(action) {
 
 function* handleReferenceSwap(action) {
     try {
-        let {payload: {list}} = action;
+        let {payload: {list, resolve, reject}} = action;
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -88,10 +88,20 @@ function* handleReferenceSwap(action) {
         const result = yield call(Api.bulkUpdateUserReference, list, candidateId);
 
         if (result['error']) {
-            console.log(result['error']);
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
-        // yield call(fetchUserLanguage)
+        let {data} = result;
+
+        data.sort((a, b) => a.order <= b.order);
+
+        data = {list: data};
+
+
+        yield put({type: Actions.SAVE_USER_REFERENCE, data: data});
+
+        return resolve('User Reference  Info saved successfully.');
+
 
     } catch (e) {
         console.log('error', e);
@@ -126,5 +136,7 @@ export default function* watchReference() {
     yield takeLatest(Actions.UPDATE_USER_REFERENCE, updateUserReference);
     yield takeLatest(Actions.DELETE_USER_REFERENCE, deleteUserReference);
     yield takeLatest(Actions.HANDLE_REFERENCE_SWAP, handleReferenceSwap);
+    yield takeLatest(Actions.BULK_U_C_USER_REFERENCE, handleReferenceSwap);
+
 
 }

@@ -5,9 +5,7 @@ const initialState = {
         "candidate_id": '',
         "id": '',
         "name": '',
-        "proficiency": {
-            value: 5, 'label': '5'
-        },
+        "proficiency": 5,
         order: 0
     }
     ]

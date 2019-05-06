@@ -16,7 +16,7 @@ function modifyLanguage(data) {
             list: data['list'].map(el => {
                 return {
                     ...el,
-                    proficiency: proficiencyList[el['proficiency'].toString()]
+                    proficiency: proficiencyList[el['proficiency'] && el['proficiency'].toString()]
                 }
             })
         }
@@ -98,7 +98,7 @@ function* updateUserLanguage(action) {
 
 function* handleLanguageSwap(action) {
     try {
-        let {payload: {list}} = action;
+        let {payload: {list, resolve, reject}} = action;
 
 
         const candidateId = localStorage.getItem('candidateId') || '';
@@ -106,11 +106,25 @@ function* handleLanguageSwap(action) {
 
         const result = yield call(Api.bulkUpdateUserLanguage, list, candidateId);
 
+
         if (result['error']) {
-            console.log(result['error']);
+            return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
-        console.log('-language swap result--', result);
+        let {data} = result;
+
+
+        data.sort((a, b) => a.order <= b.order);
+
+        data = {list: data};
+
+
+        data = modifyLanguage(data)
+
+        yield put({type: Actions.SAVE_USER_LANGUAGE, data: data})
+
+        return resolve('User Language Info saved successfully.');
+
         // yield call(fetchUserLanguage)
 
     } catch (e) {
@@ -146,5 +160,6 @@ export default function* watchLanguage() {
     yield takeLatest(Actions.UPDATE_USER_LANGUAGE, updateUserLanguage);
     yield takeLatest(Actions.DELETE_USER_LANGUAGE, deleteUserLanguage);
     yield takeLatest(Actions.HANDLE_LANGUAGE_SWAP, handleLanguageSwap);
+    yield takeLatest(Actions.BULK_U_C_USER_LANGUAGE, handleLanguageSwap);
 
 }

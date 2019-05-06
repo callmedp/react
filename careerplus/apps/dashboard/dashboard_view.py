@@ -810,7 +810,6 @@ class DashboardResumeDownload(View):
     def get(self, request, *args, **kwargs):
         candidate_id = request.session.get('candidate_id', None)
         email = request.session.get('email', None)
-
         try:
             order_pk = kwargs.get('pk', None)
             order = Order.objects.get(pk=order_pk)

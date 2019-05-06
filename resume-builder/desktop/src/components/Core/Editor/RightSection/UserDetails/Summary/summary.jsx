@@ -27,6 +27,14 @@ class Summary extends Component {
         else this.props.history.push('/resume-builder/buy/')
     }
 
+
+    componentWillUnmount() {
+        let {formData: {summary: {values}}} = this.props;
+        this.props.onSubmit(values)
+
+    }
+
+
     shouldComponentUpdate(nextProps, nextState, nextContext) {
         return true;
     }
@@ -86,7 +94,7 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(actions.fetchPersonalInfo())
         },
         "onSubmit": (personalDetails) => {
-            const {gender, date_of_birth, extracurricular} = personalDetails
+            const {gender, date_of_birth, extracurricular} = personalDetails;
             personalDetails = {
                 ...personalDetails,
                 ...{

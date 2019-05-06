@@ -104,13 +104,15 @@ $('#id_callback').click(function() {
             success: function(data, textStatus, jqXHR) {
             pop('Your Query Submitted Successfully.');
             $('#id_callback').removeAttr('disabled');
-
+            MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Enquiry', 'success');
 
                 $('#callback_form')[0].reset();
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 pop('Something went wrong. Try again later.');
                 $('#id_callback').removeAttr('disabled');
+              MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Enquiry', 'Failure');
+
 
             }
         });
