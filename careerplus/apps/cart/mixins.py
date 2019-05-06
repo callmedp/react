@@ -450,6 +450,7 @@ class CartMixin(object):
     # add the product to the cart in case of resume builder
     def add_item_to_cart(self, main_products: object, products: object, cart_obj: object, cart_items: object,
                          total_amount: object) -> object:
+        # import ipdb ; ipdb.set_trace()
 
         for m_prod in main_products:
             addon_list = []
