@@ -354,7 +354,7 @@ class ResumeGenerate(object):
             dest.write(chunk)
         dest.close()
 
-    def handle_content_type(self, order=None, content_type='pdf', index=''):
+    def handle_content_type(self, order=None, content_type='pdf', index=1):
 
         file_dir = 'order/%s/' % str(order.pk)
         file_name = 'resumetemplateupload-' + str(order.number) + '-' \
