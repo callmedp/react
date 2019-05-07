@@ -344,6 +344,18 @@ FEATURE_PROFILE_EXCLUDE=[49]
 TEST_EMAIL = False
 
 
+VENDOR_URLS = {
+    'amcat': {
+        'all_certificates': 'https://www.myamcat.com/api/3p/assessment-results'
+    }
+}
+
+VENDOR_HEADERS = {
+    'amcat': {
+        'x-api-authtoken': 'xxcxx',
+        'x-api-signature': 'xsccss'
+    }
+}
 
 EXOTEL_DICT = {
            'token': '9e4df38c0c3bd1009ca142da306d827e71e74737',

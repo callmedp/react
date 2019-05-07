@@ -1,11 +1,112 @@
-from partner.models import ParsedAssesmentData, Certificate, UserCertificate, Assesment
-from core.api_mixin import ShineCandidateDetail
-from collections import OrderedDict
-from copy import deepcopy
+# python imports
 import logging
+from collections import OrderedDict
+
+# inter-app imports
+from partner.models import (
+    ParsedAssesmentData, Certificate, UserCertificate, Assesment,
+    UserCertificateOperations, Vendor)
+from django.db import IntegrityError
+
+from core.api_mixin import (
+    ShineCandidateDetail, ShineToken, ShineCertificateUpdate
+)
 
 '''
-DEMO DATA :-
+Pull Type.
+
+{
+    "status": "success",
+    "code": 200,
+    "data": {
+        "certificates": [
+            {
+                "certificateName": "AMCAT Certified in C",
+                "skillValidated": "C",
+                "licenseNumber": "10017408486910-6",
+                "amcatID": 10017408486910,
+                "certificationDate": "2013-04-04 00:00:00",
+                "validTill": "2014-04-04"
+            },
+            {
+                "certificateName": "AMCAT Certified in Ms office",
+                "skillValidated": "Ms office",
+                "licenseNumber": "10017408486910-1",
+                "amcatID": 10017408486910,
+                "certificationDate": "2013-04-04 00:00:00",
+                "validTill": "2014-04-04"
+            },
+            {
+                "certificateName": "AMCAT Certified in Communication",
+                "skillValidated": "Communication",
+                "licenseNumber": "103541972-2",
+                "amcatID": 103541972,
+                "certificationDate": "2007-11-13 00:00:00",
+                "validTill": "2008-11-13"
+            },
+            {
+                "certificateName": "AMCAT Certified in Leadership Skills",
+                "skillValidated": "Leadership Skills",
+                "licenseNumber": "10014234777181-14",
+                "amcatID": 10014234777181,
+                "certificationDate": "2012-07-25 00:00:00",
+                "validTill": "2013-07-25"
+            }
+            ],
+            "scores": [
+            {
+                "overallScore": "NA",
+                "testAttemptDate": "2007-11-13",
+                "amcatID": "103541972",
+                "modules": {
+                    "5": {
+                        "modulenames": "Computer Programming",
+                        "mscores": 295,
+                        "maxScores": 900
+                    },
+                    "693": {
+                        "modulenames": "Basic computer literacy",
+                        "mscores": 435,
+                        "maxScores": 900
+                        },
+                    "972": {
+                        "modulenames": "Effective Communication",
+                        "mscores": 495,
+                        "maxScores": 900
+                    },
+                    "2760": {
+                        "modulenames": "WriteX",
+                        "mscores": 475,
+                        "maxScores": 900
+                    }
+                }
+            },
+            {
+                "overallScore": "NA",
+                "testAttemptDate": "2013-09-28",
+                "amcatID": "10018648902011",
+                "modules": {
+                    "1": {
+                        "modulenames": "English",
+                        "mscores": 450,
+                        "maxScores": 900
+                    },
+                    "5": {
+                        "modulenames": "Computer Programming",
+                        "mscores": 535,
+                        "maxScores": 900
+                    }
+                }
+            }
+        ]
+    },
+"message": null
+}
+'''
+
+'''
+(PUSH TYPE)
+DEMO DATA (AMCAT):-
 
 {
     "result": {
@@ -61,7 +162,9 @@ DEMO DATA :-
     4 ---> denotes dictionary with multiple values as key, value
     5 ---> denotes list of dictionary
 '''
-MAPPING_VALUES_TO_DATA_KEY = {
+
+# PUSH TYPE
+MAPPING_VALUES_TO_DATA_KEY_1 = {
     'amcat': {
         'assesment': {
             'candidate_email': '1|candidateEmailID',
@@ -70,6 +173,7 @@ MAPPING_VALUES_TO_DATA_KEY = {
         'certificate': {
             'name': '3|certificates:1|name',
             'skill': '2|validated-skills',
+            'vendor_certificate_id': '1|amcatID'
         },
         'user_certificate': {
             'candidate_name': '1|candidateName',
@@ -85,6 +189,21 @@ MAPPING_VALUES_TO_DATA_KEY = {
     }
 }
 
+# PULL-TYPE
+MAPPING_VALUES_TO_DATA_KEY_2 = {
+
+    'amcat': {
+        'certificate': {
+            'certificate': '6|certificates',
+        },
+    }
+}
+
+MAPPING_VALUES_TO_DATA_KEY = {
+    0: MAPPING_VALUES_TO_DATA_KEY_1,
+    1: MAPPING_VALUES_TO_DATA_KEY_2
+}
+
 # Marks
 MAPPING_SCORE_TYPE_VENDOR = {
     'amcat': 1,
@@ -96,148 +215,182 @@ MAPPING_VENDOR_MAX_SCORE = {
 }
 
 
-MULTIPLE_VALUES = {'score': ['subject', 'score_obtained'], 'report': ['name', 'url']}
+MULTIPLE_VALUES_1 = {'score': ['subject', 'score_obtained'], 'report': ['name', 'url']}
+
+MULTIPLE_VALUES_2 = {
+    'certificate': {
+        'name': 'certificateName',
+        'skill': 'skillValidated',
+        'vendor_certificate_id': 'amcatID',
+        'active_from': 'certificationDate',
+        'expiry': 'validTill',
+        'licenseNumber': 'licenseNumber'
+    }
+}
+
+ADDITONAL_OPERATIONS_1 = {
+    'amcat': ['attach_score_to_certificates']
+}
+
+ADDITONAL_OPERATIONS_2 = {
+    'amcat': ['attach_score_to_certificates']
+}
+
+ADDITONAL_OPERATIONS_MAPPING = {
+    0: ADDITONAL_OPERATIONS_1,
+    1: ADDITONAL_OPERATIONS_2
+}
+
+MULTIPLE_VALUES_MAPPING = {
+    0: MULTIPLE_VALUES_1,
+    1: MULTIPLE_VALUES_2
+}
 
 
-def get_value_from_dict_using_key(data, name_key):
-    if isinstance(data, dict):
-        all_keys = data.keys()
-        if name_key not in all_keys:
-            for key in all_keys:
-                if isinstance(data[key], dict):
-                    return get_value_from_dict_using_key(data[key], name_key)
-        else:
-            return data[name_key]
+class CertiticateParser:
+
+    def __init__(self, parse_type=0):
+        self.parse_type = parse_type
+        self.MAPPING_VALUES_TO_DATA_KEY = MAPPING_VALUES_TO_DATA_KEY.get(parse_type)
+        self.MULTIPLE_VALUES = MULTIPLE_VALUES_MAPPING.get(parse_type)
+        self.ADDITONAL_OPERATIONS = ADDITONAL_OPERATIONS_MAPPING.get(parse_type)
+
+    def get_value_from_dict_using_key(self, data, name_key):
+        if isinstance(data, dict):
+            all_keys = data.keys()
+            if name_key not in all_keys:
+                for key in all_keys:
+                    if isinstance(data[key], dict):
+                        return self.get_value_from_dict_using_key(data[key], name_key)
+            else:
+                return data[name_key]
 
 
-def get_score_type_choices_as_per_vendor(vendor):
-    return MAPPING_SCORE_TYPE_VENDOR.get(vendor, 1)
+    def get_score_type_choices_as_per_vendor(self, vendor):
+        return MAPPING_SCORE_TYPE_VENDOR.get(vendor, 1)
 
 
-def get_max_score_as_per_vendor(vendor):
-    return MAPPING_VENDOR_MAX_SCORE.get(vendor, 100)
+    def get_max_score_as_per_vendor(self, vendor):
+        return MAPPING_VENDOR_MAX_SCORE.get(vendor, 100)
 
 
-def get_key_for_field(vendor_type, key, field):
-    return MAPPING_VALUES_TO_DATA_KEY[vendor_type][key][field]
+    def get_key_for_field(self, vendor_type, key, field):
+        return self.MAPPING_VALUES_TO_DATA_KEY[vendor_type][key][field]
 
 
-def get_plain_key_value_pair(data, actual_data_key):
-    '''
-    expecting data as == { actual_data_key :value1}
-    after parsing returns 'value1'
+    def get_plain_key_value_pair(self, data, actual_data_key):
+        '''
+        expecting data as == { actual_data_key :value1}
+        after parsing returns 'value1'
 
-    '''
-    return get_value_from_dict_using_key(data, actual_data_key)
-
-
-def get_list_values_as_comma_seperated_string(data, actual_data_key):
-    '''
-    expecting data as == { actual_data_key :[val1, val2, val3]}
-
-    after parsing returns 'val1, val2, val3'
-    '''
-    value = get_value_from_dict_using_key(data, actual_data_key)
-    return ','.join(value)
+        '''
+        return self.get_value_from_dict_using_key(data, actual_data_key)
 
 
-def get_value_of_key_of_certain_dictionary(data, actual_data_key, value=None):
-    '''
-    expecting data as == { temp_key :{actual_data_key: value1}}
+    def get_list_values_as_comma_seperated_string(self, data, actual_data_key):
+        '''
+        expecting data as == { actual_data_key :[val1, val2, val3]}
 
-    after parsing returns 'value1'
-    '''
-    temp_key = value.split(':')[-2].split('|')[1]
-    new_data = get_value_from_dict_using_key(data, temp_key)
-    actual_data_key = value.split(':')[-1].split('|')[1]
-    value = get_value_from_dict_using_key(new_data, actual_data_key)
-    return value
+        after parsing returns 'val1, val2, val3'
+        '''
+        value = self.get_value_from_dict_using_key(data, actual_data_key)
+        return ','.join(value)
 
 
-def get_list_of_list_of_dictionary_with_key_value_pair(data, actual_data_key):
-    '''
-    expecting data as == { actual_data_key :{key1: value1, key2: value2}}
+    def get_value_of_key_of_certain_dictionary(self, data, actual_data_key, value=None):
+        '''
+        expecting data as == { temp_key :{actual_data_key: value1}}
 
-    after parsing returns [[key1, value1],[key2, value2]]
-    '''
-    data = get_value_from_dict_using_key(data, actual_data_key)
-    return data.items()
-
-
-def get_list_of_list_of_list_of_dictionary(data, actual_data_key):
-    '''
-    expecting data as{actual_data_key :[{key1: value1, key2: value2}, {key3: value3, key4: value4}]}
-
-    after parsing returns [[value1, value2],[value3, value4]]
-    '''
-    value = get_value_from_dict_using_key(data, actual_data_key)
-    k = []
-    for val in value:
-        val = OrderedDict(sorted(val.items(), key=lambda t: t[0]))
-        k.append(list(val.values()))
-    return k
+        after parsing returns 'value1'
+        '''
+        temp_key = value.split(':')[-2].split('|')[1]
+        new_data = self.get_value_from_dict_using_key(data, temp_key)
+        actual_data_key = value.split(':')[-1].split('|')[1]
+        value = self.get_value_from_dict_using_key(new_data, actual_data_key)
+        return value
 
 
-def get_actual_value(data, value):
-    temp = value.split(':')
-    if len(temp) == 0:
-        return None
-    data_type = value[0]
-    actual_data_key = value.split(':')[-1].split('|')[1]
-    if data_type == '1':
-        return get_plain_key_value_pair(data, actual_data_key)
-    elif data_type == '2':
-        return get_list_values_as_comma_seperated_string(data, actual_data_key)
-    elif data_type == '3':
-        return get_value_of_key_of_certain_dictionary(data, actual_data_key, value) 
-    elif data_type == '4':
-        return get_list_of_list_of_dictionary_with_key_value_pair(data, actual_data_key)
-    elif data_type == '5':
-        return get_list_of_list_of_list_of_dictionary(data, actual_data_key)
+    def get_list_of_list_of_dictionary_with_key_value_pair(self, data, actual_data_key):
+        '''
+        expecting data as == { actual_data_key :{key1: value1, key2: value2}}
 
-def parse_data(data):
-    try:
-        vendor_key = data['vendor']
+        after parsing returns [[key1, value1],[key2, value2]]
+        '''
+        data = self.get_value_from_dict_using_key(data, actual_data_key)
+        return data.items()
+
+
+    def get_list_of_list_of_list_of_dictionary(self, data, actual_data_key):
+        '''
+        expecting data as{actual_data_key :[{key1: value1, key2: value2}, {key3: value3, key4: value4}]}
+
+        after parsing returns [[value1, value2],[value3, value4]]
+        '''
+        value = self.get_value_from_dict_using_key(data, actual_data_key)
+        k = []
+        for val in value:
+            val = OrderedDict(sorted(val.items(), key=lambda t: t[0]))
+            k.append(list(val.values()))
+        return k
+
+    def get_list_of_dictionary(self, data, actual_data_key):
+        '''
+        expecting data as{actual_data_key :[{key1: value1, key2: value2}, {key3: value3, key4: value4}]}
+
+        after parsing returns [{key1: value1, key2: value2}, {key3: value3, key4: value4}]}
+        '''
+        value = self.get_value_from_dict_using_key(data, actual_data_key)
+        return value
+
+
+    def get_actual_value(self, data, value):
+        temp = value.split(':')
+        if len(temp) == 0:
+            return None
+        data_type = value[0]
+        actual_data_key = value.split(':')[-1].split('|')[1]
+        if data_type == '1':
+            return self.get_plain_key_value_pair(data, actual_data_key)
+        elif data_type == '2':
+            return self.get_list_values_as_comma_seperated_string(data, actual_data_key)
+        elif data_type == '3':
+            return self.get_value_of_key_of_certain_dictionary(data, actual_data_key, value) 
+        elif data_type == '4':
+            return self.get_list_of_list_of_dictionary_with_key_value_pair(data, actual_data_key)
+        elif data_type == '5':
+            return self.get_list_of_list_of_list_of_dictionary(data, actual_data_key)
+        elif data_type == '6':
+            return self.get_list_of_dictionary(data, actual_data_key)
+
+
+    def save_parsed_data(self, parse_data, vendor):
+        vendor_key = vendor
         vendor_field = 'vendor_text'
-        from partner.models import Vendor
+
         try:
             vendor = Vendor.objects.get(name=vendor_key)
             vendor_field = 'vendor_provider'
         except Vendor.DoesNotExist:
             pass
 
-        parse_data = ParsedAssesmentData()
-        all_keys_for_parsed_data = MAPPING_VALUES_TO_DATA_KEY[vendor_key].keys()
-
-        for key in all_keys_for_parsed_data:
-            fields = dict(MAPPING_VALUES_TO_DATA_KEY[vendor_key][key]).keys()
-
-            for field in fields:
-                value = get_actual_value(data, get_key_for_field(vendor_key, key, field))
-
-                if field in MULTIPLE_VALUES.keys():
-                    multiple_fields = MULTIPLE_VALUES[field]
-
-                    for val1, val2 in value:
-                        data_instance = getattr(parse_data, key)
-                        data_instance = data_instance()
-                        setattr(data_instance, multiple_fields[0], val1)
-                        setattr(data_instance, multiple_fields[1], val2)
-                        parse_data.__dict__[key + 's'].append(data_instance)
-                else:
-                    setattr(getattr(parse_data, key), field, value)
-
         # manage certiticate data
         certificate_data = parse_data.certificate.__dict__
-        certificate_data = {key: val for key, val in certificate_data.items() \
-                            if key in dict(MAPPING_VALUES_TO_DATA_KEY[vendor_key]['certificate']).keys()}
 
-        certificate_data['vendor_text'] = vendor
+        certificate_data = {key: val for key, val in certificate_data.items() \
+                            if key in dict(self.MAPPING_VALUES_TO_DATA_KEY[vendor_key]['certificate']).keys()}
+
+        if vendor_field == 'vendor_text':
+            certificate_data['vendor_text'] = vendor
+
         certificate, created = Certificate.objects.get_or_create(
             **certificate_data
         )
         setattr(certificate, vendor_field, vendor)
-        certificate.save()
+
+        try:
+            certificate.save()
+        except IntegrityError:
+            pass
 
         candidate_email = parse_data.assesment.candidate_email
         report = []
@@ -262,7 +415,7 @@ def parse_data(data):
         # save user certificate data
         user_certificate_data = parse_data.user_certificate.__dict__
         user_certificate_data = {key: val for key, val in user_certificate_data.items() \
-                                 if key in dict(MAPPING_VALUES_TO_DATA_KEY[vendor_key]['user_certificate']).keys()}
+                                 if key in dict(self.MAPPING_VALUES_TO_DATA_KEY[vendor_key]['user_certificate']).keys()}
         user_certificate_data['certificate'] = certificate
         user_certificate, created = UserCertificate.objects.get_or_create(
             **user_certificate_data
@@ -270,7 +423,7 @@ def parse_data(data):
 
         assesmemnt_data = parse_data.assesment.__dict__
         assesmemnt_data = {key: val for key, val in assesmemnt_data.items() \
-                           if key in dict(MAPPING_VALUES_TO_DATA_KEY[vendor_key]['assesment']).keys()}
+                           if key in dict(self.MAPPING_VALUES_TO_DATA_KEY[vendor_key]['assesment']).keys()}
 
         assesment, created = Assesment.objects.get_or_create(
             **assesmemnt_data
@@ -288,13 +441,89 @@ def parse_data(data):
             for scor in parse_data.scores:
                 if assesment:
                     scor.assesment = assesment
-                    scor.score_type = get_score_type_choices_as_per_vendor(vendor_key)
+                    scor.score_type = self.get_score_type_choices_as_per_vendor(vendor_key)
+                    # if not present and not percent
                     if not getattr(scor, 'max_score', None) and scor.score_type != 3:
-                        scor.max_score = get_max_score_as_per_vendor(vendor_key)
+                        scor.max_score = self.get_max_score_as_per_vendor(vendor_key)
+                    # if not present and score is percent
                     if not getattr(scor, 'max_score', None) and scor.score_type == 3:
                         scor.max_score = '100'
                 scor.save()
-        return True
-    except Exception as e:
-        logging.getLogger('error_log').error("%s Exception occured for data:- %s - " % (str(e), str(data)))
+        return (certificate, user_certificate)
+
+
+
+    def update_certificate_on_shine(self, user_certificate):
+        headers = ShineToken().get_api_headers()
+        shineid = ShineCandidateDetail().get_shine_id(
+            email=user_certificate.candidate_email, headers=headers)
+        if shineid:
+            post_data = {
+                'certification_name': user_certificate.certificate.name,
+                'certification_year': user_certificate.year
+            }
+            flag, jsonrsp = ShineCertificateUpdate().update_shine_certificate_data(
+                candidate_id=shineid, data=post_data, headers=headers
+            )
+            if flag:
+                logging.getLogger('inf_log').error("Certificate %s for Candidate Id %s" % (str(user_certificate.certificate.name), str(user_certificate.candidate_id)))
+                last_op_type = user_certificate.status
+                user_certificate.status = 1
+                user_certificate.save()
+                UserCertificateOperations.objects.create(
+                    user_certificate=user_certificate,
+                    op_type=1,
+                    last_op_type=last_op_type)
+                return True
         return False
+
+    def parse_data(self, data):
+        try:
+            vendor_key = data['vendor']
+            parse_data = ParsedAssesmentData()
+            all_keys_for_parsed_data = self.MAPPING_VALUES_TO_DATA_KEY[vendor_key].keys()
+
+            for key in all_keys_for_parsed_data:
+                fields = dict(self.MAPPING_VALUES_TO_DATA_KEY[vendor_key][key]).keys()
+
+                for field in fields:
+                    value = self.get_actual_value(data, self.get_key_for_field(vendor_key, key, field))
+                    if field in self.MULTIPLE_VALUES.keys():
+                        multiple_fields = self.MULTIPLE_VALUES[field]
+
+                        for val in value:
+                            data_instance = getattr(parse_data, key).__class__()
+                            if isinstance(multiple_fields, list):
+                                for index, field in enumerate(multiple_fields):
+                                    setattr(data_instance, multiple_fields[index], val[index])
+                            elif isinstance(multiple_fields, dict):
+                                for k, value in multiple_fields.items():
+                                    setattr(data_instance, k, val[value])
+                            parse_data.__dict__[key + 's'].append(data_instance)
+                    else:
+                        setattr(getattr(parse_data, key), field, value)
+            additional_operations = self.ADDITONAL_OPERATIONS[vendor_key]
+
+            # additonal operation to be done on parsed data as per vendor type and parse type
+            for operation in additional_operations:
+                parse_data = getattr(self, operation)(parse_data, data)
+
+            return parse_data
+        except Exception as e:
+            logging.getLogger('error_log').error("%s Exception occured for data:- %s - " % (str(e), str(data)))
+            return None
+
+
+    def attach_score_to_certificates(self, parsed_data, data):
+        all_scores = self.get_list_of_dictionary(data, 'scores')
+        for certificate in parsed_data.certificates:
+            current_certificate_id = certificate.vendor_certificate_id
+            for score in all_scores:
+                print(current_certificate_id, score['amcatID'])
+                if str(current_certificate_id) == str(score['amcatID']):
+                    setattr(certificate, 'overallScore', score.get('overallScore', 'N.A'))
+                    break
+                else:
+                    print(current_certificate_id, score['amcatID'])
+                    setattr(certificate, 'overallScore', 'N.A')
+        return parsed_data

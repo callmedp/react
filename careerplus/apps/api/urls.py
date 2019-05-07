@@ -33,6 +33,14 @@ urlpatterns = [
     url(r'^v1/shine-data-for-flow/$',
         views.ShineDataFlowDataApiView.as_view(),
         name='shine-data-for-flow'),
+    url(r'^v1/vendor-certificate/$',
+        views.VendorCertificateMappingApiView.as_view(),
+        name='vendor-certificate-mapping'),
+    url(r'^v1/import-certificates/(?P<vendor_name>[\w\-]+)/$$',
+        views.ImportCertificateApiView.as_view(),
+        name='vendor-certificate-mapping'),
+
+    
 ]
 
 if settings.DEBUG:

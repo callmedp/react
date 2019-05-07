@@ -9,6 +9,7 @@ from rest_framework import serializers
 from order.models import Order, OrderItem
 from shop.models import Product, ShineProfileData
 from payment.models import PaymentTxn
+from partner.models import Certificate
 
 import logging
 
@@ -305,3 +306,39 @@ class  ShineDataFlowDataSerializer(ModelSerializer):
     def get_image_url(self, obj):
         if obj.image:
             return obj.image.url
+
+
+class VendorCertificateSerializer(ModelSerializer):
+
+    class Meta:
+        model = Certificate
+        fields = ('id', 'name', 'skill', 'vendor_certificate_id',)
+
+
+class ImportCertificateSerializer(Serializer):
+
+    class Meta:
+        fields = (
+            'name', 'skill', 'vendor_certificate_id', 'active_from',
+            'expiry', 'licenseNumber'
+        )
+
+    def __init__(self, *args, **kwargs):
+        super(ImportCertificateSerializer, self).__init__(*args, **kwargs)
+        context = kwargs.get('context', None)
+        if context:
+            self.vendor_provider = context.get('vendor_provider', None)
+
+    name = serializers.CharField()
+    skill = serializers.CharField()
+    vendor_certificate_id = serializers.CharField()
+    active_from = serializers.CharField()
+    expiry = serializers.CharField()
+    licenseNumber = serializers.CharField()
+    vendor_provider = serializers.SerializerMethodField()
+    overallScore = serializers.CharField()
+
+    def get_vendor_provider(self, obj):
+        return self.vendor_provider
+
+

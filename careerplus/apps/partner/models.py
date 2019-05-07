@@ -142,7 +142,7 @@ class Certificate(AbstractAutoDate):
     vendor_text = models.CharField(max_length=255, null=True, blank=False)
     certificate_file_url = models.URLField(max_length=500, blank=True, null=True)
     vendor_image_url = models.URLField(max_length=500, blank=True, null=True)
-
+    vendor_certificate_id = models.CharField(max_length=255, null=True, blank=True)
     def __str__(self):
         return self.name
 
@@ -175,6 +175,7 @@ class UserCertificate(models.Model):
         verbose_name=_("Order"), blank=True, null=True)
 
     status = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
+    extra_info = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return '{}'.format(self.certificate.name)
@@ -239,8 +240,9 @@ class ParsedAssesmentData:
         self.assesment = Assesment()
         self.certificate = Certificate()
         self.user_certificate = UserCertificate()
-        self.report = Report
+        self.report = Report()
         self.reports = []
+        self.certificates = []
 
 class UserCertificateOperations(AbstractAutoDate):
     user_certificate = models.ForeignKey(UserCertificate)

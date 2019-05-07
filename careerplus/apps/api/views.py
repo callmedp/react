@@ -17,7 +17,7 @@ from rest_framework.permissions import (
 from haystack import connections
 from haystack.query import SearchQuerySet
 from core.library.haystack.query import SQS
-from partner.utils import parse_data
+from partner.utils import CertiticateParser
 from rest_framework.generics import ListAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 
@@ -41,9 +41,11 @@ from .serializers import (
     OrderListHistorySerializer,
     RecommendedProductSerializer,
     RecommendedProductSerializerSolr,
+    VendorCertificateSerializer,
+    ImportCertificateSerializer,
     ShineDataFlowDataSerializer)
 from shared.rest_addons.pagination import Learning_custom_pagination
-
+from partner.models import Certificate
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
     authentication_classes = [OAuth2Authentication]
@@ -747,19 +749,25 @@ class UpdateCertificateAndAssesment(APIView):
         vendor_name = self.kwargs.get('vendor_name')
         data = request.data
         data['vendor'] = vendor_name.lower()
-        flag = parse_data(data)
+        parser = CertiticateParser(parse_type=0)
+        parsed_data = parser.parse_data(data)
+        certificate, user_certificate = parser.save_parsed_data(parsed_data, vendor=data['vendor'])
+        flag = parser.update_certificate_on_shine(user_certificate)
         if flag:
-            return Response({
-                "status": 1,
-                "msg": "Certificate Updated"},
-                status=status.HTTP_201_CREATED
+            logging.getLogger('info_log').error(
+                "Certificate %s parsed, saved, updated for Candidate Id %s" %
+                (str(certificate.name), str(user_certificate.candidate_id))
             )
         else:
-            return Response({
-                "status": 0,
-                "msg": "Error Occured"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            logging.getLogger('error_log').error(
+                "Error Occured for Certificate %s for Candidate Id %s" %
+                (str(certificate.name), str(user_certificate.candidate_id))
             )
+        return Response({
+            "status": 1,
+            "msg": "Certificate Updated"},
+            status=status.HTTP_201_CREATED
+        )
 
 class ShineDataFlowDataApiView(ListAPIView):
     permission_classes = []
@@ -768,3 +776,134 @@ class ShineDataFlowDataApiView(ListAPIView):
     serializer_class = ShineDataFlowDataSerializer
     pagination_class = None
 
+
+
+class VendorCertificateMappingApiView(ListAPIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = Certificate.objects.all()
+    serializer_class = VendorCertificateSerializer
+    pagination_class = None
+
+
+class ImportCertificateApiView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get_all_certiticate_data(self):
+
+        data = {
+            "status": "success",
+            "code": 200,
+            "data": {
+                "certificates": [
+                    {
+                        "certificateName": "AMCAT Certified in C",
+                        "skillValidated": "C",
+                        "licenseNumber": "10017408486910-6",
+                        "amcatID": 10017408486910,
+                        "certificationDate": "2013-04-04 00:00:00",
+                        "validTill": "2014-04-04"
+                    },
+                    {
+                        "certificateName": "AMCAT Certified in Ms office",
+                        "skillValidated": "Ms office",
+                        "licenseNumber": "10017408486910-1",
+                        "amcatID": 10017408486910,
+                        "certificationDate": "2013-04-04 00:00:00",
+                        "validTill": "2014-04-04"
+                    },
+                    {
+                        "certificateName": "AMCAT Certified in Communication",
+                        "skillValidated": "Communication",
+                        "licenseNumber": "103541972-2",
+                        "amcatID": 103541972,
+                        "certificationDate": "2007-11-13 00:00:00",
+                        "validTill": "2008-11-13"
+                    },
+                    {
+                        "certificateName": "AMCAT Certified in Leadership Skills",
+                        "skillValidated": "Leadership Skills",
+                        "licenseNumber": "10014234777181-14",
+                        "amcatID": 10014234777181,
+                        "certificationDate": "2012-07-25 00:00:00",
+                        "validTill": "2013-07-25"
+                    }
+                ],
+                "scores": [
+                    {
+                        "overallScore": "123",
+                        "testAttemptDate": "2007-11-13",
+                        "amcatID": "103541972",
+                        "modules": {
+                            "5": {
+                                "modulenames": "Computer Programming",
+                                "mscores": 295,
+                                "maxScores": 900
+                            },
+                            "693": {
+                                "modulenames": "Basic computer literacy",
+                                "mscores": 435,
+                                "maxScores": 900
+                            },
+                            "972": {
+                                "modulenames": "Effective Communication",
+                                "mscores": 495,
+                                "maxScores": 900
+                            },
+                            "2760": {
+                                "modulenames": "WriteX",
+                                "mscores": 475,
+                                "maxScores": 900
+                            }
+                        }
+                    },
+                    {
+                        "overallScore": "234",
+                        "testAttemptDate": "2013-09-28",
+                        "amcatID": "10018648902011",
+                        "modules": {
+                            "1": {
+                                "modulenames": "English",
+                                "mscores": 450,
+                                "maxScores": 900
+                            },
+                            "5": {
+                                "modulenames": "Computer Programming",
+                                "mscores": 535,
+                                "maxScores": 900
+                            }
+                        }
+                    }
+                ]
+            },
+            "message": None
+        }
+
+        return data
+
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email', '')
+        vendor_name = self.kwargs.get('vendor_name')
+
+        if not email:
+            return Response({
+                "status": 1,
+                "msg": "Email is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        parser = CertiticateParser(parse_type=1)
+        data = self.get_all_certiticate_data()
+        data['vendor'] = vendor_name.lower()
+
+        parsed_data = parser.parse_data(data)
+        resp = {}
+        certificates = ImportCertificateSerializer(
+            parsed_data.certificates,
+            many=True,
+            context={'vendor_provider': vendor_name}
+        )
+        resp['count'] = len(certificates.data)
+        resp['results'] = certificates.data
+        return Response(resp, status=status.HTTP_200_OK)

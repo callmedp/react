@@ -229,6 +229,31 @@ class ShineCertificateUpdate(ShineToken):
             logging.getLogger('error_log').error('unable to update certificate %s'%str(e))
         return False, None
 
+    def get_all_certiticate_data(self, email=None, vendor=None):
+        if not email or not vendor:
+            return False, None
+
+        api_url = settings.VENDOR_URLS[vendor]['all_certificates']
+        headers = settings.VENDOR_HEADERS[vendor]
+        data = {
+            'check_type': "certificate",
+            'candidate_email': email
+        }
+        response = requests.post(api_url, data=data, headers=headers)
+
+        if response.status_code == 200:
+            jsonrsp = response.json()
+            logging.getLogger('info_log').info(
+                "{} import certificate for email {} api response:{}".format(vendor, email, jsonrsp)
+            )
+            return True, response.json()
+        else:
+            jsonrsp = response.json()
+            logging.getLogger('info_log').info(
+                "{} import certificate for email {} api response:{}".format(vendor, email, jsonrsp)
+            )
+            return False, response.json()
+
 class ShineProfileDataUpdate(ShineToken):
 
     def update_shine_profile_data(self):
