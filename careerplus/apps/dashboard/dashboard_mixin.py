@@ -95,11 +95,11 @@ class DashboardInfo(object):
                 "order": obj,
                 "item_count": item_count,
                 'product_type_flow': product_type_flow,
-                "product_id":product_id,
+                "product_id": product_id,
                 "orderitems": orderitems,
             }
             order_list.append(data)
-        
+
         if request:
             csrf_token = get_token(request)
         else:
