@@ -17,7 +17,8 @@ class Summary extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
             'editHeading': false,
-            'heading' : ''
+            'heading' : '',
+            'submit' : false
         }
         this.updateInputValue =this.updateInputValue.bind(this);
         this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this);
@@ -62,6 +63,7 @@ class Summary extends Component {
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
+        this.setState({submit:true})
         await this.props.onSubmit(values);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
@@ -76,23 +78,22 @@ class Summary extends Component {
 
     componentWillUnmount() {
 
-        const form_data = this.props.info.form.summary;
-        console.log(form_data)
-        let error = false
-        let error_values =form_data["syncErrors"]
-        console.log(error_values)
-        if(error_values){
-            for(let i of  Object.keys(error_values)){
-                if(error_values[i]){
-                    error =true;
-                    break;
+        if(!this.state.submit){
+            const form_data = this.props.info.form.summary;
+            let error = false
+            let error_values =form_data["syncErrors"]
+            if(error_values){
+                for(let i of  Object.keys(error_values)){
+                    if(error_values[i]){
+                        error =true;
+                        break;
+                    }
                 }
             }
+            if(!error){
+                this.updateInfoBeforeLoss(form_data)
+            }
         }
-        if(!error){
-            this.updateInfoBeforeLoss(form_data)
-        }
-
     }
 
     async updateInfoBeforeLoss(form_data){

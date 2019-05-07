@@ -13,7 +13,7 @@ import './rightSection.scss'
 import queryString from 'query-string'
 import * as actions from "../../../../store/sidenav/actions";
 import {connect} from "react-redux";
-import DataLoader from "../../../Common/DataLoader/dataloader"
+import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 class RightSection extends Component {
 
@@ -24,44 +24,11 @@ class RightSection extends Component {
         this.state = {
             type: (values && values.type) || ''
         }
-        // this.educationRef = React.createRef()
-        // this.skillRef = React.createRef()
     }
 
 
     componentDidUpdate(prevProps) {
         if (this.props.location !== prevProps.location) {
-            // console.log('-pros----', queryString.parse(prevProps.location.search), prevProps);
-            // let form_name =Object.keys(prevProps.info.form)[0]
-            // console.log(form_name)
-            // console.log("---- prev",)
-            // let error = false
-            // let list_values =prevProps.info.form[form_name]["syncErrors"]
-            // if(list_values){
-            //     for(let i of  list_values['list']){
-            //         for(let j in Object.keys(i)){
-            //             if(i[j]){
-            //                 error =true
-            //                 break;
-            //             }
-            //         }
-            //     }
-            // }
-            
-            // console.log("error",error)
-            // if(!error){
-            //     let form_values = prevProps.info.form[form_name]['values']
-            //     form_name =form_name.toLowerCase()
-
-            //     console.log("values",form_values)
-            //     if(this.refs[form_name]){
-            //         let prop = this.refs[form_name]
-            //         console.log(prop)
-            //         prop = prop['selectChildElement']('<Education/>')
-            //         console.log(prop)
-            //     }
-            // }
-            // console.log("info ------",prevProps.info)
             
             const values = queryString.parse(this.props.location.search)
             this.setState({
@@ -70,42 +37,39 @@ class RightSection extends Component {
         }
     }
 
-    componentDidMount() {
-        ////console.log(this.props)
-        
-    }
+    
 
     renderSwitch() {
         switch (this.state.type) {
             case 'education': {
-                return <Education ref={'education'} {...this.props}/>
+                return <Education {...this.props}/>
             }
             case 'skill': {
-                return <Skills ref={'skill'} {...this.props}/>
+                return <Skills {...this.props}/>
             }
             case 'experience': {
-                return <Experience ref={'experience'} {...this.props}/>
+                return <Experience {...this.props}/>
             }
             case 'language': {
-                return <Language ref={'language'} {...this.props}/>
+                return <Language {...this.props}/>
             }
             case 'award': {
-                return <Award ref={'award'} {...this.props}/>
+                return <Award {...this.props}/>
             }
             case 'project': {
-                return <Project ref={'project'} {...this.props}/>
+                return <Project {...this.props}/>
             }
             case 'course': {
-                return <Course ref={'course'} {...this.props}/>
+                return <Course {...this.props}/>
             }
             case 'reference': {
-                return <Reference ref={'reference'} {...this.props}/>
+                return <Reference {...this.props}/>
             }
             case 'summary': {
-                return <Summary ref={'summary'} {...this.props}/>
+                return <Summary {...this.props}/>
             }
             default: {
-                return <PersonalInfo ref={'profile'} {...this.props}/>
+                return <PersonalInfo {...this.props}/>
             }
 
         }
@@ -113,7 +77,6 @@ class RightSection extends Component {
     }
 
     render() {
-        const {type} = this.state;
         return (
             <React.Fragment>
                 <section className="right-panel">
@@ -125,6 +88,17 @@ class RightSection extends Component {
         )
     }
 
+}
+
+const handleAddition = (fields,data,offset,type) =>{
+    fields.push(data)
+
+    scroller.scrollTo(`${type}${fields.length -1}`, {
+        duration: 800,
+        delay: 0,
+        smooth: 'easeInOutQuad',
+        offset
+    })
 }
 
 const mapStateToProps = (state) => {
@@ -143,6 +117,9 @@ const mapDispatchToProps = (dispatch) => {
         "updateCurrentLinkPos": (data) => {
             return dispatch(actions.updateCurrentLinkPos(data))
         },
+        "handleAddition":(fields,data,offset,type)=>{
+            return handleAddition(fields,data,offset,type)
+        }
     }
 };
 

@@ -1,7 +1,8 @@
 import React from 'react';
-import {renderField, renderTextArea, datepicker,checkbox} from '../../../../../FormHandler/formFieldRenderer.jsx'
+import {renderField, renderTextArea, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
 import {Field} from 'redux-form';
 import DataLoader from "../../../../../Common/DataLoader/dataloader"
+import {experienceNewData} from "../../../../../../Utils/addnewData"
 
 
 const renderExperiences = ({
@@ -32,8 +33,8 @@ const renderExperiences = ({
                     <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
                 </div>
                 <button role="button"
-                onClick={handleSubmit(handleAddition.bind(this, fields, error))}
-                type={'button'} className="btn btn__round btn--outline">+ Add new</button>
+                    onClick={handleSubmit(handleAddition.bind(this,fields,experienceNewData(fields),780,'experience'))}
+                    type={'button'} className="btn btn__round btn--outline">+ Add new</button>
             </div>
             {fields.map((member, index) => {
                 return (

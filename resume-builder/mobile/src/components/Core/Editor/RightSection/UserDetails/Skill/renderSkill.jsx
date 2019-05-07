@@ -2,6 +2,7 @@ import React from 'react';
 import {Field} from "redux-form"
 import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import DataLoader from "../../../../../Common/DataLoader/dataloader"
+import {skillNewData} from "../../../../../../Utils/addnewData"
 
 
 const renderSkills = ({
@@ -31,7 +32,7 @@ const renderSkills = ({
                         }
                         <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
                     </div>
-                    <button type={'button'} onClick={handleSubmit(handleAddition.bind(this,fields))} 
+                    <button type={'button'}  onClick={handleSubmit(handleAddition.bind(this,fields,skillNewData(fields),0,'skill'))} 
                         className="btn btn__round btn--outline">+ Add new</button>
                 </div>
             

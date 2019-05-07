@@ -2,6 +2,7 @@ import React from 'react';
 import {Field} from "redux-form";
 import {renderField, datepicker} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import DataLoader from "../../../../../Common/DataLoader/dataloader"
+import {courseNewData} from "../../../../../../Utils/addnewData"
 
 const renderCourse = ({
                         fields, 
@@ -31,8 +32,8 @@ const renderCourse = ({
                     <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
                 </div>
                 <button role="button" className="btn btn__round btn--outline"
-                onClick={handleSubmit(handleAddition.bind(this, fields, error))}
-                type={'button'}>+ Add new</button>
+                    onClick={handleSubmit(handleAddition.bind(this,fields,courseNewData(fields),0,'course'))}
+                    type={'button'}>+ Add new</button>
             </div>
             {fields.map((member, index) => {
             return (

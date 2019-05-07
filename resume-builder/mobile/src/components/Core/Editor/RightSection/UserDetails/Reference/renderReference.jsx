@@ -2,6 +2,7 @@ import React from 'react';
 import {Field} from "redux-form";
 import {renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import DataLoader from "../../../../../Common/DataLoader/dataloader"
+import {referenceNewData} from "../../../../../../Utils/addnewData"
 
 const renderReferences = ({
                             fields, 
@@ -31,7 +32,7 @@ const renderReferences = ({
                     <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
                 </div>
                 <button role="button" className="btn btn__round btn--outline"
-                    onClick={handleSubmit(handleAddition.bind(this, fields, error))}
+                    onClick={handleSubmit(handleAddition.bind(this,fields,referenceNewData(fields),150,'references'))}
                     type={'button'}>+ Add new</button>
             </div>
             {fields.map((member, index) => {

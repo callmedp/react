@@ -7,7 +7,7 @@ import {datepicker, renderField, renderTextArea} from "../../../../../FormHandle
 import moment from "moment";
 import PreviewModal from "../../../Preview/previewModal";
 import renderAwards from "./renderAwards"
-import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+
 
 
 class Award extends Component {
@@ -15,13 +15,13 @@ class Award extends Component {
     constructor(props){
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleAddition = this.handleAddition.bind(this);
         this.deleteAward = this.deleteAward.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
         this.state = {
             'editHeading': false,
-            'heading' : ''
+            'heading' : '',
+            'submit'  : false
         }
         this.updateInputValue =this.updateInputValue.bind(this);
         this.editHeadingClick = this.editHeadingClick.bind(this);
@@ -36,27 +36,25 @@ class Award extends Component {
     }
 
     componentWillUnmount() {
-
-        const form_data = this.props.info.form.award;
-        console.log(form_data)
-        let error = false
-        let error_values =form_data["syncErrors"]
-        // console.log(error_values)
-        if(error_values){
-            for(let i of  error_values['list']){
-                for(let j of Object.keys(i)){
-                    if(i[j]){
-                        error =true
-                        break;
+        if(!this.state.submit){
+            const form_data = this.props.info.form.award;
+            let error = false
+            let error_values =form_data["syncErrors"]
+            if(error_values){
+                for(let i of  error_values['list']){
+                    for(let j of Object.keys(i)){
+                        if(i[j]){
+                            error =true
+                            break;
+                        }
                     }
                 }
             }
+            if(!error){
+                this.props.bulkUpdateUserAward(form_data['values']['list'])
+            }
         }
-        console.log("error",error)
-        if(!error){
-            console.log("Came Here")
-            this.props.bulkUpdateUserAward(form_data['values']['list'])
-        }
+        
 
     }
     
@@ -64,6 +62,7 @@ class Award extends Component {
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
+        this.setState({submit:true})
         await this.props.bulkUpdateUserAward(values.list);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
@@ -73,26 +72,6 @@ class Award extends Component {
             this.props.updateCurrentLinkPos({currentLinkPos})
             this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
         }
-    }
-
-    handleAddition(fields, error) {
-        ////console.log(error)
-        
-        fields.push({
-            "candidate_id": '',
-            "id": '',
-            "title": '',
-            "date": '',
-            "summary": '',
-            order: fields.length
-        })
-
-        scroller.scrollTo(`award${fields.length -1}`, {
-            duration: 800,
-            delay: 0,
-            smooth: 'easeInOutQuad',
-            offset: 100
-        })
     }
 
     deleteAward(index, fields, event) {
@@ -179,7 +158,7 @@ class Award extends Component {
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}
-                                handleAddition={this.handleAddition}
+                                handleAddition={this.props.handleAddition}
                                 deleteAward={this.deleteAward}
                                 changeOrderingUp={this.changeOrderingUp}
                                 changeOrderingDown={this.changeOrderingDown}

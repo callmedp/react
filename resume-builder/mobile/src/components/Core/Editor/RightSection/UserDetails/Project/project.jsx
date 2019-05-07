@@ -12,13 +12,13 @@ class Project extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this)
-        this.handleAddition = this.handleAddition.bind(this);
         this.deleteProject = this.deleteProject.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
         this.state = {
             'editHeading': false,
-            'heading' : ''
+            'heading' : '',
+            'submit' : false
         }
         this.updateInputValue =this.updateInputValue.bind(this);
         this.editHeadingClick = this.editHeadingClick.bind(this);
@@ -67,6 +67,7 @@ class Project extends Component {
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
+        this.setState({submit:true})
         await this.props.bulkUpdateUserProject(values.list);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
@@ -80,46 +81,24 @@ class Project extends Component {
 
     componentWillUnmount() {
 
-        const form_data = this.props.info.form.project;
-        console.log(form_data)
-        let error = false
-        let error_values =form_data["syncErrors"]
-        // console.log(error_values)
-        if(error_values){
-            for(let i of  error_values['list']){
-                for(let j of Object.keys(i)){
-                    if(i[j]){
-                        error =true
-                        break;
+        if(!this.state.submit){
+            const form_data = this.props.info.form.project;
+            let error = false
+            let error_values =form_data["syncErrors"]
+            if(error_values){
+                for(let i of  error_values['list']){
+                    for(let j of Object.keys(i)){
+                        if(i[j]){
+                            error =true
+                            break;
+                        }
                     }
                 }
             }
+            if(!error){
+                this.props.bulkUpdateUserProject(form_data['values']['list'])
+            }
         }
-        console.log("error",error)
-        if(!error){
-            console.log("Came Here")
-            this.props.bulkUpdateUserProject(form_data['values']['list'])
-        }
-
-    }
-
-    handleAddition(fields, error) {
-        fields.push({
-            "candidate_id": '',
-            "id": '',
-            "project_name": '',
-            "start_date": '',
-            "end_date": '',
-            "skills": [],
-            "description": '',
-            order: fields.length
-        })
-        scroller.scrollTo(`project${fields.length -1}`, {
-            duration: 800,
-            delay: 0,
-            smooth: 'easeInOutQuad',
-            offset: 200
-        })
     }
 
     deleteProject(index, fields, event) {
@@ -166,7 +145,7 @@ class Project extends Component {
     render () {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
-        const {handleSubmit, project,submitting,submitSucceeded} = this.props;
+        const {handleSubmit,submitting} = this.props;
         const {editHeading,heading} =this.state;
         return(
             <div className="buildResume">
@@ -174,7 +153,7 @@ class Project extends Component {
                     <PreviewModal {...this.props}/>
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}
-                                handleAddition={this.handleAddition}
+                                handleAddition={this.props.handleAddition}
                                 deleteProject={this.deleteProject}
                                 changeOrderingUp={this.changeOrderingUp}
                                 changeOrderingDown={this.changeOrderingDown}

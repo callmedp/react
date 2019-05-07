@@ -13,13 +13,13 @@ class Education extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this)
-        this.handleAddition = this.handleAddition.bind(this);
         this.deleteEducation = this.deleteEducation.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
         this.state = {
             'editHeading': false,
-            'heading' : ''
+            'heading' : '',
+            'submit' : false
         }
         this.updateInputValue =this.updateInputValue.bind(this);
         this.editHeadingClick = this.editHeadingClick.bind(this);
@@ -28,6 +28,7 @@ class Education extends Component {
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
+        this.setState({submit:true})
         await this.props.bulkUpdateUserEducation(values.list);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
@@ -42,27 +43,24 @@ class Education extends Component {
 
     componentWillUnmount() {
 
-        const form_data = this.props.info.form.education;
-        console.log(form_data)
-        let error = false
-        let error_values =form_data["syncErrors"]
-        // console.log(error_values)
-        if(error_values){
-            for(let i of  error_values['list']){
-                for(let j of Object.keys(i)){
-                    if(i[j]){
-                        error =true
-                        break;
+        if(!this.state.submit){
+            const form_data = this.props.info.form.education;
+            let error = false
+            let error_values =form_data["syncErrors"]
+            if(error_values){
+                for(let i of  error_values['list']){
+                    for(let j of Object.keys(i)){
+                        if(i[j]){
+                            error =true
+                            break;
+                        }
                     }
                 }
             }
+            if(!error){
+                this.props.bulkUpdateUserEducation(form_data['values']['list'])
+            }
         }
-        console.log("error",error)
-        if(!error){
-            console.log("Came Here")
-            this.props.bulkUpdateUserEducation(form_data['values']['list'])
-        }
-
     }
 
     updateInputValue(key,e) {
@@ -102,28 +100,6 @@ class Education extends Component {
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[1].entity_text})
         }
-    }
-
-    handleAddition(fields, error) {
-
-        fields.push({
-            "candidate_id": '',
-            "id": '',
-            "specialization": '',
-            "institution_name": '',
-            "course_type": '',
-            "start_date": '',
-            "percentage_cgpa": '',
-            "end_date": '',
-            "is_pursuing": false,
-            order: fields.length
-        })
-        scroller.scrollTo(`education${fields.length -1}`, {
-            duration: 800,
-            delay: 0,
-            smooth: 'easeInOutQuad',
-            offset: 450
-        })
     }
 
     deleteEducation(index, fields, event) {
@@ -178,7 +154,7 @@ class Education extends Component {
                     <PreviewModal {...this.props}/>
                     <FieldArray name={'list'}
                                 handleSubmit={handleSubmit}
-                                handleAddition={this.handleAddition}
+                                handleAddition={this.props.handleAddition}
                                 deleteEducation={this.deleteEducation}
                                 changeOrderingUp={this.changeOrderingUp}
                                 changeOrderingDown={this.changeOrderingDown}

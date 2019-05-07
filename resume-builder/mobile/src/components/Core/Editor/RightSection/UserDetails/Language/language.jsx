@@ -12,13 +12,13 @@ class Language extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleAddition = this.handleAddition.bind(this);
         this.deleteLanguage = this.deleteLanguage.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
         this.state = {
             'editHeading': false,
-            'heading' : ''
+            'heading' : '',
+            'submit' :false
         }
         this.updateInputValue =this.updateInputValue.bind(this);
         this.editHeadingClick = this.editHeadingClick.bind(this);
@@ -67,6 +67,8 @@ class Language extends Component {
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
+        
+        this.setState({submit:true})
         await this.props.bulkUpdateUserLanguage(values.list);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
@@ -81,44 +83,29 @@ class Language extends Component {
 
     componentWillUnmount() {
 
-        const form_data = this.props.info.form.Language;
-        console.log(form_data)
-        let error = false
-        let error_values =form_data["syncErrors"]
-        // console.log(error_values)
-        if(error_values){
-            for(let i of  error_values['list']){
-                for(let j of Object.keys(i)){
-                    if(i[j]){
-                        error =true
-                        break;
+        if(!this.state.submit){
+            const form_data = this.props.info.form.Language;
+            console.log(form_data)
+            let error = false
+            let error_values =form_data["syncErrors"]
+            // console.log(error_values)
+            if(error_values){
+                for(let i of  error_values['list']){
+                    for(let j of Object.keys(i)){
+                        if(i[j]){
+                            error =true
+                            break;
+                        }
                     }
                 }
             }
+            console.log("error",error)
+            if(!error){
+                console.log("Came Here")
+                this.props.bulkUpdateUserLanguage(form_data['values']['list'])
+            }
         }
-        console.log("error",error)
-        if(!error){
-            console.log("Came Here")
-            this.props.bulkUpdateUserLanguage(form_data['values']['list'])
-        }
 
-    }
-
-    handleAddition(fields, error) {
-
-        fields.push({
-            "candidate_id": '',
-            "id": '',
-            "name": '',
-            "proficiency": '',
-            order: fields.length
-        })
-        scroller.scrollTo(`language${fields.length -1}`, {
-            duration: 800,
-            delay: 0,
-            smooth: 'easeInOutQuad',
-            offset: 0
-        })
     }
 
     deleteLanguage(index, fields, event) {
@@ -172,7 +159,7 @@ class Language extends Component {
                     <PreviewModal {...this.props}/>
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}
-                                handleAddition={this.handleAddition}
+                                handleAddition={this.props.handleAddition}
                                 deleteLanguage={this.deleteLanguage}
                                 changeOrderingUp={this.changeOrderingUp}
                                 changeOrderingDown={this.changeOrderingDown}

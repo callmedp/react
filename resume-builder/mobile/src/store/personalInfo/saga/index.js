@@ -75,7 +75,7 @@ function* updatePersonalDetails(action) {
         
 
         yield put({type: Actions.SAVE_USER_INFO, data:modifyPersonalInfo(result['data'])});
-        // yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
 
         return resolve('User Personal  Info saved successfully.');
 

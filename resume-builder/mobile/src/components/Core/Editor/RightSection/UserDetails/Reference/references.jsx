@@ -11,13 +11,13 @@ class References extends Component {
     constructor(props) {
         super(props)
         this.handleSubmit = this.handleSubmit.bind(this)
-        this.handleAddition = this.handleAddition.bind(this);
         this.deleteReference = this.deleteReference.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
         this.state = {
             'editHeading': false,
-            'heading' : ''
+            'heading' : '',
+            'submit':false
         }
         this.updateInputValue =this.updateInputValue.bind(this);
         this.editHeadingClick = this.editHeadingClick.bind(this);
@@ -26,6 +26,7 @@ class References extends Component {
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
+        this.setState({submit:true})
         await this.props.bulkUpdateUserReference(values.list);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
@@ -40,33 +41,29 @@ class References extends Component {
 
     componentWillUnmount() {
 
-        const form_data = this.props.info.form.reference;
-        console.log(form_data)
-        let error = false
-        let error_values =form_data["syncErrors"]
-        // console.log(error_values)
-        if(error_values){
-            for(let i of  error_values['list']){
-                for(let j of Object.keys(i)){
-                    if(i[j]){
-                        error =true
-                        break;
+        if(!this.state.submit){
+            const form_data = this.props.info.form.reference;
+            let error = false
+            let error_values =form_data["syncErrors"]
+            if(error_values){
+                for(let i of  error_values['list']){
+                    for(let j of Object.keys(i)){
+                        if(i[j]){
+                            error =true
+                            break;
+                        }
                     }
                 }
             }
-        }
-        console.log("error",error)
-        if(!error){
-            console.log("Came Here")
-            this.props.bulkUpdateUserReference(form_data['values']['list'])
+            if(!error){
+                this.props.bulkUpdateUserReference(form_data['values']['list'])
+            }
         }
 
     }
 
     componentDidMount() {
         this.props.fetchUserReference()
-        // console.log("Here")
-        // console.log("----",this.props.sidenav.currentLinkPos)
         if (this.props.personalInfo.entity_preference_data.length) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[9].entity_text})
         }
@@ -102,24 +99,6 @@ class References extends Component {
 
     editHeadingClick(){
         this.setState({editHeading:true})
-    }
-
-    handleAddition(fields, error) {
-        
-        fields.push({
-            "candidate_id": '',
-            "id": '',
-            "reference_name": '',
-            "reference_designation": '',
-            "about_user": "",
-            order: fields.length
-        })
-        scroller.scrollTo(`references${fields.length -1}`, {
-            duration: 800,
-            delay: 0,
-            smooth: 'easeInOutQuad',
-            offset: 150
-        })
     }
 
     deleteReference(index, fields, event) {
@@ -174,7 +153,7 @@ class References extends Component {
                     <PreviewModal {...this.props}/>
                     <FieldArray name={"list"} 
                                 handleSubmit={handleSubmit}
-                                handleAddition={this.handleAddition}
+                                handleAddition={this.props.handleAddition}
                                 deleteReference={this.deleteReference}
                                 changeOrderingUp={this.changeOrderingUp}
                                 changeOrderingDown={this.changeOrderingDown}

@@ -2,6 +2,7 @@ import {renderField, renderTextArea, renderSelect, datepicker} from '../../../..
 import React from 'react';
 import {Field} from "redux-form";
 import DataLoader from "../../../../../Common/DataLoader/dataloader"
+import {educationNewData} from "../../../../../../Utils/addnewData"
 
 const renderEducation = ({
                             fields, 
@@ -32,7 +33,7 @@ const renderEducation = ({
                 </div>
                 
                 <button role="button" className="btn btn__round btn--outline"
-                    onClick={handleSubmit(handleAddition.bind(this,fields, error))}
+                    onClick={handleSubmit(handleAddition.bind(this,fields,educationNewData(fields),450,'education'))}
                     type={'button'}>+ Add new</button>
             </div>
             {fields.map((member, index) => {

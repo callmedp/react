@@ -14,12 +14,12 @@ class Skill extends Component {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this)
         this.deleteSkill = this.deleteSkill.bind(this)
-        this.handleAddition = this.handleAddition.bind(this)
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
         this.state = {
             'editHeading': false,
-            'heading' : ''
+            'heading' : '',
+            'submit' : ''
         }
         this.updateInputValue =this.updateInputValue.bind(this);
         this.editHeadingClick = this.editHeadingClick.bind(this);
@@ -75,27 +75,11 @@ class Skill extends Component {
         }
     }
 
-    handleAddition(fields) {
-        fields.push({
-            "candidate_id": '',
-            "id": '',
-            "name": '',
-            "proficiency": '',
-            "order": fields.length
-        })
-        
-        scroller.scrollTo(`skill${fields.length -1}`, {
-            duration: 800,
-            delay: 0,
-            smooth: 'easeInOutQuad',
-        })
-
-    }
-
     async handleSubmit(values) {
         // console.log("In Submit")
         let {listOfLinks,currentLinkPos} = this.props.sidenav
         currentLinkPos++
+        this.setState({submit:true})
         await this.props.bulkSaveUserSkill(values.list);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
@@ -110,27 +94,24 @@ class Skill extends Component {
 
     componentWillUnmount() {
 
-        const form_data = this.props.info.form.Skill;
-        console.log(form_data)
-        let error = false
-        let error_values =form_data["syncErrors"]
-        // console.log(error_values)
-        if(error_values){
-            for(let i of  error_values['list']){
-                for(let j of Object.keys(i)){
-                    if(i[j]){
-                        error =true
-                        break;
+        if(!this.state.submit){
+            const form_data = this.props.info.form.Skill;
+            let error = false
+            let error_values =form_data["syncErrors"]
+            if(error_values){
+                for(let i of  error_values['list']){
+                    for(let j of Object.keys(i)){
+                        if(i[j]){
+                            error =true
+                            break;
+                        }
                     }
                 }
             }
+            if(!error){
+                this.props.bulkSaveUserSkill(form_data['values']['list'])
+            }
         }
-        console.log("error",error)
-        if(!error){
-            console.log("Came Here")
-            this.props.bulkSaveUserSkill(form_data['values']['list'])
-        }
-
     }
 
     async changeOrderingUp(index,fields,event){
@@ -175,7 +156,7 @@ class Skill extends Component {
                     <PreviewModal {...this.props}/>
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}
-                                handleAddition={this.handleAddition}
+                                handleAddition={this.props.handleAddition}
                                 deleteSkill={this.deleteSkill}
                                 changeOrderingUp={this.changeOrderingUp}
                                 changeOrderingDown={this.changeOrderingDown}

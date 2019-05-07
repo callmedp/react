@@ -2,6 +2,7 @@ import React from 'react';
 import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer.jsx";
 import {Field} from "redux-form";
 import DataLoader from "../../../../../Common/DataLoader/dataloader"
+import {awardNewData} from "../../../../../../Utils/addnewData"
 
 export const renderAwards = ({
                                 fields, 
@@ -30,7 +31,7 @@ export const renderAwards = ({
                     }
                     <i className="sprite icon--edit" onClick={editHeadingClick.bind(true)}></i>
                 </div>
-                <button role="button" onClick={handleSubmit(handleAddition.bind(this, fields, error))}
+                <button role="button" onClick={handleSubmit(handleAddition.bind(this,fields,awardNewData(fields),100,'award'))}
                     type={'button'} className="btn btn__round btn--outline">+ Add new</button>
             </div>
 

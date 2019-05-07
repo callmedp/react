@@ -14,13 +14,13 @@ class Experience extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleAddition = this.handleAddition.bind(this);
         this.deleteExperience = this.deleteExperience.bind(this);
         this.changeOrderingUp = this.changeOrderingUp.bind(this);
         this.changeOrderingDown = this.changeOrderingDown.bind(this);
         this.state = {
             'editHeading': false,
-            'heading' : ''
+            'heading' : '',
+            'submit' : false
         }
         this.updateInputValue =this.updateInputValue.bind(this);
         this.editHeadingClick = this.editHeadingClick.bind(this);
@@ -61,6 +61,7 @@ class Experience extends Component {
 
     async handleSubmit(values) {
         let {listOfLinks,currentLinkPos} = this.props.sidenav
+        this.setState({submit:true})
         currentLinkPos++
         await this.props.bulkUpdateUserExperience(values.list);
         if(currentLinkPos === listOfLinks.length){
@@ -76,56 +77,30 @@ class Experience extends Component {
 
     componentWillUnmount() {
 
-        const form_data = this.props.info.form.experience;
-        console.log(form_data)
-        let error = false
-        let error_values =form_data["syncErrors"]
-        // console.log(error_values)
-        if(error_values){
-            for(let i of  error_values['list']){
-                for(let j of Object.keys(i)){
-                    if(i[j]){
-                        error =true
-                        break;
+        if(!this.state.submit){
+            const form_data = this.props.info.form.experience;
+            let error = false
+            let error_values =form_data["syncErrors"]
+            if(error_values){
+                for(let i of  error_values['list']){
+                    for(let j of Object.keys(i)){
+                        if(i[j]){
+                            error =true
+                            break;
+                        }
                     }
                 }
             }
+            if(!error){
+                this.props.bulkUpdateUserExperience(form_data['values']['list'])
+            }
         }
-        console.log("error",error)
-        if(!error){
-            console.log("Came Here")
-            this.props.bulkUpdateUserExperience(form_data['values']['list'])
-        }
-
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
             this.setState({heading : this.props.personalInfo.entity_preference_data[2].entity_text})
         }
-    }
-
-    handleAddition(fields, error) {
-        console.log("-----",fields instanceof Array)
-        fields.push({
-            "candidate_id": '',
-            "id": '',
-            "job_profile": '',
-            "company_name": '',
-            "start_date": '',
-            "end_date": '',
-            "is_working": false,
-            "job_location": '',
-            "work_description": '',
-            order: fields.length
-        })
-        fields.push({})
-        scroller.scrollTo(`experience${fields.length -1}`, {
-            duration: 800,
-            delay: 0,
-            smooth: 'easeInOutQuad',
-            offset: 780
-        })
     }
 
     deleteExperience(index, fields, event) {
@@ -178,7 +153,7 @@ class Experience extends Component {
                     <PreviewModal {...this.props}/>
                     <FieldArray name="list" 
                                 handleSubmit={handleSubmit}
-                                handleAddition={this.handleAddition}
+                                handleAddition={this.props.handleAddition}
                                 deleteExperience={this.deleteExperience}
                                 changeOrderingUp={this.changeOrderingUp}
                                 changeOrderingDown={this.changeOrderingDown}

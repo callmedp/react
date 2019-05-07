@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, ReactDOM} from 'react';
 import './resumeSlider.scss'
 import Slider from "react-slick";
 
@@ -11,6 +11,7 @@ export default class ResumeSlider extends Component {
     }
 
     customise() {
+        localStorage.setItem('template',(parseInt(document.getElementsByClassName('slick-current')[0].getAttribute('data-index')) + 1))
         window.location = '/resume-builder/edit/?type=profile'
     }
 
@@ -42,9 +43,15 @@ export default class ResumeSlider extends Component {
                         <div className="proven-resume__imageWrap">
                             <img src={`${this.staticUrl}react/assets/images/mobile/resume.jpg`} alt=""/>
                         </div>
+                        <div className="proven-resume__imageWrap">
+                            <img src={`${this.staticUrl}react/assets/images/mobile/resume.jpg`} alt=""/>
+                        </div>
+                        <div className="proven-resume__imageWrap">
+                            <img src={`${this.staticUrl}react/assets/images/mobile/resume.jpg`} alt=""/>
+                        </div>
                     </Slider>
 
-                    <a className="btn btn__shadow btn__round btn__primary" onClick={this.customise}>Customise</a>
+                    <a className="btn btn__shadow btn__round btn__primary" onClick={this.customise}>Select Template</a>
                 </div>
             </section>
         )
