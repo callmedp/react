@@ -841,10 +841,12 @@ class DashboardResumeTemplateDownload(View):
         email = request.session.get('email', None)
         try:
             order_pk = request.POST.get('order_pk', None)
-            product_id = request.POST.get('product_id_key', None)
+            product_id = request.POST.get('product_id',None)
+
             is_combo = False
             if product_id != "3092":
                 is_combo = True
+
             order = Order.objects.get(pk=order_pk)
             if not candidate_id or not order.status in [1, 3, 0] or not (order.email == email) \
                     or not (order.candidate_id == candidate_id):

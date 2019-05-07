@@ -5,6 +5,7 @@ import {takeLatest, put, call, select} from "redux-saga/effects";
 import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
+import {siteDomain} from '../../../Utils/domains'
 
 
 function* fetchProductIds(action) {
@@ -26,6 +27,9 @@ function* addToCart(action) {
         const result = yield call(Api.addToCart, data);
         if (result['error']) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
+        }
+        else{
+            window.location.href = `${siteDomain}/cart`
         }
         return resolve('Product added to cart successfully.');
 

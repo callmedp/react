@@ -12,14 +12,18 @@ import {SubmissionError} from 'redux-form'
 import {interestList} from '../../../Utils/interestList'
 
 function modifyPersonalInfo(data) {
-    const {date_of_birth, gender, extracurricular} = data;
+    console.log("Came inside Modify")
+    let {date_of_birth, gender, extracurricular} = data;
+    extracurricular = extracurricular ?(extracurricular).split(',').map(key => interestList[key]):[]
+    console.log(extracurricular)
     let newData = {
             ...data,
             ...{
                 "date_of_birth": (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
-                "extracurricular": (extracurricular||'').split(',').map(key => interestList[key])
+                extracurricular
                 }
         }
+    console.log("Came Here Outside Modify")
     return newData;
 }
 
@@ -68,8 +72,9 @@ function* updatePersonalDetails(action) {
         }
 
         localStorage.removeItem('personalInfo');
+        
 
-        yield put({type: Actions.SAVE_USER_INFO, data:result['data']});
+        yield put({type: Actions.SAVE_USER_INFO, data:modifyPersonalInfo(result['data'])});
         // yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
 
         return resolve('User Personal  Info saved successfully.');

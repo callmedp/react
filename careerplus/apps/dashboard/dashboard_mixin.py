@@ -62,8 +62,6 @@ class DashboardInfo(object):
             return render_to_string('partial/user-inboxlist.html', data)
 
     def get_myorder_list(self, candidate_id=None, request=None):
-        import ipdb;
-        ipdb.set_trace();
         if not candidate_id:
             return
         # days = 6 * 30
@@ -82,22 +80,22 @@ class DashboardInfo(object):
         orders = orders.exclude(id__in=excl_order_list)
 
         orders = orders.order_by('-date_placed')
-
         order_list = []
         for obj in orders:
             orderitems = obj.orderitems.filter(no_process=False)
             orderitems.select_related('product')
             product_type_flow = None
+            product_id = None
             item_count = orderitems.count()
             if item_count > 0:
                 item_order = orderitems.first()
                 product_type_flow = item_order and item_order.product and item_order.product.type_flow or 0
-                product_id = item_order and item_order.product and item_order.product.id or 0
+                product_id =item_order and item_order.product and item_order.product.id or None
             data = {
                 "order": obj,
                 "item_count": item_count,
                 'product_type_flow': product_type_flow,
-                'product_id': product_id,
+                "product_id": product_id,
                 "orderitems": orderitems,
             }
             order_list.append(data)
