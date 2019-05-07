@@ -35,7 +35,7 @@ from .managers import (
     IndexableProductManager,
     BrowsableProductManager,
     SaleableProductManager, SelectedFieldProductManager)
-from .utils import ProductAttributesContainer
+from .utils import ProductAttributesContainer,get_days_month_year
 from . import choices
 from .functions import (
     get_upload_path_faculty,
@@ -1589,6 +1589,22 @@ class Product(AbstractProduct, ModelMeta):
         else:
             return ''
 
+
+
+    def get_duration_in_ddmmyy(self):
+        if self.is_course:
+            dd = getattr(self.attr, C_ATTR_DICT.get('DD')) \
+                if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
+                else 0
+            return get_days_month_year(dd)
+        elif self.is_service and self.type_flow == 5:
+            dd = getattr(self.attr, S_ATTR_DICT.get('FD')) \
+                if getattr(self.attr, S_ATTR_DICT.get('FD'), None) \
+                else 0
+            return get_days_month_year(dd)
+        else:
+            return get_days_month_year()
+
     def get_duration_db(self):
         # return display value
         if self.is_course:
@@ -3107,8 +3123,9 @@ class SubCategory(AbstractAutoDate,AbstractSEO,ModelMeta):
             self.meta_desc = self.get_description()
 
         if self.category and self.get_location_display():
+            value = self.slug if self.slug else self.category.name + '-' + str(self.get_location_display())
             self.url = self.get_absolute_url()
-            value = self.category.name + '-' + str(self.get_location_display())
+            # value = self.category.name + '-' + str(self.get_location_display())
             slug_value = slugify(value)
             self.slug = slug_value
         super(SubCategory, self).save(*args, **kwargs)

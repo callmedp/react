@@ -812,6 +812,7 @@ class WelcomeCallUpdateView(DetailView, WelcomeCallInfo):
                 for oi_data in wc_items:
                     oi = oi_data.get('oi')
                     name = 'subcategory' + str(oi.pk)
+
                     oi_category = int(data.get(name))
                     oi.wc_cat = cat
                     oi.wc_sub_cat = oi_category

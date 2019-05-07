@@ -371,6 +371,8 @@ class ProductModeration(object):
                 product.upc = screen.upc
                 product.product_class = screen.product_class
                 product.type_product = screen.type_product
+                product.type_flow = screen.type_flow
+                product.sub_type_flow = screen.sub_type_flow
                 
                 product.about = screen.about
                 product.description = screen.description
@@ -460,7 +462,7 @@ class ProductModeration(object):
                         vproduct.upc = vscreen.upc
                         vproduct.product_class = vscreen.product_class
                         vproduct.type_product = vscreen.type_product
-                        
+                        vproduct.type_flow = vscreen.type_flow
                         vproduct.inr_price = vscreen.inr_price
                         vproduct.fake_inr_price = vscreen.fake_inr_price
                         vproduct.usd_price = vscreen.usd_price
@@ -1207,3 +1209,26 @@ class ProductValidation(object):
             messages.error(request, (
                 ("%(msg)s : %(err)s") % {'msg': 'Contact Tech ERROR', 'err': e}))
         return test_pass
+
+
+def get_days_month_year(days_value=0):
+
+
+    def get_attr_repr(val,attr):
+        if not val:
+            return ""
+        repr = (str(attr)+"s") if val > 1 else attr
+        return str(val) + repr
+
+    if not days_value or not isinstance(days_value, int):
+        return ""
+
+    years, remain = divmod(days_value, 365)
+    months, days = divmod(remain, 30)
+    return "-".join(filter(None,[get_attr_repr(years,"year"),\
+                                 get_attr_repr(months,"month"),get_attr_repr(days,'day')]))
+
+
+
+
+

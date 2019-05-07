@@ -693,5 +693,9 @@
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
         }
+       $(document).on('click', '.icon-downlod', function () {
+
+    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms resume Enquiry', 'success');
+});
     </script>
  {% endblock js_section %}

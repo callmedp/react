@@ -270,7 +270,13 @@ CITY_CHOICES = (
     (2, 'Pune'),
     (3, 'Hyderabad'),
     (4, 'Kolkata'),
-
+    (5, 'Noida'),
+    (6, 'Gurgaon'),
+    (7, 'Chandigarh'),
+    (8, 'Nagpur'),
+    (9, 'Jaipur'),
+    (10, 'Bangalore'),
+    (11, 'Gurugram')
 )
 
 SHINE_FLOW_ACTION = (
