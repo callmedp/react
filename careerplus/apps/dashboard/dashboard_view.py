@@ -837,15 +837,12 @@ class DashboardResumeDownload(View):
 class DashboardResumeTemplateDownload(View):
 
     def post(self, request, *args, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
-
         candidate_id = request.session.get('candidate_id', None)
         email = request.session.get('email', None)
         try:
             order_pk = request.POST.get('order_pk', None)
-            product_id = request.POST.get('product_id', None)
-            is_combo = False;
+            product_id = request.POST.get('product_id_key', None)
+            is_combo = False
             if product_id != "3092":
                 is_combo = True
             order = Order.objects.get(pk=order_pk)
