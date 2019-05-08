@@ -360,6 +360,27 @@
     display: block;
     background-position: -114px -323px;
   }
+
+
+  &--percentage {
+    @include size(19px, 19px, block);
+    background-position: -128px 0;
+  }
+  
+  &--course-type {
+    @include size(19px, 24px, block);
+    background-position: -131px -53px;
+  }
+  
+  &--location {
+    @include size(19px, 24px, block);
+    background-position: -135px -134px;
+  }
+  
+  &--description {
+    @include size(19px, 20px, block);
+    background-position: -135px -160px;
+  }
 }
 
 

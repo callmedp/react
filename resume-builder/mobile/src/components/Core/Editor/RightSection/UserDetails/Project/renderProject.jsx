@@ -83,7 +83,7 @@ const renderProjects = ({
                                 <div className="input-group">
                                     <div className="input-group__prepend">
                                         <span className="input-group__text">
-                                            <i className="sprite icon--date"></i>
+                                            <i className="sprite icon--description"></i>
                                         </span>
                                     </div>
                                     <Field component={renderTextArea} rows={"3"} type={"textarea"}
