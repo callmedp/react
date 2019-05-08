@@ -19,7 +19,7 @@ class EditPreview extends Component {
     }
 
     render() {
-        const {ui: {loader}} = this.props;
+        const {ui: {loader}, userInfo: {first_name}} = this.props;
         return (
             /*
             * @desc Top Bar component
@@ -30,7 +30,7 @@ class EditPreview extends Component {
                      <LoaderPage/>
                 }
 
-                <Header/>
+                <Header userName={first_name}/>
                 <div className="page-container">
                     <TopBar/>
                     <section className={'flex-container mt-30'}>
@@ -48,7 +48,8 @@ class EditPreview extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        ui: state.ui
+        ui: state.ui,
+        userInfo: state.personalInfo
     }
 }
 export default withRouter(connect(mapStateToProps, null)(EditPreview))

@@ -1,5 +1,5 @@
 import {Api} from './Api';
-import {takeLatest, call} from "redux-saga/effects";
+import {takeLatest, call,put} from "redux-saga/effects";
 import {siteDomain} from "../../../Utils/domains";
 import * as Actions from '../actions/actionTypes';
 import {LOGIN_CANDIDATE} from "../actions/actionTypes";
@@ -27,6 +27,7 @@ function* loginCandidate(action) {
 
         //handle token already present in there
         if (localStorage.getItem('token')) {
+            yield put({type: 'FETCH_PERSONAL_INFO'});
             console.log('--token available-');
             return;
         }
@@ -52,6 +53,7 @@ function* loginCandidate(action) {
             } else localStorage.setItem(key, (JSON.stringify(candidate_profile[key])) || '');
         }
         localStorage.setItem('token', (token) || '');
+
     } catch (e) {
         console.log(e);
     }

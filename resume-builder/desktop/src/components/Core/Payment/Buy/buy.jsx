@@ -10,6 +10,7 @@ import {connect} from "react-redux";
 import {siteDomain} from "../../../../Utils/domains";
 import TemplateModal from '../../../Modal/tempateModal'
 import Slider from "react-slick";
+import {fetchPersonalInfo} from '../../../../store/personalInfo/actions/index'
 
 
 function SampleNextArrow(props) {
@@ -81,6 +82,7 @@ export class Buy extends Component {
 
     componentDidMount() {
         this.props.getProductIds();
+        this.props.fetchUserInfo();
 
     }
 
@@ -104,15 +106,16 @@ export class Buy extends Component {
             slidesToShow: 3,
             slidesToScroll: 3,
             nextArrow: <SampleNextArrow/>,
-            prevArrow: <SamplePrevArrow/>
+            prevArrow: <SamplePrevArrow/>,
         };
+        const {userInfo: {first_name}} = this.props;
         const {checked} = this.state;
         return (
             /*
             * @desc Top Bar component
             * */
             <div>
-                <Header/>
+                <Header userName={first_name}/>
                 <TemplateModal {...this.props} />
                 <div className="page-container">
                     <TopBar page={'buy'}/>
@@ -183,7 +186,7 @@ export class Buy extends Component {
                                 <div className="">
                                     <div className="choose-plan--pay-price">
                                         You pay
-                                        <span>Rs. <strong>{checked === 'product1'? "999" : "1249"}/-</strong></span>
+                                        <span>Rs. <strong>{checked === 'product1' ? "999" : "1249"}/-</strong></span>
                                     </div>
                                     <button
                                         className="choose-plan--orange-button-change orange-button items-right pull-right mt-10"
@@ -210,12 +213,16 @@ export class Buy extends Component {
 const mapStateToProps = (state) => {
     return {
         productIds: state.productIds,
-        ui: state.ui
+        ui: state.ui,
+        userInfo: state.personalInfo
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        'fetchUserInfo': () => {
+            return dispatch(fetchPersonalInfo())
+        },
         'getProductIds': () => {
             return dispatch(action.getProductIds())
         },
