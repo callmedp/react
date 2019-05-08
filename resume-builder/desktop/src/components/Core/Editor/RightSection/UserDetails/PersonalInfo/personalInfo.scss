@@ -1,19 +1,19 @@
 @import '../../../../../../styles/variables/vars.scss';
 @import '../../../../../../styles/variables/mixins.scss';
 
-h2 {
+:local(h2) {
   margin: 0 10px !important;
 }
 
-.icon-edit__cursor {
+:local(.icon-edit__cursor) {
   cursor: pointer;
 }
 
-.zero-opacity {
+:local(.zero-opacity) {
   opacity: 0;
 }
 
-.upper-cross {
+:local(.upper-cross) {
 	position: relative;
 
 	.icon-close {

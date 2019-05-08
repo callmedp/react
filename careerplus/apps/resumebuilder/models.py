@@ -190,7 +190,7 @@ class CandidateAchievement(models.Model):
     @property
     def owner_id(self):
         return self.candidate.candidate_id
-        
+
     def __str__(self):
         return self.title
 

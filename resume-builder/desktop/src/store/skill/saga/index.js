@@ -109,11 +109,11 @@ function* handleSkillSwap(action) {
 
         localStorage.removeItem('skill');
 
-        let {data: {results}} = result;
+        let {data} = result;
 
-        results.sort((a, b) => a.order <= b.order);
+        data.sort((a, b) => a.order <= b.order);
 
-        let data = {list: results};
+        data = {list: data};
 
         data = modifySkill(data);
 
@@ -150,7 +150,6 @@ function* deleteUserSkill(action) {
         yield put({type: Actions.REMOVE_SKILL, id: skillId});
 
 
-
     } catch (e) {
         console.log('error', e);
     }
@@ -162,6 +161,6 @@ export default function* watchSkill() {
     yield takeLatest(Actions.UPDATE_USER_SKILL, updateUserSkill);
     yield takeLatest(Actions.DELETE_USER_SKILL, deleteUserSkill);
     yield takeLatest(Actions.HANDLE_SKILL_SWAP, handleSkillSwap);
-        yield takeLatest(Actions.BULK_U_C_USER_SKILL, handleSkillSwap);
+    yield takeLatest(Actions.BULK_U_C_USER_SKILL, handleSkillSwap);
 
 }

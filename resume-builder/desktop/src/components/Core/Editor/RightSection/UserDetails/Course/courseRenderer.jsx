@@ -6,25 +6,26 @@ import {
     AccordionItemPanel
 } from "react-accessible-accordion";
 import {Field} from "redux-form";
+import styles from './course.scss'
 import {datepicker, renderField} from "../../../../../FormHandler/formFieldRenderer";
 import React from "react";
 
 export const CourseRenderer = ({
-                            fields,
-                            loader,
-                            meta: {touched, error, submitFailed},
-                            handleSubmit,
-                            deleteCourse,
-                            handleAddition,
-                            handleAccordionClick,
-                            changeOrderingUp,
-                            changeOrderingDown,
-                            isEditable,
-                            editHeading,
-                            saveTitle,
-                            entityName,
-                            expanded
-                        }) => {
+                                   fields,
+                                   loader,
+                                   meta: {touched, error, submitFailed},
+                                   handleSubmit,
+                                   deleteCourse,
+                                   handleAddition,
+                                   handleAccordionClick,
+                                   changeOrderingUp,
+                                   changeOrderingDown,
+                                   isEditable,
+                                   editHeading,
+                                   saveTitle,
+                                   entityName,
+                                   expanded
+                               }) => {
     let elem = null;
     return (
         <div>
@@ -40,7 +41,7 @@ export const CourseRenderer = ({
                 >{entityName}
                 </h2>
                 <span onClick={() => editHeading(elem)}
-                      className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ""}/>
+                      className={!!(!isEditable) ? "icon-edit " + styles['icon-edit__cursor'] : ""}/>
 
                 <button
                     onClick={handleSubmit((values) => {
@@ -48,7 +49,7 @@ export const CourseRenderer = ({
                     })}
 
                     type={'button'}
-                    className="add-button add-button__right">Add new
+                    className={"add-button " + styles['add-button__right']}>Add new
                 </button>
 
 

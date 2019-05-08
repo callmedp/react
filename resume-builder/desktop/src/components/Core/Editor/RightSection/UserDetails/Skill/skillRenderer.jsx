@@ -8,6 +8,7 @@ import {
 import {Field} from "redux-form";
 import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer";
 import React from "react";
+import styles from './skill.scss'
 
 
 export const SkillRenderer = ({
@@ -41,15 +42,14 @@ export const SkillRenderer = ({
                     contenteditable={isEditable ? "true" : "false"}
                 >{entityName}</h2>
                 <span onClick={() => editHeading(elem)}
-                      className={!!(!isEditable) ? "icon-edit icon-education__cursor" : ""}
+                      className={!!(!isEditable) ? "icon-edit" + styles['icon-education__cursor'] : ""}
                 />
                 <button
                     onClick={handleSubmit((values) => {
-                        console.log('---clicked--')
                         handleAddition(fields, error)
                     })}
                     type={'button'}
-                    className="add-button add-button__right">Add new
+                    className={"add-button " + styles['add-button__right']}>Add new
                 </button>
 
 

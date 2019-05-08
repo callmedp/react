@@ -5,6 +5,7 @@ import {
     AccordionItemHeading,
     AccordionItemPanel
 } from "react-accessible-accordion";
+import styles from './award.scss'
 import {Field} from "redux-form";
 import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer";
 import React from "react";
@@ -32,21 +33,21 @@ export const AwardRenderer = ({
             {/*{!!(loader) &&*/}
             {/*<LoaderSection/>*/}
             {/*}*/}
-            <section className="head-section">
-                <span className="icon-box"><i className="icon-awards1"/></span>
+            <section className={'head-section'}>
+                <span className={'icon-box'}><i className={'icon-awards1'}/></span>
                 <h2 ref={(value) => {
                     elem = value
                 }} onKeyUp={(event) => saveTitle(event)}
                     contenteditable={isEditable ? "true" : "false"}
                 >{entityName}</h2>
                 <span onClick={() => editHeading(elem)}
-                      className={!!(!isEditable) ? "icon-edit icon-awards__cursor" : ""}/>
+                      className={!!(!isEditable) ? 'icon-edit ' + styles['icon-awards__cursor'] : ""}/>
 
                 <button onClick={handleSubmit((values) => {
                     handleAddition(fields, error)
                 })}
                         type={'button'}
-                        className="add-button add-button__right">Add new
+                        className={'add-button ' + styles['add-button__right']}>Add new
                 </button>
 
             </section>

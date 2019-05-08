@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './project.scss'
 import {FieldArray, reduxForm} from "redux-form";
 import * as actions from "../../../../../../store/project/actions";
 import {connect} from "react-redux";

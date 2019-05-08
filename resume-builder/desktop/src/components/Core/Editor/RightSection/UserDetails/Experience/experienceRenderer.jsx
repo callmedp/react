@@ -8,6 +8,8 @@ import {
 import {Field} from "redux-form";
 import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer";
 import React from "react";
+import styles from './experience.scss'
+
 
 export const ExperienceRenderer = ({
                                        fields,
@@ -38,14 +40,14 @@ export const ExperienceRenderer = ({
                 }} onKeyUp={(event) => saveTitle(event)}
                     contenteditable={isEditable ? "true" : "false"}>{entityName}</h2>
                 <span onClick={() => editHeading(elem)}
-                      className={!!(!isEditable) ? "icon-edit icon-experience__cursor" : ''}/>
+                      className={!!(!isEditable) ? "icon-edit " + styles['icon-experience__cursor'] : ''}/>
 
                 <button
                     onClick={handleSubmit((values) => {
                         handleAddition(fields, error)
                     })}
                     type={'button'}
-                    className="add-button add-button__right">Add new
+                    className={"add-button " + styles['add-button__right']}>Add new
                 </button>
 
             </section>
@@ -136,7 +138,7 @@ export const ExperienceRenderer = ({
                                                                        name={`${member}.end_date`}
                                                                        className={'input-control'}/>
                                                             </div>
-                                                            <span className="till-today">
+                                                            <span className={styles['till-today']}>
 									                                    <Field type="checkbox"
                                                                                name={`${member}.is_working`}
                                                                                component={renderField}

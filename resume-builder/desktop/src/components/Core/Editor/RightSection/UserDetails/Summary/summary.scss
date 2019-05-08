@@ -1,13 +1,13 @@
 @import '../../../../../../styles/variables/vars.scss';
 @import '../../../../../../styles/variables/mixins.scss';
 
-h2 {
+:local(h2) {
 	margin: 0 10px !important;
 	font-weight: 1.8rem;
 	font-weight: 700;
 }
 
-.icon-summary__cursor {
+:local(.icon-summary__cursor) {
 	cursor: pointer;
 }
 
@@ -15,7 +15,7 @@ h2 {
 	padding: 3%;
 }
 
-.summary-box {
+:local(.summary-box){
 	h3 {
 		display: block;
 		font-size: 1.3rem;

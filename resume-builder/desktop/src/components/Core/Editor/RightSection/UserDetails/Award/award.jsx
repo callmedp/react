@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './award.scss'
 import {Field, FieldArray, reduxForm} from "redux-form";
 import * as actions from "../../../../../../store/award/actions";
 import {connect} from "react-redux";
@@ -91,9 +90,11 @@ class Award extends Component {
                             isEditable={isEditable}
                             expanded={this.state.active}
                 />
-                <div className="flex-container items-right mr-20 mb-30">
-                    <button className="blue-button mr-10" type={'button'} onClick={handlePreview}>Preview</button>
-                    <button className="orange-button" type={'submit'}>Save & Continue</button>
+                <div className={'flex-container items-right mr-20 mb-30'}>
+                    <button className={'blue-button mr-10'} type={'button'}
+                            onClick={handlePreview}>Preview
+                    </button>
+                    <button className={'orange-button'} type={'submit'}>Save & Continue</button>
                 </div>
 
             </form>

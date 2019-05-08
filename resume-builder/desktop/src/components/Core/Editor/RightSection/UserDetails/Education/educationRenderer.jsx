@@ -8,6 +8,7 @@ import {
 import {Field} from "redux-form";
 import {datepicker, renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer";
 import React from "react";
+import styles from './education.scss'
 
 export const EducationRenderer = ({
                                       fields,
@@ -36,14 +37,14 @@ export const EducationRenderer = ({
                 }} onKeyUp={(event) => saveTitle(event)}
                     contenteditable={isEditable ? "true" : "false"}>{entityName}</h2>
                 <span onClick={() => editHeading(elem)}
-                      className={!!(!isEditable) ? "icon-edit icon-education__cursor" : ''}/>
+                      className={!!(!isEditable) ? "icon-edit " + styles['icon-education__cursor']  : ''}/>
 
                 <button
                     onClick={handleSubmit((values) => {
                         handleAddition(fields, error)
                     })}
                     type={'button'}
-                    className="add-button add-button__right">Add new
+                    className={"add-button " + styles['add-button__right']}>Add new
                 </button>
 
 
@@ -138,8 +139,9 @@ export const EducationRenderer = ({
                                                                        className="input-control"/>
 
                                                             </div>
-                                                            <span className="till-today">
-                                    <Field type="checkbox" name={`${member}.is_pursuing`} component={renderField}  checked={`${member}.end_date` === true}/>
+                                                            <span className={styles["till-today"]}>
+                                    <Field type="checkbox" name={`${member}.is_pursuing`} component={renderField}
+                                           checked={`${member}.end_date` === true}/>
                                     Till Today
                                 </span>
                                                         </fieldset>
