@@ -139,12 +139,15 @@ class ProductInformationMixin(object):
         info['prd_rating_star'] = product.pStar
         info['prd_video'] = product.pvurl
         info['start_price'] = product.pPinb
+
         if product.pPc == 'course':
             info['prd_service'] = 'course'
         elif product.pPc == 'writing':
             info['prd_service'] = 'resume'
         elif product.pPc == 'service':
             info['prd_service'] = 'service'
+        elif product.pPc == 'assesment':
+            info['prd_service'] = 'test'
         else:
             info['prd_service'] = 'other'
         info['prd_product'] = product.pTP
@@ -352,6 +355,7 @@ class ProductInformationMixin(object):
         ctx = {}
         ctx['product'] = product
         ctx['num_jobs_url'] = self.get_jobs_url(product)
+
         if product:
             ctx.update(self.get_breadcrumbs(product, product.category_main))
         ctx.update(self.solar_info(sqs))
@@ -616,8 +620,10 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         super(ProductDetailView, self).__init__(*args, **kwargs)
 
     def get_template_names(self):
-        if self.product_obj.type_flow==14:
+        if self.product_obj.type_flow == 14:
             return['shop/university.html']
+        elif self.product_obj.type_flow == 16:
+            return ['shop/assesment.html']
         if not self.request.amp:
             return ['shop/detail1.html']
         if not settings.DEBUG:
@@ -636,9 +642,14 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         product_data = self.get_product_detail_context(
             self.product_obj, self.sqs,
             self.product_obj, self.sqs)
-        product_detail_content = render_to_string(
-            'shop/product-detail.html', product_data,
-            request=self.request)
+        if self.product_obj.type_flow == 16:
+            product_detail_content = render_to_string(
+                'shop/product-detail-assesment.html', product_data,
+                request=self.request)
+        else:
+            product_detail_content = render_to_string(
+                'shop/product-detail.html', product_data,
+                request=self.request)
         ctx.update({
             'product_detail': product_detail_content,
             "ggn_contact_full": settings.GGN_CONTACT_FULL,

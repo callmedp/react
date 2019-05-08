@@ -1245,7 +1245,7 @@ class Product(AbstractProduct, ModelMeta):
                 cat_slug = cat_slug1[0] if cat_slug1 else None
         cat_slug = cat_slug.slug if cat_slug else None
         if cat_slug:
-            if self.is_course:
+            if self.is_course or self.type_flow == 16:
                 url_to_return = reverse('course-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
             else:
                 url_to_return = reverse('service-detail', kwargs={'prd_slug': self.slug, 'cat_slug': cat_slug, 'pk': self.pk})
