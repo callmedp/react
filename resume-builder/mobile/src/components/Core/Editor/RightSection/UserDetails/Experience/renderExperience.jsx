@@ -96,7 +96,7 @@ const renderExperiences = ({
                         
                         <li className="form__group">
                             <Field component={renderField} label={"Job Location"}  type={"text"} name={`${member}.job_location`} 
-                                id={`${member}.job_location`} iconClass={"sprite icon--company"} className="form__input" prepend={true}/>
+                                id={`${member}.job_location`} iconClass={"sprite icon--location"} className="form__input" prepend={true}/>
                         </li>
 
                         <li className="form__group">

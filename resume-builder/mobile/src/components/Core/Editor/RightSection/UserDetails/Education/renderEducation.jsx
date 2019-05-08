@@ -95,7 +95,7 @@ const renderEducation = ({
 
                             <li className="form__group">
                                 <Field component={renderSelect} label={"Course Type"} name={`${member}.course_type`} prepend={true} 
-                                    id={`${member}.course_type`} iconClass={"sprite icon--date"} className="form__input">
+                                    id={`${member}.course_type`} iconClass={"sprite icon--course-type"} className="form__input">
                                     <option value="">Choose</option>
                                     <option value="FT" >FULL TIME</option>
                                     <option value="PT" >PART TIME</option>
@@ -104,7 +104,7 @@ const renderEducation = ({
                             
                             <li className="form__group">
                                 <Field component={renderField} label={"Percentage/CGPA"}  type={"text"} name={`${member}.percentage_cgpa`} 
-                                    id={`${member}.percentage_cgpa`} iconClass={"sprite icon--date"} className="form__input" prepend={true}/>
+                                    id={`${member}.percentage_cgpa`} iconClass={"sprite icon--percentage"} className="form__input" prepend={true}/>
                             </li>
 
                         </ul>
