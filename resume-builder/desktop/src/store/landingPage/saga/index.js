@@ -28,6 +28,7 @@ function* loginCandidate(action) {
         //handle token already present in there
         if (localStorage.getItem('token')) {
             yield put({type: 'FETCH_PERSONAL_INFO'});
+
             console.log('--token available-');
             return;
         }

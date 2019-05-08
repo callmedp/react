@@ -43,17 +43,19 @@ function* getPersonalDetails(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
-        yield put({type: UPDATE_UI, data: {loader: true}})
-
 
         if (localStorage.getItem('personalInfo')) {
 
             yield put({
                 type: Actions.SAVE_USER_INFO,
                 data: modifyPersonalInfo(JSON.parse(localStorage.getItem('personalInfo')) || [])
-            })
+
+            });
             return;
         }
+
+        yield put({type: UPDATE_UI, data: {loader: true}});
+
 
         const result = yield call(Api.fetchPersonalInfo, candidateId);
         if (result['error']) {

@@ -20,7 +20,8 @@ function* fetchUserExperience(action) {
             yield put({
                 type: Actions.SAVE_USER_EXPERIENCE,
                 data: {list: JSON.parse(localStorage.getItem('experience')) || []}
-            })
+            });
+
             return;
         }
         yield put({type: UPDATE_UI, data: {loader: true}});

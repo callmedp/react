@@ -15,7 +15,7 @@ function* fetchUserAward(action) {
 
         if (localStorage.getItem('award')) {
 
-            yield put({type: Actions.SAVE_USER_AWARD, data: JSON.parse(localStorage.getItem('award')) || []})
+            yield put({type: Actions.SAVE_USER_AWARD, data: JSON.parse(localStorage.getItem('award')) || []});
             return;
         }
 
