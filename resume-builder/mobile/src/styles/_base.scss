@@ -52,7 +52,7 @@ ul, li {
     padding: 1.5rem;
 }
 
-.overlay{
+.overlay-sidenav{
     @include square(100%);
     background-color: rgba($black, .6);
     position: fixed;

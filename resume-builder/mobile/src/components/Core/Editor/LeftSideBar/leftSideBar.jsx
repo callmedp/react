@@ -166,7 +166,7 @@ class LeftSideBar extends Component {
             <React.Fragment>
                 {(addmore.length) ?
                     <div>
-                        <div className={"overlay"} style={sidenavStatus ? {visibility: "visible", opacity: 1} : {}}
+                        <div className={"overlay-sidenav"} style={sidenavStatus ? {visibility: "visible", opacity: 1} : {}}
                              onClick={this.closeSideNav}></div>
 
                         <section

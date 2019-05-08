@@ -2,10 +2,9 @@ import React,{Component} from 'react';
 import Modal from 'react-modal';
 import './preview.scss'
 
+Modal.setAppElement(document.getElementById('react-app'));
+
 export default class PreviewModal extends Component{
-    constructor(props){
-        super(props)
-    }
 
     render(){
         return(
@@ -15,7 +14,6 @@ export default class PreviewModal extends Component{
                 onRequestClose={this.handleCloseModal}
                 className="Modal"
                 overlayClassName="Overlay">
-                
                 <div className="Modal--iframe">
                     <iframe srcDoc={this.props.template.html}></iframe>
                 </div>
