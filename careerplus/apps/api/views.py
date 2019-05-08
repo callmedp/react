@@ -43,9 +43,10 @@ from .serializers import (
     RecommendedProductSerializerSolr,
     VendorCertificateSerializer,
     ImportCertificateSerializer,
-    ShineDataFlowDataSerializer)
+    ShineDataFlowDataSerializer,
+    CertificateSerializer)
 from shared.rest_addons.pagination import Learning_custom_pagination
-from partner.models import Certificate
+from partner.models import Certificate, Vendor
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
     authentication_classes = [OAuth2Authentication]
@@ -781,10 +782,38 @@ class ShineDataFlowDataApiView(ListAPIView):
 class VendorCertificateMappingApiView(ListAPIView):
     authentication_classes = [OAuth2Authentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
-    queryset = Certificate.objects.all()
+    queryset = Vendor.objects.all()
     serializer_class = VendorCertificateSerializer
     pagination_class = None
 
+
+    def get_queryset(self):
+        queryset = super(self.__class__, self).get_queryset()
+        return queryset.exclude(certificate=None)
+
+    def get(self, request, *args, **kwargs):
+        response = self.list(request, *args, **kwargs)
+
+        # getting certificates on basis of vendor_text
+        all_vendor_texts = set(Certificate.objects.filter(vendor_provider=None).exclude(vendor_text=None).values_list('vendor_text',flat=True))
+        k = []
+        for vendor_text in all_vendor_texts:
+            p = {}
+            certificates = CertificateSerializer(Certificate.objects.filter(vendor_text=vendor_text, vendor_provider=None), many=True).data
+            p[vendor_text] = certificates
+            k.append(p)
+        response.data.extend(k)
+
+        k = {}
+
+        # restructure response as per dictionary from list of dictionary
+        for res in response.data:
+            for key, val in res.items():
+                k[key] = val
+
+        response.data = k
+
+        return response
 
 class ImportCertificateApiView(APIView):
     authentication_classes = []

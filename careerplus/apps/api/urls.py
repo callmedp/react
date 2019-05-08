@@ -36,7 +36,7 @@ urlpatterns = [
     url(r'^v1/vendor-certificate/$',
         views.VendorCertificateMappingApiView.as_view(),
         name='vendor-certificate-mapping'),
-    url(r'^v1/import-certificates/(?P<vendor_name>[\w\-]+)/$$',
+    url(r'^v1/import-certificates/(?P<vendor_name>[\w\-]+)/$',
         views.ImportCertificateApiView.as_view(),
         name='vendor-certificate-mapping'),
 

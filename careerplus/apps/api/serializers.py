@@ -9,7 +9,7 @@ from rest_framework import serializers
 from order.models import Order, OrderItem
 from shop.models import Product, ShineProfileData
 from payment.models import PaymentTxn
-from partner.models import Certificate
+from partner.models import Certificate, Vendor
 
 import logging
 
@@ -308,11 +308,32 @@ class  ShineDataFlowDataSerializer(ModelSerializer):
             return obj.image.url
 
 
-class VendorCertificateSerializer(ModelSerializer):
+class CertificateSerializer(ModelSerializer):
+    skill = serializers.SerializerMethodField()
 
     class Meta:
         model = Certificate
-        fields = ('id', 'name', 'skill', 'vendor_certificate_id',)
+        fields = ('id', 'name', 'skill', 'vendor_certificate_id', 'vendor_provider')
+
+
+    def get_skill(self, obj):
+        if obj.skill:
+            k = list(map(lambda x: x.lower(), obj.skill.split(',')))
+            return k
+
+class VendorCertificateSerializer(ModelSerializer):
+    certificate_set = CertificateSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Vendor
+        fields = ("name", "certificate_set")
+
+    def to_representation(self, obj):
+        response = super(VendorCertificateSerializer, self).to_representation(obj)
+        if response['certificate_set']:
+            return {
+                response['name']: response['certificate_set']
+            }
 
 
 class ImportCertificateSerializer(Serializer):
