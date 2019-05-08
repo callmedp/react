@@ -63,7 +63,8 @@ function* getPersonalDetails(action) {
 function* updatePersonalDetails(action) {
     try {
         const {payload: {personalDetails, resolve, reject}} = action;
-
+        delete personalDetails['subscription_status']
+        delete personalDetails['selected_template']
         const candidateId = localStorage.getItem('candidateId') || '';
         yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: true}})
         const result = yield call(Api.updatePersonalData, personalDetails, candidateId);

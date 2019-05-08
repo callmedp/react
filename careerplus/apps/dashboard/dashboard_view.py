@@ -24,6 +24,7 @@ from django.core.files.base import ContentFile
 # from console.decorators import Decorate, stop_browser_cache
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage
 from order.models import Order, OrderItem
+from resumebuilder.models import Candidate
 from order.choices import CANCELLED, OI_CANCELLED
 from review.models import Review
 from emailers.email import SendMail
@@ -194,6 +195,7 @@ class DashboardMyorderView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DashboardMyorderView, self).get_context_data(**kwargs)
         candidate_id = self.request.session.get('candidate_id', None)
+
         if candidate_id:
             order_list = DashboardInfo().get_myorder_list(candidate_id=candidate_id, request=self.request)
         else:
@@ -841,19 +843,16 @@ class DashboardResumeTemplateDownload(View):
         email = request.session.get('email', None)
         try:
             order_pk = request.POST.get('order_pk', None)
-            product_id = request.POST.get('product_id',None)
-
-            is_combo = False
-            if product_id != "3092":
-                is_combo = True
-
+            # product_id = request.POST.get('product_id',None)
+            selected_template = 1
+            # selected_template = Candidate.objects.filter(candidate_id = candidate_id).first().selected_template
             order = Order.objects.get(pk=order_pk)
             if not candidate_id or not order.status in [1, 3, 0] or not (order.email == email) \
                     or not (order.candidate_id == candidate_id):
                 return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
             order, resume_template_full_path, resume_template_name = \
-                ResumeGenerate().save_order_resume_pdf(order=order, is_combo=is_combo)
+                ResumeGenerate().save_order_resume_pdf(order=order,index=selected_template)
 
             if resume_template_full_path:
                 file_path = resume_template_full_path

@@ -458,15 +458,15 @@ class ResumeGenerate(object):
 
         return order, file_path, file_name
 
-    def save_order_resume_pdf(self, order=None, is_combo=False):
+    def save_order_resume_pdf(self, order=None, is_combo=False,index=None):
         if not order:
             return None, None
 
         # check if pack is combo or not
         if not is_combo:
-            print("Came not combo")
+            # print("Came not combo")
             # self.handle_content_type(order, content_type='png')
-            return self.handle_content_type(order, content_type='pdf',index='1')
+            return self.handle_content_type(order, content_type='pdf',index=str(index))                         
 
         for i in range(1, 6):
             # self.handle_content_type(order, content_type='png', index=str(i))

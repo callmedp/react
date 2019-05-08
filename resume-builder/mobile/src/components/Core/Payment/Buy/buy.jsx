@@ -131,36 +131,6 @@ class Buy extends Component {
 
                             <div className="buy__item--right">
                                 <div className="buy__item--right__sliderWrap mt-20">
-                                    {/* <div className="buy__item--right__sliderWrap__controls">
-                                        <span className="buy__item--right__sliderWrap__controls--next">
-                                            <i className="sprite icon--control"></i>
-                                        </span>
-                                        <span className="buy__item--right__sliderWrap__controls--prev hide">
-                                            <i className="sprite icon--control"></i>
-                                        </span>
-                                    </div> 
-                                    <ul className="buy__recommended__items">
-                                        <li className="buy__recommended__item">
-                                            <span className="buy__recommended__image">
-                                                <span className="sprite icon--zoom"></span>
-                                                <img src="/media/static/react/assets/images/mobile/resume-1.png" alt="Custom resume" />
-                                            </span>
-                                        </li>
-                                        
-                                        <li className="buy__recommended__item">
-                                            <span className="buy__recommended__image">
-                                                <span className="sprite icon--zoom"></span>
-                                                <img src="/media/static/react/assets/images/mobile/resume-2.png" alt="Custom resume" />
-                                            </span>
-                                        </li>
-                                       
-                                        <li className="buy__recommended__item">
-                                            <span className="buy__recommended__image">
-                                                <span className="sprite icon--zoom"></span>
-                                                <img src="/media/static/react/assets/images/mobile/resume-2.png" alt="Custom resume" />
-                                            </span>
-                                        </li>
-                                    </ul> */}
                                     <Slider {...settings}>
                                         <div className="buy__recommended__item">
                                             <span className="buy__recommended__image">
