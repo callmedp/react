@@ -45,11 +45,9 @@ function* getPersonalDetails(action) {
 
 
         if (localStorage.getItem('personalInfo')) {
-
             yield put({
                 type: Actions.SAVE_USER_INFO,
                 data: modifyPersonalInfo(JSON.parse(localStorage.getItem('personalInfo')) || [])
-
             });
             return;
         }
