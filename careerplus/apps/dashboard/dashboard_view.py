@@ -854,6 +854,7 @@ class DashboardResumeTemplateDownload(View):
             order, resume_template_full_path, resume_template_name = \
                 ResumeGenerate().save_order_resume_pdf(order=order,index=selected_template)
 
+
             if resume_template_full_path:
                 file_path = resume_template_full_path
                 if not settings.IS_GCP:

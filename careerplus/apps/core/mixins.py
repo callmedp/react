@@ -21,6 +21,7 @@ from PIL import Image
 import zipfile
 
 
+
 class TokenExpiry(object):
 
     def encode(self, email, oi_pk, days=None):
@@ -279,7 +280,7 @@ class InvoiceGenerate(object):
 
             rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
 
-            pdf_file = HTML(string=rendered_html).write_pdf()
+            pdf_file = cp(string=rendered_html).write_pdf()
 
             return pdf_file
 
@@ -345,7 +346,7 @@ class ResumeGenerate(object):
     def store_file(self, file_dir: object, file_name, file: object) -> object:
 
         if settings.IS_GCP:
-            return GCPPrivateMediaStorage().save(settings.RESUME_TEMPLATE_DIR + file_dir, file)
+            return GCPPrivateMediaStorage().save(settings.RESUME_TEMPLATE_DIR + file_dir + file_name, file)
 
         if not os.path.exists(settings.RESUME_TEMPLATE_DIR + file_dir):
             os.makedirs(settings.RESUME_TEMPLATE_DIR + file_dir)
@@ -354,7 +355,7 @@ class ResumeGenerate(object):
             dest.write(chunk)
         dest.close()
 
-    def handle_content_type(self, order=None, content_type='pdf', index=1):
+    def handle_content_type(self, order=None, content_type='pdf', index='1'):
 
         file_dir = 'order/%s/' % str(order.pk)
         file_name = 'resumetemplateupload-' + str(order.number) + '-' \
@@ -370,7 +371,6 @@ class ResumeGenerate(object):
 
         if self.is_file_exist(file_path):
             return order, file_path, file_name
-
         #  handle for pdf
         if content_type == 'pdf':
             candidate = Candidate.objects.get(candidate_id=order.candidate_id)
@@ -391,6 +391,8 @@ class ResumeGenerate(object):
                             'achievements': achievements, 'references': references, 'projects': projects,
                             'certifications': certifications, 'extracurricular': '', 'languages': languages,
                             'current_exp': current_exp, 'latest_exp': latest_experience}
+
+            
 
             pdf_file = self.generate_file(
                 context_dict=context_dict,
@@ -464,9 +466,8 @@ class ResumeGenerate(object):
 
         # check if pack is combo or not
         if not is_combo:
-            # print("Came not combo")
             # self.handle_content_type(order, content_type='png')
-            return self.handle_content_type(order, content_type='pdf',index=str(index))                         
+            return self.handle_content_type(order, content_type='pdf',index=str(index))
 
         for i in range(1, 6):
             # self.handle_content_type(order, content_type='png', index=str(i))
