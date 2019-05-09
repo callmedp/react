@@ -8,23 +8,24 @@ import {
 import {Field} from "redux-form";
 import {renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer";
 import React from "react";
+import styles from './reference.scss'
 
 export const ReferenceRenderer = ({
-                               fields,
-                               loader,
-                               meta: {touched, error, submitFailed},
-                               deleteReference,
-                               handleAddition,
-                               handleSubmit,
-                               handleAccordionClick,
-                               changeOrderingUp,
-                               changeOrderingDown,
-                               isEditable,
-                               editHeading,
-                               saveTitle,
-                               entityName,
-                               expanded
-                           }) => {
+                                      fields,
+                                      loader,
+                                      meta: {touched, error, submitFailed},
+                                      deleteReference,
+                                      handleAddition,
+                                      handleSubmit,
+                                      handleAccordionClick,
+                                      changeOrderingUp,
+                                      changeOrderingDown,
+                                      isEditable,
+                                      editHeading,
+                                      saveTitle,
+                                      entityName,
+                                      expanded
+                                  }) => {
     let elem = null;
 
     return (
@@ -40,13 +41,13 @@ export const ReferenceRenderer = ({
                     contenteditable={isEditable ? "true" : "false"}
                 >{entityName}</h2>
                 <span onClick={() => editHeading(elem)}
-                      className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ""}/>
+                      className={!!(!isEditable) ? "icon-edit " + styles['icon-references__cursor'] : ""}/>
 
                 <button
                     onClick={handleSubmit((values) => {
                         handleAddition(fields, error)
                     })} type={'button'}
-                    className="add-button add-button__right">Add new
+                    className={"add-button " + styles['add-button__right']}>Add new
                 </button>
 
 

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './experience.scss'
 import {renderField, renderTextArea, datepicker} from '../../../../../FormHandler/formFieldRenderer.jsx'
 import {Field, reduxForm, FieldArray} from 'redux-form';
 import * as actions from '../../../../../../store/experience/actions/index';

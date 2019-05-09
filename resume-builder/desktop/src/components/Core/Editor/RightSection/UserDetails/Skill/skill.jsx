@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './skill.scss'
 import {reduxForm, FieldArray} from "redux-form"
 import * as actions from "../../../../../../store/skill/actions";
 import {connect} from "react-redux";

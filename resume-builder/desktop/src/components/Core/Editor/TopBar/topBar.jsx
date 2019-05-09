@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
 import './topBar.scss'
 
 export default class TopBar extends Component {
@@ -40,7 +41,9 @@ export default class TopBar extends Component {
                             page === 'buy' ?
                                 '' :
                                 <div className="top-banner--banner-right">
-                                    <button className="white-button mr-20" href="#">Change template</button>
+                                    <Link to={'/resume-builder/#templates'}>
+                                        <button className="white-button mr-20">Change template</button>
+                                    </Link>
                                     <span className="top-banner--banner-right--banner-thumb">
                                     <img src={`${this.staticUrl}react/assets/images/resume-thumb.jpg`}
                                          alt=""/>

@@ -15,7 +15,7 @@ function* fetchUserCourse(action) {
 
         if (localStorage.getItem('course')) {
 
-            yield put({type: Actions.SAVE_USER_COURSE, data: JSON.parse(localStorage.getItem('course')) || []})
+            yield put({type: Actions.SAVE_USER_COURSE, data: JSON.parse(localStorage.getItem('course')) || []});
             return;
         }
 

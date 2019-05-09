@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import './summary.scss'
 import {connect} from "react-redux";
 import * as actions from '../../../../../../store/personalInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
+import styles from './summary.scss'
+
 
 import {
     renderTextArea
@@ -52,11 +53,11 @@ class Summary extends Component {
                     }} onKeyUp={(event) => saveTitle(event, 5)}
                         contenteditable={!!(isEditable) ? "true" : "false"}>{entityName}</h2>
                     <span onClick={() => editHeading(elem)}
-                          className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ''}/>
+                          className={!!(!isEditable) ? "icon-edit " + styles['icon-summary__cursor'] : ''}/>
                 </section>
                 <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                     <section className="right-sidebar-scroll p3p">
-                        <div className="summary-box">
+                        <div className={styles['summary-box']}>
                             <h3>Summary</h3>
                             <Field component={renderTextArea} type={"textarea"} name="extra_info"
                                    className="summary-box--summary-txt" rows="10" value={extra_info}/>

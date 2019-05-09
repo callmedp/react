@@ -37,7 +37,7 @@ export default class Header extends Component {
     }
 
     render() {
-        const {page} = this.props;
+        const {page, userName} = this.props;
         return (
             <header className={this.props.getclass + " home-nav-fixed"}>
                 <div className="container">
@@ -61,7 +61,7 @@ export default class Header extends Component {
                         <span className="signin--user-pic">
             				<img src={`${this.staticUrl}react/assets/images/user-pic.jpg`}/>
             			</span>
-                        Hello Amit
+                        Hello {userName || 'User'}
                     </div>
                 </div>
             </header>

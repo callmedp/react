@@ -8,6 +8,7 @@ import {
 import {Field} from "redux-form";
 import {renderField, renderSelect} from "../../../../../FormHandler/formFieldRenderer";
 import React from "react";
+import styles from './language.scss'
 
 export const LanguageRenderer = ({
                                      fields,
@@ -41,13 +42,13 @@ export const LanguageRenderer = ({
                     contenteditable={isEditable ? "true" : "false"}
                 >{entityName}</h2>
                 <span onClick={() => editHeading(elem)}
-                      className={!!(!isEditable) ? "icon-edit icon-language__cursor" : ""}/>
+                      className={!!(!isEditable) ? "icon-edit " + styles['icon-language__cursor'] : ""}/>
 
                 <button onClick={handleSubmit((values) => {
                     handleAddition(fields, error)
                 })}
                         type={'button'}
-                        className="add-button add-button__right">Add new
+                        className={"add-button " + styles['add-button__right']}>Add new
                 </button>
 
             </section>
@@ -100,7 +101,7 @@ export const LanguageRenderer = ({
                                                             </div>
                                                         </fieldset>
 
-                                                        <fieldset className="width-half">
+                                                        <fieldset className={styles['width-half']}>
                                                             <label>Language rating (out of 10)</label>
                                                             <div className="input-group">
                                                                 <div className="input-group--input-group-icon">

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './personalInfo.scss'
+import styles from './personalInfo.scss'
 import {connect} from "react-redux";
 import * as actions from '../../../../../../store/personalInfo/actions/index';
 import {Field, reduxForm} from 'redux-form';
@@ -112,7 +112,7 @@ export class PersonalInfo extends Component {
                         </h2>
                     }
                     <span onClick={() => editHeading(elem)}
-                          className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ''}/>
+                          className={!!(!isEditable) ? "icon-edit " + styles['icon-edit__cursor'] : ''}/>
                 </section>
                 <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                     <section className="flex-container right-sidebar-scroll">
@@ -253,7 +253,7 @@ export class PersonalInfo extends Component {
                         <section className="pic-section mt-30">
                             {
                                 this.state.imageURI || personalInfo.image && this.state.flag ?
-                                    <div className='upper-cross' onClick={this.removeImage.bind(this)}>
+                                    <div className={styles['upper-cross']} onClick={this.removeImage.bind(this)}>
                                         <i className='icon-close'></i>
                                     </div> : ''
                             }
@@ -271,7 +271,7 @@ export class PersonalInfo extends Component {
                                        onChange={this.getImageURI.bind(this)}
                                        style={{opacity: 0}}/>
                                 <Field type={"text"} name={"image"} component={renderField}
-                                       value={this.state.imageURL} className={'zero-opacity'}/>
+                                       value={this.state.imageURL} className={styles['zero-opacity']}/>
                             </label>
 
                         </section>

@@ -8,6 +8,7 @@ import {
 import {Field} from "redux-form";
 import {datepicker, renderField, renderTextArea} from "../../../../../FormHandler/formFieldRenderer";
 import React from "react";
+import styles from './project.scss'
 
 export const ProjectRenderer = ({
                                     fields,
@@ -40,14 +41,14 @@ export const ProjectRenderer = ({
                     contenteditable={isEditable ? "true" : "false"}>{entityName}
                 </h2>
                 <span onClick={() => editHeading(elem)}
-                      className={!!(!isEditable) ? "icon-edit icon-edit__cursor" : ""}/>
+                      className={!!(!isEditable) ? "icon-edit " + styles['icon-edit__cursor'] : ""}/>
 
                 <button
                     onClick={handleSubmit((values) => {
                         handleAddition(fields, error)
                     })}
                     type={'button'}
-                    className="add-button add-button__right">Add new
+                    className={"add-button " + styles['add-button__right']}>Add new
                 </button>
 
             </section>
@@ -123,7 +124,7 @@ export const ProjectRenderer = ({
                                                                 <Field component={datepicker} type={"date"}
                                                                        className={'input-control'}
                                                                        name={`${member}.end_date`}/></div>
-                                                            <span className="till-today">
+                                                            <span className={styles['till-today']}>
                                     <Field type="radio" name={`${member}.currently_working`} component="input"
                                            value={`${member}.currently_working`}/>
                                     Till Today

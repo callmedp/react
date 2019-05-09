@@ -68,9 +68,10 @@ class Home extends Component {
 
 
     render() {
+        const {userInfo: {first_name}} = this.props;
         return (
             <div className="nav-fixed">
-                <Header page={'home'} getclass={this.state.scrolled ? 'color-change' : ''}/>
+                <Header page={'home'} userName={first_name} getclass={this.state.scrolled ? 'color-change' : ''}/>
                 <Banner/>
                 <section className="section-container">
                     <h2>Professional advantage</h2>
@@ -236,7 +237,9 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {}
+    return {
+        userInfo: state.personalInfo
+    }
 };
 
 const mapDispatchToProps = (dispatch) => {
