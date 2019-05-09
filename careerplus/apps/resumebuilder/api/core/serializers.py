@@ -48,8 +48,7 @@ class CandidateSerializer(serializers.ModelSerializer):
 
     def to_representation(self,instance):
         rendered_data = super(CandidateSerializer,self).to_representation(instance)
-        rendered_data['selected_template'] = 1
-        rendered_data['subscription_status'] = {True: True, False: False}[OrderItem.objects.filter(order__candidate_id = '53461c6e6cca0763532d4b09', product__id=3092, order__payment_date__gte = timezone.now() - timedelta(180)).count() > 0]
+        rendered_data['subscription_status'] = {True: True, False: False}[OrderItem.objects.filter(order__candidate_id = rendered_data['candidate_id'], product__id=3092, order__payment_date__gte = timezone.now() - timedelta(180)).count() > 0]
         try:
             rendered_data['entity_preference_data'] = ast.literal_eval(instance.entity_preference_data)
         except Exception as e:
@@ -63,7 +62,7 @@ class CandidateSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'candidate_id', 'first_name', 'last_name', 'email', \
             'date_of_birth', 'number', 'gender', 'location',\
-            'extra_info', 'extracurricular', 'image','entity_preference_data')
+            'extra_info', 'extracurricular', 'image','entity_preference_data','selected_template')
 
 
 class SkillSerializer(serializers.ModelSerializer):

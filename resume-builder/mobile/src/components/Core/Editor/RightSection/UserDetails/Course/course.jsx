@@ -168,7 +168,7 @@ class Course extends Component {
                         <li className="form__group">
                             <div className="btn-wrap">
                                 <button className="btn btn__round btn--outline" 
-                                    onClick={()=>{this.props.updateModalStatus({modal_status:true})}} 
+                                    onClick={()=>{this.props.updateModalStatus({modal_status:true});this.props.fetchTemplate()}} 
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
                                     {(length === pos +1) ?"Buy" :"Save & Continue"}

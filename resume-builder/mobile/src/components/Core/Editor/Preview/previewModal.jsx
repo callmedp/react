@@ -21,4 +21,6 @@ export default class PreviewModal extends Component{
             </Modal>
         )
     }
+
+    
 }

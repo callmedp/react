@@ -44,8 +44,10 @@ class CandidateProfile(AbstractAutoDate):
     gender = models.CharField('Gender', choices=(('1', 'Male'), ('2', 'Female'), ('3', 'Others')), max_length=1,
                               blank=True, null=True)
     extracurricular = models.CharField('Extra Curricular', max_length=200, blank=True, null=True)
+    selected_template = models.CharField('Selected Template', max_length=20, blank=True, null=True)
     extra_info = models.TextField('Extra Information', blank=True, null=True)
     entity_preference_data = models.TextField(blank=True, null=True)
+
 
     @property
     def owner_id(self):

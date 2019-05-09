@@ -18,7 +18,6 @@ class EditPreview extends Component {
     }
 
     componentDidMount() {
-        this.props.fetchTemplate()
         this.props.fetchLoaderStatus()
     }
 
