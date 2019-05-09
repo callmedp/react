@@ -23,7 +23,7 @@ export default class Testimonial extends Component {
             dotClass: "testimonials--indicators"
         };
         return (
-            <section className="section-container grey-bg">
+            <section className="section-container grey-bg testimonial-slider">
                 <h2>Success stories</h2>
                 <strong className="section-container--sub-head">What are our customers saying about our resume
                     builder</strong>
