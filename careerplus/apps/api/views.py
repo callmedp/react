@@ -1049,6 +1049,8 @@ class ShineCandidateLoginAPIView(APIView):
         return self.get_response_for_successful_login(candidate_id, login_response)
 
     def get(self, request, *args, **kwargs):
+        import ipdb;
+        ipdb.set_trace();
         user = request.user
         candidate_id = request.session.get('candidate_id')
         if not user.is_authenticated() and not candidate_id:
