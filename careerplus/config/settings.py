@@ -346,7 +346,8 @@ TEST_EMAIL = False
 
 VENDOR_URLS = {
     'amcat': {
-        'all_certificates': 'https://www.myamcat.com/api/3p/assessment-results'
+        'all_certificates': 'https://www.myamcat.com/api/3p/assessment-results',
+        'get_autologin_url': 'https://www.myamcat.com/api/3p/schedule-skill-test'
     }
 }
 

@@ -122,6 +122,16 @@ def update_initiat_orderitem_sataus(order=None):
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
 
+            elif oi.product.type_flow == 16:
+                last_oi_status = oi.oi_status
+                oi.oi_status = 5
+                oi.last_oi_status = last_oi_status
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=last_oi_status,
+                    assigned_to=oi.assigned_to)
+
 
 def get_upload_path_order_invoice(instance, filename):
     return "invoice/order/{order_id}/{filename}".format(

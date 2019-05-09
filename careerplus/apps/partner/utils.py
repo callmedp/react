@@ -1,17 +1,21 @@
 # python imports
 import logging
 from collections import OrderedDict
+from django.utils import timezone
 
 # inter-app imports
 from partner.models import (
     ParsedAssesmentData, Certificate, UserCertificate, Assesment,
     UserCertificateOperations, Vendor)
 from django.db import IntegrityError
-
+from emailers.tasks import send_email_task
+from emailers.sms import SendSMS
 from core.api_mixin import (
     ShineCandidateDetail, ShineToken, ShineCertificateUpdate
 )
-
+from emailers.utils import get_featured_profile_data_for_candidate
+from core.api_mixin import FeatureProfileUpdate
+from order.models import OrderItem
 '''
 Pull Type.
 
@@ -502,6 +506,7 @@ class CertiticateParser:
                             parse_data.__dict__[key + 's'].append(data_instance)
                     else:
                         setattr(getattr(parse_data, key), field, value)
+
             additional_operations = self.ADDITONAL_OPERATIONS[vendor_key]
 
             # additonal operation to be done on parsed data as per vendor type and parse type
@@ -527,3 +532,56 @@ class CertiticateParser:
                     print(current_certificate_id, score['amcatID'])
                     setattr(certificate, 'overallScore', 'N.A')
         return parsed_data
+
+    def update_order_and_badge_user(self, parsed_data, vendor):
+        email = parsed_data.certiticate.candidate_email
+        upc = parsed_data.certificate.vendor_certificate_id
+        oi = OrderItem.objects.filter(email=email, product__upc=upc, product__vendor__name=vendor).order_by('-id').first()
+        if oi:
+            candidate_id = oi.order.candidate_id
+            data = get_featured_profile_data_for_candidate(
+                candidate_id=candidate_id, curr_order_item=oi, feature=True)
+            flag = FeatureProfileUpdate().update_feature_profile(
+                candidate_id=candidate_id, data=data)
+            if flag:
+                logging.getLogger('info_log').info(
+                    'Badging After parsing data is done for OrderItem  %s is %s' % (str(oi.id), str(data))
+                )
+                last_oi_status = oi.oi_status
+                oi.oi_status = 4
+                oi.closed_on = timezone.now()
+                oi.last_oi_status = 6
+                oi.save()
+                oi.orderitemoperation_set.create(
+                    oi_status=6,
+                    last_oi_status=last_oi_status,
+                    assigned_to=oi.assigned_to)
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=oi.last_oi_status,
+                    assigned_to=oi.assigned_to)
+
+                # Send mail and sms with subject line as Your Profile updated
+                try:
+                    mail_type = "BADGING_DONE_MAIL"
+
+                    email_sets = list(
+                        oi.emailorderitemoperation_set.all().values_list(
+                            'email_oi_status', flat=True).distinct())
+                    to_emails = [oi.order.get_email()]
+                    data = {}
+                    data.update({
+                        "subject": 'Your Featured Profile Is Updated',
+                        "username": oi.order.first_name,
+                        "product_timeline": oi.product.get_duration_in_day(),
+                    })
+
+                    if 72 not in email_sets:
+                        send_email_task.delay(
+                            to_emails, mail_type, data,
+                            status=72, oi=oi.pk)
+                    SendSMS().send(sms_type=mail_type, data=data)
+                    return True
+                except Exception as e:
+                        logging.getLogger('error_log').error('Bading After pasrsing data failed, Error: %s'.format(str(e)))
+                        return False

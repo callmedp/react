@@ -754,6 +754,7 @@ class UpdateCertificateAndAssesment(APIView):
         parsed_data = parser.parse_data(data)
         certificate, user_certificate = parser.save_parsed_data(parsed_data, vendor=data['vendor'])
         flag = parser.update_certificate_on_shine(user_certificate)
+
         if flag:
             logging.getLogger('info_log').error(
                 "Certificate %s parsed, saved, updated for Candidate Id %s" %
@@ -764,6 +765,8 @@ class UpdateCertificateAndAssesment(APIView):
                 "Error Occured for Certificate %s for Candidate Id %s" %
                 (str(certificate.name), str(user_certificate.candidate_id))
             )
+        flag = parser.update_order_and_badge_user(parsed_data, vendor=data['vendor'])
+
         return Response({
             "status": 1,
             "msg": "Certificate Updated"},
@@ -794,7 +797,7 @@ class VendorCertificateMappingApiView(ListAPIView):
     def get(self, request, *args, **kwargs):
         response = self.list(request, *args, **kwargs)
 
-        # getting certificates on basis of vendor_text
+        # Getting certificates on basis of vendor_text
         all_vendor_texts = set(Certificate.objects.filter(vendor_provider=None).exclude(vendor_text=None).values_list('vendor_text',flat=True))
         k = []
         for vendor_text in all_vendor_texts:
@@ -924,6 +927,9 @@ class ImportCertificateApiView(APIView):
 
         parser = CertiticateParser(parse_type=1)
         data = self.get_all_certiticate_data()
+        logging.getLogger('info_log').error(
+            "Certificate data for email %s is %s" % (str(email), str(data))
+        )
         data['vendor'] = vendor_name.lower()
 
         parsed_data = parser.parse_data(data)

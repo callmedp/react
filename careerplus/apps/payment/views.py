@@ -21,7 +21,7 @@ from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from .models import PaymentTxn
 from .mixin import PaymentMixin
 from .forms import StateForm, PayByCheckForm
-from .utils import EpayLaterEncryptDecryptUtil
+from .utils import EpayLaterEncryptDecryptUtil, update_auto_login_url_for_assesment
 from .tasks import put_epay_for_successful_payment
 
 #inter app imports
@@ -249,8 +249,19 @@ class ThankYouView(TemplateView):
                 pending_resume_items = order.orderitems.filter(
                     order__status__in=[0, 1],
                     no_process=False, oi_status=2)
+
+                assesment_items = order.orderitems.filter(
+                    order__status__in=[1],
+                    product__type_flow=16,
+                    product__sub_type_flow=1602
+                )
+
+                for oi in assesment_items:
+                    update_auto_login_url_for_assesment(oi)
+
                 context.update({
                     "pending_resume_items": pending_resume_items,
+                    "assesment_items": assesment_items
                 })
 
                 if not self.request.session.get('resume_id', None):

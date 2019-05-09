@@ -143,6 +143,8 @@ class Certificate(AbstractAutoDate):
     certificate_file_url = models.URLField(max_length=500, blank=True, null=True)
     vendor_image_url = models.URLField(max_length=500, blank=True, null=True)
     vendor_certificate_id = models.CharField(max_length=255, null=True, blank=True)
+    product = models.PositiveIntegerField(max_length=255, null=True, blank=True)
+
     def __str__(self):
         return self.name
 

@@ -365,6 +365,11 @@ class OrderItem(AbstractAutoDate):
     replacement_order_id = models.CharField(
         _("Replacement Order number"), null=True, blank=True, max_length=20)
 
+    # autologin url for assesment
+    autologin_url = models.TextField(
+        _("Auto Login Url"), null=True, blank=True)
+
+
     class Meta:
         app_label = 'order'
         # Enforce sorting in order of creation.
