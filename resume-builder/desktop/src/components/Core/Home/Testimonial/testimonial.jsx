@@ -19,6 +19,7 @@ export default class Testimonial extends Component {
             slidesToShow: 3,
             slidesToScroll: 3,
             arrows: false,
+            variableWidth: true,
             dotClass: "testimonials--indicators"
         };
         return (
@@ -30,18 +31,21 @@ export default class Testimonial extends Component {
                     {
                         [1, 2, 3, 4, 5, 6, 7].map(el => (
                             <div className="testimonials--list">
-                                <div className="testimonials--image">
-                            <span className="mr-20"><img alt={"Testimonial 1"}
-                                                         src={`${this.staticUrl}react/assets/images/testimonial1.jpg`}/></span>
-                                    <span><strong>Sumit Sharma</strong>
-                            Project Manager, Sapient</span>
-                                </div>
-                                <div className="testimonials--content">
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                        Ipsum
-                                        has been the industry's standard dummy text ever since the 1500s, when an
-                                        unknown
-                                        printer took a galley.</p>
+                                <div className="testimonials--wrap">
+                                
+                                    <div className="testimonials--image">
+                                        <span className="mr-20">
+                                            <img alt={"Testimonial 1"}
+                                            src={`${this.staticUrl}react/assets/images/testimonial1.jpg`}/>
+                                        </span>
+                                        <span>
+                                            <strong>Sumit Sharma</strong>
+                                            Project Manager, Sapient
+                                        </span>
+                                    </div>
+                                    <div className="testimonials--content">
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley.</p>
+                                    </div>
                                 </div>
                             </div>
                         ))
