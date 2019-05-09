@@ -28,10 +28,15 @@ function* loginCandidate(action) {
         //handle token already present in there
         if (localStorage.getItem('token')) {
             yield put({type: 'FETCH_PERSONAL_INFO'});
-            console.log('--token available-');
             return;
         }
-        const result = yield call(Api.loginCandidate, payload);
+
+        let result = yield call(Api.loginCandidate, payload);
+
+        if (result['error']) {
+            result = yield call(Api.getInformation)
+        }
+
         if (result['error']) {
             console.log('error here and now returning');
             window.location.href = `${siteDomain}/login/?next=/resume-builder/`;

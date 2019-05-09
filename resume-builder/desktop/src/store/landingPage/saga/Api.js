@@ -14,9 +14,15 @@ const loginCandidate = (data) => {
     });
 };
 
+const getInformation = (data) => {
+    const url = 'candidate-login/';
+    return BaseApiService.get(`${siteDomain}/api/v1/${url}`)
+}
+
 
 export const Api = {
     getCandidateId,
-    loginCandidate
+    loginCandidate,
+    getInformation
 
 }
