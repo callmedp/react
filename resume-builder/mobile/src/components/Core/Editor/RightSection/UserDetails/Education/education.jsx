@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 import moment from "moment";
 import PreviewModal from "../../../Preview/previewModal";
 import renderEducation from "./renderEducation"
-import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+import {siteDomain} from "../../../../../../Utils/domains";
 
 class Education extends Component {
 
@@ -30,13 +30,18 @@ class Education extends Component {
         currentLinkPos++
         this.setState({submit:true})
         await this.props.bulkUpdateUserEducation(values.list);
-        if(currentLinkPos === listOfLinks.length){
+         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            this.props.history.push(`/resume-builder/buy`)
+            if(this.props.personalInfo.subscription_status){
+                window.location.href = `${siteDomain}/dashboard/myorder`
+            }
+            else{
+                this.props.history.push(`/resume-builder/buy`) 
+            }
         }
         else{
             this.props.updateCurrentLinkPos({currentLinkPos})
-            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
+            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
         }
         
     }
@@ -44,7 +49,9 @@ class Education extends Component {
     componentWillUnmount() {
 
         if(!this.state.submit){
+            
             const form_data = this.props.info.form.education;
+            console.log("COming inside Unmount",form_data)
             let error = false
             let error_values =form_data["syncErrors"]
             if(error_values){
@@ -147,7 +154,7 @@ class Education extends Component {
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {handleSubmit, education,submitting,submitSucceeded} = this.props;
         const {editHeading,heading} =this.state;
-        
+        const {subscription_status} = this.props.personalInfo;
         return(
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}> 
@@ -171,7 +178,7 @@ class Education extends Component {
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true});this.props.fetchTemplate()}} 
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
-                                    {(length === pos +1) ?"Buy" :"Save & Continue"}
+                                    {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
                                 </button>
                             </div>
                         </li>

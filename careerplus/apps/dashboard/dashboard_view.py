@@ -195,7 +195,6 @@ class DashboardMyorderView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DashboardMyorderView, self).get_context_data(**kwargs)
         candidate_id = self.request.session.get('candidate_id', None)
-
         if candidate_id:
             order_list = DashboardInfo().get_myorder_list(candidate_id=candidate_id, request=self.request)
         else:
@@ -844,7 +843,8 @@ class DashboardResumeTemplateDownload(View):
         try:
             order_pk = request.POST.get('order_pk', None)
             # product_id = request.POST.get('product_id',None)
-            selected_template = 1
+            selected_template = Candidate.objects.filter(candidate_id = candidate_id) and Candidate.objects.filter(candidate_id = candidate_id).first() \
+                and Candidate.objects.filter(candidate_id = candidate_id).first().selected_template or '1'
             # selected_template = Candidate.objects.filter(candidate_id = candidate_id).first().selected_template
             order = Order.objects.get(pk=order_pk)
             if not candidate_id or not order.status in [1, 3, 0] or not (order.email == email) \

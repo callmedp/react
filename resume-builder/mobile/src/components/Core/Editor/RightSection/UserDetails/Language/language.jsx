@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 import PreviewModal from "../../../Preview/previewModal";
 import renderLanguage from "./renderLanguage";
 import validate from "../../../../../FormHandler/validtaions/language/validate"
-import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+import {siteDomain} from "../../../../../../Utils/domains";
 
 class Language extends Component {
     constructor(props) {
@@ -70,13 +70,18 @@ class Language extends Component {
         
         this.setState({submit:true})
         await this.props.bulkUpdateUserLanguage(values.list);
-        if(currentLinkPos === listOfLinks.length){
+         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            this.props.history.push(`/resume-builder/buy`)
+            if(this.props.personalInfo.subscription_status){
+                window.location.href = `${siteDomain}/dashboard/myorder`
+            }
+            else{
+                this.props.history.push(`/resume-builder/buy`) 
+            }
         }
         else{
             this.props.updateCurrentLinkPos({currentLinkPos})
-            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
+            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
         }
         
     }
@@ -153,6 +158,7 @@ class Language extends Component {
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {handleSubmit, language,submitting,submitSucceeded} = this.props;
         const {editHeading,heading} =this.state;
+        const {subscription_status} = this.props.personalInfo;
         return(
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -176,7 +182,7 @@ class Language extends Component {
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true});this.props.fetchTemplate()}} 
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
-                                    {(length === pos +1) ?"Buy" :"Save & Continue"}
+                                    {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
                                 </button>
                             </div>
                         </li>

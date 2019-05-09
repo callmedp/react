@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import renderReferences from "./renderReference"
 import validate from "../../../../../FormHandler/validtaions/reference/validate"
 import PreviewModal from "../../../Preview/previewModal";
-import { animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+import {siteDomain} from "../../../../../../Utils/domains";
 
 class References extends Component {
     constructor(props) {
@@ -30,7 +30,12 @@ class References extends Component {
         await this.props.bulkUpdateUserReference(values.list);
         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            this.props.history.push(`/resume-builder/buy`)  
+            if(this.props.personalInfo.subscription_status){
+                window.location.href = `${siteDomain}/dashboard/myorder`
+            }
+            else{
+                this.props.history.push(`/resume-builder/buy`) 
+            }
         }
         else{
             this.props.updateCurrentLinkPos({currentLinkPos})
@@ -147,6 +152,7 @@ class References extends Component {
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const { handleSubmit,reference,submitting,submitSucceeded} = this.props;
         const {editHeading,heading} =this.state;
+        const {subscription_status} = this.props.personalInfo;
         return(
             <div className="buildResume">
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -170,7 +176,7 @@ class References extends Component {
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true});this.props.fetchTemplate()}} 
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
-                                    {(length === pos +1) ?"Buy" :"Save & Continue"}
+                                {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
                                 </button>
                             </div>
                         </li>

@@ -101,7 +101,7 @@ WSGI_APPLICATION = 'careerplus.config.wsgi.application'
 
 INVOICE_DIR = 'invoice/'  # Cloud path
 RESUME_DIR = 'resume/'  # Cloud path
-RESUME_TEMPLATE_DIR = 'resume-template/'  # Cloud path
+RESUME_TEMPLATE_DIR = 'careerplus/media/resume-template/'  # Cloud path
 
 ########## DOMAIN SETTINGS ######################
 SITE_DOMAIN = 'learning1.shine.com'

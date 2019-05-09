@@ -8,6 +8,7 @@ import {
 } from "../../../../../FormHandler/formFieldRenderer.jsx";
 import PreviewModal from "../../../Preview/previewModal";
 import validate from "../../../../../FormHandler/validtaions/summary/validate"
+import {siteDomain} from "../../../../../../Utils/domains";
 
 
 class Summary extends Component {
@@ -65,13 +66,18 @@ class Summary extends Component {
         currentLinkPos++
         this.setState({submit:true})
         await this.props.onSubmit(values);
-        if(currentLinkPos === listOfLinks.length){
+         if(currentLinkPos === listOfLinks.length){
             currentLinkPos = 0
-            this.props.history.push(`/resume-builder/buy`)
+            if(this.props.personalInfo.subscription_status){
+                window.location.href = `${siteDomain}/dashboard/myorder`
+            }
+            else{
+                this.props.history.push(`/resume-builder/buy`) 
+            }
         }
         else{
             this.props.updateCurrentLinkPos({currentLinkPos})
-            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
+            this.props.history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)    
         }
         
     }
@@ -105,6 +111,7 @@ class Summary extends Component {
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const {personalInfo: {extra_info}, handleSubmit,submitting,submitSucceeded} = this.props;
         const {editHeading,heading} =this.state;
+        const {subscription_status} = this.props.personalInfo;
         return (
         <div className="buildResume">
             <PreviewModal {...this.props}/>
@@ -131,7 +138,7 @@ class Summary extends Component {
                                     onClick={()=>{this.props.updateModalStatus({modal_status:true});this.props.fetchTemplate()}} 
                                     type={'button'}>Preview</button>
                                 <button className="btn btn__round btn__primary" disabled={submitting} type={'submit'}>
-                                    {(length === pos +1) ?"Buy" :"Save & Continue"}
+                                    {(length === pos +1) ? subscription_status ?"Download Resume":"Buy" :"Save & Continue"}
                                 </button>
                             </div>
                         </li>
