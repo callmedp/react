@@ -19,3 +19,13 @@ BUILDER_ENTITY_MAPPING = ((1, "Personal Info"),
                           (9, "Languages"),
                           (10, "References")
                           )
+
+BUILDER_ENTITY_KEYS = ((1, "personalInfo"),
+                       (2, "skill"),
+                       (3, "experience"),
+                       (4, "education"),
+                       (5, "course"),
+                       (6, "project"),
+                       (7, "reference"),
+                       (8, "language"),
+                       (9, "award"))

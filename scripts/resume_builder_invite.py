@@ -26,8 +26,8 @@ def get_emails(user_details):
     for row in user_details:
         name, email = row.values()
         token_gen = AutoLogin()
-        login_token = token_gen.encode(email, '53461c6e6cca0763532d4b09', None)
-        upload_url = "http://learning1.shine.com/resume-builder/?token=%s" % (
+        login_token = token_gen.encode(email, '5c4ede4da4d7330573d8c79b', None)
+        upload_url = "http://localhost:3000/resume-builder/?token=%s" % (
             login_token)
         context_data = {
             'first_name': name,
