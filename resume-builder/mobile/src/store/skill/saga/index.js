@@ -137,15 +137,19 @@ function* deleteUserSkill(action) {
 
         const result = yield call(Api.deleteUserSkill, candidateId, skillId);
 
-
+        console.log(result)
         if (result['error']) {
             ////console.log(result['error'])
         }
-        localStorage.deleteItem('skill');
-        // yield call(fetchUserSkill)
-        yield put({type: Actions.REMOVE_SKILL, id: skillId});
-        yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
-        yield call(fetchUserSkill)
+        else{
+            yield put({type:LoaderAction.UPDATE_DATA_LOADER,payload:{dataloader: false}})
+            if(localStorage.getItem('skill'))
+                localStorage.deleteItem('skill');
+            yield put({type: Actions.REMOVE_SKILL, id: skillId});
+            
+            yield call(fetchUserSkill)
+        }
+        
 
     } catch (e) {
         ////console.log('error', e);

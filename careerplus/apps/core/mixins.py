@@ -468,7 +468,6 @@ class ResumeGenerate(object):
         if not is_combo:
             # self.handle_content_type(order, content_type='png')
             return self.handle_content_type(order, content_type='pdf',index=str(index))
-
         for i in range(1, 6):
             # self.handle_content_type(order, content_type='png', index=str(i))
             self.handle_content_type(order, content_type='pdf', index=str(i))
