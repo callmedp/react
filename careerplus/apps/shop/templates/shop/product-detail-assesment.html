@@ -146,7 +146,29 @@
                 <div class="col-sm-12 col-md-8 mt-40">
                 {% if prd_about %}
                   <h2 class="detail-heading">About{% if prd_service == 'test' %} Test {% elif prd_service == 'course' %}course{% else %}service{% endif %}</h2>
-                  <style>
+                  <p>Multi choice test that measures the knowledge on the concepts of need SEO, SEO planning, SEO strategies, SEO software, tools, exchanging links etc. </p>
+
+                  <p class="mt-20"><strong>About Aspiring MInd</strong></p>
+                  <p>Aspiring Minds ia a leader in scientific, automated, AI-powered pre-employment assessments and video interview analytics including technology coding test,call...</p>
+
+                  <div class="test-wrap mt-30">
+                    <div class="test-wrap__item">
+                      <span class="icon-question"></span>
+                      <div class="test-wrap__item--content">
+                        <strong class="fs-18">120</strong>
+                        <p>No. of questions</p>
+                      </div>
+                    </div>
+
+                    <div class="test-wrap__item">
+                        <span class="icon-time"></span>
+                        <div class="test-wrap__item--content">
+                          <strong class="fs-18">60 min</strong>
+                          <p>Test duration</p>
+                        </div>
+                    </div>
+                  </div>
+                  <!-- <style>
                     .morecontent span {
                           display: none;
                       }
@@ -156,7 +178,7 @@
                   </style>
                   <span class="more">
                   {{prd_about|safe}}
-                  </span>
+                  </span> -->
                 {% endif %}
                 </div>
               </div>
@@ -172,20 +194,19 @@
       <!-- main parent2 section start -->
       <section class="container-fluid cls_scroller_parent pr">
         <div class="row">
-
-
-            {% if prd_uget %}
-              <section class="container-fluid detail-box">
-              <div class="container">
-                <div class="row">
-                  <div id="course" class="col-sm-12 col-md-8">
-                    <h2>What you get if you pass??</h2>                     
-                          {{prd_uget|safe}}
-                    </div>
-                </div>
+          <section class="detail-box" style="padding:0;"></section>
+          {% if prd_uget %}
+            <section class="container-fluid detail-box">
+            <div class="container">
+              <div class="row">
+                <div id="course" class="col-sm-12 col-md-8">
+                  <h2>What you get if you pass??</h2>                     
+                        <!-- {{prd_uget|safe}} -->
+                  </div>
               </div>
-              </section>
-            {% endif %}
+            </div>
+            </section>
+          {% endif %}
 
             {% if prd_desc %}
               <section class="container-fluid detail-box">

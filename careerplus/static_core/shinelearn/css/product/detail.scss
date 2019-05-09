@@ -1740,3 +1740,54 @@ footer {
     z-index: 9;
     box-shadow: 0 0 10px rgba(0,0,0, .3);
 }
+
+.test-wrap {
+	background-color: $white-bg;
+	box-shadow: 0 0 15px rgba(0,0,0, .1);
+	padding: 15px;
+	width: 45%;
+
+	display: flex;
+
+	&__item {
+		display: flex;
+		
+
+		&:not(:last-child) {
+			border-right: 1px solid #ddd;
+			margin-right: 20px;
+			padding-right: 20px;
+		}
+
+		&--content {
+			margin-left: 10px;
+
+			strong {
+				font-size: 18px;
+			}
+
+			p {
+				color: $secondary-color;
+				font-size: 12px;
+			}
+		}
+	}
+}
+
+.icon-question {
+	width: 32px;
+	height: 32px;
+	background: $sprite -461px -376px;
+	display: inline-block;
+}
+
+.icon-time {
+	width: 26px;
+	height: 32px;
+	background: $sprite -501px -376px;
+	display: inline-block;
+}
+
+.grey-bg {
+	background-color: #f6f7f9;
+}
