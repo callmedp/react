@@ -48,7 +48,7 @@ export default class Header extends Component {
                             <a onClick={() => this.scrollTo('works')}>How it Works</a>
                         </li>
                         <li>
-                            <a >Templates</a>
+                            <a onClick={() => this.scrollTo('templates')}>Templates</a>
                         </li>
                     </ul>
                     }
