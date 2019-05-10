@@ -29,7 +29,8 @@ export class PersonalInfo extends Component {
         this.state = {
             'imageURI': '',
             'imageURL': '',
-            flag: true
+            flag: true,
+            submit: false
         }
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
     }
@@ -41,6 +42,9 @@ export class PersonalInfo extends Component {
 
     async handleSubmit(values, entityLink) {
         await this.props.onSubmit(values, this.state.imageURL, this.state.flag);
+        this.setState({
+            submit: true
+        })
         if (entityLink) this.props.history.push(entityLink);
         else this.props.history.push('/resume-builder/buy/')
     }
@@ -59,8 +63,7 @@ export class PersonalInfo extends Component {
         let {formData: {personalInfo: {values, syncErrors}}} = this.props;
         let error = false;
         Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
-        if (!error) this.props.onSubmit(values, this.state.imageURL, this.state.flag)
-
+        if (!error && !this.state.submit) this.props.onSubmit(values, this.state.imageURL, this.state.flag)
     }
 
     async fetchInterestList(inputValue, callback) {
@@ -84,13 +87,13 @@ export class PersonalInfo extends Component {
                 imageURI: event.target.result,
                 flag: true
             })
-
         };
         reader.readAsDataURL(event.target.files[0]);
 
         let url = await this.props.fetchImageUrl(event.target.files[0]);
         this.setState({
             'imageURL': url,
+            flag: true
         })
     }
 
@@ -310,18 +313,20 @@ const mapDispatchToProps = (dispatch) => {
         "fetchPersonalInfo": () => {
             return dispatch(actions.fetchPersonalInfo())
         },
-        "onSubmit": (personalDetails, imageURL) => {
-            const {gender, date_of_birth, extracurricular, image, flag} = personalDetails;
+        "onSubmit": (personalDetails, imageURL, flag) => {
+            const {gender, date_of_birth, extracurricular, image} = personalDetails;
+            console.log('-------', image, flag)
             personalDetails = {
                 ...personalDetails,
                 ...{
                     'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
                     'gender': (gender && gender['value']) || '',
-                    'image': imageURL || flag ? image : '',
+                    'image': imageURL || (flag ? image : ''),
                     'extracurricular': extracurricular instanceof Array ?
                         (extracurricular || []).map(el => el.value).join(',') : extracurricular
                 }
             }
+            console.log('----', personalDetails);
             return new Promise((resolve, reject) => {
                 dispatch(actions.updatePersonalInfo({personalDetails, resolve, reject}));
             })

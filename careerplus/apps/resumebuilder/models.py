@@ -48,7 +48,6 @@ class CandidateProfile(AbstractAutoDate):
     extra_info = models.TextField('Extra Information', blank=True, null=True)
     entity_preference_data = models.TextField(blank=True, null=True)
 
-
     @property
     def owner_id(self):
         return self.candidate.candidate_id
@@ -83,9 +82,9 @@ class CandidateExperience(models.Model):
     company_name = models.CharField('Company Name', max_length=200)
     start_date = models.DateField('Start Date', blank=True, null=True)
     end_date = models.DateField('End Date', blank=True, null=True)
-    is_working = models.BooleanField('Present')
-    job_location = models.CharField('Job Location', max_length=100)
-    work_description = models.TextField('Job Description')
+    is_working = models.BooleanField('Present', default=False)
+    job_location = models.CharField('Job Location', max_length=100, blank=True, null=True)
+    work_description = models.TextField('Job Description', blank=True, null=True)
     order = models.IntegerField('Order', default=0)
 
     @property
@@ -102,10 +101,10 @@ class CandidateEducation(models.Model):
     institution_name = models.CharField('Institution Name', max_length=250)
     course_type = models.CharField('Institution Name', choices=(('FT', 'Full Time'), ('PT', 'Part Time'),
                                                                 ('CR', 'Correspondence')), max_length=2)
-    percentage_cgpa = models.CharField('Percentage Or CGPA', max_length=250)
+    percentage_cgpa = models.CharField('Percentage Or CGPA', max_length=250, null=True, blank=True)
     start_date = models.DateField('Start Date', blank=True, null=True)
     end_date = models.DateField('End Date', blank=True, null=True)
-    is_pursuing = models.BooleanField('Still Pursuing')
+    is_pursuing = models.BooleanField('Still Pursuing', default=False)
     order = models.IntegerField('Order', default=0)
 
     @property
@@ -137,7 +136,7 @@ class CandidateProject(models.Model):
     end_date = models.DateField('End Date', blank=True)
     skills = models.ManyToManyField(Skill, verbose_name='List of Skills', null=True, blank=True)
     currently_working = models.BooleanField('Currently Working', default=False)
-    description = models.TextField('Project Description')
+    description = models.TextField('Project Description', blank=True, null=True)
     order = models.IntegerField('Order', default=0)
 
     @property
@@ -152,7 +151,7 @@ class CandidateReference(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     reference_name = models.CharField('Reference Name', max_length=150)
     reference_designation = models.CharField('Reference Designation', max_length=150)
-    about_candidate = models.TextField('About Candidate')
+    about_candidate = models.TextField('About Candidate', null=True, blank=True)
     order = models.IntegerField('Order', default=0)
 
     @property
@@ -186,7 +185,7 @@ class CandidateAchievement(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, verbose_name='Candidate')
     title = models.CharField('Title', max_length=100)
     date = models.DateField('Date')
-    summary = models.TextField('Summary')
+    summary = models.TextField('Summary', null=True, blank=True)
     order = models.IntegerField('Order', default=0)
 
     @property

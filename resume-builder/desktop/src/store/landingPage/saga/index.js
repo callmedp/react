@@ -4,6 +4,7 @@ import {siteDomain} from "../../../Utils/domains";
 import * as Actions from '../actions/actionTypes';
 import {LOGIN_CANDIDATE} from "../actions/actionTypes";
 import {entityList} from "../../../Utils/formCategoryList";
+import {SAVE_USER_INFO} from "../../personalInfo/actions/actionTypes";
 
 
 function* getCandidateId() {
@@ -41,13 +42,14 @@ function* loginCandidate(action) {
             //redirect code here
         }
 
-        yield put({type: 'FETCH_PERSONAL_INFO'});
-
-
         const {data: {candidate_id, candidate_profile, token, entity_status}} = result;
         localStorage.setItem('candidateId', (candidate_id) || '');
         for (const key in candidate_profile) {
             const entityObj = entity_status.find(el => el['display_value'] === key);
+
+            if (key === 'personalInfo') {
+                yield put({type: SAVE_USER_INFO, data: candidate_profile[key]})
+            }
 
             if (!entityObj.set) {
                 if (key == 'personalInfo') {

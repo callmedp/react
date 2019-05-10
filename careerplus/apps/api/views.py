@@ -847,6 +847,7 @@ class ShineCandidateLoginAPIView(APIView):
                         "entity_status": self.get_entity_status_for_candidate(candidate_id)
                         # TODO make param configurable
                         }
+        self.request.session.update(login_response)
         return Response(data_to_send, status=status.HTTP_201_CREATED)
 
     def get_profile_info(self, profile):

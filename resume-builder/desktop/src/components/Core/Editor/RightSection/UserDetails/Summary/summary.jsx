@@ -15,6 +15,9 @@ class Summary extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.state = {
+            submit: false
+        }
     }
 
     componentDidMount() {
@@ -24,6 +27,9 @@ class Summary extends Component {
 
     async handleSubmit(values, entityLink) {
         await this.props.onSubmit(values);
+        this.setState({
+            submit: true
+        })
         if (entityLink) this.props.history.push(entityLink);
         else this.props.history.push('/resume-builder/buy/')
     }
@@ -31,8 +37,7 @@ class Summary extends Component {
 
     componentWillUnmount() {
         let {formData: {summary: {values}}} = this.props;
-        this.props.onSubmit(values)
-
+        if (!this.state.submit) this.props.onSubmit(values)
     }
 
 
