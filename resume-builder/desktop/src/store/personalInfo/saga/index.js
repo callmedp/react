@@ -63,7 +63,6 @@ function* getPersonalDetails(action) {
 
         let {data} = result;
         data = modifyPersonalInfo(data)
-        console.log('data');
         yield put({type: Actions.SAVE_USER_INFO, data: data})
     } catch (e) {
         console.log(e);
@@ -101,7 +100,11 @@ function* updatePersonalDetails(action) {
         yield put({type: UPDATE_UI, data: {loader: false}})
 
 
-        yield put({type: Actions.SAVE_USER_INFO, data: result['data']});
+        let {data} = result;
+
+        data = modifyPersonalInfo(data)
+
+        yield put({type: Actions.SAVE_USER_INFO, data: data});
 
         return resolve('User Personal  Info saved successfully.');
 

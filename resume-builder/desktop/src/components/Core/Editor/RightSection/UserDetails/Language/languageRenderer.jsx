@@ -36,7 +36,8 @@ export const LanguageRenderer = ({
             {/*}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-languages1"/></span>
-                <h2 ref={(value) => {
+                <h2  className={"comp-heading"}
+                    ref={(value) => {
                     elem = value
                 }} onKeyUp={(event) => saveTitle(event)}
                     contenteditable={isEditable ? "true" : "false"}

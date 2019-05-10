@@ -15,6 +15,9 @@ class Summary extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.state = {
+            submit: false
+        }
     }
 
     componentDidMount() {
@@ -24,6 +27,9 @@ class Summary extends Component {
 
     async handleSubmit(values, entityLink) {
         await this.props.onSubmit(values);
+        this.setState({
+            submit: true
+        })
         if (entityLink) this.props.history.push(entityLink);
         else this.props.history.push('/resume-builder/buy/')
     }
@@ -31,8 +37,7 @@ class Summary extends Component {
 
     componentWillUnmount() {
         let {formData: {summary: {values}}} = this.props;
-        this.props.onSubmit(values)
-
+        if (!this.state.submit) this.props.onSubmit(values)
     }
 
 
@@ -48,9 +53,10 @@ class Summary extends Component {
             <div>
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-summary1"/></span>
-                    <h2 ref={(value) => {
-                        elem = value
-                    }} onKeyUp={(event) => saveTitle(event, 5)}
+                    <h2 className={"comp-heading"}
+                        ref={(value) => {
+                            elem = value
+                        }} onKeyUp={(event) => saveTitle(event, 5)}
                         contenteditable={!!(isEditable) ? "true" : "false"}>{entityName}</h2>
                     <span onClick={() => editHeading(elem)}
                           className={!!(!isEditable) ? "icon-edit " + styles['icon-summary__cursor'] : ''}/>

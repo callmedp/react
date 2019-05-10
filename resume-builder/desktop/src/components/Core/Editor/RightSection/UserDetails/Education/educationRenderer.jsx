@@ -32,7 +32,7 @@ export const EducationRenderer = ({
             {/*{<LoaderSection/>}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-education1"></i></span>
-                <h2 ref={(value) => {
+                <h2 className={"comp-heading"} ref={(value) => {
                     elem = value
                 }} onKeyUp={(event) => saveTitle(event)}
                     contenteditable={isEditable ? "true" : "false"}>{entityName}</h2>

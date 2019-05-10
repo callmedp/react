@@ -1,11 +1,7 @@
 @import '../../../../../../styles/variables/vars.scss';
 @import '../../../../../../styles/variables/mixins.scss';
 
-:local(h2) {
-	margin: 0 10px !important;
-	font-weight: 1.8rem;
-	font-weight: 700;
-}
+
 
 :local(.icon-language__cursor){
 	cursor: pointer;

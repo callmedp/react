@@ -35,7 +35,7 @@ export const ExperienceRenderer = ({
         <div>
             <section className="head-section">
                 <span className="icon-box"><i className="icon-experience1"/></span>
-                <h2 ref={(value) => {
+                <h2 className={"comp-heading"} ref={(value) => {
                     elem = value
                 }} onKeyUp={(event) => saveTitle(event)}
                     contenteditable={isEditable ? "true" : "false"}>{entityName}</h2>

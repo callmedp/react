@@ -10,8 +10,7 @@ For example:
 @import './variables/components';
 @import './themes/default';
 */
-@import './variables/vars.scss';
-@import './variables/mixins.scss';
+
 
 
 .mt-10 {
@@ -147,6 +146,12 @@ h2 {
 	font-weight: 700;
 	font-size: 1.8rem;
 }
+
+.comp-heading {
+    margin: 0 10px !important;
+    font-weight: 1.8rem;
+    font-weight: 700;
+  }
 
 .icon-box {
 	background: $blue1;
