@@ -22,6 +22,21 @@ export default class ResumeSlider extends Component {
                 <h2>Proven resume templates</h2>
                 <strong className="section-container--sub-head">Choose from a library of classic templates and land a
                     new job</strong>
+                <ul >
+                    <li>
+                        <img src={`${this.staticUrl}react/assets/images/resume-1.jpg`}/>
+                    </li>
+                    <li>
+                        <img src={`${this.staticUrl}react/assets/images/resume-2.jpg`}/>
+                    </li>
+                    <li>
+                        <img src={`${this.staticUrl}react/assets/images/resume-3.jpg`}/>
+                    </li>
+                    <li>
+                        <img src={`${this.staticUrl}react/assets/images/resume-4.jpg`}/>
+                    </li>
+                </ul>
+
                 {/*<Slider {...settings}>*/}
                     {/*{*/}
                         {/*[1, 2, 3, 4, 5, 6, 7, 8].map((el, ind) => {*/}
