@@ -806,13 +806,13 @@ class ShineCandidateLoginAPIView(APIView):
         self.set_user_in_cache(token, candidate_obj)
         return token
 
-    def get_entity_status_for_candidate(self, candidate_id):
+    def get_entity_status_for_candidate(self, candidate_id, BUILDER_ENTITY_MAPPING=None):
         from resumebuilder.models import Candidate, Skill, CandidateExperience, \
             CandidateEducation, CandidateCertification, CandidateProject, \
             CandidateReference, CandidateSocialLink, CandidateLanguage, CandidateAchievement
 
-        from resumebuilder.choices import BUILDER_ENTITY_MAPPING
-        entity_mapping = dict(BUILDER_ENTITY_MAPPING)
+        from resumebuilder.choices import BUILDER_ENTITY_KEYS
+        entity_mapping = dict(BUILDER_ENTITY_KEYS)
 
         entity_slug_model_mapping = {1: (Candidate, "candidate_id"),
                                      2: (Skill, "candidate__candidate_id"),
@@ -821,9 +821,9 @@ class ShineCandidateLoginAPIView(APIView):
                                      5: (CandidateCertification, "candidate__candidate_id"),
                                      6: (CandidateProject, "candidate__candidate_id"),
                                      7: (CandidateReference, "candidate__candidate_id"),
-                                     8: (CandidateSocialLink, "candidate__candidate_id"),
-                                     9: (CandidateLanguage, "candidate__candidate_id"),
-                                     10: (CandidateAchievement, "candidate__candidate_id")
+                                     # 8: (CandidateSocialLink, "candidate__candidate_id"),
+                                     8: (CandidateLanguage, "candidate__candidate_id"),
+                                     9: (CandidateAchievement, "candidate__candidate_id")
                                      }
 
         data = []
@@ -936,7 +936,14 @@ class ShineCandidateLoginAPIView(APIView):
             certification_dict = dict(zip(candidate_certification_keys, candidate_certification_values))
             candidate_certification.append(certification_dict)
 
-        return candidate_certification
+        if len(candidate_certification) == 0:
+            candidate_certification = [{
+                "candidate_id": '',
+                "id": '',
+                "name_of_certification": '',
+                "year_of_certification": '',
+            }]
+            return candidate_certification
 
     def customize_user_profile(self, login_response):
 

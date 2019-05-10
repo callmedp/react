@@ -105,8 +105,7 @@ export class Buy extends Component {
             speed: 500,
             slidesToShow: 3,
             slidesToScroll: 3,
-            nextArrow: <SampleNextArrow/>,
-            prevArrow: <SamplePrevArrow/>,
+            variableWidth: true
         };
         const {userInfo: {first_name}} = this.props;
         const {checked} = this.state;
@@ -151,24 +150,26 @@ export class Buy extends Component {
                                         <div className="flex-container">
                                             <span className="choose-plan--ribbon">Recommended</span>
                                             <span className="choose-plann--child">
-            <input type="radio" name="product2"
-                   checked={this.state.checked === 'product2' ? true : false}
-                   onChange={this.handleOnChange.bind(this, 'product2')}/>
-            </span>
-                                            <span className="choose-plan--price">
-            <p>Buy all 6 customised resumes</p>
-            Rs. <strong>1249/-</strong>
-            <strike className="ml-10">Rs. 3499</strike>
-            <span className="choose-plan--off ml-10">63% off</span>
-            </span>
+                                            <input type="radio" name="product2"
+                                                checked={this.state.checked === 'product2' ? true : false}
+                                                onChange={this.handleOnChange.bind(this, 'product2')}/>
+                                            </span>
+                                                                            <span className="choose-plan--price">
+                                            <p>Buy all 6 customised resumes</p>
+                                            Rs. <strong>1249/-</strong>
+                                            <strike className="ml-10">Rs. 3499</strike>
+                                            <span className="choose-plan--off ml-10">63% off</span>
+                                            </span>
                                         </div>
+
                                         <Slider {...settings}>
-                                            {/*<div className="carousel-box">*/}
-                                            {/*<ul className="carousel-box--carousel">*/}
-                                            {/*<li className="carousel-box--slide">*/}
+                                            
                                             {
                                                 [1, 2, 3, 4, 5, 6].map(el => (
                                                     <div className="carousel-box--slide__content">
+                                                        <div className="triangle-topright">
+                                                            <span></span>
+                                                        </div>
                                                         <img
                                                             src={`${this.staticUrl}react/assets/images/resume1.jpg`}
                                                             className="img-responsive"
@@ -176,10 +177,6 @@ export class Buy extends Component {
                                                     </div>
                                                 ))
                                             }
-                                            {/*</li>*/}
-                                            {/*</ul>*/}
-                                            {/*<span className="carousel-box--right"></span>*/}
-                                            {/*</div>*/}
                                         </Slider>
                                     </li>
                                 </ul>
