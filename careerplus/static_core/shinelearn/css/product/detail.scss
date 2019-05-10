@@ -1311,6 +1311,19 @@ header {
 					height: 30px;
 					margin: auto;
 				}
+				
+				.df-link {
+					position: absolute;
+					left: 0;
+					top: 0;
+					right: 0;
+					bottom: 0;
+					content: '';
+					background: $sprite -590px -427px;
+					width: 33px;
+					height: 34px;
+					margin: auto;
+				}
 			}			
 
 			article {
@@ -1788,6 +1801,73 @@ footer {
 	display: inline-block;
 }
 
-.grey-bg {
-	background-color: #f6f7f9;
+.what-get {
+	padding: 0;
+
+	li {
+		list-style: none;
+		padding: 15px;
+
+		display: flex;
+		align-items: flex-start;
+
+		span {
+			margin-right: 10px;
+			flex: 0 0 43px;
+		}
+	}
+}
+
+.list-tick-item {
+	padding: 0;	
+
+	li {
+		list-style: none;
+		padding: 10px 15px;
+
+		&::before {
+			content: '';
+			width: 14px;
+			height: 10px;
+			background: $sprite -678px -88px;
+			display: inline-block;
+			margin-right: 10px;
+
+		}
+	}
+}
+
+.icon-industry {
+	width: 43px;
+	height: 40px;
+	background: $sprite -357px -424px;
+	display: inline-block; 
+}
+
+.icon-badge {
+	width: 43px;
+	height: 42px;
+	background: $sprite -403px -424px;
+	display: inline-block; 
+}
+
+.icon-skills {
+	width: 43px;
+	height: 42px;
+	background: $sprite -450px -424px;
+	display: inline-block; 
+}
+
+.icon-receive {
+	width: 43px;
+	height: 48px;
+	background: $sprite -496px -424px;
+	display: inline-block; 
+}
+
+.icon-certified {
+	width: 43px;
+	height: 46px;
+	background: $sprite -542px -424px;
+	display: inline-block; 
 }
