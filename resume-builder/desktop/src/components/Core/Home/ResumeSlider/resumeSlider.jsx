@@ -23,16 +23,17 @@ export default class ResumeSlider extends Component {
             className: "center",
             centerMode: true,
             infinite: true,
-            centerPadding: "60px",
             slidesToShow: 3,
+            arrow: true,
             speed: 500
         };
 
         return (
-            <section id="templates" className="section-container">
+            <section id="templates" className="section-container proven-resume pos-rel">
                 <h2>Proven resume templates</h2>
                 <strong className="section-container--sub-head">Choose from a library of classic templates and land a
                     new job</strong>
+                    <a href="#" className="orange-button proven-resume--customise">Customise</a>
                 {/* <ul >
                     <li>
                         
@@ -52,15 +53,17 @@ export default class ResumeSlider extends Component {
                     {[1,2,3,4].map((item,key)=>{
                         return(
                             <div>
+                                <div className="proven-resume--slide">
                                 <img src={`${this.staticUrl}react/assets/images/resume-${item}.jpg`}/>
+                                </div>
                             </div>
                         )
                     })
 
                     }
-                    
-                
                 </Slider>
+
+
                 {/*<Slider {...settings}>*/}
                     {/*{*/}
                         {/*[1, 2, 3, 4, 5, 6, 7, 8].map((el, ind) => {*/}
