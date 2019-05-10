@@ -1,3 +1,5 @@
+import {siteDomain} from "../Utils/domains";
+
 const defaultHeaders = {
     "Content-Type": "application/json",
     'Authorization': localStorage.getItem('token') || ''
@@ -64,6 +66,9 @@ async function handleResponse(response, isFetchingHTML) {
         let data = await response.json();
         for (const key in data) {
             message += `${data[key]} `;
+        }
+        if(response['status'] === 401) {
+            window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
         }
         return {
             error: true,

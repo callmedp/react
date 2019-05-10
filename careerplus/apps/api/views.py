@@ -922,8 +922,8 @@ class ShineCandidateLoginAPIView(APIView):
 
         for skill in skills:
             candidate_skill_values = ['', skill['value'], 5]
-        skill_dict = dict(zip(skill_keys, candidate_skill_values))
-        candidate_skill.append(skill_dict)
+            skill_dict = dict(zip(skill_keys, candidate_skill_values))
+            candidate_skill.append(skill_dict)
 
         return candidate_skill
 

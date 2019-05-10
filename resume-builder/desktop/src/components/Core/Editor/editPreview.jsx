@@ -11,12 +11,6 @@ import {siteDomain} from "../../../Utils/domains";
 import LoaderPage from "../../Loader/loaderPage.jsx";
 
 class EditPreview extends Component {
-    componentWillMount() {
-        if (!localStorage.getItem('token')) {
-            window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
-            return;
-        }
-    }
 
     render() {
         const {ui: {loader}, userInfo: {first_name}} = this.props;

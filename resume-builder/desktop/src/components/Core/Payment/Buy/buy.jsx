@@ -46,13 +46,6 @@ export class Buy extends Component {
         this.showEnlargedTemplate = this.showEnlargedTemplate.bind(this)
     }
 
-    componentWillMount() {
-        if (!localStorage.getItem('token')) {
-            window.location.href = `${siteDomain}/login/?next=/resume-builder/`;
-            return;
-        }
-    }
-
     showEnlargedTemplate() {
         this.props.showModal()
     }

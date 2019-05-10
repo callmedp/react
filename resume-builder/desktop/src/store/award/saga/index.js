@@ -13,6 +13,7 @@ function* fetchUserAward(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+
         if (localStorage.getItem('award')) {
 
             yield put({type: Actions.SAVE_USER_AWARD, data: JSON.parse(localStorage.getItem('award')) || []});
