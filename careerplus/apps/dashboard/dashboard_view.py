@@ -841,6 +841,10 @@ class DashboardResumeTemplateDownload(View):
         candidate_id = request.session.get('candidate_id', None)
         email = request.session.get('email', None)
         try:
+            product_id = request.POST.get('product_id', None)
+            is_combo = False
+            if product_id != "3092":
+                is_combo = True
             order_pk = request.POST.get('order_pk', None)
             # product_id = request.POST.get('product_id',None)
             selected_template = Candidate.objects.filter(candidate_id = candidate_id) and Candidate.objects.filter(candidate_id = candidate_id).first() \
@@ -852,7 +856,7 @@ class DashboardResumeTemplateDownload(View):
                 return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
             order, resume_template_full_path, resume_template_name = \
-                ResumeGenerate().save_order_resume_pdf(order=order,index=selected_template)
+                ResumeGenerate().save_order_resume_pdf(order=order,is_combo=is_combo,index=selected_template)
 
 
             if resume_template_full_path:

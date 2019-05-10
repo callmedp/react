@@ -280,7 +280,7 @@ class InvoiceGenerate(object):
 
             rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
 
-            pdf_file = cp(string=rendered_html).write_pdf()
+            pdf_file = HTML(string=rendered_html).write_pdf()
 
             return pdf_file
 
@@ -468,7 +468,6 @@ class ResumeGenerate(object):
         if not is_combo:
             # self.handle_content_type(order, content_type='png')
             return self.handle_content_type(order, content_type='pdf',index=str(index))
-
         for i in range(1, 6):
             # self.handle_content_type(order, content_type='png', index=str(i))
             self.handle_content_type(order, content_type='pdf', index=str(i))
