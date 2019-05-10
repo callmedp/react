@@ -10,7 +10,10 @@ export default class TopBar extends Component {
 
     render() {
         const {page} = this.props;
-
+        let {selected_template} =this.props.userInfo
+        if(localStorage.getItem('selected_template')){
+            selected_template =localStorage.getItem('selected_template')
+        }
         return (
             <section className="flex-container">
                 <div className="top-banner">
@@ -45,7 +48,7 @@ export default class TopBar extends Component {
                                         <button className="white-button mr-20">Change template</button>
                                     </Link>
                                     <span className="top-banner--banner-right--banner-thumb">
-                                    <img src={`${this.staticUrl}react/assets/images/resume-thumb.jpg`}
+                                    <img src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template}.jpg`}
                                          alt=""/>
                 		            </span>
                                 </div>

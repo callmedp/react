@@ -26,7 +26,7 @@ class EditPreview extends Component {
 
                 <Header userName={first_name}/>
                 <div className="page-container">
-                    <TopBar/>
+                    <TopBar {...this.props}/>
                     <section className={'flex-container mt-30'}>
                         <LeftSideBar {...this.props}/>
                         <RightSection {...this.props}/>

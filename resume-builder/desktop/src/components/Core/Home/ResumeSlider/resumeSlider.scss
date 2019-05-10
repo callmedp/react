@@ -45,6 +45,10 @@
     transform: scale(.9);
     transition: all .3s ease-out;
 
+    img {
+      width: 100%;
+    }
+
     &::before {
       content: '';
       width: 95%;
@@ -109,6 +113,14 @@
   .slick-prev {
     left: 358px;
 
+    @media only screen  and (min-width : 1224px) {
+      left: 358px;
+    }
+
+    @media only screen  and (min-width : 1824px) {
+      left: 522px;
+    }
+
     &::after {
         content: '';
         background-position: -293px -243px;
@@ -118,6 +130,16 @@
   
   .slick-next {
     right: 358px;
+
+    @media only screen  and (min-width : 1224px) {
+      right: 358px;
+    }
+
+    @media only screen  and (min-width : 1824px) {
+      right: 515px;
+    }
+
+      
 
     &::after {
         content: '';

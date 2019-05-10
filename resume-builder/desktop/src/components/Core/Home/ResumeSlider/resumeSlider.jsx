@@ -36,11 +36,11 @@ export default class ResumeSlider extends Component {
         };
 
         return (
-            <section id="templates" className="section-container proven-resume pos-rel">
+            <section name="templates" id="templates" className="section-container proven-resume pos-rel">
                 <h2>Proven resume templates</h2>
                 <strong className="section-container--sub-head">Choose from a library of classic templates and land a
                     new job</strong>
-                    <a href="#" className="orange-button proven-resume--customise">Customise</a>
+                    <a onClick={this.selectTemplate} className="orange-button proven-resume--customise">Select Template</a>
                 {/* <ul >
                     <li>
                         
@@ -57,11 +57,11 @@ export default class ResumeSlider extends Component {
                 </ul> */}
 
                 <Slider {...settings}>
-                    {[1,2,3,4].map((item,key)=>{
+                    {[1,2,3,4,5].map((item,key)=>{
                         return(
-                            <div onClick={this.selectTemplate}>
+                            <div>
                                 <div className="proven-resume--slide">
-                                <img src={`${this.staticUrl}react/assets/images/resume-${item}.jpg`}/>
+                                <img src={`${this.staticUrl}react/assets/images/resume${item}_preview.jpg`}/>
                                 </div>
                             </div>
                         )
