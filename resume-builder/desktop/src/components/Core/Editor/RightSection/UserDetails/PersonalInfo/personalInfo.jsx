@@ -108,7 +108,7 @@ export class PersonalInfo extends Component {
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-info1"/></span>
                     {
-                        <h2 ref={(value) => {
+                        <h2   ref={(value) => {
                             elem = value
                         }} onKeyUp={(event) => saveTitle(event, 0)}
                             contenteditable={!!(isEditable) ? "true" : "false"}>{entityName}

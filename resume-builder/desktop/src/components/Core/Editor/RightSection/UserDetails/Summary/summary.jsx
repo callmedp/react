@@ -53,9 +53,10 @@ class Summary extends Component {
             <div>
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-summary1"/></span>
-                    <h2 ref={(value) => {
-                        elem = value
-                    }} onKeyUp={(event) => saveTitle(event, 5)}
+                    <h2 className={"comp-heading"}
+                        ref={(value) => {
+                            elem = value
+                        }} onKeyUp={(event) => saveTitle(event, 5)}
                         contenteditable={!!(isEditable) ? "true" : "false"}>{entityName}</h2>
                     <span onClick={() => editHeading(elem)}
                           className={!!(!isEditable) ? "icon-edit " + styles['icon-summary__cursor'] : ''}/>
