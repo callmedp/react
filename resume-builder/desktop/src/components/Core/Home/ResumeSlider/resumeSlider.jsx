@@ -6,6 +6,13 @@ export default class ResumeSlider extends Component {
     constructor(props) {
         super(props);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+        this.selectTemplate = this.selectTemplate.bind(this);
+    }
+
+    selectTemplate(){
+        // console.log("Selected Template",parseInt(document.getElementsByClassName('slick-current')[0].getAttribute('data-index')) + 1)
+        localStorage.setItem('selected_template',(parseInt(document.getElementsByClassName('slick-current')[0].getAttribute('data-index')) + 1))
+        window.location = '/resume-builder/edit/?type=profile'
     }
 
     render() {
@@ -51,7 +58,7 @@ export default class ResumeSlider extends Component {
                 <Slider {...settings}>
                     {[1,2,3,4].map((item,key)=>{
                         return(
-                            <div>
+                            <div onClick={this.selectTemplate}>
                                 <img src={`${this.staticUrl}react/assets/images/resume-${item}.jpg`}/>
                             </div>
                         )

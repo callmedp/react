@@ -72,9 +72,19 @@ function* getPersonalDetails(action) {
 
 function* updatePersonalDetails(action) {
     try {
-        const {payload: {personalDetails, resolve, reject}} = action;
+        let {payload: {personalDetails, resolve, reject}} = action;
 
         const candidateId = localStorage.getItem('candidateId') || '';
+        delete personalDetails['subscription_status']
+        if(localStorage.getItem('selected_template')){
+            personalDetails = {
+                ...personalDetails,
+                ...{
+                    'selected_template' : localStorage.getItem('selected_template')
+                }
+            }
+            localStorage.removeItem('selected_template')
+        }
 
         yield put({type: UPDATE_UI, data: {loader: true}});
 
