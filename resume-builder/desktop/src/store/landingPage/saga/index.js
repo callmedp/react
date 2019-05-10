@@ -25,11 +25,8 @@ function* loginCandidate(action) {
     try {
         let {payload} = action;
 
-        //handle token already present in there
-        if (localStorage.getItem('token')) {
-            yield put({type: 'FETCH_PERSONAL_INFO'});
-            return;
-        }
+        localStorage.clear();
+
 
         let result = yield call(Api.loginCandidate, payload);
 
@@ -43,6 +40,10 @@ function* loginCandidate(action) {
             return;
             //redirect code here
         }
+
+        yield put({type: 'FETCH_PERSONAL_INFO'});
+
+
         const {data: {candidate_id, candidate_profile, token, entity_status}} = result;
         localStorage.setItem('candidateId', (candidate_id) || '');
         for (const key in candidate_profile) {
