@@ -280,7 +280,7 @@ class InvoiceGenerate(object):
 
             rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
 
-            pdf_file = cp(string=rendered_html).write_pdf()
+            pdf_file = HTML(string=rendered_html).write_pdf()
 
             return pdf_file
 
