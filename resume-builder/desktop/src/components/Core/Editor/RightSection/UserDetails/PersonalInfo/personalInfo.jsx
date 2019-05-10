@@ -121,7 +121,7 @@ export class PersonalInfo extends Component {
                     <section className="flex-container right-sidebar-scroll">
                         <section className="info-section">
                             <div className="flex-container">
-                                <fieldset className="error">
+                                <fieldset >
                                     <label>First Name</label>
                                     <div className="input-group">
                                         <div className="input-group--input-group-icon">
