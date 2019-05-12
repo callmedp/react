@@ -1,5 +1,8 @@
 import logging
 import base64
+import hmac
+from hashlib import sha256
+
 import requests
 import json
 from Crypto.Cipher import XOR
@@ -229,31 +232,6 @@ class ShineCertificateUpdate(ShineToken):
             logging.getLogger('error_log').error('unable to update certificate %s'%str(e))
         return False, None
 
-    def get_all_certiticate_data(self, email=None, vendor=None):
-        if not email or not vendor:
-            return False, None
-
-        api_url = settings.VENDOR_URLS[vendor]['all_certificates']
-        headers = settings.VENDOR_HEADERS[vendor]
-        data = {
-            'check_type': "certificate",
-            'candidate_email': email
-        }
-        response = requests.post(api_url, data=data, headers=headers)
-
-        if response.status_code == 200:
-            jsonrsp = response.json()
-            logging.getLogger('info_log').info(
-                "{} import certificate for email {} api response:{}".format(vendor, email, jsonrsp)
-            )
-            return True, response.json()
-        else:
-            jsonrsp = response.json()
-            logging.getLogger('info_log').info(
-                "{} import certificate for email {} api response:{}".format(vendor, email, jsonrsp)
-            )
-            return False, response.json()
-
 class ShineProfileDataUpdate(ShineToken):
 
     def update_shine_profile_data(self):
@@ -355,4 +333,75 @@ class CrmApiMixin(object):
                 return True
         except Exception as e:
             logging.getLogger('error_log').error('error in creating lead by api %s'%str(e))
+
+
+class AmcatApiMixin(object):
+
+    def get_api_signature(self, token, secret, data, api_url, method_type):
+        data = dict(sorted(data.items()))
+        msg = 'POST' + '|' + api_url + "\n"
+
+        for key, value in data.items():
+            msg += key + value
+
+        msg = (msg + token).strip()
+
+        # $signature = base64_encode(hash_hmac(‘sha256’, $longStr, $secret, false));
+        msg = msg.encode()
+        secret = secret.encode()
+        digest = hmac.new(secret, msg=msg, digestmod=sha256).hexdigest()
+
+        signature = base64.b64encode(digest.encode())
+
+        return signature
+
+    def get_headers(self, data, api_url, method_type):
+        token = settings.AMCAT_API_TOKEN
+        secret = settings.AMCAT_API_SECRET
+        api_signature = self.get_api_signature(token, secret, data, api_url, method_type)
+        headers = {
+            'X-Api-AuthToken': token,
+            'X-Api-Signature': api_signature,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        return headers
+
+    def get_all_certiticate_data(self, data):
+        api_url = settings.VENDOR_URLS['amcat']['all_certificates']
+        headers = self.get_headers(data, api_url, 'POST')
+        response = requests.post(api_url, data=data, headers=headers)
+        if response.status_code == 200:
+            jsonrsp = response.json()
+            jsonrsp = jsonrsp['data']
+            logging.getLogger('info_log').info(
+                "amcat import certificate for email {} api response:{}".format(str(data), jsonrsp)
+            )
+            return True, jsonrsp
+        else:
+            jsonrsp = response.json()
+            logging.getLogger('info_log').info(
+                "amcat  import certificate for email {} api response:{}".format(str(data), jsonrsp)
+            )
+            return False, response.json()
+
+    def get_auto_login_url(self, data):
+        api_url = settings.VENDOR_URLS['amcat']['get_autologin_url']
+        headers = self.get_headers(data, api_url, 'POST')
+        resp = requests.post(api_url, data=data, headers=headers)
+        if resp.status_code == 200:
+            resp = resp.json()
+            autologin_url = resp['data']['autoLoginUrl']
+            logging.getLogger('info_log').error(
+                "AutoLogin url for Order item %s successfully retrieved" % (str(orderitem))
+            )
+            orderitem.autologin_url = autologin_url
+            orderitem.save()
+            return True
+        else:
+            logging.getLogger('error_log').error(
+                "Failed fetching autologin for Order item:- %s , Error:- %s" % (str(orderitem), str(resp.content))
+            )
+            return False
+
+
         return None

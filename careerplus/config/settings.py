@@ -351,12 +351,10 @@ VENDOR_URLS = {
     }
 }
 
-VENDOR_HEADERS = {
-    'amcat': {
-        'x-api-authtoken': 'xxcxx',
-        'x-api-signature': 'xsccss'
-    }
-}
+
+AMCAT_API_TOKEN = '7347D18D79F6431CB9ACADBE704B2389'
+AMCAT_API_SECRET = '7B348DF7F1A4EBED5DCBC0A1E4AC6B67'
+
 
 EXOTEL_DICT = {
            'token': '9e4df38c0c3bd1009ca142da306d827e71e74737',
