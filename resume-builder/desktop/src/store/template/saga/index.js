@@ -8,6 +8,7 @@ function* fetchTemplate(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
+
         const result = yield call(Api.fetchTemplate, candidateId);
         if (result['error']) {
             console.log('error');

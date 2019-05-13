@@ -73,14 +73,14 @@
         {% if skills %}
             <div class="d-flex justify-content-between mb-30">
                 <div class="skills w-50">
-                    <div class="heading">{{ preference_list.4.entity_text}}</div>
+                    <div class="heading">{{ preference_list.4.entity_text }}</div>
 
                     <div class="skill-wrap">
                         <div class="skill-graph">
                             <!--5 skills-->
                             <div style="padding: 0; display: table; margin: 20% 0 5% 30%; height: 200px;">
                                 <div style="position: relative;">
-                                    <div style="position: absolute; left: 0; right: 0; display: table-cell; margin: 10px auto; width: 130px; height: 130px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #d8d8d8 50%, transparent 50.1%, transparent),linear-gradient(270deg, #d8d8d8 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
+                                    <div style="position: absolute; left: 0; right: 0; display: table-cell; margin: 10px auto; width: 130px; height: 130px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient({{ '14.4' }}deg, #d8d8d8 50%, transparent 50.1%, transparent),linear-gradient(270deg, #d8d8d8 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
                               <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 100px; height: 100px; margin-left: -38%; margin-top: -38%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
                                 <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Data Engineering</span>
                               </span>
@@ -95,7 +95,7 @@
                                 <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Full stack developer</span>
                               </span>
                                     </div>
-                                    <div style="position: absolute; bottom: -230px; left: 25px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #e2bd58 50%, transparent 50.1%, transparent),linear-gradient(270deg, #e2bd58 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
+                                    <div style="position: absolute; bottom: -230px; left: 25px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient({{ '90' }}deg, #e2bd58 50%, transparent 50.1%, transparent),linear-gradient(270deg, #e2bd58 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
                               <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
                                 <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Machine</span>
                               </span>
@@ -113,7 +113,7 @@
                 </div><!-- Skills -->
 
                 <div class="skills w-50">
-                    <div class="heading">{{ preference_list.3.entity_text}}</div>
+                    <div class="heading">{{ preference_list.3.entity_text }}</div>
 
                     <ul class="list">
                         {% for project in projects %}
@@ -134,51 +134,14 @@
             <div class="d-flex justify-content-between mb-30">
             <div class="w-50">
                 <div class="heading">{{ preference_list.7.entity_text }}</div>
+
                 <ul class="list list-2">
-                    <li>
-                        <span class="dot"></span>
-                        Data Structure
-                    </li>
-
-                    <li>
-                        <span class="dot"></span>
-                        Operating Systems
-                    </li>
-
-                    <li>
-                        <span class="dot"></span>
-                        Algorithm
-                    </li>
-
-                    <li>
-                        <span class="dot"></span>
-                        MySQL
-                    </li>
-
-                    <li>
-                        <span class="dot"></span>
-                        Neural Networks
-                    </li>
-
-                    <li>
-                        <span class="dot"></span>
-                        Data Analysis
-                    </li>
-
-                    <li>
-                        <span class="dot"></span>
-                        Discrete Mathematics
-                    </li>
-
-                    <li>
-                        <span class="dot"></span>
-                        Big Data Certification
-                    </li>
-
-                    <li>
-                        <span class="dot"></span>
-                        Data Analytics
-                    </li>
+                    {% for course in certifications %}
+                        <li>
+                            <span class="dot"></span>
+                            {{ course.name_of_certification }}
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
         {% endif %}
@@ -223,21 +186,14 @@
                 <div class="w-50">
                     <div class="heading">{{ preference_list.6.entity_text }}</div>
                     <ul class="list">
-                        <li>
-                            <span class="dot"></span>
-                            <div class="education-content w-100">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua.
-                            </div>
-                        </li>
-
-                        <li>
-                            <span class="dot"></span>
-                            <div class="education-content w-100">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua.
-                            </div>
-                        </li>
+                        {% for award in achievements %}
+                            <li>
+                                <span class="dot"></span>
+                                <div class="education-content w-100">
+                                    {{ award.summary }}
+                                </div>
+                            </li>
+                        {% endfor %}
                     </ul>
                 </div>
                 </div><!-- D-flex -->
@@ -249,16 +205,17 @@
                 <div class="w-50">
                     <div class="heading">{{ preference_list.9.entity_text }}</div>
                     <ul class="list">
-                        <li>
-                            <span class="dot"></span>
-                            <div class="flex-row">
-                                <h3 class="heading2">Amardeep Singh <span>(Project Manager)</span></h3>
-                                <p>Infocom Network Pvt. Ltd</p>
-                            </div>
+                        {% for ref in references %}
+                            <li>
+                                <span class="dot"></span>
+                                <div class="flex-row">
+                                    <h3 class="heading2">{{ ref.reference_name }}<span>({{ ref.reference_designation }})</span>
+                                    </h3>
+                                    <p>{{ ref.about_candidate }}</p>
+                                </div>
 
-                        </li>
-
-
+                            </li>
+                        {% endfor %}
                     </ul>
                 </div>
 
