@@ -405,7 +405,7 @@ class RecommendedSearchView(SearchBaseView, FormView):
             func_area = self.request.session.get('func_area')
             func_area = FunctionalArea.objects.filter(pk=func_area)
             func_area = func_area[0].name if func_area else ''
-            skills = self.request.session.get('skills').split(",")
+            skills = self.request.session.get('mid_skills').split(",")
             skills_found = Skill.objects.filter(pk__in=skills).values_list('name', flat=True)
         else:
             func_area = ''
@@ -437,7 +437,7 @@ class RecommendedSearchView(SearchBaseView, FormView):
             func_area = FunctionalArea.objects.filter(pk=func_area)
             func_area = func_area[0].name if func_area else ''
         context.update({'recmnd_func_area': func_area})
-        skills = self.request.session.get('skills')
+        skills = self.request.session.get('mid_skills')
         skills_found = Skill.objects.filter(pk__in=skills).values_list('name', flat=True)
         context.update({'recmnd_skills': ','.join(skills_found)})
         
