@@ -33,10 +33,15 @@ export const datepicker =
          meta: {touched, error, warning}
      }) => (
         <div className="Error">
-            <DatePicker {...input} dateFormat="yyyy-MM-dd"
+            <DatePicker {...input}
+                        dateFormat="yyyy-MM-dd"
                         autoComplete="off"
                         selected={input.value ? new Date(input.value) : null}
                         onChange={date => input.onChange(date)}
+                        showYearDropdown
+                        yearDropdownItemNumber={20}
+                        scrollableYearDropdown
+                        showMonthDropdown
 
 
             />
