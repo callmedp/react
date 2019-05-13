@@ -7,8 +7,13 @@ from django.conf import settings
 from rest_framework import serializers
 
 from order.models import Order, OrderItem
-from shop.models import Product, ShineProfileData
+from shop.models import Product, ShineProfileData,Category
 from payment.models import PaymentTxn
+from blog.models import *
+from users.models import User
+
+from shared.rest_addons.mixins import (SerializerFieldsMixin,
+ListSerializerContextMixin, ListSerializerDataMixin)
 
 import logging
 
@@ -294,7 +299,8 @@ class RecommendedProductSerializerSolr(Serializer):
     # pSkilln = serializers.ListField(
     #     child=serializers.CharField())
 
-class  ShineDataFlowDataSerializer(ModelSerializer):
+
+class ShineDataFlowDataSerializer(ModelSerializer):
 
     image_url = serializers.SerializerMethodField()
 
@@ -305,3 +311,25 @@ class  ShineDataFlowDataSerializer(ModelSerializer):
     def get_image_url(self, obj):
         if obj.image:
             return obj.image.url
+
+
+class TalentEconomySerializer(SerializerFieldsMixin, ListSerializerContextMixin, ListSerializerDataMixin,ModelSerializer):
+
+
+    list_lookup_fields = ['p_cat_id', 'sec_cat_id', 'tags_id', 'author_id', 'user_id', 'speakers_id', ]
+    fields_required_mapping = {'p_cat_id': ['name'], 'sec_cat_id': ['name'],
+                               'tags_id': ['name'], 'author_id': ['name'], 'user_id': ['name'],
+                               'speakers_id': ['name']}
+    field_model_mapping = {'p_cat_id': Category, 'sec_cat_id': Category, 'tags_id': Tag, 'author_id': Author,
+                           'user_id': User, 'speakers_id': Author}
+
+
+    def to_representation(self,instance):
+        ret = super(TalentEconomySerializer,self).to_representation(instance)
+        asked_fields = self.context.get('asked_fields',[])
+        [ret.pop(field,"") for field in asked_fields]
+        return ret
+
+    class Meta:
+        model = Blog
+        fields = '__all__'
