@@ -15,12 +15,11 @@ class Education extends Component {
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteEducation = this.deleteEducation.bind(this);
-
+        this.tillTodayDisable = this.tillTodayDisable.bind(this);
         this.state = {
             active: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             submit: false,
-            till_today:false
-
+            till_today:[],
         }
     }
 
@@ -45,8 +44,31 @@ class Education extends Component {
 
     }
 
+    tillTodayDisable(index,checked,e){
+        console.log("checked",checked,"index",index,"e",e)
+        let {till_today} =this.state
+        till_today[index] = checked
+        console.log("till_today",this.state.till_today[index])
+    }
+
     componentDidMount() {
+        let till_today= []
+        for (let i of this.props.initialValues.list){
+            till_today.push(i.is_pursuing)
+        }
+        console.log(till_today)
         this.props.fetchUserEducation()
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.initialValues.list !== prevProps.initialValues.list) {
+            let till_today= []
+            for (let i of this.props.initialValues.list){
+                till_today.push(i.is_pursuing)
+            }
+            console.log(till_today)
+            this.setState({till_today})
+        }
     }
 
 
@@ -94,7 +116,9 @@ class Education extends Component {
             editHeading, entityName, nextEntity, handlePreview, changeOrderingUp
             , changeOrderingDown
         } = this.props;
-        const {till_today} = this.props
+        const {initialValues:{list}} = this.props
+        const {till_today} =this.state
+        console.log(list)
 
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -112,6 +136,8 @@ class Education extends Component {
                             isEditable={isEditable}
                             entityName={entityName}
                             expanded={this.state.active}
+                            till_today={till_today}
+                            tillTodayDisable ={this.tillTodayDisable}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">

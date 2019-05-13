@@ -97,7 +97,7 @@ export class Buy extends Component {
 
     render() {
         const settings = {
-            infinite: true,
+            infinite: false,
             speed: 500,
             slidesToShow: 3,
             slidesToScroll: 3,
@@ -167,13 +167,13 @@ export class Buy extends Component {
                                         <Slider {...settings}>
 
                                             {
-                                                [1, 2, 3, 4, 5, 6].map((el,key) => (
+                                                [1, 2, 3, 4, 5].map((el,key) => (
                                                     <div className="carousel-box--slide__content" key={key}>
                                                         <div className="triangle-topright">
                                                             <span></span>
                                                         </div>
                                                         <img
-                                                            src={`${this.staticUrl}react/assets/images/resume1.jpg`}
+                                                            src={`${this.staticUrl}react/assets/images/resume-thumb-${el}.jpg`}
                                                             className="img-responsive"
                                                             alt=""/>
                                                     </div>

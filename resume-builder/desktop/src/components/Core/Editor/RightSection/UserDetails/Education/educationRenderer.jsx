@@ -24,7 +24,9 @@ export const EducationRenderer = ({
                                       saveTitle,
                                       isEditable,
                                       entityName,
-                                      expanded
+                                      expanded,
+                                      till_today,
+                                      tillTodayDisable
                                   }) => {
     let elem = null;
     return (
@@ -135,13 +137,13 @@ export const EducationRenderer = ({
                                                                 </div>
                                                                 <Field component={datepicker}
                                                                        type={"date"}
-                                                                       name={`${member}.end_date`}
+                                                                       name={`${member}.end_date`} disabled={till_today[index]}
                                                                        className="input-control"/>
 
                                                             </div>
                                                             <span className={styles["till-today"]}>
                                                                 <Field type="checkbox" name={`${member}.is_pursuing`} component={renderField}
-                                                                    checked={`${member}.end_date` === true}/>
+                                                                    tillTodayDisable={tillTodayDisable} index={1} checked={`${member}.end_date` === true}/>
                                                                 Till Today
                                                             </span>
                                                         </fieldset>

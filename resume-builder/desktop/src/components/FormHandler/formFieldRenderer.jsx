@@ -11,15 +11,30 @@ export const renderField = ({
                                 label,
                                 type,
                                 className,
+                                tillTodayDisable,
+                                index,
                                 meta: {touched, error, warning}
                             }) => {
     return (
-        <div className="Error">
-            <input {...input} className={className} autoComplete="off" placeholder={label} type={type}/>
-            {touched &&
-            ((error && <span className={'Error-message'}>{error}</span>) ||
-                (warning && <span className={'Warn-Message'}>{warning}</span>))}
-        </div>
+        <React.Fragment>
+             {console.log(index)}
+            {index ?
+                <div className="Error">
+                    fjewdhfjdhsjfhl
+                    <input {...input} className={className} onClick={tillTodayDisable(0,input.checked)} autoComplete="off" placeholder={label} type={type}/>
+                    {touched &&
+                    ((error && <span className={'Error-message'}>{error}</span>) ||
+                        (warning && <span className={'Warn-Message'}>{warning}</span>))}
+                </div>:
+                <div className="Error">
+                    yo{index}
+                    <input {...input} className={className} autoComplete="off" placeholder={label} type={type}/>
+                    {touched &&
+                    ((error && <span className={'Error-message'}>{error}</span>) ||
+                        (warning && <span className={'Warn-Message'}>{warning}</span>))}
+                </div>
+            }
+        </React.Fragment>
     )
 };
 
@@ -30,6 +45,7 @@ export const datepicker =
          label,
          type,
          onDateChange,
+         disabled,
          meta: {touched, error, warning}
      }) => (
         <div className="Error">
@@ -42,6 +58,7 @@ export const datepicker =
                         yearDropdownItemNumber={20}
                         scrollableYearDropdown
                         showMonthDropdown
+                        disabled={disabled}
 
 
             />
