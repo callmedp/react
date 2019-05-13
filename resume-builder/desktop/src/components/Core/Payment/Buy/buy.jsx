@@ -101,6 +101,7 @@ export class Buy extends Component {
             variableWidth: true
         };
         const {userInfo: {first_name}} = this.props;
+        const {userInfo} = this.props;
         const {checked} = this.state;
         return (
             /*
@@ -110,7 +111,7 @@ export class Buy extends Component {
                 <Header userName={first_name}/>
                 <TemplateModal {...this.props} />
                 <div className="page-container">
-                    <TopBar page={'buy'}/>
+                    <TopBar page={'buy'} userInfo={userInfo}/>
                     <section className={'flex-container mt-30'}>
 
                         <section className="left-sidebar half-width pos-rel">
@@ -144,10 +145,10 @@ export class Buy extends Component {
                                             <span className="choose-plan--ribbon">Recommended</span>
                                             <span className="choose-plann--child">
                                             <input type="radio" name="product2"
-                                                checked={this.state.checked === 'product2' ? true : false}
-                                                onChange={this.handleOnChange.bind(this, 'product2')}/>
+                                                   checked={this.state.checked === 'product2' ? true : false}
+                                                   onChange={this.handleOnChange.bind(this, 'product2')}/>
                                             </span>
-                                                                            <span className="choose-plan--price">
+                                            <span className="choose-plan--price">
                                             <p>Buy all 6 customised resumes</p>
                                             Rs. <strong>1249/-</strong>
                                             <strike className="ml-10">Rs. 3499</strike>
@@ -156,7 +157,7 @@ export class Buy extends Component {
                                         </div>
 
                                         <Slider {...settings}>
-                                            
+
                                             {
                                                 [1, 2, 3, 4, 5, 6].map(el => (
                                                     <div className="carousel-box--slide__content">

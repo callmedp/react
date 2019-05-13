@@ -92,6 +92,8 @@ function* handleExperienceSwap(action) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
+        localStorage.removeItem('experience');
+
         let {data} = result;
 
         data.sort((a, b) => a.order <= b.order);

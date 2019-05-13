@@ -91,6 +91,8 @@ function* handleReferenceSwap(action) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
+        localStorage.removeItem('reference');
+
         let {data} = result;
 
         data.sort((a, b) => a.order <= b.order);

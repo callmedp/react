@@ -111,6 +111,8 @@ function* handleLanguageSwap(action) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
+        localStorage.removeItem('language');
+
         let {data} = result;
 
 
@@ -119,7 +121,7 @@ function* handleLanguageSwap(action) {
         data = {list: data};
 
 
-        data = modifyLanguage(data)
+        data = modifyLanguage(data);
 
         yield put({type: Actions.SAVE_USER_LANGUAGE, data: data})
 
