@@ -115,7 +115,7 @@ class Education extends Component {
 
                 <div className="flex-container items-right mr-20 mb-30">
                     <button className="blue-button mr-10" onClick={handlePreview}>Preview</button>
-                    <button className="orange-button" type={'submit'}>Save & Continue</button>
+                    <button className="orange-button" type={'submit'}>{!nextEntity ? "Download": 'Save and Continue'}</button>
                 </div>
 
             </form>
