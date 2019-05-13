@@ -9,6 +9,10 @@ import RightSection from './RightSection/rightSection.jsx'
 import {withRouter} from "react-router-dom";
 import {siteDomain} from "../../../Utils/domains";
 import LoaderPage from "../../Loader/loaderPage.jsx";
+import * as actions from "../../../store/ui/actions"
+import * as profileActions from "../../../store/personalInfo/actions"
+import SelectTemplateModal from '../../Modal/selectTemplateModal';
+import moment from 'moment'
 
 class EditPreview extends Component {
 
@@ -26,6 +30,7 @@ class EditPreview extends Component {
 
                 <Header userName={first_name}/>
                 <div className="page-container">
+                    <SelectTemplateModal {...this.props}/>
                     <TopBar {...this.props}/>
                     <section className={'flex-container mt-30'}>
                         <LeftSideBar {...this.props}/>
@@ -46,5 +51,32 @@ const mapStateToProps = (state) => {
         userInfo: state.personalInfo
     }
 }
-export default withRouter(connect(mapStateToProps, null)(EditPreview))
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "showSelectTemplateModal": () => {
+            return dispatch(actions.showSelectTemplateModal())
+        },
+        "hideSelectTemplateModal": () => {
+            return dispatch(actions.hideSelectTemplateModal())
+        },
+        "updateSelectedTemplate": (personalDetails) => {
+            const {gender, date_of_birth, extracurricular} = personalDetails;
+            personalDetails = {
+                ...personalDetails,
+                ...{
+                    'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
+                    'gender': (gender && gender['value']) || '',
+                    'extracurricular': extracurricular instanceof Array ?
+                        (extracurricular || []).map(el => el.value).join(',') : extracurricular
+                }
+            }
+            return new Promise((resolve, reject) => {
+                dispatch(profileActions.updatePersonalInfo({personalDetails, resolve, reject}));
+            })
+        }
+    }
+}
+          
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditPreview))
 

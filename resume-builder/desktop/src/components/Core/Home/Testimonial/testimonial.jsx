@@ -29,8 +29,8 @@ export default class Testimonial extends Component {
                     builder</strong>
                 <Slider {...settings}>
                     {
-                        [1, 2, 3, 4, 5, 6, 7].map(el => (
-                            <div className="testimonials--list">
+                        [1, 2, 3, 4, 5, 6, 7].map((el,key) => (
+                            <div className="testimonials--list" key={key}>
                                 <div className="testimonials--wrap">
                                 
                                     <div className="testimonials--image">

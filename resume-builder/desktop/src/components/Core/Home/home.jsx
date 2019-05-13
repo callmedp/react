@@ -32,7 +32,7 @@ class Home extends Component {
             duration: 800,
             delay: 0,
             smooth: 'easeInOutQuad',
-            offset: -63
+            offset: -10
         })
     }
 

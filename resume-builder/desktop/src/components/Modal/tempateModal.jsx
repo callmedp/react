@@ -39,6 +39,7 @@ export default class TemplateModal extends React.Component {
 
     render() {
         return (
+            
             <div className="pr">
                 { this.state.modalIsOpen && 
              <i onClick={this.closeModal} className='icon-close icon-close--position'></i>

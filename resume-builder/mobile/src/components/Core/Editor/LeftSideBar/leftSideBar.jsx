@@ -63,7 +63,6 @@ class LeftSideBar extends Component {
         let addmore = {...this.state.addmore};
         addmore[item -1].active = true;
         //this.setState({addMore: addMore})
-        console.log(addmore[item -1])
         // const addmore_sorted = [].concat(this.state.addmore).sort((a, b) => b.active - a.active)
         // this.setState({addmore: addmore_sorted})
     }

@@ -11,12 +11,12 @@ export default class Header extends Component {
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
     }
 
-    scrollTo(elem) {
+    scrollTo(elem,offset) {
         scroller.scrollTo(elem, {
             duration: 800,
             delay: 0,
             smooth: 'easeInOutQuad',
-            offset: -63
+            offset
         })
     }
 
@@ -45,10 +45,10 @@ export default class Header extends Component {
                     {!!(page === 'home') &&
                     <ul className="home-links">
                         <li>
-                            <a onClick={() => this.scrollTo('works')}>How it Works</a>
+                            <a onClick={() => this.scrollTo('works',-63)}>How it Works</a>
                         </li>
                         <li>
-                            <a onClick={() => this.scrollTo('templates')}>Templates</a>
+                            <a onClick={() => this.scrollTo('templates',-10)}>Templates</a>
                         </li>
                     </ul>
                     }

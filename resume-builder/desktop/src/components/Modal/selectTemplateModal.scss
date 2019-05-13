@@ -1,0 +1,88 @@
+@import '../../styles/variables/vars.scss';
+@import '../../styles/variables/mixins.scss';
+
+.preview {
+    height: 100%;
+    padding-top: 60px;
+
+    &__resume {
+        padding: 15px;
+        height: calc(100vh - 130px);
+        overflow: scroll;
+
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    }
+
+    &__bottom-btns {
+        @include size(100%, auto, flex);
+        position: absolute;
+        bottom: 0;
+        background-color: $white;
+        box-shadow: 0 0 10px rgba($black, .2);
+        padding: 15px;
+
+        align-items: center;
+        justify-content: space-evenly;
+    }
+}
+
+.Modal {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    right: 30px;
+    bottom: 30px;
+    background-color: $white;
+    border-radius: 8px;
+    overflow: hidden;
+
+    &:focus {
+        outline: 0;
+    }
+    
+
+    &--close {
+        position: absolute;
+        top: 0;
+        right: 4px;
+        border: 0 none;
+        transform: rotateZ(45deg);
+        font-size: 28px;
+        font-weight: 300;
+        background-color: transparent;
+
+        &:focus {
+            outline: 0;
+        }
+    }
+
+    &--iframe {
+        overflow-x: scroll;
+        overflow-y: scroll;
+        padding: 15px;
+
+        &:focus {
+            outline: 0;
+        }
+    }
+  }
+
+  .Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba($black, .7);
+    z-index: 9;
+
+    iframe {
+        width: 100vh;
+        height: 100vh;
+        border: 0 none;
+    }
+  }

@@ -58,7 +58,6 @@ const mapDispatchToProps = (dispatch) => {
             return dispatch(profileActions.fetchPersonalInfo())
         },
         "headingChange": (personalInfo,id,heading) => {
-            console.log(personalInfo.entity_preference_data)
             let personalDetails = {
                 ...personalInfo,
                 ...{

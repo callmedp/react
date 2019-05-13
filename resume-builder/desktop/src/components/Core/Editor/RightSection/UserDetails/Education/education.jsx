@@ -18,7 +18,8 @@ class Education extends Component {
 
         this.state = {
             active: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            submit: false
+            submit: false,
+            till_today:false
 
         }
     }
@@ -63,7 +64,6 @@ class Education extends Component {
             "is_pursuing": false,
             order: listLength
         })
-        console.log('-fields--', fields.length);
 
         scroller.scrollTo(`education1`, {
             duration: 800,
@@ -94,6 +94,7 @@ class Education extends Component {
             editHeading, entityName, nextEntity, handlePreview, changeOrderingUp
             , changeOrderingDown
         } = this.props;
+        const {till_today} = this.props
 
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>

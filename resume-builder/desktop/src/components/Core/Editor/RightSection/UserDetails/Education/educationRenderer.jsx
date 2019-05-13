@@ -140,10 +140,10 @@ export const EducationRenderer = ({
 
                                                             </div>
                                                             <span className={styles["till-today"]}>
-                                    <Field type="checkbox" name={`${member}.is_pursuing`} component={renderField}
-                                           checked={`${member}.end_date` === true}/>
-                                    Till Today
-                                </span>
+                                                                <Field type="checkbox" name={`${member}.is_pursuing`} component={renderField}
+                                                                    checked={`${member}.end_date` === true}/>
+                                                                Till Today
+                                                            </span>
                                                         </fieldset>
                                                     </div>
 

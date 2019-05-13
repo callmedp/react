@@ -44,9 +44,9 @@ export default class TopBar extends Component {
                             page === 'buy' ?
                                 '' :
                                 <div className="top-banner--banner-right">
-                                    <Link to={'/resume-builder/#templates'}>
-                                        <button className="white-button mr-20">Change template</button>
-                                    </Link>
+                                    <div>
+                                        <button className="white-button mr-20" onClick={()=>{this.props.showSelectTemplateModal()}}>Change template</button>
+                                    </div>
                                     <span className="top-banner--banner-right--banner-thumb">
                                     <img src={`${this.staticUrl}react/assets/images/resume-thumb-${selected_template}.jpg`}
                                          alt=""/>

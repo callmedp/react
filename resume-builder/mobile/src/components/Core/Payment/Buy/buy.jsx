@@ -39,7 +39,6 @@ class Buy extends Component {
             'add_resume': true
 
         }
-        console.log(data)
         this.props.addToCart(data);
         this.setState({pay_button_clicked:true})
     }

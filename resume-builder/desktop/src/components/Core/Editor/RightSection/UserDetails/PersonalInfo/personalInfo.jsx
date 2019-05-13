@@ -50,7 +50,6 @@ export class PersonalInfo extends Component {
     }
 
     removeImage() {
-        console.log(' here');
         this.setState({
             imageURI: '',
             imageURL: '',
@@ -74,7 +73,6 @@ export class PersonalInfo extends Component {
         // } catch (e) {
         //     console.log('--error-', e);
         // }
-        console.log('---', inputValue);
         return [];
     }
 
@@ -315,7 +313,6 @@ const mapDispatchToProps = (dispatch) => {
         },
         "onSubmit": (personalDetails, imageURL, flag) => {
             const {gender, date_of_birth, extracurricular, image} = personalDetails;
-            console.log('-------', image, flag)
             personalDetails = {
                 ...personalDetails,
                 ...{
@@ -326,7 +323,6 @@ const mapDispatchToProps = (dispatch) => {
                         (extracurricular || []).map(el => el.value).join(',') : extracurricular
                 }
             }
-            console.log('----', personalDetails);
             return new Promise((resolve, reject) => {
                 dispatch(actions.updatePersonalInfo({personalDetails, resolve, reject}));
             })

@@ -10,20 +10,20 @@ export default class ResumeSlider extends Component {
     }
 
     selectTemplate(){
-        // console.log("Selected Template",parseInt(document.getElementsByClassName('slick-current')[0].getAttribute('data-index')) + 1)
         localStorage.setItem('selected_template',(parseInt(document.getElementsByClassName('slick-current')[0].getAttribute('data-index')) + 1))
-        window.location = '/resume-builder/edit/?type=profile'
+        const select_template_modal = this.props.ui ? this.props.ui.select_template_modal : false
+        if (select_template_modal){
+            this.props.hideSelectTemplateModal();
+            this.props.updateSelectedTemplate(this.props.userInfo)
+        }
+        else{
+
+            window.location = '/resume-builder/edit/?type=profile'
+        }
+        
     }
 
     render() {
-        // const settings = {
-        //     className: "center",
-        //     centerMode: true,
-        //     infinite: true,
-        //     centerPadding: "60px",
-        //     slidesToShow: 3,
-        //     speed: 500
-        // };
 
         const settings = {
             dots: false,
@@ -34,32 +34,25 @@ export default class ResumeSlider extends Component {
             arrow: true,
             speed: 500
         };
-
+        let select_template_modal = false
+        if(this.props.ui){
+            select_template_modal = {ui:{select_template_modal}} = this.props;
+        }
         return (
             <section name="templates" id="templates" className="section-container proven-resume pos-rel">
-                <h2>Proven resume templates</h2>
-                <strong className="section-container--sub-head">Choose from a library of classic templates and land a
-                    new job</strong>
-                    <a onClick={this.selectTemplate} className="orange-button proven-resume--customise">Select Template</a>
-                {/* <ul >
-                    <li>
-                        
-                    </li>
-                    <li>
-                        <img src={`${this.staticUrl}react/assets/images/resume-2.jpg`}/>
-                    </li>
-                    <li>
-                        <img src={`${this.staticUrl}react/assets/images/resume-3.jpg`}/>
-                    </li>
-                    <li>
-                        <img src={`${this.staticUrl}react/assets/images/resume-4.jpg`}/>
-                    </li>
-                </ul> */}
+                {select_template_modal ? "" :
+                    <React.Fragment>
+                        <h2>Proven resume templates</h2>
+                        <strong className="section-container--sub-head">Choose from a library of classic templates and land a
+                            new job</strong>
+                    </React.Fragment>
+                }
+                <a onClick={this.selectTemplate} className="orange-button proven-resume--customise">Select Template</a>
 
                 <Slider {...settings}>
                     {[1,2,3,4,5].map((item,key)=>{
                         return(
-                            <div>
+                            <div key={key}>
                                 <div className="proven-resume--slide">
                                 <img src={`${this.staticUrl}react/assets/images/resume${item}_preview.jpg`}/>
                                 </div>
@@ -69,25 +62,6 @@ export default class ResumeSlider extends Component {
 
                     }
                 </Slider>
-
-
-                {/*<Slider {...settings}>*/}
-                    {/*{*/}
-                        {/*[1, 2, 3, 4, 5, 6, 7, 8].map((el, ind) => {*/}
-                            {/*return (*/}
-                                {/*<div  className={'resume-slider'}>*/}
-                                    {/*<h3>{ind}</h3>*/}
-                                {/*</div>)*/}
-                        {/*})*/}
-                    {/*}*/}
-                {/*</Slider>*/}
-                {/* <ul className="slider">
-                <li><img onClick={() => this.props.history.push('/resume-builder/edit/')} alt={'Slider'}
-                src={`${this.staticUrl}react/assets/images/slider.jpg`}
-                className="img-responsive"/></li> */}
-                {/* </ul> */}
-                {/*<button className="orange-button orange-button--custom" onClick={() => this.scrollTo('templates')}>Customise*/}
-                {/*</button>*/}
             </section>
         )
     }
