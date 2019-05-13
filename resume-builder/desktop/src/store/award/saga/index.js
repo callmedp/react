@@ -87,6 +87,8 @@ function* handleAwardSwap(action) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
+        localStorage.removeItem('award');
+
 
         let {data} = result;
 

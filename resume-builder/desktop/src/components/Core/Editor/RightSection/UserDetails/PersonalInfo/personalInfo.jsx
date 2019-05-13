@@ -106,7 +106,7 @@ export class PersonalInfo extends Component {
                 <section className="head-section">
                     <span className="icon-box"><i className="icon-info1"/></span>
                     {
-                        <h2   ref={(value) => {
+                        <h2 ref={(value) => {
                             elem = value
                         }} onKeyUp={(event) => saveTitle(event, 0)}
                             contenteditable={!!(isEditable) ? "true" : "false"}>{entityName}
@@ -119,7 +119,7 @@ export class PersonalInfo extends Component {
                     <section className="flex-container right-sidebar-scroll">
                         <section className="info-section">
                             <div className="flex-container">
-                                <fieldset >
+                                <fieldset>
                                     <label>First Name</label>
                                     <div className="input-group">
                                         <div className="input-group--input-group-icon">
@@ -281,8 +281,7 @@ export class PersonalInfo extends Component {
 
                     <div className="flex-container items-right mr-20 mb-30">
                         <button className="blue-button mr-10" type={"button"} onClick={handlePreview}>Preview</button>
-                        <button className="orange-button" type="submit">Save &
-                            Continue
+                        <button className="orange-button" type="submit">{!nextEntity ? "Download" : 'Save and Continue'}
                         </button>
                     </div>
                 </form>

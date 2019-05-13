@@ -85,6 +85,9 @@ function* handleCourseSwap(action) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
 
+        localStorage.removeItem('course');
+
+
         let {data} = result;
 
 
