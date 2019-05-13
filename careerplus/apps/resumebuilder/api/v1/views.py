@@ -343,6 +343,8 @@ class CandidateResumePreview(APIView):
         if not candidate:
             return {}
 
+        entity_preference = eval(candidate.entity_preference_data)
+
         # extracurricular = candidate.extracurricular.split(',')
         education = candidate.candidateeducation_set.all()
         experience = candidate.candidateexperience_set.all()
@@ -360,7 +362,9 @@ class CandidateResumePreview(APIView):
             {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
              'achievements': achievements, 'references': references, 'projects': projects,
              'certifications': certifications, 'extracurricular': '', 'languages': languages,
-             'current_exp': current_exp, 'latest_exp': latest_experience}).encode(encoding='UTF-8')
+             'current_exp': current_exp, 'latest_exp': latest_experience,
+             'preference_list': entity_preference
+             }).encode(encoding='UTF-8')
 
         return Response({
             'html': rendered_template

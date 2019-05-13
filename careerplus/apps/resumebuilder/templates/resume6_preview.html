@@ -3,6 +3,10 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% block css_section %}
+        <link type="text/css" href="{% static 'shinelearn/css/resume-builder/resume6.css' %}" rel="stylesheet">
+    {% endblock css_section %}
+
 </head>
 <body>
 <div class="resume">
@@ -46,10 +50,10 @@
                 </div><!-- right panel -->
             </div>
         </div><!-- /. Top panel -->
-
-        <div class="resume-container">
+        {% if experience %}
+            <div class="resume-container">
             <div class="experience mb-30">
-                <div class="heading">EXPERIENCE</div>
+                <div class="heading">{{ preference_list.2.entity_text }}</div>
                 <ul class="list">
                     {% for exp in experience %}
                         <li>
@@ -64,10 +68,12 @@
                     {% endfor %}
                 </ul>
             </div><!-- experience-->
+        {% endif %}
 
+        {% if skills %}
             <div class="d-flex justify-content-between mb-30">
                 <div class="skills w-50">
-                    <div class="heading">Skills</div>
+                    <div class="heading">{{ preference_list.4.entity_text}}</div>
 
                     <div class="skill-wrap">
                         <div class="skill-graph">
@@ -107,7 +113,7 @@
                 </div><!-- Skills -->
 
                 <div class="skills w-50">
-                    <div class="heading">Project</div>
+                    <div class="heading">{{ preference_list.3.entity_text}}</div>
 
                     <ul class="list">
                         {% for project in projects %}
@@ -122,93 +128,100 @@
                     </ul>
                 </div><!-- Skills -->
             </div><!-- D-flex -->
+        {% endif %}
 
-
+        {% if certifications %}
             <div class="d-flex justify-content-between mb-30">
-                <div class="w-50">
-                    <div class="heading">COURSES DONE</div>
-                    <ul class="list list-2">
+            <div class="w-50">
+                <div class="heading">{{ preference_list.7.entity_text }}</div>
+                <ul class="list list-2">
+                    <li>
+                        <span class="dot"></span>
+                        Data Structure
+                    </li>
+
+                    <li>
+                        <span class="dot"></span>
+                        Operating Systems
+                    </li>
+
+                    <li>
+                        <span class="dot"></span>
+                        Algorithm
+                    </li>
+
+                    <li>
+                        <span class="dot"></span>
+                        MySQL
+                    </li>
+
+                    <li>
+                        <span class="dot"></span>
+                        Neural Networks
+                    </li>
+
+                    <li>
+                        <span class="dot"></span>
+                        Data Analysis
+                    </li>
+
+                    <li>
+                        <span class="dot"></span>
+                        Discrete Mathematics
+                    </li>
+
+                    <li>
+                        <span class="dot"></span>
+                        Big Data Certification
+                    </li>
+
+                    <li>
+                        <span class="dot"></span>
+                        Data Analytics
+                    </li>
+                </ul>
+            </div>
+        {% endif %}
+
+
+        {% if education %}
+            <div class="w-50">
+                <div class="heading">{{ preference_list.1.entity_text }}</div>
+                <ul class="list">
+                    {% for edu in education %}
                         <li>
                             <span class="dot"></span>
-                            Data Structure
+                            <div class="education-content">
+                                <h3>{{ edu.specialization }} - 80%</h3>
+                                <p> {{ edu.institution_name }}</p>
+                            </div>
+
+                            <div class="education-year">({{ edu.start_date|date:"Y" }} - {{ edu.end_date|date:"Y" }})
+                            </div>
                         </li>
-
-                        <li>
-                            <span class="dot"></span>
-                            Operating Systems
-                        </li>
-
-                        <li>
-                            <span class="dot"></span>
-                            Algorithm
-                        </li>
-
-                        <li>
-                            <span class="dot"></span>
-                            MySQL
-                        </li>
-
-                        <li>
-                            <span class="dot"></span>
-                            Neural Networks
-                        </li>
-
-                        <li>
-                            <span class="dot"></span>
-                            Data Analysis
-                        </li>
-
-                        <li>
-                            <span class="dot"></span>
-                            Discrete Mathematics
-                        </li>
-
-                        <li>
-                            <span class="dot"></span>
-                            Big Data Certification
-                        </li>
-
-                        <li>
-                            <span class="dot"></span>
-                            Data Analytics
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="w-50">
-                    <div class="heading">EDUCATION</div>
-                    <ul class="list">
-                        {% for edu in education %}
-                            <li>
-                                <span class="dot"></span>
-                                <div class="education-content">
-                                    <h3>{{ edu.specialization }} - 80%</h3>
-                                    <p> {{ edu.institution_name }}</p>
-                                </div>
-
-                                <div class="education-year">({{ edu.start_date|date:"Y" }} - {{ edu.end_date|date:"Y" }})</div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
+                    {% endfor %}
+                </ul>
+            </div>
             </div><!-- D-flex -->
 
-            <div class="d-flex justify-content-between mb-30">
-                <div class="w-50">
-                    <div class="heading">INTEREST</div>
-                    <ul class="list list-2">
-                        {% for interest in extracurricular %}
-                            <li>
-                                <span class="dot"></span>
-                                {{ interest }}
-                            </li>
-                        {% endfor %}
+        {% endif %}
 
-                    </ul>
-                </div>
+        <div class="d-flex justify-content-between mb-30">
+            <div class="w-50">
+                <div class="heading">INTEREST</div>
+                <ul class="list list-2">
+                    {% for interest in extracurricular %}
+                        <li>
+                            <span class="dot"></span>
+                            {{ interest }}
+                        </li>
+                    {% endfor %}
 
+                </ul>
+            </div>
+            {% if achievements %}
                 <div class="w-50">
-                    <div class="heading">CERTIFICATE</div>
+                    <div class="heading">{{ preference_list.6.entity_text }}</div>
                     <ul class="list">
                         <li>
                             <span class="dot"></span>
@@ -227,11 +240,14 @@
                         </li>
                     </ul>
                 </div>
-            </div><!-- D-flex -->
+                </div><!-- D-flex -->
+            {% endif %}
 
-            <div class="d-flex justify-content-between mb-30">
+
+        <div class="d-flex justify-content-between mb-30">
+            {% if references %}
                 <div class="w-50">
-                    <div class="heading">REFERENCE</div>
+                    <div class="heading">{{ preference_list.9.entity_text }}</div>
                     <ul class="list">
                         <li>
                             <span class="dot"></span>
@@ -246,8 +262,10 @@
                     </ul>
                 </div>
 
+            {% endif %}
+            {% if languages %}
                 <div class="w-50">
-                    <div class="heading">LANGUAGES</div>
+                    <div class="heading">{{ preference_list.8.entity_text }}</div>
                     <ul class="list list-2">
                         {% for language in languages %}
                             <li>
@@ -258,7 +276,8 @@
 
                     </ul>
                 </div>
-            </div><!-- D-flex -->
+            {% endif %}
+        </div><!-- D-flex -->
         </div>
     </div>
 
