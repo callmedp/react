@@ -1,8 +1,9 @@
 import {FETCH_TEMPLATE} from './actionTypes'
 
 
-export const fetchTemplate = () => {
+export const fetchTemplate = (payload) => {
     return {
-        type: FETCH_TEMPLATE
+        type: FETCH_TEMPLATE,
+        payload
     }
 }

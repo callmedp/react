@@ -36,10 +36,6 @@ class Edit extends Component {
         })
     }
 
-    componentDidMount() {
-        this.props.fetchEntityInfo()
-    }
-
     addIntoVisibleList(addedElem) {
         const updatedList = (this.state.preferenceList || []).map(elem => {
             if (elem['entity_id'] === addedElem['entity_id']) {
@@ -147,10 +143,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-
-        "fetchEntityInfo": () => {
-            return dispatch(actions.fetchPersonalInfo())
-        },
         'updateCategoryEntity': (entity) => {
             return dispatch(actions.updateEntityPreference({"entity_preference_data": entity}))
         }

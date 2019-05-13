@@ -16,6 +16,11 @@ import moment from 'moment'
 
 class EditPreview extends Component {
 
+
+    componentDidMount() {
+        this.props.fetchEntityInfo()
+    }
+    
     render() {
         const {ui: {loader}, userInfo: {first_name}} = this.props;
         return (
@@ -54,6 +59,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        "fetchEntityInfo": () => {
+            return dispatch(profileActions.fetchPersonalInfo())
+        },
         "showSelectTemplateModal": () => {
             return dispatch(actions.showSelectTemplateModal())
         },

@@ -52,7 +52,7 @@ function* getPersonalDetails(action) {
             return;
         }
 
-        // yield put({type: UPDATE_UI, data: {loader: true}});
+        yield put({type: UPDATE_UI, data: {loader: true}});
 
 
         const result = yield call(Api.fetchPersonalInfo, candidateId);
