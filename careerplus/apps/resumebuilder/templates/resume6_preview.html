@@ -1,245 +1,203 @@
-{% load static compress %}
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    {% block css_section %}
-        <link type="text/css" href="{% static 'shinelearn/css/resume-builder/resume6.css' %}" rel="stylesheet">
-    {% endblock css_section %}
-
+    <title>Resume</title>
 </head>
-<body>
-<div class="resume">
-    <div class="resume-content">
-        <div class="top-panel">
-            <div class="resume-container">
-
-                <div class="left-panel">
-                  <span class="resume-image">
-                    <img src="./images/resume-pic.jpg" alt="">
-                  </span>
-                    <h1>{{ candidate.first_name }} {{ candidate.last_name }}</h1>
-                    <h2>{{ latest_exp }}</h2>
-
-                    <p>{{ candidate.extra_info }}</p>
-                </div><!-- left panel -->
-
-                <div class="right-panel">
-                    <ul class="resume-list">
-                        <li>
-                            <span class="icon"><img src="images/mobile-icon.png" alt=""></span>
-                            <span>+91 {{ candidate.number }}</span>
-                        </li>
-                        <li>
-                            <span class="icon"><img src="images/email-icon.png" alt=""></span>
-                            <span>{{ candidate.email }}</span>
-                        </li>
-                        <li>
-                            <span class="icon"><img src="images/location-icon.png" alt=""></span>
-                            <span>{{ candidate.location }}</span>
-                        </li>
-                        {#                        <li>#}
-                        {#                            <span class="icon"><img src="images/linkedin-icon.png" alt=""></span>#}
-                        {#                            <span>linkedin.com/candidatename</span>#}
-                        {#                        </li>#}
-                        {#                        <li>#}
-                        {#                            <span class="icon"><img src="images/facebook-icon.png" alt=""></span>#}
-                        {#                            <span>Facebook.com/candidatename</span>#}
-                        {#                        </li>#}
-                    </ul>
-                </div><!-- right panel -->
-            </div>
-        </div><!-- /. Top panel -->
-        {% if experience %}
-            <div class="resume-container">
-            <div class="experience mb-30">
-                <div class="heading">{{ preference_list.2.entity_text }}</div>
-                <ul class="list">
-                    {% for exp in experience %}
-                        <li>
-                            <span class="dot"></span>
-                            <div class="experience-content">
-                                <h3>{{ exp.job_profile }}</h3>
-                                <p>{{ exp.company_name }}</p>
-                                <p>{{ exp.work_description }}</p>
-                            </div>
-                            <span class="experience-status">({{ exp.start_date|date:"M Y" }} - Current)</span>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div><!-- experience-->
-        {% endif %}
-
-        {% if skills %}
-            <div class="d-flex justify-content-between mb-30">
-                <div class="skills w-50">
-                    <div class="heading">{{ preference_list.4.entity_text }}</div>
-
-                    <div class="skill-wrap">
-                        <div class="skill-graph">
-                            <!--5 skills-->
-                            <div style="padding: 0; display: table; margin: 20% 0 5% 30%; height: 200px;">
-                                <div style="position: relative;">
-                                    <div style="position: absolute; left: 0; right: 0; display: table-cell; margin: 10px auto; width: 130px; height: 130px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient({{ '14.4' }}deg, #d8d8d8 50%, transparent 50.1%, transparent),linear-gradient(270deg, #d8d8d8 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                              <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 100px; height: 100px; margin-left: -38%; margin-top: -38%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                                <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Data Engineering</span>
-                              </span>
-                                    </div>
-                                    <div style="position: absolute; top: -80px; left: 25px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #ef8080 50%, transparent 50.1%, transparent),linear-gradient(270deg, #ef8080 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                              <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                                <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Dev OPS</span>
-                              </span>
-                                    </div>
-                                    <div style="position: absolute; top: 25px; right: -210px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #a7c4f4 50%, transparent 50.1%, transparent),linear-gradient(270deg, #a7c4f4 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                              <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                                <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Full stack developer</span>
-                              </span>
-                                    </div>
-                                    <div style="position: absolute; bottom: -230px; left: 25px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient({{ '90' }}deg, #e2bd58 50%, transparent 50.1%, transparent),linear-gradient(270deg, #e2bd58 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                              <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                                <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">Machine</span>
-                              </span>
-                                    </div>
-                                    <div style="position: absolute; top: 25px; left: -80px; display: table-cell; margin: 10px auto; width: 85px; height: 85px; border-radius: 50%; background-color: #ebebeb; background-image: linear-gradient(14.4deg, #abc881 50%, transparent 50.1%, transparent),linear-gradient(270deg, #abc881 50%, #ebebeb 50.1%, #ebebeb); text-align: center;">
-                              <span style=" position: absolute; left: 50%; top: 50%; display: block; width: 65px; height: 65px; margin-left: -38%; margin-top: -39%; text-align: center; border-radius: 50%; background: #f4f4f4; z-index: 1; vertical-align: middle;">
-                                <span style="display: block; margin: 36% 1px 0 1px; color: #333333; font-size: 13px; line-height: 13px;">OOP</span>
-                              </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div><!-- Skills -->
-
-                <div class="skills w-50">
-                    <div class="heading">{{ preference_list.3.entity_text }}</div>
-
-                    <ul class="list">
-                        {% for project in projects %}
-                            <li>
-                                <span class="dot"></span>
-                                <div class="experience-content w-100">
-                                    <h3>{{ project.project_name }}</h3>
-                                    <p>{{ project.description }}</p>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div><!-- Skills -->
-            </div><!-- D-flex -->
-        {% endif %}
-
-        {% if certifications %}
-            <div class="d-flex justify-content-between mb-30">
-            <div class="w-50">
-                <div class="heading">{{ preference_list.7.entity_text }}</div>
-
-                <ul class="list list-2">
-                    {% for course in certifications %}
-                        <li>
-                            <span class="dot"></span>
-                            {{ course.name_of_certification }}
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif';">
+<div style="max-width: 1536px; width: 100%; font-family: 'Segoe UI', 'Helvetica Neue', 'Roboto', Arial, 'sans-serif'; font-size: 14px; color: #777777;">
 
 
-        {% if education %}
-            <div class="w-50">
-                <div class="heading">{{ preference_list.1.entity_text }}</div>
-                <ul class="list">
-                    {% for edu in education %}
-                        <li>
-                            <span class="dot"></span>
-                            <div class="education-content">
-                                <h3>{{ edu.specialization }} - 80%</h3>
-                                <p> {{ edu.institution_name }}</p>
-                            </div>
+    <div style="width: 100%; background: #d34d4d; padding: 3%;">
 
-                            <div class="education-year">({{ edu.start_date|date:"Y" }} - {{ edu.end_date|date:"Y" }})
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            </div><!-- D-flex -->
-
-        {% endif %}
-
-        <div class="d-flex justify-content-between mb-30">
-            <div class="w-50">
-                <div class="heading">INTEREST</div>
-                <ul class="list list-2">
-                    {% for interest in extracurricular %}
-                        <li>
-                            <span class="dot"></span>
-                            {{ interest }}
-                        </li>
-                    {% endfor %}
-
-                </ul>
-            </div>
-            {% if achievements %}
-                <div class="w-50">
-                    <div class="heading">{{ preference_list.6.entity_text }}</div>
-                    <ul class="list">
-                        {% for award in achievements %}
-                            <li>
-                                <span class="dot"></span>
-                                <div class="education-content w-100">
-                                    {{ award.summary }}
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                </div><!-- D-flex -->
-            {% endif %}
-
-
-        <div class="d-flex justify-content-between mb-30">
-            {% if references %}
-                <div class="w-50">
-                    <div class="heading">{{ preference_list.9.entity_text }}</div>
-                    <ul class="list">
-                        {% for ref in references %}
-                            <li>
-                                <span class="dot"></span>
-                                <div class="flex-row">
-                                    <h3 class="heading2">{{ ref.reference_name }}<span>({{ ref.reference_designation }})</span>
-                                    </h3>
-                                    <p>{{ ref.about_candidate }}</p>
-                                </div>
-
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
-            {% endif %}
-            {% if languages %}
-                <div class="w-50">
-                    <div class="heading">{{ preference_list.8.entity_text }}</div>
-                    <ul class="list list-2">
-                        {% for language in languages %}
-                            <li>
-                                <span class="dot"></span>
-                                {{ language.name }}
-                            </li>
-                        {% endfor %}
-
-                    </ul>
-                </div>
-            {% endif %}
-        </div><!-- D-flex -->
+        <!--top left-->
+        <div style="width: 46%; margin-right: 2%; display: inline-block; vertical-align: top;">
+            <h1 style="margin: 0; color: #ffffff; font-size: 32px;">{{ candidate.first_name }} {{ candidate.last_name }}</h1>
+            <strong style="display: block; font-size: 16px; color: #ffd7d7; font-weight: normal; margin-bottom: 20px;">{{ latest_exp }}</strong>
+            <p style="color: #ffffff">{{ candidate.extra_info }}</p>
+            <p style="color: #ffffff">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                incididunt ut labore et dolore magna aliqua.</p>
         </div>
+
+        <!--top right-->
+        <div style="width: 48%; display: inline-block; vertical-align: top; padding-left: 3%; border-left: 1px solid #de8080;">
+            <ul style="margin: 20px 0 0 0; padding: 0; font-size: 14px; color: #ffffff; list-style-type: none;">
+                <li style="display: table; margin-bottom: 15px;"><span
+                        style="display: table-cell; padding-right: 10px;"><img
+                        src="{% static 'resumebuilder/images/resume1/mobile-icon.png' %}" alt="Mobile"
+                        style="vertical-align: middle;"></span>+91 {{ candidate.number }}
+                </li>
+                <li style="display: table; margin-bottom: 15px;"><span
+                        style="display: table-cell; padding-right: 10px;"><img
+                        src="{% static 'resumebuilder/images/resume1/email-icon.png' %}" alt="Email"
+                        style="vertical-align: middle;"></span>{{ candidate.email }}
+                </li>
+                <li style="display: table; margin-bottom: 15px;"><span
+                        style="display: table-cell; padding-right: 10px;"><img
+                        src="{% static 'resumebuilder/images/resume1/location-icon.png' %}" alt="Location"
+                        style="vertical-align: middle;"></span>{{ candidate.location }}
+                </li>
+                <li style="display: table; margin-bottom: 15px;"><span
+                        style="display: table-cell; padding-right: 10px;"><img
+                        src="{% static 'resumebuilder/images/resume1/linkedin-icon.png' %}" alt="Linkedin"
+                        style="vertical-align: text-top;"></span>linkedin.com/candidatename
+                </li>
+                <li style="display: table; margin-bottom: 15px;"><span
+                        style="display: table-cell; padding-right: 10px;"><img
+                        src="{% static 'resumebuilder/images/resume1/facebook-icon.png' %}" alt="Facebook"
+                        style="vertical-align: middle;"></span>Facebook.com/candidatename
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div style="width: 100%; border-bottom: 13px solid #d34d4d; padding: 3% 3% 0 3%;">
+
+        <!--Experience-->
+        <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">
+            <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Experience</strong>
+            <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
+                {% for exp in experience %}
+                    <li style="vertical-align: top; margin: 10px 0;">
+                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                        <span style="display: inline-block; width: 75%; vertical-align: top;">
+                    <strong style="display: block; font-size: 16px; color: #333333;">{{ exp.job_profile }}</strong>
+                    {{ exp.company_name }}
+                    <p style="font-size: 14px; color: #777777; margin-top: 5px;">{{ exp.work_description }}</p>
+                  </span>
+                        <span style="font-style: italic; color: #333333; width: 20%; display: inline-block; vertical-align: top;">({{ exp.start_date | date:"M Y" }} - Current)</span>
+                    </li>
+                {% endfor %}
+            
+            </ul>
+        </div>
+
+        <!--Skills-->
+        <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 40px;">
+            <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Skills</strong>
+            {% if skills|length > 4 %}
+                <div style="width: 35%; margin-right: 5%; display: inline-block; font-size: 13px; color: #333333; text-align: center;">
+                <span style="position: relative; display: table; margin: 25% 0 0 30%;">
+                  <span style="width: 155px; height: 155px; border-radius: 100%; background: #d8d8d8; vertical-align: middle; text-align: center; display: table-cell; line-height: 15px;">{{ skills.0 }}</span>
+                  <span style="width: 86px; height: 86px; border-radius: 100%; background: #ef8080; vertical-align: middle; text-align: center; display: table-cell; position: absolute; top: -45px; left: 35px;">
+                    <b style="vertical-align: middle; display: inline-block; margin-top: 35%; line-height: 15px;">{{ skills.1 }}</b>
+                  </span>
+                  <span style="width: 86px; height: 86px; border-radius: 100%; background: #a7c4f4; vertical-align: middle; text-align: center; display: table-cell; position: absolute; top: 40px; right: -70px;">
+                    <b style="vertical-align: middle; display: inline-block; margin-top: 35%; line-height: 15px;">{{ skills.2 }}</b>
+                  </span>
+                  <span style="width: 86px; height: 86px; border-radius: 100%; background: #e2bd58; vertical-align: middle; text-align: center; display: table-cell; position: absolute; bottom: -45px; left: 35px;">
+                    <b style="vertical-align: middle; display: inline-block; margin-top: 35%; line-height: 15px;">{{ skills.3 }}</b>
+                  </span>
+                  <span style="width: 86px; height: 86px; border-radius: 100%; background: #abc881; vertical-align: middle; text-align: center; display: table-cell; position: absolute; top: 40px; left: -70px;">
+                    <b style="vertical-align: middle; display: inline-block; margin-top: 35%; line-height: 15px;">{{ skills.4 }}</b>
+                  </span>
+                </span>
+                </div>
+            {% endif %}
+
+            <div style="width: 59%; display: inline-block; position: relative; vertical-align: top;">
+                {% for skill in skills|slice:"5:" %}
+                    <div style="width: 80%; display: inline-block; margin: 30px 0 0 5%;">
+                        <strong style="font-size: 14px; display: block; color: #333333; margin-bottom: 5px;">{{ skill.name }}</strong>
+                        <div style="background: #e0e0e0; height: 8px; border-radius: 5px; overflow: hidden; width: 88%; position: relative; font-size: 12px; color: #333333;">
+                            <div role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"
+                                 style="width: 40%; background-color: #333333; line-height: 8px; height: 8px;">
+                                <span style="position: absolute; right: 0; width: 1px; height: 1px; overflow: hidden;"></span>
+                            </div>
+                        </div>
+                        <span style="float: right; display: inline-block; margin: -15px 4% 0 0; font-size: 12px;"><b
+                                style="font-size: 16px; color: #333333;">{{ skill.proficiency }}/</b>10</span>
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <!--Courses done-->
+        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-right: 2%;">
+            <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Courses
+                done</strong>
+            <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
+                {% for certi in certifications %}
+                    <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
+                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                        <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">{{ certi.name_of_certification }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!--Education-->
+        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-left: 2%;">
+            <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Education</strong>
+            <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
+                {% for edu in education %}
+                    <li style="vertical-align: top; margin: 10px 0;">
+                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                        <span style="display: inline-block; width: 57%; vertical-align: top; color: #999999;">
+                <strong style="display: block; font-size: 16px; color: #333333;">{{ edu.specialization }}</strong>
+                        {{ edu.institution_name }}
+                        </span>
+                        <span style="font-size: 14px; font-style: italic; color: #333333; width: 35%; display: inline-block; vertical-align: top;">{{ edu.start_date|date:"Y" }} - {{ edu.end_date |date:"Y" }}</span>
+                    </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+
+        <!--Project-->
+        <div style="vertical-align: top; font-size: 13px; color: #999999; margin-bottom: 30px;">
+            <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Project</strong>
+            {% for proj in projects %}
+                <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none; width: 47.5%; margin-right: 2%; display: inline-block;">
+                    <li style="vertical-align: top; margin: 10px 0;">
+                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                        <span style="display: inline-block; width: 93%; vertical-align: top; color: #999999; font-size: 14px;">
+                <strong style="display: block; font-size: 16px; color: #333333; margin-bottom: 10px;">{{ proj.project_name }}</strong>
+            {{ proj.description }}
+              </span>
+                    </li>
+                </ul>
+            {% endfor %}
+        </div>
+
+        <!--Interest-->
+        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-right: 2%;">
+            <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Interest</strong>
+            <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
+
+
+                {% for interest in extracurricular %}
+                    <li style="vertical-align: top; margin: 5px 0; width: 49.3%; display: inline-block;">
+                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                        <span style="font-size: 14px; color: #333333; display: inline-block; vertical-align: top; width: 86%;">{{ interest }}</span>
+                    </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+
+        <!--Achievements/Awards-->
+        <div style="vertical-align: top; font-size: 13px; color: #333333; margin-bottom: 30px; display: inline-block; width: 47.5%; margin-left: 2%;">
+            <strong style="background: #333333; padding: 10px; display: block; text-transform: uppercase; color: #ffffff; font-weight: normal; font-size: 16px;">Achievements/Awards</strong>
+            <ul style="padding: 10px 0 0 0; margin: 0; list-style-type: none;">
+                {% for achievement in achievements %}
+                    <li style="vertical-align: top; margin: 5px 0 10px 0; display: block;">
+                        <span style="width: 9px; height: 9px; border-radius: 100%; background: #d34d4d; display: inline-block; margin-right: 10px; vertical-align: baseline;"></span>
+                        <span style="font-size: 14px; color: #555555; display: inline-block; vertical-align: top; width: 93%;">{{ achievement.summary }}</span>
+                    </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+
     </div>
 
 </div>
-
-
 </body>
 </html>

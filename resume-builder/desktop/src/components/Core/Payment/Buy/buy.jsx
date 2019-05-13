@@ -5,12 +5,15 @@ import TopBar from '../../Editor/TopBar/topBar.jsx'
 import Header from '../../../Common/Header/header.jsx'
 import Footer from '../../../Common/Footer/footer.jsx'
 import * as action from '../../../../store/buy/actions'
-import {showModal, hideModal} from "../../../../store/ui/actions"
+import {showModal, hideModal,showSelectTemplateModal,hideSelectTemplateModal} from "../../../../store/ui/actions"
 import {connect} from "react-redux";
 import {siteDomain} from "../../../../Utils/domains";
 import TemplateModal from '../../../Modal/tempateModal'
 import Slider from "react-slick";
-import {fetchPersonalInfo} from '../../../../store/personalInfo/actions/index'
+import moment from "moment"
+import {fetchPersonalInfo,updatePersonalInfo} from '../../../../store/personalInfo/actions/index'
+import SelectTemplateModal from '../../../Modal/selectTemplateModal';
+import LoaderPage from '../../../Loader/loaderPage';
 
 
 function SampleNextArrow(props) {
@@ -100,7 +103,7 @@ export class Buy extends Component {
             slidesToScroll: 3,
             variableWidth: true
         };
-        const {userInfo: {first_name}} = this.props;
+        const {userInfo: {first_name,selected_template},ui: {loader}} = this.props;
         const {userInfo} = this.props;
         const {checked} = this.state;
         return (
@@ -110,6 +113,11 @@ export class Buy extends Component {
             <div>
                 <Header userName={first_name}/>
                 <TemplateModal {...this.props} />
+                <SelectTemplateModal {...this.props}/>
+                {
+                    !!(loader) &&
+                     <LoaderPage/>
+                }
                 <div className="page-container">
                     <TopBar page={'buy'} userInfo={userInfo}/>
                     <section className={'flex-container mt-30'}>
@@ -117,7 +125,7 @@ export class Buy extends Component {
                         <section className="left-sidebar half-width pos-rel">
                             <span onClick={this.showEnlargedTemplate} className="zoom"/>
                             <div className="right-sidebar-scroll-main">
-                                <img src={`${this.staticUrl}react/assets/images/resume1_preview.jpg`}
+                                <img src={`${this.staticUrl}react/assets/images/resume${selected_template}_preview.jpg`}
                                      className="img-responsive" alt=""/>
                             </div>
 
@@ -129,15 +137,15 @@ export class Buy extends Component {
                                 <ul>
                                     <li>
                                         <div className="flex-container">
-            <span className="choose-plann--child">
-            <input type="radio" name="product1"
-                   checked={this.state.checked === 'product1' ? true : false}
-                   onChange={this.handleOnChange.bind(this, 'product1')}/>
-            </span>
-                                            <span className="choose-plan--price">
-            <p>Buy your customised resume</p>
-            Rs. <strong>999/-</strong>
-            </span>
+                                            <span className="choose-plann--child">
+                                            <input type="radio" name="product1"
+                                                checked={this.state.checked === 'product1' ? true : false}
+                                                onChange={this.handleOnChange.bind(this, 'product1')}/>
+                                            </span>
+                                                                            <span className="choose-plan--price">
+                                            <p>Buy your customised resume</p>
+                                            Rs. <strong>999/-</strong>
+                                            </span>
                                         </div>
                                     </li>
                                     <li className="bdr pos-rel">
@@ -159,8 +167,8 @@ export class Buy extends Component {
                                         <Slider {...settings}>
 
                                             {
-                                                [1, 2, 3, 4, 5, 6].map(el => (
-                                                    <div className="carousel-box--slide__content">
+                                                [1, 2, 3, 4, 5, 6].map((el,key) => (
+                                                    <div className="carousel-box--slide__content" key={key}>
                                                         <div className="triangle-topright">
                                                             <span></span>
                                                         </div>
@@ -190,7 +198,7 @@ export class Buy extends Component {
                     </section>
 
                     <div className="bottom-links">
-                        <a href="#">Change template</a> | <Link to={'/resume-builder/edit'}>Edit template</Link>
+                        <a onClick={()=>{this.props.showSelectTemplateModal()}}>Change template</a> | <Link to={'/resume-builder/edit'}>Edit template</Link>
                     </div>
                 </div>
                 <Footer/>
@@ -227,7 +235,28 @@ const mapDispatchToProps = (dispatch) => {
         },
         'hideModal': () => {
             return dispatch(hideModal())
-        }
+        },
+        'showSelectTemplateModal': () => {
+            return dispatch(showSelectTemplateModal())
+        },
+        'hideSelectTemplateModal': () => {
+            return dispatch(hideSelectTemplateModal())
+        },
+        "updateSelectedTemplate": (personalDetails) => {
+            const {gender, date_of_birth, extracurricular} = personalDetails;
+            personalDetails = {
+                ...personalDetails,
+                ...{
+                    'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
+                    'gender': (gender && gender['value']) || '',
+                    'extracurricular': extracurricular instanceof Array ?
+                        (extracurricular || []).map(el => el.value).join(',') : extracurricular
+                }
+            }
+            return new Promise((resolve, reject) => {
+                dispatch(updatePersonalInfo({personalDetails, resolve, reject}));
+            })
+        },
     }
 };
 

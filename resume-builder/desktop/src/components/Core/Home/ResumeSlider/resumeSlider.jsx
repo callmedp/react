@@ -10,7 +10,7 @@ export default class ResumeSlider extends Component {
     }
 
     selectTemplate(){
-        localStorage.setItem('selected_template',(parseInt(document.getElementsByClassName('slick-current')[0].getAttribute('data-index')) + 1))
+        localStorage.setItem('selected_template',(parseInt(document.getElementsByClassName('slick-current slick-center')[0].getAttribute('data-index')) + 1))
         const select_template_modal = this.props.ui ? this.props.ui.select_template_modal : false
         if (select_template_modal){
             this.props.hideSelectTemplateModal();
