@@ -1,0 +1,84 @@
+.test-wrap {
+	background-color: $bg-white;
+	box-shadow: 0 0 15px rgba(0,0,0, .1);
+	padding: 10px;
+	width: 100%;
+
+	display: flex;
+
+	&__item {
+        display: flex;
+        align-items: center;
+
+        flex: 0 0 50%;
+
+        span {
+            flex: 0 0 29px;
+        }
+		
+
+		&:not(:last-child) {
+			border-right: 1px solid #ddd;
+			margin-right: 15px;
+			padding-right: 15px;
+		}
+
+		&--content {
+			margin-left: 10px;
+
+			strong {
+				font-size: 18px;
+			}
+
+			p {
+				color: #333;
+				font-size: 12px;
+			}
+		}
+	}
+}
+
+
+.what-get {
+	li {
+		list-style: none;
+        
+		display: flex;
+        align-items: flex-start;
+
+        p {
+            padding-bottom: 0;
+        }
+        
+        &:not(:last-child) {
+            margin-bottom: 25px;
+        }
+
+		span {
+			@include square(40px);
+            flex: 0 0 40px;
+            margin-right: 10px;
+		}
+	}
+}
+
+
+.list-tick-item {
+	padding: 0;	
+
+	li {
+		list-style: none;
+		padding: 5px 0px;
+
+		&::before {
+			content: '';
+			width: 14px;
+			height: 10px;
+			background-image: url($image-path);
+			background-position: -37px -96px;
+			display: inline-block;
+			margin-right: 5px;
+
+		}
+	}
+}

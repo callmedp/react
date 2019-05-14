@@ -1,0 +1,548 @@
+{% extends "mobile/basic/base.html" %}
+{% load static compress %}
+{% load humanize search_tags compress %}
+{% block css_section %}
+{{ block.super }}
+    {% compress css %}
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/checkbox.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/shop/course-detail.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/smk-accordion.scss' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
+    {% endcompress css %}
+     <style>
+        .breadcrumb > li a{
+            color: #ffff;
+                    }
+            a[disabled], a[disabled]:hover {
+               pointer-events: none;
+               color: #e1e1e1;
+            }
+            /*div[data-test-id="ChatWidgetMobileButton"]{
+                display: none !important;
+            }*/
+            .review-close {
+	border: 0 none;
+	border-radius: 50%;
+	background-color: #fff;
+	position: absolute;
+    right: 6px;
+    top: 0px;
+	color: #000;
+	font-size: 12px;
+    width: 25px;
+    height: 25px;
+    display: block;
+    z-index: 9;
+    box-shadow: 0 0 10px rgba(0,0,0, .3);
+}
+
+
+
+        </style>
+{% endblock css_section %}
+{% block title %}
+  {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
+{% endblock title %}
+{% block canonical_url %}
+  <link rel="canonical" href="//{{ SITE_DOMAIN }}{{canonical_url}}">
+{% endblock canonical_url %}
+
+        {% block django_meta %}
+            {% include 'meta/meta.html' %}
+        {% endblock django_meta %}
+
+
+{% block header %}
+    <header class="w100fl he-auto">
+        <img src="{% static 'shinelearn/images/mobile/shop/header-img-3.png' %}">
+        <!-- header menu Icon Starts here -->
+
+        {% if not navigation %}
+            <div class="main-menu w100fl">
+                <div class="pull-left">
+                    <!--a id="sidebar-main-trigger" class="icon-bar pull-left" role="button"></a-->
+                </div>
+
+                <div class="pull-right">
+
+                   <!--a class="icon-search pull-left" href="search-listing.html">search</a-->
+
+                   <!--a class="icon-cart" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a-->
+                </div><!-- / Right side Icon ends here -->
+            </div><!-- header menu Icon ends here -->
+        {% else %}
+            <div class="main-menu w100fl">
+                <div class="pull-left">
+                    <a id="sidebar-main-trigger" class="icon-bar pull-left" role="button"></a>
+                </div>
+                <div class="pull-right" style="width:90%;">
+
+                   <a class="icon-cart pull-right" href="{% url "cart:cart-product-list" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                   <form method='get' id="search-form">
+                    <div class="searchbox">
+                        <input id='id_q' type="text" placeholder="Search here" name="search" class="searchbox-input" autocomplete="off">
+                        <span class="searchbox-icon"></span>
+                    </div>
+                    </form>
+                </div><!-- / Right side Icon ends here -->
+            </div><!-- header menu Icon ends here -->
+        {% endif %}
+
+
+        <h1 class="heading-back w100fl pb-0">{{prd_H1}}</h1>
+         {% block breadcrumbs %}
+                  {% if sqs.id in linkedin_resume_services %}
+                    <ol class="breadcrumb mt-30 z-auto" itemscope itemtype="http://schema.org/BreadcrumbList">
+                        <li class="active"></li>
+                    </ol>
+                  {% else %}
+                    {% include "shop/partials/breadcrumb.html" %}
+                  {% endif %}
+              {% endblock breadcrumbs %}
+        <div class="clearfix"></div>
+        {% include "shop/partials/packagediv.html" %}
+    </header><!-- header ends here -->
+{% endblock header %}
+
+{% block container %}
+    <div class="body-wrapper">
+        <section class="content-box">
+            <div class="mb-10 c6">
+                {% if prd_num_rating %}
+                <div class="rating inline-block ml-0 fs-12">
+                  <sup class="fill-star"></sup>
+                  {{prd_rating}}/5
+                </div><!-- end of star rating -->
+                {% endif %}
+                <ul class="inline-block fs-12 jobs-icon-wrap">
+                    <li>
+                        <figure class="icon-comments"></figure>
+                        {% if prd_num_rating %}
+                        <a href="javascript:void(0);">{{prd_num_rating}}
+                        {%if prd_num_rating == 1 %}
+                            review
+                            {%else%}
+                            reviews
+                            {% endif %}
+                        </a>
+                        {% else %}
+                        <span class="fs-11">Be the first to review</span>
+                        {% endif %}
+                    </li>
+                    {% if prd_num_jobs %}
+                        <li>
+                            <figure class="icon-bag"></figure>
+                            <strong>{{prd_num_jobs}} Jobs</strong>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <figure class="icon-jobs"></figure>
+                        <strong>
+                            {{prd_num_bought}}
+                        </strong> bought
+                    </li>
+                    {% if prd_cert %}
+                        <li>
+                            <figure class="icon-certificate"></figure>
+                        </li>
+                    {% endif  %}
+                </ul>
+            </div><!-- end of icons wrapper -->
+
+        <hr class="row">
+        <article class="mt-20">
+        {% if prd_about %}
+            <h2>Overview</h2>
+            <p>Multi choice test that measures the knowledge on the concepts of need SEO, SEO planning, SEO strategies, SEO software, tools, exchanging links etc.</p>
+
+            <p class="pb-0"><strong>About Aspiring MInd</strong></p>
+            <p>Aspiring Minds ia a leader in scientific, automated, AI-powered pre-employment assessments and video interview analytics including technology coding test,call...<a href="#">know more</a></p>
+            <style>
+                .morecontent span {
+                      display: none;
+                  }
+                  .morelink {
+                      display: block;
+                  }
+            </style>
+            <!-- <p class="more">
+                {{prd_about|safe}}
+            </p> -->
+
+            <div class="test-wrap mt-20 mb-15">
+                <div class="test-wrap__item">
+                    <span class="icon-question"></span>
+                    <div class="test-wrap__item--content">
+                    <strong>120</strong>
+                    <p class="pb-0">No. of questions</p>
+                    </div>
+                </div>
+
+                <div class="test-wrap__item">
+                    <span class="icon-time"></span>
+                    <div class="test-wrap__item--content">
+                        <strong>60 min</strong>
+                        <p class="pb-0">Test duration</p>
+                    </div>
+                </div>
+            </div>
+            
+        {% endif %}
+
+            {% include "mobile/shop/partials/prd_cart.html" %}
+            {% include "mobile/shop/partials/product_child.html" %}
+            {% include "mobile/shop/partials/frequentlybought.html" %}
+            <!-- Select products container Satrts here  -->
+            {% include "mobile/shop/partials/product_variations.html" %}
+
+            <!-- Select products container ends here -->
+            <div class="container mb-30 pt-0" style="margin-top:-15px;">
+
+                <div class="grey-bg border-bottom row pt-20 pb-20">
+                    <div class="content-box">
+                        <h2 class="fs-18">What you get if you pass?</h2>
+                        <ul class="what-get">
+                            <li>
+                                <span class="icon-industry"></span>
+                                <p>Get Industry recognized certification after clearing the test</p>
+                            </li>
+                            <li>
+                                <span class="icon-verified"></span>
+                                <p>Shine shows your skills as validated and certification as verified which build high trust among recruiters</p>
+                            </li>
+                            <li>
+                                <span class="icon-certificate"></span>
+                                <p>Certified candidates gets higher salary as compared to non certified candidate</p>
+                            </li>
+                            <li>
+                                <span class="icon-badge"></span>
+                                <p>Get badge on shine.com and showcase your knowledge to the recruiters </p>
+                            </li>
+                            <li>
+                                <span class="icon-receive"></span>
+                                <p>Receive valuable feedback on your strong and weak areas to improve yourself</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div><!-- /.What you get -->
+
+                <div class="content-box row pt-30 pb-30">
+                    <h2 class="fs-18">Topics covered</h2>
+                    <ul class="list-tick-item">
+                        <li>Keyword Density</li>
+                        <li>Meta tag</li>
+                        <li>Inbound- outbound links</li>
+                        <li>Keywok Searching</li>
+                        <li>Internal linking</li>
+                        <li>Keyword matching categories</li>
+                        <li>Page rank</li>
+                        <li>Link sharing</li>
+                        <li>SEO rules</li>
+                    </ul>
+                </div>
+
+
+                <div class="grey-bg border-bottom row pt-20 pb-20 border-top">
+                    <div class="content-box">
+                        {% include "mobile/shop/partials/delivery_flow.html" %}
+                    </div> 
+                </div>
+
+            </div><!-- end of container -->
+
+                <!-- Revew Slide widget -->
+                {% include "mobile/shop/partials/reviews.html" %}
+            </article>
+        </section><!-- end of section here -->
+    </div><!-- body wrapper ends here -->
+
+    {% if prd_service == 'course' and pop %}
+        <div class="sidebar" id="sidebar-secondary">
+            <div class="right-navbar pt-0">
+                <h2 class="mb-0">Other providers</h2>
+                <ul class="underline">
+                {% for provider in pop_list|slice:"0:4" %}
+                    <li>
+                        <a href="{{provider.url}}" for="test1">
+                            <span>
+                                <img src="{{provider.vendor.image.url}}" style="z-index: 10;">
+                                {{provider.vendor}} - {{provider.heading}} (Rs.{{provider.inr_price|floatformat:"0"}})
+                            </span>
+                        </a>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% elif product.type_flow == 5 %}
+        <!-- Other packages start here -->
+        <div class="sidebar" id="sidebar-secondary">
+          <div class="right-navbar packages pt-0">
+            <h2 class="mb-0">Other packages</h2>
+            <ul class="underline">
+            {% for package in pop_list|slice:"0:4"  %}
+                <li>
+                    <a href="{{package.url}}">
+                    {% if package.duration %}
+                        <strong>
+                            {{ package.duration }} days
+                        </strong>
+                    {% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+            </ul>
+          </div>
+        </div><!-- Other packages ends here -->
+    {% else %}
+    <!-- Other packages start here -->
+    <div class="sidebar" id="sidebar-secondary">
+      <div class="right-navbar packages pt-0">
+        <h2 class="mb-0">Other packages</h2>
+        <ul class="underline">
+        {% for package in pop_list|slice:"0:4"  %}
+            <li>
+                <a href="{{package.url}}{% if sqs.id in linkedin_resume_services %}?token={{request.GET.token}}{% endif %}" class="blue-link pb-0">
+                {% if package.experience %}
+                    <strong>
+                        {{package.experience|get_choice_display:"EXP_DICT"}}
+                    </strong>
+                {% endif %}
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+      </div>
+    </div><!-- Other packages ends here -->
+    {% endif %}
+
+    {% if prd_service == 'resume' and var_list %}
+        <!-- Select countries (optional) start here -->
+        <div class="sidebar" id="sidebar-countries">
+            <div class="right-navbar packages pt-0">
+                <ul class="underline">
+                {% for country in var_list %}
+                    <li id="element_checked">
+                        <input {% if country.id in selected_products %}checked{% endif %}
+                        value='{{country.id}}' name="required_option" type="checkbox"data-id="{{country.id}}" data-price="{{country.inr_price}}" actual-price="{% if country.fake_inr_price %} {{country.fake_inr_price}}{% else %}{{country.inr_price}}{% endif %}" id="{{country.label}} ">
+                        <label for="{{country.label}} ">
+                            <p class="pb-0" id="text_val">{{country.label}}</p>
+                        </label>
+                    </li>
+                {% endfor %}
+                </ul>
+                <div class="bottom-btn">
+                    <a href="#" class="btn-slg btn-blue btn-round w100fl text-center"
+                    id="done_click">
+                        DONE
+                    </a>
+                </div>
+            </div>
+        </div><!-- Select countries (optional) ends here -->
+    {% endif %}
+    <!-- leadform start here -->
+    <!-- call us and chat widget starts here -->
+    {% block call_us %}
+        {% include "shop/partials/call_us.html" %}
+    {% endblock call_us %}
+{% endblock container %}
+
+{% block js_section %}
+
+    {{block.super}}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/shop/detail.js' %}"></script>
+    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
+    {% endcompress %}
+
+<script type="text/javascript">
+
+
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+              ga('create', 'UA-3537905-41', 'auto', {'name': 'a'});
+              ga('a.send', 'pageview');
+              ga('create', 'UA-3537905-41', 'auto');
+              ga('send', 'pageview');
+
+function gaEvent(event_cat,event_lab,event_action){
+  ga('send', 'event', event_cat, event_action, event_lab);
+ }
+
+ function gaEventFunc(typeOfProduct,status){
+    var event_cat='Form Interactions';
+
+    var type = "" ;
+    if(typeOfProduct == "2"){
+        type= 'Course Enquiry';
+    }
+    else{
+        type= 'Service Enquiry';
+    }
+    gaEvent(event_cat,status,type);
+ }
+
+
+$.validator.addMethod("numbercheck", function (value, element) {
+    if( $('#id_country_code').val() == "91" && $('#id_cell_phone').val().length != 10){
+     $('#enquire_form').removeAttr("disabled");
+
+        return false;
+    }
+    else if($('#id_cell_phone').val().length >= 8 && $('#id_cell_phone').val().length <= 15){
+        return true
+    }
+}, 'please enter valid mobile number');
+
+
+
+$(function() {
+  // Initialize form validation on the registration form.
+  // It has the name attribute "registration"
+  $("form[name='enq']").validate({
+    // Specify validation rules
+    rules: {
+
+    number:{
+        numbercheck : true,
+    },
+      msg: {
+        maxlength:250,
+      }
+    },
+    // Specify validation error messages
+    messages: {
+      msg: {
+        maxlength: "Message should be within 250 characters",
+      },
+
+    },
+    // Make sure the form is submitted to the destination defined
+    // in the "action" attribute of the form when valid
+
+  });
+});
+
+
+
+$('#enquire_form').click(function(event) {
+    event.preventDefault();
+        $('#enquire_form').attr("disabled", true);
+    var $enquireform = $("#enquireform");
+        var typeOfProduct = document.getElementsByName("lsource")[0].value;
+
+    var flag = $enquireform.valid();
+    if (flag) {
+        var formData = $enquireform.serialize();
+        $.ajax({
+            url: "/lead/lead-management/",
+            type: "POST",
+            data: formData,
+            success: function(data, textStatus, jqXHR) {
+                gaEventFunc(typeOfProduct,'success');
+            pop('Your Query Submitted Successfully.');
+               $('#enquire_form').removeAttr("disabled");
+
+                $('#enquireform')[0].reset();
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                gaEventFunc(typeOfProduct,'failure');
+                  $('#enquire_form').removeAttr("disabled");
+
+
+                pop('Something went wrong. Try again later.');
+            }
+        });
+    }
+});
+
+
+function pop(param) {
+    // Get the snackbar DIV
+    var x = document.getElementById("snackbar");
+    x.innerHTML=param;
+
+    // Add the "show" class to DIV
+    x.className = "show";
+
+    // After 3 seconds, remove the show class from DIV
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3500);
+}
+
+
+
+    var display_info = " ";
+
+function toggle_review(text_to_display) {
+	display_info = text_to_display;
+	var review_display = $('#review').children('h2').text();
+	if (review_display == " ") {
+
+		$('#review').children('h2').text('Reviews');
+		$('#review').children('a').text(text_to_display);
+		$('#review').children('a').css({
+			'right': '15px',
+			'left': '',
+			'margin-top': '0px'
+		});
+		if ($('#write_review_container').is(":visible")) {
+			$('#review').children('a').before('<input type="button" class="review-close" id="close" onclick="close_review()" value="X"></input>');
+		}
+	} else {
+		$('#review').children('h2').text($('#review').children('a').text());
+		$('#review').children('a').before('<input type="button" id="close" class="review-close" onclick="close_review()" value="X"></input>');
+		$('#review').children('a').css({
+			'display': 'none'
+		});
+	}
+}
+
+function close_review() {
+	$('#close').remove();
+	$('#review').children('h2').text("Reviews");
+	$('#review').children('a').css({
+		'display': 'block'
+	});
+	$('#write_review_container').css({'display':'none'});
+	$('#write_review_container').css({
+		'height': ''
+	});
+}
+
+</script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){  
+            funcAreaSet = {{ func_area_set|safe }}
+            if(commonJs.getParameterByName('type') == 'autoEnrol'){
+               $('#enrol-now-button').trigger('click'); 
+            }
+            if(commonJs.getParameterByName('type') == 'autoCart'){
+               $('#add-to-cart').trigger('click');
+            } 
+            
+        });
+        
+    </script>
+
+
+
+
+{% endblock js_section %}
+
+
+{% if sqs.id in linkedin_resume_services %}
+  {% block zendesk %}
+    {{block.super}}
+  {% endblock zendesk %}
+{% endif %}
+
+

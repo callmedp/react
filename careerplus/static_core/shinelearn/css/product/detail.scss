@@ -1324,6 +1324,32 @@ header {
 					height: 34px;
 					margin: auto;
 				}
+				
+				.df-test {
+					position: absolute;
+					left: 0;
+					top: 0;
+					right: 0;
+					bottom: 0;
+					content: '';
+					background: $sprite -632px -428px;
+					width: 44px;
+					height: 33px;
+					margin: auto;
+				}
+
+				.df-get-report {
+					position: absolute;
+					left: 0;
+					top: 0;
+					right: 0;
+					bottom: 0;
+					content: '';
+					background: $sprite -686px -428px;
+					width: 30px;
+					height: 36px;
+					margin: auto;
+				}
 			}			
 
 			article {
@@ -1334,6 +1360,14 @@ header {
 
 		.wd8 {
 			width: 4%;
+		}
+	}
+}
+
+.assessment-flow {
+	ul {
+		li {
+			width: 20%;
 		}
 	}
 }
