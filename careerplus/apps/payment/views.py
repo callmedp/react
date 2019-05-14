@@ -257,22 +257,25 @@ class ThankYouView(TemplateView):
                     product__sub_type_flow=1602
                 )
                 for oi in assesment_items:
-                    candidate_location = self.request.session.get('candidate_location', 'N.A')
-                    if candidate_location != 'N.A':
-                        candidate_location = LOCATION_MAPPING.get(candidate_location, 'N.A')
-                    candidate_degree = self.request.session.get('highest_education', 'N>A')
-                    if candidate_degree != 'N.A':
-                        candidate_degree = DEGREE_MAPPING.get(candidate_location, 'N.A')
-                    data = {
-                        "candidate_email": oi.order.email,
-                        "skill_name": "English",
-                        "candidate_phone": oi.order.mobile,
-                        "candidate_name": oi.order.first_name,
-                        "candidate_city": candidate_location,
-                        "candidate_degree": candidate_degree,
-                        "shine_learning_order_id": oi.order.number
-                    }
-                    update_auto_login_url_for_assesment(oi, data)
+                    skill_id = oi.product.new_productskills.first().third_party_skill_id
+                    if not oi.autologin_url and skill_id:
+                        candidate_location = self.request.session.get('candidate_location', 'N.A')
+                        if candidate_location != 'N.A':
+                            candidate_location = LOCATION_MAPPING.get(candidate_location, 'N.A')
+                        candidate_degree = self.request.session.get('highest_education', 'N>A')
+                        if candidate_degree != 'N.A':
+                            candidate_degree = DEGREE_MAPPING.get(candidate_location, 'N.A')
+
+                        data = {
+                            "candidate_email": oi.order.email,
+                            "skill_id": str(skill_id),
+                            "candidate_phone": oi.order.mobile,
+                            "candidate_name": oi.order.first_name,
+                            "candidate_city": candidate_location,
+                            "candidate_degree": candidate_degree,
+                            "shine_learning_order_id": oi.order.number
+                        }
+                        update_auto_login_url_for_assesment(oi, data)
 
                 context.update({
                     "pending_resume_items": pending_resume_items,

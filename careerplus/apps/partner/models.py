@@ -23,7 +23,6 @@ from geolocation.models import (
 from order.choices import BOOSTER_RECRUITER_TYPE
 from .choices import SCORE_TYPE_CHOICES
 
-
 class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
     name = models.CharField(
         _('Name'), max_length=100,
@@ -251,3 +250,29 @@ class UserCertificateOperations(AbstractAutoDate):
     op_type = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
     last_op_type = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
 
+
+class ProductSkill(AbstractAutoDate):
+
+    skill = models.ForeignKey(
+        'shop.Skill',
+        verbose_name=_('Skill'),
+        related_name='new_productskills',
+        on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        'shop.Product',
+        verbose_name=_('Product'),
+        related_name='new_productskills',
+        on_delete=models.CASCADE)
+    third_party_skill_id = models.PositiveIntegerField(default=0)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        name = '{} - ({}) to {} - ({})'.format(
+            self.skill.name, self.skill_id,
+            self.product.get_name, self.product_id)
+        return name
+
+    class Meta:
+        unique_together = ('product', 'skill')
+        verbose_name = _('Product Skill')
+        verbose_name_plural = _('Product Skills')

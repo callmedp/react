@@ -70,10 +70,17 @@
             {% endif %}
 
             {% if assesment_items %}
-                {% if order.status == 1 %}
+                {% if order.status == 0 %}
                       {% for assesment in assesment_items%}
-                        Here is your test Link for the  assesment {{ assesment.autologin_url }}
+                        Click on button below to take test<br>
+                        <button><a href="{{ assesment.autologin_url }}"> Take Test</a></button>
+
                       {% endfor %}
+                    {% if assesment_items and not pending_resume_items and assesment_items.count == 1 %}
+                    <br>
+                    <br>
+                    <span id="redirect_text">You will be Redirected to Test in <span id="dec_time">5</span> seconds</span> <button id="do_not_redirect"> Do not Redirect</button>
+                     {% endif %}
                 {% else %}
                     Once your Payment has been made, please Go to  follwing link for test.
                 {% endif %}
@@ -144,9 +151,24 @@
     {% endcompress %}
     {% if assesment_items and not pending_resume_items and assesment_items.count == 1 %}
     <script>
-        setTimeout(function(){
-            window.location.href = "{{ assesment_items.0.autologin_url }}"
-        }, 5000)
+    var redirect = setTimeout(function(){
+        window.location.href = "{{ assesment_items.0.autologin_url }}"
+    }, 5000)
+    var dec_time = setInterval(function(){
+        tim = parseInt($("#dec_time").text())
+        tim = tim - 1
+        if(tim==0){
+            clearInteval(dec_time)
+        }
+        $("#dec_time").text(tim)
+    }, 1000)
+
+    $("#do_not_redirect").click(function(){
+        clearTimeout(redirect);
+        $(this).remove();
+        $("#redirect_text").remove()
+    })
+
     </script>
     {% endif %}
     <script>

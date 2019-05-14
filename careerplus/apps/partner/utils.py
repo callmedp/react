@@ -524,13 +524,15 @@ class CertiticateParser:
         for certificate in parsed_data.certificates:
             current_certificate_id = certificate.vendor_certificate_id
             for score in all_scores:
-                print(current_certificate_id, score['amcatID'])
                 if str(current_certificate_id) == str(score['amcatID']):
-                    setattr(certificate, 'overallScore', score.get('overallScore', 'N.A'))
+                    overallScore = score.get('overallScore', None)
+                    if overallScore != 'NA':
+                        setattr(certificate, 'overallScore', int(overallScore))
+                    else:
+                        setattr(certificate, 'overallScore', None)
                     break
                 else:
-                    print(current_certificate_id, score['amcatID'])
-                    setattr(certificate, 'overallScore', 'N.A')
+                    setattr(certificate, 'overallScore', None)
         return parsed_data
 
     def update_order_and_badge_user(self, parsed_data, vendor):

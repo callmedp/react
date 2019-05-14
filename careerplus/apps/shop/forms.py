@@ -430,6 +430,7 @@ class ChangeProductSEOForm(forms.ModelForm):
             for val in ['about', 'buy_shine', 'attend']:
                 self.fields.pop(val)
 
+
     class Meta:
         model = Product
         fields = ('title', 'meta_desc', 'meta_keywords', 'heading','image_alt',
@@ -459,7 +460,7 @@ class ChangeProductSEOForm(forms.ModelForm):
 
     def clean_description(self):
         desc = self.cleaned_data.get('description', '')
-        if desc:
+        if desc or self.instance.type_flow == 16:
             pass
         else:
             raise forms.ValidationError(
