@@ -56,6 +56,7 @@ from review.forms import ReviewForm
 from .models import Skill
 from homepage.config import UNIVERSITY_COURSE
 from crmapi.models import UNIVERSITY_LEAD_SOURCE
+from partner.models import ProductSkill
 
 redis_conn = get_redis_connection("search_lookup")
 
@@ -1211,3 +1212,15 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
 
             return HttpResponse(json.dumps(data), content_type="application/json")
         return HttpResponseForbidden()
+
+
+class SkillToProductRedirectView(View):
+
+    def get(self, request, *args, **kwargs):
+        skill_name = self.kwargs.get('skill_name', '')
+        pkskl = ProductSkill.objects.filter(skill__name=skill_name).first()
+        if not pkskl:
+            pkskl = ProductSkill.objects.all().first()
+        url_ro_rirect = pkskl.product.get_absolute_url()
+        return HttpResponseRedirect(url_ro_rirect)
+
