@@ -864,10 +864,10 @@ class ShineCandidateLoginAPIView(APIView):
         candidate_education_keys = ['candidate_id', 'specialization', 'institution_name', 'course_type',
                                     'percentage_cgpa',
                                     'start_date',
-                                    'end_date', 'is_pursuing']
+                                    'end_date', 'is_pursuing', 'order']
         candidate_education = []
 
-        for edu in education:
+        for ind, edu in enumerate(education):
             course_type = ""
             if edu['course_type'] == 1:
                 course_type = "FT"
@@ -891,7 +891,7 @@ class ShineCandidateLoginAPIView(APIView):
                                           edu['institute_name'],
                                           course_type,
                                           '',
-                                          None, None, True]
+                                          None, None, True, ind]
             education_dict = dict(zip(candidate_education_keys, candidate_education_values))
             candidate_education.append(education_dict)
 
@@ -899,10 +899,10 @@ class ShineCandidateLoginAPIView(APIView):
 
     def get_experience_info(self, experience):
         candidate_experience_keys = ['candidate_id', 'job_profile', 'company_name', 'start_date', 'end_date',
-                                     'is_working', 'job_location', 'work_description']
+                                     'is_working', 'job_location', 'work_description', 'order']
         candidate_experience = []
 
-        for exp in experience:
+        for ind, exp in enumerate(experience):
             start_date = datetime.datetime.strptime(exp['start_date'], '%Y-%m-%dT%H:%M:%S').date() \
                 if exp['start_date'] is not None else \
                 exp['start_date']
@@ -911,29 +911,29 @@ class ShineCandidateLoginAPIView(APIView):
                 exp['end_date']
             candidate_experience_values = ['', exp['job_title'], exp['company_name'],
                                            start_date, end_date,
-                                           exp['is_current'], '', exp['description']]
+                                           exp['is_current'], '', exp['description'], ind]
             experience_dict = dict(zip(candidate_experience_keys, candidate_experience_values))
             candidate_experience.append(experience_dict)
 
         return candidate_experience
 
     def get_skill_info(self, skills):
-        skill_keys = ['candidate_id', 'name', 'proficiency']
+        skill_keys = ['candidate_id', 'name', 'proficiency', 'order']
         candidate_skill = []
 
-        for skill in skills:
-            candidate_skill_values = ['', skill['value'], 5]
+        for ind, skill in enumerate(skills):
+            candidate_skill_values = ['', skill['value'], 5, ind]
             skill_dict = dict(zip(skill_keys, candidate_skill_values))
             candidate_skill.append(skill_dict)
 
         return candidate_skill
 
     def get_certification_info(self, certifications):
-        candidate_certification_keys = ['candidate_id', 'name_of_certification', 'year_of_certification']
+        candidate_certification_keys = ['candidate_id', 'name_of_certification', 'year_of_certification', 'order']
         candidate_certification = []
 
-        for certi in certifications:
-            candidate_certification_values = ['', certi['certification_name'], certi['certification_year']]
+        for ind, certi in enumerate(certifications):
+            candidate_certification_values = ['', certi['certification_name'], certi['certification_year'], ind]
             certification_dict = dict(zip(candidate_certification_keys, candidate_certification_values))
             candidate_certification.append(certification_dict)
 
@@ -943,6 +943,7 @@ class ShineCandidateLoginAPIView(APIView):
                 "id": '',
                 "name_of_certification": '',
                 "year_of_certification": '',
+                "order": 0
             }]
             return candidate_certification
 
@@ -983,6 +984,7 @@ class ShineCandidateLoginAPIView(APIView):
             "title": '',
             "date": '',
             "summary": '',
+            "order": 0
         }]
 
         #  get reference
@@ -992,6 +994,7 @@ class ShineCandidateLoginAPIView(APIView):
             "reference_name": '',
             "reference_designation": '',
             "about_user": "",
+            "order": 0
         }]
 
         #  get projects
@@ -1002,7 +1005,8 @@ class ShineCandidateLoginAPIView(APIView):
             "start_date": '',
             "end_date": '',
             "skills": [],
-            "description": ''
+            "description": '',
+            "order": 0
         }]
 
         return candidate_info
