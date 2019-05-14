@@ -143,6 +143,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     # university_courses_detail
     pUncdl = indexes.MultiValueField(null=True, indexed=False)
 
+    # Assesment attributes
+    pAsft = indexes.MultiValueField(null=True, indexed=False)
+
     def get_model(self):
         return Product
 
@@ -929,3 +932,11 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             detail['payment'] = payment_list
             return json.dumps(detail)
         return ''
+
+    def prepare_pAsft(self, obj):
+        detail = {}
+        if obj.product_class.name == 'assesment':
+            objs = obj.productattributes.all()
+            for obj in objs:
+                detail[obj.attribute.name] = obj.value
+            return detail

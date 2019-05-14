@@ -146,16 +146,13 @@
                 <div class="col-sm-12 col-md-8 mt-40">
                 {% if prd_about %}
                   <h2 class="detail-heading">About{% if prd_service == 'test' %} Test {% elif prd_service == 'course' %}course{% else %}service{% endif %}</h2>
-                  <p>Multi choice test that measures the knowledge on the concepts of need SEO, SEO planning, SEO strategies, SEO software, tools, exchanging links etc. </p>
-
-                  <p class="mt-20"><strong>About Aspiring MInd</strong></p>
-                  <p>Aspiring Minds ia a leader in scientific, automated, AI-powered pre-employment assessments and video interview analytics including technology coding test,call...</p>
+                 {{prd_about}}
 
                   <div class="test-wrap mt-30">
                     <div class="test-wrap__item">
                       <span class="icon-question"></span>
                       <div class="test-wrap__item--content">
-                        <strong class="fs-18">120</strong>
+                        <strong class="fs-18">{{ prd_asft.number_of_questions }}</strong>
                         <p>No. of questions</p>
                       </div>
                     </div>
@@ -163,21 +160,11 @@
                     <div class="test-wrap__item">
                         <span class="icon-time"></span>
                         <div class="test-wrap__item--content">
-                          <strong class="fs-18">60 min</strong>
+                          <strong class="fs-18">{{ prd_asft.test_duration }}</strong>
                           <p>Test duration</p>
                         </div>
                     </div>
                   </div>
-                  <!-- <style>
-                    .morecontent span {
-                          display: none;
-                      }
-                      .morelink {
-                          display: block;
-                      }
-                  </style>
-                  <span class="more">
-                  {{prd_about|safe}}
                   </span> -->
                 {% endif %}
                 </div>
@@ -200,7 +187,6 @@
               <div class="row">
                 <div id="course" class="col-sm-12 col-md-8">
                   <h2>What you get if you pass??</h2>                     
-                        <!-- {{prd_uget|safe}} -->
                     <ul class="what-get row">
                       <li class="col-md-6">
                         <span class="icon-industry"></span>
@@ -237,19 +223,7 @@
                 <div class="row">
                   <div id="course" class="col-sm-12 col-md-8">
                     <h2>Topics Covered</h2>                     
-                          <!-- {{prd_desc|safe}} -->
-
-                    <ul class="list-tick-item row">
-                      <li class="col-md-6">Keyword Density</li>
-                      <li class="col-md-6">Keyword matching categories</li>
-                      <li class="col-md-6">Meta tag</li>
-                      <li class="col-md-6">Page rank</li>
-                      <li class="col-md-6">Inbound- outbound links</li>
-                      <li class="col-md-6">Link sharing</li>
-                      <li class="col-md-6">Keywok Searching</li>
-                      <li class="col-md-6">SEO rules</li>
-                      <li class="col-md-6">Internal linking</li>
-                    </ul>
+                       {{prd_desc|safe}}
                     </div>
                 </div>
               </div>

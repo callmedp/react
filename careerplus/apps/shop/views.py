@@ -152,8 +152,12 @@ class ProductInformationMixin(object):
             info['prd_service'] = 'other'
         info['prd_product'] = product.pTP
         info['prd_exp'] = product.pEX
+
         if product.pTF == 5:
             info['prd_dur'] = product.pDM[0] if product.pDM else ''
+
+        if product.pTF == 16:
+            info['prd_asft'] = eval(product.pAsft[0])
         return info
 
     def get_program_structure(self, product):
