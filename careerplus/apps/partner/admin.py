@@ -119,6 +119,9 @@ class ScoreAdmin(admin.ModelAdmin):
 class UserCertificateOperationsAdmin(admin.ModelAdmin):
     model = models.UserCertificateOperations
 
+class ProductSkillAdmin(admin.ModelAdmin):
+    model = models.ProductSkill
+    raw_id_fields = ['product', 'skill']
 
 admin.site.register(models.Vendor, VendorAdmin)
 admin.site.register(models.Certificate, CeritficateAdmin)
@@ -127,5 +130,6 @@ admin.site.register(models.BoosterRecruiter, BoosterRecruiterAdmin)
 admin.site.register(models.Assesment, AssesmentAdmin)
 admin.site.register(models.Score, ScoreAdmin)
 admin.site.register(models.UserCertificateOperations, UserCertificateOperationsAdmin)
+admin.site.register(models.ProductSkill, ProductSkillAdmin)
 
 
