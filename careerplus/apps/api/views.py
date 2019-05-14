@@ -749,6 +749,10 @@ class UpdateCertificateAndAssesment(APIView):
     def post(self, request, *args, **kwargs):
         vendor_name = self.kwargs.get('vendor_name')
         data = request.data
+        logging.getLogger('info_log').error(
+            "Incoming Data in request is %s" %
+            str(data)
+        )
         data['vendor'] = vendor_name.lower()
         parser = CertiticateParser(parse_type=0)
         parsed_data = parser.parse_data(data)
