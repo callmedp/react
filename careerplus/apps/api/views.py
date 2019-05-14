@@ -784,7 +784,7 @@ class ShineDataFlowDataApiView(ListAPIView):
 
 class VendorCertificateMappingApiView(ListAPIView):
     authentication_classes = [OAuth2Authentication]
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated]
     queryset = Vendor.objects.all()
     serializer_class = VendorCertificateSerializer
     pagination_class = None
@@ -819,8 +819,8 @@ class VendorCertificateMappingApiView(ListAPIView):
         return response
 
 class ImportCertificateApiView(APIView, AmcatApiMixin):
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
     allowed_vendors = settings.IMPORT_CERTIFICATE_ALLOWED_VEDOR
 
     def post(self, request, *args, **kwargs):

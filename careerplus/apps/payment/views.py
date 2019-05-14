@@ -21,7 +21,7 @@ from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from .models import PaymentTxn
 from .mixin import PaymentMixin
 from .forms import StateForm, PayByCheckForm
-from .utils import EpayLaterEncryptDecryptUtil
+from .utils import EpayLaterEncryptDecryptUtil, update_auto_login_url_for_assesment
 from .tasks import put_epay_for_successful_payment
 
 #inter app imports
@@ -35,8 +35,9 @@ from dashboard.dashboard_mixin import DashboardInfo
 from console.decorators import Decorate, stop_browser_cache
 from core.utils import get_client_ip,get_client_device_type
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
+from api.config import LOCATION_MAPPING, DEGREE_MAPPING
 
-#third party imports
+# third party imports
 
 
 @Decorate(stop_browser_cache())
@@ -251,13 +252,27 @@ class ThankYouView(TemplateView):
                     no_process=False, oi_status=2)
 
                 assesment_items = order.orderitems.filter(
-                    order__status__in=[1],
+                    order__status__in=[0, 1],
                     product__type_flow=16,
                     product__sub_type_flow=1602
                 )
-
-                # for oi in assesment_items:
-                #     update_auto_login_url_for_assesment(oi)
+                for oi in assesment_items:
+                    candidate_location = self.request.session.get('candidate_location', 'N.A')
+                    if candidate_location != 'N.A':
+                        candidate_location = LOCATION_MAPPING.get(candidate_location, 'N.A')
+                    candidate_degree = self.request.session.get('highest_education', 'N>A')
+                    if candidate_degree != 'N.A':
+                        candidate_degree = DEGREE_MAPPING.get(candidate_location, 'N.A')
+                    data = {
+                        "candidate_email": oi.order.email,
+                        "skill_name": "English",
+                        "candidate_phone": oi.order.mobile,
+                        "candidate_name": oi.order.first_name,
+                        "candidate_city": candidate_location,
+                        "candidate_degree": candidate_degree,
+                        "shine_learning_order_id": oi.order.number
+                    }
+                    update_auto_login_url_for_assesment(oi, data)
 
                 context.update({
                     "pending_resume_items": pending_resume_items,

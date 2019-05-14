@@ -44,17 +44,8 @@ class EpayLaterEncryptDecryptUtil(object):
         return s[:-ord(s[len(s)-1:])]
 
 
-def update_auto_login_url_for_assesment(orderitem):
-    from core.api_mixins import AmcatApiMixin
-    data = {
-        "candidate_email": orderitem.order.email,
-        "skill_name": "",
-        "candidate_phone": orderitem.order.mobile,
-        "candidate_name": orderitem.order.first_name,
-        "candidate_city": "",
-        "candidate_degree": "",
-        "shine_learning_order_id": orderitem.order.number
-    }
+def update_auto_login_url_for_assesment(orderitem, data):
+    from core.api_mixin import AmcatApiMixin
     autologin_url = AmcatApiMixin().get_auto_login_url(data)
     if autologin_url:
         orderitem.autologin_url = autologin_url
