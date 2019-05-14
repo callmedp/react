@@ -146,7 +146,29 @@
                 <div class="col-sm-12 col-md-8 mt-40">
                 {% if prd_about %}
                   <h2 class="detail-heading">About{% if prd_service == 'test' %} Test {% elif prd_service == 'course' %}course{% else %}service{% endif %}</h2>
-                  <style>
+                  <p>Multi choice test that measures the knowledge on the concepts of need SEO, SEO planning, SEO strategies, SEO software, tools, exchanging links etc. </p>
+
+                  <p class="mt-20"><strong>About Aspiring MInd</strong></p>
+                  <p>Aspiring Minds ia a leader in scientific, automated, AI-powered pre-employment assessments and video interview analytics including technology coding test,call...</p>
+
+                  <div class="test-wrap mt-30">
+                    <div class="test-wrap__item">
+                      <span class="icon-question"></span>
+                      <div class="test-wrap__item--content">
+                        <strong class="fs-18">120</strong>
+                        <p>No. of questions</p>
+                      </div>
+                    </div>
+
+                    <div class="test-wrap__item">
+                        <span class="icon-time"></span>
+                        <div class="test-wrap__item--content">
+                          <strong class="fs-18">60 min</strong>
+                          <p>Test duration</p>
+                        </div>
+                    </div>
+                  </div>
+                  <!-- <style>
                     .morecontent span {
                           display: none;
                       }
@@ -156,7 +178,7 @@
                   </style>
                   <span class="more">
                   {{prd_about|safe}}
-                  </span>
+                  </span> -->
                 {% endif %}
                 </div>
               </div>
@@ -168,24 +190,46 @@
     {% endblock section1 %}
 
     {% block section2 %}
-      
       <!-- main parent2 section start -->
       <section class="container-fluid cls_scroller_parent pr">
         <div class="row">
+          <section class="detail-box" style="padding:0;"></section>
+          {% if prd_uget %}
+            <section class="container-fluid detail-box">
+            <div class="container">
+              <div class="row">
+                <div id="course" class="col-sm-12 col-md-8">
+                  <h2>What you get if you pass??</h2>                     
+                        <!-- {{prd_uget|safe}} -->
+                    <ul class="what-get row">
+                      <li class="col-md-6">
+                        <span class="icon-industry"></span>
+                        <p>Industry recognized certification after clearing the test</p>
+                      </li>
 
+                      <li class="col-md-6">
+                        <span class="icon-badge"></span>
+                        <p>Get badge on shine.com and showcase your knowledge to the recruiters</p>
+                      </li>
 
-            {% if prd_uget %}
-              <section class="container-fluid detail-box">
-              <div class="container">
-                <div class="row">
-                  <div id="course" class="col-sm-12 col-md-8">
-                    <h2>What you get if you pass??</h2>                     
-                          {{prd_uget|safe}}
-                    </div>
-                </div>
+                      <li class="col-md-6">
+                          <span class="icon-skills"></span>
+                        <p>Shine shows your skills as validated and certification as verified which build high trust among recruiters</p>
+                      </li>
+                      <li class="col-md-6">
+                          <span class="icon-receive"></span>
+                        <p>Receive valuable feedback on your strong and weak areas to improve yourself</p>
+                      </li>
+                      <li class="col-md-6">
+                          <span class="icon-certified"></span>
+                        <p>Certified candidates gets higher salary as compared to non certified candidate</p>
+                      </li>
+                    </ul>
+                  </div>
               </div>
-              </section>
-            {% endif %}
+            </div>
+            </section>
+          {% endif %}
 
             {% if prd_desc %}
               <section class="container-fluid detail-box">
@@ -193,7 +237,19 @@
                 <div class="row">
                   <div id="course" class="col-sm-12 col-md-8">
                     <h2>Topics Covered</h2>                     
-                          {{prd_desc|safe}}
+                          <!-- {{prd_desc|safe}} -->
+
+                    <ul class="list-tick-item row">
+                      <li class="col-md-6">Keyword Density</li>
+                      <li class="col-md-6">Keyword matching categories</li>
+                      <li class="col-md-6">Meta tag</li>
+                      <li class="col-md-6">Page rank</li>
+                      <li class="col-md-6">Inbound- outbound links</li>
+                      <li class="col-md-6">Link sharing</li>
+                      <li class="col-md-6">Keywok Searching</li>
+                      <li class="col-md-6">SEO rules</li>
+                      <li class="col-md-6">Internal linking</li>
+                    </ul>
                     </div>
                 </div>
               </div>
