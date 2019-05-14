@@ -392,14 +392,12 @@ class AmcatApiMixin(object):
             resp = resp.json()
             autologin_url = resp['data']['autoLoginUrl']
             logging.getLogger('info_log').error(
-                "AutoLogin url for Order item %s successfully retrieved" % (str(orderitem))
+                "AutoLogin url for data %s successfully retrieved" % (str(data))
             )
-            orderitem.autologin_url = autologin_url
-            orderitem.save()
-            return True
+            return autologin_url
         else:
             logging.getLogger('error_log').error(
-                "Failed fetching autologin for Order item:- %s , Error:- %s" % (str(orderitem), str(resp.content))
+                "Failed fetching autologin for data:- %s , Error:- %s" % (str(data), str(resp.content))
             )
             return False
 

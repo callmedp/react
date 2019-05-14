@@ -821,10 +821,17 @@ class VendorCertificateMappingApiView(ListAPIView):
 class ImportCertificateApiView(APIView, AmcatApiMixin):
     authentication_classes = []
     permission_classes = []
+    allowed_vendors = settings.IMPORT_CERTIFICATE_ALLOWED_VEDOR
 
     def post(self, request, *args, **kwargs):
         email = request.data.get('email', '')
         vendor_name = self.kwargs.get('vendor_name')
+        if vendor_name not in self.allowed_vendors:
+            return Response({
+                "status": 1,
+                "msg": "This vendor is not allowed for importing certificate"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         if not email:
             return Response({
                 "status": 1,
