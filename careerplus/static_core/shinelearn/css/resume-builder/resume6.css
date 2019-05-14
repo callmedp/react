@@ -4,7 +4,7 @@
     -moz-osx-font-smoothing: grayscale; */
 }
 
-html {
+/*html {
     height: 100%;
     font-size: 62.5%;
 }
@@ -17,21 +17,21 @@ body {
     height: 100%;
     font-weight: 400;
     font-size: 1.4rem;
-}
+}*/
 
 ul, li {
     margin: 0;
     padding: 0;
-    list-style: none;
+    /*list-style: none;*/
 }
 
 p {
     margin: 0 0 10px;
 }
 
-h1, h2, h3 {
+/*h1, h2, h3 {
     margin: 0;
-}
+}*/
 
 .resume {
     width: 100%;
