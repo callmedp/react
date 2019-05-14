@@ -13,17 +13,32 @@ class Project extends Component {
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteProject = this.deleteProject.bind(this);
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
-
+        this.tillTodayDisable = this.tillTodayDisable.bind(this);
         this.state = {
             active: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            submit: false
-
+            submit: false,
+            till_today:[],
         }
     }
 
     componentDidMount() {
         this.props.fetchUserProject()
+        let till_today= []
+        for (let i of this.props.initialValues.list){
+            till_today.push(i.currently_working)
+        }
+        this.setState({till_today})
 
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.initialValues.list !== prevProps.initialValues.list) {
+            let till_today= []
+            for (let i of this.props.initialValues.list){
+                till_today.push(i.currently_working)
+            }
+            this.setState({till_today})
+        }
     }
 
 
@@ -58,9 +73,16 @@ class Project extends Component {
             "start_date": '',
             "end_date": '',
             "skills": '',
+            "currently_working": false,
             "description": '',
             order: listLength,
         })
+    }
+
+    tillTodayDisable(index,checked,e){
+        e.stopPropagation();
+        let {till_today} =this.state
+        till_today[parseInt(index)] = checked
     }
 
     deleteProject(index, fields, event) {
@@ -85,6 +107,7 @@ class Project extends Component {
             editHeading, isEditable, entityName, nextEntity,
             handlePreview, changeOrderingDown, changeOrderingUp
         } = this.props;
+        const {till_today} =this.state
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray
@@ -102,6 +125,8 @@ class Project extends Component {
                     isEditable={isEditable}
                     entityName={entityName}
                     expanded={this.state.active}
+                    till_today={till_today}
+                    tillTodayDisable ={this.tillTodayDisable}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">

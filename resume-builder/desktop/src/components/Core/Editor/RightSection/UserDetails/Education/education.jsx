@@ -45,10 +45,9 @@ class Education extends Component {
     }
 
     tillTodayDisable(index,checked,e){
-        console.log("checked",checked,"index",index,"e",e)
+        e.stopPropagation();
         let {till_today} =this.state
-        till_today[index] = checked
-        console.log("till_today",this.state.till_today[index])
+        till_today[parseInt(index)] = checked
     }
 
     componentDidMount() {
@@ -56,7 +55,7 @@ class Education extends Component {
         for (let i of this.props.initialValues.list){
             till_today.push(i.is_pursuing)
         }
-        console.log(till_today)
+        this.setState({till_today})
         this.props.fetchUserEducation()
     }
 
@@ -66,7 +65,6 @@ class Education extends Component {
             for (let i of this.props.initialValues.list){
                 till_today.push(i.is_pursuing)
             }
-            console.log(till_today)
             this.setState({till_today})
         }
     }
@@ -116,9 +114,7 @@ class Education extends Component {
             editHeading, entityName, nextEntity, handlePreview, changeOrderingUp
             , changeOrderingDown
         } = this.props;
-        const {initialValues:{list}} = this.props
         const {till_today} =this.state
-        console.log(list)
 
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>

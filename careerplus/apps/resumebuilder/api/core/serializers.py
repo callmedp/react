@@ -170,7 +170,7 @@ class CandidateProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CandidateProject
-        fields = ('id', 'candidate_id', 'project_name', 'start_date', 'end_date', 'skills', 'description', 'order')
+        fields = ('id', 'candidate_id', 'project_name', 'start_date', 'end_date','currently_working','skills', 'description', 'order')
 
 
 class CandidateReferenceSerializer(serializers.ModelSerializer):

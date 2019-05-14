@@ -15,15 +15,33 @@ class Experience extends Component {
         this.handleAccordionClick = this.handleAccordionClick.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.deleteExperience = this.deleteExperience.bind(this);
+        this.tillTodayDisable = this.tillTodayDisable.bind(this);
         this.state = {
             active: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            submit: false
+            submit: false,
+            till_today:[],
 
         }
     }
 
     componentDidMount() {
         this.props.fetchUserExperience()
+        let till_today= []
+        for (let i of this.props.initialValues.list){
+            till_today.push(i.is_working)
+        }
+        this.setState({till_today})
+        
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.initialValues.list !== prevProps.initialValues.list) {
+            let till_today= []
+            for (let i of this.props.initialValues.list){
+                till_today.push(i.is_working)
+            }
+            this.setState({till_today})
+        }
     }
 
 
@@ -33,6 +51,12 @@ class Experience extends Component {
         (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el).map(key => (!!el[key] ? error = true : false)))
         if (!error && !this.state.submit) this.props.bulkUpdateOrCreate(values && values['list'])
 
+    }
+
+    tillTodayDisable(index,checked,e){
+        e.stopPropagation();
+        let {till_today} =this.state
+        till_today[parseInt(index)] = checked
     }
 
     async handleSubmit(values, entityLink) {
@@ -86,6 +110,7 @@ class Experience extends Component {
             changeOrderingDown, changeOrderingUp
 
         } = this.props;
+        const {till_today} =this.state
 
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -103,6 +128,8 @@ class Experience extends Component {
                             isEditable={isEditable}
                             entityName={entityName}
                             expanded={this.state.active}
+                            till_today={till_today}
+                            tillTodayDisable ={this.tillTodayDisable}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">

@@ -27,7 +27,9 @@ export const ExperienceRenderer = ({
                                        saveTitle,
                                        isEditable,
                                        entityName,
-                                       expanded
+                                       expanded,
+                                       till_today,
+                                       tillTodayDisable
                                    }) => {
     let elem = null;
 
@@ -91,7 +93,7 @@ export const ExperienceRenderer = ({
                                                 </AccordionItemHeading>
                                                 <AccordionItemPanel>
                                                     <div className="flex-container">
-                                                        <fieldset className="error">
+                                                        <fieldset>
                                                             <label>Designation</label>
                                                             <div className="input-group">
                                                                 <div className="input-group--input-group-icon">
@@ -133,18 +135,19 @@ export const ExperienceRenderer = ({
                                                                 <div className="input-group--input-group-icon">
                                                                     <span className="icon-date"/>
                                                                 </div>
-                                                                <Field component={datepicker}
+                                                                <Field component={datepicker} disabled={till_today[index]}
                                                                        type={"date"}
                                                                        name={`${member}.end_date`}
                                                                        className={'input-control'}/>
                                                             </div>
                                                             <span className={styles['till-today']}>
-									                                    <Field type="checkbox"
-                                                                               name={`${member}.is_working`}
-                                                                               component={renderField}
-                                                                               checked={`${member}.is_working` === true}/>
-								                                	Till Today
-							                                    	</span>
+                                                                <Field type="checkbox"
+                                                                        name={`${member}.is_working`}
+                                                                        component={renderField}
+                                                                        tillTodayDisable={tillTodayDisable} index={`${index}`}
+                                                                        checked={`${member}.is_working` === true}/>
+                                                                Till Today
+							                                </span>
                                                         </fieldset>
                                                     </div>
 

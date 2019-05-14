@@ -17,17 +17,14 @@ export const renderField = ({
                             }) => {
     return (
         <React.Fragment>
-             {console.log(index)}
             {index ?
                 <div className="Error">
-                    fjewdhfjdhsjfhl
-                    <input {...input} className={className} onClick={tillTodayDisable(0,input.checked)} autoComplete="off" placeholder={label} type={type}/>
+                    <input {...input} className={className} onClick={(e)=>tillTodayDisable(index,!input.checked,e)} autoComplete="off" placeholder={label} type={type}/>
                     {touched &&
                     ((error && <span className={'Error-message'}>{error}</span>) ||
                         (warning && <span className={'Warn-Message'}>{warning}</span>))}
                 </div>:
                 <div className="Error">
-                    yo{index}
                     <input {...input} className={className} autoComplete="off" placeholder={label} type={type}/>
                     {touched &&
                     ((error && <span className={'Error-message'}>{error}</span>) ||

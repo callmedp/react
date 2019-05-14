@@ -139,11 +139,10 @@ export const EducationRenderer = ({
                                                                        type={"date"}
                                                                        name={`${member}.end_date`} disabled={till_today[index]}
                                                                        className="input-control"/>
-
                                                             </div>
                                                             <span className={styles["till-today"]}>
                                                                 <Field type="checkbox" name={`${member}.is_pursuing`} component={renderField}
-                                                                    tillTodayDisable={tillTodayDisable} index={1} checked={`${member}.end_date` === true}/>
+                                                                    tillTodayDisable={tillTodayDisable} index={`${index}`} checked={`${member}.end_date` === true}/>
                                                                 Till Today
                                                             </span>
                                                         </fieldset>
