@@ -337,13 +337,19 @@ class CandidateResumePreview(APIView):
 
     def get(self, request, *args, **kwargs):
         candidate_id = self.kwargs.get('candidate_id', '')
-        template_id = self.kwargs.get('pk', '');
+        template_id = self.kwargs.get('pk', '')
 
         candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
         if not candidate:
             return {}
 
         entity_preference = eval(candidate.entity_preference_data)
+
+        exp = entity_preference[2]
+        del entity_preference[2],entity_preference[0],entity_preference[3]
+        entity_preference.append(exp)
+        entity_preference = [x for x in entity_preference if x.get('active') ]
+
 
         # extracurricular = candidate.extracurricular.split(',')
         education = candidate.candidateeducation_set.all()
@@ -363,7 +369,7 @@ class CandidateResumePreview(APIView):
              'achievements': achievements, 'references': references, 'projects': projects,
              'certifications': certifications, 'extracurricular': '', 'languages': languages,
              'current_exp': current_exp, 'latest_exp': latest_experience,
-             'preference_list': entity_preference
+             'preference_list': entity_preference,
              }).encode(encoding='UTF-8')
 
         return Response({

@@ -10,8 +10,6 @@ class Template extends Component {
 
     componentDidMount() {
         let {userInfo:{selected_template}} = this.props;
-        console.log(this.props)
-        console.log(selected_template)
         if(selected_template){
             this.props.fetchTemplate(selected_template)
         }
@@ -25,8 +23,6 @@ class Template extends Component {
     }
 
     render() {
-        console.log("Rendered")
-        console.log(this.props)
         const {template: {html}} = this.props;
         return (
             <div className="right-sidebar-scroll-main"
