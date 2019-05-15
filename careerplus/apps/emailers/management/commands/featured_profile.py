@@ -103,7 +103,7 @@ def unfeature():
     ''' featured profile cron for closing updated orderitem '''
 
     featured_orderitems = OrderItem.objects.filter(
-        order__status__in=[1, 3], product__type_flow=5, oi_status=28, product__sub_type_flow__in=[501, 503])
+        order__status__in=[1, 3], product__type_flow=5, oi_status=28, product__sub_type_flow__in=[501, 503, 502])
     featured_orderitems = featured_orderitems.select_related('order')
 
     unfeature_count = 0
