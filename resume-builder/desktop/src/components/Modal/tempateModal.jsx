@@ -39,7 +39,6 @@ export default class TemplateModal extends React.Component {
 
     render() {
         const {template: {templateId}} = this.props;
-        console.log('----', this.props);
         return (
             <div className="pr">
                 {this.state.modalIsOpen &&
