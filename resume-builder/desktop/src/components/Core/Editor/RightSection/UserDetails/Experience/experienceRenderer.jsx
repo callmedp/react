@@ -65,7 +65,7 @@ export const ExperienceRenderer = ({
                         {
                             fields.map((member, index) => {
                                 return (
-                                    <li key={index}>
+                                    <li key={index} name={`experience${index}`} id={`experience${index}`}>
                                         <section className="info-section">
                                             <AccordionItem uuid={index}>
                                                 <AccordionItemHeading>
@@ -135,17 +135,19 @@ export const ExperienceRenderer = ({
                                                                 <div className="input-group--input-group-icon">
                                                                     <span className="icon-date"/>
                                                                 </div>
-                                                                <Field component={datepicker} disabled={till_today[index]}
+                                                                <Field component={datepicker}
+                                                                       disabled={till_today[index]}
                                                                        type={"date"}
                                                                        name={`${member}.end_date`}
                                                                        className={'input-control'}/>
                                                             </div>
                                                             <span className={styles['till-today']}>
                                                                 <Field type="checkbox"
-                                                                        name={`${member}.is_working`}
-                                                                        component={renderField}
-                                                                        tillTodayDisable={tillTodayDisable} index={`${index}`}
-                                                                        checked={`${member}.is_working` === true}/>
+                                                                       name={`${member}.is_working`}
+                                                                       component={renderField}
+                                                                       tillTodayDisable={tillTodayDisable}
+                                                                       index={`${index}`}
+                                                                       checked={`${member}.is_working` === true}/>
                                                                 Till Today
 							                                </span>
                                                         </fieldset>

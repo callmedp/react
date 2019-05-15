@@ -39,7 +39,7 @@ export const EducationRenderer = ({
                 }} onKeyUp={(event) => saveTitle(event)}
                     contenteditable={isEditable ? "true" : "false"}>{entityName}</h2>
                 <span onClick={() => editHeading(elem)}
-                      className={!!(!isEditable) ? "icon-edit " + styles['icon-education__cursor']  : ''}/>
+                      className={!!(!isEditable) ? "icon-edit " + styles['icon-education__cursor'] : ''}/>
 
                 <button
                     onClick={handleSubmit((values) => {
@@ -64,9 +64,9 @@ export const EducationRenderer = ({
                         {
                             fields.map((member, index) => {
                                 return (
-                                    <li key={index} id={`education${index}`}>
+                                    <li key={index}>
                                         <section className="info-section">
-                                            <AccordionItem uuid={index}>
+                                            <AccordionItem uuid={index} name={`education${index}`} id={`education${index}`}>
                                                 <AccordionItemHeading>
                                                     <AccordionItemButton>
                                                         <div className="flex-container">
@@ -137,12 +137,16 @@ export const EducationRenderer = ({
                                                                 </div>
                                                                 <Field component={datepicker}
                                                                        type={"date"}
-                                                                       name={`${member}.end_date`} disabled={till_today[index]}
+                                                                       name={`${member}.end_date`}
+                                                                       disabled={till_today[index]}
                                                                        className="input-control"/>
                                                             </div>
                                                             <span className={styles["till-today"]}>
-                                                                <Field type="checkbox" name={`${member}.is_pursuing`} component={renderField}
-                                                                    tillTodayDisable={tillTodayDisable} index={`${index}`} checked={`${member}.end_date` === true}/>
+                                                                <Field type="checkbox" name={`${member}.is_pursuing`}
+                                                                       component={renderField}
+                                                                       tillTodayDisable={tillTodayDisable}
+                                                                       index={`${index}`}
+                                                                       checked={`${member}.end_date` === true}/>
                                                                 Till Today
                                                             </span>
                                                         </fieldset>
@@ -162,6 +166,7 @@ export const EducationRenderer = ({
                                                                            {value: 'FT', label: 'FULL TIME'},
                                                                            {value: 'PT', label: 'PART TIME'},
                                                                        ]}
+                                                                       closeMenuOnSelect={true}
                                                                        className="input-control"/>
                                                             </div>
                                                         </fieldset>

@@ -110,6 +110,7 @@ export const LanguageRenderer = ({
                                                                 </div>
                                                                 <Field name={`${member}.proficiency`}
                                                                        component={renderSelect}
+                                                                       closeMenuOnSelect={true}
                                                                        isMulti={false}
                                                                        options={[
                                                                            {value: 1, label: '1'},

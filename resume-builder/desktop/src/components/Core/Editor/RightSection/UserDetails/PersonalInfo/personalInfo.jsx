@@ -152,6 +152,7 @@ export class PersonalInfo extends Component {
                                             component={renderSelect}
                                             label="Gender"
                                             isMulti={false}
+                                            closeMenuOnSelect={true}
                                             options={[
                                                 {value: '1', label: 'Male'},
                                                 {value: '2', label: 'Female'},
@@ -209,6 +210,7 @@ export class PersonalInfo extends Component {
                                             // loadOptions={this.fetchInterestList.bind(this)}
                                                defaultOptions={Object.keys(interestList).map(key => interestList[key])}
                                                value={personalInfo.extracurricular}
+                                               closeMenuOnSelect={false}
                                                label="Select Interest"/>
                                     </div>
                                 </fieldset>

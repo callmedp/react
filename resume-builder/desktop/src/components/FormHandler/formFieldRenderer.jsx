@@ -19,11 +19,12 @@ export const renderField = ({
         <React.Fragment>
             {index ?
                 <div className="Error">
-                    <input {...input} className={className} onClick={(e)=>tillTodayDisable(index,!input.checked,e)} autoComplete="off" placeholder={label} type={type}/>
+                    <input {...input} className={className} onClick={(e) => tillTodayDisable(index, !input.checked, e)}
+                           autoComplete="off" placeholder={label} type={type}/>
                     {touched &&
                     ((error && <span className={'Error-message'}>{error}</span>) ||
                         (warning && <span className={'Warn-Message'}>{warning}</span>))}
-                </div>:
+                </div> :
                 <div className="Error">
                     <input {...input} className={className} autoComplete="off" placeholder={label} type={type}/>
                     {touched &&
@@ -65,20 +66,26 @@ export const datepicker =
         </div>
     )
 
+const selectStyles = {menu: styles => ({...styles, zIndex: 999})};
+
 
 export const renderSelect = ({
                                  input,
                                  label,
                                  meta: {touched, error, warning},
                                  options,
-                                 isMulti
+                                 isMulti,
+                                 closeMenuOnSelect
                              }) => (
     <div className="Error">
         <Select {...input}
                 placeholder={label}
+                styles={{menuPortal: base => ({...base, zIndex: 9999})}}
+                menuPortalTarget={document.body}
+
                 options={options}
                 isMulti={isMulti}
-                closeMenuOnSelect={false}
+                closeMenuOnSelect={closeMenuOnSelect}
                 autoComplete="off"
                 components={makeAnimated()}
                 onBlur={() => {
@@ -97,14 +104,19 @@ export const renderDynamicSelect = ({
                                         loadOptions,
                                         label,
                                         defaultOptions,
+                                        closeMenuOnSelect,
                                         meta: {touched, error, warning}
                                     }) => (
     <div className="Error">
         <AsyncSelect {...input}
                      loadOptions={loadOptions}
+                     styles={{menuPortal: base => ({...base, zIndex: 9999})}}
+                     menuPortalTarget={document.body}
+
                      defaultOptions={defaultOptions}
                      placeholder={label}
                      isMulti={true}
+                     closeMenuOnSelect={closeMenuOnSelect}
                      onBlur={() => {
                          input.onBlur(input.value)
                      }}

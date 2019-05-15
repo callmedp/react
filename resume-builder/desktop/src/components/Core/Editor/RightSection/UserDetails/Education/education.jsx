@@ -89,7 +89,8 @@ class Education extends Component {
             duration: 800,
             delay: 0,
             smooth: 'easeInOutQuad',
-            offset: 1000
+            offset: 1000,
+            containerId: 'education2'
         })
 
 

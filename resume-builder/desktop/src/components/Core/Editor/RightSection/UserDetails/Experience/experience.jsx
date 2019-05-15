@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import moment from 'moment';
 import {ExperienceRenderer} from "./experienceRenderer";
 import validate from '../../../../../FormHandler/validations/experience/validate'
+import {scroller, Events, animateScroll as scroll} from "react-scroll/modules";
 
 
 class Experience extends Component {
@@ -19,25 +20,35 @@ class Experience extends Component {
         this.state = {
             active: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             submit: false,
-            till_today:[],
+            till_today: [],
 
         }
     }
 
     componentDidMount() {
         this.props.fetchUserExperience()
-        let till_today= []
-        for (let i of this.props.initialValues.list){
+        let till_today = []
+        for (let i of this.props.initialValues.list) {
             till_today.push(i.is_working)
         }
         this.setState({till_today})
-        
+
+
+        Events.scrollEvent.register('begin', function () {
+            console.log("begin");
+        });
+
+        Events.scrollEvent.register('end', function () {
+            console.log("end");
+        });
+
+
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.initialValues.list !== prevProps.initialValues.list) {
-            let till_today= []
-            for (let i of this.props.initialValues.list){
+            let till_today = []
+            for (let i of this.props.initialValues.list) {
                 till_today.push(i.is_working)
             }
             this.setState({till_today})
@@ -46,6 +57,8 @@ class Experience extends Component {
 
 
     componentWillUnmount() {
+        Events.scrollEvent.remove('begin');
+        Events.scrollEvent.remove('end');
         let {formData: {experience: {values, syncErrors}}} = this.props;
         let error = false;
         (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el).map(key => (!!el[key] ? error = true : false)))
@@ -53,9 +66,9 @@ class Experience extends Component {
 
     }
 
-    tillTodayDisable(index,checked,e){
+    tillTodayDisable(index, checked, e) {
         e.stopPropagation();
-        let {till_today} =this.state
+        let {till_today} = this.state
         till_today[parseInt(index)] = checked
     }
 
@@ -87,6 +100,8 @@ class Experience extends Component {
             "work_description": '',
             order: listLength
         })
+
+        scroll.scrollTo(500)
     }
 
     deleteExperience(index, fields, event) {
@@ -110,7 +125,7 @@ class Experience extends Component {
             changeOrderingDown, changeOrderingUp
 
         } = this.props;
-        const {till_today} =this.state
+        const {till_today} = this.state
 
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -129,12 +144,13 @@ class Experience extends Component {
                             entityName={entityName}
                             expanded={this.state.active}
                             till_today={till_today}
-                            tillTodayDisable ={this.tillTodayDisable}
+                            tillTodayDisable={this.tillTodayDisable}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
                     <button className="blue-button mr-10" type="button" onClick={handlePreview}>Preview</button>
-                    <button className="orange-button" type="submit">{!nextEntity ? "Download": 'Save and Continue'}</button>
+                    <button className="orange-button"
+                            type="submit">{!nextEntity ? "Download" : 'Save and Continue'}</button>
                 </div>
             </form>
         )

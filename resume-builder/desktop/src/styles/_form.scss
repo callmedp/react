@@ -1,11 +1,13 @@
 
-
-form { 
+form {
   margin: 0;
   padding: 0;
 }
 
-input, select, textarea {outline:none;}
+input, select, textarea {
+  outline: none;
+}
+
 label {
   display: block;
   font-size: 1.3rem;
@@ -17,7 +19,7 @@ label {
 
 /* Text Input */
 input[type='text'] {
-  width:100%;
+  width: 100%;
   border: 1px solid $border1;
   height: 45px;
   @include border-radius(3px);
@@ -28,8 +30,9 @@ input[type='text'] {
 
 .input-group {
   @include flexbox();
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+
   &--input-group-icon {
     flex-direction: column;
     flex: 0 1 45px;
@@ -40,7 +43,7 @@ input[type='text'] {
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
   }
-  
+
   input {
     flex: 1;
     border-top-left-radius: 0;
@@ -62,16 +65,31 @@ input[type='text'] {
   }
 }
 
-::-webkit-input-placeholder {color: $txt1;}
-:-moz-placeholder {color: $txt1;} /* FF 18 */
-::-moz-placeholder {color: $txt1; font-weight: 400;} /* FF 19+ */
-:-ms-input-placeholder {color: $txt1; font-weight: 400;}
+::-webkit-input-placeholder {
+  color: $txt1;
+}
+
+:-moz-placeholder {
+  color: $txt1;
+}
+
+/* FF 18 */
+::-moz-placeholder {
+  color: $txt1;
+  font-weight: 400;
+}
+
+/* FF 19+ */
+:-ms-input-placeholder {
+  color: $txt1;
+  font-weight: 400;
+}
 
 
 /* Radio Buttons */
 fieldset {
   flex-grow: 1;
-  
+
   margin: 10px;
   color: $txt1;
 
@@ -82,7 +100,7 @@ fieldset {
 
 input[type='radio'] {
   /*appearance:none;*/
-  cursor:pointer;
+  cursor: pointer;
 }
 
 input[type="radio"]:checked:after {
@@ -97,7 +115,7 @@ input[type="radio"]:checked:after {
   @include border-radius(3px);
   @extend %inner-shadow;
   padding: 0 10px;
-  font-weight: 400;  
+  font-weight: 400;
   display: block;
 }
 
@@ -109,28 +127,28 @@ input[type="radio"]:checked:after {
   display: block;
   position: absolute;
   right: 10px;
-  top: 20px; 
+  top: 20px;
   z-index: 999;
 }
 
 select {
-    appearance:none;
-    -webkit-appearance:none;
-    -moz-appearance:none;
-    background-color:transparent;
-    width:100%;
-    border: none;
-    height: 45px;
-    font-size: 1.2rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: transparent;
+  width: 100%;
+  border: none;
+  height: 45px;
+  font-size: 1.2rem;
 
-    option {
-      font-size: 1.2rem;
-    }
+  option {
+    font-size: 1.2rem;
+  }
 }
 
 /* Text Area */
 textarea {
-  width:100%;
+  width: 100%;
   border: 1px solid $border1;
   @include border-radius(3px);
   @extend %inner-shadow;
@@ -139,7 +157,7 @@ textarea {
 }
 
 .address textarea {
-  width:100%;
+  width: 100%;
   border: 1px solid $border1;
   @include border-radius(3px);
   border-top-left-radius: 0;
@@ -152,7 +170,7 @@ textarea {
 /* Checkbox */
 input[type='checkbox'] {
   /*appearance:none;*/
-  cursor:pointer;
+  cursor: pointer;
 }
 
 input[type='checkbox']:checked:after {
@@ -168,22 +186,26 @@ input[type='checkbox']:checked:after {
 
 /* Submit Button */
 input[type='submit'] {
-  
+
 }
+
 input[type='submit']:hover {
-  
+
 }
 
 .react-datepicker-wrapper {
   display: block;
   flex: 1;
 }
+
 .react-datepicker__input-container {
-  display: block ;
+  display: block;
 }
+
 .css-d8oujb {
   display: none;
 }
+
 .css-vj8t7z {
   /*height: 45px;*/
   min-height: 45px !important;
@@ -192,6 +214,7 @@ input[type='submit']:hover {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
+
 .css-1hwfws3 {
   padding: 0 8px !important;
   min-height: 45px;
@@ -200,6 +223,7 @@ input[type='submit']:hover {
   overflow-x: hidden !important;*/
   align-items: flex-start !important;
 }
+
 .css-1g6gooi {
   margin: 0 !important;
   padding-top: 0 !important;
@@ -209,17 +233,19 @@ input[type='submit']:hover {
     box-shadow: none !important;
   }
 }
+
 .css-2o5izw {
   border-color: $border1 !important;
-  box-shadow: inset 0 3px 8px 0 rgba(214,214,214,0.40) !important;
+  box-shadow: inset 0 3px 8px 0 rgba(214, 214, 214, 0.40) !important;
   /*min-height: auto !important;
   height: 45px;*/
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
+
 .css-15k3avv {
   border: 1px solid #ebebeb !important;
-  box-shadow: inset 0 3px 8px 0 rgba(214,214,214,0.40) !important;
+  box-shadow: inset 0 3px 8px 0 rgba(214, 214, 214, 0.40) !important;
   margin-top: 5px !important;
   font-size: 12px !important;
 }
@@ -240,30 +266,42 @@ input[type='submit']:hover {
 .react-datepicker {
   font-size: 0.8em;
 }
+
 .react-datepicker__header {
   padding-top: 0.8em;
 }
+
 .react-datepicker__month {
   margin: 0.4em 1em;
 }
+
 .react-datepicker__day-name, .react-datepicker__day {
   width: 1.9em;
   line-height: 1.9em;
   margin: 0.166em;
 }
+
 .react-datepicker__current-month {
   font-size: 1em;
 }
+
 .react-datepicker__navigation {
   top: 1em;
   line-height: 1.7em;
   border: 0.45em solid transparent;
 }
+
 .react-datepicker__navigation--previous {
   border-right-color: #ccc;
   left: 1em;
 }
+
 .react-datepicker__navigation--next {
   border-left-color: #ccc;
   right: 1em;
+}
+
+.Select-menu-outer {
+  z-index: 1000;
+  position: relative;
 }

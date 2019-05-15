@@ -39,8 +39,8 @@ export const SkillRenderer = ({
                 <h2
                     className={"comp-heading"}
                     ref={(value) => {
-                    elem = value
-                }} onKeyUp={(event) => saveTitle(event)}
+                        elem = value
+                    }} onKeyUp={(event) => saveTitle(event)}
                     contenteditable={isEditable ? "true" : "false"}
                 >{entityName}</h2>
                 <span onClick={() => editHeading(elem)}
@@ -118,6 +118,7 @@ export const SkillRenderer = ({
                                                             <Field name={`${member}.proficiency`}
                                                                    component={renderSelect}
                                                                    isMulti={false}
+                                                                   closeMenuOnSelect={true}
                                                                    options={[
                                                                        {value: 1, label: '1'},
                                                                        {value: 2, label: '2'},
