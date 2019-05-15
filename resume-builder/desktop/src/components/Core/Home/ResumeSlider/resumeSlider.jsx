@@ -54,6 +54,7 @@ export default class ResumeSlider extends Component {
                         return(
                             <div key={key}>
                                 <div className="proven-resume--slide">
+                                    <div className="zoom"></div>
                                 <img src={`${this.staticUrl}react/assets/images/resume${item}_preview.jpg`}/>
                                 </div>
                             </div>

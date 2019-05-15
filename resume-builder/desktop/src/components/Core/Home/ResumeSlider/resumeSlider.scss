@@ -62,6 +62,10 @@
 
       transition: all .3s ease-out;
     }
+
+    .zoom {
+      display: none;
+    }
   }
 
   .slick-active {
@@ -83,6 +87,11 @@
       position: absolute;
       top: 0;
       left: 0;
+    }
+
+    .zoom {
+      display: block;
+      transform: scale(0.7);
     }
   }
 
