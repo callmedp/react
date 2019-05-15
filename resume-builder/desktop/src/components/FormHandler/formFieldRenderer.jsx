@@ -82,7 +82,6 @@ export const renderSelect = ({
                 placeholder={label}
                 styles={{menuPortal: base => ({...base, zIndex: 9999})}}
                 menuPortalTarget={document.body}
-
                 options={options}
                 isMulti={isMulti}
                 closeMenuOnSelect={closeMenuOnSelect}
