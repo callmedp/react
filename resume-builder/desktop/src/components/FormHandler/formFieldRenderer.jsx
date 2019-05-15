@@ -86,6 +86,8 @@ export const renderSelect = ({
                 isMulti={isMulti}
                 closeMenuOnSelect={closeMenuOnSelect}
                 autoComplete="off"
+                menuPosition={'absolute'}
+                menuPlacement={'auto'}
                 components={makeAnimated()}
                 onBlur={() => {
                     input.onBlur(input.value)
@@ -110,11 +112,13 @@ export const renderDynamicSelect = ({
         <AsyncSelect {...input}
                      loadOptions={loadOptions}
                      styles={{menuPortal: base => ({...base, zIndex: 9999})}}
-                     menuPortalTarget={document.body}
-
+                     menuPortalTarget={document.getElementById('right-panel-section')}
+                     menuPosition={'absolute'}
+                     menuPlacement={'auto'}
                      defaultOptions={defaultOptions}
                      placeholder={label}
                      isMulti={true}
+                     autoComplete="off"
                      closeMenuOnSelect={closeMenuOnSelect}
                      onBlur={() => {
                          input.onBlur(input.value)
@@ -136,7 +140,10 @@ export const renderTextArea = ({
 
                                }) => (
     <div className="Error">
-        <textarea {...input} placeholder={label} rows={rows} type={type}/>
+        <textarea {...input}
+                  autoComplete="off"
+                  placeholder={label}
+                  rows={rows} type={type}/>
         {touched &&
         ((error && <span className={'Error-message'}>{error}</span>) ||
             (warning && <span className={'Warn-Message'}>{warning}</span>))}

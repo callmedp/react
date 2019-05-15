@@ -5,13 +5,13 @@ import TopBar from '../../Editor/TopBar/topBar.jsx'
 import Header from '../../../Common/Header/header.jsx'
 import Footer from '../../../Common/Footer/footer.jsx'
 import * as action from '../../../../store/buy/actions'
-import {showModal, hideModal,showSelectTemplateModal,hideSelectTemplateModal} from "../../../../store/ui/actions"
+import {showModal, hideModal, showSelectTemplateModal, hideSelectTemplateModal} from "../../../../store/ui/actions"
 import {connect} from "react-redux";
 import {siteDomain} from "../../../../Utils/domains";
 import TemplateModal from '../../../Modal/tempateModal'
 import Slider from "react-slick";
 import moment from "moment"
-import {fetchPersonalInfo,updatePersonalInfo} from '../../../../store/personalInfo/actions/index'
+import {fetchPersonalInfo, updatePersonalInfo} from '../../../../store/personalInfo/actions/index'
 import SelectTemplateModal from '../../../Modal/selectTemplateModal';
 import LoaderPage from '../../../Loader/loaderPage';
 
@@ -103,7 +103,7 @@ export class Buy extends Component {
             slidesToScroll: 3,
             variableWidth: true
         };
-        const {userInfo: {first_name,selected_template},ui: {loader}} = this.props;
+        const {userInfo: {first_name, selected_template}, ui: {loader}} = this.props;
         const {userInfo} = this.props;
         const {checked} = this.state;
         return (
@@ -116,7 +116,7 @@ export class Buy extends Component {
                 <SelectTemplateModal {...this.props}/>
                 {
                     !!(loader) &&
-                     <LoaderPage/>
+                    <LoaderPage/>
                 }
                 <div className="page-container">
                     <TopBar page={'buy'} userInfo={userInfo}/>
@@ -139,10 +139,10 @@ export class Buy extends Component {
                                         <div className="flex-container">
                                             <span className="choose-plann--child">
                                             <input type="radio" name="product1"
-                                                checked={this.state.checked === 'product1' ? true : false}
-                                                onChange={this.handleOnChange.bind(this, 'product1')}/>
+                                                   checked={this.state.checked === 'product1' ? true : false}
+                                                   onChange={this.handleOnChange.bind(this, 'product1')}/>
                                             </span>
-                                                                            <span className="choose-plan--price">
+                                            <span className="choose-plan--price">
                                             <p>Buy your customised resume</p>
                                             Rs. <strong>999/-</strong>
                                             </span>
@@ -167,7 +167,7 @@ export class Buy extends Component {
                                         <Slider {...settings}>
 
                                             {
-                                                [1, 2, 3, 4, 5].map((el,key) => (
+                                                [1, 2, 3, 4, 5].map((el, key) => (
                                                     <div className="carousel-box--slide__content" key={key}>
                                                         <div className="triangle-topright">
                                                             <span></span>
@@ -198,7 +198,9 @@ export class Buy extends Component {
                     </section>
 
                     <div className="bottom-links">
-                        <a onClick={()=>{this.props.showSelectTemplateModal()}}>Change template</a> | <Link to={'/resume-builder/edit'}>Edit template</Link>
+                        <a onClick={() => {
+                            this.props.showSelectTemplateModal()
+                        }}>Change template</a> | <Link to={'/resume-builder/edit'}>Edit template</Link>
                     </div>
                 </div>
                 <Footer/>
@@ -213,7 +215,8 @@ const mapStateToProps = (state) => {
     return {
         productIds: state.productIds,
         ui: state.ui,
-        userInfo: state.personalInfo
+        userInfo: state.personalInfo,
+        template: state.template
     }
 };
 

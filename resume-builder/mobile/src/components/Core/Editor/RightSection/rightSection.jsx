@@ -79,7 +79,7 @@ class RightSection extends Component {
     render() {
         return (
             <React.Fragment>
-                <section className="right-panel">
+                <section id="right-panel-section" className="right-panel">
                     {
                         this.renderSwitch()
                     }

@@ -10,6 +10,8 @@ import Header from "../../Common/Header/header.jsx";
 import {Link} from 'react-router-dom'
 import {Events, animateScroll as scroll, scrollSpy, scroller} from 'react-scroll';
 import queryString from "query-string";
+import {hideModal, showModal} from "../../../store/ui/actions";
+import {displaySelectedTemplate} from '../../../store/template/actions'
 
 
 class Home extends Component {
@@ -238,7 +240,9 @@ class Home extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        userInfo: state.personalInfo
+        userInfo: state.personalInfo,
+        ui: state.ui,
+        template: state.template
     }
 };
 
@@ -249,8 +253,16 @@ const mapDispatchToProps = (dispatch) => {
         },
         "loginCandidate": (token) => {
             return dispatch(actions.loginCandidate({alt: token}))
+        },
+        'showModal': () => {
+            return dispatch(showModal())
+        },
+        'hideModal': () => {
+            return dispatch(hideModal())
+        },
+        displaySelectedTemplate(templateId) {
+            return dispatch(displaySelectedTemplate(templateId))
         }
-
     }
 };
 

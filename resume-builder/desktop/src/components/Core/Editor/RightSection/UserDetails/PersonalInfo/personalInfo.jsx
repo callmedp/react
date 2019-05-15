@@ -116,7 +116,7 @@ export class PersonalInfo extends Component {
                           className={!!(!isEditable) ? "icon-edit " + styles['icon-edit__cursor'] : ''}/>
                 </section>
                 <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
-                    <section className="flex-container right-sidebar-scroll">
+                    <section id="personal-section"  className="flex-container right-sidebar-scroll">
                         <section className="info-section">
                             <div className="flex-container">
                                 <fieldset>
@@ -200,7 +200,20 @@ export class PersonalInfo extends Component {
                             </div>
 
                             <div className="flex-container">
-                                <fieldset className="custom">
+                                <fieldset>
+                                    <label>Address</label>
+                                    <div className="input-group address">
+                                        <div className="input-group--input-group-icon">
+                                            <span className="icon-address"></span>
+                                        </div>
+                                        <Field component={renderTextArea} type={"textarea"} name="location"
+                                               className={"input-control"} rows="3"/>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <div className="flex-container">
+                                <fieldset id="interest-select" className="custom">
                                     <label>Interest</label>
                                     <div className="input-group">
                                         <div className="input-group--input-group-icon">
@@ -215,20 +228,6 @@ export class PersonalInfo extends Component {
                                     </div>
                                 </fieldset>
                             </div>
-
-                            <div className="flex-container">
-                                <fieldset>
-                                    <label>Address</label>
-                                    <div className="input-group address">
-                                        <div className="input-group--input-group-icon">
-                                            <span className="icon-address"></span>
-                                        </div>
-                                        <Field component={renderTextArea} type={"textarea"} name="location"
-                                               className={"input-control"} rows="3"/>
-                                    </div>
-                                </fieldset>
-                            </div>
-
                             {/*<div className="flex-container">*/}
                             {/*<fieldset>*/}
                             {/*<label>Linkedin</label>*/}
