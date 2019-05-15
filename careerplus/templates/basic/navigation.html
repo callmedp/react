@@ -29,7 +29,7 @@
               <li role="presentation"><a href="/courses/law/23/"  data-target="#courses9" aria-controls="courses9" role="tab">Law</a></li>
              <!--  <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'other-online' 5 %}#courses10" aria-controls="courses9" role="tab">Other Online Courses</a></li> -->
              <li role="presentation"><a href="{% url "course-catalogoue" %}" data-target="#courses10" aria-controls="courses10" role="tab">Course Catalogue</a></li>
-             
+
             </ul>
 
 
@@ -130,8 +130,8 @@
 
               <div role="tabpanel" class="tab-pane" id="courses10">
               </div>
-              
-                
+
+
             </div>
           </div>
         </li>
@@ -143,7 +143,7 @@
             <li><a href="/services/visual-resume/entry-level-freshers-4/pd-2052">Visual Resume</a></li>
             <li><a href="https://learning.shine.com/services/professional-service/jobs-on-the-move-3/pd-3411">Jobs On The Move</a></li>
             <li><a href="/services/linkedin-profile/180/">LinkedIn Profile</a></li>
-              
+
               <li><a href="/services/profile-update/featured-profile-10/pd-1939">Featured Profile</a></li>
               <li><a href="/services/background-verification-2/employment-verification/pd-2618">Background Verification Services</a></li>
             <li><a href="/services/interview-preparation-3/job-interview-coaching-by-sarabjeet-sachar/pd-1284">Interview Preparation</a></li>
@@ -170,7 +170,7 @@
                        <li><a href="/cms/resume-format/experienced-professionals/6/">Experienced Professional   </a></li>
                        <li><a href="/cms/resume-format/engineers-2/20/">Engineers   </a></li>
                        <li><a href="/cms/resume-format/it/53/">IT </a></li>
-                       
+
                        <li><a href="/cms/resume-format/1/ ">View all </a></li>
                     </ul>
                  </div>
@@ -224,7 +224,7 @@
           <a class="cls_eventtrack" href="/talenteconomy/" data-category="TELINK" data-action="Header" data-label="learing.shine"><span class="hidden-sm">Executive Course</span></a>
         </li> -->
       </ul>
-      
+
       <ul class="nav navbar-nav navbar-right">
         <li>
           <a>
@@ -257,7 +257,7 @@
             <li><a href="{% url "dashboard:roundone-dashboard" %}">Referrals</a></li>
             {% endif %}
             <li><a>{{request.session.email}}</a></li>
-            <li><a href="{% url 'logout' %}">Logout</a></li>
+            <li><a onclick= "return clearLocalStorage();" href="{% url 'logout' %}">Logout</a></li>
           </ul>
         </li>
         {% else %}
@@ -277,6 +277,10 @@
 <script type="text/javascript">
   var productUrlSet = {{ product_url_set|safe }}
   var categoryUrlSet = {{ category_url_set|safe }}
-  
+
+    function clearLocalStorage(){
+        localStorage.clear();
+    }
+
 </script>
 
