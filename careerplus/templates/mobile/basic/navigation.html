@@ -15,7 +15,7 @@
                                 <a href="{% url 'login' %}" class="btn btn-outline">Login</a>
                                 <a href="{% url 'register' %}" class="btn btn-outline">Register</a>
                                 {% else %}
-                                <a href="{% url 'logout' %}" class="btn btn-outline">Logout</a>
+                                <a onclick="return clearLocalStorage()" href="{% url 'logout' %}" class="btn btn-outline">Logout</a>
                                 {% endif %}
                             </div>
                         </div>
@@ -197,8 +197,8 @@
                                     </ul>
                                 </div>
                             </li> -->
-                            
-                            
+
+
                         </ul>
                     </div>
                 </li>
@@ -261,4 +261,8 @@
 <script type="text/javascript">
   var productUrlSet = {{ product_url_set|safe|default:"[]"}} ;
   var categoryUrlSet = {{ category_url_set|safe }}
+
+    function clearLocalStorage(){
+        localStorage.clear();
+    }
 </script>

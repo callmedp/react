@@ -37,9 +37,10 @@ function* fetchUserSkill(action) {
             return;
         }
 
-        yield put({type: UPDATE_UI, data: {loader: true}})
+        yield put({type: UPDATE_UI, data: {loader: true}});
 
         const result = yield call(Api.fetchUserSkill, candidateId);
+
         if (result['error']) {
             console.log('error');
         }
@@ -48,6 +49,7 @@ function* fetchUserSkill(action) {
 
         let {data: {results}} = result;
 
+        console.log('--results---', results)
         if (!results.length) {
             const state = yield select();
             let {skill: {list}} = state;

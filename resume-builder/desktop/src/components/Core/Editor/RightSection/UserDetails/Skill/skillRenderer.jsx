@@ -44,7 +44,7 @@ export const SkillRenderer = ({
                     contenteditable={isEditable ? "true" : "false"}
                 >{entityName}</h2>
                 <span onClick={() => editHeading(elem)}
-                      className={!!(!isEditable) ? "icon-edit" + styles['icon-education__cursor'] : ""}
+                      className={!!(!isEditable) ? "icon-edit " + styles['icon-education__cursor'] : ""}
                 />
                 <button
                     onClick={handleSubmit((values) => {
