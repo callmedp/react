@@ -273,10 +273,13 @@
    <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     {% endcompress %}
-    $('.icon-downlod, .download-icon').on('click', function() {
+<script>
+        $('.icon-downlod, .download-icon').on('click', function() {
 
-    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms resume Enquiry', 'success');
+    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Resume Enquiry', 'success');
 };
+
+</script>
 
 {% endblock js_section %}
 
