@@ -262,9 +262,9 @@ class ThankYouView(TemplateView):
                         candidate_location = self.request.session.get('candidate_location', 'N.A')
                         if candidate_location != 'N.A':
                             candidate_location = LOCATION_MAPPING.get(candidate_location, 'N.A')
-                        candidate_degree = self.request.session.get('highest_education', 'N>A')
+                        candidate_degree = self.request.session.get('highest_education', 'N.A')
                         if candidate_degree != 'N.A':
-                            candidate_degree = DEGREE_MAPPING.get(candidate_location, 'N.A')
+                            candidate_degree = DEGREE_MAPPING.get(candidate_degree, 'N.A')
 
                         data = {
                             "candidate_email": oi.order.email,
