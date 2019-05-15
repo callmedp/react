@@ -64,21 +64,23 @@
 
 
 .list-tick-item {
-	padding: 0;	
+	ul {
+		padding: 0;	
 
-	li {
-		list-style: none;
-		padding: 5px 0px;
+		li {
+			list-style: none;
+			padding: 5px 0px;
 
-		&::before {
-			content: '';
-			width: 14px;
-			height: 10px;
-			background-image: url($image-path);
-			background-position: -37px -96px;
-			display: inline-block;
-			margin-right: 5px;
+			&::before {
+				content: '';
+				width: 14px;
+				height: 10px;
+				background-image: url($image-path);
+				background-position: -37px -96px;
+				display: inline-block;
+				margin-right: 5px;
 
+			}
 		}
 	}
 }

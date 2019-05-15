@@ -160,12 +160,12 @@
                     <div class="test-wrap__item">
                         <span class="icon-time"></span>
                         <div class="test-wrap__item--content">
-                          <strong class="fs-18">{{ prd_asft.test_duration }}</strong>
+                          <strong class="fs-18">{{ prd_asft.test_duration }} min</strong>
                           <p>Test duration</p>
                         </div>
                     </div>
                   </div>
-                  </span> -->
+                  </span>
                 {% endif %}
                 </div>
               </div>
@@ -181,7 +181,6 @@
       <section class="container-fluid cls_scroller_parent pr">
         <div class="row">
           <section class="detail-box" style="padding:0;"></section>
-          {% if prd_uget %}
             <section class="container-fluid detail-box">
             <div class="container">
               <div class="row">
@@ -215,15 +214,14 @@
               </div>
             </div>
             </section>
-          {% endif %}
 
-            {% if prd_desc %}
+            {% if prd_uget %}
               <section class="container-fluid detail-box">
               <div class="container">
                 <div class="row">
                   <div id="course" class="col-sm-12 col-md-8">
                     <h2>Topics Covered</h2>                     
-                       {{prd_desc|safe}}
+                       {{prd_uget|safe}}
                     </div>
                 </div>
               </div>

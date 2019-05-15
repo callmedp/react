@@ -175,7 +175,7 @@
                 <div class="test-wrap__item">
                     <span class="icon-question"></span>
                     <div class="test-wrap__item--content">
-                    <strong>120</strong>
+                    <strong>{{ prd_asft.number_of_questions }}</strong>
                     <p class="pb-0">No. of questions</p>
                     </div>
                 </div>
@@ -183,7 +183,7 @@
                 <div class="test-wrap__item">
                     <span class="icon-time"></span>
                     <div class="test-wrap__item--content">
-                        <strong>60 min</strong>
+                        <strong>{{ prd_asft.test_duration }} min</strong>
                         <p class="pb-0">Test duration</p>
                     </div>
                 </div>
@@ -230,17 +230,9 @@
 
                 <div class="content-box row pt-30 pb-30">
                     <h2 class="fs-18">Topics covered</h2>
-                    <ul class="list-tick-item">
-                        <li>Keyword Density</li>
-                        <li>Meta tag</li>
-                        <li>Inbound- outbound links</li>
-                        <li>Keywok Searching</li>
-                        <li>Internal linking</li>
-                        <li>Keyword matching categories</li>
-                        <li>Page rank</li>
-                        <li>Link sharing</li>
-                        <li>SEO rules</li>
-                    </ul>
+                    <div class="list-tick-item">
+                    {{prd_uget|safe}}
+               		 </div>
                 </div>
 
 
@@ -258,92 +250,7 @@
         </section><!-- end of section here -->
     </div><!-- body wrapper ends here -->
 
-    {% if prd_service == 'course' and pop %}
-        <div class="sidebar" id="sidebar-secondary">
-            <div class="right-navbar pt-0">
-                <h2 class="mb-0">Other providers</h2>
-                <ul class="underline">
-                {% for provider in pop_list|slice:"0:4" %}
-                    <li>
-                        <a href="{{provider.url}}" for="test1">
-                            <span>
-                                <img src="{{provider.vendor.image.url}}" style="z-index: 10;">
-                                {{provider.vendor}} - {{provider.heading}} (Rs.{{provider.inr_price|floatformat:"0"}})
-                            </span>
-                        </a>
-                    </li>
-                {% endfor %}
-                </ul>
-            </div>
-        </div>
-    {% elif product.type_flow == 5 %}
-        <!-- Other packages start here -->
-        <div class="sidebar" id="sidebar-secondary">
-          <div class="right-navbar packages pt-0">
-            <h2 class="mb-0">Other packages</h2>
-            <ul class="underline">
-            {% for package in pop_list|slice:"0:4"  %}
-                <li>
-                    <a href="{{package.url}}">
-                    {% if package.duration %}
-                        <strong>
-                            {{ package.duration }} days
-                        </strong>
-                    {% endif %}
-                    </a>
-                </li>
-            {% endfor %}
-            </ul>
-          </div>
-        </div><!-- Other packages ends here -->
-    {% else %}
-    <!-- Other packages start here -->
-    <div class="sidebar" id="sidebar-secondary">
-      <div class="right-navbar packages pt-0">
-        <h2 class="mb-0">Other packages</h2>
-        <ul class="underline">
-        {% for package in pop_list|slice:"0:4"  %}
-            <li>
-                <a href="{{package.url}}{% if sqs.id in linkedin_resume_services %}?token={{request.GET.token}}{% endif %}" class="blue-link pb-0">
-                {% if package.experience %}
-                    <strong>
-                        {{package.experience|get_choice_display:"EXP_DICT"}}
-                    </strong>
-                {% endif %}
-                </a>
-            </li>
-        {% endfor %}
-        </ul>
-      </div>
-    </div><!-- Other packages ends here -->
-    {% endif %}
 
-    {% if prd_service == 'resume' and var_list %}
-        <!-- Select countries (optional) start here -->
-        <div class="sidebar" id="sidebar-countries">
-            <div class="right-navbar packages pt-0">
-                <ul class="underline">
-                {% for country in var_list %}
-                    <li id="element_checked">
-                        <input {% if country.id in selected_products %}checked{% endif %}
-                        value='{{country.id}}' name="required_option" type="checkbox"data-id="{{country.id}}" data-price="{{country.inr_price}}" actual-price="{% if country.fake_inr_price %} {{country.fake_inr_price}}{% else %}{{country.inr_price}}{% endif %}" id="{{country.label}} ">
-                        <label for="{{country.label}} ">
-                            <p class="pb-0" id="text_val">{{country.label}}</p>
-                        </label>
-                    </li>
-                {% endfor %}
-                </ul>
-                <div class="bottom-btn">
-                    <a href="#" class="btn-slg btn-blue btn-round w100fl text-center"
-                    id="done_click">
-                        DONE
-                    </a>
-                </div>
-            </div>
-        </div><!-- Select countries (optional) ends here -->
-    {% endif %}
-    <!-- leadform start here -->
-    <!-- call us and chat widget starts here -->
     {% block call_us %}
         {% include "shop/partials/call_us.html" %}
     {% endblock call_us %}

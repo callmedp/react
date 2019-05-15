@@ -157,7 +157,7 @@ class ProductInformationMixin(object):
         if product.pTF == 5:
             info['prd_dur'] = product.pDM[0] if product.pDM else ''
 
-        if product.pTF == 16:
+        if product.pTF == 16 and product.pAsft:
             info['prd_asft'] = eval(product.pAsft[0])
         return info
 
