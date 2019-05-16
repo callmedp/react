@@ -116,7 +116,7 @@ export class PersonalInfo extends Component {
                           className={!!(!isEditable) ? "icon-edit " + styles['icon-edit__cursor'] : ''}/>
                 </section>
                 <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
-                    <section id="personal-section"  className="flex-container right-sidebar-scroll">
+                    <section id="personal-section" className="flex-container right-sidebar-scroll">
                         <section className="info-section">
                             <div className="flex-container">
                                 <fieldset>
@@ -167,7 +167,7 @@ export class PersonalInfo extends Component {
                                         <div className="input-group--input-group-icon">
                                             <span className="icon-date"></span>
                                         </div>
-                                        <Field component={datepicker} name="date_of_birth"
+                                        <Field yearDropDownItemNumber={50} component={datepicker} name="date_of_birth"
                                                className={"input-control"}/>
                                     </div>
                                 </fieldset>

@@ -123,6 +123,8 @@ function* deleteUserExperience(action) {
         if (result['error']) {
             console.log(result['error'])
         }
+        localStorage.removeItem('experience');
+
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_EXPERIENCE, id: experienceId});
 

@@ -107,7 +107,10 @@ export const AwardRenderer = ({
                                                                 <div className="input-group--input-group-icon">
                                                                     <span className="icon-date"/>
                                                                 </div>
-                                                                <Field component={datepicker} type={"date"}
+                                                                <Field component={datepicker}
+                                                                       maxDateAllowed={true}
+                                                                       yearDropDownItemNumber={30}
+                                                                       type={"date"}
                                                                        className={'input-control'}
                                                                        name={`${member}.date`}/>
                                                             </div>

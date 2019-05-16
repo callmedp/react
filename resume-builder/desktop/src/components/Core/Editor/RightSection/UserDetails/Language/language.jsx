@@ -150,13 +150,14 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         "bulkUpdateOrCreate": (listItems) => {
-            listItems = (listItems || []).map(item => {
+            listItems = (listItems || []).map((item,index) => {
                 const {proficiency} = item;
                 if (!item['id']) delete item['id'];
                 item = {
                     ...item,
                     ...{
-                        proficiency: (proficiency && proficiency.value) || 5
+                        proficiency: (proficiency && proficiency.value) || 5,
+                        order:index
 
                     }
                 };

@@ -149,6 +149,9 @@ function* deleteUserLanguage(action) {
         if (result['error']) {
             console.log(result['error'])
         }
+
+        localStorage.removeItem('language');
+
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_LANGUAGE, id: languageId});
 

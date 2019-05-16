@@ -1,10 +1,10 @@
-import React from 'react'
+import React from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import AsyncSelect from 'react-select/lib/Async';
 import Select from 'react-select';
-import makeAnimated from 'react-select/lib/animated'
-
+import makeAnimated from 'react-select/lib/animated';
+import moment from 'moment';
 
 export const renderField = ({
                                 input,
@@ -13,6 +13,7 @@ export const renderField = ({
                                 className,
                                 tillTodayDisable,
                                 index,
+                                text,
                                 meta: {touched, error, warning}
                             }) => {
     return (
@@ -21,6 +22,9 @@ export const renderField = ({
                 <div className="Error">
                     <input {...input} className={className} onClick={(e) => tillTodayDisable(index, !input.checked, e)}
                            autoComplete="off" placeholder={label} type={type}/>
+                    {
+                        !!(text) && <span>{text}</span>
+                    }
                     {touched &&
                     ((error && <span className={'Error-message'}>{error}</span>) ||
                         (warning && <span className={'Warn-Message'}>{warning}</span>))}
@@ -44,27 +48,30 @@ export const datepicker =
          type,
          onDateChange,
          disabled,
+         maxDateAllowed,
+         yearDropDownItemNumber,
          meta: {touched, error, warning}
      }) => (
-        <React.Fragment>
-            <div className="Error">
-                <DatePicker {...input}
-                            value={disabled ? "" : input.value}
-                            dateFormat="yyyy-MM-dd"
-                            autoComplete="off"
-                            selected={input.value ? new Date(input.value) : null}
-                            onChange={date => input.onChange(date)}
-                            showYearDropdown
-                            yearDropdownItemNumber={20}
-                            scrollableYearDropdown
-                            showMonthDropdown
-                            disabled={disabled}
-                />
-                {touched &&
-                ((error && <span className={'Error-message'}>{error}</span>) ||
-                    (warning && <span className={'Warn-Message'}>{warning}</span>))}
-            </div>
-        </React.Fragment>
+        <div className="Error">
+            <DatePicker {...input}
+                        value={disabled ? "" : input.value}
+                        dateFormat="yyyy-MM-dd"
+                        autoComplete="off"
+                        selected={input.value ? new Date(input.value) : null}
+                        maxDate={maxDateAllowed ? new Date() : null}
+                // minDate={dateValue !== ''  ? moment(dateValue).add(1, 'days') : null}
+                        onChange={date => input.onChange(date)}
+                        showYearDropdown
+                        yearDropdownItemNumber={yearDropDownItemNumber}
+                        scrollableYearDropdown
+                        showMonthDropdown
+                        disabled={disabled}
+
+            />
+            {touched &&
+            ((error && <span className={'Error-message'}>{error}</span>) ||
+                (warning && <span className={'Warn-Message'}>{warning}</span>))}
+        </div>
     )
 
 const selectStyles = {menu: styles => ({...styles, zIndex: 999})};

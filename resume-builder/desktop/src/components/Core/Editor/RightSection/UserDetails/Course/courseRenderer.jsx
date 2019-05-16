@@ -113,6 +113,7 @@ export const CourseRenderer = ({
                                                                 </div>
                                                                 <Field component={datepicker}
                                                                        type={"date"}
+                                                                       yearDropDownItemNumber={15}
                                                                        name={`${member}.year_of_certification`}
                                                                        className="input-control"/>
                                                             </div>

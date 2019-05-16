@@ -120,6 +120,8 @@ function* deleteUserCourse(action) {
             console.log(result['error'])
         }
         // yield call(fetchUserLanguage)
+        localStorage.removeItem('course');
+
         yield put({type: Actions.REMOVE_COURSE, id: courseId});
 
     } catch (e) {

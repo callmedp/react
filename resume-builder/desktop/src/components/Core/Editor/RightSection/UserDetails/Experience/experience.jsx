@@ -68,7 +68,7 @@ class Experience extends Component {
 
     tillTodayDisable(index, checked, e) {
         e.stopPropagation();
-        let {till_today} = this.state
+        let {till_today} = this.state;
         till_today[parseInt(index)] = checked
     }
 
@@ -125,7 +125,7 @@ class Experience extends Component {
             changeOrderingDown, changeOrderingUp
 
         } = this.props;
-        const {till_today} = this.state
+        const {till_today} = this.state;
 
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
@@ -194,14 +194,16 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         "bulkUpdateOrCreate": (listItems) => {
-            listItems = (listItems || []).map(userExperience => {
+            listItems = (listItems || []).map((userExperience,index) => {
                 const {start_date, end_date} = userExperience;
                 if (!userExperience['id']) delete userExperience['id'];
                 userExperience = {
                     ...userExperience,
                     ...{
                         start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
-                        end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || ''
+                        end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || '',
+                        order: index
+
                     }
                 };
                 return userExperience;

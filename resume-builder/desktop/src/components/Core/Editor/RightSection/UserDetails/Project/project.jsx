@@ -17,14 +17,14 @@ class Project extends Component {
         this.state = {
             active: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             submit: false,
-            till_today:[],
+            till_today: [],
         }
     }
 
     componentDidMount() {
         this.props.fetchUserProject()
-        let till_today= []
-        for (let i of this.props.initialValues.list){
+        let till_today = []
+        for (let i of this.props.initialValues.list) {
             till_today.push(i.currently_working)
         }
         this.setState({till_today})
@@ -33,8 +33,8 @@ class Project extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.initialValues.list !== prevProps.initialValues.list) {
-            let till_today= []
-            for (let i of this.props.initialValues.list){
+            let till_today = []
+            for (let i of this.props.initialValues.list) {
                 till_today.push(i.currently_working)
             }
             this.setState({till_today})
@@ -79,9 +79,9 @@ class Project extends Component {
         })
     }
 
-    tillTodayDisable(index,checked,e){
+    tillTodayDisable(index, checked, e) {
         e.stopPropagation();
-        let {till_today} =this.state
+        let {till_today} = this.state
         till_today[parseInt(index)] = checked
     }
 
@@ -105,9 +105,9 @@ class Project extends Component {
         const {
             handleSubmit, ui: {loader}, saveTitle,
             editHeading, isEditable, entityName, nextEntity,
-            handlePreview, changeOrderingDown, changeOrderingUp
+            handlePreview, changeOrderingDown, changeOrderingUp, formData: {project}
         } = this.props;
-        const {till_today} =this.state
+        const {till_today} = this.state
         return (
             <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
                 <FieldArray
@@ -126,12 +126,14 @@ class Project extends Component {
                     entityName={entityName}
                     expanded={this.state.active}
                     till_today={till_today}
-                    tillTodayDisable ={this.tillTodayDisable}
+                    tillTodayDisable={this.tillTodayDisable}
+                    formValues={project && project.values}
                 />
 
                 <div className="flex-container items-right mr-20 mb-30">
                     <button className="blue-button mr-10" type={'button'} onClick={handlePreview}>Preview</button>
-                    <button className="orange-button" type={'submit'}>{!nextEntity ? "Download": 'Save and Continue'}</button>
+                    <button className="orange-button"
+                            type={'submit'}>{!nextEntity ? "Download" : 'Save and Continue'}</button>
                 </div>
             </form>
 
@@ -179,14 +181,15 @@ const mapDispatchToProps = (dispatch) => {
 
 
         "bulkUpdateOrCreate": (listItems) => {
-            listItems = (listItems || []).map(userProject => {
+            listItems = (listItems || []).map((userProject, index) => {
                 const {start_date, end_date} = userProject;
                 if (!userProject['id']) delete userProject['id'];
                 userProject = {
                     ...userProject,
                     ...{
                         start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
-                        end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || ''
+                        end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || '',
+                        order: index
                     }
                 };
                 return userProject;

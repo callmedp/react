@@ -66,7 +66,8 @@ export const EducationRenderer = ({
                                 return (
                                     <li key={index}>
                                         <section className="info-section">
-                                            <AccordionItem uuid={index} name={`education${index}`} id={`education${index}`}>
+                                            <AccordionItem uuid={index} name={`education${index}`}
+                                                           id={`education${index}`}>
                                                 <AccordionItemHeading>
                                                     <AccordionItemButton>
                                                         <div className="flex-container">
@@ -123,8 +124,9 @@ export const EducationRenderer = ({
                                                                 <div className="input-group--input-group-icon">
                                                                     <span className="icon-date"></span>
                                                                 </div>
-                                                                <Field component={datepicker} type={"date"}
-
+                                                                <Field maxDateAllowed={true} component={datepicker}
+                                                                       type={"date"}
+                                                                       yearDropDownItemNumber={15}
                                                                        name={`${member}.start_date`}
                                                                        className="input-control"/>
                                                             </div>
@@ -139,6 +141,7 @@ export const EducationRenderer = ({
                                                                        type={"date"}
                                                                        name={`${member}.end_date`}
                                                                        disabled={till_today[index]}
+                                                                       yearDropDownItemNumber={15}
                                                                        className="input-control"/>
                                                             </div>
                                                             <span className={styles["till-today"]}>
@@ -146,8 +149,8 @@ export const EducationRenderer = ({
                                                                        component={renderField}
                                                                        tillTodayDisable={tillTodayDisable}
                                                                        index={`${index}`}
+                                                                       text={'Till Today'}
                                                                        checked={`${member}.end_date` === true}/>
-                                                                Till Today
                                                             </span>
                                                         </fieldset>
                                                     </div>

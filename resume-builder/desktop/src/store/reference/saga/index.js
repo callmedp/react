@@ -124,6 +124,9 @@ function* deleteUserReference(action) {
         if (result['error']) {
             console.log(result['error'])
         }
+
+        localStorage.removeItem('reference');
+
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_REFERENCE, id: referenceId});
 

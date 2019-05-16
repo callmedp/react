@@ -131,6 +131,8 @@ function* deleteUserProject(action) {
         if (result['error']) {
             console.log(result['error'])
         }
+        localStorage.removeItem('project');
+
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_PROJECT, id: projectId});
 

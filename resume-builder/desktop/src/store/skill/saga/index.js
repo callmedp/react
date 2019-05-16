@@ -146,7 +146,7 @@ function* deleteUserSkill(action) {
         }
 
 
-        localStorage.deleteItem('skill');
+        localStorage.removeItem('skill');
 
         // yield call(fetchUserSkill)
         yield put({type: Actions.REMOVE_SKILL, id: skillId});

@@ -10,7 +10,6 @@ import {datepicker, renderField, renderTextArea} from "../../../../../FormHandle
 import React from "react";
 import styles from './experience.scss'
 
-
 export const ExperienceRenderer = ({
                                        fields,
                                        loader,
@@ -32,7 +31,6 @@ export const ExperienceRenderer = ({
                                        tillTodayDisable
                                    }) => {
     let elem = null;
-
     return (
         <div>
             <section className="head-section">
@@ -125,6 +123,8 @@ export const ExperienceRenderer = ({
                                                                 </div>
                                                                 <Field component={datepicker}
                                                                        type={"date"}
+                                                                       yearDropDownItemNumber={15}
+                                                                       maxDateAllowed={true}
                                                                        className={'input-control'}
                                                                        name={`${member}.start_date`}/>
                                                             </div>
@@ -147,8 +147,8 @@ export const ExperienceRenderer = ({
                                                                        component={renderField}
                                                                        tillTodayDisable={tillTodayDisable}
                                                                        index={`${index}`}
+                                                                       text={'Till Today'}
                                                                        checked={`${member}.is_working` === true}/>
-                                                                Till Today
 							                                </span>
                                                         </fieldset>
                                                     </div>

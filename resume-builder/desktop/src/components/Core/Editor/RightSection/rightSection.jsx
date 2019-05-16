@@ -78,6 +78,7 @@ class RightSection extends Component {
 
     changeOrderingUp(index, fields, event) {
         event.stopPropagation();
+        console.log('---', fields.getAll());
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;

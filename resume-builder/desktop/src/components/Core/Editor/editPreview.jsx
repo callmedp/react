@@ -20,7 +20,7 @@ class EditPreview extends Component {
     componentDidMount() {
         this.props.fetchEntityInfo()
     }
-    
+
     render() {
         const {ui: {loader}, userInfo: {first_name}} = this.props;
         return (
@@ -30,7 +30,7 @@ class EditPreview extends Component {
             <div>
                 {
                     !!(loader) &&
-                     <LoaderPage/>
+                    <LoaderPage/>
                 }
 
                 <Header userName={first_name}/>
@@ -53,7 +53,8 @@ class EditPreview extends Component {
 const mapStateToProps = (state) => {
     return {
         ui: state.ui,
-        userInfo: state.personalInfo
+        userInfo: state.personalInfo,
+        template: state.template
     }
 }
 
@@ -85,6 +86,6 @@ const mapDispatchToProps = (dispatch) => {
         }
     }
 }
-          
+
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditPreview))
 

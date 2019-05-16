@@ -62,6 +62,7 @@ function* updateUserAward(action) {
 
         //delete the award
         localStorage.removeItem('award');
+
         yield put({type: Actions.SAVE_USER_AWARD, data: result['data']});
 
         return resolve('User Award  Info saved successfully.');
@@ -123,6 +124,8 @@ function* deleteUserAward(action) {
             console.log(result['error'])
         }
         // yield call(fetchUserLanguage)
+        localStorage.removeItem('award');
+
         yield put({type: Actions.REMOVE_AWARD, id: awardId});
 
     } catch (e) {

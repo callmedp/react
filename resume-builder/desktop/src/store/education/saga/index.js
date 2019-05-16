@@ -141,6 +141,8 @@ function* deleteUserEducation(action) {
         if (result['error']) {
             console.log(result['error'])
         }
+        localStorage.removeItem('education');
+
         // yield call(fetchUserLanguage)
         yield put({type: Actions.REMOVE_EDUCATION, id: educationId});
 

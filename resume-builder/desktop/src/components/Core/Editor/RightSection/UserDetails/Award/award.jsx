@@ -99,7 +99,8 @@ class Award extends Component {
                     <button className={'blue-button mr-10'} type={'button'}
                             onClick={handlePreview}>Preview
                     </button>
-                    <button className={'orange-button'} type={'submit'}>{!nextEntity ? "Download": 'Save and Continue'}</button>
+                    <button className={'orange-button'}
+                            type={'submit'}>{!nextEntity ? "Download" : 'Save and Continue'}</button>
                 </div>
 
             </form>
@@ -145,13 +146,14 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         "bulkUpdateOrCreate": (listItems) => {
-            listItems = (listItems || []).map(userAward => {
+            listItems = (listItems || []).map((userAward, index) => {
                 const {date} = userAward;
                 if (!userAward['id']) delete userAward['id'];
                 userAward = {
                     ...userAward,
                     ...{
                         date: (date && moment(date).format('YYYY-MM-DD')) || '',
+                        order: index
                     }
                 };
                 return userAward;

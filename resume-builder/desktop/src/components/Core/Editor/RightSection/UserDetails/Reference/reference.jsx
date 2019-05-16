@@ -104,7 +104,8 @@ class Reference extends Component {
 
                 <div className="flex-container items-right mr-20 mb-30">
                     <button className="blue-button mr-10" type={'button'} onClick={handlePreview}>Preview</button>
-                    <button className="orange-button" type={'submit'}>{!nextEntity ? "Download": 'Save and Continue'}</button>
+                    <button className="orange-button"
+                            type={'submit'}>{!nextEntity ? "Download" : 'Save and Continue'}</button>
                 </div>
             </form>
         )
@@ -141,8 +142,14 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         "bulkUpdateOrCreate": (listItems) => {
-            listItems = (listItems || []).map(userReference => {
+            listItems = (listItems || []).map((userReference, index) => {
                 if (!userReference['id']) delete userReference['id'];
+                userReference = {
+                    ...userReference,
+                    ...{
+                        order: index
+                    }
+                }
                 return userReference;
             });
             return new Promise((resolve, reject) => {

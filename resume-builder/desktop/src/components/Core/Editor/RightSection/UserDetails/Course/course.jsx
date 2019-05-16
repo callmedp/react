@@ -43,7 +43,7 @@ class Course extends Component {
         let {formData: {course: {values, syncErrors}}} = this.props;
         let error = false;
         (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el).map(key => (!!el[key] ? error = true : false)))
-        if (!error &&  !this.state.submit) this.props.bulkUpdateOrCreate(values && values['list'])
+        if (!error && !this.state.submit) this.props.bulkUpdateOrCreate(values && values['list'])
 
     }
 
@@ -98,7 +98,8 @@ class Course extends Component {
                 />
                 <div className="flex-container items-right mr-20 mb-30">
                     <button className="blue-button mr-10" type={'button'} onClick={handlePreview}>Preview</button>
-                    <button className="orange-button" type={'submit'}>{!nextEntity ? "Download": 'Save and Continue'}</button>
+                    <button className="orange-button"
+                            type={'submit'}>{!nextEntity ? "Download" : 'Save and Continue'}</button>
                 </div>
             </form>
 
@@ -146,13 +147,14 @@ const
             },
 
             "bulkUpdateOrCreate": (listItems) => {
-                listItems = (listItems || []).map(userCourse => {
+                listItems = (listItems || []).map((userCourse, index) => {
                     const {year_of_certification} = userCourse;
                     if (!userCourse['id']) delete userCourse['id'];
                     userCourse = {
                         ...userCourse,
                         ...{
                             year_of_certification: (year_of_certification && moment(year_of_certification).format('YYYY')) || '',
+                            order: index
                         }
                     };
                     return userCourse;

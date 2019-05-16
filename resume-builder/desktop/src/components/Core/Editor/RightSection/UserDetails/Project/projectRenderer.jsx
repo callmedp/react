@@ -27,6 +27,7 @@ export const ProjectRenderer = ({
                                     expanded,
                                     tillTodayDisable,
                                     till_today,
+                                    formValues
                                 }) => {
     let elem = null;
 
@@ -37,10 +38,10 @@ export const ProjectRenderer = ({
             {/*}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-projects1"/></span>
-                <h2  className={"comp-heading"}
+                <h2 className={"comp-heading"}
                     ref={(value) => {
-                    elem = value
-                }} onKeyUp={(event) => saveTitle(event)}
+                        elem = value
+                    }} onKeyUp={(event) => saveTitle(event)}
                     contenteditable={isEditable ? "true" : "false"}>{entityName}
                 </h2>
                 <span onClick={() => editHeading(elem)}
@@ -113,7 +114,10 @@ export const ProjectRenderer = ({
                                                                 <div className="input-group--input-group-icon">
                                                                     <span className="icon-date"/>
                                                                 </div>
-                                                                <Field component={datepicker} type={"date"}
+                                                                <Field component={datepicker}
+                                                                       type={"date"}
+                                                                       yearDropDownItemNumber={15}
+                                                                       maxDateAllowed={true}
                                                                        className={'input-control'}
                                                                        name={`${member}.start_date`}/>
                                                             </div>
@@ -125,16 +129,21 @@ export const ProjectRenderer = ({
                                                                     <span className="icon-date"/>
                                                                 </div>
                                                                 <Field component={datepicker} type={"date"}
-                                                                       className={'input-control'} disabled={till_today[index]}
+                                                                       className={'input-control'}
+                                                                       disabled={till_today[index]}
+                                                                       dateFromName={`${member}.start_date`}
+                                                                       formValues={formValues}
                                                                        name={`${member}.end_date`}/>
                                                             </div>
                                                             <span className={styles['till-today']}>
                                                                 <Field type="checkbox"
-                                                                        name={`${member}.currently_working`}
-                                                                        component={renderField}
-                                                                        tillTodayDisable={tillTodayDisable} index={`${index}`}
-                                                                        checked={`${member}.is_working` === true}/>
-                                                                Till Today
+                                                                       name={`${member}.currently_working`}
+                                                                       component={renderField}
+                                                                       tillTodayDisable={tillTodayDisable}
+                                                                       index={`${index}`}
+                                                                       text={'Till Today'}
+                                                                       checked={`${member}.is_working` === true}/>
+
 							                                </span>
                                                         </fieldset>
                                                     </div>
