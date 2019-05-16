@@ -666,6 +666,8 @@ class AuthorListingView(TemplateView):
 
         popular_courses = BlogMixin().get_product(
             top_cats, skills)
+        country_choices, initial_country = self.get_countries()
+        context.update({'country_choices': country_choices, 'initial_country': initial_country, })
 
         context.update({
             'authors': authors,
@@ -678,6 +680,14 @@ class AuthorListingView(TemplateView):
         context.update(self.get_breadcrumb_data())
         context.update(self.get_meta_details())
         return context
+
+
+    def get_countries(self):
+        country_choices = [(m.phone, m.name) for m in
+            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+        initial_country = Country.objects.filter(phone='91')[0].phone
+        return country_choices,initial_country
+
 
     def get_breadcrumb_data(self):
         breadcrumbs = []
