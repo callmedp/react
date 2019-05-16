@@ -539,7 +539,7 @@ class CertiticateParser:
 
         email = parsed_data.user_certificate.candidate_email
         upc = parsed_data.certificate.vendor_certificate_id
-        oi = OrderItem.objects.filter(email=email, product__upc=upc, product__vendor__name=vendor).order_by('-id').first()
+        oi = OrderItem.objects.filter(order__email=email, product__upc=upc, product__vendor__name=vendor).order_by('-id').first()
         if oi:
             candidate_id = oi.order.candidate_id
             data = get_featured_profile_data_for_candidate(
