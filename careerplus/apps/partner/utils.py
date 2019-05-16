@@ -536,7 +536,8 @@ class CertiticateParser:
         return parsed_data
 
     def update_order_and_badge_user(self, parsed_data, vendor):
-        email = parsed_data.certiticate.candidate_email
+
+        email = parsed_data.user_certificate.candidate_email
         upc = parsed_data.certificate.vendor_certificate_id
         oi = OrderItem.objects.filter(email=email, product__upc=upc, product__vendor__name=vendor).order_by('-id').first()
         if oi:
