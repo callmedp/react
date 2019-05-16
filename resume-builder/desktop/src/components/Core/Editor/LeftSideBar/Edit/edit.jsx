@@ -13,21 +13,29 @@ class Edit extends Component {
         this.addMoreClick = this.addMoreClick.bind(this);
         this.deleteFromVisibleList = this.deleteFromVisibleList.bind(this);
         this.addIntoVisibleList = this.addIntoVisibleList.bind(this);
-        const values = queryString.parse(this.props.location.search);
         this.state = {
-            type: (values && values.type) || '',
             show: false,
             preferenceList: this.props.entityList
         };
-
-        if (!(values && values.type)) {
-            this.props.history.push('/resume-builder/edit/?type=profile')
-        }
     }
 
 
     handleSpanClick(e) {
         e.stopPropagation();
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        const values = queryString.parse(nextProps.location.search);
+        const {formName} = nextProps;
+
+        if (!(values && values.type)) {
+            if (formName) {
+                nextProps.history.push(`/resume-builder/edit/?type=${formName}`);
+            } else nextProps.history.push('/resume-builder/edit/?type=profile');
+        }
+        return ({
+            type: values && values.type || ''
+        })
     }
 
     addMoreClick() {
@@ -137,7 +145,8 @@ class Edit extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        entityList: state.personalInfo && state.personalInfo.entity_preference_data || []
+        entityList: state.personalInfo && state.personalInfo.entity_preference_data || [],
+        formName: state.ui && state.ui.formName
     }
 }
 

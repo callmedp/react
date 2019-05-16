@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
 import './preview.scss'
+import queryString from "query-string";
 
 export default class Preview extends Component {
     constructor(props) {
         super(props);
         this.goToBuyPage = this.goToBuyPage.bind(this);
     }
+
+
 
     goToBuyPage() {
         this.props.history.push('/resume-builder/buy')

@@ -22,7 +22,9 @@ class Skill extends Component {
         this.state = {
             active: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             submit: false
-        }
+        };
+        this.props.currentForm('skill');
+
     }
 
     componentDidMount() {

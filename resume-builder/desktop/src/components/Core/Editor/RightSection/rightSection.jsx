@@ -1,19 +1,20 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import './rightSection.scss'
-import PersonalInfo from './UserDetails/PersonalInfo/personalInfo.jsx'
-import Education from './UserDetails/Education/education.jsx'
-import Experience from './UserDetails/Experience/experience.jsx'
-import Language from './UserDetails/Language/language.jsx'
-import Skill from './UserDetails/Skill/skill.jsx'
-import Summary from './UserDetails/Summary/summary.jsx'
-import Award from './UserDetails/Award/award.jsx'
-import Project from './UserDetails/Project/project.jsx'
-import Reference from './UserDetails/Reference/reference.jsx'
-import Course from './UserDetails/Course/course.jsx'
-import Template from './Template/template.jsx'
-import queryString from 'query-string'
-import * as actions from '../../../../store/personalInfo/actions'
+import './rightSection.scss';
+import PersonalInfo from './UserDetails/PersonalInfo/personalInfo.jsx';
+import Education from './UserDetails/Education/education.jsx';
+import Experience from './UserDetails/Experience/experience.jsx';
+import Language from './UserDetails/Language/language.jsx';
+import Skill from './UserDetails/Skill/skill.jsx';
+import Summary from './UserDetails/Summary/summary.jsx';
+import Award from './UserDetails/Award/award.jsx';
+import Project from './UserDetails/Project/project.jsx';
+import Reference from './UserDetails/Reference/reference.jsx';
+import Course from './UserDetails/Course/course.jsx';
+import Template from './Template/template.jsx';
+import queryString from 'query-string';
+import * as actions from '../../../../store/personalInfo/actions';
+import {currentForm} from '../../../../store/ui/actions';
 import {formCategoryList} from "../../../../Utils/formCategoryList";
 
 
@@ -345,6 +346,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         "updateEntityPreference": (entityList) => {
             return dispatch(actions.updateEntityPreference({'entity_preference_data': entityList}));
+        },
+        "currentForm": (formName = '') => {
+            return dispatch(currentForm({formName: formName}))
         }
     }
 }

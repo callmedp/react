@@ -19,6 +19,7 @@ class Award extends Component {
             submit: false
 
         }
+        this.props.currentForm('award');
     }
 
     componentDidMount() {

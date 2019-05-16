@@ -16,10 +16,14 @@ import moment from 'moment'
 
 class EditPreview extends Component {
 
+    constructor(props) {
+        super(props);
+    }
 
     componentDidMount() {
-        this.props.fetchEntityInfo()
+        this.props.fetchEntityInfo();
     }
+
 
     render() {
         const {ui: {loader}, userInfo: {first_name}} = this.props;

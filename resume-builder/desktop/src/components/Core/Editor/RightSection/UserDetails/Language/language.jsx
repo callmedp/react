@@ -21,7 +21,9 @@ class Language extends Component {
             active: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             submit: false
 
-        }
+        };
+        this.props.currentForm('language');
+
     }
 
 
@@ -104,7 +106,8 @@ class Language extends Component {
 
                 <div className="flex-container items-right mr-20 mb-30">
                     <button className="blue-button mr-10" type={'button'} onClick={handlePreview}>Preview</button>
-                    <button className="orange-button" type={'submit'}>{!nextEntity ? "Download": 'Save and Continue'}</button>
+                    <button className="orange-button"
+                            type={'submit'}>{!nextEntity ? "Download" : 'Save and Continue'}</button>
                 </div>
             </form>
         )
@@ -150,14 +153,14 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         "bulkUpdateOrCreate": (listItems) => {
-            listItems = (listItems || []).map((item,index) => {
+            listItems = (listItems || []).map((item, index) => {
                 const {proficiency} = item;
                 if (!item['id']) delete item['id'];
                 item = {
                     ...item,
                     ...{
                         proficiency: (proficiency && proficiency.value) || 5,
-                        order:index
+                        order: index
 
                     }
                 };

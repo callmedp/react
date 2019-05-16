@@ -21,6 +21,8 @@ class Education extends Component {
             submit: false,
             till_today: [],
         }
+        this.props.currentForm('education');
+
     }
 
     async handleSubmit(values, entityLink) {
@@ -188,7 +190,7 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         "bulkUpdateOrCreate": (listItems) => {
-            listItems = (listItems || []).map((userEducation,index) => {
+            listItems = (listItems || []).map((userEducation, index) => {
                     const {start_date, end_date, course_type} = userEducation;
                     if (!userEducation['id']) delete userEducation['id'];
                     userEducation = {

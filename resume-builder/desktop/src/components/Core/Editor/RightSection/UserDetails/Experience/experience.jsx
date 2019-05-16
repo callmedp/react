@@ -22,7 +22,9 @@ class Experience extends Component {
             submit: false,
             till_today: [],
 
-        }
+        };
+        this.props.currentForm('experience');
+
     }
 
     componentDidMount() {
@@ -41,8 +43,6 @@ class Experience extends Component {
         Events.scrollEvent.register('end', function () {
             console.log("end");
         });
-
-
     }
 
     componentDidUpdate(prevProps) {
@@ -194,7 +194,7 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         "bulkUpdateOrCreate": (listItems) => {
-            listItems = (listItems || []).map((userExperience,index) => {
+            listItems = (listItems || []).map((userExperience, index) => {
                 const {start_date, end_date} = userExperience;
                 if (!userExperience['id']) delete userExperience['id'];
                 userExperience = {

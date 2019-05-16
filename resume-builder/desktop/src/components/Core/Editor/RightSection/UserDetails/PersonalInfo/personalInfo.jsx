@@ -33,6 +33,8 @@ export class PersonalInfo extends Component {
             submit: false
         }
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
+        this.props.currentForm('profile');
+
     }
 
 

@@ -19,6 +19,7 @@ class Course extends Component {
             submit: false
 
         }
+        this.props.currentForm('course');
     }
 
     componentDidMount() {
