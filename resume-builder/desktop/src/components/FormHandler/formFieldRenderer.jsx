@@ -46,24 +46,25 @@ export const datepicker =
          disabled,
          meta: {touched, error, warning}
      }) => (
-        <div className="Error">
-            <DatePicker {...input}
-                        dateFormat="yyyy-MM-dd"
-                        autoComplete="off"
-                        selected={input.value ? new Date(input.value) : null}
-                        onChange={date => input.onChange(date)}
-                        showYearDropdown
-                        yearDropdownItemNumber={20}
-                        scrollableYearDropdown
-                        showMonthDropdown
-                        disabled={disabled}
-
-
-            />
-            {touched &&
-            ((error && <span className={'Error-message'}>{error}</span>) ||
-                (warning && <span className={'Warn-Message'}>{warning}</span>))}
-        </div>
+        <React.Fragment>
+            <div className="Error">
+                <DatePicker {...input}
+                            value={disabled ? "" : input.value}
+                            dateFormat="yyyy-MM-dd"
+                            autoComplete="off"
+                            selected={input.value ? new Date(input.value) : null}
+                            onChange={date => input.onChange(date)}
+                            showYearDropdown
+                            yearDropdownItemNumber={20}
+                            scrollableYearDropdown
+                            showMonthDropdown
+                            disabled={disabled}
+                />
+                {touched &&
+                ((error && <span className={'Error-message'}>{error}</span>) ||
+                    (warning && <span className={'Warn-Message'}>{warning}</span>))}
+            </div>
+        </React.Fragment>
     )
 
 const selectStyles = {menu: styles => ({...styles, zIndex: 999})};
