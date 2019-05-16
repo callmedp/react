@@ -757,18 +757,21 @@ class UpdateCertificateAndAssesment(APIView):
         parser = CertiticateParser(parse_type=0)
         parsed_data = parser.parse_data(data)
         certificate, user_certificate = parser.save_parsed_data(parsed_data, vendor=data['vendor'])
-        flag = parser.update_certificate_on_shine(user_certificate)
 
-        if flag:
-            logging.getLogger('info_log').error(
-                "Certificate %s parsed, saved, updated for Candidate Id %s" %
-                (str(certificate.name), str(user_certificate.candidate_id))
-            )
-        else:
-            logging.getLogger('error_log').error(
-                "Error Occured for Certificate %s for Candidate Id %s" %
-                (str(certificate.name), str(user_certificate.candidate_id))
-            )
+        if user_certificate:
+            flag = parser.update_certificate_on_shine(user_certificate)
+
+            if flag:
+                logging.getLogger('info_log').error(
+                    "Certificate %s parsed, saved, updated for Candidate Id %s" %
+                    (str(certificate.name), str(user_certificate.candidate_id))
+                )
+            else:
+                logging.getLogger('error_log').error(
+                    "Error Occured for Certificate %s for Candidate Id %s" %
+                    (str(certificate.name), str(user_certificate.candidate_id))
+                )
+
         flag = parser.update_order_and_badge_user(parsed_data, vendor=data['vendor'])
 
         return Response({

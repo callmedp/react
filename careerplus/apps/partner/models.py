@@ -133,6 +133,22 @@ class VendorHierarchy(AbstractAutoDate):
             'employee': self.employee}
 
 
+class Assesment(AbstractAutoDate):
+    vendor_text = models.CharField(max_length=255, blank=True, null=True)
+    vendor_provider = models.ForeignKey(Vendor, null=True, blank=True)
+    assesment_name = models.CharField(max_length=255, blank=True, null=True)
+    candidate_id = models.CharField(
+        _('Candidate_id'), blank=True,
+        max_length=60, help_text=_('Candidate_id'))
+    candidate_email = models.EmailField(
+        _('Email'),
+        max_length=255, help_text=_('Candidate Email Address'))
+    extra_info = models.TextField(
+        _('Extra Info'), blank=True,
+        default='', help_text=_('Extra Info'))
+    report = models.TextField(blank=True)
+
+
 class Certificate(AbstractAutoDate):
     name = models.CharField(
         max_length=255, null=False, blank=False, db_index=True)
@@ -181,11 +197,12 @@ class UserCertificate(models.Model):
     certificate_file_url = models.URLField(max_length=500, blank=True, null=True)
     expiry_date = models.DateTimeField(null=True, blank=True)
     order = models.ForeignKey(
-        'order.Order', related_name='user_certificates',
+        'order.Order', related_name='user_certificate_order',
         verbose_name=_("Order"), blank=True, null=True)
     overallScore = models.IntegerField(default=0, null=True, blank=True)
     status = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
     extra_info = models.TextField(null=True, blank=True)
+    assesment = models.ForeignKey('Assesment', null=True, blank=True)
 
     def __str__(self):
         return '{}'.format(self.certificate.name)
@@ -205,23 +222,6 @@ class BoosterRecruiter(AbstractAutoDate):
 
     def __str__(self):
         return '<' + self.get_type_recruiter_display() + '>'
-
-
-class Assesment(AbstractAutoDate):
-    vendor_text = models.CharField(max_length=255, blank=True, null=True)
-    vendor_provider = models.ForeignKey(Vendor, null=True, blank=True)
-    assesment_name = models.CharField(max_length=255, blank=True, null=True)
-    certificate = models.ForeignKey('Certificate', null=True, blank=True)
-    candidate_id = models.CharField(
-        _('Candidate_id'), blank=True,
-        max_length=60, help_text=_('Candidate_id'))
-    candidate_email = models.EmailField(
-        _('Email'),
-        max_length=255, help_text=_('Candidate Email Address'))
-    extra_info = models.TextField(
-        _('Extra Info'), blank=True,
-        default='', help_text=_('Extra Info'))
-    report = models.TextField(blank=True)
 
 
 class Report(models.Model):

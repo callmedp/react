@@ -113,49 +113,99 @@ Pull Type.
 DEMO DATA (AMCAT):-
 
 {
-    "result": {
-        "candidateName": "Mark Depp",
-        "candidateEmailID": "user@mail.com",
-        "amcatID": "12345678901234",
-        "assessmentName": "Test name",
-        "reportURL": [
-            {
-                "name": "Candidate Proficiency Report",
-                "url":
-                "https%3A%2F%2Fcorpmis.aspiringminds.in%2FgenerateReports.php%3Fdata%3DYvxRSzV7xzokU5g9NBTMkRGO"
-            }
-        ],
-        "scores": {
-            "Logical": "692",
-            "english comprehension": "725",
-            "mathematical": "815"
-        },
-        "scores": {
-            ["Logical", "692"],
-            ["english comprehension", "725"],
-            ["mathematical", "815"]
-        },
-        "scores": {
-            ["Logical", "692", "english comprehension", "725", "mathematical", "815"]
-        },
-        "scores": {
-            ["Logical", "692", "english comprehension", "725", "mathematical", "815"]
-        },
-        "certificates": {
-            "name": "AMCAT Certified Software Engineer - Product",
-            "licenseNumber": "1302681-1",
-            "url": "https://www.myamcat.com/linkedin-share?candidateID=1302681&jobsuitabilityID=1&src=2"
-        },
-        "certificates_name": "AMCAT Certified Software Engineer - Product",
 
-        "certificate_url": "https://www.myamcat.com/linkedin-share?candidateID=1302681&jobsuitabilityID=1&src=2",
+  "result": {
 
-        "validated-skills": [
-            "English comprehension",
-            "Quantitative ability"
-        ],
-        "validated-skills": "English comprehension, Quantitative ability"
-    }
+    "amcatID": "10011930591215",
+
+    "assessmentName": 1556099337@myamcat.com,
+
+    "candidateName": "Raj Singh",
+
+    "candidateEmailID": "s@gmail.com",
+
+    "status": "",
+
+    "reportURL": [
+
+      {
+
+        "name": "Candidate Proficiency Report",
+
+        "url": "https%3A%2F%2Fcorpmis.aspiringminds.in%2FgenerateReports.php%3Fdata%3DYvxRSzV7xzokU5g9NBTMkRGO7LzG8gxGPTZcGIlEcG7PdOl1HPcHaNo%252FvlsN77fnbvWaD5bUZa%252BOt22%252FBMhArHH42XG%252FozvQgNh3Zsw8wfyxk6KPy4lnri8dyKNClklf"
+
+      }
+
+    ],
+
+    "scores": {
+
+      "English Comprehension": "605",
+
+      "Quantitative Ability (Advanced)": "735",
+
+      "Basic IT Applications": "765",
+
+      "Computer Programming": "0",
+
+      "Logical Ability": "0",
+
+      "Mechanical Engineering": "0",
+
+      "Civil Engineering": "0",
+
+      "C++ Programming": "0",
+
+      "Core Java (Entry Level)": "0",
+
+      "SQL": "0",
+
+      "UNIX": "0"
+
+    },
+
+    "certificates": [
+
+      {
+
+        "certificateName": "AMCAT Certified in C",
+
+        "licenseNumber": "333070-10011930591215-6",
+
+        "amcatID": 10011930591215,
+
+        "validTill": "2012-08-26"
+
+      },
+
+      {
+
+        "certificateName": "AMCAT Certified in Basic Computer Knowledge",
+
+        "licenseNumber": "333070-10011930591215-20",
+
+        "amcatID": 10011930591215,
+
+        "validTill": "2012-08-26"
+
+      },
+
+      {
+
+        "certificateName": "AMCAT Certified in MS office",
+
+        "licenseNumber": "333070-10011930591215-1",
+
+        "amcatID": 10011930591215,
+
+        "validTill": "2012-08-26"
+
+      }
+
+    ]
+
+  }
+
 }
 '''
 
@@ -172,12 +222,10 @@ MAPPING_VALUES_TO_DATA_KEY_1 = {
     'amcat': {
         'assesment': {
             'candidate_email': '1|candidateEmailID',
-            'assesment_name': '1|assesment_name',
+            'assesment_name': '1|assessmentName',
         },
         'certificate': {
-            'name': '3|certificates:1|name',
-            'skill': '2|validated-skills',
-            'vendor_certificate_id': '1|amcatID'
+            'certificate': '6|certificates',
         },
         'user_certificate': {
             'candidate_name': '1|candidateName',
@@ -219,21 +267,32 @@ MAPPING_VENDOR_MAX_SCORE = {
 }
 
 
-MULTIPLE_VALUES_1 = {'score': ['subject', 'score_obtained'], 'report': ['name', 'url']}
+MULTIPLE_VALUES_1 = {
+    'amcat': {
+        'score': ['subject', 'score_obtained'],
+        'report': ['name', 'url'],
+        'certificate': {
+            'name': 'certificateName',
+            'vendor_certificate_id': 'licenseNumber'
+        },
+    }
+}
 
 MULTIPLE_VALUES_2 = {
-    'certificate': {
-        'name': 'certificateName',
-        'skill': 'skillValidated',
-        'vendor_certificate_id': 'amcatID',
-        'active_from': 'certificationDate',
-        'expiry': 'validTill',
-        'licenseNumber': 'licenseNumber'
+    'amcat': {
+        'certificate': {
+            'name': 'certificateName',
+            'skill': 'skillValidated',
+            'vendor_certificate_id': 'amcatID',
+            'active_from': 'certificationDate',
+            'expiry': 'validTill',
+            'licenseNumber': 'licenseNumber'
+        }
     }
 }
 
 ADDITONAL_OPERATIONS_1 = {
-    'amcat': ['attach_score_to_certificates']
+    'amcat': []
 }
 
 ADDITONAL_OPERATIONS_2 = {
@@ -370,6 +429,8 @@ class CertiticateParser:
     def save_parsed_data(self, parse_data, vendor):
         vendor_key = vendor
         vendor_field = 'vendor_text'
+        certificate = None
+        user_certificate = None
 
         try:
             vendor = Vendor.objects.get(name=vendor_key)
@@ -377,26 +438,6 @@ class CertiticateParser:
         except Vendor.DoesNotExist:
             pass
 
-        # manage certiticate data
-        certificate_data = parse_data.certificate.__dict__
-
-        certificate_data = {key: val for key, val in certificate_data.items() \
-                            if key in dict(self.MAPPING_VALUES_TO_DATA_KEY[vendor_key]['certificate']).keys()}
-
-        if vendor_field == 'vendor_text':
-            certificate_data['vendor_text'] = vendor
-
-        certificate, created = Certificate.objects.get_or_create(
-            **certificate_data
-        )
-        setattr(certificate, vendor_field, vendor)
-
-        try:
-            certificate.save()
-        except IntegrityError:
-            pass
-
-        candidate_email = parse_data.assesment.candidate_email
         report = []
 
         # Make report string from report model
@@ -405,41 +446,21 @@ class CertiticateParser:
 
         report = ','.join(report)
 
-        # fetch candidate id and store it in assesment and user certificate
-        user_certificate = parse_data.user_certificate
-        assesment = parse_data.assesment
-
-        if candidate_email:
-            candidate_id = ShineCandidateDetail().get_shine_id(email=candidate_email)
-
-            if candidate_id:
-                user_certificate.candidate_id = candidate_id
-                assesment.candidate_id = candidate_id
-
-        # save user certificate data
-        user_certificate_data = parse_data.user_certificate.__dict__
-        user_certificate_data = {key: val for key, val in user_certificate_data.items() \
-                                 if key in dict(self.MAPPING_VALUES_TO_DATA_KEY[vendor_key]['user_certificate']).keys()}
-        user_certificate_data['certificate'] = certificate
-        user_certificate, created = UserCertificate.objects.get_or_create(
-            **user_certificate_data
-        )
-
         assesmemnt_data = parse_data.assesment.__dict__
         assesmemnt_data = {key: val for key, val in assesmemnt_data.items() \
                            if key in dict(self.MAPPING_VALUES_TO_DATA_KEY[vendor_key]['assesment']).keys()}
 
+        if vendor_field == 'vendor_text':
+                assesmemnt_data['vendor_text'] = vendor
         assesment, created = Assesment.objects.get_or_create(
             **assesmemnt_data
         )
+        setattr(assesment, vendor_field, vendor)
 
         # Save assesment data
         assesment.report = report
-        if certificate:
-            assesment.certificate = certificate
         setattr(assesment, vendor_field, vendor)
         assesment.save()
-
         # Handling for scores, create only if assesment is newly created
         if created:
             for scor in parse_data.scores:
@@ -453,6 +474,50 @@ class CertiticateParser:
                     if not getattr(scor, 'max_score', None) and scor.score_type == 3:
                         scor.max_score = '100'
                 scor.save()
+
+        for certificate in parse_data.certificates:
+            # manage certiticate data
+            certificate_data = certificate.__dict__
+
+            certificate_data = {key: val for key, val in certificate_data.items() \
+                                if key in dict(self.MULTIPLE_VALUES[vendor_key]['certificate']).keys()}
+
+            if vendor_field == 'vendor_text':
+                certificate_data['vendor_text'] = vendor
+
+            certificate, created = Certificate.objects.get_or_create(
+                **certificate_data
+            )
+            setattr(certificate, vendor_field, vendor)
+
+            try:
+                certificate.save()
+            except IntegrityError:
+                pass
+
+            candidate_email = parse_data.assesment.candidate_email
+
+            # Fetch candidate id and store it in assesment and user certificate
+            user_certificate = parse_data.user_certificate
+
+            if candidate_email:
+                candidate_id = ShineCandidateDetail().get_shine_id(email=candidate_email)
+
+                if candidate_id:
+                    user_certificate.candidate_id = candidate_id
+                    assesment.candidate_id = candidate_id
+                    assesment.save()
+
+            # save user certificate data
+            user_certificate_data = parse_data.user_certificate.__dict__
+            user_certificate_data = {key: val for key, val in user_certificate_data.items() \
+                                     if key in dict(self.MAPPING_VALUES_TO_DATA_KEY[vendor_key]['user_certificate']).keys()}
+            user_certificate_data['certificate'] = certificate
+            if assesment:
+                user_certificate_data['assesment'] = assesment
+            user_certificate, created = UserCertificate.objects.get_or_create(
+                **user_certificate_data
+            )
         return (certificate, user_certificate)
 
 
@@ -492,8 +557,8 @@ class CertiticateParser:
 
                 for field in fields:
                     value = self.get_actual_value(data, self.get_key_for_field(vendor_key, key, field))
-                    if field in self.MULTIPLE_VALUES.keys():
-                        multiple_fields = self.MULTIPLE_VALUES[field]
+                    if field in self.MULTIPLE_VALUES[vendor_key].keys():
+                        multiple_fields =self.MULTIPLE_VALUES[vendor_key][field]
 
                         for val in value:
                             data_instance = getattr(parse_data, key).__class__()
@@ -536,10 +601,8 @@ class CertiticateParser:
         return parsed_data
 
     def update_order_and_badge_user(self, parsed_data, vendor):
-
         email = parsed_data.user_certificate.candidate_email
-        upc = parsed_data.certificate.vendor_certificate_id
-        oi = OrderItem.objects.filter(order__email=email, product__upc=upc, product__vendor__name=vendor).order_by('-id').first()
+        oi = OrderItem.objects.filter(order__email=email, product__vendor__name=vendor).order_by('-id').first()
         if oi:
             candidate_id = oi.order.candidate_id
             data = get_featured_profile_data_for_candidate(
