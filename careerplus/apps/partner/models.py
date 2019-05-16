@@ -144,6 +144,15 @@ class Certificate(AbstractAutoDate):
     vendor_certificate_id = models.CharField(max_length=255, null=True, blank=True)
     product = models.PositiveIntegerField(max_length=255, null=True, blank=True)
 
+
+    @property
+    def provider(self):
+        if self.vendor_provider:
+            return self.vendor_provider.name
+        else:
+            return self.vendor_text
+    
+
     def __str__(self):
         return self.name
 
@@ -174,7 +183,7 @@ class UserCertificate(models.Model):
     order = models.ForeignKey(
         'order.Order', related_name='user_certificates',
         verbose_name=_("Order"), blank=True, null=True)
-
+    overallScore = models.IntegerField(default=0, null=True, blank=True)
     status = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
     extra_info = models.TextField(null=True, blank=True)
 
@@ -236,7 +245,7 @@ class Score(AbstractAutoDate):
 class ParsedAssesmentData:
 
     def __init__(self):
-        self.score = Score
+        self.score = Score()
         self.scores = []
         self.assesment = Assesment()
         self.certificate = Certificate()
