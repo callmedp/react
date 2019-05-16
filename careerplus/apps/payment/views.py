@@ -273,7 +273,7 @@ class ThankYouView(TemplateView):
                             "candidate_name": oi.order.first_name,
                             "candidate_city": candidate_location,
                             "candidate_degree": candidate_degree,
-                            "shine_learning_order_id": oi.order.number
+                            "shine_learning_order_id": oi.id
                         }
                         update_auto_login_url_for_assesment(oi, data)
 

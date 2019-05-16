@@ -196,9 +196,9 @@ class UserCertificate(models.Model):
         max_length=30, help_text=_('Candidate ID'))
     certificate_file_url = models.URLField(max_length=500, blank=True, null=True)
     expiry_date = models.DateTimeField(null=True, blank=True)
-    order = models.ForeignKey(
-        'order.Order', related_name='user_certificate_order',
-        verbose_name=_("Order"), blank=True, null=True)
+    order_item = models.ForeignKey(
+        'order.OrderItem', related_name='user_certificate_orderitem',
+        verbose_name=_("Order Item"), blank=True, null=True)
     overallScore = models.IntegerField(default=0, null=True, blank=True)
     status = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
     extra_info = models.TextField(null=True, blank=True)
