@@ -2,188 +2,195 @@
 @import '../../../../../styles/variables/mixins.scss';
 
 .edit-section {
-	padding: 20px 0;
-	font-weight: 600;
-	color: $txt1;
+  padding: 20px 0;
+  font-weight: 600;
+  color: $txt1;
 
-	strong {
-		margin: 0 20px;
-	}
+  strong {
+    margin: 0 20px;
+  }
 
-	ul {
-		margin: 20px 0 0 0;
-		display: block;
-		flex: 1 1 auto;
-		overflow-y: auto;
-		height: 450px;
+  ul {
+    margin: 20px 0 0 0;
+    display: block;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    height: 450px;
 
-		li {
-			color: $blue1;
-			display: block;
-			padding: 0 20px;
-			border-bottom: 1px solid $white;
+    li {
+      color: $blue1;
+      display: block;
+      padding: 0 20px;
+      border-bottom: 1px solid $white;
 
-			a {
-				display: inline-block;
-				width: 90%;
-				color: $blue1;
-				padding: 15px 0;
-				line-height: 30px;
-			}
+      a {
+        display: inline-block;
+        width: 90%;
+        color: $blue1;
+        padding: 15px 0;
+        line-height: 30px;
+      }
 
-			&:hover {
-				cursor: pointer;
-				background-color: $blue1;
-				color: $white ;
-				border-bottom: 1px solid $white;
+      .non-link {
+		 display: inline-block;
+        width: 90%;
+        padding: 15px 0;
+        line-height: 30px;
+      }
 
-				a {
-					color: $white !important;
-				}
+      &:hover {
+        cursor: pointer;
+        background-color: $blue1;
+        color: $white;
+        border-bottom: 1px solid $white;
 
-				.icon-delete {
-					background-position: -139px -1px;
-				}
+        a {
+          color: $white !important;
+        }
 
-				.icon-info {
-					background-position: -273px -1px;
-				}
+        .icon-delete {
+          background-position: -139px -1px;
+        }
 
-				.icon-summary {
-					background-position: -355px -38px;
-				}
+        .icon-info {
+          background-position: -273px -1px;
+        }
 
-				.icon-experience {
-					background-position: -397px -39px;
-				}
+        .icon-summary {
+          background-position: -355px -38px;
+        }
 
-				.icon-education {
-					background-position: -339px 0;
-				}
+        .icon-experience {
+          background-position: -397px -39px;
+        }
 
-				.icon-skills {
-					background-position: -382px -1px;
-				}
+        .icon-education {
+          background-position: -339px 0;
+        }
 
-				.icon-languages {
-					background-position: -111px -74px;
-				}
+        .icon-skills {
+          background-position: -382px -1px;
+        }
 
-				.icon-awards {
-					background-position: -194px -75px;
-				}
+        .icon-languages {
+          background-position: -111px -74px;
+        }
 
-				.icon-courses {
-					background-position: -277px -75px;
-				}
+        .icon-awards {
+          background-position: -194px -75px;
+        }
 
-				.icon-projects {
-					background-position: -362px -75px;
-				}
+        .icon-courses {
+          background-position: -277px -75px;
+        }
 
-				.icon-references {
-					background-position: -441px -75px;
-				}
+        .icon-projects {
+          background-position: -362px -75px;
+        }
 
-				.icon-add {
-					background-position: -478px -13px;
-				}
-			}
-		}
-	}
+        .icon-references {
+          background-position: -441px -75px;
+        }
 
-	&--active {
-		background-color: $blue1;
-		color: $white !important;
+        .icon-add {
+          background-position: -478px -13px;
+        }
+      }
+    }
+  }
 
-		a {
-			color: $white !important;
-		}
+  &--active {
+    background-color: $blue1;
+    color: $white !important;
 
-		.icon-delete {
-			background-position: -139px -1px;
-		}
+    a {
+      color: $white !important;
+    }
 
-		.icon-info {
-			background-position: -273px -1px;
-		}
+    .icon-delete {
+      background-position: -139px -1px;
+    }
 
-		.icon-summary {
-			background-position: -355px -38px;
-		}
+    .icon-info {
+      background-position: -273px -1px;
+    }
 
-		.icon-experience {
-			background-position: -397px -39px;
-		}
+    .icon-summary {
+      background-position: -355px -38px;
+    }
 
-		.icon-education {
-			background-position: -339px 0;
-		}
+    .icon-experience {
+      background-position: -397px -39px;
+    }
 
-		.icon-skills {
-			background-position: -382px -1px;
-		}
+    .icon-education {
+      background-position: -339px 0;
+    }
 
-		.icon-languages {
-			background-position: -111px -74px;
-		}
+    .icon-skills {
+      background-position: -382px -1px;
+    }
 
-		.icon-awards {
-			background-position: -194px -75px;
-		}
+    .icon-languages {
+      background-position: -111px -74px;
+    }
 
-		.icon-courses {
-			background-position: -277px -75px;
-		}
+    .icon-awards {
+      background-position: -194px -75px;
+    }
 
-		.icon-projects {
-			background-position: -362px -75px;
-		}
+    .icon-courses {
+      background-position: -277px -75px;
+    }
 
-		.icon-references {
-			background-position: -441px -75px;
-		}
+    .icon-projects {
+      background-position: -362px -75px;
+    }
 
-		.icon-add {
-			background-position: -478px -13px;
+    .icon-references {
+      background-position: -441px -75px;
+    }
 
-			/*&:hover {
-				background-position: -478px -13px !important;
-			}*/
-		}
-	}
+    .icon-add {
+      background-position: -478px -13px;
 
-	&--addmore {
-		font-weight: 400;
-		text-align: center;
+      /*&:hover {
+          background-position: -478px -13px !important;
+      }*/
+    }
+  }
 
-		&:hover {
-			background-color: $white !important; 
-			color: $blue1 !important;
-		}
-	}
+  &--addmore {
+    font-weight: 400;
+    text-align: center;
 
-	/*.icon-add {
-		&:hover {
-			background-position: -478px -13px;
-		}
-	}*/
+    &:hover {
+      background-color: $white !important;
+      color: $blue1 !important;
+    }
+  }
+
+  /*.icon-add {
+      &:hover {
+          background-position: -478px -13px;
+      }
+  }*/
 }
 
 .disabled {
-	opacity: 0.3;
-	color: $blue1 !important;
+  opacity: 0.3;
+  color: $blue1 !important;
 
-	&:hover {
-		background-color: $white !important;
-		color: $blue1 !important;
-	}
+  &:hover {
+    background-color: $white !important;
+    color: $blue1 !important;
+  }
 
-	a {
-		&:hover {
-			color: $blue1 !important;
-		}
-	}
+  a {
+    &:hover {
+      color: $blue1 !important;
+    }
+  }
 }
 
 

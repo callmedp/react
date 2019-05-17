@@ -61,7 +61,7 @@ export class PersonalInfo extends Component {
 
 
     componentWillUnmount() {
-        let {formData: {personalInfo: {values, syncErrors}}} = this.props;
+        let {formData: {profile: {values, syncErrors}}} = this.props;
         let error = false;
         Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
         if (!error && !this.state.submit) this.props.onSubmit(values, this.state.imageURL, this.state.flag)
@@ -294,7 +294,7 @@ export class PersonalInfo extends Component {
 }
 
 export const PersonalInfoForm = reduxForm({
-    form: 'personalInfo',
+    form: 'profile',
     enableReinitialize: true,
     validate
 })(PersonalInfo);

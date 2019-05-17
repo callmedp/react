@@ -14,6 +14,7 @@ import moment from "moment"
 import {fetchPersonalInfo, updatePersonalInfo} from '../../../../store/personalInfo/actions/index'
 import SelectTemplateModal from '../../../Modal/selectTemplateModal';
 import LoaderPage from '../../../Loader/loaderPage';
+import {displaySelectedTemplate} from "../../../../store/template/actions";
 
 
 function SampleNextArrow(props) {
@@ -49,7 +50,8 @@ export class Buy extends Component {
         this.showEnlargedTemplate = this.showEnlargedTemplate.bind(this)
     }
 
-    showEnlargedTemplate() {
+    showEnlargedTemplate(templateId) {
+        this.props.displaySelectedTemplate(templateId);
         this.props.showModal()
     }
 
@@ -123,7 +125,7 @@ export class Buy extends Component {
                     <section className={'flex-container mt-30'}>
 
                         <section className="left-sidebar half-width pos-rel">
-                            <span onClick={this.showEnlargedTemplate} className="zoom"/>
+                            <span onClick={() => this.showEnlargedTemplate(selected_template)} className="zoom"/>
                             <div className="right-sidebar-scroll-main">
                                 <img src={`${this.staticUrl}react/assets/images/resume${selected_template}_preview.jpg`}
                                      className="img-responsive" alt=""/>
@@ -260,6 +262,9 @@ const mapDispatchToProps = (dispatch) => {
                 dispatch(updatePersonalInfo({personalDetails, resolve, reject}));
             })
         },
+        displaySelectedTemplate(templateId) {
+            return dispatch(displaySelectedTemplate(templateId))
+        }
     }
 };
 

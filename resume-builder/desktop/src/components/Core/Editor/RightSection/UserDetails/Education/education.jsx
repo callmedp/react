@@ -87,13 +87,13 @@ class Education extends Component {
             order: listLength
         })
 
-        scroller.scrollTo(`education1`, {
-            duration: 800,
-            delay: 0,
-            smooth: 'easeInOutQuad',
-            offset: 1000,
-            containerId: 'education2'
-        })
+        // scroller.scrollTo(`education1`, {
+        //     duration: 800,
+        //     delay: 0,
+        //     smooth: 'easeInOutQuad',
+        //     offset: 1000,
+        //     containerId: 'education2'
+        // })
 
 
     }

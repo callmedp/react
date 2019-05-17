@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {Link} from 'react-router-dom';
 import './edit.scss'
 import queryString from "query-string";
@@ -93,6 +93,13 @@ class Edit extends Component {
 
     render() {
         const {type, show, preferenceList} = this.state;
+        let {formData, formName} = this.props;
+        let error = false;
+        const obj = formData && formData[formName] || {};
+        let syncErrors = obj['syncErrors'] || {};
+        // if ('list' in syncErrors) (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el).map(key => (!!el[key] ? error = true : false)))
+        // else Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
+        console.log('-error---', error);
         return (
             <div className="edit-section">
                 <strong>Complete your information</strong>
@@ -102,10 +109,18 @@ class Edit extends Component {
                             const {link, icon, itemType} = formCategoryList[elem['entity_id']];
                             return (
                                 <li key={index} className={type === itemType ? 'edit-section--active' : ''}>
-                                    <Link to={link}>
-                                        <span className={'mr-20 ' + icon}></span>
-                                        {elem['entity_text']}
-                                    </Link>
+                                    {
+                                        !!(error) ?
+                                            <div className={"non-link"}>
+                                                <span className={'mr-20 ' + icon}></span>
+                                                {elem['entity_text']}
+                                            </div>
+                                            :
+                                            <Link to={link}>
+                                                <span className={'mr-20 ' + icon}></span>
+                                                {elem['entity_text']}
+                                            </Link>
+                                    }
                                     {
                                         !!(elem['entity_id'] !== 1 && elem['entity_id'] !== 6) ?
                                             <span onClick={() => this.deleteFromVisibleList(elem)}
@@ -146,7 +161,9 @@ class Edit extends Component {
 const mapStateToProps = (state) => {
     return {
         entityList: state.personalInfo && state.personalInfo.entity_preference_data || [],
-        formName: state.ui && state.ui.formName
+        formName: state.ui && state.ui.formName,
+        formData: state && state.form
+
     }
 }
 

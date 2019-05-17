@@ -324,7 +324,7 @@ class RightSection extends Component {
     render() {
         const {type} = this.state;
         return (
-            <section className="right-sidebar">
+            <section id='right-sidebar' className="right-sidebar">
                 {
                     this.renderSwitch()
                 }
