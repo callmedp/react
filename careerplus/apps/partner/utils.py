@@ -2,7 +2,8 @@
 import logging
 from collections import OrderedDict
 from django.utils import timezone
-
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 # inter-app imports
 from partner.models import (
     ParsedAssesmentData, Certificate, UserCertificate, Assesment,
@@ -231,7 +232,8 @@ MAPPING_VALUES_TO_DATA_KEY_1 = {
             'candidate_name': '1|candidateName',
             'candidate_email': '1|candidateEmailID',
             'certificate_file_url': '3|certificates:1|url',
-            'order_item_id': '1|shineLearningOrderID'
+            'order_item_id': '1|shineLearningOrderID',
+            "overallScore": '1|overallScore'
         },
         'score': {
             'score': '4|scores',
@@ -274,7 +276,8 @@ MULTIPLE_VALUES_1 = {
         'report': ['name', 'url'],
         'certificate': {
             'name': 'certificateName',
-            'vendor_certificate_id': 'licenseNumber'
+            'vendor_certificate_id': 'licenseNumber',
+            'expiry': 'validTill',
         },
     }
 }
@@ -430,8 +433,9 @@ class CertiticateParser:
     def save_parsed_data(self, parse_data, vendor):
         vendor_key = vendor
         vendor_field = 'vendor_text'
-        certificate = None
-        user_certificate = None
+        certificates = []
+        user_certificates = []
+        expiry = None
 
         try:
             vendor = Vendor.objects.get(name=vendor_key)
@@ -479,6 +483,13 @@ class CertiticateParser:
         for certificate in parse_data.certificates:
             # manage certiticate data
             certificate_data = certificate.__dict__
+            try:
+                expiry = certificate_data.pop('expiry')
+            except KeyError:
+                pass
+
+            if not expiry:
+                expiry = timezone.now() + relativedelta(months=12)
 
             certificate_data = {key: val for key, val in certificate_data.items() \
                                 if key in dict(self.MULTIPLE_VALUES[vendor_key]['certificate']).keys()}
@@ -490,7 +501,7 @@ class CertiticateParser:
                 **certificate_data
             )
             setattr(certificate, vendor_field, vendor)
-
+            certificates.append(certificate)
             try:
                 certificate.save()
             except IntegrityError:
@@ -500,7 +511,6 @@ class CertiticateParser:
 
             # Fetch candidate id and store it in assesment and user certificate
             user_certificate = parse_data.user_certificate
-
             if candidate_email:
                 candidate_id = ShineCandidateDetail().get_shine_id(email=candidate_email)
 
@@ -514,12 +524,24 @@ class CertiticateParser:
             user_certificate_data = {key: val for key, val in user_certificate_data.items() \
                                      if key in dict(self.MAPPING_VALUES_TO_DATA_KEY[vendor_key]['user_certificate']).keys()}
             user_certificate_data['certificate'] = certificate
+
+            if isinstance(expiry, str):
+                user_certificate_data['expiry_date'] = datetime.strptime(expiry, '%Y-%m-%d')
+            else:
+                user_certificate_data['expiry_date'] = expiry
             if assesment:
                 user_certificate_data['assesment'] = assesment
             user_certificate, created = UserCertificate.objects.get_or_create(
                 **user_certificate_data
             )
-        return (certificate, user_certificate)
+            if created:
+                last_op_type = user_certificate.status
+                UserCertificateOperations.objects.create(
+                    user_certificate=user_certificate,
+                    op_type=0,
+                    last_op_type=last_op_type)
+                user_certificates.append(user_certificate)
+        return (certificates, user_certificates)
 
 
 
@@ -539,6 +561,7 @@ class CertiticateParser:
                 logging.getLogger('inf_log').error("Certificate %s for Candidate Id %s" % (str(user_certificate.certificate.name), str(user_certificate.candidate_id)))
                 last_op_type = user_certificate.status
                 user_certificate.status = 1
+                user_certificate.candidate_id = shineid
                 user_certificate.save()
                 UserCertificateOperations.objects.create(
                     user_certificate=user_certificate,
@@ -559,7 +582,7 @@ class CertiticateParser:
                 for field in fields:
                     value = self.get_actual_value(data, self.get_key_for_field(vendor_key, key, field))
                     if field in self.MULTIPLE_VALUES[vendor_key].keys():
-                        multiple_fields =self.MULTIPLE_VALUES[vendor_key][field]
+                        multiple_fields = self.MULTIPLE_VALUES[vendor_key][field]
 
                         for val in value:
                             data_instance = getattr(parse_data, key).__class__()
@@ -568,6 +591,7 @@ class CertiticateParser:
                                     setattr(data_instance, multiple_fields[index], val[index])
                             elif isinstance(multiple_fields, dict):
                                 for k, value in multiple_fields.items():
+                                    print(k, value)
                                     setattr(data_instance, k, val[value])
                             parse_data.__dict__[key + 's'].append(data_instance)
                     else:
