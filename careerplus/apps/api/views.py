@@ -771,8 +771,8 @@ class UpdateCertificateAndAssesment(APIView):
                     "Error Occured for Certificate %s for Candidate Id %s" %
                     (str(certificate.name), str(user_certificate.candidate_id))
                 )
-
-        flag = parser.update_order_and_badge_user(parsed_data, vendor=data['vendor'])
+        if getattr(parsed_data.user_certificate, 'order_item_id'):
+            flag = parser.update_order_and_badge_user(parsed_data, vendor=data['vendor'])
 
         return Response({
             "status": 1,

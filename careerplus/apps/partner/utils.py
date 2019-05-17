@@ -231,7 +231,7 @@ MAPPING_VALUES_TO_DATA_KEY_1 = {
             'candidate_name': '1|candidateName',
             'candidate_email': '1|candidateEmailID',
             'certificate_file_url': '3|certificates:1|url',
-            'order_id': '1|shineLearningOrderID'
+            'order_item_id': '1|shineLearningOrderID'
         },
         'score': {
             'score': '4|scores',
@@ -603,7 +603,7 @@ class CertiticateParser:
 
     def update_order_and_badge_user(self, parsed_data, vendor):
         email = parsed_data.user_certificate.candidate_email
-        orderitem_id = parsed_data.user_certificate.order_id
+        orderitem_id = parsed_data.user_certificate.order_item_id
         oi = OrderItem.objects.filter(id=orderitem_id)
         if oi:
             candidate_id = oi.order.candidate_id
