@@ -109,12 +109,15 @@
 {% block js_section %}
     {{block.super}}
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
+       <script type="text/javascript" src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
+
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     <script>
         $(function() {
             Article.init();
         });
     </script>
+
 {% endblock js_section %}
 
 {% block johukum %}

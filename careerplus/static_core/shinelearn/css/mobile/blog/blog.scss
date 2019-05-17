@@ -326,6 +326,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b6fc2', end
     
     span {
       display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     sup {
@@ -333,7 +336,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b6fc2', end
       width: 20px;
       display: inline-block;
       background-color: $txt-grey-999;
-      margin-bottom: 4px;
+      margin-bottom: 10px;
     }
   }
 }
