@@ -21,7 +21,7 @@ from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from .models import PaymentTxn
 from .mixin import PaymentMixin
 from .forms import StateForm, PayByCheckForm
-from .utils import EpayLaterEncryptDecryptUtil, update_auto_login_url_for_assesment
+from .utils import EpayLaterEncryptDecryptUtil
 from .tasks import put_epay_for_successful_payment
 
 #inter app imports
@@ -35,7 +35,6 @@ from dashboard.dashboard_mixin import DashboardInfo
 from console.decorators import Decorate, stop_browser_cache
 from core.utils import get_client_ip,get_client_device_type
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
-from api.config import LOCATION_MAPPING, DEGREE_MAPPING
 
 # third party imports
 
@@ -256,26 +255,6 @@ class ThankYouView(TemplateView):
                     product__type_flow=16,
                     product__sub_type_flow=1602
                 )
-                for oi in assesment_items:
-                    skill_id = oi.product.new_productskills.first().third_party_skill_id
-                    if not oi.autologin_url and skill_id:
-                        candidate_location = self.request.session.get('candidate_location', 'N.A')
-                        if candidate_location != 'N.A':
-                            candidate_location = LOCATION_MAPPING.get(candidate_location, 'N.A')
-                        candidate_degree = self.request.session.get('highest_education', 'N.A')
-                        if candidate_degree != 'N.A':
-                            candidate_degree = DEGREE_MAPPING.get(candidate_degree, 'N.A')
-
-                        data = {
-                            "candidate_email": oi.order.email,
-                            "skill_id": str(skill_id),
-                            "candidate_phone": oi.order.mobile,
-                            "candidate_name": oi.order.first_name,
-                            "candidate_city": candidate_location,
-                            "candidate_degree": candidate_degree,
-                            "shine_learning_order_id": oi.id
-                        }
-                        update_auto_login_url_for_assesment(oi, data)
 
                 context.update({
                     "pending_resume_items": pending_resume_items,
