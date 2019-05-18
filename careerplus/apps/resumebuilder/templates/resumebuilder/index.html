@@ -22,10 +22,10 @@
     {% endblock css_section %}
     <script>
         window.config = {}
-        config.staticUrl = "{{STATIC_URL}}"
-        config.siteDomain ="{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN }}"
-        config.msiteDomain = "{{ SITE_PROTOCOL }}://{{ MOBILE_SITE_DOMAIN }}"
-        {#config.siteDomain = "http://127.0.0.1:8000"#}
+        config.staticUrl = "{{STATIC_URL}}" 
+        {#config.siteDomain ="{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN }}"#} 
+        config.msiteDomain = "{{ SITE_PROTOCOL }}://{{ MOBILE_SITE_DOMAIN }}" 
+        config.siteDomain = "http://127.0.0.1:8000"
     </script>
 
 {% endblock head %}

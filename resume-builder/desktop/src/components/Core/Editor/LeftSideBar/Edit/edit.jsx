@@ -108,7 +108,7 @@ class Edit extends Component {
                         (preferenceList || []).filter(elem => elem.active === true).map((elem, index) => {
                             const {link, icon, itemType} = formCategoryList[elem['entity_id']];
                             return (
-                                <li key={index} className={type === itemType ? 'edit-section--active' : ''}>
+                                <li key={index} className={type === itemType ? 'edit-section--active, disabled' : ''}>
                                     {
                                         !!(error) ?
                                             <div className={"non-link"}>
