@@ -171,7 +171,8 @@ export class Buy extends Component {
                                             {
                                                 [1, 2, 3, 4, 5].map((el, key) => (
                                                     <div className="carousel-box--slide__content" key={key}>
-                                                        <div className="triangle-topright">
+                                                        <div onClick={() => this.showEnlargedTemplate(el)}
+                                                             className="triangle-topright">
                                                             <span></span>
                                                         </div>
                                                         <img

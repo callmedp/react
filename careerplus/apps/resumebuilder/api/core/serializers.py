@@ -153,7 +153,7 @@ class CandidateCertificationSerializer(serializers.ModelSerializer):
 
 class CandidateProjectSerializer(serializers.ModelSerializer):
     candidate_id = serializers.CharField(allow_blank=True, allow_null=True)
-    
+
     def validate_candidate_id(self, candidate_id):
         if not self.instance:
             user_id = self.context['request'].user.id
