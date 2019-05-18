@@ -1,6 +1,6 @@
 import {SAVE_USER_AWARD, REMOVE_AWARD} from "../actions/actionTypes";
 
-const initialState = {
+export const initialState = {
     list: [{
         "candidate_id": '',
         "id": '',

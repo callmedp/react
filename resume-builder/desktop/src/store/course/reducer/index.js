@@ -1,6 +1,6 @@
 import {SAVE_USER_COURSE, REMOVE_COURSE} from "../actions/actionTypes";
 
-const initialState = {
+export const initialState = {
     list: [{
         "candidate_id": '',
         "id": '',

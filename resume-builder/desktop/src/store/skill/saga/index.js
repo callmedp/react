@@ -8,6 +8,7 @@ import {SubmissionError} from 'redux-form'
 import {proficiencyList} from "../../../Utils/proficiencyList";
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
 import {courseTypeList} from "../../../Utils/courseTypeList";
+import { initialState } from '../reducer';
 
 
 function modifySkill(data) {
@@ -22,7 +23,7 @@ function modifySkill(data) {
             })
         }
     };
-    return data;
+    return data.list.length ? data : initialState;
 }
 
 function* fetchUserSkill(action) {

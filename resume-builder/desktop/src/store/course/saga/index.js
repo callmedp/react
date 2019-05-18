@@ -7,15 +7,16 @@ import * as Actions from '../actions/actionTypes';
 import {SubmissionError} from 'redux-form'
 
 import {UPDATE_UI} from '../../ui/actions/actionTypes'
+import {initialState} from "../reducer/index"
 
 function* fetchUserCourse(action) {
     try {
         const candidateId = localStorage.getItem('candidateId') || '';
 
-
+        
         if (localStorage.getItem('course')) {
-
-            yield put({type: Actions.SAVE_USER_COURSE, data: JSON.parse(localStorage.getItem('course')) || []});
+            let data = {list: JSON.parse(localStorage.getItem('course')) || []} 
+            yield put({type: Actions.SAVE_USER_COURSE, data: data.list.length ?  data : initialState });
             return;
         }
 
@@ -36,7 +37,7 @@ function* fetchUserCourse(action) {
             let {course: {list}} = state;
             results = list
         }
-        let data = {list: results};
+        let data = results.length ? {list: results} : initialState
         yield put({type: Actions.SAVE_USER_COURSE, data: data})
     } catch (e) {
         console.log(e);

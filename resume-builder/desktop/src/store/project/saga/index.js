@@ -6,6 +6,7 @@ import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
+import { initialState } from '../reducer';
 
 
 function* fetchUserProject(action) {
@@ -13,11 +14,11 @@ function* fetchUserProject(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
         if (localStorage.getItem('project')) {
-
+            let data = {list: JSON.parse(localStorage.getItem('project')) || []}
             yield put({
                 type: Actions.SAVE_USER_PROJECT,
-                data: {list: JSON.parse(localStorage.getItem('project')) || []}
-            })
+                data: data.list.length ? data : initialState
+            });
             return;
         }
 
@@ -37,7 +38,7 @@ function* fetchUserProject(action) {
             let {project: {list}} = state;
             results = list
         }
-        let data = {list: results}
+        let data = results.length ? {list: results} : initialState
 
 
         yield put({type: Actions.SAVE_USER_PROJECT, data: data})

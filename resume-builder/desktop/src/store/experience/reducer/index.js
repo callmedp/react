@@ -1,6 +1,6 @@
 import {SAVE_USER_EXPERIENCE, REMOVE_EXPERIENCE} from "../actions/actionTypes";
 
-const initialState = {
+export const initialState = {
     list: [{
         "candidate_id": '',
         "id": '',

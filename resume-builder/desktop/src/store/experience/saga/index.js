@@ -7,7 +7,7 @@ import * as Actions from '../actions/actionTypes';
 import {SubmissionError} from 'redux-form'
 
 import {UPDATE_UI} from '../../ui/actions/actionTypes'
-import {courseTypeList} from "../../../Utils/courseTypeList";
+import {initialState} from '../reducer/index'
 
 
 function* fetchUserExperience(action) {
@@ -16,10 +16,10 @@ function* fetchUserExperience(action) {
 
 
         if (localStorage.getItem('experience')) {
-
+            let data = {list: JSON.parse(localStorage.getItem('experience')) || []}
             yield put({
                 type: Actions.SAVE_USER_EXPERIENCE,
-                data: {list: JSON.parse(localStorage.getItem('experience')) || []}
+                data: data.list.length ? data : initialState
             });
 
             return;
@@ -39,7 +39,7 @@ function* fetchUserExperience(action) {
             let {experience: {list}} = state;
             results = list
         }
-        let data = {list: results};
+        let data = results.length ? {list: results} : initialState
         yield put({type: Actions.SAVE_USER_EXPERIENCE, data: data})
     } catch (e) {
         console.log(e);

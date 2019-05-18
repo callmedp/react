@@ -6,6 +6,7 @@ import * as Actions from '../actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
+import { initialState } from '../reducer';
 
 
 function* fetchUserReference(action) {
@@ -13,11 +14,11 @@ function* fetchUserReference(action) {
         const candidateId = localStorage.getItem('candidateId') || '';
 
         if (localStorage.getItem('reference')) {
-
+            let data = {list: JSON.parse(localStorage.getItem('reference')) || []}
             yield put({
                 type: Actions.SAVE_USER_REFERENCE,
-                data: {list: JSON.parse(localStorage.getItem('reference')) || []}
-            })
+                data: data.list.length ? data : initialState
+            });
             return;
         }
 
@@ -38,7 +39,7 @@ function* fetchUserReference(action) {
             results = list
         }
 
-        let data = {list: results};
+        let data = results.length ? {list: results} : initialState
         yield put({type: Actions.SAVE_USER_REFERENCE, data: data})
     } catch (e) {
         console.log(e);

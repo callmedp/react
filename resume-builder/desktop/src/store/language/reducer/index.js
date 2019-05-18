@@ -1,6 +1,6 @@
 import {SAVE_USER_LANGUAGE, REMOVE_LANGUAGE} from "../actions/actionTypes";
 
-const initialState = {
+export const initialState = {
     list: [{
         "candidate_id": '',
         "id": '',

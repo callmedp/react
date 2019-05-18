@@ -6,7 +6,7 @@ import * as Actions from '../actions/actionTypes';
 import {UPDATE_UI} from '../../ui/actions/actionTypes'
 
 import {SubmissionError} from 'redux-form'
-import {proficiencyList} from "../../../Utils/proficiencyList";
+import {initialState} from '../reducer/index'
 
 
 function* fetchUserAward(action) {
@@ -16,7 +16,8 @@ function* fetchUserAward(action) {
 
         if (localStorage.getItem('award')) {
 
-            yield put({type: Actions.SAVE_USER_AWARD, data: JSON.parse(localStorage.getItem('award')) || []});
+            let data = {list: JSON.parse(localStorage.getItem('award')) || []} 
+            yield put({type: Actions.SAVE_USER_AWARD, data: data.list.length ? data : initialState});
             return;
         }
 
@@ -34,7 +35,8 @@ function* fetchUserAward(action) {
             let {award: {list}} = state;
             results = list
         }
-        let data = {list: results};
+        let data = results.length ? {list: results} : initialState
+
         yield put({type: Actions.SAVE_USER_AWARD, data: data})
     } catch (e) {
         console.log(e);

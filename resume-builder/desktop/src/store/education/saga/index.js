@@ -10,6 +10,7 @@ import {courseTypeList} from "../../../Utils/courseTypeList";
 import {proficiencyList} from "../../../Utils/proficiencyList";
 
 import {UPDATE_UI} from '../../ui/actions/actionTypes'
+import {initialState} from "../reducer/index"
 
 function modifyEducation(data) {
     data = {
@@ -23,7 +24,7 @@ function modifyEducation(data) {
             })
         }
     };
-    return data;
+    return data.list.length ? data : initialState 
 }
 
 function* fetchUserEducation(action) {

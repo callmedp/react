@@ -7,6 +7,7 @@ import {proficiencyList} from "../../../Utils/proficiencyList";
 import {SubmissionError} from 'redux-form'
 import {UPDATE_UI} from "../../ui/actions/actionTypes";
 import {courseTypeList} from "../../../Utils/courseTypeList";
+import { initialState } from '../reducer';
 
 
 function modifyLanguage(data) {
@@ -21,7 +22,7 @@ function modifyLanguage(data) {
             })
         }
     };
-    return data;
+    return data.list.length ? data: initialState ;
 }
 
 function* fetchUserLanguage(action) {
@@ -30,7 +31,6 @@ function* fetchUserLanguage(action) {
 
 
         if (localStorage.getItem('language')) {
-
             yield put({
                 type: Actions.SAVE_USER_LANGUAGE,
                 data: modifyLanguage({list: JSON.parse(localStorage.getItem('language')) || []})
