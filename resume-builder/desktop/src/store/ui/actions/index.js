@@ -3,7 +3,8 @@ import {
     HIDE_TEMPLATE_MODAL,
     SHOW_SELECT_TEMPLATE_MODAL,
     HIDE_SELECT_TEMPLATE_MODAL,
-    SELECT_CURRENT_FORM
+    SELECT_CURRENT_FORM,
+    SHOW_MORE_SECTION
 } from "./actionTypes";
 
 
@@ -39,5 +40,19 @@ export const currentForm = (payload) => {
     return {
         type: SELECT_CURRENT_FORM,
         data: payload
+    }
+}
+
+export const showMoreSection = () => {
+    return {
+        type: SHOW_MORE_SECTION,
+        data: {showMoreSection: true}
+    }
+}
+
+export const hideMoreSection = () => {
+    return {
+        type: SHOW_MORE_SECTION,
+        data: {showMoreSection: false}
     }
 }

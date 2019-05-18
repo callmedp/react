@@ -14,7 +14,7 @@ import Course from './UserDetails/Course/course.jsx';
 import Template from './Template/template.jsx';
 import queryString from 'query-string';
 import * as actions from '../../../../store/personalInfo/actions';
-import {currentForm} from '../../../../store/ui/actions';
+import {currentForm, hideMoreSection} from '../../../../store/ui/actions';
 import {formCategoryList} from "../../../../Utils/formCategoryList";
 
 
@@ -118,7 +118,7 @@ class RightSection extends Component {
     }
 
     renderSwitch() {
-        const {entityList} = this.props;
+        const {entityList, ui: {showMoreSection}, hideMoreSection} = this.props;
         let entity, nextEntity;
         const {isEditable} = this.state;
 
@@ -127,14 +127,19 @@ class RightSection extends Component {
                 entity = entityList && entityList[0];
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
                 nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
-                return <PersonalInfo {...this.props}
-                                     isEditable={isEditable}
-                                     saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
-                                     handlePreview={this.handlePreview}
-                                     entityName={entity && entity['entity_text'] || 'Personal Info'}
-                                     nextEntity={nextEntity && nextEntity['link'] || nextEntity}
-                                     editHeading={(elem) => this.editHeading(elem)}
-                />
+                return !!((showMoreSection)) ?
+                    <div className="backtoedit">
+                        <p>Add more section in your resume from left panel</p>
+                        <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
+                    </div>
+                    : <PersonalInfo {...this.props}
+                                    isEditable={isEditable}
+                                    saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                                    handlePreview={this.handlePreview}
+                                    entityName={entity && entity['entity_text'] || 'Personal Info'}
+                                    nextEntity={nextEntity && nextEntity['link'] || nextEntity}
+                                    editHeading={(elem) => this.editHeading(elem)}
+                    />
             }
 
             case 'education': {
@@ -142,10 +147,10 @@ class RightSection extends Component {
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
                 nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
 
-                return !!(!(entity && entity.active)) ?
+                return !!((showMoreSection)) ?
                     <div className="backtoedit">
                         <p>Add more section in your resume from left panel</p>
-                        <button className="orange-button">Back to Edit</button>
+                        <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Education {...this.props}
                                  isEditable={isEditable}
@@ -164,10 +169,10 @@ class RightSection extends Component {
                 entity = entityList && entityList[2];
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
                 nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
-                return !!(!(entity && entity.active)) ?
+                return !!(showMoreSection) ?
                     <div className="backtoedit">
                         <p>Add more section in your resume from left panel</p>
-                        <button className="orange-button">Back to Edit</button>
+                        <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Experience {...this.props}
                                   isEditable={isEditable}
@@ -187,10 +192,10 @@ class RightSection extends Component {
                 entity = entityList && entityList[3];
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
                 nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
-                return !!(!(entity && entity.active)) ?
+                return !!(showMoreSection) ?
                     <div className="backtoedit">
                         <p>Add more section in your resume from left panel</p>
-                        <button className="orange-button">Back to Edit</button>
+                        <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Project {...this.props}
                                isEditable={isEditable}
@@ -209,10 +214,10 @@ class RightSection extends Component {
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
                 nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
 
-                return !!(!(entity && entity.active)) ?
+                return !!(showMoreSection) ?
                     <div className="backtoedit">
                         <p>Add more section in your resume from left panel</p>
-                        <button className="orange-button">Back to Edit</button>
+                        <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Skill {...this.props}
                              isEditable={isEditable}
@@ -231,10 +236,10 @@ class RightSection extends Component {
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
                 nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
 
-                return !!(!(entity && entity.active)) ?
+                return !!(showMoreSection) ?
                     <div className="backtoedit">
                         <p>Add more section in your resume from left panel</p>
-                        <button className="orange-button">Back to Edit</button>
+                        <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Summary {...this.props}
                                isEditable={isEditable}
@@ -250,10 +255,10 @@ class RightSection extends Component {
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
                 nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
 
-                return !!(!(entity && entity.active)) ?
+                return !!(showMoreSection) ?
                     <div className="backtoedit">
                         <p>Add more section in your resume from left panel</p>
-                        <button className="orange-button">Back to Edit</button>
+                        <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Award {...this.props}
                              isEditable={isEditable}
@@ -272,10 +277,10 @@ class RightSection extends Component {
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
                 nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
 
-                return !!(!(entity && entity.active)) ?
+                return !!(showMoreSection) ?
                     <div className="backtoedit">
                         <p>Add more section in your resume from left panel</p>
-                        <button className="orange-button">Back to Edit</button>
+                        <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Course {...this.props}
                               isEditable={isEditable}
@@ -294,10 +299,10 @@ class RightSection extends Component {
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
                 nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
 
-                return !!(!(entity && entity.active)) ?
+                return !!(showMoreSection) ?
                     <div className="backtoedit">
                         <p>Add more section in your resume from left panel</p>
-                        <button className="orange-button">Back to Edit</button>
+                        <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Language {...this.props}
                                 isEditable={isEditable}
@@ -315,10 +320,10 @@ class RightSection extends Component {
                 entity = entityList && entityList[9];
                 nextEntity = entityList && entityList.find(el => el['entity_id'] > entity['entity_id'] && el['active'] === true);
                 nextEntity = nextEntity && formCategoryList[nextEntity['entity_id']] || undefined;
-                return !!(!(entity && entity.active)) ?
+                return !!(showMoreSection) ?
                     <div className="backtoedit">
                         <p>Add more section in your resume from left panel</p>
-                        <button className="orange-button">Back to Edit</button>
+                        <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Reference {...this.props}
                                  isEditable={isEditable}
@@ -357,7 +362,8 @@ class RightSection extends Component {
 const mapStateToProps = (state) => {
     return {
         entityList: state.personalInfo && state.personalInfo.entity_preference_data,
-        formData: state && state.form
+        formData: state && state.form,
+        ui: state && state.ui
     }
 }
 
@@ -368,6 +374,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         "currentForm": (formName = '') => {
             return dispatch(currentForm({formName: formName}))
+        },
+        "hideMoreSection": () => {
+            return dispatch(hideMoreSection())
         }
     }
 }

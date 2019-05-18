@@ -3,14 +3,17 @@ import {
     HIDE_TEMPLATE_MODAL,
     SHOW_SELECT_TEMPLATE_MODAL,
     HIDE_SELECT_TEMPLATE_MODAL,
-    SELECT_CURRENT_FORM
+    SELECT_CURRENT_FORM,
+    SHOW_MORE_SECTION,
+    HIDE_MORE_SECTION
 } from "../actions/actionTypes";
 
 const initialState = {
     'loader': false,
     'modal': false,
     'select_template_modal': false,
-    'formName': ''
+    'formName': '',
+    'showMoreSection': false
 };
 
 export const uiReducer = (state = initialState, action) => {
@@ -46,6 +49,18 @@ export const uiReducer = (state = initialState, action) => {
             }
         }
         case SELECT_CURRENT_FORM: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+        case SHOW_MORE_SECTION: {
+            return {
+                ...state,
+                ...action.data
+            }
+        }
+        case HIDE_MORE_SECTION: {
             return {
                 ...state,
                 ...action.data

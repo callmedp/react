@@ -5,6 +5,7 @@ import queryString from "query-string";
 import {formCategoryList, entityList} from "../../../../../Utils/formCategoryList";
 import {connect} from 'react-redux'
 import * as actions from '../../../../../store/personalInfo/actions/index'
+import {showMoreSection} from '../../../../../store/ui/actions/index'
 
 class Edit extends Component {
     constructor(props) {
@@ -14,7 +15,6 @@ class Edit extends Component {
         this.deleteFromVisibleList = this.deleteFromVisibleList.bind(this);
         this.addIntoVisibleList = this.addIntoVisibleList.bind(this);
         this.state = {
-            show: false,
             preferenceList: this.props.entityList
         };
     }
@@ -39,9 +39,7 @@ class Edit extends Component {
     }
 
     addMoreClick() {
-        this.setState({
-            show: true
-        })
+        this.props.showMoreSection()
     }
 
     addIntoVisibleList(addedElem) {
@@ -92,14 +90,13 @@ class Edit extends Component {
     }
 
     render() {
-        const {type, show, preferenceList} = this.state;
-        let {formData, formName} = this.props;
+        const {type, preferenceList} = this.state;
+        let {formData, ui: {formName, showMoreSection}} = this.props;
         let error = false;
         const obj = formData && formData[formName] || {};
         let syncErrors = obj['syncErrors'] || {};
         // if ('list' in syncErrors) (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el).map(key => (!!el[key] ? error = true : false)))
         // else Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
-        console.log('-error---', error);
         return (
             <div className="edit-section">
                 <strong>Complete your information</strong>
@@ -108,9 +105,10 @@ class Edit extends Component {
                         (preferenceList || []).filter(elem => elem.active === true).map((elem, index) => {
                             const {link, icon, itemType} = formCategoryList[elem['entity_id']];
                             return (
-                                <li key={index} className={type === itemType ? 'edit-section--active, disabled' : ''}>
+                                <li key={index}
+                                    className={showMoreSection ? 'disabled' : '' + (type === itemType ? ' edit-section--active' : '')}>
                                     {
-                                        !!(error) ?
+                                        !!(error || showMoreSection) ?
                                             <div className={"non-link"}>
                                                 <span className={'mr-20 ' + icon}></span>
                                                 {elem['entity_text']}
@@ -131,20 +129,20 @@ class Edit extends Component {
                         })
                     }
                     {
-                        !!(!show) && !!(preferenceList.filter(elem => elem.active !== true).length) &&
+                        !!(!showMoreSection) && !!(preferenceList.filter(elem => elem.active !== true).length) &&
                         <li className="edit-section--addmore mt-30" onClick={this.addMoreClick}>
                             + Add more sections
                         </li>
                     }
-                    {!!(show) &&
+                    {!!(showMoreSection) &&
                     (preferenceList || []).filter(elem => elem.active !== true).map((elem, index) => {
                         const {link, icon, itemType} = formCategoryList[elem['entity_id']];
                         return (
                             <li key={index} className={type === itemType ? 'edit-section--active' : ''}>
-                                <Link to={link}>
+                                <div className={"non-link"}>
                                     <span className={'mr-20 ' + icon}></span>
                                     {elem['entity_text']}
-                                </Link>
+                                </div>
                                 <span onClick={() => this.addIntoVisibleList(elem)}
                                       className="icon-add pull-right mt-20"/>
                             </li>
@@ -161,7 +159,7 @@ class Edit extends Component {
 const mapStateToProps = (state) => {
     return {
         entityList: state.personalInfo && state.personalInfo.entity_preference_data || [],
-        formName: state.ui && state.ui.formName,
+        ui: state.ui,
         formData: state && state.form
 
     }
@@ -171,6 +169,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         'updateCategoryEntity': (entity) => {
             return dispatch(actions.updateEntityPreference({"entity_preference_data": entity}))
+        },
+        'showMoreSection': () => {
+            return dispatch(showMoreSection())
         }
     }
 };

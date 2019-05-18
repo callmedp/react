@@ -1,5 +1,5 @@
 # python imports
-from datetime import datetime,date
+from datetime import datetime, date
 
 # django imports
 from django.template.loader import get_template
@@ -349,7 +349,6 @@ class CandidateResumePreview(APIView):
         del entity_preference[2], entity_preference[0], entity_preference[3]
         entity_preference.append(exp)
         entity_preference = [x for x in entity_preference if x.get('active')]
-
         # extracurricular = candidate.extracurricular.split(',')
         education = candidate.candidateeducation_set.all().order_by('order')
         experience = candidate.candidateexperience_set.all().order_by('order')
@@ -361,7 +360,7 @@ class CandidateResumePreview(APIView):
         languages = candidate.candidatelanguage_set.all().order_by('order')
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
 
-        latest_experience,latest_end_date = '',None
+        latest_experience, latest_end_date = '', None
         for i in experience:
             if i.is_working:
                 latest_end_date = date.today()
@@ -376,9 +375,8 @@ class CandidateResumePreview(APIView):
                     latest_experience = i.job_profile
 
         print(type(latest_experience))
-        
 
-        #latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
+        # latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
 
         template = get_template('resume{}_preview.html'.format(template_id))
         rendered_template = template.render(
