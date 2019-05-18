@@ -54,7 +54,7 @@ export const datepicker =
      }) => (
         <div className="Error">
             <DatePicker {...input}
-                        value={disabled ? "" : input.value}
+                        value={disabled ? "This is disabled" : input.value}
                         dateFormat="yyyy-MM-dd"
                         autoComplete="off"
                         selected={input.value ? new Date(input.value) : null}

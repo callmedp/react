@@ -48,7 +48,7 @@ class Experience extends Component {
 
     componentWillUnmount() {
         let {formData: {experience: {values, syncErrors}}} = this.props;
-        console.log('-syncErrors-   -', syncErrors,values);
+        console.log('-syncErrors-   -', syncErrors, values);
         let error = false;
         (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el).map(key => (!!el[key] ? error = true : false)))
         if (!error && !this.state.submit) this.props.bulkUpdateOrCreate(values && values['list'])
@@ -62,7 +62,6 @@ class Experience extends Component {
     }
 
     async handleSubmit(values, entityLink, currentFields) {
-        console.log('---current--', currentFields.getAll());
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
