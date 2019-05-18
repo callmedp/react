@@ -24,7 +24,6 @@ class Experience extends Component {
 
         };
         this.props.currentForm('experience');
-
     }
 
     componentDidMount() {
@@ -38,7 +37,7 @@ class Experience extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.initialValues.list !== prevProps.initialValues.list) {
-            let till_today = []
+            let till_today = [];
             for (let i of this.props.initialValues.list) {
                 till_today.push(i.is_working)
             }
@@ -49,6 +48,7 @@ class Experience extends Component {
 
     componentWillUnmount() {
         let {formData: {experience: {values, syncErrors}}} = this.props;
+        console.log('-syncErrors-   -', syncErrors,values);
         let error = false;
         (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el).map(key => (!!el[key] ? error = true : false)))
         if (!error && !this.state.submit) this.props.bulkUpdateOrCreate(values && values['list'])
@@ -61,7 +61,8 @@ class Experience extends Component {
         till_today[parseInt(index)] = checked
     }
 
-    async handleSubmit(values, entityLink) {
+    async handleSubmit(values, entityLink, currentFields) {
+        console.log('---current--', currentFields.getAll());
         const {list} = values;
         if (list.length) {
             await this.props.bulkUpdateOrCreate(list);
@@ -117,13 +118,12 @@ class Experience extends Component {
         const {
             handleSubmit, ui: {loader}, isEditable,
             editHeading, saveTitle, entityName, nextEntity, handlePreview,
-            changeOrderingDown, changeOrderingUp
-
+            changeOrderingDown, changeOrderingUp, currentFields
         } = this.props;
         const {till_today} = this.state;
 
         return (
-            <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity))}>
+            <form onSubmit={handleSubmit((values) => this.handleSubmit(values, nextEntity, currentFields))}>
                 <FieldArray name={"list"}
                             loader={loader}
                             handleSubmit={handleSubmit}
@@ -189,6 +189,7 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         "bulkUpdateOrCreate": (listItems) => {
+            console.log('--list Items <>>>>>>-', listItems);
             listItems = (listItems || []).map((userExperience, index) => {
                 const {start_date, end_date} = userExperience;
                 if (!userExperience['id']) delete userExperience['id'];

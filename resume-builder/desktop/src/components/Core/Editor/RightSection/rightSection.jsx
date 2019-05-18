@@ -26,11 +26,14 @@ class RightSection extends Component {
         this.saveTitle = this.saveTitle.bind(this);
         this.editHeading = this.editHeading.bind(this);
         this.handlePreview = this.handlePreview.bind(this);
+        this.changeOrderingUp = this.changeOrderingUp.bind(this);
+        this.changeOrderingDown = this.changeOrderingDown.bind(this);
 
 
         this.state = {
             type: (values && values.type) || '',
-            'isEditable': false
+            'isEditable': false,
+            'currentFields': []
         }
     }
 
@@ -79,7 +82,6 @@ class RightSection extends Component {
 
     changeOrderingUp(index, fields, event) {
         event.stopPropagation();
-        console.log('---', fields.getAll());
         let currentItem = fields.get(index);
         let prevItem = fields.get(index - 1);
         currentItem['order'] = index - 1;
@@ -89,6 +91,10 @@ class RightSection extends Component {
         fields.remove(index - 1)
         fields.insert(index - 1, prevItem)
         fields.swap(index, index - 1)
+        console.log('-up order--', fields.getAll());
+        this.setState({
+            currentFields: fields
+        })
         // this.props.handleSwap([currentItem, prevItem])
     }
 
@@ -98,11 +104,15 @@ class RightSection extends Component {
         let nextItem = fields.get(index + 1);
         currentItem['order'] = index + 1;
         nextItem['order'] = index;
-        fields.remove(index)
+        fields.remove(index);
         fields.insert(index, currentItem)
         fields.remove(index + 1)
         fields.insert(index + 1, nextItem)
         fields.swap(index, index + 1);
+        console.log('-down order--', fields.getAll());
+        this.setState({
+            currentFields: fields
+        })
 
         // this.props.handleSwap([currentItem, nextItem])
     }
@@ -146,6 +156,7 @@ class RightSection extends Component {
                                  changeOrderingUp={this.changeOrderingUp}
                                  changeOrderingDown={this.changeOrderingDown}
                                  saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
+                                 currentFields={this.state.currentFields}
                     />
             }
 
@@ -167,6 +178,8 @@ class RightSection extends Component {
                                   changeOrderingUp={this.changeOrderingUp}
                                   changeOrderingDown={this.changeOrderingDown}
                                   editHeading={(elem) => this.editHeading(elem)}
+                                  currentFields={this.state.currentFields}
+
                     />
             }
 
@@ -188,6 +201,7 @@ class RightSection extends Component {
                                changeOrderingUp={this.changeOrderingUp}
                                changeOrderingDown={this.changeOrderingDown}
                                editHeading={(elem) => this.editHeading(elem)}
+                               currentFields={this.state.currentFields}
                     />
             }
             case 'skill': {
@@ -209,6 +223,7 @@ class RightSection extends Component {
                              changeOrderingUp={this.changeOrderingUp}
                              changeOrderingDown={this.changeOrderingDown}
                              editHeading={(elem) => this.editHeading(elem)}
+                             currentFields={this.state.currentFields}
                     />
             }
             case 'summary': {
@@ -249,6 +264,7 @@ class RightSection extends Component {
                              changeOrderingUp={this.changeOrderingUp}
                              changeOrderingDown={this.changeOrderingDown}
                              editHeading={(elem) => this.editHeading(elem)}
+                             currentFields={this.state.currentFields}
                     />
             }
             case 'course': {
@@ -270,6 +286,7 @@ class RightSection extends Component {
                               changeOrderingUp={this.changeOrderingUp}
                               changeOrderingDown={this.changeOrderingDown}
                               editHeading={(elem) => this.editHeading(elem)}
+                              currentFields={this.state.currentFields}
                     />
             }
             case 'language': {
@@ -291,6 +308,7 @@ class RightSection extends Component {
                                 changeOrderingUp={this.changeOrderingUp}
                                 changeOrderingDown={this.changeOrderingDown}
                                 editHeading={(elem) => this.editHeading(elem)}
+                                currentFields={this.state.currentFields}
                     />
             }
             case 'reference': {
@@ -311,6 +329,7 @@ class RightSection extends Component {
                                  changeOrderingUp={this.changeOrderingUp}
                                  changeOrderingDown={this.changeOrderingDown}
                                  editHeading={(elem) => this.editHeading(elem)}
+                                 currentFields={this.state.currentFields}
                     />
             }
             default: {

@@ -346,20 +346,19 @@ class CandidateResumePreview(APIView):
         entity_preference = eval(candidate.entity_preference_data)
 
         exp = entity_preference[2]
-        del entity_preference[2],entity_preference[0],entity_preference[3]
+        del entity_preference[2], entity_preference[0], entity_preference[3]
         entity_preference.append(exp)
-        entity_preference = [x for x in entity_preference if x.get('active') ]
-
+        entity_preference = [x for x in entity_preference if x.get('active')]
 
         # extracurricular = candidate.extracurricular.split(',')
-        education = candidate.candidateeducation_set.all()
-        experience = candidate.candidateexperience_set.all()
-        skills = candidate.skill_set.all()
-        achievements = candidate.candidateachievement_set.all()
-        references = candidate.candidatereference_set.all()
-        projects = candidate.candidateproject_set.all()
-        certifications = candidate.candidatecertification_set.all()
-        languages = candidate.candidatelanguage_set.all()
+        education = candidate.candidateeducation_set.all().order_by('order')
+        experience = candidate.candidateexperience_set.all().order_by('order')
+        skills = candidate.skill_set.all().order_by('order')
+        achievements = candidate.candidateachievement_set.all().order_by('order')
+        references = candidate.candidatereference_set.all().order_by('order')
+        projects = candidate.candidateproject_set.all().order_by('order')
+        certifications = candidate.candidatecertification_set.all().order_by('order')
+        languages = candidate.candidatelanguage_set.all().order_by('order')
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
 
         latest_experience,latest_end_date = '',None

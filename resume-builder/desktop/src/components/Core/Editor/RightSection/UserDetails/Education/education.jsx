@@ -42,7 +42,6 @@ class Education extends Component {
         let error = false;
         (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el).map(key => (!!el[key] ? error = true : false)))
         if (!error && !this.state.submit) this.props.bulkUpdateOrCreate(values && values['list'])
-
     }
 
     tillTodayDisable(index, checked, e) {
@@ -189,6 +188,7 @@ const mapDispatchToProps = (dispatch) => {
         },
 
         "bulkUpdateOrCreate": (listItems) => {
+            console.log('---education list--', listItems);
             listItems = (listItems || []).map((userEducation, index) => {
                     const {start_date, end_date, course_type} = userEducation;
                     if (!userEducation['id']) delete userEducation['id'];
