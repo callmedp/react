@@ -103,8 +103,6 @@ class Project extends Component {
         if (project && project.id) {
             this.props.removeProject(project.id)
         }
-
-
     }
 
     handleAccordionClick(value, fields) {

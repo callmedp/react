@@ -5,9 +5,11 @@ const initialState = {
         "candidate_id": '',
         "id": '',
         "name": '',
-        "proficiency": 5,
+        "proficiency": {
+            value: 5, 'label': '5'
+        },
         order: 0
-    }
+        }
     ]
 };
 
@@ -24,7 +26,7 @@ export const languageReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...{
-                    list: state['list'].filter(item => item.id !== action.id)
+                    list: state['list'].length === 1 ? initialState.list : state['list'].filter(item => item.id !== action.id)
                 }
             }
         }

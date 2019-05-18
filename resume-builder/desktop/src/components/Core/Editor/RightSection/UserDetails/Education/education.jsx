@@ -35,7 +35,6 @@ class Education extends Component {
             if (entityLink) this.props.history.push(entityLink);
             else this.props.history.push('/resume-builder/buy/')
         }
-
     }
 
     componentWillUnmount() {
@@ -86,7 +85,6 @@ class Education extends Component {
             "is_pursuing": false,
             order: listLength
         })
-        console.log(`education${fields.length -1}`)
 
         scroller.scrollTo(`education${fields.length -1}`, {
             duration: 800,
