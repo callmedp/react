@@ -53,7 +53,7 @@ export const LanguageRenderer = ({
                 </button>
 
             </section>
-            <section className="right-sidebar-scroll">
+            <section className="right-sidebar-scroll" id="language">
                 <ul>
                     <Accordion
                         onChange={(value) => handleAccordionClick(value)}
@@ -64,7 +64,7 @@ export const LanguageRenderer = ({
                                 return (
                                     <li key={index}>
                                         <section className="info-section">
-                                            <AccordionItem uuid={index}>
+                                            <AccordionItem uuid={index} id={`language${index}`}>
                                                 <AccordionItemHeading>
                                                     <AccordionItemButton>
                                                         <div className="flex-container">

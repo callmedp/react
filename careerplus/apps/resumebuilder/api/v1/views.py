@@ -1,5 +1,5 @@
 # python imports
-from datetime import datetime
+from datetime import datetime,date
 
 # django imports
 from django.template.loader import get_template
@@ -361,7 +361,25 @@ class CandidateResumePreview(APIView):
         certifications = candidate.candidatecertification_set.all()
         languages = candidate.candidatelanguage_set.all()
         current_exp = experience.filter(is_working=True).order_by('-start_date').first()
-        latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
+
+        latest_experience,latest_end_date = '',None
+        for i in experience:
+            if i.is_working:
+                latest_end_date = date.today()
+                latest_experience = i.job_profile
+                break
+            elif latest_end_date == None:
+                latest_end_date = i.end_date
+                latest_experience = i.job_profile
+            else:
+                if latest_end_date < i.end_date:
+                    latest_end_date = i.end_date
+                    latest_experience = i.job_profile
+
+        print(type(latest_experience))
+        
+
+        #latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
 
         template = get_template('resume{}_preview.html'.format(template_id))
         rendered_template = template.render(

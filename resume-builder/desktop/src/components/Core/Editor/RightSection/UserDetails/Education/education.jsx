@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 import moment from "moment";
 import {EducationRenderer} from "./educationRenderer";
 import validate from '../../../../../FormHandler/validations/education/validate';
-import {animateScroll as scroll, scrollSpy, scroller} from 'react-scroll'
+import {scroller} from "react-scroll/modules";
 
 
 class Education extends Component {
@@ -86,14 +86,15 @@ class Education extends Component {
             "is_pursuing": false,
             order: listLength
         })
+        console.log(`education${fields.length -1}`)
 
-        // scroller.scrollTo(`education1`, {
-        //     duration: 800,
-        //     delay: 0,
-        //     smooth: 'easeInOutQuad',
-        //     offset: 1000,
-        //     containerId: 'education2'
-        // })
+        scroller.scrollTo(`education${fields.length -1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 350,
+            containerId:'education'
+        })
 
 
     }

@@ -55,7 +55,7 @@ export const ReferenceRenderer = ({
                 {/*{(touched || submitFailed) && error && <span>{error}</span>}*/}
             </section>
             <section>
-                <section className="right-sidebar-scroll">
+                <section className="right-sidebar-scroll" id="reference">
                     <ul>
                         <Accordion
                             onChange={(value) => handleAccordionClick(value)}
@@ -67,7 +67,7 @@ export const ReferenceRenderer = ({
                                     return (
                                         <li key={index}>
                                             <section className="info-section">
-                                                <AccordionItem uuid={index}>
+                                                <AccordionItem uuid={index} id={`reference${index}`}>
                                                     <AccordionItemHeading>
                                                         <AccordionItemButton>
                                                             <div className="flex-container">

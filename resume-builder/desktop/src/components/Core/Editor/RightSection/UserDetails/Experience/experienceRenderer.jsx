@@ -53,7 +53,7 @@ export const ExperienceRenderer = ({
             </section>
 
 
-            <section className="right-sidebar-scroll">
+            <section className="right-sidebar-scroll" id="experience">
                 <ul>
                     <Accordion
                         onChange={(value) => handleAccordionClick(value)}

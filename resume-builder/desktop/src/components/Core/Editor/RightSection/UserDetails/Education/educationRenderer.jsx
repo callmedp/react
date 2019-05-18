@@ -53,7 +53,7 @@ export const EducationRenderer = ({
             </section>
 
 
-            <section className="right-sidebar-scroll">
+            <section className="right-sidebar-scroll" id="education">
                 <ul>
                     <Accordion
                         onChange={(value) => handleAccordionClick(value)}

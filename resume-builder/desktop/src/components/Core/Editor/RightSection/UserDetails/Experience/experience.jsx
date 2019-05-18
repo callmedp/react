@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 import moment from 'moment';
 import {ExperienceRenderer} from "./experienceRenderer";
 import validate from '../../../../../FormHandler/validations/experience/validate'
-import {scroller, Events, animateScroll as scroll} from "react-scroll/modules";
+import {scroller} from "react-scroll/modules";
 
 
 class Experience extends Component {
@@ -34,15 +34,6 @@ class Experience extends Component {
             till_today.push(i.is_working)
         }
         this.setState({till_today})
-
-
-        Events.scrollEvent.register('begin', function () {
-            console.log("begin");
-        });
-
-        Events.scrollEvent.register('end', function () {
-            console.log("end");
-        });
     }
 
     componentDidUpdate(prevProps) {
@@ -57,8 +48,6 @@ class Experience extends Component {
 
 
     componentWillUnmount() {
-        Events.scrollEvent.remove('begin');
-        Events.scrollEvent.remove('end');
         let {formData: {experience: {values, syncErrors}}} = this.props;
         let error = false;
         (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el).map(key => (!!el[key] ? error = true : false)))
@@ -101,7 +90,13 @@ class Experience extends Component {
             order: listLength
         })
 
-        scroll.scrollTo(500)
+        scroller.scrollTo(`experience${fields.length -1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 470,
+            containerId:'experience'
+        })
     }
 
     deleteExperience(index, fields, event) {

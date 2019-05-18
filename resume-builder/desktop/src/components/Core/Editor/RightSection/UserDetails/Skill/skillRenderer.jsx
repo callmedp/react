@@ -57,7 +57,7 @@ export const SkillRenderer = ({
 
             </section>
 
-            <section className="right-sidebar-scroll">
+            <section className="right-sidebar-scroll" id="skill">
                 <ul>
                     <Accordion
 
@@ -71,7 +71,7 @@ export const SkillRenderer = ({
                             return (
                                 <li key={index}>
                                     <section className="info-section">
-                                        <AccordionItem uuid={index}>
+                                        <AccordionItem uuid={index} id={`skill${index}`}>
                                             <AccordionItemHeading>
                                                 <AccordionItemButton>
                                                     <div className="flex-container">

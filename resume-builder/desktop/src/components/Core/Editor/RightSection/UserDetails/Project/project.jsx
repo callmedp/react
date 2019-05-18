@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import moment from "moment";
 import validate from "../../../../../FormHandler/validations/project/validate"
 import {ProjectRenderer} from "./projectRenderer";
+import {scroller} from "react-scroll/modules";
 
 class Project extends Component {
     constructor(props) {
@@ -78,6 +79,14 @@ class Project extends Component {
             "currently_working": false,
             "description": '',
             order: listLength,
+        })
+
+        scroller.scrollTo(`project${fields.length -1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 400,
+            containerId:'project'
         })
     }
 

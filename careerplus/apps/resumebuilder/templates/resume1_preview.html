@@ -11,7 +11,7 @@
 <body>
 <div class="resume">
     <div class="resume-content">
-        <div class="top-panel">
+        <div class="top-panel mb-30">
             <div class="resume-container">
 
                 <div class="left-panel">
@@ -21,7 +21,9 @@
                   </span>
                   {% endif %}
                     <h1>{{ candidate.first_name }} {{ candidate.last_name }}</h1>
-                    <h2>{{ latest_exp }}</h2>
+                    {% if latest_exp %}
+                        <h2>{{ latest_exp }}</h2>
+                    {% endif %}
 
                     <p>{{ candidate.extra_info }}</p>
                 </div><!-- left panel -->
@@ -52,8 +54,9 @@
                 </div><!-- right panel -->
             </div>
         </div><!-- /. Top panel -->
+        <div class="resume-container">
         {% if experience %}
-            <div class="resume-container">
+        
             <div class="experience mb-30">
             {% with preference_list|last as experience_item %}
                 <div class="heading">{{ experience_item.entity_text }}</div>

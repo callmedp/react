@@ -4,6 +4,7 @@ import * as actions from "../../../../../../store/reference/actions";
 import {connect} from "react-redux";
 import {ReferenceRenderer} from "./referenceRenderer";
 import validate from '../../../../../FormHandler/validations/reference/validate'
+import {scroller} from "react-scroll/modules";
 
 
 class Reference extends Component {
@@ -59,6 +60,14 @@ class Reference extends Component {
             "reference_designation": '',
             "about_user": "",
             order: listLength
+        })
+
+        scroller.scrollTo(`reference${fields.length -1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 200,
+            containerId:'reference'
         })
     }
 

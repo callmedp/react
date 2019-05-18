@@ -56,7 +56,7 @@ export const ProjectRenderer = ({
                 </button>
 
             </section>
-            <section className="right-sidebar-scroll">
+            <section className="right-sidebar-scroll" id="project">
                 <ul>
                     <Accordion
                         onChange={(value) => handleAccordionClick(value)}
@@ -68,7 +68,7 @@ export const ProjectRenderer = ({
                                 return (
                                     <li key={index}>
                                         <section className="info-section">
-                                            <AccordionItem uuid={index}>
+                                            <AccordionItem uuid={index} id={`project${index}`}>
                                                 <AccordionItemHeading>
                                                     <AccordionItemButton>
                                                         <div className="flex-container">

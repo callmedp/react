@@ -4,6 +4,7 @@ import * as actions from "../../../../../../store/skill/actions";
 import {connect} from "react-redux";
 import validate from '../../../../../FormHandler/validations/skill/validate'
 import {SkillRenderer} from "./skillRenderer";
+import {scroller} from "react-scroll/modules";
 
 
 /*
@@ -62,6 +63,14 @@ class Skill extends Component {
             },
             order: listLength
         });
+
+        scroller.scrollTo(`skill${fields.length -1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 0,
+            containerId:'skill'
+        })
     }
 
     deleteSkill(index, fields, event) {

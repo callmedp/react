@@ -8,6 +8,7 @@ import validate from '../../../../../FormHandler/validations/language/validate'
 styles
 * */
 import 'react-accessible-accordion/dist/fancy-example.css';
+import {scroller} from "react-scroll/modules";
 
 class Language extends Component {
     constructor(props) {
@@ -60,6 +61,14 @@ class Language extends Component {
                 value: 5, 'label': '5'
             },
             order: listLength
+        })
+
+        scroller.scrollTo(`language${fields.length -1}`, {
+            duration: 800,
+            delay: 0,
+            smooth: 'easeInOutQuad',
+            offset: 0,
+            containerId:'language'
         })
     }
 
