@@ -42,10 +42,7 @@ export default class ResumeSlider extends Component {
             arrow: true,
             speed: 500
         };
-        let select_template_modal = false
-        if (this.props.ui) {
-            select_template_modal = {ui: {select_template_modal}} = this.props;
-        }
+        const {ui: {select_template_modal}} = this.props;
         return (
             <Fragment>
                 <TemplateModal {...this.props} />
