@@ -181,18 +181,6 @@
   opacity: 0.3;
   color: $blue1 !important;
   pointer-events: none !important;
-
-  &:hover {
-    background-color: $white !important;
-    color: $blue1 !important;
-
-  }
-
-  a {
-    &:hover {
-      color: $blue1 !important;
-    }
-  }
 }
 
 

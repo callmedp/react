@@ -30,7 +30,7 @@ export const EducationRenderer = ({
                                   }) => {
     let elem = null;
     return (
-        <div className="pr">
+        <div>
             {/*{<LoaderSection/>}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-education1"></i></span>

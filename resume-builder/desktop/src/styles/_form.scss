@@ -65,6 +65,22 @@ input[type='text'] {
   }
 }
 
+.errormsg {
+  border: 1px solid $red;
+  position: relative;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+
+  .errormsg-txt {
+    color: $red;
+    font-size: 1.2rem;
+    display: inline-block;
+    position: absolute;
+    bottom: -13px;
+    left: 0;
+  }
+}
+
 ::-webkit-input-placeholder {
   color: $txt1;
 }
@@ -252,6 +268,14 @@ input[type='submit']:hover {
   font-size: 12px !important;
   z-index: 9999 !important;
   overflow: visible !important;
+}
+
+.css-bg1rzq-control {
+  min-height: 45px !important;
+  border-color: $border1 !important;
+  @extend %inner-shadow;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
 }
 
 .head-section {
