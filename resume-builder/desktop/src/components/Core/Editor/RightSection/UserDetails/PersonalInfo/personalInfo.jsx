@@ -17,18 +17,18 @@ import validate from '../../../../../FormHandler/validations/personalInfo/valida
 import moment from 'moment';
 import LoaderSection from "../../../../../Loader/loaderSection.jsx";
 
-const filterValues = (inputValue,values) => {
+const filterValues = (inputValue, values) => {
     return values.filter(i =>
         i.label.toLowerCase().includes(inputValue.toLowerCase())
     );
-  };
+};
 
-const promiseOptions = (inputValue,values) =>
-  new Promise(resolve => {
-    setTimeout(() => {
-      resolve(filterValues(inputValue,values));
-    }, 1000);
-});
+const promiseOptions = (inputValue, values) =>
+    new Promise(resolve => {
+        setTimeout(() => {
+            resolve(filterValues(inputValue, values));
+        }, 1000);
+    });
 
 export class PersonalInfo extends Component {
     constructor(props) {
@@ -206,17 +206,13 @@ export class PersonalInfo extends Component {
                             <div className="flex-container">
                                 <fieldset id="interest-select" className="custom">
                                     <label>Interest</label>
-                                    <div className="input-group">
-                                        <div className="input-group--input-group-icon">
-                                            <span className="icon-interest"></span>
-                                        </div>
-                                        <Field name="extracurricular" component={renderDynamicSelect}
-                                            // loadOptions={this.fetchInterestList.bind(this)}
-                                               defaultOptions={Object.keys(personalInfo.interest_list).map(key => personalInfo.interest_list[key])}
-                                               value={personalInfo.extracurricular}
-                                               closeMenuOnSelect={false}
-                                               label="Select Interest"/>
-                                    </div>
+                                    <Field name="extracurricular" component={renderDynamicSelect}
+                                        // loadOptions={this.fetchInterestList.bind(this)}
+                                           defaultOptions={Object.keys(personalInfo.interest_list).map(key => personalInfo.interest_list[key])}
+                                           value={personalInfo.extracurricular}
+                                           closeMenuOnSelect={false}
+                                           iconClass={'icon-interest'}
+                                           label="Select Interest"/>
                                 </fieldset>
                             </div>
                             {/*<div className="flex-container">*/}
