@@ -24,13 +24,14 @@ from shared.permissions import IsObjectOwner
 
 # third party imports
 from rest_framework import status
-from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView)
+from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView)
 from rest_framework.views import (APIView)
 from rest_framework.parsers import (FormParser, MultiPartParser)
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from weasyprint import HTML, CSS
+from resumebuilder.models import interest_dict
 
 
 class CandidateListCreateView(ListCreateAPIView):
@@ -643,3 +644,12 @@ class CandidateShineProfileRetrieveUpdateView(APIView):
         return Response({
             "candidate_id": candidate_profile['candidate_id']
         })
+
+
+class InterestView(ListAPIView):
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    
+    def get(self, request, *args, **kwargs):
+        return Response({"data":interest_dict})
+

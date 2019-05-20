@@ -16,7 +16,7 @@ from .views import (CandidateListCreateView, CandidateRetrieveUpdateView, SkillR
                     CandidateSocialLinkRetrieveUpdateView, CandidateAchievementListCreateView,
                     CandidateAchievementRetrieveUpdateView, CandidateLanguageListCreateView,
                     CandidateLanguageRetrieveUpdateView,
-                    CandidateResumePreview,ProfileEntityBulkUpdateView)
+                    CandidateResumePreview,ProfileEntityBulkUpdateView, InterestView)
 
 #inter app imports
 
@@ -53,6 +53,6 @@ urlpatterns = [
     url(r'^candidate/(?P<candidate_id>.+)/languages/$', CandidateLanguageListCreateView.as_view()),
     url(r'^candidate/(?P<candidate_id>.+)/preview/(?P<pk>\d+)/$', CandidateResumePreview.as_view()),
     url(r'^candidate/(?P<candidate_id>.+)/bulk-update/(?P<entity_slug>[a-z\-]+)/$', ProfileEntityBulkUpdateView.as_view()),
-
+    url(r'^interest-list/$',InterestView.as_view()),
 
 ]

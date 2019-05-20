@@ -1,4 +1,4 @@
-import {SAVE_USER_INFO} from "../actions/actionTypes";
+import {SAVE_USER_INFO , SAVE_INTEREST_LIST} from "../actions/actionTypes";
 
 const initialState = {
     "candidate_id": '',
@@ -13,9 +13,8 @@ const initialState = {
     gender: '',
     extracurricular: '',
     extra_info: '',
-    entity_preference_data: []
-
-
+    entity_preference_data: [],
+    interest_list:[]
 };
 
 
@@ -27,6 +26,14 @@ export const personalInfoReducer = (state = initialState, action) => {
                 ...state,
                 ...action.data
             };
+        }
+        case SAVE_INTEREST_LIST: {
+            return {
+                ...state,
+                ...{
+                    interest_list:action.data
+                }
+            }
         }
         default: {
             return state;

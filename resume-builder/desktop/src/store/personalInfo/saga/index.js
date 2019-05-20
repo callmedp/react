@@ -69,6 +69,28 @@ function* getPersonalDetails(action) {
     }
 }
 
+function* getInterestList(action){
+    try{
+        const result = yield call(Api.fetchInterestList);
+        console.log(result)
+        if (result['error']) {
+            console.log('error');
+        }
+        let {data:{data}} = result;
+
+        let updated_data={}; 
+        Object.keys(data).map((el,key)=>{
+            updated_data[key] = {'value':key,'label':data[el]}
+        })
+
+        console.log(updated_data)
+        yield put({type: Actions.SAVE_INTEREST_LIST,data:updated_data})
+
+    }catch (e) {
+        console.log(e);
+    }
+}
+
 function* updatePersonalDetails(action) {
     try {
         let {payload: {personalDetails, resolve, reject}} = action;
@@ -161,5 +183,5 @@ export default function* watchPersonalInfo() {
     yield takeLatest(Actions.UPDATE_PERSONAL_INFO, updatePersonalDetails);
     yield takeLatest(Actions.FETCH_IMAGE_URL, fetchImageUrl);
     yield takeLatest(Actions.UPDATE_ENTITY_PREFERENCE, updateEntityPreference);
-
+    yield takeLatest(Actions.FETCH_INTEREST_LIST, getInterestList);
 }

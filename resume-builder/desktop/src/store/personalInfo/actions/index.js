@@ -1,4 +1,4 @@
-import {FETCH_PERSONAL_INFO, UPDATE_PERSONAL_INFO, FETCH_IMAGE_URL, UPDATE_ENTITY_PREFERENCE} from './actionTypes';
+import {FETCH_PERSONAL_INFO, UPDATE_PERSONAL_INFO, FETCH_IMAGE_URL, UPDATE_ENTITY_PREFERENCE, FETCH_INTEREST_LIST} from './actionTypes';
 
 
 export const fetchPersonalInfo = () => ({
@@ -16,8 +16,14 @@ export const updateEntityPreference = (payload) => ({
     type: UPDATE_ENTITY_PREFERENCE,
     payload
 })
+
 export const fetchImageUrl = (payload) => ({
     type: FETCH_IMAGE_URL,
+    payload
+});
+
+export const fetchInterestList = (payload) => ({
+    type: FETCH_INTEREST_LIST ,
     payload
 });
 
