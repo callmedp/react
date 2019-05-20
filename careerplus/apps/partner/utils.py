@@ -224,6 +224,7 @@ MAPPING_VALUES_TO_DATA_KEY_1 = {
         'assesment': {
             'candidate_email': '1|candidateEmailID',
             'assesment_name': '1|assessmentName',
+            "overallScore": '1|overallScore'
         },
         'certificate': {
             'certificate': '6|certificates',
@@ -233,7 +234,6 @@ MAPPING_VALUES_TO_DATA_KEY_1 = {
             'candidate_email': '1|candidateEmailID',
             'certificate_file_url': '3|certificates:1|url',
             'order_item_id': '1|shineLearningOrderID',
-            "overallScore": '1|overallScore'
         },
         'score': {
             'score': '4|scores',
@@ -553,7 +553,7 @@ class CertiticateParser:
             post_data = {
                 'certification_name': user_certificate.certificate.name,
                 'certification_year': user_certificate.year,
-                'score': user_certificate.overallScore,
+                'score': user_certificate.assesment.overallScore,
                 'certiticate_id': user_certificate.certificate.vendor_certificate_id
             }
 

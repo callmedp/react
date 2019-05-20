@@ -147,6 +147,8 @@ class Assesment(AbstractAutoDate):
         _('Extra Info'), blank=True,
         default='', help_text=_('Extra Info'))
     report = models.TextField(blank=True)
+    overallScore = models.IntegerField(default=0, null=True, blank=True)
+
 
 
 class Certificate(AbstractAutoDate):
@@ -158,7 +160,7 @@ class Certificate(AbstractAutoDate):
     certificate_file_url = models.URLField(max_length=500, blank=True, null=True)
     vendor_image_url = models.URLField(max_length=500, blank=True, null=True)
     vendor_certificate_id = models.CharField(max_length=255, null=True, blank=True)
-    product = models.PositiveIntegerField(max_length=255, null=True, blank=True)
+    product = models.PositiveIntegerField(null=True, blank=True)
 
 
     @property
@@ -199,7 +201,6 @@ class UserCertificate(models.Model):
     order_item = models.ForeignKey(
         'order.OrderItem', related_name='user_certificate_orderitem',
         verbose_name=_("Order Item"), blank=True, null=True)
-    overallScore = models.IntegerField(default=0, null=True, blank=True)
     status = models.IntegerField(choices=USER_CERTITIFICATE_STATUS, default=0)
     extra_info = models.TextField(null=True, blank=True)
     assesment = models.ForeignKey('Assesment', null=True, blank=True)
