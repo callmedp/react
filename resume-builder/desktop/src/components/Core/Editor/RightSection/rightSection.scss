@@ -105,22 +105,22 @@
 	display: none !important;
 }
 
-.accordion__button .add-section-heading:after {
-	content: '';
+.accordion__button .opened-accordion {
 	width: 10px;
 	height: 11px;
 	display: inline-block;
 	background: $sprite -151px -197px;
 	margin-left: 10px;
+	margin-top: 5px;
 }
 
-.accordion__button .add-section-heading[aria-expanded='true']::after .accordion__button .add-section-heading[aria-selected='true']::after {
-	content: '';
+.accordion__button .closed-accordion {
 	width: 10px;
 	height: 11px;
 	display: inline-block;
 	background: $sprite -167px -197px;
 	margin-left: 10px;
+	margin-top: 5px;
 }
 
 .accordion__item {

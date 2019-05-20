@@ -69,7 +69,8 @@ export const ExperienceRenderer = ({
                                                 <AccordionItemHeading>
                                                     <AccordionItemButton>
                                                         <div className="flex-container">
-                                                            <h3 className={"add-section-heading" + (expanded.indexOf(index) > -1 ? "opened-accordion" : "closed-accordion")}>{fields.get(index).company_name || 'Experience'}</h3>
+                                                             <h3 className={"add-section-heading"}>{fields.get(index).specialization || 'Experience'}</h3>
+                                                            <span className={expanded.indexOf(index) > -1 ? "opened-accordion" : "closed-accordion"}></span>
                                                             <div className="addon-buttons mr-10">
                                                                 <span
                                                                     onClick={(event) => deleteExperience(index, fields, event)}
