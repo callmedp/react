@@ -156,7 +156,7 @@ class Certificate(AbstractAutoDate):
         max_length=255, null=False, blank=False, db_index=True)
     skill = models.CharField(max_length=128, null=False, blank=False)
     vendor_provider = models.ForeignKey(Vendor, null=True, blank=True)
-    vendor_text = models.CharField(max_length=255, null=True, blank=False)
+    vendor_text = models.CharField(max_length=255, null=True, blank=True)
     certificate_file_url = models.URLField(max_length=500, blank=True, null=True)
     vendor_image_url = models.URLField(max_length=500, blank=True, null=True)
     vendor_certificate_id = models.CharField(max_length=255, null=True, blank=True)

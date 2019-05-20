@@ -497,6 +497,13 @@ class CertiticateParser:
             if vendor_field == 'vendor_text':
                 certificate_data['vendor_text'] = vendor
 
+            orderitem_id = parse_data.user_certificate.order_item_id
+            if orderitem_id:
+                oi = OrderItem.objects.filter(id=orderitem_id).first()
+                if oi:
+                    product = oi.product
+                    skill = product.new_productskills.all().first().skill.name
+                    certificate_data['skill'] = skill
             certificate, created = Certificate.objects.get_or_create(
                 **certificate_data
             )
