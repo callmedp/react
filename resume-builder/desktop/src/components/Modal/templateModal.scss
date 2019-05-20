@@ -19,9 +19,8 @@ modal {
 }
 
 .icon-close--position {
-	position: absolute;
-	right: 10.5%;
-	top: -45px;
+	position: fixed;
+	right: 11.5%;
 
 	&:before {
 		background: $white;
