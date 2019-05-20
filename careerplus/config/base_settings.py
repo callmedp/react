@@ -102,6 +102,7 @@ LOCAL_APPS = [
     'talenteconomy',
     'hrinsider',
     'scheduler',
+    'assessment',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

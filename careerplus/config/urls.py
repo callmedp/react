@@ -119,6 +119,10 @@ urlpatterns += [
 
     url(r'^courses/(?P<sc_slug>[a-z\-]+)/$', LocationSkillPageView.as_view(), name='location-skillpage'),
 
+    url(r'^', include('assessment.urls', namespace='assessment')),
+
+
+
 
 
     # url(r'^job-assistance/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
