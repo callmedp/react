@@ -206,14 +206,6 @@ input[type='submit']:hover {
   display: none;
 }
 
-.css-vj8t7z {
-  /*height: 45px;*/
-  min-height: 45px !important;
-  border-color: $border1 !important;
-  @extend %inner-shadow;
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
-}
 
 .css-1hwfws3 {
   padding: 0 8px !important;
@@ -222,6 +214,16 @@ input[type='submit']:hover {
   overflow-y: auto !important;
   overflow-x: hidden !important;*/
   align-items: flex-start !important;
+}
+
+
+.css-vj8t7z {
+  /*height: 45px;*/
+  min-height: 45px !important;
+  border-color: $border1 !important;
+  @extend %inner-shadow;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
 }
 
 .css-1g6gooi {
