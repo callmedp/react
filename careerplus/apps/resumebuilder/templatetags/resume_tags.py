@@ -30,3 +30,12 @@ def mainSkillFilterTemplate1(skill):
             result.append(i)
     skill = ' '.join(result)
     return skill
+
+@register.filter
+def resume1filter(entity_preference):
+   exp = entity_preference[2]
+   del entity_preference[2], entity_preference[0], entity_preference[3]
+   entity_preference.append({'entity_id':11,'entity_text':'Interest','active':True})
+   entity_preference.append(exp)
+   return [x for x in entity_preference if x.get('active')]
+   

@@ -17,7 +17,7 @@
                 <div class="left-panel">
                   {% if candidate.image%}
                   <span class="resume-image">
-                    <img src={{candidate.image}} alt="CandidateImage" >
+                    <img src={{candidate.image}} alt="CandidateImage">
                   </span>
                   {% endif %}
                     <h1>{{ candidate.first_name }} {{ candidate.last_name }}</h1>
@@ -56,11 +56,8 @@
         </div><!-- /. Top panel -->
         <div class="resume-container">
         {% if experience %}
-        
             <div class="experience mb-30">
-            {% with preference_list|last as experience_item %}
-                <div class="heading">{{ experience_item.entity_text }}</div>
-            {% endwith %}
+                <div class="heading">{{ preference_list.2.entity_text }}</div>
                 <ul class="list">
                     {% for exp in experience %}
                         <li>
@@ -81,12 +78,12 @@
             </div><!-- experience-->
         {% endif %}
 
-        {% for item in preference_list%}
+        {% for item in preference_list|resume1filter%}
             {% if item.entity_id != 3%}
                 {% if forloop.counter0|divisibleby:2 %}
                     <div class="d-flex justify-content-between mb-30">
                 {% endif %}
-                    {% if item.entity_id == 5 %}
+                    {% if item.entity_id == 5%}
                         <div class="skills w-50">
                             <div class="heading">{{ item.entity_text }}</div>
 
@@ -139,9 +136,9 @@
                             </div>
                         </div>
                     {% else %}
-                        <div class="w-50">
-                            <div class="heading">{{ item.entity_text }}</div>
                             {% if item.entity_id == 2%}
+                            <div class="w-50">
+                                <div class="heading">{{ item.entity_text }}</div>
                                 <ul class="list">
                                     {% for edu in education %}
                                         <li>
@@ -156,8 +153,11 @@
                                         </li>
                                     {% endfor %}
                                 </ul>
+                            </div>
                             {% endif %}
-                            {% if item.entity_id == 4%}
+                            {% if item.entity_id == 4 %}
+                            <div class="w-50">
+                                <div class="heading">{{ item.entity_text }}</div>
                                 <ul class="list">
                                     {% for project in projects %}
                                         <li>
@@ -169,8 +169,11 @@
                                         </li>
                                     {% endfor %}
                                 </ul>
+                            </div>
                             {% endif %}
                             {% if item.entity_id == 7%}
+                            <div class="w-50">
+                                <div class="heading">{{ item.entity_text }}</div>
                                 <ul class="list">
                                     {% for award in achievements %}
                                         <li>
@@ -182,8 +185,11 @@
                                         </li>
                                     {% endfor %}
                                 </ul>
+                            </div>
                             {% endif %}
                             {% if item.entity_id == 8%}
+                            <div class="w-50">
+                                <div class="heading">{{ item.entity_text }}</div>
                                  <ul class="list list-2">
                                     {% for course in certifications %}
                                         <li>
@@ -192,8 +198,11 @@
                                         </li>
                                     {% endfor %}
                                 </ul>
+                            </div>
                             {% endif %}
                             {% if item.entity_id == 9%}
+                            <div class="w-50">
+                                <div class="heading">{{ item.entity_text }}</div>
                                 <ul class="list list-2">
                                     {% for language in languages %}
                                         <li>
@@ -203,8 +212,11 @@
                                     {% endfor %}
 
                                 </ul>
+                            </div>
                             {% endif %}
                             {% if item.entity_id == 10%}
+                            <div class="w-50">
+                                <div class="heading">{{ item.entity_text }}</div>
                                 <ul class="list">
                                     {% for ref in references %}
                                         <li>
@@ -218,8 +230,25 @@
                                         </li>
                                     {% endfor %}
                                 </ul>
+                            </div>
                             {% endif %}
-                        </div>
+                            {% if item.entity_id == 11%}
+                            <div class="w-50">
+                                <div class="heading">{{ item.entity_text }}</div>
+                                <ul class="list">
+                                    {% for interest in extracurricular %}
+                                        <li>
+                                            <span class="dot"></span>
+                                            <div class="flex-row">
+                                                <h3 class="heading2">{{ interest }}
+                                                </h3>
+                                            </div>
+
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
                     {% endif %}
                 {% if not forloop.counter0|divisibleby:2 %}
                     </div>

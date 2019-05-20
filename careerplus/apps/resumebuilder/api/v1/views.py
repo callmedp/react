@@ -345,11 +345,15 @@ class CandidateResumePreview(APIView):
 
         entity_preference = eval(candidate.entity_preference_data)
 
+<<<<<<< HEAD
         exp = entity_preference[2]
         del entity_preference[2], entity_preference[0], entity_preference[3]
         entity_preference.append(exp)
         entity_preference = [x for x in entity_preference if x.get('active')]
         # extracurricular = candidate.extracurricular.split(',')
+=======
+        extracurricular = candidate.extracurricular_list
+>>>>>>> Interest Added in resume 1
         education = candidate.candidateeducation_set.all().order_by('order')
         experience = candidate.candidateexperience_set.all().order_by('order')
         skills = candidate.skill_set.all().order_by('order')
@@ -374,15 +378,13 @@ class CandidateResumePreview(APIView):
                     latest_end_date = i.end_date
                     latest_experience = i.job_profile
 
-        print(type(latest_experience))
-
-        # latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
+        #latest_experience = experience and experience[0].job_profile or 'FULL STACK DEVELOPER'
 
         template = get_template('resume{}_preview.html'.format(template_id))
         rendered_template = template.render(
             {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
              'achievements': achievements, 'references': references, 'projects': projects,
-             'certifications': certifications, 'extracurricular': '', 'languages': languages,
+             'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
              'current_exp': current_exp, 'latest_exp': latest_experience,
              'preference_list': entity_preference,
              }).encode(encoding='UTF-8')

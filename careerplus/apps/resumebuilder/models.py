@@ -31,6 +31,8 @@ INTERESTS = ((0, '3D printing'), (1, 'Acrobatics'), (2, 'Acting'), (3, 'Amateur 
              (93, 'Whittling'), (94, 'Wood carving'), (95, 'Woodworking'), (96, 'Worldbuilding'), (97, 'Writing'),
              (98, 'Yo-yoing'), (99, 'Yoga'))
 
+interest_dict = dict(INTERESTS)
+
 
 class CandidateProfile(AbstractAutoDate):
     candidate_id = models.CharField('Candidate Id', max_length=100, blank=True, null=True)
@@ -51,6 +53,9 @@ class CandidateProfile(AbstractAutoDate):
     @property
     def owner_id(self):
         return self.candidate.candidate_id
+    @property
+    def extracurricular_list(self):
+        return [interest_dict[int(x)] for x in self.extracurricular.split(',')]
 
     class Meta:
         abstract = True
