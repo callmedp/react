@@ -37,8 +37,8 @@ export const ReferenceRenderer = ({
                 <span className="icon-box"><i className="icon-references1"/></span>
                 <h2 className={"comp-heading"}
                     ref={(value) => {
-                    elem = value
-                }} onKeyUp={(event) => saveTitle(event)}
+                        elem = value
+                    }} onKeyUp={(event) => saveTitle(event)}
                     contenteditable={isEditable ? "true" : "false"}
                 >{entityName}</h2>
                 <span onClick={() => editHeading(elem)}
@@ -97,31 +97,22 @@ export const ReferenceRenderer = ({
                                                         <div className="flex-container">
                                                             <fieldset className="error">
                                                                 <label>Reference name</label>
-                                                                <div className="input-group">
-                                                                    <div
-                                                                        className="input-group--input-group-icon">
-                                                                                <span
-                                                                                    className="icon-refrences-gr"/>
-                                                                    </div>
-                                                                    <Field component={renderField} type={"text"}
-                                                                           name={`${member}.reference_name`}
-                                                                           className={"input-control"}
-                                                                    />
-                                                                </div>
+
+                                                                <Field
+                                                                    iconClass={'icon-refrences-gr'}
+                                                                    component={renderField} type={"text"}
+                                                                    name={`${member}.reference_name`}
+                                                                    className={"input-control"}
+                                                                />
                                                             </fieldset>
                                                             <fieldset>
                                                                 <label>Designation</label>
-                                                                <div className="input-group">
-                                                                    <div
-                                                                        className="input-group--input-group-icon">
-                                                                                <span
-                                                                                    className="icon-designation"/>
-                                                                    </div>
-                                                                    <Field component={renderField} type={"text"}
-                                                                           name={`${member}.reference_designation`}
-                                                                           className={"input-control"}
-                                                                    />
-                                                                </div>
+                                                                <Field
+                                                                    iconClass={'icon-designation'}
+                                                                    component={renderField} type={"text"}
+                                                                    name={`${member}.reference_designation`}
+                                                                    className={"input-control"}
+                                                                />
                                                             </fieldset>
                                                         </div>
 
@@ -129,6 +120,7 @@ export const ReferenceRenderer = ({
                                                             <fieldset>
                                                                 <label>Description</label>
                                                                 <Field component={renderTextArea}
+                                                                       noIcon={true}
                                                                        type={"textarea"}
                                                                        name={`${member}.about_candidate`}/>
                                                             </fieldset>

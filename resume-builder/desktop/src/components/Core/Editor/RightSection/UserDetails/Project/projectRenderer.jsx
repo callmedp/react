@@ -97,44 +97,37 @@ export const ProjectRenderer = ({
                                                     <div className="flex-container">
                                                         <fieldset>
                                                             <label>Project Name</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-projects-gr"/>
-                                                                </div>
-                                                                <Field component={renderField} type={"text"}
-                                                                       name={`${member}.project_name`}
-                                                                       className={"input-control"}/>
-                                                            </div>
+                                                            <Field component={renderField}
+                                                                   iconClass={'icon-projects-gr'}
+                                                                   type={"text"}
+                                                                   name={`${member}.project_name`}
+                                                                   className={"input-control"}/>
+
                                                         </fieldset>
                                                     </div>
                                                     <div className="flex-container">
                                                         <fieldset>
                                                             <label>Date from</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-date"/>
-                                                                </div>
-                                                                <Field component={datepicker}
-                                                                       type={"date"}
-                                                                       yearDropDownItemNumber={15}
-                                                                       maxDateAllowed={true}
-                                                                       className={'input-control'}
-                                                                       name={`${member}.start_date`}/>
-                                                            </div>
+
+                                                            <Field component={datepicker}
+                                                                   type={"date"}
+                                                                   iconClass={'icon-date'}
+                                                                   yearDropDownItemNumber={15}
+                                                                   maxDateAllowed={true}
+                                                                   className={'input-control'}
+                                                                   name={`${member}.start_date`}/>
                                                         </fieldset>
                                                         <fieldset>
                                                             <label>Date to</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-date"/>
-                                                                </div>
-                                                                <Field component={datepicker} type={"date"}
-                                                                       className={'input-control'}
-                                                                       disabled={till_today[index]}
-                                                                       dateFromName={`${member}.start_date`}
-                                                                       formValues={formValues}
-                                                                       name={`${member}.end_date`}/>
-                                                            </div>
+
+                                                            <Field component={datepicker} type={"date"}
+                                                                   className={'input-control'}
+                                                                   disabled={till_today[index]}
+                                                                   iconClass={'icon-date'}
+                                                                   dateFromName={`${member}.start_date`}
+                                                                   formValues={formValues}
+                                                                   name={`${member}.end_date`}/>
+
                                                             <span className={styles['till-today']}>
                                                                 <Field type="checkbox"
                                                                        name={`${member}.currently_working`}
@@ -153,6 +146,7 @@ export const ProjectRenderer = ({
                                                             <label>Description</label>
                                                             <Field component={renderTextArea} rows={"3"}
                                                                    type={"text"}
+                                                                   noIcon={true}
                                                                    name={`${member}.description`}
                                                                    value={`${member}.description`}/>
                                                         </fieldset>

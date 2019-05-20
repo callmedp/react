@@ -67,7 +67,9 @@ class Summary extends Component {
                     <section className="right-sidebar-scroll p3p">
                         <div className={styles['summary-box']}>
                             <h3>Summary</h3>
-                            <Field component={renderTextArea} type={"textarea"} name="extra_info"
+                            <Field
+                                noIcon={true}
+                                component={renderTextArea} type={"textarea"} name="extra_info"
                                    className="summary-box--summary-txt" rows="10" value={extra_info}/>
                         </div>
                     </section>

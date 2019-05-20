@@ -96,28 +96,23 @@ export const CourseRenderer = ({
                                                     <div className="flex-container">
                                                         <fieldset>
                                                             <label>Course Name</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-courses-gr"/>
-                                                                </div>
-                                                                <Field component={renderField}
-                                                                       type={"text"}
-                                                                       name={`${member}.name_of_certification`}
-                                                                       className={"input-control"}/>
-                                                            </div>
+                                                            <Field
+                                                                iconClass={'icon-courses-gr'}
+                                                                component={renderField}
+                                                                type={"text"}
+                                                                name={`${member}.name_of_certification`}
+                                                                className={"input-control"}/>
                                                         </fieldset>
                                                         <fieldset>
                                                             <label>Completion Year</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-date"/>
-                                                                </div>
-                                                                <Field component={datepicker}
-                                                                       type={"date"}
-                                                                       yearDropDownItemNumber={15}
-                                                                       name={`${member}.year_of_certification`}
-                                                                       className="input-control"/>
-                                                            </div>
+                                                            <Field
+                                                                iconClass={'icon-date'}
+                                                                component={datepicker}
+                                                                type={"date"}
+                                                                yearDropDownItemNumber={15}
+                                                                name={`${member}.year_of_certification`}
+                                                                className="input-control"/>
+
                                                         </fieldset>
                                                     </div>
                                                 </AccordionItemPanel>

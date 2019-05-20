@@ -5,6 +5,7 @@ import AsyncSelect from 'react-select/lib/Async';
 import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
 import moment from 'moment';
+import {Field} from "redux-form";
 
 export const renderField = ({
                                 input,
@@ -14,13 +15,17 @@ export const renderField = ({
                                 tillTodayDisable,
                                 index,
                                 text,
+                                iconClass,
                                 meta: {touched, error, warning}
                             }) => {
     return (
         <React.Fragment>
             {index ?
+
+
                 <div className="Error">
-                    <input {...input} className={className} onClick={(e) => tillTodayDisable(index, !input.checked, e)}
+                    <input {...input} className={className}
+                           onClick={(e) => tillTodayDisable(index, !input.checked, e)}
                            autoComplete="off" placeholder={label} type={type}/>
                     {
                         !!(text) && <span>{text}</span>
@@ -28,13 +33,20 @@ export const renderField = ({
                     {touched &&
                     ((error && <span className={'Error-message'}>{error}</span>) ||
                         (warning && <span className={'Warn-Message'}>{warning}</span>))}
-                </div> :
-                <div className="Error">
-                    <input {...input} className={className} autoComplete="off" placeholder={label} type={type}/>
-                    {touched &&
-                    ((error && <span className={'Error-message'}>{error}</span>) ||
-                        (warning && <span className={'Warn-Message'}>{warning}</span>))}
                 </div>
+                :
+                <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
+                    <div className="input-group--input-group-icon">
+                        <span className={iconClass}></span>
+                    </div>
+                    <div className="Error">
+                        <input {...input} className={className} autoComplete="off" placeholder={label} type={type}/>
+                        {touched &&
+                        ((error && <span className={'Error-message'}>{error}</span>) ||
+                            (warning && <span className={'Warn-Message'}>{warning}</span>))}
+                    </div>
+                </div>
+
             }
         </React.Fragment>
     )
@@ -48,29 +60,35 @@ export const datepicker =
          type,
          onDateChange,
          disabled,
+         iconClass,
          maxDateAllowed,
          yearDropDownItemNumber,
          meta: {touched, error, warning}
      }) => (
-        <div className="Error">
-            <DatePicker {...input}
-                        value={disabled ? "This is disabled" : input.value}
-                        dateFormat="yyyy-MM-dd"
-                        autoComplete="off"
-                        selected={input.value ? new Date(input.value) : null}
-                        maxDate={maxDateAllowed ? new Date() : null}
-                // minDate={dateValue !== ''  ? moment(dateValue).add(1, 'days') : null}
-                        onChange={date => input.onChange(date)}
-                        showYearDropdown
-                        yearDropdownItemNumber={yearDropDownItemNumber}
-                        scrollableYearDropdown
-                        showMonthDropdown
-                        disabled={disabled}
+        <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
+            <div className="input-group--input-group-icon">
+                <span className={iconClass}></span>
+            </div>
+            <div className="Error">
+                <DatePicker {...input}
+                            value={disabled ? "This is disabled" : input.value}
+                            dateFormat="yyyy-MM-dd"
+                            autoComplete="off"
+                            selected={input.value ? new Date(input.value) : null}
+                            maxDate={maxDateAllowed ? new Date() : null}
+                    // minDate={dateValue !== ''  ? moment(dateValue).add(1, 'days') : null}
+                            onChange={date => input.onChange(date)}
+                            showYearDropdown
+                            yearDropdownItemNumber={yearDropDownItemNumber}
+                            scrollableYearDropdown
+                            showMonthDropdown
+                            disabled={disabled}
 
-            />
-            {touched &&
-            ((error && <span className={'Error-message'}>{error}</span>) ||
-                (warning && <span className={'Warn-Message'}>{warning}</span>))}
+                />
+                {touched &&
+                ((error && <span className={'Error-message'}>{error}</span>) ||
+                    (warning && <span className={'Warn-Message'}>{warning}</span>))}
+            </div>
         </div>
     )
 
@@ -83,27 +101,33 @@ export const renderSelect = ({
                                  meta: {touched, error, warning},
                                  options,
                                  isMulti,
+                                 iconClass,
                                  closeMenuOnSelect
                              }) => (
-    <div className="Error">
-        <Select {...input}
-                placeholder={label}
-                styles={{menuPortal: base => ({...base, zIndex: 9999})}}
-                menuPortalTarget={document.body}
-                options={options}
-                isMulti={isMulti}
-                closeMenuOnSelect={closeMenuOnSelect}
-                autoComplete="off"
-                menuPosition={'absolute'}
-                menuPlacement={'auto'}
-                components={makeAnimated()}
-                onBlur={() => {
-                    input.onBlur(input.value)
-                }}
-        />
-        {touched &&
-        ((error && <span className={'Error-message'}>{error}</span>) ||
-            (warning && <span className={'Warn-Message'}>{warning}</span>))}
+    <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
+        <div className="input-group--input-group-icon">
+            <span className={iconClass}></span>
+        </div>
+        <div className="Error">
+            <Select {...input}
+                    placeholder={label}
+                    styles={{menuPortal: base => ({...base, zIndex: 9999})}}
+                    menuPortalTarget={document.body}
+                    options={options}
+                    isMulti={isMulti}
+                    closeMenuOnSelect={closeMenuOnSelect}
+                    autoComplete="off"
+                    menuPosition={'absolute'}
+                    menuPlacement={'auto'}
+                    components={makeAnimated()}
+                    onBlur={() => {
+                        input.onBlur(input.value)
+                    }}
+            />
+            {touched &&
+            ((error && <span className={'Error-message'}>{error}</span>) ||
+                (warning && <span className={'Warn-Message'}>{warning}</span>))}
+        </div>
     </div>
 );
 
@@ -113,28 +137,34 @@ export const renderDynamicSelect = ({
                                         loadOptions,
                                         label,
                                         defaultOptions,
+                                        iconClass,
                                         closeMenuOnSelect,
                                         meta: {touched, error, warning}
                                     }) => (
-    <div className="Error">
-        <AsyncSelect {...input}
-                     loadOptions={loadOptions}
-                     styles={{menuPortal: base => ({...base, zIndex: 9999})}}
-                     menuPortalTarget={document.getElementById('right-panel-section')}
-                     menuPosition={'absolute'}
-                     menuPlacement={'auto'}
-                     defaultOptions={defaultOptions}
-                     placeholder={label}
-                     isMulti={true}
-                     autoComplete="off"
-                     closeMenuOnSelect={closeMenuOnSelect}
-                     onBlur={() => {
-                         input.onBlur(input.value)
-                     }}
-        />
-        {touched &&
-        ((error && <span className={'Error-message'}>{error}</span>) ||
-            (warning && <span className={'Warn-Message'}>{warning}</span>))}
+    <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
+        <div className="input-group--input-group-icon">
+            <span className={iconClass}></span>
+        </div>
+        <div className="Error">
+            <AsyncSelect {...input}
+                         loadOptions={loadOptions}
+                         styles={{menuPortal: base => ({...base, zIndex: 9999})}}
+                         menuPortalTarget={document.getElementById('right-panel-section')}
+                         menuPosition={'absolute'}
+                         menuPlacement={'auto'}
+                         defaultOptions={defaultOptions}
+                         placeholder={label}
+                         isMulti={true}
+                         autoComplete="off"
+                         closeMenuOnSelect={closeMenuOnSelect}
+                         onBlur={() => {
+                             input.onBlur(input.value)
+                         }}
+            />
+            {touched &&
+            ((error && <span className={'Error-message'}>{error}</span>) ||
+                (warning && <span className={'Warn-Message'}>{warning}</span>))}
+        </div>
     </div>
 )
 
@@ -143,19 +173,40 @@ export const renderTextArea = ({
                                    label,
                                    type,
                                    rows,
-
+                                   iconClass,
+                                   noIcon,
                                    meta: {touched, error, warning}
 
                                }) => (
-    <div className="Error">
+    <React.Fragment>
+        {noIcon ?
+            <div className="Error">
         <textarea {...input}
                   autoComplete="off"
                   placeholder={label}
                   rows={rows} type={type}/>
-        {touched &&
-        ((error && <span className={'Error-message'}>{error}</span>) ||
-            (warning && <span className={'Warn-Message'}>{warning}</span>))}
-    </div>
+                {touched &&
+                ((error && <span className={'Error-message'}>{error}</span>) ||
+                    (warning && <span className={'Warn-Message'}>{warning}</span>))}
+            </div>
+            :
+            <div className={"input-group " + (touched && error ? 'errormsg' : '')}>
+                <div className="input-group--input-group-icon">
+                    <span className={iconClass}></span>
+                </div>
+                <div className="Error">
+        <textarea {...input}
+                  autoComplete="off"
+                  placeholder={label}
+                  rows={rows} type={type}/>
+                    {touched &&
+                    ((error && <span className={'Error-message'}>{error}</span>) ||
+                        (warning && <span className={'Warn-Message'}>{warning}</span>))}
+                </div>
+            </div>
+        }
+
+    </React.Fragment>
 
 
 )

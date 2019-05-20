@@ -36,10 +36,10 @@ export const LanguageRenderer = ({
             {/*}*/}
             <section className="head-section">
                 <span className="icon-box"><i className="icon-languages1"/></span>
-                <h2  className={"comp-heading"}
+                <h2 className={"comp-heading"}
                     ref={(value) => {
-                    elem = value
-                }} onKeyUp={(event) => saveTitle(event)}
+                        elem = value
+                    }} onKeyUp={(event) => saveTitle(event)}
                     contenteditable={isEditable ? "true" : "false"}
                 >{entityName}</h2>
                 <span onClick={() => editHeading(elem)}
@@ -93,39 +93,33 @@ export const LanguageRenderer = ({
                                                     <div className="flex-container">
                                                         <fieldset className="width-half">
                                                             <label>Language name</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-language-gr"></span>
-                                                                </div>
-                                                                <Field component={renderField} type={"text"}
-                                                                       name={`${member}.name`}
-                                                                       className={"input-control"}/>
-                                                            </div>
+                                                            <Field
+                                                                iconClass={'icon-language-gr'}
+                                                                component={renderField} type={"text"}
+                                                                name={`${member}.name`}
+                                                                className={"input-control"}/>
                                                         </fieldset>
 
                                                         <fieldset className={styles['width-half']}>
                                                             <label>Language rating (out of 10)</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-rating"></span>
-                                                                </div>
-                                                                <Field name={`${member}.proficiency`}
-                                                                       component={renderSelect}
-                                                                       closeMenuOnSelect={true}
-                                                                       isMulti={false}
-                                                                       options={[
-                                                                           {value: 1, label: '1'},
-                                                                           {value: 2, label: '2'},
-                                                                           {value: 3, label: '3'},
-                                                                           {value: 4, label: '4'},
-                                                                           {value: 5, label: '5'},
-                                                                           {value: 6, label: '6'},
-                                                                           {value: 7, label: '7'},
-                                                                           {value: 8, label: '8'},
-                                                                           {value: 9, label: '9'},
-                                                                           {value: 10, label: '10'}
-                                                                       ]}/>
-                                                            </div>
+                                                            <Field
+                                                                iconClass={'icon-rating'}
+                                                                name={`${member}.proficiency`}
+                                                                component={renderSelect}
+                                                                closeMenuOnSelect={true}
+                                                                isMulti={false}
+                                                                options={[
+                                                                    {value: 1, label: '1'},
+                                                                    {value: 2, label: '2'},
+                                                                    {value: 3, label: '3'},
+                                                                    {value: 4, label: '4'},
+                                                                    {value: 5, label: '5'},
+                                                                    {value: 6, label: '6'},
+                                                                    {value: 7, label: '7'},
+                                                                    {value: 8, label: '8'},
+                                                                    {value: 9, label: '9'},
+                                                                    {value: 10, label: '10'}
+                                                                ]}/>
                                                         </fieldset>
                                                         <Field component={'input'} name={`${member}.id`}
                                                                type={'text'}

@@ -93,36 +93,32 @@ export const AwardRenderer = ({
                                                     <div className="flex-container">
                                                         <fieldset className="error">
                                                             <label>Title</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-awards-gr"/>
-                                                                </div>
-                                                                <Field component={renderField} type={"text"}
-                                                                       name={`${member}.title`}
-                                                                       className="input-control"/>
-                                                            </div>
+                                                            <Field
+                                                                iconClass={'icon-awards-gr'}
+                                                                component={renderField} type={"text"}
+                                                                name={`${member}.title`}
+                                                                className="input-control"/>
                                                         </fieldset>
                                                         <fieldset>
                                                             <label>Date</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-date"/>
-                                                                </div>
-                                                                <Field component={datepicker}
-                                                                       maxDateAllowed={true}
-                                                                       yearDropDownItemNumber={30}
-                                                                       type={"date"}
-                                                                       className={'input-control'}
-                                                                       name={`${member}.date`}/>
-                                                            </div>
+                                                            <Field
+                                                                iconClass={'icon-date'}
+                                                                component={datepicker}
+                                                                maxDateAllowed={true}
+                                                                yearDropDownItemNumber={30}
+                                                                type={"date"}
+                                                                className={'input-control'}
+                                                                name={`${member}.date`}/>
                                                         </fieldset>
                                                     </div>
                                                     <div className="flex-container">
                                                         <fieldset>
                                                             <label>Summary</label>
-                                                            <Field component={renderTextArea} type={"textarea"}
-                                                                   name={`${member}.summary`}
-                                                                   className="input-control"/>
+                                                            <Field
+                                                                noIcon={true}
+                                                                component={renderTextArea} type={"textarea"}
+                                                                name={`${member}.summary`}
+                                                                className="input-control"/>
                                                         </fieldset>
                                                     </div>
                                                 </AccordionItemPanel>

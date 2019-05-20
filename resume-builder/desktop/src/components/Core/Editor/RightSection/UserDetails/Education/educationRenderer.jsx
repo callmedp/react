@@ -97,54 +97,41 @@ export const EducationRenderer = ({
                                                     <div className="flex-container">
                                                         <fieldset>
                                                             <label>Institution Name </label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-company"></span>
-                                                                </div>
-                                                                <Field component={renderField} type={"text"}
-                                                                       name={`${member}.institution_name`}/>
-                                                            </div>
+                                                            <Field
+                                                                iconClass={'icon-company'}
+                                                                component={renderField} type={"text"}
+                                                                name={`${member}.institution_name`}/>
                                                         </fieldset>
                                                         <fieldset>
                                                             <label>Specialization</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-designation"></span>
-                                                                </div>
-                                                                <Field component={renderField} type={"text"}
-
-                                                                       name={`${member}.specialization`}/>
-                                                            </div>
+                                                            <Field
+                                                                iconClass={'icon-designation'}
+                                                                component={renderField}
+                                                                type={"text"}
+                                                                name={`${member}.specialization`}/>
                                                         </fieldset>
                                                     </div>
 
                                                     <div className="flex-container">
                                                         <fieldset>
                                                             <label>Date from</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-date"></span>
-                                                                </div>
-                                                                <Field maxDateAllowed={true} component={datepicker}
-                                                                       type={"date"}
-                                                                       yearDropDownItemNumber={15}
-                                                                       name={`${member}.start_date`}
-                                                                       className="input-control"/>
-                                                            </div>
+                                                            <Field maxDateAllowed={true} component={datepicker}
+                                                                   type={"date"}
+                                                                   iconClass={'icon-date'}
+                                                                   yearDropDownItemNumber={15}
+                                                                   name={`${member}.start_date`}
+                                                                   className="input-control"/>
                                                         </fieldset>
                                                         <fieldset>
                                                             <label>Date to</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-date"></span>
-                                                                </div>
-                                                                <Field component={datepicker}
-                                                                       type={"date"}
-                                                                       name={`${member}.end_date`}
-                                                                       disabled={till_today[index]}
-                                                                       yearDropDownItemNumber={15}
-                                                                       className="input-control"/>
-                                                            </div>
+                                                            <Field component={datepicker}
+                                                                   type={"date"}
+                                                                   iconClass={'icon-date'}
+                                                                   name={`${member}.end_date`}
+                                                                   disabled={till_today[index]}
+                                                                   yearDropDownItemNumber={15}
+                                                                   className="input-control"/>
+
                                                             <span className={styles["till-today"]}>
                                                                 <Field type="checkbox" name={`${member}.is_pursuing`}
                                                                        component={renderField}
@@ -160,30 +147,25 @@ export const EducationRenderer = ({
 
                                                         <fieldset className="custom">
                                                             <label>Course Type</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-course-type"></span>
-                                                                </div>
-                                                                <Field component={renderSelect} type={"text"}
-                                                                       name={`${member}.course_type`}
-                                                                       options={[
-                                                                           {value: 'FT', label: 'FULL TIME'},
-                                                                           {value: 'PT', label: 'PART TIME'},
-                                                                       ]}
-                                                                       closeMenuOnSelect={true}
-                                                                       className="input-control"/>
-                                                            </div>
+                                                            <Field
+                                                                iconClass={'icon-course-type'}
+                                                                component={renderSelect} type={"text"}
+                                                                name={`${member}.course_type`}
+                                                                options={[
+                                                                    {value: 'FT', label: 'FULL TIME'},
+                                                                    {value: 'PT', label: 'PART TIME'},
+                                                                ]}
+                                                                closeMenuOnSelect={true}
+                                                                className="input-control"/>
                                                         </fieldset>
                                                         <fieldset>
                                                             <label>Percentage/CGPA</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-percentage"></span>
-                                                                </div>
-                                                                <Field component={renderField} type={"text"}
-                                                                       name={`${member}.percentage_cgpa`}
-                                                                       className="input-control"/>
-                                                            </div>
+                                                            <Field
+                                                                iconClass={'icon-percentage'}
+                                                                component={renderField} type={"text"}
+                                                                name={`${member}.percentage_cgpa`}
+                                                                className="input-control"/>
+
                                                         </fieldset>
                                                     </div>
                                                 </AccordionItemPanel>

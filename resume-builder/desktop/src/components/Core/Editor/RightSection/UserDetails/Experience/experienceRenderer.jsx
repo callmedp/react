@@ -94,54 +94,45 @@ export const ExperienceRenderer = ({
                                                     <div className="flex-container">
                                                         <fieldset>
                                                             <label>Designation</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-designation"/>
-                                                                </div>
-                                                                <Field component={renderField}
-                                                                       type={"text"}
-                                                                       name={`${member}.job_profile`}/>
-                                                            </div>
+                                                            <Field
+                                                                iconClass={'icon-designation'}
+                                                                component={renderField}
+                                                                type={"text"}
+                                                                name={`${member}.job_profile`}/>
+
                                                         </fieldset>
                                                         <fieldset>
                                                             <label>Company Name</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-company"/>
-                                                                </div>
-                                                                <Field component={renderField}
-                                                                       type={"text"}
-                                                                       name={`${member}.company_name`}/>
-                                                            </div>
+                                                            <Field
+                                                                iconClass={'icon-company'}
+                                                                component={renderField}
+                                                                type={"text"}
+                                                                name={`${member}.company_name`}/>
+
                                                         </fieldset>
                                                     </div>
                                                     <div className="flex-container">
                                                         <fieldset>
                                                             <label>Date from</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-date"/>
-                                                                </div>
-                                                                <Field component={datepicker}
-                                                                       type={"date"}
-                                                                       yearDropDownItemNumber={15}
-                                                                       maxDateAllowed={true}
-                                                                       className={'input-control'}
-                                                                       name={`${member}.start_date`}/>
-                                                            </div>
+
+                                                            <Field component={datepicker}
+                                                                   type={"date"}
+                                                                   yearDropDownItemNumber={15}
+                                                                   maxDateAllowed={true}
+                                                                   iconClass={'icon-date'}
+                                                                   className={'input-control'}
+                                                                   name={`${member}.start_date`}/>
+
                                                         </fieldset>
                                                         <fieldset>
                                                             <label>Date to</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-date"/>
-                                                                </div>
-                                                                <Field component={datepicker}
-                                                                       disabled={till_today[index]}
-                                                                       type={"date"}
-                                                                       name={`${member}.end_date`}
-                                                                       className={'input-control'}/>
-                                                            </div>
+                                                            <Field component={datepicker}
+                                                                   disabled={till_today[index]}
+                                                                   type={"date"}
+                                                                   iconClass={'icon-date'}
+                                                                   name={`${member}.end_date`}
+                                                                   className={'input-control'}/>
+
                                                             <span className={styles['till-today']}>
                                                                 <Field type="checkbox"
                                                                        name={`${member}.is_working`}
@@ -157,14 +148,12 @@ export const ExperienceRenderer = ({
                                                     <div className="flex-container">
                                                         <fieldset>
                                                             <label>Job Location</label>
-                                                            <div className="input-group">
-                                                                <div className="input-group--input-group-icon">
-                                                                    <span className="icon-address"/>
-                                                                </div>
-                                                                <Field component={renderField} type={"text"}
-                                                                       name={`${member}.job_location`}
-                                                                       className={"input-control"}/>
-                                                            </div>
+                                                            <Field
+                                                                iconClass={'icon-address'}
+                                                                component={renderField} type={"text"}
+                                                                name={`${member}.job_location`}
+                                                                className={"input-control"}/>
+
                                                         </fieldset>
                                                     </div>
 
@@ -173,6 +162,7 @@ export const ExperienceRenderer = ({
                                                             <label>Description</label>
                                                             <Field component={renderTextArea} rows={"3"}
                                                                    type={"text"}
+                                                                   noIcon={true}
                                                                    name={`${member}.work_description`}/>
                                                         </fieldset>
                                                     </div>
