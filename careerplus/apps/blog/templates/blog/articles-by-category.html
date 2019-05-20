@@ -14,7 +14,8 @@
     {% endblock django_meta %}
     {% block canonical_url %}
       <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ category.get_absolute_url }}">
-      <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ category.get_absolute_url }}">
+      <link rel="alternate" media="only screen and (maxwidth:640px)" href="https://{{ MOBILE_SITE_DOMAIN }}{{ category.get_absolute_url }}">
+      <link rel="alternate" media="handheld" href="https://{{ MOBILE_SITE_DOMAIN }}{{ category.get_absolute_url }}">
     {% endblock canonical_url %}
 
     {% block title %}

@@ -17,7 +17,8 @@
 {%  endblock django_meta %}
 {% block canonical_url %}
   <link rel="canonical" href="//{{ SITE_DOMAIN }}{{ request.path }}">
-  <link rel="alternate" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}">
+  <link rel="alternate" media="only screen and (maxwidth:640px)" href="https://{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
+  <link rel="alternate" media="handheld" href="https://{{ MOBILE_SITE_DOMAIN }}{{request.path}}">
   <link rel="amphtml" href="//{{ MOBILE_SITE_DOMAIN }}{{ request.path }}?type=amp">
 {% endblock canonical_url %}
 
