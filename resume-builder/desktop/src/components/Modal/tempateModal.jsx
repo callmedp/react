@@ -10,27 +10,8 @@ Modal.setAppElement(document.getElementById('react-app'));
 export default class TemplateModal extends React.Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            modalIsOpen: false
-        };
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
-        this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
-    }
-
-    static getDerivedStateFromProps(nextProps, prevState) {
-        const {ui: {modal}} = nextProps;
-        if (prevState.modalIsOpen !== modal) {
-            return ({
-                modalIsOpen: modal
-            })
-        }
-    }
-
-
-    openModal() {
-        this.setState({modalIsOpen: true});
     }
 
     closeModal() {
@@ -38,10 +19,10 @@ export default class TemplateModal extends React.Component {
     }
 
     render() {
-        const {template: {templateId}} = this.props;
+        const {template: {templateId}, ui: {modal}} = this.props;
         return (
             <div className="pr">
-            
+
                 <Modal
                     style={{
                         content: {
@@ -50,7 +31,7 @@ export default class TemplateModal extends React.Component {
                             top: '15%',
                         }
                     }}
-                    isOpen={this.state.modalIsOpen}
+                    isOpen={modal}
                     onRequestClose={this.closeModal}
                     contentLabel="Example Modal"
                 >

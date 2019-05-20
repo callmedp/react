@@ -6,6 +6,7 @@ import {formCategoryList, entityList} from "../../../../../Utils/formCategoryLis
 import {connect} from 'react-redux'
 import * as actions from '../../../../../store/personalInfo/actions/index'
 import {showMoreSection} from '../../../../../store/ui/actions/index'
+import Swal from 'sweetalert2'
 
 class Edit extends Component {
     constructor(props) {
@@ -14,6 +15,7 @@ class Edit extends Component {
         this.addMoreClick = this.addMoreClick.bind(this);
         this.deleteFromVisibleList = this.deleteFromVisibleList.bind(this);
         this.addIntoVisibleList = this.addIntoVisibleList.bind(this);
+        this.showErrorMessage = this.showErrorMessage.bind(this);
         this.state = {
             preferenceList: this.props.entityList
         };
@@ -26,8 +28,7 @@ class Edit extends Component {
 
     static getDerivedStateFromProps(nextProps, prevState) {
         const values = queryString.parse(nextProps.location.search);
-        const {formName} = nextProps;
-
+        const {ui: {formName}} = nextProps;
         if (!(values && values.type)) {
             if (formName) {
                 nextProps.history.push(`/resume-builder/edit/?type=${formName}`);
@@ -74,6 +75,23 @@ class Edit extends Component {
         })
     }
 
+    showErrorMessage(link) {
+        const {ui: {formName}} = this.props;
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `Some information may be lost as required fields are not filled.`,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, change it!'
+        }).then((result) => {
+            if (result.value) {
+                this.props.history.push(link)
+            }
+        })
+    }
+
     componentDidUpdate(prevProps) {
         if (this.props.location !== prevProps.location) {
             const values = queryString.parse(this.props.location.search);
@@ -95,8 +113,10 @@ class Edit extends Component {
         let error = false;
         const obj = formData && formData[formName] || {};
         let syncErrors = obj['syncErrors'] || {};
-        // if ('list' in syncErrors) (syncErrors && syncErrors['list'] || []).map(el => Object.keys(el).map(key => (!!el[key] ? error = true : false)))
-        // else Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
+        if ('fields' in obj) {
+            if ('list' in syncErrors) (syncErrors && syncErrors['list'] || []).map(el => (el ? Object.keys(el) : []).map(key => (!!el[key] ? error = true : false)))
+            else Object.keys(syncErrors || {}).map(key => (!!syncErrors[key] ? error = true : false));
+        }
         return (
             <div className="edit-section">
                 <strong>Complete your information</strong>
@@ -109,7 +129,7 @@ class Edit extends Component {
                                     className={showMoreSection ? 'disabled' : '' + (type === itemType ? ' edit-section--active' : '')}>
                                     {
                                         !!(error || showMoreSection) ?
-                                            <div className={"non-link"}>
+                                            <div onClick={() => this.showErrorMessage(link)} className={"non-link"}>
                                                 <span className={'mr-20 ' + icon}></span>
                                                 {elem['entity_text']}
                                             </div>

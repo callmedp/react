@@ -24,7 +24,7 @@ class Skill extends Component {
             active: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             submit: false
         };
-        this.props.currentForm('skill');
+        this.props.currentForm('Skill');
 
     }
 
