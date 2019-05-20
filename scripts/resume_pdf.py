@@ -16,7 +16,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings_stag
 django.setup()
 from django.conf import settings
 from django.template.loader import get_template
-from resumebuilder.models import User
+# from resumebuilder.models import Candidate
 
 if __name__ == '__main__':
     # import ipdb;
@@ -42,4 +42,4 @@ if __name__ == '__main__':
     template = get_template('resume1.html')
     rendered_template = template.render({"is_pdf": True}).encode(encoding='UTF-8')
     print(rendered_template)
-    HTML(string=rendered_template).write_pdf('test2.pdf', stylesheets=[CSS(string='@page {size:A3; margin:0px}')])
+    HTML(string=rendered_template).write_png('test3.png', stylesheets=[CSS(string='@page {size:A3; margin:0px}')])
