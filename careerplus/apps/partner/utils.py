@@ -552,8 +552,11 @@ class CertiticateParser:
         if shineid:
             post_data = {
                 'certification_name': user_certificate.certificate.name,
-                'certification_year': user_certificate.year
+                'certification_year': user_certificate.year,
+                'score': user_certificate.overallScore,
+                'certiticate_id': user_certificate.certificate.vendor_certificate_id
             }
+
             flag, jsonrsp = ShineCertificateUpdate().update_shine_certificate_data(
                 candidate_id=shineid, data=post_data, headers=headers
             )
@@ -568,6 +571,10 @@ class CertiticateParser:
                     op_type=1,
                     last_op_type=last_op_type)
                 return True
+        logging.getLogger('error_log').error(
+            "Error Occured for Certificate %s, Candidate Id Does not Exist for email %" %
+            (str(user_certificate.certificate.name), str(user_certificate.candidate_email))
+        )
         return False
 
     def parse_data(self, data):
@@ -575,7 +582,6 @@ class CertiticateParser:
             vendor_key = data['vendor']
             parse_data = ParsedAssesmentData()
             all_keys_for_parsed_data = self.MAPPING_VALUES_TO_DATA_KEY[vendor_key].keys()
-
             for key in all_keys_for_parsed_data:
                 fields = dict(self.MAPPING_VALUES_TO_DATA_KEY[vendor_key][key]).keys()
 
@@ -583,7 +589,7 @@ class CertiticateParser:
                     value = self.get_actual_value(data, self.get_key_for_field(vendor_key, key, field))
                     if field in self.MULTIPLE_VALUES[vendor_key].keys():
                         multiple_fields = self.MULTIPLE_VALUES[vendor_key][field]
-
+                        print(field)
                         for val in value:
                             data_instance = getattr(parse_data, key).__class__()
                             if isinstance(multiple_fields, list):
@@ -626,9 +632,8 @@ class CertiticateParser:
         return parsed_data
 
     def update_order_and_badge_user(self, parsed_data, vendor):
-        email = parsed_data.user_certificate.candidate_email
-        orderitem_id = parsed_data.user_certificate.order_item_id
-        oi = OrderItem.objects.filter(id=orderitem_id)
+        orderitem_id = int(parsed_data.user_certificate.order_item_id)
+        oi = OrderItem.objects.filter(id=orderitem_id).first()
         if oi:
             candidate_id = oi.order.candidate_id
             data = get_featured_profile_data_for_candidate(
