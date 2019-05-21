@@ -112,6 +112,10 @@
   @include icon-inblock (10px, 7px, -37px -96px);
 }
 
+.icon-tickBig {
+  @include icon-inblock (50px, 37px, -319px -140px);
+}
+
 .icon-file {
  @include icon-inblock (34px, 32px, 0 -110px); 
 }
