@@ -147,7 +147,7 @@
                 {% if prd_about %}
                   <h2 class="detail-heading">About{% if prd_service == 'test' %} Test {% elif prd_service == 'course' %}course{% else %}service{% endif %}</h2>
                  {{prd_about}}
-
+                 {% if prd_asft %}
                   <div class="test-wrap mt-30">
                     <div class="test-wrap__item">
                       <span class="icon-question"></span>
@@ -166,6 +166,7 @@
                     </div>
                   </div>
                   </span>
+                  {% endif%}
                 {% endif %}
                 </div>
               </div>
