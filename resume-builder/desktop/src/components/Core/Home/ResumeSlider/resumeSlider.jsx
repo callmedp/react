@@ -42,7 +42,7 @@ export default class ResumeSlider extends Component {
             arrow: true,
             speed: 500
         };
-        const {ui: {select_template_modal}} = this.props;
+        const {ui: {select_template_modal}, page} = this.props;
         return (
             <Fragment>
                 <TemplateModal {...this.props} />
@@ -73,7 +73,10 @@ export default class ResumeSlider extends Component {
                                 return (
                                     <div key={key}>
                                         <div className="proven-resume--slide">
-                                            <div onClick={() => this.showZoomedImage(item)} className="zoom"></div>
+                                            {
+                                                !!(page === 'home') &&
+                                                <div onClick={() => this.showZoomedImage(item)} className="zoom"/>
+                                            }
                                             <img
                                                 src={`${this.staticUrl}react/assets/images/resume${item}_preview.jpg`}/>
                                         </div>

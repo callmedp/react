@@ -15,7 +15,7 @@ export default class SelectTemplateModal extends Component{
                 onRequestClose={this.handleCloseModal}
                 className="Modal"
                 overlayClassName="Overlay">
-                <ResumeSlider   {...this.props}/>
+                <ResumeSlider   {...this.props} page={'edit'}/>
                 <button className="Modal--close" onClick={()=>{this.props.hideSelectTemplateModal()}}>+</button>
             </Modal>
         )

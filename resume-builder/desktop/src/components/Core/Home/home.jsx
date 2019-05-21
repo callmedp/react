@@ -163,7 +163,7 @@ class Home extends Component {
                     </ul>
                 </section>
 
-                <ResumeSlider {...this.props}/>
+                <ResumeSlider {...this.props} page={'home'}/>
 
                 <section className="section-container">
                     <h2>Resume builder features</h2>
