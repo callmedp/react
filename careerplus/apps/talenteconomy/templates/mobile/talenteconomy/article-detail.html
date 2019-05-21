@@ -31,6 +31,11 @@
     <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
     {% endcompress %}
+<style>
+    #related-container ul li {
+    list-style:inside;
+    }
+</style>
 {% endblock css_section %}
 
 {% block header %}
@@ -136,6 +141,8 @@
     <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
+    <script type="text/javascript" src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
+
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     {% endcompress %}
     {% compress js inline %}
@@ -150,6 +157,9 @@
         </script>
 
     {% endcompress %}
+
+
+
 {% endblock js_section %}
 
 {% block johukum %}
