@@ -33,11 +33,14 @@
     <div class="col-sm-7">
 
         <div class="text-center payment-done">
-            <figure class="waiting-icon"></figure>
+            
 
-            <h1>{% if order.status == 1 %}
-                    Your payment has been made successfully!
+            <h1>
+                {% if order.status == 0 %}
+                    <figure class="greenTick-icon"></figure>
+                    You have made the payment <br />successfully!
                 {% else %}
+                    <figure class="waiting-icon"></figure>
                     Waiting for payment to be made, meanwhile order has been created!
                 {% endif %}
             </h1>
@@ -105,6 +108,25 @@
                             {% endif %}
                         </ul>
                     </div>
+
+
+                {% elif oi.product.type_flow == 16 %}
+
+                    <div class="subcribe-services">
+                        <div class="new-test">
+                            <strong>SEO Expert Test</strong>
+                            <a href="#">Take Test</a>
+                        </div>
+                    </div>
+                   
+                    <div class="subcribe-services">
+                        <div class="new-test">
+                            <strong>Social Media Test</strong>
+                            <a href="#">Take Test</a>
+                        </div>
+                    </div>
+
+
                 {% else %}
                     <div class="subcribe-services">
                         <strong>{{oi.product.get_name}}</strong>

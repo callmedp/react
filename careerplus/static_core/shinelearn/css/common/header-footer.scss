@@ -1862,6 +1862,14 @@ footer {
 	margin: 0 auto;
 }
 
+.greenTick-icon {
+	background: $sprite -550px -358px;
+	display: block;
+	width: 51px;
+	height: 51px;
+	margin: 0 auto 15px;
+}
+
 .cancel-icon {
 	background: $sprite -306px -323px;
 	display: block;
