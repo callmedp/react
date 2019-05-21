@@ -935,7 +935,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_pAsft(self, obj):
         detail = {}
-        if obj.product_class.name == 'assesment':
+        if obj.product_class.name == 'assessment':
             objs = obj.productattributes.all()
             for obj in objs:
                 detail[obj.attribute.name] = obj.value
