@@ -274,7 +274,7 @@ class ProductSkill(AbstractAutoDate):
         related_name='new_productskills',
         on_delete=models.CASCADE)
     third_party_skill_id = models.PositiveIntegerField(default=0)
-    active = models.BooleanField(default=True)
+    primary = models.BooleanField(default=False)
 
     def __str__(self):
         name = '{} - ({}) to {} - ({})'.format(
