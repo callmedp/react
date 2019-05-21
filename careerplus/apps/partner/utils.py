@@ -266,7 +266,7 @@ MAPPING_SCORE_TYPE_VENDOR = {
 
 # Max_Score
 MAPPING_VENDOR_MAX_SCORE = {
-    'amcat': 1000,
+    'amcat': 900,
 }
 
 
@@ -502,8 +502,8 @@ class CertiticateParser:
                 oi = OrderItem.objects.filter(id=orderitem_id).first()
                 if oi:
                     product = oi.product
-                    skill = product.new_productskills.all().first().skill.name
-                    certificate_data['skill'] = skill
+                    skill = list(product.new_productskills.all().values_list('skill__name', flat=True))
+                    certificate_data['skill'] = ','.join(skill)
             certificate, created = Certificate.objects.get_or_create(
                 **certificate_data
             )

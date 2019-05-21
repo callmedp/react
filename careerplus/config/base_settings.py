@@ -413,6 +413,7 @@ CLICK_TRACKING = 'https://www3.shine.com/click-tracking/'
 COURSE_SLUG = ['course', ]
 WRITING_SLUG = ['writing', 'resume']
 SERVICE_SLUG = ['service', ]
+ASSESSMENT_SLUG = ['assessment']
 # delivery slug
 NORMAL_DELIVERY_SLUG = ['normal', ]
 EXPRESS_DELIVERY_SLUG = ['express', ]

@@ -66,7 +66,7 @@ def manually_generate_autologin_url(assesment_items=[]):
         status_response = ShineCandidateDetail().get_status_detail(
             email=None, shine_id=candidate_id
         )
-        skill_id = oi.product.new_productskills.first()
+        skill_id = oi.product.new_productskills.filter(primary=True).first()
         if skill_id:
             skill_id = skill_id.third_party_skill_id
         if not oi.autologin_url and skill_id:
