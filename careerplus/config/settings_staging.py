@@ -117,9 +117,15 @@ META_FB_PROFILE_ID = '282244838633660'
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
-        'URL': 'http://172.22.65.33:8983/solr/prdt',
+        'URL': 'http://172.22.65.33:8983/solr/prdt',  # prdt(staging learning1) # live_prod(staging learing2)
         'INCLUDE_SPELLING': False,
     },
+
+    'index': {
+        'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
+        'URL': 'http://172.22.65.33:8983/solr/prdt',  # prdt(staging learning1) # live_prod(staging learing2)
+        'INCLUDE_SPELLING': False,
+    }
 }
 
 ###### SHINE SETTINGS ###########
