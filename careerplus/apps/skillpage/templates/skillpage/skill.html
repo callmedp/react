@@ -1,5 +1,6 @@
 {% extends "basic/base.html" %}
 {% load static compress %}
+{% load shop_tags %}
 
 {% block django_meta %}
     {% include 'meta/meta.html' %}
@@ -184,11 +185,15 @@
 			{% endif %}
 
 		    <!-- certification programs listing -->
-		    {% if products %}
+		    {% if products or certifications %}
 		    <div id="programs" class="listing-box assessments-box mb-40" itemscope itemtype="http://schema.org/ItemList">
 		    	<ul class="nav nav-tabs" role="tablist">
+				    {% if products %}
 				    <li role="presentation" class="active"><h2 itemprop="name"><a href="#courses-tab" aria-controls="courses-tab" role="tab" data-toggle="tab">{{category_obj.name}} Programs</a></h2></li>
-				    <li role="presentation"><h2 itemprop="name"><a href="#assessments-tab" aria-controls="assessments-tab" role="tab" data-toggle="tab">Assessments</a></h2><span>New</span></li>
+				    {% endif %}
+				    {% if certifications %}
+				    <li role="presentation" {% if not products %} class="active" {% endif %}><h2 itemprop="name"><a href="#assessments-tab" aria-controls="assessments-tab" role="tab" data-toggle="tab">Assessments</a></h2><span>New</span></li>
+				    {% endif %}
 				</ul>
 				<div class="tab-content">
 				    <div role="tabpanel" class="tab-pane active" id="courses-tab">
@@ -277,10 +282,11 @@
 						    {% endif %}
 				      	</ul>
 					</div>
+					{% if certifications %}
 					
 				    <div role="tabpanel" class="tab-pane" id="assessments-tab">
 				    	<ul class="listing1" id="product_list">
-				    		{% for product in products %}
+				    		{% for product in certifications %}
 						        <li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
 						        	<meta itemprop="position" content="{{forloop.counter}}" />
 						        	<a itemprop="url" title="{{product.pNm}}" 
@@ -348,8 +354,8 @@
 													</div>
 													
 													<ul class="pull-right pricing-box__lists">
-														<li>No. of questions : <span>120</span></li>
-														<li>Duration: <span>60 min</span></li>
+													{% if product.pAsft %}	<li>No. of questions : <span>{{ product.pAsft|get_value_from_dict:'number_of_questions' }}</span></li> {% endif %}
+													{% if product.pAsft %}	<li>Duration: <span>{{ product.pAsft|get_value_from_dict:'test_duration' }} min</span></li> {% endif %}
 													</ul>
 								                </div>
 
@@ -371,6 +377,8 @@
 						    {% endif %}
 				      	</ul>
 				    </div>
+
+				    {% endif %}
 				</div>
 		    </div>
 		    {% endif %}

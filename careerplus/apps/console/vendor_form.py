@@ -324,7 +324,7 @@ class ChangeScreenProductForm(forms.ModelForm):
     
     def clean_description(self):
         desc = self.cleaned_data.get('description', '')
-        if desc:
+        if desc or self.instance.type_flow == 16:
             pass
         else:
             raise forms.ValidationError(

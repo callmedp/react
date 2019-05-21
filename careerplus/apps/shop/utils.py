@@ -260,7 +260,7 @@ class ProductModeration(object):
                     else:
                         messages.error(request, "Invalid Product Choice")
                         return test_pass
-                    if product.type_product in [0, 1, 3, 4]:
+                    if product.type_product in [0, 1, 3, 4] and product.type_flow != 16:
                         if not product.description:
                             messages.error(request, "Description is required")
                             return test_pass
@@ -1070,7 +1070,7 @@ class ProductValidation(object):
                                 return test_pass
                     
 
-                    if product.type_product in [0, 1, 3, 4]:
+                    if product.type_product in [0, 1, 3, 4] and product.type_flow != 16:
                         if not product.description:
                             messages.error(request, "Description is required")
                             return test_pass
