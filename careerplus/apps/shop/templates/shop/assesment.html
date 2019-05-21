@@ -127,10 +127,3 @@ $(document).ready(function() {
 </script>
 
 {% endblock js_section %}
-
-  {% block zendesk %}
-    {% if sqs.id in linkedin_resume_services %}
-    {% else %}
-      {{block.super}}
-    {% endif %}
-  {% endblock zendesk %}

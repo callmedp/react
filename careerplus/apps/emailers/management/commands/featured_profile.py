@@ -130,7 +130,7 @@ def unfeature():
             continue
         duration_dict = {
             'service': getattr(obj.product.attr, S_ATTR_DICT.get('FD'), 180),
-            'assesment': getattr(obj.product.attr, A_ATTR_DICT.get('AD'), 365)
+            'assessment': getattr(obj.product.attr, A_ATTR_DICT.get('AD'), 365)
         }
 
         duration_days = duration_dict.get(obj.product.product_class.name)
