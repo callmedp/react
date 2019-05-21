@@ -61,7 +61,7 @@
       <!-- Interested in this course? -->
       <div class="course-query box-panel mb-40 cleafix">
           <h2 class="heading-right">
-            {% if product.is_course %}
+            {% if product.is_course or product.is_assesment %}
               Interested in this course?
             {% else %}
               Interested in this service?
