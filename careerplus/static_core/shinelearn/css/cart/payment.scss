@@ -777,6 +777,24 @@
 				}
 			}
 		}
+
+		.new-test {
+			position: relative;
+
+			strong {
+				width: 70%;
+			}
+
+			a {
+				background-color: $orange-color;
+				padding: 5px 15px;
+				color: $text-white;
+				position: absolute;
+				right: 0;
+				font-size: 13px;
+				top: -4px;
+			}
+		}
 	}
 }
 
